@@ -23,7 +23,7 @@ import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -35,7 +35,7 @@ import java.util.Set;
 public class NonClasspathDirectoriesScope extends GlobalSearchScope {
   private final Set<VirtualFile> myRoots;
 
-  public NonClasspathDirectoriesScope(@Nonnull Collection<VirtualFile> roots) {
+  public NonClasspathDirectoriesScope(@jakarta.annotation.Nonnull Collection<VirtualFile> roots) {
     myRoots = new HashSet<>(roots);
   }
 
@@ -65,7 +65,7 @@ public class NonClasspathDirectoriesScope extends GlobalSearchScope {
   }
 
   @Override
-  public boolean isSearchInModuleContent(@Nonnull Module aModule) {
+  public boolean isSearchInModuleContent(@jakarta.annotation.Nonnull Module aModule) {
     return false;
   }
 

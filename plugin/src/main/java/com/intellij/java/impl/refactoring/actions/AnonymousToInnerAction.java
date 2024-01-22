@@ -26,7 +26,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.action.BaseRefactoringAction;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class AnonymousToInnerAction extends BaseRefactoringAction {
   public boolean isAvailableInEditorOnly() {
@@ -49,7 +49,7 @@ public class AnonymousToInnerAction extends BaseRefactoringAction {
     return newExpression != null && newExpression.getAnonymousClass() != null;
   }
 
-  public RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
+  public RefactoringActionHandler getHandler(@jakarta.annotation.Nonnull DataContext dataContext) {
     return new AnonymousToInnerHandler();
   }
 }

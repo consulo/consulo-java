@@ -50,7 +50,7 @@ import com.intellij.java.language.psi.PsiMethod;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.util.collection.ContainerUtil;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public class GenerationUtil
 {
@@ -127,7 +127,7 @@ public class GenerationUtil
 	 * @param classMemberList list of {@link PsiElementClassMember}
 	 * @return a list of {PsiMember} objects.
 	 */
-	public static List<PsiMember> convertClassMembersToPsiMembers(@Nullable List<PsiElementClassMember> classMemberList)
+	public static List<PsiMember> convertClassMembersToPsiMembers(@jakarta.annotation.Nullable List<PsiElementClassMember> classMemberList)
 	{
 		if(classMemberList == null || classMemberList.isEmpty())
 		{

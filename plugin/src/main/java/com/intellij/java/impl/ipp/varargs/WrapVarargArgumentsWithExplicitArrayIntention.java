@@ -24,7 +24,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.MakeMethodVarargsIntention", fileExtensions = "java", categories = {"Java", "Declaration"})
@@ -37,7 +37,7 @@ public class WrapVarargArgumentsWithExplicitArrayIntention extends Intention {
   }
 
   @Override
-  protected void processIntention(@Nonnull PsiElement element)
+  protected void processIntention(@jakarta.annotation.Nonnull PsiElement element)
     throws IncorrectOperationException {
     final PsiMethodCallExpression methodCallExpression =
       PsiTreeUtil.getParentOfType(element,

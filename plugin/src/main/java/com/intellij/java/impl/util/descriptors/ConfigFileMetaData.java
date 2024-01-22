@@ -16,10 +16,10 @@
 
 package com.intellij.java.impl.util.descriptors;
 
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 import consulo.logging.Logger;
 
-import javax.annotation.Nullable;
 import java.util.Arrays;
 
 /**

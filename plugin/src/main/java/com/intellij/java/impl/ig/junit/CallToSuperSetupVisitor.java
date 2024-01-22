@@ -15,10 +15,9 @@
  */
 package com.intellij.java.impl.ig.junit;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 class CallToSuperSetupVisitor extends JavaRecursiveElementVisitor {
@@ -26,7 +25,7 @@ class CallToSuperSetupVisitor extends JavaRecursiveElementVisitor {
   private boolean callToSuperSetupFound = false;
 
   @Override
-  public void visitElement(@Nonnull PsiElement element) {
+  public void visitElement(@jakarta.annotation.Nonnull PsiElement element) {
     if (!callToSuperSetupFound) {
       super.visitElement(element);
     }

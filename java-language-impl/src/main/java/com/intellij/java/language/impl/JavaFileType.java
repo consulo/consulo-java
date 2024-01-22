@@ -23,7 +23,7 @@ import consulo.platform.base.localize.IdeLocalize;
 import consulo.ui.image.Image;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class JavaFileType extends LanguageFileType {
   @NonNls public static final String DEFAULT_EXTENSION = "java";
@@ -41,7 +41,7 @@ public class JavaFileType extends LanguageFileType {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public LocalizeValue getDescription() {
     return IdeLocalize.filetypeDescriptionJava();
   }

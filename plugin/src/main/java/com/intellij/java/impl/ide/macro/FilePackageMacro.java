@@ -25,7 +25,7 @@ import consulo.language.editor.LangDataKeys;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiFile;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public final class FilePackageMacro extends Macro {

@@ -34,8 +34,9 @@ import consulo.process.ExecutionException;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.Comparator;
 
 public class DefaultDebugEnvironment implements DebugEnvironment {
@@ -46,7 +47,7 @@ public class DefaultDebugEnvironment implements DebugEnvironment {
   private final RunProfileState state;
   private final boolean myNeedParametersSet;
 
-  public DefaultDebugEnvironment(@Nonnull ExecutionEnvironment environment, @Nonnull RunProfileState state, RemoteConnection remoteConnection, boolean pollConnection) {
+  public DefaultDebugEnvironment(@Nonnull ExecutionEnvironment environment, @jakarta.annotation.Nonnull RunProfileState state, RemoteConnection remoteConnection, boolean pollConnection) {
     this(environment, state, remoteConnection, pollConnection ? LOCAL_START_TIMEOUT : 0);
   }
 
@@ -60,7 +61,7 @@ public class DefaultDebugEnvironment implements DebugEnvironment {
     myNeedParametersSet = remoteConnection.isServerMode() && remoteConnection.isUseSockets() && "0".equals(remoteConnection.getAddress());
   }
 
-  private static GlobalSearchScope createSearchScope(@Nonnull Project project, @Nullable RunProfile runProfile) {
+  private static GlobalSearchScope createSearchScope(@Nonnull Project project, @jakarta.annotation.Nullable RunProfile runProfile) {
     SearchScope scope = ExecutionSearchScopeProvider.createSearchScope(project, runProfile);
     if (scope.equals(GlobalSearchScope.allScope(project))) {
       // prefer sources over class files
@@ -113,7 +114,7 @@ public class DefaultDebugEnvironment implements DebugEnvironment {
     return environment.getRunProfile().getName();
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public Sdk getAlternativeJre() {
     return AlternativeJreClassFinder.getAlternativeJre(environment.getRunProfile());

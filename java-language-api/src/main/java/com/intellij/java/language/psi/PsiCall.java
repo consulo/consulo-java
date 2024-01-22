@@ -16,9 +16,9 @@
 package com.intellij.java.language.psi;
 
 import consulo.language.psi.PsiElement;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * Represents the call of a Java method or constructor or a Java enum constant..

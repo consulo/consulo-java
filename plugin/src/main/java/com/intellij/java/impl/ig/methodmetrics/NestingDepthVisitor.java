@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.methodmetrics;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;
@@ -26,7 +26,7 @@ class NestingDepthVisitor extends JavaRecursiveElementVisitor {
 
 
   @Override
-  public void visitAnonymousClass(@Nonnull PsiAnonymousClass aClass) {
+  public void visitAnonymousClass(@jakarta.annotation.Nonnull PsiAnonymousClass aClass) {
     // to call to super, to keep this from drilling down
   }
 
@@ -48,7 +48,7 @@ class NestingDepthVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitDoWhileStatement(@Nonnull PsiDoWhileStatement statement) {
+  public void visitDoWhileStatement(@jakarta.annotation.Nonnull PsiDoWhileStatement statement) {
     enterScope();
     super.visitDoWhileStatement(statement);
     exitScope();
@@ -82,28 +82,28 @@ class NestingDepthVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitSynchronizedStatement(@Nonnull PsiSynchronizedStatement statement) {
+  public void visitSynchronizedStatement(@jakarta.annotation.Nonnull PsiSynchronizedStatement statement) {
     enterScope();
     super.visitSynchronizedStatement(statement);
     exitScope();
   }
 
   @Override
-  public void visitTryStatement(@Nonnull PsiTryStatement statement) {
+  public void visitTryStatement(@jakarta.annotation.Nonnull PsiTryStatement statement) {
     enterScope();
     super.visitTryStatement(statement);
     exitScope();
   }
 
   @Override
-  public void visitSwitchStatement(@Nonnull PsiSwitchStatement statement) {
+  public void visitSwitchStatement(@jakarta.annotation.Nonnull PsiSwitchStatement statement) {
     enterScope();
     super.visitSwitchStatement(statement);
     exitScope();
   }
 
   @Override
-  public void visitWhileStatement(@Nonnull PsiWhileStatement statement) {
+  public void visitWhileStatement(@jakarta.annotation.Nonnull PsiWhileStatement statement) {
     enterScope();
     super.visitWhileStatement(statement);
     exitScope();

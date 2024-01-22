@@ -29,7 +29,7 @@ import consulo.project.Project;
 import consulo.ui.ex.awt.IdeBorderFactory;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 import java.util.function.Function;

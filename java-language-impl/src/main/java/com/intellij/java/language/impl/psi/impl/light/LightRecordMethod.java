@@ -11,8 +11,9 @@ import consulo.language.psi.util.LanguageCachedValueUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.DumbService;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.Arrays;
 
 public final class LightRecordMethod extends LightMethod implements LightRecordMember {
@@ -23,13 +24,13 @@ public final class LightRecordMethod extends LightMethod implements LightRecordM
   public LightRecordMethod(@Nonnull PsiManager manager,
                            @Nonnull PsiMethod method,
                            @Nonnull PsiClass containingClass,
-                           @Nonnull PsiRecordComponent component) {
+                           @jakarta.annotation.Nonnull PsiRecordComponent component) {
     super(manager, method, containingClass);
     myRecordComponent = component;
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiRecordComponent getRecordComponent() {
     return myRecordComponent;
   }
@@ -82,7 +83,7 @@ public final class LightRecordMethod extends LightMethod implements LightRecordM
   }
 
   @Override
-  public boolean hasAnnotation(@Nonnull String fqn) {
+  public boolean hasAnnotation(@jakarta.annotation.Nonnull String fqn) {
     PsiType returnType = getReturnType();
     return returnType != null && returnType.hasAnnotation(fqn);
   }

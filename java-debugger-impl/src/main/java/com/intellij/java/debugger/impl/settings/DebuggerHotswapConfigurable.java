@@ -18,7 +18,7 @@ package com.intellij.java.debugger.impl.settings;
 import com.intellij.java.debugger.DebuggerBundle;
 import consulo.configurable.SearchableConfigurable;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import javax.swing.border.Border;

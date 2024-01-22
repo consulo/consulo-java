@@ -3,8 +3,8 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.*;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import static com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes.BOTTOM;
 
@@ -27,7 +27,7 @@ public interface DfReferenceType extends DfType {
   /**
    * @return mutability of all the objects referred by this type
    */
-  @Nonnull
+  @jakarta.annotation.Nonnull
   default Mutability getMutability() {
     return Mutability.UNKNOWN;
   }
@@ -58,7 +58,7 @@ public interface DfReferenceType extends DfType {
   /**
    * @return this type without type constraint, or simply this type if it's a constant
    */
-  @Nonnull
+  @jakarta.annotation.Nonnull
   default DfReferenceType dropTypeConstraint() {
     return this;
   }
@@ -74,7 +74,7 @@ public interface DfReferenceType extends DfType {
   /**
    * @return this type without nullability knowledge, or simply this type if it's a constant
    */
-  @Nonnull
+  @jakarta.annotation.Nonnull
   DfReferenceType dropNullability();
 
   /**
@@ -106,7 +106,7 @@ public interface DfReferenceType extends DfType {
    * @return this type dropping any relation to the supplied type
    */
   @Nonnull
-  default DfType withoutType(@Nonnull TypeConstraint type) {
+  default DfType withoutType(@jakarta.annotation.Nonnull TypeConstraint type) {
     TypeConstraint constraint = getConstraint();
     if (constraint.equals(type)) {
       return dropTypeConstraint();

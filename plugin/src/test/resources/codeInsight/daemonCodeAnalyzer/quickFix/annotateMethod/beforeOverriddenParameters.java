@@ -1,9 +1,10 @@
 // "Annotate overridden method parameters as '@NotNull'" "true"
-import javax.annotation.Nonnull;
+
+import jakarta.annotation.Nonnull;
 
 abstract class P2 {
     @Nonnull
-    String foo(@Nonnull<caret> P p) {
+    String foo(@jakarta.annotation.Nonnull<caret> P p) {
         return "";
     }
 }

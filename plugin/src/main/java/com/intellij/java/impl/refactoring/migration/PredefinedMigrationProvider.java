@@ -18,8 +18,8 @@ package com.intellij.java.impl.refactoring.migration;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.net.URL;
 
 @ExtensionAPI(ComponentScope.APPLICATION)

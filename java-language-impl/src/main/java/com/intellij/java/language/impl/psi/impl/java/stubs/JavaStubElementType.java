@@ -23,7 +23,7 @@ import consulo.language.psi.stub.PsiFileStub;
 import consulo.language.psi.stub.StubElement;
 import consulo.language.ast.ICompositeElementType;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author max
@@ -36,12 +36,12 @@ public abstract class JavaStubElementType<StubT extends StubElement, PsiT extend
     this(debugName, false);
   }
 
-  protected JavaStubElementType(@Nonnull @NonNls final String debugName, final boolean leftBound) {
+  protected JavaStubElementType(@jakarta.annotation.Nonnull @NonNls final String debugName, final boolean leftBound) {
     super(debugName, JavaLanguage.INSTANCE);
     myLeftBound = leftBound;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getExternalId() {
     return "java." + toString();
@@ -65,7 +65,7 @@ public abstract class JavaStubElementType<StubT extends StubElement, PsiT extend
   }
 
   @SuppressWarnings("MethodOverloadsMethodOfSuperclass")
-  public abstract PsiT createPsi(@Nonnull ASTNode node);
+  public abstract PsiT createPsi(@jakarta.annotation.Nonnull ASTNode node);
 
   @Override
   public final StubT createStub(@Nonnull final PsiT psi, final StubElement parentStub) {

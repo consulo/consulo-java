@@ -1,5 +1,5 @@
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class X  {
     private final static String CON = "";
@@ -30,7 +30,7 @@ public class X  {
         set(hz());
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     String nn() {
         return "";
     }

@@ -31,7 +31,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.ProcessingContext;
 import consulo.util.collection.ContainerUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.List;
 
 import static com.intellij.java.language.patterns.PsiJavaPatterns.psiLiteral;
@@ -50,9 +50,9 @@ public class JamReferenceContributor extends PsiReferenceContributor {
 
   public void registerReferenceProviders(PsiReferenceRegistrar registrar) {
     registrar.registerReferenceProvider(STRING_IN_ANNO, new PsiReferenceProvider() {
-      @Nonnull
+      @jakarta.annotation.Nonnull
       @Override
-      public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull ProcessingContext context) {
+      public PsiReference[] getReferencesByElement(@jakarta.annotation.Nonnull PsiElement element, @jakarta.annotation.Nonnull ProcessingContext context) {
         final PsiNameValuePair pair = PsiTreeUtil.getParentOfType(element, PsiNameValuePair.class);
         final PsiAnnotation anno = (PsiAnnotation)pair.getParent().getParent();
         final PsiAnnotation originalAnno = anno == null ? null :  CompletionUtilCore.getOriginalElement(anno);

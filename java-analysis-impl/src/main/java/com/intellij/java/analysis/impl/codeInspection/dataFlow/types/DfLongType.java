@@ -4,8 +4,8 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.rangeSet.LongRangeSet;
 import com.intellij.java.language.psi.PsiPrimitiveType;
 import com.intellij.java.language.psi.PsiType;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public interface DfLongType extends DfIntegralType {
   @Override
@@ -21,7 +21,7 @@ public interface DfLongType extends DfIntegralType {
 
   @Nonnull
   @Override
-  default DfType meet(@Nonnull DfType other) {
+  default DfType meet(@jakarta.annotation.Nonnull DfType other) {
     if (other == DfTypes.TOP) return this;
     if (!(other instanceof DfLongType)) return DfTypes.BOTTOM;
     return DfTypes.longRange(((DfLongType)other).getRange().intersect(getRange()));
@@ -33,7 +33,7 @@ public interface DfLongType extends DfIntegralType {
     return meet(DfTypes.longRange(range));
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   default PsiPrimitiveType getPsiType() {
     return PsiType.LONG;

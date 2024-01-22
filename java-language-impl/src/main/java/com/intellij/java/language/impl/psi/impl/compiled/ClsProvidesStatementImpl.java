@@ -25,7 +25,7 @@ import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.language.psi.stub.StubElement;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class ClsProvidesStatementImpl extends ClsRepositoryPsiElement<PsiProvidesStatementStub> implements PsiProvidesStatement {
   private final ClsJavaCodeReferenceElementImpl myClassReference;
@@ -52,7 +52,7 @@ public class ClsProvidesStatementImpl extends ClsRepositoryPsiElement<PsiProvide
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, @jakarta.annotation.Nonnull StringBuilder buffer) {
     StringUtil.repeatSymbol(buffer, ' ', indentLevel);
     buffer.append("provides ").append(myClassReference.getCanonicalText()).append(' ');
     appendText(getImplementationList(), indentLevel, buffer);

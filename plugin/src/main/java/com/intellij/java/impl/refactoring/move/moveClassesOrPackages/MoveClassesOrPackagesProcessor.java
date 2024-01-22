@@ -27,7 +27,6 @@ import com.intellij.java.language.psi.search.PackageScope;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.util.VisibilityUtil;
-import consulo.component.extension.Extensions;
 import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
 import consulo.util.lang.Comparing;
@@ -57,8 +56,9 @@ import consulo.application.util.function.Processor;
 import consulo.util.collection.MultiMap;
 import consulo.logging.Logger;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.*;
 
 /**

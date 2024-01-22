@@ -17,7 +17,7 @@ package com.intellij.java.execution;
 
 import consulo.util.io.FileUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;

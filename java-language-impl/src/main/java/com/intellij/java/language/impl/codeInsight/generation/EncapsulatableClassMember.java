@@ -17,8 +17,7 @@ package com.intellij.java.language.impl.codeInsight.generation;
 
 import consulo.language.editor.generation.ClassMember;
 import consulo.language.util.IncorrectOperationException;
-
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author peter
@@ -33,6 +32,6 @@ public interface EncapsulatableClassMember extends ClassMember {
   /**
    * @return PsiElement or TemplateGenerationInfo
    */
-  @Nullable
+  @jakarta.annotation.Nullable
   GenerationInfo generateSetter() throws IncorrectOperationException;
 }

@@ -17,8 +17,8 @@ package com.intellij.java.debugger.impl.memory.component;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import com.intellij.java.debugger.impl.memory.utils.StackFrameItem;
 import consulo.internal.com.sun.jdi.ObjectReference;

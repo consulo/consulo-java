@@ -20,8 +20,7 @@ import consulo.annotation.component.ServiceAPI;
 import consulo.ide.ServiceManager;
 import consulo.language.psi.ReferenceProviderType;
 import consulo.project.Project;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
@@ -46,6 +45,6 @@ public abstract class CommonReferenceProviderTypes {
   @Nonnull
   public abstract JavaClassPsiReferenceProvider getClassReferenceProvider();
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public abstract JavaClassPsiReferenceProvider getSoftClassReferenceProvider();
 }

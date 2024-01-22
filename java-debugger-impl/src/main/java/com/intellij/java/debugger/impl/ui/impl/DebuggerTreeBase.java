@@ -39,7 +39,7 @@ import consulo.util.lang.StringUtil;
 import consulo.util.lang.text.StringTokenizer;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.tree.TreeModel;

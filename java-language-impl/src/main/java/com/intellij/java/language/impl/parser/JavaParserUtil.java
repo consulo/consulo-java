@@ -25,8 +25,8 @@ import consulo.util.lang.StringUtil;
 import consulo.util.lang.function.Condition;
 import org.jetbrains.annotations.PropertyKey;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.List;
 
 public class JavaParserUtil {
@@ -119,7 +119,7 @@ public class JavaParserUtil {
     builder.putUserData(LANG_LEVEL_KEY, level);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static LanguageLevel getLanguageLevel(final PsiBuilder builder) {
     final LanguageLevel level = builder.getUserData(LANG_LEVEL_KEY);
     assert level != null : builder;
@@ -163,7 +163,7 @@ public class JavaParserUtil {
     return builder;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static PsiBuilder createBuilder(final LighterLazyParseableNode chameleon) {
     final PsiElement psi = chameleon.getContainingFile();
     assert psi != null : chameleon;
@@ -183,7 +183,7 @@ public class JavaParserUtil {
     return parseFragment(chameleon, wrapper, true, LanguageLevel.HIGHEST);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static ASTNode parseFragment(final ASTNode chameleon, final ParserWrapper wrapper, final boolean eatAll, final LanguageLevel level) {
     final PsiElement psi = (chameleon.getTreeParent() != null ? chameleon.getTreeParent().getPsi() : chameleon.getPsi());
     assert psi != null : chameleon;
@@ -228,7 +228,7 @@ public class JavaParserUtil {
     builder.mark().error(message);
   }
 
-  public static void error(final PsiBuilder builder, final String message, @Nullable final PsiBuilder.Marker before) {
+  public static void error(final PsiBuilder builder, final String message, @jakarta.annotation.Nullable final PsiBuilder.Marker before) {
     if (before == null) {
       error(builder, message);
     } else {

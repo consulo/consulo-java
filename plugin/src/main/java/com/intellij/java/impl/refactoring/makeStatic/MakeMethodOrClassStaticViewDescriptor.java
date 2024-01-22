@@ -24,7 +24,7 @@
  */
 package com.intellij.java.impl.refactoring.makeStatic;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMember;

@@ -19,7 +19,7 @@ import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiTypeVisitor;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Used in Generify refactoring

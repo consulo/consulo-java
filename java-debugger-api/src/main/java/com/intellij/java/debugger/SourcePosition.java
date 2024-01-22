@@ -32,8 +32,9 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Comparing;
 import consulo.virtualFileSystem.VirtualFile;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.List;
 
 /**
@@ -44,7 +45,7 @@ import java.util.List;
 public abstract class SourcePosition implements Navigatable {
   private static final Logger LOG = Logger.getInstance(SourcePosition.class);
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public abstract PsiFile getFile();
 
   public abstract PsiElement getElementAt();

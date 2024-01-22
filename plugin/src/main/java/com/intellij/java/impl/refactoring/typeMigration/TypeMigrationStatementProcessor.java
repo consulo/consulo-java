@@ -38,7 +38,7 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.Pair;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;

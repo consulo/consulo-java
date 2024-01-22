@@ -31,10 +31,11 @@ import consulo.execution.ui.console.HyperlinkInfo;
 import consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil;
 import consulo.internal.com.sun.jdi.*;
 import consulo.logging.Logger;
+import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.util.Collections;
 
 /**

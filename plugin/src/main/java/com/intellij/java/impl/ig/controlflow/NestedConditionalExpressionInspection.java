@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiConditionalExpression;
 import consulo.annotation.component.ExtensionImpl;

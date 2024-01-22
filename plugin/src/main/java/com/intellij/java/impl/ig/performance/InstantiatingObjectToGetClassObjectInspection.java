@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.ig.performance;
 
-import javax.annotation.Nonnull;
-
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
@@ -27,6 +25,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.psiutils.StringUtils;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
@@ -34,7 +33,7 @@ public class InstantiatingObjectToGetClassObjectInspection
   extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "instantiating.object.to.get.class.object.display.name");
@@ -116,7 +115,7 @@ public class InstantiatingObjectToGetClassObjectInspection
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();

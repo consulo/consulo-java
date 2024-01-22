@@ -36,7 +36,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.lang.Pair;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public abstract class AddAnnotationIntention extends BaseIntentionAction {
   public AddAnnotationIntention() {
@@ -78,7 +78,7 @@ public abstract class AddAnnotationIntention extends BaseIntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     PsiModifierListOwner owner = AddAnnotationPsiFix.getContainer(file, editor.getCaretModel().getOffset());
     if (owner == null || !owner.isValid()) {
       return;

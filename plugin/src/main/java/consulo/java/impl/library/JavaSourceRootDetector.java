@@ -22,7 +22,7 @@ import consulo.content.base.SourcesOrderRootType;
 import consulo.content.library.ui.RootDetector;
 import consulo.virtualFileSystem.VirtualFile;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Collection;
 
 @ExtensionImpl

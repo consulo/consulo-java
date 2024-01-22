@@ -17,8 +17,8 @@ package com.intellij.java.impl.ig.junit;
 
 import javax.swing.JComponent;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
@@ -52,7 +52,7 @@ public class TestCaseWithNoTestMethodsInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "test.case.with.no.test.methods.problem.descriptor");
@@ -76,7 +76,7 @@ public class TestCaseWithNoTestMethodsInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
       if (aClass.isInterface()
           || aClass.isEnum()
           || aClass.isAnnotationType()

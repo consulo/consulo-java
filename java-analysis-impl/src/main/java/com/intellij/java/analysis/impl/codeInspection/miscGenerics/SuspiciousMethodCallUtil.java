@@ -16,10 +16,11 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.ObjectUtil;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.util.List;
 
 public class SuspiciousMethodCallUtil {
@@ -186,7 +187,7 @@ public class SuspiciousMethodCallUtil {
   }
 
   @Contract(value = "null -> false", pure = true)
-  public static boolean isCollectionAcceptingMethod(@Nullable String name) {
+  public static boolean isCollectionAcceptingMethod(@jakarta.annotation.Nullable String name) {
     return "removeAll".equals(name) || "retainAll".equals(name) || "containsAll".equals(name);
   }
 
@@ -220,11 +221,11 @@ public class SuspiciousMethodCallUtil {
   }
 
   @Nullable
-  public static String getSuspiciousMethodCallMessage(@Nonnull PsiMethodCallExpression methodCall,
+  public static String getSuspiciousMethodCallMessage(@jakarta.annotation.Nonnull PsiMethodCallExpression methodCall,
                                                       PsiExpression arg,
                                                       PsiType argType,
                                                       boolean reportConvertibleMethodCalls,
-                                                      @Nonnull List<PatternMethod> patternMethods,
+                                                      @jakarta.annotation.Nonnull List<PatternMethod> patternMethods,
                                                       int idx) {
     final PsiReferenceExpression methodExpression = methodCall.getMethodExpression();
 
@@ -237,7 +238,7 @@ public class SuspiciousMethodCallUtil {
     return getSuspiciousMethodCallMessage(methodExpression, argType, reportConvertibleMethodCalls, patternMethods, idx);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static String getSuspiciousMethodCallMessage(PsiReferenceExpression methodExpression,
                                                       PsiType argType,
                                                       boolean reportConvertibleMethodCalls,

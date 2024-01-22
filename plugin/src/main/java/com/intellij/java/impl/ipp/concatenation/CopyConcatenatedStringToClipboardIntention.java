@@ -29,8 +29,8 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.util.IncorrectOperationException;
 import consulo.ui.ex.awt.CopyPasteManager;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.awt.datatransfer.StringSelection;
 
 @ExtensionImpl
@@ -44,7 +44,7 @@ public class CopyConcatenatedStringToClipboardIntention extends Intention {
   }
 
   @Override
-  protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+  protected void processIntention(@jakarta.annotation.Nonnull PsiElement element) throws IncorrectOperationException {
     if (!(element instanceof PsiPolyadicExpression)) {
       return;
     }

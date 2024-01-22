@@ -22,8 +22,8 @@ import consulo.language.psi.PsiReference;
 import com.siyeh.ig.psiutils.BoolUtils;
 import com.siyeh.ig.psiutils.ClassUtils;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -39,7 +39,7 @@ public class InitializationUtils {
   }
 
   public static boolean expressionAssignsVariableOrFails(
-      @Nullable PsiExpression expression, @Nonnull PsiVariable variable) {
+    @jakarta.annotation.Nullable PsiExpression expression, @Nonnull PsiVariable variable) {
     return expressionAssignsVariableOrFails(expression, variable,
         new HashSet(), true);
   }
@@ -61,15 +61,15 @@ public class InitializationUtils {
   }
 
   public static boolean blockAssignsVariableOrFails(
-      @Nullable PsiCodeBlock block, @Nonnull PsiVariable variable,
-      boolean strict) {
+    @jakarta.annotation.Nullable PsiCodeBlock block, @jakarta.annotation.Nonnull PsiVariable variable,
+    boolean strict) {
     return blockAssignsVariableOrFails(block, variable,
         new HashSet<MethodSignature>(), strict);
   }
 
   private static boolean blockAssignsVariableOrFails(
-      @Nullable PsiCodeBlock block, @Nonnull PsiVariable variable,
-      @Nonnull Set<MethodSignature> checkedMethods, boolean strict) {
+    @jakarta.annotation.Nullable PsiCodeBlock block, @jakarta.annotation.Nonnull PsiVariable variable,
+    @Nonnull Set<MethodSignature> checkedMethods, boolean strict) {
     if (block == null) {
       return false;
     }
@@ -199,16 +199,16 @@ public class InitializationUtils {
 
   public static boolean switchStatementAssignsVariableOrFails(
       @Nonnull PsiSwitchStatement switchStatement,
-      @Nonnull PsiVariable variable,
+      @jakarta.annotation.Nonnull PsiVariable variable,
       boolean strict) {
     return switchStatementAssignsVariableOrFails(switchStatement, variable,
         new HashSet(), strict);
   }
 
   private static boolean switchStatementAssignsVariableOrFails(
-      @Nonnull PsiSwitchStatement switchStatement,
-      @Nonnull PsiVariable variable,
-      @Nonnull Set<MethodSignature> checkedMethods, boolean strict) {
+    @Nonnull PsiSwitchStatement switchStatement,
+    @jakarta.annotation.Nonnull PsiVariable variable,
+    @jakarta.annotation.Nonnull Set<MethodSignature> checkedMethods, boolean strict) {
     final PsiExpression expression = switchStatement.getExpression();
     if (expressionAssignsVariableOrFails(expression, variable,
         checkedMethods, strict)) {
@@ -273,7 +273,7 @@ public class InitializationUtils {
     return false;
   }
 
-  private static boolean tryStatementAssignsVariableOrFails(@Nonnull PsiTryStatement tryStatement, PsiVariable variable,
+  private static boolean tryStatementAssignsVariableOrFails(@jakarta.annotation.Nonnull PsiTryStatement tryStatement, PsiVariable variable,
                                                             @Nonnull Set<MethodSignature> checkedMethods, boolean strict) {
     final PsiResourceList resourceList = tryStatement.getResourceList();
     if (resourceList != null) {
@@ -303,9 +303,9 @@ public class InitializationUtils {
   }
 
   private static boolean ifStatementAssignsVariableOrFails(
-      @Nonnull PsiIfStatement ifStatement,
+      @jakarta.annotation.Nonnull PsiIfStatement ifStatement,
       PsiVariable variable,
-      @Nonnull Set<MethodSignature> checkedMethods,
+      @jakarta.annotation.Nonnull Set<MethodSignature> checkedMethods,
       boolean strict) {
     final PsiExpression condition = ifStatement.getCondition();
     if (expressionAssignsVariableOrFails(condition, variable,
@@ -391,7 +391,7 @@ public class InitializationUtils {
     return false;
   }
 
-  private static boolean expressionAssignsVariableOrFails(@Nullable PsiExpression expression, PsiVariable variable,
+  private static boolean expressionAssignsVariableOrFails(@jakarta.annotation.Nullable PsiExpression expression, PsiVariable variable,
                                                           @Nonnull Set<MethodSignature> checkedMethods, boolean strict) {
     if (expression == null) {
       return false;

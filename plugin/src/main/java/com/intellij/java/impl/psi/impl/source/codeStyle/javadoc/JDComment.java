@@ -21,8 +21,8 @@ import consulo.language.codeStyle.CommonCodeStyleSettings;
 import consulo.language.codeStyle.IndentInfo;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +42,7 @@ public class JDComment
 	private String myFirstLine = "/**";
 	private String myEndLine = "*/";
 
-	public JDComment(@Nonnull CommentFormatter formatter)
+	public JDComment(@jakarta.annotation.Nonnull CommentFormatter formatter)
 	{
 		myFormatter = formatter;
 	}
@@ -62,7 +62,7 @@ public class JDComment
 		myMultiLineComment = value;
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	protected String javadocContinuationIndent()
 	{
 		if(!myFormatter.getSettings().JD_INDENT_ON_CONTINUATION)
@@ -72,7 +72,7 @@ public class JDComment
 		return continuationIndent();
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	protected String continuationIndent()
 	{
 		CodeStyleSettings settings = myFormatter.getSettings().getContainer();
@@ -80,8 +80,8 @@ public class JDComment
 		return new IndentInfo(0, indentOptions.CONTINUATION_INDENT_SIZE, 0).generateNewWhiteSpace(indentOptions);
 	}
 
-	@Nullable
-	public String generate(@Nonnull String indent)
+	@jakarta.annotation.Nullable
+	public String generate(@jakarta.annotation.Nonnull String indent)
 	{
 		final String prefix;
 
@@ -181,21 +181,21 @@ public class JDComment
 		return sb.toString();
 	}
 
-	protected void generateSpecial(@Nonnull String prefix, @Nonnull StringBuilder sb)
+	protected void generateSpecial(@Nonnull String prefix, @jakarta.annotation.Nonnull StringBuilder sb)
 	{
 	}
 
-	public void setFirstCommentLine(@Nonnull String firstCommentLine)
+	public void setFirstCommentLine(@jakarta.annotation.Nonnull String firstCommentLine)
 	{
 		myFirstLine = firstCommentLine;
 	}
 
-	public void setLastCommentLine(@Nonnull String lastCommentLine)
+	public void setLastCommentLine(@jakarta.annotation.Nonnull String lastCommentLine)
 	{
 		myEndLine = lastCommentLine;
 	}
 
-	public void addSeeAlso(@Nonnull String seeAlso)
+	public void addSeeAlso(@jakarta.annotation.Nonnull String seeAlso)
 	{
 		if(mySeeAlsoList == null)
 		{
@@ -222,12 +222,12 @@ public class JDComment
 		mySinceList.add(since);
 	}
 
-	public void setDeprecated(@Nullable String deprecated)
+	public void setDeprecated(@jakarta.annotation.Nullable String deprecated)
 	{
 		this.myDeprecated = deprecated;
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	public String getDescription()
 	{
 		return myDescription;

@@ -41,8 +41,8 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.ref.Ref;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -251,7 +251,7 @@ public class InlineToAnonymousClassHandler extends JavaInlineActionHandler
 	}
 
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	public static PsiCall findCallToInline(final Editor editor)
 	{
 		PsiCall callToInline = null;
@@ -267,7 +267,7 @@ public class InlineToAnonymousClassHandler extends JavaInlineActionHandler
 		return callToInline;
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	public static String getCannotInlineMessage(final PsiClass psiClass)
 	{
 		if(psiClass instanceof PsiTypeParameter)

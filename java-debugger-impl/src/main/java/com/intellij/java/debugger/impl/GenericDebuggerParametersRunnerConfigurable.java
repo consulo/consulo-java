@@ -18,7 +18,6 @@ package com.intellij.java.debugger.impl;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.annotation.Nonnull;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -37,6 +36,7 @@ import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 import consulo.ide.impl.idea.xdebugger.impl.settings.DebuggerConfigurable;
 import consulo.logging.Logger;
+import jakarta.annotation.Nonnull;
 
 public class GenericDebuggerParametersRunnerConfigurable extends SettingsEditor<GenericDebuggerRunnerSettings>
 {

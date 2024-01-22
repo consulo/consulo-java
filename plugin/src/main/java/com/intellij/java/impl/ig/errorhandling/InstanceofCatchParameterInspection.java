@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.errorhandling;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
@@ -28,7 +28,7 @@ import com.siyeh.ig.psiutils.ControlFlowUtils;
 @ExtensionImpl
 public class InstanceofCatchParameterInspection extends BaseInspection {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "instanceof.catch.parameter.display.name");
@@ -49,7 +49,7 @@ public class InstanceofCatchParameterInspection extends BaseInspection {
 
     @Override
     public void visitInstanceOfExpression(
-      @Nonnull PsiInstanceOfExpression exp) {
+      @jakarta.annotation.Nonnull PsiInstanceOfExpression exp) {
       super.visitInstanceOfExpression(exp);
       if (!ControlFlowUtils.isInCatchBlock(exp)) {
         return;

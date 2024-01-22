@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.junit;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
@@ -31,7 +31,7 @@ import consulo.annotation.component.ExtensionImpl;
 @ExtensionImpl
 public class BeforeOrAfterIsPublicVoidNoArgInspection extends BaseInspection {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "BeforeOrAfterWithIncorrectSignature";
   }
@@ -44,7 +44,7 @@ public class BeforeOrAfterIsPublicVoidNoArgInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "before.or.after.is.public.void.no.arg.problem.descriptor");
@@ -59,7 +59,7 @@ public class BeforeOrAfterIsPublicVoidNoArgInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
       //note: no call to super;
       if (!TestUtils.isJUnit4BeforeOrAfterMethod(method)) {
         return;

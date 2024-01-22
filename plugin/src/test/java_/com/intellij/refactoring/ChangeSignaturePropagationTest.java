@@ -5,8 +5,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 import java.util.Set;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.JavaTestUtil;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
@@ -30,6 +28,7 @@ import consulo.util.collection.ContainerUtil;
 import java.util.HashSet;
 import consulo.language.editor.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
+import jakarta.annotation.Nonnull;
 import junit.framework.Assert;
 
 /**

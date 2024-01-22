@@ -26,7 +26,7 @@ import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 
 @ExtensionImpl

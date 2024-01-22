@@ -18,7 +18,7 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.inliner;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.CFGBuilder;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * A CallInliner can recognize specific method calls and inline their implementation into current CFG
@@ -34,7 +34,7 @@ public interface CallInliner
 	 * @return true if inlining is successful. In this case subsequent inliners are skipped and default processing is omitted.
 	 * If false is returned, inliner must not emit any instructions via builder.
 	 */
-	boolean tryInlineCall(@Nonnull CFGBuilder builder, @Nonnull PsiMethodCallExpression call);
+	boolean tryInlineCall(@jakarta.annotation.Nonnull CFGBuilder builder, @Nonnull PsiMethodCallExpression call);
 
 	/**
 	 * @param expression expression to test

@@ -41,8 +41,8 @@ import consulo.util.collection.primitive.ints.IntList;
 import consulo.util.collection.primitive.ints.IntLists;
 import consulo.util.dataholder.Key;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -56,7 +56,7 @@ public class DuplicatesFinder {
   private final List<? extends PsiVariable> myOutputParameters;
   private final List<PsiElement> myPatternAsList;
   private boolean myMultipleExitPoints = false;
-  @Nullable
+  @jakarta.annotation.Nullable
   private final ReturnValue myReturnValue;
 
   public DuplicatesFinder(PsiElement[] pattern, InputVariables parameters, @Nullable ReturnValue returnValue, @Nonnull List<? extends PsiVariable> outputParameters) {
@@ -110,7 +110,7 @@ public class DuplicatesFinder {
     return myPattern;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public ReturnValue getReturnValue() {
     return myReturnValue;
   }

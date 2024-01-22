@@ -62,8 +62,8 @@ import consulo.virtualFileSystem.util.VirtualFileUtil;
 import consulo.virtualFileSystem.util.VirtualFileVisitor;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -102,10 +102,10 @@ public class BackendCompilerWrapper
 
 	public BackendCompilerWrapper(TranslatingCompiler translatingCompiler,
 								  Chunk<Module> chunk,
-								  @Nonnull final Project project,
-								  @Nonnull List<VirtualFile> filesToCompile,
-								  @Nonnull CompileContextEx compileContext,
-								  @Nonnull BackendCompiler compiler,
+								  @jakarta.annotation.Nonnull final Project project,
+								  @jakarta.annotation.Nonnull List<VirtualFile> filesToCompile,
+								  @jakarta.annotation.Nonnull CompileContextEx compileContext,
+								  @jakarta.annotation.Nonnull BackendCompiler compiler,
 								  TranslatingCompiler.OutputSink sink)
 	{
 		myTranslatingCompiler = translatingCompiler;
@@ -125,7 +125,7 @@ public class BackendCompilerWrapper
 		myStatistics = stat;
 	}
 
-	public void compile(@Nonnull Map<File, FileObject> parsingInfo) throws CompilerException, CacheCorruptedException
+	public void compile(@jakarta.annotation.Nonnull Map<File, FileObject> parsingInfo) throws CompilerException, CacheCorruptedException
 	{
 		Application application = ApplicationManager.getApplication();
 		try
@@ -430,7 +430,7 @@ public class BackendCompilerWrapper
 		}
 	}
 
-	private void doCompile(@Nonnull final ModuleChunk chunk, @Nonnull String outputDir, Map<File, FileObject> parsingInfo) throws IOException
+	private void doCompile(@jakarta.annotation.Nonnull final ModuleChunk chunk, @jakarta.annotation.Nonnull String outputDir, Map<File, FileObject> parsingInfo) throws IOException
 	{
 		myCompileContext.getProgressIndicator().checkCanceled();
 
@@ -803,7 +803,7 @@ public class BackendCompilerWrapper
 			VirtualFileUtil.visitChildrenRecursively(from, new VirtualFileVisitor()
 			{
 				@Override
-				public boolean visitFile(@Nonnull VirtualFile file)
+				public boolean visitFile(@jakarta.annotation.Nonnull VirtualFile file)
 				{
 					if(!file.isDirectory())
 					{

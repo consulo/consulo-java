@@ -2,7 +2,7 @@ package com.intellij.java.analysis.impl.find.findUsages;
 
 import java.util.LinkedHashSet;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import consulo.find.FindBundle;
 import consulo.project.Project;
 

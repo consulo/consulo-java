@@ -18,9 +18,6 @@ package com.intellij.java.debugger.impl.engine.evaluation.expression;
 import java.util.Collections;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import consulo.logging.Logger;
@@ -35,6 +32,8 @@ import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.PrimitiveValue;
 import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.internal.com.sun.jdi.Value;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Eugene Zhuravlev
@@ -110,7 +109,7 @@ public class UnBoxingEvaluator implements Evaluator
 		return context.getDebugProcess().invokeMethod(context, value, method, Collections.emptyList());
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	public static PrimitiveValue getInnerPrimitiveValue(ObjectReference value)
 	{
 		ReferenceType type = value.referenceType();

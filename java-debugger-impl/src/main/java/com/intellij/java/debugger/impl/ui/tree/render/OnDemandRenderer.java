@@ -28,9 +28,9 @@ import consulo.execution.debug.frame.XFullValueEvaluator;
 import consulo.execution.debug.frame.XValuePlace;
 import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 import consulo.util.dataholder.Key;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author egor

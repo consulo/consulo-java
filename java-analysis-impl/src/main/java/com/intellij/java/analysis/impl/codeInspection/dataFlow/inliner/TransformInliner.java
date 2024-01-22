@@ -6,7 +6,7 @@ import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.siyeh.ig.callMatcher.CallMatcher;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class TransformInliner implements CallInliner
 {

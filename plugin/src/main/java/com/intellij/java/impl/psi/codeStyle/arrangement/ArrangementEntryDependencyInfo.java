@@ -18,7 +18,7 @@ package com.intellij.java.impl.psi.codeStyle.arrangement;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author Denis Zhdanov
@@ -27,7 +27,7 @@ import javax.annotation.Nonnull;
 public class ArrangementEntryDependencyInfo
 {
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	private final List<ArrangementEntryDependencyInfo> myDependentEntries = new ArrayList<ArrangementEntryDependencyInfo>();
 
 	@Nonnull
@@ -38,18 +38,18 @@ public class ArrangementEntryDependencyInfo
 		myAnchorEntry = entry;
 	}
 
-	public void addDependentEntryInfo(@Nonnull ArrangementEntryDependencyInfo info)
+	public void addDependentEntryInfo(@jakarta.annotation.Nonnull ArrangementEntryDependencyInfo info)
 	{
 		myDependentEntries.add(info);
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public List<ArrangementEntryDependencyInfo> getDependentEntriesInfos()
 	{
 		return myDependentEntries;
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public JavaElementArrangementEntry getAnchorEntry()
 	{
 		return myAnchorEntry;

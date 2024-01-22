@@ -23,7 +23,7 @@ import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author ven
@@ -32,7 +32,7 @@ public class ClsArrayInitializerMemberValueImpl extends ClsElementImpl implement
   private final ClsElementImpl myParent;
   private final PsiAnnotationMemberValue[] myInitializers;
 
-  public ClsArrayInitializerMemberValueImpl(@Nonnull ClsElementImpl parent, @Nonnull PsiAnnotationMemberValue[] initializers) {
+  public ClsArrayInitializerMemberValueImpl(@jakarta.annotation.Nonnull ClsElementImpl parent, @Nonnull PsiAnnotationMemberValue[] initializers) {
     myParent = parent;
     myInitializers = initializers;
   }
@@ -55,13 +55,13 @@ public class ClsArrayInitializerMemberValueImpl extends ClsElementImpl implement
   }
 
   @Override
-  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(@jakarta.annotation.Nonnull TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, null);
     setMirrors(getInitializers(), SourceTreeToPsiMap.<PsiArrayInitializerMemberValue>treeToPsiNotNull(element).getInitializers());
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiElement[] getChildren() {
     return myInitializers;
   }
@@ -81,7 +81,7 @@ public class ClsArrayInitializerMemberValueImpl extends ClsElementImpl implement
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiAnnotationMemberValue[] getInitializers() {
     return myInitializers;
   }

@@ -46,8 +46,8 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.module.content.ProjectRootManager;
 import consulo.util.lang.function.Functions;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import java.util.Collection;
 
@@ -150,7 +150,7 @@ public class GuavaLineMarkerProvider implements LineMarkerProvider {
     }));
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static PsiClass findSubscribeAnnotation(@Nonnull PsiElement element) {
     return LanguageCachedValueUtil.getCachedValue(element, () ->
     {

@@ -37,9 +37,9 @@ import consulo.project.Project;
 import consulo.usage.UsageInfo;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.List;
 
 public class ExtractLightMethodObjectHandler {

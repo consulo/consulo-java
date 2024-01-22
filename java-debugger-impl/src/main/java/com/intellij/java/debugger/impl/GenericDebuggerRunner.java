@@ -40,8 +40,8 @@ import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.process.ExecutionException;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl(id = "defaultJavaDebugRunner")
 public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDebuggerRunnerSettings> {

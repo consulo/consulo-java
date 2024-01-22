@@ -1,6 +1,6 @@
 <root>
   <item name='multiRoot.Test java.lang.String get(java.lang.String) 0'>
-    <annotation name='javax.annotation.Nonnull'>
+    <annotation name='jakarta.annotation.Nonnull'>
       <val name="value" val="&quot;foo&quot;"/>
     </annotation>
   </item>

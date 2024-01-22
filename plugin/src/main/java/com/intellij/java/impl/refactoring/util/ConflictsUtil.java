@@ -34,8 +34,8 @@ import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import consulo.application.util.function.Processor;
 import consulo.util.collection.MultiMap;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class ConflictsUtil {
   private ConflictsUtil() {
@@ -59,7 +59,7 @@ public class ConflictsUtil {
     }
   }
 
-  public static void checkMethodConflicts(@Nullable PsiClass aClass,
+  public static void checkMethodConflicts(@jakarta.annotation.Nullable PsiClass aClass,
                                           PsiMethod refactoredMethod,
                                           final PsiMethod prototype,
                                           final MultiMap<PsiElement,String> conflicts) {

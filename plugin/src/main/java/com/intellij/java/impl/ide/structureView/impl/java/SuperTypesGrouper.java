@@ -26,7 +26,7 @@ import consulo.util.collection.ArrayUtil;
 import consulo.util.dataholder.Key;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.lang.ref.WeakReference;
 import java.util.Collection;
 import java.util.Collections;

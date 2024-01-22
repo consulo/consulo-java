@@ -26,7 +26,7 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.lazy.LazyValue;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Supplier;
@@ -51,7 +51,7 @@ public class ClsPackageAccessibilityStatementImpl extends ClsRepositoryPsiElemen
     });
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Role getRole() {
     return JavaPackageAccessibilityStatementElementType.typeToRole(getStub().getStubType());
@@ -67,7 +67,7 @@ public class ClsPackageAccessibilityStatementImpl extends ClsRepositoryPsiElemen
     return nullize(getStub().getPackageName());
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Iterable<PsiJavaModuleReferenceElement> getModuleReferences() {
     return myModuleReferences.get();

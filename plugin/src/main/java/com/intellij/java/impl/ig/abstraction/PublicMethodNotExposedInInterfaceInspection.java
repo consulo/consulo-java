@@ -32,7 +32,7 @@ import com.siyeh.ig.ui.ExternalizableStringSet;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 
@@ -61,7 +61,7 @@ public class PublicMethodNotExposedInInterfaceInspection
       "public.method.not.in.interface.problem.descriptor");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     return AddToIgnoreIfAnnotatedByListQuickFix.build((PsiModifierListOwner)infos[0], ignorableAnnotations);

@@ -38,7 +38,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -53,14 +53,14 @@ public class UnnecessaryJavaDocLinkInspection extends BaseInspection {
   public boolean ignoreInlineLinkToSuper = false;
 
   @Nls
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "unnecessary.javadoc.link.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     final int n = ((Integer)infos[1]).intValue();

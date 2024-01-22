@@ -15,10 +15,9 @@
  */
 package com.intellij.codeInsight.completion;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.JavaTestUtil;
 import consulo.language.editor.CodeInsightSettings;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author ik

@@ -17,8 +17,9 @@ import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.util.lang.ObjectUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,7 @@ import java.util.List;
 public class SuspiciousCollectionsMethodCallsInspection extends AbstractBaseJavaLocalInspectionTool {
   public boolean REPORT_CONVERTIBLE_METHOD_CALLS = true;
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getDisplayName() {
     return InspectionsBundle.message("inspection.suspicious.collections.method.calls.display.name");
@@ -48,7 +49,7 @@ public class SuspiciousCollectionsMethodCallsInspection extends AbstractBaseJava
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
                                             final boolean isOnTheFly,
                                             LocalInspectionToolSession session,

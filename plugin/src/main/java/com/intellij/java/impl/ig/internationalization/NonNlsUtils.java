@@ -20,7 +20,7 @@ import com.intellij.java.language.psi.*;
 import consulo.util.dataholder.Key;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public class NonNlsUtils {
 
@@ -50,7 +50,7 @@ public class NonNlsUtils {
     return null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static PsiModifierListOwner getAnnotatableQualifier(
     PsiReferenceExpression expression) {
     final PsiExpression qualifierExpression =
@@ -67,7 +67,7 @@ public class NonNlsUtils {
   }
 
   public static boolean isNonNlsAnnotated(
-    @Nullable PsiExpression expression) {
+    @jakarta.annotation.Nullable PsiExpression expression) {
     if (isReferenceToNonNlsAnnotatedElement(expression)) {
       return true;
     }
@@ -95,7 +95,7 @@ public class NonNlsUtils {
   }
 
   public static boolean isNonNlsAnnotatedUse(
-    @Nullable PsiExpression expression) {
+    @jakarta.annotation.Nullable PsiExpression expression) {
     if (expression == null) {
       return false;
     }
@@ -143,7 +143,7 @@ public class NonNlsUtils {
     }
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static <T> T getCachedValue(PsiExpression expression, Key<T> key) {
     final T data = expression.getUserData(key);
     if (!(expression instanceof PsiBinaryExpression)) {
@@ -175,7 +175,7 @@ public class NonNlsUtils {
   }
 
   private static boolean isReferenceToNonNlsAnnotatedElement(
-    @Nullable PsiExpression expression) {
+    @jakarta.annotation.Nullable PsiExpression expression) {
     if (!(expression instanceof PsiReferenceExpression)) {
       return false;
     }
@@ -284,7 +284,7 @@ public class NonNlsUtils {
   }
 
   private static boolean isNonNlsAnnotatedModifierListOwner(
-    @Nullable PsiElement element) {
+    @jakarta.annotation.Nullable PsiElement element) {
     if (!(element instanceof PsiModifierListOwner)) {
       return false;
     }

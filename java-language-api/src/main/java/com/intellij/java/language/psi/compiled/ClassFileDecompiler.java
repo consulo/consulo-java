@@ -5,8 +5,7 @@ import consulo.annotation.component.ExtensionAPI;
 import consulo.language.file.FileViewProvider;
 import consulo.language.psi.PsiManager;
 import consulo.virtualFileSystem.VirtualFile;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Actual implementations should extend either {@link ClassFileDecompiler.Light} or {@link ClassFileDecompiler.Full} classes -
@@ -23,8 +22,8 @@ public interface ClassFileDecompiler {
    * attribute to avoid interfering with other decompilers.</p>
    */
   public abstract static class Light implements ClassFileDecompiler {
-    @Nonnull
-    public abstract CharSequence getText(@Nonnull VirtualFile file);
+    @jakarta.annotation.Nonnull
+    public abstract CharSequence getText(@jakarta.annotation.Nonnull VirtualFile file);
   }
 
 
@@ -34,7 +33,7 @@ public interface ClassFileDecompiler {
    * in return they have an ability to represent decompiled file in a way natural for original language.</p>
    */
   public abstract static class Full implements ClassFileDecompiler {
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public abstract ClsStubBuilder getStubBuilder();
 
     /**
@@ -50,8 +49,8 @@ public interface ClassFileDecompiler {
      * A standard practice is to hide such files by returning {@code null} from
      * {@link FileViewProvider#getPsi(Language)}.</p>
      */
-    @Nonnull
-    public abstract FileViewProvider createFileViewProvider(@Nonnull VirtualFile file, @Nonnull PsiManager manager, boolean physical);
+    @jakarta.annotation.Nonnull
+    public abstract FileViewProvider createFileViewProvider(@jakarta.annotation.Nonnull VirtualFile file, @jakarta.annotation.Nonnull PsiManager manager, boolean physical);
   }
 
   boolean accepts(@Nonnull VirtualFile file);

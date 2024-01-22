@@ -23,7 +23,7 @@ import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.editor.rawHighlight.HighlightInfoType;
 import consulo.language.psi.PsiElement;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class PsiMethodReferenceHighlightingUtil {
   public static HighlightInfo checkRawConstructorReference(@Nonnull PsiMethodReferenceExpression expression) {

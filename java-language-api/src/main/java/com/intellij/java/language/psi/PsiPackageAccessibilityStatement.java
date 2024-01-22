@@ -15,8 +15,9 @@
  */
 package com.intellij.java.language.psi;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.List;
 
 /**
@@ -32,13 +33,13 @@ public interface PsiPackageAccessibilityStatement extends PsiStatement {
     OPENS
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   Role getRole();
 
   @Nullable
   PsiJavaCodeReferenceElement getPackageReference();
 
-  @Nullable
+  @jakarta.annotation.Nullable
   String getPackageName();
 
   @Nonnull

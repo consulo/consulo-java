@@ -28,10 +28,10 @@ import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.util.PsiTreeUtil;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +40,7 @@ import java.util.List;
 public class ReplaceIfWithSwitchIntention extends Intention {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new IfToSwitchPredicate();
   }
@@ -136,8 +136,8 @@ public class ReplaceIfWithSwitchIntention extends Intention {
   }
 
   @Nullable
-  public static <T extends PsiElement> T getPrevSiblingOfType(@Nullable PsiElement element, @Nonnull Class<T> aClass,
-                                                              @Nonnull Class<? extends PsiElement>... stopAt) {
+  public static <T extends PsiElement> T getPrevSiblingOfType(@Nullable PsiElement element, @jakarta.annotation.Nonnull Class<T> aClass,
+                                                              @jakarta.annotation.Nonnull Class<? extends PsiElement>... stopAt) {
     if (element == null) {
       return null;
     }

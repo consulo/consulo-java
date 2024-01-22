@@ -36,7 +36,7 @@ import consulo.project.ProjectManager;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.awt.*;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;

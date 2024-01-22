@@ -4,10 +4,10 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaVariableValue;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import one.util.streamex.StreamEx;
-import javax.annotation.Nonnull;
 
-import javax.annotation.Nullable;
 import java.util.*;
 
 /**

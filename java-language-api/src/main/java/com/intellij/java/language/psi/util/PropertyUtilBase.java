@@ -17,8 +17,8 @@ import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import kava.beans.Introspector;
 import java.util.*;
 
@@ -95,7 +95,7 @@ public class PropertyUtilBase {
   }
 
   @Nonnull
-  public static List<PsiMethod> getGetters(@Nonnull final PsiClass psiClass, final String propertyName) {
+  public static List<PsiMethod> getGetters(@jakarta.annotation.Nonnull final PsiClass psiClass, final String propertyName) {
     final String[] names = suggestGetterNames(propertyName);
     final ArrayList<PsiMethod> list = new ArrayList<>();
     for (String name : names) {
@@ -111,12 +111,12 @@ public class PropertyUtilBase {
     return list;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static List<PsiMethod> getAccessors(@Nonnull final PsiClass psiClass, final String propertyName) {
     return ContainerUtil.concat(getGetters(psiClass, propertyName), getSetters(psiClass, propertyName));
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static String[] getReadableProperties(@Nonnull PsiClass aClass, boolean includeSuperClass) {
     List<String> result = new ArrayList<>();
 
@@ -171,7 +171,7 @@ public class PropertyUtilBase {
 
   @Nullable
   public static PsiMethod findPropertySetter(PsiClass aClass,
-                                             @Nonnull String propertyName,
+                                             @jakarta.annotation.Nonnull String propertyName,
                                              boolean isStatic,
                                              boolean checkSuperClasses) {
     if (aClass == null)
@@ -277,7 +277,7 @@ public class PropertyUtilBase {
     NOT_A_GETTER
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static GetterFlavour getMethodNameGetterFlavour(@Nonnull String methodName) {
     if (checkPrefix(methodName, GET_PREFIX)) {
       return GetterFlavour.GENERIC;
@@ -385,7 +385,7 @@ public class PropertyUtilBase {
     return Comparing.equal(PsiUtil.resolveClassInType(TypeConversionUtil.erasure(returnType)), method.getContainingClass());
   }
 
-  public static boolean isSetterName(@Nonnull String methodName) {
+  public static boolean isSetterName(@jakarta.annotation.Nonnull String methodName) {
     return checkPrefix(methodName, SET_PREFIX);
   }
 
@@ -424,7 +424,7 @@ public class PropertyUtilBase {
 
   @NonNls
   @Nonnull
-  public static String[] suggestGetterNames(@Nonnull String propertyName) {
+  public static String[] suggestGetterNames(@jakarta.annotation.Nonnull String propertyName) {
     final String str = StringUtil.capitalizeWithJavaBeanConvention(StringUtil.sanitizeJavaIdentifier(propertyName));
     return new String[]{
         IS_PREFIX + str,
@@ -670,7 +670,7 @@ public class PropertyUtilBase {
   }
 
   @Contract(pure = true)
-  @Nullable
+  @jakarta.annotation.Nullable
   public static PropertyKind getPropertyKind(@Nonnull String accessorName) {
     for (PropertyKind kind : PropertyKind.values()) {
       String prefix = kind.prefix;
@@ -687,7 +687,7 @@ public class PropertyUtilBase {
    * @see Introspector
    */
   @Contract(pure = true)
-  @Nullable
+  @jakarta.annotation.Nullable
   public static Pair<String, PropertyKind> getPropertyNameAndKind(@Nonnull String accessorName) {
     PropertyKind kind = getPropertyKind(accessorName);
     if (kind == null) {
@@ -700,7 +700,7 @@ public class PropertyUtilBase {
 
   @Contract(pure = true)
   @Nonnull
-  public static String getAccessorName(@Nonnull String propertyName, @Nonnull PropertyKind kind) {
+  public static String getAccessorName(@Nonnull String propertyName, @jakarta.annotation.Nonnull PropertyKind kind) {
     return kind.prefix + StringUtil.capitalizeWithJavaBeanConvention(propertyName);
   }
 }

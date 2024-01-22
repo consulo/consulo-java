@@ -18,8 +18,6 @@ package com.intellij.java.impl.ide.hierarchy.type;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 import consulo.ide.IdeBundle;
 import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
 import consulo.ide.impl.idea.ide.hierarchy.HierarchyTreeStructure;
@@ -34,6 +32,7 @@ import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.indexing.search.searches.FunctionalExpressionSearch;
 import consulo.util.collection.ArrayUtil;
 import consulo.application.util.function.Processor;
+import jakarta.annotation.Nonnull;
 
 public class SubtypesHierarchyTreeStructure extends HierarchyTreeStructure
 {
@@ -53,7 +52,7 @@ public class SubtypesHierarchyTreeStructure extends HierarchyTreeStructure
 
 	@Override
 	@Nonnull
-	protected final Object[] buildChildren(@Nonnull final HierarchyNodeDescriptor descriptor)
+	protected final Object[] buildChildren(@jakarta.annotation.Nonnull final HierarchyNodeDescriptor descriptor)
 	{
 		final Object element = ((TypeHierarchyNodeDescriptor) descriptor).getPsiClass();
 		if(!(element instanceof PsiClass))

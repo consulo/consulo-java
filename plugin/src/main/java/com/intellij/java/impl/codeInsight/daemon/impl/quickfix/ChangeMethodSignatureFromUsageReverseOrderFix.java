@@ -10,7 +10,7 @@ import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.impl.refactoring.changeSignature.ParameterInfoImpl;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,9 +20,9 @@ import java.util.Set;
 public class ChangeMethodSignatureFromUsageReverseOrderFix extends ChangeMethodSignatureFromUsageFix
 {
 	public ChangeMethodSignatureFromUsageReverseOrderFix(@Nonnull PsiMethod targetMethod,
-														 @Nonnull PsiExpression[] expressions,
+														 @jakarta.annotation.Nonnull PsiExpression[] expressions,
 														 @Nonnull PsiSubstitutor substitutor,
-														 @Nonnull PsiElement context,
+														 @jakarta.annotation.Nonnull PsiElement context,
 														 boolean changeAllUsages,
 														 int minUsagesNumberToShowDialog)
 	{

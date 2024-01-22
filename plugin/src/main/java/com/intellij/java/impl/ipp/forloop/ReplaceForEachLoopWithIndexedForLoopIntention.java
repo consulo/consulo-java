@@ -29,10 +29,10 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ReplaceForEachLoopWithIndexedForLoopIntention", fileExtensions = "java", categories = {"Java", "Control Flow"})
@@ -263,7 +263,7 @@ public class ReplaceForEachLoopWithIndexedForLoopIntention extends Intention {
                                                       assignedExpression, true);
   }
 
-  public static String createVariableName(@Nullable String baseName,
+  public static String createVariableName(@jakarta.annotation.Nullable String baseName,
                                           @Nonnull PsiType type,
                                           @Nonnull PsiElement context) {
     final Project project = context.getProject();

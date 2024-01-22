@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.methodmetrics;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import consulo.language.ast.IElementType;
@@ -39,7 +39,7 @@ class NegationCountVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitAnonymousClass(@Nonnull PsiAnonymousClass aClass) {
+  public void visitAnonymousClass(@jakarta.annotation.Nonnull PsiAnonymousClass aClass) {
     // no call to super, to keep it from drilling into anonymous classes
   }
 

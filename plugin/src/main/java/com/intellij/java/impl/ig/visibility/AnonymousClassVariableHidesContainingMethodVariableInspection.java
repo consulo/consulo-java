@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.ig.visibility;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiParameter;
 import com.siyeh.InspectionGadgetsBundle;
@@ -25,12 +23,13 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.RenameFix;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class AnonymousClassVariableHidesContainingMethodVariableInspection
   extends BaseInspection {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "anonymous.class.variable.hides.containing.method.variable.display.name");

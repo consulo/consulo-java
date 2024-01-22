@@ -11,8 +11,8 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -232,7 +232,7 @@ public class ParameterInfoImpl implements JavaParameterInfo
 	 * @return an array of ParameterInfoImpl entries
 	 */
 	@Nonnull
-	public static ParameterInfoImpl[] fromMethod(@Nonnull PsiMethod method)
+	public static ParameterInfoImpl[] fromMethod(@jakarta.annotation.Nonnull PsiMethod method)
 	{
 		List<ParameterInfoImpl> result = new ArrayList<>();
 		final PsiParameter[] parameters = method.getParameterList().getParameters();

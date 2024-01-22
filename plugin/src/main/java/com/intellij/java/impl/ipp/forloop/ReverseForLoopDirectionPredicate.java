@@ -15,8 +15,7 @@
  */
 package com.intellij.java.impl.ipp.forloop;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;
@@ -25,6 +24,7 @@ import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import jakarta.annotation.Nullable;
 
 class ReverseForLoopDirectionPredicate implements PsiElementPredicate
 {
@@ -78,7 +78,7 @@ class ReverseForLoopDirectionPredicate implements PsiElementPredicate
 		return isVariableIncrementOrDecremented(variable, update);
 	}
 
-	public static boolean isVariableCompared(@Nonnull PsiVariable variable, @Nullable PsiExpression expression)
+	public static boolean isVariableCompared(@jakarta.annotation.Nonnull PsiVariable variable, @Nullable PsiExpression expression)
 	{
 		if(!(expression instanceof PsiBinaryExpression))
 		{
@@ -107,7 +107,7 @@ class ReverseForLoopDirectionPredicate implements PsiElementPredicate
 		return false;
 	}
 
-	public static boolean isVariableIncrementOrDecremented(@Nonnull PsiVariable variable, @Nullable PsiStatement statement)
+	public static boolean isVariableIncrementOrDecremented(@Nonnull PsiVariable variable, @jakarta.annotation.Nullable PsiStatement statement)
 	{
 		if(!(statement instanceof PsiExpressionStatement))
 		{

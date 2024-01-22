@@ -20,17 +20,16 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.application.Application;
 import consulo.language.Language;
 import com.intellij.java.language.spi.SPILanguage;
-import consulo.component.extension.ExtensionPointName;
 import consulo.module.Module;
 import consulo.language.util.ModuleUtilCore;
 import consulo.project.Project;
-import consulo.util.lang.function.Condition;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.language.psi.LanguageSubstitutor;
 import consulo.java.impl.roots.SpecialDirUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.List;
 
 /**

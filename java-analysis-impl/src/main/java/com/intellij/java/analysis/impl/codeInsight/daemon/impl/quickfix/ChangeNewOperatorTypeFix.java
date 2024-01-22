@@ -34,10 +34,10 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 public class ChangeNewOperatorTypeFix implements SyntheticIntentionAction {
   private final PsiType myType;
@@ -55,7 +55,7 @@ public class ChangeNewOperatorTypeFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
     return myType.isValid()
         && myExpression.isValid()
         && myExpression.getManager().isInProject(myExpression)

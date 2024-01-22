@@ -24,9 +24,9 @@ import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.editor.rawHighlight.HighlightInfoType;
 import consulo.language.psi.PsiElement;
 import consulo.logging.Logger;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -37,8 +37,8 @@ import java.util.Set;
 public class LambdaHighlightingUtil {
   private static final Logger LOG = Logger.getInstance(LambdaHighlightingUtil.class);
 
-  @Nullable
-  public static String checkInterfaceFunctional(@Nonnull PsiClass psiClass) {
+  @jakarta.annotation.Nullable
+  public static String checkInterfaceFunctional(@jakarta.annotation.Nonnull PsiClass psiClass) {
     return checkInterfaceFunctional(psiClass, "Target type of a lambda conversion must be an interface");
   }
 

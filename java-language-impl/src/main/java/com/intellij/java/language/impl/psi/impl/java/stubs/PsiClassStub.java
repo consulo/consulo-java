@@ -22,11 +22,11 @@ package com.intellij.java.language.impl.psi.impl.java.stubs;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.PsiClass;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public interface PsiClassStub<T extends PsiClass> extends PsiMemberStub<T>
 {
-	@Nullable
+	@jakarta.annotation.Nullable
 	String getQualifiedName();
 
 	@Nullable

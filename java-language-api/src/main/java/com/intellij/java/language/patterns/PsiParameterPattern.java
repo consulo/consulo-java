@@ -21,8 +21,8 @@ import consulo.language.pattern.ElementPattern;
 import consulo.language.pattern.PatternConditionPlus;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.ProcessingContext;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.util.function.BiPredicate;
 
 /**

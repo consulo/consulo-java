@@ -21,7 +21,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import org.intellij.lang.annotations.MagicConstant;
 import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;

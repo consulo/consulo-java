@@ -27,7 +27,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.ui.ExternalizableStringSet;
 import com.intellij.java.impl.ig.ui.UiUtils;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.List;
@@ -65,13 +65,13 @@ public class BadExceptionThrownInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "ProhibitedExceptionThrown";
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "bad.exception.thrown.display.name");

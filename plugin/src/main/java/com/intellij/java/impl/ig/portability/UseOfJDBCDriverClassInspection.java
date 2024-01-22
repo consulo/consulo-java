@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.portability;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
@@ -28,14 +28,14 @@ import consulo.annotation.component.ExtensionImpl;
 public class UseOfJDBCDriverClassInspection extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "use.of.concrete.jdbc.driver.class.display.name");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "use.of.concrete.jdbc.driver.class.problem.descriptor");
@@ -84,7 +84,7 @@ public class UseOfJDBCDriverClassInspection extends BaseInspection {
 
     @Override
     public void visitNewExpression(
-      @Nonnull PsiNewExpression newExpression) {
+      @jakarta.annotation.Nonnull PsiNewExpression newExpression) {
       super.visitNewExpression(newExpression);
       final PsiType type = newExpression.getType();
       if (type == null) {

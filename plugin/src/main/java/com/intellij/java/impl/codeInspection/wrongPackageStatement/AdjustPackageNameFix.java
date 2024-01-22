@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.codeInspection.wrongPackageStatement;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.FileModificationService;

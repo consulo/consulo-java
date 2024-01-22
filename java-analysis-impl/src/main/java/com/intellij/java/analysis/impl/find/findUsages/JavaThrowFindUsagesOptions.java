@@ -17,8 +17,7 @@ package com.intellij.java.analysis.impl.find.findUsages;
 
 import com.intellij.java.analysis.impl.psi.impl.search.ThrowSearchUtil;
 import consulo.project.Project;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author peter

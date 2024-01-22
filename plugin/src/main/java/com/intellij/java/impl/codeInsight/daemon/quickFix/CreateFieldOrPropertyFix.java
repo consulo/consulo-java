@@ -42,7 +42,7 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.List;
 
 /**
@@ -66,7 +66,7 @@ public class CreateFieldOrPropertyFix implements IntentionAction, LocalQuickFix 
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getText() {
     return JavaQuickFixBundle.message(myMemberType == PropertyMemberType.FIELD ? "create.field.text":"create.property.text", myName);
   }
@@ -78,23 +78,23 @@ public class CreateFieldOrPropertyFix implements IntentionAction, LocalQuickFix 
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getFamilyName() {
     return getText();
   }
 
   @Override
-  public void applyFix(@Nonnull final Project project, @Nonnull ProblemDescriptor descriptor) {
+  public void applyFix(@jakarta.annotation.Nonnull final Project project, @jakarta.annotation.Nonnull ProblemDescriptor descriptor) {
     applyFixInner(project);
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
     return true;
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
     applyFixInner(project);
   }
 

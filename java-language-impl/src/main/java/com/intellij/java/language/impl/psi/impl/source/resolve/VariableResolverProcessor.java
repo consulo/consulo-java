@@ -19,7 +19,7 @@ import consulo.language.psi.resolve.ResolveState;
 import consulo.util.collection.SmartList;
 import consulo.util.dataholder.Key;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author ik, dsl

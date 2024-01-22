@@ -26,8 +26,8 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.util.IncorrectOperationException;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.AddClarifyingParenthesesIntention", fileExtensions = "java", categories = {"Java", "Other"})
@@ -59,7 +59,7 @@ public class AddClarifyingParenthesesIntention extends Intention {
     replaceExpression(newExpression.toString(), expression);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static PsiExpression getTopLevelExpression(PsiElement element) {
     if (!(element instanceof PsiExpression)) {
       return null;

@@ -38,8 +38,8 @@ import consulo.ui.ex.awt.event.DocumentAdapter;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -75,7 +75,7 @@ public class IfCanBeSwitchInspection extends BaseInspection {
     return InspectionGadgetsBundle.message("if.can.be.switch.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("if.can.be.switch.problem.descriptor");
@@ -253,9 +253,9 @@ public class IfCanBeSwitchInspection extends BaseInspection {
       }
     }
 
-    @Nullable
-    public static <T extends PsiElement> T getPrevSiblingOfType(@Nullable PsiElement element, @Nonnull Class<T> aClass,
-                                                                @Nonnull Class<? extends PsiElement>... stopAt) {
+    @jakarta.annotation.Nullable
+    public static <T extends PsiElement> T getPrevSiblingOfType(@Nullable PsiElement element, @jakarta.annotation.Nonnull Class<T> aClass,
+                                                                @jakarta.annotation.Nonnull Class<? extends PsiElement>... stopAt) {
       if (element == null) {
         return null;
       }

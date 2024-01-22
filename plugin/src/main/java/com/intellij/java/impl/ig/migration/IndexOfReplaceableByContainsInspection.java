@@ -16,8 +16,7 @@
 
 package com.intellij.java.impl.ig.migration;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -35,6 +34,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import consulo.java.language.module.util.JavaClassNames;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
@@ -54,7 +54,7 @@ public class IndexOfReplaceableByContainsInspection
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     final PsiBinaryExpression expression = (PsiBinaryExpression)infos[0];
     final PsiExpression lhs = expression.getLOperand();
@@ -117,7 +117,7 @@ public class IndexOfReplaceableByContainsInspection
       replaceExpression(expression, newExpressionText);
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "replace.indexof.with.contains.quickfix");
@@ -125,7 +125,7 @@ public class IndexOfReplaceableByContainsInspection
   }
 
   static String createContainsExpressionText(
-    @Nonnull PsiMethodCallExpression call,
+    @jakarta.annotation.Nonnull PsiMethodCallExpression call,
     boolean flipped, IElementType tokenType) {
     final PsiReferenceExpression methodExpression =
       call.getMethodExpression();
@@ -238,7 +238,7 @@ public class IndexOfReplaceableByContainsInspection
     }
 
     private static boolean isIndexOfCall(
-      @Nonnull PsiMethodCallExpression expression) {
+      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
       final String methodName = methodExpression.getReferenceName();

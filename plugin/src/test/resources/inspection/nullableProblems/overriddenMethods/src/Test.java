@@ -1,8 +1,9 @@
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 abstract class P2 {
     @Nonnull
-    String foo(@Nonnull P p) {
+    String foo(@jakarta.annotation.Nonnull P p) {
         return "";
     }
 }
@@ -32,12 +33,12 @@ class FooImpl extends java.awt.Frame implements Foo {
 
 
 interface I1 {
-  @javax.annotation.Nullable
+  @Nullable
   Object foo();
 }
 
 interface I2 extends I1 {
-  @Nonnull
+  @jakarta.annotation.Nonnull
   Object foo();
 }
 

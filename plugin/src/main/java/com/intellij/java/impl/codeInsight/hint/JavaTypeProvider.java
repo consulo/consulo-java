@@ -25,7 +25,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.SyntaxTraverser;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.List;
 
 /**
@@ -49,7 +49,7 @@ public class JavaTypeProvider extends ExpressionTypeProvider<PsiExpression> {
 
   @Nonnull
   @Override
-  public List<PsiExpression> getExpressionsAt(@Nonnull PsiElement elementAt) {
+  public List<PsiExpression> getExpressionsAt(@jakarta.annotation.Nonnull PsiElement elementAt) {
     return SyntaxTraverser.psiApi().parents(elementAt).filter(PsiExpression.class).toList();
   }
 

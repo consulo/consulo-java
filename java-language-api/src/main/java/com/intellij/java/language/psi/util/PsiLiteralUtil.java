@@ -13,8 +13,8 @@ import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.function.Predicate;
 
 public final class PsiLiteralUtil {
@@ -29,7 +29,7 @@ public final class PsiLiteralUtil {
 
   private static final String QUOT = "&quot;";
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static Integer parseInteger(String text) {
     try {
       if (text.startsWith(HEX_PREFIX)) {
@@ -97,7 +97,7 @@ public final class PsiLiteralUtil {
     }
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static Double parseDouble(String text) {
     try {
       return Double.valueOf(text);
@@ -134,7 +134,7 @@ public final class PsiLiteralUtil {
    * @return resulting string literal
    */
   @Nonnull
-  public static String stringForCharLiteral(@Nonnull String charLiteral) {
+  public static String stringForCharLiteral(@jakarta.annotation.Nonnull String charLiteral) {
     if ("'\"'".equals(charLiteral)) {
       return "\"\\\"\"";
     } else if ("'\\''".equals(charLiteral)) {
@@ -273,7 +273,7 @@ public final class PsiLiteralUtil {
     return i + 1;
   }
 
-  private static int parseSpaces(int start, @Nonnull String s, @Nonnull StringBuilder result, boolean escapeSpacesInTheEnd) {
+  private static int parseSpaces(int start, @jakarta.annotation.Nonnull String s, @jakarta.annotation.Nonnull StringBuilder result, boolean escapeSpacesInTheEnd) {
     char c = s.charAt(start);
     if (c != ' ') {
       return -1;
@@ -365,7 +365,7 @@ public final class PsiLiteralUtil {
    * @param idx parse from
    * @return index where next char starts, -1 otherwise
    */
-  public static int parseBackSlash(@Nonnull String str, int idx) {
+  public static int parseBackSlash(@jakarta.annotation.Nonnull String str, int idx) {
     char c = str.charAt(idx);
     if (c != '\\') {
       return -1;
@@ -445,7 +445,7 @@ public final class PsiLiteralUtil {
   /**
    * @see #getTextBlockIndent(PsiLiteralExpression)
    */
-  public static int getTextBlockIndent(@Nonnull String[] lines) {
+  public static int getTextBlockIndent(@jakarta.annotation.Nonnull String[] lines) {
     return getTextBlockIndent(lines, false, false);
   }
 
@@ -453,7 +453,7 @@ public final class PsiLiteralUtil {
    * @see #getTextBlockIndent(PsiLiteralExpression)
    * Note that this method might change some of the given lines.
    */
-  public static int getTextBlockIndent(@Nonnull String[] lines, boolean preserveContent, boolean ignoreLastLine) {
+  public static int getTextBlockIndent(@jakarta.annotation.Nonnull String[] lines, boolean preserveContent, boolean ignoreLastLine) {
     int prefix = Integer.MAX_VALUE;
     for (int i = 0; i < lines.length && prefix != 0; i++) {
       String line = lines[i];
@@ -521,7 +521,7 @@ public final class PsiLiteralUtil {
     return sb.toString();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private static String trimTrailingWhitespaces(@Nonnull String line) {
     int index = line.length();
     while (true) {
@@ -572,7 +572,7 @@ public final class PsiLiteralUtil {
     return nBackSlashes;
   }
 
-  private static int parseUnicodeEscapeBackwards(@Nonnull String s, int index, @Nonnull Predicate<? super Character> charPredicate) {
+  private static int parseUnicodeEscapeBackwards(@jakarta.annotation.Nonnull String s, int index, @Nonnull Predicate<? super Character> charPredicate) {
     // \u1234 needs at least 6 positions
     if (index - 5 < 0) {
       return -1;
@@ -698,8 +698,8 @@ public final class PsiLiteralUtil {
    * or wanted type is not a numeric type.
    */
   public static
-  @Nullable
-  String tryConvertNumericLiteral(@Nonnull PsiLiteralExpression literal, PsiType wantedType) {
+  @jakarta.annotation.Nullable
+  String tryConvertNumericLiteral(@jakarta.annotation.Nonnull PsiLiteralExpression literal, PsiType wantedType) {
     PsiType exprType = literal.getType();
     if (PsiType.INT.equals(exprType)) {
       if (PsiType.LONG.equals(wantedType)) {
@@ -804,7 +804,7 @@ public final class PsiLiteralUtil {
       return null;
     }
 
-    private static int findLinePrefixLength(@Nonnull String line, int indent) {
+    private static int findLinePrefixLength(@jakarta.annotation.Nonnull String line, int indent) {
       boolean isBlankLine = line.chars().allMatch(Character::isWhitespace);
       return isBlankLine ? line.length() : indent;
     }

@@ -17,7 +17,7 @@ package com.intellij.java.impl.refactoring.encapsulateFields;
 
 import java.util.HashSet;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.language.editor.CommonDataKeys;
 import consulo.dataContext.DataContext;
@@ -69,7 +69,7 @@ public class EncapsulateFieldsHandler implements RefactoringActionHandler {
    * if elements.length == 1 the expected value is either PsiClass or PsiField
    * if elements.length > 1 the expected values are PsiField objects only
    */
-  public void invoke(@Nonnull final Project project, @Nonnull final PsiElement[] elements, DataContext dataContext) {
+  public void invoke(@jakarta.annotation.Nonnull final Project project, @Nonnull final PsiElement[] elements, DataContext dataContext) {
     PsiClass aClass = null;
     final HashSet<PsiField> preselectedFields = new HashSet<PsiField>();
     if (elements.length == 1) {

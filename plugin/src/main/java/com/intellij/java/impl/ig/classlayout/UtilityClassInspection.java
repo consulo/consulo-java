@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
-import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 
 import com.intellij.java.language.codeInsight.AnnotationUtil;
@@ -30,6 +29,7 @@ import com.intellij.java.impl.ig.fixes.AddToIgnoreIfAnnotatedByListQuickFix;
 import com.intellij.java.impl.ig.psiutils.UtilityClassUtil;
 import com.siyeh.ig.ui.ExternalizableStringSet;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class UtilityClassInspection extends BaseInspection {
@@ -38,13 +38,13 @@ public class UtilityClassInspection extends BaseInspection {
   public final ExternalizableStringSet ignorableAnnotations = new ExternalizableStringSet();
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("utility.class.display.name");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "utility.class.problem.descriptor");
@@ -70,7 +70,7 @@ public class UtilityClassInspection extends BaseInspection {
   private class UtilityClassVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
       // no call to super, so that it doesn't drill down to inner classes
       if (!UtilityClassUtil.isUtilityClass(aClass)) {
         return;

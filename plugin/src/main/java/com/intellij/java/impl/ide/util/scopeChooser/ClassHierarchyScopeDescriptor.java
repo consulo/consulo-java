@@ -34,7 +34,7 @@ import consulo.content.scope.SearchScope;
 import consulo.language.editor.util.PsiUtilBase;
 import consulo.java.impl.JavaBundle;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 

@@ -1,14 +1,14 @@
 // "Annotate method as '@NotNull'" "true"
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 class X {
-    @Nonnull
+    @jakarta.annotation.Nonnull
     String annotateBase() {
         return "X";
     }
 }
 class Y extends X{
-    @Nonnull
+    @jakarta.annotation.Nonnull
     String annotateBase() {
         return "Y";
     }

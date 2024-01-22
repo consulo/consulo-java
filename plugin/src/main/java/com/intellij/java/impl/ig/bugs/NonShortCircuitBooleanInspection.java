@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import javax.annotation.Nonnull;
-
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.JavaTokenType;
@@ -30,6 +28,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NonShortCircuitBooleanInspection extends BaseInspection {
@@ -56,7 +55,7 @@ public class NonShortCircuitBooleanInspection extends BaseInspection {
   private static class NonShortCircuitBooleanFix
     extends InspectionGadgetsFix {
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("non.short.circuit.boolean.expression.replace.quickfix");
     }

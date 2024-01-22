@@ -41,9 +41,9 @@ import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.Pair;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -57,7 +57,7 @@ public class CreateMethodFromUsageFix extends CreateFromUsageBaseFix {
 
   private final SmartPsiElementPointer myMethodCall;
 
-  public CreateMethodFromUsageFix(@Nonnull PsiMethodCallExpression methodCall) {
+  public CreateMethodFromUsageFix(@jakarta.annotation.Nonnull PsiMethodCallExpression methodCall) {
     myMethodCall = SmartPointerManager.getInstance(methodCall.getProject()).createSmartPsiElementPointer(methodCall);
   }
 
@@ -215,7 +215,7 @@ public class CreateMethodFromUsageFix extends CreateFromUsageBaseFix {
   }
 
   public static void doCreate(PsiClass targetClass, PsiMethod method, List<Pair<PsiExpression, PsiType>> arguments, PsiSubstitutor substitutor,
-                              ExpectedTypeInfo[] expectedTypes, @Nullable PsiElement context) {
+                              ExpectedTypeInfo[] expectedTypes, @jakarta.annotation.Nullable PsiElement context) {
     doCreate(targetClass, method, shouldBeAbstractImpl(null, targetClass), arguments, substitutor, expectedTypes, context);
   }
 
@@ -360,7 +360,7 @@ public class CreateMethodFromUsageFix extends CreateFromUsageBaseFix {
   }
 
 
-  @Nullable
+  @jakarta.annotation.Nullable
   protected PsiMethodCallExpression getMethodCall() {
     return (PsiMethodCallExpression)myMethodCall.getElement();
   }

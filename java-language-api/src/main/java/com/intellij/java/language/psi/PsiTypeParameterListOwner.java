@@ -16,9 +16,8 @@
 package com.intellij.java.language.psi;
 
 import com.intellij.java.language.jvm.JvmTypeParametersOwner;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * Represents a PSI element (class, interface, method or constructor) which can own a type

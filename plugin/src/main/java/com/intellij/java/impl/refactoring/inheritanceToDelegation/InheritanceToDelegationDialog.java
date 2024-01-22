@@ -34,10 +34,10 @@ import consulo.language.editor.refactoring.ui.NameSuggestionsField;
 import consulo.language.editor.refactoring.ui.RefactoringDialog;
 import com.intellij.java.impl.refactoring.util.classMembers.InterfaceMemberDependencyGraph;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
@@ -87,7 +87,7 @@ public class InheritanceToDelegationDialog extends RefactoringDialog {
     super.dispose();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getFieldName() {
     return myFieldNameField.getEnteredName();
   }

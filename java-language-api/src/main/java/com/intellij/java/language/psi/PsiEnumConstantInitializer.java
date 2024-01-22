@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.psi;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Represents the class body attached to a constant in a Java enum type.

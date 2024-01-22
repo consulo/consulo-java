@@ -50,8 +50,8 @@ import consulo.ui.image.Image;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.function.Condition;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -66,7 +66,7 @@ public class JavaExecutionUtil {
     return executeRun(project, contentName, icon, dataContext, null);
   }
 
-  public static boolean executeRun(@Nonnull final Project project, String contentName, Image icon, DataContext dataContext, Filter[] filters) throws ExecutionException {
+  public static boolean executeRun(@jakarta.annotation.Nonnull final Project project, String contentName, Image icon, DataContext dataContext, Filter[] filters) throws ExecutionException {
     final OwnJavaParameters cmdLine = dataContext.getData(OwnJavaParameters.JAVA_PARAMETERS);
     final DefaultRunProfile profile = new DefaultRunProfile(project, cmdLine, contentName, icon, filters);
     final ProgramRunner runner = RunnerRegistry.getInstance().getRunner(DefaultRunExecutor.EXECUTOR_ID, profile);
@@ -125,7 +125,7 @@ public class JavaExecutionUtil {
     }
 
     @Override
-    public RunProfileState getState(@Nonnull final Executor executor, @Nonnull final ExecutionEnvironment env) throws ExecutionException {
+    public RunProfileState getState(@Nonnull final Executor executor, @jakarta.annotation.Nonnull final ExecutionEnvironment env) throws ExecutionException {
       final JavaCommandLineState state = new JavaCommandLineState(env) {
         @Override
         protected OwnJavaParameters createJavaParameters() {
@@ -152,7 +152,7 @@ public class JavaExecutionUtil {
   }
 
   @Nullable
-  public static String getPresentableClassName(@Nullable String rtClassName) {
+  public static String getPresentableClassName(@jakarta.annotation.Nullable String rtClassName) {
     if (StringUtil.isEmpty(rtClassName)) {
       return null;
     }
@@ -166,7 +166,7 @@ public class JavaExecutionUtil {
    */
   @DeprecationInfo("Use JavaExecutionUtil#getPresentableClassName(java.lang.String)")
   @Deprecated
-  @Nullable
+  @jakarta.annotation.Nullable
   public static String getPresentableClassName(final String rtClassName, final JavaRunConfigurationModule configurationModule) {
     return getPresentableClassName(rtClassName);
   }
@@ -175,12 +175,12 @@ public class JavaExecutionUtil {
     return ModuleUtilCore.findModuleForPsiElement(psiClass);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static PsiClass findMainClass(final Module module, final String mainClassName) {
     return findMainClass(module.getProject(), mainClassName, GlobalSearchScope.moduleRuntimeScope(module, true));
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static PsiClass findMainClass(final Project project, final String mainClassName, final GlobalSearchScope scope) {
     if (project.isDefault()) {
       return null;

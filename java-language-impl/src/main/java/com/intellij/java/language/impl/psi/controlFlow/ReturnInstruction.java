@@ -17,7 +17,7 @@ package com.intellij.java.language.impl.psi.controlFlow;
 
 import consulo.logging.Logger;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 
 public class ReturnInstruction extends GoToInstruction {
@@ -63,7 +63,7 @@ public class ReturnInstruction extends GoToInstruction {
     return myCallInstruction.procEnd;
   }
 
-  void setCallInstruction(@Nonnull CallInstruction callInstruction) {
+  void setCallInstruction(@jakarta.annotation.Nonnull CallInstruction callInstruction) {
     myCallInstruction = callInstruction;
   }
 

@@ -1,9 +1,10 @@
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 class B {
     public final A myDelegate = new A();
 
-    @javax.annotation.Nullable
+    @Nullable
     public Object methodFromA(@Nonnull String s) {
         return myDelegate.methodFromA(s);
     }

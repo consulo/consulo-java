@@ -30,7 +30,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 
 public abstract class UnnecessarilyQualifiedStaticUsageInspection extends BaseInspection implements CleanupLocalInspectionTool {
@@ -51,13 +51,13 @@ public abstract class UnnecessarilyQualifiedStaticUsageInspection extends BaseIn
   public boolean m_ignoreStaticAccessFromStaticContext = false;
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("unnecessarily.qualified.static.usage.display.name");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     final PsiJavaCodeReferenceElement element = (PsiJavaCodeReferenceElement) infos[0];
     final PsiElement parent = element.getParent();
@@ -123,7 +123,7 @@ public abstract class UnnecessarilyQualifiedStaticUsageInspection extends BaseIn
     }
   }
 
-  public static boolean isUnnecessarilyQualifiedAccess(@Nonnull PsiJavaCodeReferenceElement referenceElement,
+  public static boolean isUnnecessarilyQualifiedAccess(@jakarta.annotation.Nonnull PsiJavaCodeReferenceElement referenceElement,
                                                        boolean ignoreStaticAccessFromStaticContext,
                                                        boolean ignoreStaticFieldAccesses,
                                                        boolean ignoreStaticMethodCalls) {

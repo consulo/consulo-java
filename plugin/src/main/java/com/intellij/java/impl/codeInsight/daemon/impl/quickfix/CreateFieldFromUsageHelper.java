@@ -29,9 +29,8 @@ import consulo.language.extension.ByLanguageValue;
 import consulo.language.extension.LanguageExtension;
 import consulo.language.extension.LanguageOneToOne;
 import consulo.language.psi.PsiElement;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Max Medvedev
@@ -45,7 +44,7 @@ public interface CreateFieldFromUsageHelper extends LanguageExtension {
     return Application.get().getExtensionPoint(CreateFieldFromUsageHelper.class).getOrBuildCache(KEY).get(language);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static Template setupTemplate(
       PsiField field,
       Object expectedTypes,
@@ -61,8 +60,8 @@ public interface CreateFieldFromUsageHelper extends LanguageExtension {
         CreateFromUsageBaseFix.getTargetSubstitutor(context));
   }
 
-  @Nonnull
-  public static PsiField insertField(@Nonnull PsiClass targetClass, @Nonnull PsiField field, @Nonnull PsiElement place) {
+  @jakarta.annotation.Nonnull
+  public static PsiField insertField(@jakarta.annotation.Nonnull PsiClass targetClass, @jakarta.annotation.Nonnull PsiField field, @jakarta.annotation.Nonnull PsiElement place) {
     CreateFieldFromUsageHelper helper = forLanguage(field.getLanguage());
     if (helper == null) {
       throw new IllegalArgumentException("CreateFieldFromUsageHelper is not found for language: " + field.getLanguage());
@@ -70,7 +69,7 @@ public interface CreateFieldFromUsageHelper extends LanguageExtension {
     return helper.insertFieldImpl(targetClass, field, place);
   }
 
-  public abstract PsiField insertFieldImpl(@Nonnull PsiClass targetClass, @Nonnull PsiField field, @Nonnull PsiElement place);
+  public abstract PsiField insertFieldImpl(@jakarta.annotation.Nonnull PsiClass targetClass, @jakarta.annotation.Nonnull PsiField field, @Nonnull PsiElement place);
 
   public abstract Template setupTemplateImpl(
       PsiField field,

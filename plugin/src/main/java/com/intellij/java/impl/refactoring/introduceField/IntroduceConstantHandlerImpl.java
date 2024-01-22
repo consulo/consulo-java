@@ -42,9 +42,9 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import consulo.project.ui.wm.WindowManager;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,7 +69,7 @@ public class IntroduceConstantHandlerImpl extends BaseExpressionToFieldHandler i
     super.invoke(project, expressions, null);
   }
 
-  public void invoke(@Nonnull final Project project, final Editor editor, PsiFile file, DataContext dataContext) {
+  public void invoke(@jakarta.annotation.Nonnull final Project project, final Editor editor, PsiFile file, DataContext dataContext) {
     if (!CommonRefactoringUtil.checkReadOnlyStatus(project, file)) return;
 
     PsiDocumentManager.getInstance(project).commitAllDocuments();

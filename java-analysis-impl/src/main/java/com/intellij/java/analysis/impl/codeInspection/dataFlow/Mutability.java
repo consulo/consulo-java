@@ -26,12 +26,13 @@ import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.ObjectUtil;
+import jakarta.annotation.Nullable;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.PropertyKey;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -58,10 +59,10 @@ public enum Mutability {
   UNMODIFIABLE("mutability.unmodifiable", "org.jetbrains.annotations.Unmodifiable");
 
   public static final
-  @Nonnull
+  @jakarta.annotation.Nonnull
   String UNMODIFIABLE_ANNOTATION = UNMODIFIABLE.myAnnotation;
   public static final
-  @Nonnull
+  @jakarta.annotation.Nonnull
   String UNMODIFIABLE_VIEW_ANNOTATION = UNMODIFIABLE_VIEW.myAnnotation;
   private final
   @PropertyKey(resourceBundle = JavaAnalysisBundle.BUNDLE)
@@ -80,7 +81,7 @@ public enum Mutability {
   }
 
   public
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Nls
   String getPresentationName() {
     return JavaAnalysisBundle.message(myResourceKey);
@@ -90,7 +91,7 @@ public enum Mutability {
     return this == UNMODIFIABLE || this == UNMODIFIABLE_VIEW;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public Mutability unite(Mutability other) {
     if (this == other) {
       return this;
@@ -145,7 +146,7 @@ public enum Mutability {
    * @param owner an element to check the mutability
    * @return a Mutability enum value; {@link #UNKNOWN} if cannot be determined or specified element type is not supported.
    */
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static Mutability getMutability(@Nonnull PsiModifierListOwner owner) {
     if (owner instanceof LightElement) {
       return UNKNOWN;
@@ -154,8 +155,8 @@ public enum Mutability {
         CachedValueProvider.Result.create(calcMutability(owner), owner, PsiModificationTracker.MODIFICATION_COUNT));
   }
 
-  @Nonnull
-  private static Mutability calcMutability(@Nonnull PsiModifierListOwner owner) {
+  @jakarta.annotation.Nonnull
+  private static Mutability calcMutability(@jakarta.annotation.Nonnull PsiModifierListOwner owner) {
     if (owner instanceof PsiParameter && owner.getParent() instanceof PsiParameterList) {
       PsiParameterList list = (PsiParameterList) owner.getParent();
       PsiMethod method = ObjectUtil.tryCast(list.getParent(), PsiMethod.class);

@@ -28,7 +28,7 @@ import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.JComponent;
 
@@ -45,13 +45,13 @@ public class StringConcatenationInLoopsInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("string.concatenation.in.loops.display.name");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("string.concatenation.in.loops.problem.descriptor");
   }
@@ -104,7 +104,7 @@ public class StringConcatenationInLoopsInspection extends BaseInspection {
     }
 
     @Override
-    public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression expression) {
+    public void visitAssignmentExpression(@jakarta.annotation.Nonnull PsiAssignmentExpression expression) {
       super.visitAssignmentExpression(expression);
       if (expression.getRExpression() == null) {
         return;

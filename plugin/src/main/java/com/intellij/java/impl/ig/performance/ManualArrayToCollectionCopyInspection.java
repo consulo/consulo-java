@@ -35,14 +35,14 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class ManualArrayToCollectionCopyInspection extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "manual.array.to.collection.copy.display.name");
@@ -68,7 +68,7 @@ public class ManualArrayToCollectionCopyInspection extends BaseInspection {
   private static class ManualArrayToCollectionCopyFix
     extends InspectionGadgetsFix {
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "manual.array.to.collection.copy.replace.quickfix");
@@ -145,7 +145,7 @@ public class ManualArrayToCollectionCopyInspection extends BaseInspection {
       return buffer.toString();
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     private static String getCollectionsAddAllText(
       PsiForStatement forStatement)
       throws IncorrectOperationException {

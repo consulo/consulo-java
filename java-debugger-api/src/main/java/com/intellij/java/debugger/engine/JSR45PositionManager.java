@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.NoDataException;
 import com.intellij.java.debugger.PositionManager;
@@ -242,7 +242,7 @@ public abstract class JSR45PositionManager<Scope> implements PositionManager
 	}
 
 	@Override
-	public ClassPrepareRequest createPrepareRequest(@Nonnull final ClassPrepareRequestor requestor, @Nonnull final SourcePosition position) throws NoDataException
+	public ClassPrepareRequest createPrepareRequest(@Nonnull final ClassPrepareRequestor requestor, @jakarta.annotation.Nonnull final SourcePosition position) throws NoDataException
 	{
 		checkSourcePositionFileType(position);
 

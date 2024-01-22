@@ -28,8 +28,8 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.collection.ContainerUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -105,7 +105,7 @@ public class JavaMembersGetter extends MembersGetter {
   }
 
   @Nullable
-  private static PsiClass getCalledClass(@Nullable PsiElement call) {
+  private static PsiClass getCalledClass(@jakarta.annotation.Nullable PsiElement call) {
     if (call instanceof PsiMethodCallExpression) {
       for (final JavaResolveResult result : ((PsiMethodCallExpression)call).getMethodExpression().multiResolve(true)) {
         final PsiElement element = result.getElement();
@@ -132,7 +132,7 @@ public class JavaMembersGetter extends MembersGetter {
   }
 
   @Override
-  @Nullable
+  @jakarta.annotation.Nullable
   protected LookupElement createFieldElement(PsiField field) {
     if (!myExpectedType.isAssignableFrom(field.getType())) {
       return null;
@@ -142,7 +142,7 @@ public class JavaMembersGetter extends MembersGetter {
   }
 
   @Override
-  @Nullable
+  @jakarta.annotation.Nullable
   protected LookupElement createMethodElement(PsiMethod method) {
     PsiSubstitutor substitutor = SmartCompletionDecorator.calculateMethodReturnTypeSubstitutor(method, myExpectedType);
     PsiType type = substitutor.substitute(method.getReturnType());

@@ -17,7 +17,7 @@ package com.intellij.lang.java.parser;
 
 import java.io.IOException;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.impl.parser.JavaParserUtil;
 import org.jetbrains.annotations.NonNls;
@@ -64,7 +64,7 @@ public abstract class JavaParsingTestCase extends ParsingTestCase
 
 	@Nonnull
 	@Override
-	public LanguageVersion resolveLanguageVersion(@Nonnull FileType fileType)
+	public LanguageVersion resolveLanguageVersion(@jakarta.annotation.Nonnull FileType fileType)
 	{
 		return myLanguageLevel.toLangVersion();
 	}

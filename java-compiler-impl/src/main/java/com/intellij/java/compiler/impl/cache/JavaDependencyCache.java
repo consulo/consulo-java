@@ -37,10 +37,11 @@ import consulo.util.lang.Pair;
 import consulo.util.lang.Trinity;
 import consulo.util.lang.ref.Ref;
 import consulo.virtualFileSystem.VirtualFile;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -68,7 +69,7 @@ public class JavaDependencyCache implements DependencyCache {
   @NonNls
   private static final String SYMBOLTABLE_FILE_NAME = "java-symboltable.dat";
 
-  public JavaDependencyCache(@Nonnull String cacheDir) {
+  public JavaDependencyCache(@jakarta.annotation.Nonnull String cacheDir) {
     myStoreDirectoryPath = cacheDir + File.separator + ".java-dependency-info";
     mySymbolTableFilePath = myStoreDirectoryPath + "/" + SYMBOLTABLE_FILE_NAME;
   }

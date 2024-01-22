@@ -70,8 +70,8 @@ import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTool implements OldStyleInspection
@@ -104,7 +104,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
 		return new UnusedDeclarationInspectionState();
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
 	public HighlightDisplayLevel getDefaultLevel()
 	{
@@ -136,7 +136,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public String getGroupDisplayName()
 	{
 		return GroupNames.DECLARATION_REDUNDANCY;
@@ -214,7 +214,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
 		return !(aClass != null && !isSerializable(aClass, refClass));
 	}
 
-	private static boolean isReadObjectMethod(@Nonnull PsiMethod method, RefClass refClass)
+	private static boolean isReadObjectMethod(@jakarta.annotation.Nonnull PsiMethod method, RefClass refClass)
 	{
 		@NonNls final String name = method.getName();
 		if(!"readObject".equals(name))
@@ -327,10 +327,10 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
 	}
 
 	@Override
-	public void runInspection(@Nonnull final AnalysisScope scope,
-							  @Nonnull InspectionManager manager,
+	public void runInspection(@jakarta.annotation.Nonnull final AnalysisScope scope,
+							  @jakarta.annotation.Nonnull InspectionManager manager,
 							  @Nonnull final GlobalInspectionContext globalContext,
-							  @Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor,
+							  @jakarta.annotation.Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor,
 							  Object state)
 	{
 		UnusedDeclarationInspectionState inspectionState = (UnusedDeclarationInspectionState) state;
@@ -403,7 +403,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
 					refManager.iterate(new RefJavaVisitor()
 					{
 						@Override
-						public void visitElement(@Nonnull final RefEntity refEntity)
+						public void visitElement(@jakarta.annotation.Nonnull final RefEntity refEntity)
 						{
 							if(refEntity instanceof RefClass && strictUnreferencedFilter.accepts((RefClass) refEntity))
 							{
@@ -501,7 +501,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
 	}
 
 	@SuppressWarnings("unchecked")
-	public boolean isEntryPoint(@Nonnull PsiElement element, @Nonnull UnusedDeclarationInspectionState state)
+	public boolean isEntryPoint(@jakarta.annotation.Nonnull PsiElement element, @jakarta.annotation.Nonnull UnusedDeclarationInspectionState state)
 	{
 		final Project project = element.getProject();
 		final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
@@ -572,7 +572,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
 		}
 
 		@Override
-		public int getElementProblemCount(@Nonnull RefJavaElement refElement)
+		public int getElementProblemCount(@jakarta.annotation.Nonnull RefJavaElement refElement)
 		{
 			final int problemCount = super.getElementProblemCount(refElement);
 			if(problemCount > -1)
@@ -587,7 +587,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
 	public boolean queryExternalUsagesRequests(@Nonnull InspectionManager manager,
 											   @Nonnull GlobalInspectionContext globalContext,
 											   @Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor,
-											   @Nonnull Object state)
+											   @jakarta.annotation.Nonnull Object state)
 	{
 		checkForReachables(globalContext);
 		final RefFilter filter = myPhase == 1 ? new StrictUnreferencedFilter(this,
@@ -668,7 +668,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
 						}
 
 						@Override
-						public void visitClass(@Nonnull final RefClass refClass)
+						public void visitClass(@jakarta.annotation.Nonnull final RefClass refClass)
 						{
 							myProcessedSuspicious.add(refClass);
 							if(!refClass.isAnonymous())
@@ -772,7 +772,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
 		context.getRefManager().iterate(new RefJavaVisitor()
 		{
 			@Override
-			public void visitElement(@Nonnull RefEntity refEntity)
+			public void visitElement(@jakarta.annotation.Nonnull RefEntity refEntity)
 			{
 				if(refEntity instanceof RefJavaElement)
 				{
@@ -812,7 +812,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
 		private final Set<RefMethod> myProcessedMethods = new HashSet<>();
 
 		@Override
-		public void visitMethod(@Nonnull RefMethod method)
+		public void visitMethod(@jakarta.annotation.Nonnull RefMethod method)
 		{
 			if(!myProcessedMethods.contains(method))
 			{
@@ -852,7 +852,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
 		}
 
 		@Override
-		public void visitClass(@Nonnull RefClass refClass)
+		public void visitClass(@jakarta.annotation.Nonnull RefClass refClass)
 		{
 			boolean alreadyActive = refClass.isReachable();
 			((RefClassImpl) refClass).setReachable(true);
@@ -867,7 +867,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
 		}
 
 		@Override
-		public void visitField(@Nonnull RefField field)
+		public void visitField(@jakarta.annotation.Nonnull RefField field)
 		{
 			// Process class's static intitializers.
 			if(!field.isReachable())
@@ -962,7 +962,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public void initialize(@Nonnull GlobalInspectionContext context, Object state)
+	public void initialize(@jakarta.annotation.Nonnull GlobalInspectionContext context, Object state)
 	{
 		super.initialize(context, state);
 		myContext = context;

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.style;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -43,7 +43,7 @@ public class UnnecessaryQualifierForThisInspection
       "unnecessary.qualifier.for.this.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "unnecessary.qualifier.for.this.problem.descriptor");

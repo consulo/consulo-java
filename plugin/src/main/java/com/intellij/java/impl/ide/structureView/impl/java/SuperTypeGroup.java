@@ -18,7 +18,7 @@ package com.intellij.java.impl.ide.structureView.impl.java;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 import consulo.application.AllIcons;
 import consulo.ide.IdeBundle;

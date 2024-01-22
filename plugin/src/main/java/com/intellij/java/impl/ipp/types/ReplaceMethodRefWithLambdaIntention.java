@@ -39,7 +39,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,7 +51,7 @@ import java.util.function.Function;
 public class ReplaceMethodRefWithLambdaIntention extends Intention {
   private static final Logger LOG = Logger.getInstance(ReplaceMethodRefWithLambdaIntention.class);
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected PsiElementPredicate getElementPredicate() {
     return new MethodRefPredicate();
@@ -62,7 +62,7 @@ public class ReplaceMethodRefWithLambdaIntention extends Intention {
   }
 
   @Override
-  protected void processIntention(final Editor editor, @Nonnull PsiElement element) {
+  protected void processIntention(final Editor editor, @jakarta.annotation.Nonnull PsiElement element) {
     final PsiMethodReferenceExpression referenceExpression = PsiTreeUtil.getParentOfType(element,
         PsiMethodReferenceExpression.class);
     LOG.assertTrue(referenceExpression != null);

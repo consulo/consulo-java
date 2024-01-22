@@ -21,8 +21,8 @@ import consulo.codeEditor.Editor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Medvedev Max
@@ -40,7 +40,7 @@ public interface GenerationInfo {
    * @return the value that will be passed to the {@link #insert(PsiClass, com.intellij.psi.PsiElement, boolean)} method later.
    */
   @Nullable
-  PsiElement findInsertionAnchor(@Nonnull PsiClass aClass, @Nonnull PsiElement leaf);
+  PsiElement findInsertionAnchor(@jakarta.annotation.Nonnull PsiClass aClass, @Nonnull PsiElement leaf);
 
   /**
    * Position caret in generated element in correct way

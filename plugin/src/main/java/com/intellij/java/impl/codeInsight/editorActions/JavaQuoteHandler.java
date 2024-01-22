@@ -31,7 +31,7 @@ import consulo.language.editor.action.SimpleTokenSetQuoteHandler;
 import consulo.language.psi.PsiElement;
 import consulo.virtualFileSystem.fileType.FileType;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
@@ -97,7 +97,7 @@ public class JavaQuoteHandler extends SimpleTokenSetQuoteHandler implements Java
   }
 
   @Override
-  public boolean isAppropriateElementTypeForLiteral(final @Nonnull IElementType tokenType) {
+  public boolean isAppropriateElementTypeForLiteral(final @jakarta.annotation.Nonnull IElementType tokenType) {
     return isAppropriateElementTypeForLiteralStatic(tokenType);
   }
 

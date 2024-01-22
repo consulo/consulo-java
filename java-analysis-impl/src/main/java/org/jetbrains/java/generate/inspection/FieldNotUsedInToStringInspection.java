@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.java.generate.GenerateToStringContext;
 import org.jetbrains.java.generate.GenerateToStringUtils;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -45,7 +45,7 @@ public class FieldNotUsedInToStringInspection extends AbstractToStringInspection
     return "Field not used in 'toString()' method";
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getShortName() {
     return "FieldNotUsedInToString";
   }
@@ -57,7 +57,7 @@ public class FieldNotUsedInToStringInspection extends AbstractToStringInspection
 
   @Nonnull
   @Override
-  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
+  public PsiElementVisitor buildVisitor(@jakarta.annotation.Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
     return new FieldNotUsedInToStringVisitor(holder);
   }
 

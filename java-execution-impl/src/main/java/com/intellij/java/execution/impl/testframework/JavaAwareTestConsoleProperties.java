@@ -32,8 +32,8 @@ import consulo.execution.executor.Executor;
 import consulo.execution.test.sm.runner.SMTRunnerConsoleProperties;
 import consulo.navigation.Navigatable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.tree.TreeSelectionModel;
 import java.util.Collection;
 import java.util.Iterator;
@@ -72,7 +72,7 @@ public abstract class JavaAwareTestConsoleProperties<T extends ModuleBasedConfig
     return getStackTraceErrorNavigatable(location, stacktrace);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static Navigatable getStackTraceErrorNavigatable(@Nonnull Location<?> location, @Nonnull String stacktrace) {
     final PsiLocation<?> psiLocation = location.toPsiLocation();
     final PsiClass containingClass = psiLocation.getParentElement(PsiClass.class);
@@ -105,7 +105,7 @@ public abstract class JavaAwareTestConsoleProperties<T extends ModuleBasedConfig
     return lastLine != null ? lastLine.getOpenFileDescriptor(containingClass.getContainingFile().getVirtualFile()) : null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public DebuggerSession getDebugSession() {
     final DebuggerManagerEx debuggerManager = DebuggerManagerEx.getInstanceEx(getProject());
     if (debuggerManager == null) {

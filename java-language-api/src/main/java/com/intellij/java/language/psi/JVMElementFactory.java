@@ -23,8 +23,8 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Map;
 
 /**
@@ -39,7 +39,7 @@ public interface JVMElementFactory {
    * @throws IncorrectOperationException if <code>name</code> is not a valid Java identifier.
    */
   @Nonnull
-  PsiClass createClass(@NonNls @Nonnull String name) throws IncorrectOperationException;
+  PsiClass createClass(@NonNls @jakarta.annotation.Nonnull String name) throws IncorrectOperationException;
 
   /**
    * Creates an empty interface with the specified name.
@@ -48,7 +48,7 @@ public interface JVMElementFactory {
    * @return the created interface instance.
    * @throws IncorrectOperationException if <code>name</code> is not a valid Java identifier.
    */
-  @Nonnull
+  @jakarta.annotation.Nonnull
   PsiClass createInterface(@NonNls @Nonnull String name) throws IncorrectOperationException;
 
   /**
@@ -59,7 +59,7 @@ public interface JVMElementFactory {
    * @throws IncorrectOperationException if <code>name</code> is not a valid Java identifier.
    */
   @Nonnull
-  PsiClass createEnum(@Nonnull @NonNls String name) throws IncorrectOperationException;
+  PsiClass createEnum(@jakarta.annotation.Nonnull @NonNls String name) throws IncorrectOperationException;
 
   /**
    * Creates a field with the specified name and type.
@@ -71,7 +71,7 @@ public interface JVMElementFactory {
    *                                     or <code>type</code> represents an invalid type.
    */
   @Nonnull
-  PsiField createField(@Nonnull @NonNls String name, @Nonnull PsiType type) throws IncorrectOperationException;
+  PsiField createField(@Nonnull @NonNls String name, @jakarta.annotation.Nonnull PsiType type) throws IncorrectOperationException;
 
   /**
    * Creates an empty method with the specified name and return type.
@@ -83,7 +83,7 @@ public interface JVMElementFactory {
    *                                     or <code>type</code> represents an invalid type.
    */
   @Nonnull
-  PsiMethod createMethod(@Nonnull @NonNls String name, PsiType returnType) throws IncorrectOperationException;
+  PsiMethod createMethod(@jakarta.annotation.Nonnull @NonNls String name, PsiType returnType) throws IncorrectOperationException;
 
   @Nonnull
   PsiMethod createMethod(@Nonnull @NonNls String name,
@@ -95,7 +95,7 @@ public interface JVMElementFactory {
    *
    * @return the created constructor instance.
    */
-  @Nonnull
+  @jakarta.annotation.Nonnull
   PsiMethod createConstructor();
 
   /**
@@ -104,7 +104,7 @@ public interface JVMElementFactory {
    * @return the created initializer block instance.
    * @throws IncorrectOperationException in case of an internal error.
    */
-  @Nonnull
+  @jakarta.annotation.Nonnull
   PsiClassInitializer createClassInitializer() throws IncorrectOperationException;
 
   /**
@@ -116,8 +116,8 @@ public interface JVMElementFactory {
    * @throws IncorrectOperationException <code>name</code> is not a valid Java identifier
    *                                     or <code>type</code> represents an invalid type.
    */
-  @Nonnull
-  PsiParameter createParameter(@Nonnull @NonNls String name, PsiType type) throws IncorrectOperationException;
+  @jakarta.annotation.Nonnull
+  PsiParameter createParameter(@jakarta.annotation.Nonnull @NonNls String name, PsiType type) throws IncorrectOperationException;
 
   PsiParameter createParameter(@Nonnull @NonNls String name,
                                PsiType type,
@@ -132,13 +132,13 @@ public interface JVMElementFactory {
    * @throws IncorrectOperationException if some of the parameter names or types are invalid.
    */
   @Nonnull
-  PsiParameterList createParameterList(@Nonnull @NonNls String[] names,
+  PsiParameterList createParameterList(@jakarta.annotation.Nonnull @NonNls String[] names,
                                        @Nonnull PsiType[] types) throws IncorrectOperationException;
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   PsiMethod createMethodFromText(String text, @Nullable PsiElement context);
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   PsiAnnotation createAnnotationFromText(@Nonnull @NonNls String annotationText,
                                          @Nullable PsiElement context) throws IncorrectOperationException;
 
@@ -170,7 +170,7 @@ public interface JVMElementFactory {
    * @param superTypes the super types of the type parameter
    * @return the new type parameter
    */
-  @Nonnull
+  @jakarta.annotation.Nonnull
   PsiTypeParameter createTypeParameter(String name, PsiClassType[] superTypes);
 
   /**
@@ -180,7 +180,7 @@ public interface JVMElementFactory {
    * @return the class type instance.
    */
   @Nonnull
-  PsiClassType createType(@Nonnull PsiClass aClass);
+  PsiClassType createType(@jakarta.annotation.Nonnull PsiClass aClass);
 
   /**
    * Creates an empty annotation type with the specified name.
@@ -199,7 +199,7 @@ public interface JVMElementFactory {
    * @return the created constructor instance.
    */
   @Nonnull
-  PsiMethod createConstructor(@Nonnull @NonNls String name);
+  PsiMethod createConstructor(@jakarta.annotation.Nonnull @NonNls String name);
 
   PsiMethod createConstructor(@Nonnull @NonNls String name, PsiElement context);
 
@@ -211,25 +211,25 @@ public interface JVMElementFactory {
    * @param substitutor the substitutor to use.
    * @return the class type instance.
    */
-  @Nonnull
-  PsiClassType createType(@Nonnull PsiClass resolve, @Nonnull PsiSubstitutor substitutor);
+  @jakarta.annotation.Nonnull
+  PsiClassType createType(@Nonnull PsiClass resolve, @jakarta.annotation.Nonnull PsiSubstitutor substitutor);
 
   /*
      additional languageLevel parameter to memorize language level for allowing/prohibiting boxing/unboxing
     */
-  @Nonnull
-  PsiClassType createType(@Nonnull PsiClass resolve,
-                          @Nonnull PsiSubstitutor substitutor,
-                          @Nonnull LanguageLevel languageLevel);
+  @jakarta.annotation.Nonnull
+  PsiClassType createType(@jakarta.annotation.Nonnull PsiClass resolve,
+                          @jakarta.annotation.Nonnull PsiSubstitutor substitutor,
+                          @jakarta.annotation.Nonnull LanguageLevel languageLevel);
 
   @Nonnull
   PsiClassType createType(@Nonnull PsiClass resolve,
                           @Nonnull PsiSubstitutor substitutor,
-                          @Nonnull LanguageLevel languageLevel,
-                          @Nonnull PsiAnnotation[] annotations);
+                          @jakarta.annotation.Nonnull LanguageLevel languageLevel,
+                          @jakarta.annotation.Nonnull PsiAnnotation[] annotations);
 
-  @Nonnull
-  PsiClassType createType(@Nonnull PsiClass aClass, PsiType parameters);
+  @jakarta.annotation.Nonnull
+  PsiClassType createType(@jakarta.annotation.Nonnull PsiClass aClass, PsiType parameters);
 
   @Nonnull
   PsiClassType createType(@Nonnull PsiClass aClass, PsiType... parameters);
@@ -241,7 +241,7 @@ public interface JVMElementFactory {
    * @param owner the class or method for which the substitutor is created.
    * @return the substitutor instance.
    */
-  @Nonnull
+  @jakarta.annotation.Nonnull
   PsiSubstitutor createRawSubstitutor(@Nonnull PsiTypeParameterListOwner owner);
 
   /**
@@ -250,8 +250,8 @@ public interface JVMElementFactory {
    * @param map the type parameter to type map used by the substitutor.
    * @return the substitutor instance.
    */
-  @Nonnull
-  PsiSubstitutor createSubstitutor(@Nonnull Map<PsiTypeParameter, PsiType> map);
+  @jakarta.annotation.Nonnull
+  PsiSubstitutor createSubstitutor(@jakarta.annotation.Nonnull Map<PsiTypeParameter, PsiType> map);
 
   /**
    * Returns the primitive type instance for the specified type name.
@@ -261,7 +261,7 @@ public interface JVMElementFactory {
    * primitive type name.
    */
   @Nullable
-  PsiPrimitiveType createPrimitiveType(@Nonnull String text);
+  PsiPrimitiveType createPrimitiveType(@jakarta.annotation.Nonnull String text);
 
   /**
    * The same as {@link #createTypeByFQClassName(String, GlobalSearchScope)}
@@ -281,13 +281,13 @@ public interface JVMElementFactory {
    * @param resolveScope the scope in which the class is searched.
    * @return the class type instance.
    */
-  @Nonnull
-  PsiClassType createTypeByFQClassName(@Nonnull @NonNls String qName, @Nonnull GlobalSearchScope resolveScope);
+  @jakarta.annotation.Nonnull
+  PsiClassType createTypeByFQClassName(@Nonnull @NonNls String qName, @jakarta.annotation.Nonnull GlobalSearchScope resolveScope);
 
   /**
    * Creates doc comment from text
    */
-  @Nonnull
+  @jakarta.annotation.Nonnull
   PsiDocComment createDocCommentFromText(@Nonnull String text);
 
   /**
@@ -320,7 +320,7 @@ public interface JVMElementFactory {
    * @param name name to checks
    * @return true if name is a valid name
    */
-  boolean isValidFieldName(@Nonnull String name);
+  boolean isValidFieldName(@jakarta.annotation.Nonnull String name);
 
   /**
    * Checks whether name is a valid local variable name in the current language

@@ -31,7 +31,7 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.util.CharTable;
 import consulo.logging.Logger;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  *  @author dsl
@@ -185,7 +185,7 @@ public class PsiReferenceParameterListImpl extends CompositePsiElement implement
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitReferenceParameterList(this);
     }

@@ -33,8 +33,8 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import consulo.java.language.module.util.JavaClassNames;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -67,7 +67,7 @@ public class PointlessBooleanExpressionInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("pointless.boolean.expression.display.name");
   }
@@ -277,7 +277,7 @@ public class PointlessBooleanExpressionInspection extends BaseInspection {
 
   private class PointlessBooleanExpressionFix extends InspectionGadgetsFix {
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("constant.conditional.expression.simplify.quickfix");
     }

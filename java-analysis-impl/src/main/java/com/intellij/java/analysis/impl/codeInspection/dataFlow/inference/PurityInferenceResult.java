@@ -25,8 +25,8 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -35,10 +35,10 @@ import java.util.function.Supplier;
  */
 class PurityInferenceResult {
   private List<ExpressionRange> mutableRefs;
-  @Nullable
+  @jakarta.annotation.Nullable
   private ExpressionRange singleCall;
 
-  PurityInferenceResult(List<ExpressionRange> mutableRefs, @Nullable ExpressionRange singleCall) {
+  PurityInferenceResult(List<ExpressionRange> mutableRefs, @jakarta.annotation.Nullable ExpressionRange singleCall) {
     this.mutableRefs = mutableRefs;
     this.singleCall = singleCall;
   }

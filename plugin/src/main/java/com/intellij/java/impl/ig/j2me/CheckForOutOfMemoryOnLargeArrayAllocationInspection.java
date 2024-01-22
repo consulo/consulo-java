@@ -24,7 +24,7 @@ import consulo.deadCodeNotWorking.impl.SingleIntegerFieldOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 
 public abstract class CheckForOutOfMemoryOnLargeArrayAllocationInspection
@@ -41,7 +41,7 @@ public abstract class CheckForOutOfMemoryOnLargeArrayAllocationInspection
       "large.array.allocation.no.outofmemoryerror.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "large.array.allocation.no.outofmemoryerror.problem.descriptor");

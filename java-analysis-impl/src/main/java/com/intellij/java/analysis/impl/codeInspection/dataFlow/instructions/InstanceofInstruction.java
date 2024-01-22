@@ -23,8 +23,8 @@ import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiType;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author peter
@@ -33,10 +33,10 @@ public class InstanceofInstruction extends BinopInstruction
 {
 	@Nullable
 	private final PsiExpression myLeft;
-	@Nullable
+	@jakarta.annotation.Nullable
 	private final PsiType myCastType;
 
-	public InstanceofInstruction(PsiExpression psiAnchor, @Nullable PsiExpression left, @Nonnull PsiType castType)
+	public InstanceofInstruction(PsiExpression psiAnchor, @jakarta.annotation.Nullable PsiExpression left, @Nonnull PsiType castType)
 	{
 		super(JavaTokenType.INSTANCEOF_KEYWORD, psiAnchor, PsiType.BOOLEAN);
 		myLeft = left;
@@ -65,13 +65,13 @@ public class InstanceofInstruction extends BinopInstruction
 	 * @return instanceof operand or null if it's not applicable
 	 * (e.g. instruction is emitted when inlining Xyz.class::isInstance method reference)
 	 */
-	@Nullable
+	@jakarta.annotation.Nullable
 	public PsiExpression getLeft()
 	{
 		return myLeft;
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	public PsiType getCastType()
 	{
 		return myCastType;

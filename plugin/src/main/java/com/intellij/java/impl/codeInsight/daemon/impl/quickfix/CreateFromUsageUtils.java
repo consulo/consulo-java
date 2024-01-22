@@ -74,10 +74,10 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.fileType.FileType;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -531,7 +531,7 @@ public class CreateFromUsageUtils {
     final List<PsiVariable> list = new ArrayList<PsiVariable>();
     VariablesProcessor varproc = new VariablesProcessor("", true, list){
       @Override
-      public boolean execute(@Nonnull PsiElement element, ResolveState state) {
+      public boolean execute(@jakarta.annotation.Nonnull PsiElement element, ResolveState state) {
         if(!(element instanceof PsiField) ||
            JavaPsiFacade.getInstance(element.getProject()).getResolveHelper().isAccessible((PsiField)element, expression, null)) {
           return super.execute(element, state);
@@ -968,7 +968,7 @@ public class CreateFromUsageUtils {
   @Nullable
   private static String getQualifiedName(final PsiClass aClass) {
     return ApplicationManager.getApplication().runReadAction(new Computable<String>() {
-      @Nullable
+      @jakarta.annotation.Nullable
       @Override
       public String compute() {
         return aClass.getQualifiedName();

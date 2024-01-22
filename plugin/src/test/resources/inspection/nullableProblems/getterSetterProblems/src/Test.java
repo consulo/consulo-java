@@ -1,5 +1,5 @@
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 class B {
      @Nonnull
@@ -13,7 +13,7 @@ class B {
         this.b = b;
     }
 
-        @Nonnull
+        @jakarta.annotation.Nonnull
         private String bug = "true";
 
         public boolean getBug() {
@@ -21,18 +21,18 @@ class B {
         }
 }
 class C {
-  @Nonnull
+  @jakarta.annotation.Nonnull
   C c;
 
   C(C c) {
     this.c = c;
   }
 
-  C(@Nullable C c, int i) {
+  C(@jakarta.annotation.Nullable C c, int i) {
     this.c = c;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public C getC() {
     return c;
   }
@@ -43,7 +43,7 @@ class C {
 
   @Nonnull
   C c1;
-  @Nullable
+  @jakarta.annotation.Nullable
   public C getC1() {
     if (c1 != null) {
       return null;
@@ -53,7 +53,8 @@ class C {
 }
 
 class D {
-    @Nullable Long myL;
+    @jakarta.annotation.Nullable
+    Long myL;
 
     D(long l) {
       myL = l;
@@ -61,7 +62,7 @@ class D {
 }
 
 class E {
-  final @Nonnull
+  final @jakarta.annotation.Nonnull
   C c;
 
   E(C c) {

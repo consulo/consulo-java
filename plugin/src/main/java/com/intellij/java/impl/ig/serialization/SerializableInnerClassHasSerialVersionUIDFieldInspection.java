@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.serialization;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -27,7 +27,7 @@ import consulo.annotation.component.ExtensionImpl;
 public class SerializableInnerClassHasSerialVersionUIDFieldInspection
   extends SerializableInspection {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "SerializableNonStaticInnerClassWithoutSerialVersionUID";
   }
@@ -38,7 +38,7 @@ public class SerializableInnerClassHasSerialVersionUIDFieldInspection
       "serializable.inner.class.has.serial.version.uid.field.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "serializable.inner.class.has.serial.version.uid.field.problem.descriptor");

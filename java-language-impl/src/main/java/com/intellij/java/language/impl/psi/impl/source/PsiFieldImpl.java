@@ -50,8 +50,8 @@ import consulo.navigation.ItemPresentationProvider;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.SoftReference;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.lang.ref.Reference;
 import java.util.*;
 
@@ -100,7 +100,7 @@ public class PsiFieldImpl extends JavaStubPsiElement<PsiFieldStub> implements Ps
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public CompositeElement getNode() {
     return (CompositeElement) super.getNode();
   }
@@ -112,7 +112,7 @@ public class PsiFieldImpl extends JavaStubPsiElement<PsiFieldStub> implements Ps
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getName() {
     final PsiFieldStub stub = getGreenStub();
     if (stub != null) {
@@ -158,7 +158,7 @@ public class PsiFieldImpl extends JavaStubPsiElement<PsiFieldStub> implements Ps
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiModifierList getModifierList() {
     final PsiModifierList selfModifierList = getSelfModifierList();
     if (selfModifierList != null) {
@@ -187,7 +187,7 @@ public class PsiFieldImpl extends JavaStubPsiElement<PsiFieldStub> implements Ps
   }
 
   @Override
-  public boolean hasModifierProperty(@Nonnull String name) {
+  public boolean hasModifierProperty(@jakarta.annotation.Nonnull String name) {
     return getModifierList().hasModifierProperty(name);
   }
 
@@ -285,12 +285,12 @@ public class PsiFieldImpl extends JavaStubPsiElement<PsiFieldStub> implements Ps
     private static final OurConstValueComputer INSTANCE = new OurConstValueComputer();
 
     @Override
-    public Object execute(@Nonnull PsiVariable variable, Set<PsiVariable> visitedVars) {
+    public Object execute(@jakarta.annotation.Nonnull PsiVariable variable, Set<PsiVariable> visitedVars) {
       return ((PsiFieldImpl) variable)._computeConstantValue(visitedVars);
     }
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private Object _computeConstantValue(Set<PsiVariable> visitedVars) {
     PsiType type = getType();
     // javac rejects all non primitive and non String constants, although JLS states constants "variables whose initializers are constant expressions"
@@ -382,7 +382,7 @@ public class PsiFieldImpl extends JavaStubPsiElement<PsiFieldStub> implements Ps
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitField(this);
     } else {
@@ -391,7 +391,7 @@ public class PsiFieldImpl extends JavaStubPsiElement<PsiFieldStub> implements Ps
   }
 
   @Override
-  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place) {
+  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @jakarta.annotation.Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place) {
     processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, this);
     return true;
   }

@@ -2,7 +2,7 @@
 package com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis;
 
 import one.util.streamex.IntStreamEx;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -42,7 +42,7 @@ public final class HMember implements MemberDescriptor
 		myMethod = ByteBuffer.wrap(sigDigest).getInt();
 	}
 
-	public HMember(@Nonnull byte[] bytes)
+	public HMember(@jakarta.annotation.Nonnull byte[] bytes)
 	{
 		ByteBuffer buffer = ByteBuffer.wrap(bytes);
 		myClassHi = buffer.getLong();
@@ -50,7 +50,7 @@ public final class HMember implements MemberDescriptor
 		myMethod = buffer.getInt();
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	byte[] asBytes()
 	{
 		ByteBuffer bytes = ByteBuffer.allocate(HASH_SIZE);

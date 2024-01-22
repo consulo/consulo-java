@@ -25,8 +25,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.debugger.impl.DebuggerManagerEx;
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.DebuggerSession;
@@ -41,11 +39,12 @@ import consulo.ui.ex.awt.Messages;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.util.lang.SystemProperties;
+import jakarta.annotation.Nonnull;
 
 public class ExportThreadsAction extends AnAction implements AnAction.TransparentUpdate
 {
 	@Override
-	public void actionPerformed(@Nonnull AnActionEvent e)
+	public void actionPerformed(@jakarta.annotation.Nonnull AnActionEvent e)
 	{
 		Project project = e.getData(CommonDataKeys.PROJECT);
 		if(project == null)

@@ -43,8 +43,9 @@ import consulo.ui.ex.awt.Messages;
 import consulo.util.lang.ref.Ref;
 import consulo.virtualFileSystem.VirtualFile;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,11 +58,11 @@ public class DuplicatesImpl {
   private DuplicatesImpl() {
   }
 
-  public static void invoke(@Nonnull final Project project, @Nonnull Editor editor, @Nonnull MatchProvider provider) {
+  public static void invoke(@jakarta.annotation.Nonnull final Project project, @jakarta.annotation.Nonnull Editor editor, @jakarta.annotation.Nonnull MatchProvider provider) {
     invoke(project, editor, provider, true);
   }
 
-  public static void invoke(@Nonnull final Project project, @Nonnull Editor editor, @Nonnull MatchProvider provider, boolean skipPromptWhenOne) {
+  public static void invoke(@jakarta.annotation.Nonnull final Project project, @jakarta.annotation.Nonnull Editor editor, @jakarta.annotation.Nonnull MatchProvider provider, boolean skipPromptWhenOne) {
     final List<Match> duplicates = provider.getDuplicates();
     int idx = 0;
     final Ref<Boolean> showAll = new Ref<Boolean>();
@@ -116,7 +117,7 @@ public class DuplicatesImpl {
   private static boolean replaceMatch(final Project project,
                                       final MatchProvider provider,
                                       final Match match,
-                                      @Nonnull final Editor editor,
+                                      @jakarta.annotation.Nonnull final Editor editor,
                                       final int idx,
                                       final int size,
                                       Ref<Boolean> showAll,
@@ -156,7 +157,7 @@ public class DuplicatesImpl {
 
     new WriteCommandAction(project, MethodDuplicatesHandler.REFACTORING_NAME, MethodDuplicatesHandler.REFACTORING_NAME) {
       @Override
-      protected void run(@Nonnull Result result) throws Throwable {
+      protected void run(@jakarta.annotation.Nonnull Result result) throws Throwable {
         try {
           provider.processMatch(match);
         } catch (IncorrectOperationException e) {
@@ -206,7 +207,7 @@ public class DuplicatesImpl {
     HighlightManager.getInstance(project).addRangeHighlight(editor, match.getTextRange().getStartOffset(), match.getTextRange().getEndOffset(), attributes, true, highlighters);
   }
 
-  public static void processDuplicates(@Nonnull MatchProvider provider, @Nonnull Project project, @Nonnull Editor editor) {
+  public static void processDuplicates(@Nonnull MatchProvider provider, @jakarta.annotation.Nonnull Project project, @Nonnull Editor editor) {
     Boolean hasDuplicates = provider.hasDuplicates();
     if (hasDuplicates == null || hasDuplicates.booleanValue()) {
       List<Match> duplicates = provider.getDuplicates();

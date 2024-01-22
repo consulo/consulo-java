@@ -30,8 +30,8 @@ import consulo.language.editor.refactoring.RenameRefactoring;
 import consulo.language.editor.refactoring.rename.RenameDialog;
 import consulo.language.editor.refactoring.rename.RenameHandler;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Dmitry Avdeev
@@ -46,11 +46,11 @@ public abstract class BeanPropertyRenameHandler implements RenameHandler {
     return getProperty(dataContext) != null;
   }
 
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
     performInvoke(editor, dataContext);
   }
 
-  public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+  public void invoke(@Nonnull Project project, @jakarta.annotation.Nonnull PsiElement[] elements, DataContext dataContext) {
     performInvoke(null, dataContext);
   }
 

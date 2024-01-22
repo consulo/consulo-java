@@ -18,8 +18,7 @@ package com.intellij.java.impl.codeInsight.completion;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;
@@ -28,6 +27,7 @@ import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
+import jakarta.annotation.Nullable;
 
 /**
  * @author ik

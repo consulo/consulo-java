@@ -21,12 +21,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 import consulo.execution.coverage.CoverageEnabledConfiguration;
 import consulo.execution.configuration.RunConfigurationBase;
 import consulo.execution.coverage.CoverageRunner;
+import jakarta.annotation.Nonnull;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 import consulo.logging.Logger;

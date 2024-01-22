@@ -26,7 +26,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
 import consulo.util.collection.ArrayUtil;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collection;

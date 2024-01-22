@@ -35,7 +35,7 @@ import consulo.project.Project;
 import consulo.util.collection.primitive.ints.IntMaps;
 import consulo.util.collection.primitive.ints.IntObjectMap;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Properties;
@@ -89,7 +89,7 @@ public class FileHeaderChecker {
 
     ReplaceWithFileTemplateFix replaceTemplateFix = new ReplaceWithFileTemplateFix() {
       @Override
-      public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+      public void applyFix(@Nonnull Project project, @jakarta.annotation.Nonnull ProblemDescriptor descriptor) {
         PsiElement element = descriptor.getPsiElement();
         if (element == null) {
           return;

@@ -22,8 +22,7 @@ import consulo.language.psi.stub.IdAndToDoScannerBasedOnFilterLexer;
 import consulo.language.psi.stub.OccurrenceConsumer;
 import consulo.language.psi.stub.todo.LexerBasedTodoIndexer;
 import consulo.virtualFileSystem.fileType.FileType;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class JavaTodoIndexer extends LexerBasedTodoIndexer implements IdAndToDoScannerBasedOnFilterLexer {

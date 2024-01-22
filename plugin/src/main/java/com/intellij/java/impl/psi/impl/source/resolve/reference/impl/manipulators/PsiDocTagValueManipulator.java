@@ -24,7 +24,7 @@ import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import consulo.language.util.IncorrectOperationException;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author Gregory.Shrago

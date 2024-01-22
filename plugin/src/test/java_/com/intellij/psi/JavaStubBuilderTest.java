@@ -22,9 +22,8 @@ import static org.junit.Assert.assertNotNull;
 import java.io.File;
 import java.security.SecureRandom;
 
-import javax.annotation.Nullable;
-
 import com.intellij.java.language.psi.PsiJavaFile;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 import consulo.language.ast.FileASTNode;
 import consulo.ide.impl.idea.openapi.util.io.FileUtil;

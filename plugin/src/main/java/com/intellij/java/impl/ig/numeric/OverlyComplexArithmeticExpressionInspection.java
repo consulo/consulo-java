@@ -26,7 +26,7 @@ import consulo.language.ast.IElementType;
 import consulo.deadCodeNotWorking.impl.SingleIntegerFieldOptionsPanel;
 import consulo.language.psi.PsiElement;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -60,7 +60,7 @@ public abstract class OverlyComplexArithmeticExpressionInspection
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "overly.complex.arithmetic.expression.problem.descriptor");

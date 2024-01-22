@@ -27,7 +27,7 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.ObjectUtil;
 import consulo.virtualFileSystem.VirtualFile;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.BitSet;
 import java.util.Collections;
 import java.util.List;
@@ -53,21 +53,21 @@ public class JavaSourceInference {
         new MethodInferenceData(Mutability.UNKNOWN, Nullability.UNKNOWN, Collections.emptyList(), false, new BitSet());
 
     final
-    @Nonnull
+    @jakarta.annotation.Nonnull
     Mutability myMutability;
     final
-    @Nonnull
+    @jakarta.annotation.Nonnull
     Nullability myNullability;
     final
-    @Nonnull
+    @jakarta.annotation.Nonnull
     List<StandardMethodContract> myContracts;
     final boolean myPure;
     final
-    @Nonnull
+    @jakarta.annotation.Nonnull
     BitSet myNotNullParameters;
 
-    MethodInferenceData(@Nonnull Mutability mutability,
-                        @Nonnull Nullability nullability,
+    MethodInferenceData(@jakarta.annotation.Nonnull Mutability mutability,
+                        @jakarta.annotation.Nonnull Nullability nullability,
                         @Nonnull List<StandardMethodContract> contracts,
                         boolean pure,
                         @Nonnull BitSet parameters) {
@@ -79,7 +79,7 @@ public class JavaSourceInference {
     }
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private static MethodInferenceData infer(PsiMethodImpl method) {
     InferenceMode mode = getInferenceMode(method);
     if (mode == InferenceMode.DISABLED ||
@@ -135,8 +135,8 @@ public class JavaSourceInference {
     return nullability == null ? Nullability.UNKNOWN : nullability;
   }
 
-  @Nonnull
-  private static Mutability findMutability(@Nonnull PsiMethodImpl method, @Nonnull MethodData data) {
+  @jakarta.annotation.Nonnull
+  private static Mutability findMutability(@jakarta.annotation.Nonnull PsiMethodImpl method, @jakarta.annotation.Nonnull MethodData data) {
     PsiType type = method.getReturnType();
     if (type == null || ClassUtils.isImmutable(type, false)) {
       return Mutability.UNKNOWN;
@@ -150,7 +150,7 @@ public class JavaSourceInference {
     return mutability == null ? Mutability.UNKNOWN : mutability;
   }
 
-  private static boolean findPurity(@Nonnull PsiMethodImpl method, @Nonnull MethodData data) {
+  private static boolean findPurity(@jakarta.annotation.Nonnull PsiMethodImpl method, @Nonnull MethodData data) {
     PurityInferenceResult result = data.getPurity();
     if (result == null) {
       return false;
@@ -160,9 +160,9 @@ public class JavaSourceInference {
 
   @Nonnull
   private static List<StandardMethodContract> findContracts(@Nonnull PsiMethodImpl method,
-                                                            @Nonnull MethodData data,
+                                                            @jakarta.annotation.Nonnull MethodData data,
                                                             @Nonnull Nullability nullability,
-                                                            @Nonnull IntPredicate notNullParameter) {
+                                                            @jakarta.annotation.Nonnull IntPredicate notNullParameter) {
     PsiAnnotation explicitContract = AnnotationUtil.findAnnotationInHierarchy(
         method, Collections.singleton(JavaMethodContractUtil.ORG_JETBRAINS_ANNOTATIONS_CONTRACT), true);
     if (explicitContract != null) {
@@ -185,9 +185,9 @@ public class JavaSourceInference {
     return postProcessContracts(contracts, method, nullability, notNullParameter);
   }
 
-  @Nonnull
-  private static List<StandardMethodContract> postProcessContracts(List<StandardMethodContract> contracts, @Nonnull PsiMethod method,
-                                                                   @Nonnull Nullability nullability,
+  @jakarta.annotation.Nonnull
+  private static List<StandardMethodContract> postProcessContracts(List<StandardMethodContract> contracts, @jakarta.annotation.Nonnull PsiMethod method,
+                                                                   @jakarta.annotation.Nonnull Nullability nullability,
                                                                    @Nonnull IntPredicate notNullParameter) {
     final PsiType returnType = method.getReturnType();
     if (returnType != null && !(returnType instanceof PsiPrimitiveType)) {
@@ -270,7 +270,7 @@ public class JavaSourceInference {
    * @param method method to analyze
    * @return inferred return type mutability; {@link Mutability#UNKNOWN} if cannot be inferred or non-applicable
    */
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static Mutability inferMutability(PsiMethodImpl method) {
     return getInferenceData(method).myMutability;
   }
@@ -342,7 +342,7 @@ public class JavaSourceInference {
     return MethodReferencesSearch.search(method, new LocalSearchScope(containingClass), false).findFirst() == null;
   }
 
-  private static boolean isLibraryCode(@Nonnull PsiMethod method) {
+  private static boolean isLibraryCode(@jakarta.annotation.Nonnull PsiMethod method) {
     if (method instanceof PsiCompiledElement) {
       return true;
     }

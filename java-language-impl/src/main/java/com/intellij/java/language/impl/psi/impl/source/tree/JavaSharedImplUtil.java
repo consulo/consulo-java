@@ -21,6 +21,7 @@ import com.intellij.java.language.impl.psi.impl.cache.TypeInfo;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.ast.ASTNode;
+import consulo.language.ast.IElementType;
 import consulo.language.ast.TokenSet;
 import consulo.language.impl.ast.*;
 import consulo.language.impl.psi.CodeEditUtil;
@@ -34,9 +35,9 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.JBIterable;
 import consulo.util.collection.SmartList;
 import consulo.util.collection.Stack;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.List;
 
 public class JavaSharedImplUtil {
@@ -47,11 +48,11 @@ public class JavaSharedImplUtil {
   private JavaSharedImplUtil() {
   }
 
-  public static PsiType getType(@Nonnull PsiTypeElement typeElement, @Nonnull PsiElement anchor) {
+  public static PsiType getType(@jakarta.annotation.Nonnull PsiTypeElement typeElement, @jakarta.annotation.Nonnull PsiElement anchor) {
     return getType(typeElement, anchor, null);
   }
 
-  public static PsiType getType(@Nonnull PsiTypeElement typeElement, @Nonnull PsiElement anchor, @Nullable PsiAnnotation stopAt) {
+  public static PsiType getType(@jakarta.annotation.Nonnull PsiTypeElement typeElement, @jakarta.annotation.Nonnull PsiElement anchor, @Nullable PsiAnnotation stopAt) {
     PsiType type = typeElement.getType();
 
     List<PsiAnnotation[]> allAnnotations = collectAnnotations(anchor, stopAt);
@@ -102,8 +103,8 @@ public class JavaSharedImplUtil {
     return !found || stop ? null : annotations;
   }
 
-  @Nonnull
-  public static PsiType applyAnnotations(@Nonnull PsiType type, @Nullable PsiModifierList modifierList) {
+  @jakarta.annotation.Nonnull
+  public static PsiType applyAnnotations(@jakarta.annotation.Nonnull PsiType type, @jakarta.annotation.Nullable PsiModifierList modifierList) {
     if (modifierList != null) {
       PsiAnnotation[] annotations = modifierList.getAnnotations();
       if (annotations.length > 0) {
@@ -216,13 +217,73 @@ public class JavaSharedImplUtil {
     variable.addAfter(initializer, eq.getPsi());
   }
 
-  @Nonnull
-  public static PsiType createTypeFromStub(@Nonnull PsiModifierListOwner owner, @Nonnull TypeInfo typeInfo) {
+  @jakarta.annotation.Nonnull
+  public static PsiType createTypeFromStub(@jakarta.annotation.Nonnull PsiModifierListOwner owner, @Nonnull TypeInfo typeInfo) {
     String typeText = TypeInfo.createTypeText(typeInfo);
     assert typeText != null : owner;
     PsiType type = JavaPsiFacade.getInstance(owner.getProject()).getParserFacade().createTypeFromText(typeText, owner);
     type = applyAnnotations(type, owner.getModifierList());
     return typeInfo.getTypeAnnotations().applyTo(type, owner);
+  }
+
+  @jakarta.annotation.Nonnull
+  public static PsiElement getPatternVariableDeclarationScope(@Nonnull PsiPatternVariable variable) {
+    PsiElement parent = variable.getPattern().getParent();
+    if (!(parent instanceof PsiInstanceOfExpression) && !(parent instanceof PsiCaseLabelElementList) && !(parent instanceof PsiPattern)
+      && !(parent instanceof PsiDeconstructionList)) {
+      return parent;
+    }
+    return getInstanceOfPartDeclarationScope(parent);
+  }
+
+  @jakarta.annotation.Nullable
+  public static PsiElement getPatternVariableDeclarationScope(@jakarta.annotation.Nonnull PsiInstanceOfExpression instanceOfExpression) {
+    return getInstanceOfPartDeclarationScope(instanceOfExpression);
+  }
+
+  private static PsiElement getInstanceOfPartDeclarationScope(@Nonnull PsiElement parent) {
+    boolean negated = false;
+    for (PsiElement nextParent = parent.getParent(); ; parent = nextParent, nextParent = parent.getParent()) {
+      if (nextParent instanceof PsiParenthesizedExpression) continue;
+      if (nextParent instanceof PsiForeachStatementBase ||
+        nextParent instanceof PsiConditionalExpression && parent == ((PsiConditionalExpression)nextParent).getCondition()) {
+        return nextParent;
+      }
+      if (nextParent instanceof PsiPrefixExpression &&
+        ((PsiPrefixExpression)nextParent).getOperationTokenType().equals(JavaTokenType.EXCL)) {
+        negated = !negated;
+        continue;
+      }
+      if (nextParent instanceof PsiPolyadicExpression) {
+        IElementType tokenType = ((PsiPolyadicExpression)nextParent).getOperationTokenType();
+        if (tokenType.equals(JavaTokenType.ANDAND) && !negated || tokenType.equals(JavaTokenType.OROR) && negated) continue;
+      }
+      if (nextParent instanceof PsiIfStatement) {
+        while (nextParent.getParent() instanceof PsiLabeledStatement) {
+          nextParent = nextParent.getParent();
+        }
+        return nextParent.getParent();
+      }
+      if (nextParent instanceof PsiConditionalLoopStatement) {
+        if (!negated) return nextParent;
+        while (nextParent.getParent() instanceof PsiLabeledStatement) {
+          nextParent = nextParent.getParent();
+        }
+        return nextParent.getParent();
+      }
+      if (nextParent instanceof PsiSwitchLabelStatementBase) {
+        while (nextParent.getParent() instanceof PsiLabeledStatement) {
+          nextParent = nextParent.getParent();
+        }
+        return nextParent.getParent();
+      }
+      if (nextParent instanceof PsiPattern || nextParent instanceof PsiCaseLabelElementList ||
+        (parent instanceof PsiPattern && nextParent instanceof PsiInstanceOfExpression) ||
+        (parent instanceof PsiPattern && nextParent instanceof PsiDeconstructionList)) {
+        continue;
+      }
+      return parent;
+    }
   }
 
   private static class FilteringTypeAnnotationProvider implements TypeAnnotationProvider {

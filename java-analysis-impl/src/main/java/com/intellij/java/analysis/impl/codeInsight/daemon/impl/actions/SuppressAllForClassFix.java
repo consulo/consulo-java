@@ -28,8 +28,8 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * User: anna
@@ -66,7 +66,7 @@ public class SuppressAllForClassFix extends SuppressFix {
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, @Nonnull final PsiElement element) throws IncorrectOperationException {
+  public void invoke(@Nonnull final Project project, @jakarta.annotation.Nonnull final PsiElement element) throws IncorrectOperationException {
     final PsiDocCommentOwner container = getContainer(element);
     LOG.assertTrue(container != null);
     if (!FileModificationService.getInstance().preparePsiElementForWrite(container)) return;

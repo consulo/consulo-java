@@ -26,8 +26,9 @@ import consulo.language.psi.search.PsiSearchHelper;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class DeclarationSearchUtils {
   private DeclarationSearchUtils() {
   }
 
-  public static boolean variableNameResolvesToTarget(@Nonnull String variableName, @Nonnull PsiVariable target, @Nonnull PsiElement context) {
+  public static boolean variableNameResolvesToTarget(@Nonnull String variableName, @jakarta.annotation.Nonnull PsiVariable target, @Nonnull PsiElement context) {
 
     final Project project = context.getProject();
     final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);

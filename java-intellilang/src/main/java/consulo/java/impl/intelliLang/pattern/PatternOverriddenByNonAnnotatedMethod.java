@@ -31,10 +31,11 @@ import consulo.util.lang.Pair;
 import consulo.java.impl.intelliLang.util.AnnotateFix;
 import consulo.java.impl.intelliLang.util.AnnotationUtilEx;
 import consulo.java.impl.intelliLang.util.PsiUtilEx;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.util.Set;
 
 @ExtensionImpl

@@ -17,7 +17,7 @@ package com.intellij.java.analysis.codeInspection.reference;
 
 import consulo.language.editor.inspection.reference.RefVisitor;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Visitor for reference graph nodes.

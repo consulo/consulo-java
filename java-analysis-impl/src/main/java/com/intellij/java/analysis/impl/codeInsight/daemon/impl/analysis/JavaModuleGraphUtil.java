@@ -31,8 +31,9 @@ import consulo.util.lang.Trinity;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileTypeRegistry;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -44,7 +45,7 @@ public final class JavaModuleGraphUtil {
   private JavaModuleGraphUtil() {
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static PsiJavaModule findDescriptorByElement(@Nullable PsiElement element) {
     if (element != null) {
       PsiFileSystemItem fsItem = element instanceof PsiFileSystemItem ? (PsiFileSystemItem) element : element.getContainingFile();
@@ -56,16 +57,16 @@ public final class JavaModuleGraphUtil {
     return null;
   }
 
-  @Nullable
-  public static PsiJavaModule findDescriptorByFile(@Nullable VirtualFile file, @Nonnull Project project) {
+  @jakarta.annotation.Nullable
+  public static PsiJavaModule findDescriptorByFile(@jakarta.annotation.Nullable VirtualFile file, @jakarta.annotation.Nonnull Project project) {
     if (file == null) {
       return null;
     }
     return JavaPsiFacade.getInstance(project).findModule(file);
   }
 
-  @Nullable
-  public static PsiJavaModule findDescriptorByModule(@Nullable Module module, boolean inTests) {
+  @jakarta.annotation.Nullable
+  public static PsiJavaModule findDescriptorByModule(@jakarta.annotation.Nullable Module module, boolean inTests) {
     if (module != null) {
       Predicate<ContentFolderTypeProvider> rootType = inTests ? LanguageContentFolderScopes.test() : LanguageContentFolderScopes.production();
       List<VirtualFile> files = ContainerUtil.mapNotNull(ModuleRootManager.getInstance(module).getContentFolderFiles(rootType),
@@ -91,38 +92,38 @@ public final class JavaModuleGraphUtil {
     return null;
   }
 
-  @Nonnull
-  public static Collection<PsiJavaModule> findCycle(@Nonnull PsiJavaModule module) {
+  @jakarta.annotation.Nonnull
+  public static Collection<PsiJavaModule> findCycle(@jakarta.annotation.Nonnull PsiJavaModule module) {
     Project project = module.getProject();
     List<Set<PsiJavaModule>> cycles = CachedValuesManager.getManager(project).getCachedValue(project, () ->
         Result.create(findCycles(project), cacheDependency()));
     return ObjectUtil.notNull(ContainerUtil.find(cycles, set -> set.contains(module)), Collections.emptyList());
   }
 
-  public static boolean exports(@Nonnull PsiJavaModule source, @Nonnull String packageName, @Nullable PsiJavaModule target) {
+  public static boolean exports(@jakarta.annotation.Nonnull PsiJavaModule source, @Nonnull String packageName, @jakarta.annotation.Nullable PsiJavaModule target) {
     Map<String, Set<String>> exports = LanguageCachedValueUtil.getCachedValue(source, () ->
         Result.create(exportsMap(source), source.getContainingFile()));
     Set<String> targets = exports.get(packageName);
     return targets != null && (targets.isEmpty() || target != null && targets.contains(target.getName()));
   }
 
-  public static boolean reads(@Nonnull PsiJavaModule source, @Nonnull PsiJavaModule destination) {
+  public static boolean reads(@jakarta.annotation.Nonnull PsiJavaModule source, @jakarta.annotation.Nonnull PsiJavaModule destination) {
     return getRequiresGraph(source).reads(source, destination);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static Set<PsiJavaModule> getAllDependencies(PsiJavaModule source) {
     return getRequiresGraph(source).getAllDependencies(source);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static Trinity<String, PsiJavaModule, PsiJavaModule> findConflict(@Nonnull PsiJavaModule module) {
     return getRequiresGraph(module).findConflict(module);
   }
 
   public static
-  @Nullable
-  PsiJavaModule findOrigin(@Nonnull PsiJavaModule module, @Nonnull String packageName) {
+  @jakarta.annotation.Nullable
+  PsiJavaModule findOrigin(@jakarta.annotation.Nonnull PsiJavaModule module, @jakarta.annotation.Nonnull String packageName) {
     return getRequiresGraph(module).findOrigin(module, packageName);
   }
 
@@ -180,7 +181,7 @@ public final class JavaModuleGraphUtil {
     return Collections.emptyList();
   }
 
-  private static Map<String, Set<String>> exportsMap(@Nonnull PsiJavaModule source) {
+  private static Map<String, Set<String>> exportsMap(@jakarta.annotation.Nonnull PsiJavaModule source) {
     Map<String, Set<String>> map = new HashMap<>();
     for (PsiPackageAccessibilityStatement statement : source.getExports()) {
       String pkg = statement.getPackageName();
@@ -318,7 +319,7 @@ public final class JavaModuleGraphUtil {
       return module.getName() + '/' + exporter.getName();
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public Set<PsiJavaModule> getAllDependencies(PsiJavaModule module) {
       Set<PsiJavaModule> requires = new HashSet<>();
       collectDependencies(module, requires);
@@ -352,7 +353,7 @@ public final class JavaModuleGraphUtil {
     }
 
     @Override
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public Collection<N> getNodes() {
       return myNodes;
     }
@@ -364,7 +365,7 @@ public final class JavaModuleGraphUtil {
     }
 
     @Override
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public Iterator<N> getOut(N n) {
       return myInbound ? Collections.emptyIterator() : myEdges.get(n).iterator();
     }
@@ -375,7 +376,7 @@ public final class JavaModuleGraphUtil {
     private final boolean myIncludeLibraries;
     private final boolean myIsInTests;
 
-    private JavaModuleScope(@Nonnull Project project, @Nonnull PsiJavaModule module, @Nonnull VirtualFile moduleFile) {
+    private JavaModuleScope(@jakarta.annotation.Nonnull Project project, @Nonnull PsiJavaModule module, @Nonnull VirtualFile moduleFile) {
       super(project);
       myModule = module;
       ProjectFileIndex fileIndex = ProjectFileIndex.getInstance(project);
@@ -384,7 +385,7 @@ public final class JavaModuleGraphUtil {
     }
 
     @Override
-    public boolean isSearchInModuleContent(@Nonnull Module aModule) {
+    public boolean isSearchInModuleContent(@jakarta.annotation.Nonnull Module aModule) {
       return findDescriptorByModule(aModule, myIsInTests) == myModule;
     }
 
@@ -394,7 +395,7 @@ public final class JavaModuleGraphUtil {
     }
 
     @Override
-    public boolean contains(@Nonnull VirtualFile file) {
+    public boolean contains(@jakarta.annotation.Nonnull VirtualFile file) {
       Project project = getProject();
       if (project == null) {
         return false;
@@ -410,14 +411,14 @@ public final class JavaModuleGraphUtil {
       return myModule.equals(findDescriptorByModule(module, myIsInTests));
     }
 
-    private static boolean isJvmLanguageFile(@Nonnull VirtualFile file) {
+    private static boolean isJvmLanguageFile(@jakarta.annotation.Nonnull VirtualFile file) {
       FileTypeRegistry fileTypeRegistry = FileTypeRegistry.getInstance();
       LanguageFileType languageFileType = tryCast(fileTypeRegistry.getFileTypeByFileName(file.getName()), LanguageFileType.class);
       return languageFileType != null && languageFileType.getLanguage() instanceof JavaLanguage;
     }
 
     public static
-    @Nullable
+    @jakarta.annotation.Nullable
     JavaModuleScope moduleScope(@Nonnull PsiJavaModule module) {
       PsiFile moduleFile = module.getContainingFile();
       if (moduleFile == null) {

@@ -43,8 +43,9 @@ import consulo.ui.ex.popup.ListPopup;
 import consulo.ui.ex.popup.PopupStep;
 import consulo.virtualFileSystem.VirtualFile;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.List;
 
 @ExtensionImpl
@@ -60,7 +61,7 @@ public class DeannotateIntentionAction implements IntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
     PsiModifierListOwner listOwner = getContainer(editor, file);
     if (listOwner != null) {
       final ExternalAnnotationsManager externalAnnotationsManager = ExternalAnnotationsManager.getInstance(project);
@@ -149,7 +150,7 @@ public class DeannotateIntentionAction implements IntentionAction {
       }
 
       @Override
-      @Nonnull
+      @jakarta.annotation.Nonnull
       public String getTextFor(final PsiAnnotation value) {
         final String qualifiedName = value.getQualifiedName();
         LOG.assertTrue(qualifiedName != null);

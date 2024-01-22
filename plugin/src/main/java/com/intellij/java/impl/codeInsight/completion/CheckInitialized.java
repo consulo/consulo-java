@@ -24,9 +24,9 @@ import consulo.language.editor.completion.CompletionUtilCore;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.filter.ElementFilter;
 import consulo.language.psi.util.PsiTreeUtil;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -45,7 +45,7 @@ class CheckInitialized implements ElementFilter
 		myInsideConstructorCall = isInsideConstructorCall(position);
 	}
 
-	static boolean isInsideConstructorCall(@Nonnull PsiElement position)
+	static boolean isInsideConstructorCall(@jakarta.annotation.Nonnull PsiElement position)
 	{
 		return ExpressionUtils.isConstructorInvocation(PsiTreeUtil.getParentOfType(position, PsiMethodCallExpression.class)) && !JavaKeywordCompletion.AFTER_DOT.accepts(position);
 	}

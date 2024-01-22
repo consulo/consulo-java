@@ -25,9 +25,8 @@
 
 package org.osmorc.manifest.lang.psi.impl;
 
-import javax.annotation.Nonnull;
-
 import consulo.language.impl.psi.LeafPsiElement;
+import jakarta.annotation.Nonnull;
 import org.osmorc.manifest.lang.ManifestTokenType;
 import org.osmorc.manifest.lang.psi.ManifestToken;
 

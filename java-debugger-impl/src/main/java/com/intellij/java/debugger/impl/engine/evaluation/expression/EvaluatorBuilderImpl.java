@@ -59,8 +59,8 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 public class EvaluatorBuilderImpl implements EvaluatorBuilder
@@ -533,9 +533,9 @@ public class EvaluatorBuilderImpl implements EvaluatorBuilder
 		private static Evaluator createBinaryEvaluator(Evaluator lResult,
 				PsiType lType,
 				Evaluator rResult,
-				@Nonnull PsiType rType,
-				@Nonnull IElementType operation,
-				@Nonnull PsiType expressionExpectedType)
+				@jakarta.annotation.Nonnull PsiType rType,
+				@jakarta.annotation.Nonnull IElementType operation,
+				@jakarta.annotation.Nonnull PsiType expressionExpectedType)
 		{
 			// handle unboxing if necessary
 			if(isUnboxingInBinaryExpressionApplicable(lType, rType, operation))

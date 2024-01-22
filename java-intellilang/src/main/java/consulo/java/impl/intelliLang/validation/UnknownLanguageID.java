@@ -30,8 +30,8 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class UnknownLanguageID extends LocalInspectionTool {
@@ -45,7 +45,7 @@ public class UnknownLanguageID extends LocalInspectionTool {
     return true;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getGroupDisplayName() {
     return PatternValidator.LANGUAGE_INJECTION;
   }
@@ -62,7 +62,7 @@ public class UnknownLanguageID extends LocalInspectionTool {
   }
 
   @Nonnull
-  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
+  public PsiElementVisitor buildVisitor(@jakarta.annotation.Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
     return new JavaElementVisitor() {
       final String annotationName = Configuration.getProjectInstance(holder.getProject()).getAdvancedConfiguration().getLanguageAnnotationClass();
 

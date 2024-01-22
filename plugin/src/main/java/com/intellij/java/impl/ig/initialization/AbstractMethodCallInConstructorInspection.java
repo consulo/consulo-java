@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.initialization;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
@@ -28,7 +28,7 @@ import com.siyeh.ig.psiutils.MethodCallUtils;
 @ExtensionImpl
 public class AbstractMethodCallInConstructorInspection extends BaseInspection {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("abstract.method.call.in.constructor.display.name");
   }
@@ -45,7 +45,7 @@ public class AbstractMethodCallInConstructorInspection extends BaseInspection {
   private static class AbstractMethodCallInConstructorVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(@jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!MethodCallUtils.isCallDuringObjectConstruction(expression)) {
         return;

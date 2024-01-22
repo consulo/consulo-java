@@ -44,7 +44,7 @@ import consulo.ui.ex.awt.util.TableUtil;
 import consulo.util.lang.Pair;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -130,7 +130,7 @@ class CompoundRendererConfigurable extends JPanel
 		myClassNameField = new ClassNameEditorWithBrowseButton(new ActionListener()
 		{
 			@Override
-			public void actionPerformed(@Nonnull ActionEvent e)
+			public void actionPerformed(@jakarta.annotation.Nonnull ActionEvent e)
 			{
 				PsiClass psiClass = DebuggerUtils.getInstance().chooseClassDialog(DebuggerBundle.message("title.compound.renderer.configurable.choose.renderer.reference.type"), myProject);
 				if(psiClass != null)
@@ -144,7 +144,7 @@ class CompoundRendererConfigurable extends JPanel
 		myClassNameField.getEditorTextField().addFocusListener(new FocusAdapter()
 		{
 			@Override
-			public void focusLost(@Nonnull FocusEvent e)
+			public void focusLost(@jakarta.annotation.Nonnull FocusEvent e)
 			{
 				updateContext(myClassNameField.getText());
 			}

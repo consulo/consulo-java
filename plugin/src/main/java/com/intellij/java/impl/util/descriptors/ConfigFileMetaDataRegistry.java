@@ -16,7 +16,7 @@
 
 package com.intellij.java.impl.util.descriptors;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author nik

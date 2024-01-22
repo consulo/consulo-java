@@ -3,8 +3,8 @@ package com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis.asm;
 
 import consulo.internal.org.objectweb.asm.tree.JumpInsnNode;
 import consulo.internal.org.objectweb.asm.tree.LabelNode;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +21,7 @@ public class Subroutine
 	{
 	}
 
-	Subroutine(@Nullable LabelNode start, int maxLocals, @Nullable JumpInsnNode caller)
+	Subroutine(@Nullable LabelNode start, int maxLocals, @jakarta.annotation.Nullable JumpInsnNode caller)
 	{
 		this.start = start;
 		this.access = new boolean[maxLocals];

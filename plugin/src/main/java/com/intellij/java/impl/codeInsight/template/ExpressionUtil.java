@@ -29,7 +29,7 @@ import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author mike

@@ -33,7 +33,7 @@ import consulo.language.psi.*;
 import consulo.undoRedo.CommandProcessor;
 import consulo.util.dataholder.Key;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Set;
 
 @ExtensionImpl
@@ -59,7 +59,7 @@ public class JavaPostfixTemplateProvider extends PostfixTemplateProvider {
   }
 
   @Override
-  public void preExpand(@Nonnull final PsiFile file, @Nonnull final Editor editor) {
+  public void preExpand(@Nonnull final PsiFile file, @jakarta.annotation.Nonnull final Editor editor) {
     ApplicationManager.getApplication().assertIsDispatchThread();
 
     file.putUserData(ADDED_SEMICOLON, null);
@@ -106,9 +106,9 @@ public class JavaPostfixTemplateProvider extends PostfixTemplateProvider {
     }
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
-  public PsiFile preCheck(final @Nonnull PsiFile copyFile, final @Nonnull Editor realEditor, final int currentOffset) {
+  public PsiFile preCheck(final @Nonnull PsiFile copyFile, final @jakarta.annotation.Nonnull Editor realEditor, final int currentOffset) {
     return ApplicationManager.getApplication().runReadAction(new Computable<PsiFile>() {
       @Override
       public PsiFile compute() {
@@ -126,15 +126,15 @@ public class JavaPostfixTemplateProvider extends PostfixTemplateProvider {
     });
   }
 
-  public static void doNotDeleteSemicolon(@Nonnull PsiFile file) {
+  public static void doNotDeleteSemicolon(@jakarta.annotation.Nonnull PsiFile file) {
     file.putUserData(ADDED_SEMICOLON, null);
   }
 
-  private static boolean isSemicolonNeeded(@Nonnull PsiFile file, @Nonnull Editor editor) {
+  private static boolean isSemicolonNeeded(@jakarta.annotation.Nonnull PsiFile file, @Nonnull Editor editor) {
     return JavaCompletionContributor.semicolonNeeded(editor, file, CompletionInitializationContext.calcStartOffset(editor.getCaretModel().getCurrentCaret()));
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

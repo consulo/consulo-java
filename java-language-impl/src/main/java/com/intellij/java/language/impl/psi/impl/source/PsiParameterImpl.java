@@ -38,7 +38,7 @@ import consulo.navigation.ItemPresentation;
 import consulo.navigation.ItemPresentationProvider;
 import consulo.util.lang.ref.SoftReference;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.lang.ref.Reference;
 import java.util.Arrays;
 
@@ -51,7 +51,7 @@ public class PsiParameterImpl extends JavaStubPsiElement<PsiParameterStub> imple
     this(stub, JavaStubElementTypes.PARAMETER);
   }
 
-  protected PsiParameterImpl(@Nonnull PsiParameterStub stub, @Nonnull IStubElementType type) {
+  protected PsiParameterImpl(@jakarta.annotation.Nonnull PsiParameterStub stub, @Nonnull IStubElementType type) {
     super(stub, type);
   }
 
@@ -204,7 +204,7 @@ public class PsiParameterImpl extends JavaStubPsiElement<PsiParameterStub> imple
   }
 
   @Override
-  public boolean hasModifierProperty(@Nonnull String name) {
+  public boolean hasModifierProperty(@jakarta.annotation.Nonnull String name) {
     return getModifierList().hasModifierProperty(name);
   }
 
@@ -230,7 +230,7 @@ public class PsiParameterImpl extends JavaStubPsiElement<PsiParameterStub> imple
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitParameter(this);
     } else {

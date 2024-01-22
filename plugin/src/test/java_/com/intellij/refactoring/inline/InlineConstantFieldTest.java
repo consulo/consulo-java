@@ -2,7 +2,7 @@ package com.intellij.refactoring.inline;
 
 import static org.junit.Assert.assertTrue;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.impl.refactoring.inline.InlineConstantFieldProcessor;
 import org.jetbrains.annotations.NonNls;

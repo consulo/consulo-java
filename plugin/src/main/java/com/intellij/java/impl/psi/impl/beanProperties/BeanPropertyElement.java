@@ -31,8 +31,8 @@ import consulo.ui.image.Image;
 import consulo.util.collection.ArrayUtil;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author peter
@@ -51,7 +51,7 @@ public class BeanPropertyElement extends FakePsiElement implements PsiMetaOwner,
     return PropertyUtil.getPropertyType(myMethod);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiMethod getMethod() {
     return myMethod;
   }
@@ -105,7 +105,7 @@ public class BeanPropertyElement extends FakePsiElement implements PsiMetaOwner,
   }
 
   @Override
-  @Nullable
+  @jakarta.annotation.Nullable
   public PsiMetaData getMetaData() {
     return this;
   }

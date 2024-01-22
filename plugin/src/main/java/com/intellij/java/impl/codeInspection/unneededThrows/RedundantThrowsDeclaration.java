@@ -30,10 +30,11 @@ import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -58,7 +59,7 @@ public class RedundantThrowsDeclaration extends BaseJavaBatchLocalInspectionTool
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @NonNls
   public String getShortName() {
     return "RedundantThrowsDeclaration";
@@ -66,7 +67,7 @@ public class RedundantThrowsDeclaration extends BaseJavaBatchLocalInspectionTool
 
   @Override
   @Nullable
-  public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull final InspectionManager manager, final boolean isOnTheFly, Object state) {
+  public ProblemDescriptor[] checkFile(@jakarta.annotation.Nonnull PsiFile file, @jakarta.annotation.Nonnull final InspectionManager manager, final boolean isOnTheFly, Object state) {
     final Set<ProblemDescriptor> problems = new HashSet<ProblemDescriptor>();
     file.accept(new JavaRecursiveElementWalkingVisitor() {
       @Override public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {

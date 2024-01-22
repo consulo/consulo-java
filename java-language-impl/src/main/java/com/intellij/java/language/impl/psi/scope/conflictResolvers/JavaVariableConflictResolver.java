@@ -21,7 +21,7 @@ import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiLocalVariable;
 import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.impl.psi.scope.PsiConflictResolver;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.List;
 

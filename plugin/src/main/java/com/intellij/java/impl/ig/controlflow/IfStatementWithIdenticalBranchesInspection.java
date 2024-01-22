@@ -17,8 +17,7 @@ package com.intellij.java.impl.ig.controlflow;
 
 import java.util.Collections;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -44,6 +43,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.ig.psiutils.EquivalenceChecker;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class IfStatementWithIdenticalBranchesInspection
@@ -57,7 +57,7 @@ public class IfStatementWithIdenticalBranchesInspection
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "if.statement.with.identical.branches.problem.descriptor");
@@ -73,14 +73,14 @@ public class IfStatementWithIdenticalBranchesInspection
     public CollapseIfFix() {
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "if.statement.with.identical.branches.collapse.quickfix");
     }
 
     @Override
-    public void doFix(@Nonnull Project project,
+    public void doFix(@jakarta.annotation.Nonnull Project project,
                       ProblemDescriptor descriptor)
       throws IncorrectOperationException {
       final PsiElement identifier = descriptor.getPsiElement();

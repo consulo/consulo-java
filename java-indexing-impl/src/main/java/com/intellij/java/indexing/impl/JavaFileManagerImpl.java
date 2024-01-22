@@ -50,11 +50,12 @@ import consulo.util.lang.Comparing;
 import consulo.util.lang.Pair;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.VirtualFileWithId;
+import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -202,7 +203,7 @@ public class JavaFileManagerImpl implements JavaFileManager, Disposable {
 
   @Nonnull
   @Override
-  public Collection<PsiJavaModule> findModules(@Nonnull String moduleName, @Nonnull GlobalSearchScope scope) {
+  public Collection<PsiJavaModule> findModules(@jakarta.annotation.Nonnull String moduleName, @Nonnull GlobalSearchScope scope) {
     GlobalSearchScope excludingScope = new LibSrcExcludingScope(scope);
 
     List<PsiJavaModule> results = new ArrayList<>(JavaModuleNameIndex.getInstance().get(moduleName, myManager.getProject(), excludingScope));

@@ -25,8 +25,8 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import javax.swing.*;
 
 public abstract class UnnecessaryParenthesesInspection extends BaseInspection {
@@ -69,7 +69,7 @@ public abstract class UnnecessaryParenthesesInspection extends BaseInspection {
 
   private class UnnecessaryParenthesesFix extends InspectionGadgetsFix {
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("unnecessary.parentheses.remove.quickfix");
     }

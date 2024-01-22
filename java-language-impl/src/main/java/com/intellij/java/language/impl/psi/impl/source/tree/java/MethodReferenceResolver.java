@@ -37,8 +37,8 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
 import consulo.util.collection.SmartList;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -225,7 +225,7 @@ public class MethodReferenceResolver implements ResolveCache.PolyVariantContextR
       return conflict.isVarargs() ? MethodCandidateInfo.ApplicabilityLevel.VARARGS : MethodCandidateInfo.ApplicabilityLevel.FIXED_ARITY;
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     @Override
     protected CandidateInfo guardedOverloadResolution(@Nonnull List<CandidateInfo> conflicts) {
       if (mySignature == null) {

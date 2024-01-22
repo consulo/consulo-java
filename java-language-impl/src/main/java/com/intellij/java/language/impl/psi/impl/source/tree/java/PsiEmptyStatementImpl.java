@@ -20,7 +20,7 @@ import consulo.language.psi.PsiElementVisitor;
 import com.intellij.java.language.psi.PsiEmptyStatement;
 import com.intellij.java.language.impl.psi.impl.source.Constants;
 import consulo.language.impl.psi.CompositePsiElement;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class PsiEmptyStatementImpl extends CompositePsiElement implements PsiEmptyStatement {
   public PsiEmptyStatementImpl() {

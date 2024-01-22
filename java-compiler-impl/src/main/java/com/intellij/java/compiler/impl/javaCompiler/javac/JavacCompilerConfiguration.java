@@ -26,10 +26,9 @@ import consulo.ide.ServiceManager;
 import consulo.project.Project;
 import consulo.project.macro.ProjectPathMacroManager;
 import consulo.util.xml.serializer.XmlSerializerUtil;
+import jakarta.annotation.Nonnull;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-
-import javax.annotation.Nonnull;
 
 @Singleton
 @State(
@@ -56,7 +55,7 @@ public class JavacCompilerConfiguration implements PersistentStateComponent<JpsJ
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public JpsJavaCompilerOptions getState() {
     JpsJavaCompilerOptions state = new JpsJavaCompilerOptions();
     XmlSerializerUtil.copyBean(mySettings, state);

@@ -6,8 +6,7 @@ import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.callMatcher.CallMatcher;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import static com.intellij.java.language.psi.CommonClassNames.JAVA_LANG_CLASS;
 import static com.intellij.java.language.psi.CommonClassNames.JAVA_LANG_OBJECT;
@@ -25,7 +24,7 @@ public class ClassMethodsInliner implements CallInliner {
 
 
   @Override
-  public boolean tryInlineCall(@Nonnull CFGBuilder builder, @Nonnull PsiMethodCallExpression call) {
+  public boolean tryInlineCall(@Nonnull CFGBuilder builder, @jakarta.annotation.Nonnull PsiMethodCallExpression call) {
     PsiExpression qualifier = call.getMethodExpression().getQualifierExpression();
     if (qualifier == null) {
       return false;

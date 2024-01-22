@@ -16,8 +16,9 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -76,7 +77,7 @@ public class RecordAugmentProvider extends PsiAugmentProvider {
     return methods;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static PsiMethod getCanonicalConstructor(PsiExtensibleClass aClass,
                                                    List<PsiMethod> ownMethods,
                                                    @Nonnull PsiRecordHeader recordHeader) {
@@ -131,8 +132,8 @@ public class RecordAugmentProvider extends PsiAugmentProvider {
     return fields;
   }
 
-  @Nullable
-  private static PsiField createRecordField(@Nonnull PsiRecordComponent component, @Nonnull PsiElementFactory factory) {
+  @jakarta.annotation.Nullable
+  private static PsiField createRecordField(@jakarta.annotation.Nonnull PsiRecordComponent component, @Nonnull PsiElementFactory factory) {
     String name = component.getName();
     if (hasForbiddenType(component)) {
       return null;
@@ -150,7 +151,7 @@ public class RecordAugmentProvider extends PsiAugmentProvider {
     }
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static PsiMethod createRecordMethod(@Nonnull PsiRecordComponent component, @Nonnull PsiElementFactory factory) {
     String name = component.getName();
     if (name == null) {
@@ -177,7 +178,7 @@ public class RecordAugmentProvider extends PsiAugmentProvider {
     return typeElement == null || typeElement.getText().equals(PsiKeyword.RECORD);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static String getTypeText(@Nonnull PsiRecordComponent component) {
     PsiTypeElement typeElement = component.getTypeElement();
     if (typeElement == null) {

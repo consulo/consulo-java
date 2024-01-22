@@ -15,7 +15,7 @@
  */
 package com.intellij.java.debugger.impl.descriptors.data;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.debugger.engine.evaluation.TextWithImports;
 import com.intellij.java.debugger.impl.ui.impl.watch.UserExpressionDescriptorImpl;

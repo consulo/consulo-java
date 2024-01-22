@@ -43,7 +43,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.util.LanguageUtil;
 import consulo.language.version.LanguageVersion;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author max

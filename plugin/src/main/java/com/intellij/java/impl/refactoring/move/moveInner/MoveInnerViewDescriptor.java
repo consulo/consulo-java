@@ -20,13 +20,12 @@
  */
 package com.intellij.java.impl.refactoring.move.moveInner;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiClass;
 import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.usage.UsageViewBundle;
 import consulo.usage.UsageViewDescriptor;
+import jakarta.annotation.Nonnull;
 
 class MoveInnerViewDescriptor implements UsageViewDescriptor {
 

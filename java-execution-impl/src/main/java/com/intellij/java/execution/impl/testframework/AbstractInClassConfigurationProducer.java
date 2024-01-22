@@ -18,8 +18,6 @@ package com.intellij.java.execution.impl.testframework;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.execution.impl.JavaTestConfigurationBase;
 import consulo.execution.RunnerAndConfigurationSettings;
 import consulo.execution.action.*;
@@ -40,6 +38,7 @@ import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
 import consulo.language.psi.util.PsiTreeUtil;
+import jakarta.annotation.Nonnull;
 
 public abstract class AbstractInClassConfigurationProducer<T extends JavaTestConfigurationBase> extends AbstractJavaTestConfigurationProducer<T>
 {
@@ -51,7 +50,7 @@ public abstract class AbstractInClassConfigurationProducer<T extends JavaTestCon
 	}
 
 	@Override
-	public void onFirstRun(@Nonnull final ConfigurationFromContext configuration, @Nonnull final ConfigurationContext fromContext, @Nonnull Runnable performRunnable)
+	public void onFirstRun(@Nonnull final ConfigurationFromContext configuration, @jakarta.annotation.Nonnull final ConfigurationContext fromContext, @jakarta.annotation.Nonnull Runnable performRunnable)
 	{
 		final PsiElement psiElement = configuration.getSourceElement();
 		if(psiElement instanceof PsiMethod || psiElement instanceof PsiClass)

@@ -1,6 +1,6 @@
 package com.siyeh.igtest.encapsulation.public_field;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public class PublicField {
   public final X y = X.Y;

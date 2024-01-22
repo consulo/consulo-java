@@ -30,7 +30,7 @@ import consulo.language.util.CharTable;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class JavaSourceUtil {
   private static final Logger LOG = Logger.getInstance(JavaSourceUtil.class);
@@ -118,8 +118,8 @@ public class JavaSourceUtil {
     return LightTreeUtil.toFilteredString(tree, node, REF_FILTER);
   }
 
-  @Nonnull
-  public static TreeElement addParenthToReplacedChild(@Nonnull ASTNode child, @Nonnull TreeElement newChild, @Nonnull PsiManager manager) {
+  @jakarta.annotation.Nonnull
+  public static TreeElement addParenthToReplacedChild(@Nonnull ASTNode child, @jakarta.annotation.Nonnull TreeElement newChild, @Nonnull PsiManager manager) {
     boolean needParenth = ElementType.EXPRESSION_BIT_SET.contains(child.getElementType()) &&
         ElementType.EXPRESSION_BIT_SET.contains(newChild.getElementType()) &&
         ReplaceExpressionUtil.isNeedParenthesis(child, newChild);
@@ -168,7 +168,7 @@ public class JavaSourceUtil {
 
   public static void addSeparatingComma(@Nonnull CompositeElement element,
                                         @Nonnull ASTNode child,
-                                        @Nonnull TokenSet listTypes) {
+                                        @jakarta.annotation.Nonnull TokenSet listTypes) {
     assert child.getElementType() != JavaTokenType.COMMA : child;
 
     scanChildren(element, child, listTypes, true);

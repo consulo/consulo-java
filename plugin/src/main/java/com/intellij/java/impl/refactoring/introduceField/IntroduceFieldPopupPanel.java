@@ -23,7 +23,7 @@ import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.ide.impl.idea.refactoring.introduce.inplace.KeyboardComboSwitcher;
 import com.intellij.java.impl.refactoring.ui.TypeSelectorManager;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,7 +36,7 @@ import java.awt.event.ItemListener;
  * Date: 4/8/11
  */
 public class IntroduceFieldPopupPanel extends IntroduceFieldCentralPanel {
-  private @Nullable
+  private @jakarta.annotation.Nullable
   JComboBox myInitializerCombo;
   private JComboBox myVisibilityCombo;
   private DefaultComboBoxModel myInitialisersPlaceModel;

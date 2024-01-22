@@ -24,7 +24,7 @@ import com.intellij.java.language.impl.psi.scope.ElementClassHint;
 import com.intellij.java.language.psi.scope.JavaScopeProcessorEvent;
 import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.util.collection.MostlySingularMultiMap;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author max
@@ -50,7 +50,7 @@ public class SymbolCollectingProcessor extends BaseScopeProcessor implements Ele
   }
 
   @Override
-  public boolean execute(@Nonnull PsiElement element, ResolveState state) {
+  public boolean execute(@jakarta.annotation.Nonnull PsiElement element, ResolveState state) {
     if (element instanceof PsiNamedElement) {
       PsiNamedElement named = (PsiNamedElement)element;
       String name = named.getName();

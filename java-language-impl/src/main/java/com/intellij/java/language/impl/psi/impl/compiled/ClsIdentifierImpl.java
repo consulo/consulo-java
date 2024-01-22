@@ -15,8 +15,6 @@
  */
 package com.intellij.java.language.impl.psi.impl.compiled;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.java.language.psi.JavaTokenType;
 import consulo.language.psi.PsiElement;
@@ -26,13 +24,14 @@ import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiJavaToken;
 import consulo.language.impl.ast.TreeElement;
 import consulo.language.ast.IElementType;
+import jakarta.annotation.Nonnull;
 
 class ClsIdentifierImpl extends ClsElementImpl implements PsiIdentifier, PsiJavaToken
 {
 	private final PsiElement myParent;
 	private final String myText;
 
-	ClsIdentifierImpl(@Nonnull PsiElement parent, String text)
+	ClsIdentifierImpl(@jakarta.annotation.Nonnull PsiElement parent, String text)
 	{
 		myParent = parent;
 		myText = text;
@@ -51,7 +50,7 @@ class ClsIdentifierImpl extends ClsElementImpl implements PsiIdentifier, PsiJava
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public PsiElement[] getChildren()
 	{
 		return PsiElement.EMPTY_ARRAY;
@@ -69,7 +68,7 @@ class ClsIdentifierImpl extends ClsElementImpl implements PsiIdentifier, PsiJava
 	}
 
 	@Override
-	public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer)
+	public void appendMirrorText(int indentLevel, @jakarta.annotation.Nonnull StringBuilder buffer)
 	{
 		String original = getText();
 		if(isCorrectName(original))
@@ -83,7 +82,7 @@ class ClsIdentifierImpl extends ClsElementImpl implements PsiIdentifier, PsiJava
 	}
 
 	@Override
-	public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException
+	public void setMirror(@jakarta.annotation.Nonnull TreeElement element) throws InvalidMirrorException
 	{
 		setMirrorCheckingType(element, JavaTokenType.IDENTIFIER);
 	}

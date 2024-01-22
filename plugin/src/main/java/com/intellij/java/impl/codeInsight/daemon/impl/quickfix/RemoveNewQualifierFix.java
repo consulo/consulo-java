@@ -17,7 +17,6 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import consulo.language.editor.FileModificationService;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
-import consulo.language.editor.intention.IntentionAction;
 import consulo.codeEditor.Editor;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.project.Project;
@@ -26,7 +25,7 @@ import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiNewExpression;
 import consulo.language.util.IncorrectOperationException;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * User: cdr

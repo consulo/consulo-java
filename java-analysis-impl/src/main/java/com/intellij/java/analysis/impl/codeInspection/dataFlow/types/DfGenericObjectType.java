@@ -8,8 +8,8 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiEnumConstant;
 import one.util.streamex.StreamEx;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 import static com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes.BOTTOM;
@@ -73,13 +73,13 @@ class DfGenericObjectType extends DfAntiConstantType<Object> implements DfRefere
     return myLocal;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public SpecialField getSpecialField() {
     return mySpecialField;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public DfType getSpecialFieldType() {
     return mySpecialFieldType;
@@ -198,7 +198,7 @@ class DfGenericObjectType extends DfAntiConstantType<Object> implements DfRefere
   }
 
   @Override
-  public boolean isMergeable(@Nonnull DfType other) {
+  public boolean isMergeable(@jakarta.annotation.Nonnull DfType other) {
     if (!isSuperType(other)) {
       return false;
     }
@@ -245,7 +245,7 @@ class DfGenericObjectType extends DfAntiConstantType<Object> implements DfRefere
 
   @Nonnull
   @Override
-  public DfType meet(@Nonnull DfType other) {
+  public DfType meet(@jakarta.annotation.Nonnull DfType other) {
     if (other instanceof DfConstantType || other instanceof DfEphemeralReferenceType) {
       return other.meet(this);
     }

@@ -45,7 +45,7 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.ref.Ref;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.*;
 
 public class EncapsulateFieldsProcessor extends BaseRefactoringProcessor {
@@ -59,7 +59,7 @@ public class EncapsulateFieldsProcessor extends BaseRefactoringProcessor {
   private HashMap<String,PsiMethod> myNameToGetter;
   private HashMap<String,PsiMethod> myNameToSetter;
 
-  public EncapsulateFieldsProcessor(Project project, @Nonnull EncapsulateFieldsDescriptor descriptor) {
+  public EncapsulateFieldsProcessor(Project project, @jakarta.annotation.Nonnull EncapsulateFieldsDescriptor descriptor) {
     super(project);
     myDescriptor = descriptor;
     myFieldDescriptors = descriptor.getSelectedFields();
@@ -78,7 +78,7 @@ public class EncapsulateFieldsProcessor extends BaseRefactoringProcessor {
     }
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
     FieldDescriptor[] fields = new FieldDescriptor[myFieldDescriptors.length];
     System.arraycopy(myFieldDescriptors, 0, fields, 0, myFieldDescriptors.length);

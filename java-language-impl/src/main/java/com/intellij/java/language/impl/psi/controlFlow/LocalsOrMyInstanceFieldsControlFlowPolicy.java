@@ -5,8 +5,7 @@ package com.intellij.java.language.impl.psi.controlFlow;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.util.lang.ObjectUtil;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public final class LocalsOrMyInstanceFieldsControlFlowPolicy implements ControlFlowPolicy {
   private static final LocalsOrMyInstanceFieldsControlFlowPolicy INSTANCE = new LocalsOrMyInstanceFieldsControlFlowPolicy();
@@ -23,12 +22,12 @@ public final class LocalsOrMyInstanceFieldsControlFlowPolicy implements ControlF
   }
 
   @Override
-  public boolean isParameterAccepted(@Nonnull PsiParameter psiParameter) {
+  public boolean isParameterAccepted(@jakarta.annotation.Nonnull PsiParameter psiParameter) {
     return true;
   }
 
   @Override
-  public boolean isLocalVariableAccepted(@Nonnull PsiLocalVariable psiVariable) {
+  public boolean isLocalVariableAccepted(@jakarta.annotation.Nonnull PsiLocalVariable psiVariable) {
     return true;
   }
 

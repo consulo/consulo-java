@@ -32,7 +32,7 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class StringEqualsEmptyStringInspection extends BaseInspection {
@@ -68,7 +68,7 @@ public class StringEqualsEmptyStringInspection extends BaseInspection {
       this.useIsEmpty = useIsEmpty;
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       if (useIsEmpty) {
         return InspectionGadgetsBundle.message("string.equals.empty.string.isempty.quickfix");

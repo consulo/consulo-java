@@ -1,8 +1,8 @@
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 // "Implement method 'foo'" "true"
 abstract class Test {
-  public abstract void foo(@javax.annotation.Nullable String a);
+  public abstract void foo(@Nullable String a);
 }
 
 class TImple extends Test {

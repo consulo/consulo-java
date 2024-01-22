@@ -20,9 +20,9 @@ import com.intellij.java.language.psi.PsiClass;
 import consulo.language.pom.PomTarget;
 import consulo.language.sem.SemKey;
 import consulo.util.lang.function.PairConsumer;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.function.Consumer;
 
 /**
@@ -37,7 +37,7 @@ public class JamClassMeta<Jam extends JamElement> extends JamMemberMeta<PsiClass
     super(jamClass);
   }
 
-  public JamClassMeta(@Nullable JamMemberArchetype<? super PsiClass, ? super Jam> parent, Class<? extends Jam> jamClass, SemKey<Jam> jamKey) {
+  public JamClassMeta(@jakarta.annotation.Nullable JamMemberArchetype<? super PsiClass, ? super Jam> parent, Class<? extends Jam> jamClass, SemKey<Jam> jamKey) {
     super(parent, jamClass, jamKey);
   }
 

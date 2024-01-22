@@ -21,8 +21,6 @@ import java.util.List;
 
 import javax.swing.JComboBox;
 
-import javax.annotation.Nullable;
-
 import consulo.execution.configuration.ModuleBasedConfiguration;
 import consulo.module.ui.awt.ModuleDescriptionsComboBox;
 import consulo.module.ui.awt.ModuleListCellRenderer;
@@ -37,6 +35,7 @@ import com.intellij.java.language.psi.PsiClass;
 import consulo.ui.ex.awt.ComboboxSpeedSearch;
 import consulo.ui.ex.awt.SortedComboBoxModel;
 import consulo.java.language.module.extension.JavaModuleExtension;
+import jakarta.annotation.Nullable;
 
 public class ConfigurationModuleSelector
 {

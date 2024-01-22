@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
@@ -39,7 +39,7 @@ public class ObjectToStringInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("default.tostring.call.problem.descriptor");
   }
@@ -64,7 +64,7 @@ public class ObjectToStringInspection extends BaseInspection {
     }
 
     @Override
-    public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression expression) {
+    public void visitAssignmentExpression(@jakarta.annotation.Nonnull PsiAssignmentExpression expression) {
       super.visitAssignmentExpression(expression);
       final IElementType tokenType = expression.getOperationTokenType();
       if (!tokenType.equals(JavaTokenType.PLUSEQ)) {

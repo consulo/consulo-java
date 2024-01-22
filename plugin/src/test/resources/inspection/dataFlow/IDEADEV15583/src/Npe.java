@@ -1,7 +1,9 @@
+import jakarta.annotation.Nullable;
+
 import java.util.*;
 
 class Test {
-    @javax.annotation.Nullable
+    @Nullable
     public String getString(String s) {
         return null;
     }

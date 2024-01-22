@@ -31,10 +31,10 @@ import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.swing.*;
 import java.util.*;
 
@@ -54,14 +54,14 @@ public class TypeMayBeWeakenedInspection extends BaseInspection {
   public boolean onlyWeakentoInterface = true;
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "type.may.be.weakened.display.name");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     final Iterable<PsiClass> weakerClasses = (Iterable<PsiClass>)infos[1];
     @NonNls final StringBuilder builder = new StringBuilder();
@@ -104,7 +104,7 @@ public class TypeMayBeWeakenedInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     final Iterable<PsiClass> weakerClasses = (Iterable<PsiClass>)infos[1];
     final Collection<InspectionGadgetsFix> fixes = new ArrayList();
@@ -126,7 +126,7 @@ public class TypeMayBeWeakenedInspection extends BaseInspection {
       this.fqClassName = fqClassName;
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("type.may.be.weakened.quickfix", fqClassName);
     }

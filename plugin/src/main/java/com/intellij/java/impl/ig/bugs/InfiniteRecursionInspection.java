@@ -23,7 +23,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import consulo.annotation.component.ExtensionImpl;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class InfiniteRecursionInspection extends BaseInspection {
@@ -56,7 +56,7 @@ public class InfiniteRecursionInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
       super.visitMethod(method);
       if (method.hasModifierProperty(PsiModifier.ABSTRACT)) {
         return;

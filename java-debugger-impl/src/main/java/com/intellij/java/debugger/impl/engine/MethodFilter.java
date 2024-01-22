@@ -20,9 +20,8 @@ import com.intellij.java.debugger.impl.EvaluatingComputable;
 import consulo.internal.com.sun.jdi.Location;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.util.lang.Range;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public interface MethodFilter
 {

@@ -27,7 +27,7 @@ import consulo.language.editor.testIntegration.TestCreator;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class JavaTestCreator implements TestCreator {

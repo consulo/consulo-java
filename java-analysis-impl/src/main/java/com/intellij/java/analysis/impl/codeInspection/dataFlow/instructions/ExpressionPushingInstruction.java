@@ -3,7 +3,7 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.instructions;
 
 import consulo.document.util.TextRange;
 import com.intellij.java.language.psi.PsiExpression;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * An instruction which pushes a result of {@link PsiExpression} (or its part) evaluation to the stack
@@ -20,7 +20,7 @@ public abstract class ExpressionPushingInstruction<T extends PsiExpression> exte
 	/**
 	 * @return a PsiExpression which result is pushed to the stack, or null if this instruction is not bound to any particular PsiExpression
 	 */
-	@Nullable
+	@jakarta.annotation.Nullable
 	public T getExpression()
 	{
 		return myExpression;

@@ -17,7 +17,7 @@ package com.intellij.java.language.impl.psi.scope.processor;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import consulo.util.dataholder.Key;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiModifier;

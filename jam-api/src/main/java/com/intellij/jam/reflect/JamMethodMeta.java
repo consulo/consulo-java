@@ -20,16 +20,16 @@ import com.intellij.java.language.psi.PsiMethod;
 import consulo.language.pom.PomTarget;
 import consulo.language.sem.SemKey;
 import consulo.util.lang.function.PairConsumer;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
 /**
  * @author peter
  */
 public class JamMethodMeta<Jam extends JamElement> extends JamMemberMeta<PsiMethod, Jam>{
-  public JamMethodMeta(@Nullable JamMemberArchetype<? super PsiMethod, ? super Jam> parent, Class<Jam> jamClass) {
+  public JamMethodMeta(@jakarta.annotation.Nullable JamMemberArchetype<? super PsiMethod, ? super Jam> parent, Class<Jam> jamClass) {
     super(parent, jamClass);
   }
 

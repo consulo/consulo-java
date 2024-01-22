@@ -61,7 +61,6 @@ import consulo.execution.ui.console.LineNumbersMapping;
 import consulo.execution.ui.console.TextConsoleBuilder;
 import consulo.execution.ui.console.TextConsoleBuilderFactory;
 import consulo.execution.ui.layout.RunnerLayoutUi;
-import consulo.execution.unscramble.ThreadDumpConsoleFactory;
 import consulo.execution.unscramble.ThreadDumpPanel;
 import consulo.execution.unscramble.ThreadState;
 import consulo.ide.impl.idea.execution.ui.layout.impl.RunnerContentUi;
@@ -97,9 +96,9 @@ import org.jdom.Attribute;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.swing.*;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.PatternSyntaxException;
@@ -403,8 +402,8 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
     return elementsEqual(root1, root2);
   }
 
-  @Nonnull
-  public static List<Pair<Breakpoint, Event>> getEventDescriptors(@Nullable SuspendContextImpl suspendContext) {
+  @jakarta.annotation.Nonnull
+  public static List<Pair<Breakpoint, Event>> getEventDescriptors(@jakarta.annotation.Nullable SuspendContextImpl suspendContext) {
     DebuggerManagerThreadImpl.assertIsManagerThread();
     if (suspendContext != null) {
       EventSet events = suspendContext.getEventSet();
@@ -641,7 +640,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
     return new SigReader(s).getSignature();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static List<Location> allLineLocations(Method method) {
     try {
       return method.allLineLocations();
@@ -794,7 +793,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
     return map != null ? map.get(className) : null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static XSourcePosition toXSourcePosition(@Nullable SourcePosition position) {
     if (position != null) {
       VirtualFile file = position.getFile().getVirtualFile();
@@ -808,7 +807,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
     return null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static SourcePosition toSourcePosition(@Nullable XSourcePosition position, Project project) {
     if (position != null) {
       if (position instanceof JavaXSourcePosition) {
@@ -854,7 +853,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
       return XSourcePositionImpl.doCreateOpenFileDescriptor(project, this);
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     @Override
     public TextRange getHighlightRange() {
       return intersectWithLine(SourcePositionHighlighter.getHighlightRangeFor(mySourcePosition), mySourcePosition.getFile(), getLine());
@@ -881,7 +880,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
     return file != null ? file.findElementAt(offset) : null;
   }
 
-  public static String getLocationMethodQName(@Nonnull Location location) {
+  public static String getLocationMethodQName(@jakarta.annotation.Nonnull Location location) {
     StringBuilder res = new StringBuilder();
     ReferenceType type = location.declaringType();
     if (type != null) {
@@ -933,7 +932,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
     return -1;
   }
 
-  public static List<PsiLambdaExpression> collectLambdas(@Nonnull SourcePosition position, final boolean onlyOnTheLine) {
+  public static List<PsiLambdaExpression> collectLambdas(@jakarta.annotation.Nonnull SourcePosition position, final boolean onlyOnTheLine) {
     ApplicationManager.getApplication().assertReadAccessAllowed();
     PsiFile file = position.getFile();
     final int line = position.getLine();
@@ -1006,12 +1005,12 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
     return ((BooleanValue) value).booleanValue();
   }
 
-  public static boolean intersects(@Nonnull TextRange range, @Nonnull PsiElement elem) {
+  public static boolean intersects(@jakarta.annotation.Nonnull TextRange range, @Nonnull PsiElement elem) {
     TextRange elemRange = elem.getTextRange();
     return elemRange != null && elemRange.intersects(range);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static PsiElement getFirstElementOnTheLine(PsiLambdaExpression lambda, Document document, int line) {
     ApplicationManager.getApplication().assertReadAccessAllowed();
     TextRange lineRange = DocumentUtil.getLineTextRange(document, line);
@@ -1045,7 +1044,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
     return body;
   }
 
-  public static boolean inTheMethod(@Nonnull SourcePosition pos, @Nonnull PsiElement method) {
+  public static boolean inTheMethod(@Nonnull SourcePosition pos, @jakarta.annotation.Nonnull PsiElement method) {
     PsiElement elem = pos.getElementAt();
     if (elem == null) {
       return false;
@@ -1053,7 +1052,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
     return Comparing.equal(getContainingMethod(elem), method);
   }
 
-  public static boolean inTheSameMethod(@Nonnull SourcePosition pos1, @Nonnull SourcePosition pos2) {
+  public static boolean inTheSameMethod(@Nonnull SourcePosition pos1, @jakarta.annotation.Nonnull SourcePosition pos2) {
     ApplicationManager.getApplication().assertReadAccessAllowed();
     PsiElement elem1 = pos1.getElementAt();
     PsiElement elem2 = pos2.getElementAt();
@@ -1079,12 +1078,12 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
     }
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static PsiElement getContainingMethod(@Nullable PsiElement elem) {
     return PsiTreeUtil.getContextOfType(elem, PsiMethod.class, PsiLambdaExpression.class, PsiClassInitializer.class);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static PsiElement getContainingMethod(@Nullable SourcePosition position) {
     if (position == null) {
       return null;

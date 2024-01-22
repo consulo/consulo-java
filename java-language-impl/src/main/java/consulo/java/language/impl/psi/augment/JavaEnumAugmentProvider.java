@@ -25,8 +25,8 @@ import com.intellij.java.language.impl.psi.impl.light.LightMethodBuilder;
 import com.intellij.java.language.impl.psi.impl.source.PsiImmediateClassType;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.util.dataholder.Key;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -41,7 +41,7 @@ public class JavaEnumAugmentProvider extends PsiAugmentProvider {
   public static final String VALUES_METHOD_NAME = "values";
   public static final String VALUE_OF_METHOD_NAME = "valueOf";
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   @SuppressWarnings("unchecked")
   public <Psi extends PsiElement> List<Psi> getAugments(@Nonnull PsiElement element, @Nonnull Class<Psi> type) {

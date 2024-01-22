@@ -18,14 +18,14 @@ package com.intellij.java.debugger.impl.memory.ui;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.java.debugger.impl.memory.filtering.FilteringResult;
 import consulo.application.AllIcons;
 import consulo.ui.ex.awt.JBLabel;
 import consulo.ui.ex.awt.JBProgressBar;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.ex.awt.BorderLayoutPanel;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 class FilteringProgressView extends BorderLayoutPanel
 {

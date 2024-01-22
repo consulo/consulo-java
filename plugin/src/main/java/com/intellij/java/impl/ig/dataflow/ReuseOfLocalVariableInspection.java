@@ -36,10 +36,11 @@ import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class ReuseOfLocalVariableInspection
   extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "reuse.of.local.variable.display.name");
@@ -69,7 +70,7 @@ public class ReuseOfLocalVariableInspection
   private static class ReuseOfLocalVariableFix
     extends InspectionGadgetsFix {
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "reuse.of.local.variable.split.quickfix");
@@ -169,7 +170,7 @@ public class ReuseOfLocalVariableInspection
 
     @Override
     public void visitAssignmentExpression(
-      @Nonnull PsiAssignmentExpression assignment) {
+      @jakarta.annotation.Nonnull PsiAssignmentExpression assignment) {
       super.visitAssignmentExpression(assignment);
       final PsiElement assignmentParent = assignment.getParent();
       if (!(assignmentParent instanceof PsiExpressionStatement)) {
@@ -281,8 +282,8 @@ public class ReuseOfLocalVariableInspection
      */
     @Nullable
     public static PsiElement getChildWhichContainsElement(
-      @Nonnull PsiCodeBlock ancestor,
-      @Nonnull PsiElement descendant) {
+      @jakarta.annotation.Nonnull PsiCodeBlock ancestor,
+      @jakarta.annotation.Nonnull PsiElement descendant) {
       PsiElement element = descendant;
       while (!element.equals(ancestor)) {
         descendant = element;

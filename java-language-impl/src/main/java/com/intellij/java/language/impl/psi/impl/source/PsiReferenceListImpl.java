@@ -15,8 +15,6 @@
  */
 package com.intellij.java.language.impl.psi.impl.source;
 
-import javax.annotation.Nonnull;
-
 import consulo.language.ast.ASTNode;
 import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.java.language.psi.JavaPsiFacade;
@@ -28,24 +26,25 @@ import com.intellij.java.language.psi.PsiReferenceList;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaClassReferenceListElementType;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiClassReferenceListStub;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author max
  */
 public class PsiReferenceListImpl extends JavaStubPsiElement<PsiClassReferenceListStub> implements PsiReferenceList
 {
-	public PsiReferenceListImpl(@Nonnull PsiClassReferenceListStub stub)
+	public PsiReferenceListImpl(@jakarta.annotation.Nonnull PsiClassReferenceListStub stub)
 	{
 		super(stub, stub.getStubType());
 	}
 
-	public PsiReferenceListImpl(@Nonnull ASTNode node)
+	public PsiReferenceListImpl(@jakarta.annotation.Nonnull ASTNode node)
 	{
 		super(node);
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public PsiJavaCodeReferenceElement[] getReferenceElements()
 	{
 		return calcTreeElement().getChildrenAsPsiElements(JavaElementType.JAVA_CODE_REFERENCE, PsiJavaCodeReferenceElement.ARRAY_FACTORY);
@@ -79,7 +78,7 @@ public class PsiReferenceListImpl extends JavaStubPsiElement<PsiClassReferenceLi
 	}
 
 	@Override
-	public void accept(@Nonnull PsiElementVisitor visitor)
+	public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{

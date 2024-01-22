@@ -44,8 +44,8 @@ import consulo.language.psi.search.PsiSearchHelper;
 import consulo.project.Project;
 import consulo.usage.UsageInfo;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class UnusedSymbolUtil {
   public static boolean isInjected(@Nonnull Project project, @Nonnull PsiModifierListOwner modifierListOwner) {
@@ -91,7 +91,7 @@ public class UnusedSymbolUtil {
 
   public static boolean isImplicitWrite(@Nonnull Project project,
                                         @Nonnull PsiVariable element,
-                                        @Nullable ProgressIndicator progress) {
+                                        @jakarta.annotation.Nullable ProgressIndicator progress) {
     for (ImplicitUsageProvider provider : ImplicitUsageProvider.EP_NAME.getExtensionList()) {
       ProgressManager.checkCanceled();
       if (provider.isImplicitWrite(element)) {
@@ -101,7 +101,7 @@ public class UnusedSymbolUtil {
     return isInjected(project, element);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static HighlightInfo createUnusedSymbolInfo(@Nonnull PsiElement element,
                                                      @Nonnull String message,
                                                      @Nonnull final HighlightInfoType highlightInfoType) {
@@ -221,10 +221,10 @@ public class UnusedSymbolUtil {
 
   // return false if can't process usages (weird member of too may usages) or processor returned false
   public static boolean processUsages(@Nonnull Project project,
-                                      @Nonnull PsiFile containingFile,
+                                      @jakarta.annotation.Nonnull PsiFile containingFile,
                                       @Nonnull PsiMember member,
                                       @Nonnull ProgressIndicator progress,
-                                      @Nullable PsiFile ignoreFile,
+                                      @jakarta.annotation.Nullable PsiFile ignoreFile,
                                       @Nonnull Processor<UsageInfo> usageInfoProcessor) {
     String name = member.getName();
     if (name == null) {
@@ -351,7 +351,7 @@ public class UnusedSymbolUtil {
   }
 
   private static boolean isReallyUsed(@Nonnull Project project,
-                                      @Nonnull PsiFile containingFile,
+                                      @jakarta.annotation.Nonnull PsiFile containingFile,
                                       @Nonnull PsiClass aClass,
                                       @Nonnull ProgressIndicator progress,
                                       @Nonnull GlobalUsageHelper helper) {

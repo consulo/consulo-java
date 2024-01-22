@@ -49,10 +49,11 @@ import consulo.util.collection.ArrayUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.MultiMap;
 import consulo.logging.Logger;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -174,7 +175,7 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
     return showConflicts(conflicts, refUsages.get());
   }
 
-  public void findUsages(@Nonnull List<FixableUsageInfo> usages) {
+  public void findUsages(@jakarta.annotation.Nonnull List<FixableUsageInfo> usages) {
     if (myUseExistingClass && existingClass != null) {
       myExistingClassCompatibleConstructor = existingClassIsCompatible(existingClass, parameters);
     }
@@ -385,7 +386,7 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
     }
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static PsiMethod existingClassIsCompatible(PsiClass aClass, List<ParameterChunk> params) {
     if (params.size() == 1) {
       final ParameterChunk parameterChunk = params.get(0);
@@ -471,7 +472,7 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
       this.setter = setter;
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     public PsiField getField() {
       return field;
     }

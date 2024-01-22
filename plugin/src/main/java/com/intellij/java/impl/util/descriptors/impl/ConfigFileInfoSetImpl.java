@@ -22,11 +22,11 @@ import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.collection.MultiValuesMap;
 import consulo.util.xml.serializer.WriteExternalException;
 import consulo.logging.Logger;
+import jakarta.annotation.Nonnull;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
@@ -87,7 +87,7 @@ public class ConfigFileInfoSetImpl implements ConfigFileInfoSet {
     onChange();
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public ConfigFileInfo getConfigFileInfo(ConfigFileMetaData metaData) {
     final Collection<ConfigFileInfo> descriptors = myConfigFiles.get(metaData);
     if (descriptors == null || descriptors.isEmpty()) {

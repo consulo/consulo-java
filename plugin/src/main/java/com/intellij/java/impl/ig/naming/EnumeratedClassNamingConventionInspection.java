@@ -15,14 +15,13 @@
  */
 package com.intellij.java.impl.ig.naming;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiClass;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.RenameFix;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class EnumeratedClassNamingConventionInspection
@@ -45,7 +44,7 @@ public class EnumeratedClassNamingConventionInspection
     return true;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     final String className = (String)infos[0];
     if (className.length() < getMinLength()) {
@@ -80,7 +79,7 @@ public class EnumeratedClassNamingConventionInspection
   private class NamingConventionsVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
       if (!aClass.isEnum()) {
         return;
       }

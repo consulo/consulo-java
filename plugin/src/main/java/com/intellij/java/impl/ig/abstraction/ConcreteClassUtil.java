@@ -17,7 +17,7 @@ package com.intellij.java.impl.ig.abstraction;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.impl.ig.psiutils.LibraryUtil;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 class ConcreteClassUtil {
 
@@ -31,7 +31,7 @@ class ConcreteClassUtil {
     return typeIsConcreteClass(type, ignoreCastToAbstractClass);
   }
 
-  public static boolean typeIsConcreteClass(@Nullable PsiType type, boolean ignoreCastToAbstractClass) {
+  public static boolean typeIsConcreteClass(@jakarta.annotation.Nullable PsiType type, boolean ignoreCastToAbstractClass) {
     if (type == null) {
       return false;
     }

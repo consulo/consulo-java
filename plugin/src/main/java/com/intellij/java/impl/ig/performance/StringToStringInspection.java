@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.performance;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -33,19 +33,19 @@ import consulo.java.language.module.util.JavaClassNames;
 public class StringToStringInspection extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "RedundantStringToString";
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("string.to.string.display.name");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "string.to.string.problem.descriptor");
@@ -94,7 +94,7 @@ public class StringToStringInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();

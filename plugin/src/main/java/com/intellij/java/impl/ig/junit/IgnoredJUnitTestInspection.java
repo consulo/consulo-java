@@ -22,14 +22,14 @@ import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
 @ExtensionImpl
 public class IgnoredJUnitTestInspection extends BaseInspection {
   @Nls
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(

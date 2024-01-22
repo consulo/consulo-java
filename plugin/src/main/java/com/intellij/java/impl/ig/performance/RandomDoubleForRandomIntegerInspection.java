@@ -27,16 +27,16 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class RandomDoubleForRandomIntegerInspection
   extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "UsingRandomNextDoubleForRandomInteger";
   }
@@ -49,7 +49,7 @@ public class RandomDoubleForRandomIntegerInspection
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "random.double.for.random.integer.problem.descriptor");
@@ -63,7 +63,7 @@ public class RandomDoubleForRandomIntegerInspection
   private static class RandomDoubleForRandomIntegerFix
     extends InspectionGadgetsFix {
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "random.double.for.random.integer.replace.quickfix");
@@ -122,7 +122,7 @@ public class RandomDoubleForRandomIntegerInspection
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression call) {
+      @jakarta.annotation.Nonnull PsiMethodCallExpression call) {
       super.visitMethodCallExpression(call);
       final PsiReferenceExpression methodExpression =
         call.getMethodExpression();

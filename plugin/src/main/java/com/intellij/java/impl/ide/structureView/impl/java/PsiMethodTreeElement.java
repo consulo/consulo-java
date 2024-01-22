@@ -19,7 +19,7 @@ import consulo.project.DumbService;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -122,7 +122,7 @@ public class PsiMethodTreeElement extends JavaClassTreeElementBase<PsiMethod> im
     return getElement();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getAlphaSortKey() {
     final PsiMethod method = getElement();

@@ -18,8 +18,8 @@ package com.intellij.java.impl.refactoring.rename.naming;
 import consulo.usage.RenameableUsage;
 import consulo.util.lang.StringUtil;
 import consulo.language.util.IncorrectOperationException;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.util.*;
 
@@ -88,7 +88,7 @@ public abstract class AutomaticUsageRenamer<T> {
     return myElements;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   /**
    * Element source, path. For example, package. Taken into account while sorting.
    */

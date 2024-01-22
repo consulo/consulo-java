@@ -30,7 +30,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 
 @ExtensionImpl
@@ -42,20 +42,20 @@ public class RedundantImplementsInspection extends BaseInspection {
   public boolean ignoreCloneable = false;
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "RedundantInterfaceDeclaration";
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "redundant.implements.display.name");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "redundant.implements.problem.descriptor");

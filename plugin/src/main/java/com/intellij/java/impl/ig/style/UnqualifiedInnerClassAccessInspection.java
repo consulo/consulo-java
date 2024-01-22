@@ -31,7 +31,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.psiutils.HighlightUtils;
 import com.intellij.java.impl.ig.psiutils.ImportUtils;
 import org.jetbrains.annotations.Nls;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.*;
@@ -43,13 +43,13 @@ public class UnqualifiedInnerClassAccessInspection extends BaseInspection {
   public boolean ignoreReferencesToLocalInnerClasses = false;
 
   @Nls
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("unqualified.inner.class.access.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("unqualified.inner.class.access.problem.descriptor");

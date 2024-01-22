@@ -23,7 +23,7 @@ import consulo.language.editor.refactoring.RefactoringImpl;
 import com.intellij.java.impl.refactoring.makeStatic.MakeMethodStaticProcessor;
 import com.intellij.java.impl.refactoring.makeStatic.Settings;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 

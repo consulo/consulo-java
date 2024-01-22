@@ -17,12 +17,12 @@ package com.intellij.java.impl.generate.config;
 
 import java.util.Arrays;
 
-import javax.annotation.Nonnull;
 import com.intellij.java.impl.codeInsight.generation.GenerateMembersUtil;
 import com.intellij.java.impl.codeInsight.generation.PsiGenerationInfo;
 import consulo.codeEditor.Editor;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
+import jakarta.annotation.Nonnull;
 
 /**
  * Inserts the method at the caret position.

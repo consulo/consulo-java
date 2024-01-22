@@ -33,8 +33,8 @@ import consulo.language.psi.resolve.ResolveState;
 import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.util.PsiTreeUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Map;
 
 public class PsiLambdaExpressionImpl extends JavaStubPsiElement<FunctionalExpressionStub<PsiLambdaExpression>> implements PsiLambdaExpression {
@@ -77,7 +77,7 @@ public class PsiLambdaExpressionImpl extends JavaStubPsiElement<FunctionalExpres
   }
 
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public PsiType getFunctionalInterfaceType() {
     return FunctionalInterfaceParameterizationUtil.getGroundTargetType(LambdaUtil.getFunctionalInterfaceType(this, true), this);

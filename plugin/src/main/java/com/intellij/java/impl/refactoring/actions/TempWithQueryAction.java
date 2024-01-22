@@ -24,8 +24,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.action.BaseRefactoringAction;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class TempWithQueryAction extends BaseRefactoringAction {
   public boolean isAvailableInEditorOnly() {
@@ -36,11 +35,11 @@ public class TempWithQueryAction extends BaseRefactoringAction {
     return false;
   }
 
-  public RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
+  public RefactoringActionHandler getHandler(@jakarta.annotation.Nonnull DataContext dataContext) {
     return new TempWithQueryHandler();
   }
 
-  protected boolean isAvailableOnElementInEditorAndFile(@Nonnull final PsiElement element, @Nonnull final Editor editor, @Nonnull PsiFile file, @Nonnull DataContext context) {
+  protected boolean isAvailableOnElementInEditorAndFile(@jakarta.annotation.Nonnull final PsiElement element, @jakarta.annotation.Nonnull final Editor editor, @jakarta.annotation.Nonnull PsiFile file, @jakarta.annotation.Nonnull DataContext context) {
     return element instanceof PsiLocalVariable && ((PsiLocalVariable) element).getInitializer() != null;
   }
 }

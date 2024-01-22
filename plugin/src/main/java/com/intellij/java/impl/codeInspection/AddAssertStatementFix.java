@@ -29,7 +29,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 
 /**
@@ -39,7 +39,7 @@ public class AddAssertStatementFix implements LocalQuickFix {
   private static final Logger LOG = Logger.getInstance(AddAssertStatementFix.class);
   private final String myText;
 
-  public AddAssertStatementFix(@Nonnull String text) {
+  public AddAssertStatementFix(@jakarta.annotation.Nonnull String text) {
     myText = text;
   }
 

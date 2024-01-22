@@ -2,22 +2,22 @@
 package com.intellij.java.language.impl.psi.impl.source;
 
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 interface ClassReferencePointer
 {
 	@Nullable
 	PsiJavaCodeReferenceElement retrieveReference();
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	PsiJavaCodeReferenceElement retrieveNonNullReference();
 
-	static ClassReferencePointer constant(@Nonnull PsiJavaCodeReferenceElement ref)
+	static ClassReferencePointer constant(@jakarta.annotation.Nonnull PsiJavaCodeReferenceElement ref)
 	{
 		return new ClassReferencePointer()
 		{
-			@Nonnull
+			@jakarta.annotation.Nonnull
 			@Override
 			public PsiJavaCodeReferenceElement retrieveReference()
 			{

@@ -17,7 +17,7 @@ package com.intellij.java.debugger.impl.memory.filtering;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import consulo.util.lang.StringUtil;
@@ -35,11 +35,11 @@ public class FilteringTask implements Runnable
 
 	private volatile boolean myIsCancelled = false;
 
-	public FilteringTask(@Nonnull String className,
-			@Nonnull DebugProcessImpl debugProcess,
+	public FilteringTask(@jakarta.annotation.Nonnull String className,
+			@jakarta.annotation.Nonnull DebugProcessImpl debugProcess,
 			@Nonnull XExpression expression,
-			@Nonnull List<ObjectReference> references,
-			@Nonnull FilteringTaskCallback callback)
+			@jakarta.annotation.Nonnull List<ObjectReference> references,
+			@jakarta.annotation.Nonnull FilteringTaskCallback callback)
 	{
 		myChecker = StringUtil.isEmptyOrSpaces(expression.getExpression()) ? ConditionChecker.ALL_MATCHED_CHECKER : new ConditionCheckerImpl(debugProcess, expression, className);
 		myReferences = references;

@@ -33,7 +33,7 @@ import consulo.xml.util.xml.DomElement;
 import consulo.xml.util.xml.actions.generate.DomTemplateRunner;
 import consulo.xml.util.xml.ui.actions.generate.CreateDomElementAction;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,7 +42,8 @@ import java.util.Map;
  */
 public abstract class CreateClassMappingAction<T extends DomElement> extends CreateDomElementAction<T> {
 
-  @Nullable private final String myBaseClass;
+  @jakarta.annotation.Nullable
+  private final String myBaseClass;
   private final String myTemplate;
 
   public CreateClassMappingAction(Class<T> contextClass, @Nullable String baseClass, String template) {
@@ -101,7 +102,7 @@ public abstract class CreateClassMappingAction<T extends DomElement> extends Cre
 
   protected abstract DomElement createElement(T context);
 
-  @Nullable
+  @jakarta.annotation.Nullable
   protected PsiClass getBaseClass(T context, Project project, String baseClass) {
     return baseClass == null ? null : JavaPsiFacade.getInstance(project).findClass(baseClass, GlobalSearchScope.allScope(project));
   }

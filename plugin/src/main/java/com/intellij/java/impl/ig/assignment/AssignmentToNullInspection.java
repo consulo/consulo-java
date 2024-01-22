@@ -27,7 +27,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.intellij.java.impl.ig.DelegatingFix;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 

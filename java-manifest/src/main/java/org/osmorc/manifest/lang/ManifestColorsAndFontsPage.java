@@ -31,10 +31,10 @@ import consulo.colorScheme.setting.ColorDescriptor;
 import consulo.java.manifest.lang.ManifestLanguageVersion;
 import consulo.language.editor.colorScheme.setting.ColorSettingsPage;
 import consulo.language.editor.highlight.SyntaxHighlighter;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -70,12 +70,12 @@ public class ManifestColorsAndFontsPage implements ColorSettingsPage {
     ADDITIONAL_HIGHLIGHTING.put("parameterSeparator", ManifestColorsAndFonts.PARAMETER_SEPARATOR_KEY);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return "Manifest & Bnd";
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public AttributesDescriptor[] getAttributeDescriptors() {
     return ATTRIBUTE_DESCRIPTORS;
   }
@@ -85,12 +85,12 @@ public class ManifestColorsAndFontsPage implements ColorSettingsPage {
     return ADDITIONAL_HIGHLIGHTING;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public ColorDescriptor[] getColorDescriptors() {
     return new ColorDescriptor[0];
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public SyntaxHighlighter getHighlighter() {
     return new ManifestSyntaxHighlighter(ManifestLanguageVersion.Bnd);
   }

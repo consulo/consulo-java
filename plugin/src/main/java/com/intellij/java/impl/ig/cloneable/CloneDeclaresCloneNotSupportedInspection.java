@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.ig.cloneable;
 
-import javax.annotation.Nonnull;
-
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.PsiClass;
@@ -34,24 +32,25 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.CloneUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class CloneDeclaresCloneNotSupportedInspection extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "CloneDoesntDeclareCloneNotSupportedException";
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("clone.doesnt.declare.clonenotsupportedexception.display.name");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("clone.doesnt.declare.clonenotsupportedexception.problem.descriptor");
   }
@@ -90,7 +89,7 @@ public class CloneDeclaresCloneNotSupportedInspection extends BaseInspection {
   private static class CloneDeclaresCloneNotSupportedExceptionVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
       if (!CloneUtils.isClone(method)) {
         return;
       }

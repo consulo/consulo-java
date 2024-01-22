@@ -33,7 +33,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,13 +58,13 @@ public class AnnotateMethodFix implements LocalQuickFix {
     return getFamilyName() + " " + getPreposition() + " \'@" + ClassUtil.extractClassName(myAnnotation) + "\'";
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String getPreposition() {
     return "with";
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getFamilyName() {
     if (annotateSelf()) {
       if (annotateOverriddenMethods()) {

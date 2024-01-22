@@ -28,8 +28,8 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Pair;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.lang.String;
 import java.util.HashSet;
 import java.util.Set;
@@ -55,8 +55,8 @@ public class AnnotationUtilEx {
    * decides whether to prefer the element a reference expressions resolves to, or the element that is implied by the
    * usage context ("expected type").
    */
-  @Nullable
-  public static PsiModifierListOwner getAnnotatedElementFor(@Nullable PsiElement element, LookupType type) {
+  @jakarta.annotation.Nullable
+  public static PsiModifierListOwner getAnnotatedElementFor(@jakarta.annotation.Nullable PsiElement element, LookupType type) {
     while (element != null) {
       if (type == LookupType.PREFER_DECLARATION || type == LookupType.DECLARATION_ONLY) {
         if (element instanceof PsiReferenceExpression) {
@@ -134,7 +134,7 @@ public class AnnotationUtilEx {
     boolean visitReference(PsiReferenceExpression expression);
   }
 
-  public static void visitAnnotatedElements(@Nullable PsiElement element, AnnotatedElementVisitor visitor) {
+  public static void visitAnnotatedElements(@jakarta.annotation.Nullable PsiElement element, AnnotatedElementVisitor visitor) {
     if (element == null) return;
     for (PsiElement cur = ContextComputationProcessor.getTopLevelInjectionTarget(element); cur != null; cur = cur.getParent()) {
       if (!visitAnnotatedElementInner(cur, visitor)) return;
@@ -197,7 +197,7 @@ public class AnnotationUtilEx {
    * String and as a Set. This is done for performance reasons because the Set is required by the
    * {@link AnnotationUtil} utility class and allows to avoid unnecessary object constructions.
    */
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static PsiAnnotation[] getAnnotationFrom(PsiModifierListOwner owner,
                                                   Pair<String, ? extends Set<String>> annotationName,
                                                   boolean allowIndirect,
@@ -244,7 +244,7 @@ public class AnnotationUtilEx {
     return PsiAnnotation.EMPTY_ARRAY;
   }
 
-  public static PsiAnnotation[] getAnnotationFrom(@Nonnull PsiModifierListOwner owner,
+  public static PsiAnnotation[] getAnnotationFrom(@jakarta.annotation.Nonnull PsiModifierListOwner owner,
                                                   @Nonnull Pair<String, ? extends Set<String>> annotationName,
                                                   boolean allowIndirect) {
     return getAnnotationFrom(owner, annotationName, allowIndirect, true);

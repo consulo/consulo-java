@@ -13,8 +13,8 @@ import consulo.util.collection.MultiMap;
 import one.util.streamex.LongStreamEx;
 import one.util.streamex.StreamEx;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -25,7 +25,7 @@ final class StateMerger {
   private final Map<DfaMemoryStateImpl, Set<Fact>> myFacts = new IdentityHashMap<>();
   private final Map<DfaMemoryState, Map<DfaVariableValue, DfaMemoryStateImpl>> myCopyCache = new IdentityHashMap<>();
 
-  @Nullable
+  @jakarta.annotation.Nullable
   List<DfaMemoryStateImpl> mergeByFacts(@Nonnull List<DfaMemoryStateImpl> states) {
     MultiMap<Fact, DfaMemoryStateImpl> statesByFact = createFactToStateMap(states);
     Set<Fact> facts = statesByFact.keySet();
@@ -140,7 +140,7 @@ final class StateMerger {
   }
 
   private
-  @Nonnull
+  @jakarta.annotation.Nonnull
   MultiMap<CompactFactSet, DfaMemoryStateImpl> mapByUnrelatedFacts(@Nonnull Fact fact,
                                                                    @Nonnull Collection<DfaMemoryStateImpl> states,
                                                                    @Nonnull Set<Fact> interestingFacts) {
@@ -153,7 +153,7 @@ final class StateMerger {
 
   private
   @Nonnull
-  CompactFactSet getUnrelatedFacts(final @Nonnull Fact fact,
+  CompactFactSet getUnrelatedFacts(final @jakarta.annotation.Nonnull Fact fact,
                                    @Nonnull DfaMemoryStateImpl state,
                                    @Nonnull Set<Fact> interestingFacts) {
     final ArrayList<Fact> result = new ArrayList<>();
@@ -198,7 +198,7 @@ final class StateMerger {
   }
 
   private
-  @Nullable
+  @jakarta.annotation.Nullable
   List<DfaMemoryStateImpl> mergeIndependentRanges(List<DfaMemoryStateImpl> states, DfaVariableValue var) {
     ProgressManager.checkCanceled();
     Map<DfaMemoryStateImpl, List<DfaMemoryStateImpl>> merged = new LinkedHashMap<>();
@@ -220,7 +220,7 @@ final class StateMerger {
   }
 
   private
-  @Nonnull
+  @jakarta.annotation.Nonnull
   DfaMemoryStateImpl copyWithoutVar(@Nonnull DfaMemoryStateImpl state, @Nonnull DfaVariableValue var) {
     Map<DfaVariableValue, DfaMemoryStateImpl> map = myCopyCache.computeIfAbsent(state, k -> new IdentityHashMap<>());
     DfaMemoryStateImpl copy = map.get(var);
@@ -328,11 +328,11 @@ final class StateMerger {
   abstract static class Fact {
     final boolean myPositive;
     final
-    @Nonnull
+    @jakarta.annotation.Nonnull
     DfaVariableValue myVar;
     private final int myHash;
 
-    protected Fact(boolean positive, @Nonnull DfaVariableValue var, int hash) {
+    protected Fact(boolean positive, @jakarta.annotation.Nonnull DfaVariableValue var, int hash) {
       myPositive = positive;
       myVar = var;
       myHash = hash;
@@ -396,7 +396,7 @@ final class StateMerger {
 
   static final class EqualityFact extends Fact {
     private final
-    @Nonnull
+    @jakarta.annotation.Nonnull
     DfaValue myArg;
 
     private EqualityFact(@Nonnull DfaVariableValue var, boolean positive, @Nonnull DfaValue arg) {
@@ -523,7 +523,7 @@ final class StateMerger {
     private final Set<DfaMemoryStateImpl> myRemovedStates = new HashSet<>();
     private final List<DfaMemoryStateImpl> myMerged = new ArrayList<>();
 
-    private Replacements(@Nonnull List<DfaMemoryStateImpl> allStates) {
+    private Replacements(@jakarta.annotation.Nonnull List<DfaMemoryStateImpl> allStates) {
       myAllStates = allStates;
     }
 
@@ -532,7 +532,7 @@ final class StateMerger {
     }
 
     private
-    @Nullable
+    @jakarta.annotation.Nullable
     List<DfaMemoryStateImpl> getMergeResult() {
       if (hasMerges()) {
         List<DfaMemoryStateImpl> result = new ArrayList<>(myMerged);

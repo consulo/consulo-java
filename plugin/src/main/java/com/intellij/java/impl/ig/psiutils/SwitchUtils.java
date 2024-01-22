@@ -29,8 +29,8 @@ import com.siyeh.ig.psiutils.SideEffectChecker;
 import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -48,7 +48,7 @@ public class SwitchUtils {
    * @param statement the statement to count the cases of.
    * @return a negative number if a default case was encountered.
    */
-  public static int calculateBranchCount(@Nonnull PsiSwitchStatement statement) {
+  public static int calculateBranchCount(@jakarta.annotation.Nonnull PsiSwitchStatement statement) {
     // preserved for plugin compatibility
     return calculateBranchCount((PsiSwitchBlock) statement);
   }
@@ -61,7 +61,7 @@ public class SwitchUtils {
    * @param block the switch block to count the cases of.
    * @return a negative number if a default case was encountered.
    */
-  public static int calculateBranchCount(@Nonnull PsiSwitchBlock block) {
+  public static int calculateBranchCount(@jakarta.annotation.Nonnull PsiSwitchBlock block) {
     final PsiCodeBlock body = block.getBody();
     if (body == null) {
       return 0;
@@ -272,7 +272,7 @@ public class SwitchUtils {
    * @return true if given switch block has a rule-based format; false if it has conventional label-based format (like 'case 0:')
    * If switch body has no labels yet and language level permits, rule-based format is assumed.
    */
-  public static boolean isRuleFormatSwitch(@Nonnull PsiSwitchBlock block) {
+  public static boolean isRuleFormatSwitch(@jakarta.annotation.Nonnull PsiSwitchBlock block) {
     if (!HighlightUtil.Feature.ENHANCED_SWITCH.isAvailable(block)) {
       return false;
     }

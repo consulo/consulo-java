@@ -18,8 +18,8 @@ import consulo.logging.Logger;
 import consulo.process.cmd.GeneralCommandLine;
 import consulo.process.cmd.ParametersList;
 import consulo.virtualFileSystem.VirtualFile;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.io.*;
 import java.util.List;
 
@@ -50,7 +50,7 @@ public class OldBackendCompilerProcessBuilder extends BackendCompilerProcessBuil
 		return createStartupCommand(myModuleChunk, myOutputPath, myCompileContext, myJavaCompilerOptions, myAnnotationProcessorsEnabled);
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@RequiredReadAction
 	private GeneralCommandLine createStartupCommand(ModuleChunk chunk,
                                                   String outputPath,

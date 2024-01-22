@@ -48,8 +48,8 @@ import consulo.util.collection.MultiMap;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -120,7 +120,7 @@ public class RenameJavaClassProcessor extends RenamePsiElementProcessor {
     }
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public Pair<String, String> getTextOccurrenceSearchStrings(@Nonnull final PsiElement element, @Nonnull final String newName) {
     if (element instanceof PsiClass) {
       final PsiClass aClass = (PsiClass) element;
@@ -315,7 +315,7 @@ public class RenameJavaClassProcessor extends RenamePsiElementProcessor {
     }
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @NonNls
   public String getHelpID(final PsiElement element) {
     return HelpID.RENAME_CLASS;

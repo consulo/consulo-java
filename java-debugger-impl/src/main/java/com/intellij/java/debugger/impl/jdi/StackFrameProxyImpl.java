@@ -26,10 +26,10 @@ import com.intellij.java.debugger.engine.evaluation.EvaluateExceptionUtil;
 import com.intellij.java.debugger.engine.jdi.StackFrameProxy;
 import consulo.internal.com.sun.jdi.*;
 import consulo.logging.Logger;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 public class StackFrameProxyImpl extends JdiProxy implements StackFrameProxy
@@ -46,7 +46,7 @@ public class StackFrameProxyImpl extends JdiProxy implements StackFrameProxy
 	private Boolean myIsObsolete = null;
 	private Map<LocalVariable, Value> myAllValues;
 
-	public StackFrameProxyImpl(ThreadReferenceProxyImpl threadProxy, @Nonnull StackFrame frame, int fromBottomIndex /* 1-based */)
+	public StackFrameProxyImpl(ThreadReferenceProxyImpl threadProxy, @jakarta.annotation.Nonnull StackFrame frame, int fromBottomIndex /* 1-based */)
 	{
 		super(threadProxy.getVirtualMachine());
 		myThreadProxy = threadProxy;
@@ -181,7 +181,7 @@ public class StackFrameProxyImpl extends JdiProxy implements StackFrameProxy
 		return (VirtualMachineProxyImpl) myTimer;
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	@Override
 	public Location location() throws EvaluateException
 	{
@@ -227,7 +227,7 @@ public class StackFrameProxyImpl extends JdiProxy implements StackFrameProxy
 		}
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	public ObjectReference thisObject() throws EvaluateException
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();

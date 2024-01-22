@@ -33,10 +33,11 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 
 @ExtensionImpl
@@ -48,7 +49,7 @@ public class ReturnOfCollectionFieldInspection extends BaseInspection {
   public boolean ignorePrivateMethods = true;
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "ReturnOfCollectionOrArrayField";
   }
@@ -60,14 +61,14 @@ public class ReturnOfCollectionFieldInspection extends BaseInspection {
   }
 
   @Override
-  @Nullable
+  @jakarta.annotation.Nullable
   public JComponent createOptionsPanel() {
     return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message("return.of.collection.array.field.option"),
                                           this, "ignorePrivateMethods");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     final PsiField field = (PsiField)infos[0];
     final PsiType type = field.getType();
@@ -120,7 +121,7 @@ public class ReturnOfCollectionFieldInspection extends BaseInspection {
       myQualifiedClassName = qualifiedClassName;
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "return.of.collection.field.quickfix", myReplacementText);
@@ -190,7 +191,7 @@ public class ReturnOfCollectionFieldInspection extends BaseInspection {
   private class ReturnOfCollectionFieldVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
+    public void visitReturnStatement(@jakarta.annotation.Nonnull PsiReturnStatement statement) {
       super.visitReturnStatement(statement);
       final PsiExpression returnValue = statement.getReturnValue();
       if (returnValue == null) {

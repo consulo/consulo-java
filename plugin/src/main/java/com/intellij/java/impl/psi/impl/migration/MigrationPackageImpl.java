@@ -19,8 +19,7 @@ import com.intellij.java.language.impl.psi.impl.file.PsiPackageImpl;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.psi.PsiPackageManager;
 import consulo.virtualFileSystem.VirtualFile;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author dsl

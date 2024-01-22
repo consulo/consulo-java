@@ -17,8 +17,7 @@ package com.intellij.java.analysis.impl.codeInspection.ex;
 
 import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * User: anna

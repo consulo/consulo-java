@@ -61,8 +61,8 @@ import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -303,7 +303,7 @@ public class CreateSubclassAction implements IntentionAction {
     return typeParameterList.replace(oldTypeParameterList);
   }
 
-  protected static void chooseAndImplement(PsiClass psiClass, Project project, @Nonnull PsiClass targetClass, Editor editor) {
+  protected static void chooseAndImplement(PsiClass psiClass, Project project, @jakarta.annotation.Nonnull PsiClass targetClass, Editor editor) {
     boolean hasNonTrivialConstructor = false;
     final PsiMethod[] constructors = psiClass.getConstructors();
     for (PsiMethod constructor : constructors) {

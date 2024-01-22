@@ -29,21 +29,21 @@ import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.module.extension.ModuleExtensionHelper;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 
 @ExtensionImpl
 public class DefaultConsoleFiltersProvider implements ConsoleFilterProviderEx {
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
-  public Filter[] getDefaultFilters(@Nonnull Project project) {
+  public Filter[] getDefaultFilters(@jakarta.annotation.Nonnull Project project) {
     return getDefaultFilters(project, GlobalSearchScope.allScope(project));
   }
 
   @Override
-  @Nonnull
-  public Filter[] getDefaultFilters(@Nonnull Project project, @Nonnull SearchScope scope) {
+  @jakarta.annotation.Nonnull
+  public Filter[] getDefaultFilters(@Nonnull Project project, @jakarta.annotation.Nonnull SearchScope scope) {
     if (!ModuleExtensionHelper.getInstance(project).hasModuleExtension(JavaModuleExtension.class)) {
       return Filter.EMPTY_ARRAY;
     }

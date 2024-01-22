@@ -61,8 +61,8 @@ import consulo.util.collection.primitive.ints.IntList;
 import consulo.util.lang.Pair;
 import consulo.util.lang.ref.Ref;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -92,9 +92,9 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
 	/**
 	 * if expressionToSearch is null, search for localVariable
 	 */
-	public IntroduceParameterProcessor(@Nonnull Project project,
+	public IntroduceParameterProcessor(@jakarta.annotation.Nonnull Project project,
 									   PsiMethod methodToReplaceIn,
-									   @Nonnull PsiMethod methodToSearchFor,
+									   @jakarta.annotation.Nonnull PsiMethod methodToSearchFor,
 									   PsiExpression parameterInitializer,
 									   PsiExpression expressionToSearch,
 									   PsiLocalVariable localVariable,
@@ -105,7 +105,7 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
 									   boolean declareFinal,
 									   boolean generateDelegate,
 									   PsiType forcedType,
-									   @Nonnull IntList parametersToRemove)
+									   @jakarta.annotation.Nonnull IntList parametersToRemove)
 	{
 		super(project);
 
@@ -135,7 +135,7 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
 		return new IntroduceParameterViewDescriptor(myMethodToSearchFor);
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public PsiType getForcedType()
 	{
 		return myForcedType;
@@ -729,13 +729,13 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
 		return myGenerateDelegate;
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public IntList getParametersToRemove()
 	{
 		return myParametersToRemove;
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public Project getProject()
 	{
 		return myProject;

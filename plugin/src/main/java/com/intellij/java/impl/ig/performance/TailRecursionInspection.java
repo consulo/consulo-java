@@ -31,8 +31,8 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class TailRecursionInspection extends BaseInspection {
@@ -51,7 +51,7 @@ public class TailRecursionInspection extends BaseInspection {
   }
 
   @Override
-  @Nullable
+  @jakarta.annotation.Nullable
   protected InspectionGadgetsFix buildFix(Object... infos) {
     final PsiMethod containingMethod = (PsiMethod)infos[0];
     if (!mayBeReplacedByIterativeMethod(containingMethod)) {

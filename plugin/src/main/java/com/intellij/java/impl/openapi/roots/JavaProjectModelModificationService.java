@@ -26,7 +26,7 @@ import consulo.module.content.layer.orderEntry.DependencyScope;
 import consulo.content.library.Library;
 import consulo.util.concurrent.AsyncResult;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -49,19 +49,19 @@ public abstract class JavaProjectModelModificationService {
     return addDependency(from, to, DependencyScope.COMPILE);
   }
 
-  public abstract AsyncResult<Void> addDependency(@Nonnull Module from, @Nonnull Module to, @Nonnull DependencyScope scope);
+  public abstract AsyncResult<Void> addDependency(@jakarta.annotation.Nonnull Module from, @Nonnull Module to, @Nonnull DependencyScope scope);
 
-  public AsyncResult<Void> addDependency(@Nonnull Module from, @Nonnull ExternalLibraryDescriptor libraryDescriptor) {
+  public AsyncResult<Void> addDependency(@jakarta.annotation.Nonnull Module from, @jakarta.annotation.Nonnull ExternalLibraryDescriptor libraryDescriptor) {
     return addDependency(from, libraryDescriptor, DependencyScope.COMPILE);
   }
 
-  public AsyncResult<Void> addDependency(@Nonnull Module from, @Nonnull ExternalLibraryDescriptor descriptor, @Nonnull DependencyScope scope) {
+  public AsyncResult<Void> addDependency(@jakarta.annotation.Nonnull Module from, @jakarta.annotation.Nonnull ExternalLibraryDescriptor descriptor, @Nonnull DependencyScope scope) {
     return addDependency(Collections.singletonList(from), descriptor, scope);
   }
 
-  public abstract AsyncResult<Void> addDependency(@Nonnull Collection<Module> from, @Nonnull ExternalLibraryDescriptor libraryDescriptor, @Nonnull DependencyScope scope);
+  public abstract AsyncResult<Void> addDependency(@jakarta.annotation.Nonnull Collection<Module> from, @jakarta.annotation.Nonnull ExternalLibraryDescriptor libraryDescriptor, @Nonnull DependencyScope scope);
 
-  public abstract AsyncResult<Void> addDependency(@Nonnull Module from, @Nonnull Library library, @Nonnull DependencyScope scope);
+  public abstract AsyncResult<Void> addDependency(@Nonnull Module from, @jakarta.annotation.Nonnull Library library, @jakarta.annotation.Nonnull DependencyScope scope);
 
-  public abstract AsyncResult<Void> changeLanguageLevel(@Nonnull Module module, @Nonnull LanguageLevel languageLevel);
+  public abstract AsyncResult<Void> changeLanguageLevel(@jakarta.annotation.Nonnull Module module, @jakarta.annotation.Nonnull LanguageLevel languageLevel);
 }

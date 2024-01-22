@@ -22,10 +22,9 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.impl.codeInsight.javadoc.JavaDocExternalFilter;
 import consulo.virtualFileSystem.LocalFileSystem;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
 import consulo.language.impl.internal.psi.LoadTextUtil;

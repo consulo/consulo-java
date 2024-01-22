@@ -18,10 +18,10 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 import consulo.logging.Logger;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 import consulo.language.editor.FileModificationService;
 import com.intellij.java.impl.codeInsight.generation.GenerateMembersUtil;

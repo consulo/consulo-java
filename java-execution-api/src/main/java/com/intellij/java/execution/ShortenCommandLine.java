@@ -15,9 +15,8 @@ package com.intellij.java.execution;
 
 import consulo.project.Project;
 import consulo.java.execution.projectRoots.OwnJdkUtil;
+import jakarta.annotation.Nonnull;
 import org.jdom.Element;
-
-import javax.annotation.Nonnull;
 
 /**
  * Command line has length limit depending on used OS. In order to allow java command lines of any length for any OS, a number of approaches are possible.
@@ -70,7 +69,7 @@ public enum ShortenCommandLine {
     return null;
   }
 
-  public static void writeShortenClasspathMethod(@Nonnull Element element, ShortenCommandLine shortenCommandLine) {
+  public static void writeShortenClasspathMethod(@jakarta.annotation.Nonnull Element element, ShortenCommandLine shortenCommandLine) {
     if (shortenCommandLine != null) {
       element.addContent(new Element("shortenClasspath").setAttribute("name", shortenCommandLine.name()));
     }

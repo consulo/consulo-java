@@ -20,14 +20,14 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaNullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfConstantType;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * A condition that represents a relation between two DfaValues
  */
 public final class DfaRelation extends DfaCondition
 {
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
 	public DfaRelation negate()
 	{
@@ -44,26 +44,26 @@ public final class DfaRelation extends DfaCondition
 	@Nonnull
 	final RelationType myRelation;
 
-	private DfaRelation(@Nonnull DfaValue leftOperand, @Nonnull DfaValue rightOperand, @Nonnull RelationType relationType)
+	private DfaRelation(@jakarta.annotation.Nonnull DfaValue leftOperand, @jakarta.annotation.Nonnull DfaValue rightOperand, @jakarta.annotation.Nonnull RelationType relationType)
 	{
 		myLeftOperand = leftOperand;
 		myRightOperand = rightOperand;
 		myRelation = relationType;
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public DfaValue getLeftOperand()
 	{
 		return myLeftOperand;
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public DfaValue getRightOperand()
 	{
 		return myRightOperand;
 	}
 
-	public static DfaRelation createRelation(@Nonnull DfaValue dfaLeft, @Nonnull RelationType relationType, @Nonnull DfaValue dfaRight)
+	public static DfaRelation createRelation(@jakarta.annotation.Nonnull DfaValue dfaLeft, @Nonnull RelationType relationType, @jakarta.annotation.Nonnull DfaValue dfaRight)
 	{
 		if((relationType == RelationType.IS || relationType == RelationType.IS_NOT) &&
 				dfaRight instanceof DfaTypeValue && !(dfaLeft instanceof DfaTypeValue))
@@ -92,7 +92,7 @@ public final class DfaRelation extends DfaCondition
 		return null;
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	private static DfaRelation createConstBasedRelation(DfaTypeValue dfaLeft, RelationType relationType, DfaValue dfaRight)
 	{
 		if(dfaRight.getDfType() == DfTypes.NULL && DfaNullability.fromDfType(dfaLeft.getDfType()) == DfaNullability.NULLABLE)
@@ -112,7 +112,7 @@ public final class DfaRelation extends DfaCondition
 		return myRelation == RelationType.NE || myRelation == RelationType.GT || myRelation == RelationType.LT;
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public RelationType getRelation()
 	{
 		return myRelation;

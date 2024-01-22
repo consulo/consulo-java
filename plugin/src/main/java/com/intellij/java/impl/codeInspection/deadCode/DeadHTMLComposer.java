@@ -39,7 +39,7 @@ import consulo.language.editor.inspection.reference.RefElement;
 import consulo.language.editor.inspection.reference.RefEntity;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.tree.TreeNode;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -49,7 +49,7 @@ public class DeadHTMLComposer extends HTMLComposerImpl {
   private final InspectionToolPresentation myToolPresentation;
   private final HTMLJavaHTMLComposer myComposer;
 
-  public DeadHTMLComposer(@Nonnull InspectionToolPresentation presentation) {
+  public DeadHTMLComposer(@jakarta.annotation.Nonnull InspectionToolPresentation presentation) {
     myToolPresentation = presentation;
     myComposer = getExtension(HTMLJavaHTMLComposer.COMPOSER);
   }
@@ -71,7 +71,7 @@ public class DeadHTMLComposer extends HTMLComposerImpl {
         buf.append("<br><br>");
         appendResolution(buf, refElement, DescriptorComposer.quickFixTexts(refElement, myToolPresentation));
         refElement.accept(new RefJavaVisitor() {
-          @Override public void visitClass(@Nonnull RefClass aClass) {
+          @Override public void visitClass(@jakarta.annotation.Nonnull RefClass aClass) {
             appendClassInstantiations(buf, aClass);
             myComposer.appendDerivedClasses(buf, aClass);
             myComposer.appendClassExtendsImplements(buf, aClass);
@@ -79,14 +79,14 @@ public class DeadHTMLComposer extends HTMLComposerImpl {
             myComposer.appendTypeReferences(buf, aClass);
           }
 
-          @Override public void visitMethod(@Nonnull RefMethod method) {
+          @Override public void visitMethod(@jakarta.annotation.Nonnull RefMethod method) {
             appendElementInReferences(buf, method);
             appendElementOutReferences(buf, method);
             myComposer.appendDerivedMethods(buf, method);
             myComposer.appendSuperMethods(buf, method);
           }
 
-          @Override public void visitField(@Nonnull RefField field) {
+          @Override public void visitField(@jakarta.annotation.Nonnull RefField field) {
             appendElementInReferences(buf, field);
             appendElementOutReferences(buf, field);
           }

@@ -58,11 +58,12 @@ import consulo.java.impl.intelliLang.config.ui.MethodParameterPanel;
 import consulo.java.impl.intelliLang.config.ui.configurables.MethodParameterInjectionConfigurable;
 import consulo.java.impl.intelliLang.util.ContextComputationProcessor;
 import consulo.java.impl.intelliLang.util.PsiUtilEx;
+import jakarta.annotation.Nullable;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -87,7 +88,7 @@ public class JavaLanguageInjectionSupport extends AbstractLanguageInjectionSuppo
     return JAVA_SUPPORT_ID;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public Class[] getPatternClasses() {
     return new Class[] { PsiJavaPatterns.class };
   }
@@ -265,7 +266,7 @@ public class JavaLanguageInjectionSupport extends AbstractLanguageInjectionSuppo
   public static boolean doInjectInJavaMethod(@Nonnull final Project project,
                                              @Nullable final PsiMethod psiMethod,
                                              final int parameterIndex,
-                                             @Nonnull PsiLanguageInjectionHost host, @Nonnull final String languageId) {
+                                             @jakarta.annotation.Nonnull PsiLanguageInjectionHost host, @Nonnull final String languageId) {
     if (psiMethod == null) return false;
     if (parameterIndex < -1) return false;
     if (parameterIndex >= psiMethod.getParameterList().getParametersCount()) return false;
@@ -305,7 +306,7 @@ public class JavaLanguageInjectionSupport extends AbstractLanguageInjectionSuppo
     return idx < 0? -2 : idx;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   static PsiMethod findPsiMethod(final PsiElement parent) {
     if (parent instanceof PsiNameValuePair) {
       final PsiAnnotation annotation = PsiTreeUtil.getParentOfType(parent, PsiAnnotation.class);

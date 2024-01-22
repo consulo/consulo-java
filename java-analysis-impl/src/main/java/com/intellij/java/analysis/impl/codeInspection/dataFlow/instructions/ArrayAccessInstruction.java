@@ -18,22 +18,22 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.instructions;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.*;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.java.language.psi.PsiArrayAccessExpression;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.Objects;
 
 public class ArrayAccessInstruction extends ExpressionPushingInstruction<PsiArrayAccessExpression> {
   private final
-  @Nonnull
+  @jakarta.annotation.Nonnull
   DfaValue myValue;
   private final
   @Nullable
   DfaControlTransferValue myTransferValue;
 
-  public ArrayAccessInstruction(@Nonnull DfaValue value,
-                                @Nonnull PsiArrayAccessExpression expression,
-                                @Nullable DfaControlTransferValue transferValue) {
+  public ArrayAccessInstruction(@jakarta.annotation.Nonnull DfaValue value,
+                                @jakarta.annotation.Nonnull PsiArrayAccessExpression expression,
+                                @jakarta.annotation.Nullable DfaControlTransferValue transferValue) {
     super(expression);
     myValue = value;
     myTransferValue = transferValue;

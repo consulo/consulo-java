@@ -20,7 +20,7 @@ import consulo.language.ast.ASTNode;
 import consulo.language.ast.IElementType;
 import consulo.language.codeStyle.AlignmentStrategy;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.List;
 
 public class SubsequentOneLineMethodsAligner extends ChildAlignmentStrategyProvider {

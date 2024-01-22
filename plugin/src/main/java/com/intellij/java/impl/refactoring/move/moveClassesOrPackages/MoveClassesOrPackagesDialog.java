@@ -57,8 +57,8 @@ import consulo.usage.UsageViewUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -318,7 +318,7 @@ public class MoveClassesOrPackagesDialog extends RefactoringDialog {
     return null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private PsiClass findTargetClass() {
     String name = myInnerClassChooser.getText().trim();
     return JavaPsiFacade.getInstance(myManager.getProject()).findClass(name, (GlobalSearchScope) ProjectScopes.getProjectScope(myProject));
@@ -411,7 +411,7 @@ public class MoveClassesOrPackagesDialog extends RefactoringDialog {
     refactoringSettings.MOVE_PREVIEW_USAGES = isPreviewUsages();
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private String verifyInnerClassDestination() {
     PsiClass targetClass = findTargetClass();
     if (targetClass == null) return null;

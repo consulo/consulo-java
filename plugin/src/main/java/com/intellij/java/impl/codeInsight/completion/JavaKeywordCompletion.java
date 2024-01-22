@@ -47,8 +47,9 @@ import consulo.language.util.ProcessingContext;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.ObjectUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -71,7 +72,7 @@ public class JavaKeywordCompletion {
       false), new ClassFilter(PsiJavaCodeReferenceCodeFragment.class, false), new ClassFilter(PsiTypeCodeFragment.class, false))), new StartElementFilter());
 
   static final NotNullLazyValue<ElementFilter> END_OF_BLOCK = new AtomicNotNullLazyValue<ElementFilter>() {
-    @Nonnull
+    @jakarta.annotation.Nonnull
     @Override
     protected ElementFilter compute() {
       return new OrFilter(new AndFilter(new LeftNeighbour(new OrFilter(new AndFilter(new TextFilter("{", "}", ";", ":", "else"), new NotFilter(new SuperParentFilter(new ClassFilter
@@ -131,7 +132,7 @@ public class JavaKeywordCompletion {
   private final PsiElement myPosition;
   private final String myPrefix;
   private final List<LookupElement> myResults = new ArrayList<>();
-  @Nullable
+  @jakarta.annotation.Nullable
   private PsiElement myPrevLeaf;
 
   JavaKeywordCompletion(CompletionParameters parameters, JavaCompletionSession session) {

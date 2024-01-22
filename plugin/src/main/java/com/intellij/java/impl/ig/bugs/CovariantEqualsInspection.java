@@ -22,8 +22,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
 import consulo.annotation.component.ExtensionImpl;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class CovariantEqualsInspection extends BaseInspection {
@@ -34,7 +33,7 @@ public class CovariantEqualsInspection extends BaseInspection {
       "covariant.equals.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "covariant.equals.problem.descriptor");
@@ -47,7 +46,7 @@ public class CovariantEqualsInspection extends BaseInspection {
   private static class CovariantEqualsVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
       // note: no call to super
       final String name = method.getName();
       if (!HardcodedMethodConstants.EQUALS.equals(name)) {

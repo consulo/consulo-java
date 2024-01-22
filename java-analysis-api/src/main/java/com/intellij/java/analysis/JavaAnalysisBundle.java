@@ -3,7 +3,7 @@ package com.intellij.java.analysis;
 
 import consulo.component.util.localize.AbstractBundle;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.PropertyKey;
 
 import java.util.function.Supplier;
@@ -20,7 +20,7 @@ public final class JavaAnalysisBundle extends AbstractBundle
 	}
 
 	@Nonnull
-	public static String message(@Nonnull @PropertyKey(resourceBundle = BUNDLE) String key, @Nonnull Object  ...params)
+	public static String message(@jakarta.annotation.Nonnull @PropertyKey(resourceBundle = BUNDLE) String key, @Nonnull Object  ...params)
 	{
 		return INSTANCE.getMessage(key, params);
 	}

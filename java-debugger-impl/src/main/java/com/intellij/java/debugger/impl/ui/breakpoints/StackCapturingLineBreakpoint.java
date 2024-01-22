@@ -53,9 +53,9 @@ import consulo.java.debugger.impl.JavaRegistry;
 import consulo.logging.Logger;
 import consulo.util.collection.Maps;
 import consulo.util.dataholder.Key;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -199,7 +199,7 @@ public class StackCapturingLineBreakpoint extends WildcardMethodBreakpoint {
     bpts.add(breakpoint);
   }
 
-  public static <T> void putProcessUserData(@Nonnull Key<T> key, @Nullable T value, DebugProcessImpl debugProcess) {
+  public static <T> void putProcessUserData(@jakarta.annotation.Nonnull Key<T> key, @jakarta.annotation.Nullable T value, DebugProcessImpl debugProcess) {
     debugProcess.putUserData(key, value);
     debugProcess.addDebugProcessListener(new DebugProcessListener() {
       @Override
@@ -209,8 +209,8 @@ public class StackCapturingLineBreakpoint extends WildcardMethodBreakpoint {
     });
   }
 
-  @Nullable
-  public static CapturePoint getMatchingDisabledInsertionPoint(@Nonnull StackFrameProxyImpl frame) {
+  @jakarta.annotation.Nullable
+  public static CapturePoint getMatchingDisabledInsertionPoint(@jakarta.annotation.Nonnull StackFrameProxyImpl frame) {
     try {
       Location location = frame.location();
       String className = location.declaringType().name();
@@ -227,8 +227,8 @@ public class StackCapturingLineBreakpoint extends WildcardMethodBreakpoint {
     return null;
   }
 
-  @Nullable
-  public static List<StackFrameItem> getRelatedStack(@Nonnull StackFrameProxyImpl frame, @Nonnull SuspendContextImpl suspendContext) {
+  @jakarta.annotation.Nullable
+  public static List<StackFrameItem> getRelatedStack(@jakarta.annotation.Nonnull StackFrameProxyImpl frame, @jakarta.annotation.Nonnull SuspendContextImpl suspendContext) {
     DebugProcessImpl debugProcess = suspendContext.getDebugProcess();
     Map<Object, List<StackFrameItem>> capturedStacks = debugProcess.getUserData(CAPTURED_STACKS);
     if (ContainerUtil.isEmpty(capturedStacks)) {
@@ -264,7 +264,7 @@ public class StackCapturingLineBreakpoint extends WildcardMethodBreakpoint {
   }
 
   @Nullable
-  public static List<StackFrameItem> getRelatedStack(@Nullable ObjectReference key, @Nullable DebugProcessImpl process) {
+  public static List<StackFrameItem> getRelatedStack(@jakarta.annotation.Nullable ObjectReference key, @jakarta.annotation.Nullable DebugProcessImpl process) {
     if (process != null && key != null) {
       Map<Object, List<StackFrameItem>> data = process.getUserData(CAPTURED_STACKS);
       if (data != null) {
@@ -301,7 +301,7 @@ public class StackCapturingLineBreakpoint extends WildcardMethodBreakpoint {
       }
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     Value evaluate(final EvaluationContext context) throws EvaluateException {
       ExpressionEvaluator evaluator = myEvaluator;
       if (evaluator == null) {

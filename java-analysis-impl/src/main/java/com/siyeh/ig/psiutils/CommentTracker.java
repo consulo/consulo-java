@@ -12,11 +12,12 @@ import consulo.language.impl.psi.LeafPsiElement;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.collection.SmartList;
+import jakarta.annotation.Nullable;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Contract;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -89,7 +90,7 @@ public final class CommentTracker {
    * @return the passed argument
    */
   @Contract("_ -> param1")
-  public <T extends PsiElement> T markUnchanged(@Nullable T element) {
+  public <T extends PsiElement> T markUnchanged(@jakarta.annotation.Nullable T element) {
     checkState();
     if (element != null)
       addIgnored(element);
@@ -319,7 +320,7 @@ public final class CommentTracker {
    */
   public
   @Nonnull
-  PsiElement replaceAndRestoreComments(@Nonnull PsiElement element, @Nonnull PsiElement replacement) {
+  PsiElement replaceAndRestoreComments(@Nonnull PsiElement element, @jakarta.annotation.Nonnull PsiElement replacement) {
     List<PsiElement> suffix = grabSuffixComments(element);
     PsiElement result = replace(element, replacement);
     PsiElement anchor = PsiTreeUtil
@@ -439,7 +440,7 @@ public final class CommentTracker {
    */
   public
   @Nonnull
-  PsiElement replaceAndRestoreComments(@Nonnull PsiElement element, @Nonnull String text) {
+  PsiElement replaceAndRestoreComments(@Nonnull PsiElement element, @jakarta.annotation.Nonnull String text) {
     PsiElement replacement = createElement(element, text);
     return replaceAndRestoreComments(element, replacement);
   }
@@ -543,7 +544,7 @@ public final class CommentTracker {
       PsiComment.class
   };
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Contract("null -> null")
   @Deprecated
   public static PsiElement skipWhitespacesAndCommentsForward(@Nullable PsiElement element) {

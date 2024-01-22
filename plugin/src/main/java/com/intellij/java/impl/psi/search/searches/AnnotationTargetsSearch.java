@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.psi.search.searches;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.indexing.search.searches.AnnotatedMembersSearch;
 import com.intellij.java.language.psi.PsiClass;
@@ -53,7 +53,7 @@ public class AnnotationTargetsSearch {
 
   private AnnotationTargetsSearch() {}
 
-  public static Query<PsiModifierListOwner> search(@Nonnull PsiClass annotationClass, @Nonnull SearchScope scope) {
+  public static Query<PsiModifierListOwner> search(@Nonnull PsiClass annotationClass, @jakarta.annotation.Nonnull SearchScope scope) {
     final Query<PsiMember> members = AnnotatedMembersSearch.search(annotationClass, scope);
     final Query<PsiJavaPackage> packages = AnnotatedPackagesSearch.search(annotationClass, scope);
     return new MergeQuery<PsiModifierListOwner>(members, packages);

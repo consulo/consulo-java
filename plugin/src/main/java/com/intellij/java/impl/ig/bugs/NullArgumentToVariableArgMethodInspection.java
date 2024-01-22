@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.InspectionGadgetsBundle;
@@ -24,18 +22,19 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NullArgumentToVariableArgMethodInspection
   extends BaseInspection {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "null.argument.to.var.arg.method.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "null.argument.to.var.arg.method.problem.descriptor");

@@ -26,8 +26,8 @@ import consulo.language.extension.LanguageOneToOne;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Maxim.Medvedev
@@ -36,7 +36,7 @@ import javax.annotation.Nullable;
 public interface TestGenerator extends LanguageExtension {
   ExtensionPointCacheKey<TestGenerator, ByLanguageValue<TestGenerator>> KEY = ExtensionPointCacheKey.create("TestGenerator", LanguageOneToOne.build());
 
-  @Nullable
+  @jakarta.annotation.Nullable
   static TestGenerator forLanguage(@Nonnull Language language) {
     return Application.get().getExtensionPoint(TestGenerator.class).getOrBuildCache(KEY).get(language);
   }

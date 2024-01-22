@@ -26,7 +26,7 @@ package org.osmorc.manifest.lang.valueparser.impl;
 
 import consulo.language.editor.annotation.AnnotationHolder;
 import consulo.document.util.TextRange;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import org.osmorc.manifest.lang.psi.HeaderValuePart;
 import org.osmorc.manifest.lang.valueparser.impl.valueobject.Version;
 
@@ -40,7 +40,7 @@ public class VersionParser extends AbstractValueParserImpl<Version> {
     _qualifierPattern = Pattern.compile("[\\w\\-]*");
   }
 
-  protected Version parseValue(@Nullable HeaderValuePart headerValue, String text, int start, @Nullable AnnotationHolder annotationHolder) {
+  protected Version parseValue(@jakarta.annotation.Nullable HeaderValuePart headerValue, String text, int start, @jakarta.annotation.Nullable AnnotationHolder annotationHolder) {
     String[] componentNames = new String[]{"major", "minor", "micro"};
     int[] components = new int[]{0, 0, 0};
     int componentStart;

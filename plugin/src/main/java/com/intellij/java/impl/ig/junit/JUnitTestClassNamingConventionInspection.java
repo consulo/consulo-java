@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.ig.junit;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiClass;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
@@ -30,6 +28,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.impl.ig.naming.ConventionInspection;
 import com.siyeh.ig.psiutils.TestUtils;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class JUnitTestClassNamingConventionInspection
@@ -56,7 +55,7 @@ public class JUnitTestClassNamingConventionInspection
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     final String className = (String)infos[0];
     if (className.length() < getMinLength()) {

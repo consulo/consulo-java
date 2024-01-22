@@ -30,7 +30,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -59,14 +59,14 @@ public class BoxingBoxedValueInspection extends BaseInspection {
   }
 
   @Nls
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "boxing.boxed.value.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(

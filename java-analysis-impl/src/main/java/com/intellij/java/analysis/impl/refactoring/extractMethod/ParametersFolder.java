@@ -36,8 +36,8 @@ import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.lang.Pair;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 public class ParametersFolder {
@@ -56,7 +56,7 @@ public class ParametersFolder {
     myDeleted.clear();
   }
 
-  public boolean isParameterSafeToDelete(@Nonnull VariableData data, @Nonnull LocalSearchScope scope) {
+  public boolean isParameterSafeToDelete(@jakarta.annotation.Nonnull VariableData data, @jakarta.annotation.Nonnull LocalSearchScope scope) {
     Next:
     for (PsiReference reference : ReferencesSearch.search(data.variable, scope)) {
       PsiElement expression = reference.getElement();
@@ -281,7 +281,7 @@ public class ParametersFolder {
     return myExpressions.containsKey(data.variable) ? myExpressions.get(data.variable).getText() : data.variable.getName();
   }
 
-  public boolean annotateWithParameter(@Nonnull VariableData data, @Nonnull PsiElement element) {
+  public boolean annotateWithParameter(@Nonnull VariableData data, @jakarta.annotation.Nonnull PsiElement element) {
     final PsiExpression psiExpression = myExpressions.get(data.variable);
     if (psiExpression != null) {
       final PsiExpression expression = findEquivalent(psiExpression, element);
@@ -293,7 +293,7 @@ public class ParametersFolder {
     return false;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static PsiExpression findEquivalent(PsiExpression expr, PsiElement element) {
     PsiElement expression = element;
     while (expression  != null) {

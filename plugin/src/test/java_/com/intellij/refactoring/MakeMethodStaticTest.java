@@ -20,7 +20,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
-import javax.annotation.Nonnull;
 import com.intellij.JavaTestUtil;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
@@ -31,6 +30,7 @@ import com.intellij.java.analysis.impl.refactoring.util.VariableData;
 import consulo.util.collection.ContainerUtil;
 import consulo.language.editor.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
+import jakarta.annotation.Nonnull;
 
 public abstract class MakeMethodStaticTest extends LightRefactoringTestCase {
   @Nonnull

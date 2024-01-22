@@ -27,7 +27,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ReplaceWithOperatorAssignmentIntention", fileExtensions = "java", categories = {"Java", "Other"})
@@ -49,7 +49,7 @@ public class ReplaceWithOperatorAssignmentIntention extends MutablyNamedIntentio
     return new ReplaceableWithOperatorAssignmentPredicate();
   }
 
-  public void processIntention(@Nonnull PsiElement element){
+  public void processIntention(@jakarta.annotation.Nonnull PsiElement element){
     final PsiAssignmentExpression expression = (PsiAssignmentExpression)element;
     final PsiExpression rhs = expression.getRExpression();
     final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)PsiUtil.deparenthesizeExpression(rhs);

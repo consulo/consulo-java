@@ -45,8 +45,8 @@ import consulo.ui.ex.action.IdeActions;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.CharArrayUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -126,14 +126,14 @@ public class JavaSmartEnterProcessor extends SmartEnterProcessor {
   private final JavadocFixer myJavadocFixer = new JavadocFixer();
 
   @Override
-  public boolean process(@Nonnull final Project project, @Nonnull final Editor editor, @Nonnull final PsiFile psiFile) {
+  public boolean process(@Nonnull final Project project, @Nonnull final Editor editor, @jakarta.annotation.Nonnull final PsiFile psiFile) {
     FeatureUsageTracker.getInstance().triggerFeatureUsed("codeassists.complete.statement");
 
     return invokeProcessor(editor, psiFile, false);
   }
 
   @Override
-  public boolean processAfterCompletion(@Nonnull Editor editor, @Nonnull PsiFile psiFile) {
+  public boolean processAfterCompletion(@jakarta.annotation.Nonnull Editor editor, @jakarta.annotation.Nonnull PsiFile psiFile) {
     return invokeProcessor(editor, psiFile, true);
   }
 
@@ -153,7 +153,7 @@ public class JavaSmartEnterProcessor extends SmartEnterProcessor {
     return true;
   }
 
-  private void process(@Nonnull final Editor editor, @Nonnull final PsiFile file, final int attempt, boolean afterCompletion) throws TooManyAttemptsException {
+  private void process(@jakarta.annotation.Nonnull final Editor editor, @jakarta.annotation.Nonnull final PsiFile file, final int attempt, boolean afterCompletion) throws TooManyAttemptsException {
     if (attempt > MAX_ATTEMPTS) {
       throw new TooManyAttemptsException();
     }
@@ -360,7 +360,7 @@ public class JavaSmartEnterProcessor extends SmartEnterProcessor {
     mySkipEnter = skipEnter;
   }
 
-  protected static void plainEnter(@Nonnull final Editor editor) {
+  protected static void plainEnter(@jakarta.annotation.Nonnull final Editor editor) {
     getEnterHandler().execute(editor, ((EditorEx) editor).getDataContext());
   }
 

@@ -54,9 +54,9 @@ import consulo.util.lang.ThreeState;
 import consulo.virtualFileSystem.LocalFileSystem;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -75,18 +75,18 @@ public abstract class OrderEntryFix implements SyntheticIntentionAction, LocalQu
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getName() {
     return getText();
   }
 
   @Override
-  public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor) {
+  public void applyFix(@jakarta.annotation.Nonnull final Project project, @jakarta.annotation.Nonnull final ProblemDescriptor descriptor) {
     invoke(project, null, descriptor.getPsiElement().getContainingFile());
   }
 
   @Nullable
-  public static List<LocalQuickFix> registerFixes(@Nonnull PsiReference reference) {
+  public static List<LocalQuickFix> registerFixes(@jakarta.annotation.Nonnull PsiReference reference) {
     PsiElement psiElement = reference.getElement();
     String shortReferenceName = reference.getRangeInElement().substring(psiElement.getText());
 
@@ -239,7 +239,7 @@ public abstract class OrderEntryFix implements SyntheticIntentionAction, LocalQu
     return ThreeState.NO;
   }
 
-  public static void importClass(@Nonnull Module currentModule, @Nullable Editor editor, @Nullable PsiReference reference, @Nullable String className) {
+  public static void importClass(@jakarta.annotation.Nonnull Module currentModule, @Nullable Editor editor, @Nullable PsiReference reference, @Nullable String className) {
     Project project = currentModule.getProject();
     if (editor != null && reference != null && className != null) {
       DumbService.getInstance(project).withAlternativeResolveEnabled(() ->
@@ -253,23 +253,23 @@ public abstract class OrderEntryFix implements SyntheticIntentionAction, LocalQu
     }
   }
 
-  public static void addJarToRoots(@Nonnull String jarPath, final @Nonnull Module module, @Nullable PsiElement location) {
+  public static void addJarToRoots(@jakarta.annotation.Nonnull String jarPath, final @jakarta.annotation.Nonnull Module module, @Nullable PsiElement location) {
     addJarsToRoots(Collections.singletonList(jarPath), null, module, location);
   }
 
-  public static void addJarsToRoots(@Nonnull List<String> jarPaths, @Nullable String libraryName, @Nonnull Module module, @Nullable PsiElement location) {
+  public static void addJarsToRoots(@jakarta.annotation.Nonnull List<String> jarPaths, @jakarta.annotation.Nullable String libraryName, @jakarta.annotation.Nonnull Module module, @jakarta.annotation.Nullable PsiElement location) {
     List<String> urls = refreshAndConvertToUrls(jarPaths);
     DependencyScope scope = suggestScopeByLocation(module, location);
     ModuleRootModificationUtil.addModuleLibrary(module, libraryName, urls, Collections.emptyList(), scope);
   }
 
-  @Nonnull
-  public static List<String> refreshAndConvertToUrls(@Nonnull List<String> jarPaths) {
+  @jakarta.annotation.Nonnull
+  public static List<String> refreshAndConvertToUrls(@jakarta.annotation.Nonnull List<String> jarPaths) {
     return ContainerUtil.map(jarPaths, OrderEntryFix::refreshAndConvertToUrl);
   }
 
   @Nonnull
-  public static DependencyScope suggestScopeByLocation(@Nonnull Module module, @Nullable PsiElement location) {
+  public static DependencyScope suggestScopeByLocation(@jakarta.annotation.Nonnull Module module, @Nullable PsiElement location) {
     if (location != null) {
       final VirtualFile vFile = location.getContainingFile().getVirtualFile();
       if (vFile != null && ModuleRootManager.getInstance(module).getFileIndex().isInTestSourceContent(vFile)) {
@@ -279,7 +279,7 @@ public abstract class OrderEntryFix implements SyntheticIntentionAction, LocalQu
     return DependencyScope.COMPILE;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private static String refreshAndConvertToUrl(String jarPath) {
     final File libraryRoot = new File(jarPath);
     LocalFileSystem.getInstance().refreshAndFindFileByIoFile(libraryRoot);

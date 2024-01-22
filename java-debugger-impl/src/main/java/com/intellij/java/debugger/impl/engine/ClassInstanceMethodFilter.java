@@ -25,8 +25,7 @@ import com.intellij.java.language.psi.PsiMethod;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.request.EventRequest;
 import consulo.util.lang.Range;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author egor

@@ -34,8 +34,9 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.util.lang.Pair;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class DeclarationMover extends LineMover {
   private PsiEnumConstant myEnumToInsertSemicolonAfter;
 
   @Override
-  public void beforeMove(@Nonnull final Editor editor, @Nonnull final MoveInfo info, final boolean down) {
+  public void beforeMove(@jakarta.annotation.Nonnull final Editor editor, @jakarta.annotation.Nonnull final MoveInfo info, final boolean down) {
     super.beforeMove(editor, info, down);
 
     if (myEnumToInsertSemicolonAfter != null) {
@@ -66,7 +67,7 @@ public class DeclarationMover extends LineMover {
   }
 
   @Override
-  public boolean checkAvailable(@Nonnull final Editor editor, @Nonnull final PsiFile file, @Nonnull final MoveInfo info, final boolean down) {
+  public boolean checkAvailable(@jakarta.annotation.Nonnull final Editor editor, @jakarta.annotation.Nonnull final PsiFile file, @Nonnull final MoveInfo info, final boolean down) {
     if (!(file instanceof PsiJavaFile)) {
       return false;
     }
@@ -122,7 +123,7 @@ public class DeclarationMover extends LineMover {
     return true;
   }
 
-  private static LineRange memberRange(@Nonnull PsiElement member, Editor editor, LineRange lineRange) {
+  private static LineRange memberRange(@jakarta.annotation.Nonnull PsiElement member, Editor editor, LineRange lineRange) {
     final TextRange textRange = member.getTextRange();
     if (editor.getDocument().getTextLength() < textRange.getEndOffset()) return null;
     final int startLine = editor.offsetToLogicalPosition(textRange.getStartOffset()).line;

@@ -47,8 +47,8 @@ import consulo.util.collection.SmartList;
 import consulo.util.lang.ObjectUtil;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
@@ -72,7 +72,7 @@ public class PsiTypeElementImpl extends CompositePsiElement implements PsiTypeEl
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiType getType() {
     return LanguageCachedValueUtil.getCachedValue(this, () -> CachedValueProvider.Result.create(calculateType(), PsiModificationTracker.MODIFICATION_COUNT));
   }
@@ -196,7 +196,7 @@ public class PsiTypeElementImpl extends CompositePsiElement implements PsiTypeEl
     return null;
   }
 
-  private static boolean isSelfReferenced(@Nonnull PsiExpression initializer, PsiElement parent) {
+  private static boolean isSelfReferenced(@jakarta.annotation.Nonnull PsiExpression initializer, PsiElement parent) {
     class SelfReferenceVisitor extends JavaRecursiveElementVisitor {
       private boolean referenced;
 
@@ -231,7 +231,7 @@ public class PsiTypeElementImpl extends CompositePsiElement implements PsiTypeEl
     return PsiUtil.isJavaToken(firstChild, JavaTokenType.VAR_KEYWORD) || PsiAugmentProvider.isInferredType(this);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private static ClassReferencePointer getReferenceComputable(@Nonnull PsiJavaCodeReferenceElement ref) {
     PsiTypeElement rootType = getRootTypeElement(ref);
     if (rootType != null) {
@@ -247,7 +247,7 @@ public class PsiTypeElementImpl extends CompositePsiElement implements PsiTypeEl
     return ClassReferencePointer.constant(ref);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static PsiTypeElement getRootTypeElement(@Nonnull PsiJavaCodeReferenceElement ref) {
     PsiElement root = SyntaxTraverser.psiApi()
         .parents(ref.getParent())
@@ -264,7 +264,7 @@ public class PsiTypeElementImpl extends CompositePsiElement implements PsiTypeEl
 
       @Override
       public
-      @Nullable
+      @jakarta.annotation.Nullable
       PsiJavaCodeReferenceElement retrieveReference() {
         PsiJavaCodeReferenceElement result = myCache.get();
         if (result == null) {
@@ -277,7 +277,7 @@ public class PsiTypeElementImpl extends CompositePsiElement implements PsiTypeEl
         return result;
       }
 
-      @Nullable
+      @jakarta.annotation.Nullable
       private PsiJavaCodeReferenceElement findReferenceByIndex(PsiClassReferenceType type) {
         PsiTypeElement root = getRootTypeElement(type.getReference());
         return root == null ? null : allReferencesInside(root).get(index);
@@ -325,12 +325,12 @@ public class PsiTypeElementImpl extends CompositePsiElement implements PsiTypeEl
     };
   }
 
-  @Nonnull
-  private static JBIterable<PsiJavaCodeReferenceElement> allReferencesInside(@Nonnull PsiTypeElement rootType) {
+  @jakarta.annotation.Nonnull
+  private static JBIterable<PsiJavaCodeReferenceElement> allReferencesInside(@jakarta.annotation.Nonnull PsiTypeElement rootType) {
     return SyntaxTraverser.psiTraverser(rootType).filter(PsiJavaCodeReferenceElement.class);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private static TypeAnnotationProvider createProvider(@Nonnull List<PsiAnnotation> annotations) {
     return TypeAnnotationProvider.Static.create(ContainerUtil.copyAndClear(annotations, PsiAnnotation.ARRAY_FACTORY, true));
   }
@@ -353,7 +353,7 @@ public class PsiTypeElementImpl extends CompositePsiElement implements PsiTypeEl
     return getReferenceElement();
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private PsiJavaCodeReferenceElement getReferenceElement() {
     ASTNode ref = findChildByType(JavaElementType.JAVA_CODE_REFERENCE);
     if (ref == null) {
@@ -363,7 +363,7 @@ public class PsiTypeElementImpl extends CompositePsiElement implements PsiTypeEl
   }
 
   @Override
-  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place) {
+  public boolean processDeclarations(@jakarta.annotation.Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @jakarta.annotation.Nonnull PsiElement place) {
     processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, this);
     return true;
   }
@@ -376,24 +376,24 @@ public class PsiTypeElementImpl extends CompositePsiElement implements PsiTypeEl
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiAnnotation[] getApplicableAnnotations() {
     return getType().getAnnotations();
   }
 
   @Override
-  public PsiAnnotation findAnnotation(@Nonnull @NonNls String qualifiedName) {
+  public PsiAnnotation findAnnotation(@jakarta.annotation.Nonnull @NonNls String qualifiedName) {
     return PsiImplUtil.findAnnotation(this, qualifiedName);
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiAnnotation addAnnotation(@Nonnull @NonNls String qualifiedName) {
     throw new UnsupportedOperationException();//todo
   }
 
   @Override
-  public PsiElement replace(@Nonnull PsiElement newElement) throws IncorrectOperationException {
+  public PsiElement replace(@jakarta.annotation.Nonnull PsiElement newElement) throws IncorrectOperationException {
     // neighbouring type annotations are logical part of this type element and should be dropped
     //if replacement is `var`, annotations should be left as they are not inferred from the right side of the assignment
     if (!(newElement instanceof PsiTypeElement) || !((PsiTypeElement) newElement).isInferredType()) {

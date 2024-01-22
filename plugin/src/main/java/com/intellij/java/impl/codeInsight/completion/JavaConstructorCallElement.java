@@ -31,8 +31,8 @@ import consulo.util.dataholder.Key;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.SystemProperties;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
@@ -125,7 +125,7 @@ public class JavaConstructorCallElement extends LookupElementDecorator<LookupEle
     return Collections.singletonList(classItem);
   }
 
-  private static boolean shouldSuggestConstructor(@Nonnull PsiClass psiClass, @Nonnull PsiElement position, PsiMethod constructor) {
+  private static boolean shouldSuggestConstructor(@jakarta.annotation.Nonnull PsiClass psiClass, @Nonnull PsiElement position, PsiMethod constructor) {
     return JavaResolveUtil.isAccessible(constructor, psiClass, constructor.getModifierList(), position, null, null) || willBeAccessibleInAnonymous(psiClass, constructor);
   }
 

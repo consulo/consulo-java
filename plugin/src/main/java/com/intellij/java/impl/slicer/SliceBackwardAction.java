@@ -15,10 +15,9 @@
  */
 package com.intellij.java.impl.slicer;
 
-import javax.annotation.Nonnull;
-
 import consulo.language.editor.action.CodeInsightActionHandler;
 import consulo.language.editor.action.CodeInsightAction;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author cdr

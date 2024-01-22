@@ -15,8 +15,7 @@
  */
 package com.intellij.java.impl.ig.fixes;
 
-import javax.annotation.Nonnull;
-
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.dataContext.DataManager;

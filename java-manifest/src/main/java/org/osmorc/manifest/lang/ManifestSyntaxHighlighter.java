@@ -27,8 +27,6 @@ package org.osmorc.manifest.lang;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
-
 import consulo.language.editor.highlight.LanguageVersionableSyntaxHighlighter;
 import consulo.language.lexer.Lexer;
 import consulo.colorScheme.TextAttributesKey;
@@ -36,6 +34,7 @@ import consulo.language.ast.IElementType;
 import consulo.java.manifest.lang.ManifestLanguageVersion;
 import consulo.language.version.LanguageVersion;
 import consulo.language.version.LanguageVersionWithParsing;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)

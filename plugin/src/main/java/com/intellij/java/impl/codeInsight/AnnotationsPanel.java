@@ -15,7 +15,7 @@ import consulo.ui.ex.awt.table.BooleanTableCellEditor;
 import consulo.ui.ex.awt.table.JBTable;
 import consulo.ui.image.Image;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;

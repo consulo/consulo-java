@@ -25,8 +25,8 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -65,7 +65,7 @@ public class ReplaceOperatorAssignmentWithAssignmentIntention extends MutablyNam
   }
 
   @Override
-  protected void processIntention(@Nonnull PsiElement element) {
+  protected void processIntention(@jakarta.annotation.Nonnull PsiElement element) {
     final PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression)element;
     final PsiJavaToken sign = assignmentExpression.getOperationSign();
     final PsiExpression lhs = assignmentExpression.getLExpression();

@@ -27,8 +27,7 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.language.psi.util.PsiTreeUtil;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class PsiClassInitializerImpl extends JavaStubPsiElement<PsiClassInitializerStub> implements PsiClassInitializer {
   public PsiClassInitializerImpl(final PsiClassInitializerStub stub) {
@@ -57,12 +56,12 @@ public class PsiClassInitializerImpl extends JavaStubPsiElement<PsiClassInitiali
   }
 
   @Override
-  public boolean hasModifierProperty(@Nonnull String name) {
+  public boolean hasModifierProperty(@jakarta.annotation.Nonnull String name) {
     return getModifierList().hasModifierProperty(name);
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiCodeBlock getBody() {
     return (PsiCodeBlock) ((CompositeElement) getNode()).findChildByRoleAsPsiElement(ChildRole.METHOD_BODY);
   }
@@ -81,7 +80,7 @@ public class PsiClassInitializerImpl extends JavaStubPsiElement<PsiClassInitiali
   }
 
   @Override
-  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place) {
+  public boolean processDeclarations(@jakarta.annotation.Nonnull PsiScopeProcessor processor, @jakarta.annotation.Nonnull ResolveState state, PsiElement lastParent, @jakarta.annotation.Nonnull PsiElement place) {
     processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, this);
     return lastParent == null || PsiScopesUtil.walkChildrenScopes(this, processor, state, lastParent, place);
   }

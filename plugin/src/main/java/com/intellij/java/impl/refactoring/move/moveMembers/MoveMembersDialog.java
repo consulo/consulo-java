@@ -33,7 +33,7 @@ import javax.swing.JTextField;
 import com.intellij.java.language.psi.*;
 import consulo.ui.ex.awt.Messages;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import com.intellij.java.language.util.ClassFilter;
 import com.intellij.java.language.impl.codeInsight.PackageUtil;
 import com.intellij.java.language.util.TreeClassChooser;
@@ -321,7 +321,7 @@ public class MoveMembersDialog extends RefactoringDialog implements MoveMembersO
     }
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private PsiClass findOrCreateTargetClass(final PsiManager manager, final String fqName) throws IncorrectOperationException {
     final String className;
     final String packageName;

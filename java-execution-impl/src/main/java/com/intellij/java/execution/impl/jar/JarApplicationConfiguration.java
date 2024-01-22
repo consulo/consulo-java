@@ -24,8 +24,8 @@ import consulo.project.Project;
 import consulo.util.xml.serializer.*;
 import org.jdom.Element;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -143,7 +143,7 @@ public class JarApplicationConfiguration extends LocatableConfigurationBase impl
     myBean.ALTERNATIVE_JRE_PATH_ENABLED = enabled;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public String getAlternativeJrePath() {
     return myBean.ALTERNATIVE_JRE_PATH;

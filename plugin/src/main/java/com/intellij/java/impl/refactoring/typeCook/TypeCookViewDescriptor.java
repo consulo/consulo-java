@@ -19,7 +19,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.usage.UsageViewBundle;
 import consulo.usage.UsageViewDescriptor;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 class TypeCookViewDescriptor implements UsageViewDescriptor {
   private final PsiElement[] myElements;

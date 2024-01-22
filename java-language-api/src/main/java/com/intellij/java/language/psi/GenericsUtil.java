@@ -31,8 +31,8 @@ import consulo.util.lang.Couple;
 import consulo.util.lang.Pair;
 import org.jetbrains.annotations.Contract;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -68,7 +68,7 @@ public class GenericsUtil {
     return getLeastUpperBound(type1, type2, new LinkedHashSet<>(), manager);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private static PsiType getLeastUpperBound(PsiType type1, PsiType type2, Set<Couple<PsiType>> compared, PsiManager manager) {
     if (type1 instanceof PsiCapturedWildcardType) {
       return getLeastUpperBound(((PsiCapturedWildcardType) type1).getUpperBound(), type2, compared, manager);
@@ -206,7 +206,7 @@ public class GenericsUtil {
     return PsiWildcardType.createExtends(manager, getLeastUpperBound(type1, type2, compared, manager));
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static PsiClass[] getLeastUpperClasses(PsiClass aClass, PsiClass bClass) {
     if (InheritanceUtil.isInheritorOrSelf(aClass, bClass, true)) {
       return new PsiClass[]{bClass};
@@ -565,7 +565,7 @@ public class GenericsUtil {
     return false;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static PsiClassType getExpectedGenericType(PsiElement context,
                                                     PsiClass aClass,
                                                     PsiClassType expectedType) {

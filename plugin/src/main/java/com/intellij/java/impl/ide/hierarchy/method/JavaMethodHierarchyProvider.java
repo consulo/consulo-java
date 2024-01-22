@@ -37,15 +37,15 @@ import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author yole
  */
 @ExtensionImpl
 public class JavaMethodHierarchyProvider implements MethodHierarchyProvider {
-  public PsiElement getTarget(@Nonnull final DataContext dataContext) {
+  public PsiElement getTarget(@jakarta.annotation.Nonnull final DataContext dataContext) {
     final PsiMethod method = getMethodImpl(dataContext);
     if (method != null && method.getContainingClass() != null && !method.hasModifierProperty(PsiModifier.PRIVATE) && !method.hasModifierProperty(PsiModifier.STATIC)) {
       return method;
@@ -98,7 +98,7 @@ public class JavaMethodHierarchyProvider implements MethodHierarchyProvider {
     return PsiTreeUtil.getParentOfType(element, PsiMethod.class, false);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public HierarchyBrowser createHierarchyBrowser(final PsiElement target) {
     return new MethodHierarchyBrowser(target.getProject(), (PsiMethod) target);
   }
@@ -107,7 +107,7 @@ public class JavaMethodHierarchyProvider implements MethodHierarchyProvider {
     ((MethodHierarchyBrowser) hierarchyBrowser).changeView(MethodHierarchyBrowserBase.METHOD_TYPE);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

@@ -3,7 +3,7 @@ package com.intellij.java.language.psi;
 
 import consulo.language.psi.PsiPolyVariantReference;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public interface PsiJavaModuleReference extends PsiPolyVariantReference {
   @Override

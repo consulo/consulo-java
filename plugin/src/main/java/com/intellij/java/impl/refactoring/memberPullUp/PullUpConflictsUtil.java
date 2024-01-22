@@ -29,8 +29,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import consulo.util.lang.Comparing;
@@ -53,6 +52,7 @@ import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import consulo.usage.UsageInfo;
 import com.intellij.java.language.util.VisibilityUtil;
 import consulo.util.collection.MultiMap;
+import jakarta.annotation.Nullable;
 
 public class PullUpConflictsUtil {
   private PullUpConflictsUtil() {}
@@ -60,15 +60,15 @@ public class PullUpConflictsUtil {
   public static MultiMap<PsiElement, String> checkConflicts(final MemberInfo[] infos,
                                         PsiClass subclass,
                                         @Nullable PsiClass superClass,
-                                        @Nonnull PsiJavaPackage targetPackage,
+                                        @jakarta.annotation.Nonnull PsiJavaPackage targetPackage,
                                         @Nonnull PsiDirectory targetDirectory,
                                         final InterfaceContainmentVerifier interfaceContainmentVerifier) {
     return checkConflicts(infos, subclass, superClass, targetPackage, targetDirectory, interfaceContainmentVerifier, true);
   }
 
   public static MultiMap<PsiElement, String> checkConflicts(final MemberInfo[] infos,
-                                                            @Nonnull final PsiClass subclass,
-                                                            @Nullable PsiClass superClass,
+                                                            @jakarta.annotation.Nonnull final PsiClass subclass,
+                                                            @jakarta.annotation.Nullable PsiClass superClass,
                                                             @Nonnull final PsiJavaPackage targetPackage,
                                                             @Nonnull PsiDirectory targetDirectory,
                                                             final InterfaceContainmentVerifier interfaceContainmentVerifier,

@@ -15,9 +15,9 @@ import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.JBIterable;
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * from kotlin
  */
 public class JavaInlayHintsProvider {
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @RequiredReadAction
   public static Set<InlayInfo> createHints(PsiCallExpression callExpression) {
     JavaResolveResult resolveResult = callExpression.resolveMethodGenerics();
@@ -63,7 +63,7 @@ public class JavaInlayHintsProvider {
   }
 
   @RequiredReadAction
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private static Set<InlayInfo> createHintsForResolvedMethod(PsiCallExpression callExpression, ResolveResult resolveResult) {
     PsiElement element = resolveResult.getElement();
     PsiSubstitutor substitutor = resolveResult instanceof JavaResolveResult ? ((JavaResolveResult) resolveResult).getSubstitutor() : PsiSubstitutor.EMPTY;
@@ -178,7 +178,7 @@ public class JavaInlayHintsProvider {
     return false;
   }
 
-  private static String typeText(@Nonnull PsiParameter psiParameter) {
+  private static String typeText(@jakarta.annotation.Nonnull PsiParameter psiParameter) {
     return psiParameter.getType().getCanonicalText();
   }
 

@@ -23,8 +23,7 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author Bas Leijdekkers
@@ -40,7 +39,7 @@ public class MergeCallSequenceToChainIntention extends Intention {
   }
 
   @Override
-  protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+  protected void processIntention(@jakarta.annotation.Nonnull PsiElement element) throws IncorrectOperationException {
     if (!(element instanceof PsiExpressionStatement)) {
       return;
     }

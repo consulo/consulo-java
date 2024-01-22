@@ -24,10 +24,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.CreateMethodQuickFix;
@@ -50,7 +49,7 @@ public class ParameterizedParametersStaticCollectionInspection extends BaseInspe
   private static final String PARAMETERS_FQN = "org.junit.runners.Parameterized.Parameters";
   private static final String PARAMETERIZED_FQN = "org.junit.runners.Parameterized";
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return infos.length > 0
            ? (String)infos[1]
@@ -154,7 +153,7 @@ public class ParameterizedParametersStaticCollectionInspection extends BaseInspe
   }
 
   @Nls
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return "@RunWith(Parameterized.class) without data provider";
   }

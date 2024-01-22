@@ -28,7 +28,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class TypeOfVariableMacro extends Macro {
@@ -49,7 +49,7 @@ public class TypeOfVariableMacro extends Macro {
   }
 
   @Override
-  public Result calculateResult(@Nonnull Expression[] params, ExpressionContext context) {
+  public Result calculateResult(@jakarta.annotation.Nonnull Expression[] params, ExpressionContext context) {
     if (params.length == 0) return null;
 
     final Project project = context.getProject();

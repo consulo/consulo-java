@@ -5,7 +5,7 @@ import consulo.internal.org.objectweb.asm.AnnotationVisitor;
 import consulo.internal.org.objectweb.asm.Opcodes;
 import consulo.internal.org.objectweb.asm.Type;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.function.Consumer;
 import java.util.function.Function;
 

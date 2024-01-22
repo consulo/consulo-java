@@ -17,8 +17,8 @@ package com.intellij.java.impl.refactoring.encapsulateFields;
 
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Max Medvedev
@@ -30,11 +30,11 @@ public class FieldDescriptorImpl implements FieldDescriptor {
   private final PsiMethod myGetterPrototype;
   private final PsiMethod mySetterPrototype;
 
-  public FieldDescriptorImpl(@Nonnull PsiField field,
+  public FieldDescriptorImpl(@jakarta.annotation.Nonnull PsiField field,
                              @Nonnull String getterName,
-                             @Nonnull String setterName,
-                             @Nullable PsiMethod getterPrototype,
-                             @Nullable PsiMethod setterPrototype) {
+                             @jakarta.annotation.Nonnull String setterName,
+                             @jakarta.annotation.Nullable PsiMethod getterPrototype,
+                             @jakarta.annotation.Nullable PsiMethod setterPrototype) {
     myField = field;
     myGetterName = getterName;
     mySetterName = setterName;
@@ -42,7 +42,7 @@ public class FieldDescriptorImpl implements FieldDescriptor {
     mySetterPrototype = setterPrototype;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public PsiField getField() {
     return myField;
@@ -54,13 +54,13 @@ public class FieldDescriptorImpl implements FieldDescriptor {
     return myGetterName;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getSetterName() {
     return mySetterName;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public PsiMethod getGetterPrototype() {
     return myGetterPrototype;
@@ -73,7 +73,7 @@ public class FieldDescriptorImpl implements FieldDescriptor {
   }
 
   @Override
-  public void refreshField(@Nonnull PsiField newField) {
+  public void refreshField(@jakarta.annotation.Nonnull PsiField newField) {
     myField = newField;
   }
 }

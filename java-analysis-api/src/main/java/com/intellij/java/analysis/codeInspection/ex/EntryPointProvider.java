@@ -5,9 +5,8 @@ import consulo.annotation.component.ExtensionAPI;
 import consulo.language.editor.inspection.reference.RefElement;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author VISTALL
@@ -16,21 +15,21 @@ import javax.annotation.Nullable;
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface EntryPointProvider<State extends EntryPointState>
 {
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	String getId();
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	LocalizeValue getDisplayName();
 
 	@Nonnull
 	State createState();
 
-	default boolean isEntryPoint(RefElement refElement, PsiElement psiElement, @Nonnull State state)
+	default boolean isEntryPoint(RefElement refElement, PsiElement psiElement, @jakarta.annotation.Nonnull State state)
 	{
 		return isEntryPoint(psiElement, state);
 	}
 
-	boolean isEntryPoint(PsiElement psiElement, @Nonnull State state);
+	boolean isEntryPoint(PsiElement psiElement, @jakarta.annotation.Nonnull State state);
 
 	@Nullable
 	default String[] getIgnoreAnnotations()

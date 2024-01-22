@@ -26,7 +26,7 @@ import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.xml.psi.xml.XmlTag;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -61,7 +61,7 @@ public class JavaClassListReferenceProvider extends JavaClassReferenceProvider {
     }
 
     NotNullLazyValue<Set<String>> topLevelPackages = new NotNullLazyValue<Set<String>>() {
-      @Nonnull
+      @jakarta.annotation.Nonnull
       @Override
       protected Set<String> compute() {
         final Set<String> knownTopLevelPackages = new HashSet<String>();

@@ -29,7 +29,7 @@ import consulo.xml.util.xml.DomManager;
 import consulo.xml.util.xml.DomTarget;
 import consulo.xml.util.xml.DomUtil;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author peter
@@ -50,7 +50,7 @@ public abstract class BaseImpl implements CommonDomModelElement {
     return DomUtil.getFile(this);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   protected final PsiClass findPsiClass(String className) {
     if (className == null) return null;
     final Module module = getModule();
@@ -60,7 +60,7 @@ public abstract class BaseImpl implements CommonDomModelElement {
     return JavaPsiFacade.getInstance(getManager().getProject()).findClass(className, scope);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public Module getModule() {
     if (!isValid()) {
       return null;

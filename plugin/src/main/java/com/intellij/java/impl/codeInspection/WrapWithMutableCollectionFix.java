@@ -17,8 +17,8 @@ import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class WrapWithMutableCollectionFix implements LocalQuickFix {
   private final String myVariableName;
@@ -46,7 +46,7 @@ public class WrapWithMutableCollectionFix implements LocalQuickFix {
   }
 
   @Override
-  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+  public void applyFix(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull ProblemDescriptor descriptor) {
     PsiLocalVariable variable = getVariable(descriptor.getStartElement());
     if (variable == null) {
       return;
@@ -106,7 +106,7 @@ public class WrapWithMutableCollectionFix implements LocalQuickFix {
   }
 
   @Nullable
-  private static PsiLocalVariable getVariable(@Nonnull PsiElement anchor) {
+  private static PsiLocalVariable getVariable(@jakarta.annotation.Nonnull PsiElement anchor) {
     if (anchor.getParent() instanceof PsiReferenceExpression && anchor.getParent().getParent() instanceof PsiCallExpression) {
       anchor = ((PsiReferenceExpression) anchor.getParent()).getQualifierExpression();
     }

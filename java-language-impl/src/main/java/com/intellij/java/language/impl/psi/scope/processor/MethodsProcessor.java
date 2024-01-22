@@ -17,8 +17,7 @@ package com.intellij.java.language.impl.psi.scope.processor;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 import consulo.util.dataholder.Key;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.PsiCallExpression;
@@ -36,6 +35,7 @@ import com.intellij.java.language.impl.psi.scope.ElementClassHint;
 import com.intellij.java.language.psi.scope.JavaScopeProcessorEvent;
 import com.intellij.java.language.impl.psi.scope.PsiConflictResolver;
 import com.intellij.java.language.psi.util.PsiUtil;
+import jakarta.annotation.Nullable;
 
 /**
  * Created by IntelliJ IDEA.
@@ -56,7 +56,7 @@ public abstract class MethodsProcessor extends ConflictFilterProcessor implement
 	private PsiType[] myTypeArguments;
 	private final LanguageLevel myLanguageLevel;
 
-	public MethodsProcessor(@Nonnull PsiConflictResolver[] resolvers, @Nonnull List<CandidateInfo> container, @Nonnull PsiElement place, @Nonnull PsiFile placeFile)
+	public MethodsProcessor(@Nonnull PsiConflictResolver[] resolvers, @jakarta.annotation.Nonnull List<CandidateInfo> container, @Nonnull PsiElement place, @Nonnull PsiFile placeFile)
 	{
 		super(null, ourFilter, resolvers, container, place, placeFile);
 		myLanguageLevel = PsiUtil.getLanguageLevel(placeFile);
@@ -130,13 +130,13 @@ public abstract class MethodsProcessor extends ConflictFilterProcessor implement
 		this.myIsConstructor = myIsConstructor;
 	}
 
-	public void forceAddResult(@Nonnull PsiMethod method)
+	public void forceAddResult(@jakarta.annotation.Nonnull PsiMethod method)
 	{
 		add(new CandidateInfo(method, PsiSubstitutor.EMPTY, false, false, myCurrentFileContext));
 	}
 
 	@Override
-	public <T> T getHint(@Nonnull Key<T> hintKey)
+	public <T> T getHint(@jakarta.annotation.Nonnull Key<T> hintKey)
 	{
 		if(hintKey == ElementClassHint.KEY)
 		{

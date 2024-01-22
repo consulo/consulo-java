@@ -23,12 +23,12 @@ import com.intellij.java.impl.ig.psiutils.InitializationUtils;
 import com.intellij.java.impl.ig.psiutils.SerializationUtils;
 import consulo.annotation.component.ExtensionImpl;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class TransientFieldNotInitializedInspection extends BaseInspection {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "transient.field.not.initialized.display.name");
@@ -70,7 +70,7 @@ public class TransientFieldNotInitializedInspection extends BaseInspection {
     }
 
     private static boolean isInitializedInConstructors(
-      @Nonnull PsiField field, @Nonnull PsiClass aClass) {
+      @Nonnull PsiField field, @jakarta.annotation.Nonnull PsiClass aClass) {
       final PsiMethod[] constructors = aClass.getConstructors();
       if (constructors.length == 0) {
         return false;
@@ -85,7 +85,7 @@ public class TransientFieldNotInitializedInspection extends BaseInspection {
     }
 
     private static boolean isInitializedInInitializer(
-      @Nonnull PsiField field, @Nonnull PsiClass aClass) {
+      @Nonnull PsiField field, @jakarta.annotation.Nonnull PsiClass aClass) {
       final PsiClassInitializer[] initializers = aClass.getInitializers();
       for (final PsiClassInitializer initializer : initializers) {
         if (initializer.hasModifierProperty(PsiModifier.STATIC)) {

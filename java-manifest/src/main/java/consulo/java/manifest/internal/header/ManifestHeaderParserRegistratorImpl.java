@@ -8,7 +8,7 @@ import org.osmorc.manifest.lang.headerparser.ManifestHeaderParserContributor;
 import org.osmorc.manifest.lang.headerparser.ManifestHeaderParserRegistrator;
 import org.osmorc.manifest.lang.headerparser.impl.GenericComplexHeaderParser;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 

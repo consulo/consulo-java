@@ -67,8 +67,8 @@ import consulo.logging.Logger;
 import consulo.ui.image.Image;
 import consulo.util.dataholder.Key;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
@@ -172,7 +172,7 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
 	}
 
 	@Override
-	public Object getData(@Nonnull Key dataId)
+	public Object getData(@jakarta.annotation.Nonnull Key dataId)
 	{
 		if(DATA_KEY == dataId)
 		{
@@ -732,7 +732,7 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
 		}
 
 		@Override
-		public void addChildren(@Nonnull XValueChildrenList children, boolean last)
+		public void addChildren(@jakarta.annotation.Nonnull XValueChildrenList children, boolean last)
 		{
 		}
 
@@ -757,7 +757,7 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
 		}
 
 		@Override
-		public void setMessage(@Nonnull String message, @Nullable Image icon, @Nonnull SimpleTextAttributes attributes, @Nullable XDebuggerTreeNodeHyperlink link)
+		public void setMessage(@Nonnull String message, @Nullable Image icon, @jakarta.annotation.Nonnull SimpleTextAttributes attributes, @Nullable XDebuggerTreeNodeHyperlink link)
 		{
 		}
 

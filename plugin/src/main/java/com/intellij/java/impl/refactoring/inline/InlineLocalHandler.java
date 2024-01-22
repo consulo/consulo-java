@@ -50,9 +50,9 @@ import consulo.project.Project;
 import consulo.project.ui.wm.WindowManager;
 import consulo.undoRedo.CommandProcessor;
 import consulo.util.collection.ArrayUtil;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -317,7 +317,7 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
     return defToInline.getParent() instanceof PsiVariable;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static PsiExpression getDefToInline(final PsiLocalVariable local,
                                               final PsiElement refExpr,
                                               final PsiCodeBlock block) {

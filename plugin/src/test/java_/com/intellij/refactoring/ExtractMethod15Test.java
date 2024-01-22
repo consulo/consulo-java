@@ -20,7 +20,7 @@
  */
 package com.intellij.refactoring;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.JavaTestUtil;
 import com.intellij.testFramework.LightCodeInsightTestCase;

@@ -34,8 +34,8 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.util.PsiTreeUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author max
@@ -179,7 +179,7 @@ public class RefFieldImpl extends RefJavaElementImpl implements RefField {
     });
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static RefField fieldFromExternalName(RefManager manager, String externalName) {
     return (RefField) manager.getReference(findPsiField(PsiManager.getInstance(manager.getProject()), externalName));
   }

@@ -15,8 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import consulo.logging.Logger;
@@ -30,6 +29,7 @@ import com.intellij.java.language.psi.PsiPrimitiveType;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiTypeElement;
 import com.intellij.java.language.psi.PsiWildcardType;
+import jakarta.annotation.Nullable;
 
 /**
  * User: anna

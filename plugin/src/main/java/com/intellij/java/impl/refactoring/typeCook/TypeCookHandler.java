@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.refactoring.typeCook;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.dataContext.DataContext;
 import consulo.codeEditor.Editor;

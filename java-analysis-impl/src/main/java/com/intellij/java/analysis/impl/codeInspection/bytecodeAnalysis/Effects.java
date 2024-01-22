@@ -16,7 +16,7 @@
 
 package com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -28,12 +28,12 @@ final class Effects implements Result
 	static final Set<EffectQuantum> TOP_EFFECTS = Collections.singleton(EffectQuantum.TopEffectQuantum);
 	static final Effects VOLATILE_EFFECTS = new Effects(DataValue.UnknownDataValue2, Collections.singleton(EffectQuantum.TopEffectQuantum));
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	final DataValue returnValue;
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	final Set<EffectQuantum> effects;
 
-	Effects(@Nonnull DataValue returnValue, @Nonnull Set<EffectQuantum> effects)
+	Effects(@Nonnull DataValue returnValue, @jakarta.annotation.Nonnull Set<EffectQuantum> effects)
 	{
 		this.returnValue = returnValue;
 		this.effects = effects;

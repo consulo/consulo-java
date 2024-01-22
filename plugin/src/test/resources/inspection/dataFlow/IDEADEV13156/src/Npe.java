@@ -1,6 +1,8 @@
+import jakarta.annotation.Nullable;
+
 class Foo {
   public void x() throws IOException {
-     @javax.annotation.Nullable String foo = "";
+     @Nullable String foo = "";
      while (foo.length() == 0) {
        foo = y();
        if (foo == null) throw new IOException("foo");

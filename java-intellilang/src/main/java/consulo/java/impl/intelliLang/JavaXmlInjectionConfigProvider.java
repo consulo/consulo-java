@@ -2,8 +2,7 @@ package consulo.java.impl.intelliLang;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.psi.injection.InjectionConfigProvider;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL

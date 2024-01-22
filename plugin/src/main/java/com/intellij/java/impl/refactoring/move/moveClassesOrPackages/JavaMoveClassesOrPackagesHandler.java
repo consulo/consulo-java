@@ -48,7 +48,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.java.impl.util.JavaProjectRootsUtil;
 import consulo.logging.Logger;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
@@ -74,7 +74,7 @@ public class JavaMoveClassesOrPackagesHandler extends MoveHandlerDelegate {
   }
 
   @Override
-  public boolean canMove(PsiElement[] elements, @Nullable PsiElement targetContainer) {
+  public boolean canMove(PsiElement[] elements, @jakarta.annotation.Nullable PsiElement targetContainer) {
     for (PsiElement element : elements) {
       if (!isPackageOrDirectory(element) && invalid4Move(element)) {
         return false;

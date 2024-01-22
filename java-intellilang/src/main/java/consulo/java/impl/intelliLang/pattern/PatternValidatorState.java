@@ -7,7 +7,7 @@ import consulo.language.editor.inspection.InspectionToolState;
 import consulo.localize.LocalizeValue;
 import consulo.util.xml.serializer.XmlSerializerUtil;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author VISTALL
@@ -17,7 +17,7 @@ public class PatternValidatorState implements InspectionToolState<PatternValidat
 {
 	public boolean CHECK_NON_CONSTANT_VALUES = true;
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	@Override
 	public UnnamedConfigurable createConfigurable()
 	{

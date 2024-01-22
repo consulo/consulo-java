@@ -28,7 +28,7 @@ import consulo.language.impl.ast.TreeElement;
 import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.logging.Logger;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.HashMap;
 
 public class ModifierListElement extends CompositeElement {

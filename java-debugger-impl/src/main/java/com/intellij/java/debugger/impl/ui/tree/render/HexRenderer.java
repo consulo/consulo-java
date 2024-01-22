@@ -15,8 +15,7 @@
  */
 package com.intellij.java.debugger.impl.ui.tree.render;
 
-import javax.annotation.Nonnull;
-
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.java.debugger.DebuggerContext;
 import com.intellij.java.debugger.engine.evaluation.EvaluationContext;

@@ -30,7 +30,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 
 @ExtensionImpl
@@ -40,14 +40,14 @@ public class ListenerMayUseAdapterInspection extends BaseInspection {
 
   @Override
   @Nls
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "listener.may.use.adapter.display.name");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     final PsiClass aClass = (PsiClass)infos[0];
     final String className = aClass.getName();
@@ -75,11 +75,11 @@ public class ListenerMayUseAdapterInspection extends BaseInspection {
 
     private final PsiClass adapterClass;
 
-    ListenerMayUseAdapterFix(@Nonnull PsiClass adapterClass) {
+    ListenerMayUseAdapterFix(@jakarta.annotation.Nonnull PsiClass adapterClass) {
       this.adapterClass = adapterClass;
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "listener.may.use.adapter.quickfix",
@@ -165,7 +165,7 @@ public class ListenerMayUseAdapterInspection extends BaseInspection {
 
     private void checkReference(
       @Nonnull PsiClass aClass,
-      @Nonnull PsiJavaCodeReferenceElement implementsReference) {
+      @jakarta.annotation.Nonnull PsiJavaCodeReferenceElement implementsReference) {
       final PsiElement target = implementsReference.resolve();
       if (!(target instanceof PsiClass)) {
         return;

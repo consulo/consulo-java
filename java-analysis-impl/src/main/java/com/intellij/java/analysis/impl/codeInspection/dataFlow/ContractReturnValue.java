@@ -9,9 +9,9 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValueFac
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaVariableValue;
 import com.intellij.java.analysis.JavaAnalysisBundle;
 import com.intellij.java.language.psi.*;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 import java.util.Objects;
 import java.util.function.Function;
@@ -47,7 +47,7 @@ public abstract class ContractReturnValue
 					.message("contract.return.validator.return.type.must.be.boolean");
 
 	private final
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	String myName;
 	private final int myOrdinal;
 
@@ -232,7 +232,7 @@ public abstract class ContractReturnValue
 	 * @return a ContractReturnValue object. Returns an object which represents any possible value if the supplied ordinal does not
 	 * correspond to any valid ContractReturnValue.
 	 */
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public static ContractReturnValue valueOf(int ordinal)
 	{
 		switch(ordinal)

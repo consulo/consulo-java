@@ -16,7 +16,7 @@
 package com.intellij.java.language.psi;
 
 import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.List;
 

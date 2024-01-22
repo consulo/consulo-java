@@ -18,7 +18,7 @@ package com.intellij.java.impl.refactoring.typeMigration.ui;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;

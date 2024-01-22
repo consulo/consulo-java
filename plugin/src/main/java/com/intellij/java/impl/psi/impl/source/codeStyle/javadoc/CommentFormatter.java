@@ -22,8 +22,8 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author max
@@ -39,13 +39,13 @@ public class CommentFormatter {
    * @deprecated Use {@link ##CommentFormatter(PsiFile)} instead.
    */
   @Deprecated
-  public CommentFormatter(@Nonnull Project project) {
+  public CommentFormatter(@jakarta.annotation.Nonnull Project project) {
     mySettings = CodeStyle.getSettings(project);
     myParser = new JDParser(mySettings);
     myProject = project;
   }
 
-  public CommentFormatter(@Nonnull PsiFile file) {
+  public CommentFormatter(@jakarta.annotation.Nonnull PsiFile file) {
     mySettings = CodeStyle.getSettings(file);
     myParser = new JDParser(mySettings);
     myProject = file.getProject();

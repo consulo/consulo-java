@@ -32,7 +32,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +41,7 @@ import java.util.List;
 public class CharUsedInArithmeticContextInspection extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("char.used.in.arithmetic.context.display.name");
   }
@@ -82,7 +82,7 @@ public class CharUsedInArithmeticContextInspection extends BaseInspection {
 
   private static class CharUsedInArithmeticContentFix extends InspectionGadgetsFix {
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("char.used.in.arithmetic.context.quickfix");
     }
@@ -111,7 +111,7 @@ public class CharUsedInArithmeticContextInspection extends BaseInspection {
       this.typeText = typeText;
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("char.used.in.arithmetic.context.cast.quickfix", typeText);
     }

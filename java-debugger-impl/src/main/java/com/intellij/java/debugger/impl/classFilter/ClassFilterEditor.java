@@ -36,8 +36,8 @@ import consulo.ui.ex.awt.util.TableUtil;
 import consulo.ui.image.Image;
 import consulo.util.collection.ContainerUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.*;
@@ -124,7 +124,7 @@ public class ClassFilterEditor extends JPanel implements ComponentWithEmptyText 
     getEmptyText().setText(UIBundle.message("no.patterns"));
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public StatusText getEmptyText() {
     return myTable.getEmptyText();

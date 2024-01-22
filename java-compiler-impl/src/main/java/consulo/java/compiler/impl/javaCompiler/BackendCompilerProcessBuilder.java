@@ -11,7 +11,7 @@ import consulo.process.ProcessHandler;
 import consulo.process.cmd.GeneralCommandLine;
 import consulo.process.local.ProcessHandlerFactory;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public abstract class BackendCompilerProcessBuilder
 	@RequiredReadAction
 	public abstract GeneralCommandLine buildCommandLine() throws IOException;
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public ProcessHandler createProcess(GeneralCommandLine commandLine) throws ExecutionException
 	{
 		return ProcessHandlerFactory.getInstance().createProcessHandler(commandLine);

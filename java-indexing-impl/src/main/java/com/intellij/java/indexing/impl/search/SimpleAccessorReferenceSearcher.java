@@ -30,7 +30,7 @@ import consulo.language.psi.search.UsageSearchContext;
 import consulo.project.util.query.QueryExecutorBase;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author ven
@@ -43,7 +43,7 @@ public class SimpleAccessorReferenceSearcher extends QueryExecutorBase<PsiRefere
   }
 
   @Override
-  public void processQuery(@Nonnull ReferencesSearch.SearchParameters queryParameters, @Nonnull Processor<? super PsiReference> consumer) {
+  public void processQuery(@jakarta.annotation.Nonnull ReferencesSearch.SearchParameters queryParameters, @Nonnull Processor<? super PsiReference> consumer) {
     PsiElement refElement = queryParameters.getElementToSearch();
     if (!(refElement instanceof PsiMethod)) return;
 

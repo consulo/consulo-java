@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.analysis;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import consulo.codeEditor.Editor;
@@ -60,7 +60,7 @@ class ReplacePrimitiveWithBoxedTypeAction extends LocalQuickFixAndIntentionActio
   @Override
   public boolean isAvailable(@Nonnull Project project,
                              @Nonnull PsiFile file,
-                             @Nonnull PsiElement startElement,
+                             @jakarta.annotation.Nonnull PsiElement startElement,
                              @Nonnull PsiElement endElement) {
     if (startElement instanceof PsiTypeElement) {
       PsiType type = ((PsiTypeElement)startElement).getType();
@@ -75,10 +75,10 @@ class ReplacePrimitiveWithBoxedTypeAction extends LocalQuickFixAndIntentionActio
   }
 
   @Override
-  public void invoke(@Nonnull Project project,
+  public void invoke(@jakarta.annotation.Nonnull Project project,
                      @Nonnull PsiFile file,
-                     @Nullable Editor editor,
-                     @Nonnull PsiElement startElement,
+                     @jakarta.annotation.Nullable Editor editor,
+                     @jakarta.annotation.Nonnull PsiElement startElement,
                      @Nonnull PsiElement endElement) {
     final PsiType type = ((PsiTypeElement)startElement).getType();
     PsiType boxedType;

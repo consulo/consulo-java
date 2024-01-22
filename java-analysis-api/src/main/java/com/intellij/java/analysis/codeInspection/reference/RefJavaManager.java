@@ -28,9 +28,9 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
 import consulo.util.dataholder.Key;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -87,7 +87,7 @@ public abstract class RefJavaManager implements RefManagerExtension<RefJavaManag
 		return Arrays.asList(JavaLanguage.INSTANCE);
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
 	public Language getLanguage()
 	{

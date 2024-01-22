@@ -29,7 +29,7 @@ import consulo.language.psi.PsiElement;
 import consulo.logging.Logger;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,14 +38,14 @@ public class RemoveInitializerFix implements LocalQuickFix
 	private static final Logger LOG = Logger.getInstance(RemoveInitializerFix.class);
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public String getName()
 	{
 		return InspectionsBundle.message("inspection.unused.assignment.remove.quickfix");
 	}
 
 	@Override
-	public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
+	public void applyFix(@Nonnull Project project, @jakarta.annotation.Nonnull ProblemDescriptor descriptor)
 	{
 		final PsiElement psiInitializer = descriptor.getPsiElement();
 		if(!(psiInitializer instanceof PsiExpression))

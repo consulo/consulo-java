@@ -1,29 +1,29 @@
-import javax.annotation.*;
+import jakarta.annotation.Nullable;
 
 class C {
   public static C C = null;
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public C getC() {return C;}
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public C getC2() {return C;}
 
-  public void f1(@javax.annotation.Nullable C p) {}
-  public void f2(@Nonnull C p) {}
-  public void f3(@javax.annotation.Nullable C p) {}
-  public void f4(@Nonnull C p) {}
+  public void f1(@Nullable C p) {}
+  public void f2(@jakarta.annotation.Nonnull C p) {}
+  public void f3(@jakarta.annotation.Nullable C p) {}
+  public void f4(@jakarta.annotation.Nonnull C p) {}
 }
 
 class CC extends C {
-  @javax.annotation.Nullable
+  @jakarta.annotation.Nullable
   public C getC() {return C;}
   public C getC2() {return C;}
 
-  public void f1(@Nonnull C p) {}
-  public void f2(@Nonnull C p) {}
-  public void f3(@javax.annotation.Nullable C p) {}
-  public void f4(@javax.annotation.Nullable C p) {}
+  public void f1(@jakarta.annotation.Nonnull C p) {}
+  public void f2(@jakarta.annotation.Nonnull C p) {}
+  public void f3(@jakarta.annotation.Nullable C p) {}
+  public void f4(@jakarta.annotation.Nullable C p) {}
 
-  @javax.annotation.Nullable
-  @Nonnull
+  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   String f() { return null;}
 }

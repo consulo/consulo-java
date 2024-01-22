@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.ig.serialization;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import consulo.annotation.component.ExtensionImpl;
 import org.jetbrains.annotations.Nls;
@@ -51,7 +51,7 @@ public class ExternalizableWithoutPublicNoArgConstructorInspection extends BaseI
     return InspectionGadgetsBundle.message("externalizable.without.public.no.arg.constructor.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("externalizable.without.public.no.arg.constructor.problem.descriptor");
@@ -88,7 +88,7 @@ public class ExternalizableWithoutPublicNoArgConstructorInspection extends BaseI
   private static class MakeConstructorPublicFix extends InspectionGadgetsFix {
 
     @Override
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("make.constructor.public");
     }

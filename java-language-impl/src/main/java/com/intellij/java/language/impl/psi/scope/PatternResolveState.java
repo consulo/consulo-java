@@ -6,8 +6,7 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.util.dataholder.Key;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public enum PatternResolveState {
   WHEN_TRUE,

@@ -22,7 +22,7 @@ import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiTypeParameter;
 import consulo.language.psi.PsiElement;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author Max Medvedev

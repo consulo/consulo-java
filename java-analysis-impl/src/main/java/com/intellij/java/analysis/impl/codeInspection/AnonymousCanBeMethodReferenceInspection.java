@@ -33,7 +33,7 @@ import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -45,7 +45,7 @@ public class AnonymousCanBeMethodReferenceInspection extends BaseJavaBatchLocalI
   private static final Logger LOG = Logger.getInstance(AnonymousCanBeMethodReferenceInspection.class);
 
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public HighlightDisplayLevel getDefaultLevel() {
     return HighlightDisplayLevel.WARNING;
@@ -59,7 +59,7 @@ public class AnonymousCanBeMethodReferenceInspection extends BaseJavaBatchLocalI
   }
 
   @Nls
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getDisplayName() {
     return "Anonymous type can be replaced with method reference";
@@ -70,13 +70,13 @@ public class AnonymousCanBeMethodReferenceInspection extends BaseJavaBatchLocalI
     return true;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getShortName() {
     return "Anonymous2MethodRef";
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public InspectionToolState<? extends AnonymousCanBeMethodReferenceInspectionState> createStateProvider() {
     return new AnonymousCanBeMethodReferenceInspectionState();
@@ -84,7 +84,7 @@ public class AnonymousCanBeMethodReferenceInspection extends BaseJavaBatchLocalI
 
   @Nonnull
   @Override
-  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
+  public PsiElementVisitor buildVisitorImpl(@jakarta.annotation.Nonnull final ProblemsHolder holder,
                                             boolean isOnTheFly,
                                             LocalInspectionToolSession session,
                                             AnonymousCanBeMethodReferenceInspectionState state) {
@@ -122,14 +122,14 @@ public class AnonymousCanBeMethodReferenceInspection extends BaseJavaBatchLocalI
   }
 
   private static class ReplaceWithMethodRefFix implements LocalQuickFix {
-    @Nonnull
+    @jakarta.annotation.Nonnull
     @Override
     public String getFamilyName() {
       return "Replace with method reference";
     }
 
     @Override
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull ProblemDescriptor descriptor) {
       final PsiElement element = descriptor.getPsiElement();
       if (element instanceof PsiNewExpression) {
         final PsiAnonymousClass anonymousClass = ((PsiNewExpression) element).getAnonymousClass();
@@ -153,7 +153,7 @@ public class AnonymousCanBeMethodReferenceInspection extends BaseJavaBatchLocalI
     }
   }
 
-  static void replaceWithMethodReference(@Nonnull Project project, String methodRefText, PsiType castType, PsiElement replacementTarget) {
+  static void replaceWithMethodReference(@jakarta.annotation.Nonnull Project project, String methodRefText, PsiType castType, PsiElement replacementTarget) {
     final Collection<PsiComment> comments = ContainerUtil.map(PsiTreeUtil.findChildrenOfType(replacementTarget, PsiComment.class), comment -> (PsiComment) comment.copy());
 
     if (methodRefText != null) {

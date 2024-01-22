@@ -20,10 +20,10 @@ import com.intellij.java.language.psi.infos.CandidateInfo;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 public class LightClassReference extends LightClassReferenceBase implements PsiJavaCodeReferenceElement {
 
@@ -37,10 +37,10 @@ public class LightClassReference extends LightClassReferenceBase implements PsiJ
   private LightClassReference(@Nonnull PsiManager manager,
                               @Nonnull @NonNls String text,
                               @Nullable @NonNls String className,
-                              @Nullable PsiSubstitutor substitutor,
+                              @jakarta.annotation.Nullable PsiSubstitutor substitutor,
                               @Nonnull GlobalSearchScope resolveScope,
-                              @Nullable PsiElement context,
-                              @Nullable PsiClass refClass) {
+                              @jakarta.annotation.Nullable PsiElement context,
+                              @jakarta.annotation.Nullable PsiClass refClass) {
     super(manager, text);
     myClassName = className;
     myResolveScope = resolveScope;

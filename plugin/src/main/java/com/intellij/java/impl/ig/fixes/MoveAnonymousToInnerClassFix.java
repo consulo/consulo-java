@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.ig.fixes;
 
-import javax.annotation.Nonnull;
-
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.dataContext.DataManager;
 import consulo.dataContext.DataContext;
@@ -28,6 +26,7 @@ import com.intellij.java.analysis.refactoring.JavaRefactoringActionHandlerFactor
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
+import jakarta.annotation.Nonnull;
 
 public class MoveAnonymousToInnerClassFix extends InspectionGadgetsFix {
 
@@ -42,7 +41,7 @@ public class MoveAnonymousToInnerClassFix extends InspectionGadgetsFix {
       "move.anonymous.to.inner.quickfix");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getName() {
     return name;
   }

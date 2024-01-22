@@ -58,8 +58,8 @@ import consulo.ui.ex.awt.ScrollPaneFactory;
 import consulo.util.lang.Pair;
 import consulo.virtualFileSystem.VirtualFile;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -97,7 +97,7 @@ public class CreateTestDialog extends DialogWrapper {
   private JRadioButton myDefaultLibraryButton;
 
   public CreateTestDialog(@Nonnull Project project,
-                          @Nonnull String title,
+                          @jakarta.annotation.Nonnull String title,
                           PsiClass targetClass,
                           PsiJavaPackage targetPackage,
                           Module targetModule) {
@@ -260,7 +260,7 @@ public class CreateTestDialog extends DialogWrapper {
     return getClass().getName();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected Action[] createActions() {
     return new Action[]{
         getOKAction(),

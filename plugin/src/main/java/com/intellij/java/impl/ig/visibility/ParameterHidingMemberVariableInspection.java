@@ -27,8 +27,8 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 
 @ExtensionImpl
@@ -67,7 +67,7 @@ public class ParameterHidingMemberVariableInspection extends BaseInspection {
     return true;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     final PsiClass aClass = (PsiClass)infos[0];
     return InspectionGadgetsBundle.message("parameter.hides.member.variable.problem.descriptor", aClass.getName());

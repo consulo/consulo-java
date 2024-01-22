@@ -4,7 +4,7 @@ import com.intellij.java.language.impl.psi.impl.source.resolve.reference.impl.pr
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL

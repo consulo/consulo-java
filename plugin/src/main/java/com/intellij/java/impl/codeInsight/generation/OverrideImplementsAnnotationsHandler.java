@@ -25,7 +25,7 @@ import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface OverrideImplementsAnnotationsHandler {
@@ -34,5 +34,5 @@ public interface OverrideImplementsAnnotationsHandler {
   String[] getAnnotations(Project project);
 
   @Nonnull
-  String[] annotationsToRemove(Project project, @Nonnull String fqName);
+  String[] annotationsToRemove(Project project, @jakarta.annotation.Nonnull String fqName);
 }

@@ -1,7 +1,6 @@
 
 package com.intellij.codeInsight.daemon.quickFix;
 
-import javax.annotation.Nonnull;
 import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.impl.codeInspection.accessStaticViaInstance.AccessStaticViaInstance;
 import com.intellij.java.analysis.impl.codeInspection.deprecation.DeprecationInspection;
@@ -10,6 +9,7 @@ import com.intellij.java.impl.codeInspection.sillyAssignment.SillyAssignmentInsp
 import com.intellij.java.impl.codeInspection.uncheckedWarnings.UncheckedWarningLocalInspection;
 import com.intellij.java.impl.codeInspection.unneededThrows.RedundantThrowsDeclaration;
 import com.intellij.java.impl.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
+import jakarta.annotation.Nonnull;
 
 
 public abstract class SuppressNonInspectionsTest extends LightQuickFixTestCase {

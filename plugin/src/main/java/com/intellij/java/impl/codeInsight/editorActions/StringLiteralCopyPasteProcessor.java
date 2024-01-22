@@ -35,8 +35,8 @@ import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import static consulo.util.lang.StringUtil.unescapeStringCharacters;
 
@@ -116,7 +116,7 @@ public class StringLiteralCopyPasteProcessor implements CopyPastePreProcessor {
     return textWasChanged ? buffer.toString() : null;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String unescape(String text, PsiElement token) {
     return unescapeStringCharacters(text);
   }
@@ -187,18 +187,18 @@ public class StringLiteralCopyPasteProcessor implements CopyPastePreProcessor {
     return elementAtSelectionStart;
   }
 
-  protected boolean isCharLiteral(@Nonnull PsiElement token) {
+  protected boolean isCharLiteral(@jakarta.annotation.Nonnull PsiElement token) {
     ASTNode node = token.getNode();
     return node != null && node.getElementType() == JavaTokenType.CHARACTER_LITERAL;
   }
 
-  protected boolean isStringLiteral(@Nonnull PsiElement token) {
+  protected boolean isStringLiteral(@jakarta.annotation.Nonnull PsiElement token) {
     ASTNode node = token.getNode();
     return node != null && node.getElementType() == JavaTokenType.STRING_LITERAL;
   }
 
-  @Nonnull
-  protected String escapeCharCharacters(@Nonnull String s, @Nonnull PsiElement token) {
+  @jakarta.annotation.Nonnull
+  protected String escapeCharCharacters(@Nonnull String s, @jakarta.annotation.Nonnull PsiElement token) {
     StringBuilder buffer = new StringBuilder();
     StringUtil.escapeStringCharacters(s.length(), s, isStringLiteral(token) ? "\"" : "\'", buffer);
     return buffer.toString();

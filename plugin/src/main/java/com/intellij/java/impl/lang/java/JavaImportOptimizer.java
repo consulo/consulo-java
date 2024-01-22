@@ -36,7 +36,7 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.EmptyRunnable;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author max
@@ -125,7 +125,7 @@ public class JavaImportOptimizer implements ImportOptimizer {
     return file instanceof PsiJavaFile;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

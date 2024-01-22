@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.ig.inheritance;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -43,21 +43,21 @@ public class RedundantMethodOverrideInspection extends BaseInspection
 {
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public String getDisplayName()
 	{
 		return InspectionGadgetsBundle.message("redundant.method.override.display.name");
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	protected String buildErrorString(Object... infos)
 	{
 		return InspectionGadgetsBundle.message("redundant.method.override.problem.descriptor");
 	}
 
 	@Override
-	@Nullable
+	@jakarta.annotation.Nullable
 	protected InspectionGadgetsFix buildFix(Object... infos)
 	{
 		return new RedundantMethodOverrideFix();
@@ -136,7 +136,7 @@ public class RedundantMethodOverrideInspection extends BaseInspection
 			private final PsiMethod myMethod;
 			private final PsiMethod mySuperMethod;
 
-			ParameterEquivalenceChecker(@Nonnull PsiMethod method, @Nonnull PsiMethod superMethod)
+			ParameterEquivalenceChecker(@Nonnull PsiMethod method, @jakarta.annotation.Nonnull PsiMethod superMethod)
 			{
 				myMethod = method;
 				mySuperMethod = superMethod;

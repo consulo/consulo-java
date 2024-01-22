@@ -31,7 +31,7 @@ import consulo.util.lang.StringUtil;
 import jakarta.inject.Singleton;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -131,7 +131,7 @@ public class EqualsHashCodeTemplatesManager extends TemplatesManager {
     return ArrayUtil.toStringArray(names);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static String getTemplateBaseName(TemplateResource resource) {
     return StringUtil.trimEnd(StringUtil.trimEnd(resource.getFileName(), EQUALS_SUFFIX), HASH_CODE_SUFFIX).trim();
   }

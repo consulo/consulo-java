@@ -26,8 +26,8 @@ import consulo.language.codeStyle.CodeStyleSettings;
 import consulo.language.codeStyle.setting.CodeStyleSettingsProvider;
 import consulo.language.codeStyle.CustomCodeStyleSettings;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Rustam Vishnyakov
@@ -55,7 +55,7 @@ public class JavaCodeStyleSettingsProvider extends CodeStyleSettingsProvider {
     return "Java";
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

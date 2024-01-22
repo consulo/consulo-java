@@ -43,7 +43,7 @@ import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 import jakarta.inject.Inject;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -68,7 +68,7 @@ public class PatternValidator extends LocalInspectionTool
 		myConfiguration = configuration;
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
 	public InspectionToolState<?> createStateProvider()
 	{
@@ -81,7 +81,7 @@ public class PatternValidator extends LocalInspectionTool
 		return true;
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
 	public HighlightDisplayLevel getDefaultLevel()
 	{
@@ -103,14 +103,14 @@ public class PatternValidator extends LocalInspectionTool
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public String getShortName()
 	{
 		return "PatternValidation";
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly, LocalInspectionToolSession session, Object state)
 	{
 		PatternValidatorState inspectionState = (PatternValidatorState) state;
@@ -355,7 +355,7 @@ public class PatternValidator extends LocalInspectionTool
 		}
 
 		@Override
-		@Nonnull
+		@jakarta.annotation.Nonnull
 		public String getName()
 		{
 			return "Introduce Variable";
@@ -369,7 +369,7 @@ public class PatternValidator extends LocalInspectionTool
 		}
 
 		@Override
-		public void applyFix(@Nonnull final Project project, @Nonnull ProblemDescriptor descriptor)
+		public void applyFix(@jakarta.annotation.Nonnull final Project project, @Nonnull ProblemDescriptor descriptor)
 		{
 			final RefactoringActionHandler handler = JavaRefactoringActionHandlerFactory.getInstance().createIntroduceVariableHandler();
 			final AsyncResult<DataContext> dataContextContainer = DataManager.getInstance().getDataContextFromFocus();

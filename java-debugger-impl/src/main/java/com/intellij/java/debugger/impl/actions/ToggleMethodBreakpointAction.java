@@ -40,7 +40,7 @@ import com.intellij.java.language.psi.PsiMethod;
 import consulo.document.util.DocumentUtil;
 import consulo.util.lang.CharArrayUtil;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public class ToggleMethodBreakpointAction extends AnAction
 {
@@ -88,7 +88,7 @@ public class ToggleMethodBreakpointAction extends AnAction
 		}
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	private static PlaceInDocument getPlace(AnActionEvent event)
 	{
 		final Project project = event.getData(CommonDataKeys.PROJECT);

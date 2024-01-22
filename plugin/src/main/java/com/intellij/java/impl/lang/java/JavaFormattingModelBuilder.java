@@ -39,8 +39,8 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.logging.Logger;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class JavaFormattingModelBuilder implements FormattingModelBuilderEx {
@@ -66,7 +66,7 @@ public class JavaFormattingModelBuilder implements FormattingModelBuilderEx {
     return doGetRangeAffectingIndent(elementAtOffset);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static TextRange doGetRangeAffectingIndent(final ASTNode elementAtOffset) {
     ASTNode current = elementAtOffset;
     current = findNearestExpressionParent(current);
@@ -117,7 +117,7 @@ public class JavaFormattingModelBuilder implements FormattingModelBuilderEx {
     }
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static ASTNode findNearestExpressionParent(final ASTNode current) {
     ASTNode result = current;
     while (result != null) {
@@ -130,7 +130,7 @@ public class JavaFormattingModelBuilder implements FormattingModelBuilderEx {
     return result;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

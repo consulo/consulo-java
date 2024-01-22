@@ -15,7 +15,7 @@
  */
 package com.intellij.spellchecker.inspection;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.codeInsight.daemon.quickFix.LightQuickFixTestCase;
 

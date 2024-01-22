@@ -19,12 +19,13 @@ import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Couple;
 import consulo.util.lang.ObjectUtil;
+import jakarta.annotation.Nullable;
 import one.util.streamex.Joining;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.util.*;
 import java.util.function.Function;
 
@@ -123,7 +124,7 @@ public class CreateSwitchBranchesUtil {
    * @param block       parent switch block
    * @param addedLabels list of created labels (returned from {@link #createMissingBranches(PsiSwitchBlock, List, Collection, Function)}).
    */
-  public static void createTemplate(@Nonnull PsiSwitchBlock block, List<PsiSwitchLabelStatementBase> addedLabels) {
+  public static void createTemplate(@jakarta.annotation.Nonnull PsiSwitchBlock block, List<PsiSwitchLabelStatementBase> addedLabels) {
     if (!(block instanceof PsiSwitchExpression))
       return;
     Editor editor = prepareForTemplateAndObtainEditor(block);

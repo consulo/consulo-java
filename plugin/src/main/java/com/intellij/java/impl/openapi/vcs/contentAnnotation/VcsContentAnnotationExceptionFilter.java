@@ -46,9 +46,9 @@ import consulo.versionControlSystem.change.ChangeListManager;
 import consulo.versionControlSystem.history.VcsRevisionNumber;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.status.FileStatus;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -77,9 +77,9 @@ public class VcsContentAnnotationExceptionFilter implements Filter, FilterMixin 
       super(start, end);
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     @Override
-    public TextAttributes getTextAttributes(@Nullable TextAttributes source) {
+    public TextAttributes getTextAttributes(@jakarta.annotation.Nullable TextAttributes source) {
       EditorColorsScheme globalScheme = EditorColorsManager.getInstance().getGlobalScheme();
       final TextAttributes changedColor = globalScheme.getAttributes(consulo.ide.impl.idea.openapi.diff.DiffColors.DIFF_MODIFIED);
       if (source == null) {
@@ -99,7 +99,7 @@ public class VcsContentAnnotationExceptionFilter implements Filter, FilterMixin 
   }
 
   @Override
-  public void applyHeavyFilter(@Nonnull final Document copiedFragment, int startOffset, int startLineNumber, @Nonnull Consumer<? super AdditionalHighlight> consumer) {
+  public void applyHeavyFilter(@jakarta.annotation.Nonnull final Document copiedFragment, int startOffset, int startLineNumber, @jakarta.annotation.Nonnull Consumer<? super AdditionalHighlight> consumer) {
     VcsContentAnnotation vcsContentAnnotation = VcsContentAnnotationImpl.getInstance(myProject);
     final LocalChangesCorrector localChangesCorrector = new LocalChangesCorrector(myProject);
     Trinity<PsiClass, PsiFile, String> previousLineResult = null;

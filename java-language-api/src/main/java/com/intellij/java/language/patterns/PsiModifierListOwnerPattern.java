@@ -25,7 +25,7 @@ import consulo.language.util.ProcessingContext;
 import consulo.util.collection.ContainerUtil;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author peter

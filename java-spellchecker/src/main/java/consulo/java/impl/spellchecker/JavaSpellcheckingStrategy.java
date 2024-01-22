@@ -30,7 +30,7 @@ import consulo.language.psi.PsiNamedElement;
 import consulo.language.spellchecker.editor.inspection.SuppressibleSpellcheckingStrategy;
 import consulo.language.spellcheker.tokenizer.Tokenizer;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author shkate@jetbrains.com
@@ -42,7 +42,7 @@ public class JavaSpellcheckingStrategy extends SuppressibleSpellcheckingStrategy
   private final LiteralExpressionTokenizer myLiteralExpressionTokenizer = new LiteralExpressionTokenizer();
   private final NamedElementTokenizer myNamedElementTokenizer = new NamedElementTokenizer();
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Tokenizer getTokenizer(PsiElement element) {
     if (element instanceof PsiMethod) {
@@ -65,12 +65,12 @@ public class JavaSpellcheckingStrategy extends SuppressibleSpellcheckingStrategy
   }
 
   @Override
-  public boolean isSuppressedFor(@Nonnull PsiElement element, @Nonnull String name) {
+  public boolean isSuppressedFor(@jakarta.annotation.Nonnull PsiElement element, @jakarta.annotation.Nonnull String name) {
     return SuppressManager.getInstance().isSuppressedFor(element, name);
   }
 
   @Override
-  public SuppressQuickFix[] getSuppressActions(@Nonnull PsiElement element, @Nonnull String name) {
+  public SuppressQuickFix[] getSuppressActions(@jakarta.annotation.Nonnull PsiElement element, @Nonnull String name) {
     return BatchSuppressManager.getInstance().createBatchSuppressActions(HighlightDisplayKey.find(name));
   }
 

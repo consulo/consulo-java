@@ -22,7 +22,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.intellij.java.impl.ig.psiutils.LibraryUtil;
 import consulo.annotation.component.ExtensionImpl;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -38,7 +38,7 @@ public class ClassInheritanceDepthInspection
 
   private static final int CLASS_INHERITANCE_LIMIT = 2;
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("class.too.deep.display.name");
   }
@@ -66,7 +66,7 @@ public class ClassInheritanceDepthInspection
   private class ClassNestingLevel extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
       // note: no call to super
       if (aClass.isEnum()) {
         return;

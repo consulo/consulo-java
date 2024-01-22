@@ -22,7 +22,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.codeStyle.CodeStyleSettings;
 import consulo.ide.impl.psi.impl.source.codeStyle.PostFormatProcessor;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ImportPostFormatProcessor implements PostFormatProcessor {
@@ -32,7 +32,7 @@ public class ImportPostFormatProcessor implements PostFormatProcessor {
   }
 
   @Override
-  public TextRange processText(@Nonnull PsiFile source, @Nonnull TextRange rangeToReformat, @Nonnull CodeStyleSettings settings) {
+  public TextRange processText(@Nonnull PsiFile source, @jakarta.annotation.Nonnull TextRange rangeToReformat, @Nonnull CodeStyleSettings settings) {
     return new ImportsFormatter(settings, source.getContainingFile()).processText(source, rangeToReformat);
   }
 }

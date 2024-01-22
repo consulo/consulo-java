@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.ig.fixes;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.dataContext.DataManager;
 import consulo.dataContext.DataContext;
@@ -31,6 +29,8 @@ import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Bas Leijdekkers

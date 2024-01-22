@@ -25,8 +25,8 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import javax.swing.*;
 
@@ -37,7 +37,7 @@ public class WhileLoopSpinsOnFieldInspection extends BaseInspection {
   public boolean ignoreNonEmtpyLoops = false;
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "while.loop.spins.on.field.display.name");
@@ -51,7 +51,7 @@ public class WhileLoopSpinsOnFieldInspection extends BaseInspection {
   }
 
   @Override
-  @Nullable
+  @jakarta.annotation.Nullable
   public JComponent createOptionsPanel() {
     return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message(
       "while.loop.spins.on.field.ignore.non.empty.loops.option"),

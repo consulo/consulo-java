@@ -21,8 +21,8 @@ import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiTypeElement;
 import com.intellij.java.language.util.VisibilityUtil;
 import consulo.ide.impl.idea.refactoring.changeSignature.MethodDescriptor;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -22,8 +22,8 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
 @ExtensionImpl
 public class WaitNotInLoopInspection extends BaseInspection {
@@ -33,7 +33,7 @@ public class WaitNotInLoopInspection extends BaseInspection {
     return InspectionGadgetsBundle.message("wait.not.in.loop.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "wait.not.in.loop.problem.descriptor");

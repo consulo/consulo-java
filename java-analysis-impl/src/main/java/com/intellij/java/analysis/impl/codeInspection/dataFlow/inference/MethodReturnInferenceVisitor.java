@@ -11,8 +11,8 @@ import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import consulo.language.ast.IElementType;
 import consulo.language.ast.TokenSet;
 import consulo.util.collection.ContainerUtil;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.util.*;
 
@@ -72,7 +72,7 @@ class MethodReturnInferenceVisitor
 		}
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	private ReturnValue getExpressionValue(@Nullable LighterASTNode expr)
 	{
 		expr = skipParenthesesCastsDown(tree, expr);
@@ -233,7 +233,7 @@ class MethodReturnInferenceVisitor
 		return ReturnValue.UNKNOWN;
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	private ReturnValue findValueInStatement(LighterASTNode statement, LighterASTNode target)
 	{
 		if(statement == null)
@@ -346,7 +346,7 @@ class MethodReturnInferenceVisitor
 		return ReturnValue.merge(thenValue, elseValue);
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	private ReturnValue findValueInExpression(LighterASTNode expression, LighterASTNode target)
 	{
 		if(expression == null)

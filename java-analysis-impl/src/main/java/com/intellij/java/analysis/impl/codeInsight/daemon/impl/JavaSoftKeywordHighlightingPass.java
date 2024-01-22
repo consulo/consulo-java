@@ -29,8 +29,9 @@ import consulo.language.editor.impl.highlight.UpdateHighlightersUtil;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.util.collection.ContainerUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class JavaSoftKeywordHighlightingPass extends TextEditorHighlightingPass 
   private final PsiJavaFile myFile;
   private final List<HighlightInfo> myResults = new ArrayList<>();
 
-  public JavaSoftKeywordHighlightingPass(@Nonnull PsiJavaFile file, @Nullable Document document) {
+  public JavaSoftKeywordHighlightingPass(@jakarta.annotation.Nonnull PsiJavaFile file, @Nullable Document document) {
     super(file.getProject(), document);
     myFile = file;
   }

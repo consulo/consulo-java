@@ -20,14 +20,14 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.ControlTransferIn
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaControlTransferValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.ExceptionTransfer;
 import consulo.language.psi.PsiElement;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class ReturnInstruction extends ControlTransferInstruction
 {
 	private final PsiElement myAnchor;
 
-	public ReturnInstruction(@Nonnull DfaControlTransferValue transfer, @Nullable PsiElement anchor)
+	public ReturnInstruction(@Nonnull DfaControlTransferValue transfer, @jakarta.annotation.Nullable PsiElement anchor)
 	{
 		super(transfer);
 		myAnchor = anchor;

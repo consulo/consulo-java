@@ -17,8 +17,8 @@ package com.intellij.java.debugger.impl.memory.event;
 
 import java.util.EventListener;
 
-import javax.annotation.Nonnull;
 import com.intellij.java.debugger.impl.memory.component.MemoryViewManagerState;
+import jakarta.annotation.Nonnull;
 
 @FunctionalInterface
 public interface MemoryViewManagerListener extends EventListener

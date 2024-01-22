@@ -22,8 +22,8 @@ package com.intellij.java.analysis.impl.codeInsight;
 import com.intellij.java.language.psi.*;
 import consulo.java.language.module.util.JavaClassNames;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -79,7 +79,7 @@ public class ClassUtil {
     return checkPackageLocalInSuperClass(aClass);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static PsiMethod checkPackageLocalInSuperClass(@Nonnull PsiClass aClass) {
     // super class can have package local abstract methods not accessible for overriding
     PsiClass superClass = aClass.getSuperClass();

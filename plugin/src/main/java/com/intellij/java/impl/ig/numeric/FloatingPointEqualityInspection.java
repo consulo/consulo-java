@@ -24,8 +24,7 @@ import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import consulo.annotation.component.ExtensionImpl;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class FloatingPointEqualityInspection extends BaseInspection {
@@ -47,7 +46,7 @@ public class FloatingPointEqualityInspection extends BaseInspection {
   private static class FloatingPointEqualityComparisonVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitBinaryExpression(@Nonnull PsiBinaryExpression expression) {
+    public void visitBinaryExpression(@jakarta.annotation.Nonnull PsiBinaryExpression expression) {
       super.visitBinaryExpression(expression);
       final PsiExpression rhs = expression.getROperand();
       if (rhs == null) {

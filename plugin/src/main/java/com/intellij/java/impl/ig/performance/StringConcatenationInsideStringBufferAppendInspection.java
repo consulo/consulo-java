@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.performance;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.ChangeToAppendFix;
 import consulo.annotation.component.ExtensionImpl;
@@ -38,7 +38,7 @@ import org.jetbrains.annotations.NonNls;
 public class StringConcatenationInsideStringBufferAppendInspection extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("string.concatenation.inside.string.buffer.append.display.name");
   }
@@ -68,7 +68,7 @@ public class StringConcatenationInsideStringBufferAppendInspection extends BaseI
 
   private static class ReplaceWithChainedAppendFix extends InspectionGadgetsFix {
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "string.concatenation.inside.string.buffer.append.replace.quickfix");

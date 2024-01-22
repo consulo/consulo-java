@@ -10,9 +10,9 @@ import com.intellij.java.language.impl.psi.impl.java.stubs.PsiParameterStub;
 import consulo.language.psi.stub.StubBase;
 import consulo.language.psi.stub.StubElement;
 import consulo.util.lang.BitUtil;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class PsiMethodStubImpl extends StubBase<PsiMethod> implements PsiMethodStub

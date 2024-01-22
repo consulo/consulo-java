@@ -18,7 +18,7 @@ package consulo.java.analysis.codeInspection;
 import com.intellij.java.analysis.codeInspection.ex.EntryPoint;
 import consulo.component.extension.ExtensionPointName;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL

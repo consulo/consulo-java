@@ -22,7 +22,7 @@ import consulo.language.pattern.PatternCondition;
 import consulo.language.util.ProcessingContext;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
@@ -32,7 +32,7 @@ public class PsiNameValuePairPattern extends PsiElementPattern<PsiNameValuePair,
     super(PsiNameValuePair.class);
   }
 
-  public PsiNameValuePairPattern withName(@Nonnull @NonNls final String requiredName) {
+  public PsiNameValuePairPattern withName(@jakarta.annotation.Nonnull @NonNls final String requiredName) {
     return with(new PatternCondition<PsiNameValuePair>("withName") {
       public boolean accepts(@Nonnull final PsiNameValuePair psiNameValuePair, final ProcessingContext context) {
         String actualName = psiNameValuePair.getName();

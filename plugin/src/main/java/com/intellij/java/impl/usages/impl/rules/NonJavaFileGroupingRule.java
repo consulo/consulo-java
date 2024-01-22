@@ -22,10 +22,9 @@ import consulo.language.psi.PsiFile;
 import consulo.usage.Usage;
 import consulo.usage.UsageGroup;
 import consulo.usage.UsageTarget;
-import consulo.ide.impl.idea.usages.impl.rules.FileGroupingRule;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class NonJavaFileGroupingRule extends consulo.ide.impl.idea.usages.impl.rules.FileGroupingRule {
   public NonJavaFileGroupingRule(Project project) {

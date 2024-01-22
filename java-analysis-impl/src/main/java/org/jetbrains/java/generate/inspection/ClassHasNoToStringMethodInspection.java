@@ -25,10 +25,9 @@ import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.java.generate.GenerateToStringContext;
 import org.jetbrains.java.generate.GenerateToStringUtils;
-
-import javax.annotation.Nonnull;
 
 /**
  * Inspection to check if the current class overrides the toString() method.
@@ -39,7 +38,7 @@ import javax.annotation.Nonnull;
 @ExtensionImpl
 public class ClassHasNoToStringMethodInspection extends AbstractToStringInspection {
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return "Class does not override 'toString()' method";
   }
@@ -50,7 +49,7 @@ public class ClassHasNoToStringMethodInspection extends AbstractToStringInspecti
     return "ClassHasNoToStringMethod";
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder,
                                         boolean isOnTheFly,

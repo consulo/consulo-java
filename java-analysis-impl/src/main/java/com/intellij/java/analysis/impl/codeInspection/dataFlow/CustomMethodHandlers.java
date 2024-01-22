@@ -21,10 +21,11 @@ import consulo.application.util.CachedValueProvider;
 import consulo.language.psi.util.LanguageCachedValueUtil;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.reflect.ReflectionUtil;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -266,7 +267,7 @@ final class CustomMethodHandlers {
   }
 
   private static
-  @Nonnull
+  @jakarta.annotation.Nonnull
   DfType indexOf(DfaValue qualifier,
                  DfaMemoryState memState,
                  DfaValueFactory factory,

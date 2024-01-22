@@ -36,10 +36,10 @@ import consulo.language.editor.refactoring.rename.RenameUtil;
 import consulo.ide.impl.idea.refactoring.rename.RenameWithOptionalReferencesDialog;
 import consulo.usage.UsageInfo;
 import consulo.language.util.IncorrectOperationException;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -96,7 +96,7 @@ public class RenamePsiDirectoryProcessor extends RenamePsiElementProcessor {
     return newName;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Collection<PsiReference> findReferences(PsiElement element) {
     if (!RefactoringSettings.getInstance().RENAME_SEARCH_FOR_REFERENCES_FOR_DIRECTORY) {

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.siyeh.InspectionGadgetsBundle;
@@ -28,7 +28,7 @@ import consulo.annotation.component.ExtensionImpl;
 public class SingletonInspection extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("singleton.display.name");
   }

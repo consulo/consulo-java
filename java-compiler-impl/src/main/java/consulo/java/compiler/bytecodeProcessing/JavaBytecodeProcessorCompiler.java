@@ -38,8 +38,8 @@ import consulo.util.io.FileUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.io.DataInput;
 import java.io.File;
 import java.io.IOException;
@@ -72,7 +72,7 @@ public class JavaBytecodeProcessorCompiler implements ClassInstrumentingCompiler
       myValidityState = new TimestampValidityState(myFile.lastModified());
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     @Override
     public File getFile() {
       return myFile;
@@ -85,7 +85,7 @@ public class JavaBytecodeProcessorCompiler implements ClassInstrumentingCompiler
     }
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public ProcessingItem[] getProcessingItems(CompileContext compileContext) {
     List<ProcessingItem> list = new LinkedList<>();
@@ -183,7 +183,7 @@ public class JavaBytecodeProcessorCompiler implements ClassInstrumentingCompiler
   }
 
   @Nonnull
-  public static InstrumentationClassFinder createClassFinder(@Nonnull CompileContext context, @Nonnull final Module module) {
+  public static InstrumentationClassFinder createClassFinder(@jakarta.annotation.Nonnull CompileContext context, @jakarta.annotation.Nonnull final Module module) {
     ModuleChunk moduleChunk =
       new ModuleChunk((CompileContextEx)context, new Chunk<>(module), Collections.<Module, List<VirtualFile>>emptyMap());
 

@@ -9,9 +9,9 @@ import consulo.language.psi.*;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.project.Project;
 import consulo.usage.UsageInfo;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;

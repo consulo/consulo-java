@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
@@ -26,6 +24,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.RemoveModifierFix;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class FinalMethodInFinalClassInspection extends BaseInspection {
@@ -43,7 +42,7 @@ public class FinalMethodInFinalClassInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "final.method.in.final.class.problem.descriptor");
@@ -58,7 +57,7 @@ public class FinalMethodInFinalClassInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
       if (!method.hasModifierProperty(PsiModifier.FINAL)) {
         return;
       }

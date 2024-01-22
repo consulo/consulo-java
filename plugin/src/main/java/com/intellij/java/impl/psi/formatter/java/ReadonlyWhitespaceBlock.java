@@ -19,8 +19,7 @@ package com.intellij.java.impl.psi.formatter.java;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 import consulo.language.codeStyle.Alignment;
 import consulo.language.codeStyle.Block;
 import consulo.language.codeStyle.ChildAttributes;
@@ -28,6 +27,7 @@ import consulo.language.codeStyle.Indent;
 import consulo.language.codeStyle.Spacing;
 import consulo.language.codeStyle.Wrap;
 import consulo.document.util.TextRange;
+import jakarta.annotation.Nullable;
 
 /**
  * @author max
@@ -69,21 +69,21 @@ public class ReadonlyWhitespaceBlock implements Block
 	}
 
 	@Override
-	@Nullable
+	@jakarta.annotation.Nullable
 	public Indent getIndent()
 	{
 		return myIndent;
 	}
 
 	@Override
-	@Nullable
+	@jakarta.annotation.Nullable
 	public Alignment getAlignment()
 	{
 		return myAlignment;
 	}
 
 	@Override
-	@Nullable
+	@jakarta.annotation.Nullable
 	public Spacing getSpacing(Block child1, @Nonnull Block child2)
 	{
 		return null;

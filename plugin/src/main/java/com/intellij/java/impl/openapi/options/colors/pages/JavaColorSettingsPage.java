@@ -28,9 +28,9 @@ import consulo.java.impl.JavaBundle;
 import consulo.language.editor.colorScheme.setting.ColorSettingsPage;
 import consulo.language.editor.highlight.SyntaxHighlighter;
 import consulo.language.editor.rawHighlight.RainbowHighlighter;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
 import java.util.Map;
 
 @ExtensionImpl
@@ -129,13 +129,13 @@ public class JavaColorSettingsPage implements ColorSettingsPage {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return OptionsBundle.message("options.java.display.name");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public AttributesDescriptor[] getAttributeDescriptors() {
     return ourDescriptors;
   }
@@ -147,13 +147,13 @@ public class JavaColorSettingsPage implements ColorSettingsPage {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public SyntaxHighlighter getHighlighter() {
     return new JavaFileHighlighter(LanguageLevel.HIGHEST.toLangVersion());
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDemoText() {
     return "/* Block comment */\n" +
         "import <package>java.util.</package><class>Date</class>;\n" +

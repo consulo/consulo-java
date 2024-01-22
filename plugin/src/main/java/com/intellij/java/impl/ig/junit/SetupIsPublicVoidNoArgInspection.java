@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.junit;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
@@ -29,13 +29,13 @@ import org.jetbrains.annotations.NonNls;
 public class SetupIsPublicVoidNoArgInspection extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "SetUpWithIncorrectSignature";
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "setup.is.public.void.no.arg.display.name");
@@ -57,7 +57,7 @@ public class SetupIsPublicVoidNoArgInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
       //note: no call to super;
       @NonNls final String methodName = method.getName();
       if (!"setUp".equals(methodName)) {

@@ -27,7 +27,7 @@ package com.intellij.java.impl.refactoring.memberPullUp;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import consulo.language.editor.CommonDataKeys;

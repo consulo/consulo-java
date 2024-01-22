@@ -49,7 +49,7 @@ import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.Ref;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -123,7 +123,7 @@ public class WrapReturnValueProcessor extends FixableUsagesRefactoringProcessor 
     return new WrapReturnValueUsageViewDescriptor(method, usageInfos);
   }
 
-  public void findUsages(@Nonnull List<FixableUsageInfo> usages) {
+  public void findUsages(@jakarta.annotation.Nonnull List<FixableUsageInfo> usages) {
     findUsagesForMethod(method, usages);
     for (PsiMethod overridingMethod : OverridingMethodsSearch.search(method)) {
       findUsagesForMethod(overridingMethod, usages);

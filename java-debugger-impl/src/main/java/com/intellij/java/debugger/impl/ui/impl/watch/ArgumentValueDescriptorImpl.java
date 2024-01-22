@@ -15,7 +15,7 @@
  */
 package com.intellij.java.debugger.impl.ui.impl.watch;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.DebuggerContext;

@@ -27,10 +27,10 @@ import com.intellij.java.impl.openapi.roots.JavaProjectModelModificationService;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiReference;
 import consulo.language.util.IncorrectOperationException;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author nik
@@ -42,9 +42,9 @@ class AddExternalLibraryToDependenciesQuickFix extends AddOrderEntryFix
 	private final ExternalLibraryDescriptor myLibraryDescriptor;
 	private final String myQualifiedClassName;
 
-	public AddExternalLibraryToDependenciesQuickFix(@Nonnull Module currentModule,
+	public AddExternalLibraryToDependenciesQuickFix(@jakarta.annotation.Nonnull Module currentModule,
 													@Nonnull ExternalLibraryDescriptor libraryDescriptor,
-													@Nonnull PsiReference reference,
+													@jakarta.annotation.Nonnull PsiReference reference,
 													@Nullable String qualifiedClassName)
 	{
 		super(reference);
@@ -62,7 +62,7 @@ class AddExternalLibraryToDependenciesQuickFix extends AddOrderEntryFix
 	}
 
 	@Nls
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -70,7 +70,7 @@ class AddExternalLibraryToDependenciesQuickFix extends AddOrderEntryFix
 	}
 
 	@Override
-	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
+	public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file)
 	{
 		return !project.isDisposed() && !myCurrentModule.isDisposed();
 	}

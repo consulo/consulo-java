@@ -28,8 +28,8 @@ import consulo.util.collection.SmartList;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.ref.Ref;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -108,7 +108,7 @@ public abstract class PsiAugmentProvider {
    * Extends {@link PsiTypeElement#getType()} so that a type could be retrieved from external place
    * (e.g. inferred from a variable initializer).
    */
-  @Nullable
+  @jakarta.annotation.Nullable
   protected PsiType inferType(@Nonnull PsiTypeElement typeElement) {
     return null;
   }
@@ -144,7 +144,7 @@ public abstract class PsiAugmentProvider {
 
   @Nonnull
   public static <Psi extends PsiElement> List<Psi> collectAugments(@Nonnull PsiElement element, @Nonnull Class<? extends Psi> type,
-                                                                   @Nullable String nameHint) {
+                                                                   @jakarta.annotation.Nullable String nameHint) {
     List<Psi> result = new SmartList<>();
 
     forEach(element.getProject(), provider -> {

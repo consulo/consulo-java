@@ -18,7 +18,7 @@ package com.intellij.java.language.impl;
 import consulo.virtualFileSystem.VirtualFileManager;
 import consulo.virtualFileSystem.archive.ArchiveFileType;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class JarArchiveFileType extends ArchiveFileType {
   public static final String PROTOCOL = "jar";

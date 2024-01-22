@@ -1,18 +1,17 @@
 package com.intellij.codeInsight.daemon;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.JavaTestUtil;
 import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.impl.codeInspection.javaDoc.JavaDocLocalInspection;
 import com.intellij.java.impl.codeInspection.javaDoc.JavaDocReferenceInspection;
 import com.intellij.java.language.LanguageLevel;
+import jakarta.annotation.Nonnull;
 
 
 public abstract class JavadocHighlightingTest extends LightDaemonAnalyzerTestCase {
   private static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/javaDoc";
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

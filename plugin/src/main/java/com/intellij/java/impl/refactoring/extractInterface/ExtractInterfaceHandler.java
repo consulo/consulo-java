@@ -39,8 +39,8 @@ import consulo.project.Project;
 import consulo.undoRedo.CommandProcessor;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.MultiMap;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import javax.swing.*;
 
 public class ExtractInterfaceHandler implements RefactoringActionHandler, ElementsHandler {
@@ -57,7 +57,7 @@ public class ExtractInterfaceHandler implements RefactoringActionHandler, Elemen
   private PsiDirectory myTargetDir;
   private DocCommentPolicy myJavaDocPolicy;
 
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
     int offset = editor.getCaretModel().getOffset();
     editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
     PsiElement element = file.findElementAt(offset);
@@ -75,7 +75,7 @@ public class ExtractInterfaceHandler implements RefactoringActionHandler, Elemen
     }
   }
 
-  public void invoke(@Nonnull final Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+  public void invoke(@Nonnull final Project project, @jakarta.annotation.Nonnull PsiElement[] elements, DataContext dataContext) {
     if (elements.length != 1) return;
 
     myProject = project;

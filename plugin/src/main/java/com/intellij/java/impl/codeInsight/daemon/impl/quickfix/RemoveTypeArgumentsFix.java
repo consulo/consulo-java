@@ -15,9 +15,6 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import consulo.language.editor.intention.HighPriorityAction;
 import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import consulo.logging.Logger;
@@ -29,6 +26,8 @@ import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiReferenceParameterList;
 import com.intellij.java.language.psi.PsiTypeElement;
 import com.intellij.java.language.psi.PsiVariable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * User: anna
@@ -37,36 +36,36 @@ import com.intellij.java.language.psi.PsiVariable;
 public class RemoveTypeArgumentsFix extends LocalQuickFixAndIntentionActionOnPsiElement implements HighPriorityAction {
   private static final Logger LOGGER = Logger.getInstance(RemoveTypeArgumentsFix.class);
 
-  public RemoveTypeArgumentsFix(@Nullable PsiElement element) {
+  public RemoveTypeArgumentsFix(@jakarta.annotation.Nullable PsiElement element) {
     super(element);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getText() {
     return "Remove type arguments";
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getFamilyName() {
     return getText();
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project,
+  public boolean isAvailable(@jakarta.annotation.Nonnull Project project,
                              @Nonnull PsiFile file,
-                             @Nonnull PsiElement startElement,
-                             @Nonnull PsiElement endElement) {
+                             @jakarta.annotation.Nonnull PsiElement startElement,
+                             @jakarta.annotation.Nonnull PsiElement endElement) {
     return startElement instanceof PsiVariable && startElement.isValid() && ((PsiVariable)startElement).getTypeElement() != null;
   }
 
   @Override
-  public void invoke(@Nonnull Project project,
-                     @Nonnull PsiFile file,
+  public void invoke(@jakarta.annotation.Nonnull Project project,
+                     @jakarta.annotation.Nonnull PsiFile file,
                      @Nullable Editor editor,
-                     @Nonnull PsiElement startElement,
-                     @Nonnull PsiElement endElement) {
+                     @jakarta.annotation.Nonnull PsiElement startElement,
+                     @jakarta.annotation.Nonnull PsiElement endElement) {
     final PsiVariable psiVariable = (PsiVariable)startElement;
     final PsiTypeElement typeElement = psiVariable.getTypeElement();
     LOGGER.assertTrue(typeElement != null);

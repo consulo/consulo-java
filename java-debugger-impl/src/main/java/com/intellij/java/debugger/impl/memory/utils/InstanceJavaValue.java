@@ -15,8 +15,8 @@
  */
 package com.intellij.java.debugger.impl.memory.utils;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import com.intellij.java.debugger.impl.engine.JavaValue;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
@@ -26,7 +26,7 @@ import consulo.internal.com.sun.jdi.ObjectReference;
 
 public class InstanceJavaValue extends JavaValue
 {
-	public InstanceJavaValue(@Nonnull ValueDescriptorImpl valueDescriptor, @Nonnull EvaluationContextImpl evaluationContext, NodeManagerImpl nodeManager)
+	public InstanceJavaValue(@jakarta.annotation.Nonnull ValueDescriptorImpl valueDescriptor, @Nonnull EvaluationContextImpl evaluationContext, NodeManagerImpl nodeManager)
 	{
 		super(null, valueDescriptor, evaluationContext, nodeManager, false);
 	}

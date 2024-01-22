@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.threading;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
@@ -27,7 +27,7 @@ class ThreadingUtils {
   }
 
   public static boolean isWaitCall(
-    @Nonnull PsiMethodCallExpression expression) {
+    @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
     final PsiReferenceExpression methodExpression =
       expression.getMethodExpression();
     @NonNls final String methodName = methodExpression.getReferenceName();
@@ -98,7 +98,7 @@ class ThreadingUtils {
   }
 
   public static boolean isAwaitCall(
-    @Nonnull PsiMethodCallExpression expression) {
+    @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
     final PsiReferenceExpression methodExpression =
       expression.getMethodExpression();
     @NonNls final String methodName = methodExpression.getReferenceName();

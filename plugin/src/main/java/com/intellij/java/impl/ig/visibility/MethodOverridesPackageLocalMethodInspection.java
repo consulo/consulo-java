@@ -26,7 +26,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.RenameFix;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -35,7 +35,7 @@ import java.util.Set;
 public class MethodOverridesPackageLocalMethodInspection
   extends BaseInspection {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "MethodOverridesPrivateMethodOfSuperclass";
   }
@@ -46,7 +46,7 @@ public class MethodOverridesPackageLocalMethodInspection
       "method.overrides.package.local.method.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "method.overrides.package.local.method.problem.descriptor");
@@ -68,7 +68,7 @@ public class MethodOverridesPackageLocalMethodInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
       final PsiClass aClass = method.getContainingClass();
       if (aClass == null) {
         return;

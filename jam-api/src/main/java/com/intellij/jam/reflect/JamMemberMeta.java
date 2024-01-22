@@ -28,8 +28,8 @@ import consulo.language.sem.SemRegistrar;
 import consulo.language.sem.SemService;
 import consulo.util.lang.function.PairConsumer;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -98,7 +98,7 @@ public class JamMemberMeta<Psi extends PsiModifierListOwner, Jam extends JamElem
     return this;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public final Jam getJamElement(@Nonnull Psi member) {
     return SemService.getSemService(member.getProject()).getSemElement(myJamKey, member);
   }

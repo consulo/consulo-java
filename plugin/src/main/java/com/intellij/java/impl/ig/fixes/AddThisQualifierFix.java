@@ -26,8 +26,8 @@ import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
 public class AddThisQualifierFix extends InspectionGadgetsFix {
 

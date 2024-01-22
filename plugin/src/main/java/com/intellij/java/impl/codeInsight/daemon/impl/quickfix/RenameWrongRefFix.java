@@ -44,7 +44,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.*;
 
 public class RenameWrongRefFix implements SyntheticIntentionAction {
@@ -69,7 +69,7 @@ public class RenameWrongRefFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
     if (!myRefExpr.isValid() || !myRefExpr.getManager().isInProject(myRefExpr)) return false;
     int offset = editor.getCaretModel().getOffset();
     PsiElement refName = myRefExpr.getReferenceNameElement();

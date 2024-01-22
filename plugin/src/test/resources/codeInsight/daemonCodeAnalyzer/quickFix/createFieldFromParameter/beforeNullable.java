@@ -2,9 +2,11 @@
 
 package codeInsight.createFieldFromParameterAction.test1;
 
+import jakarta.annotation.Nullable;
+
 public class TestBefore {
 
-    public TestBefore(@javax.annotation.Nullable String name<caret>) {
+    public TestBefore(@Nullable String name<caret>) {
         super();
     }
 }

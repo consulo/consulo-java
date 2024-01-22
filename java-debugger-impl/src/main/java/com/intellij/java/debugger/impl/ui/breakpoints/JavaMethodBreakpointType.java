@@ -27,8 +27,8 @@ import consulo.project.Project;
 import consulo.ui.image.Image;
 import consulo.virtualFileSystem.VirtualFile;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Eugene Zhuravlev
@@ -99,19 +99,19 @@ public class JavaMethodBreakpointType extends JavaLineBreakpointTypeBase<JavaMet
     return new MethodBreakpointPropertiesPanel();
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public JavaMethodBreakpointProperties createProperties() {
     return new JavaMethodBreakpointProperties();
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public JavaMethodBreakpointProperties createBreakpointProperties(@Nonnull VirtualFile file, int line) {
     return new JavaMethodBreakpointProperties();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Breakpoint createJavaBreakpoint(Project project, XBreakpoint breakpoint) {
     return new MethodBreakpoint(project, breakpoint);

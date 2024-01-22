@@ -31,8 +31,8 @@ import consulo.language.editor.rawHighlight.HighlightDisplayKey;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.psi.PsiElement;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public abstract class GlobalJavaBatchInspectionTool extends GlobalInspectionTool implements BatchSuppressableTool
 {
@@ -45,7 +45,7 @@ public abstract class GlobalJavaBatchInspectionTool extends GlobalInspectionTool
 		return queryExternalUsagesRequests(globalContext.getRefManager(), globalContext.getExtension(GlobalJavaInspectionContext.CONTEXT), problemDescriptionsProcessor);
 	}
 
-	protected boolean queryExternalUsagesRequests(@Nonnull RefManager manager, @Nonnull GlobalJavaInspectionContext globalContext, @Nonnull ProblemDescriptionsProcessor processor)
+	protected boolean queryExternalUsagesRequests(@Nonnull RefManager manager, @Nonnull GlobalJavaInspectionContext globalContext, @jakarta.annotation.Nonnull ProblemDescriptionsProcessor processor)
 	{
 		return false;
 	}

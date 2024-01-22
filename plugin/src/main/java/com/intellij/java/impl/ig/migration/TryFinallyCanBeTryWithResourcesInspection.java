@@ -36,8 +36,8 @@ import consulo.project.Project;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -52,13 +52,13 @@ public class TryFinallyCanBeTryWithResourcesInspection extends BaseInspection {
   }
 
   @Nls
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("try.finally.can.be.try.with.resources.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("try.finally.can.be.try.with.resources.problem.descriptor");
@@ -73,7 +73,7 @@ public class TryFinallyCanBeTryWithResourcesInspection extends BaseInspection {
 
     public TryFinallyCanBeTryWithResourcesFix() {}
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("try.finally.can.be.try.with.resources.quickfix");
     }

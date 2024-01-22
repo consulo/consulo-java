@@ -17,7 +17,7 @@ package com.siyeh.ig.psiutils;
 
 import java.util.Set;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import com.intellij.java.language.psi.JavaRecursiveElementVisitor;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.language.psi.PsiElement;
@@ -37,7 +37,7 @@ class VariablePassedAsArgumentExcludedVisitor extends JavaRecursiveElementVisito
 
   private boolean passed = false;
 
-  public VariablePassedAsArgumentExcludedVisitor(@Nonnull PsiVariable variable, @Nonnull Set<String> excludes, boolean builderPattern) {
+  public VariablePassedAsArgumentExcludedVisitor(@Nonnull PsiVariable variable, @jakarta.annotation.Nonnull Set<String> excludes, boolean builderPattern) {
     this.variable = variable;
     this.excludes = excludes;
     myBuilderPattern = builderPattern;

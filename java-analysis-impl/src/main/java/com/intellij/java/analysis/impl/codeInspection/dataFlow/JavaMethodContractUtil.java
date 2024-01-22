@@ -15,8 +15,8 @@ import consulo.util.lang.StringUtil;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Contract;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,8 +39,8 @@ public class JavaMethodContractUtil {
    * @param call a method call site.
    * @return list of contracts (empty list if no contracts found)
    */
-  @Nonnull
-  public static List<? extends MethodContract> getMethodCallContracts(@Nonnull PsiCallExpression call) {
+  @jakarta.annotation.Nonnull
+  public static List<? extends MethodContract> getMethodCallContracts(@jakarta.annotation.Nonnull PsiCallExpression call) {
     PsiMethod method = call.resolveMethod();
     return method == null ? Collections.emptyList() : getMethodCallContracts(method, call);
   }
@@ -53,9 +53,9 @@ public class JavaMethodContractUtil {
    *               testing methods like assertThat(x, is(null))
    * @return list of contracts (empty list if no contracts found)
    */
-  @Nonnull
-  public static List<? extends MethodContract> getMethodCallContracts(@Nonnull final PsiMethod method,
-                                                                      @Nullable PsiCallExpression call) {
+  @jakarta.annotation.Nonnull
+  public static List<? extends MethodContract> getMethodCallContracts(@jakarta.annotation.Nonnull final PsiMethod method,
+                                                                      @jakarta.annotation.Nullable PsiCallExpression call) {
     List<MethodContract> contracts =
         HardcodedContracts.getHardcodedContracts(method, ObjectUtil.tryCast(call, PsiMethodCallExpression.class));
     return !contracts.isEmpty() ? contracts : getMethodContracts(method);
@@ -67,8 +67,8 @@ public class JavaMethodContractUtil {
    * @param method a method to check the contracts for
    * @return list of contracts (empty list if no contracts found)
    */
-  @Nonnull
-  public static List<StandardMethodContract> getMethodContracts(@Nonnull final PsiMethod method) {
+  @jakarta.annotation.Nonnull
+  public static List<StandardMethodContract> getMethodContracts(@jakarta.annotation.Nonnull final PsiMethod method) {
     return getContractInfo(method).getContracts();
   }
 
@@ -78,7 +78,7 @@ public class JavaMethodContractUtil {
    * @param method method to check
    * @return true if method has explicit (non-inferred) contract annotation.
    */
-  public static boolean hasExplicitContractAnnotation(@Nonnull PsiMethod method) {
+  public static boolean hasExplicitContractAnnotation(@jakarta.annotation.Nonnull PsiMethod method) {
     return getContractInfo(method).isExplicit();
   }
 
@@ -104,15 +104,15 @@ public class JavaMethodContractUtil {
     static final ContractInfo EMPTY = new ContractInfo(Collections.emptyList(), false, false, MutationSignature.UNKNOWN);
 
     private final
-    @Nonnull
+    @jakarta.annotation.Nonnull
     List<StandardMethodContract> myContracts;
     private final boolean myPure;
     private final boolean myExplicit;
     private final
-    @Nonnull
+    @jakarta.annotation.Nonnull
     MutationSignature myMutationSignature;
 
-    ContractInfo(@Nonnull List<StandardMethodContract> contracts, boolean pure, boolean explicit, @Nonnull MutationSignature signature) {
+    ContractInfo(@jakarta.annotation.Nonnull List<StandardMethodContract> contracts, boolean pure, boolean explicit, @jakarta.annotation.Nonnull MutationSignature signature) {
       myContracts = contracts;
       myPure = pure;
       myExplicit = explicit;
@@ -132,14 +132,14 @@ public class JavaMethodContractUtil {
       return myExplicit;
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     MutationSignature getMutationSignature() {
       return myMutationSignature;
     }
   }
 
-  @Nonnull
-  static ContractInfo getContractInfo(@Nonnull PsiMethod method) {
+  @jakarta.annotation.Nonnull
+  static ContractInfo getContractInfo(@jakarta.annotation.Nonnull PsiMethod method) {
     return LanguageCachedValueUtil.getCachedValue(method, () -> {
       final PsiAnnotation contractAnno = findContractAnnotation(method);
       ContractInfo info = ContractInfo.EMPTY;
@@ -174,7 +174,7 @@ public class JavaMethodContractUtil {
    * @return a list of parsed contracts
    */
   @Nonnull
-  public static List<StandardMethodContract> parseContracts(@Nonnull PsiMethod method, @Nullable PsiAnnotation contractAnno) {
+  public static List<StandardMethodContract> parseContracts(@jakarta.annotation.Nonnull PsiMethod method, @Nullable PsiAnnotation contractAnno) {
     if (contractAnno == null)
       return Collections.emptyList();
     String text = AnnotationUtil.getStringAttributeValue(contractAnno, null);
@@ -198,7 +198,7 @@ public class JavaMethodContractUtil {
    * @return a found annotation (null if not found)
    */
   @Nullable
-  public static PsiAnnotation findContractAnnotation(@Nonnull PsiMethod method) {
+  public static PsiAnnotation findContractAnnotation(@jakarta.annotation.Nonnull PsiMethod method) {
     return AnnotationUtil.findAnnotationInHierarchy(method, Collections.singleton(ORG_JETBRAINS_ANNOTATIONS_CONTRACT));
   }
 
@@ -208,7 +208,7 @@ public class JavaMethodContractUtil {
    * @param method method to check
    * @return true if the method known to be pure (see {@link Contract#pure()} for details).
    */
-  public static boolean isPure(@Nonnull PsiMethod method) {
+  public static boolean isPure(@jakarta.annotation.Nonnull PsiMethod method) {
     return getContractInfo(method).myPure;
   }
 

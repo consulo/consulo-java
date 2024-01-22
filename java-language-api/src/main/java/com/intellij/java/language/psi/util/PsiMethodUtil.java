@@ -18,8 +18,8 @@ package com.intellij.java.language.psi.util;
 
 import com.intellij.java.language.codeInsight.runner.JavaMainMethodProvider;
 import com.intellij.java.language.psi.*;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.function.Predicate;
 
 /**
@@ -46,7 +46,7 @@ public class PsiMethodUtil {
     return findMainMethod(mainMethods);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static PsiMethod findMainMethod(final PsiMethod[] mainMethods) {
     for (final PsiMethod mainMethod : mainMethods) {
       if (isMainMethod(mainMethod)) return mainMethod;
@@ -76,7 +76,7 @@ public class PsiMethodUtil {
     return findMainMethod(psiClass.findMethodsByName("main", true)) != null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static PsiMethod findMainInClass(final PsiClass aClass) {
     if (!MAIN_CLASS.test(aClass)) return null;
     for (JavaMainMethodProvider provider : JavaMainMethodProvider.EP_NAME.getExtensionList()) {

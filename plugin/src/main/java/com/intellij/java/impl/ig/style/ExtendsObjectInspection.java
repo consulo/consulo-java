@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.style;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -45,7 +45,7 @@ public class ExtendsObjectInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "extends.object.problem.descriptor");
@@ -70,7 +70,7 @@ public class ExtendsObjectInspection extends BaseInspection {
     }
 
     @Override
-    public void doFix(@Nonnull Project project, ProblemDescriptor descriptor)
+    public void doFix(@jakarta.annotation.Nonnull Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
       final PsiElement extendClassIdentifier = descriptor.getPsiElement();
       final PsiClass element =
@@ -99,7 +99,7 @@ public class ExtendsObjectInspection extends BaseInspection {
   private static class ExtendsObjectVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
       if (aClass.isInterface() || aClass.isAnnotationType()) {
         return;
       }

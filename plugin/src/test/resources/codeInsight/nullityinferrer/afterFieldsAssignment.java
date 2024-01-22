@@ -1,20 +1,21 @@
-import javax.annotation.*;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 class Test {
-  @Nonnull
+  @jakarta.annotation.Nonnull
   String myFoo = "";
 
-  @javax.annotation.Nullable
+  @jakarta.annotation.Nullable
   String myFoo1 = null;
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   String myFoo2 = foo2();
-  @Nonnull
+  @jakarta.annotation.Nonnull
   String foo2() { return "";}
 
-  @javax.annotation.Nullable
+  @jakarta.annotation.Nullable
   String myFoo3 = foo3();
-  @javax.annotation.Nullable
+  @Nullable
   String foo3() { return null;}
 
   String myFoo4;
@@ -22,28 +23,28 @@ class Test {
     myFoo4 = "";
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   final String myFoo5;
-  @javax.annotation.Nullable
+  @jakarta.annotation.Nullable
   final String myFoo6;
-  @Nonnull
+  @jakarta.annotation.Nonnull
   final String myFoo7;
-  @javax.annotation.Nullable
+  @jakarta.annotation.Nullable
   final String myFoo8;
   final String myFoo9;
-  @javax.annotation.Nullable
+  @jakarta.annotation.Nullable
   final String myFoo10;
 
   final String myFoo11 = "";
   @Nonnull
   final String myFoo12;
-  @javax.annotation.Nullable
+  @jakarta.annotation.Nullable
   final String myFoo13 = null;
 
   /**
    * {@link #myFoo6}
    */
-  Test(@Nonnull String param, @javax.annotation.Nullable String paramNullable, String simpleParam) {
+  Test(@Nonnull String param, @jakarta.annotation.Nullable String paramNullable, String simpleParam) {
     myFoo5 = "";
     myFoo6 = null;
     myFoo7 = param;
@@ -53,7 +54,7 @@ class Test {
     myFoo12 = "";
   }
 
-  @javax.annotation.Nullable
+  @jakarta.annotation.Nullable
   String foo10(boolean flag) {
     return flag ? foo2() : foo3();
   }

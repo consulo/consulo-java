@@ -18,7 +18,7 @@ package com.intellij.java.indexing.search.searches;
 import consulo.application.util.query.QueryExecutor;
 import consulo.language.psi.scope.GlobalSearchScope;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * A query executor that handles all searches within the specified scope, requesting the default query

@@ -34,7 +34,7 @@ import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.logging.Logger;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class PsiConditionalExpressionImpl extends ExpressionPsiElement implements PsiConditionalExpression {
   private static final Logger LOG = Logger.getInstance(PsiConditionalExpressionImpl.class);

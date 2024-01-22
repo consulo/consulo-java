@@ -36,13 +36,12 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageGroup;
 import consulo.usage.UsageView;
-import consulo.ide.impl.idea.usages.impl.rules.FileGroupingRule;
 import consulo.usage.rule.UsageGroupingRule;
 import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.ui.image.Image;
 import consulo.util.dataholder.Key;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author max
@@ -111,7 +110,7 @@ public class ClassGroupingRule implements UsageGroupingRule {
     private final String myQName;
     private final Image myIcon;
 
-    public ClassUsageGroup(@Nonnull PsiClass aClass) {
+    public ClassUsageGroup(@jakarta.annotation.Nonnull PsiClass aClass) {
       myQName = aClass.getQualifiedName();
       myText = createText(aClass);
       myClassPointer = SmartPointerManager.getInstance(aClass.getProject()).createSmartPsiElementPointer(aClass);

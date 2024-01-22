@@ -1,6 +1,8 @@
+import jakarta.annotation.Nullable;
+
 public class Bar {
 
-    void navigateTo(final@javax.annotation.Nullable Object p) {
+    void navigateTo(final@Nullable Object p) {
       if (p == null) {
         return;
       }

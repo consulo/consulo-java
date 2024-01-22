@@ -24,8 +24,8 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Dmitry Batkovich
@@ -33,10 +33,10 @@ import javax.annotation.Nullable;
 public class WrapArrayToArraysAsListFix extends MethodArgumentFix {
   public static final ArgumentFixerActionFactory REGISTAR = new MyFixerActionFactory();
 
-  protected WrapArrayToArraysAsListFix(final @Nonnull PsiExpressionList list,
+  protected WrapArrayToArraysAsListFix(final @jakarta.annotation.Nonnull PsiExpressionList list,
                                        final int i,
                                        final @Nonnull PsiType toType,
-                                       final @Nonnull ArgumentFixerActionFactory fixerActionFactory) {
+                                       final @jakarta.annotation.Nonnull ArgumentFixerActionFactory fixerActionFactory) {
     super(list, i, toType, fixerActionFactory);
   }
 
@@ -52,7 +52,7 @@ public class WrapArrayToArraysAsListFix extends MethodArgumentFix {
 
   public static class MyFixerActionFactory extends ArgumentFixerActionFactory {
 
-    @Nullable
+    @jakarta.annotation.Nullable
     @Override
     protected PsiExpression getModifiedArgument(final PsiExpression expression,
                                                 final PsiType toType) throws IncorrectOperationException {

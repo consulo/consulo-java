@@ -27,8 +27,8 @@ import consulo.ide.ServiceManager;
 import consulo.project.Project;
 import org.jetbrains.annotations.Contract;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -40,8 +40,8 @@ import static consulo.util.lang.ObjectUtil.notNull;
  */
 @ServiceAPI(ComponentScope.PROJECT)
 public abstract class PsiNameHelper {
-  @Nonnull
-  public static PsiNameHelper getInstance(@Nonnull Project project) {
+  @jakarta.annotation.Nonnull
+  public static PsiNameHelper getInstance(@jakarta.annotation.Nonnull Project project) {
     return ServiceManager.getService(project, PsiNameHelper.class);
   }
 
@@ -83,8 +83,8 @@ public abstract class PsiNameHelper {
    */
   public abstract boolean isQualifiedName(@Nullable String text);
 
-  @Nonnull
-  public static String getShortClassName(@Nonnull String referenceText) {
+  @jakarta.annotation.Nonnull
+  public static String getShortClassName(@jakarta.annotation.Nonnull String referenceText) {
     int lessPos = referenceText.length();
     int bracesBalance = 0;
     int i;
@@ -127,16 +127,16 @@ public abstract class PsiNameHelper {
     return sub.length() == referenceText.length() ? sub : new String(sub);
   }
 
-  @Nonnull
-  public static String getPresentableText(@Nonnull PsiJavaCodeReferenceElement ref) {
+  @jakarta.annotation.Nonnull
+  public static String getPresentableText(@jakarta.annotation.Nonnull PsiJavaCodeReferenceElement ref) {
     String name = ref.getReferenceName();
     PsiAnnotation[] annotations = PsiTreeUtil.getChildrenOfType(ref, PsiAnnotation.class);
     return getPresentableText(name, notNull(annotations, PsiAnnotation.EMPTY_ARRAY), ref.getTypeParameters());
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static String getPresentableText(@Nullable String refName,
-                                          @Nonnull PsiAnnotation[] annotations,
+                                          @jakarta.annotation.Nonnull PsiAnnotation[] annotations,
                                           @Nonnull PsiType[] types) {
     if (types.length == 0 && annotations.length == 0) {
       return refName != null ? refName : "";
@@ -176,8 +176,8 @@ public abstract class PsiNameHelper {
     return "";
   }
 
-  @Nonnull
-  public static String getQualifiedClassName(@Nonnull String referenceText, boolean removeWhitespace) {
+  @jakarta.annotation.Nonnull
+  public static String getQualifiedClassName(@jakarta.annotation.Nonnull String referenceText, boolean removeWhitespace) {
     if (removeWhitespace) {
       referenceText = removeWhitespace(referenceText);
     }
@@ -211,7 +211,7 @@ public abstract class PsiNameHelper {
 
   private static final Pattern WHITESPACE_PATTERN = Pattern.compile("(?:\\s)|(?:/\\*.*\\*/)|(?://[^\\n]*)");
 
-  private static String removeWhitespace(@Nonnull String referenceText) {
+  private static String removeWhitespace(@jakarta.annotation.Nonnull String referenceText) {
     return WHITESPACE_PATTERN.matcher(referenceText).replaceAll("");
   }
 
@@ -224,8 +224,8 @@ public abstract class PsiNameHelper {
    * @param referenceText the text of the reference to calculate type parameters for.
    * @return the calculated array of type parameters.
    */
-  @Nonnull
-  public static String[] getClassParametersText(@Nonnull String referenceText) {
+  @jakarta.annotation.Nonnull
+  public static String[] getClassParametersText(@jakarta.annotation.Nonnull String referenceText) {
     if (referenceText.indexOf('<') < 0) {
       return ArrayUtil.EMPTY_STRING_ARRAY;
     }
@@ -309,13 +309,13 @@ public abstract class PsiNameHelper {
     return result;
   }
 
-  public static boolean isSubpackageOf(@Nonnull String subpackageName, @Nonnull String packageName) {
+  public static boolean isSubpackageOf(@jakarta.annotation.Nonnull String subpackageName, @jakarta.annotation.Nonnull String packageName) {
     return subpackageName.equals(packageName) || subpackageName.startsWith(packageName) && subpackageName.charAt
         (packageName.length()) == '.';
   }
 
   public static void appendTypeArgs(@Nonnull StringBuilder sb,
-                                    @Nonnull PsiType[] types,
+                                    @jakarta.annotation.Nonnull PsiType[] types,
                                     boolean canonical,
                                     boolean annotated) {
     if (types.length == 0) {
@@ -338,14 +338,14 @@ public abstract class PsiNameHelper {
     sb.append('>');
   }
 
-  public static boolean appendAnnotations(@Nonnull StringBuilder sb,
-                                          @Nonnull PsiAnnotation[] annotations,
+  public static boolean appendAnnotations(@jakarta.annotation.Nonnull StringBuilder sb,
+                                          @jakarta.annotation.Nonnull PsiAnnotation[] annotations,
                                           boolean canonical) {
     return appendAnnotations(sb, Arrays.asList(annotations), canonical);
   }
 
-  public static boolean appendAnnotations(@Nonnull StringBuilder sb,
-                                          @Nonnull List<PsiAnnotation> annotations,
+  public static boolean appendAnnotations(@jakarta.annotation.Nonnull StringBuilder sb,
+                                          @jakarta.annotation.Nonnull List<PsiAnnotation> annotations,
                                           boolean canonical) {
     boolean updated = false;
     for (PsiAnnotation annotation : annotations) {
@@ -366,7 +366,7 @@ public abstract class PsiNameHelper {
     return updated;
   }
 
-  public static boolean isValidModuleName(@Nonnull String name, @Nonnull PsiElement context) {
+  public static boolean isValidModuleName(@jakarta.annotation.Nonnull String name, @jakarta.annotation.Nonnull PsiElement context) {
     PsiNameHelper helper = getInstance(context.getProject());
     LanguageLevel level = PsiUtil.getLanguageLevel(context);
     return StringUtil.split(name, ".", true, false).stream().allMatch(part -> helper.isIdentifier(part, level));

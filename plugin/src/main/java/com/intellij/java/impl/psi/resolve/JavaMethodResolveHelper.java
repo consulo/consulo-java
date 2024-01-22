@@ -31,8 +31,9 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.util.collection.ContainerUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.*;
 import java.util.function.Function;
 
@@ -46,9 +47,9 @@ public class JavaMethodResolveHelper {
   @Nullable
   private final PsiType[] myArgumentTypes;
 
-  public JavaMethodResolveHelper(@Nonnull final PsiElement argumentList,
+  public JavaMethodResolveHelper(@jakarta.annotation.Nonnull final PsiElement argumentList,
                                  PsiFile containingFile,
-                                 @Nullable final PsiType[] argumentTypes) {
+                                 @jakarta.annotation.Nullable final PsiType[] argumentTypes) {
     myArgumentTypes = argumentTypes;
     final LanguageLevel languageLevel = PsiUtil.getLanguageLevel(argumentList);
     final PsiConflictResolver resolver = argumentTypes == null ? DuplicateConflictResolver.INSTANCE : new

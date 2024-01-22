@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.threading;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiSynchronizedStatement;
@@ -35,7 +35,7 @@ public class SynchronizeOnLockInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "synchronize.on.lock.display.name");
@@ -59,7 +59,7 @@ public class SynchronizeOnLockInspection extends BaseInspection {
 
     @Override
     public void visitSynchronizedStatement(
-      @Nonnull PsiSynchronizedStatement statement) {
+      @jakarta.annotation.Nonnull PsiSynchronizedStatement statement) {
       super.visitSynchronizedStatement(statement);
       final PsiExpression lockExpression = statement.getLockExpression();
       if (lockExpression == null) {

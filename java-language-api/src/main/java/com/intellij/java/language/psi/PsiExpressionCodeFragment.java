@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.psi;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * Represents a fragment of Java code the contents of which is an expression.

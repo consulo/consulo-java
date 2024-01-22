@@ -19,7 +19,7 @@ import consulo.fileEditor.structureView.tree.ActionPresentation;
 import consulo.fileEditor.structureView.tree.Sorter;
 import com.intellij.java.language.psi.PsiMethod;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.Comparator;
 
@@ -83,7 +83,7 @@ public class KindSorter implements Sorter
 	};
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public Comparator getComparator()
 	{
 		return COMPARATOR;

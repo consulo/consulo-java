@@ -25,12 +25,12 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import consulo.annotation.component.ExtensionImpl;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class InstantiationOfUtilityClassInspection extends BaseInspection {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "instantiation.utility.class.display.name");
@@ -50,7 +50,7 @@ public class InstantiationOfUtilityClassInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+    public void visitNewExpression(@jakarta.annotation.Nonnull PsiNewExpression expression) {
       final PsiType type = expression.getType();
       if (!(type instanceof PsiClassType)) {
         return;

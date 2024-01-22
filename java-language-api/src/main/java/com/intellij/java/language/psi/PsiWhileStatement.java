@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.psi;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * Represents a Java <code>while</code> statement.
@@ -26,7 +26,7 @@ public interface PsiWhileStatement extends PsiConditionalLoopStatement {
    *
    * @return the expression, or null if the statement is incomplete.
    */
-  @Nullable
+  @jakarta.annotation.Nullable
   PsiExpression getCondition();
 
   /**
@@ -34,7 +34,7 @@ public interface PsiWhileStatement extends PsiConditionalLoopStatement {
    *
    * @return the opening parenthesis, or null if the statement is incomplete.
    */
-  @Nullable
+  @jakarta.annotation.Nullable
   PsiJavaToken getLParenth();
 
   /**

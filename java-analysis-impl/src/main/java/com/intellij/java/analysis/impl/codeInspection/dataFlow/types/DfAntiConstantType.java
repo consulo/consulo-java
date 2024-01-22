@@ -2,7 +2,7 @@
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 
 import one.util.streamex.StreamEx;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.Collections;
 import java.util.Objects;

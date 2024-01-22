@@ -8,7 +8,7 @@ import consulo.language.version.LanguageVersion;
 import org.osmorc.manifest.lang.ManifestLanguage;
 import org.osmorc.manifest.lang.ManifestSyntaxHighlighter;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -22,7 +22,7 @@ public class ManifestSyntaxHighlighterFactory extends LanguageVersionableSyntaxH
     return ManifestLanguage.INSTANCE;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public SyntaxHighlighter getSyntaxHighlighter(@Nonnull LanguageVersion languageVersion) {
     return new ManifestSyntaxHighlighter((ManifestLanguageVersion) languageVersion);

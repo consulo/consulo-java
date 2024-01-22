@@ -30,8 +30,8 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 @ExtensionImpl
@@ -46,7 +46,7 @@ public class UnimplementInterfaceAction implements IntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
     if (!(file instanceof PsiJavaFile)) return false;
     final PsiReference psiReference = TargetElementUtil.findReference(editor);
     if (psiReference == null) return false;
@@ -89,7 +89,7 @@ public class UnimplementInterfaceAction implements IntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
+  public void invoke(@jakarta.annotation.Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(file)) return;
 
     final PsiReference psiReference = TargetElementUtil.findReference(editor);

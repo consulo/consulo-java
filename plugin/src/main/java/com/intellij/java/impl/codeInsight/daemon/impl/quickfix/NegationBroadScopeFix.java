@@ -20,14 +20,12 @@ import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author cdr
@@ -42,7 +40,7 @@ public class NegationBroadScopeFix implements SyntheticIntentionAction {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getText() {
     String text = myPrefixExpression.getOperand().getText();
     text += " ";
@@ -80,7 +78,7 @@ public class NegationBroadScopeFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(myPrefixExpression)) return;
     PsiExpression operand = myPrefixExpression.getOperand();
     PsiElement unnegated = myPrefixExpression.replace(operand);

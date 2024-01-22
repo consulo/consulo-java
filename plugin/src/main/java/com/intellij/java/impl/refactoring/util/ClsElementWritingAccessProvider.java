@@ -19,7 +19,7 @@ import com.intellij.java.language.impl.JavaClassFileType;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.WritingAccessProvider;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.Collections;

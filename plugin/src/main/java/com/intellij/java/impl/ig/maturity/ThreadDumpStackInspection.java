@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.maturity;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
@@ -29,7 +29,7 @@ import com.siyeh.ig.psiutils.MethodCallUtils;
 @ExtensionImpl
 public class ThreadDumpStackInspection extends BaseInspection {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "CallToThreadDumpStack";
   }
@@ -53,7 +53,7 @@ public class ThreadDumpStackInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final String methodName = MethodCallUtils.getMethodName(expression);
       if (!HardcodedMethodConstants.DUMP_STACKTRACE.equals(methodName)) {

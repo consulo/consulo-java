@@ -15,10 +15,10 @@
  */
 package com.intellij.java.language.psi;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 import consulo.language.util.IncorrectOperationException;
+import jakarta.annotation.Nonnull;
 
 /**
  * Represents a Java <code>if</code> or <code>if ... else</code> statement.
@@ -46,7 +46,7 @@ public interface PsiIfStatement extends PsiStatement {
    * @return the statement instance, or null if the statement has no <code>else</code>
    * part or is incomplete.
    */
-  @Nullable
+  @jakarta.annotation.Nullable
   PsiStatement getElseBranch();
 
   /**
@@ -55,7 +55,7 @@ public interface PsiIfStatement extends PsiStatement {
    * @return the keyword instance, or null if the statement has no <code>else</code>
    * part.
    */
-  @Nullable
+  @jakarta.annotation.Nullable
   PsiKeyword getElseElement();
 
   /**
@@ -76,14 +76,14 @@ public interface PsiIfStatement extends PsiStatement {
    * @throws IncorrectOperationException if the modification fails for some reason (for example,
    * the containing file is read-only).
    */
-  void setThenBranch(@Nonnull PsiStatement statement) throws IncorrectOperationException;
+  void setThenBranch(@jakarta.annotation.Nonnull PsiStatement statement) throws IncorrectOperationException;
 
   /**
    * Returns the opening parenthesis enclosing the statement condition.
    *
    * @return the opening parenthesis, or null if the statement is incomplete.
    */
-  @Nullable
+  @jakarta.annotation.Nullable
   PsiJavaToken getLParenth();
 
   /**

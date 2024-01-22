@@ -5,8 +5,8 @@ import com.intellij.java.language.impl.psi.impl.source.JavaLightTreeUtil;
 import com.intellij.java.language.psi.JavaTokenType;
 import consulo.language.ast.*;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -16,7 +16,7 @@ import static com.intellij.java.language.impl.psi.impl.source.tree.JavaElementTy
  * from kotlin
  */
 class InferenceVisitor extends RecursiveLighterASTNodeWalkingVisitor {
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private final LighterAST tree;
 
   private Map<Integer, MethodData> result = new HashMap<>();
@@ -29,7 +29,7 @@ class InferenceVisitor extends RecursiveLighterASTNodeWalkingVisitor {
   }
 
   @Override
-  public void visitNode(@Nonnull LighterASTNode element) {
+  public void visitNode(@jakarta.annotation.Nonnull LighterASTNode element) {
     IElementType tokenType = element.getTokenType();
     if (tokenType == CLASS || tokenType == ANONYMOUS_CLASS) {
       classData.put(element, calcClassData(element));
@@ -144,7 +144,7 @@ class InferenceVisitor extends RecursiveLighterASTNodeWalkingVisitor {
   private void walkMethodBody(LighterASTNode root, Consumer<LighterASTNode> processor) {
     new RecursiveLighterASTNodeWalkingVisitor(tree) {
       @Override
-      public void visitNode(@Nonnull LighterASTNode element) {
+      public void visitNode(@jakarta.annotation.Nonnull LighterASTNode element) {
         IElementType type = element.getTokenType();
         if (type == CLASS || type == FIELD || type == METHOD || type == ANNOTATION_METHOD || type == LAMBDA_EXPRESSION) {
           return;
@@ -157,7 +157,7 @@ class InferenceVisitor extends RecursiveLighterASTNodeWalkingVisitor {
     }.visitNode(root);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public Map<Integer, MethodData> getResult() {
     return result;
   }

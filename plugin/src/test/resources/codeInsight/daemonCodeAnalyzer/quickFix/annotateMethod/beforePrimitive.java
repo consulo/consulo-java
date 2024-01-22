@@ -1,6 +1,6 @@
 // "Remove annotation" "true"
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 class Foo {
   <caret>@Nonnull

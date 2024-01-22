@@ -30,8 +30,8 @@ import consulo.project.Project;
 import consulo.internal.com.sun.jdi.*;
 import consulo.logging.Logger;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.HashMap;
 
 public class NodeDescriptorFactoryImpl implements NodeDescriptorFactory {
@@ -75,12 +75,12 @@ public class NodeDescriptorFactoryImpl implements NodeDescriptorFactory {
     return descriptor;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   protected <T extends NodeDescriptor> T findDisplayDescriptor(NodeDescriptor parent, T descriptor, DisplayKey<T> key) {
     return myDisplayDescriptorSearcher.search(parent, descriptor, key);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   protected <T extends NodeDescriptor> T findDescriptor(NodeDescriptor parent, T descriptor, DescriptorData<T> key) {
     return myDescriptorSearcher.search(parent, descriptor, key);
   }
@@ -136,7 +136,7 @@ public class NodeDescriptorFactoryImpl implements NodeDescriptorFactory {
     return getDescriptor(parent, new ArrayItemData(array, index));
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public FieldDescriptorImpl getFieldDescriptor(NodeDescriptor parent, ObjectReference objRef, Field field) {
     final DescriptorData<FieldDescriptorImpl> descriptorData;
@@ -160,7 +160,7 @@ public class NodeDescriptorFactoryImpl implements NodeDescriptorFactory {
     return getDescriptor(parent, new ArgValueData(variable, value));
   }
 
-  public StackFrameDescriptorImpl getStackFrameDescriptor(@Nullable NodeDescriptorImpl parent, @Nonnull StackFrameProxyImpl frameProxy) {
+  public StackFrameDescriptorImpl getStackFrameDescriptor(@jakarta.annotation.Nullable NodeDescriptorImpl parent, @jakarta.annotation.Nonnull StackFrameProxyImpl frameProxy) {
     return getDescriptor(parent, new StackFrameData(frameProxy));
   }
 
@@ -206,7 +206,7 @@ public class NodeDescriptorFactoryImpl implements NodeDescriptorFactory {
       myDescriptorTree = descriptorTree;
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     public <T extends NodeDescriptor> T search(NodeDescriptor parent, T descriptor, DescriptorKey<T> key) {
       final T result;
       if (parent == null) {

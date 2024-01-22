@@ -27,12 +27,11 @@ import com.intellij.java.language.testIntegration.TestFramework;
 import consulo.annotation.component.ServiceImpl;
 import consulo.application.Application;
 import consulo.component.extension.ExtensionPoint;
-import consulo.component.extension.Extensions;
 import consulo.language.util.IncorrectOperationException;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 @Singleton
 @ServiceImpl
@@ -78,7 +77,7 @@ public class TestFrameworksImpl extends TestFrameworks {
   }
 
   @Override
-  @Nullable
+  @jakarta.annotation.Nullable
   public PsiMethod findSetUpMethod(final PsiClass psiClass) {
     ExtensionPoint<TestFramework> point = myApplication.getExtensionPoint(TestFramework.class);
 
@@ -95,7 +94,7 @@ public class TestFrameworksImpl extends TestFrameworks {
   }
 
   @Override
-  @Nullable
+  @jakarta.annotation.Nullable
   public PsiMethod findTearDownMethod(final PsiClass psiClass) {
     ExtensionPoint<TestFramework> point = myApplication.getExtensionPoint(TestFramework.class);
 

@@ -30,7 +30,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.module.Module;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class RefactoringListeners {
   public static RefactoringElementListener getListener(final PsiJavaPackage psiPackage, final Accessor<PsiJavaPackage> accessor) {

@@ -24,9 +24,9 @@ import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiEl
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -37,17 +37,17 @@ import java.util.stream.Collectors;
  */
 public abstract class MergeModuleStatementsFix<T extends PsiElement> extends LocalQuickFixAndIntentionActionOnPsiElement {
 
-  protected MergeModuleStatementsFix(@Nonnull PsiJavaModule javaModule) {
+  protected MergeModuleStatementsFix(@jakarta.annotation.Nonnull PsiJavaModule javaModule) {
     super(javaModule);
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
+  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull PsiFile file, @jakarta.annotation.Nonnull PsiElement startElement, @jakarta.annotation.Nonnull PsiElement endElement) {
     return PsiUtil.isLanguageLevel9OrHigher(file);
   }
 
   @Override
-  public void invoke(@Nonnull Project project, @Nonnull PsiFile file, @Nullable Editor editor, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
+  public void invoke(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull PsiFile file, @jakarta.annotation.Nullable Editor editor, @Nonnull PsiElement startElement, @jakarta.annotation.Nonnull PsiElement endElement) {
     if (startElement instanceof PsiJavaModule) {
       final PsiJavaModule javaModule = (PsiJavaModule) startElement;
       final List<T> statementsToMerge = getStatementsToMerge(javaModule);
@@ -78,19 +78,19 @@ public abstract class MergeModuleStatementsFix<T extends PsiElement> extends Loc
     }
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected abstract String getReplacementText(List<T> statementsToMerge);
 
   @Nonnull
-  protected abstract List<T> getStatementsToMerge(@Nonnull PsiJavaModule javaModule);
+  protected abstract List<T> getStatementsToMerge(@jakarta.annotation.Nonnull PsiJavaModule javaModule);
 
-  @Nonnull
-  protected static String joinUniqueNames(@Nonnull List<String> names) {
+  @jakarta.annotation.Nonnull
+  protected static String joinUniqueNames(@jakarta.annotation.Nonnull List<String> names) {
     final Set<String> unique = new HashSet<>();
     return names.stream().filter(name -> unique.add(name)).collect(Collectors.joining(","));
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static MergeModuleStatementsFix createFix(@Nullable PsiElement statement) {
     if (statement instanceof PsiPackageAccessibilityStatement) {
       return MergePackageAccessibilityStatementsFix.createFix((PsiPackageAccessibilityStatement) statement);

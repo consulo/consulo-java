@@ -15,13 +15,12 @@
  */
 package com.intellij.java.impl.refactoring.changeClassSignature;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiClass;
 import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.ui.UsageViewDescriptorAdapter;
 import consulo.usage.UsageViewUtil;
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author dsl

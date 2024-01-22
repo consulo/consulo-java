@@ -22,7 +22,7 @@ package com.siyeh.ig.junit;
 
 import com.intellij.openapi.application.PluginPathManager;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class JUnitRuleInspectionTest extends LightCodeInsightFixtureTestCase {
   public void testWrongsignature() throws Exception {

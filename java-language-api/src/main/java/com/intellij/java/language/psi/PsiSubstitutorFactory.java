@@ -5,7 +5,7 @@ import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
 import consulo.application.Application;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Map;
 
 @ServiceAPI(ComponentScope.APPLICATION)
@@ -13,10 +13,10 @@ public abstract class PsiSubstitutorFactory {
   @Nonnull
   protected abstract PsiSubstitutor createSubstitutor(@Nonnull PsiTypeParameter typeParameter, PsiType mapping);
 
-  @Nonnull
-  protected abstract PsiSubstitutor createSubstitutor(@Nonnull PsiClass aClass, PsiType[] mappings);
+  @jakarta.annotation.Nonnull
+  protected abstract PsiSubstitutor createSubstitutor(@jakarta.annotation.Nonnull PsiClass aClass, PsiType[] mappings);
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected abstract PsiSubstitutor createSubstitutor(@Nonnull Map<? extends PsiTypeParameter, ? extends PsiType> map);
 
   static PsiSubstitutorFactory getInstance() {

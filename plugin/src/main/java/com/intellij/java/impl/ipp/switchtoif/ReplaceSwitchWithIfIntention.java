@@ -24,14 +24,13 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ReplaceSwitchWithIfIntention", fileExtensions = "java", categories = {"Java", "Control Flow"})
 public class ReplaceSwitchWithIfIntention extends Intention {
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new SwitchPredicate();
   }
@@ -48,7 +47,7 @@ public class ReplaceSwitchWithIfIntention extends Intention {
     ConvertSwitchToIfIntention.doProcessIntention(switchStatement);
   }
 
-  public static boolean canProcess(@Nonnull PsiSwitchStatement switchLabelStatement) {
+  public static boolean canProcess(@jakarta.annotation.Nonnull PsiSwitchStatement switchLabelStatement) {
     return SwitchPredicate.checkSwitchStatement(switchLabelStatement);
   }
 }

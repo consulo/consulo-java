@@ -15,9 +15,8 @@
  */
 package com.intellij.java.language.psi;
 
-import javax.annotation.Nonnull;
-
 import consulo.util.collection.ArrayFactory;
+import jakarta.annotation.Nonnull;
 
 /**
  * Represents a Java class initializer block.
@@ -41,6 +40,6 @@ public interface PsiClassInitializer extends PsiMember {
    *
    * @return the code block representing the contents of the class initializer block.
    */
-  @Nonnull
+  @jakarta.annotation.Nonnull
   PsiCodeBlock getBody();
 }

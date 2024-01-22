@@ -32,8 +32,8 @@ import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import org.jdom.Element;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -82,7 +82,7 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkBase<JavaModu
     return myLanguageLevel.isNull() ? myLanguageLevelValue.getValue() : myLanguageLevel.get();
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public LanguageLevel getLanguageLevelNoDefault() {
     return myLanguageLevel.get();
@@ -100,7 +100,7 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkBase<JavaModu
     return getSdk();
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public String getBytecodeVersion() {
     return myBytecodeVersion;

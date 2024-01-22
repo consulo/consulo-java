@@ -19,7 +19,7 @@ import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 class MethodCallChainPredicate implements PsiElementPredicate {
 

@@ -60,10 +60,11 @@ import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.Ref;
 import consulo.virtualFileSystem.VirtualFile;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 import java.util.*;
 import java.util.function.Supplier;
@@ -137,7 +138,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
     processUsages(project, scope, usageInfos);
   }
 
-  protected void processUsages(@Nonnull Project project, @Nonnull AnalysisScope scope, @Nonnull UsageInfo[] usageInfos) {
+  protected void processUsages(@jakarta.annotation.Nonnull Project project, @Nonnull AnalysisScope scope, @Nonnull UsageInfo[] usageInfos) {
     if (usageInfos.length < 5) {
       applyRunnable(project, () -> usageInfos).run();
     } else {

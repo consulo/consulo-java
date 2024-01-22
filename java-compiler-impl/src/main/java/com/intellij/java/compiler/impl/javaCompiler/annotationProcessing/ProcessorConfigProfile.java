@@ -15,8 +15,8 @@
  */
 package com.intellij.java.compiler.impl.javaCompiler.annotationProcessing;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.util.Collection;
 import java.util.Set;
@@ -36,11 +36,11 @@ public interface ProcessorConfigProfile extends AnnotationProcessingConfiguratio
 
   void setEnabled(boolean enabled);
 
-  void setProcessorPath(@Nullable String processorPath);
+  void setProcessorPath(@jakarta.annotation.Nullable String processorPath);
 
   void setObtainProcessorsFromClasspath(boolean value);
 
-  void setGeneratedSourcesDirectoryName(@Nullable String generatedSourcesDirectoryName, boolean forTests);
+  void setGeneratedSourcesDirectoryName(@jakarta.annotation.Nullable String generatedSourcesDirectoryName, boolean forTests);
 
   @Nonnull
   Set<String> getModuleNames();

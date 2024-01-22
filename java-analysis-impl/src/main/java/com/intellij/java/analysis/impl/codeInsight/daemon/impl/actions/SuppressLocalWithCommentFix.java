@@ -20,8 +20,8 @@ import com.intellij.java.analysis.impl.codeInspection.JavaSuppressionUtil;
 import consulo.project.Project;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * User: anna
@@ -43,12 +43,12 @@ public class SuppressLocalWithCommentFix extends SuppressByJavaCommentFix {
   }
 
   @Override
-  protected void createSuppression(@Nonnull Project project, @Nonnull PsiElement element, @Nonnull PsiElement container)
+  protected void createSuppression(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull PsiElement element, @Nonnull PsiElement container)
     throws IncorrectOperationException {
     suppressWithComment(project, element, container);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getText() {
     return "Suppress for statement with comment";

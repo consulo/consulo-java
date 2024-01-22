@@ -28,10 +28,10 @@ import consulo.module.content.ProjectFileIndex;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Set;
 
 import static consulo.java.language.module.util.JavaClassNames.*;
@@ -45,7 +45,7 @@ public class KnownElementWeigher extends ProximityWeigher {
       JAVA_LANG_THROWABLE, JAVA_LANG_RUNTIME_EXCEPTION, JAVA_UTIL_ARRAY_LIST, JAVA_UTIL_HASH_MAP, JAVA_UTIL_HASH_SET);
 
   @Override
-  public Comparable weigh(@Nonnull final PsiElement element, @Nonnull final ProximityLocation location) {
+  public Comparable weigh(@jakarta.annotation.Nonnull final PsiElement element, @jakarta.annotation.Nonnull final ProximityLocation location) {
     Project project = location.getProject();
     if (project == null) {
       return 0;
@@ -93,8 +93,8 @@ public class KnownElementWeigher extends ProximityWeigher {
     return 0;
   }
 
-  @Nullable
-  private static Integer getTestFrameworkWeight(@Nonnull PsiElement element, @Nonnull ProximityLocation location, @Nonnull Project project) {
+  @jakarta.annotation.Nullable
+  private static Integer getTestFrameworkWeight(@Nonnull PsiElement element, @jakarta.annotation.Nonnull ProximityLocation location, @jakarta.annotation.Nonnull Project project) {
     if (element instanceof PsiClass) {
       final String qualifiedName = ((PsiClass) element).getQualifiedName();
       if (qualifiedName != null) {

@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.ig.fixes;
 
-import javax.annotation.Nonnull;
-
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.project.Project;
 import consulo.language.psi.PsiElement;
@@ -24,6 +22,7 @@ import consulo.language.editor.refactoring.RefactoringFactory;
 import consulo.language.editor.refactoring.RenameRefactoring;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.InspectionGadgetsBundle;
+import jakarta.annotation.Nonnull;
 
 public class RenameParameterFix extends InspectionGadgetsFix {
   private final String m_targetName;

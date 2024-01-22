@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.impl.psi.impl.light;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import org.jetbrains.annotations.NonNls;
 import com.intellij.java.language.psi.JavaElementVisitor;
@@ -32,14 +32,14 @@ public class LightTypeParameter extends LightClass implements PsiTypeParameter
 		super(delegate);
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
 	public PsiTypeParameter getDelegate()
 	{
 		return (PsiTypeParameter) super.getDelegate();
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
 	public PsiElement copy()
 	{
@@ -91,9 +91,9 @@ public class LightTypeParameter extends LightClass implements PsiTypeParameter
 		return getDelegate().findAnnotation(qualifiedName);
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
-	public PsiAnnotation addAnnotation(@Nonnull @NonNls final String qualifiedName)
+	public PsiAnnotation addAnnotation(@jakarta.annotation.Nonnull @NonNls final String qualifiedName)
 	{
 		return getDelegate().addAnnotation(qualifiedName);
 	}

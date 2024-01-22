@@ -26,8 +26,9 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 
 public abstract class UnpredictableBigDecimalConstructorCallInspection
@@ -36,7 +37,7 @@ public abstract class UnpredictableBigDecimalConstructorCallInspection
   public boolean ignoreReferences = true;
   public boolean ignoreComplexLiterals = false;
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "unpredictable.big.decimal.constructor.call.display.name");

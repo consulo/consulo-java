@@ -30,9 +30,9 @@ import com.intellij.java.language.psi.PsiExpression;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.SmartPointerManager;
 import consulo.language.psi.SmartPsiElementPointer;
+import jakarta.annotation.Nonnull;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Nls;
-import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.Collections;
@@ -64,7 +64,7 @@ public class FindDfaProblemCauseFix implements LocalQuickFix, LowPriorityAction
 	}
 
 	@Nls(capitalization = Nls.Capitalization.Sentence)
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -72,7 +72,7 @@ public class FindDfaProblemCauseFix implements LocalQuickFix, LowPriorityAction
 	}
 
 	@Override
-	public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
+	public void applyFix(@jakarta.annotation.Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 	{
 		ThrowableComputable<TrackingRunner.CauseItem, RuntimeException> causeFinder = () -> {
 			PsiExpression element = myAnchor.getElement();

@@ -17,8 +17,8 @@ package com.intellij.java.language.impl.psi.controlFlow;
 
 import consulo.logging.Logger;
 import com.intellij.java.language.psi.PsiExpression;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * Author: msk
@@ -56,7 +56,7 @@ public abstract class ConditionalBranchingInstruction extends BranchingInstructi
 	}
 
 	@Override
-	public void accept(@Nonnull ControlFlowInstructionVisitor visitor, int offset, int nextOffset)
+	public void accept(@jakarta.annotation.Nonnull ControlFlowInstructionVisitor visitor, int offset, int nextOffset)
 	{
 		visitor.visitConditionalBranchingInstruction(this, offset, nextOffset);
 	}

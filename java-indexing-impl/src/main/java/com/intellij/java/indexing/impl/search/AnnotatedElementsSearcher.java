@@ -31,7 +31,7 @@ import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.collection.ContainerUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 
@@ -41,7 +41,7 @@ import java.util.List;
 @ExtensionImpl
 public class AnnotatedElementsSearcher implements AnnotatedElementsSearchExecutor {
   @Override
-  public boolean execute(@Nonnull final AnnotatedElementsSearch.Parameters p, @Nonnull final Processor<? super PsiModifierListOwner> consumer) {
+  public boolean execute(@Nonnull final AnnotatedElementsSearch.Parameters p, @jakarta.annotation.Nonnull final Processor<? super PsiModifierListOwner> consumer) {
     final PsiClass annClass = p.getAnnotationClass();
     assert annClass.isAnnotationType() : "Annotation type should be passed to annotated members search";
 

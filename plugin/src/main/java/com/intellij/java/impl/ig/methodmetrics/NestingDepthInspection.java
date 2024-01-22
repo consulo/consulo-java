@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.methodmetrics;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiMethod;
 import com.siyeh.InspectionGadgetsBundle;
@@ -30,7 +30,7 @@ public class NestingDepthInspection extends MethodMetricInspection {
     return "OverlyNestedMethod";
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("nesting.depth.display.name");
   }
@@ -43,7 +43,7 @@ public class NestingDepthInspection extends MethodMetricInspection {
     return InspectionGadgetsBundle.message("nesting.depth.limit.option");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     final Integer nestingDepth = (Integer)infos[0];
     return InspectionGadgetsBundle.message(

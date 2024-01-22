@@ -18,8 +18,7 @@ package com.intellij.java.debugger.engine.evaluation;
 import consulo.internal.com.sun.jdi.InvocationException;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.logging.Logger;
-
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public class EvaluateException extends Exception {
   private static final Logger LOG = Logger.getInstance(EvaluateException.class);

@@ -23,7 +23,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
 import consulo.annotation.component.ExtensionImpl;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class WaitCalledOnConditionInspection extends BaseInspection {
@@ -34,7 +34,7 @@ public class WaitCalledOnConditionInspection extends BaseInspection {
       "wait.called.on.condition.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "wait.called.on.condition.problem.descriptor");

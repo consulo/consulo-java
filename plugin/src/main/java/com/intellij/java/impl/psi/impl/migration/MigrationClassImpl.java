@@ -29,7 +29,7 @@ import consulo.content.scope.SearchScope;
 import consulo.language.util.IncorrectOperationException;
 import consulo.java.language.module.util.JavaClassNames;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -118,7 +118,7 @@ public class MigrationClassImpl extends LightElement implements PsiClass{
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiClassType[] getImplementsListTypes() {
     return PsiClassType.EMPTY_ARRAY;
   }
@@ -152,13 +152,13 @@ public class MigrationClassImpl extends LightElement implements PsiClass{
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public Collection<HierarchicalMethodSignature> getVisibleSignatures() {
     return Collections.emptySet();
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiField[] getFields() {
     return PsiField.EMPTY_ARRAY;
   }
@@ -200,7 +200,7 @@ public class MigrationClassImpl extends LightElement implements PsiClass{
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiMethod[] getAllMethods() {
     return PsiMethod.EMPTY_ARRAY;
   }
@@ -228,13 +228,13 @@ public class MigrationClassImpl extends LightElement implements PsiClass{
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiMethod[] findMethodsByName(String name, boolean checkBases) {
     return PsiMethod.EMPTY_ARRAY;
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public List<Pair<PsiMethod, PsiSubstitutor>> findMethodsAndTheirSubstitutorsByName(String name, boolean checkBases) {
     return new ArrayList<Pair<PsiMethod,PsiSubstitutor>>();
   }
@@ -331,7 +331,7 @@ public class MigrationClassImpl extends LightElement implements PsiClass{
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public SearchScope getUseScope() {
     return PsiClassImplUtil.getClassUseScope(this);
   }

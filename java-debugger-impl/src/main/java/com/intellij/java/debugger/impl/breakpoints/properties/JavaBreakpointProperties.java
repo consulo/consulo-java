@@ -23,7 +23,7 @@ import consulo.util.xml.serializer.annotation.OptionTag;
 import consulo.util.xml.serializer.annotation.Tag;
 import consulo.execution.debug.breakpoint.XBreakpointProperties;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author egor

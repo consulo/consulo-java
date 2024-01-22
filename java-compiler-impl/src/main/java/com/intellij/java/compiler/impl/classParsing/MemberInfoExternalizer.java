@@ -23,7 +23,7 @@ package com.intellij.java.compiler.impl.classParsing;
 
 import consulo.logging.Logger;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;

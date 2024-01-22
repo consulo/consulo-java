@@ -1,4 +1,4 @@
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public class DDD {
   int test(boolean t) {
@@ -8,7 +8,8 @@ public class DDD {
     return 1;
   }
 
-  public @Nullable DDD[] fff() {
+  public @Nullable
+  DDD[] fff() {
     return new DDD[8];
   }
 }

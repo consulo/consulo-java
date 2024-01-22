@@ -17,11 +17,11 @@ package com.intellij.java.language.impl.psi.impl.smartPointers;
 
 import java.lang.ref.Reference;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.SmartTypePointer;
 import consulo.util.lang.ref.SoftReference;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * Created by Max Medvedev on 10/25/13

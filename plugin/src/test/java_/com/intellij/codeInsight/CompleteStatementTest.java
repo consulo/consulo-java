@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import com.intellij.JavaTestUtil;
 import consulo.ui.ex.action.IdeActions;
 import com.intellij.java.language.LanguageLevel;

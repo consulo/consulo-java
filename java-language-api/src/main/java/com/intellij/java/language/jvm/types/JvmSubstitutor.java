@@ -15,9 +15,9 @@
  */
 package com.intellij.java.language.jvm.types;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import com.intellij.java.language.jvm.JvmTypeParameter;
+import jakarta.annotation.Nonnull;
 
 public interface JvmSubstitutor
 {

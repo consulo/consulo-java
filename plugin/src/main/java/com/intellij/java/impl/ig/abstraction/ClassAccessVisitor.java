@@ -22,7 +22,7 @@ import com.intellij.java.language.psi.PsiMethodCallExpression;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.intellij.java.impl.ig.psiutils.LibraryUtil;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.*;
 

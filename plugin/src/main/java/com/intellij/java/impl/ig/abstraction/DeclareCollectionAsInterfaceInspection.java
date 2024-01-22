@@ -32,8 +32,8 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -151,7 +151,7 @@ public class DeclareCollectionAsInterfaceInspection extends BaseInspection
 	{
 
 		@Override
-		public void visitVariable(@Nonnull PsiVariable variable)
+		public void visitVariable(@jakarta.annotation.Nonnull PsiVariable variable)
 		{
 			if(isOnTheFly() && DeclarationSearchUtils.isTooExpensiveToSearch(variable, false))
 			{
@@ -201,7 +201,7 @@ public class DeclareCollectionAsInterfaceInspection extends BaseInspection
 		}
 
 		@Override
-		public void visitMethod(@Nonnull PsiMethod method)
+		public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method)
 		{
 			super.visitMethod(method);
 			if(ignorePrivateMethodsAndFields && method.hasModifierProperty(PsiModifier.PRIVATE))

@@ -17,7 +17,7 @@ package com.intellij.java.language.psi;
 
 import consulo.language.psi.scope.GlobalSearchScope;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * A type which represents a function denoted by a method reference.
@@ -65,7 +65,7 @@ public class PsiMethodReferenceType extends PsiType {
     return null;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public PsiType[] getSuperTypes() {
     return PsiType.EMPTY_ARRAY;

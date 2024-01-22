@@ -28,18 +28,18 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author max
  */
 public class ClsTypeParametersListImpl extends ClsRepositoryPsiElement<PsiTypeParameterListStub> implements PsiTypeParameterList {
-  public ClsTypeParametersListImpl(@Nonnull PsiTypeParameterListStub stub) {
+  public ClsTypeParametersListImpl(@jakarta.annotation.Nonnull PsiTypeParameterListStub stub) {
     super(stub);
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, @jakarta.annotation.Nonnull StringBuilder buffer) {
     final PsiTypeParameter[] params = getTypeParameters();
     if (params.length != 0) {
       buffer.append('<');

@@ -18,7 +18,7 @@ package com.intellij.jam.view.ui;
 import com.intellij.jam.JamMessages;
 import consulo.project.Project;
 import consulo.language.psi.PsiElement;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.List;

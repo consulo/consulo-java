@@ -17,8 +17,8 @@ package com.intellij.java.debugger.impl.ui.tree;
 
 import com.intellij.java.debugger.engine.StackFrameContext;
 import com.intellij.java.debugger.ui.tree.NodeDescriptor;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nullable;
 import java.awt.*;
 
 public interface StackFrameDescriptor extends NodeDescriptor, StackFrameContext {

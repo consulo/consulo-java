@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.junit;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.siyeh.InspectionGadgetsBundle;
@@ -36,7 +36,7 @@ public class TestMethodInProductCodeInspection extends BaseInspection
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public String getID()
 	{
 		return "JUnitTestMethodInProductSource";

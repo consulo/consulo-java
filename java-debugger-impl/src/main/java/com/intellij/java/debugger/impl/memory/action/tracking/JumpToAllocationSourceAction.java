@@ -27,9 +27,9 @@ import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.project.Project;
 import consulo.ui.ex.action.AnActionEvent;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.List;
 
 public class JumpToAllocationSourceAction extends DebuggerTreeAction

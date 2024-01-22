@@ -5,7 +5,7 @@ import consulo.logging.Logger;
 import consulo.application.util.SystemInfo;
 import consulo.ide.impl.idea.openapi.vfs.impl.ArchiveHandler;
 import consulo.util.lang.ref.SoftReference;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -91,7 +91,7 @@ class JrtHandler extends ArchiveHandler
 		return fs;
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
 	protected Map<String, EntryInfo> createEntriesMap() throws IOException
 	{
@@ -146,9 +146,9 @@ class JrtHandler extends ArchiveHandler
 		return map;
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
-	public byte[] contentsToByteArray(@Nonnull String relativePath) throws IOException
+	public byte[] contentsToByteArray(@jakarta.annotation.Nonnull String relativePath) throws IOException
 	{
 		EntryInfo entry = getEntryInfo(relativePath);
 		if(entry == null)

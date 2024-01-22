@@ -28,9 +28,9 @@ import consulo.ui.ex.awt.table.ComboBoxTableRenderer;
 import consulo.ui.ex.awt.table.ListTableModel;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -47,7 +47,7 @@ class ExcludeTable extends ListTableWithButtons<ExcludeTable.Item>
 	private static final Pattern ourPackagePattern = Pattern.compile("([\\w*]+\\.)*[\\w*]+");
 	private static final ColumnInfo<Item, String> NAME_COLUMN = new ColumnInfo<Item, String>("Class/package/member qualified name mask")
 	{
-		@Nullable
+		@jakarta.annotation.Nullable
 		@Override
 		public String valueOf(Item pair)
 		{
@@ -70,7 +70,7 @@ class ExcludeTable extends ListTableWithButtons<ExcludeTable.Item>
 			return new DefaultCellEditor(field);
 		}
 
-		@Nullable
+		@jakarta.annotation.Nullable
 		@Override
 		public TableCellRenderer getRenderer(Item pair)
 		{
@@ -104,7 +104,7 @@ class ExcludeTable extends ListTableWithButtons<ExcludeTable.Item>
 	};
 	private static final ColumnInfo<Item, ExclusionScope> SCOPE_COLUMN = new ColumnInfo<Item, ExclusionScope>("Scope")
 	{
-		@Nullable
+		@jakarta.annotation.Nullable
 		@Override
 		public ExclusionScope valueOf(Item pair)
 		{
@@ -118,7 +118,7 @@ class ExcludeTable extends ListTableWithButtons<ExcludeTable.Item>
 			return new ComboBoxTableRenderer<>(ExclusionScope.values());
 		}
 
-		@Nullable
+		@jakarta.annotation.Nullable
 		@Override
 		public TableCellEditor getEditor(Item pair)
 		{
@@ -137,7 +137,7 @@ class ExcludeTable extends ListTableWithButtons<ExcludeTable.Item>
 			pair.scope = value;
 		}
 
-		@Nullable
+		@jakarta.annotation.Nullable
 		@Override
 		public String getMaxStringValue()
 		{
@@ -146,7 +146,7 @@ class ExcludeTable extends ListTableWithButtons<ExcludeTable.Item>
 	};
 	private final Project myProject;
 
-	public ExcludeTable(@Nonnull Project project)
+	public ExcludeTable(@jakarta.annotation.Nonnull Project project)
 	{
 		myProject = project;
 		getTableView().getEmptyText().setText(ApplicationBundle.message("exclude.from.imports.no.exclusions"));
@@ -260,7 +260,7 @@ class ExcludeTable extends ListTableWithButtons<ExcludeTable.Item>
 		String exclude;
 		ExclusionScope scope;
 
-		Item(@Nonnull String exclude, ExclusionScope scope)
+		Item(@jakarta.annotation.Nonnull String exclude, ExclusionScope scope)
 		{
 			this.exclude = exclude;
 			this.scope = scope;

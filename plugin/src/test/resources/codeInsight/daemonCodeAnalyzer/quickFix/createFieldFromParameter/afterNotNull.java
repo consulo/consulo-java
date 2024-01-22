@@ -1,10 +1,10 @@
 // "Create Field for Parameter 'name'" "true"
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class TestBefore {
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     private final String myName;
 
     public TestBefore(@Nonnull String name) {

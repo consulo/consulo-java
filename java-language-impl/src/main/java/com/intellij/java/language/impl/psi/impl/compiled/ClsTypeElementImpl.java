@@ -17,8 +17,8 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import one.util.streamex.StreamEx;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,14 +30,14 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
 
   private final PsiElement myParent;
   private final
-  @Nonnull
+  @jakarta.annotation.Nonnull
   String myTypeText;
   private final char myVariance;
   private final
   @Nonnull
   TypeAnnotationContainer myAnnotations;
   private final
-  @Nonnull
+  @jakarta.annotation.Nonnull
   NullableLazyValue<ClsElementImpl> myChild;
   private final
   @Nonnull
@@ -49,14 +49,14 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
     this(parent, typeText, variance, TypeAnnotationContainer.EMPTY);
   }
 
-  ClsTypeElementImpl(@Nullable PsiElement parent, @Nonnull TypeInfo typeInfo) {
+  ClsTypeElementImpl(@Nullable PsiElement parent, @jakarta.annotation.Nonnull TypeInfo typeInfo) {
     this(parent, Objects.requireNonNull(TypeInfo.createTypeText(typeInfo)), VARIANCE_NONE, typeInfo.getTypeAnnotations());
   }
 
   ClsTypeElementImpl(@Nullable PsiElement parent,
-                     @Nonnull String typeText,
+                     @jakarta.annotation.Nonnull String typeText,
                      char variance,
-                     @Nonnull TypeAnnotationContainer annotations) {
+                     @jakarta.annotation.Nonnull TypeAnnotationContainer annotations) {
     myParent = parent;
     myTypeText = TypeInfo.internFrequentType(typeText);
     myVariance = variance;
@@ -71,7 +71,7 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiElement[] getChildren() {
     ClsElementImpl child = myChild.getValue();
     return child != null ? new PsiElement[]{child} : PsiElement.EMPTY_ARRAY;
@@ -109,7 +109,7 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, @jakarta.annotation.Nonnull StringBuilder buffer) {
     buffer.append(getType().getCanonicalText(true));
   }
 
@@ -132,7 +132,7 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiType getType() {
     return myCachedType.getValue();
   }
@@ -185,7 +185,7 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
   }
 
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private PsiType createArrayType(PsiTypeElement deepestChild) {
     int depth = getArrayDepth();
     List<TypeAnnotationContainer> containers =
@@ -202,12 +202,12 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
     return type;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private PsiType calculateType() {
     return calculateBaseType().annotate(myAnnotations.getProvider(this));
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private PsiType calculateBaseType() {
     PsiType result = PsiJavaParserFacadeImpl.getPrimitiveType(myTypeText);
     if (result != null) {
@@ -254,7 +254,7 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitTypeElement(this);
     } else {
@@ -269,7 +269,7 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
   }
 
   @Override
-  public PsiAnnotation findAnnotation(@Nonnull String qualifiedName) {
+  public PsiAnnotation findAnnotation(@jakarta.annotation.Nonnull String qualifiedName) {
     return PsiImplUtil.findAnnotation(this, qualifiedName);
   }
 
@@ -280,7 +280,7 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiAnnotation[] getApplicableAnnotations() {
     return getType().getAnnotations();
   }

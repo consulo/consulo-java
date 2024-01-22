@@ -16,8 +16,8 @@
 package com.intellij.java.impl.ig.psiutils;
 
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -89,8 +89,8 @@ public class StringUtils {
   }
 
   @SuppressWarnings({"HardCodedStringLiteral"})
-  @Nonnull
-  public static String createSingularFromName(@Nonnull String name) {
+  @jakarta.annotation.Nonnull
+  public static String createSingularFromName(@jakarta.annotation.Nonnull String name) {
     final int nameLength = name.length();
     final String singularName;
     if (name.endsWith("ies")) {

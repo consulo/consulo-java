@@ -29,7 +29,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import com.intellij.java.debugger.impl.breakpoints.properties.JavaMethodBreakpointProperties;
 import com.intellij.java.debugger.DebuggerBundle;
 import consulo.execution.debug.breakpoint.XBreakpoint;

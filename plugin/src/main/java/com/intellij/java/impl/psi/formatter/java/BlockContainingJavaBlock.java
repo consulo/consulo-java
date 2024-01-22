@@ -18,7 +18,7 @@ package com.intellij.java.impl.psi.formatter.java;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.language.codeStyle.ASTBlock;
 import consulo.language.codeStyle.Alignment;
@@ -61,7 +61,7 @@ public class BlockContainingJavaBlock extends AbstractJavaBlock
 									Indent indent,
 									CommonCodeStyleSettings settings,
 									JavaCodeStyleSettings javaSettings,
-									@Nonnull FormattingMode formattingMode)
+									@jakarta.annotation.Nonnull FormattingMode formattingMode)
 	{
 		super(node, wrap, alignment, indent, settings, javaSettings, formattingMode);
 	}
@@ -235,7 +235,7 @@ public class BlockContainingJavaBlock extends AbstractJavaBlock
 		}
 	}
 
-	private static boolean isNodeParentMethod(@Nonnull ASTNode node)
+	private static boolean isNodeParentMethod(@jakarta.annotation.Nonnull ASTNode node)
 	{
 		return node.getTreeParent() != null && node.getTreeParent().getElementType() == JavaElementType.METHOD;
 	}
@@ -314,7 +314,7 @@ public class BlockContainingJavaBlock extends AbstractJavaBlock
 
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public ChildAttributes getChildAttributes(final int newChildIndex)
 	{
 		if(isAfter(newChildIndex, new IElementType[]{JavaDocElementType.DOC_COMMENT}))

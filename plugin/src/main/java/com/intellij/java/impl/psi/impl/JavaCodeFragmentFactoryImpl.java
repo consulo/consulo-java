@@ -24,11 +24,11 @@ import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ServiceImpl;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 @Singleton
 @ServiceImpl
@@ -40,16 +40,16 @@ public class JavaCodeFragmentFactoryImpl extends JavaCodeFragmentFactory {
     myProject = project;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
-  public PsiExpressionCodeFragment createExpressionCodeFragment(@Nonnull final String text,
+  public PsiExpressionCodeFragment createExpressionCodeFragment(@jakarta.annotation.Nonnull final String text,
                                                                 @Nullable final PsiElement context,
                                                                 @Nullable final PsiType expectedType,
                                                                 final boolean isPhysical) {
     return new PsiExpressionCodeFragmentImpl(myProject, isPhysical, "fragment.java", text, expectedType, context);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public JavaCodeFragment createCodeBlockCodeFragment(@Nonnull final String text,
                                                       @Nullable final PsiElement context,
@@ -57,15 +57,15 @@ public class JavaCodeFragmentFactoryImpl extends JavaCodeFragmentFactory {
     return new PsiCodeFragmentImpl(myProject, JavaElementType.STATEMENTS, isPhysical, "fragment.java", text, context);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
-  public PsiTypeCodeFragment createTypeCodeFragment(@Nonnull final String text,
+  public PsiTypeCodeFragment createTypeCodeFragment(@jakarta.annotation.Nonnull final String text,
                                                     @Nullable final PsiElement context,
                                                     final boolean isPhysical) {
     return createTypeCodeFragment(text, context, isPhysical, 0);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public PsiTypeCodeFragment createTypeCodeFragment(@Nonnull final String text,
                                                     @Nullable final PsiElement context,
@@ -74,10 +74,10 @@ public class JavaCodeFragmentFactoryImpl extends JavaCodeFragmentFactory {
     return new PsiTypeCodeFragmentImpl(myProject, isPhysical, "fragment.java", text, flags, context);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
-  public PsiJavaCodeReferenceCodeFragment createReferenceCodeFragment(@Nonnull final String text,
-                                                                      @Nullable final PsiElement context,
+  public PsiJavaCodeReferenceCodeFragment createReferenceCodeFragment(@jakarta.annotation.Nonnull final String text,
+                                                                      @jakarta.annotation.Nullable final PsiElement context,
                                                                       final boolean isPhysical,
                                                                       final boolean isClassesAccepted) {
     return new PsiJavaCodeReferenceCodeFragmentImpl(myProject, isPhysical, "fragment.java", text, isClassesAccepted, context);

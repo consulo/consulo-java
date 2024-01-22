@@ -23,7 +23,7 @@ import consulo.util.lang.Comparing;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
@@ -68,7 +68,7 @@ public class SliceTreeBuilder extends AbstractTreeBuilder {
   public SliceTreeBuilder(@Nonnull JTree tree,
                           @Nonnull Project project,
                           boolean dataFlowToThis,
-                          @Nonnull SliceNode rootNode,
+                          @jakarta.annotation.Nonnull SliceNode rootNode,
                           boolean splitByLeafExpressions) {
     super(tree, (DefaultTreeModel)tree.getModel(), new SliceTreeStructure(project, rootNode), SLICE_NODE_COMPARATOR, false);
     this.dataFlowToThis = dataFlowToThis;

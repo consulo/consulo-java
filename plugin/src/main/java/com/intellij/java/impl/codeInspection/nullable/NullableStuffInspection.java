@@ -34,7 +34,7 @@ import consulo.usage.*;
 import consulo.util.collection.ArrayUtil;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NullableStuffInspection extends NullableStuffInspectionBase {
@@ -67,7 +67,7 @@ public class NullableStuffInspection extends NullableStuffInspectionBase {
     }
 
     @Override
-    public void invoke(@Nonnull Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
+    public void invoke(@Nonnull Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @jakarta.annotation.Nonnull PsiElement endElement) {
       PsiParameter p = (PsiParameter)startElement;
       final PsiMethod method = PsiTreeUtil.getParentOfType(p, PsiMethod.class);
       if (method == null) {

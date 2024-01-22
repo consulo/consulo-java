@@ -29,11 +29,12 @@ import consulo.module.Module;
 import consulo.project.Project;
 import consulo.xml.util.xml.ConvertContext;
 import consulo.xml.util.xml.GenericDomValue;
+import jakarta.annotation.Nullable;
 import jakarta.inject.Singleton;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,7 +88,7 @@ public class ClassArrayConverterImpl extends ClassArrayConverter {
     }
   }
 
-  public PsiClass fromString(@Nullable @NonNls String s, final ConvertContext context) {
+  public PsiClass fromString(@jakarta.annotation.Nullable @NonNls String s, final ConvertContext context) {
     if (s == null) return null;
     final Module module = context.getModule();
     final PsiFile psiFile = context.getFile();

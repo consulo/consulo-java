@@ -30,7 +30,7 @@ import consulo.language.psi.stub.IndexSink;
 import consulo.language.psi.stub.StubElement;
 import consulo.language.psi.stub.StubInputStream;
 import consulo.language.psi.stub.StubOutputStream;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import org.osmorc.manifest.lang.psi.Clause;
 import org.osmorc.manifest.lang.psi.impl.ClauseImpl;
 import org.osmorc.manifest.lang.psi.stub.ClauseStub;
@@ -47,7 +47,7 @@ public class ClauseElementType extends AbstractManifestStubElementType<ClauseStu
   }
 
   @Override
-  public Clause createPsi(@Nonnull ClauseStub stub) {
+  public Clause createPsi(@jakarta.annotation.Nonnull ClauseStub stub) {
     return new ClauseImpl(stub, this);
   }
 
@@ -57,18 +57,18 @@ public class ClauseElementType extends AbstractManifestStubElementType<ClauseStu
   }
 
   @Override
-  public ClauseStub createStub(@Nonnull Clause psi, StubElement parentStub) {
+  public ClauseStub createStub(@jakarta.annotation.Nonnull Clause psi, StubElement parentStub) {
     return new ClauseStubImpl(parentStub);
   }
 
   public void serialize(@Nonnull ClauseStub stub, @Nonnull StubOutputStream dataStream) throws IOException {
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public ClauseStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
     return new ClauseStubImpl(parentStub);
   }
 
-  public void indexStub(@Nonnull ClauseStub stub, @Nonnull IndexSink sink) {
+  public void indexStub(@jakarta.annotation.Nonnull ClauseStub stub, @jakarta.annotation.Nonnull IndexSink sink) {
   }
 }

@@ -23,11 +23,11 @@ import consulo.configurable.OptionsBundle;
 import consulo.execution.debug.setting.DebuggerSettingsCategory;
 import consulo.execution.debug.setting.XDebuggerSettings;
 import consulo.ide.impl.idea.openapi.util.Getter;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
 import org.jdom.Element;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -51,7 +51,7 @@ public class JavaDebuggerSettings extends XDebuggerSettings<Element> {
 
   @Nonnull
   @Override
-  public Collection<? extends Configurable> createConfigurables(@Nonnull DebuggerSettingsCategory category) {
+  public Collection<? extends Configurable> createConfigurables(@jakarta.annotation.Nonnull DebuggerSettingsCategory category) {
     Getter<DebuggerSettings> settingsGetter = () -> DebuggerSettings.getInstance();
 
     switch (category) {
@@ -94,7 +94,7 @@ public class JavaDebuggerSettings extends XDebuggerSettings<Element> {
   }
 
   @Override
-  public void generalApplied(@Nonnull DebuggerSettingsCategory category) {
+  public void generalApplied(@jakarta.annotation.Nonnull DebuggerSettingsCategory category) {
     if (category == DebuggerSettingsCategory.DATA_VIEWS) {
       NodeRendererSettings.getInstance().fireRenderersChanged();
     }

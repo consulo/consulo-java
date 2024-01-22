@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.errorhandling;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiCodeBlock;
 import consulo.annotation.component.ExtensionImpl;
@@ -60,7 +60,7 @@ public class FinallyBlockCannotCompleteNormallyInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitTryStatement(@Nonnull PsiTryStatement statement) {
+    public void visitTryStatement(@jakarta.annotation.Nonnull PsiTryStatement statement) {
       super.visitTryStatement(statement);
       final PsiCodeBlock finallyBlock = statement.getFinallyBlock();
       if (finallyBlock == null) {

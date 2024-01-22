@@ -17,8 +17,7 @@ package com.intellij.java.language.psi;
 
 import consulo.language.psi.PsiElement;
 import consulo.util.collection.ArrayFactory;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Represents a PSI element which can be used as the value of an annotation element.

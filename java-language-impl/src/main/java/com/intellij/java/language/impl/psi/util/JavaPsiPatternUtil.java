@@ -7,10 +7,11 @@ import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.lang.ObjectUtil;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -45,8 +46,8 @@ public final class JavaPsiPatternUtil {
    * under some other parent (e.g. under PsiIfStatement).
    */
   @Contract(pure = true)
-  @Nonnull
-  public static List<PsiPatternVariable> getExposedPatternVariablesIgnoreParent(@Nonnull PsiExpression expression) {
+  @jakarta.annotation.Nonnull
+  public static List<PsiPatternVariable> getExposedPatternVariablesIgnoreParent(@jakarta.annotation.Nonnull PsiExpression expression) {
     List<PsiPatternVariable> list = new ArrayList<>();
     collectPatternVariableCandidates(expression, expression, list, true);
     return list;

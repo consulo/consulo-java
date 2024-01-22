@@ -94,8 +94,8 @@ import consulo.virtualFileSystem.VirtualFile;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.TestOnly;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -418,7 +418,7 @@ public class ExtractMethodProcessor implements MatchProvider {
     return inferNullability(block, Objects.requireNonNull(statementFromText.getReturnValue())) == Nullability.NOT_NULL;
   }
 
-  private static Nullability inferNullability(@Nonnull PsiCodeBlock block, @Nonnull PsiExpression expr) {
+  private static Nullability inferNullability(@Nonnull PsiCodeBlock block, @jakarta.annotation.Nonnull PsiExpression expr) {
     final DataFlowRunner dfaRunner = new DataFlowRunner(block.getProject());
 
     class Visitor extends StandardInstructionVisitor {
@@ -426,10 +426,10 @@ public class ExtractMethodProcessor implements MatchProvider {
       boolean myVisited = false;
 
       @Override
-      protected void beforeExpressionPush(@Nonnull DfaValue value,
+      protected void beforeExpressionPush(@jakarta.annotation.Nonnull DfaValue value,
                                           @Nonnull PsiExpression expression,
                                           @Nullable TextRange range,
-                                          @Nonnull DfaMemoryState state) {
+                                          @jakarta.annotation.Nonnull DfaMemoryState state) {
         if (expression == expr && range == null) {
           myVisited = true;
           myNullability = myNullability.unite(DfaNullability.fromDfType(state.getDfType(value)));
@@ -1452,7 +1452,7 @@ public class ExtractMethodProcessor implements MatchProvider {
       final LinkedHashMap<PsiClass, List<PsiVariable>> classes = new LinkedHashMap<PsiClass, List<PsiVariable>>();
       final PsiElementProcessor<PsiClass> processor = new PsiElementProcessor<PsiClass>() {
         @Override
-        public boolean execute(@Nonnull PsiClass selectedClass) {
+        public boolean execute(@jakarta.annotation.Nonnull PsiClass selectedClass) {
           AnonymousTargetClassPreselectionUtil.rememberSelection(selectedClass, myTargetClass);
           final List<PsiVariable> array = classes.get(selectedClass);
           myNeedChangeContext = myTargetClass != selectedClass;

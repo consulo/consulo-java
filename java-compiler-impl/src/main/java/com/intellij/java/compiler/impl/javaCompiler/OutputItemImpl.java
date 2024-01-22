@@ -23,8 +23,7 @@ package com.intellij.java.compiler.impl.javaCompiler;
 
 import consulo.compiler.TranslatingCompiler;
 import consulo.virtualFileSystem.VirtualFile;
-
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public class OutputItemImpl implements TranslatingCompiler.OutputItem{
 

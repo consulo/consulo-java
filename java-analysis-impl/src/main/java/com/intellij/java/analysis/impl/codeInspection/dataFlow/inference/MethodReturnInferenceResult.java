@@ -10,7 +10,7 @@ import com.intellij.java.language.psi.PsiPrimitiveType;
 import consulo.util.collection.ContainerUtil;
 import com.siyeh.ig.psiutils.ClassUtils;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -29,7 +29,7 @@ public interface MethodReturnInferenceResult
 			this.value = value;
 		}
 
-		@Nonnull
+		@jakarta.annotation.Nonnull
 		public Nullability getValue()
 		{
 			return value;
@@ -85,7 +85,7 @@ public interface MethodReturnInferenceResult
 			return delegateCalls;
 		}
 
-		@Nonnull
+		@jakarta.annotation.Nonnull
 		@Override
 		public Nullability getNullability(PsiMethod method, Supplier<PsiCodeBlock> body)
 		{
@@ -168,7 +168,7 @@ public interface MethodReturnInferenceResult
 		}
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	Nullability getNullability(PsiMethod method, Supplier<PsiCodeBlock> body);
 
 	@Nonnull

@@ -15,11 +15,10 @@
  */
 package com.intellij.java.debugger.impl.engine;
 
-import javax.annotation.Nonnull;
-
 import consulo.execution.debug.frame.XValueMarkerProvider;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.Value;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author egor
@@ -39,7 +38,7 @@ public class JavaValueMarker extends XValueMarkerProvider<JavaValue, Long>
 	}
 
 	@Override
-	public Long getMarker(@Nonnull JavaValue value)
+	public Long getMarker(@jakarta.annotation.Nonnull JavaValue value)
 	{
 		Value obj = value.getDescriptor().getValue();
 		if(obj instanceof ObjectReference)

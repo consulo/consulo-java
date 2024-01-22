@@ -39,9 +39,9 @@ import consulo.util.collection.primitive.ints.IntList;
 import consulo.util.collection.primitive.ints.IntLists;
 import consulo.util.collection.primitive.ints.IntSet;
 import consulo.util.collection.primitive.ints.IntSets;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.PrimitiveIterator;
 
@@ -82,7 +82,7 @@ public class Util {
   }
 
   @Nonnull
-  private static PsiElement getPhysical(@Nonnull PsiElement expr) {
+  private static PsiElement getPhysical(@jakarta.annotation.Nonnull PsiElement expr) {
     PsiElement physicalElement = expr.getUserData(ElementToWorkOn.PARENT);
     if (physicalElement != null) expr = physicalElement;
     return expr;
@@ -116,9 +116,9 @@ public class Util {
   }
 
   // returns parameters that are used solely in specified expression
-  @Nonnull
-  public static IntList findParametersToRemove(@Nonnull PsiMethod method,
-											   @Nonnull final PsiExpression expr,
+  @jakarta.annotation.Nonnull
+  public static IntList findParametersToRemove(@jakarta.annotation.Nonnull PsiMethod method,
+											   @jakarta.annotation.Nonnull final PsiExpression expr,
 											   @Nullable final PsiExpression[] occurences) {
     final PsiParameter[] parameters = method.getParameterList().getParameters();
     if (parameters.length == 0) return IntLists.newArrayList();

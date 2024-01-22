@@ -25,7 +25,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author cdr
@@ -38,13 +38,13 @@ public class DeleteThrowsFix implements LocalQuickFix {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getName() {
     return myQuickFix.getText();
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("fix.throws.list.family");
   }

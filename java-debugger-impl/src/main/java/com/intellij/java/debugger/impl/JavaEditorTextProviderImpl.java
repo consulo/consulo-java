@@ -30,8 +30,8 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.util.lang.Pair;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Maxim.Medvedev
@@ -139,8 +139,8 @@ public class JavaEditorTextProviderImpl implements EditorTextProvider {
     return null;
   }
 
-  @Nullable
-  private static String qualifyEnumConstant(PsiElement resolved, @Nullable String def) {
+  @jakarta.annotation.Nullable
+  private static String qualifyEnumConstant(PsiElement resolved, @jakarta.annotation.Nullable String def) {
     if (resolved instanceof PsiEnumConstant) {
       final PsiEnumConstant enumConstant = (PsiEnumConstant)resolved;
       final PsiClass enumClass = enumConstant.getContainingClass();

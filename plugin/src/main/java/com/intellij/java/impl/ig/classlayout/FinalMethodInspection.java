@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
@@ -50,7 +50,7 @@ public class FinalMethodInspection extends BaseInspection {
 
   private static class FinalMethodVisitor extends BaseInspectionVisitor {
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
       //no call to super, so we don't drill into anonymous classes
       if (!method.hasModifierProperty(PsiModifier.FINAL)) {
         return;

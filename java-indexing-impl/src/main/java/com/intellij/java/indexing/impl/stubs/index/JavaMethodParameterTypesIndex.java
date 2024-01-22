@@ -29,7 +29,7 @@ import consulo.language.psi.stub.StubIndexKey;
 import consulo.project.Project;
 import consulo.project.content.scope.ProjectAwareSearchScope;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Collection;
 
 @ExtensionImpl
@@ -48,7 +48,7 @@ public class JavaMethodParameterTypesIndex extends StringStubIndexExtension<PsiM
   }
 
   @Override
-  public Collection<PsiMethod> get(@Nonnull final String s,
+  public Collection<PsiMethod> get(@jakarta.annotation.Nonnull final String s,
                                    @Nonnull final Project project,
                                    @Nonnull final ProjectAwareSearchScope scope) {
     return StubIndex.getElements(getKey(), s, project, new JavaSourceFilterScope(scope), PsiMethod.class);

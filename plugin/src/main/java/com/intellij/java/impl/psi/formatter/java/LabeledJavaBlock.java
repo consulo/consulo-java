@@ -18,7 +18,6 @@ package com.intellij.java.impl.psi.formatter.java;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
 import consulo.language.codeStyle.Alignment;
 import consulo.language.codeStyle.Block;
 import consulo.language.codeStyle.ChildAttributes;
@@ -33,6 +32,7 @@ import com.intellij.java.language.psi.JavaTokenType;
 import consulo.language.codeStyle.CommonCodeStyleSettings;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
 import consulo.language.codeStyle.FormatterUtil;
+import jakarta.annotation.Nonnull;
 
 public class LabeledJavaBlock extends AbstractJavaBlock
 {
@@ -42,7 +42,7 @@ public class LabeledJavaBlock extends AbstractJavaBlock
 							Indent indent,
 							CommonCodeStyleSettings settings,
 							JavaCodeStyleSettings javaSettings,
-							@Nonnull FormattingMode formattingMode)
+							@jakarta.annotation.Nonnull FormattingMode formattingMode)
 	{
 		super(node, wrap, alignment, indent, settings, javaSettings, formattingMode);
 	}

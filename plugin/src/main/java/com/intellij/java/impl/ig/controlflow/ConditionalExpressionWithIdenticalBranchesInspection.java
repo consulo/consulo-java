@@ -17,8 +17,7 @@ package com.intellij.java.impl.ig.controlflow;
 
 import javax.swing.JComponent;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.CleanupLocalInspectionTool;
@@ -38,6 +37,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.PsiReplacementUtil;
 import com.siyeh.ig.psiutils.EquivalenceChecker;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class ConditionalExpressionWithIdenticalBranchesInspection extends BaseInspection implements CleanupLocalInspectionTool
@@ -52,7 +52,7 @@ public class ConditionalExpressionWithIdenticalBranchesInspection extends BaseIn
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public String getDisplayName()
 	{
 		return InspectionGadgetsBundle.message("conditional.expression.with.identical.branches.display.name");

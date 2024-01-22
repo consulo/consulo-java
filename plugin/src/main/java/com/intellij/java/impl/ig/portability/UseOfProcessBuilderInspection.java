@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.portability;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiNewExpression;
 import com.intellij.java.language.psi.PsiType;
@@ -36,7 +36,7 @@ public class UseOfProcessBuilderInspection extends BaseInspection {
       "use.processbuilder.class.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "use.processbuilder.class.problem.descriptor");
@@ -65,7 +65,7 @@ public class UseOfProcessBuilderInspection extends BaseInspection {
 
     @Override
     public void visitNewExpression(
-      @Nonnull PsiNewExpression newExpression) {
+      @jakarta.annotation.Nonnull PsiNewExpression newExpression) {
       super.visitNewExpression(newExpression);
       final PsiType type = newExpression.getType();
       if (type == null) {

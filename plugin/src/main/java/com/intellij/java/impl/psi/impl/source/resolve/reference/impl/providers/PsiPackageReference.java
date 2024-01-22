@@ -21,7 +21,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.language.psi.EmptyResolveMessageProvider;
 import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
@@ -80,7 +80,7 @@ public class PsiPackageReference extends PsiPolyVariantReferenceBase<PsiElement>
 		return subPackages.toArray();
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
 	public String getUnresolvedMessagePattern()
 	{
@@ -94,7 +94,7 @@ public class PsiPackageReference extends PsiPolyVariantReferenceBase<PsiElement>
 		return doMultiResolve();
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	protected ResolveResult[] doMultiResolve()
 	{
 		final Collection<PsiJavaPackage> packages = new HashSet<PsiJavaPackage>();
@@ -106,7 +106,7 @@ public class PsiPackageReference extends PsiPolyVariantReferenceBase<PsiElement>
 	}
 
 	@Override
-	public PsiElement bindToElement(@Nonnull final PsiElement element) throws IncorrectOperationException
+	public PsiElement bindToElement(@jakarta.annotation.Nonnull final PsiElement element) throws IncorrectOperationException
 	{
 		if(!(element instanceof PsiJavaPackage))
 		{

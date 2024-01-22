@@ -34,7 +34,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.lang.ref.Ref;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author max
@@ -47,7 +47,7 @@ public class SplitDeclarationAction extends PsiElementBaseIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, @jakarta.annotation.Nonnull PsiElement element) {
 
     if (element instanceof PsiCompiledElement) {
       return false;

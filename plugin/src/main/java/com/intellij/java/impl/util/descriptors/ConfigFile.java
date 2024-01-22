@@ -22,8 +22,8 @@ import consulo.language.psi.PsiFile;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.xml.psi.xml.XmlFile;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author nik
@@ -33,17 +33,17 @@ public interface ConfigFile extends Disposable, ModificationTracker {
  
   String getUrl();
 
-  @Nullable
+  @jakarta.annotation.Nullable
   VirtualFile getVirtualFile();
 
-  @Nullable
+  @jakarta.annotation.Nullable
   PsiFile getPsiFile();
 
   @Nullable
   XmlFile getXmlFile();
 
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   ConfigFileMetaData getMetaData();
 
   @Nonnull

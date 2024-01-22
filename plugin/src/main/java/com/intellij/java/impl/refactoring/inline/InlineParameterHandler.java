@@ -39,7 +39,7 @@ import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import com.intellij.java.impl.refactoring.util.InlineUtil;
 import consulo.language.editor.refactoring.util.RefactoringMessageDialog;
 import consulo.application.util.function.Processor;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 import java.util.*;
 

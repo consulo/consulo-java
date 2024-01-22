@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.ig.security;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiArrayType;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
@@ -26,17 +24,18 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.CollectionUtils;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class PublicStaticArrayFieldInspection extends BaseInspection {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "public.static.array.field.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "public.static.array.field.problem.descriptor");

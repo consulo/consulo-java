@@ -61,9 +61,9 @@ import consulo.util.lang.StringUtil;
 import consulo.util.lang.function.Condition;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 public class RefactoringUtil {
@@ -775,7 +775,7 @@ public class RefactoringUtil {
     return result;
   }
 
-  public static void makeMethodAbstract(@Nonnull PsiClass targetClass, @Nonnull PsiMethod method) throws IncorrectOperationException {
+  public static void makeMethodAbstract(@jakarta.annotation.Nonnull PsiClass targetClass, @Nonnull PsiMethod method) throws IncorrectOperationException {
     if (!method.hasModifierProperty(PsiModifier.DEFAULT)) {
       PsiCodeBlock body = method.getBody();
       if (body != null) {
@@ -793,7 +793,7 @@ public class RefactoringUtil {
 
   }
 
-  public static void makeMethodDefault(@Nonnull PsiMethod method) throws IncorrectOperationException {
+  public static void makeMethodDefault(@jakarta.annotation.Nonnull PsiMethod method) throws IncorrectOperationException {
     PsiUtil.setModifierProperty(method, PsiModifier.DEFAULT, true);
     PsiUtil.setModifierProperty(method, PsiModifier.ABSTRACT, false);
 
@@ -1317,20 +1317,20 @@ public class RefactoringUtil {
   }
 
   @Nullable
-  public static PsiTypeParameterList createTypeParameterListWithUsedTypeParameters(@Nonnull final PsiElement... elements) {
+  public static PsiTypeParameterList createTypeParameterListWithUsedTypeParameters(@jakarta.annotation.Nonnull final PsiElement... elements) {
     return createTypeParameterListWithUsedTypeParameters(null, elements);
   }
 
   @Nullable
   public static PsiTypeParameterList createTypeParameterListWithUsedTypeParameters(@Nullable final PsiTypeParameterList fromList,
-                                                                                   @Nonnull final PsiElement... elements) {
+                                                                                   @jakarta.annotation.Nonnull final PsiElement... elements) {
     return createTypeParameterListWithUsedTypeParameters(fromList, Condition.TRUE, elements);
   }
 
   @Nullable
   public static PsiTypeParameterList createTypeParameterListWithUsedTypeParameters(@Nullable final PsiTypeParameterList fromList,
                                                                                    Condition<PsiTypeParameter> filter,
-                                                                                   @Nonnull final PsiElement... elements) {
+                                                                                   @jakarta.annotation.Nonnull final PsiElement... elements) {
     if (elements.length == 0) {
       return null;
     }
@@ -1442,7 +1442,7 @@ public class RefactoringUtil {
     });
   }
 
-  public static PsiCodeBlock expandExpressionLambdaToCodeBlock(@Nonnull PsiLambdaExpression lambdaExpression) {
+  public static PsiCodeBlock expandExpressionLambdaToCodeBlock(@jakarta.annotation.Nonnull PsiLambdaExpression lambdaExpression) {
     final PsiElement body = lambdaExpression.getBody();
     if (!(body instanceof PsiExpression)) {
       return (PsiCodeBlock) body;

@@ -16,16 +16,16 @@ import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author VISTALL
  * @since 13:10/21.05.13
  */
 public class JavaProjectRootsUtil extends ProjectRootsUtil {
-  public static boolean isJavaSourceFile(@Nonnull Project project, @Nonnull VirtualFile file, boolean withLibrary) {
+  public static boolean isJavaSourceFile(@jakarta.annotation.Nonnull Project project, @Nonnull VirtualFile file, boolean withLibrary) {
     FileTypeManager fileTypeManager = FileTypeManager.getInstance();
     if (file.isDirectory()) {
       return false;

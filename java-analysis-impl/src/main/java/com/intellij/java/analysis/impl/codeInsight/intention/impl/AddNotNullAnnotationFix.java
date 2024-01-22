@@ -24,7 +24,7 @@ package com.intellij.java.analysis.impl.codeInsight.intention.impl;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.language.psi.PsiModifierListOwner;
 import consulo.util.collection.ArrayUtil;
@@ -36,7 +36,7 @@ public class AddNotNullAnnotationFix extends AddNullableNotNullAnnotationFix {
           getNullables(owner));
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private static String[] getNullables(@Nonnull PsiModifierListOwner owner) {
     final List<String> nullables = NullableNotNullManager.getInstance(owner.getProject()).getNullables();
     return ArrayUtil.toStringArray(nullables);

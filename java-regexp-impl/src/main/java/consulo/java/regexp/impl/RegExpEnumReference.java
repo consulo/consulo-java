@@ -25,8 +25,8 @@ import consulo.util.collection.ContainerUtil;
 import org.intellij.plugins.intelliLang.util.RegExpUtil;
 import consulo.java.impl.intelliLang.util.StringLiteralReference;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Set;
 
 /**
@@ -36,7 +36,7 @@ import java.util.Set;
 final class RegExpEnumReference extends StringLiteralReference {
   private final String myPattern;
 
-  public RegExpEnumReference(PsiLiteralExpression expression, @Nonnull String pattern) {
+  public RegExpEnumReference(PsiLiteralExpression expression, @jakarta.annotation.Nonnull String pattern) {
     super(expression);
     myPattern = pattern;
   }

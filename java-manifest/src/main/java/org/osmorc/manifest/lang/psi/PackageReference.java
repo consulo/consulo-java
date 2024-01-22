@@ -36,8 +36,8 @@ import consulo.module.Module;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.Comparing;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)
@@ -58,7 +58,7 @@ public class PackageReference extends PsiReferenceBase<PsiElement> implements Em
     }
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private PsiJavaPackage getPsiPackage() {
     return myIndex == 0
         ? JavaPsiFacade.getInstance(getElement().getProject()).findPackage("")

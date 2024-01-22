@@ -3,7 +3,7 @@ package com.intellij.java.language.impl.psi.presentation.java;
 import com.intellij.java.language.psi.PsiLocalVariable;
 import consulo.annotation.component.ExtensionImpl;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL

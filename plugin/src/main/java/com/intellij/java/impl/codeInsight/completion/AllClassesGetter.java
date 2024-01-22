@@ -21,7 +21,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -137,7 +137,7 @@ public class AllClassesGetter {
   }
 
   public static void processJavaClasses(@Nonnull final PrefixMatcher prefixMatcher,
-                                        @Nonnull Project project,
+                                        @jakarta.annotation.Nonnull Project project,
                                         @Nonnull GlobalSearchScope scope,
                                         @Nonnull Processor<? super PsiClass> processor) {
     final Set<String> names = new HashSet<>(10000);

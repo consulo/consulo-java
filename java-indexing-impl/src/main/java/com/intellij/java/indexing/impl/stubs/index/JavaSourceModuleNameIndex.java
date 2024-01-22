@@ -17,9 +17,9 @@ import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
 import consulo.virtualFileSystem.fileType.FileTypeRegistry;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Collection;
@@ -36,7 +36,7 @@ public class JavaSourceModuleNameIndex extends ScalarIndexExtension<String> {
   private final FileType myManifestFileType = FileTypeRegistry.getInstance().getFileTypeByExtension("MF");
   private final FileBasedIndex.InputFilter myFilter = new DefaultFileTypeSpecificInputFilter(myManifestFileType) {
     @Override
-    public boolean acceptInput(@Nullable Project project, @Nonnull VirtualFile f) {
+    public boolean acceptInput(@Nullable Project project, @jakarta.annotation.Nonnull VirtualFile f) {
       return f.isInLocalFileSystem();
     }
   };
@@ -52,7 +52,7 @@ public class JavaSourceModuleNameIndex extends ScalarIndexExtension<String> {
     return emptyMap();
   };
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public ID<String, Void> getName() {
     return NAME;
@@ -63,7 +63,7 @@ public class JavaSourceModuleNameIndex extends ScalarIndexExtension<String> {
     return 2;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public KeyDescriptor<String> getKeyDescriptor() {
     return EnumeratorStringDescriptor.INSTANCE;
@@ -74,31 +74,31 @@ public class JavaSourceModuleNameIndex extends ScalarIndexExtension<String> {
     return true;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public FileBasedIndex.InputFilter getInputFilter() {
     return myFilter;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public DataIndexer<String, Void, FileContent> getIndexer() {
     return myIndexer;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Collection<FileType> getFileTypesWithSizeLimitNotApplicable() {
     return Collections.singleton(JavaClassFileType.INSTANCE);
   }
 
-  @Nonnull
-  public static Collection<VirtualFile> getFilesByKey(@Nonnull String moduleName, @Nonnull GlobalSearchScope scope) {
+  @jakarta.annotation.Nonnull
+  public static Collection<VirtualFile> getFilesByKey(@jakarta.annotation.Nonnull String moduleName, @jakarta.annotation.Nonnull GlobalSearchScope scope) {
     return FileBasedIndex.getInstance().getContainingFiles(NAME, moduleName, new JavaAutoModuleFilterScope(scope));
   }
 
   @Nonnull
-  public static Collection<String> getAllKeys(@Nonnull Project project) {
+  public static Collection<String> getAllKeys(@jakarta.annotation.Nonnull Project project) {
     return FileBasedIndex.getInstance().getAllKeys(NAME, project);
   }
 }

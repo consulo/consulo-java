@@ -1,7 +1,7 @@
-import javax.annotation.*;
+import jakarta.annotation.Nullable;
 
 class Test {
-  void bar(@javax.annotation.Nullable String str) {
+  void bar(@jakarta.annotation.Nullable String str) {
     if (str == null) {
       foo(str);
     }
@@ -11,20 +11,20 @@ class Test {
     return str;
   }
 
-  @javax.annotation.Nullable
-  String foo1(@javax.annotation.Nullable String str) {
+  @jakarta.annotation.Nullable
+  String foo1(@jakarta.annotation.Nullable String str) {
     if (str == null);
     return (str);
   }
 
-  @Nonnull
-  String foo2(@javax.annotation.Nullable String str) {
+  @jakarta.annotation.Nonnull
+  String foo2(@Nullable String str) {
     if (str == null);
     return ((String)str);
   }
 
-  @Nonnull
-  String fram(@javax.annotation.Nullable String str, boolean b) {
+  @jakarta.annotation.Nonnull
+  String fram(@jakarta.annotation.Nullable String str, boolean b) {
     if (str != null) {
       return b ? str : "not null strimg";
     }

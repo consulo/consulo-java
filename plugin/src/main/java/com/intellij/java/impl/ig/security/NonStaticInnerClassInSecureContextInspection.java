@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.security;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.util.PsiUtil;
@@ -34,7 +34,7 @@ public class NonStaticInnerClassInSecureContextInspection
       "non.static.inner.class.in.secure.context.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "non.static.inner.class.in.secure.context.problem.descriptor");
@@ -48,7 +48,7 @@ public class NonStaticInnerClassInSecureContextInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
       // no call to super, so it doesn't drill down
       if (aClass.isInterface() || aClass.isAnnotationType()) {
         return;

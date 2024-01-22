@@ -17,14 +17,14 @@ package com.intellij.java.debugger.impl;
 
 import java.util.Collection;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.debugger.DebuggerManager;
 import com.intellij.java.debugger.engine.DebugProcess;
 import com.intellij.java.debugger.impl.ui.breakpoints.BreakpointManager;
 import consulo.process.ExecutionException;
 import consulo.project.Project;
+import jakarta.annotation.Nullable;
 
 public abstract class DebuggerManagerEx extends DebuggerManager
 {

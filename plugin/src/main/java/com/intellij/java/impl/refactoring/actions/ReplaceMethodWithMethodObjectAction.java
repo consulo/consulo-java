@@ -25,8 +25,7 @@ import consulo.dataContext.DataContext;
 import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.action.BaseRefactoringAction;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class ReplaceMethodWithMethodObjectAction extends BaseRefactoringAction {
   protected boolean isAvailableInEditorOnly() {
@@ -37,7 +36,7 @@ public class ReplaceMethodWithMethodObjectAction extends BaseRefactoringAction {
     return false;
   }
 
-  protected RefactoringActionHandler getHandler(@Nonnull final DataContext dataContext) {
+  protected RefactoringActionHandler getHandler(@jakarta.annotation.Nonnull final DataContext dataContext) {
     return new ExtractMethodObjectHandler();
   }
 }

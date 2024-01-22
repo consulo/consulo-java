@@ -3,8 +3,8 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.rangeSet;
 
 import consulo.util.lang.ThreeState;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * Helper methods for LongRangeSet implementation

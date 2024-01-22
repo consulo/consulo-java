@@ -16,7 +16,7 @@
 package com.intellij.java.language.impl.psi.impl.compiled;
 
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiDocCommentOwner;
@@ -36,14 +36,14 @@ class ClsDocCommentImpl extends ClsElementImpl implements PsiDocComment, JavaTok
 	private final PsiDocCommentOwner myParent;
 	private final PsiDocTag[] myTags;
 
-	ClsDocCommentImpl(@Nonnull PsiDocCommentOwner parent)
+	ClsDocCommentImpl(@jakarta.annotation.Nonnull PsiDocCommentOwner parent)
 	{
 		myParent = parent;
 		myTags = new PsiDocTag[]{new ClsDocTagImpl(this, "@deprecated")};
 	}
 
 	@Override
-	public void appendMirrorText(final int indentLevel, @Nonnull final StringBuilder buffer)
+	public void appendMirrorText(final int indentLevel, @jakarta.annotation.Nonnull final StringBuilder buffer)
 	{
 		buffer.append("/**");
 		for(PsiDocTag tag : getTags())
@@ -82,7 +82,7 @@ class ClsDocCommentImpl extends ClsElementImpl implements PsiDocComment, JavaTok
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public PsiElement[] getDescriptionElements()
 	{
 		return PsiElement.EMPTY_ARRAY;

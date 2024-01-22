@@ -17,8 +17,7 @@ package com.intellij.java.execution.impl.junit2;
 
 import java.util.Collections;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import consulo.execution.action.Location;
 import consulo.execution.action.PsiLocation;
@@ -31,6 +30,7 @@ import com.intellij.java.language.psi.PsiClassObjectAccessExpression;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiTypeElement;
 import com.intellij.java.language.psi.util.InheritanceUtil;
+import jakarta.annotation.Nullable;
 
 public class PsiMemberParameterizedLocation extends PsiLocation<PsiElement>
 {

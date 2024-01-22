@@ -29,10 +29,11 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 
 @ExtensionImpl
@@ -68,7 +69,7 @@ public class UnusedCatchParameterInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     final boolean namedIgnoreButUsed = ((Boolean)infos[0]).booleanValue();
     if (namedIgnoreButUsed) {

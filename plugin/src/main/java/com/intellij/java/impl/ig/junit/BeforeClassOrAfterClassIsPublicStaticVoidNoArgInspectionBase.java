@@ -5,7 +5,7 @@ import static com.intellij.java.language.codeInsight.AnnotationUtil.CHECK_HIERAR
 
 import java.util.Arrays;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.PsiClass;

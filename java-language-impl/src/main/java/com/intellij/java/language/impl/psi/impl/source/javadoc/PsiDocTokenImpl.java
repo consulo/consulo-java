@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.javadoc;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.JavaElementVisitor;
 import consulo.language.psi.PsiElementVisitor;

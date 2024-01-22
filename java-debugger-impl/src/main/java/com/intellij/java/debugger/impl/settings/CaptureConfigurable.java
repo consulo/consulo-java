@@ -47,13 +47,14 @@ import consulo.util.xml.serializer.XmlSerializer;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.VirtualFileWrapper;
 import consulo.virtualFileSystem.archive.ArchiveFileType;
+import jakarta.annotation.Nullable;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jetbrains.annotations.Debugger;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumnModel;
@@ -133,7 +134,7 @@ public class CaptureConfigurable implements SearchableConfigurable
 			}
 
 			@Override
-			public void actionPerformed(@Nonnull AnActionEvent e)
+			public void actionPerformed(@jakarta.annotation.Nonnull AnActionEvent e)
 			{
 				selectedCapturePoints(table).forEach(c ->
 				{
@@ -159,7 +160,7 @@ public class CaptureConfigurable implements SearchableConfigurable
 			}
 
 			@Override
-			public void actionPerformed(@Nonnull AnActionEvent e)
+			public void actionPerformed(@jakarta.annotation.Nonnull AnActionEvent e)
 			{
 				selectedCapturePoints(table).forEach(c -> c.myEnabled = true);
 				table.repaint();
@@ -174,7 +175,7 @@ public class CaptureConfigurable implements SearchableConfigurable
 			}
 
 			@Override
-			public void actionPerformed(@Nonnull AnActionEvent e)
+			public void actionPerformed(@jakarta.annotation.Nonnull AnActionEvent e)
 			{
 				selectedCapturePoints(table).forEach(c -> c.myEnabled = false);
 				table.repaint();
@@ -184,13 +185,13 @@ public class CaptureConfigurable implements SearchableConfigurable
 		new DumbAwareAction("Toggle")
 		{
 			@Override
-			public void update(@Nonnull AnActionEvent e)
+			public void update(@jakarta.annotation.Nonnull AnActionEvent e)
 			{
 				e.getPresentation().setEnabled(table.getSelectedRowCount() == 1);
 			}
 
 			@Override
-			public void actionPerformed(@Nonnull final AnActionEvent e)
+			public void actionPerformed(@jakarta.annotation.Nonnull final AnActionEvent e)
 			{
 				selectedCapturePoints(table).forEach(c -> c.myEnabled = !c.myEnabled);
 				table.repaint();
@@ -200,7 +201,7 @@ public class CaptureConfigurable implements SearchableConfigurable
 		decorator.addExtraAction(new consulo.ide.impl.idea.ui.DumbAwareActionButton(LocalizeValue.of("Import"), LocalizeValue.of("Import"), AllIcons.Actions.Install)
 		{
 			@Override
-			public void actionPerformed(@Nonnull final AnActionEvent e)
+			public void actionPerformed(@jakarta.annotation.Nonnull final AnActionEvent e)
 			{
 				FileChooserDescriptor descriptor = new FileChooserDescriptor(true, false, true, false, true, true)
 				{

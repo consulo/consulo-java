@@ -24,7 +24,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.RenameFix;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ParameterNamingConventionInspection extends ConventionInspection {
@@ -51,7 +51,7 @@ public class ParameterNamingConventionInspection extends ConventionInspection {
     return true;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     final String parametername = (String)infos[0];
     if (parametername.length() < getMinLength()) {
@@ -88,7 +88,7 @@ public class ParameterNamingConventionInspection extends ConventionInspection {
   private class NamingConventionsVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitParameter(@Nonnull PsiParameter variable) {
+    public void visitParameter(@jakarta.annotation.Nonnull PsiParameter variable) {
       final PsiElement scope = variable.getDeclarationScope();
       if (scope instanceof PsiCatchSection ||
           scope instanceof PsiForeachStatement) {

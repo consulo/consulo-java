@@ -18,8 +18,7 @@ package com.intellij.java.impl.refactoring.memberPullUp;
 import com.intellij.java.language.JavaLanguage;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Created by Max Medvedev on 10/4/13

@@ -47,8 +47,8 @@ import consulo.undoRedo.CommandProcessor;
 import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
@@ -84,12 +84,12 @@ public class CreateClassDialog extends DialogWrapper {
   @NonNls private static final String RECENTS_KEY = "CreateClassDialog.RecentsKey";
 
   public CreateClassDialog(@Nonnull Project project,
-                           @Nonnull String title,
+                           @jakarta.annotation.Nonnull String title,
                            @Nonnull String targetClassName,
-                           @Nonnull String targetPackageName,
-                           @Nonnull ClassKind kind,
+                           @jakarta.annotation.Nonnull String targetPackageName,
+                           @jakarta.annotation.Nonnull ClassKind kind,
                            boolean classNameEditable,
-                           @Nullable Module defaultModule) {
+                           @jakarta.annotation.Nullable Module defaultModule) {
     super(project, true);
     myClassNameEditable = classNameEditable;
     myModule = defaultModule;
@@ -120,7 +120,7 @@ public class CreateClassDialog extends DialogWrapper {
     return false;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected Action[] createActions() {
     return new Action[]{getOKAction(), getCancelAction()};
@@ -272,7 +272,7 @@ public class CreateClassDialog extends DialogWrapper {
     return myModule == null? null : PackageUtil.findPossiblePackageDirectoryInModule(myModule, packageName);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getClassName() {
     if (myClassNameEditable) {
       return myTfClassName.getText();

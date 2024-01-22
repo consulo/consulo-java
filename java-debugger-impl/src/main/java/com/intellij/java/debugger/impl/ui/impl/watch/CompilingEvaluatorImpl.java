@@ -18,8 +18,7 @@ package com.intellij.java.debugger.impl.ui.impl.watch;
 import java.util.Collection;
 import java.util.function.Function;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.evaluation.expression.ExpressionEvaluator;
 import com.intellij.java.compiler.ClassObject;
@@ -29,6 +28,7 @@ import com.intellij.java.language.LanguageLevel;
 import consulo.language.psi.PsiCodeFragment;
 import consulo.language.psi.PsiElement;
 import consulo.util.lang.SystemProperties;
+import jakarta.annotation.Nullable;
 
 // TODO [VISTALL] disabled
 // todo: consider batching compilations in order not to start a separate process for every class that needs to be compiled
@@ -124,7 +124,7 @@ public class CompilingEvaluatorImpl extends CompilingEvaluator
 		return myCompiledClasses;
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	private static String getSourceOption(@Nonnull LanguageLevel languageLevel)
 	{
 		return "1." + Integer.valueOf(3 + languageLevel.ordinal());
@@ -150,8 +150,8 @@ public class CompilingEvaluatorImpl extends CompilingEvaluator
 		return file;
 	} */
 
-	@Nullable
-	public static ExpressionEvaluator create(@Nonnull Project project, @Nullable PsiElement psiContext, @Nonnull Function<PsiElement, PsiCodeFragment> fragmentFactory) throws EvaluateException
+	@jakarta.annotation.Nullable
+	public static ExpressionEvaluator create(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nullable PsiElement psiContext, @jakarta.annotation.Nonnull Function<PsiElement, PsiCodeFragment> fragmentFactory) throws EvaluateException
 	{
 		/*if(DEBUGGER_COMPILING_EVALUATOR && psiContext != null)
 		{
@@ -177,7 +177,7 @@ public class CompilingEvaluatorImpl extends CompilingEvaluator
 	}
 
 	@Nonnull
-	private static PsiElement findPhysicalContext(@Nonnull PsiElement element)
+	private static PsiElement findPhysicalContext(@jakarta.annotation.Nonnull PsiElement element)
 	{
 		while(!element.isPhysical())
 		{

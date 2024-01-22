@@ -45,8 +45,8 @@ import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -60,7 +60,7 @@ public class JavaCoverageEngine extends CoverageEngine {
   private static final Logger LOG = Logger.getInstance(JavaCoverageEngine.class);
 
   @Override
-  public boolean isApplicableTo(@Nullable final RunConfigurationBase conf) {
+  public boolean isApplicableTo(@jakarta.annotation.Nullable final RunConfigurationBase conf) {
     if (conf instanceof CommonJavaRunConfigurationParameters) {
       return true;
     }
@@ -77,7 +77,7 @@ public class JavaCoverageEngine extends CoverageEngine {
     return !(conf instanceof ApplicationConfiguration) && conf instanceof CommonJavaRunConfigurationParameters;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public CoverageEnabledConfiguration createCoverageEnabledConfiguration(@Nullable final RunConfigurationBase conf) {
     return new JavaCoverageEnabledConfiguration(conf, this);
@@ -85,9 +85,9 @@ public class JavaCoverageEngine extends CoverageEngine {
 
   @Nullable
   @Override
-  public CoverageSuite createCoverageSuite(@Nonnull final CoverageRunner covRunner,
-                                           @Nonnull final String name,
-                                           @Nonnull final CoverageFileProvider coverageDataFileProvider,
+  public CoverageSuite createCoverageSuite(@jakarta.annotation.Nonnull final CoverageRunner covRunner,
+                                           @jakarta.annotation.Nonnull final String name,
+                                           @jakarta.annotation.Nonnull final CoverageFileProvider coverageDataFileProvider,
                                            String[] filters,
                                            long lastCoverageTimeStamp,
                                            String suiteToMerge,
@@ -100,10 +100,10 @@ public class JavaCoverageEngine extends CoverageEngine {
   }
 
   @Override
-  public CoverageSuite createCoverageSuite(@Nonnull final CoverageRunner covRunner,
-                                           @Nonnull final String name,
-                                           @Nonnull final CoverageFileProvider coverageDataFileProvider,
-                                           @Nonnull final CoverageEnabledConfiguration config) {
+  public CoverageSuite createCoverageSuite(@jakarta.annotation.Nonnull final CoverageRunner covRunner,
+                                           @jakarta.annotation.Nonnull final String name,
+                                           @jakarta.annotation.Nonnull final CoverageFileProvider coverageDataFileProvider,
+                                           @jakarta.annotation.Nonnull final CoverageEnabledConfiguration config) {
     if (config instanceof JavaCoverageEnabledConfiguration) {
       final JavaCoverageEnabledConfiguration javaConfig = (JavaCoverageEnabledConfiguration) config;
       return createSuite(covRunner, name, coverageDataFileProvider,
@@ -118,11 +118,11 @@ public class JavaCoverageEngine extends CoverageEngine {
 
   @Nullable
   @Override
-  public CoverageSuite createEmptyCoverageSuite(@Nonnull CoverageRunner coverageRunner) {
+  public CoverageSuite createEmptyCoverageSuite(@jakarta.annotation.Nonnull CoverageRunner coverageRunner) {
     return new JavaCoverageSuite(this);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public CoverageAnnotator getCoverageAnnotator(Project project) {
     return JavaCoverageAnnotator.getInstance(project);
@@ -140,7 +140,7 @@ public class JavaCoverageEngine extends CoverageEngine {
     }
     // let's show coverage only for module files
     final Module module = ApplicationManager.getApplication().runReadAction(new Computable<Module>() {
-      @Nullable
+      @jakarta.annotation.Nullable
       public Module compute() {
         return ModuleUtilCore.findModuleForPsiElement(psiFile);
       }
@@ -148,7 +148,7 @@ public class JavaCoverageEngine extends CoverageEngine {
     return module != null;
   }
 
-  public boolean acceptedByFilters(@Nonnull final PsiFile psiFile, @Nonnull final CoverageSuitesBundle suite) {
+  public boolean acceptedByFilters(@jakarta.annotation.Nonnull final PsiFile psiFile, @jakarta.annotation.Nonnull final CoverageSuitesBundle suite) {
     final VirtualFile virtualFile = psiFile.getVirtualFile();
     if (virtualFile == null) return false;
     final Project project = psiFile.getProject();
@@ -177,8 +177,8 @@ public class JavaCoverageEngine extends CoverageEngine {
   }
 
   @Override
-  public boolean recompileProjectAndRerunAction(@Nonnull final Module module, @Nonnull final CoverageSuitesBundle suite,
-                                                @Nonnull final Runnable chooseSuiteAction) {
+  public boolean recompileProjectAndRerunAction(@jakarta.annotation.Nonnull final Module module, @jakarta.annotation.Nonnull final CoverageSuitesBundle suite,
+                                                @jakarta.annotation.Nonnull final Runnable chooseSuiteAction) {
     final VirtualFile outputpath = ModuleCompilerPathsManager.getInstance(module).getCompilerOutput(ProductionContentFolderTypeProvider.getInstance
         ());
     final VirtualFile testOutputpath = ModuleCompilerPathsManager.getInstance(module).getCompilerOutput(TestContentFolderTypeProvider.getInstance());
@@ -234,8 +234,8 @@ public class JavaCoverageEngine extends CoverageEngine {
     return false;
   }
 
-  @Nullable
-  public List<Integer> collectSrcLinesForUntouchedFile(@Nonnull final File classFile, @Nonnull final CoverageSuitesBundle suite) {
+  @jakarta.annotation.Nullable
+  public List<Integer> collectSrcLinesForUntouchedFile(@jakarta.annotation.Nonnull final File classFile, @jakarta.annotation.Nonnull final CoverageSuitesBundle suite) {
     final List<Integer> uncoveredLines = new ArrayList<Integer>();
 
     final byte[] content;
@@ -253,9 +253,9 @@ public class JavaCoverageEngine extends CoverageEngine {
     return uncoveredLines;
   }
 
-  public boolean includeUntouchedFileInCoverage(@Nonnull final String qualifiedName,
-                                                @Nonnull final File outputFile,
-                                                @Nonnull final PsiFile sourceFile, @Nonnull CoverageSuitesBundle suite) {
+  public boolean includeUntouchedFileInCoverage(@jakarta.annotation.Nonnull final String qualifiedName,
+                                                @jakarta.annotation.Nonnull final File outputFile,
+                                                @jakarta.annotation.Nonnull final PsiFile sourceFile, @jakarta.annotation.Nonnull CoverageSuitesBundle suite) {
     for (CoverageSuite coverageSuite : suite.getSuites()) {
       final JavaCoverageSuite javaSuite = (JavaCoverageSuite) coverageSuite;
       if (javaSuite.isClassFiltered(qualifiedName) || javaSuite.isPackageFiltered(getPackageName(sourceFile)))
@@ -265,12 +265,12 @@ public class JavaCoverageEngine extends CoverageEngine {
   }
 
 
-  public String getQualifiedName(@Nonnull final File outputFile, @Nonnull final PsiFile sourceFile) {
+  public String getQualifiedName(@Nonnull final File outputFile, @jakarta.annotation.Nonnull final PsiFile sourceFile) {
     final String packageFQName = getPackageName(sourceFile);
     return StringUtil.getQualifiedName(packageFQName, FileUtil.getNameWithoutExtension(outputFile));
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Set<String> getQualifiedNames(@Nonnull final PsiFile sourceFile) {
     final PsiClass[] classes = ApplicationManager.getApplication().runReadAction(new Computable<PsiClass[]>() {
@@ -301,10 +301,10 @@ public class JavaCoverageEngine extends CoverageEngine {
     return qNames;
   }
 
-  @Nonnull
-  public Set<File> getCorrespondingOutputFiles(@Nonnull final PsiFile srcFile,
+  @jakarta.annotation.Nonnull
+  public Set<File> getCorrespondingOutputFiles(@jakarta.annotation.Nonnull final PsiFile srcFile,
                                                @Nullable final Module module,
-                                               @Nonnull final CoverageSuitesBundle suite) {
+                                               @jakarta.annotation.Nonnull final CoverageSuitesBundle suite) {
     if (module == null) {
       return Collections.emptySet();
     }
@@ -362,12 +362,12 @@ public class JavaCoverageEngine extends CoverageEngine {
     return classFiles;
   }
 
-  public String generateBriefReport(@Nonnull Editor editor,
-                                    @Nonnull PsiFile psiFile,
+  public String generateBriefReport(@jakarta.annotation.Nonnull Editor editor,
+                                    @jakarta.annotation.Nonnull PsiFile psiFile,
                                     int lineNumber,
                                     int startOffset,
                                     int endOffset,
-                                    @Nullable LineData lineData) {
+                                    @jakarta.annotation.Nullable LineData lineData) {
 
     final StringBuffer buf = new StringBuffer();
     buf.append("Hits: ");
@@ -472,14 +472,14 @@ public class JavaCoverageEngine extends CoverageEngine {
   }
 
   @Nullable
-  public String getTestMethodName(@Nonnull final PsiElement element,
-                                  @Nonnull final AbstractTestProxy testProxy) {
+  public String getTestMethodName(@jakarta.annotation.Nonnull final PsiElement element,
+                                  @jakarta.annotation.Nonnull final AbstractTestProxy testProxy) {
     return testProxy.toString();
   }
 
 
-  @Nonnull
-  public List<PsiElement> findTestsByNames(@Nonnull String[] testNames, @Nonnull Project project) {
+  @jakarta.annotation.Nonnull
+  public List<PsiElement> findTestsByNames(@jakarta.annotation.Nonnull String[] testNames, @jakarta.annotation.Nonnull Project project) {
     final List<PsiElement> elements = new ArrayList<PsiElement>();
     final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
     final GlobalSearchScope projectScope = GlobalSearchScope.projectScope(project);
@@ -543,7 +543,7 @@ public class JavaCoverageEngine extends CoverageEngine {
         trackTestFolders, acceptedCovRunner, this, project);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected static String getPackageName(final PsiFile sourceFile) {
     return ApplicationManager.getApplication().runReadAction(new Computable<String>() {
       public String compute() {

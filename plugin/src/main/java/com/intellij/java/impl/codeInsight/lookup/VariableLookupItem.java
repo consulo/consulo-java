@@ -43,8 +43,8 @@ import consulo.ui.color.ColorValue;
 import consulo.ui.image.ImageEffects;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.HashMap;
 
 /**
@@ -52,7 +52,7 @@ import java.util.HashMap;
  */
 public class VariableLookupItem extends LookupItem<PsiVariable> implements TypedLookupItem, StaticallyImportable {
   private static final String EQ = " = ";
-  @Nullable
+  @jakarta.annotation.Nullable
   private final MemberLookupHelper myHelper;
   private final ColorValue myColor;
   private final String myTailText;
@@ -77,7 +77,7 @@ public class VariableLookupItem extends LookupItem<PsiVariable> implements Typed
     myTailText = getInitializerText(field);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private String getInitializerText(PsiVariable var) {
     if (myColor != null || !var.hasModifierProperty(PsiModifier.FINAL) || !var.hasModifierProperty(PsiModifier.STATIC)) {
       return null;
@@ -94,7 +94,7 @@ public class VariableLookupItem extends LookupItem<PsiVariable> implements Typed
     return StringUtil.trimLog(prefix + initText + suffix, 30);
   }
 
-  private static PsiExpression getInitializer(@Nonnull PsiVariable var) {
+  private static PsiExpression getInitializer(@jakarta.annotation.Nonnull PsiVariable var) {
     PsiElement navigationElement = var.getNavigationElement();
     if (navigationElement instanceof PsiVariable) {
       var = (PsiVariable) navigationElement;
@@ -103,7 +103,7 @@ public class VariableLookupItem extends LookupItem<PsiVariable> implements Typed
   }
 
   @Nullable
-  private static ColorValue getInitializerColor(@Nonnull PsiVariable var) {
+  private static ColorValue getInitializerColor(@jakarta.annotation.Nonnull PsiVariable var) {
     if (!JavaColorProvider.isColorType(var.getType())) {
       return null;
     }
@@ -119,12 +119,12 @@ public class VariableLookupItem extends LookupItem<PsiVariable> implements Typed
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiType getType() {
     return getSubstitutor().substitute(getObject().getType());
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiSubstitutor getSubstitutor() {
     return mySubstitutor;
   }

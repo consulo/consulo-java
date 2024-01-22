@@ -42,10 +42,11 @@ import consulo.undoRedo.BasicUndoableAction;
 import consulo.undoRedo.ProjectUndoManager;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.fileType.FileType;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.util.LinkedHashMap;
 import java.util.StringTokenizer;
 
@@ -71,7 +72,7 @@ public class PsiCodeFragmentImpl extends PsiFileImpl implements JavaCodeFragment
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public Language getLanguage()
 	{
 		return getContentElementType().getLanguage();
@@ -104,7 +105,7 @@ public class PsiCodeFragmentImpl extends PsiFileImpl implements JavaCodeFragment
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public FileType getFileType()
 	{
 		return JavaFileType.INSTANCE;
@@ -190,7 +191,7 @@ public class PsiCodeFragmentImpl extends PsiFileImpl implements JavaCodeFragment
 	}
 
 	@Override
-	public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place)
+	public boolean processDeclarations(@jakarta.annotation.Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place)
 	{
 		final ElementClassHint classHint = processor.getHint(ElementClassHint.KEY);
 

@@ -17,8 +17,8 @@ package com.intellij.java.language.psi;
 
 import consulo.language.psi.NavigatablePsiElement;
 import consulo.language.util.IncorrectOperationException;
-import javax.annotation.Nullable;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 /**
  * Represents a Java local variable.

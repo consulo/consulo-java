@@ -6,11 +6,11 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaInstructionSta
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaMemoryState;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.InstructionVisitor;
 import com.intellij.java.language.psi.PsiType;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public class BoxingInstruction extends Instruction
 {
-	@Nullable
+	@jakarta.annotation.Nullable
 	private final PsiType myTargetType;
 
 	public BoxingInstruction(@Nullable PsiType targetType)

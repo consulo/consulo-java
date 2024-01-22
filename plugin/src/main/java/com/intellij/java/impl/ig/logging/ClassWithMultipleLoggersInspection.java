@@ -27,7 +27,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.intellij.java.impl.ig.ui.UiUtils;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -51,7 +51,7 @@ public class ClassWithMultipleLoggersInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("multiple.loggers.display.name");
   }
@@ -64,13 +64,13 @@ public class ClassWithMultipleLoggersInspection extends BaseInspection {
   }
 
   @Override
-  public void readSettings(@Nonnull Element element) throws InvalidDataException {
+  public void readSettings(@jakarta.annotation.Nonnull Element element) throws InvalidDataException {
     super.readSettings(element);
     parseString(loggerNamesString, loggerNames);
   }
 
   @Override
-  public void writeSettings(@Nonnull Element element) throws WriteExternalException {
+  public void writeSettings(@jakarta.annotation.Nonnull Element element) throws WriteExternalException {
     loggerNamesString = formatString(loggerNames);
     super.writeSettings(element);
   }
@@ -90,7 +90,7 @@ public class ClassWithMultipleLoggersInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
       //no recursion to avoid drilldown
       if (aClass.isInterface() || aClass.isEnum() ||
           aClass.isAnnotationType()) {

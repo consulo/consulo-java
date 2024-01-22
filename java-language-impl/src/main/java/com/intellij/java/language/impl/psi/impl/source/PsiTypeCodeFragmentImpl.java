@@ -17,8 +17,7 @@ package com.intellij.java.language.impl.psi.impl.source;
 
 import static consulo.util.lang.BitUtil.isSet;
 
-import javax.annotation.Nonnull;
-
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 import consulo.logging.Logger;
 import consulo.project.Project;

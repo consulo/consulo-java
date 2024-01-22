@@ -19,7 +19,7 @@ import com.intellij.java.debugger.impl.ui.impl.watch.ArrayElementDescriptorImpl;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.internal.com.sun.jdi.ArrayReference;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public final class ArrayItemData extends DescriptorData<ArrayElementDescriptorImpl>{
   private static final Logger LOG = Logger.getInstance(ArrayItemData.class);

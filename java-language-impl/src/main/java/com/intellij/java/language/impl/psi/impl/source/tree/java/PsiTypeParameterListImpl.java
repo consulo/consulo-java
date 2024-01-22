@@ -28,8 +28,7 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.logging.Logger;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author dsl
@@ -57,7 +56,7 @@ public class PsiTypeParameterListImpl extends JavaStubPsiElement<PsiTypeParamete
   }
 
   @Override
-  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place) {
+  public boolean processDeclarations(@jakarta.annotation.Nonnull PsiScopeProcessor processor, @jakarta.annotation.Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place) {
     final PsiTypeParameter[] parameters = getTypeParameters();
     for (final PsiTypeParameter parameter : parameters) {
       if (!processor.execute(parameter, state)) return false;

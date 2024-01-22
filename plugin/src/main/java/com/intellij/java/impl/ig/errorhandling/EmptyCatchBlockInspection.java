@@ -29,10 +29,10 @@ import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 
 @ExtensionImpl
@@ -52,14 +52,14 @@ public class EmptyCatchBlockInspection extends BaseInspection {
   public boolean m_ignoreIgnoreParameter = true;
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "empty.catch.block.display.name");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "empty.catch.block.problem.descriptor");
@@ -131,7 +131,7 @@ public class EmptyCatchBlockInspection extends BaseInspection {
   private class EmptyCatchBlockVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitTryStatement(@Nonnull PsiTryStatement statement) {
+    public void visitTryStatement(@jakarta.annotation.Nonnull PsiTryStatement statement) {
       super.visitTryStatement(statement);
     /*  if (JspPsiUtil.isInJspFile(statement.getContainingFile())) {
         return;

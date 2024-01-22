@@ -24,9 +24,8 @@ import consulo.language.psi.PsiElement;
 import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.language.impl.ast.CompositeElement;
 import consulo.logging.Logger;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 
 /**
  * @author ven

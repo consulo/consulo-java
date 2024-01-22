@@ -6,7 +6,7 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaMemoryState;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.java.language.psi.PsiExpression;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.Objects;
 
@@ -23,7 +23,7 @@ public class ResultOfInstruction extends EvalInstruction
 	@Override
 	public
 	@Nonnull
-	DfaValue eval(@Nonnull DfaValueFactory factory, @Nonnull DfaMemoryState state, @Nonnull DfaValue ... arguments)
+	DfaValue eval(@jakarta.annotation.Nonnull DfaValueFactory factory, @Nonnull DfaMemoryState state, @Nonnull DfaValue ... arguments)
 	{
 		return arguments[0];
 	}
@@ -33,7 +33,7 @@ public class ResultOfInstruction extends EvalInstruction
 		return "RESULT_OF " + getExpression().getText();
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
 	public PsiExpression getExpression()
 	{

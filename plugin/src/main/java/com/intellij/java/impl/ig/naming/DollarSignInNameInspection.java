@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.ig.naming;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiVariable;
@@ -26,11 +24,12 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.RenameFix;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class DollarSignInNameInspection extends BaseInspection {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "dollar.sign.in.name.display.name");
@@ -40,7 +39,7 @@ public class DollarSignInNameInspection extends BaseInspection {
     return new RenameFix();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "dollar.sign.in.name.problem.descriptor");
@@ -70,7 +69,7 @@ public class DollarSignInNameInspection extends BaseInspection {
     }
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
       super.visitMethod(method);
       final String name = method.getName();
       if (name.indexOf((int)'$') < 0) {
@@ -80,7 +79,7 @@ public class DollarSignInNameInspection extends BaseInspection {
     }
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
       //note: no call to super, to avoid drill-down
       final String name = aClass.getName();
       if (name == null) {

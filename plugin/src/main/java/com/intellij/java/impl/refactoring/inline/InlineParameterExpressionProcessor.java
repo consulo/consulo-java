@@ -37,8 +37,8 @@ import consulo.util.collection.MultiMap;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.ref.Ref;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -307,12 +307,12 @@ public class InlineParameterExpressionProcessor extends BaseRefactoringProcessor
       myReplacement = replacement;
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     public PsiElement getReplacement() {
       return myReplacement.isValid() ? myReplacement : null;
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     public PsiVariable getVariable() {
       return myVariable != null && myVariable.isValid() ? myVariable : null;
     }

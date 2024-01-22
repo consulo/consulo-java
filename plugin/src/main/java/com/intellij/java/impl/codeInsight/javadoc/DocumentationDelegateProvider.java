@@ -21,8 +21,8 @@ import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 @ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class DocumentationDelegateProvider {
@@ -59,7 +59,7 @@ public abstract class DocumentationDelegateProvider {
   @Nullable
   public abstract PsiDocCommentOwner computeDocumentationDelegate(@Nonnull PsiMember member);
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static PsiDocCommentOwner findDocumentationDelegate(@Nonnull PsiMember method) {
     for (DocumentationDelegateProvider delegator : EP_NAME.getExtensionList()) {
       PsiDocCommentOwner type = delegator.computeDocumentationDelegate(method);

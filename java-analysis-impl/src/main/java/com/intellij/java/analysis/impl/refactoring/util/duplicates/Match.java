@@ -34,9 +34,9 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.collection.ArrayUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -325,7 +325,7 @@ public final class Match {
     return new TextRange(startRange.getStartOffset(), endRange.getEndOffset());
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public PsiType getChangedReturnType(final PsiMethod psiMethod) {
     final PsiType returnType = psiMethod.getReturnType();
     if (returnType != null) {

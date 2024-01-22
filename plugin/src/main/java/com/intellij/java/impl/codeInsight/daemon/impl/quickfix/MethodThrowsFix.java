@@ -30,8 +30,8 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class MethodThrowsFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   private static final Logger LOG = Logger.getInstance(MethodThrowsFix.class);
@@ -60,13 +60,13 @@ public class MethodThrowsFix extends LocalQuickFixAndIntentionActionOnPsiElement
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("fix.throws.list.family");
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project,
+  public boolean isAvailable(@jakarta.annotation.Nonnull Project project,
                              @Nonnull PsiFile file,
                              @Nonnull PsiElement startElement,
                              @Nonnull PsiElement endElement) {
@@ -76,11 +76,11 @@ public class MethodThrowsFix extends LocalQuickFixAndIntentionActionOnPsiElement
   }
 
   @Override
-  public void invoke(@Nonnull Project project,
+  public void invoke(@jakarta.annotation.Nonnull Project project,
                      @Nonnull PsiFile file,
                      @Nullable Editor editor,
                      @Nonnull PsiElement startElement,
-                     @Nonnull PsiElement endElement) {
+                     @jakarta.annotation.Nonnull PsiElement endElement) {
     final PsiMethod myMethod = (PsiMethod)startElement;
     if (!FileModificationService.getInstance().prepareFileForWrite(myMethod.getContainingFile())) return;
     PsiJavaCodeReferenceElement[] referenceElements = myMethod.getThrowsList().getReferenceElements();

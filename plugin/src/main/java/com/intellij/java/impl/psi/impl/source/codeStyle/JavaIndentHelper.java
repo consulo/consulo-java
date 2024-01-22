@@ -31,7 +31,7 @@ import consulo.language.impl.ast.CompositeElement;
 import consulo.language.impl.ast.TreeUtil;
 import consulo.language.psi.PsiFile;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class JavaIndentHelper implements IndentHelperExtension {

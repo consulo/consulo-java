@@ -27,9 +27,9 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author anna
@@ -40,7 +40,7 @@ import javax.annotation.Nullable;
 public class ConvertToNestedIfIntention extends Intention {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new PsiElementPredicate() {
 

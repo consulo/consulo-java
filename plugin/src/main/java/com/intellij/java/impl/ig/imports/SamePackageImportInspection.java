@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.imports;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiImportList;
 import com.intellij.java.language.psi.PsiImportStatement;
@@ -33,7 +33,7 @@ import com.intellij.java.impl.ig.fixes.DeleteImportFix;
 public class SamePackageImportInspection extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "import.from.same.package.display.name");

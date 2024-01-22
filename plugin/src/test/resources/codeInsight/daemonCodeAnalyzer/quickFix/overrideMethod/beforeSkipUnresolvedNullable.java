@@ -1,4 +1,4 @@
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 // "Implement method 'foo'" "true"
 abstract class Test {

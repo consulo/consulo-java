@@ -21,7 +21,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.ui.ex.awt.UIUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 
@@ -40,13 +40,13 @@ public class ClassCouplingInspection
   public boolean m_includeLibraryClasses = false;
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "OverlyCoupledClass";
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "overly.coupled.class.display.name");

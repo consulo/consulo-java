@@ -24,7 +24,6 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.annotation.Nonnull;
 import javax.swing.Box;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -36,6 +35,7 @@ import consulo.execution.debug.breakpoint.XBreakpoint;
 import consulo.ui.ex.awt.IdeBorderFactory;
 import consulo.ui.ex.awt.util.DialogUtil;
 import consulo.execution.debug.breakpoint.ui.XBreakpointCustomPropertiesPanel;
+import jakarta.annotation.Nonnull;
 
 public class ExceptionBreakpointPropertiesPanel extends XBreakpointCustomPropertiesPanel<XBreakpoint<JavaExceptionBreakpointProperties>>
 {
@@ -111,7 +111,7 @@ public class ExceptionBreakpointPropertiesPanel extends XBreakpointCustomPropert
 	//}
 
 	@Override
-	public void loadFrom(@Nonnull XBreakpoint<JavaExceptionBreakpointProperties> breakpoint)
+	public void loadFrom(@jakarta.annotation.Nonnull XBreakpoint<JavaExceptionBreakpointProperties> breakpoint)
 	{
 		myNotifyCaughtCheckBox.setSelected(breakpoint.getProperties().NOTIFY_CAUGHT);
 		myNotifyUncaughtCheckBox.setSelected(breakpoint.getProperties().NOTIFY_UNCAUGHT);

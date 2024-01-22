@@ -7,7 +7,7 @@ import consulo.language.editor.inspection.InspectionToolState;
 import consulo.localize.LocalizeValue;
 import consulo.util.xml.serializer.XmlSerializerUtil;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author VISTALL
@@ -19,7 +19,7 @@ public class DeprecationInspectionState implements InspectionToolState<Deprecati
   public boolean IGNORE_ABSTRACT_DEPRECATED_OVERRIDES = true;
   public boolean IGNORE_METHODS_OF_DEPRECATED = true;
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public UnnamedConfigurable createConfigurable() {
     ConfigurableBuilder<ConfigurableBuilderState> builder = ConfigurableBuilder.newBuilder();

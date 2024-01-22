@@ -33,7 +33,7 @@ import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.introduce.inplace.AbstractInplaceIntroducer;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.List;
 
 public class IntroduceFieldHandler extends BaseExpressionToFieldHandler {

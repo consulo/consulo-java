@@ -15,8 +15,7 @@
  */
 package com.intellij.java.impl.ig.numeric;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -29,6 +28,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ConfusingFloatingPointLiteralInspection
@@ -42,7 +42,7 @@ public class ConfusingFloatingPointLiteralInspection
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "confusing.floating.point.literal.problem.descriptor");
@@ -133,7 +133,7 @@ public class ConfusingFloatingPointLiteralInspection
 
     @Override
     public void visitLiteralExpression(
-      @Nonnull PsiLiteralExpression literal) {
+      @jakarta.annotation.Nonnull PsiLiteralExpression literal) {
       super.visitLiteralExpression(literal);
       final PsiType type = literal.getType();
       if (type == null) {

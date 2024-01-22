@@ -45,9 +45,9 @@ import consulo.util.collection.MultiMap;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.Ref;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -89,7 +89,7 @@ public class ReplaceConstructorWithBuilderProcessor extends FixableUsagesRefacto
     return new ReplaceConstructorWithBuilderViewDescriptor();
   }
 
-  protected void findUsages(@Nonnull final List<FixableUsageInfo> usages) {
+  protected void findUsages(@jakarta.annotation.Nonnull final List<FixableUsageInfo> usages) {
     final String builderQualifiedName = StringUtil.getQualifiedName(myPackageName, myClassName);
     final PsiClass builderClass =
         JavaPsiFacade.getInstance(myProject).findClass(builderQualifiedName, GlobalSearchScope.projectScope(myProject));
@@ -260,7 +260,7 @@ public class ReplaceConstructorWithBuilderProcessor extends FixableUsagesRefacto
     return constructor;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private PsiMethod getMostCommonConstructor() {
     if (myConstructors.length == 1) return myConstructors[0];
     PsiMethod commonConstructor = null;

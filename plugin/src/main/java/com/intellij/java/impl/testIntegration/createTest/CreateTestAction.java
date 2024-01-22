@@ -44,8 +44,9 @@ import consulo.ui.ex.awt.Messages;
 import consulo.undoRedo.CommandProcessor;
 import consulo.virtualFileSystem.VirtualFile;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -111,7 +112,7 @@ public class CreateTestAction extends PsiElementBaseIntentionAction {
   }
 
   @Override
-  public void invoke(final @Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
+  public void invoke(final @jakarta.annotation.Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(element)) return;
     final Module srcModule = ModuleUtilCore.findModuleForPsiElement(element);
     final PsiClass srcClass = getContainingClass(element);

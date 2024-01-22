@@ -8,8 +8,8 @@ import com.intellij.java.language.impl.psi.impl.java.stubs.PsiFieldStub;
 import consulo.language.psi.stub.StubBase;
 import consulo.language.psi.stub.StubElement;
 import consulo.util.lang.BitUtil;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class PsiFieldStubImpl extends StubBase<PsiField> implements PsiFieldStub
 {
@@ -23,7 +23,7 @@ public class PsiFieldStubImpl extends StubBase<PsiField> implements PsiFieldStub
 	private final String myInitializer;
 	private final byte myFlags;
 
-	public PsiFieldStubImpl(StubElement parent, @Nullable String name, @Nonnull TypeInfo type, @Nullable String initializer, byte flags)
+	public PsiFieldStubImpl(StubElement parent, @jakarta.annotation.Nullable String name, @jakarta.annotation.Nonnull TypeInfo type, @Nullable String initializer, byte flags)
 	{
 		super(parent, isEnumConst(flags) ? JavaStubElementTypes.ENUM_CONSTANT : JavaStubElementTypes.FIELD);
 		myName = name;

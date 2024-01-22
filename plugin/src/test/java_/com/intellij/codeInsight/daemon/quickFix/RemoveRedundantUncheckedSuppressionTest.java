@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import org.jetbrains.annotations.Nls;
 import consulo.language.editor.inspection.scheme.InspectionManager;
@@ -74,9 +74,9 @@ public abstract class RemoveRedundantUncheckedSuppressionTest extends LightQuick
           return inspection.getShortName();
         }
 
-        @Nonnull
+        @jakarta.annotation.Nonnull
         @Override
-        public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder,
+        public PsiElementVisitor buildVisitor(@jakarta.annotation.Nonnull final ProblemsHolder holder,
                                               boolean isOnTheFly,
                                               @Nonnull LocalInspectionToolSession session) {
           return new JavaElementVisitor() {

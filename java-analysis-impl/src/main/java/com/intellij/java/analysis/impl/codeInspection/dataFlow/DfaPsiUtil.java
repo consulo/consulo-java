@@ -33,8 +33,8 @@ import consulo.util.collection.*;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.ref.Ref;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
 
@@ -52,20 +52,20 @@ public final class DfaPsiUtil {
     return var.hasModifierProperty(PsiModifier.FINAL) && !var.hasModifierProperty(PsiModifier.TRANSIENT) && var instanceof PsiField;
   }
 
-  @Nonnull
-  public static Nullability getElementNullability(@Nullable PsiType resultType, @Nullable PsiModifierListOwner owner) {
+  @jakarta.annotation.Nonnull
+  public static Nullability getElementNullability(@jakarta.annotation.Nullable PsiType resultType, @jakarta.annotation.Nullable PsiModifierListOwner owner) {
     return getElementNullability(resultType, owner, false);
   }
 
   @Nonnull
   public static Nullability getElementNullabilityIgnoringParameterInference(@Nullable PsiType resultType,
-                                                                            @Nullable PsiModifierListOwner owner) {
+                                                                            @jakarta.annotation.Nullable PsiModifierListOwner owner) {
     return getElementNullability(resultType, owner, true);
   }
 
-  @Nonnull
-  private static Nullability getElementNullability(@Nullable PsiType resultType,
-                                                   @Nullable PsiModifierListOwner owner,
+  @jakarta.annotation.Nonnull
+  private static Nullability getElementNullability(@jakarta.annotation.Nullable PsiType resultType,
+                                                   @jakarta.annotation.Nullable PsiModifierListOwner owner,
                                                    boolean ignoreParameterNullabilityInference) {
     if (owner == null) {
       return getTypeNullability(resultType);
@@ -110,7 +110,7 @@ public final class DfaPsiUtil {
     return Nullability.UNKNOWN;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private static Nullability getNullabilityFromAnnotation(PsiModifierListOwner owner, boolean ignoreParameterNullabilityInference) {
     NullableNotNullManager manager = NullableNotNullManager.getInstance(owner.getProject());
     NullabilityAnnotationInfo info = manager.findEffectiveNullabilityInfo(owner);
@@ -124,7 +124,7 @@ public final class DfaPsiUtil {
     return info.getNullability();
   }
 
-  private static boolean isMapMethodWithUnknownNullity(@Nonnull PsiMethod method) {
+  private static boolean isMapMethodWithUnknownNullity(@jakarta.annotation.Nonnull PsiMethod method) {
     String name = method.getName();
     if (!"get".equals(name) && !"remove".equals(name)) {
       return false;
@@ -150,7 +150,7 @@ public final class DfaPsiUtil {
     return Nullability.UNKNOWN;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static PsiType inferLoopParameterTypeWithNullability(PsiForeachStatement loop) {
     PsiExpression iteratedValue = PsiUtil.skipParenthesizedExprDown(loop.getIteratedValue());
     if (iteratedValue == null) {
@@ -172,13 +172,13 @@ public final class DfaPsiUtil {
   }
 
 
-  @Nonnull
-  public static Nullability getTypeNullability(@Nullable PsiType type) {
+  @jakarta.annotation.Nonnull
+  public static Nullability getTypeNullability(@jakarta.annotation.Nullable PsiType type) {
     NullabilityAnnotationInfo info = getTypeNullabilityInfo(type);
     return info == null ? Nullability.UNKNOWN : info.getNullability();
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static NullabilityAnnotationInfo getTypeNullabilityInfo(@Nullable PsiType type) {
     if (type == null || type instanceof PsiPrimitiveType) {
       return null;
@@ -193,7 +193,7 @@ public final class DfaPsiUtil {
     return result.get();
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static NullabilityAnnotationInfo getTypeOwnNullability(PsiType eachType) {
     for (PsiAnnotation annotation : eachType.getAnnotations()) {
       String qualifiedName = annotation.getQualifiedName();
@@ -254,7 +254,7 @@ public final class DfaPsiUtil {
     return Nullability.UNKNOWN;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private static Nullability inferLambdaParameterNullability(PsiFunctionalExpression lambda, int parameterIndex) {
     PsiElement expression = lambda;
     PsiElement expressionParent = lambda.getParent();
@@ -276,7 +276,7 @@ public final class DfaPsiUtil {
     return Nullability.UNKNOWN;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private static Nullability getLambdaParameterNullability(@Nonnull PsiMethod method, int parameterIndex, int lambdaParameterIndex) {
     PsiClass type = method.getContainingClass();
     if (type != null) {
@@ -433,7 +433,7 @@ public final class DfaPsiUtil {
     }
 
     return LanguageCachedValueUtil.getCachedValue(psiClass, new CachedValueProvider<>() {
-      @Nonnull
+      @jakarta.annotation.Nonnull
       @Override
       public Result<MultiMap<PsiField, PsiExpression>> compute() {
         final Set<String> fieldNames = new HashSet<>();
@@ -470,8 +470,8 @@ public final class DfaPsiUtil {
     });
   }
 
-  @Nullable
-  public static PsiElement getTopmostBlockInSameClass(@Nonnull PsiElement position) {
+  @jakarta.annotation.Nullable
+  public static PsiElement getTopmostBlockInSameClass(@jakarta.annotation.Nonnull PsiElement position) {
     return JBIterable.
         generate(position, PsiElement::getParent).
         takeWhile(e -> !(e instanceof PsiMember || e instanceof PsiFile || e instanceof PsiLambdaExpression)).
@@ -559,7 +559,7 @@ public final class DfaPsiUtil {
    * @param method method to check
    * @return nullability of vararg parameter component; {@link Nullability#UNKNOWN} if not specified or method is not vararg method.
    */
-  @Nonnull
+  @jakarta.annotation.Nonnull
   static Nullability getVarArgComponentNullability(PsiMethod method) {
     if (method != null) {
       if (NON_NULL_VAR_ARG.methodMatches(method)) {
@@ -618,7 +618,7 @@ public final class DfaPsiUtil {
    * @param expr literal to create a constant type from
    * @return a DfType that describes given literal
    */
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static DfType fromLiteral(@Nonnull PsiLiteralExpression expr) {
     PsiType type = expr.getType();
     if (type == null) {

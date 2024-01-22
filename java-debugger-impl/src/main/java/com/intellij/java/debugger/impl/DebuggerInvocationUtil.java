@@ -21,12 +21,12 @@ import consulo.ui.ModalityState;
 import consulo.project.Project;
 import consulo.application.util.function.Computable;
 import consulo.language.psi.PsiDocumentManager;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
 public class DebuggerInvocationUtil {
-  public static void swingInvokeLater(final Project project, @Nonnull final Runnable runnable) {
+  public static void swingInvokeLater(final Project project, @jakarta.annotation.Nonnull final Runnable runnable) {
     SwingUtilities.invokeLater(new Runnable() {
       public void run() {
         if (project != null && !project.isDisposed()) {
@@ -45,7 +45,7 @@ public class DebuggerInvocationUtil {
     });
   }
 
-  public static void invokeLater(final Project project, @Nonnull final Runnable runnable, ModalityState state) {
+  public static void invokeLater(final Project project, @jakarta.annotation.Nonnull final Runnable runnable, ModalityState state) {
     ApplicationManager.getApplication().invokeLater(new Runnable() {
       public void run() {
         if(project == null || project.isDisposed()) return;

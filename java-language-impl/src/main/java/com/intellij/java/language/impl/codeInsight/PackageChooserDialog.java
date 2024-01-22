@@ -45,11 +45,11 @@ import consulo.ui.ex.awt.tree.TreeUtil;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.undoRedo.CommandProcessor;
 import consulo.util.lang.Comparing;
-import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -208,7 +208,7 @@ public class PackageChooserDialog extends PackageChooser {
       }, ModalityState.stateForComponent(getRootPane()));*/
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private PsiJavaPackage getTreeSelection() {
     if (myTree == null) return null;
     TreePath path = myTree.getSelectionPath();

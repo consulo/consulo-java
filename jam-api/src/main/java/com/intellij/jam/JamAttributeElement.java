@@ -23,15 +23,15 @@ import consulo.language.psi.PsiManager;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.xml.util.xml.GenericValue;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author peter
  */
 public abstract class JamAttributeElement<T> implements JamElement, GenericValue<T> {
   private final PsiElementRef<PsiAnnotation> myParent;
-  @Nullable
+  @jakarta.annotation.Nullable
   private final AnnotationAttributeChildLink myAttributeLink;
   @Nullable
   private final PsiAnnotationMemberValue myExactValue;
@@ -83,7 +83,7 @@ public abstract class JamAttributeElement<T> implements JamElement, GenericValue
     return myParent.isValid();
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public PsiAnnotationMemberValue getPsiElement() {
     if (myExactValue == null) {
       assert myAttributeLink != null;

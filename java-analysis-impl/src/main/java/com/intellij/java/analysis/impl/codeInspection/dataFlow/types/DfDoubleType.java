@@ -3,7 +3,7 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 
 import com.intellij.java.language.psi.PsiPrimitiveType;
 import com.intellij.java.language.psi.PsiType;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public interface DfDoubleType extends DfFloatingPointType {
   @Nonnull

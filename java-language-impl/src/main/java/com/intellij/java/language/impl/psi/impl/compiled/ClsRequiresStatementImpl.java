@@ -15,7 +15,7 @@ import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.language.psi.stub.StubElement;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class ClsRequiresStatementImpl extends ClsRepositoryPsiElement<PsiRequiresStatementStub> implements PsiRequiresStatement {
   private final NotNullLazyValue<PsiJavaModuleReferenceElement> myModuleReference;

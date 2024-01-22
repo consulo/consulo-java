@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
@@ -29,13 +27,14 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
 import consulo.java.language.module.util.JavaClassNames;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ThrowableResultOfMethodCallIgnoredInspection
   extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "throwable.result.of.method.call.ignored.display.name");

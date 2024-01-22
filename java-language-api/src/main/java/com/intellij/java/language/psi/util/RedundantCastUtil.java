@@ -29,8 +29,8 @@ import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.ref.Ref;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -207,7 +207,7 @@ public class RedundantCastUtil {
       }
     }
 
-    private void processPossibleTypeCast(PsiExpression rExpr, @Nullable PsiType lType) {
+    private void processPossibleTypeCast(PsiExpression rExpr, @jakarta.annotation.Nullable PsiType lType) {
       rExpr = deparenthesizeExpression(rExpr);
       if (rExpr instanceof PsiTypeCastExpression) {
         PsiExpression castOperand = ((PsiTypeCastExpression) rExpr).getOperand();

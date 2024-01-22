@@ -9,8 +9,7 @@ import com.intellij.java.language.psi.*;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import static com.siyeh.ig.callMatcher.CallMatcher.anyOf;
 import static com.siyeh.ig.callMatcher.CallMatcher.staticCall;
@@ -28,7 +27,7 @@ public class AssertAllInliner implements CallInliner {
 
 
   @Override
-  public boolean tryInlineCall(@Nonnull CFGBuilder builder, @Nonnull PsiMethodCallExpression call) {
+  public boolean tryInlineCall(@Nonnull CFGBuilder builder, @jakarta.annotation.Nonnull PsiMethodCallExpression call) {
     if (!ASSERT_ALL.matches(call) || !MethodCallUtils.isVarArgCall(call)) {
       return false;
     }

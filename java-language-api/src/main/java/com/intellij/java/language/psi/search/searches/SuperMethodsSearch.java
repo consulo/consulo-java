@@ -21,8 +21,7 @@ import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import consulo.application.util.query.ExtensibleQueryFactory;
 import consulo.application.util.query.Query;
-
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author max
@@ -33,13 +32,13 @@ public class SuperMethodsSearch extends ExtensibleQueryFactory<MethodSignatureBa
   public static class SearchParameters {
     private final PsiMethod myMethod;
     //null means any class would be matched
-    @Nullable
+    @jakarta.annotation.Nullable
     private final PsiClass myClass;
     private final boolean myCheckBases;
     private final boolean myAllowStaticMethod;
 
     public SearchParameters(final PsiMethod method,
-                            @Nullable final PsiClass aClass,
+                            @jakarta.annotation.Nullable final PsiClass aClass,
                             final boolean checkBases,
                             final boolean allowStaticMethod) {
       myCheckBases = checkBases;
@@ -56,7 +55,7 @@ public class SuperMethodsSearch extends ExtensibleQueryFactory<MethodSignatureBa
       return myMethod;
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     public final PsiClass getPsiClass() {
       return myClass;
     }

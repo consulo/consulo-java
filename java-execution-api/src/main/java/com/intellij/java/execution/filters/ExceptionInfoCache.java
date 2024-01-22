@@ -25,7 +25,7 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.collection.ContainerUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.concurrent.ConcurrentMap;
 
 /**

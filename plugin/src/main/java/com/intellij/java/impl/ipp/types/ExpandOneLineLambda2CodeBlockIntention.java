@@ -27,14 +27,13 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ExpandOneLineLambda2CodeBlockIntention", fileExtensions = "java", categories = {"Java", "Declaration"})
 public class ExpandOneLineLambda2CodeBlockIntention extends Intention {
   private static final Logger LOG = Logger.getInstance(ExpandOneLineLambda2CodeBlockIntention.class);
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected PsiElementPredicate getElementPredicate() {
     return new LambdaExpressionPredicate();
@@ -47,7 +46,7 @@ public class ExpandOneLineLambda2CodeBlockIntention extends Intention {
   }
 
   @Override
-  protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+  protected void processIntention(@jakarta.annotation.Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(element, PsiLambdaExpression.class);
     LOG.assertTrue(lambdaExpression != null);
     final PsiElement body = lambdaExpression.getBody();

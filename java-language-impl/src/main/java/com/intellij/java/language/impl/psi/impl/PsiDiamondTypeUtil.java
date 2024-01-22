@@ -31,7 +31,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.List;
 
 public class PsiDiamondTypeUtil {
@@ -42,7 +42,7 @@ public class PsiDiamondTypeUtil {
 
   public static boolean canCollapseToDiamond(final PsiNewExpression expression,
                                              final PsiNewExpression context,
-                                             @Nullable final PsiType expectedType) {
+                                             @jakarta.annotation.Nullable final PsiType expectedType) {
     return canCollapseToDiamond(expression, context, expectedType, false);
   }
 
@@ -183,7 +183,7 @@ public class PsiDiamondTypeUtil {
   public static boolean areTypeArgumentsRedundant(PsiType[] typeArguments,
                                                   PsiExpression context,
                                                   boolean constructorRef,
-                                                  @Nullable PsiMethod method,
+                                                  @jakarta.annotation.Nullable PsiMethod method,
                                                   PsiTypeParameter[] typeParameters) {
     try {
       final PsiElement copy;

@@ -44,10 +44,10 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.application.util.function.Processor;
 import consulo.util.collection.MultiMap;
 import consulo.logging.Logger;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

@@ -9,7 +9,7 @@ import com.intellij.java.language.psi.PsiEnumConstant;
 import com.intellij.java.language.psi.PsiEnumConstantInitializer;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiSubstitutor;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.Collections;

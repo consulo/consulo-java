@@ -48,10 +48,11 @@ import consulo.ui.ex.awt.JBList;
 import consulo.ui.ex.popup.JBPopup;
 import consulo.undoRedo.CommandProcessor;
 import consulo.virtualFileSystem.VirtualFile;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 import java.util.*;
 
@@ -62,7 +63,7 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction impleme
   private static final Logger LOG = Logger.getInstance(CreateFromUsageBaseFix.class);
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
     PsiElement element = getElement();
     if (element == null || isValidElement(element)) {
       return false;
@@ -124,7 +125,7 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction impleme
     });
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   protected abstract PsiElement getElement();
 
   private void chooseTargetClass(List<PsiClass> classes, final Editor editor) {
@@ -165,8 +166,8 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction impleme
   /**
    * @return null means unable to open the editor
    */
-  @Nullable
-  protected static Editor positionCursor(@Nonnull Project project, @Nonnull PsiFile targetFile, @Nonnull PsiElement element) {
+  @jakarta.annotation.Nullable
+  protected static Editor positionCursor(@jakarta.annotation.Nonnull Project project, @Nonnull PsiFile targetFile, @jakarta.annotation.Nonnull PsiElement element) {
     TextRange range = element.getTextRange();
     int textOffset = range.getStartOffset();
     VirtualFile file = targetFile.getVirtualFile();
@@ -434,7 +435,7 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction impleme
     startTemplate(editor, template, project, listener, null);
   }
 
-  public static void startTemplate(@Nonnull final Editor editor,
+  public static void startTemplate(@jakarta.annotation.Nonnull final Editor editor,
                                    final Template template,
                                    @Nonnull final Project project,
                                    final TemplateEditingListener listener,

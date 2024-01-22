@@ -22,7 +22,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import consulo.annotation.component.ExtensionImpl;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class InstanceofIncompatibleInterfaceInspection
@@ -49,7 +49,7 @@ public class InstanceofIncompatibleInterfaceInspection
 
     @Override
     public void visitInstanceOfExpression(
-      @Nonnull PsiInstanceOfExpression expression) {
+      @jakarta.annotation.Nonnull PsiInstanceOfExpression expression) {
       super.visitInstanceOfExpression(expression);
       final PsiTypeElement castTypeElement = expression.getCheckType();
       if (castTypeElement == null) {

@@ -42,8 +42,8 @@ import consulo.util.lang.StringUtil;
 import consulo.util.lang.SystemProperties;
 import consulo.util.lang.ref.Ref;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -161,7 +161,7 @@ public class InferenceSession {
     initBounds(typeParams);
   }
 
-  public static PsiType getUpperBound(@Nonnull PsiClass psiClass) {
+  public static PsiType getUpperBound(@jakarta.annotation.Nonnull PsiClass psiClass) {
     return psiClass.getUserData(UPPER_BOUND);
   }
 
@@ -337,28 +337,28 @@ public class InferenceSession {
 
 
   public PsiSubstitutor collectAdditionalAndInfer(@Nonnull PsiParameter[] parameters,
-                                                  @Nonnull PsiExpression[] args,
-                                                  @Nonnull MethodCandidateInfo.CurrentCandidateProperties properties,
+                                                  @jakarta.annotation.Nonnull PsiExpression[] args,
+                                                  @jakarta.annotation.Nonnull MethodCandidateInfo.CurrentCandidateProperties properties,
                                                   @Nonnull PsiSubstitutor psiSubstitutor) {
     return performGuardedInference(parameters, args, myContext, properties, psiSubstitutor);
   }
 
   @Nonnull
-  public PsiSubstitutor infer(@Nullable PsiParameter[] parameters, @Nullable PsiExpression[] args, @Nullable PsiElement parent) {
+  public PsiSubstitutor infer(@jakarta.annotation.Nullable PsiParameter[] parameters, @jakarta.annotation.Nullable PsiExpression[] args, @jakarta.annotation.Nullable PsiElement parent) {
     return infer(parameters, args, parent, getCurrentProperties(parent));
   }
 
-  @Nonnull
-  public PsiSubstitutor infer(@Nullable PsiParameter[] parameters, @Nullable PsiExpression[] args, @Nullable PsiElement parent, @Nullable MethodCandidateInfo.CurrentCandidateProperties properties) {
+  @jakarta.annotation.Nonnull
+  public PsiSubstitutor infer(@jakarta.annotation.Nullable PsiParameter[] parameters, @Nullable PsiExpression[] args, @jakarta.annotation.Nullable PsiElement parent, @Nullable MethodCandidateInfo.CurrentCandidateProperties properties) {
     return performGuardedInference(parameters, args, parent, properties, PsiSubstitutor.EMPTY);
   }
 
   @Nonnull
   private PsiSubstitutor performGuardedInference(@Nullable PsiParameter[] parameters,
-                                                 @Nullable PsiExpression[] args,
+                                                 @jakarta.annotation.Nullable PsiExpression[] args,
                                                  @Nullable PsiElement parent,
-                                                 @Nullable MethodCandidateInfo.CurrentCandidateProperties properties,
-                                                 @Nonnull PsiSubstitutor initialSubstitutor) {
+                                                 @jakarta.annotation.Nullable MethodCandidateInfo.CurrentCandidateProperties properties,
+                                                 @jakarta.annotation.Nonnull PsiSubstitutor initialSubstitutor) {
     try {
       doInfer(parameters, args, parent, properties, initialSubstitutor);
       return prepareSubstitution();
@@ -376,7 +376,7 @@ public class InferenceSession {
   }
 
   private void doInfer(@Nullable PsiParameter[] parameters,
-                       @Nullable PsiExpression[] args,
+                       @jakarta.annotation.Nullable PsiExpression[] args,
                        @Nullable PsiElement parent,
                        @Nullable MethodCandidateInfo.CurrentCandidateProperties properties,
                        @Nonnull PsiSubstitutor initialSubstitutor) {
@@ -962,7 +962,7 @@ public class InferenceSession {
     return collectDependencies(type, null);
   }
 
-  public boolean collectDependencies(@Nullable PsiType type, @Nullable final Set<InferenceVariable> dependencies) {
+  public boolean collectDependencies(@jakarta.annotation.Nullable PsiType type, @jakarta.annotation.Nullable final Set<InferenceVariable> dependencies) {
     return collectDependencies(type, dependencies, new Function<PsiClassType, InferenceVariable>() {
       @Override
       public InferenceVariable apply(PsiClassType classType) {
@@ -971,18 +971,18 @@ public class InferenceSession {
     });
   }
 
-  public static boolean collectDependencies(@Nullable PsiType type, @Nullable final Set<InferenceVariable> dependencies, final Function<PsiClassType, InferenceVariable> fun) {
+  public static boolean collectDependencies(@jakarta.annotation.Nullable PsiType type, @jakarta.annotation.Nullable final Set<InferenceVariable> dependencies, final Function<PsiClassType, InferenceVariable> fun) {
     if (type == null) {
       return true;
     }
     final Boolean isProper = type.accept(new PsiTypeVisitor<Boolean>() {
-      @Nullable
+      @jakarta.annotation.Nullable
       @Override
       public Boolean visitType(PsiType type) {
         return true;
       }
 
-      @Nullable
+      @jakarta.annotation.Nullable
       @Override
       public Boolean visitCapturedWildcardType(PsiCapturedWildcardType capturedWildcardType) {
         return true;
@@ -1107,7 +1107,7 @@ public class InferenceSession {
     return false;
   }
 
-  private void resolveBounds(final Collection<InferenceVariable> inferenceVariables, @Nonnull PsiSubstitutor substitutor) {
+  private void resolveBounds(final Collection<InferenceVariable> inferenceVariables, @jakarta.annotation.Nonnull PsiSubstitutor substitutor) {
     final Collection<InferenceVariable> allVars = new ArrayList<>(inferenceVariables);
     while (!allVars.isEmpty()) {
       final List<InferenceVariable> vars = InferenceVariablesOrder.resolveOrder(allVars, this);
@@ -1663,7 +1663,7 @@ public class InferenceSession {
    */
   public static boolean isMoreSpecific(final PsiMethod m1, final PsiMethod m2, final PsiSubstitutor siteSubstitutor1, final PsiExpression[] args, final PsiElement context, final boolean varargs) {
     return LambdaUtil.performWithSubstitutedParameterBounds(m1.getTypeParameters(), siteSubstitutor1, new Supplier<Boolean>() {
-      @Nullable
+      @jakarta.annotation.Nullable
       @Override
       public Boolean get() {
         return isMoreSpecificInternal(m1, m2, siteSubstitutor1, args, context, varargs);

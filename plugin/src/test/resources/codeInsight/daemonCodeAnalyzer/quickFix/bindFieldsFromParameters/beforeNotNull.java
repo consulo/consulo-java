@@ -1,10 +1,10 @@
 // "Bind Constructor Parameters to Fields" "true"
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class TestBefore {
 
-    public TestBefore(@Nonnull String name<caret>, @Nonnull String name2) {
+    public TestBefore(@Nonnull String name<caret>, @jakarta.annotation.Nonnull String name2) {
         super();
     }
 }

@@ -18,7 +18,6 @@ package com.intellij.java.debugger.impl.ui.tree.render;
 import java.awt.Dimension;
 import java.awt.Point;
 
-import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
@@ -31,6 +30,7 @@ import consulo.ui.ex.RelativePoint;
 import consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author egor
@@ -48,7 +48,7 @@ public abstract class CustomPopupFullValueEvaluator<T> extends JavaValue.JavaFul
 	protected abstract JComponent createComponent(T data);
 
 	@Override
-	public void evaluate(@Nonnull final XFullValueEvaluationCallback callback)
+	public void evaluate(@jakarta.annotation.Nonnull final XFullValueEvaluationCallback callback)
 	{
 		final T data = getData();
 		DebuggerUIUtil.invokeLater(new Runnable()

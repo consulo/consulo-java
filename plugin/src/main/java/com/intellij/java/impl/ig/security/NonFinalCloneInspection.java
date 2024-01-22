@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.ig.security;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
@@ -26,11 +24,12 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NonFinalCloneInspection extends BaseInspection {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("non.final.clone.display.name");
   }
@@ -48,7 +47,7 @@ public class NonFinalCloneInspection extends BaseInspection {
   private static class NonFinalCloneVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
       super.visitMethod(method);
       final String name = method.getName();
       if (!HardcodedMethodConstants.CLONE.equals(name)) {

@@ -24,7 +24,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.usage.Usage;
 import consulo.usage.rule.PsiElementUsage;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author Eugene Zhuravlev

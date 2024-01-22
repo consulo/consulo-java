@@ -24,29 +24,29 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import consulo.java.language.module.util.JavaClassNames;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 @ExtensionImpl
 public class WaitNotInSynchronizedContextInspection
   extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "WaitWhileNotSynced";
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "wait.not.in.synchronized.context.display.name");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     @NonNls final String text;
     if (infos.length > 0) {
@@ -70,7 +70,7 @@ public class WaitNotInSynchronizedContextInspection
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
@@ -138,7 +138,7 @@ public class WaitNotInSynchronizedContextInspection
     }
 
     private static boolean isSynchronizedOnThis(
-      @Nonnull PsiElement element) {
+      @jakarta.annotation.Nonnull PsiElement element) {
       final PsiElement context =
         PsiTreeUtil.getParentOfType(element, PsiMethod.class,
                                     PsiSynchronizedStatement.class);

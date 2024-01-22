@@ -29,10 +29,11 @@ import consulo.project.Project;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.io.File;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -116,7 +117,7 @@ public class PatternPackageSet extends PatternBasedPackageSet {
     return StringUtil.getQualifiedName(fileIndex.getPackageNameByDirectory(file.isDirectory() ? file : file.getParent()), file.getNameWithoutExtension());
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public PackageSet createCopy() {
     return new PatternPackageSet(myAspectJSyntaxPattern, myScope, myModulePatternText);
@@ -127,7 +128,7 @@ public class PatternPackageSet extends PatternBasedPackageSet {
     return 0;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getText() {
     StringBuilder buf = new StringBuilder();

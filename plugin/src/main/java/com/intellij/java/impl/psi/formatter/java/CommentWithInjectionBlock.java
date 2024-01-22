@@ -18,8 +18,6 @@ package com.intellij.java.impl.psi.formatter.java;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 import consulo.language.codeStyle.Alignment;
 import consulo.language.codeStyle.Block;
 import consulo.language.codeStyle.ChildAttributes;
@@ -33,6 +31,7 @@ import consulo.language.codeStyle.CodeStyleSettings;
 import consulo.language.codeStyle.CommonCodeStyleSettings;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
 import consulo.language.codeStyle.inject.InjectedLanguageBlockBuilder;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author nik
@@ -47,7 +46,7 @@ public class CommentWithInjectionBlock extends AbstractJavaBlock
 									 Indent indent,
 									 CommonCodeStyleSettings settings,
 									 JavaCodeStyleSettings javaSettings,
-									 @Nonnull FormattingMode formattingMode)
+									 @jakarta.annotation.Nonnull FormattingMode formattingMode)
 	{
 		super(node, wrap, alignment, indent, settings, javaSettings, formattingMode);
 		myInjectedBlockBuilder = new JavaCommentInjectedBlockBuilder();
@@ -67,7 +66,7 @@ public class CommentWithInjectionBlock extends AbstractJavaBlock
 		return false;
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
 	public ChildAttributes getChildAttributes(int newChildIndex)
 	{
@@ -75,7 +74,7 @@ public class CommentWithInjectionBlock extends AbstractJavaBlock
 	}
 
 	@Override
-	public Spacing getSpacing(Block child1, @Nonnull Block child2)
+	public Spacing getSpacing(Block child1, @jakarta.annotation.Nonnull Block child2)
 	{
 		return null;
 	}

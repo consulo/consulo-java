@@ -30,8 +30,8 @@ import consulo.language.editor.completion.lookup.LookupElementPresentation;
 import consulo.language.editor.completion.lookup.LookupElementRenderer;
 import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
 /**

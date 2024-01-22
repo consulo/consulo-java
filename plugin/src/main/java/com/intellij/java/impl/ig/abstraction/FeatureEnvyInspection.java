@@ -19,8 +19,7 @@ import java.util.Set;
 
 import javax.swing.JComponent;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import com.intellij.java.language.codeInsight.TestFrameworks;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
@@ -32,6 +31,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TestUtils;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class FeatureEnvyInspection extends BaseInspection {
@@ -40,13 +40,13 @@ public class FeatureEnvyInspection extends BaseInspection {
   public boolean ignoreTestCases = false;
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("feature.envy.display.name");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     final PsiNamedElement element = (PsiNamedElement)infos[0];
     final String className = element.getName();

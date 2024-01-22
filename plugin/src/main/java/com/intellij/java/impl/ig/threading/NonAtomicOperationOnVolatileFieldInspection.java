@@ -24,8 +24,8 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.intellij.java.impl.ig.psiutils.SynchronizationUtil;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class NonAtomicOperationOnVolatileFieldInspection

@@ -39,14 +39,14 @@ import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.popup.JBPopup;
 import consulo.virtualFileSystem.VirtualFile;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public abstract class BaseJavaGotoSuperHandler implements GotoSuperActionHander {
   @RequiredUIAccess
   @Override
-  public void invoke(@Nonnull final Project project, @Nonnull final Editor editor, @Nonnull final PsiFile file) {
+  public void invoke(@Nonnull final Project project, @Nonnull final Editor editor, @jakarta.annotation.Nonnull final PsiFile file) {
     FeatureUsageTracker.getInstance().triggerFeatureUsed(GotoSuperAction.FEATURE_ID);
 
     int offset = editor.getCaretModel().getOffset();

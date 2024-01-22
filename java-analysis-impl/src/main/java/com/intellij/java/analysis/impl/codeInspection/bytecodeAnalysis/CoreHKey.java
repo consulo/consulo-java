@@ -16,7 +16,7 @@
 
 package com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 final class CoreHKey
 {
@@ -25,7 +25,7 @@ final class CoreHKey
 	MemberDescriptor myMethod;
 	final int dirKey;
 
-	CoreHKey(@Nonnull MemberDescriptor method, int dirKey)
+	CoreHKey(@jakarta.annotation.Nonnull MemberDescriptor method, int dirKey)
 	{
 		this.myMethod = method;
 		this.dirKey = dirKey;

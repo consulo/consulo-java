@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.ig.threading;
 
-import javax.annotation.Nonnull;
-
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
@@ -25,6 +23,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NestedSynchronizedStatementInspection extends BaseInspection {
@@ -35,7 +34,7 @@ public class NestedSynchronizedStatementInspection extends BaseInspection {
       "nested.synchronized.statement.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "nested.synchronized.statement.problem.descriptor");
@@ -50,7 +49,7 @@ public class NestedSynchronizedStatementInspection extends BaseInspection {
 
     @Override
     public void visitSynchronizedStatement(
-      @Nonnull PsiSynchronizedStatement statement) {
+      @jakarta.annotation.Nonnull PsiSynchronizedStatement statement) {
       super.visitSynchronizedStatement(statement);
       final PsiElement containingSynchronizedStatement =
         PsiTreeUtil.getParentOfType(statement,

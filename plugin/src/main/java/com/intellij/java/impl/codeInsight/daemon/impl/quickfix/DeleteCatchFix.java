@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import javax.annotation.Nonnull;
-
 import consulo.language.editor.FileModificationService;
 import com.intellij.java.language.psi.PsiCatchSection;
 import com.intellij.java.language.psi.PsiCodeBlock;
@@ -24,21 +22,21 @@ import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiTryStatement;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
-import consulo.language.editor.intention.IntentionAction;
 import consulo.codeEditor.Editor;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.project.Project;
 import consulo.language.psi.*;
+import jakarta.annotation.Nonnull;
 
 public class DeleteCatchFix implements SyntheticIntentionAction {
   private final PsiParameter myCatchParameter;
 
-  public DeleteCatchFix(@Nonnull PsiParameter myCatchParameter) {
+  public DeleteCatchFix(@jakarta.annotation.Nonnull PsiParameter myCatchParameter) {
     this.myCatchParameter = myCatchParameter;
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getText() {
     return JavaQuickFixBundle.message("delete.catch.text", JavaHighlightUtil.formatType(myCatchParameter.getType()));
   }
@@ -49,7 +47,7 @@ public class DeleteCatchFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(myCatchParameter.getContainingFile())) return;
 
     final PsiTryStatement tryStatement = ((PsiCatchSection)myCatchParameter.getDeclarationScope()).getTryStatement();

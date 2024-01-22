@@ -13,7 +13,7 @@ import com.intellij.java.impl.refactoring.move.moveInner.MoveInnerImpl;
 import com.intellij.java.impl.refactoring.move.moveInner.MoveInnerProcessor;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  *  @author dsl

@@ -23,15 +23,15 @@ import consulo.language.psi.PsiElement;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.java.language.module.extension.JavaModuleExtension;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * User: anna
  * Date: 3/28/12
  */
 public class JavaSdkVersionUtil {
-  public static boolean isAtLeast(@Nonnull PsiElement element, @Nonnull JavaSdkVersion minVersion) {
+  public static boolean isAtLeast(@jakarta.annotation.Nonnull PsiElement element, @Nonnull JavaSdkVersion minVersion) {
     JavaSdkVersion version = getJavaSdkVersion(element);
     return version == null || version.isAtLeast(minVersion);
   }

@@ -47,8 +47,8 @@ import consulo.application.util.function.Processor;
 import consulo.util.collection.MultiMap;
 import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.function.Function;
 
@@ -71,7 +71,7 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
 
   public MoveClassToInnerProcessor(Project project,
                                    final PsiClass[] classesToMove,
-                                   @Nonnull final PsiClass targetClass,
+                                   @jakarta.annotation.Nonnull final PsiClass targetClass,
                                    boolean searchInComments,
                                    boolean searchInNonJavaFiles,
                                    MoveCallback moveCallback) {
@@ -95,12 +95,12 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
     }
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
     return new MoveMultipleElementsViewDescriptor(myClassesToMove, myTargetClass.getQualifiedName());
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public UsageInfo[] findUsages() {
     final List<UsageInfo> usages = new ArrayList<UsageInfo>();
     for (PsiClass classToMove : myClassesToMove) {
@@ -237,7 +237,7 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
         myTargetClass.getQualifiedName());
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected Collection<? extends PsiElement> getElementsToWrite(@Nonnull final UsageViewDescriptor descriptor) {
     List<PsiElement> result = new ArrayList<PsiElement>();
     result.addAll(super.getElementsToWrite(descriptor));

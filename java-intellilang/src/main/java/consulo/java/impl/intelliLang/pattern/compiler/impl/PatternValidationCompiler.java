@@ -33,7 +33,7 @@ import consulo.java.impl.intelliLang.pattern.compiler.AnnotationBasedInstrumenti
 import consulo.java.impl.intelliLang.pattern.compiler.Instrumenter;
 import consulo.java.impl.intelliLang.util.AnnotationUtilEx;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -100,7 +100,7 @@ public class PatternValidationCompiler extends AnnotationBasedInstrumentingCompi
     return "Inserting @Pattern assertions";
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDescription() {
     return "Pattern Validation";
   }

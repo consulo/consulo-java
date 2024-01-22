@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.refactoring.replaceConstructorWithFactory;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import consulo.dataContext.DataContext;

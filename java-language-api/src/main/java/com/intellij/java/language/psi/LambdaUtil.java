@@ -37,8 +37,8 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.SystemProperties;
 import org.jetbrains.annotations.Contract;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -102,7 +102,7 @@ public class LambdaUtil {
     return null;
   }
 
-  public static PsiSubstitutor getSubstitutor(@Nonnull PsiMethod method, @Nonnull PsiClassType.ClassResolveResult resolveResult) {
+  public static PsiSubstitutor getSubstitutor(@Nonnull PsiMethod method, @jakarta.annotation.Nonnull PsiClassType.ClassResolveResult resolveResult) {
     final PsiClass derivedClass = resolveResult.getElement();
     LOG.assertTrue(derivedClass != null);
 
@@ -160,7 +160,7 @@ public class LambdaUtil {
     return isAssignmentContext(context) || isInvocationContext(context);
   }
 
-  private static boolean isInvocationContext(@Nullable PsiElement context) {
+  private static boolean isInvocationContext(@jakarta.annotation.Nullable PsiElement context) {
     return context instanceof PsiExpressionList;
   }
 
@@ -191,7 +191,7 @@ public class LambdaUtil {
   public static MethodSignature getFunction(final PsiClass psiClass) {
     if (isPlainInterface(psiClass)) {
       return LanguageCachedValueUtil.getCachedValue(psiClass, new CachedValueProvider<MethodSignature>() {
-        @Nonnull
+        @jakarta.annotation.Nonnull
         @Override
         public Result<MethodSignature> compute() {
           return Result.create(calcFunction(psiClass), PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT);
@@ -309,8 +309,8 @@ public class LambdaUtil {
   }
 
   @Contract("null -> null")
-  @Nullable
-  public static List<HierarchicalMethodSignature> findFunctionCandidates(@Nullable final PsiClass psiClass) {
+  @jakarta.annotation.Nullable
+  public static List<HierarchicalMethodSignature> findFunctionCandidates(@jakarta.annotation.Nullable final PsiClass psiClass) {
     if (!isPlainInterface(psiClass)) {
       return null;
     }
@@ -480,7 +480,7 @@ public class LambdaUtil {
     return null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static PsiType getSubstitutedType(PsiElement expression, boolean tryToSubstitute, int lambdaIdx, final JavaResolveResult resolveResult) {
     final PsiElement resolve = resolveResult.getElement();
     if (resolve instanceof PsiMethod) {
@@ -613,7 +613,7 @@ public class LambdaUtil {
     return result;
   }
 
-  public static boolean isValidQualifier4InterfaceStaticMethodCall(@Nonnull PsiMethod method,
+  public static boolean isValidQualifier4InterfaceStaticMethodCall(@jakarta.annotation.Nonnull PsiMethod method,
                                                                    @Nonnull PsiReferenceExpression methodReferenceExpression,
                                                                    @Nullable PsiElement scope,
                                                                    @Nonnull LanguageLevel languageLevel) {
@@ -622,9 +622,9 @@ public class LambdaUtil {
 
   @Nullable
   public static String getInvalidQualifier4StaticInterfaceMethodMessage(@Nonnull PsiMethod method,
-                                                                        @Nonnull PsiReferenceExpression methodReferenceExpression,
+                                                                        @jakarta.annotation.Nonnull PsiReferenceExpression methodReferenceExpression,
                                                                         @Nullable PsiElement scope,
-                                                                        @Nonnull LanguageLevel languageLevel) {
+                                                                        @jakarta.annotation.Nonnull LanguageLevel languageLevel) {
     final PsiExpression qualifierExpression = methodReferenceExpression.getQualifierExpression();
     final PsiClass containingClass = method.getContainingClass();
     if (containingClass != null && containingClass.isInterface() && method.hasModifierProperty(PsiModifier.STATIC)) {
@@ -714,7 +714,7 @@ public class LambdaUtil {
     return false;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static Map<PsiElement, PsiType> getFunctionalTypeMap() {
     Map<PsiElement, PsiType> map = ourFunctionTypes.get();
     if (map == null) {
@@ -1005,7 +1005,7 @@ public class LambdaUtil {
 
   @Nullable
   public static PsiParameterList specifyLambdaParameterTypes(PsiType functionalInterfaceType,
-                                                             @Nonnull PsiLambdaExpression lambdaExpression) {
+                                                             @jakarta.annotation.Nonnull PsiLambdaExpression lambdaExpression) {
     String typedParamList = createLambdaParameterListWithFormalTypes(functionalInterfaceType, lambdaExpression, false);
     if (typedParamList != null) {
       PsiParameterList paramListWithFormalTypes = JavaPsiFacade.getElementFactory(lambdaExpression.getProject())
@@ -1080,7 +1080,7 @@ public class LambdaUtil {
       return true;
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     @Override
     public Boolean visitLambdaExpressionType(PsiLambdaExpressionType lambdaExpressionType) {
       return true;

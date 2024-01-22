@@ -23,7 +23,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import org.jetbrains.java.generate.GenerateToStringActionHandler;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Quick fix to run Generate toString() to fix any code inspection problems.

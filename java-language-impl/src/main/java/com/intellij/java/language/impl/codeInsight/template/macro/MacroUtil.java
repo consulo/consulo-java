@@ -33,8 +33,9 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -43,7 +44,7 @@ import java.util.Set;
 public class MacroUtil {
   private static final Logger LOG = Logger.getInstance(MacroUtil.class);
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @RequiredReadAction
   public static PsiType resultToPsiType(Result result, ExpressionContext context) {
     if (result instanceof PsiTypeResult) {
@@ -105,7 +106,7 @@ public class MacroUtil {
     }
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @RequiredReadAction
   private static PsiExpression[] getStandardExpressions(PsiElement place) {
     ArrayList<PsiExpression> array = new ArrayList<>();
@@ -143,7 +144,7 @@ public class MacroUtil {
     return array.toArray(new PsiExpression[array.size()]);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static PsiExpression[] getStandardExpressionsOfType(PsiElement place, PsiType type) {
     List<PsiExpression> array = new ArrayList<>();
     PsiExpression[] expressions = getStandardExpressions(place);
@@ -157,7 +158,7 @@ public class MacroUtil {
   }
 
   @Nonnull
-  public static PsiVariable[] getVariablesVisibleAt(@Nullable final PsiElement place, String prefix) {
+  public static PsiVariable[] getVariablesVisibleAt(@jakarta.annotation.Nullable final PsiElement place, String prefix) {
     if (place == null) {
       return new PsiVariable[0];
     }
@@ -166,7 +167,7 @@ public class MacroUtil {
     final List<PsiVariable> list = new ArrayList<>();
     VariablesProcessor varproc = new VariablesProcessor(prefix, true, list) {
       @Override
-      public boolean execute(@Nonnull PsiElement pe, @Nonnull ResolveState state) {
+      public boolean execute(@jakarta.annotation.Nonnull PsiElement pe, @jakarta.annotation.Nonnull ResolveState state) {
         if (pe instanceof PsiVariable) {
           if (!usedNames.add(((PsiVariable) pe).getName())) {
             return false;

@@ -15,7 +15,7 @@
  */
 package com.siyeh.ig.psiutils;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.JavaRecursiveElementVisitor;
 import consulo.language.psi.PsiElement;
@@ -60,7 +60,7 @@ class VariablePassedAsArgumentVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitNewExpression(@Nonnull PsiNewExpression newExpression) {
+  public void visitNewExpression(@jakarta.annotation.Nonnull PsiNewExpression newExpression) {
     if (passed) {
       return;
     }

@@ -33,8 +33,8 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.function.PairConsumer;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -107,7 +107,7 @@ public abstract class JamAnnotationAttributeMeta<T extends JamElement, JamType> 
       super(attrName, annoMeta, instantiator);
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public T getJam(PsiElementRef<PsiAnnotation> anno) {
       final PsiAnnotation psiElement = anno.getPsiElement();
       assert psiElement != null;
@@ -130,7 +130,7 @@ public abstract class JamAnnotationAttributeMeta<T extends JamElement, JamType> 
       super(attrName, annoMeta, instantiator);
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public List<T> getJam(final PsiElementRef<PsiAnnotation> anno) {
       return getCollectionJam(anno, new Function<PsiAnnotationMemberValue, T>() {
         public T apply(PsiAnnotationMemberValue psiAnnotationMemberValue) {

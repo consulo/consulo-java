@@ -21,15 +21,15 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.editor.completion.lookup.TailType;
 import consulo.util.lang.lazy.LazyValue;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.function.Supplier;
 
 public class ExpectedTypeInfoImpl implements ExpectedTypeInfo {
   public static final Supplier<String> NULL = () -> null;
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private final PsiType type;
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private final PsiType defaultType;
   private final int kind;
   @Nonnull
@@ -51,7 +51,7 @@ public class ExpectedTypeInfoImpl implements ExpectedTypeInfo {
 
   public ExpectedTypeInfoImpl(@Nonnull PsiType type,
                               @Type int kind,
-                              @Nonnull PsiType defaultType,
+                              @jakarta.annotation.Nonnull PsiType defaultType,
                               @Nonnull TailType myTailType,
                               PsiMethod calledMethod,
                               @Nonnull Supplier<String> expectedName) {

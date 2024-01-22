@@ -16,7 +16,7 @@
 
 package com.intellij.java.impl.ig.security;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;

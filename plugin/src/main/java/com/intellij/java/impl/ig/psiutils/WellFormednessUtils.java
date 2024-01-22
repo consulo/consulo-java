@@ -15,10 +15,9 @@
  */
 package com.intellij.java.impl.ig.psiutils;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiAssignmentExpression;
 import com.intellij.java.language.psi.PsiExpression;
+import jakarta.annotation.Nonnull;
 
 public class WellFormednessUtils {
   private WellFormednessUtils() {

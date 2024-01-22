@@ -18,7 +18,7 @@ package com.intellij.java.language.psi;
 import consulo.language.psi.NavigatablePsiElement;
 import consulo.language.psi.PsiNameIdentifierOwner;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Set;
 
 /**

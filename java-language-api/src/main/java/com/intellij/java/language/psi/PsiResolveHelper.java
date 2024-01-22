@@ -26,8 +26,8 @@ import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 import consulo.application.util.RecursionGuard;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * Service for resolving references to declarations.
@@ -58,7 +58,7 @@ public interface PsiResolveHelper {
    * @param place        place where constructor is invoked (used for checking access)
    * @return the result of the resolve, or {@link JavaResolveResult#EMPTY} if the resolve failed.
    */
-  @Nonnull
+  @jakarta.annotation.Nonnull
   JavaResolveResult resolveConstructor(PsiClassType type, PsiExpressionList argumentList, PsiElement place);
 
   /**
@@ -71,9 +71,9 @@ public interface PsiResolveHelper {
    * @param place        place where constructor is invoked (used for checking access)
    * @return the result of the resolve, or {@link JavaResolveResult#EMPTY} if the resolve failed.
    */
-  @Nonnull
-  JavaResolveResult[] multiResolveConstructor(@Nonnull PsiClassType type,
-                                              @Nonnull PsiExpressionList argumentList,
+  @jakarta.annotation.Nonnull
+  JavaResolveResult[] multiResolveConstructor(@jakarta.annotation.Nonnull PsiClassType type,
+                                              @jakarta.annotation.Nonnull PsiExpressionList argumentList,
                                               @Nonnull PsiElement place);
 
   /**
@@ -84,8 +84,8 @@ public interface PsiResolveHelper {
    *                                 can be returned as a candidate for the resolve.
    * @return the array of resolve results.
    */
-  @Nonnull
-  CandidateInfo[] getReferencedMethodCandidates(@Nonnull PsiCallExpression call, boolean dummyImplicitConstructor);
+  @jakarta.annotation.Nonnull
+  CandidateInfo[] getReferencedMethodCandidates(@jakarta.annotation.Nonnull PsiCallExpression call, boolean dummyImplicitConstructor);
 
   /**
    * Resolves a call expression and returns an array of possible resolve results.
@@ -96,8 +96,8 @@ public interface PsiResolveHelper {
    * @param checkVarargs             true if varargs method should lead to 2 candidates in the result array
    * @return the array of resolve results.
    */
-  @Nonnull
-  CandidateInfo[] getReferencedMethodCandidates(@Nonnull PsiCallExpression call,
+  @jakarta.annotation.Nonnull
+  CandidateInfo[] getReferencedMethodCandidates(@jakarta.annotation.Nonnull PsiCallExpression call,
                                                 boolean dummyImplicitConstructor,
                                                 boolean checkVarargs);
 
@@ -109,7 +109,7 @@ public interface PsiResolveHelper {
    * @param context       the context in which the reference is found.
    * @return the resolve result, or null if the resolve was not successful.
    */
-  @Nullable
+  @jakarta.annotation.Nullable
   PsiClass resolveReferencedClass(@Nonnull String referenceText, PsiElement context);
 
   /**
@@ -121,7 +121,7 @@ public interface PsiResolveHelper {
    * @return the resolve result, or null if the resolve was not successful.
    */
   @Nullable
-  PsiVariable resolveReferencedVariable(@Nonnull String referenceText, PsiElement context);
+  PsiVariable resolveReferencedVariable(@jakarta.annotation.Nonnull String referenceText, PsiElement context);
 
   /**
    * Resolves a reference to a variable, given the text of the reference and the context
@@ -133,50 +133,50 @@ public interface PsiResolveHelper {
    * in a given context.
    */
   @Nullable
-  PsiVariable resolveAccessibleReferencedVariable(@Nonnull String referenceText, PsiElement context);
+  PsiVariable resolveAccessibleReferencedVariable(@jakarta.annotation.Nonnull String referenceText, PsiElement context);
 
-  boolean isAccessible(@Nonnull PsiMember member,
+  boolean isAccessible(@jakarta.annotation.Nonnull PsiMember member,
                        @Nullable PsiModifierList modifierList,
-                       @Nonnull PsiElement place,
-                       @Nullable PsiClass accessObjectClass,
+                       @jakarta.annotation.Nonnull PsiElement place,
+                       @jakarta.annotation.Nullable PsiClass accessObjectClass,
                        @Nullable PsiElement currentFileResolveScope);
 
-  boolean isAccessible(@Nonnull PsiMember member, @Nonnull PsiElement place, @Nullable PsiClass accessObjectClass);
+  boolean isAccessible(@jakarta.annotation.Nonnull PsiMember member, @jakarta.annotation.Nonnull PsiElement place, @Nullable PsiClass accessObjectClass);
 
   /**
    * @return {@link PsiType#NULL} iff no type could be inferred
    * null         iff the type inferred is raw
    * inferred type otherwise
    */
-  PsiType inferTypeForMethodTypeParameter(@Nonnull PsiTypeParameter typeParameter,
-                                          @Nonnull PsiParameter[] parameters,
-                                          @Nonnull PsiExpression[] arguments,
+  PsiType inferTypeForMethodTypeParameter(@jakarta.annotation.Nonnull PsiTypeParameter typeParameter,
+                                          @jakarta.annotation.Nonnull PsiParameter[] parameters,
+                                          @jakarta.annotation.Nonnull PsiExpression[] arguments,
                                           @Nonnull PsiSubstitutor partialSubstitutor,
                                           @Nullable PsiElement parent,
-                                          @Nonnull ParameterTypeInferencePolicy policy);
+                                          @jakarta.annotation.Nonnull ParameterTypeInferencePolicy policy);
+
+  @jakarta.annotation.Nonnull
+  PsiSubstitutor inferTypeArguments(@jakarta.annotation.Nonnull PsiTypeParameter[] typeParameters,
+                                    @jakarta.annotation.Nonnull PsiParameter[] parameters,
+                                    @jakarta.annotation.Nonnull PsiExpression[] arguments,
+                                    @jakarta.annotation.Nonnull PsiSubstitutor partialSubstitutor,
+                                    @jakarta.annotation.Nonnull PsiElement parent,
+                                    @jakarta.annotation.Nonnull ParameterTypeInferencePolicy policy);
 
   @Nonnull
-  PsiSubstitutor inferTypeArguments(@Nonnull PsiTypeParameter[] typeParameters,
-                                    @Nonnull PsiParameter[] parameters,
-                                    @Nonnull PsiExpression[] arguments,
-                                    @Nonnull PsiSubstitutor partialSubstitutor,
+  PsiSubstitutor inferTypeArguments(@jakarta.annotation.Nonnull PsiTypeParameter[] typeParameters,
+                                    @jakarta.annotation.Nonnull PsiParameter[] parameters,
+                                    @jakarta.annotation.Nonnull PsiExpression[] arguments,
+                                    @jakarta.annotation.Nonnull PsiSubstitutor partialSubstitutor,
                                     @Nonnull PsiElement parent,
-                                    @Nonnull ParameterTypeInferencePolicy policy);
+                                    @jakarta.annotation.Nonnull ParameterTypeInferencePolicy policy,
+                                    @jakarta.annotation.Nonnull LanguageLevel languageLevel);
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   PsiSubstitutor inferTypeArguments(@Nonnull PsiTypeParameter[] typeParameters,
-                                    @Nonnull PsiParameter[] parameters,
-                                    @Nonnull PsiExpression[] arguments,
-                                    @Nonnull PsiSubstitutor partialSubstitutor,
-                                    @Nonnull PsiElement parent,
-                                    @Nonnull ParameterTypeInferencePolicy policy,
-                                    @Nonnull LanguageLevel languageLevel);
-
-  @Nonnull
-  PsiSubstitutor inferTypeArguments(@Nonnull PsiTypeParameter[] typeParameters,
-                                    @Nonnull PsiType[] leftTypes,
-                                    @Nonnull PsiType[] rightTypes,
-                                    @Nonnull LanguageLevel languageLevel);
+                                    @jakarta.annotation.Nonnull PsiType[] leftTypes,
+                                    @jakarta.annotation.Nonnull PsiType[] rightTypes,
+                                    @jakarta.annotation.Nonnull LanguageLevel languageLevel);
 
   PsiType getSubstitutionForTypeParameter(PsiTypeParameter typeParam,
                                           PsiType param,

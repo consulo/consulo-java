@@ -8,8 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import org.jetbrains.annotations.NonNls;
 import consulo.project.Project;
@@ -97,7 +97,7 @@ public class TypeMigrationRules
 		return !isCovariantPosition && TypeConversionUtil.isAssignable(from, to) ? new TypeConversionDescriptorBase() : null;
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	public TypeConversionDescriptorBase findConversion(final PsiType from, final PsiType to, final PsiMember member, final PsiExpression context, final TypeMigrationLabeler labeler)
 	{
 		for(TypeConversionRule descriptor : myConversionRules)

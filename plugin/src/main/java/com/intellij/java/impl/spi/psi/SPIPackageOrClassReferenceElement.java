@@ -30,8 +30,8 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.ArrayUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * User: anna
@@ -52,7 +52,7 @@ public class SPIPackageOrClassReferenceElement extends ASTWrapperPsiElement impl
     return new TextRange(last.getStartOffsetInParent(), getTextLength());
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getCanonicalText() {
     return getText();
@@ -107,7 +107,7 @@ public class SPIPackageOrClassReferenceElement extends ASTWrapperPsiElement impl
     return this;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Object[] getVariants() {
     return ArrayUtil.EMPTY_OBJECT_ARRAY;

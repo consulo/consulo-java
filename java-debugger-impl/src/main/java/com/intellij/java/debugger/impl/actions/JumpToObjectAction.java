@@ -17,7 +17,7 @@ package com.intellij.java.debugger.impl.actions;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.JVMNameUtil;

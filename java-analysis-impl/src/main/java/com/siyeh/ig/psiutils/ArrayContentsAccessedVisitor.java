@@ -18,9 +18,8 @@ package com.siyeh.ig.psiutils;
 import com.intellij.java.language.psi.*;
 import com.siyeh.HardcodedMethodConstants;
 import consulo.language.psi.PsiElement;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nonnull;
 
 class ArrayContentsAccessedVisitor extends JavaRecursiveElementVisitor {
 
@@ -33,7 +32,7 @@ class ArrayContentsAccessedVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitForeachStatement(
-    @Nonnull PsiForeachStatement statement) {
+    @jakarta.annotation.Nonnull PsiForeachStatement statement) {
     if (accessed) {
       return;
     }

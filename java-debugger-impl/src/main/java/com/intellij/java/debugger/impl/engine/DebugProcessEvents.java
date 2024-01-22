@@ -54,7 +54,7 @@ import consulo.project.ui.notification.NotificationType;
 import consulo.ui.ex.awt.Messages;
 import consulo.util.lang.Pair;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.Objects;
 
 /**

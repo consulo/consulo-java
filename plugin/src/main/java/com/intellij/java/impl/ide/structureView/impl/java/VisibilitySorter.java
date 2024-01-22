@@ -20,9 +20,9 @@ import consulo.ide.IdeBundle;
 import consulo.fileEditor.structureView.tree.ActionPresentation;
 import consulo.fileEditor.structureView.tree.Sorter;
 import consulo.ui.image.Image;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
 import java.util.Comparator;
 
 public class VisibilitySorter implements Sorter{
@@ -52,7 +52,7 @@ public class VisibilitySorter implements Sorter{
     return true;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public ActionPresentation getPresentation() {
     return PRESENTATION;
   }

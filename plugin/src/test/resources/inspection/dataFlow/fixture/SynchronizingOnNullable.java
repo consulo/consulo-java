@@ -1,6 +1,8 @@
+import jakarta.annotation.Nullable;
+
 public class BrokenAlignment {
 
-  void test(@javax.annotation.Nullable Object n) {
+  void test(@Nullable Object n) {
     synchronized (<warning descr="Dereference of 'n' may produce 'java.lang.NullPointerException'">n</warning>) {
 
     }

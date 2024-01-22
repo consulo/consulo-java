@@ -13,7 +13,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import org.jetbrains.annotations.Contract;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import static consulo.util.lang.ObjectUtil.tryCast;
 
@@ -28,7 +28,7 @@ public class ReplaceComputeWithComputeIfPresentFix implements LocalQuickFix, Hig
   }
 
   @Override
-  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+  public void applyFix(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull ProblemDescriptor descriptor) {
     PsiLambdaExpression lambda = PsiTreeUtil.getParentOfType(descriptor.getStartElement(), PsiLambdaExpression.class);
     if (lambda == null) {
       return;

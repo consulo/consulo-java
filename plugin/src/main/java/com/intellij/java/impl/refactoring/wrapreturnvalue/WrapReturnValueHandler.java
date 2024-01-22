@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.refactoring.wrapreturnvalue;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.impl.ide.util.SuperMethodWarningUtil;
 import consulo.dataContext.DataContext;

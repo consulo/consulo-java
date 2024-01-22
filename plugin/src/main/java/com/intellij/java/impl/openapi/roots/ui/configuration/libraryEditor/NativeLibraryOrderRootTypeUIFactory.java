@@ -26,17 +26,17 @@ import consulo.java.impl.JavaBundle;
 import consulo.java.language.impl.JavaIcons;
 import consulo.ui.image.Image;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NativeLibraryOrderRootTypeUIFactory implements OrderRootTypeUIFactory {
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Image getIcon() {
     return JavaIcons.Nodes.NativeLibrariesFolder;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getNodeText() {
     return JavaBundle.message("project.roots.native.library.node.text");
@@ -48,7 +48,7 @@ public class NativeLibraryOrderRootTypeUIFactory implements OrderRootTypeUIFacto
     return "javaNative";
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public SdkPathEditor createPathEditor(Sdk sdk) {
     return new SdkPathEditor(getNodeText(),

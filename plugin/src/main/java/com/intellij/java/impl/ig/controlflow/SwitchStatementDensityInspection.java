@@ -22,7 +22,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import consulo.deadCodeNotWorking.impl.SingleIntegerFieldOptionsPanel;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 
 public abstract class SwitchStatementDensityInspection extends BaseInspection {
@@ -33,7 +33,7 @@ public abstract class SwitchStatementDensityInspection extends BaseInspection {
   public int m_limit = DEFAULT_DENSITY_LIMIT;
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("switch.statement.density.display.name");
   }
@@ -75,7 +75,7 @@ public abstract class SwitchStatementDensityInspection extends BaseInspection {
       registerStatementError(statement, Integer.valueOf(intDensity));
     }
 
-    private double calculateDensity(@Nonnull PsiCodeBlock body, int branchCount) {
+    private double calculateDensity(@jakarta.annotation.Nonnull PsiCodeBlock body, int branchCount) {
       final StatementCountVisitor visitor = new StatementCountVisitor();
       body.accept(visitor);
       return (double)branchCount / (double)visitor.getStatementCount();
@@ -87,7 +87,7 @@ public abstract class SwitchStatementDensityInspection extends BaseInspection {
     private int statementCount = 0;
 
     @Override
-    public void visitStatement(@Nonnull PsiStatement statement) {
+    public void visitStatement(@jakarta.annotation.Nonnull PsiStatement statement) {
       super.visitStatement(statement);
       if (statement instanceof PsiSwitchLabelStatement || statement instanceof PsiBreakStatement) {
         return;

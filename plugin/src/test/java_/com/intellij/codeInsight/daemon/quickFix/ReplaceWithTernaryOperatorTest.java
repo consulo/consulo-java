@@ -20,11 +20,10 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-import javax.annotation.Nonnull;
-
 import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.impl.codeInspection.dataFlow.DataFlowInspection;
 import com.intellij.java.impl.codeInspection.nullable.NullableStuffInspection;
+import jakarta.annotation.Nonnull;
 
 public abstract class ReplaceWithTernaryOperatorTest extends LightQuickFixTestCase {
   @Nonnull

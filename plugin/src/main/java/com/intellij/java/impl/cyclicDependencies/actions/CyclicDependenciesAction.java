@@ -21,8 +21,6 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-import javax.annotation.Nullable;
-
 import consulo.language.editor.PlatformDataKeys;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.editor.scope.AnalysisScopeBundle;
@@ -44,6 +42,7 @@ import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.ui.ex.awt.IdeBorderFactory;
+import jakarta.annotation.Nullable;
 
 /**
  * User: anna
@@ -111,7 +110,7 @@ public class CyclicDependenciesAction extends AnAction{
     return scope != null && scope.getScopeType() != AnalysisScope.INVALID ? scope : null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static AnalysisScope getInspectionScopeImpl(DataContext dataContext) {
     //Possible scopes: package, project, module.
     Project projectContext = dataContext.getData(PlatformDataKeys.PROJECT_CONTEXT);
@@ -145,7 +144,7 @@ public class CyclicDependenciesAction extends AnAction{
     return null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static AnalysisScope getProjectScope(DataContext dataContext) {
     final Project data = dataContext.getData(CommonDataKeys.PROJECT);
     if (data == null) {
@@ -154,7 +153,7 @@ public class CyclicDependenciesAction extends AnAction{
     return new AnalysisScope(data);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static AnalysisScope getModuleScope(DataContext dataContext) {
     final Module data = dataContext.getData(LangDataKeys.MODULE);
     if (data == null) {

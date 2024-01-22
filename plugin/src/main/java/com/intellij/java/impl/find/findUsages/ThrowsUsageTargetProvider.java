@@ -30,7 +30,7 @@ import consulo.usage.UsageTarget;
 import consulo.usage.UsageTargetProvider;
 import consulo.language.editor.TargetElementUtil;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class ThrowsUsageTargetProvider implements UsageTargetProvider {

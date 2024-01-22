@@ -38,8 +38,9 @@ import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.collection.ContainerUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.Collection;
 import java.util.Map;
 
@@ -63,36 +64,36 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
     }
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getId() {
     return "GSON";
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getPsiElementName() {
     return "Class";
   }
 
   @RequiredReadAction
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
-  public String getIdFromPsiElement(@Nonnull PsiClass psiClass) {
+  public String getIdFromPsiElement(@jakarta.annotation.Nonnull PsiClass psiClass) {
     return psiClass.getQualifiedName();
   }
 
   @RequiredReadAction
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
-  public PsiClass getPsiElementById(@Nonnull String s, @Nonnull Project project) {
+  public PsiClass getPsiElementById(@jakarta.annotation.Nonnull String s, @jakarta.annotation.Nonnull Project project) {
     return JavaPsiFacade.getInstance(project).findClass(s, GlobalSearchScope.allScope(project));
   }
 
   @RequiredUIAccess
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
-  public PsiClass chooseElement(@Nonnull Project project) {
+  public PsiClass chooseElement(@jakarta.annotation.Nonnull Project project) {
     TreeClassChooser classChooser = TreeClassChooserFactory.getInstance(project).createAllProjectScopeChooser("Choose class");
     classChooser.showDialog();
     return classChooser.getSelected();
@@ -100,12 +101,12 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
 
   @RequiredReadAction
   @Override
-  public boolean isAvailable(@Nonnull Project project) {
+  public boolean isAvailable(@jakarta.annotation.Nonnull Project project) {
     return ModuleExtensionHelper.getInstance(project).hasModuleExtension(JavaModuleExtension.class) && getPsiElementById("com.google.gson.Gson", project) != null;
   }
 
   @Override
-  public void fillRootObject(@Nonnull PsiClass psiClass, @Nonnull JsonObjectDescriptor jsonObjectDescriptor) {
+  public void fillRootObject(@jakarta.annotation.Nonnull PsiClass psiClass, @jakarta.annotation.Nonnull JsonObjectDescriptor jsonObjectDescriptor) {
     PropertyType type = toType(psiClass.getProject(), null, new PsiImmediateClassType(psiClass, PsiSubstitutor.EMPTY));
 
     if (type != null && type.myValue instanceof JsonObjectDescriptor) {
@@ -115,8 +116,8 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
     }
   }
 
-  @Nullable
-  private static PropertyType toType(@Nonnull Project project, @Nullable PsiField field, @Nonnull PsiType type) {
+  @jakarta.annotation.Nullable
+  private static PropertyType toType(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nullable PsiField field, @Nonnull PsiType type) {
     if (PsiType.BYTE.equals(type)) {
       return new PropertyType(false, Number.class);
     } else if (PsiType.SHORT.equals(type)) {
@@ -222,7 +223,7 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
     return null;
   }
 
-  private static void addIfNotNull(@Nonnull JsonObjectDescriptor objectDescriptor, @Nullable PropertyType propertyType, @Nullable PsiField navElement) {
+  private static void addIfNotNull(@jakarta.annotation.Nonnull JsonObjectDescriptor objectDescriptor, @Nullable PropertyType propertyType, @jakarta.annotation.Nullable PsiField navElement) {
     if (propertyType == null) {
       return;
     }
@@ -250,7 +251,7 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
     }
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private static String getPropertyNameFromField(@Nonnull PsiField field) {
     PsiAnnotation annotation = AnnotationUtil.findAnnotation(field, "com.google.gson.annotations.SerializedName");
     if (annotation != null) {

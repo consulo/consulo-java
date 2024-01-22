@@ -20,8 +20,7 @@ import com.intellij.java.language.psi.PsiTypeCastExpression;
 import consulo.language.pattern.PatternCondition;
 import consulo.language.pattern.ElementPattern;
 import consulo.language.util.ProcessingContext;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author nik

@@ -22,6 +22,7 @@ import com.intellij.java.language.impl.parser.JavaParserUtil;
 import com.intellij.java.language.impl.parser.JavadocParser;
 import com.intellij.java.language.impl.psi.impl.source.javadoc.*;
 import com.intellij.java.language.module.EffectiveLanguageLevelUtil;
+import com.intellij.java.language.psi.tree.ParentProviderElementType;
 import com.intellij.java.language.psi.tree.java.IJavaDocElementType;
 import consulo.language.Language;
 import consulo.language.ast.*;
@@ -32,10 +33,12 @@ import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.Set;
 import java.util.function.Supplier;
 
 public interface JavaDocElementType {
@@ -66,16 +69,48 @@ public interface JavaDocElementType {
     }
   }
 
+  final class JavaDocParentProviderElementType extends IJavaDocElementType implements ParentProviderElementType {
+
+    private final Set<IElementType> myParentElementTypes;
+
+    public JavaDocParentProviderElementType(@Nonnull String debugName, @Nonnull IElementType parentElementType) {
+      super(debugName);
+      myParentElementTypes = Collections.singleton(parentElementType);
+    }
+
+    @Override
+    public
+    @Nonnull
+    Set<IElementType> getParents() {
+      return myParentElementTypes;
+    }
+  }
+
+
   IElementType DOC_TAG = new JavaDocCompositeElementType("DOC_TAG", PsiDocTagImpl::new);
   IElementType DOC_INLINE_TAG = new JavaDocCompositeElementType("DOC_INLINE_TAG", PsiInlineDocTagImpl::new);
   IElementType DOC_METHOD_OR_FIELD_REF = new JavaDocCompositeElementType("DOC_METHOD_OR_FIELD_REF", PsiDocMethodOrFieldRef::new);
   IElementType DOC_PARAMETER_REF = new JavaDocCompositeElementType("DOC_PARAMETER_REF", PsiDocParamRef::new);
   IElementType DOC_TAG_VALUE_ELEMENT = new IJavaDocElementType("DOC_TAG_VALUE_ELEMENT");
 
+  IElementType DOC_SNIPPET_TAG =
+    new JavaDocCompositeElementType("DOC_SNIPPET_TAG", PsiSnippetDocTagImpl::new);
+  IElementType DOC_SNIPPET_TAG_VALUE = new JavaDocCompositeElementType("DOC_SNIPPET_TAG_VALUE",
+                                                                       PsiSnippetDocTagValueImpl::new);
+  IElementType DOC_SNIPPET_BODY = new JavaDocCompositeElementType("DOC_SNIPPET_BODY",
+                                                                  PsiSnippetDocTagBodyImpl::new);
+  IElementType DOC_SNIPPET_ATTRIBUTE = new JavaDocCompositeElementType("DOC_SNIPPET_ATTRIBUTE",
+                                                                       PsiSnippetAttributeImpl::new);
+  IElementType DOC_SNIPPET_ATTRIBUTE_LIST =
+    new JavaDocCompositeElementType("DOC_SNIPPET_ATTRIBUTE_LIST",
+                                    PsiSnippetAttributeListImpl::new);
+  IElementType DOC_SNIPPET_ATTRIBUTE_VALUE =
+    new JavaDocParentProviderElementType("DOC_SNIPPET_ATTRIBUTE_VALUE", new IJavaDocElementType("DOC_SNIPPET_ATTRIBUTE_VALUE"));
+
   ILazyParseableElementType DOC_REFERENCE_HOLDER = new JavaDocLazyElementType("DOC_REFERENCE_HOLDER") {
     private final JavaParserUtil.ParserWrapper myParser = JavadocParser::parseJavadocReference;
 
-    @Nullable
+    @jakarta.annotation.Nullable
     @Override
     public ASTNode parseContents(final ASTNode chameleon) {
       return JavaParserUtil.parseFragment(chameleon, myParser, false, LanguageLevel.JDK_1_3);
@@ -85,7 +120,7 @@ public interface JavaDocElementType {
   ILazyParseableElementType DOC_TYPE_HOLDER = new JavaDocLazyElementType("DOC_TYPE_HOLDER") {
     private final JavaParserUtil.ParserWrapper myParser = JavadocParser::parseJavadocType;
 
-    @Nullable
+    @jakarta.annotation.Nullable
     @Override
     public ASTNode parseContents(final ASTNode chameleon) {
       return JavaParserUtil.parseFragment(chameleon, myParser, false, LanguageLevel.JDK_1_3);
@@ -107,14 +142,18 @@ public interface JavaDocElementType {
     }
 
     @Override
-    public boolean isParsable(@Nullable ASTNode parent, @Nonnull CharSequence buffer, @Nonnull Language fileLanguage, @Nonnull Project project) {
+    public boolean isParsable(@jakarta.annotation.Nullable ASTNode parent,
+                              @jakarta.annotation.Nonnull CharSequence buffer,
+                              @Nonnull Language fileLanguage,
+                              @Nonnull Project project) {
       if (!StringUtil.startsWith(buffer, "/**") || !StringUtil.endsWith(buffer, "*/")) {
         return false;
       }
 
       PsiFile psiFile = parent.getPsi().getContainingFile();
       final Module moduleForPsiElement = ModuleUtilCore.findModuleForPsiElement(psiFile);
-      LanguageLevel languageLevel = moduleForPsiElement == null ? LanguageLevel.HIGHEST : EffectiveLanguageLevelUtil.getEffectiveLanguageLevel(moduleForPsiElement);
+      LanguageLevel languageLevel =
+        moduleForPsiElement == null ? LanguageLevel.HIGHEST : EffectiveLanguageLevelUtil.getEffectiveLanguageLevel(moduleForPsiElement);
 
       Lexer lexer = new JavaLexer(languageLevel);
       lexer.start(buffer);
@@ -128,5 +167,12 @@ public interface JavaDocElementType {
     }
   };
 
-  TokenSet ALL_JAVADOC_ELEMENTS = TokenSet.create(DOC_TAG, DOC_INLINE_TAG, DOC_METHOD_OR_FIELD_REF, DOC_PARAMETER_REF, DOC_TAG_VALUE_ELEMENT, DOC_REFERENCE_HOLDER, DOC_TYPE_HOLDER, DOC_COMMENT);
+  TokenSet ALL_JAVADOC_ELEMENTS = TokenSet.create(DOC_TAG,
+                                                  DOC_INLINE_TAG,
+                                                  DOC_METHOD_OR_FIELD_REF,
+                                                  DOC_PARAMETER_REF,
+                                                  DOC_TAG_VALUE_ELEMENT,
+                                                  DOC_REFERENCE_HOLDER,
+                                                  DOC_TYPE_HOLDER,
+                                                  DOC_COMMENT);
 }

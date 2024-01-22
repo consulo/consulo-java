@@ -38,8 +38,8 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.DumbService;
 import consulo.util.collection.ArrayUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import static com.intellij.java.impl.psi.formatter.java.JavaFormatterUtil.getWrapType;
 import static com.intellij.java.language.impl.psi.impl.PsiImplUtil.isTypeAnnotation;

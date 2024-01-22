@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -33,7 +33,7 @@ import com.siyeh.ig.psiutils.BoolUtils;
 public class UnnecessaryConditionalExpressionInspection
   extends BaseInspection {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "RedundantConditionalExpression";
   }

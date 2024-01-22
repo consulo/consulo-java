@@ -33,7 +33,7 @@ import consulo.util.lang.ObjectUtil;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import consulo.java.analysis.impl.codeInsight.JavaInspectionsBundle;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author Danila Ponomarenko
@@ -42,23 +42,23 @@ public class ReplaceWithTernaryOperatorFix implements LocalQuickFix {
   private final String myText;
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getName() {
     return InspectionsBundle.message("inspection.replace.ternary.quickfix", myText);
   }
 
-  public ReplaceWithTernaryOperatorFix(@Nonnull PsiExpression expressionToAssert) {
+  public ReplaceWithTernaryOperatorFix(@jakarta.annotation.Nonnull PsiExpression expressionToAssert) {
     myText = ParenthesesUtils.getText(expressionToAssert, ParenthesesUtils.BINARY_AND_PRECEDENCE);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getFamilyName() {
     return InspectionsBundle.message("inspection.surround.if.family");
   }
 
   @Override
-  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+  public void applyFix(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull ProblemDescriptor descriptor) {
     PsiElement element = descriptor.getPsiElement();
     while (true) {
       PsiElement parent = element.getParent();
@@ -88,8 +88,8 @@ public class ReplaceWithTernaryOperatorFix implements LocalQuickFix {
     }
   }
 
-  @Nonnull
-  private static PsiConditionalExpression replaceWithConditionalExpression(@Nonnull Project project, @Nonnull String condition, @Nonnull PsiExpression expression, @Nonnull String defaultValue) {
+  @jakarta.annotation.Nonnull
+  private static PsiConditionalExpression replaceWithConditionalExpression(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull String condition, @jakarta.annotation.Nonnull PsiExpression expression, @jakarta.annotation.Nonnull String defaultValue) {
     final PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
 
     final PsiElement parent = expression.getParent();
@@ -99,7 +99,7 @@ public class ReplaceWithTernaryOperatorFix implements LocalQuickFix {
     return (PsiConditionalExpression) expression.replace(codeStyleManager.reformat(conditionalExpression));
   }
 
-  public static boolean isAvailable(@Nonnull PsiExpression qualifier, @Nonnull PsiExpression expression) {
+  public static boolean isAvailable(@jakarta.annotation.Nonnull PsiExpression qualifier, @Nonnull PsiExpression expression) {
     if (!qualifier.isValid() || qualifier.getText() == null) {
       return false;
     }
@@ -107,20 +107,20 @@ public class ReplaceWithTernaryOperatorFix implements LocalQuickFix {
     return !(expression.getParent() instanceof PsiExpressionStatement) && !PsiUtil.isAccessedForWriting(expression);
   }
 
-  private static String suggestDefaultValue(@Nonnull PsiExpression expression) {
+  private static String suggestDefaultValue(@jakarta.annotation.Nonnull PsiExpression expression) {
     PsiType type = expression.getType();
     return PsiTypesUtil.getDefaultValueOfType(type);
   }
 
   public static class ReplaceMethodRefWithTernaryOperatorFix implements LocalQuickFix {
-    @Nonnull
+    @jakarta.annotation.Nonnull
     @Override
     public String getFamilyName() {
       return JavaInspectionsBundle.message("inspection.replace.methodref.ternary.quickfix");
     }
 
     @Override
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull ProblemDescriptor descriptor) {
       PsiMethodReferenceExpression element = ObjectUtil.tryCast(descriptor.getPsiElement(), PsiMethodReferenceExpression.class);
       if (element == null) {
         return;

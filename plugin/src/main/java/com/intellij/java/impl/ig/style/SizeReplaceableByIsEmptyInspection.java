@@ -34,10 +34,11 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.collection.OrderedSet;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -51,19 +52,19 @@ public class SizeReplaceableByIsEmptyInspection extends BaseInspection {
   public OrderedSet<String> ignoredTypes = new OrderedSet<>();
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("size.replaceable.by.isempty.display.name");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("expression.can.be.replaced.problem.descriptor", infos[0]);
   }
 
   @Override
-  @Nullable
+  @jakarta.annotation.Nullable
   public JComponent createOptionsPanel() {
     final JComponent panel = new JPanel(new BorderLayout());
     final ListTable table =
@@ -148,7 +149,7 @@ public class SizeReplaceableByIsEmptyInspection extends BaseInspection {
       }
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     private String getReplacementIsEmptyCall(PsiExpression lhs, PsiExpression rhs, boolean flipped, IElementType tokenType) {
       final PsiMethodCallExpression callExpression = (PsiMethodCallExpression) lhs;
       final String isEmptyCall = getIsEmptyCall(callExpression);
@@ -182,7 +183,7 @@ public class SizeReplaceableByIsEmptyInspection extends BaseInspection {
       return null;
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     private String getIsEmptyCall(PsiMethodCallExpression callExpression) {
       final PsiReferenceExpression methodExpression = callExpression.getMethodExpression();
       final String referenceName = methodExpression.getReferenceName();

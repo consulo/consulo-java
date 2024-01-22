@@ -27,8 +27,8 @@ import consulo.language.impl.ast.CompositeElement;
 import consulo.language.psi.stub.StubElement;
 import consulo.logging.Logger;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class PsiParameterListImpl extends JavaStubPsiElement<PsiParameterListStub> implements PsiParameterList
 {
@@ -39,13 +39,13 @@ public class PsiParameterListImpl extends JavaStubPsiElement<PsiParameterListStu
 		super(stub, JavaStubElementTypes.PARAMETER_LIST);
 	}
 
-	public PsiParameterListImpl(@Nonnull ASTNode node)
+	public PsiParameterListImpl(@jakarta.annotation.Nonnull ASTNode node)
 	{
 		super(node);
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public PsiParameter[] getParameters()
 	{
 		return getStubOrPsiChildren(JavaStubElementTypes.PARAMETER, PsiParameter.ARRAY_FACTORY);
@@ -59,7 +59,7 @@ public class PsiParameterListImpl extends JavaStubPsiElement<PsiParameterListStu
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public CompositeElement getNode()
 	{
 		return (CompositeElement) super.getNode();

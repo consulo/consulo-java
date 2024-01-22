@@ -15,20 +15,20 @@
  */
 package com.intellij.java.impl.psi.impl.source.codeStyle.javadoc;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Dmitry Skavish
  */
 public class TagDescription
 {
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public final String name;
-	@Nullable
+	@jakarta.annotation.Nullable
 	public final String desc;
 
-	public TagDescription(@Nonnull String name, @Nullable String desc)
+	public TagDescription(@jakarta.annotation.Nonnull String name, @Nullable String desc)
 	{
 		this.name = name;
 		this.desc = desc;

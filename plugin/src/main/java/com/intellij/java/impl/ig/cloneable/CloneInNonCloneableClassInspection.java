@@ -24,21 +24,20 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.MakeCloneableFix;
 import com.siyeh.ig.psiutils.CloneUtils;
 import consulo.annotation.component.ExtensionImpl;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class CloneInNonCloneableClassInspection extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "clone.method.in.non.cloneable.class.display.name");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     final PsiClass aClass = (PsiClass)infos[0];
     final String className = aClass.getName();

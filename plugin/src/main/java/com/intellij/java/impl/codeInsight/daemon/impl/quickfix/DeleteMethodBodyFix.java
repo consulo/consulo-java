@@ -17,7 +17,6 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import consulo.language.editor.FileModificationService;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
-import consulo.language.editor.intention.IntentionAction;
 import consulo.codeEditor.Editor;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.project.Project;
@@ -25,7 +24,7 @@ import com.intellij.java.language.psi.PsiCodeBlock;
 import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiMethod;
 import consulo.language.util.IncorrectOperationException;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author ven
@@ -38,13 +37,13 @@ public class DeleteMethodBodyFix implements SyntheticIntentionAction {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getText() {
     return JavaQuickFixBundle.message("delete.body.text");
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
     return myMethod.isValid() && myMethod.getManager().isInProject(myMethod) && myMethod.getBody() != null;
   }
 

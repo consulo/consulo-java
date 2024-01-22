@@ -17,7 +17,7 @@ package com.intellij.java.language.impl.psi.impl.java.stubs;
 
 import java.io.IOException;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.language.ast.LighterAST;
 import consulo.language.ast.LighterASTNode;
@@ -36,7 +36,7 @@ public abstract class FunctionalExpressionElementType<T extends PsiFunctionalExp
 	}
 
 	@Override
-	public void serialize(@Nonnull FunctionalExpressionStub<T> stub, @Nonnull StubOutputStream dataStream) throws IOException
+	public void serialize(@Nonnull FunctionalExpressionStub<T> stub, @jakarta.annotation.Nonnull StubOutputStream dataStream) throws IOException
 	{
 		dataStream.writeName(stub.getPresentableText());
 	}
@@ -49,7 +49,7 @@ public abstract class FunctionalExpressionElementType<T extends PsiFunctionalExp
 	}
 
 	@Override
-	public void indexStub(@Nonnull FunctionalExpressionStub<T> stub, @Nonnull IndexSink sink)
+	public void indexStub(@jakarta.annotation.Nonnull FunctionalExpressionStub<T> stub, @Nonnull IndexSink sink)
 	{
 	}
 
@@ -60,5 +60,5 @@ public abstract class FunctionalExpressionElementType<T extends PsiFunctionalExp
 	}
 
 	@Nonnull
-	protected abstract String getPresentableText(@Nonnull LighterAST tree, @Nonnull LighterASTNode funExpr);
+	protected abstract String getPresentableText(@Nonnull LighterAST tree, @jakarta.annotation.Nonnull LighterASTNode funExpr);
 }

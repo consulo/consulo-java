@@ -37,8 +37,8 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.util.lang.ObjectUtil;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -72,14 +72,14 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
   protected abstract ResolveResult[] resolveInner();
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public final ResolveResult[] multiResolve(final boolean incompleteCode) {
     PsiFile file = getContainingFile();
     return ResolveCache.getInstance(file.getProject()).resolveWithCaching(this, MY_RESOLVER, true, false, file);
   }
 
   @Override
-  @Nullable
+  @jakarta.annotation.Nullable
   public final PsiElement resolve() {
     final ResolveResult[] results = multiResolve(false);
     return results.length == 1 ? results[0].getElement() : null;
@@ -125,7 +125,7 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
   }
 
   @Override
-  public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException {
+  public PsiElement bindToElement(@jakarta.annotation.Nonnull PsiElement element) throws IncorrectOperationException {
     CheckUtil.checkWritable(this);
     if (isReferenceTo(element)) return this;
 
@@ -223,7 +223,7 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
     return false;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   protected abstract PsiElement getSeparator();
 
   @Nullable
@@ -254,7 +254,7 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
     private final Set<ResolveResult> myResults = new LinkedHashSet<ResolveResult>();
 
     @Override
-    public boolean execute(@Nonnull final PsiElement element, final ResolveState state) {
+    public boolean execute(@jakarta.annotation.Nonnull final PsiElement element, final ResolveState state) {
       if (isFound()) return false;
       process(element);
       return true;

@@ -37,7 +37,7 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import jakarta.inject.Singleton;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 @Singleton
 @ServiceImpl
@@ -290,7 +290,7 @@ public class RefJavaUtilImpl extends RefJavaUtil {
   }
 
   @Override
-  @Nullable
+  @jakarta.annotation.Nullable
   public RefClass getOwnerClass(RefManager refManager, PsiElement psiElement) {
     while (psiElement != null && !(psiElement instanceof PsiClass)) {
       psiElement = psiElement.getParent();

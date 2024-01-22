@@ -20,9 +20,9 @@ import consulo.process.ExecutionException;
 import com.intellij.java.execution.configurations.RemoteConnection;
 import consulo.content.bundle.Sdk;
 import consulo.language.psi.scope.GlobalSearchScope;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public interface DebugEnvironment
 {

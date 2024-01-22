@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.language.editor.FileModificationService;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
@@ -37,7 +37,7 @@ public class MakeMethodConstructorFix implements IntentionAction {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getText() {
     return JavaQuickFixBundle.message("convert.method.to.constructor");
   }
@@ -48,7 +48,7 @@ public class MakeMethodConstructorFix implements IntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(myMethod)) return;
     myMethod.getReturnTypeElement().delete();
   }

@@ -8,8 +8,7 @@ import consulo.language.editor.highlight.SyntaxHighlighterProvider;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
-
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author VISTALL
@@ -19,7 +18,7 @@ import javax.annotation.Nullable;
 public class JavaSyntaxHighlighterProvider implements SyntaxHighlighterProvider {
   @Nullable
   @Override
-  public SyntaxHighlighter create(FileType fileType, @Nullable Project project, @Nullable VirtualFile virtualFile) {
+  public SyntaxHighlighter create(FileType fileType, @jakarta.annotation.Nullable Project project, @jakarta.annotation.Nullable VirtualFile virtualFile) {
     if (fileType == JavaFileType.INSTANCE || fileType == JavaClassFileType.INSTANCE) {
       return new JavaFileHighlighter();
     }

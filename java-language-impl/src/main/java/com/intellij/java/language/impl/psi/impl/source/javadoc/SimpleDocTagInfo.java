@@ -22,7 +22,7 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author mike
@@ -33,7 +33,7 @@ public class SimpleDocTagInfo implements JavadocTagInfo {
   private final boolean myInline;
   private final LanguageLevel myLanguageLevel;
 
-  public SimpleDocTagInfo(@Nonnull String name, @Nonnull LanguageLevel level, boolean isInline, @Nonnull Class... contexts) {
+  public SimpleDocTagInfo(@jakarta.annotation.Nonnull String name, @Nonnull LanguageLevel level, boolean isInline, @Nonnull Class... contexts) {
     myName = name;
     myContexts = contexts;
     myInline = isInline;

@@ -31,7 +31,7 @@ import consulo.ui.ex.awt.LabeledComponent;
 import consulo.application.util.SystemInfo;
 import consulo.ui.ex.awt.event.DocumentAdapter;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -175,7 +175,7 @@ public class RemoteConfigurable extends SettingsEditor<RemoteConfiguration> {
     myModuleSelector.reset(configuration);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public JComponent createEditor() {
     return myPanel;
   }

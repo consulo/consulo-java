@@ -35,8 +35,8 @@ import consulo.project.Project;
 import consulo.util.lang.ref.Ref;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -78,7 +78,7 @@ public class CaughtExceptionImmediatelyRethrownInspection extends BaseInspection
       this.removeTryCatch = removeTryCatch;
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       if (removeTryCatch) {
         return InspectionGadgetsBundle.message("remove.try.catch.quickfix");

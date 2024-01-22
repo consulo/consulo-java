@@ -15,8 +15,7 @@
  */
 package com.intellij.java.impl.ipp.decls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiExpression;
@@ -25,6 +24,7 @@ import consulo.language.psi.*;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import jakarta.annotation.Nullable;
 
 class MoveDeclarationPredicate implements PsiElementPredicate {
 
@@ -77,7 +77,7 @@ class MoveDeclarationPredicate implements PsiElementPredicate {
 
   @Nullable
   public static PsiElement getChildWhichContainsElement(
-    @Nonnull PsiCodeBlock ancestor, @Nonnull PsiElement descendant) {
+    @jakarta.annotation.Nonnull PsiCodeBlock ancestor, @Nonnull PsiElement descendant) {
     PsiElement element = descendant;
     while (!element.equals(ancestor)) {
       descendant = element;
@@ -89,9 +89,9 @@ class MoveDeclarationPredicate implements PsiElementPredicate {
     return descendant;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static PsiCodeBlock getTightestBlock(
-    @Nonnull PsiReference[] references) {
+    @jakarta.annotation.Nonnull PsiReference[] references) {
     PsiCodeBlock commonParentBlock = null;
     for (PsiReference reference : references) {
       final PsiElement referenceElement = reference.getElement();

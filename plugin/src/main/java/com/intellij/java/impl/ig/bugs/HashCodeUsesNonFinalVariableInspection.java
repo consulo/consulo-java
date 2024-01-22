@@ -25,8 +25,8 @@ import com.siyeh.ig.psiutils.MethodUtils;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class HashCodeUsesNonFinalVariableInspection
@@ -43,7 +43,7 @@ public class HashCodeUsesNonFinalVariableInspection
       "non.final.field.in.hashcode.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "non.final.field.in.hashcode.problem.descriptor");
@@ -63,7 +63,7 @@ public class HashCodeUsesNonFinalVariableInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
       final boolean isHashCode = MethodUtils.isHashCode(method);
       if (isHashCode) {
         method.accept(new JavaRecursiveElementVisitor() {

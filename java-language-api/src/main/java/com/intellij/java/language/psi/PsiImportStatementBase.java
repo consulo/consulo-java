@@ -17,9 +17,8 @@ package com.intellij.java.language.psi;
 
 import consulo.language.psi.PsiElement;
 import consulo.util.collection.ArrayFactory;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * Represents a Java <code>import</code> or <code>import static</code> statement.
@@ -53,7 +52,7 @@ public interface PsiImportStatementBase extends PsiElement {
    * @return the import reference element.
    * @see PsiImportStaticReferenceElement
    */
-  @Nullable
+  @jakarta.annotation.Nullable
   PsiJavaCodeReferenceElement getImportReference();
 
   /**

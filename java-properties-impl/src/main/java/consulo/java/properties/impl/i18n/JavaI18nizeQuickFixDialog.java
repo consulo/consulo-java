@@ -48,8 +48,8 @@ import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
@@ -83,8 +83,8 @@ public class JavaI18nizeQuickFixDialog extends I18nizeQuickFixDialog {
   public static final String PROPERTY_VALUE_ATTR = "PROPERTY_VALUE";
 
   public JavaI18nizeQuickFixDialog(@Nonnull Project project,
-                                   @Nonnull final PsiFile context,
-                                   @Nullable final PsiLiteralExpression literalExpression,
+                                   @jakarta.annotation.Nonnull final PsiFile context,
+                                   @jakarta.annotation.Nullable final PsiLiteralExpression literalExpression,
                                    String defaultPropertyValue,
                                    DialogCustomization customization,
                                    final boolean showJavaCodeInfo,

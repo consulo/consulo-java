@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.impl.psi.impl.java.stubs.impl;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiImportStatementBase;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
@@ -77,7 +77,7 @@ public class PsiImportStatementStubImpl extends StubBase<PsiImportStatementBase>
 	}
 
 	@Override
-	@Nullable
+	@jakarta.annotation.Nullable
 	public PsiJavaCodeReferenceElement getReference()
 	{
 		PsiJavaCodeReferenceElement ref = SoftReference.dereference(myReference);
@@ -103,7 +103,7 @@ public class PsiImportStatementStubImpl extends StubBase<PsiImportStatementBase>
 		return flags;
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	private PsiJavaCodeReferenceElement getStaticReference()
 	{
 		final PsiJavaCodeReferenceElement refElement = createReference();
@@ -132,7 +132,7 @@ public class PsiImportStatementStubImpl extends StubBase<PsiImportStatementBase>
 		return refElement;
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	private PsiJavaCodeReferenceElement createReference()
 	{
 		final String refText = getImportReferenceText();

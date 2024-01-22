@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.threading;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
@@ -35,7 +35,7 @@ public class WaitWhileHoldingTwoLocksInspection extends BaseInspection {
       "wait.while.holding.two.locks.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "wait.while.holding.two.locks.problem.descriptor");
@@ -120,7 +120,7 @@ public class WaitWhileHoldingTwoLocksInspection extends BaseInspection {
 
         @Override
         public void visitSynchronizedStatement(
-          @Nonnull PsiSynchronizedStatement synchronizedStatement) {
+          @jakarta.annotation.Nonnull PsiSynchronizedStatement synchronizedStatement) {
           m_numLocksHeld++;
           super.visitSynchronizedStatement(synchronizedStatement);
           m_numLocksHeld--;

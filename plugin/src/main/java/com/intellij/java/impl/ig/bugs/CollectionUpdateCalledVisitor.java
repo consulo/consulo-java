@@ -17,9 +17,9 @@ package com.intellij.java.impl.ig.bugs;
 
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 import java.util.Set;
 
@@ -53,7 +53,7 @@ class CollectionUpdateCalledVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitMethodCallExpression(
-    @Nonnull PsiMethodCallExpression call) {
+    @jakarta.annotation.Nonnull PsiMethodCallExpression call) {
     super.visitMethodCallExpression(call);
     if (updated) {
       return;

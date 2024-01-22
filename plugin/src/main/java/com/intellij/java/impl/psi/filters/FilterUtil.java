@@ -20,7 +20,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.filter.FilterPositionUtil;
 import consulo.language.psi.util.PsiTreeUtil;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * Created by IntelliJ IDEA.
@@ -86,7 +86,7 @@ public class FilterUtil {
     return null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static PsiElement getPreviousElement(final PsiElement element, boolean skipReference) {
     PsiElement prev = element;
     if (element != null) {

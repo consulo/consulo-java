@@ -23,8 +23,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import consulo.annotation.component.ExtensionImpl;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.StringTokenizer;
 
@@ -60,7 +59,7 @@ public class ClassNamePrefixedWithPackageNameInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
       // no call to super, so it doesn't drill down into inner classes
       final String className = aClass.getName();
       if (className == null) {

@@ -24,7 +24,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
 import consulo.externalService.statistic.FeatureUsageTracker;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author ven

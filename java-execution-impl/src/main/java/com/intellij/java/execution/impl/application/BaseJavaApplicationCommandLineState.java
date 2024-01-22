@@ -26,8 +26,7 @@ import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.process.ExecutionException;
 import consulo.process.ProcessHandler;
 import consulo.process.ProcessHandlerBuilder;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author nik
@@ -54,7 +53,7 @@ public abstract class BaseJavaApplicationCommandLineState<T extends RunConfigura
   }
 
   @Override
-  protected void buildProcessHandler(@Nonnull ProcessHandlerBuilder builder) throws ExecutionException {
+  protected void buildProcessHandler(@jakarta.annotation.Nonnull ProcessHandlerBuilder builder) throws ExecutionException {
     builder.colored().killable().silentReader();
   }
 

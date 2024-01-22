@@ -1,5 +1,7 @@
+import jakarta.annotation.Nullable;
+
 public class Test {
-  @javax.annotation.Nullable
+  @Nullable
   public final String o;
 
   public Test(String q) { o = q; }

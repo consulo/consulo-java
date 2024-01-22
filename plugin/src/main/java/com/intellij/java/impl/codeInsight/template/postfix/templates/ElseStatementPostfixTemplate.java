@@ -19,7 +19,7 @@ import consulo.language.editor.postfixTemplate.ElseExpressionPostfixTemplateBase
 import com.intellij.java.impl.codeInsight.generation.surroundWith.JavaWithIfExpressionSurrounder;
 import consulo.language.editor.surroundWith.Surrounder;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import static com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.IS_BOOLEAN;
 import static com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;

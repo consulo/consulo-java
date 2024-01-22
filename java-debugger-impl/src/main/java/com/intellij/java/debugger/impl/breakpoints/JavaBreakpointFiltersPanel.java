@@ -32,7 +32,7 @@ import consulo.execution.debug.breakpoint.ui.XBreakpointCustomPropertiesPanel;
 import consulo.ide.impl.idea.xdebugger.impl.breakpoints.XBreakpointBase;
 import consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -200,7 +200,7 @@ public class JavaBreakpointFiltersPanel<T extends JavaBreakpointProperties, B ex
 	}
 
 	@Override
-	public void loadFrom(@Nonnull B breakpoint)
+	public void loadFrom(@jakarta.annotation.Nonnull B breakpoint)
 	{
 		JavaBreakpointProperties properties = breakpoint.getProperties();
 		if(properties != null)

@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import javax.annotation.Nonnull;
-
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
@@ -31,12 +29,13 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.BoolUtils;
 import com.intellij.java.impl.ig.psiutils.VariableSearchUtils;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ConstantIfStatementInspection extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "constant.if.statement.display.name");
@@ -48,7 +47,7 @@ public class ConstantIfStatementInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "constant.if.statement.problem.descriptor");

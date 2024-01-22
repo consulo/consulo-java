@@ -27,8 +27,8 @@ import consulo.xml.util.xml.converters.values.BooleanValueConverter;
 import consulo.xml.util.xml.converters.values.CharacterValueConverter;
 import consulo.xml.util.xml.converters.values.NumberValueConverter;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.LinkedHashMap;
@@ -103,7 +103,7 @@ public class GenericDomValueConvertersRegistry {
     registerConverter(new NumberValueConverter(BigInteger.class, true), BigInteger.class);
   }
 
-  public void registerConverter(@Nonnull Converter<?> provider, @Nonnull final PsiType type) {
+  public void registerConverter(@jakarta.annotation.Nonnull Converter<?> provider, @Nonnull final PsiType type) {
     registerConverter(provider, new Condition<Pair<PsiType, GenericDomValue>>() {
       public boolean value(final Pair<PsiType, GenericDomValue> pair) {
         return Comparing.equal(pair.getFirst(), type);
@@ -111,14 +111,14 @@ public class GenericDomValueConvertersRegistry {
     });
   }
 
-  public void registerConverter(@Nonnull Converter<?> provider, @Nonnull Condition<Pair<PsiType, GenericDomValue>> condition) {
+  public void registerConverter(@Nonnull Converter<?> provider, @jakarta.annotation.Nonnull Condition<Pair<PsiType, GenericDomValue>> condition) {
     myConditionConverters.put(condition, provider);
   }
 
   @Nullable
-  public Converter<?> getConverter(@Nonnull GenericDomValue domValue, @Nullable PsiType type) {
+  public Converter<?> getConverter(@jakarta.annotation.Nonnull GenericDomValue domValue, @jakarta.annotation.Nullable PsiType type) {
     final Pair<PsiType, GenericDomValue> pair = new Pair<PsiType, GenericDomValue>(type, domValue);
-    for (@Nonnull Condition<Pair<PsiType, GenericDomValue>> condition : myConditionConverters.keySet()) {
+    for (@jakarta.annotation.Nonnull Condition<Pair<PsiType, GenericDomValue>> condition : myConditionConverters.keySet()) {
       if (condition.value(pair)) {
         return myConditionConverters.get(condition);
       }
@@ -126,7 +126,7 @@ public class GenericDomValueConvertersRegistry {
     return null;
   }
 
-  public void registerConverter(@Nonnull Converter<?> provider, @Nonnull Class type) {
+  public void registerConverter(@Nonnull Converter<?> provider, @jakarta.annotation.Nonnull Class type) {
     final String name = type.getCanonicalName();
     registerConverter(provider, new Condition<Pair<PsiType, GenericDomValue>>() {
       public boolean value(final Pair<PsiType, GenericDomValue> pair) {

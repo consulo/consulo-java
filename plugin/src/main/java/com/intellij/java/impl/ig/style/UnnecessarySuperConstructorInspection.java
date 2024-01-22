@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.style;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -38,13 +38,13 @@ public class UnnecessarySuperConstructorInspection
     return "UnnecessaryCallToSuper";
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "unnecessary.super.constructor.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "unnecessary.super.constructor.problem.descriptor");
@@ -81,7 +81,7 @@ public class UnnecessarySuperConstructorInspection
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression call) {
+      @jakarta.annotation.Nonnull PsiMethodCallExpression call) {
       super.visitMethodCallExpression(call);
       final PsiReferenceExpression methodExpression =
         call.getMethodExpression();

@@ -22,7 +22,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import com.siyeh.ig.InspectionGadgetsFix;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class DelegatingFix extends InspectionGadgetsFix {
 
@@ -32,7 +32,7 @@ public class DelegatingFix extends InspectionGadgetsFix {
     this.delegate = delegate;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getName() {
     return delegate.getName();
   }

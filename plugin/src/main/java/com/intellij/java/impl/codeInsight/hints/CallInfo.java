@@ -2,10 +2,10 @@ package com.intellij.java.impl.codeInsight.hints;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiParameter;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * from kotlin
@@ -16,7 +16,7 @@ class CallInfo
 	private final PsiParameter varArg;
 	private final List<PsiExpression> varArgExpressions;
 
-	CallInfo(@Nonnull List<CallArgumentInfo> regularArgs, @Nullable PsiParameter varArg, @Nonnull List<PsiExpression> varArgExpressions)
+	CallInfo(@jakarta.annotation.Nonnull List<CallArgumentInfo> regularArgs, @Nullable PsiParameter varArg, @jakarta.annotation.Nonnull List<PsiExpression> varArgExpressions)
 	{
 		this.regularArgs = regularArgs;
 		this.varArg = varArg;
@@ -29,13 +29,13 @@ class CallInfo
 		return regularArgs;
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public List<PsiExpression> getVarArgExpressions()
 	{
 		return varArgExpressions;
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	public PsiParameter getVarArg()
 	{
 		return varArg;

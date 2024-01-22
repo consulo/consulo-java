@@ -15,19 +15,18 @@
  */
 package com.intellij.java.debugger.impl.engine.evaluation.expression;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import consulo.internal.com.sun.jdi.ObjectReference;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author egor
  */
 public class ThrowEvaluator implements Evaluator
 {
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	private final Evaluator myExceptionEvaluator;
 
 	public ThrowEvaluator(@Nonnull Evaluator exceptionEvaluator)

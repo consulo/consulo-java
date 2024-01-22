@@ -21,22 +21,22 @@ import consulo.language.editor.inspection.SuppressQuickFix;
 import consulo.language.editor.rawHighlight.HighlightDisplayKey;
 import consulo.language.psi.PsiElement;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public abstract class BaseJavaBatchLocalInspectionTool<State> extends AbstractBaseJavaLocalInspectionTool<State> implements BatchSuppressableTool {
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public SuppressQuickFix[] getBatchSuppressActions(@Nullable PsiElement element) {
     return BatchSuppressManager.getInstance().createBatchSuppressActions(HighlightDisplayKey.find(getShortName()));
   }
 
   @Override
-  public boolean isSuppressedFor(@Nonnull PsiElement element) {
+  public boolean isSuppressedFor(@jakarta.annotation.Nonnull PsiElement element) {
     return isSuppressedFor(element, this);
   }
 
-  public static boolean isSuppressedFor(@Nonnull PsiElement element, @Nonnull LocalInspectionTool tool) {
+  public static boolean isSuppressedFor(@Nonnull PsiElement element, @jakarta.annotation.Nonnull LocalInspectionTool tool) {
     BatchSuppressManager manager = BatchSuppressManager.getInstance();
     String alternativeId;
     String toolId = tool.getID();

@@ -29,7 +29,7 @@ import consulo.language.editor.refactoring.ElementsHandler;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfoStorage;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.List;
 

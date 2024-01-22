@@ -17,8 +17,8 @@ package com.intellij.java.debugger.impl.memory.utils;
 
 import java.util.Locale;
 
-import javax.annotation.Nonnull;
 import consulo.internal.com.sun.jdi.VirtualMachine;
+import jakarta.annotation.Nonnull;
 
 public class AndroidUtil
 {

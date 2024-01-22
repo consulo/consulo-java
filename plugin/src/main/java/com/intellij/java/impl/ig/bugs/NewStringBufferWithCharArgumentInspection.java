@@ -15,9 +15,6 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
@@ -30,6 +27,8 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import consulo.java.language.module.util.JavaClassNames;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Nls;
 
 @ExtensionImpl
@@ -44,7 +43,7 @@ public class NewStringBufferWithCharArgumentInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "new.string.buffer.with.char.argument.problem.descriptor");
@@ -68,7 +67,7 @@ public class NewStringBufferWithCharArgumentInspection extends BaseInspection {
   private static class NewStringBufferWithCharArgumentFix
     extends InspectionGadgetsFix {
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "new.string.buffer.with.char.argument.quickfix");

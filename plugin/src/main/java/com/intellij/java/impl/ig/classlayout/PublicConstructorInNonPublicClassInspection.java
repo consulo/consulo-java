@@ -27,7 +27,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.RemoveModifierFix;
 import com.intellij.java.impl.ig.psiutils.SerializationUtils;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +40,7 @@ public class PublicConstructorInNonPublicClassInspection extends BaseInspection 
     return InspectionGadgetsBundle.message("public.constructor.in.non.public.class.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     final PsiMethod method = (PsiMethod)infos[0];
     return InspectionGadgetsBundle.message("public.constructor.in.non.public.class.problem.descriptor",
@@ -51,7 +51,7 @@ public class PublicConstructorInNonPublicClassInspection extends BaseInspection 
     return new PublicConstructorInNonPublicClassVisitor();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public InspectionGadgetsFix[] buildFixes(Object... infos) {
     final List<InspectionGadgetsFix> fixes = new ArrayList();
     final PsiMethod constructor = (PsiMethod)infos[0];

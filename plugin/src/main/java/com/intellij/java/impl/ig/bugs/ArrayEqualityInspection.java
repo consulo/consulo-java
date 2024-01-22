@@ -27,22 +27,21 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nonnull;
 
 @ExtensionImpl
 public class ArrayEqualityInspection extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "array.comparison.display.name");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "array.comparison.problem.descriptor");
@@ -126,7 +125,7 @@ public class ArrayEqualityInspection extends BaseInspection {
 
     @Override
     public void visitBinaryExpression(
-      @Nonnull PsiBinaryExpression expression) {
+      @jakarta.annotation.Nonnull PsiBinaryExpression expression) {
       super.visitBinaryExpression(expression);
       final PsiExpression rhs = expression.getROperand();
       if (rhs == null) {

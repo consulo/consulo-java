@@ -21,7 +21,7 @@ import consulo.ide.impl.idea.ide.util.PropertiesComponent;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public class AnonymousTargetClassPreselectionUtil
 {

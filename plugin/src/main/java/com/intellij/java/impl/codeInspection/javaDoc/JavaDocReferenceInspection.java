@@ -48,8 +48,8 @@ import consulo.util.concurrent.AsyncResult;
 import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import java.util.*;
 
@@ -58,7 +58,7 @@ public class JavaDocReferenceInspection extends BaseLocalInspectionTool {
   @NonNls
   public static final String SHORT_NAME = "JavadocReference";
 
-  private static ProblemDescriptor createDescriptor(@Nonnull PsiElement element,
+  private static ProblemDescriptor createDescriptor(@jakarta.annotation.Nonnull PsiElement element,
                                                     String template,
                                                     InspectionManager manager,
                                                     boolean onTheFly) {
@@ -67,19 +67,19 @@ public class JavaDocReferenceInspection extends BaseLocalInspectionTool {
 
   @Override
   @Nullable
-  public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod psiMethod, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
+  public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod psiMethod, @jakarta.annotation.Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
     return checkMember(psiMethod, manager, isOnTheFly);
   }
 
   @Override
   @Nullable
-  public ProblemDescriptor[] checkField(@Nonnull PsiField field, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
+  public ProblemDescriptor[] checkField(@jakarta.annotation.Nonnull PsiField field, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
     return checkMember(field, manager, isOnTheFly);
   }
 
   @Override
   @Nullable
-  public ProblemDescriptor[] checkClass(@Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
+  public ProblemDescriptor[] checkClass(@jakarta.annotation.Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
     return checkMember(aClass, manager, isOnTheFly);
   }
 
@@ -231,7 +231,7 @@ public class JavaDocReferenceInspection extends BaseLocalInspectionTool {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionsBundle.message("inspection.javadoc.ref.display.name");
   }
@@ -262,19 +262,19 @@ public class JavaDocReferenceInspection extends BaseLocalInspectionTool {
     }
 
     @Override
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return JavaQuickFixBundle.message("add.qualifier");
     }
 
     @Override
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getFamilyName() {
       return JavaQuickFixBundle.message("add.qualifier");
     }
 
     @Override
-    public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor) {
+    public void applyFix(@Nonnull final Project project, @jakarta.annotation.Nonnull final ProblemDescriptor descriptor) {
       final PsiElement element = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiJavaCodeReferenceElement.class);
       if (element instanceof PsiJavaCodeReferenceElement) {
         final PsiJavaCodeReferenceElement referenceElement = (PsiJavaCodeReferenceElement)element;
@@ -324,19 +324,19 @@ public class JavaDocReferenceInspection extends BaseLocalInspectionTool {
     }
 
     @Override
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return "Change to ...";
     }
 
     @Override
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getFamilyName() {
       return getName();
     }
 
     @Override
-    public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor) {
+    public void applyFix(@jakarta.annotation.Nonnull final Project project, @jakarta.annotation.Nonnull final ProblemDescriptor descriptor) {
       final AsyncResult<DataContext> asyncResult = DataManager.getInstance().getDataContextFromFocus();
       asyncResult.doWhenDone(dataContext -> {
         final Editor editor = dataContext.getData(PlatformDataKeys.EDITOR);
@@ -368,19 +368,19 @@ public class JavaDocReferenceInspection extends BaseLocalInspectionTool {
     }
 
     @Override
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return "Remove @" + myTagName + " " + myParamName;
     }
 
     @Override
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getFamilyName() {
       return getName();
     }
 
     @Override
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(@jakarta.annotation.Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
       final PsiDocTag myTag = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiDocTag.class);
       if (myTag == null) {
         return;

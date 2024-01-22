@@ -28,7 +28,6 @@ import consulo.ide.impl.idea.ide.util.MemberChooser;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -40,8 +39,8 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -61,7 +60,7 @@ public class InitializeFinalFieldInConstructorFix implements SyntheticIntentionA
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
     if (!myField.isValid() || myField.hasModifierProperty(PsiModifier.STATIC) || myField.hasInitializer()) {
       return false;
     }
@@ -166,7 +165,7 @@ public class InitializeFinalFieldInConstructorFix implements SyntheticIntentionA
   }
 
   @Nonnull
-  private static List<PsiMethod> choose(@Nonnull PsiMethod[] ctors, @Nonnull final Project project) {
+  private static List<PsiMethod> choose(@Nonnull PsiMethod[] ctors, @jakarta.annotation.Nonnull final Project project) {
     if (ApplicationManager.getApplication().isUnitTestMode()) {
       return Arrays.asList(ctors);
     }

@@ -26,9 +26,9 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -378,7 +378,7 @@ public class SerialVersionUIDBuilder extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitMethodCallExpression(
-    @Nonnull PsiMethodCallExpression methodCallExpression) {
+    @jakarta.annotation.Nonnull PsiMethodCallExpression methodCallExpression) {
     // for navigating the psi tree in the order javac navigates its AST
     final PsiExpressionList argumentList =
       methodCallExpression.getArgumentList();

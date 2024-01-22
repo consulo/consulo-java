@@ -18,7 +18,7 @@ package com.intellij.java.language.impl.codeInsight.generation;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.language.util.IncorrectOperationException;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * User: anna
@@ -37,6 +37,6 @@ public interface PropertyClassMember extends EncapsulatableClassMember
 	 * @param aClass
 	 * @return PsiElement or TemplateGenerationInfo
 	 */
-	@Nullable
+	@jakarta.annotation.Nullable
 	GenerationInfo[] generateSetters(PsiClass aClass) throws IncorrectOperationException;
 }

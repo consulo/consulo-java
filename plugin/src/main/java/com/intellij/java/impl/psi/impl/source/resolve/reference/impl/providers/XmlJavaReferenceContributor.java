@@ -7,7 +7,7 @@ import consulo.language.psi.PsiReferenceRegistrar;
 import consulo.xml.lang.xml.XMLLanguage;
 import consulo.xml.patterns.XmlPatterns;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL

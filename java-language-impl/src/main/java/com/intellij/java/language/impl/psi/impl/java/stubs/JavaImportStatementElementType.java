@@ -34,7 +34,7 @@ import consulo.language.psi.stub.StubInputStream;
 import consulo.language.psi.stub.StubOutputStream;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.io.IOException;
 
 /**
@@ -51,7 +51,7 @@ public abstract class JavaImportStatementElementType extends JavaStubElementType
   }
 
   @Override
-  public PsiImportStatementBase createPsi(@Nonnull final ASTNode node) {
+  public PsiImportStatementBase createPsi(@jakarta.annotation.Nonnull final ASTNode node) {
     if (node instanceof ImportStaticStatementElement) {
       return new PsiImportStaticStatementImpl(node);
     } else {
@@ -78,20 +78,20 @@ public abstract class JavaImportStatementElementType extends JavaStubElementType
   }
 
   @Override
-  public void serialize(@Nonnull final PsiImportStatementStub stub, @Nonnull final StubOutputStream dataStream) throws IOException {
+  public void serialize(@jakarta.annotation.Nonnull final PsiImportStatementStub stub, @Nonnull final StubOutputStream dataStream) throws IOException {
     dataStream.writeByte(((PsiImportStatementStubImpl) stub).getFlags());
     dataStream.writeName(stub.getImportReferenceText());
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
-  public PsiImportStatementStub deserialize(@Nonnull final StubInputStream dataStream, final StubElement parentStub) throws IOException {
+  public PsiImportStatementStub deserialize(@jakarta.annotation.Nonnull final StubInputStream dataStream, final StubElement parentStub) throws IOException {
     final byte flags = dataStream.readByte();
     final StringRef refText = dataStream.readName();
     return new PsiImportStatementStubImpl(parentStub, StringRef.toString(refText), flags);
   }
 
   @Override
-  public void indexStub(@Nonnull final PsiImportStatementStub stub, @Nonnull final IndexSink sink) {
+  public void indexStub(@jakarta.annotation.Nonnull final PsiImportStatementStub stub, @Nonnull final IndexSink sink) {
   }
 }

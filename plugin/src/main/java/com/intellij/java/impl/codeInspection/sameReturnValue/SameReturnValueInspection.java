@@ -29,8 +29,8 @@ import consulo.language.editor.inspection.reference.RefManager;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.scope.AnalysisScope;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author max
@@ -127,7 +127,7 @@ public class SameReturnValueInspection extends GlobalJavaInspectionTool
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public String getDisplayName()
 	{
 		return InspectionsBundle.message("inspection.same.return.value.display.name");

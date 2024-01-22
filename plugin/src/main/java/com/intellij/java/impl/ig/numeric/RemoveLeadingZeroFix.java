@@ -24,7 +24,7 @@ import com.intellij.java.language.psi.PsiExpression;
 import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 class RemoveLeadingZeroFix extends InspectionGadgetsFix {
 

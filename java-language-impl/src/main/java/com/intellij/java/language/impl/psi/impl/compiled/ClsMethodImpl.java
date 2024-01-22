@@ -44,8 +44,8 @@ import consulo.navigation.ItemPresentation;
 import consulo.navigation.ItemPresentationProvider;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.List;
 
 public class ClsMethodImpl extends ClsMemberImpl<PsiMethodStub> implements PsiAnnotationMethod {
@@ -287,7 +287,7 @@ public class ClsMethodImpl extends ClsMemberImpl<PsiMethodStub> implements PsiAn
         FileIndexFacade.getInstance(getProject()).getRootModificationTracker()));
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private PsiMethod calcSourceMirrorMethod() {
     PsiClass sourceClassMirror = ((ClsClassImpl) getParent()).getSourceMirrorClass();
     if (sourceClassMirror == null) {

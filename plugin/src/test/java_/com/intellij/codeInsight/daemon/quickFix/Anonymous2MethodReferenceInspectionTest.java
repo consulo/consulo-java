@@ -15,10 +15,9 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.analysis.impl.codeInspection.AnonymousCanBeMethodReferenceInspection;
 import consulo.language.editor.inspection.LocalInspectionTool;
+import jakarta.annotation.Nonnull;
 
 
 public abstract class Anonymous2MethodReferenceInspectionTest extends LightQuickFixTestCase {

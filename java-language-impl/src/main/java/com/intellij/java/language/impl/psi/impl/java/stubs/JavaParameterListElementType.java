@@ -26,7 +26,7 @@ import consulo.language.psi.stub.IndexSink;
 import consulo.language.psi.stub.StubElement;
 import consulo.language.psi.stub.StubInputStream;
 import consulo.language.psi.stub.StubOutputStream;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.io.IOException;
 
@@ -50,7 +50,7 @@ public class JavaParameterListElementType extends JavaStubElementType<PsiParamet
   }
 
   @Override
-  public PsiParameterList createPsi(@Nonnull final ASTNode node) {
+  public PsiParameterList createPsi(@jakarta.annotation.Nonnull final ASTNode node) {
     return new PsiParameterListImpl(node);
   }
 
@@ -60,16 +60,16 @@ public class JavaParameterListElementType extends JavaStubElementType<PsiParamet
   }
 
   @Override
-  public void serialize(@Nonnull final PsiParameterListStub stub, @Nonnull final StubOutputStream dataStream) throws IOException {
+  public void serialize(@Nonnull final PsiParameterListStub stub, @jakarta.annotation.Nonnull final StubOutputStream dataStream) throws IOException {
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
-  public PsiParameterListStub deserialize(@Nonnull final StubInputStream dataStream, final StubElement parentStub) throws IOException {
+  public PsiParameterListStub deserialize(@jakarta.annotation.Nonnull final StubInputStream dataStream, final StubElement parentStub) throws IOException {
     return new PsiParameterListStubImpl(parentStub);
   }
 
   @Override
-  public void indexStub(@Nonnull final PsiParameterListStub stub, @Nonnull final IndexSink sink) {
+  public void indexStub(@Nonnull final PsiParameterListStub stub, @jakarta.annotation.Nonnull final IndexSink sink) {
   }
 }

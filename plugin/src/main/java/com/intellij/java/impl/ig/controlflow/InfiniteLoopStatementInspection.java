@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiDoWhileStatement;
 import com.intellij.java.language.psi.PsiForStatement;
@@ -61,7 +61,7 @@ public class InfiniteLoopStatementInspection extends BaseInspection
 	{
 
 		@Override
-		public void visitForStatement(@Nonnull PsiForStatement statement)
+		public void visitForStatement(@jakarta.annotation.Nonnull PsiForStatement statement)
 		{
 			super.visitForStatement(statement);
 			checkStatement(statement);
@@ -75,7 +75,7 @@ public class InfiniteLoopStatementInspection extends BaseInspection
 		}
 
 		@Override
-		public void visitDoWhileStatement(@Nonnull PsiDoWhileStatement statement)
+		public void visitDoWhileStatement(@jakarta.annotation.Nonnull PsiDoWhileStatement statement)
 		{
 			super.visitDoWhileStatement(statement);
 			checkStatement(statement);

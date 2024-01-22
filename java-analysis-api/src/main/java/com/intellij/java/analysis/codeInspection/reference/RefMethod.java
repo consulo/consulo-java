@@ -18,9 +18,9 @@ package com.intellij.java.analysis.codeInspection.reference;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiModifierListOwner;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.Collection;
 
 /**
@@ -38,7 +38,7 @@ public interface RefMethod extends RefJavaElement {
    * @see PsiMethod#findSuperMethods()
    * @see #hasSuperMethods
    */
-  @Nonnull
+  @jakarta.annotation.Nonnull
   Collection<RefMethod> getSuperMethods();
 
   /**
@@ -47,7 +47,7 @@ public interface RefMethod extends RefJavaElement {
    *
    * @return the collection of overriding methods.
    */
-  @Nonnull
+  @jakarta.annotation.Nonnull
   Collection<RefMethod> getDerivedMethods();
 
   /**
@@ -130,7 +130,7 @@ public interface RefMethod extends RefJavaElement {
    *
    * @return the method return value or null if it's different or impossible to determine.
    */
-  @Nullable
+  @jakarta.annotation.Nullable
   String getReturnValueIfSame();
 
   /**

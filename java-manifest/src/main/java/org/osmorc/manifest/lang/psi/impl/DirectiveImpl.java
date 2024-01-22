@@ -25,10 +25,9 @@
 
 package org.osmorc.manifest.lang.psi.impl;
 
-import javax.annotation.Nonnull;
-
 import consulo.language.ast.ASTNode;
 import consulo.language.psi.stub.IStubElementType;
+import jakarta.annotation.Nonnull;
 import org.osmorc.manifest.lang.psi.Directive;
 import org.osmorc.manifest.lang.psi.stub.AssignmentExpressionStub;
 
@@ -40,7 +39,7 @@ public class DirectiveImpl extends AbstractAssignmentExpression implements Direc
     super(stub, nodeType);
   }
 
-  public DirectiveImpl(@Nonnull ASTNode node) {
+  public DirectiveImpl(@jakarta.annotation.Nonnull ASTNode node) {
     super(node);
   }
 }

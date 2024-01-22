@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.psi.codeStyle.arrangement;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class JavaArrangementOverriddenMethodsInfo {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private final List<JavaElementArrangementEntry> myMethodEntries = new ArrayList<JavaElementArrangementEntry>();
   @Nonnull
   private final String myName;
@@ -35,11 +35,11 @@ public class JavaArrangementOverriddenMethodsInfo {
     myName = name;
   }
 
-  public void addMethodEntry(@Nonnull JavaElementArrangementEntry entry) {
+  public void addMethodEntry(@jakarta.annotation.Nonnull JavaElementArrangementEntry entry) {
     myMethodEntries.add(entry);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getName() {
     return myName;
   }

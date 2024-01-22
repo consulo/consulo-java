@@ -53,8 +53,8 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.xml.XmlStringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.awt.event.MouseEvent;
 import java.util.function.Function;
 
@@ -69,9 +69,9 @@ public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDes
   };
 
   @RequiredReadAction
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
-  public LineMarkerInfo getLineMarkerInfo(@Nonnull final PsiElement element) {
+  public LineMarkerInfo getLineMarkerInfo(@jakarta.annotation.Nonnull final PsiElement element) {
     PsiModifierListOwner owner = getAnnotationOwner(element);
     if (owner == null) {
       return null;
@@ -87,7 +87,7 @@ public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDes
         .RIGHT);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   static PsiModifierListOwner getAnnotationOwner(@Nullable PsiElement element) {
     if (element == null) {
       return null;
@@ -110,7 +110,7 @@ public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDes
   }
 
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getName() {
     return "External annotations";
@@ -156,7 +156,7 @@ public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDes
       }
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     protected JBPopup createActionGroupPopup(PsiFile file, Project project, Editor editor) {
       final DefaultActionGroup group = new DefaultActionGroup();
       for (final IntentionAction action : IntentionManager.getInstance().getAvailableIntentionActions()) {

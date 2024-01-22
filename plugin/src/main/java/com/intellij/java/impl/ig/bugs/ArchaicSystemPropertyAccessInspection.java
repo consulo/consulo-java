@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -75,7 +75,7 @@ public class ArchaicSystemPropertyAccessInspection extends BaseInspection {
 
   private static class ReplaceWithParseMethodFix extends InspectionGadgetsFix {
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "archaic.system.property.accessors.replace.parse.quickfix");

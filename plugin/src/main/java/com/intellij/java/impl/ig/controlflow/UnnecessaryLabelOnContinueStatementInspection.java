@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -56,7 +56,7 @@ public class UnnecessaryLabelOnContinueStatementInspection
   private static class UnnecessaryLabelOnContinueStatementFix
     extends InspectionGadgetsFix {
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "unnecessary.label.remove.quickfix");

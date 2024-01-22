@@ -49,10 +49,11 @@ import consulo.usage.UsageViewDescriptor;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.Ref;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.util.*;
 import java.util.function.Function;
 
@@ -96,7 +97,7 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
     return RefactoringBundle.message("move.inner.class.command", myDescriptiveName);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
     return new MoveInnerViewDescriptor(myInnerClass);
   }
@@ -415,7 +416,7 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
                     final String parameterName,
                     boolean searchInComments,
                     boolean searchInNonJava,
-                    @Nonnull final PsiElement targetContainer) {
+                    @jakarta.annotation.Nonnull final PsiElement targetContainer) {
     myNewClassName = className;
     myInnerClass = innerClass;
     myDescriptiveName = DescriptiveNameUtil.getDescriptiveName(myInnerClass);

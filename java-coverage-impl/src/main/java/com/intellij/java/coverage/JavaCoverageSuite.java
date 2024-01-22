@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.execution.coverage.*;
 import consulo.logging.Logger;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import consulo.application.ApplicationManager;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
@@ -80,7 +80,7 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
     return ArrayUtil.toStringArray(result);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String[] getFilteredClassNames() {
     if (myFilters == null) return ArrayUtil.EMPTY_STRING_ARRAY;
     List<String> result = new ArrayList<String>();
@@ -126,7 +126,7 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
     element.setAttribute(COVERAGE_RUNNER, coverageRunner != null ? coverageRunner.getId() : "emma");
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public ProjectData getCoverageData(final CoverageDataManager coverageDataManager) {
     final ProjectData data = getCoverageData();
     if (data != null) return data;
@@ -155,12 +155,12 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
     return map;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public CoverageEngine getCoverageEngine() {
     return myCoverageEngine;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public String getSuiteToMerge() {
     return mySuiteToMerge;
   }
@@ -224,7 +224,7 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
     return false;
   }
 
-  public @Nonnull
+  public @jakarta.annotation.Nonnull
   List<PsiClass> getCurrentSuiteClasses(final Project project) {
     final List<PsiClass> classes = new ArrayList<PsiClass>();
     final PsiManager psiManager = PsiManager.getInstance(project);

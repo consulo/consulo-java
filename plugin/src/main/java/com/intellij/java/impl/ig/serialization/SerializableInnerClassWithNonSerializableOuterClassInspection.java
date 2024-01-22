@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.serialization;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -31,7 +31,7 @@ public class SerializableInnerClassWithNonSerializableOuterClassInspection
       "serializable.inner.class.with.non.serializable.outer.class.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "serializable.inner.class.with.non.serializable.outer.class.problem.descriptor");

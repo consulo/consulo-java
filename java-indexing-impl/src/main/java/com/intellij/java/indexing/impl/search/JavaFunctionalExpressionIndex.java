@@ -35,7 +35,7 @@ import consulo.language.psi.stub.FileContent;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -57,9 +57,9 @@ public class JavaFunctionalExpressionIndex extends FileBasedIndexExtension<Strin
   @Override
   public DataIndexer<String, Collection<IndexHolder>, FileContent> getIndexer() {
     return new DataIndexer<String, Collection<IndexHolder>, FileContent>() {
-      @Nonnull
+      @jakarta.annotation.Nonnull
       @Override
-      public Map<String, Collection<IndexHolder>> map(@Nonnull FileContent inputData) {
+      public Map<String, Collection<IndexHolder>> map(@jakarta.annotation.Nonnull FileContent inputData) {
         if (!JavaStubElementTypes.JAVA_FILE.shouldBuildStubFor(inputData.getFile())) {
           return Collections.emptyMap();
         }

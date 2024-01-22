@@ -25,16 +25,16 @@ import consulo.language.impl.psi.LightElement;
 import consulo.content.scope.SearchScope;
 import consulo.language.util.IncorrectOperationException;
 import consulo.annotation.access.RequiredReadAction;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 public class LightField extends LightElement implements PsiField {
   private final PsiField myField;
   private final PsiClass myContainingClass;
 
-  public LightField(@Nonnull final PsiManager manager, @Nonnull final PsiField field, @Nonnull final PsiClass containingClass) {
+  public LightField(@jakarta.annotation.Nonnull final PsiManager manager, @jakarta.annotation.Nonnull final PsiField field, @Nonnull final PsiClass containingClass) {
     super(manager, JavaLanguage.INSTANCE);
     myField = field;
     myContainingClass = containingClass;
@@ -119,7 +119,7 @@ public class LightField extends LightElement implements PsiField {
   }
 
   @Override
-  public boolean hasModifierProperty(@NonNls @Nonnull final String name) {
+  public boolean hasModifierProperty(@NonNls @jakarta.annotation.Nonnull final String name) {
     return myField.hasModifierProperty(name);
   }
 
@@ -135,7 +135,7 @@ public class LightField extends LightElement implements PsiField {
   }
 
   @RequiredReadAction
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public TextRange getTextRange() {
     return myField.getTextRange();

@@ -29,7 +29,7 @@ import com.siyeh.ig.psiutils.TypeUtils;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.java.language.module.util.JavaClassNames;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -40,13 +40,13 @@ public class StringReplaceableByStringBufferInspection extends BaseInspection {
   public boolean onlyWarnOnLoop = true;
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "NonConstantStringShouldBeStringBuffer";
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "string.replaceable.by.string.buffer.display.name");
@@ -76,7 +76,7 @@ public class StringReplaceableByStringBufferInspection extends BaseInspection {
 
     @Override
     public void visitLocalVariable(
-      @Nonnull PsiLocalVariable variable) {
+      @jakarta.annotation.Nonnull PsiLocalVariable variable) {
       super.visitLocalVariable(variable);
       final PsiCodeBlock codeBlock =
         PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class);

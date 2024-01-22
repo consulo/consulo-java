@@ -29,8 +29,8 @@ import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,7 +67,7 @@ public class RedundantCastInspection extends GenericsInspectionToolBase<Redundan
   @Override
   @Nullable
   public ProblemDescriptor[] getDescriptions(@Nonnull PsiElement where,
-                                             @Nonnull InspectionManager manager,
+                                             @jakarta.annotation.Nonnull InspectionManager manager,
                                              boolean isOnTheFly,
                                              RedundantCastInspectionState state) {
     List<PsiTypeCastExpression> redundantCasts = RedundantCastUtil.getRedundantCastsInside(where);
@@ -88,7 +88,7 @@ public class RedundantCastInspection extends GenericsInspectionToolBase<Redundan
   }
 
   @Override
-  public ProblemDescriptor[] checkField(@Nonnull PsiField field,
+  public ProblemDescriptor[] checkField(@jakarta.annotation.Nonnull PsiField field,
                                         @Nonnull InspectionManager manager,
                                         boolean isOnTheFly,
                                         RedundantCastInspectionState state) {
@@ -96,7 +96,7 @@ public class RedundantCastInspection extends GenericsInspectionToolBase<Redundan
   }
 
   @Nullable
-  private ProblemDescriptor createDescription(@Nonnull PsiTypeCastExpression cast,
+  private ProblemDescriptor createDescription(@jakarta.annotation.Nonnull PsiTypeCastExpression cast,
                                               @Nonnull InspectionManager manager,
                                               boolean onTheFly,
                                               RedundantCastInspectionState state) {
@@ -125,13 +125,13 @@ public class RedundantCastInspection extends GenericsInspectionToolBase<Redundan
 
   private static class AcceptSuggested implements LocalQuickFix {
     @Override
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getFamilyName() {
       return InspectionsBundle.message("inspection.redundant.cast.remove.quickfix");
     }
 
     @Override
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(@Nonnull Project project, @jakarta.annotation.Nonnull ProblemDescriptor descriptor) {
       PsiElement castTypeElement = descriptor.getPsiElement();
       PsiTypeCastExpression cast = castTypeElement == null ? null : (PsiTypeCastExpression)castTypeElement.getParent();
       if (cast != null) {
@@ -141,19 +141,19 @@ public class RedundantCastInspection extends GenericsInspectionToolBase<Redundan
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionsBundle.message("inspection.redundant.cast.display.name");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getGroupDisplayName() {
     return GroupNames.VERBOSE_GROUP_NAME;
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getShortName() {
     return SHORT_NAME;
   }

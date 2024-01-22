@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.language.psi.*;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
@@ -29,6 +27,7 @@ import consulo.language.psi.*;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author Mike
@@ -129,7 +128,7 @@ public class CreateFieldFromUsageFix extends CreateVarFromUsageFix {
     });
   }
 
-  private static boolean shouldCreateFinalMember(@Nonnull PsiReferenceExpression ref, @Nonnull PsiClass targetClass) {
+  private static boolean shouldCreateFinalMember(@Nonnull PsiReferenceExpression ref, @jakarta.annotation.Nonnull PsiClass targetClass) {
     if (!PsiTreeUtil.isAncestor(targetClass, ref, true)) {
       return false;
     }

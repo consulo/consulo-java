@@ -25,7 +25,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.MakeInitializerExplicitFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.intellij.java.impl.ig.psiutils.InitializationUtils;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -51,7 +51,7 @@ public class StaticVariableInitializationInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "static.variable.may.not.be.initialized.problem.descriptor");

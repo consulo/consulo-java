@@ -16,7 +16,7 @@ import com.siyeh.ig.psiutils.ControlFlowUtils;
 import consulo.language.psi.PsiElement;
 import consulo.util.collection.ContainerUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.*;
 
 /**
@@ -40,9 +40,9 @@ public final class ContractChecker {
     }
 
     @Override
-    protected void checkReturnValue(@Nonnull DfaValue value,
+    protected void checkReturnValue(@jakarta.annotation.Nonnull DfaValue value,
                                     @Nonnull PsiExpression expression,
-                                    @Nonnull PsiParameterListOwner context,
+                                    @jakarta.annotation.Nonnull PsiParameterListOwner context,
                                     @Nonnull DfaMemoryState state) {
       if (context != myMethod || state.isEphemeral()) {
         return;
@@ -76,10 +76,10 @@ public final class ContractChecker {
     }
 
     @Override
-    @Nonnull
-    public DfaInstructionState[] visitControlTransfer(@Nonnull ControlTransferInstruction instruction,
-                                                      @Nonnull DataFlowRunner runner,
-                                                      @Nonnull DfaMemoryState state) {
+    @jakarta.annotation.Nonnull
+    public DfaInstructionState[] visitControlTransfer(@jakarta.annotation.Nonnull ControlTransferInstruction instruction,
+                                                      @jakarta.annotation.Nonnull DataFlowRunner runner,
+                                                      @jakarta.annotation.Nonnull DfaMemoryState state) {
       if (instruction instanceof ReturnInstruction && ((ReturnInstruction) instruction).isViaException()) {
         ContainerUtil.addIfNotNull(myFailures, ((ReturnInstruction) instruction).getAnchor());
       } else {

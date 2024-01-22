@@ -15,7 +15,8 @@
  */
 package com.intellij.java.language.jvm;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
+
 import java.lang.reflect.GenericDeclaration;
 
 /**

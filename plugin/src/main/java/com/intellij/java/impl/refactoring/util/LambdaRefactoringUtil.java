@@ -37,9 +37,9 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
 import consulo.ui.ex.awt.Messages;
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,13 +49,13 @@ import java.util.function.Function;
 public class LambdaRefactoringUtil {
   private static final Logger LOG = Logger.getInstance(LambdaRefactoringUtil.class);
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static PsiExpression convertToMethodCallInLambdaBody(PsiMethodReferenceExpression element) {
     final PsiLambdaExpression lambdaExpression = convertMethodReferenceToLambda(element, false, true);
     return lambdaExpression != null ? LambdaUtil.extractSingleExpressionFromBody(lambdaExpression.getBody()) : null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static PsiLambdaExpression convertMethodReferenceToLambda(final PsiMethodReferenceExpression referenceExpression, final boolean ignoreCast, final boolean simplifyToExpressionLambda) {
     PsiLambdaExpression lambdaExpression = createLambda(referenceExpression, ignoreCast);
     if (lambdaExpression == null) {
@@ -300,7 +300,7 @@ public class LambdaRefactoringUtil {
     return false;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static String createLambdaParameterListWithFormalTypes(PsiType functionalInterfaceType, PsiLambdaExpression lambdaExpression, boolean checkApplicability) {
     final PsiClassType.ClassResolveResult resolveResult = PsiUtil.resolveGenericsClassInType(functionalInterfaceType);
     final StringBuilder buf = new StringBuilder();
@@ -331,7 +331,7 @@ public class LambdaRefactoringUtil {
     return buf.toString();
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static PsiParameterList specifyLambdaParameterTypes(PsiLambdaExpression lambdaExpression) {
     return specifyLambdaParameterTypes(lambdaExpression.getFunctionalInterfaceType(), lambdaExpression);
   }

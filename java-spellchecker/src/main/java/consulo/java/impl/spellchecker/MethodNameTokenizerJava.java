@@ -19,8 +19,7 @@ import com.intellij.java.language.psi.PsiMethod;
 import consulo.language.spellcheker.tokenizer.TokenConsumer;
 import consulo.module.content.ProjectRootManager;
 import consulo.virtualFileSystem.VirtualFile;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Created by IntelliJ IDEA.

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.application.options;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.language.codeStyle.ui.setting.arrangement.ArrangementSettingsPanel;
 import com.intellij.java.language.impl.JavaFileType;

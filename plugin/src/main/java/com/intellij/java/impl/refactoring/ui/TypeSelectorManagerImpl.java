@@ -30,8 +30,8 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -329,7 +329,7 @@ public class TypeSelectorManagerImpl implements TypeSelectorManager {
     typeSelected(type, getDefaultType());
   }
 
-  public static void typeSelected(@Nonnull final PsiType type, @Nullable final PsiType defaultType) {
+  public static void typeSelected(@jakarta.annotation.Nonnull final PsiType type, @Nullable final PsiType defaultType) {
     if (defaultType == null) {
       return;
     }
@@ -348,7 +348,7 @@ public class TypeSelectorManagerImpl implements TypeSelectorManager {
     return "IntroduceVariable##" + serialize(defaultType);
   }
 
-  private static String serialize(@Nonnull PsiType type) {
+  private static String serialize(@jakarta.annotation.Nonnull PsiType type) {
     if (PsiUtil.resolveClassInType(type) instanceof PsiTypeParameter) {
       return type.getCanonicalText();
     }

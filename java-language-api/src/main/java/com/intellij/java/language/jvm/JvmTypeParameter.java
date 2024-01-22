@@ -15,9 +15,9 @@
  */
 package com.intellij.java.language.jvm;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import com.intellij.java.language.jvm.types.JvmReferenceType;
+import jakarta.annotation.Nonnull;
 
 import java.lang.reflect.TypeVariable;
 

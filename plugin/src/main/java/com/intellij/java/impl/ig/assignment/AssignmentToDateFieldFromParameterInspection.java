@@ -28,8 +28,8 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.util.PsiTreeUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 
 @ExtensionImpl
@@ -48,7 +48,7 @@ public class AssignmentToDateFieldFromParameterInspection extends BaseInspection
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     final String type = (String)infos[0];
     final PsiExpression rhs = (PsiExpression)infos[1];

@@ -3,10 +3,10 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.value;
 
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaUtil;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.*;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 /**
  * Represents a condition to be applied to DFA memory state.
@@ -88,7 +88,7 @@ public abstract class DfaCondition
 		static final Exact FALSE = new Exact("FALSE");
 		static final Exact UNKNOWN = new Exact("UNKNOWN");
 
-		@Nonnull
+		@jakarta.annotation.Nonnull
 		@Override
 		public DfaCondition negate()
 		{

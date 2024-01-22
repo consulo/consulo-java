@@ -36,8 +36,8 @@ import consulo.virtualFileSystem.VirtualFile;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -80,7 +80,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
   }
 
   @Override
-  public PsiClass findClass(@Nonnull final String qualifiedName, @Nonnull GlobalSearchScope scope) {
+  public PsiClass findClass(@jakarta.annotation.Nonnull final String qualifiedName, @Nonnull GlobalSearchScope scope) {
     ProgressIndicatorProvider.checkCanceled(); // We hope this method is being called often enough to cancel daemon processes smoothly
 
     if (DumbService.getInstance(getProject()).isDumb()) {
@@ -102,7 +102,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
   }
 
   @Nonnull
-  private PsiClass[] findClassesInDumbMode(@Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope) {
+  private PsiClass[] findClassesInDumbMode(@jakarta.annotation.Nonnull String qualifiedName, @jakarta.annotation.Nonnull GlobalSearchScope scope) {
     final String packageName = StringUtil.getPackageName(qualifiedName);
     final PsiJavaPackage pkg = findPackage(packageName);
     final String className = StringUtil.getShortName(qualifiedName);
@@ -123,8 +123,8 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
   }
 
   @Override
-  @Nonnull
-  public PsiClass[] findClasses(@Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope) {
+  @jakarta.annotation.Nonnull
+  public PsiClass[] findClasses(@jakarta.annotation.Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope) {
     if (DumbService.getInstance(getProject()).isDumb()) {
       return findClassesInDumbMode(qualifiedName, scope);
     }
@@ -138,7 +138,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
     return classes.toArray(new PsiClass[classes.size()]);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private List<PsiElementFinder> finders() {
     return myProject.getExtensionList(PsiElementFinder.class);
   }
@@ -179,7 +179,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiJavaPackage[] getSubPackages(@Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope) {
     LinkedHashSet<PsiJavaPackage> result = new LinkedHashSet<>();
     for (PsiElementFinder finder : filteredFinders()) {
@@ -207,19 +207,19 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiResolveHelper getResolveHelper() {
     return myPsiResolveHelper;
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiNameHelper getNameHelper() {
     return myPsiNameHelper;
   }
 
-  @Nonnull
-  public Set<String> getClassNames(@Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope) {
+  @jakarta.annotation.Nonnull
+  public Set<String> getClassNames(@Nonnull PsiJavaPackage psiPackage, @jakarta.annotation.Nonnull GlobalSearchScope scope) {
     Set<String> result = new HashSet<>();
     for (PsiElementFinder finder : filteredFinders()) {
       result.addAll(finder.getClassNames(psiPackage, scope));
@@ -228,7 +228,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
   }
 
   @Nonnull
-  public PsiClass[] getClasses(@Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope) {
+  public PsiClass[] getClasses(@jakarta.annotation.Nonnull PsiJavaPackage psiPackage, @jakarta.annotation.Nonnull GlobalSearchScope scope) {
     List<PsiClass> result = null;
     for (PsiElementFinder finder : filteredFinders()) {
       PsiClass[] classes = finder.getClasses(psiPackage, scope);
@@ -245,7 +245,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
   }
 
   public boolean processPackageDirectories(@Nonnull PsiJavaPackage psiPackage,
-                                           @Nonnull GlobalSearchScope scope,
+                                           @jakarta.annotation.Nonnull GlobalSearchScope scope,
                                            @Nonnull Processor<PsiDirectory> consumer) {
     for (PsiElementFinder finder : filteredFinders()) {
       if (!finder.processPackageDirectories(psiPackage, scope, consumer)) {
@@ -273,7 +273,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
 
 
   @Override
-  public boolean isPartOfPackagePrefix(@Nonnull String packageName) {
+  public boolean isPartOfPackagePrefix(@jakarta.annotation.Nonnull String packageName) {
     final Collection<String> packagePrefixes = JavaFileManager.getInstance(myProject).getNonTrivialPackagePrefixes();
     for (final String subpackageName : packagePrefixes) {
       if (isSubpackageOf(subpackageName, packageName)) {
@@ -283,7 +283,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
     return false;
   }
 
-  private static boolean isSubpackageOf(@Nonnull String subpackageName, @Nonnull String packageName) {
+  private static boolean isSubpackageOf(@jakarta.annotation.Nonnull String subpackageName, @Nonnull String packageName) {
     return subpackageName.equals(packageName) || subpackageName.startsWith(packageName) && subpackageName.charAt(packageName.length()) == '.';
   }
 
@@ -301,7 +301,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
   }
 
   @Override
-  public boolean arePackagesTheSame(@Nonnull PsiElement element1, @Nonnull PsiElement element2) {
+  public boolean arePackagesTheSame(@jakarta.annotation.Nonnull PsiElement element1, @Nonnull PsiElement element2) {
     PsiFile file1 = FileContextUtil.getContextFile(element1);
     PsiFile file2 = FileContextUtil.getContextFile(element2);
     if (Comparing.equal(file1, file2)) {
@@ -327,26 +327,26 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public Project getProject() {
     return myProject;
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiElementFactory getElementFactory() {
     return myPsiElementFactory;
   }
 
   @Override
-  public PsiJavaModule findModule(@Nonnull String moduleName, @Nonnull GlobalSearchScope scope) {
+  public PsiJavaModule findModule(@jakarta.annotation.Nonnull String moduleName, @jakarta.annotation.Nonnull GlobalSearchScope scope) {
     Collection<PsiJavaModule> modules = findModules(moduleName, scope);
     return modules.size() == 1 ? modules.iterator().next() : null;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
-  public Collection<PsiJavaModule> findModules(@Nonnull String moduleName, @Nonnull GlobalSearchScope scope) {
+  public Collection<PsiJavaModule> findModules(@Nonnull String moduleName, @jakarta.annotation.Nonnull GlobalSearchScope scope) {
     return myModulesByScopeCache
       .computeIfAbsent(scope, k -> ContainerUtil.createConcurrentWeakValueMap())
       .computeIfAbsent(moduleName, k -> JavaFileManager.getInstance(myProject).findModules(k, scope));

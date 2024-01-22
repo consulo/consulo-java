@@ -23,9 +23,8 @@ import consulo.language.pattern.StandardPatterns;
 import consulo.language.pattern.StringPattern;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.ProcessingContext;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nonnull;
 
 /**
  * @author nik
@@ -48,7 +47,7 @@ public class PsiStatementPattern<T extends PsiStatement, Self extends PsiStateme
     return insideMethod(PsiJavaPatterns.psiMethod().withName(methodName).definedInClass(qualifiedClassName));
   }
 
-  public Self insideMethod(@Nonnull @NonNls String methodName, @Nonnull @NonNls String qualifiedClassName) {
+  public Self insideMethod(@jakarta.annotation.Nonnull @NonNls String methodName, @jakarta.annotation.Nonnull @NonNls String qualifiedClassName) {
     return insideMethod(StandardPatterns.string().equalTo(methodName), qualifiedClassName);
   }
 

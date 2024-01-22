@@ -23,8 +23,8 @@ import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.module.content.layer.orderEntry.LibraryOrderEntry;
@@ -41,7 +41,7 @@ public class JarVersionDetectionUtil
 	}
 
 	@Nullable
-	public static String detectJarVersion(@Nonnull String detectionClass, @Nonnull Module module)
+	public static String detectJarVersion(@jakarta.annotation.Nonnull String detectionClass, @jakarta.annotation.Nonnull Module module)
 	{
 		for(OrderEntry library : ModuleRootManager.getInstance(module).getOrderEntries())
 		{
@@ -58,8 +58,8 @@ public class JarVersionDetectionUtil
 		return null;
 	}
 
-	@Nullable
-	public static String detectJarVersion(@Nonnull String detectionClass, @Nonnull List<VirtualFile> files)
+	@jakarta.annotation.Nullable
+	public static String detectJarVersion(@jakarta.annotation.Nonnull String detectionClass, @Nonnull List<VirtualFile> files)
 	{
 		VirtualFile jarRoot = LibrariesHelper.getInstance().findRootByClass(files, detectionClass);
 		return jarRoot != null && jarRoot.getFileSystem() instanceof ArchiveFileSystem ? getMainAttribute(jarRoot, Attributes.Name.IMPLEMENTATION_VERSION) : null;
@@ -83,14 +83,14 @@ public class JarVersionDetectionUtil
 		return null;
 	}
 
-	@Nullable
-	public static String getBundleVersion(@Nonnull File jar)
+	@jakarta.annotation.Nullable
+	public static String getBundleVersion(@jakarta.annotation.Nonnull File jar)
 	{
 		return JarUtil.getJarAttribute(jar, new Attributes.Name("Bundle-Version"));
 	}
 
 	@Nullable
-	public static String getImplementationVersion(@Nonnull File jar)
+	public static String getImplementationVersion(@jakarta.annotation.Nonnull File jar)
 	{
 		return JarUtil.getJarAttribute(jar, Attributes.Name.IMPLEMENTATION_VERSION);
 	}

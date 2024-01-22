@@ -55,7 +55,7 @@ import consulo.util.lang.function.Condition;
 import consulo.java.impl.intelliLang.config.MethodParameterInjection;
 import consulo.java.impl.intelliLang.util.PsiUtilEx;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;

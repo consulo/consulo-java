@@ -24,9 +24,8 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nonnull;
 
 @ExtensionImpl
 public class EqualsWhichDoesntCheckParameterClassInspection extends BaseInspection {

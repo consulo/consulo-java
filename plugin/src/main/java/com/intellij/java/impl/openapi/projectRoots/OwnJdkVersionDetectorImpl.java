@@ -11,10 +11,11 @@ import consulo.logging.Logger;
 import consulo.process.io.BaseOutputReader;
 import consulo.util.io.CharsetToolkit;
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nullable;
 import jakarta.inject.Singleton;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -126,20 +127,20 @@ public class OwnJdkVersionDetectorImpl extends OwnJdkVersionDetector {
 
     private final List<String> myLines;
 
-    VersionOutputReader(@Nonnull InputStream stream) {
+    VersionOutputReader(@jakarta.annotation.Nonnull InputStream stream) {
       super(stream, CharsetToolkit.getDefaultSystemCharset(), OPTIONS);
       myLines = new CopyOnWriteArrayList<>();
       start("java -version");
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     @Override
-    protected Future<?> executeOnPooledThread(@Nonnull Runnable runnable) {
+    protected Future<?> executeOnPooledThread(@jakarta.annotation.Nonnull Runnable runnable) {
       return Application.get().executeOnPooledThread(runnable);
     }
 
     @Override
-    protected void onTextAvailable(@Nonnull String text) {
+    protected void onTextAvailable(@jakarta.annotation.Nonnull String text) {
       myLines.add(text);
       LOG.trace("text: " + text);
     }

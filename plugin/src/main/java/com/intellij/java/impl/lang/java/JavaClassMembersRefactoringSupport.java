@@ -25,7 +25,7 @@ import consulo.language.editor.refactoring.classMember.MemberInfoBase;
 import com.intellij.java.impl.refactoring.util.classMembers.ClassMembersUtil;
 import com.intellij.java.impl.refactoring.util.classMembers.DependentMembersCollector;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author Dennis.Ushakov

@@ -25,7 +25,7 @@ import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.engine.evaluation.expression.Modifier;
 import consulo.internal.com.sun.jdi.*;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Eugene Zhuravlev

@@ -19,16 +19,16 @@ import com.intellij.java.language.psi.*;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 class VariableValueUsedVisitor extends JavaRecursiveElementVisitor {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private final PsiVariable variable;
   private boolean read = false;
   private boolean written = false;
 
-  VariableValueUsedVisitor(@Nonnull PsiVariable variable) {
+  VariableValueUsedVisitor(@jakarta.annotation.Nonnull PsiVariable variable) {
     this.variable = variable;
   }
 
@@ -42,7 +42,7 @@ class VariableValueUsedVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitAssignmentExpression(
-      @Nonnull PsiAssignmentExpression assignment) {
+      @jakarta.annotation.Nonnull PsiAssignmentExpression assignment) {
     if (read || written) {
       return;
     }
@@ -69,7 +69,7 @@ class VariableValueUsedVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitPrefixExpression(
-      @Nonnull PsiPrefixExpression prefixExpression) {
+      @jakarta.annotation.Nonnull PsiPrefixExpression prefixExpression) {
     if (read || written) {
       return;
     }
@@ -135,7 +135,7 @@ class VariableValueUsedVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression call) {
+      @jakarta.annotation.Nonnull PsiMethodCallExpression call) {
     if (read || written) {
       return;
     }
@@ -209,7 +209,7 @@ class VariableValueUsedVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitReturnStatement(
-      @Nonnull PsiReturnStatement returnStatement) {
+      @jakarta.annotation.Nonnull PsiReturnStatement returnStatement) {
     if (read || written) {
       return;
     }

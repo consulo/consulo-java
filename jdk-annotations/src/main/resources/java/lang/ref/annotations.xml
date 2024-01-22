@@ -1,6 +1,6 @@
 <root>
   <item name='java.lang.ref.Reference T get()'>
-    <annotation name='javax.annotation.Nullable'>
+    <annotation name='jakarta.annotation.Nullable'>
     </annotation>
   </item>
 </root>

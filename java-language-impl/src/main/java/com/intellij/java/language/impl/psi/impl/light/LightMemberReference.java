@@ -27,7 +27,7 @@ import consulo.language.impl.psi.LightElement;
 import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.util.IncorrectOperationException;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class LightMemberReference extends LightElement implements PsiJavaCodeReferenceElement {
   private final PsiMember myRefMember;
@@ -48,7 +48,7 @@ public class LightMemberReference extends LightElement implements PsiJavaCodeRef
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public JavaResolveResult advancedResolve(boolean incompleteCode) {
     final PsiElement resolved = resolve();
     PsiSubstitutor substitutor = mySubstitutor;
@@ -112,7 +112,7 @@ public class LightMemberReference extends LightElement implements PsiJavaCodeRef
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getCanonicalText() {
     String name = getQualifiedName();
     if (name == null) return null;
@@ -149,7 +149,7 @@ public class LightMemberReference extends LightElement implements PsiJavaCodeRef
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitReferenceElement(this);
     } else {
@@ -167,7 +167,7 @@ public class LightMemberReference extends LightElement implements PsiJavaCodeRef
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public Object[] getVariants() {
     throw new RuntimeException("Variants are not available for light references");
   }
@@ -195,7 +195,7 @@ public class LightMemberReference extends LightElement implements PsiJavaCodeRef
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiType[] getTypeParameters() {
     PsiReferenceParameterList parameterList = getParameterList();
     return parameterList == null ? PsiType.EMPTY_ARRAY : parameterList.getTypeArguments();

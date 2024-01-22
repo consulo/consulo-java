@@ -46,8 +46,8 @@ import consulo.language.ast.IElementType;
 import consulo.language.ast.TokenSet;
 import consulo.language.psi.util.PsiTreeUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author yole
@@ -181,7 +181,7 @@ public class JavaTypedHandler extends TypedHandlerDelegate {
 
   private static boolean shouldInsertStatementBody(@Nonnull PsiElement statement,
                                                    @Nonnull Document doc,
-                                                   @Nullable PsiElement prev) {
+                                                   @jakarta.annotation.Nullable PsiElement prev) {
     PsiStatement block = statement instanceof PsiWhileStatement ? ((PsiWhileStatement) statement).getBody() : (
         (PsiIfStatement) statement).getThenBranch();
     PsiExpression condition = PsiTreeUtil.getChildOfType(statement, PsiExpression.class);
@@ -215,7 +215,7 @@ public class JavaTypedHandler extends TypedHandlerDelegate {
   public Result charTyped(final char c,
                           final Project project,
                           @Nonnull final Editor editor,
-                          @Nonnull final PsiFile file) {
+                          @jakarta.annotation.Nonnull final PsiFile file) {
     if (myJavaLTTyped) {
       myJavaLTTyped = false;
       handleAfterJavaLT(editor, JavaTokenType.LT, JavaTokenType.GT, INVALID_INSIDE_REFERENCE);
@@ -228,7 +228,7 @@ public class JavaTypedHandler extends TypedHandlerDelegate {
     return Result.CONTINUE;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static FileType getOriginalFileType(final PsiFile file) {
     final VirtualFile virtualFile = file.getVirtualFile();
     return virtualFile != null ? virtualFile.getFileType() : null;

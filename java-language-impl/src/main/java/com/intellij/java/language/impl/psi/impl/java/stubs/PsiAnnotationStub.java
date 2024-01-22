@@ -15,10 +15,10 @@
  */
 package com.intellij.java.language.impl.psi.impl.java.stubs;
 
-import javax.annotation.Nonnull;
 import com.intellij.java.language.psi.PsiAnnotation;
 import consulo.language.psi.stub.StubElement;
 import consulo.util.collection.ArrayFactory;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author max

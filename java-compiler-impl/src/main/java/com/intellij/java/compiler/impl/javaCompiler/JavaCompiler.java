@@ -40,7 +40,7 @@ import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
 import jakarta.inject.Inject;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -130,13 +130,13 @@ public class JavaCompiler implements TranslatingCompiler {
     return list;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public FileType[] getInputFileTypes() {
     return new FileType[]{JavaFileType.INSTANCE};
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public FileType[] getOutputFileTypes() {
     return new FileType[]{JavaClassFileType.INSTANCE};

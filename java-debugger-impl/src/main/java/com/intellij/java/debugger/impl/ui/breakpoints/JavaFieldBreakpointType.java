@@ -38,9 +38,9 @@ import consulo.ui.ex.awt.Messages;
 import consulo.ui.image.Image;
 import consulo.util.lang.ref.Ref;
 import consulo.virtualFileSystem.VirtualFile;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 
 /**
@@ -49,7 +49,7 @@ import javax.swing.*;
  */
 @ExtensionImpl
 public class JavaFieldBreakpointType extends JavaLineBreakpointTypeBase<JavaFieldBreakpointProperties> implements JavaBreakpointType {
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static JavaFieldBreakpointType getInstance() {
     return EXTENSION_POINT_NAME.findExtension(JavaFieldBreakpointType.class);
   }
@@ -63,13 +63,13 @@ public class JavaFieldBreakpointType extends JavaLineBreakpointTypeBase<JavaFiel
     return true;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Image getEnabledIcon() {
     return AllIcons.Debugger.Db_field_breakpoint;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Image getDisabledIcon() {
     return AllIcons.Debugger.Db_disabled_field_breakpoint;
@@ -100,7 +100,7 @@ public class JavaFieldBreakpointType extends JavaLineBreakpointTypeBase<JavaFiel
     return className != null && !className.isEmpty() ? className + "." + properties.myFieldName : properties.myFieldName;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public XBreakpointCustomPropertiesPanel<XLineBreakpoint<JavaFieldBreakpointProperties>> createCustomPropertiesPanel() {
     return new FieldBreakpointPropertiesPanel();
@@ -112,13 +112,13 @@ public class JavaFieldBreakpointType extends JavaLineBreakpointTypeBase<JavaFiel
     return new JavaFieldBreakpointProperties();
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public JavaFieldBreakpointProperties createBreakpointProperties(@Nonnull VirtualFile file, int line) {
     return new JavaFieldBreakpointProperties();
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public XLineBreakpoint<JavaFieldBreakpointProperties> addBreakpoint(final Project project, JComponent parentComponent) {
     final Ref<XLineBreakpoint> result = Ref.create(null);

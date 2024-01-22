@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.performance;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
@@ -35,7 +35,7 @@ public class ObjectAllocationInLoopInspection extends BaseInspection {
       "object.allocation.in.loop.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "object.allocation.in.loop.problem.descriptor");

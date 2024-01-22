@@ -11,7 +11,7 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.project.Project;
 import consulo.util.lang.ObjectUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class ReplaceTypeInCastFix implements LocalQuickFix {
   private final String myExistingTypeText;
@@ -30,7 +30,7 @@ public class ReplaceTypeInCastFix implements LocalQuickFix {
     return InspectionGadgetsBundle.message("cast.conflicts.with.instanceof.quickfix1", myExistingTypeText, myWantedTypeText);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getFamilyName() {
     return "Replace cast type";

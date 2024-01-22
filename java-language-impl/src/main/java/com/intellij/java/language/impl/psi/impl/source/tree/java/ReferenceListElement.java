@@ -25,8 +25,7 @@ import consulo.language.ast.IElementType;
 import consulo.language.ast.TokenType;
 import consulo.language.impl.ast.*;
 import consulo.language.util.CharTable;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class ReferenceListElement extends CompositeElement {
   private final IElementType myKeyword;

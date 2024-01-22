@@ -33,7 +33,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.IntroduceTargetChooser;
 import consulo.util.collection.ContainerUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -88,7 +88,7 @@ public abstract class ExpressionPostfixTemplateWithChooser extends PostfixTempla
   }
 
   @Nonnull
-  protected List<PsiExpression> getExpressions(@Nonnull PsiElement context, @Nonnull Document document, final int offset) {
+  protected List<PsiExpression> getExpressions(@jakarta.annotation.Nonnull PsiElement context, @Nonnull Document document, final int offset) {
     List<PsiExpression> expressions = ContainerUtil.filter(IntroduceVariableBase.collectExpressions(context.getContainingFile(), document,
         Math.max(offset - 1, 0), false),
         new Condition<PsiExpression>() {
@@ -108,7 +108,7 @@ public abstract class ExpressionPostfixTemplateWithChooser extends PostfixTempla
   }
 
   @Nonnull
-  private static List<PsiExpression> maybeTopmostExpression(@Nonnull PsiElement context) {
+  private static List<PsiExpression> maybeTopmostExpression(@jakarta.annotation.Nonnull PsiElement context) {
     PsiExpression expression = JavaPostfixTemplatesUtils.getTopmostExpression(context);
     PsiType type = expression != null ? expression.getType() : null;
     if (type == null || PsiType.VOID.equals(type)) return List.of();

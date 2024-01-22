@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.imports;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import com.siyeh.HardcodedMethodConstants;
@@ -31,7 +31,7 @@ import consulo.annotation.component.ExtensionImpl;
 public class JavaLangImportInspection extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "java.lang.import.display.name");

@@ -23,8 +23,7 @@ import com.intellij.java.language.psi.PsiType;
 import consulo.util.lang.function.PairFunction;
 import com.siyeh.ig.psiutils.SideEffectChecker;
 import consulo.util.dataholder.Key;
-
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author VISTALL

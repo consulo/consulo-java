@@ -15,8 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.unwrap;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 import consulo.language.editor.CodeInsightBundle;
 import consulo.document.util.TextRange;
@@ -24,6 +23,7 @@ import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiPolyadicExpression;
 import consulo.language.util.IncorrectOperationException;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author Danila Ponomarenko
@@ -66,7 +66,7 @@ public class JavaPolyadicExpressionUnwrapper extends JavaUnwrapper {
   }
 
   @Nullable
-  private static PsiExpression findOperand(@Nonnull PsiElement e, @Nonnull PsiPolyadicExpression expression) {
+  private static PsiExpression findOperand(@Nonnull PsiElement e, @jakarta.annotation.Nonnull PsiPolyadicExpression expression) {
     final TextRange elementTextRange = e.getTextRange();
 
     for (PsiExpression operand : expression.getOperands()) {

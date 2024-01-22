@@ -20,7 +20,7 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaMemoryState;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.java.language.psi.PsiExpression;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * An instruction that pushes given value to the stack

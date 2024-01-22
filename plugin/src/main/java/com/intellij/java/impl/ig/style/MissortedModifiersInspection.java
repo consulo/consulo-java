@@ -31,7 +31,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.util.*;
 
@@ -127,7 +127,7 @@ public class MissortedModifiersInspection extends BaseInspection {
       new ModifierComparator();
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
       super.visitClass(aClass);
       checkForMissortedModifiers(aClass);
     }
@@ -140,7 +140,7 @@ public class MissortedModifiersInspection extends BaseInspection {
     }
 
     @Override
-    public void visitLocalVariable(@Nonnull PsiLocalVariable variable) {
+    public void visitLocalVariable(@jakarta.annotation.Nonnull PsiLocalVariable variable) {
       super.visitLocalVariable(variable);
       checkForMissortedModifiers(variable);
     }

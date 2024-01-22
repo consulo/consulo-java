@@ -27,7 +27,7 @@ import com.intellij.java.impl.ig.psiutils.IteratorUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
 import consulo.java.language.module.util.JavaClassNames;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.Set;
 

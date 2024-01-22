@@ -20,7 +20,7 @@ import com.intellij.java.language.psi.PsiLiteral;
 import consulo.language.psi.PsiReferenceBase;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.lang.ObjectUtil;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
@@ -45,7 +45,7 @@ public class JamSimpleReference<T> extends PsiReferenceBase<PsiLiteral> {
     return element == null? myContext.getPsiLiteral() : element;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public Object[] getVariants() {
     return myConverter.getLookupVariants(myContext);
   }

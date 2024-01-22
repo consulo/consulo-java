@@ -42,7 +42,7 @@ import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.ex.popup.JBPopupFactory;
 import consulo.util.dataholder.Key;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 
@@ -104,7 +104,7 @@ public class ReassignVariableUtil {
     return false;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   static PsiType getVariableType(@Nullable PsiDeclarationStatement declaration) {
     if (declaration != null) {
       final PsiElement[] declaredElements = declaration.getDeclaredElements();

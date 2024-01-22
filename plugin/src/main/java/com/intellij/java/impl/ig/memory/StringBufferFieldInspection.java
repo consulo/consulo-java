@@ -23,7 +23,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class StringBufferFieldInspection extends BaseInspection {
@@ -36,7 +36,7 @@ public class StringBufferFieldInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     final PsiType type = (PsiType)infos[0];
     final String typeName = type.getPresentableText();
@@ -53,7 +53,7 @@ public class StringBufferFieldInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@Nonnull PsiField field) {
+    public void visitField(@jakarta.annotation.Nonnull PsiField field) {
       super.visitField(field);
       final PsiType type = field.getType();
       if (!type.equalsToText(JavaClassNames.JAVA_LANG_STRING_BUFFER) &&

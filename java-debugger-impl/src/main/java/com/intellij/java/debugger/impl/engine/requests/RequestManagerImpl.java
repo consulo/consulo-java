@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.debugger.impl.engine.DebugProcessAdapterImpl;
@@ -93,7 +93,7 @@ public class RequestManagerImpl extends DebugProcessAdapterImpl implements Reque
 		return myFilterThread;
 	}
 
-	public void setFilterThread(@Nullable final ThreadReference filterThread)
+	public void setFilterThread(@jakarta.annotation.Nullable final ThreadReference filterThread)
 	{
 		myFilterThread = filterThread;
 	}
@@ -477,7 +477,7 @@ public class RequestManagerImpl extends DebugProcessAdapterImpl implements Reque
 	}
 
 	public
-	@Nullable
+	@jakarta.annotation.Nullable
 	String getWarning(Requestor requestor)
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();

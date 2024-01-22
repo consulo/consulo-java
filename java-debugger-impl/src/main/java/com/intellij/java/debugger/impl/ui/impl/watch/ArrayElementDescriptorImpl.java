@@ -15,7 +15,7 @@
  */
 package com.intellij.java.debugger.impl.ui.impl.watch;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.DebuggerContext;
@@ -114,7 +114,7 @@ public class ArrayElementDescriptorImpl extends ValueDescriptorImpl implements A
 		return new JavaValueModifier(value)
 		{
 			@Override
-			protected void setValueImpl(@Nonnull String expression, @Nonnull XModificationCallback callback)
+			protected void setValueImpl(@Nonnull String expression, @jakarta.annotation.Nonnull XModificationCallback callback)
 			{
 				final ArrayElementDescriptorImpl elementDescriptor = ArrayElementDescriptorImpl.this;
 				final ArrayReference array = elementDescriptor.getArray();

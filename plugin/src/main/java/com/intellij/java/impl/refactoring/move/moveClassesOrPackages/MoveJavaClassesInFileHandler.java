@@ -6,7 +6,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.impl.psi.impl.light.LightClass;
 import consulo.util.collection.ArrayUtil;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.Map;
 

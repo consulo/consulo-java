@@ -22,7 +22,7 @@ import consulo.content.bundle.Sdk;
 import consulo.process.cmd.GeneralCommandLine;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * User: anna
@@ -37,5 +37,5 @@ public interface JavaSdkType {
   @NonNls
   String getToolsPath(Sdk sdk);
 
-  void setupCommandLine(@Nonnull GeneralCommandLine commandLine, @Nonnull Sdk sdk);
+  void setupCommandLine(@jakarta.annotation.Nonnull GeneralCommandLine commandLine, @Nonnull Sdk sdk);
 }

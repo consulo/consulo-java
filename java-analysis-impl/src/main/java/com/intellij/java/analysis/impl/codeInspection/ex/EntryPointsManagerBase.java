@@ -49,7 +49,7 @@ import consulo.util.xml.serializer.JDOMExternalizableStringList;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.*;
 
 public abstract class EntryPointsManagerBase extends EntryPointsManager implements PersistentStateComponent<Element> {
@@ -151,7 +151,7 @@ public abstract class EntryPointsManagerBase extends EntryPointsManager implemen
   }
 
   @Override
-  public void resolveEntryPoints(@Nonnull final RefManager manager) {
+  public void resolveEntryPoints(@jakarta.annotation.Nonnull final RefManager manager) {
     if (!myResolved) {
       myResolved = true;
       cleanup();
@@ -181,7 +181,7 @@ public abstract class EntryPointsManagerBase extends EntryPointsManager implemen
   }
 
   @Override
-  public void addEntryPoint(@Nonnull RefElement newEntryPoint, boolean isPersistent) {
+  public void addEntryPoint(@jakarta.annotation.Nonnull RefElement newEntryPoint, boolean isPersistent) {
     if (!newEntryPoint.isValid()) {
       return;
     }
@@ -227,7 +227,7 @@ public abstract class EntryPointsManagerBase extends EntryPointsManager implemen
   }
 
   @Override
-  public void removeEntryPoint(@Nonnull RefElement anEntryPoint) {
+  public void removeEntryPoint(@jakarta.annotation.Nonnull RefElement anEntryPoint) {
     if (anEntryPoint instanceof RefClass) {
       RefClass refClass = (RefClass) anEntryPoint;
       if (!refClass.isInterface()) {
@@ -265,7 +265,7 @@ public abstract class EntryPointsManagerBase extends EntryPointsManager implemen
     }
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public RefElement[] getEntryPoints() {
     validateEntryPoints();
@@ -402,12 +402,12 @@ public abstract class EntryPointsManagerBase extends EntryPointsManager implemen
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project1, Editor editor, PsiFile file) {
+    public boolean isAvailable(@jakarta.annotation.Nonnull Project project1, Editor editor, PsiFile file) {
       return true;
     }
 
     @Override
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+    public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
       //TODO [VISTALL]
       //myWriteAnnotations.add(myQualifiedName);
       //ProjectInspectionProfileManager.getInstance(project).fireProfileChanged();

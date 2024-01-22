@@ -28,8 +28,8 @@ import consulo.language.psi.SmartPointerManager;
 import consulo.language.psi.SmartPsiElementPointer;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.Key;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.LinkedList;
 
 /**
@@ -99,7 +99,7 @@ public class CompletionMemory {
     return null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @RequiredReadAction
   public static PsiMethod getChosenMethod(PsiCall call) {
     TextRange range = getAnchorRange(call);

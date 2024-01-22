@@ -22,9 +22,8 @@ import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiWhiteSpace;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nonnull;
 
 public abstract class BaseInspectionVisitor extends JavaElementVisitor {
 
@@ -45,7 +44,7 @@ public abstract class BaseInspectionVisitor extends JavaElementVisitor {
   }
 
   protected final void registerNewExpressionError(
-      @Nonnull PsiNewExpression expression, Object... infos) {
+    @jakarta.annotation.Nonnull PsiNewExpression expression, Object... infos) {
     final PsiJavaCodeReferenceElement classReference =
         expression.getClassOrAnonymousClassReference();
     if (classReference == null) {
@@ -56,7 +55,7 @@ public abstract class BaseInspectionVisitor extends JavaElementVisitor {
   }
 
   protected final void registerMethodCallError(
-      @Nonnull PsiMethodCallExpression expression,
+      @jakarta.annotation.Nonnull PsiMethodCallExpression expression,
       @NonNls Object... infos) {
     final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
@@ -68,7 +67,7 @@ public abstract class BaseInspectionVisitor extends JavaElementVisitor {
     }
   }
 
-  protected final void registerStatementError(@Nonnull PsiStatement statement,
+  protected final void registerStatementError(@jakarta.annotation.Nonnull PsiStatement statement,
                                               Object... infos) {
     final PsiElement statementToken = statement.getFirstChild();
     if (statementToken == null) {
@@ -78,7 +77,7 @@ public abstract class BaseInspectionVisitor extends JavaElementVisitor {
     }
   }
 
-  protected final void registerClassError(@Nonnull PsiClass aClass,
+  protected final void registerClassError(@jakarta.annotation.Nonnull PsiClass aClass,
                                           Object... infos) {
     PsiElement nameIdentifier;
     if (aClass instanceof PsiEnumConstantInitializer) {
@@ -103,7 +102,7 @@ public abstract class BaseInspectionVisitor extends JavaElementVisitor {
     }
   }
 
-  protected final void registerMethodError(@Nonnull PsiMethod method,
+  protected final void registerMethodError(@jakarta.annotation.Nonnull PsiMethod method,
                                            Object... infos) {
     final PsiElement nameIdentifier = method.getNameIdentifier();
     if (nameIdentifier == null) {
@@ -113,7 +112,7 @@ public abstract class BaseInspectionVisitor extends JavaElementVisitor {
     }
   }
 
-  protected final void registerVariableError(@Nonnull PsiVariable variable,
+  protected final void registerVariableError(@jakarta.annotation.Nonnull PsiVariable variable,
                                              Object... infos) {
     final PsiElement nameIdentifier = variable.getNameIdentifier();
     if (nameIdentifier == null) {
@@ -124,7 +123,7 @@ public abstract class BaseInspectionVisitor extends JavaElementVisitor {
   }
 
   protected final void registerTypeParameterError(
-      @Nonnull PsiTypeParameter typeParameter, Object... infos) {
+    @jakarta.annotation.Nonnull PsiTypeParameter typeParameter, Object... infos) {
     final PsiElement nameIdentifier = typeParameter.getNameIdentifier();
     if (nameIdentifier == null) {
       registerError(typeParameter, infos);
@@ -133,15 +132,15 @@ public abstract class BaseInspectionVisitor extends JavaElementVisitor {
     }
   }
 
-  protected final void registerFieldError(@Nonnull PsiField field,
+  protected final void registerFieldError(@jakarta.annotation.Nonnull PsiField field,
                                           Object... infos) {
     final PsiElement nameIdentifier = field.getNameIdentifier();
     registerError(nameIdentifier, infos);
   }
 
   protected final void registerModifierError(
-      @Nonnull String modifier, @Nonnull PsiModifierListOwner parameter,
-      Object... infos) {
+    @jakarta.annotation.Nonnull String modifier, @jakarta.annotation.Nonnull PsiModifierListOwner parameter,
+    Object... infos) {
     final PsiModifierList modifiers = parameter.getModifierList();
     if (modifiers == null) {
       return;
@@ -156,7 +155,7 @@ public abstract class BaseInspectionVisitor extends JavaElementVisitor {
   }
 
   protected final void registerClassInitializerError(
-      @Nonnull PsiClassInitializer initializer, Object... infos) {
+    @Nonnull PsiClassInitializer initializer, Object... infos) {
     final PsiCodeBlock body = initializer.getBody();
     final PsiJavaToken lBrace = body.getLBrace();
     if (lBrace == null) {
@@ -166,12 +165,12 @@ public abstract class BaseInspectionVisitor extends JavaElementVisitor {
     }
   }
 
-  protected final void registerError(@Nonnull PsiElement location,
+  protected final void registerError(@jakarta.annotation.Nonnull PsiElement location,
                                      Object... infos) {
     registerError(location, ProblemHighlightType.GENERIC_ERROR_OR_WARNING, infos);
   }
 
-  protected final void registerError(@Nonnull PsiElement location,
+  protected final void registerError(@jakarta.annotation.Nonnull PsiElement location,
                                      final ProblemHighlightType highlightType,
                                      Object... infos) {
     if (location.getTextLength() == 0 && !(location instanceof PsiFile)) {
@@ -185,7 +184,7 @@ public abstract class BaseInspectionVisitor extends JavaElementVisitor {
     holder.registerProblem(location, description, highlightType, fixes);
   }
 
-  protected final void registerErrorAtOffset(@Nonnull PsiElement location,
+  protected final void registerErrorAtOffset(@jakarta.annotation.Nonnull PsiElement location,
                                              int offset, int length, Object... infos) {
     if (location.getTextLength() == 0 || length == 0) {
       return;
@@ -199,7 +198,7 @@ public abstract class BaseInspectionVisitor extends JavaElementVisitor {
     holder.registerProblem(location, range, description, fixes);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private InspectionGadgetsFix[] createFixes(Object... infos) {
     if (!onTheFly && inspection.buildQuickFixesOnlyForOnTheFlyErrors()) {
       return InspectionGadgetsFix.EMPTY_ARRAY;

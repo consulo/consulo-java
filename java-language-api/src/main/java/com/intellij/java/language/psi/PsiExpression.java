@@ -17,13 +17,13 @@ package com.intellij.java.language.psi;
 
 import consulo.util.collection.ArrayFactory;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.function.Function;
 
 /**
  * Represents a Java expression.
  */
-public interface PsiExpression extends PsiAnnotationMemberValue {
+public interface PsiExpression extends PsiAnnotationMemberValue, PsiCaseLabelElement {
   /**
    * The empty array of PSI expressions which can be reused to avoid unnecessary allocations.
    */

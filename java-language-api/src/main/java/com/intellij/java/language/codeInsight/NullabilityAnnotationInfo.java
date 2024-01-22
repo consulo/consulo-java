@@ -2,7 +2,7 @@
 package com.intellij.java.language.codeInsight;
 
 import com.intellij.java.language.psi.PsiAnnotation;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Represents a particular nullability annotation instance
@@ -10,14 +10,14 @@ import javax.annotation.Nonnull;
 public class NullabilityAnnotationInfo
 {
 	private final
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	PsiAnnotation myAnnotation;
 	private final
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	Nullability myNullability;
 	private final boolean myContainer;
 
-	public NullabilityAnnotationInfo(@Nonnull PsiAnnotation annotation, @Nonnull Nullability nullability, boolean container)
+	public NullabilityAnnotationInfo(@jakarta.annotation.Nonnull PsiAnnotation annotation, @jakarta.annotation.Nonnull Nullability nullability, boolean container)
 	{
 		myAnnotation = annotation;
 		myNullability = nullability;
@@ -27,7 +27,7 @@ public class NullabilityAnnotationInfo
 	/**
 	 * @return annotation object (might be synthetic)
 	 */
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public PsiAnnotation getAnnotation()
 	{
 		return myAnnotation;

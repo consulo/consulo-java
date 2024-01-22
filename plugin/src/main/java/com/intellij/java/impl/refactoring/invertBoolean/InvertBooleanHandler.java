@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.refactoring.invertBoolean;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.impl.ide.util.SuperMethodWarningUtil;
 import consulo.dataContext.DataContext;
 import consulo.language.editor.LangDataKeys;
@@ -33,6 +31,7 @@ import com.intellij.java.impl.refactoring.HelpID;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author ven
@@ -74,7 +73,7 @@ public class InvertBooleanHandler implements RefactoringActionHandler {
     new InvertBooleanDialog(var).show();
   }
 
-  public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, @Nonnull DataContext dataContext) {
+  public void invoke(@Nonnull Project project, @jakarta.annotation.Nonnull PsiElement[] elements, @jakarta.annotation.Nonnull DataContext dataContext) {
     if (elements.length == 1 && elements[0] instanceof PsiMethod) {
       invoke((PsiMethod)elements[0], project, null);
     }

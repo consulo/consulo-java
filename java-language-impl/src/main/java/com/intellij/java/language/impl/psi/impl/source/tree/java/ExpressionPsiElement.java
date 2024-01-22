@@ -21,7 +21,7 @@ import com.intellij.java.language.impl.psi.impl.source.tree.JavaSourceUtil;
 import consulo.language.impl.ast.TreeElement;
 import consulo.language.ast.IElementType;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author max
@@ -37,7 +37,7 @@ public class ExpressionPsiElement extends CompositePsiElement
 	}
 
 	@Override
-	public void replaceChildInternal(@Nonnull ASTNode child, @Nonnull TreeElement newElement)
+	public void replaceChildInternal(@jakarta.annotation.Nonnull ASTNode child, @Nonnull TreeElement newElement)
 	{
 		super.replaceChildInternal(child, JavaSourceUtil.addParenthToReplacedChild(child, newElement, getManager()));
 	}

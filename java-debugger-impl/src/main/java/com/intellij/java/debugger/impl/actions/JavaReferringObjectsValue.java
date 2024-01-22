@@ -17,8 +17,8 @@ package com.intellij.java.debugger.impl.actions;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.DebuggerContext;
@@ -51,8 +51,8 @@ public class JavaReferringObjectsValue extends JavaValue
 	private final boolean myIsField;
 
 	private JavaReferringObjectsValue(@Nullable JavaValue parent,
-			@Nonnull ValueDescriptorImpl valueDescriptor,
-			@Nonnull EvaluationContextImpl evaluationContext,
+			@jakarta.annotation.Nonnull ValueDescriptorImpl valueDescriptor,
+			@jakarta.annotation.Nonnull EvaluationContextImpl evaluationContext,
 			NodeManagerImpl nodeManager,
 			boolean isField)
 	{
@@ -60,7 +60,7 @@ public class JavaReferringObjectsValue extends JavaValue
 		myIsField = isField;
 	}
 
-	public JavaReferringObjectsValue(@Nonnull JavaValue javaValue, boolean isField)
+	public JavaReferringObjectsValue(@jakarta.annotation.Nonnull JavaValue javaValue, boolean isField)
 	{
 		super(null, javaValue.getDescriptor(), javaValue.getEvaluationContext(), javaValue.getNodeManager(), false);
 		myIsField = isField;
@@ -73,7 +73,7 @@ public class JavaReferringObjectsValue extends JavaValue
 	}
 
 	@Override
-	public void computeChildren(@Nonnull final XCompositeNode node)
+	public void computeChildren(@jakarta.annotation.Nonnull final XCompositeNode node)
 	{
 		scheduleCommand(getEvaluationContext(), node, new SuspendContextCommandImpl(getEvaluationContext().getSuspendContext())
 		{
@@ -84,7 +84,7 @@ public class JavaReferringObjectsValue extends JavaValue
 			}
 
 			@Override
-			public void contextAction(@Nonnull SuspendContextImpl suspendContext) throws Exception
+			public void contextAction(@jakarta.annotation.Nonnull SuspendContextImpl suspendContext) throws Exception
 			{
 				final XValueChildrenList children = new XValueChildrenList();
 
@@ -151,7 +151,7 @@ public class JavaReferringObjectsValue extends JavaValue
 	}
 
 	@Override
-	public void computePresentation(@Nonnull final XValueNode node, @Nonnull final XValuePlace place)
+	public void computePresentation(@Nonnull final XValueNode node, @jakarta.annotation.Nonnull final XValuePlace place)
 	{
 		if(!myIsField)
 		{
@@ -162,18 +162,18 @@ public class JavaReferringObjectsValue extends JavaValue
 			super.computePresentation(new XValueNodePresentationConfigurator.ConfigurableXValueNodeImpl()
 			{
 				@Override
-				public void applyPresentation(@Nullable Image icon, @Nonnull final XValuePresentation valuePresenter, boolean hasChildren)
+				public void applyPresentation(@Nullable Image icon, @jakarta.annotation.Nonnull final XValuePresentation valuePresenter, boolean hasChildren)
 				{
 					node.setPresentation(icon, new XValuePresentation()
 					{
-						@Nonnull
+						@jakarta.annotation.Nonnull
 						@Override
 						public String getSeparator()
 						{
 							return " in ";
 						}
 
-						@Nullable
+						@jakarta.annotation.Nullable
 						@Override
 						public String getType()
 						{
@@ -189,7 +189,7 @@ public class JavaReferringObjectsValue extends JavaValue
 				}
 
 				@Override
-				public void setFullValueEvaluator(@Nonnull XFullValueEvaluator fullValueEvaluator)
+				public void setFullValueEvaluator(@jakarta.annotation.Nonnull XFullValueEvaluator fullValueEvaluator)
 				{
 				}
 

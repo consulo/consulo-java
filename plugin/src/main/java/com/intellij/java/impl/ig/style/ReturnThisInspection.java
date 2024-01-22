@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.style;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
@@ -27,7 +27,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 @ExtensionImpl
 public class ReturnThisInspection extends BaseInspection {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "ReturnOfThis";
   }

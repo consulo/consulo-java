@@ -22,7 +22,7 @@ import consulo.language.psi.PsiElement;
 import consulo.usage.UsageViewBundle;
 import consulo.usage.UsageViewDescriptor;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 class RefsToSuperViewDescriptor implements UsageViewDescriptor {
   private final PsiClass myClass;

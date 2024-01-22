@@ -21,8 +21,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.CreateClassKind;
 import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.CreateFromUsageUtils;
@@ -59,21 +59,22 @@ public class CreateClassOrPackageFix extends LocalQuickFixAndIntentionActionOnPs
   private final List<PsiDirectory> myWritableDirectoryList;
   private final String myPresentation;
 
-  @Nullable private final ClassKind myClassKind;
-  @Nullable
+  @jakarta.annotation.Nullable
+  private final ClassKind myClassKind;
+  @jakarta.annotation.Nullable
   private final String mySuperClass;
   private final String myRedPart;
   @Nullable
   private final String myTemplateName;
 
   @Nullable
-  public static CreateClassOrPackageFix createFix(@Nonnull final String qualifiedName,
-                                                  @Nonnull final GlobalSearchScope scope,
+  public static CreateClassOrPackageFix createFix(@jakarta.annotation.Nonnull final String qualifiedName,
+                                                  @jakarta.annotation.Nonnull final GlobalSearchScope scope,
                                                   @Nonnull final PsiElement context,
-                                                  @Nullable final PsiJavaPackage basePackage,
-                                                  @Nullable ClassKind kind,
-                                                  @Nullable String superClass,
-                                                  @Nullable String templateName) {
+                                                  @jakarta.annotation.Nullable final PsiJavaPackage basePackage,
+                                                  @jakarta.annotation.Nullable ClassKind kind,
+                                                  @jakarta.annotation.Nullable String superClass,
+                                                  @jakarta.annotation.Nullable String templateName) {
     final List<PsiDirectory> directories = getWritableDirectoryListDefault(basePackage, scope, context.getManager());
     if (directories.isEmpty()) {
       return null;
@@ -96,19 +97,19 @@ public class CreateClassOrPackageFix extends LocalQuickFixAndIntentionActionOnPs
                                                                       templateName);
   }
 
-  @Nullable
-  public static CreateClassOrPackageFix createFix(@Nonnull final String qualifiedName,
-                                                  @Nonnull final PsiElement context,
+  @jakarta.annotation.Nullable
+  public static CreateClassOrPackageFix createFix(@jakarta.annotation.Nonnull final String qualifiedName,
+                                                  @jakarta.annotation.Nonnull final PsiElement context,
                                                   @Nullable ClassKind kind, final String superClass) {
     return createFix(qualifiedName, context.getResolveScope(), context, null, kind, superClass, null);
   }
 
-  private CreateClassOrPackageFix(@Nonnull List<PsiDirectory> writableDirectoryList,
+  private CreateClassOrPackageFix(@jakarta.annotation.Nonnull List<PsiDirectory> writableDirectoryList,
                                   @Nonnull PsiElement context,
-                                  @Nonnull String presentation,
-                                  @Nonnull String redPart,
-                                  @Nullable ClassKind kind,
-                                  @Nullable String superClass,
+                                  @jakarta.annotation.Nonnull String presentation,
+                                  @jakarta.annotation.Nonnull String redPart,
+                                  @jakarta.annotation.Nullable ClassKind kind,
+                                  @jakarta.annotation.Nullable String superClass,
                                   @Nullable final String templateName) {
     super(context);
     myRedPart = redPart;
@@ -120,7 +121,7 @@ public class CreateClassOrPackageFix extends LocalQuickFixAndIntentionActionOnPs
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getText() {
     return JavaQuickFixBundle.message(
       myClassKind == ClassKind.INTERFACE ? "create.interface.text" : myClassKind != null ? "create.class.text" : "create.package.text",
@@ -128,17 +129,17 @@ public class CreateClassOrPackageFix extends LocalQuickFixAndIntentionActionOnPs
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getFamilyName() {
     return getText();
   }
 
   @Override
-  public void invoke(@Nonnull final Project project,
-                     @Nonnull final PsiFile file,
-                     @Nullable Editor editor,
-                     @Nonnull final PsiElement startElement,
-                     @Nonnull PsiElement endElement) {
+  public void invoke(@jakarta.annotation.Nonnull final Project project,
+                     @jakarta.annotation.Nonnull final PsiFile file,
+                     @jakarta.annotation.Nullable Editor editor,
+                     @jakarta.annotation.Nonnull final PsiElement startElement,
+                     @jakarta.annotation.Nonnull PsiElement endElement) {
     if (isAvailable(project, null, file)) {
       new WriteCommandAction(project) {
         @Override
@@ -171,7 +172,7 @@ public class CreateClassOrPackageFix extends LocalQuickFixAndIntentionActionOnPs
     }
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private PsiDirectory chooseDirectory(final Project project, final PsiFile file) {
     PsiDirectory preferredDirectory = myWritableDirectoryList.isEmpty() ? null : myWritableDirectoryList.get(0);
     final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
@@ -245,7 +246,7 @@ public class CreateClassOrPackageFix extends LocalQuickFixAndIntentionActionOnPs
     return false;
   }
 
-  public static List<PsiDirectory> getWritableDirectoryListDefault(@Nullable final PsiJavaPackage context,
+  public static List<PsiDirectory> getWritableDirectoryListDefault(@jakarta.annotation.Nullable final PsiJavaPackage context,
                                                                    final GlobalSearchScope scope,
                                                                    final PsiManager psiManager) {
     if (LOG.isDebugEnabled()) {

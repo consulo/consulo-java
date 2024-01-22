@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.java.language.psi.PsiClass;

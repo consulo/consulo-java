@@ -28,9 +28,9 @@ import consulo.ui.ex.awt.JBList;
 import consulo.ui.ex.awt.ScrollPaneFactory;
 import consulo.ui.ex.awt.UIUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
@@ -47,7 +47,7 @@ public class TurnRefsToSuperDialog extends RefactoringDialog {
   private JList mySuperClassesList = null;
   private final JCheckBox myCbReplaceInstanceOf = new JCheckBox();
 
-  TurnRefsToSuperDialog(Project project, @Nonnull PsiClass subClass, List superClasses) {
+  TurnRefsToSuperDialog(Project project, @jakarta.annotation.Nonnull PsiClass subClass, List superClasses) {
     super(project, true);
 
     mySubClass = subClass;

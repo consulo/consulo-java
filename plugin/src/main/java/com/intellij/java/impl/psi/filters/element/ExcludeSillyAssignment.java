@@ -18,7 +18,7 @@ package com.intellij.java.impl.psi.filters.element;
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;
 import consulo.language.psi.filter.ElementFilter;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * Created by IntelliJ IDEA.

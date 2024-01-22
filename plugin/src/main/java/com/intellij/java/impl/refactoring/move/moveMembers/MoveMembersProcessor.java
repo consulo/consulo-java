@@ -42,8 +42,8 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.ref.Ref;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -70,7 +70,7 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
     this(project, moveCallback, options, false);
   }
 
-  public MoveMembersProcessor(Project project, @Nullable MoveCallback moveCallback, MoveMembersOptions options, boolean openInEditor) {
+  public MoveMembersProcessor(Project project, @jakarta.annotation.Nullable MoveCallback moveCallback, MoveMembersOptions options, boolean openInEditor) {
     super(project);
     myMoveCallback = moveCallback;
     myOpenInEditor = openInEditor;
@@ -114,7 +114,7 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
     myCommandName = commandName.toString();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
     return new MoveMemberViewDescriptor(PsiUtilCore.toPsiElementArray(myMembersToMove));
   }
@@ -144,7 +144,7 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
     return usageInfos;
   }
 
-  protected void refreshElements(@Nonnull PsiElement[] elements) {
+  protected void refreshElements(@jakarta.annotation.Nonnull PsiElement[] elements) {
     LOG.assertTrue(myMembersToMove.size() == elements.length);
     myMembersToMove.clear();
     for (PsiElement resolved : elements) {
@@ -161,7 +161,7 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
     return false;
   }
 
-  protected void performRefactoring(@Nonnull final UsageInfo[] usages) {
+  protected void performRefactoring(@jakarta.annotation.Nonnull final UsageInfo[] usages) {
     try {
       PsiClass targetClass = JavaPsiFacade.getInstance(myProject).findClass(myOptions.getTargetClassName(), GlobalSearchScope.projectScope(myProject));
       if (targetClass == null) {
@@ -324,7 +324,7 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
   private static void analyzeConflictsOnUsages(UsageInfo[] usages,
                                                Set<PsiMember> membersToMove,
                                                String newVisibility,
-                                               @Nonnull PsiClass targetClass,
+                                               @jakarta.annotation.Nonnull PsiClass targetClass,
                                                Map<PsiMember, PsiModifierList> modifierListCopies,
                                                MultiMap<PsiElement, String> conflicts) {
     for (UsageInfo usage : usages) {

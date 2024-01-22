@@ -35,8 +35,8 @@ import consulo.ui.ex.awt.util.TableUtil;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 import consulo.xml.psi.xml.XmlTag;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;

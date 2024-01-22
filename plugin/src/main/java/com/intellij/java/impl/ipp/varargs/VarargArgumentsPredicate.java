@@ -19,7 +19,7 @@ import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 class VarargArgumentsPredicate implements PsiElementPredicate {
 

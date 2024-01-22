@@ -28,10 +28,11 @@ import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
 import consulo.project.Project;
 import consulo.virtualFileSystem.util.PathsList;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.io.File;
 
 public class JavaSdkUtil {
@@ -64,7 +65,7 @@ public class JavaSdkUtil {
     return isJdkSupportsLevel(getRelevantJdk(project, module), level);
   }
 
-  private static boolean isJdkSupportsLevel(@Nullable final Sdk jdk, @Nonnull LanguageLevel level) {
+  private static boolean isJdkSupportsLevel(@jakarta.annotation.Nullable final Sdk jdk, @Nonnull LanguageLevel level) {
     if (jdk == null) {
       return true;
     }
@@ -72,7 +73,7 @@ public class JavaSdkUtil {
     return version != null && version.getMaxLanguageLevel().isAtLeast(level);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static Sdk getRelevantJdk(@Nonnull Project project, @Nonnull Module module) {
     Sdk moduleJdk = ModuleUtilCore.getSdk(module, JavaModuleExtension.class);
     return moduleJdk == null ? null : moduleJdk;

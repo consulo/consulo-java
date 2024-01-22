@@ -23,7 +23,7 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ReplaceForLoopWithWhileLoopIntention", fileExtensions = "java", categories = {"Java", "Control Flow"})
@@ -36,7 +36,7 @@ public class ReplaceForLoopWithWhileLoopIntention extends Intention {
   }
 
   @Override
-  protected void processIntention(@Nonnull PsiElement element)
+  protected void processIntention(@jakarta.annotation.Nonnull PsiElement element)
     throws IncorrectOperationException {
     final PsiForStatement forStatement =
       (PsiForStatement)element.getParent();

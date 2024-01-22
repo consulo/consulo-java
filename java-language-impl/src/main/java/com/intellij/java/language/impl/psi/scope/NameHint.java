@@ -17,7 +17,7 @@ package com.intellij.java.language.impl.psi.scope;
 
 import consulo.util.dataholder.Key;
 import consulo.language.psi.resolve.ResolveState;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public interface NameHint {
   Key<NameHint> KEY = Key.create("NameHint");

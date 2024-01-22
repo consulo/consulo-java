@@ -21,7 +21,6 @@ import consulo.ide.impl.idea.ui.components.panels.ValidatingComponent;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import consulo.ui.Table;
 import consulo.ui.ex.SimpleTextAttributes;
 import consulo.ui.ex.awt.ColoredTableCellRenderer;
 import consulo.ui.ex.awt.DialogWrapper;
@@ -29,7 +28,7 @@ import consulo.ui.ex.awt.ScrollPaneFactory;
 import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.ui.ex.awt.util.TableUtil;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;

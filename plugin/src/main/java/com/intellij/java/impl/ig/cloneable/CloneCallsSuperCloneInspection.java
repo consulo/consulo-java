@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.cloneable;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
@@ -34,13 +34,13 @@ public class CloneCallsSuperCloneInspection extends BaseInspection {
     return "CloneDoesntCallSuperClone";
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "clone.doesnt.call.super.clone.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "clone.doesnt.call.super.clone.problem.descriptor");

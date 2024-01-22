@@ -28,7 +28,7 @@ import consulo.language.psi.PsiElement;
 import consulo.ui.ex.awt.IdeBorderFactory;
 import consulo.ui.ex.awt.StateRestoringCheckBox;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 
 public class FindMethodUsagesDialog extends JavaFindUsagesDialog<JavaMethodFindUsagesOptions> {

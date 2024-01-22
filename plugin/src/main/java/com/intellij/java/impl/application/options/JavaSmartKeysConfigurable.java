@@ -28,8 +28,8 @@ import consulo.ui.layout.VerticalLayout;
 import jakarta.inject.Inject;
 import jakarta.inject.Provider;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Denis Zhdanov
@@ -45,9 +45,9 @@ public class JavaSmartKeysConfigurable extends SimpleConfigurableByProperties im
   }
 
   @RequiredUIAccess
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
-  protected Component createLayout(@Nonnull PropertyBuilder propertyBuilder,
+  protected Component createLayout(@jakarta.annotation.Nonnull PropertyBuilder propertyBuilder,
                                    @Nonnull Disposable disposable) {
     JavaSmartKeysSettings javaSmartKeysSettings = myJavaSmartKeysSettingsProvider.get();
 
@@ -61,7 +61,7 @@ public class JavaSmartKeysConfigurable extends SimpleConfigurableByProperties im
     return root;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getId() {
     return "editor.preferences.smartKeys.java";
@@ -73,7 +73,7 @@ public class JavaSmartKeysConfigurable extends SimpleConfigurableByProperties im
     return "editor.preferences.smartKeys";
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getDisplayName() {
     return "Java";

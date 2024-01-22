@@ -20,8 +20,9 @@ import consulo.language.editor.completion.lookup.LookupManager;
 import consulo.ide.impl.idea.codeInsight.lookup.impl.LookupImpl;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 import java.util.HashSet;
+
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collection;

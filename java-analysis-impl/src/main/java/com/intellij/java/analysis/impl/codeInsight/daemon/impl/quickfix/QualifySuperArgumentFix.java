@@ -30,10 +30,10 @@ import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.util.PsiTreeUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class QualifySuperArgumentFix extends QualifyThisOrSuperArgumentFix {
-  public QualifySuperArgumentFix(@Nonnull PsiExpression expression, @Nonnull PsiClass psiClass) {
+  public QualifySuperArgumentFix(@Nonnull PsiExpression expression, @jakarta.annotation.Nonnull PsiClass psiClass) {
     super(expression, psiClass);
   }
 

@@ -38,8 +38,8 @@ import consulo.util.nodep.text.StringUtilRt;
 import consulo.virtualFileSystem.encoding.EncodingManager;
 import consulo.virtualFileSystem.util.PathsList;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -435,7 +435,7 @@ public class OwnJdkUtil {
   }
 
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static Class getCommandLineWrapperClass() {
     try {
       return Class.forName(WRAPPER_CLASS);

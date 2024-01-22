@@ -25,22 +25,22 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class ReplaceInaccessibleFieldWithGetterSetterFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   private final String myMethodName;
   private final boolean myIsSetter;
 
-  public ReplaceInaccessibleFieldWithGetterSetterFix(@Nonnull PsiElement element, @Nonnull PsiMethod getter, boolean isSetter) {
+  public ReplaceInaccessibleFieldWithGetterSetterFix(@jakarta.annotation.Nonnull PsiElement element, @Nonnull PsiMethod getter, boolean isSetter) {
     super(element);
     myMethodName = getter.getName();
     myIsSetter = isSetter;
   }
 
   @Override
-  public void invoke(@Nonnull Project project,
-                     @Nonnull PsiFile file,
+  public void invoke(@jakarta.annotation.Nonnull Project project,
+                     @jakarta.annotation.Nonnull PsiFile file,
                      @Nullable Editor editor,
                      @Nonnull PsiElement startElement,
                      @Nonnull PsiElement endElement) {
@@ -70,13 +70,13 @@ public class ReplaceInaccessibleFieldWithGetterSetterFix extends LocalQuickFixAn
     }
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getText() {
     return myIsSetter ? "Replace with setter" : "Replace with getter";
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getFamilyName() {
     return "Replace with getter/setter";

@@ -25,8 +25,8 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.CollectionUtils;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import javax.swing.*;
 
@@ -39,12 +39,12 @@ public class AssignmentToCollectionFieldFromParameterInspection
    */
   public boolean ignorePrivateMethods = true;
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "AssignmentToCollectionOrArrayFieldFromParameter";
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "assignment.collection.array.field.from.parameter.display.name");

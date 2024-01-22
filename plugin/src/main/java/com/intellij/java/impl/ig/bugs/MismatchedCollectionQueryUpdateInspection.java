@@ -42,8 +42,8 @@ import consulo.util.lang.ObjectUtil;
 import one.util.streamex.StreamEx;
 import org.intellij.lang.annotations.Pattern;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
@@ -484,7 +484,7 @@ public class MismatchedCollectionQueryUpdateInspection
     }
 
     @Override
-    public void visitLocalVariable(@Nonnull PsiLocalVariable variable) {
+    public void visitLocalVariable(@jakarta.annotation.Nonnull PsiLocalVariable variable) {
       super.visitLocalVariable(variable);
       final PsiCodeBlock codeBlock = PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class);
       if (!checkVariable(variable, codeBlock)) {

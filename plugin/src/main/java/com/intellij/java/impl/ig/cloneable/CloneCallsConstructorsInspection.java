@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.cloneable;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;

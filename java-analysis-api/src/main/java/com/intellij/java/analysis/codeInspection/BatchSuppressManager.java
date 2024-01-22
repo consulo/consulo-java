@@ -24,8 +24,8 @@ import consulo.language.editor.inspection.SuppressQuickFix;
 import consulo.language.editor.rawHighlight.HighlightDisplayKey;
 import consulo.language.psi.PsiElement;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Collection;
 
 @ServiceAPI(ComponentScope.APPLICATION)
@@ -43,7 +43,7 @@ public interface BatchSuppressManager {
     }
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   SuppressQuickFix[] createBatchSuppressActions(@Nonnull HighlightDisplayKey key);
 
   boolean isSuppressedFor(@Nonnull PsiElement element, String toolId);
@@ -51,10 +51,10 @@ public interface BatchSuppressManager {
   PsiElement getElementMemberSuppressedIn(@Nonnull PsiDocCommentOwner owner, String inspectionToolID);
 
   @Nullable
-  PsiElement getAnnotationMemberSuppressedIn(@Nonnull PsiModifierListOwner owner, String inspectionToolID);
+  PsiElement getAnnotationMemberSuppressedIn(@jakarta.annotation.Nonnull PsiModifierListOwner owner, String inspectionToolID);
 
   @Nullable
-  PsiElement getDocCommentToolSuppressedIn(@Nonnull PsiDocCommentOwner owner, String inspectionToolID);
+  PsiElement getDocCommentToolSuppressedIn(@jakarta.annotation.Nonnull PsiDocCommentOwner owner, String inspectionToolID);
 
   @Nonnull
   Collection<String> getInspectionIdsSuppressedInAnnotation(@Nonnull PsiModifierListOwner owner);

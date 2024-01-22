@@ -34,7 +34,7 @@ import com.intellij.java.impl.refactoring.util.ParameterTablePanel;
 import com.intellij.java.analysis.impl.refactoring.util.VariableData;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 

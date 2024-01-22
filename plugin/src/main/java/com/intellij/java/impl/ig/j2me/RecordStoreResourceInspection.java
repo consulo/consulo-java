@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.j2me;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NonNls;
 @ExtensionImpl
 public class RecordStoreResourceInspection extends BaseInspection {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "RecordStoreOpenedButNotSafelyClosed";
   }
@@ -125,7 +125,7 @@ public class RecordStoreResourceInspection extends BaseInspection {
     }
 
     private static boolean isRecordStoreFactoryMethod(
-      @Nonnull PsiMethodCallExpression expression) {
+      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
       final String methodName = methodExpression.getReferenceName();
@@ -159,7 +159,7 @@ public class RecordStoreResourceInspection extends BaseInspection {
     }
 
     @Override
-    public void visitElement(@Nonnull PsiElement element) {
+    public void visitElement(@jakarta.annotation.Nonnull PsiElement element) {
       if (!containsClose) {
         super.visitElement(element);
       }

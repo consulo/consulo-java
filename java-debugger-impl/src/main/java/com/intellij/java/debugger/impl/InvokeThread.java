@@ -21,13 +21,13 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import javax.annotation.Nonnull;
 import consulo.application.ApplicationManager;
 import consulo.component.ProcessCanceledException;
 import consulo.project.DumbService;
 import consulo.project.Project;
 import consulo.internal.com.sun.jdi.VMDisconnectedException;
 import consulo.logging.Logger;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author lex

@@ -23,8 +23,8 @@ import consulo.ide.impl.idea.analysis.BaseAnalysisActionDialog;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.project.Project;
 import consulo.ui.ex.awt.event.DocumentAdapter;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 

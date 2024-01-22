@@ -25,9 +25,9 @@ import consulo.navigation.ItemPresentation;
 import consulo.navigation.ItemPresentationProvider;
 import consulo.ui.image.Image;
 import consulo.virtualFileSystem.VirtualFile;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,7 +35,7 @@ import java.util.regex.Pattern;
 public class JavaModulePresentationProvider implements ItemPresentationProvider<PsiJavaModule> {
   private static final Pattern JAR_NAME = Pattern.compile(".+/([^/]+\\.jar)!/.*");
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Class<PsiJavaModule> getItemClass() {
     return PsiJavaModule.class;
@@ -44,7 +44,7 @@ public class JavaModulePresentationProvider implements ItemPresentationProvider<
   @Override
   public ItemPresentation getPresentation(@Nonnull final PsiJavaModule item) {
     return new ItemPresentation() {
-      @Nullable
+      @jakarta.annotation.Nullable
       @Override
       public String getPresentableText() {
         return item.getName();
@@ -69,7 +69,7 @@ public class JavaModulePresentationProvider implements ItemPresentationProvider<
         return null;
       }
 
-      @Nullable
+      @jakarta.annotation.Nullable
       @Override
       public Image getIcon() {
         return JavaIcons.Nodes.JavaModule;

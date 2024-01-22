@@ -20,8 +20,8 @@
 package com.intellij.java.debugger.impl.jdi;
 
 import consulo.internal.com.sun.jdi.*;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;

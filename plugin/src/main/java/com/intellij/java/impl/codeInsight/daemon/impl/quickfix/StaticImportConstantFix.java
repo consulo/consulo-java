@@ -29,8 +29,8 @@ import consulo.language.psi.SmartPointerManager;
 import consulo.language.psi.SmartPsiElementPointer;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
@@ -79,12 +79,12 @@ public class StaticImportConstantFix extends StaticImportMemberFix<PsiField> imp
     return processor.getMembersToImport(applicableOnly);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected StaticImportMethodQuestionAction<PsiField> createQuestionAction(List<PsiField> methodsToImport,
                                                                             @Nonnull Project project,
                                                                             Editor editor) {
     return new StaticImportMethodQuestionAction<PsiField>(project, editor, methodsToImport, myRef) {
-      @Nonnull
+      @jakarta.annotation.Nonnull
       @Override
       protected String getPopupTitle() {
         return JavaQuickFixBundle.message("field.to.import.chooser.title");
@@ -98,14 +98,14 @@ public class StaticImportConstantFix extends StaticImportMemberFix<PsiField> imp
     return myRef.getElement();
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   protected PsiElement getQualifierExpression() {
     final PsiJavaCodeReferenceElement element = myRef.getElement();
     return element != null ? element.getQualifier() : null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   protected PsiElement resolveRef() {
     final PsiJavaCodeReferenceElement referenceElement = (PsiJavaCodeReferenceElement)getElement();

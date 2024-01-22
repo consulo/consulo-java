@@ -33,7 +33,6 @@ import consulo.codeEditor.Editor;
 import consulo.ide.impl.idea.ide.util.MemberChooser;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.psi.*;
@@ -48,8 +47,9 @@ import consulo.util.dataholder.Key;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.*;
 
 public class CreateConstructorParameterFromFieldFix implements SyntheticIntentionAction {
@@ -194,7 +194,7 @@ public class CreateConstructorParameterFromFieldFix implements SyntheticIntentio
     }
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private Collection<SmartPsiElementPointer<PsiField>> getFieldsToFix() {
     Map<SmartPsiElementPointer<PsiField>, Boolean> fields = myClass.getUserData(FIELDS);
     if (fields == null) {

@@ -20,8 +20,7 @@
  */
 package com.intellij.codeInsight.daemon;
 
-import javax.annotation.Nonnull;
-
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.impl.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;

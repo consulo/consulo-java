@@ -20,7 +20,7 @@ import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.template.context.TemplateContextType;
 import consulo.language.psi.PsiFile;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author yole

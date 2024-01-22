@@ -21,8 +21,7 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassOwner;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public class PsiClassListCellRenderer extends PsiElementListCellRenderer<PsiClass> {
   public static final PsiClassListCellRenderer INSTANCE = new PsiClassListCellRenderer();

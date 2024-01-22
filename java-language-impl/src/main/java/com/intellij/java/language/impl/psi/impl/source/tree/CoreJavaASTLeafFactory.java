@@ -28,9 +28,8 @@ import consulo.language.impl.ast.ASTLeafFactory;
 import consulo.language.impl.ast.LeafElement;
 import consulo.language.impl.psi.PsiCoreCommentImpl;
 import consulo.language.version.LanguageVersion;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author yole
@@ -38,7 +37,7 @@ import javax.annotation.Nullable;
 public class CoreJavaASTLeafFactory implements Constants, ASTLeafFactory {
   @Override
   @Nonnull
-  public LeafElement createLeaf(@Nonnull final IElementType type, @Nonnull LanguageVersion languageVersion, @Nonnull final CharSequence text) {
+  public LeafElement createLeaf(@jakarta.annotation.Nonnull final IElementType type, @jakarta.annotation.Nonnull LanguageVersion languageVersion, @jakarta.annotation.Nonnull final CharSequence text) {
     if (type == JavaTokenType.C_STYLE_COMMENT || type == JavaTokenType.END_OF_LINE_COMMENT) {
       return new PsiCoreCommentImpl(type, text);
     } else if (type == JavaTokenType.IDENTIFIER) {

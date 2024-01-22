@@ -15,10 +15,10 @@
  */
 package com.intellij.jam;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 import consulo.language.psi.PsiReference;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
@@ -27,7 +27,7 @@ public abstract class JamConverter<T> {
 
   public static final JamConverter<String> DUMMY_CONVERTER = new JamConverter<String>() {
     @Override
-    public String fromString(@Nullable String s, JamStringAttributeElement<String> context) {
+    public String fromString(@jakarta.annotation.Nullable String s, JamStringAttributeElement<String> context) {
       return s;
     }
 
@@ -37,10 +37,10 @@ public abstract class JamConverter<T> {
     }
   };
 
-  @Nullable
-  public abstract T fromString(@Nullable String s, JamStringAttributeElement<T> context);
+  @jakarta.annotation.Nullable
+  public abstract T fromString(@jakarta.annotation.Nullable String s, JamStringAttributeElement<T> context);
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public String toString(@Nullable T s, JamElement context) {
     throw new UnsupportedOperationException("toString() not supported for " + getClass());
   }

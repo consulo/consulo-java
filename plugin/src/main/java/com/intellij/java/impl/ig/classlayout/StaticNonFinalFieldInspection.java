@@ -15,8 +15,7 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
@@ -26,6 +25,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.MakeFieldFinalFix;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class StaticNonFinalFieldInspection extends BaseInspection {
@@ -36,7 +36,7 @@ public class StaticNonFinalFieldInspection extends BaseInspection {
       "static.non.final.field.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "static.non.final.field.problem.descriptor");

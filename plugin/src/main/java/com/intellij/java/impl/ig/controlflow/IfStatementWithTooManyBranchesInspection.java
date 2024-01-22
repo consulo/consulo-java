@@ -23,7 +23,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import consulo.deadCodeNotWorking.impl.SingleIntegerFieldOptionsPanel;
 import consulo.language.psi.PsiElement;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 
 public abstract class IfStatementWithTooManyBranchesInspection
@@ -51,7 +51,7 @@ public abstract class IfStatementWithTooManyBranchesInspection
       this, "m_limit");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     final Integer branchCount = (Integer)infos[0];
     return InspectionGadgetsBundle.message(
@@ -67,7 +67,7 @@ public abstract class IfStatementWithTooManyBranchesInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitIfStatement(@Nonnull PsiIfStatement statement) {
+    public void visitIfStatement(@jakarta.annotation.Nonnull PsiIfStatement statement) {
       super.visitIfStatement(statement);
       final PsiElement parent = statement.getParent();
       if (parent instanceof PsiIfStatement) {

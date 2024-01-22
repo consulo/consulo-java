@@ -21,9 +21,8 @@ import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionToo
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.PairedUnfairLocalInspectionTool;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nonnull;
 
 /**
  * User: anna
@@ -48,7 +47,7 @@ public class UnusedImportLocalInspection extends BaseJavaLocalInspectionTool imp
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @NonNls
   public String getShortName() {
     return SHORT_NAME;

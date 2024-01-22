@@ -22,7 +22,7 @@ import consulo.language.impl.ast.LeafElement;
 import consulo.language.impl.psi.PsiCommentImpl;
 import consulo.language.version.LanguageVersion;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -32,7 +32,7 @@ import javax.annotation.Nonnull;
 public class JavaASTLeafFactory extends CoreJavaASTLeafFactory {
   @Override
   @Nonnull
-  public LeafElement createLeaf(@Nonnull final IElementType type, @Nonnull LanguageVersion languageVersion, @Nonnull final CharSequence text) {
+  public LeafElement createLeaf(@jakarta.annotation.Nonnull final IElementType type, @jakarta.annotation.Nonnull LanguageVersion languageVersion, @Nonnull final CharSequence text) {
     if (type == C_STYLE_COMMENT || type == END_OF_LINE_COMMENT) {
       return new PsiCommentImpl(type, text);
     }

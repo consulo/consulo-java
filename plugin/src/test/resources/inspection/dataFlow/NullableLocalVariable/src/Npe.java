@@ -1,12 +1,12 @@
-
+import jakarta.annotation.Nullable;
 
 public class Npe {
    void bar() {
-     final @javax.annotation.Nullable Object o = foo();
+     final @Nullable Object o = foo();
      o.hashCode(); // NPE
    }
 
-   @javax.annotation.Nullable
+   @Nullable
    Object foo() {
      return null;
    }

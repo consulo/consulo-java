@@ -16,13 +16,10 @@
 
 package com.intellij.java.impl.usageView;
 
-import consulo.ide.impl.idea.usages.impl.UsageViewImpl;
 import consulo.project.Project;
-import consulo.usage.UsageContextPanel;
-import consulo.usage.UsageView;
 import consulo.usage.UsageViewPresentation;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class UsageContextDataflowFromPanel extends UsageContextDataflowToPanel {
 

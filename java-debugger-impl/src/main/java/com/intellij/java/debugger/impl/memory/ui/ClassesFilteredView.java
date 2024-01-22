@@ -56,9 +56,9 @@ import consulo.ui.ex.action.*;
 import consulo.ui.ex.awt.*;
 import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.ui.ex.awt.event.DoubleClickListener;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
@@ -110,16 +110,16 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
    */
   private volatile boolean myIsActive;
 
-  public ClassesFilteredView(@Nonnull XDebugSession debugSession,
-                             @Nonnull DebugProcessImpl debugProcess,
-                             @Nonnull InstancesTracker tracker) {
+  public ClassesFilteredView(@jakarta.annotation.Nonnull XDebugSession debugSession,
+                             @jakarta.annotation.Nonnull DebugProcessImpl debugProcess,
+                             @jakarta.annotation.Nonnull InstancesTracker tracker) {
     myProject = debugSession.getProject();
 
     final DebuggerManagerThreadImpl managerThread = debugProcess.getManagerThread();
     myInstancesTracker = tracker;
     final InstancesTrackerListener instancesTrackerListener = new InstancesTrackerListener() {
       @Override
-      public void classChanged(@Nonnull String name, @Nonnull TrackingType type) {
+      public void classChanged(@jakarta.annotation.Nonnull String name, @jakarta.annotation.Nonnull TrackingType type) {
         ReferenceType ref = myTable.getClassByName(name);
         if (ref != null) {
           final boolean activated = myIsTrackersActivated.get();
@@ -134,7 +134,7 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
       }
 
       @Override
-      public void classRemoved(@Nonnull String name) {
+      public void classRemoved(@jakarta.annotation.Nonnull String name) {
         ReferenceType ref = myTable.getClassByName(name);
         if (ref != null && myConstructorTrackedClasses.containsKey(ref)) {
           ConstructorInstancesTracker removed = myConstructorTrackedClasses.remove(ref);
@@ -179,10 +179,10 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
         });
       }
 
-      private void trackWhenPrepared(@Nonnull String className,
-                                     @Nonnull XDebugSession session,
-                                     @Nonnull DebugProcessImpl process,
-                                     @Nonnull TrackingType type) {
+      private void trackWhenPrepared(@jakarta.annotation.Nonnull String className,
+                                     @jakarta.annotation.Nonnull XDebugSession session,
+                                     @jakarta.annotation.Nonnull DebugProcessImpl process,
+                                     @jakarta.annotation.Nonnull TrackingType type) {
         final ClassPrepareRequestor request = new ClassPrepareRequestor() {
           @Override
           public void processClassPrepare(DebugProcess debuggerProcess, ReferenceType referenceType) {
@@ -302,14 +302,14 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
     addToCenter(scroll);
   }
 
-  @Nullable
-  TrackerForNewInstances getStrategy(@Nonnull ReferenceType ref) {
+  @jakarta.annotation.Nullable
+  TrackerForNewInstances getStrategy(@jakarta.annotation.Nonnull ReferenceType ref) {
     return myConstructorTrackedClasses.getOrDefault(ref, null);
   }
 
-  private void trackClass(@Nonnull XDebugSession session,
+  private void trackClass(@jakarta.annotation.Nonnull XDebugSession session,
                           @Nonnull ReferenceType ref,
-                          @Nonnull TrackingType type,
+                          @jakarta.annotation.Nonnull TrackingType type,
                           boolean isTrackerEnabled) {
     LOG.assertTrue(DebuggerManager.getInstance(myProject).isDebuggerManagerThread());
     if (type == TrackingType.CREATION) {
@@ -377,7 +377,7 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
     myConstructorTrackedClasses.clear();
   }
 
-  public void setActive(boolean active, @Nonnull DebuggerManagerThreadImpl managerThread) {
+  public void setActive(boolean active, @jakarta.annotation.Nonnull DebuggerManagerThreadImpl managerThread) {
     if (myIsActive == active) {
       return;
     }
@@ -427,7 +427,7 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
     }
 
     @Override
-    public void contextAction(@Nonnull SuspendContextImpl suspendContext) throws Exception {
+    public void contextAction(@jakarta.annotation.Nonnull SuspendContextImpl suspendContext) throws Exception {
       handleTrackers();
 
       final List<ReferenceType> classes = suspendContext.getDebugProcess().getVirtualMachineProxy().allClasses();
@@ -457,7 +457,7 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
       }
     }
 
-    private Map<ReferenceType, Long> getInstancesCounts(@Nonnull List<ReferenceType> classes, @Nonnull VirtualMachine vm) {
+    private Map<ReferenceType, Long> getInstancesCounts(@jakarta.annotation.Nonnull List<ReferenceType> classes, @jakarta.annotation.Nonnull VirtualMachine vm) {
       final int batchSize = AndroidUtil.isAndroidVM(vm) ? AndroidUtil.ANDROID_COUNT_BY_CLASSES_BATCH_SIZE : DEFAULT_BATCH_SIZE;
 
       final int size = classes.size();

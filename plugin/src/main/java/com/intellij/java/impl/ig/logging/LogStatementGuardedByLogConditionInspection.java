@@ -39,8 +39,8 @@ import consulo.util.xml.serializer.WriteExternalException;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -69,7 +69,7 @@ public class LogStatementGuardedByLogConditionInspection extends BaseInspection 
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("log.statement.guarded.by.log.condition.display.name");
   }
@@ -168,7 +168,7 @@ public class LogStatementGuardedByLogConditionInspection extends BaseInspection 
       }
     }
 
-    private boolean isSameLogMethodCall(PsiStatement statement, @Nonnull String methodName) {
+    private boolean isSameLogMethodCall(PsiStatement statement, @jakarta.annotation.Nonnull String methodName) {
       if (statement == null) {
         return false;
       }
@@ -283,13 +283,13 @@ public class LogStatementGuardedByLogConditionInspection extends BaseInspection 
   }
 
   @Override
-  public void readSettings(@Nonnull Element element) throws InvalidDataException {
+  public void readSettings(@jakarta.annotation.Nonnull Element element) throws InvalidDataException {
     super.readSettings(element);
     parseString(loggerMethodAndconditionMethodNames, logMethodNameList, logConditionMethodNameList);
   }
 
   @Override
-  public void writeSettings(@Nonnull Element element) throws WriteExternalException {
+  public void writeSettings(@jakarta.annotation.Nonnull Element element) throws WriteExternalException {
     loggerMethodAndconditionMethodNames = formatString(logMethodNameList, logConditionMethodNameList);
     super.writeSettings(element);
   }

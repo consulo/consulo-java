@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.fixes;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.PsiExpression;
@@ -28,8 +28,7 @@ import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.psiutils.FinalUtils;
-
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public class MakeFieldStaticFinalFix extends InspectionGadgetsFix {
 
@@ -41,7 +40,7 @@ public class MakeFieldStaticFinalFix extends InspectionGadgetsFix {
 
   @Nonnull
   public static InspectionGadgetsFix buildFixUnconditional(
-    @Nonnull PsiField field) {
+    @jakarta.annotation.Nonnull PsiField field) {
     return new MakeFieldStaticFinalFix(field.getName());
   }
 

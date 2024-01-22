@@ -27,22 +27,23 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.Comparing;
+import jakarta.annotation.Nullable;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
 public class CoreJavaCodeStyleManager extends JavaCodeStyleManager {
   @Override
-  public boolean addImport(@Nonnull PsiJavaFile file, @Nonnull PsiClass refClass) {
+  public boolean addImport(@jakarta.annotation.Nonnull PsiJavaFile file, @jakarta.annotation.Nonnull PsiClass refClass) {
     return false;
   }
 
   @Override
-  public PsiElement shortenClassReferences(@Nonnull PsiElement element,
+  public PsiElement shortenClassReferences(@jakarta.annotation.Nonnull PsiElement element,
                                            @MagicConstant(flags = {DO_NOT_ADD_IMPORTS,
                                                INCOMPLETE_CODE
                                            }) int flags)
@@ -68,12 +69,12 @@ public class CoreJavaCodeStyleManager extends JavaCodeStyleManager {
   }
 
   @Override
-  public PsiElement shortenClassReferences(@Nonnull PsiElement element) throws IncorrectOperationException {
+  public PsiElement shortenClassReferences(@jakarta.annotation.Nonnull PsiElement element) throws IncorrectOperationException {
     return null;
   }
 
   @Override
-  public void shortenClassReferences(@Nonnull PsiElement element, int startOffset, int endOffset) throws IncorrectOperationException {
+  public void shortenClassReferences(@jakarta.annotation.Nonnull PsiElement element, int startOffset, int endOffset) throws IncorrectOperationException {
   }
 
   @Override
@@ -86,9 +87,9 @@ public class CoreJavaCodeStyleManager extends JavaCodeStyleManager {
   }
 
   @Override
-  public SuggestedNameInfo suggestVariableName(@Nonnull VariableKind kind,
-                                               @Nullable String propertyName,
-                                               @Nullable PsiExpression expr,
+  public SuggestedNameInfo suggestVariableName(@jakarta.annotation.Nonnull VariableKind kind,
+                                               @jakarta.annotation.Nullable String propertyName,
+                                               @jakarta.annotation.Nullable PsiExpression expr,
                                                @Nullable PsiType type,
                                                boolean correctKeywords) {
     return SuggestedNameInfo.NULL_INFO;
@@ -183,7 +184,7 @@ public class CoreJavaCodeStyleManager extends JavaCodeStyleManager {
   }
 
   @Override
-  public void removeRedundantImports(@Nonnull PsiJavaFile file) throws IncorrectOperationException {
+  public void removeRedundantImports(@jakarta.annotation.Nonnull PsiJavaFile file) throws IncorrectOperationException {
   }
 
   @Override

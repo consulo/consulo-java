@@ -26,14 +26,14 @@ import com.siyeh.ig.psiutils.TypeUtils;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class StringBufferMustHaveInitialCapacityInspection
   extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "StringBufferWithoutInitialCapacity";
   }
@@ -62,7 +62,7 @@ public class StringBufferMustHaveInitialCapacityInspection
 
     @Override
     public void visitNewExpression(
-      @Nonnull PsiNewExpression expression) {
+      @jakarta.annotation.Nonnull PsiNewExpression expression) {
       super.visitNewExpression(expression);
       final PsiType type = expression.getType();
 

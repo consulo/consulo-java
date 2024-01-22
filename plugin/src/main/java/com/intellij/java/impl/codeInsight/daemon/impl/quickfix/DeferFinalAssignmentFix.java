@@ -24,7 +24,6 @@
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.IntentionAction;
 import com.intellij.java.language.impl.psi.controlFlow.*;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
@@ -39,7 +38,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.logging.Logger;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -195,7 +194,7 @@ public class DeferFinalAssignmentFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
     return
         variable != null
             && variable.isValid()

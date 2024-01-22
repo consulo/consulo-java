@@ -40,7 +40,7 @@ import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.awt.Messages;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 import static com.intellij.java.language.impl.codeInsight.template.JavaTemplateUtil.INTERNAL_PACKAGE_INFO_TEMPLATE_NAME;
 
@@ -113,7 +113,7 @@ public class CreatePackageInfoAction extends CreateFromTemplateActionBase implem
     return false;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public AttributesDefaults getAttributesDefaults(DataContext dataContext) {
     return new AttributesDefaults(INTERNAL_PACKAGE_INFO_TEMPLATE_NAME).withFixedName(true);

@@ -15,10 +15,10 @@
  */
 package com.intellij.java.language.jvm.types;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 import com.intellij.java.language.jvm.JvmTypeDeclaration;
+import jakarta.annotation.Nonnull;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -40,7 +40,7 @@ public interface JvmReferenceType extends JvmType
 
 	JvmReferenceType[] EMPTY_ARRAY = new JvmReferenceType[0];
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	String getName();
 
 	/**

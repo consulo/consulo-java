@@ -27,8 +27,8 @@ import org.intellij.lang.annotations.Pattern;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class UnusedSymbolLocalInspectionBase extends BaseJavaLocalInspectionTool {
   @NonNls
@@ -66,7 +66,7 @@ public class UnusedSymbolLocalInspectionBase extends BaseJavaLocalInspectionTool
   }
 
   @PsiModifier.ModifierConstant
-  @Nullable
+  @jakarta.annotation.Nullable
   public String getFieldVisibility() {
     if (!FIELD) {
       return null;
@@ -84,7 +84,7 @@ public class UnusedSymbolLocalInspectionBase extends BaseJavaLocalInspectionTool
   }
 
   @PsiModifier.ModifierConstant
-  @Nullable
+  @jakarta.annotation.Nullable
   public String getParameterVisibility() {
     if (!PARAMETER) {
       return null;
@@ -93,7 +93,7 @@ public class UnusedSymbolLocalInspectionBase extends BaseJavaLocalInspectionTool
   }
 
   @PsiModifier.ModifierConstant
-  @Nullable
+  @jakarta.annotation.Nullable
   public String getInnerClassVisibility() {
     if (!INNER_CLASS) {
       return null;
@@ -132,13 +132,13 @@ public class UnusedSymbolLocalInspectionBase extends BaseJavaLocalInspectionTool
 
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getGroupDisplayName() {
     return GroupNames.DECLARATION_REDUNDANCY;
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return DISPLAY_NAME;
   }
@@ -175,7 +175,7 @@ public class UnusedSymbolLocalInspectionBase extends BaseJavaLocalInspectionTool
   }
 
   @Override
-  public void writeSettings(@Nonnull Element node) throws WriteExternalException {
+  public void writeSettings(@jakarta.annotation.Nonnull Element node) throws WriteExternalException {
     writeVisibility(node, myClassVisibility, "klass");
     writeVisibility(node, myInnerClassVisibility, "inner_class");
     writeVisibility(node, myFieldVisibility, "field");

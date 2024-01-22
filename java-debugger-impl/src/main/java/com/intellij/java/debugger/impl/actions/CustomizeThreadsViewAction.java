@@ -25,7 +25,7 @@ import consulo.project.Project;
 import consulo.java.debugger.impl.settings.ThreadsViewConfigurable;
 import consulo.ui.annotation.RequiredUIAccess;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * User: lex

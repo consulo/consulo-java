@@ -49,8 +49,8 @@ import consulo.util.io.FileUtil;
 import consulo.util.lang.Comparing;
 import consulo.virtualFileSystem.VirtualFile;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -62,7 +62,7 @@ public class HighlightClassUtil {
   /**
    * new ref(...) or new ref(..) { ... } where ref is abstract class
    */
-  @Nullable
+  @jakarta.annotation.Nullable
   public static HighlightInfo checkAbstractInstantiation(@Nonnull PsiJavaCodeReferenceElement ref) {
     PsiElement parent = ref.getParent();
     HighlightInfo highlightInfo = null;
@@ -332,7 +332,7 @@ public class HighlightClassUtil {
     return null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static HighlightInfo checkStaticFieldDeclarationInInnerClass(@Nonnull PsiKeyword keyword) {
     if (getEnclosingStaticClass(keyword, PsiField.class) == null) {
       return null;
@@ -564,9 +564,9 @@ public class HighlightClassUtil {
     return checkCannotInheritFromFinal(baseClass, aClass.getBaseClassReference());
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static String checkDefaultConstructorThrowsException(PsiMethod constructor,
-                                                               @Nonnull PsiClassType[] handledExceptions) {
+                                                               @jakarta.annotation.Nonnull PsiClassType[] handledExceptions) {
     PsiClassType[] referencedTypes = constructor.getThrowsList().getReferencedTypes();
     List<PsiClassType> exceptions = new ArrayList<PsiClassType>();
     for (PsiClassType referencedType : referencedTypes) {
@@ -600,7 +600,7 @@ public class HighlightClassUtil {
 
   public static HighlightInfo checkBaseClassDefaultConstructorProblem(@Nonnull PsiClass aClass,
                                                                       RefCountHolder refCountHolder,
-                                                                      @Nonnull PsiResolveHelper resolveHelper,
+                                                                      @jakarta.annotation.Nonnull PsiResolveHelper resolveHelper,
                                                                       @Nonnull TextRange range,
                                                                       @Nonnull PsiClassType[] handledExceptions) {
     if (aClass instanceof PsiAnonymousClass) {

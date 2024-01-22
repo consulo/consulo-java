@@ -60,8 +60,8 @@ import consulo.util.concurrent.AsyncResult;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ThreeState;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -100,7 +100,7 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
     return new JavaValue(parent, valueDescriptor, evaluationContext, nodeManager, contextSet);
   }
 
-  static JavaValue create(@Nonnull ValueDescriptorImpl valueDescriptor,
+  static JavaValue create(@jakarta.annotation.Nonnull ValueDescriptorImpl valueDescriptor,
                           @Nonnull EvaluationContextImpl evaluationContext,
                           NodeManagerImpl nodeManager) {
     return create(null, valueDescriptor, evaluationContext, nodeManager, false);
@@ -285,7 +285,7 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
     }
 
     @Override
-    public void renderValue(@Nonnull XValuePresentation.XValueTextRenderer renderer, @Nullable XValueNode node) {
+    public void renderValue(@jakarta.annotation.Nonnull XValuePresentation.XValueTextRenderer renderer, @Nullable XValueNode node) {
       boolean compact = node != null;
       if (myError != null) {
         if (myValue.endsWith(myError)) {
@@ -435,7 +435,7 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
                            }
 
                            @Override
-                           public void setMessage(@Nonnull String message,
+                           public void setMessage(@jakarta.annotation.Nonnull String message,
                                                   @Nullable Image icon,
                                                   @Nonnull SimpleTextAttributes attributes,
                                                   @Nullable XDebuggerTreeNodeHyperlink link) {
@@ -459,7 +459,7 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
                            }
 
                            @Override
-                           public void setErrorMessage(@Nonnull String errorMessage) {
+                           public void setErrorMessage(@jakarta.annotation.Nonnull String errorMessage) {
                              node.setErrorMessage(errorMessage);
                            }
 
@@ -577,7 +577,7 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
                   }
 
                   @Override
-                  protected void doAction(@Nullable final SourcePosition sourcePosition) {
+                  protected void doAction(@jakarta.annotation.Nullable final SourcePosition sourcePosition) {
                     if (sourcePosition != null) {
                       ApplicationManager.getApplication()
                                         .runReadAction(() -> navigatable.setSourcePosition(DebuggerUtilsEx.toXSourcePosition(sourcePosition)));
@@ -586,7 +586,7 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
                 });
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public XValueModifier getModifier() {
     return myValueDescriptor.canSetValue() ? myValueDescriptor.getModifier(this) : null;

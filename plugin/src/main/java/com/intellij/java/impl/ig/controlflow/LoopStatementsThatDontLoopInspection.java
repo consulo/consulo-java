@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
@@ -56,7 +56,7 @@ public class LoopStatementsThatDontLoopInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitForStatement(@Nonnull PsiForStatement statement) {
+    public void visitForStatement(@jakarta.annotation.Nonnull PsiForStatement statement) {
       super.visitForStatement(statement);
       final PsiStatement body = statement.getBody();
       if (body == null) {

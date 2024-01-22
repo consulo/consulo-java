@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -64,7 +64,7 @@ public class ProtectedMemberInFinalClassInspection extends BaseInspection {
     return new RemoveModifierFix((String)infos[0]);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     return new InspectionGadgetsFix[] {
@@ -188,7 +188,7 @@ public class ProtectedMemberInFinalClassInspection extends BaseInspection {
     }
 
     @Override
-    public void visitField(@Nonnull PsiField field) {
+    public void visitField(@jakarta.annotation.Nonnull PsiField field) {
       if (!field.hasModifierProperty(PsiModifier.PROTECTED)) {
         return;
       }

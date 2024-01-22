@@ -30,8 +30,7 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import consulo.usage.UsageInfo;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author Bas Leijdekkers
@@ -66,7 +65,7 @@ class MakePublicStaticVoidFix extends InspectionGadgetsFix
 			ChangeSignatureProcessor csp = new ChangeSignatureProcessor(project, method, false, myNewVisibility, method.getName(), PsiType.VOID, new ParameterInfoImpl[0])
 			{
 				@Override
-				protected void performRefactoring(@Nonnull UsageInfo[] usages)
+				protected void performRefactoring(@jakarta.annotation.Nonnull UsageInfo[] usages)
 				{
 					super.performRefactoring(usages);
 					PsiUtil.setModifierProperty(method, PsiModifier.STATIC, myMakeStatic);

@@ -32,9 +32,9 @@ import consulo.java.analysis.codeInspection.JavaExtensionPoints;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
 import javax.swing.*;
 
 @ExtensionImpl
@@ -81,7 +81,7 @@ public class MethodMayBeStaticInspection extends BaseInspection {
   private class MethodCanBeStaticVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
       super.visitMethod(method);
       if (method.hasModifierProperty(PsiModifier.STATIC) ||
           method.hasModifierProperty(PsiModifier.ABSTRACT) ||

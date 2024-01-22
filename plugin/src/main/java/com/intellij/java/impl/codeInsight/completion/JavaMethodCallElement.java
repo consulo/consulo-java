@@ -45,8 +45,8 @@ import consulo.util.dataholder.Key;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.SystemProperties;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -57,7 +57,7 @@ public class JavaMethodCallElement extends LookupItem<PsiMethod> implements Type
   private static final boolean JAVA_COMPLETION_ARGUMENT_LIVE_TEMPLATE_COMPLETION = SystemProperties.getBooleanProperty("java.completion.argument.live.template.completion", false);
 
   public static final ClassConditionKey<JavaMethodCallElement> CLASS_CONDITION_KEY = ClassConditionKey.create(JavaMethodCallElement.class);
-  @Nullable
+  @jakarta.annotation.Nullable
   private final PsiClass myContainingClass;
   private final PsiMethod myMethod;
   private final MemberLookupHelper myHelper;
@@ -117,7 +117,7 @@ public class JavaMethodCallElement extends LookupItem<PsiMethod> implements Type
     return myQualifierSubstitutor;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiSubstitutor getInferenceSubstitutor() {
     return myInferenceSubstitutor;
   }
@@ -217,7 +217,7 @@ public class JavaMethodCallElement extends LookupItem<PsiMethod> implements Type
 
   public static final Key<PsiMethod> ARGUMENT_TEMPLATE_ACTIVE = Key.create("ARGUMENT_TEMPLATE_ACTIVE");
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private static Template createArgTemplate(PsiMethod method, int caretOffset, PsiExpressionList argList, TextRange argRange) {
     Template template = TemplateManager.getInstance(method.getProject()).createTemplate("", "");
     PsiParameter[] parameters = method.getParameterList().getParameters();
@@ -443,13 +443,13 @@ public class JavaMethodCallElement extends LookupItem<PsiMethod> implements Type
   }
 
   private static class AutoPopupCompletion extends Expression {
-    @Nullable
+    @jakarta.annotation.Nullable
     @Override
     public Result calculateResult(ExpressionContext context) {
       return new InvokeActionResult(() -> AutoPopupController.getInstance(context.getProject()).scheduleAutoPopup(context.getEditor()));
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     @Override
     public Result calculateQuickResult(ExpressionContext context) {
       return null;

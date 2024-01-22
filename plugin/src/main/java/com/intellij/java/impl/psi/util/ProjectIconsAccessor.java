@@ -33,11 +33,11 @@ import consulo.ui.image.Image;
 import consulo.util.collection.SLRUMap;
 import consulo.util.lang.Pair;
 import consulo.virtualFileSystem.VirtualFile;
+import jakarta.annotation.Nonnull;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -54,7 +54,7 @@ import java.util.Locale;
 @ServiceImpl
 public class ProjectIconsAccessor implements Disposable
 {
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public static ProjectIconsAccessor getInstance(@Nonnull Project project)
 	{
 		return ServiceManager.getService(project, ProjectIconsAccessor.class);
@@ -138,7 +138,7 @@ public class ProjectIconsAccessor implements Disposable
 	}
 
 	@Nullable
-	public Image getIcon(@Nonnull VirtualFile file, @Nullable PsiElement element)
+	public Image getIcon(@jakarta.annotation.Nonnull VirtualFile file, @Nullable PsiElement element)
 	{
 		final String path = file.getPath();
 		final long stamp = file.getModificationStamp();

@@ -28,7 +28,7 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import consulo.annotation.component.ExtensionImpl;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -66,7 +66,7 @@ public class MalformedRegexInspection extends BaseInspection {
   private static class MalformedRegexVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(@jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiExpressionList argumentList = expression.getArgumentList();
       if (argumentList == null) {

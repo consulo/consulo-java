@@ -3,7 +3,7 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.*;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Set;
 
 /**
@@ -20,7 +20,7 @@ public class DfEphemeralReferenceType implements DfReferenceType {
   private final @Nonnull
   TypeConstraint myTypeConstraint;
 
-  DfEphemeralReferenceType(@Nonnull TypeConstraint constraint) {
+  DfEphemeralReferenceType(@jakarta.annotation.Nonnull TypeConstraint constraint) {
     myTypeConstraint = constraint;
   }
 
@@ -76,7 +76,7 @@ public class DfEphemeralReferenceType implements DfReferenceType {
   }
 
   @Override
-  public @Nonnull
+  public @jakarta.annotation.Nonnull
   DfType meet(@Nonnull DfType other) {
     if (other == DfTypes.TOP) return this;
     if (other == DfTypes.BOTTOM) return other;

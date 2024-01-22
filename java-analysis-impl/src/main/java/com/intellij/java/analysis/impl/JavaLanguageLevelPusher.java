@@ -18,7 +18,6 @@ package com.intellij.java.analysis.impl;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.JavaFileType;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.component.messagebus.MessageBus;
 import consulo.index.io.data.DataInputOutputUtil;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.psi.PsiElement;
@@ -34,8 +33,8 @@ import consulo.util.dataholder.Key;
 import consulo.virtualFileSystem.FileAttribute;
 import consulo.virtualFileSystem.VirtualFile;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -51,7 +50,7 @@ public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public Key<LanguageLevel> getFileDataKey() {
     return LanguageLevel.KEY;
   }
@@ -62,13 +61,13 @@ public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public LanguageLevel getDefaultValue() {
     return LanguageLevel.HIGHEST;
   }
 
   @Override
-  public LanguageLevel getImmediateValue(@Nonnull Project project, VirtualFile file) {
+  public LanguageLevel getImmediateValue(@jakarta.annotation.Nonnull Project project, VirtualFile file) {
     if (file == null) {
       return null;
     }
@@ -80,7 +79,7 @@ public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel
   }
 
   @Override
-  public LanguageLevel getImmediateValue(@Nonnull Module module) {
+  public LanguageLevel getImmediateValue(@jakarta.annotation.Nonnull Module module) {
     ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(module);
 
     final JavaModuleExtension extension = moduleRootManager.getExtension(JavaModuleExtension.class);
@@ -93,14 +92,14 @@ public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel
   }
 
   @Override
-  public boolean acceptsDirectory(@Nonnull VirtualFile file, @Nonnull Project project) {
+  public boolean acceptsDirectory(@jakarta.annotation.Nonnull VirtualFile file, @jakarta.annotation.Nonnull Project project) {
     return ProjectFileIndex.getInstance(project).isInSourceContent(file);
   }
 
   private static final FileAttribute PERSISTENCE = new FileAttribute("language_level_persistence", 2, true);
 
   @Override
-  public void persistAttribute(@Nonnull Project project, @Nonnull VirtualFile fileOrDir, @Nonnull LanguageLevel level) throws IOException {
+  public void persistAttribute(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull VirtualFile fileOrDir, @jakarta.annotation.Nonnull LanguageLevel level) throws IOException {
     final DataInputStream iStream = PERSISTENCE.readAttribute(fileOrDir);
     if (iStream != null) {
       try {
@@ -132,8 +131,8 @@ public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel
   @Nullable
   public String getInconsistencyLanguageLevelMessage(@Nonnull String message,
                                                      @Nonnull PsiElement element,
-                                                     @Nonnull LanguageLevel level,
-                                                     @Nonnull PsiFile file) {
+                                                     @jakarta.annotation.Nonnull LanguageLevel level,
+                                                     @jakarta.annotation.Nonnull PsiFile file) {
     return null;
   }
 }

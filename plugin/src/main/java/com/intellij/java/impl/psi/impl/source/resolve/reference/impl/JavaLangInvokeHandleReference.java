@@ -28,8 +28,9 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.language.util.ProcessingContext;
 import consulo.util.collection.ContainerUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -55,7 +56,7 @@ public class JavaLangInvokeHandleReference extends PsiReferenceBase<PsiLiteralEx
     return element;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public PsiElement resolve() {
     final Object value = myElement.getValue();
@@ -161,7 +162,7 @@ public class JavaLangInvokeHandleReference extends PsiReferenceBase<PsiLiteralEx
     return isRegularMethod(method) && !method.hasModifierProperty(PsiModifier.STATIC);
   }
 
-  private static boolean isStaticMethod(@Nullable PsiMethod method) {
+  private static boolean isStaticMethod(@jakarta.annotation.Nullable PsiMethod method) {
     return isRegularMethod(method) && method.hasModifierProperty(PsiModifier.STATIC);
   }
 

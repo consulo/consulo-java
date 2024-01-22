@@ -39,7 +39,6 @@ import consulo.application.Application;
 import consulo.application.ApplicationManager;
 import consulo.component.extension.ExtensionPoint;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.psi.xml.XmlAttribute;
@@ -51,7 +50,7 @@ import consulo.java.analysis.codeInspection.JavaExtensionPoints;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
 
@@ -302,7 +301,7 @@ public abstract class LightAdvHighlightingTest extends LightDaemonAnalyzerTestCa
 
   public static class MyAnnotator implements Annotator {
     @Override
-    public void annotate(@Nonnull PsiElement psiElement, @Nonnull final AnnotationHolder holder) {
+    public void annotate(@jakarta.annotation.Nonnull PsiElement psiElement, @Nonnull final AnnotationHolder holder) {
       psiElement.accept(new XmlElementVisitor() {
         @Override public void visitXmlTag(XmlTag tag) {
           XmlAttribute attribute = tag.getAttribute("aaa", "");

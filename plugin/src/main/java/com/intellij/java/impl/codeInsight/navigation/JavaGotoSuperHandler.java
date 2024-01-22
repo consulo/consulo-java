@@ -18,8 +18,7 @@ package com.intellij.java.impl.codeInsight.navigation;
 import com.intellij.java.language.JavaLanguage;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class JavaGotoSuperHandler extends BaseJavaGotoSuperHandler {

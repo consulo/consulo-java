@@ -16,7 +16,7 @@
 package com.intellij.java.debugger.impl.ui.tree.render;
 
 import org.jdom.Element;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import com.intellij.java.debugger.engine.DebuggerUtils;
 import consulo.logging.Logger;
 import consulo.util.xml.serializer.InvalidDataException;

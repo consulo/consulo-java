@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.ig.imports;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiImportList;
 import com.intellij.java.language.psi.PsiImportStatement;
@@ -25,6 +23,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class SingleClassImportInspection extends BaseInspection {
@@ -35,7 +34,7 @@ public class SingleClassImportInspection extends BaseInspection {
       "single.class.import.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "single.class.import.problem.descriptor");
@@ -48,7 +47,7 @@ public class SingleClassImportInspection extends BaseInspection {
   private static class PackageImportVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
       // no call to super, so it doesn't drill down
       if (!(aClass.getParent() instanceof PsiJavaFile)) {
         return;

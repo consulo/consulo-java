@@ -46,8 +46,8 @@ import consulo.util.lang.function.Conditions;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Collection;
 import java.util.Map;
 
@@ -91,7 +91,7 @@ public class LambdaCanBeMethodReferenceInspection extends BaseJavaBatchLocalInsp
 
   @Nonnull
   @Override
-  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
+  public PsiElementVisitor buildVisitorImpl(@jakarta.annotation.Nonnull final ProblemsHolder holder,
                                             boolean isOnTheFly,
                                             LocalInspectionToolSession session,
                                             Object state) {
@@ -125,7 +125,7 @@ public class LambdaCanBeMethodReferenceInspection extends BaseJavaBatchLocalInsp
     return canBeMethodReferenceProblem(parameters, functionalInterfaceType, context, methodRefCandidate);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static PsiExpression canBeMethodReferenceProblem(final PsiVariable[] parameters, PsiType functionalInterfaceType, @Nullable PsiElement context, final PsiExpression methodRefCandidate) {
     if (methodRefCandidate instanceof PsiNewExpression) {
       final PsiNewExpression newExpression = (PsiNewExpression) methodRefCandidate;
@@ -257,7 +257,7 @@ public class LambdaCanBeMethodReferenceInspection extends BaseJavaBatchLocalInsp
     return expression instanceof PsiReferenceExpression && ((PsiReferenceExpression) expression).resolve() == parameter;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static PsiExpression extractMethodReferenceCandidateExpression(PsiElement body, boolean checkSideEffectPureQualifier) {
     final PsiExpression expression = LambdaUtil.extractSingleExpressionFromBody(body);
     if (expression == null) {
@@ -305,7 +305,7 @@ public class LambdaCanBeMethodReferenceInspection extends BaseJavaBatchLocalInsp
     }
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static PsiExpression replaceLambdaWithMethodReference(@Nonnull PsiLambdaExpression lambda) {
     PsiElement body = LambdaUtil.extractSingleExpressionFromBody(lambda.getBody());
     final PsiExpression candidate = canBeMethodReferenceProblem(body, lambda.getParameterList().getParameters(), lambda.getFunctionalInterfaceType(), lambda);
@@ -330,7 +330,7 @@ public class LambdaCanBeMethodReferenceInspection extends BaseJavaBatchLocalInsp
   }
 
   @Nullable
-  private static PsiMethod getNonAmbiguousReceiver(PsiVariable[] parameters, @Nonnull PsiMethod psiMethod) {
+  private static PsiMethod getNonAmbiguousReceiver(PsiVariable[] parameters, @jakarta.annotation.Nonnull PsiMethod psiMethod) {
     String methodName = psiMethod.getName();
     PsiClass containingClass = psiMethod.getContainingClass();
     if (containingClass == null) {
@@ -367,13 +367,13 @@ public class LambdaCanBeMethodReferenceInspection extends BaseJavaBatchLocalInsp
         TypeConversionUtil.areTypesConvertible(nonReceiverCandidateParams[0].getType(), receiverType);
   }
 
-  private static boolean isSoleParameter(@Nonnull PsiVariable[] parameters, @Nullable PsiExpression expression) {
+  private static boolean isSoleParameter(@jakarta.annotation.Nonnull PsiVariable[] parameters, @Nullable PsiExpression expression) {
     return parameters.length == 1 &&
         expression instanceof PsiReferenceExpression &&
         parameters[0] == ((PsiReferenceExpression) expression).resolve();
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   static String createMethodReferenceText(final PsiElement element, final PsiType functionalInterfaceType, final PsiVariable[] parameters) {
     if (element instanceof PsiMethodCallExpression) {
       final PsiMethodCallExpression methodCall = (PsiMethodCallExpression) element;
@@ -505,7 +505,7 @@ public class LambdaCanBeMethodReferenceInspection extends BaseJavaBatchLocalInsp
   }
 
   @Nullable
-  private static String composeReceiverQualifierText(PsiVariable[] parameters, PsiMethod psiMethod, PsiClass containingClass, @Nonnull PsiExpression qualifierExpression) {
+  private static String composeReceiverQualifierText(PsiVariable[] parameters, PsiMethod psiMethod, PsiClass containingClass, @jakarta.annotation.Nonnull PsiExpression qualifierExpression) {
     if (psiMethod.hasModifierProperty(PsiModifier.STATIC)) {
       return null;
     }
@@ -582,7 +582,7 @@ public class LambdaCanBeMethodReferenceInspection extends BaseJavaBatchLocalInsp
     }
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   static PsiExpression tryConvertToMethodReference(@Nonnull PsiLambdaExpression lambda, PsiElement body) {
     Project project = lambda.getProject();
     PsiType functionalInterfaceType = lambda.getFunctionalInterfaceType();

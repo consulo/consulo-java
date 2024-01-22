@@ -24,7 +24,7 @@
  */
 package org.osmorc.manifest.lang;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.language.Language;
 import consulo.java.manifest.lang.ManifestLanguageVersion;

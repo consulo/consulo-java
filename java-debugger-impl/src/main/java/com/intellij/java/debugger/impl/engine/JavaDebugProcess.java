@@ -64,8 +64,8 @@ import consulo.util.lang.Comparing;
 import consulo.util.lang.Pair;
 import consulo.virtualFileSystem.VirtualFile;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,7 +79,7 @@ public class JavaDebugProcess extends XDebugProcess {
   private final JvmSmartStepIntoActionHandler mySmartStepIntoActionHandler;
   private final NodeManagerImpl myNodeManager;
 
-  public static JavaDebugProcess create(@Nonnull final XDebugSession session, final DebuggerSession javaSession) {
+  public static JavaDebugProcess create(@jakarta.annotation.Nonnull final XDebugSession session, final DebuggerSession javaSession) {
     JavaDebugProcess res = new JavaDebugProcess(session, javaSession);
     javaSession.getProcess().setXDebugProcess(res);
     return res;
@@ -174,7 +174,7 @@ public class JavaDebugProcess extends XDebugProcess {
         }
       }
 
-      private void showAlternativeNotification(@Nullable XStackFrame frame) {
+      private void showAlternativeNotification(@jakarta.annotation.Nullable XStackFrame frame) {
         if (frame != null) {
           XSourcePosition position = frame.getSourcePosition();
           if (position != null) {
@@ -231,7 +231,7 @@ public class JavaDebugProcess extends XDebugProcess {
     return myJavaSession;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public XDebuggerEditorsProvider getEditorsProvider() {
     return myEditorsProvider;
@@ -289,7 +289,7 @@ public class JavaDebugProcess extends XDebugProcess {
     return false;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   protected ProcessHandler doGetProcessHandler() {
     return myJavaSession.getProcess().getProcessHandler();
@@ -317,7 +317,7 @@ public class JavaDebugProcess extends XDebugProcess {
 
       @Nonnull
       @Override
-      public Content registerConsoleContent(@Nonnull RunnerLayoutUi ui, @Nonnull ExecutionConsole console) {
+      public Content registerConsoleContent(@Nonnull RunnerLayoutUi ui, @jakarta.annotation.Nonnull ExecutionConsole console) {
         Content content = null;
         if (console instanceof ExecutionConsoleEx) {
           ((ExecutionConsoleEx)console).buildUi(ui);
@@ -397,7 +397,7 @@ public class JavaDebugProcess extends XDebugProcess {
   }
 
   @Override
-  public void registerAdditionalActions(@Nonnull DefaultActionGroup leftToolbar,
+  public void registerAdditionalActions(@jakarta.annotation.Nonnull DefaultActionGroup leftToolbar,
                                         @Nonnull DefaultActionGroup topToolbar,
                                         @Nonnull DefaultActionGroup settings) {
     Constraints beforeRunner = new Constraints(Anchor.BEFORE, "Runner.Layout");
@@ -475,8 +475,8 @@ public class JavaDebugProcess extends XDebugProcess {
     }
   }
 
-  @Nullable
-  private static DebugProcessImpl getCurrentDebugProcess(@Nullable Project project) {
+  @jakarta.annotation.Nullable
+  private static DebugProcessImpl getCurrentDebugProcess(@jakarta.annotation.Nullable Project project) {
     if (project != null) {
       XDebugSession session = XDebuggerManager.getInstance(project).getCurrentSession();
       if (session != null) {
@@ -499,7 +499,7 @@ public class JavaDebugProcess extends XDebugProcess {
     return description != null ? description : super.getCurrentStateMessage();
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public XValueMarkerProvider<?, ?> createValueMarkerProvider() {
     return new JavaValueMarker();

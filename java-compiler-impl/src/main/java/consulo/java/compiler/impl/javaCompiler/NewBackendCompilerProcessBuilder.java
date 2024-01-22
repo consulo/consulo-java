@@ -29,7 +29,7 @@ import consulo.virtualFileSystem.VirtualFile;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.thrift.TServiceClient;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.io.*;
 import java.util.List;
 

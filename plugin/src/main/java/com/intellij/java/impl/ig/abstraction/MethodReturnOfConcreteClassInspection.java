@@ -22,7 +22,7 @@ import com.intellij.java.language.psi.PsiTypeElement;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.JComponent;
 
@@ -33,7 +33,7 @@ public class MethodReturnOfConcreteClassInspection extends BaseInspection {
   public boolean ignoreAbstractClasses = false;
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "method.return.concrete.class.display.name");

@@ -25,8 +25,8 @@
     <option name="LAST_EDITED_TAB_NAME" />
   </component>
   <component name="NullableNotNullManager">
-    <option name="myDefaultNullable" value="javax.annotation.Nullable" />
-    <option name="myDefaultNotNull" value="javax.annotation.Nonnull" />
+    <option name="myDefaultNullable" value="jakarta.annotation.Nullable" />
+    <option name="myDefaultNotNull" value="jakarta.annotation.Nonnull" />
     <option name="myNullables">
       <value>
         <list size="0" />
@@ -35,8 +35,8 @@
     <option name="myNotNulls">
       <value>
         <list size="3">
-          <item index="0" class="java.lang.String" itemvalue="javax.annotation.Nonnull" />
-          <item index="1" class="java.lang.String" itemvalue="javax.annotation.Nonnull" />
+          <item index="0" class="java.lang.String" itemvalue="jakarta.annotation.Nonnull" />
+          <item index="1" class="java.lang.String" itemvalue="jakarta.annotation.Nonnull" />
           <item index="2" class="java.lang.String" itemvalue="edu.umd.cs.findbugs.annotations.NonNull" />
         </list>
       </value>

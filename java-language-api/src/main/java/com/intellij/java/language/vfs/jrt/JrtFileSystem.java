@@ -6,7 +6,7 @@ import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.VirtualFilePointerCapableFileSystem;
 import consulo.virtualFileSystem.archive.ArchiveFileSystem;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public interface JrtFileSystem extends ArchiveFileSystem, VirtualFilePointerCapableFileSystem {
   public static final String PROTOCOL = "jrt";

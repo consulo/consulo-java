@@ -29,8 +29,8 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.editor.testIntegration.TestFinder;
 import consulo.language.editor.testIntegration.TestFinderHelper;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -43,7 +43,7 @@ public class JavaTestFinder implements TestFinder {
     return TestIntegrationUtils.findOuterClass(element);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public Collection<PsiElement> findClassesForTest(@Nonnull PsiElement element) {
     PsiClass klass = findSourceElement(element);
     if (klass == null) {
@@ -80,7 +80,7 @@ public class JavaTestFinder implements TestFinder {
   }
 
   @Nonnull
-  public Collection<PsiElement> findTestsForClass(@Nonnull PsiElement element) {
+  public Collection<PsiElement> findTestsForClass(@jakarta.annotation.Nonnull PsiElement element) {
     PsiClass klass = findSourceElement(element);
     if (klass == null) {
       return Collections.emptySet();

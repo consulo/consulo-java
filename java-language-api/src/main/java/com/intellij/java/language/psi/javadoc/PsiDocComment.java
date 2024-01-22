@@ -15,11 +15,10 @@
  */
 package com.intellij.java.language.psi.javadoc;
 
-import javax.annotation.Nonnull;
-
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nullable;
 import consulo.language.psi.PsiDocCommentBase;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiJavaDocumentedElement;
@@ -33,7 +32,7 @@ public interface PsiDocComment extends PsiDocCommentBase
 	 * Returns the class, method or field described by the comment.
 	 */
 	@Override
-	@Nullable
+	@jakarta.annotation.Nullable
 	PsiJavaDocumentedElement getOwner();
 
 	/**
@@ -46,7 +45,7 @@ public interface PsiDocComment extends PsiDocCommentBase
 	/**
 	 * Returns the list of JavaDoc tags in the comment.
 	 */
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	PsiDocTag[] getTags();
 
 	/**
@@ -63,6 +62,6 @@ public interface PsiDocComment extends PsiDocCommentBase
 	 *
 	 * @param name The name of the tags to find (not including the leading @ character).
 	 */
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	PsiDocTag[] findTagsByName(@NonNls String name);
 }

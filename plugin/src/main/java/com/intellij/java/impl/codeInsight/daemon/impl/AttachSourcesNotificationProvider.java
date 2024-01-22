@@ -61,10 +61,11 @@ import consulo.util.dataholder.Key;
 import consulo.util.lang.Comparing;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFilePathUtil;
+import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -95,7 +96,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 	}
 
 	@RequiredReadAction
-	@Nullable
+	@jakarta.annotation.Nullable
 	@Override
 	public EditorNotificationBuilder buildNotification(@Nonnull VirtualFile file, @Nonnull FileEditor fileEditor, @Nonnull Supplier<EditorNotificationBuilder> supplier)
 	{
@@ -203,7 +204,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 		return builder;
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	private static String getClassFileInfo(VirtualFile file)
 	{
 		try
@@ -255,7 +256,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 		return entries;
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	private static VirtualFile findSourceFileInSameJar(VirtualFile classFile)
 	{
 		String name = classFile.getName();
@@ -327,7 +328,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 			return AsyncResult.resolved();
 		}
 
-		@Nullable
+		@jakarta.annotation.Nullable
 		private VirtualFile findRoot(Library library)
 		{
 			for(VirtualFile classesRoot : library.getFiles(BinariesOrderRootType.getInstance()))

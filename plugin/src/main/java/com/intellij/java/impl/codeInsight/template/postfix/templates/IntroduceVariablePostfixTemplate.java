@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.codeInsight.template.postfix.templates;
 
-import javax.annotation.Nonnull;
-
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.project.Project;
@@ -28,6 +26,7 @@ import com.intellij.java.impl.refactoring.introduceVariable.InputValidator;
 import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableHandler;
 import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableSettings;
 import com.intellij.java.impl.refactoring.ui.TypeSelectorManagerImpl;
+import jakarta.annotation.Nonnull;
 
 // todo: support for int[].var (parses as .class access!)
 public class IntroduceVariablePostfixTemplate extends ExpressionPostfixTemplateWithChooser {
@@ -36,13 +35,13 @@ public class IntroduceVariablePostfixTemplate extends ExpressionPostfixTemplateW
   }
 
   @Override
-  protected void doIt(@Nonnull Editor editor, @Nonnull PsiExpression expression) {
+  protected void doIt(@jakarta.annotation.Nonnull Editor editor, @Nonnull PsiExpression expression) {
     // for advanced stuff use ((PsiJavaCodeReferenceElement)expression).advancedResolve(true).getElement();
     IntroduceVariableHandler handler = ApplicationManager.getApplication().isUnitTestMode() ? getMockHandler() : new IntroduceVariableHandler();
     handler.invoke(expression.getProject(), editor, expression);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private static IntroduceVariableHandler getMockHandler() {
     return new IntroduceVariableHandler() {
       // mock default settings

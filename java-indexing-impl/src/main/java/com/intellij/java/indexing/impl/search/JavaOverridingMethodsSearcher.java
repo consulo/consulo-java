@@ -13,8 +13,8 @@ import consulo.application.util.function.Computable;
 import consulo.application.util.function.Processor;
 import consulo.content.scope.SearchScope;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author max
@@ -27,7 +27,7 @@ public class JavaOverridingMethodsSearcher implements OverridingMethodsSearchExe
     final SearchScope scope = p.getScope();
 
     final PsiClass parentClass = ApplicationManager.getApplication().runReadAction(new Computable<PsiClass>() {
-      @Nullable
+      @jakarta.annotation.Nullable
       @Override
       public PsiClass compute() {
         return method.getContainingClass();
@@ -51,7 +51,7 @@ public class JavaOverridingMethodsSearcher implements OverridingMethodsSearchExe
     return ClassInheritorsSearch.search(parentClass, scope, true).forEach(inheritorsProcessor);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static PsiMethod findOverridingMethod(PsiClass inheritor, PsiMethod method, @Nonnull PsiClass methodContainingClass) {
     String name = method.getName();
     if (inheritor.findMethodsByName(name, false).length > 0) {

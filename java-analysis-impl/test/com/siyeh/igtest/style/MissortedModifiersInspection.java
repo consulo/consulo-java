@@ -1,7 +1,7 @@
 package com.siyeh.igtest.style;
 
-import javax.annotation.Nullable;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.util.Hashtable;
 

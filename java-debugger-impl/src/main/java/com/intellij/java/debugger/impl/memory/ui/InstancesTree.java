@@ -30,8 +30,8 @@ import consulo.internal.com.sun.jdi.Value;
 import consulo.project.Project;
 import consulo.ui.ex.SimpleTextAttributes;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.tree.TreePath;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +42,7 @@ public class InstancesTree extends XDebuggerTree
 	private final Runnable myOnRootExpandAction;
 	private List<XValueChildrenList> myChildren;
 
-	InstancesTree(@Nonnull Project project, @Nonnull XDebuggerEditorsProvider editorsProvider, @Nullable XValueMarkers<?, ?> valueMarkers, @Nonnull Runnable onRootExpand)
+	InstancesTree(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull XDebuggerEditorsProvider editorsProvider, @Nullable XValueMarkers<?, ?> valueMarkers, @jakarta.annotation.Nonnull Runnable onRootExpand)
 	{
 		super(project, editorsProvider, null, XDebuggerActions.INSPECT_TREE_POPUP_GROUP, valueMarkers);
 		myOnRootExpandAction = onRootExpand;
@@ -66,7 +66,7 @@ public class InstancesTree extends XDebuggerTree
 		myRoot.addChildren(children, last);
 	}
 
-	void rebuildTree(@Nonnull RebuildPolicy policy, @Nonnull XDebuggerTreeState state)
+	void rebuildTree(@jakarta.annotation.Nonnull RebuildPolicy policy, @Nonnull XDebuggerTreeState state)
 	{
 		if(policy == RebuildPolicy.RELOAD_INSTANCES)
 		{
@@ -81,7 +81,7 @@ public class InstancesTree extends XDebuggerTree
 		rebuildTree(policy, XDebuggerTreeState.saveState(this));
 	}
 
-	void setInfoMessage(@SuppressWarnings("SameParameterValue") @Nonnull String text)
+	void setInfoMessage(@SuppressWarnings("SameParameterValue") @jakarta.annotation.Nonnull String text)
 	{
 		myChildren = null;
 		myRoot.clearChildren();
@@ -126,7 +126,7 @@ public class InstancesTree extends XDebuggerTree
 	private class MyRootValue extends XValue
 	{
 		@Override
-		public void computeChildren(@Nonnull XCompositeNode node)
+		public void computeChildren(@jakarta.annotation.Nonnull XCompositeNode node)
 		{
 			if(myChildren == null)
 			{
@@ -144,7 +144,7 @@ public class InstancesTree extends XDebuggerTree
 		}
 
 		@Override
-		public void computePresentation(@Nonnull XValueNode node, @Nonnull XValuePlace place)
+		public void computePresentation(@jakarta.annotation.Nonnull XValueNode node, @jakarta.annotation.Nonnull XValuePlace place)
 		{
 			node.setPresentation(null, "", "", true);
 		}

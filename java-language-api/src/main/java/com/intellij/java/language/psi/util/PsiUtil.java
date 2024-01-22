@@ -58,10 +58,9 @@ import consulo.virtualFileSystem.archive.ArchiveVfsUtil;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -82,12 +81,12 @@ public final class PsiUtil extends PsiUtilCore {
   private PsiUtil() {
   }
 
-  public static boolean isOnAssignmentLeftHand(@Nonnull PsiExpression expr) {
+  public static boolean isOnAssignmentLeftHand(@jakarta.annotation.Nonnull PsiExpression expr) {
     PsiElement parent = PsiTreeUtil.skipParentsOfType(expr, PsiParenthesizedExpression.class);
     return parent instanceof PsiAssignmentExpression && PsiTreeUtil.isAncestor(((PsiAssignmentExpression) parent).getLExpression(), expr, false);
   }
 
-  public static boolean isAccessibleFromPackage(@Nonnull PsiModifierListOwner element, @Nonnull PsiJavaPackage aPackage) {
+  public static boolean isAccessibleFromPackage(@jakarta.annotation.Nonnull PsiModifierListOwner element, @Nonnull PsiJavaPackage aPackage) {
     if (element.hasModifierProperty(PsiModifier.PUBLIC)) {
       return true;
     }
@@ -110,17 +109,17 @@ public final class PsiUtil extends PsiUtilCore {
     }
   }
 
-  public static boolean isAccessedForReading(@Nonnull PsiExpression expr) {
+  public static boolean isAccessedForReading(@jakarta.annotation.Nonnull PsiExpression expr) {
     PsiElement parent = PsiTreeUtil.skipParentsOfType(expr, PsiParenthesizedExpression.class);
     return !(parent instanceof PsiAssignmentExpression) || !PsiTreeUtil.isAncestor(((PsiAssignmentExpression) parent).getLExpression(), expr, false) || ((PsiAssignmentExpression) parent)
         .getOperationTokenType() != JavaTokenType.EQ;
   }
 
-  public static boolean isAccessible(@Nonnull PsiMember member, @Nonnull PsiElement place, @Nullable PsiClass accessObjectClass) {
+  public static boolean isAccessible(@jakarta.annotation.Nonnull PsiMember member, @Nonnull PsiElement place, @Nullable PsiClass accessObjectClass) {
     return isAccessible(place.getProject(), member, place, accessObjectClass);
   }
 
-  public static boolean isAccessible(@Nonnull Project project, @Nonnull PsiMember member, @Nonnull PsiElement place, @Nullable PsiClass accessObjectClass) {
+  public static boolean isAccessible(@Nonnull Project project, @jakarta.annotation.Nonnull PsiMember member, @Nonnull PsiElement place, @jakarta.annotation.Nullable PsiClass accessObjectClass) {
     return JavaPsiFacade.getInstance(project).getResolveHelper().isAccessible(member, place, accessObjectClass);
   }
 
@@ -148,7 +147,7 @@ public final class PsiUtil extends PsiUtilCore {
     return JavaResolveResult.EMPTY;
   }
 
-  public static boolean isConstantExpression(@Nullable PsiExpression expression) {
+  public static boolean isConstantExpression(@jakarta.annotation.Nullable PsiExpression expression) {
     if (expression == null) {
       return false;
     }
@@ -158,16 +157,16 @@ public final class PsiUtil extends PsiUtilCore {
   }
 
   // todo: move to PsiThrowsList?
-  public static void addException(@Nonnull PsiMethod method, @Nonnull @NonNls String exceptionFQName) throws IncorrectOperationException {
+  public static void addException(@jakarta.annotation.Nonnull PsiMethod method, @Nonnull @NonNls String exceptionFQName) throws IncorrectOperationException {
     PsiClass exceptionClass = JavaPsiFacade.getInstance(method.getProject()).findClass(exceptionFQName, method.getResolveScope());
     addException(method, exceptionClass, exceptionFQName);
   }
 
-  public static void addException(@Nonnull PsiMethod method, @Nonnull PsiClass exceptionClass) throws IncorrectOperationException {
+  public static void addException(@Nonnull PsiMethod method, @jakarta.annotation.Nonnull PsiClass exceptionClass) throws IncorrectOperationException {
     addException(method, exceptionClass, exceptionClass.getQualifiedName());
   }
 
-  private static void addException(@Nonnull PsiMethod method, @Nullable PsiClass exceptionClass, @Nullable String exceptionName) throws IncorrectOperationException {
+  private static void addException(@Nonnull PsiMethod method, @jakarta.annotation.Nullable PsiClass exceptionClass, @jakarta.annotation.Nullable String exceptionName) throws IncorrectOperationException {
     assert exceptionClass != null || exceptionName != null : "One of exceptionName, exceptionClass must be not null";
     PsiReferenceList throwsList = method.getThrowsList();
     PsiJavaCodeReferenceElement[] refs = throwsList.getReferenceElements();
@@ -215,7 +214,7 @@ public final class PsiUtil extends PsiUtilCore {
   }
 
   // todo: move to PsiThrowsList?
-  public static void removeException(@Nonnull PsiMethod method, @NonNls String exceptionClass) throws IncorrectOperationException {
+  public static void removeException(@jakarta.annotation.Nonnull PsiMethod method, @NonNls String exceptionClass) throws IncorrectOperationException {
     PsiJavaCodeReferenceElement[] refs = method.getThrowsList().getReferenceElements();
     for (PsiJavaCodeReferenceElement ref : refs) {
       if (ref.getCanonicalText().equals(exceptionClass)) {
@@ -224,7 +223,7 @@ public final class PsiUtil extends PsiUtilCore {
     }
   }
 
-  public static boolean isVariableNameUnique(@Nonnull String name, @Nonnull PsiElement place) {
+  public static boolean isVariableNameUnique(@Nonnull String name, @jakarta.annotation.Nonnull PsiElement place) {
     PsiResolveHelper helper = JavaPsiFacade.getInstance(place.getProject()).getResolveHelper();
     return helper.resolveAccessibleReferencedVariable(name, place) == null;
   }
@@ -274,7 +273,7 @@ public final class PsiUtil extends PsiUtilCore {
     return psiClass instanceof PsiAnonymousClass || isLocalClass(psiClass);
   }
 
-  public static boolean isLocalClass(@Nonnull PsiClass psiClass) {
+  public static boolean isLocalClass(@jakarta.annotation.Nonnull PsiClass psiClass) {
     PsiElement parent = psiClass.getParent();
     return parent instanceof PsiDeclarationStatement && parent.getParent() instanceof PsiCodeBlock;
   }
@@ -287,8 +286,8 @@ public final class PsiUtil extends PsiUtilCore {
   /**
    * @return topmost code block where variable makes sense
    */
-  @Nullable
-  public static PsiElement getVariableCodeBlock(@Nonnull PsiVariable variable, @Nullable PsiElement context) {
+  @jakarta.annotation.Nullable
+  public static PsiElement getVariableCodeBlock(@jakarta.annotation.Nonnull PsiVariable variable, @jakarta.annotation.Nullable PsiElement context) {
     PsiElement codeBlock = null;
     if (variable instanceof PsiParameter) {
       PsiElement declarationScope = ((PsiParameter) variable).getDeclarationScope();
@@ -362,7 +361,7 @@ public final class PsiUtil extends PsiUtilCore {
     return Collections.emptyList();
   }
 
-  private static void collectSwitchResultExpressions(@Nonnull List<? super PsiExpression> result, @Nonnull PsiElement container) {
+  private static void collectSwitchResultExpressions(@jakarta.annotation.Nonnull List<? super PsiExpression> result, @jakarta.annotation.Nonnull PsiElement container) {
     List<PsiYieldStatement> yields = new ArrayList<>();
     addStatements(yields, container, PsiYieldStatement.class, element -> element instanceof PsiSwitchExpression);
     for (PsiYieldStatement statement : yields) {
@@ -380,7 +379,7 @@ public final class PsiUtil extends PsiUtilCore {
   }
 
   @AccessLevel
-  public static int getAccessLevel(@Nonnull PsiModifierList modifierList) {
+  public static int getAccessLevel(@jakarta.annotation.Nonnull PsiModifierList modifierList) {
     if (modifierList.hasModifierProperty(PsiModifier.PRIVATE)) {
       return ACCESS_LEVEL_PRIVATE;
     }
@@ -410,61 +409,46 @@ public final class PsiUtil extends PsiUtilCore {
   /**
    * @return true if element specified is statement or expression statement. see JLS 14.5-14.8
    */
-  public static boolean isStatement(@Nonnull PsiElement element) {
+  public static boolean isStatement(@jakarta.annotation.Nonnull PsiElement element) {
     PsiElement parent = element.getParent();
 
     if (element instanceof PsiExpressionListStatement) {
       // statement list allowed in for() init or update only
-      if (!(parent instanceof PsiForStatement)) {
-        return false;
-      }
-      final PsiForStatement forStatement = (PsiForStatement) parent;
-      if (!(element == forStatement.getInitialization() || element == forStatement.getUpdate())) {
-        return false;
-      }
-      final PsiExpressionList expressionList = ((PsiExpressionListStatement) element).getExpressionList();
-      final PsiExpression[] expressions = expressionList.getExpressions();
-      for (PsiExpression expression : expressions) {
-        if (!isStatement(expression)) {
-          return false;
-        }
+      if (!(parent instanceof PsiForStatement)) return false;
+      PsiForStatement forStatement = (PsiForStatement)parent;
+      if (!(element == forStatement.getInitialization() || element == forStatement.getUpdate())) return false;
+      PsiExpressionList expressionList = ((PsiExpressionListStatement)element).getExpressionList();
+      for (PsiExpression expression : expressionList.getExpressions()) {
+        if (!isStatement(expression)) return false;
       }
       return true;
-    } else if (element instanceof PsiExpressionStatement) {
-      return isStatement(((PsiExpressionStatement) element).getExpression());
     }
+
+    if (element instanceof PsiExpressionStatement) {
+      return parent instanceof PsiSwitchLabeledRuleStatement && ((PsiSwitchLabeledRuleStatement)parent).getEnclosingSwitchBlock() instanceof PsiSwitchExpression ||
+        isStatement(((PsiExpressionStatement)element).getExpression());
+    }
+
     if (element instanceof PsiDeclarationStatement) {
-      if (parent instanceof PsiCodeBlock) {
-        return true;
-      }
-      if (parent instanceof PsiCodeFragment) {
-        return true;
-      }
-
-      if (!(parent instanceof PsiForStatement) || ((PsiForStatement) parent).getBody() == element) {
+      if (parent instanceof PsiCodeBlock) return true;
+      if (parent instanceof PsiCodeFragment) return true;
+      if (!(parent instanceof PsiForStatement) || ((PsiForStatement)parent).getBody() == element) {
         return false;
       }
     }
 
-    if (element instanceof PsiStatement) {
-      return true;
-    }
-    if (element instanceof PsiAssignmentExpression) {
-      return true;
-    }
-    if (isIncrementDecrementOperation(element)) {
-      return true;
-    }
-    if (element instanceof PsiMethodCallExpression) {
-      return true;
-    }
+    if (element instanceof PsiStatement) return true;
+    if (element instanceof PsiAssignmentExpression) return true;
+    if (isIncrementDecrementOperation(element)) return true;
+    if (element instanceof PsiMethodCallExpression) return true;
     if (element instanceof PsiNewExpression) {
-      return !(((PsiNewExpression) element).getType() instanceof PsiArrayType);
+      return !(((PsiNewExpression)element).getType() instanceof PsiArrayType);
     }
+
     return element instanceof PsiCodeBlock;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static PsiElement getEnclosingStatement(PsiElement element) {
     while (element != null) {
       if (element.getParent() instanceof PsiCodeBlock) {
@@ -476,8 +460,8 @@ public final class PsiUtil extends PsiUtilCore {
   }
 
 
-  @Nullable
-  public static PsiElement getElementInclusiveRange(@Nonnull PsiElement scope, @Nonnull TextRange range) {
+  @jakarta.annotation.Nullable
+  public static PsiElement getElementInclusiveRange(@jakarta.annotation.Nonnull PsiElement scope, @jakarta.annotation.Nonnull TextRange range) {
     PsiElement psiElement = scope.findElementAt(range.getStartOffset());
     while (psiElement != null && !psiElement.getTextRange().contains(range)) {
       if (psiElement == scope) {
@@ -488,8 +472,8 @@ public final class PsiUtil extends PsiUtilCore {
     return psiElement;
   }
 
-  @Nullable
-  public static PsiClass resolveClassInType(@Nullable PsiType type) {
+  @jakarta.annotation.Nullable
+  public static PsiClass resolveClassInType(@jakarta.annotation.Nullable PsiType type) {
     if (type instanceof PsiClassType) {
       return ((PsiClassType) type).resolve();
     }
@@ -505,12 +489,12 @@ public final class PsiUtil extends PsiUtilCore {
     return null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static PsiClass resolveClassInClassTypeOnly(@Nullable PsiType type) {
     return type instanceof PsiClassType ? ((PsiClassType) type).resolve() : null;
   }
 
-  public static PsiClassType.ClassResolveResult resolveGenericsClassInType(@Nullable PsiType type) {
+  public static PsiClassType.ClassResolveResult resolveGenericsClassInType(@jakarta.annotation.Nullable PsiType type) {
     if (type instanceof PsiClassType) {
       final PsiClassType classType = (PsiClassType) type;
       return classType.resolveGenerics();
@@ -527,8 +511,8 @@ public final class PsiUtil extends PsiUtilCore {
     return PsiClassType.ClassResolveResult.EMPTY;
   }
 
-  @Nonnull
-  public static PsiType convertAnonymousToBaseType(@Nonnull PsiType type) {
+  @jakarta.annotation.Nonnull
+  public static PsiType convertAnonymousToBaseType(@jakarta.annotation.Nonnull PsiType type) {
     PsiClass psiClass = resolveClassInType(type);
     if (psiClass instanceof PsiAnonymousClass) {
       int dims = type.getArrayDimensions();
@@ -541,23 +525,23 @@ public final class PsiUtil extends PsiUtilCore {
     return type;
   }
 
-  public static boolean isApplicable(@Nonnull PsiMethod method, @Nonnull PsiSubstitutor substitutorForMethod, @Nonnull PsiExpressionList argList) {
+  public static boolean isApplicable(@Nonnull PsiMethod method, @Nonnull PsiSubstitutor substitutorForMethod, @jakarta.annotation.Nonnull PsiExpressionList argList) {
     return getApplicabilityLevel(method, substitutorForMethod, argList) != ApplicabilityLevel.NOT_APPLICABLE;
   }
 
-  public static boolean isApplicable(@Nonnull PsiMethod method, @Nonnull PsiSubstitutor substitutorForMethod, @Nonnull PsiExpression[] argList) {
+  public static boolean isApplicable(@jakarta.annotation.Nonnull PsiMethod method, @jakarta.annotation.Nonnull PsiSubstitutor substitutorForMethod, @jakarta.annotation.Nonnull PsiExpression[] argList) {
     final PsiType[] types = ContainerUtil.map2Array(argList, PsiType.class, PsiExpression.EXPRESSION_TO_TYPE);
     return getApplicabilityLevel(method, substitutorForMethod, types, getLanguageLevel(method)) != ApplicabilityLevel.NOT_APPLICABLE;
   }
 
   @MethodCandidateInfo.ApplicabilityLevelConstant
-  public static int getApplicabilityLevel(@Nonnull PsiMethod method, @Nonnull PsiSubstitutor substitutorForMethod, @Nonnull PsiExpressionList argList) {
+  public static int getApplicabilityLevel(@Nonnull PsiMethod method, @jakarta.annotation.Nonnull PsiSubstitutor substitutorForMethod, @jakarta.annotation.Nonnull PsiExpressionList argList) {
     return getApplicabilityLevel(method, substitutorForMethod, argList.getExpressionTypes(), getLanguageLevel(argList));
   }
 
   @MethodCandidateInfo.ApplicabilityLevelConstant
-  public static int getApplicabilityLevel(@Nonnull final PsiMethod method,
-                                          @Nonnull final PsiSubstitutor substitutorForMethod,
+  public static int getApplicabilityLevel(@jakarta.annotation.Nonnull final PsiMethod method,
+                                          @jakarta.annotation.Nonnull final PsiSubstitutor substitutorForMethod,
                                           @Nonnull final PsiType[] args,
                                           @Nonnull final LanguageLevel languageLevel) {
     return getApplicabilityLevel(method, substitutorForMethod, args, languageLevel, true, true);
@@ -576,19 +560,19 @@ public final class PsiUtil extends PsiUtilCore {
   }
 
   @MethodCandidateInfo.ApplicabilityLevelConstant
-  public static int getApplicabilityLevel(@Nonnull final PsiMethod method,
+  public static int getApplicabilityLevel(@jakarta.annotation.Nonnull final PsiMethod method,
                                           @Nonnull final PsiSubstitutor substitutorForMethod,
                                           @Nonnull final PsiType[] args,
-                                          @Nonnull final LanguageLevel languageLevel,
+                                          @jakarta.annotation.Nonnull final LanguageLevel languageLevel,
                                           final boolean allowUncheckedConversion,
                                           final boolean checkVarargs) {
     return getApplicabilityLevel(method, substitutorForMethod, args, languageLevel, allowUncheckedConversion, checkVarargs, ApplicabilityChecker.ASSIGNABILITY_CHECKER);
   }
 
   @MethodCandidateInfo.ApplicabilityLevelConstant
-  public static int getApplicabilityLevel(@Nonnull final PsiMethod method,
+  public static int getApplicabilityLevel(@jakarta.annotation.Nonnull final PsiMethod method,
                                           @Nonnull final PsiSubstitutor substitutorForMethod,
-                                          @Nonnull final PsiType[] args,
+                                          @jakarta.annotation.Nonnull final PsiType[] args,
                                           @Nonnull final LanguageLevel languageLevel,
                                           final boolean allowUncheckedConversion,
                                           final boolean checkVarargs,
@@ -653,9 +637,9 @@ public final class PsiUtil extends PsiUtilCore {
   }
 
   private static boolean areFirstArgumentsApplicable(@Nonnull PsiType[] args,
-                                                     @Nonnull final PsiParameter[] parms,
+                                                     @jakarta.annotation.Nonnull final PsiParameter[] parms,
                                                      @Nonnull LanguageLevel languageLevel,
-                                                     @Nonnull final PsiSubstitutor substitutorForMethod,
+                                                     @jakarta.annotation.Nonnull final PsiSubstitutor substitutorForMethod,
                                                      boolean isRaw,
                                                      boolean allowUncheckedConversion,
                                                      ApplicabilityChecker function) {
@@ -678,7 +662,7 @@ public final class PsiUtil extends PsiUtilCore {
     return true;
   }
 
-  private static PsiType getParameterType(@Nonnull final PsiParameter parameter, @Nonnull LanguageLevel languageLevel, @Nonnull final PsiSubstitutor substitutor) {
+  private static PsiType getParameterType(@Nonnull final PsiParameter parameter, @jakarta.annotation.Nonnull LanguageLevel languageLevel, @jakarta.annotation.Nonnull final PsiSubstitutor substitutor) {
     PsiType parmType = parameter.getType();
     if (parmType instanceof PsiClassType) {
       parmType = ((PsiClassType) parmType).setLanguageLevel(languageLevel);
@@ -691,7 +675,7 @@ public final class PsiUtil extends PsiUtilCore {
    * <code>class Foo&lt;T extends Number&gt;{}</code> types Foo&lt;?&gt; and Foo&lt;? extends Number&gt;
    * would be equivalent
    */
-  public static boolean equalOnEquivalentClasses(PsiClassType thisClassType, @Nonnull PsiClass aClass, PsiClassType otherClassType, @Nonnull PsiClass bClass) {
+  public static boolean equalOnEquivalentClasses(PsiClassType thisClassType, @jakarta.annotation.Nonnull PsiClass aClass, PsiClassType otherClassType, @jakarta.annotation.Nonnull PsiClass bClass) {
     final PsiClassType capture1 = (PsiClassType) captureToplevelWildcards(thisClassType, aClass);
     final PsiClassType capture2 = (PsiClassType) captureToplevelWildcards(otherClassType, bClass);
 
@@ -702,7 +686,7 @@ public final class PsiUtil extends PsiUtilCore {
   }
 
   @Deprecated
-  public static boolean equalOnClass(@Nonnull PsiSubstitutor s1, @Nonnull PsiSubstitutor s2, @Nonnull PsiClass aClass) {
+  public static boolean equalOnClass(@jakarta.annotation.Nonnull PsiSubstitutor s1, @jakarta.annotation.Nonnull PsiSubstitutor s2, @Nonnull PsiClass aClass) {
     return equalOnEquivalentClasses(s1, aClass, s2, aClass);
   }
 
@@ -711,7 +695,7 @@ public final class PsiUtil extends PsiUtilCore {
    * Checks if substitutors maps are identical. If substitutor map values contain wildcard type, type parameter bounds are IGNORED.
    * Please use {@link PsiUtil#equalOnEquivalentClasses(PsiClassType, PsiClass, PsiClassType, PsiClass)} instead.
    */
-  public static boolean equalOnEquivalentClasses(@Nonnull PsiSubstitutor s1, @Nonnull PsiClass aClass, @Nonnull PsiSubstitutor s2, @Nonnull PsiClass bClass) {
+  public static boolean equalOnEquivalentClasses(@Nonnull PsiSubstitutor s1, @jakarta.annotation.Nonnull PsiClass aClass, @Nonnull PsiSubstitutor s2, @jakarta.annotation.Nonnull PsiClass bClass) {
     // assume generic class equals to non-generic
     if (aClass.hasTypeParameters() != bClass.hasTypeParameters()) {
       return true;
@@ -756,7 +740,7 @@ public final class PsiUtil extends PsiUtilCore {
         && isConstantExpression(field.getInitializer());
   }
 
-  public static boolean allMethodsHaveSameSignature(@Nonnull PsiMethod[] methods) {
+  public static boolean allMethodsHaveSameSignature(@jakarta.annotation.Nonnull PsiMethod[] methods) {
     if (methods.length == 0) {
       return true;
     }
@@ -770,7 +754,7 @@ public final class PsiUtil extends PsiUtilCore {
     return true;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static PsiExpression deparenthesizeExpression(PsiExpression expression) {
     while (true) {
       if (expression instanceof PsiParenthesizedExpression) {
@@ -788,12 +772,12 @@ public final class PsiUtil extends PsiUtilCore {
   /**
    * Checks whether given class is inner (as opposed to nested)
    */
-  public static boolean isInnerClass(@Nonnull PsiClass aClass) {
+  public static boolean isInnerClass(@jakarta.annotation.Nonnull PsiClass aClass) {
     return !aClass.hasModifierProperty(PsiModifier.STATIC) && aClass.getContainingClass() != null;
   }
 
-  @Nullable
-  public static PsiElement findModifierInList(@Nonnull final PsiModifierList modifierList, @NonNls String modifier) {
+  @jakarta.annotation.Nullable
+  public static PsiElement findModifierInList(@jakarta.annotation.Nonnull final PsiModifierList modifierList, @NonNls String modifier) {
     final PsiElement[] children = modifierList.getChildren();
     for (PsiElement child : children) {
       if (child.getText().equals(modifier)) {
@@ -803,8 +787,8 @@ public final class PsiUtil extends PsiUtilCore {
     return null;
   }
 
-  @Nullable
-  public static PsiClass getTopLevelClass(@Nonnull PsiElement element) {
+  @jakarta.annotation.Nullable
+  public static PsiClass getTopLevelClass(@jakarta.annotation.Nonnull PsiElement element) {
     final PsiFile file = element.getContainingFile();
     if (file instanceof PsiClassOwner) {
       final PsiClass[] classes = ((PsiClassOwner) file).getClasses();
@@ -822,8 +806,8 @@ public final class PsiUtil extends PsiUtilCore {
    * @param aClass level to stop traversal
    * @return element with static modifier enclosing place and enclosed by aClass (if not null)
    */
-  @Nullable
-  public static PsiModifierListOwner getEnclosingStaticElement(@Nonnull PsiElement place, @Nullable PsiClass aClass) {
+  @jakarta.annotation.Nullable
+  public static PsiModifierListOwner getEnclosingStaticElement(@jakarta.annotation.Nonnull PsiElement place, @Nullable PsiClass aClass) {
     LOG.assertTrue(aClass == null || !place.isPhysical() || PsiTreeUtil.isContextAncestor(aClass, place, false));
     PsiElement parent = place;
     while (parent != aClass) {
@@ -896,7 +880,7 @@ public final class PsiUtil extends PsiUtilCore {
     return type;
   }
 
-  public static PsiType captureTypeParameterBounds(@Nonnull PsiTypeParameter typeParameter, PsiType substituted, PsiElement context, PsiSubstitutor captureSubstitutor) {
+  public static PsiType captureTypeParameterBounds(@jakarta.annotation.Nonnull PsiTypeParameter typeParameter, PsiType substituted, PsiElement context, PsiSubstitutor captureSubstitutor) {
     PsiType oldSubstituted = substituted;
     PsiElement captureContext = context;
     if (substituted instanceof PsiCapturedWildcardType) {
@@ -957,13 +941,13 @@ public final class PsiUtil extends PsiUtilCore {
         (typeElement);
   }
 
-  public static void checkIsIdentifier(@Nonnull PsiManager manager, String text) throws IncorrectOperationException {
+  public static void checkIsIdentifier(@jakarta.annotation.Nonnull PsiManager manager, String text) throws IncorrectOperationException {
     if (!PsiNameHelper.getInstance(manager.getProject()).isIdentifier(text)) {
       throw new IncorrectOperationException(PsiBundle.message("0.is.not.an.identifier", text));
     }
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static VirtualFile getJarFile(@Nonnull PsiElement candidate) {
     VirtualFile file = candidate.getContainingFile().getVirtualFile();
     if (file != null && file.getFileSystem() instanceof ArchiveFileSystem) {
@@ -1005,7 +989,7 @@ public final class PsiUtil extends PsiUtilCore {
    * inner-to-outer, right-to-left order.
    */
   @Nonnull
-  public static Iterator<PsiTypeParameter> typeParametersIterator(@Nonnull PsiTypeParameterListOwner owner) {
+  public static Iterator<PsiTypeParameter> typeParametersIterator(@jakarta.annotation.Nonnull PsiTypeParameterListOwner owner) {
     return typeParametersIterable(owner).iterator();
   }
 
@@ -1037,13 +1021,13 @@ public final class PsiUtil extends PsiUtilCore {
     return result;
   }
 
-  public static boolean canBeOverriden(@Nonnull PsiMethod method) {
+  public static boolean canBeOverriden(@jakarta.annotation.Nonnull PsiMethod method) {
     PsiClass parentClass = method.getContainingClass();
     return parentClass != null && !method.isConstructor() && !method.hasModifierProperty(PsiModifier.STATIC) && !method.hasModifierProperty(PsiModifier.FINAL) && !method.hasModifierProperty
         (PsiModifier.PRIVATE) && !(parentClass instanceof PsiAnonymousClass) && !parentClass.hasModifierProperty(PsiModifier.FINAL);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static PsiElement[] mapElements(@Nonnull ResolveResult[] candidates) {
     PsiElement[] result = new PsiElement[candidates.length];
     for (int i = 0; i < candidates.length; i++) {
@@ -1052,7 +1036,7 @@ public final class PsiUtil extends PsiUtilCore {
     return result;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static PsiMember findEnclosingConstructorOrInitializer(PsiElement expression) {
     PsiMember parent = PsiTreeUtil.getParentOfType(expression, PsiClassInitializer.class, PsiEnumConstantInitializer.class, PsiMethod.class, PsiField.class);
     if (parent instanceof PsiMethod && !((PsiMethod) parent).isConstructor()) {
@@ -1064,7 +1048,7 @@ public final class PsiUtil extends PsiUtilCore {
     return parent;
   }
 
-  public static boolean checkName(@Nonnull PsiElement element, @Nonnull String name, final PsiElement context) {
+  public static boolean checkName(@Nonnull PsiElement element, @jakarta.annotation.Nonnull String name, final PsiElement context) {
     if (element instanceof PsiMetaOwner) {
       final PsiMetaData data = ((PsiMetaOwner) element).getMetaData();
       if (data != null) {
@@ -1074,7 +1058,7 @@ public final class PsiUtil extends PsiUtilCore {
     return element instanceof PsiNamedElement && name.equals(((PsiNamedElement) element).getName());
   }
 
-  public static boolean isRawSubstitutor(@Nonnull PsiTypeParameterListOwner owner, @Nonnull PsiSubstitutor substitutor) {
+  public static boolean isRawSubstitutor(@jakarta.annotation.Nonnull PsiTypeParameterListOwner owner, @jakarta.annotation.Nonnull PsiSubstitutor substitutor) {
     if (substitutor == PsiSubstitutor.EMPTY) return false;
 
     for (PsiTypeParameter parameter : typeParametersIterable(owner)) {
@@ -1085,19 +1069,19 @@ public final class PsiUtil extends PsiUtilCore {
 
   public static final Key<LanguageLevel> FILE_LANGUAGE_LEVEL_KEY = Key.create("FORCE_LANGUAGE_LEVEL");
 
-  public static boolean isLanguageLevel5OrHigher(@Nonnull final PsiElement element) {
+  public static boolean isLanguageLevel5OrHigher(@jakarta.annotation.Nonnull final PsiElement element) {
     return getLanguageLevel(element).isAtLeast(LanguageLevel.JDK_1_5);
   }
 
-  public static boolean isLanguageLevel6OrHigher(@Nonnull final PsiElement element) {
+  public static boolean isLanguageLevel6OrHigher(@jakarta.annotation.Nonnull final PsiElement element) {
     return getLanguageLevel(element).isAtLeast(LanguageLevel.JDK_1_6);
   }
 
-  public static boolean isLanguageLevel7OrHigher(@Nonnull final PsiElement element) {
+  public static boolean isLanguageLevel7OrHigher(@jakarta.annotation.Nonnull final PsiElement element) {
     return getLanguageLevel(element).isAtLeast(LanguageLevel.JDK_1_7);
   }
 
-  public static boolean isLanguageLevel8OrHigher(@Nonnull final PsiElement element) {
+  public static boolean isLanguageLevel8OrHigher(@jakarta.annotation.Nonnull final PsiElement element) {
     return getLanguageLevel(element).isAtLeast(LanguageLevel.JDK_1_8);
   }
 
@@ -1105,7 +1089,7 @@ public final class PsiUtil extends PsiUtilCore {
     return getLanguageLevel(element).isAtLeast(LanguageLevel.JDK_1_9);
   }
 
-  public static boolean isLanguageLevel10OrHigher(@Nonnull final PsiElement element) {
+  public static boolean isLanguageLevel10OrHigher(@jakarta.annotation.Nonnull final PsiElement element) {
     return getLanguageLevel(element).isAtLeast(LanguageLevel.JDK_10);
   }
 
@@ -1113,25 +1097,25 @@ public final class PsiUtil extends PsiUtilCore {
     return getLanguageLevel(element).isAtLeast(LanguageLevel.JDK_11);
   }
 
-  public static boolean isLanguageLevel14OrHigher(@Nonnull PsiElement element) {
+  public static boolean isLanguageLevel14OrHigher(@jakarta.annotation.Nonnull PsiElement element) {
     return getLanguageLevel(element).isAtLeast(LanguageLevel.JDK_14);
   }
 
-  public static boolean isLanguageLevel16OrHigher(@Nonnull PsiElement element) {
+  public static boolean isLanguageLevel16OrHigher(@jakarta.annotation.Nonnull PsiElement element) {
     return getLanguageLevel(element).isAtLeast(LanguageLevel.JDK_16);
   }
 
-  public static boolean isLanguageLevel17OrHigher(@Nonnull PsiElement element) {
+  public static boolean isLanguageLevel17OrHigher(@jakarta.annotation.Nonnull PsiElement element) {
     return getLanguageLevel(element).isAtLeast(LanguageLevel.JDK_17);
   }
 
-  public static boolean isLanguageLevel18OrHigher(@NotNull PsiElement element) {
+  public static boolean isLanguageLevel18OrHigher(@jakarta.annotation.Nonnull PsiElement element) {
     return getLanguageLevel(element).isAtLeast(LanguageLevel.JDK_18);
   }
 
   @Nonnull
   @RequiredReadAction
-  public static LanguageLevel getLanguageLevel(@Nonnull PsiElement element) {
+  public static LanguageLevel getLanguageLevel(@jakarta.annotation.Nonnull PsiElement element) {
     if (element instanceof PsiDirectory) {
       return JavaDirectoryService.getInstance().getLanguageLevel((PsiDirectory) element);
     }
@@ -1161,7 +1145,7 @@ public final class PsiUtil extends PsiUtilCore {
     return hasDefaultConstructor(clazz, false);
   }
 
-  public static boolean hasDefaultConstructor(@Nonnull PsiClass clazz, boolean allowProtected) {
+  public static boolean hasDefaultConstructor(@jakarta.annotation.Nonnull PsiClass clazz, boolean allowProtected) {
     return hasDefaultConstructor(clazz, allowProtected, true);
   }
 
@@ -1195,13 +1179,13 @@ public final class PsiUtil extends PsiUtilCore {
   }
 
   @Nullable
-  public static PsiType extractIterableTypeParameter(@Nullable PsiType psiType, final boolean eraseTypeParameter) {
+  public static PsiType extractIterableTypeParameter(@jakarta.annotation.Nullable PsiType psiType, final boolean eraseTypeParameter) {
     final PsiType type = substituteTypeParameter(psiType, JavaClassNames.JAVA_LANG_ITERABLE, 0, eraseTypeParameter);
     return type != null ? type : substituteTypeParameter(psiType, JavaClassNames.JAVA_UTIL_COLLECTION, 0, eraseTypeParameter);
   }
 
   @Nullable
-  public static PsiType substituteTypeParameter(@Nullable final PsiType psiType, @Nonnull final String superClass, final int typeParamIndex, final boolean eraseTypeParameter) {
+  public static PsiType substituteTypeParameter(@jakarta.annotation.Nullable final PsiType psiType, @Nonnull final String superClass, final int typeParamIndex, final boolean eraseTypeParameter) {
     if (psiType == null) {
       return null;
     }
@@ -1246,13 +1230,13 @@ public final class PsiUtil extends PsiUtilCore {
     }
   };
 
-  public static void setModifierProperty(@Nonnull PsiModifierListOwner owner, @Nonnull @PsiModifier.ModifierConstant String property, boolean value) {
+  public static void setModifierProperty(@jakarta.annotation.Nonnull PsiModifierListOwner owner, @jakarta.annotation.Nonnull @PsiModifier.ModifierConstant String property, boolean value) {
     final PsiModifierList modifierList = owner.getModifierList();
     assert modifierList != null : owner;
     modifierList.setModifierProperty(property, value);
   }
 
-  public static boolean isTryBlock(@Nullable final PsiElement element) {
+  public static boolean isTryBlock(@jakarta.annotation.Nullable final PsiElement element) {
     if (element == null) {
       return false;
     }
@@ -1260,7 +1244,7 @@ public final class PsiUtil extends PsiUtilCore {
     return parent instanceof PsiTryStatement && element == ((PsiTryStatement) parent).getTryBlock();
   }
 
-  public static boolean isElseBlock(@Nullable final PsiElement element) {
+  public static boolean isElseBlock(@jakarta.annotation.Nullable final PsiElement element) {
     if (element == null) {
       return false;
     }
@@ -1272,11 +1256,11 @@ public final class PsiUtil extends PsiUtilCore {
     return element instanceof PsiJavaToken && ((PsiJavaToken) element).getTokenType() == type;
   }
 
-  public static boolean isJavaToken(@Nullable PsiElement element, @Nonnull TokenSet types) {
+  public static boolean isJavaToken(@jakarta.annotation.Nullable PsiElement element, @Nonnull TokenSet types) {
     return element instanceof PsiJavaToken && types.contains(((PsiJavaToken) element).getTokenType());
   }
 
-  public static boolean isCatchParameter(@Nullable final PsiElement element) {
+  public static boolean isCatchParameter(@jakarta.annotation.Nullable final PsiElement element) {
     return element instanceof PsiParameter && element.getParent() instanceof PsiCatchSection;
   }
 
@@ -1284,8 +1268,8 @@ public final class PsiUtil extends PsiUtilCore {
     return name != null && IGNORED_NAMES.contains(name);
   }
 
-  @Nullable
-  public static PsiMethod[] getResourceCloserMethodsForType(@Nonnull final PsiClassType resourceType) {
+  @jakarta.annotation.Nullable
+  public static PsiMethod[] getResourceCloserMethodsForType(@jakarta.annotation.Nonnull final PsiClassType resourceType) {
     final PsiClass resourceClass = resourceType.resolve();
     if (resourceClass == null) {
       return null;
@@ -1309,7 +1293,7 @@ public final class PsiUtil extends PsiUtilCore {
     return null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static PsiMethod getResourceCloserMethod(@Nonnull PsiResourceListElement resource) {
     PsiType resourceType = resource.getType();
     return resourceType instanceof PsiClassType ? getResourceCloserMethodForType((PsiClassType) resourceType) : null;
@@ -1319,12 +1303,12 @@ public final class PsiUtil extends PsiUtilCore {
    * @deprecated use {@link #getResourceCloserMethod(PsiResourceListElement)} (to be removed in IDEA 17)
    */
   @SuppressWarnings("unused")
-  public static PsiMethod getResourceCloserMethod(@Nonnull PsiResourceVariable resource) {
+  public static PsiMethod getResourceCloserMethod(@jakarta.annotation.Nonnull PsiResourceVariable resource) {
     return getResourceCloserMethod((PsiResourceListElement) resource);
   }
 
-  @Nullable
-  public static PsiMethod getResourceCloserMethodForType(@Nonnull final PsiClassType resourceType) {
+  @jakarta.annotation.Nullable
+  public static PsiMethod getResourceCloserMethodForType(@jakarta.annotation.Nonnull final PsiClassType resourceType) {
     final PsiClass resourceClass = resourceType.resolve();
     if (resourceClass == null) {
       return null;
@@ -1364,7 +1348,7 @@ public final class PsiUtil extends PsiUtilCore {
     ensureValidType(type, null);
   }
 
-  public static void ensureValidType(@Nonnull PsiType type, @Nullable String customMessage) {
+  public static void ensureValidType(@jakarta.annotation.Nonnull PsiType type, @jakarta.annotation.Nullable String customMessage) {
     if (!type.isValid()) {
       TimeoutUtil.sleep(1); // to see if processing in another thread suddenly makes the type valid again (which is a bug)
       if (type.isValid()) {
@@ -1436,13 +1420,13 @@ public final class PsiUtil extends PsiUtilCore {
     return false;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static PsiReturnStatement[] findReturnStatements(@Nonnull PsiMethod method) {
     return findReturnStatements(method.getBody());
   }
 
-  @Nonnull
-  public static PsiReturnStatement[] findReturnStatements(@Nullable PsiCodeBlock body) {
+  @jakarta.annotation.Nonnull
+  public static PsiReturnStatement[] findReturnStatements(@jakarta.annotation.Nullable PsiCodeBlock body) {
     List<PsiReturnStatement> vector = new ArrayList<>();
     if (body != null) {
       addStatements(vector, body, PsiReturnStatement.class, statement -> false);
@@ -1452,8 +1436,8 @@ public final class PsiUtil extends PsiUtilCore {
 
   private static <T extends PsiElement> void addStatements(@Nonnull List<? super T> vector,
                                                                                 @Nonnull PsiElement element,
-                                                                                @Nonnull Class<? extends T> clazz,
-                                                                                @Nonnull Predicate<? super PsiElement> stopAt) {
+                                                                                @jakarta.annotation.Nonnull Class<? extends T> clazz,
+                                                                                @jakarta.annotation.Nonnull Predicate<? super PsiElement> stopAt) {
     if (PsiTreeUtil.instanceOf(element, clazz)) {
       //noinspection unchecked
       vector.add((T) element);
@@ -1465,7 +1449,7 @@ public final class PsiUtil extends PsiUtilCore {
     }
   }
 
-  public static boolean isPackageEmpty(@Nonnull PsiDirectory[] directories, @Nonnull String packageName) {
+  public static boolean isPackageEmpty(@Nonnull PsiDirectory[] directories, @jakarta.annotation.Nonnull String packageName) {
     for (PsiDirectory directory : directories) {
       for (PsiFile file : directory.getFiles()) {
         if (file instanceof PsiClassOwner && packageName.equals(((PsiClassOwner) file).getPackageName()) && ((PsiClassOwner) file).getClasses().length > 0) {
@@ -1477,17 +1461,17 @@ public final class PsiUtil extends PsiUtilCore {
     return true;
   }
 
-  @Nonnull
-  public static PsiModifierListOwner preferCompiledElement(@Nonnull PsiModifierListOwner element) {
+  @jakarta.annotation.Nonnull
+  public static PsiModifierListOwner preferCompiledElement(@jakarta.annotation.Nonnull PsiModifierListOwner element) {
     PsiElement original = element.getOriginalElement();
     return original instanceof PsiModifierListOwner ? (PsiModifierListOwner) original : element;
   }
 
-  public static boolean isModuleFile(@Nonnull PsiFile file) {
+  public static boolean isModuleFile(@jakarta.annotation.Nonnull PsiFile file) {
     return file instanceof PsiJavaFile && ((PsiJavaFile) file).getModuleDeclaration() != null;
   }
 
-  public static boolean canBeOverridden(@Nonnull PsiMethod method) {
+  public static boolean canBeOverridden(@jakarta.annotation.Nonnull PsiMethod method) {
     PsiClass parentClass = method.getContainingClass();
     return parentClass != null &&
         !method.isConstructor() &&

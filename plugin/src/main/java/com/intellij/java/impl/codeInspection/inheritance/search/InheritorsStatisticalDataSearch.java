@@ -6,7 +6,7 @@ import com.intellij.java.language.psi.PsiClass;
 import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.indexing.search.searches.DirectClassInheritorsSearch;
 import consulo.application.util.function.Processor;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.*;
 

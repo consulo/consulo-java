@@ -8,20 +8,20 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes;
 import com.intellij.java.language.psi.PsiType;
 import consulo.util.collection.primitive.ints.IntMaps;
 import consulo.util.collection.primitive.ints.IntObjectMap;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public final class DfaBoxedValue extends DfaValue
 {
 	private final
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	DfaVariableValue myWrappedValue;
 	private final
-	@Nullable
+	@jakarta.annotation.Nullable
 	PsiType myType;
 
-	private DfaBoxedValue(@Nonnull DfaVariableValue valueToWrap, @Nonnull DfaValueFactory factory, @Nullable PsiType type)
+	private DfaBoxedValue(@jakarta.annotation.Nonnull DfaVariableValue valueToWrap, @jakarta.annotation.Nonnull DfaValueFactory factory, @Nullable PsiType type)
 	{
 		super(factory);
 		myWrappedValue = valueToWrap;
@@ -40,14 +40,14 @@ public final class DfaBoxedValue extends DfaValue
 		return myWrappedValue;
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	@Override
 	public PsiType getType()
 	{
 		return myType;
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
 	public DfType getDfType()
 	{
@@ -65,8 +65,8 @@ public final class DfaBoxedValue extends DfaValue
 			myFactory = factory;
 		}
 
-		@Nullable
-		public DfaValue createBoxed(DfaValue valueToWrap, @Nullable PsiType type)
+		@jakarta.annotation.Nullable
+		public DfaValue createBoxed(DfaValue valueToWrap, @jakarta.annotation.Nullable PsiType type)
 		{
 			if(valueToWrap instanceof DfaVariableValue && ((DfaVariableValue) valueToWrap).getDescriptor() == SpecialField.UNBOX)
 			{

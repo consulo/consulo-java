@@ -24,16 +24,15 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.BoolUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
-
-import javax.annotation.Nonnull;
 
 @ExtensionImpl
 public class ConstantAssertConditionInspection extends BaseInspection {
 
   @Override
   @Nls
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "constant.assert.condition.display.name");

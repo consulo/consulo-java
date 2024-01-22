@@ -28,8 +28,8 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class MakeClassInterfaceFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   private static final Logger LOG = Logger.getInstance(MakeClassInterfaceFix.class);
@@ -69,7 +69,7 @@ public class MakeClassInterfaceFix extends LocalQuickFixAndIntentionActionOnPsiE
   public void invoke(@Nonnull Project project,
                      @Nonnull PsiFile file,
                      @Nullable Editor editor,
-                     @Nonnull PsiElement startElement,
+                     @jakarta.annotation.Nonnull PsiElement startElement,
                      @Nonnull PsiElement endElement) {
     final PsiClass myClass = (PsiClass)startElement;
     if (!FileModificationService.getInstance().preparePsiElementForWrite(myClass)) return;

@@ -26,9 +26,9 @@ import consulo.internal.com.sun.jdi.Method;
 import consulo.language.psi.PsiElement;
 import consulo.util.lang.Range;
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Eugene Zhuravlev
@@ -38,7 +38,7 @@ public class LambdaMethodFilter implements BreakpointStepMethodFilter
 {
 	public static final String LAMBDA_METHOD_PREFIX = "lambda$";
 	private final int myLambdaOrdinal;
-	@Nullable
+	@jakarta.annotation.Nullable
 	private final SourcePosition myFirstStatementPosition;
 	private final int myLastStatementLine;
 	private final Range<Integer> myCallingExpressionLines;
@@ -79,7 +79,7 @@ public class LambdaMethodFilter implements BreakpointStepMethodFilter
 	}
 
 	@Override
-	@Nullable
+	@jakarta.annotation.Nullable
 	public SourcePosition getBreakpointPosition()
 	{
 		return myFirstStatementPosition;
@@ -106,7 +106,7 @@ public class LambdaMethodFilter implements BreakpointStepMethodFilter
 		return myCallingExpressionLines;
 	}
 
-	public static boolean isLambdaName(@Nullable String name)
+	public static boolean isLambdaName(@jakarta.annotation.Nullable String name)
 	{
 		return !StringUtil.isEmpty(name) && name.startsWith(LAMBDA_METHOD_PREFIX);
 	}

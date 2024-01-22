@@ -10,8 +10,8 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiSubstitutor;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Set;
 
@@ -45,7 +45,7 @@ public class JavaGlobalMemberLookupElement extends LookupElement implements Stat
     myImportInsertion = importInsertion;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public PsiMember getObject() {
     return myHelper.getMember();
@@ -56,7 +56,7 @@ public class JavaGlobalMemberLookupElement extends LookupElement implements Stat
     return assertNotNull(myHelper.getContainingClass());
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getLookupString() {
     return assertNotNull(getObject().getName());

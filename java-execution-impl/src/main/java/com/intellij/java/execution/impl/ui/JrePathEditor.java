@@ -26,7 +26,7 @@ import consulo.ui.ex.awt.LabeledComponent;
 import consulo.ui.ex.awt.PanelWithAnchor;
 import consulo.ui.ex.awt.Wrapper;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.util.Objects;
@@ -56,7 +56,7 @@ public class JrePathEditor extends Wrapper implements PanelWithAnchor {
     setContent(myLabeledComponent);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public String getJrePathOrName() {
     return mySdkComboBox.getSelectedSdkName();
   }
@@ -72,7 +72,7 @@ public class JrePathEditor extends Wrapper implements PanelWithAnchor {
 
   @Deprecated
   @DeprecationInfo("Use #setByName()")
-  public void setPathOrName(@Nullable String pathOrName, boolean useAlternativeJre) {
+  public void setPathOrName(@jakarta.annotation.Nullable String pathOrName, boolean useAlternativeJre) {
     setByName(pathOrName);
   }
 

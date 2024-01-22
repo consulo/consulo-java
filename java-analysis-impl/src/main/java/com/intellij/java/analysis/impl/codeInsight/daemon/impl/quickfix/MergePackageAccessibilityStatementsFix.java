@@ -24,8 +24,8 @@ import consulo.language.psi.PsiElement;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -55,15 +55,15 @@ public class MergePackageAccessibilityStatementsFix extends MergeModuleStatement
   }
 
   @Nls
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getFamilyName() {
     return JavaQuickFixBundle.message("java.9.merge.module.statements.fix.family.name", getKeyword());
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
-  protected String getReplacementText(@Nonnull List<PsiPackageAccessibilityStatement> statementsToMerge) {
+  protected String getReplacementText(@jakarta.annotation.Nonnull List<PsiPackageAccessibilityStatement> statementsToMerge) {
     final List<String> moduleNames = getModuleNames(statementsToMerge);
     if (!moduleNames.isEmpty()) {
       return getKeyword() + " " + myPackageName + " " + PsiKeyword.TO + " " + joinUniqueNames(moduleNames) + ";";
@@ -90,7 +90,7 @@ public class MergePackageAccessibilityStatementsFix extends MergeModuleStatement
     return StreamSupport.stream(getStatements(javaModule, myRole).spliterator(), false).filter(statement -> myPackageName.equals(statement.getPackageName())).collect(Collectors.toList());
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static MergeModuleStatementsFix createFix(@Nullable PsiPackageAccessibilityStatement statement) {
     if (statement != null) {
       final PsiElement parent = statement.getParent();
@@ -116,7 +116,7 @@ public class MergePackageAccessibilityStatementsFix extends MergeModuleStatement
     return Collections.emptyList();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private String getKeyword() {
     switch (myRole) {
       case OPENS:

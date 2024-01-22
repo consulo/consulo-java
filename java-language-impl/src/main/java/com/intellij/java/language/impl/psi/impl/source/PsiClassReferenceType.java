@@ -17,8 +17,8 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.SmartList;
 import consulo.util.lang.ObjectUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
@@ -30,12 +30,12 @@ public class PsiClassReferenceType extends PsiClassType.Stub {
     this(reference, level, collectAnnotations(reference));
   }
 
-  public PsiClassReferenceType(@Nonnull PsiJavaCodeReferenceElement reference, LanguageLevel level, @Nonnull PsiAnnotation[] annotations) {
+  public PsiClassReferenceType(@Nonnull PsiJavaCodeReferenceElement reference, LanguageLevel level, @jakarta.annotation.Nonnull PsiAnnotation[] annotations) {
     super(level, annotations);
     myReference = ClassReferencePointer.constant(reference);
   }
 
-  public PsiClassReferenceType(@Nonnull PsiJavaCodeReferenceElement reference, LanguageLevel level, @Nonnull TypeAnnotationProvider provider) {
+  public PsiClassReferenceType(@jakarta.annotation.Nonnull PsiJavaCodeReferenceElement reference, LanguageLevel level, @Nonnull TypeAnnotationProvider provider) {
     this(ClassReferencePointer.constant(reference), level, provider);
   }
 
@@ -73,14 +73,14 @@ public class PsiClassReferenceType extends PsiClassType.Stub {
   }
 
   @Override
-  public boolean equalsToText(@Nonnull String text) {
+  public boolean equalsToText(@jakarta.annotation.Nonnull String text) {
     PsiJavaCodeReferenceElement reference = getReference();
     String name = reference.getReferenceName();
     return (name == null || text.contains(name)) && Objects.equals(text, getCanonicalText());
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public GlobalSearchScope getResolveScope() {
     return getReference().getResolveScope();
   }
@@ -125,7 +125,7 @@ public class PsiClassReferenceType extends PsiClassType.Stub {
   @Override
   public
   @Nonnull
-  PsiClassType setLanguageLevel(final @Nonnull LanguageLevel languageLevel) {
+  PsiClassType setLanguageLevel(final @jakarta.annotation.Nonnull LanguageLevel languageLevel) {
     if (languageLevel.equals(myLanguageLevel)) {
       return this;
     }
@@ -140,7 +140,7 @@ public class PsiClassReferenceType extends PsiClassType.Stub {
   private static final class DelegatingClassResolveResult implements PsiClassType.ClassResolveResult {
     private final JavaResolveResult myDelegate;
 
-    private DelegatingClassResolveResult(@Nonnull JavaResolveResult delegate) {
+    private DelegatingClassResolveResult(@jakarta.annotation.Nonnull JavaResolveResult delegate) {
       myDelegate = delegate;
     }
 
@@ -185,7 +185,7 @@ public class PsiClassReferenceType extends PsiClassType.Stub {
 
   @Override
   public
-  @Nonnull
+  @jakarta.annotation.Nonnull
   ClassResolveResult resolveGenerics() {
     PsiJavaCodeReferenceElement reference = getReference();
     if (!reference.isValid()) {
@@ -200,7 +200,7 @@ public class PsiClassReferenceType extends PsiClassType.Stub {
 
   @Override
   public
-  @Nonnull
+  @jakarta.annotation.Nonnull
   PsiClassType rawType() {
     PsiJavaCodeReferenceElement reference = getReference();
     PsiElement resolved = reference.resolve();
@@ -229,7 +229,7 @@ public class PsiClassReferenceType extends PsiClassType.Stub {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiType[] getParameters() {
     return getReference().getTypeParameters();
   }
@@ -262,7 +262,7 @@ public class PsiClassReferenceType extends PsiClassType.Stub {
 
   @Override
   public
-  @Nonnull
+  @jakarta.annotation.Nonnull
   String getInternalCanonicalText() {
     return getCanonicalText(true);
   }
@@ -277,7 +277,7 @@ public class PsiClassReferenceType extends PsiClassType.Stub {
     return reference.getCanonicalText();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiJavaCodeReferenceElement getReference() {
     return myReference.retrieveNonNullReference();
   }

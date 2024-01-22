@@ -20,7 +20,7 @@
  */
 package com.intellij.java.impl.refactoring.inlineSuperClass.usageInfo;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;

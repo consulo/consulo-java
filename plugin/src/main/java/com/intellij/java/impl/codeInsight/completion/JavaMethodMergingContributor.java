@@ -22,8 +22,8 @@ import consulo.language.Language;
 import consulo.language.editor.completion.*;
 import consulo.language.editor.completion.lookup.LookupElement;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 
 import static consulo.util.lang.ObjectUtil.assertNotNull;
@@ -35,7 +35,7 @@ import static consulo.util.lang.ObjectUtil.assertNotNull;
 public class JavaMethodMergingContributor extends CompletionContributor {
 
   @Override
-  public AutoCompletionDecision handleAutoCompletionPossibility(@Nonnull AutoCompletionContext context) {
+  public AutoCompletionDecision handleAutoCompletionPossibility(@jakarta.annotation.Nonnull AutoCompletionContext context) {
     final CompletionParameters parameters = context.getParameters();
     if (parameters.getCompletionType() != CompletionType.SMART && parameters.getCompletionType() != CompletionType.BASIC) {
       return null;

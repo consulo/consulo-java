@@ -32,8 +32,8 @@ import consulo.util.lang.StringUtil;
 import consulo.util.lang.Trinity;
 import consulo.virtualFileSystem.fileType.FileType;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public final class TextWithImportsImpl implements TextWithImports {
 
@@ -67,7 +67,7 @@ public final class TextWithImportsImpl implements TextWithImports {
     myFileType = fileType;
   }
 
-  public TextWithImportsImpl(CodeFragmentKind kind, @Nonnull String text) {
+  public TextWithImportsImpl(CodeFragmentKind kind, @jakarta.annotation.Nonnull String text) {
     myKind = kind;
     Trinity<String, String, FileType> trinity = parseExternalForm(text);
     myText = trinity.first;
@@ -92,7 +92,7 @@ public final class TextWithImportsImpl implements TextWithImports {
 
   @Override
   public
-  @Nonnull
+  @jakarta.annotation.Nonnull
   String getImports() {
     return myImports;
   }
@@ -140,7 +140,7 @@ public final class TextWithImportsImpl implements TextWithImports {
     return myFileType;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static XExpression toXExpression(@Nullable TextWithImports text) {
     if (text != null && !text.getText().isEmpty()) {
       return XDebuggerUtil.getInstance().createExpression(text.getText(), LanguageUtil.getFileTypeLanguage(text.getFileType()), StringUtil.nullize(text.getImports()), getMode(text.getKind()));
@@ -168,7 +168,7 @@ public final class TextWithImportsImpl implements TextWithImports {
     throw new IllegalStateException("Unknown mode " + mode);
   }
 
-  public static TextWithImports fromXExpression(@Nullable XExpression expression) {
+  public static TextWithImports fromXExpression(@jakarta.annotation.Nullable XExpression expression) {
     if (expression == null) {
       return null;
     }

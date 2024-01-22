@@ -23,8 +23,7 @@ import consulo.language.ast.ChildRoleBase;
 import consulo.language.ast.IElementType;
 import consulo.language.impl.ast.CompositeElement;
 import consulo.logging.Logger;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class ParameterElement extends CompositeElement {
   private static final Logger LOG = Logger.getInstance(ParameterElement.class);

@@ -18,7 +18,7 @@ package com.intellij.java.impl.ig.classmetrics;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import org.jetbrains.annotations.NonNls;
@@ -44,7 +44,7 @@ class CouplingVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitField(@Nonnull PsiField field) {
+  public void visitField(@jakarta.annotation.Nonnull PsiField field) {
     super.visitField(field);
     final PsiType type = field.getType();
     addDependency(type);

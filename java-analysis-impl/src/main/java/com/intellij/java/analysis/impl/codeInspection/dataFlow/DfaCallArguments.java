@@ -19,8 +19,8 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.java.language.psi.*;
 import com.siyeh.ig.psiutils.MethodCallUtils;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -32,7 +32,7 @@ import java.util.Set;
 	final DfaValue myQualifier;
 	final DfaValue[] myArguments;
 	final
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	MutationSignature myMutation;
 
 	DfaCallArguments(DfaValue qualifier, DfaValue[] arguments, @Nonnull MutationSignature mutation)

@@ -20,10 +20,10 @@
  */
 package com.intellij.java.debugger.impl.engine.evaluation.expression;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 import com.intellij.java.debugger.engine.evaluation.expression.Modifier;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.engine.JVMNameUtil;

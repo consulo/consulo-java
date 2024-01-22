@@ -17,7 +17,7 @@ package com.intellij.java.impl.ipp.switchtoif;
 
 import com.intellij.java.language.psi.*;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import com.intellij.java.language.LanguageLevel;
 import consulo.language.psi.*;
 import consulo.language.ast.IElementType;

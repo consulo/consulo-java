@@ -11,7 +11,6 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import consulo.application.util.CachedValueProvider;
-import consulo.application.util.CachedValuesManager;
 import consulo.content.scope.SearchScope;
 import consulo.language.editor.ImplicitUsageProvider;
 import consulo.language.psi.PsiElement;
@@ -23,8 +22,9 @@ import consulo.language.psi.util.LanguageCachedValueUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Pair;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.List;
 
 public final class NullabilityUtil {
@@ -144,7 +144,7 @@ public final class NullabilityUtil {
    * @return expression nullability. UNKNOWN if unable to determine;
    * NULLABLE if known to possibly have null value; NOT_NULL if definitely never null.
    */
-  public static Nullability getExpressionNullability(@Nullable PsiExpression expression, boolean useDataflow) {
+  public static Nullability getExpressionNullability(@jakarta.annotation.Nullable PsiExpression expression, boolean useDataflow) {
     expression = PsiUtil.skipParenthesizedExprDown(expression);
     if (expression == null) {
       return Nullability.UNKNOWN;

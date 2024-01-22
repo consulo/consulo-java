@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.ig.internationalization;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationFix;
@@ -34,7 +34,7 @@ import consulo.java.language.module.util.JavaClassNames;
 public class StringToUpperWithoutLocaleInspection extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "StringToUpperCaseOrToLowerCaseWithoutLocale";
   }

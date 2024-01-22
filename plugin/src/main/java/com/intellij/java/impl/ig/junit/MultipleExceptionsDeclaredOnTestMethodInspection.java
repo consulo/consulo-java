@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.junit;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.annotation.component.ExtensionImpl;
 import org.jetbrains.annotations.Nls;
@@ -51,7 +51,7 @@ public class MultipleExceptionsDeclaredOnTestMethodInspection
       "multiple.exceptions.declared.on.test.method.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(

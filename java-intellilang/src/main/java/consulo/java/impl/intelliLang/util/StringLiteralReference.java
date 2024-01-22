@@ -15,8 +15,7 @@
  */
 package consulo.java.impl.intelliLang.util;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 import consulo.document.util.TextRange;
 import consulo.language.psi.ElementManipulators;
@@ -24,6 +23,7 @@ import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import consulo.language.psi.PsiReference;
 import consulo.language.util.IncorrectOperationException;
+import jakarta.annotation.Nullable;
 
 /**
  * Base class for references in String literals.

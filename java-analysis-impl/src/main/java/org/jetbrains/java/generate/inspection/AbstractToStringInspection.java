@@ -20,9 +20,9 @@ import consulo.language.Language;
 import consulo.language.editor.inspection.LocalInspectionTool;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.logging.Logger;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * Base class for inspection support.
@@ -41,7 +41,7 @@ public abstract class AbstractToStringInspection extends LocalInspectionTool {
     return JavaLanguage.INSTANCE;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public HighlightDisplayLevel getDefaultLevel() {
     return HighlightDisplayLevel.WARNING;

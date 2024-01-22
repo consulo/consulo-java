@@ -19,10 +19,9 @@ package com.intellij.java.impl.codeInspection.unusedSymbol;
 import com.intellij.java.analysis.impl.codeInspection.unusedSymbol.UnusedSymbolLocalInspectionBase;
 import com.intellij.java.impl.codeInspection.deadCode.UnusedDeclarationInspection;
 import com.intellij.java.language.psi.PsiModifier;
-import consulo.annotation.component.ExtensionImpl;
 import consulo.ui.ex.awt.UIUtil;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

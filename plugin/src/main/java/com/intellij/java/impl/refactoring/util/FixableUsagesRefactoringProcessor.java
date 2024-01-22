@@ -26,7 +26,7 @@ import consulo.util.collection.MultiMap;
 import com.intellij.xml.util.XmlUtil;
 import consulo.logging.Logger;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

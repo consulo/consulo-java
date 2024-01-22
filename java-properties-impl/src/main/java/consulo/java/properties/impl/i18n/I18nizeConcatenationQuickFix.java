@@ -29,8 +29,8 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -57,13 +57,13 @@ public class I18nizeConcatenationQuickFix extends I18nizeQuickFix{
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getName() {
     return CodeInsightBundle.message("quickfix.i18n.concatentation");
   }
 
   @Override
-  protected PsiElement doReplacementInJava(@Nonnull final PsiFile psiFile,
+  protected PsiElement doReplacementInJava(@jakarta.annotation.Nonnull final PsiFile psiFile,
                                            @Nonnull final Editor editor,
                                            @Nullable PsiLiteralExpression literalExpression,
                                            String i18nizedText) throws IncorrectOperationException {

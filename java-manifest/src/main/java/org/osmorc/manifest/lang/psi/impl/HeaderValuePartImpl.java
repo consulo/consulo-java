@@ -25,7 +25,7 @@
 
 package org.osmorc.manifest.lang.psi.impl;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.language.ast.ASTNode;
 import consulo.language.psi.PsiElement;
@@ -47,7 +47,7 @@ import org.osmorc.manifest.lang.psi.stub.HeaderValuePartStub;
  * @author Robert F. Beeger (robert@beeger.net)
  */
 public class HeaderValuePartImpl extends ManifestElementBase<HeaderValuePartStub> implements HeaderValuePart {
-  public HeaderValuePartImpl(HeaderValuePartStub stub, @Nonnull IStubElementType nodeType) {
+  public HeaderValuePartImpl(HeaderValuePartStub stub, @jakarta.annotation.Nonnull IStubElementType nodeType) {
     super(stub, nodeType);
   }
 
@@ -56,7 +56,7 @@ public class HeaderValuePartImpl extends ManifestElementBase<HeaderValuePartStub
   }
 
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getUnwrappedText() {
     String result;
     HeaderValuePartStub stub = getStub();

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.naming;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.siyeh.InspectionGadgetsBundle;
@@ -30,7 +30,7 @@ public class AnnotationNamingConventionInspection extends ConventionInspection {
   private static final int DEFAULT_MIN_LENGTH = 8;
   private static final int DEFAULT_MAX_LENGTH = 64;
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "annotation.naming.convention.display.name");

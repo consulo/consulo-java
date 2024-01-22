@@ -29,8 +29,8 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -60,15 +60,15 @@ public class WrapExpressionFix implements SyntheticIntentionAction {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getText() {
     final PsiMethod wrapper = myExpression.isValid() && myExpectedType != null ? findWrapper(myExpression.getType(), myExpectedType, myPrimitiveExpected) : null;
     final String methodPresentation = wrapper != null ? wrapper.getContainingClass().getName() + "." + wrapper.getName() : "";
     return JavaQuickFixBundle.message("wrap.expression.using.static.accessor.text", methodPresentation);
   }
 
-  @Nullable
-  private static PsiMethod findWrapper(PsiType type, @Nonnull PsiClassType expectedType, boolean primitiveExpected) {
+  @jakarta.annotation.Nullable
+  private static PsiMethod findWrapper(PsiType type, @jakarta.annotation.Nonnull PsiClassType expectedType, boolean primitiveExpected) {
     PsiClass aClass = expectedType.resolve();
     if (aClass != null) {
       PsiType expectedReturnType = expectedType;
@@ -108,7 +108,7 @@ public class WrapExpressionFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
     PsiMethod wrapper = findWrapper(myExpression.getType(), myExpectedType, myPrimitiveExpected);
     assert wrapper != null;

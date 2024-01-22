@@ -15,8 +15,8 @@
  */
 package com.intellij.java.language.psi;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * Represents a Java <code>instanceof</code> expression.
@@ -43,6 +43,6 @@ public interface PsiInstanceOfExpression extends PsiExpression
 	/**
 	 * @return pattern against which operand will be matched
 	 */
-	@Nullable
+	@jakarta.annotation.Nullable
 	PsiPattern getPattern();
 }

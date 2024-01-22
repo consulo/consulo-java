@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.internationalization;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiType;
@@ -37,7 +37,7 @@ public class MagicCharacterInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "magic.character.problem.descriptor");
@@ -63,7 +63,7 @@ public class MagicCharacterInspection extends BaseInspection {
 
     @Override
     public void visitLiteralExpression(
-      @Nonnull PsiLiteralExpression expression) {
+      @jakarta.annotation.Nonnull PsiLiteralExpression expression) {
       super.visitLiteralExpression(expression);
       final PsiType type = expression.getType();
       if (type == null) {

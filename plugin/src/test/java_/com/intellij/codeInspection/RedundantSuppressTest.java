@@ -6,7 +6,7 @@ import com.intellij.codeInspection.ex.*;
 import com.intellij.java.impl.codeInspection.i18n.I18nInspection;
 import consulo.language.psi.PsiElement;
 import com.intellij.testFramework.InspectionTestCase;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public abstract class RedundantSuppressTest extends InspectionTestCase {
   private GlobalInspectionToolWrapper myWrapper;

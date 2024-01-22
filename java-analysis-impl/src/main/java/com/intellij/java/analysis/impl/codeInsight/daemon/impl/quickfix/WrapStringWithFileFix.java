@@ -28,16 +28,16 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class WrapStringWithFileFix extends LocalQuickFixAndIntentionActionOnPsiElement implements HighPriorityAction {
   public final static MyMethodArgumentFixerFactory REGISTAR = new MyMethodArgumentFixerFactory();
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private final PsiType myType;
 
-  public WrapStringWithFileFix(@Nullable PsiType type, @Nonnull PsiExpression expression) {
+  public WrapStringWithFileFix(@Nullable PsiType type, @jakarta.annotation.Nonnull PsiExpression expression) {
     super(expression);
     myType = type;
   }
@@ -58,13 +58,13 @@ public class WrapStringWithFileFix extends LocalQuickFixAndIntentionActionOnPsiE
 
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
+  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
     return myType != null && myType.isValid() && myType.equalsToText(JavaClassNames.JAVA_IO_FILE) && startElement.isValid() && startElement.getManager().isInProject(startElement) &&
         isStringType(startElement);
   }
 
   @Override
-  public void invoke(@Nonnull Project project, @Nonnull PsiFile file, @Nullable Editor editor, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
+  public void invoke(@Nonnull Project project, @Nonnull PsiFile file, @jakarta.annotation.Nullable Editor editor, @jakarta.annotation.Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
     startElement.replace(getModifiedExpression(startElement));
   }
 
@@ -99,20 +99,20 @@ public class WrapStringWithFileFix extends LocalQuickFixAndIntentionActionOnPsiE
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
       return PsiUtil.isLanguageLevel8OrHigher(file) && super.isAvailable(project, editor, file);
     }
   }
 
   public static class MyMethodArgumentFixerFactory extends ArgumentFixerActionFactory {
-    @Nullable
+    @jakarta.annotation.Nullable
     @Override
     protected PsiExpression getModifiedArgument(final PsiExpression expression, final PsiType toType) throws IncorrectOperationException {
       return isStringType(expression) && toType.equalsToText(JavaClassNames.JAVA_IO_FILE) ? (PsiExpression) getModifiedExpression(expression) : null;
     }
 
     @Override
-    public boolean areTypesConvertible(@Nonnull final PsiType exprType, @Nonnull final PsiType parameterType, @Nonnull final PsiElement context) {
+    public boolean areTypesConvertible(@Nonnull final PsiType exprType, @Nonnull final PsiType parameterType, @jakarta.annotation.Nonnull final PsiElement context) {
       return parameterType.isConvertibleFrom(exprType) || (parameterType.equalsToText(JavaClassNames.JAVA_IO_FILE) && exprType.equalsToText(JavaClassNames.JAVA_LANG_STRING));
     }
 

@@ -20,7 +20,7 @@ import com.intellij.java.impl.codeInsight.generation.surroundWith.JavaWithCastSu
 import com.intellij.java.language.psi.PsiExpression;
 import consulo.codeEditor.Editor;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class CastExpressionPostfixTemplate extends ExpressionPostfixTemplateWithChooser {
   public CastExpressionPostfixTemplate() {

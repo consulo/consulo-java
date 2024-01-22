@@ -19,28 +19,27 @@ import com.intellij.java.language.spi.SPILanguage;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Commenter;
 import consulo.language.Language;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * User: anna
  */
 @ExtensionImpl
 public class SPICommenter implements Commenter {
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public String getLineCommentPrefix() {
     return "#";
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public String getBlockCommentPrefix() {
     return null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public String getBlockCommentSuffix() {
     return null;
@@ -52,7 +51,7 @@ public class SPICommenter implements Commenter {
     return null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public String getCommentedBlockCommentSuffix() {
     return null;

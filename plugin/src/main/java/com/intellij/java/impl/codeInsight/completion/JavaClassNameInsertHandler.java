@@ -42,7 +42,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import static com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings.*;
 
@@ -127,7 +127,7 @@ class JavaClassNameInsertHandler implements InsertHandler<JavaPsiClassReferenceE
     }
   }
 
-  private static boolean shouldInsertFqnInJavadoc(@Nonnull JavaPsiClassReferenceElement item, @Nonnull PsiFile file, @Nonnull Project project) {
+  private static boolean shouldInsertFqnInJavadoc(@jakarta.annotation.Nonnull JavaPsiClassReferenceElement item, @Nonnull PsiFile file, @Nonnull Project project) {
     CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(project);
     JavaCodeStyleSettings javaSettings = settings.getCustomSettings(JavaCodeStyleSettings.class);
 

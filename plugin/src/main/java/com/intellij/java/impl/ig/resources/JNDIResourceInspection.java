@@ -22,8 +22,8 @@ import consulo.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -34,20 +34,20 @@ public class JNDIResourceInspection extends ResourceInspection {
   public boolean insideTryAllowed = false;
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "JNDIResourceOpenedButNotSafelyClosed";
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "jndi.resource.opened.not.closed.display.name");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     final PsiExpression expression = (PsiExpression)infos[0];
     final PsiType type = expression.getType();
@@ -102,7 +102,7 @@ public class JNDIResourceInspection extends ResourceInspection {
 
     @Override
     public void visitNewExpression(
-      @Nonnull PsiNewExpression expression) {
+      @jakarta.annotation.Nonnull PsiNewExpression expression) {
       super.visitNewExpression(expression);
       if (!isJNDIResource(expression)) {
         return;

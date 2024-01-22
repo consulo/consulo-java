@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.jvm;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public interface JvmAnnotatedElement extends JvmElement
 {

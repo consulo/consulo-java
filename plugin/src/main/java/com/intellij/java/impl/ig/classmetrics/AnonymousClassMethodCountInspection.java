@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.classmetrics;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
@@ -33,7 +33,7 @@ public class AnonymousClassMethodCountInspection
   private static final int DEFAULT_METHOD_COUNT_LIMIT = 1;
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "AnonymousInnerClassWithTooManyMethods";
   }
@@ -89,7 +89,7 @@ public class AnonymousClassMethodCountInspection
 
     @Override
     public void visitAnonymousClass(
-      @Nonnull PsiAnonymousClass aClass) {
+      @jakarta.annotation.Nonnull PsiAnonymousClass aClass) {
       if (aClass instanceof PsiEnumConstantInitializer) {
         return;
       }

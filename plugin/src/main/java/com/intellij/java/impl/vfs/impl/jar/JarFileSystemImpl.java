@@ -20,7 +20,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.virtualFileSystem.archive.ArchiveFile;
 import consulo.virtualFileSystem.archive.ArchiveFileSystemProvider;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.io.IOException;
 
 @ExtensionImpl
@@ -34,7 +34,7 @@ public class JarFileSystemImpl implements ArchiveFileSystemProvider {
 
   @Nonnull
   @Override
-  public ArchiveFile createArchiveFile(@Nonnull String filePath) throws IOException {
+  public ArchiveFile createArchiveFile(@jakarta.annotation.Nonnull String filePath) throws IOException {
     return new JarArchiveFile(filePath);
   }
 }

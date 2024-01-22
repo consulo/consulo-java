@@ -32,7 +32,7 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.util.CharTable;
 import consulo.logging.Logger;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class PsiExpressionListImpl extends CompositePsiElement implements PsiExpressionList {
   private static final Logger LOG = Logger.getInstance(PsiExpressionListImpl.class);

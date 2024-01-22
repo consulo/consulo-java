@@ -19,7 +19,7 @@ import consulo.language.impl.psi.ASTWrapperPsiElement;
 import com.intellij.java.language.impl.spi.parsing.SPIElementTypes;
 import consulo.language.ast.ASTNode;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.List;
 
 /**

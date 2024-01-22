@@ -31,8 +31,7 @@ import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class PsiWhileStatementImpl extends CompositePsiElement implements PsiWhileStatement, Constants {
   private static final Logger LOG = Logger.getInstance(PsiWhileStatementImpl.class);
@@ -107,7 +106,7 @@ public class PsiWhileStatementImpl extends CompositePsiElement implements PsiWhi
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitWhileStatement(this);
     } else {
@@ -116,10 +115,10 @@ public class PsiWhileStatementImpl extends CompositePsiElement implements PsiWhi
   }
 
   @Override
-  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
-                                     @Nonnull ResolveState state,
+  public boolean processDeclarations(@jakarta.annotation.Nonnull PsiScopeProcessor processor,
+                                     @jakarta.annotation.Nonnull ResolveState state,
                                      PsiElement lastParent,
-                                     @Nonnull PsiElement place) {
+                                     @jakarta.annotation.Nonnull PsiElement place) {
     ElementClassHint elementClassHint = processor.getHint(ElementClassHint.KEY);
     if (elementClassHint != null && !elementClassHint.shouldProcess(ElementClassHint.DeclarationKind.VARIABLE)) return true;
     if (lastParent == null) {
@@ -132,10 +131,10 @@ public class PsiWhileStatementImpl extends CompositePsiElement implements PsiWhi
     return true;
   }
 
-  static boolean processDeclarationsInLoopCondition(@Nonnull PsiScopeProcessor processor,
+  static boolean processDeclarationsInLoopCondition(@jakarta.annotation.Nonnull PsiScopeProcessor processor,
                                                     @Nonnull ResolveState state,
                                                     @Nonnull PsiElement place,
-                                                    @Nonnull PsiConditionalLoopStatement loop) {
+                                                    @jakarta.annotation.Nonnull PsiConditionalLoopStatement loop) {
     PsiExpression condition = loop.getCondition();
     if (condition == null) return true;
     PsiScopeProcessor conditionProcessor = (element, s) -> {

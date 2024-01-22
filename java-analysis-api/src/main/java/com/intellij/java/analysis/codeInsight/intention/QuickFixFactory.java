@@ -34,8 +34,8 @@ import consulo.module.Module;
 import consulo.project.Project;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -51,367 +51,367 @@ public abstract class QuickFixFactory {
 
   @Nonnull
   public abstract LocalQuickFixAndIntentionActionOnPsiElement createModifierListFix(@Nonnull PsiModifierList modifierList,
+                                                                                    @PsiModifier.ModifierConstant @jakarta.annotation.Nonnull String modifier,
+                                                                                    boolean shouldHave,
+                                                                                    final boolean showContainingClass);
+
+  @jakarta.annotation.Nonnull
+  public abstract LocalQuickFixAndIntentionActionOnPsiElement createModifierListFix(@jakarta.annotation.Nonnull PsiModifierListOwner owner,
                                                                                     @PsiModifier.ModifierConstant @Nonnull String modifier,
                                                                                     boolean shouldHave,
                                                                                     final boolean showContainingClass);
 
-  @Nonnull
-  public abstract LocalQuickFixAndIntentionActionOnPsiElement createModifierListFix(@Nonnull PsiModifierListOwner owner,
-                                                                                    @PsiModifier.ModifierConstant @Nonnull String modifier,
-                                                                                    boolean shouldHave,
-                                                                                    final boolean showContainingClass);
+  @jakarta.annotation.Nonnull
+  public abstract LocalQuickFixAndIntentionActionOnPsiElement createMethodReturnFix(@Nonnull PsiMethod method, @jakarta.annotation.Nonnull PsiType toReturn, boolean fixWholeHierarchy);
 
-  @Nonnull
-  public abstract LocalQuickFixAndIntentionActionOnPsiElement createMethodReturnFix(@Nonnull PsiMethod method, @Nonnull PsiType toReturn, boolean fixWholeHierarchy);
+  @jakarta.annotation.Nonnull
+  public abstract LocalQuickFixAndIntentionActionOnPsiElement createAddMethodFix(@jakarta.annotation.Nonnull PsiMethod method, @jakarta.annotation.Nonnull PsiClass toClass);
 
-  @Nonnull
-  public abstract LocalQuickFixAndIntentionActionOnPsiElement createAddMethodFix(@Nonnull PsiMethod method, @Nonnull PsiClass toClass);
-
-  @Nonnull
-  public abstract LocalQuickFixAndIntentionActionOnPsiElement createAddMethodFix(@Nonnull String methodText, @Nonnull PsiClass toClass, @Nonnull String... exceptions);
+  @jakarta.annotation.Nonnull
+  public abstract LocalQuickFixAndIntentionActionOnPsiElement createAddMethodFix(@Nonnull String methodText, @jakarta.annotation.Nonnull PsiClass toClass, @jakarta.annotation.Nonnull String... exceptions);
 
   /**
    * @param psiElement psiClass or enum constant without class initializer
    */
-  @Nonnull
-  public abstract LocalQuickFixAndIntentionActionOnPsiElement createImplementMethodsFix(@Nonnull PsiElement psiElement);
+  @jakarta.annotation.Nonnull
+  public abstract LocalQuickFixAndIntentionActionOnPsiElement createImplementMethodsFix(@jakarta.annotation.Nonnull PsiElement psiElement);
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public abstract LocalQuickFixAndIntentionActionOnPsiElement createAssignmentToComparisonFix(PsiAssignmentExpression expr);
 
-  @Nonnull
-  public abstract LocalQuickFixAndIntentionActionOnPsiElement createImplementMethodsFix(@Nonnull PsiClass psiElement);
+  @jakarta.annotation.Nonnull
+  public abstract LocalQuickFixAndIntentionActionOnPsiElement createImplementMethodsFix(@jakarta.annotation.Nonnull PsiClass psiElement);
 
   @Nonnull
-  public abstract LocalQuickFixOnPsiElement createMethodThrowsFix(@Nonnull PsiMethod method, @Nonnull PsiClassType exceptionClass, boolean shouldThrow, boolean showContainingClass);
+  public abstract LocalQuickFixOnPsiElement createMethodThrowsFix(@jakarta.annotation.Nonnull PsiMethod method, @jakarta.annotation.Nonnull PsiClassType exceptionClass, boolean shouldThrow, boolean showContainingClass);
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public abstract LocalQuickFixAndIntentionActionOnPsiElement createAddDefaultConstructorFix(@Nonnull PsiClass aClass);
 
   @Nullable
-  public abstract LocalQuickFixAndIntentionActionOnPsiElement createAddConstructorFix(@Nonnull PsiClass aClass, @PsiModifier.ModifierConstant @Nonnull String modifier);
+  public abstract LocalQuickFixAndIntentionActionOnPsiElement createAddConstructorFix(@jakarta.annotation.Nonnull PsiClass aClass, @PsiModifier.ModifierConstant @Nonnull String modifier);
+
+  @jakarta.annotation.Nonnull
+  public abstract LocalQuickFixAndIntentionActionOnPsiElement createMethodParameterTypeFix(@jakarta.annotation.Nonnull PsiMethod method, int index, @Nonnull PsiType newType, boolean fixWholeHierarchy);
 
   @Nonnull
-  public abstract LocalQuickFixAndIntentionActionOnPsiElement createMethodParameterTypeFix(@Nonnull PsiMethod method, int index, @Nonnull PsiType newType, boolean fixWholeHierarchy);
+  public abstract LocalQuickFixAndIntentionActionOnPsiElement createMakeClassInterfaceFix(@jakarta.annotation.Nonnull PsiClass aClass);
+
+  @jakarta.annotation.Nonnull
+  public abstract LocalQuickFixAndIntentionActionOnPsiElement createMakeClassInterfaceFix(@jakarta.annotation.Nonnull PsiClass aClass, final boolean makeInterface);
 
   @Nonnull
-  public abstract LocalQuickFixAndIntentionActionOnPsiElement createMakeClassInterfaceFix(@Nonnull PsiClass aClass);
+  public abstract LocalQuickFixAndIntentionActionOnPsiElement createExtendsListFix(@jakarta.annotation.Nonnull PsiClass aClass, @jakarta.annotation.Nonnull PsiClassType typeToExtendFrom, boolean toAdd);
 
-  @Nonnull
-  public abstract LocalQuickFixAndIntentionActionOnPsiElement createMakeClassInterfaceFix(@Nonnull PsiClass aClass, final boolean makeInterface);
+  @jakarta.annotation.Nonnull
+  public abstract LocalQuickFixAndIntentionActionOnPsiElement createRemoveUnusedParameterFix(@jakarta.annotation.Nonnull PsiParameter parameter);
 
-  @Nonnull
-  public abstract LocalQuickFixAndIntentionActionOnPsiElement createExtendsListFix(@Nonnull PsiClass aClass, @Nonnull PsiClassType typeToExtendFrom, boolean toAdd);
+  @jakarta.annotation.Nonnull
+  public abstract IntentionAction createRemoveUnusedVariableFix(@jakarta.annotation.Nonnull PsiVariable variable);
 
-  @Nonnull
-  public abstract LocalQuickFixAndIntentionActionOnPsiElement createRemoveUnusedParameterFix(@Nonnull PsiParameter parameter);
-
-  @Nonnull
-  public abstract IntentionAction createRemoveUnusedVariableFix(@Nonnull PsiVariable variable);
+  @jakarta.annotation.Nullable
+  public abstract IntentionAction createCreateClassOrPackageFix(@Nonnull PsiElement context, @jakarta.annotation.Nonnull String qualifiedName, final boolean createClass, final String superClass);
 
   @Nullable
-  public abstract IntentionAction createCreateClassOrPackageFix(@Nonnull PsiElement context, @Nonnull String qualifiedName, final boolean createClass, final String superClass);
+  public abstract IntentionAction createCreateClassOrInterfaceFix(@Nonnull PsiElement context, @jakarta.annotation.Nonnull String qualifiedName, final boolean createClass, final String superClass);
 
-  @Nullable
-  public abstract IntentionAction createCreateClassOrInterfaceFix(@Nonnull PsiElement context, @Nonnull String qualifiedName, final boolean createClass, final String superClass);
-
-  @Nonnull
-  public abstract IntentionAction createCreateFieldOrPropertyFix(@Nonnull PsiClass aClass,
+  @jakarta.annotation.Nonnull
+  public abstract IntentionAction createCreateFieldOrPropertyFix(@jakarta.annotation.Nonnull PsiClass aClass,
                                                                  @Nonnull String name,
-                                                                 @Nonnull PsiType type,
-                                                                 @Nonnull PropertyMemberType targetMember,
-                                                                 @Nonnull PsiAnnotation... annotations);
+                                                                 @jakarta.annotation.Nonnull PsiType type,
+                                                                 @jakarta.annotation.Nonnull PropertyMemberType targetMember,
+                                                                 @jakarta.annotation.Nonnull PsiAnnotation... annotations);
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public abstract IntentionAction createSetupJDKFix();
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public abstract IntentionAction createAddExceptionToCatchFix();
 
   @Nonnull
-  public abstract IntentionAction createAddExceptionToThrowsFix(@Nonnull PsiElement element);
+  public abstract IntentionAction createAddExceptionToThrowsFix(@jakarta.annotation.Nonnull PsiElement element);
 
-  @Nonnull
-  public abstract IntentionAction createAddExceptionFromFieldInitializerToConstructorThrowsFix(@Nonnull PsiElement element);
+  @jakarta.annotation.Nonnull
+  public abstract IntentionAction createAddExceptionFromFieldInitializerToConstructorThrowsFix(@jakarta.annotation.Nonnull PsiElement element);
 
-  @Nonnull
-  public abstract IntentionAction createSurroundWithTryCatchFix(@Nonnull PsiElement element);
+  @jakarta.annotation.Nonnull
+  public abstract IntentionAction createSurroundWithTryCatchFix(@jakarta.annotation.Nonnull PsiElement element);
 
   @Nonnull
   public abstract IntentionAction createGeneralizeCatchFix(@Nonnull PsiElement element, @Nonnull PsiClassType type);
 
-  @Nonnull
-  public abstract IntentionAction createChangeToAppendFix(@Nonnull IElementType sign, @Nonnull PsiType type, @Nonnull PsiAssignmentExpression assignment);
+  @jakarta.annotation.Nonnull
+  public abstract IntentionAction createChangeToAppendFix(@jakarta.annotation.Nonnull IElementType sign, @jakarta.annotation.Nonnull PsiType type, @jakarta.annotation.Nonnull PsiAssignmentExpression assignment);
 
   @Nonnull
   public abstract IntentionAction createAddTypeCastFix(@Nonnull PsiType type, @Nonnull PsiExpression expression);
 
   @Nonnull
-  public abstract IntentionAction createWrapExpressionFix(@Nonnull PsiType type, @Nonnull PsiExpression expression);
+  public abstract IntentionAction createWrapExpressionFix(@Nonnull PsiType type, @jakarta.annotation.Nonnull PsiExpression expression);
 
-  @Nonnull
-  public abstract IntentionAction createReuseVariableDeclarationFix(@Nonnull PsiLocalVariable variable);
+  @jakarta.annotation.Nonnull
+  public abstract IntentionAction createReuseVariableDeclarationFix(@jakarta.annotation.Nonnull PsiLocalVariable variable);
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public abstract IntentionAction createConvertToStringLiteralAction();
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public abstract IntentionAction createDeleteCatchFix(@Nonnull PsiParameter parameter);
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public abstract IntentionAction createDeleteMultiCatchFix(@Nonnull PsiTypeElement element);
 
   @Nonnull
-  public abstract IntentionAction createConvertSwitchToIfIntention(@Nonnull PsiSwitchStatement statement);
+  public abstract IntentionAction createConvertSwitchToIfIntention(@jakarta.annotation.Nonnull PsiSwitchStatement statement);
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public abstract IntentionAction createNegationBroadScopeFix(@Nonnull PsiPrefixExpression expr);
 
-  @Nonnull
-  public abstract IntentionAction createCreateFieldFromUsageFix(@Nonnull PsiReferenceExpression place);
+  @jakarta.annotation.Nonnull
+  public abstract IntentionAction createCreateFieldFromUsageFix(@jakarta.annotation.Nonnull PsiReferenceExpression place);
 
   @Nonnull
-  public abstract IntentionAction createReplaceWithListAccessFix(@Nonnull PsiArrayAccessExpression expression);
+  public abstract IntentionAction createReplaceWithListAccessFix(@jakarta.annotation.Nonnull PsiArrayAccessExpression expression);
 
   @Nonnull
-  public abstract IntentionAction createAddNewArrayExpressionFix(@Nonnull PsiArrayInitializerExpression expression);
+  public abstract IntentionAction createAddNewArrayExpressionFix(@jakarta.annotation.Nonnull PsiArrayInitializerExpression expression);
+
+  @jakarta.annotation.Nonnull
+  public abstract IntentionAction createMoveCatchUpFix(@Nonnull PsiCatchSection section, @jakarta.annotation.Nonnull PsiCatchSection section1);
+
+  @jakarta.annotation.Nonnull
+  public abstract IntentionAction createRenameWrongRefFix(@jakarta.annotation.Nonnull PsiReferenceExpression ref);
+
+  @jakarta.annotation.Nonnull
+  public abstract IntentionAction createRemoveQualifierFix(@jakarta.annotation.Nonnull PsiExpression qualifier, @Nonnull PsiReferenceExpression expression, @jakarta.annotation.Nonnull PsiClass resolved);
 
   @Nonnull
-  public abstract IntentionAction createMoveCatchUpFix(@Nonnull PsiCatchSection section, @Nonnull PsiCatchSection section1);
+  public abstract IntentionAction createRemoveParameterListFix(@jakarta.annotation.Nonnull PsiMethod parent);
 
-  @Nonnull
-  public abstract IntentionAction createRenameWrongRefFix(@Nonnull PsiReferenceExpression ref);
-
-  @Nonnull
-  public abstract IntentionAction createRemoveQualifierFix(@Nonnull PsiExpression qualifier, @Nonnull PsiReferenceExpression expression, @Nonnull PsiClass resolved);
-
-  @Nonnull
-  public abstract IntentionAction createRemoveParameterListFix(@Nonnull PsiMethod parent);
-
-  @Nonnull
-  public abstract IntentionAction createShowModulePropertiesFix(@Nonnull PsiElement element);
+  @jakarta.annotation.Nonnull
+  public abstract IntentionAction createShowModulePropertiesFix(@jakarta.annotation.Nonnull PsiElement element);
 
   @Nonnull
   public abstract IntentionAction createShowModulePropertiesFix(@Nonnull Module module);
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public abstract IntentionAction createIncreaseLanguageLevelFix(@Nonnull LanguageLevel level);
 
-  @Nonnull
-  public abstract IntentionAction createChangeParameterClassFix(@Nonnull PsiClass aClass, @Nonnull PsiClassType type);
+  @jakarta.annotation.Nonnull
+  public abstract IntentionAction createChangeParameterClassFix(@jakarta.annotation.Nonnull PsiClass aClass, @jakarta.annotation.Nonnull PsiClassType type);
 
   @Nonnull
-  public abstract IntentionAction createReplaceInaccessibleFieldWithGetterSetterFix(@Nonnull PsiElement element, @Nonnull PsiMethod getter, boolean isSetter);
+  public abstract IntentionAction createReplaceInaccessibleFieldWithGetterSetterFix(@jakarta.annotation.Nonnull PsiElement element, @jakarta.annotation.Nonnull PsiMethod getter, boolean isSetter);
 
   @Nonnull
   public abstract IntentionAction createSurroundWithArrayFix(@Nullable PsiCall methodCall, @Nullable PsiExpression expression);
 
-  @Nonnull
-  public abstract IntentionAction createImplementAbstractClassMethodsFix(@Nonnull PsiElement elementToHighlight);
+  @jakarta.annotation.Nonnull
+  public abstract IntentionAction createImplementAbstractClassMethodsFix(@jakarta.annotation.Nonnull PsiElement elementToHighlight);
+
+  @jakarta.annotation.Nonnull
+  public abstract IntentionAction createMoveClassToSeparateFileFix(@jakarta.annotation.Nonnull PsiClass aClass);
 
   @Nonnull
-  public abstract IntentionAction createMoveClassToSeparateFileFix(@Nonnull PsiClass aClass);
+  public abstract IntentionAction createRenameFileFix(@jakarta.annotation.Nonnull String newName);
 
-  @Nonnull
-  public abstract IntentionAction createRenameFileFix(@Nonnull String newName);
-
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public abstract LocalQuickFixAndIntentionActionOnPsiElement createRenameElementFix(@Nonnull PsiNamedElement element);
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public abstract LocalQuickFixAndIntentionActionOnPsiElement createRenameElementFix(@Nonnull PsiNamedElement element, @Nonnull String newName);
 
-  @Nonnull
-  public abstract IntentionAction createChangeExtendsToImplementsFix(@Nonnull PsiClass aClass, @Nonnull PsiClassType classToExtendFrom);
+  @jakarta.annotation.Nonnull
+  public abstract IntentionAction createChangeExtendsToImplementsFix(@Nonnull PsiClass aClass, @jakarta.annotation.Nonnull PsiClassType classToExtendFrom);
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public abstract IntentionAction createCreateConstructorMatchingSuperFix(@Nonnull PsiClass aClass);
 
-  @Nonnull
-  public abstract IntentionAction createRemoveNewQualifierFix(@Nonnull PsiNewExpression expression, @Nullable PsiClass aClass);
+  @jakarta.annotation.Nonnull
+  public abstract IntentionAction createRemoveNewQualifierFix(@jakarta.annotation.Nonnull PsiNewExpression expression, @Nullable PsiClass aClass);
 
-  @Nonnull
-  public abstract IntentionAction createSuperMethodReturnFix(@Nonnull PsiMethod superMethod, @Nonnull PsiType superMethodType);
+  @jakarta.annotation.Nonnull
+  public abstract IntentionAction createSuperMethodReturnFix(@jakarta.annotation.Nonnull PsiMethod superMethod, @jakarta.annotation.Nonnull PsiType superMethodType);
 
-  @Nonnull
-  public abstract IntentionAction createInsertNewFix(@Nonnull PsiMethodCallExpression call, @Nonnull PsiClass aClass);
+  @jakarta.annotation.Nonnull
+  public abstract IntentionAction createInsertNewFix(@jakarta.annotation.Nonnull PsiMethodCallExpression call, @jakarta.annotation.Nonnull PsiClass aClass);
 
   @Nonnull
   public abstract IntentionAction createAddMethodBodyFix(@Nonnull PsiMethod method);
 
   @Nonnull
-  public abstract IntentionAction createDeleteMethodBodyFix(@Nonnull PsiMethod method);
+  public abstract IntentionAction createDeleteMethodBodyFix(@jakarta.annotation.Nonnull PsiMethod method);
 
-  @Nonnull
-  public abstract IntentionAction createInsertSuperFix(@Nonnull PsiMethod constructor);
+  @jakarta.annotation.Nonnull
+  public abstract IntentionAction createInsertSuperFix(@jakarta.annotation.Nonnull PsiMethod constructor);
 
-  @Nonnull
-  public abstract IntentionAction createInsertThisFix(@Nonnull PsiMethod constructor);
+  @jakarta.annotation.Nonnull
+  public abstract IntentionAction createInsertThisFix(@jakarta.annotation.Nonnull PsiMethod constructor);
 
-  @Nonnull
-  public abstract IntentionAction createChangeMethodSignatureFromUsageFix(@Nonnull PsiMethod targetMethod,
+  @jakarta.annotation.Nonnull
+  public abstract IntentionAction createChangeMethodSignatureFromUsageFix(@jakarta.annotation.Nonnull PsiMethod targetMethod,
                                                                           @Nonnull PsiExpression[] expressions,
-                                                                          @Nonnull PsiSubstitutor substitutor,
-                                                                          @Nonnull PsiElement context,
+                                                                          @jakarta.annotation.Nonnull PsiSubstitutor substitutor,
+                                                                          @jakarta.annotation.Nonnull PsiElement context,
                                                                           boolean changeAllUsages,
                                                                           int minUsagesNumberToShowDialog);
 
-  @Nonnull
-  public abstract IntentionAction createChangeMethodSignatureFromUsageReverseOrderFix(@Nonnull PsiMethod targetMethod,
-                                                                                      @Nonnull PsiExpression[] expressions,
-                                                                                      @Nonnull PsiSubstitutor substitutor,
-                                                                                      @Nonnull PsiElement context,
+  @jakarta.annotation.Nonnull
+  public abstract IntentionAction createChangeMethodSignatureFromUsageReverseOrderFix(@jakarta.annotation.Nonnull PsiMethod targetMethod,
+                                                                                      @jakarta.annotation.Nonnull PsiExpression[] expressions,
+                                                                                      @jakarta.annotation.Nonnull PsiSubstitutor substitutor,
+                                                                                      @jakarta.annotation.Nonnull PsiElement context,
                                                                                       boolean changeAllUsages,
                                                                                       int minUsagesNumberToShowDialog);
 
   @Nonnull
-  public abstract IntentionAction createCreateMethodFromUsageFix(@Nonnull PsiMethodCallExpression call);
+  public abstract IntentionAction createCreateMethodFromUsageFix(@jakarta.annotation.Nonnull PsiMethodCallExpression call);
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public abstract IntentionAction createCreateMethodFromUsageFix(PsiMethodReferenceExpression methodReferenceExpression);
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public abstract IntentionAction createCreateAbstractMethodFromUsageFix(@Nonnull PsiMethodCallExpression call);
 
   @Nonnull
-  public abstract IntentionAction createCreatePropertyFromUsageFix(@Nonnull PsiMethodCallExpression call);
+  public abstract IntentionAction createCreatePropertyFromUsageFix(@jakarta.annotation.Nonnull PsiMethodCallExpression call);
 
   @Nonnull
   public abstract IntentionAction createCreateConstructorFromSuperFix(@Nonnull PsiMethodCallExpression call);
 
-  @Nonnull
-  public abstract IntentionAction createCreateConstructorFromThisFix(@Nonnull PsiMethodCallExpression call);
+  @jakarta.annotation.Nonnull
+  public abstract IntentionAction createCreateConstructorFromThisFix(@jakarta.annotation.Nonnull PsiMethodCallExpression call);
+
+  @jakarta.annotation.Nonnull
+  public abstract IntentionAction createCreateGetterSetterPropertyFromUsageFix(@jakarta.annotation.Nonnull PsiMethodCallExpression call);
 
   @Nonnull
-  public abstract IntentionAction createCreateGetterSetterPropertyFromUsageFix(@Nonnull PsiMethodCallExpression call);
-
-  @Nonnull
-  public abstract IntentionAction createStaticImportMethodFix(@Nonnull PsiMethodCallExpression call);
+  public abstract IntentionAction createStaticImportMethodFix(@jakarta.annotation.Nonnull PsiMethodCallExpression call);
 
   @Nonnull
   public abstract IntentionAction createReplaceAddAllArrayToCollectionFix(@Nonnull PsiMethodCallExpression call);
 
-  @Nonnull
-  public abstract IntentionAction createCreateConstructorFromCallFix(@Nonnull PsiConstructorCall call);
+  @jakarta.annotation.Nonnull
+  public abstract IntentionAction createCreateConstructorFromCallFix(@jakarta.annotation.Nonnull PsiConstructorCall call);
+
+  @jakarta.annotation.Nonnull
+  public abstract List<IntentionAction> getVariableTypeFromCallFixes(@jakarta.annotation.Nonnull PsiMethodCallExpression call, @Nonnull PsiExpressionList list);
 
   @Nonnull
-  public abstract List<IntentionAction> getVariableTypeFromCallFixes(@Nonnull PsiMethodCallExpression call, @Nonnull PsiExpressionList list);
+  public abstract IntentionAction createAddReturnFix(@jakarta.annotation.Nonnull PsiMethod method);
 
-  @Nonnull
-  public abstract IntentionAction createAddReturnFix(@Nonnull PsiMethod method);
-
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public abstract IntentionAction createAddVariableInitializerFix(@Nonnull PsiVariable variable);
 
   @Nonnull
-  public abstract IntentionAction createDeferFinalAssignmentFix(@Nonnull PsiVariable variable, @Nonnull PsiReferenceExpression expression);
+  public abstract IntentionAction createDeferFinalAssignmentFix(@jakarta.annotation.Nonnull PsiVariable variable, @Nonnull PsiReferenceExpression expression);
 
   @Nonnull
-  public abstract IntentionAction createVariableAccessFromInnerClassFix(@Nonnull PsiVariable variable, @Nonnull PsiElement scope);
+  public abstract IntentionAction createVariableAccessFromInnerClassFix(@jakarta.annotation.Nonnull PsiVariable variable, @Nonnull PsiElement scope);
 
   @Nonnull
   public abstract IntentionAction createCreateConstructorParameterFromFieldFix(@Nonnull PsiField field);
 
-  @Nonnull
-  public abstract IntentionAction createInitializeFinalFieldInConstructorFix(@Nonnull PsiField field);
+  @jakarta.annotation.Nonnull
+  public abstract IntentionAction createInitializeFinalFieldInConstructorFix(@jakarta.annotation.Nonnull PsiField field);
 
   @Nonnull
   public abstract IntentionAction createRemoveTypeArgumentsFix(@Nonnull PsiElement variable);
 
-  @Nonnull
-  public abstract IntentionAction createChangeClassSignatureFromUsageFix(@Nonnull PsiClass owner, @Nonnull PsiReferenceParameterList parameterList);
+  @jakarta.annotation.Nonnull
+  public abstract IntentionAction createChangeClassSignatureFromUsageFix(@jakarta.annotation.Nonnull PsiClass owner, @jakarta.annotation.Nonnull PsiReferenceParameterList parameterList);
 
-  @Nonnull
-  public abstract IntentionAction createReplacePrimitiveWithBoxedTypeAction(@Nonnull PsiTypeElement element, @Nonnull String typeName, @Nonnull String boxedTypeName);
+  @jakarta.annotation.Nonnull
+  public abstract IntentionAction createReplacePrimitiveWithBoxedTypeAction(@jakarta.annotation.Nonnull PsiTypeElement element, @jakarta.annotation.Nonnull String typeName, @Nonnull String boxedTypeName);
 
   @Nonnull
   public abstract IntentionAction createMakeVarargParameterLastFix(@Nonnull PsiParameter parameter);
 
-  @Nonnull
-  public abstract IntentionAction createMoveBoundClassToFrontFix(@Nonnull PsiClass aClass, @Nonnull PsiClassType type);
+  @jakarta.annotation.Nonnull
+  public abstract IntentionAction createMoveBoundClassToFrontFix(@Nonnull PsiClass aClass, @jakarta.annotation.Nonnull PsiClassType type);
 
   public abstract void registerPullAsAbstractUpFixes(@Nonnull PsiMethod method, @Nonnull QuickFixActionRegistrar registrar);
 
   @Nonnull
   public abstract IntentionAction createCreateAnnotationMethodFromUsageFix(@Nonnull PsiNameValuePair pair);
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public abstract IntentionAction createOptimizeImportsFix(boolean onTheFly);
 
-  public abstract void registerFixesForUnusedParameter(@Nonnull PsiParameter parameter, @Nonnull Object highlightInfo);
+  public abstract void registerFixesForUnusedParameter(@jakarta.annotation.Nonnull PsiParameter parameter, @Nonnull Object highlightInfo);
 
   @Nonnull
-  public abstract IntentionAction createAddToDependencyInjectionAnnotationsFix(@Nonnull Project project, @Nonnull String qualifiedName, @Nonnull String element);
+  public abstract IntentionAction createAddToDependencyInjectionAnnotationsFix(@jakarta.annotation.Nonnull Project project, @Nonnull String qualifiedName, @Nonnull String element);
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public abstract IntentionAction createAddToImplicitlyWrittenFieldsFix(Project project, @Nonnull String qualifiedName);
 
-  @Nonnull
-  public abstract IntentionAction createCreateGetterOrSetterFix(boolean createGetter, boolean createSetter, @Nonnull PsiField field);
+  @jakarta.annotation.Nonnull
+  public abstract IntentionAction createCreateGetterOrSetterFix(boolean createGetter, boolean createSetter, @jakarta.annotation.Nonnull PsiField field);
 
-  @Nonnull
-  public abstract IntentionAction createRenameToIgnoredFix(@Nonnull PsiNamedElement namedElement);
+  @jakarta.annotation.Nonnull
+  public abstract IntentionAction createRenameToIgnoredFix(@jakarta.annotation.Nonnull PsiNamedElement namedElement);
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public abstract IntentionAction createEnableOptimizeImportsOnTheFlyFix();
 
-  @Nonnull
-  public abstract LocalQuickFixAndIntentionActionOnPsiElement createDeleteFix(@Nonnull PsiElement element);
+  @jakarta.annotation.Nonnull
+  public abstract LocalQuickFixAndIntentionActionOnPsiElement createDeleteFix(@jakarta.annotation.Nonnull PsiElement element);
+
+  @jakarta.annotation.Nonnull
+  public abstract LocalQuickFixAndIntentionActionOnPsiElement createDeleteFix(@jakarta.annotation.Nonnull PsiElement element, @jakarta.annotation.Nonnull @Nls String text);
 
   @Nonnull
-  public abstract LocalQuickFixAndIntentionActionOnPsiElement createDeleteFix(@Nonnull PsiElement element, @Nonnull @Nls String text);
+  public abstract IntentionAction createDeleteSideEffectAwareFix(@jakarta.annotation.Nonnull PsiExpressionStatement statement);
 
   @Nonnull
-  public abstract IntentionAction createDeleteSideEffectAwareFix(@Nonnull PsiExpressionStatement statement);
+  public abstract IntentionAction createSafeDeleteFix(@jakarta.annotation.Nonnull PsiElement element);
+
+  @jakarta.annotation.Nullable
+  public abstract List<LocalQuickFix> registerOrderEntryFixes(@jakarta.annotation.Nonnull PsiReference reference);
 
   @Nonnull
-  public abstract IntentionAction createSafeDeleteFix(@Nonnull PsiElement element);
-
-  @Nullable
-  public abstract List<LocalQuickFix> registerOrderEntryFixes(@Nonnull PsiReference reference);
-
-  @Nonnull
-  public abstract IntentionAction createAddMissingRequiredAnnotationParametersFix(@Nonnull PsiAnnotation annotation,
-                                                                                  @Nonnull PsiMethod[] annotationMethods,
+  public abstract IntentionAction createAddMissingRequiredAnnotationParametersFix(@jakarta.annotation.Nonnull PsiAnnotation annotation,
+                                                                                  @jakarta.annotation.Nonnull PsiMethod[] annotationMethods,
                                                                                   @Nonnull Collection<String> missedElements);
 
-  @Nonnull
-  public abstract IntentionAction createSurroundWithQuotesAnnotationParameterValueFix(@Nonnull PsiAnnotationMemberValue value, @Nonnull PsiType expectedType);
+  @jakarta.annotation.Nonnull
+  public abstract IntentionAction createSurroundWithQuotesAnnotationParameterValueFix(@jakarta.annotation.Nonnull PsiAnnotationMemberValue value, @jakarta.annotation.Nonnull PsiType expectedType);
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public abstract IntentionAction addMethodQualifierFix(@Nonnull PsiMethodCallExpression methodCall);
 
-  @Nonnull
-  public abstract IntentionAction createWrapWithAdapterFix(@Nullable PsiType type, @Nonnull PsiExpression expression);
+  @jakarta.annotation.Nonnull
+  public abstract IntentionAction createWrapWithAdapterFix(@jakarta.annotation.Nullable PsiType type, @jakarta.annotation.Nonnull PsiExpression expression);
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public abstract IntentionAction createWrapWithOptionalFix(@Nullable PsiType type, @Nonnull PsiExpression expression);
 
-  @Nullable
-  public abstract IntentionAction createNotIterableForEachLoopFix(@Nonnull PsiExpression expression);
+  @jakarta.annotation.Nullable
+  public abstract IntentionAction createNotIterableForEachLoopFix(@jakarta.annotation.Nonnull PsiExpression expression);
+
+  @jakarta.annotation.Nonnull
+  public abstract List<IntentionAction> createAddAnnotationAttributeNameFixes(@jakarta.annotation.Nonnull PsiNameValuePair pair);
+
+  @jakarta.annotation.Nonnull
+  public abstract IntentionAction createCollectionToArrayFix(@jakarta.annotation.Nonnull PsiExpression collectionExpression, @jakarta.annotation.Nonnull PsiArrayType arrayType);
 
   @Nonnull
-  public abstract List<IntentionAction> createAddAnnotationAttributeNameFixes(@Nonnull PsiNameValuePair pair);
-
-  @Nonnull
-  public abstract IntentionAction createCollectionToArrayFix(@Nonnull PsiExpression collectionExpression, @Nonnull PsiArrayType arrayType);
-
-  @Nonnull
-  public abstract IntentionAction createInsertMethodCallFix(@Nonnull PsiMethodCallExpression call, PsiMethod method);
+  public abstract IntentionAction createInsertMethodCallFix(@jakarta.annotation.Nonnull PsiMethodCallExpression call, PsiMethod method);
 
   @Nonnull
   public abstract LocalQuickFixAndIntentionActionOnPsiElement createAccessStaticViaInstanceFix(PsiReferenceExpression methodRef, JavaResolveResult result);
 
   @Nonnull
-  public abstract IntentionAction createWrapStringWithFileFix(@Nullable PsiType type, @Nonnull PsiExpression expression);
+  public abstract IntentionAction createWrapStringWithFileFix(@Nullable PsiType type, @jakarta.annotation.Nonnull PsiExpression expression);
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public abstract IntentionAction createAddMissingEnumBranchesFix(@Nonnull PsiSwitchBlock switchBlock, @Nonnull Set<String> missingCases);
 
   @Nonnull
   public abstract IntentionAction createAddSwitchDefaultFix(@Nonnull PsiSwitchBlock switchBlock, @Nullable String message);
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public abstract IntentionAction createWrapSwitchRuleStatementsIntoBlockFix(PsiSwitchLabeledRuleStatement rule);
 
 }

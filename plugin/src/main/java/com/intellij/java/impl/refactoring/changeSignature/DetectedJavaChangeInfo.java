@@ -35,9 +35,9 @@ import consulo.undoRedo.CommandProcessor;
 import consulo.usage.UsageInfo;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.Comparing;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -50,7 +50,7 @@ class DetectedJavaChangeInfo extends JavaChangeInfoImpl {
   DetectedJavaChangeInfo(@PsiModifier.ModifierConstant String newVisibility,
                          PsiMethod method,
                          CanonicalTypes.Type newType,
-                         @Nonnull ParameterInfoImpl[] newParms,
+                         @jakarta.annotation.Nonnull ParameterInfoImpl[] newParms,
                          ThrownExceptionInfo[] newExceptions,
                          String newName,
                          String oldName,

@@ -17,7 +17,7 @@ package com.intellij.codeInsight.completion;
 
 import static org.junit.Assert.assertEquals;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.JavaTestUtil;
 import consulo.language.editor.completion.lookup.Lookup;

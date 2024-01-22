@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.ig.numeric;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiType;
 import com.siyeh.InspectionGadgetsBundle;
@@ -24,6 +22,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 import org.jetbrains.annotations.NonNls;
 
@@ -31,19 +30,19 @@ import org.jetbrains.annotations.NonNls;
 public class OctalLiteralInspection extends BaseInspection {
   @Pattern(VALID_ID_PATTERN)
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "OctalInteger";
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("octal.literal.display.name");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "octal.literal.problem.descriptor");

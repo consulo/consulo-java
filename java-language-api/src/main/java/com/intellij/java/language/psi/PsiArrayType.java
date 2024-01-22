@@ -17,7 +17,7 @@ package com.intellij.java.language.psi;
 
 import consulo.language.psi.scope.GlobalSearchScope;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Represents an array type.
@@ -27,7 +27,7 @@ import javax.annotation.Nonnull;
 public class PsiArrayType extends PsiType.Stub {
   private final PsiType myComponentType;
 
-  public PsiArrayType(@Nonnull PsiType componentType) {
+  public PsiArrayType(@jakarta.annotation.Nonnull PsiType componentType) {
     this(componentType, TypeAnnotationProvider.EMPTY);
   }
 
@@ -36,7 +36,7 @@ public class PsiArrayType extends PsiType.Stub {
     myComponentType = componentType;
   }
 
-  public PsiArrayType(@Nonnull PsiType componentType, @Nonnull TypeAnnotationProvider provider) {
+  public PsiArrayType(@Nonnull PsiType componentType, @jakarta.annotation.Nonnull TypeAnnotationProvider provider) {
     super(provider);
     myComponentType = componentType;
   }
@@ -53,7 +53,7 @@ public class PsiArrayType extends PsiType.Stub {
     return getText(myComponentType.getCanonicalText(annotated), "[]", true, annotated);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getInternalCanonicalText() {
     return getText(myComponentType.getInternalCanonicalText(), "[]", true, true);

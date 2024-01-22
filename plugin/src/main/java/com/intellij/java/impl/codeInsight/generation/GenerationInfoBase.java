@@ -15,8 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.generation;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import consulo.codeEditor.Editor;
@@ -25,6 +24,7 @@ import com.intellij.java.language.psi.PsiClass;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMember;
 import consulo.language.util.IncorrectOperationException;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
@@ -44,7 +44,7 @@ public abstract class GenerationInfoBase implements GenerationInfo
 	 */
 	@Override
 	@Nullable
-	public PsiElement findInsertionAnchor(@Nonnull PsiClass aClass, @Nonnull PsiElement leaf)
+	public PsiElement findInsertionAnchor(@Nonnull PsiClass aClass, @jakarta.annotation.Nonnull PsiElement leaf)
 	{
 		PsiElement element = leaf;
 		while(element.getParent() != aClass)

@@ -38,8 +38,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.undoRedo.CommandProcessor;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author mike

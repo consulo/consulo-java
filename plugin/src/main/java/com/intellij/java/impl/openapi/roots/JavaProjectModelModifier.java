@@ -25,8 +25,8 @@ import consulo.module.content.layer.orderEntry.DependencyScope;
 import consulo.content.library.Library;
 import consulo.util.concurrent.AsyncResult;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Collection;
 
 /**
@@ -51,7 +51,7 @@ public abstract class JavaProjectModelModifier {
    * {@code null} otherwise
    */
   @Nullable
-  public abstract AsyncResult<Void> addModuleDependency(@Nonnull Module from, @Nonnull Module to, @Nonnull DependencyScope scope);
+  public abstract AsyncResult<Void> addModuleDependency(@jakarta.annotation.Nonnull Module from, @jakarta.annotation.Nonnull Module to, @jakarta.annotation.Nonnull DependencyScope scope);
 
   /**
    * Implementation of this method should add dependency from modules {@code modules} to an external library with scope {@code scope} accordingly
@@ -63,7 +63,7 @@ public abstract class JavaProjectModelModifier {
    * {@code null} otherwise
    */
   @Nullable
-  public abstract AsyncResult<Void> addExternalLibraryDependency(@Nonnull Collection<Module> modules, @Nonnull ExternalLibraryDescriptor descriptor, @Nonnull DependencyScope scope);
+  public abstract AsyncResult<Void> addExternalLibraryDependency(@jakarta.annotation.Nonnull Collection<Module> modules, @Nonnull ExternalLibraryDescriptor descriptor, @Nonnull DependencyScope scope);
 
   /**
    * Implementation of this method should add dependency from module {@code from} to {@code library} with scope {@code scope} accordingly
@@ -75,7 +75,7 @@ public abstract class JavaProjectModelModifier {
    * {@code null} otherwise
    */
   @Nullable
-  public abstract AsyncResult<Void> addLibraryDependency(@Nonnull Module from, @Nonnull Library library, @Nonnull DependencyScope scope);
+  public abstract AsyncResult<Void> addLibraryDependency(@jakarta.annotation.Nonnull Module from, @jakarta.annotation.Nonnull Library library, @jakarta.annotation.Nonnull DependencyScope scope);
 
   /**
    * Implementation of this method should set language level for module {@code module} to the specified value accordingly

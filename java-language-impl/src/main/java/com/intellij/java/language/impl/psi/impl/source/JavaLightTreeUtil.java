@@ -23,8 +23,8 @@ import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import consulo.language.ast.LightTreeUtil;
 import consulo.language.ast.IElementType;
 import org.jetbrains.annotations.Contract;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.util.List;
 
@@ -35,37 +35,37 @@ import static com.intellij.java.language.impl.psi.impl.source.tree.JavaElementTy
  */
 public class JavaLightTreeUtil
 {
-	@Nullable
+	@jakarta.annotation.Nullable
 	@Contract("_,null->null")
-	public static List<LighterASTNode> getArgList(@Nonnull LighterAST tree, @Nullable LighterASTNode call)
+	public static List<LighterASTNode> getArgList(@jakarta.annotation.Nonnull LighterAST tree, @jakarta.annotation.Nullable LighterASTNode call)
 	{
 		LighterASTNode anonClass = LightTreeUtil.firstChildOfType(tree, call, ANONYMOUS_CLASS);
 		LighterASTNode exprList = LightTreeUtil.firstChildOfType(tree, anonClass != null ? anonClass : call, EXPRESSION_LIST);
 		return exprList == null ? null : getExpressionChildren(tree, exprList);
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	@Contract("_,null->null")
-	public static String getNameIdentifierText(@Nonnull LighterAST tree, @Nullable LighterASTNode idOwner)
+	public static String getNameIdentifierText(@Nonnull LighterAST tree, @jakarta.annotation.Nullable LighterASTNode idOwner)
 	{
 		LighterASTNode id = LightTreeUtil.firstChildOfType(tree, idOwner, JavaTokenType.IDENTIFIER);
 		return id != null ? RecordUtil.intern(tree.getCharTable(), id) : null;
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public static List<LighterASTNode> getExpressionChildren(@Nonnull LighterAST tree, @Nonnull LighterASTNode node)
 	{
 		return LightTreeUtil.getChildrenOfType(tree, node, ElementType.EXPRESSION_BIT_SET);
 	}
 
-	@Nullable
-	public static LighterASTNode findExpressionChild(@Nonnull LighterAST tree, @Nullable LighterASTNode node)
+	@jakarta.annotation.Nullable
+	public static LighterASTNode findExpressionChild(@Nonnull LighterAST tree, @jakarta.annotation.Nullable LighterASTNode node)
 	{
 		return LightTreeUtil.firstChildOfType(tree, node, ElementType.EXPRESSION_BIT_SET);
 	}
 
-	@Nullable
-	public static LighterASTNode skipParenthesesCastsDown(@Nonnull LighterAST tree, @Nullable LighterASTNode node)
+	@jakarta.annotation.Nullable
+	public static LighterASTNode skipParenthesesCastsDown(@jakarta.annotation.Nonnull LighterAST tree, @Nullable LighterASTNode node)
 	{
 		while(node != null && (node.getTokenType() == PARENTH_EXPRESSION || node.getTokenType() == TYPE_CAST_EXPRESSION))
 		{
@@ -74,8 +74,8 @@ public class JavaLightTreeUtil
 		return node;
 	}
 
-	@Nullable
-	public static LighterASTNode skipParenthesesDown(@Nonnull LighterAST tree, @Nullable LighterASTNode expression)
+	@jakarta.annotation.Nullable
+	public static LighterASTNode skipParenthesesDown(@Nonnull LighterAST tree, @jakarta.annotation.Nullable LighterASTNode expression)
 	{
 		while(expression != null && expression.getTokenType() == PARENTH_EXPRESSION)
 		{
@@ -92,8 +92,8 @@ public class JavaLightTreeUtil
 	 * @param modifierKeyword   modifier to look for (e.g. {@link JavaTokenType#VOLATILE_KEYWORD}
 	 * @return true if given element has given explicit modifier
 	 */
-	public static boolean hasExplicitModifier(@Nonnull LighterAST tree,
-											  @Nullable LighterASTNode modifierListOwner,
+	public static boolean hasExplicitModifier(@jakarta.annotation.Nonnull LighterAST tree,
+											  @jakarta.annotation.Nullable LighterASTNode modifierListOwner,
 											  @Nonnull IElementType modifierKeyword)
 	{
 		LighterASTNode modifierList = LightTreeUtil.firstChildOfType(tree, modifierListOwner, MODIFIER_LIST);

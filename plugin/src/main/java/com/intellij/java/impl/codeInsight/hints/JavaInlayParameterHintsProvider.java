@@ -10,8 +10,8 @@ import consulo.language.editor.inlay.InlayParameterHintsProvider;
 import consulo.language.editor.inlay.MethodInfo;
 import consulo.language.psi.PsiElement;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -53,7 +53,7 @@ public class JavaInlayParameterHintsProvider implements InlayParameterHintsProvi
       "org.slf4j.Logger.*"
   };
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public List<InlayInfo> getParameterHints(@Nonnull PsiElement element) {
     if (element instanceof PsiCallExpression) {

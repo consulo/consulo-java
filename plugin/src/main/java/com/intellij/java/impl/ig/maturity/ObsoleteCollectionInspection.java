@@ -27,9 +27,9 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.intellij.java.impl.ig.psiutils.LibraryUtil;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -40,7 +40,7 @@ public class ObsoleteCollectionInspection extends BaseInspection {
   public boolean ignoreRequiredObsoleteCollectionTypes = false;
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "UseOfObsoleteCollectionType";
   }

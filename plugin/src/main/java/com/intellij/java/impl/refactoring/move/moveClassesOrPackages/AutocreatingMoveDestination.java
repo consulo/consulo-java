@@ -26,7 +26,7 @@ import com.intellij.java.impl.refactoring.PackageWrapper;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import consulo.language.util.IncorrectOperationException;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  *  @author dsl

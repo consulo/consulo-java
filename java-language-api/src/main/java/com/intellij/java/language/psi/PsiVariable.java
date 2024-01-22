@@ -15,15 +15,18 @@
  */
 package com.intellij.java.language.psi;
 
+import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.language.pom.PomRenameableTarget;
+import consulo.language.psi.PsiCompiledElement;
 import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiNameIdentifierOwner;
 import consulo.language.psi.PsiTarget;
 import consulo.language.util.IncorrectOperationException;
-import consulo.language.pom.PomRenameableTarget;
-import consulo.language.psi.PsiNameIdentifierOwner;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 /**
  * Represents a Java local variable, method parameter or field.
@@ -42,7 +45,7 @@ public interface PsiVariable extends PsiModifierListOwner, PsiNameIdentifierOwne
    *
    * @return the type element for the variable type.
    */
-  @Nullable
+  @jakarta.annotation.Nullable
   PsiTypeElement getTypeElement();
 
   /**
@@ -51,7 +54,7 @@ public interface PsiVariable extends PsiModifierListOwner, PsiNameIdentifierOwne
    * @return the initializer expression, or null if it has no initializer.
    * @see {@link #hasInitializer()}
    */
-  @Nullable
+  @jakarta.annotation.Nullable
   PsiExpression getInitializer();
 
   /**
@@ -88,9 +91,20 @@ public interface PsiVariable extends PsiModifierListOwner, PsiNameIdentifierOwne
    * @return the variable name identifier.
    */
   @Override
-  @Nullable
+  @jakarta.annotation.Nullable
   PsiIdentifier getNameIdentifier();
 
   @Override
   PsiElement setName(@NonNls @Nonnull String name) throws IncorrectOperationException;
+
+  /**
+   * @return true if the variable is an unnamed variable, according to the Java specification
+   */
+  default boolean isUnnamed() {
+    return "_".equals(getName()) &&
+      !(this instanceof PsiCompiledElement) &&
+      // Treat _ as unsupported unnamed variable since JDK 1.9,
+      // so we can get a proper suggestion to update language level
+      PsiUtil.getLanguageLevel(this).isAtLeast(LanguageLevel.JDK_1_9);
+  }
 }

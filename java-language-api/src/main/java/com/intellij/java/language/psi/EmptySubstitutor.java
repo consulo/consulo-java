@@ -17,7 +17,7 @@ package com.intellij.java.language.psi;
 
 import com.intellij.java.language.psi.util.PsiUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Collections;
 import java.util.Map;
 
@@ -55,7 +55,7 @@ public final class EmptySubstitutor implements PsiSubstitutor {
     return PsiSubstitutorFactory.getInstance().createSubstitutor(classParameter, mapping);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public PsiSubstitutor putAll(@Nonnull PsiClass parentClass, PsiType[] mappings) {
     if (!parentClass.hasTypeParameters())
@@ -65,7 +65,7 @@ public final class EmptySubstitutor implements PsiSubstitutor {
 
   @Nonnull
   @Override
-  public PsiSubstitutor putAll(@Nonnull PsiSubstitutor another) {
+  public PsiSubstitutor putAll(@jakarta.annotation.Nonnull PsiSubstitutor another) {
     return another;
   }
 

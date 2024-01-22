@@ -35,7 +35,7 @@ import consulo.util.xml.serializer.WriteExternalException;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -66,7 +66,7 @@ public class BooleanMethodNameMustStartWithQuestionInspection extends BaseInspec
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("boolean.method.name.must.start.with.question.display.name");
   }
@@ -78,7 +78,7 @@ public class BooleanMethodNameMustStartWithQuestionInspection extends BaseInspec
   }
 
   @Override
-  public void readSettings(@Nonnull Element element) throws InvalidDataException {
+  public void readSettings(@jakarta.annotation.Nonnull Element element) throws InvalidDataException {
     super.readSettings(element);
     parseString(questionString, questionList);
   }
@@ -140,7 +140,7 @@ public class BooleanMethodNameMustStartWithQuestionInspection extends BaseInspec
   private class BooleanMethodNameMustStartWithQuestionVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
       final PsiType returnType = method.getReturnType();
       if (returnType == null) {
         return;

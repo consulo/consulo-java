@@ -20,7 +20,7 @@ import consulo.language.psi.PsiElement;
 import com.intellij.java.impl.refactoring.RefactorJBundle;
 import com.intellij.java.impl.refactoring.psi.MyUsageViewUtil;
 import consulo.usage.UsageViewDescriptor;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 class ExtractClassUsageViewDescriptor implements UsageViewDescriptor {
     private final PsiClass aClass;

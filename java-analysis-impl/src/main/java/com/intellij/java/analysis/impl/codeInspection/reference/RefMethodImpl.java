@@ -32,8 +32,8 @@ import consulo.util.collection.SmartList;
 import consulo.util.lang.Comparing;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -312,7 +312,7 @@ public class RefMethodImpl extends RefJavaElementImpl implements RefMethod {
     getRefManager().fireBuildReferences(this);
   }
 
-  private void collectUncaughtExceptions(@Nonnull PsiMethod method) {
+  private void collectUncaughtExceptions(@jakarta.annotation.Nonnull PsiMethod method) {
     if (isExternalOverride()) {
       return;
     }
@@ -501,7 +501,7 @@ public class RefMethodImpl extends RefJavaElementImpl implements RefMethod {
     return result[0];
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static RefMethod methodFromExternalName(RefManager manager, String externalName) {
     return (RefMethod) manager.getReference(findPsiMethod(PsiManager.getInstance(manager.getProject()), externalName));
   }
@@ -673,7 +673,7 @@ public class RefMethodImpl extends RefJavaElementImpl implements RefMethod {
   }
 
   @Override
-  @Nullable
+  @jakarta.annotation.Nullable
   public PsiClass[] getUnThrownExceptions() {
     if (myUnThrownExceptions == null) {
       return null;

@@ -1,4 +1,4 @@
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 class Test {
   public static void test(@Nonnull Object... objects) { }

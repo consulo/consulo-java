@@ -18,7 +18,7 @@ package com.intellij.java.compiler.impl.javaCompiler;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.io.FileUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -35,7 +35,7 @@ public class FileObject
 	private byte[] myContent;
 	private int myClassId = -1;
 
-	public FileObject(@Nonnull File file, @Nonnull byte[] content)
+	public FileObject(@Nonnull File file, @jakarta.annotation.Nonnull byte[] content)
 	{
 		myFile = file;
 		myContent = content;

@@ -31,8 +31,8 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.intellij.java.impl.ig.psiutils.VariableSearchUtils;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import javax.swing.*;
 
@@ -49,7 +49,7 @@ public class UnnecessaryThisInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("unnecessary.this.problem.descriptor");
   }
@@ -68,7 +68,7 @@ public class UnnecessaryThisInspection extends BaseInspection {
 
   private static class UnnecessaryThisFix extends InspectionGadgetsFix {
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("unnecessary.this.remove.quickfix");
     }
@@ -95,7 +95,7 @@ public class UnnecessaryThisInspection extends BaseInspection {
   private class UnnecessaryThisVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
+    public void visitReferenceExpression(@jakarta.annotation.Nonnull PsiReferenceExpression expression) {
       super.visitReferenceExpression(expression);
       final PsiReferenceParameterList parameterList = expression.getParameterList();
       if (parameterList == null) {

@@ -67,8 +67,8 @@ import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.Ref;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 public class InlineMethodProcessor extends BaseRefactoringProcessor {
@@ -94,7 +94,7 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
 
   public InlineMethodProcessor(@Nonnull Project project,
                                @Nonnull PsiMethod method,
-                               @Nullable PsiJavaCodeReferenceElement reference,
+                               @jakarta.annotation.Nullable PsiJavaCodeReferenceElement reference,
                                Editor editor,
                                boolean isInlineThisOnly) {
     this(project, method, reference, editor, isInlineThisOnly, false, false);
@@ -102,7 +102,7 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
 
   public InlineMethodProcessor(@Nonnull Project project,
                                @Nonnull PsiMethod method,
-                               @Nullable PsiJavaCodeReferenceElement reference,
+                               @jakarta.annotation.Nullable PsiJavaCodeReferenceElement reference,
                                Editor editor,
                                boolean isInlineThisOnly,
                                boolean searchInComments,
@@ -126,7 +126,7 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
     return RefactoringBundle.message("inline.method.command", myDescriptiveName);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
     return new InlineViewDescriptor(myMethod);
   }

@@ -22,9 +22,9 @@ import consulo.application.ApplicationManager;
 import consulo.application.util.function.Computable;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.List;
 
 class ConvertReturnStatementsVisitor implements ReturnStatementsVisitor {

@@ -17,14 +17,13 @@ package com.intellij.java.impl.codeInsight;
 
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
-import consulo.component.extension.ExtensionPointName;
 import consulo.language.psi.PsiFile;
 import consulo.module.content.layer.orderEntry.LibraryOrderEntry;
 import consulo.ui.Component;
 import consulo.ui.event.UIEvent;
 import consulo.util.concurrent.AsyncResult;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 
@@ -38,7 +37,7 @@ public interface AttachSourcesProvider {
 
     String getBusyText();
 
-    AsyncResult<Void> perform(@Nonnull List<LibraryOrderEntry> orderEntriesContainingFile, @Nonnull UIEvent<Component> e);
+    AsyncResult<Void> perform(@jakarta.annotation.Nonnull List<LibraryOrderEntry> orderEntriesContainingFile, @Nonnull UIEvent<Component> e);
   }
 
   /**

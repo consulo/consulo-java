@@ -24,8 +24,8 @@ import consulo.language.pom.PomService;
 import consulo.language.pom.PomTarget;
 import consulo.language.pom.PomTargetPsiElement;
 import consulo.language.psi.PsiElement;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.util.Map;
 
 @ExtensionImpl

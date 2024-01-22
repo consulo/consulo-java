@@ -1,11 +1,10 @@
 package com.intellij.codeInsight.daemon.quickFix;
 
-import javax.annotation.Nonnull;
-
 import consulo.language.editor.CodeInsightSettings;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.analysis.impl.codeInspection.unusedImport.UnusedImportLocalInspection;
+import jakarta.annotation.Nonnull;
 
 
 public abstract class EnableOptimizeImportsOnTheFlyTest extends LightQuickFixTestCase {

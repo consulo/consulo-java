@@ -29,8 +29,8 @@ import consulo.navigation.Navigatable;
 import consulo.util.lang.lazy.LazyValue;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.function.Supplier;
 
 /**
@@ -56,13 +56,13 @@ public class ClsAnnotationImpl extends ClsRepositoryPsiElement<PsiAnnotationStub
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, @jakarta.annotation.Nonnull StringBuilder buffer) {
     buffer.append('@').append(myReferenceElement.get().getCanonicalText());
     appendText(getParameterList(), indentLevel, buffer);
   }
 
   @Override
-  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(@jakarta.annotation.Nonnull TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, null);
     PsiAnnotation mirror = SourceTreeToPsiMap.treeToPsiNotNull(element);
     setMirror(getNameReferenceElement(), mirror.getNameReferenceElement());
@@ -88,7 +88,7 @@ public class ClsAnnotationImpl extends ClsRepositoryPsiElement<PsiAnnotationStub
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiAnnotationParameterList getParameterList() {
     return myParameterList.get();
   }
@@ -110,7 +110,7 @@ public class ClsAnnotationImpl extends ClsRepositoryPsiElement<PsiAnnotationStub
   }
 
   @Override
-  @Nullable
+  @jakarta.annotation.Nullable
   public PsiAnnotationMemberValue findDeclaredAttributeValue(@NonNls final String attributeName) {
     return PsiImplUtil.findDeclaredAttributeValue(this, attributeName);
   }

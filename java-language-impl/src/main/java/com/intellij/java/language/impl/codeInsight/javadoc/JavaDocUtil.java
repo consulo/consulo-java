@@ -26,9 +26,9 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nullable;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -122,7 +122,7 @@ public class JavaDocUtil {
     }
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static PsiElement findReferencedMember(PsiClass aClass, String memberRefText, PsiElement context) {
     int parenthIndex = memberRefText.indexOf('(');
     if (parenthIndex < 0) {
@@ -203,7 +203,7 @@ public class JavaDocUtil {
     }
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static String getReferenceText(Project project, PsiElement element) {
     if (element instanceof PsiJavaPackage) {
       return ((PsiJavaPackage) element).getQualifiedName();
@@ -395,7 +395,7 @@ public class JavaDocUtil {
     return list == null ? PsiClassType.EMPTY_ARRAY : list.getReferencedTypes();
   }
 
-  public static boolean isInsidePackageInfo(@Nullable PsiDocComment containingComment) {
+  public static boolean isInsidePackageInfo(@jakarta.annotation.Nullable PsiDocComment containingComment) {
     return containingComment != null && containingComment.getOwner() == null && containingComment.getParent()
         instanceof PsiJavaFile;
   }

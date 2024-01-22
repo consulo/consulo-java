@@ -8,7 +8,7 @@ import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.siyeh.ig.callMatcher.CallMatcher;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import static com.intellij.java.language.psi.CommonClassNames.JAVA_UTIL_COLLECTION;
 import static com.intellij.java.language.psi.CommonClassNames.JAVA_UTIL_MAP;
@@ -20,7 +20,7 @@ public class CollectionMethodInliner implements CallInliner {
       instanceCall(JAVA_UTIL_MAP, "clear").parameterCount(0));
 
   @Override
-  public boolean tryInlineCall(@Nonnull CFGBuilder builder, @Nonnull PsiMethodCallExpression call) {
+  public boolean tryInlineCall(@Nonnull CFGBuilder builder, @jakarta.annotation.Nonnull PsiMethodCallExpression call) {
     PsiExpression qualifier = call.getMethodExpression().getQualifierExpression();
     if (qualifier == null)
       return false;
@@ -31,7 +31,7 @@ public class CollectionMethodInliner implements CallInliner {
     return false;
   }
 
-  private static void inlineClear(@Nonnull CFGBuilder builder, @Nonnull PsiExpression qualifier) {
+  private static void inlineClear(@jakarta.annotation.Nonnull CFGBuilder builder, @Nonnull PsiExpression qualifier) {
     DfaValueFactory factory = builder.getFactory();
     builder
         .pushExpression(qualifier)

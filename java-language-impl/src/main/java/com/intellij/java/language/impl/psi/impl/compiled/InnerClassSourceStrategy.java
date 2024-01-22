@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.impl.psi.impl.compiled;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author max

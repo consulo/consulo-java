@@ -33,7 +33,7 @@ import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.util.dataholder.Key;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class AnalysisScopeRule implements GetDataRule<AnalysisScope> {
@@ -44,7 +44,7 @@ public class AnalysisScopeRule implements GetDataRule<AnalysisScope> {
   }
 
   @Override
-  public AnalysisScope getData(@Nonnull final DataProvider dataProvider) {
+  public AnalysisScope getData(@jakarta.annotation.Nonnull final DataProvider dataProvider) {
     final Object psiFile = dataProvider.getDataUnchecked(LangDataKeys.PSI_FILE);
     if (psiFile instanceof PsiJavaFile) {
       return new JavaAnalysisScope((PsiJavaFile) psiFile);

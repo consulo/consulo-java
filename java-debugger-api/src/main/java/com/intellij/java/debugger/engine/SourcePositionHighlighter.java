@@ -22,8 +22,7 @@ import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
 import consulo.document.util.TextRange;
 import consulo.project.DumbService;
-
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * During indexing, only extensions that implement {@link DumbAware} are called.

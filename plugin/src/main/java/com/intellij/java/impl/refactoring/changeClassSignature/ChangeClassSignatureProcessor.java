@@ -35,8 +35,8 @@ import consulo.usage.UsageViewDescriptor;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.ref.Ref;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.util.*;
 
 /**
@@ -85,7 +85,7 @@ public class ChangeClassSignatureProcessor extends BaseRefactoringProcessor {
     return showConflicts(conflicts, refUsages.get());
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected UsageInfo[] findUsages() {
     GlobalSearchScope projectScope = GlobalSearchScope.projectScope(myProject);
     List<UsageInfo> result = new ArrayList<UsageInfo>();

@@ -31,7 +31,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -63,7 +63,7 @@ public abstract class UnnecessaryExplicitNumericCastInspection extends BaseInspe
     return InspectionGadgetsBundle.message("unnecessary.explicit.numeric.cast.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     final PsiExpression expression = (PsiExpression) infos[0];

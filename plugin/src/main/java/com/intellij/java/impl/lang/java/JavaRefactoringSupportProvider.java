@@ -42,8 +42,8 @@ import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.search.PsiSearchHelper;
 import consulo.language.psi.util.PsiTreeUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author ven
@@ -164,7 +164,7 @@ public class JavaRefactoringSupportProvider extends RefactoringSupportProvider {
     return PsiTreeUtil.isAncestor(containingFile, scopeElements[0], false);
   }
 
-  public static boolean isDisableRefactoringForLightElement(@Nullable PsiElement element) {
+  public static boolean isDisableRefactoringForLightElement(@jakarta.annotation.Nullable PsiElement element) {
     if (element instanceof LightMethodBuilder) {
       return true;
     }

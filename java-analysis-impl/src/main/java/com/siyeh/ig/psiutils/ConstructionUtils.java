@@ -21,9 +21,9 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
 
-import javax.annotation.Nullable;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;

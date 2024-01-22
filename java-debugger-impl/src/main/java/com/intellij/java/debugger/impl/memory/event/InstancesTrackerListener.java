@@ -17,7 +17,7 @@ package com.intellij.java.debugger.impl.memory.event;
 
 import java.util.EventListener;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.debugger.impl.memory.tracking.TrackingType;
 
@@ -27,7 +27,7 @@ public interface InstancesTrackerListener extends EventListener
 	{
 	}
 
-	default void classRemoved(@Nonnull String name)
+	default void classRemoved(@jakarta.annotation.Nonnull String name)
 	{
 	}
 

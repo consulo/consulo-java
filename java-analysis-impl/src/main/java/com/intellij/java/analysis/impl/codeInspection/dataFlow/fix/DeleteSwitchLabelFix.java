@@ -13,10 +13,10 @@ import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import consulo.util.lang.ObjectUtil;
+import jakarta.annotation.Nonnull;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -26,7 +26,7 @@ public class DeleteSwitchLabelFix implements LocalQuickFix {
   private final String myName;
   private final boolean myBranch;
 
-  public DeleteSwitchLabelFix(@Nonnull PsiExpression label) {
+  public DeleteSwitchLabelFix(@jakarta.annotation.Nonnull PsiExpression label) {
     myName = label.getText();
     PsiSwitchLabelStatementBase labelStatement = Objects.requireNonNull(PsiImplUtil.getSwitchLabel(label));
     PsiExpressionList values = labelStatement.getCaseValues();
@@ -47,7 +47,7 @@ public class DeleteSwitchLabelFix implements LocalQuickFix {
   }
 
   @Nls(capitalization = Nls.Capitalization.Sentence)
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getName() {
     return myBranch ?
@@ -56,14 +56,14 @@ public class DeleteSwitchLabelFix implements LocalQuickFix {
   }
 
   @Nls(capitalization = Nls.Capitalization.Sentence)
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getFamilyName() {
     return "Remove switch label";
   }
 
   @Override
-  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+  public void applyFix(@jakarta.annotation.Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
     PsiExpression expression = ObjectUtil.tryCast(descriptor.getStartElement(), PsiExpression.class);
     if (expression == null) {
       return;

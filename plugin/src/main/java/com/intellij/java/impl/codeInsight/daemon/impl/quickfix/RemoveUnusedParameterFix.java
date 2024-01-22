@@ -18,8 +18,8 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
@@ -43,23 +43,23 @@ public class RemoveUnusedParameterFix extends LocalQuickFixAndIntentionActionOnP
     myName = parameter.getName();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getText() {
     return JavaQuickFixBundle.message("remove.unused.parameter.text", myName);
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("remove.unused.parameter.family");
   }
 
   @Override
   public boolean isAvailable(@Nonnull Project project,
-                             @Nonnull PsiFile file,
+                             @jakarta.annotation.Nonnull PsiFile file,
                              @Nonnull PsiElement startElement,
-                             @Nonnull PsiElement endElement) {
+                             @jakarta.annotation.Nonnull PsiElement endElement) {
     final PsiParameter myParameter = (PsiParameter)startElement;
     return
       myParameter.isValid()
@@ -68,11 +68,11 @@ public class RemoveUnusedParameterFix extends LocalQuickFixAndIntentionActionOnP
   }
 
   @Override
-  public void invoke(@Nonnull Project project,
-                     @Nonnull PsiFile file,
+  public void invoke(@jakarta.annotation.Nonnull Project project,
+                     @jakarta.annotation.Nonnull PsiFile file,
                      @Nullable Editor editor,
-                     @Nonnull PsiElement startElement,
-                     @Nonnull PsiElement endElement) {
+                     @jakarta.annotation.Nonnull PsiElement startElement,
+                     @jakarta.annotation.Nonnull PsiElement endElement) {
     final PsiParameter myParameter = (PsiParameter)startElement;
     if (!FileModificationService.getInstance().prepareFileForWrite(myParameter.getContainingFile())) return;
     removeReferences(myParameter);

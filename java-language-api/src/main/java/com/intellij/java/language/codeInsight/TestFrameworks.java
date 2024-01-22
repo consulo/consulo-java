@@ -25,8 +25,9 @@ import consulo.ide.ServiceManager;
 import consulo.language.psi.PsiModificationTracker;
 import consulo.language.psi.util.LanguageCachedValueUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -43,13 +44,13 @@ public abstract class TestFrameworks {
 
   public abstract boolean isPotentialTestClass(PsiClass psiClass);
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public abstract PsiMethod findOrCreateSetUpMethod(PsiClass psiClass);
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public abstract PsiMethod findSetUpMethod(PsiClass psiClass);
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public abstract PsiMethod findTearDownMethod(PsiClass psiClass);
 
   protected abstract boolean hasConfigMethods(PsiClass psiClass);
@@ -60,13 +61,13 @@ public abstract class TestFrameworks {
     return isTestClass(psiClass) || hasConfigMethods(psiClass);
   }
 
-  @Nullable
-  public static TestFramework detectFramework(@Nonnull final PsiClass psiClass) {
+  @jakarta.annotation.Nullable
+  public static TestFramework detectFramework(@jakarta.annotation.Nonnull final PsiClass psiClass) {
     return LanguageCachedValueUtil.getCachedValue(psiClass, () -> CachedValueProvider.Result.create(computeFramework(psiClass), PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT));
   }
 
   @Nonnull
-  public static Set<TestFramework> detectApplicableFrameworks(@Nonnull final PsiClass psiClass) {
+  public static Set<TestFramework> detectApplicableFrameworks(@jakarta.annotation.Nonnull final PsiClass psiClass) {
     return LanguageCachedValueUtil.getCachedValue(psiClass, () -> CachedValueProvider.Result.create(computeFrameworks(psiClass), PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT));
   }
 

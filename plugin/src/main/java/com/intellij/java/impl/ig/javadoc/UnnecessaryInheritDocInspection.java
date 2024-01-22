@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.javadoc;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -41,7 +41,7 @@ import org.jetbrains.annotations.NonNls;
 public class UnnecessaryInheritDocInspection extends BaseInspection {
 
   @Nls
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(

@@ -32,7 +32,7 @@ import consulo.language.impl.psi.CompositePsiElement;
 import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class PsiDocTagImpl extends CompositePsiElement implements PsiDocTag, Constants {
   private static final TokenSet TAG_VALUE_BIT_SET = TokenSet.create(
@@ -72,7 +72,7 @@ public class PsiDocTagImpl extends CompositePsiElement implements PsiDocTag, Con
   }
 
   @Override
-  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
+  public PsiElement setName(@jakarta.annotation.Nonnull String name) throws IncorrectOperationException {
     PsiImplUtil.setName(getNameElement(), name);
     return this;
   }
@@ -99,7 +99,7 @@ public class PsiDocTagImpl extends CompositePsiElement implements PsiDocTag, Con
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiReference[] getReferences() {
     return ReferenceProvidersRegistry.getReferencesFromProviders(this, PsiReferenceService.Hints.NO_HINTS);
   }

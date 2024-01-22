@@ -22,7 +22,7 @@ import com.intellij.java.language.psi.PsiKeyword;
 import consulo.language.ast.ASTNode;
 import consulo.language.psi.stub.IStubFileElementType;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author max

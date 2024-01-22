@@ -27,7 +27,7 @@ import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class PsiResourceVariableImpl extends PsiLocalVariableImpl implements PsiResourceVariable {
   public PsiResourceVariableImpl() {
@@ -83,7 +83,7 @@ public class PsiResourceVariableImpl extends PsiLocalVariableImpl implements Psi
     }
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public SearchScope getUseScope() {
     return new LocalSearchScope(getDeclarationScope());

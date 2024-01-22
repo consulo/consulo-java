@@ -31,8 +31,8 @@ import consulo.virtualFileSystem.VirtualFile;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -156,7 +156,7 @@ public class ByteCodeViewerManager extends DockablePopupManager<ByteCodeViewerCo
     }
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static String getByteCode(@Nonnull PsiElement psiElement) {
     PsiClass containingClass = getContainingClass(psiElement);
     //todo show popup

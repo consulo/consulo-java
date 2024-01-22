@@ -13,8 +13,8 @@ import consulo.language.psi.stub.StubElement;
 import consulo.util.collection.SmartList;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.text.CharacterIterator;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -263,7 +263,7 @@ public final class SignatureParsing {
     return dimensions;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static String parseTypeString(CharacterIterator signature, Function<String, String> mapping) throws ClsFormatException {
     int dimensions = parseDimensions(signature);
 

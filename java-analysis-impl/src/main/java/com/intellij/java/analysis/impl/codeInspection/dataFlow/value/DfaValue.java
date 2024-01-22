@@ -19,8 +19,8 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaMemoryState;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfType;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes;
 import com.intellij.java.language.psi.PsiType;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public abstract class DfaValue
 {
@@ -99,7 +99,7 @@ public abstract class DfaValue
 	 * @return resulting condition between this value and other operand
 	 */
 	@Nonnull
-	public final DfaCondition cond(@Nonnull RelationType relationType, @Nonnull DfaValue other)
+	public final DfaCondition cond(@Nonnull RelationType relationType, @jakarta.annotation.Nonnull DfaValue other)
 	{
 		return DfaCondition.createCondition(this, relationType, other);
 	}

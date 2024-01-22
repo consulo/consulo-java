@@ -3,8 +3,7 @@ package consulo.java.execution.impl;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.execution.ui.console.ConsoleFoldingContributor;
 import consulo.execution.ui.console.ConsoleFoldingRegistrator;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL

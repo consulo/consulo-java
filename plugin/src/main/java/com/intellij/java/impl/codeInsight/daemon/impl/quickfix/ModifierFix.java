@@ -39,8 +39,8 @@ import consulo.project.Project;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.Messages;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,7 +62,7 @@ public class ModifierFix extends LocalQuickFixAndIntentionActionOnPsiElement {
     myVariable = null;
   }
 
-  public ModifierFix(@Nonnull PsiModifierListOwner owner, @PsiModifier.ModifierConstant @Nonnull String modifier, boolean shouldHave, boolean showContainingClass) {
+  public ModifierFix(@Nonnull PsiModifierListOwner owner, @PsiModifier.ModifierConstant @jakarta.annotation.Nonnull String modifier, boolean shouldHave, boolean showContainingClass) {
     super(owner.getModifierList());
     myModifier = modifier;
     myShouldHave = shouldHave;
@@ -117,7 +117,7 @@ public class ModifierFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   @Override
   public boolean isAvailable(@Nonnull Project project,
                              @Nonnull PsiFile file,
-                             @Nonnull PsiElement startElement,
+                             @jakarta.annotation.Nonnull PsiElement startElement,
                              @Nonnull PsiElement endElement) {
     final PsiModifierList myModifierList = (PsiModifierList)startElement;
     PsiVariable variable = myVariable == null ? null : myVariable.getElement();

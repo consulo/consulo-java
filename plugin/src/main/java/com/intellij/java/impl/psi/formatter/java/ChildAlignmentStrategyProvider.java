@@ -15,13 +15,13 @@
  */
 package com.intellij.java.impl.psi.formatter.java;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 import consulo.language.codeStyle.AlignmentStrategy;
 import consulo.language.ast.ASTNode;
 import consulo.util.lang.StringUtil;
 import consulo.language.ast.TokenType;
+import jakarta.annotation.Nonnull;
 
 public abstract class ChildAlignmentStrategyProvider
 {

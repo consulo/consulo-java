@@ -15,8 +15,7 @@
  */
 package com.intellij.codeInsight.daemon;
 
-import javax.annotation.Nonnull;
-
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.editor.inspection.scheme.LocalInspectionToolWrapper;

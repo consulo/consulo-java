@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.codeInsight.template.postfix.templates;
 
-import javax.annotation.Nonnull;
 import com.intellij.java.impl.codeInsight.CodeInsightServicesUtil;
 import com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils;
 import consulo.codeEditor.Editor;
 import consulo.util.lang.function.Condition;
 import com.intellij.java.language.psi.PsiExpression;
+import jakarta.annotation.Nonnull;
 
 public class NotExpressionPostfixTemplate extends ExpressionPostfixTemplateWithChooser {
   private static final Condition<PsiExpression> BOOLEAN_TYPE_CONDITION = new Condition<PsiExpression>() {
@@ -39,7 +39,7 @@ public class NotExpressionPostfixTemplate extends ExpressionPostfixTemplateWithC
   }
 
   @Override
-  protected void doIt(@Nonnull Editor editor, @Nonnull PsiExpression expression) {
+  protected void doIt(@jakarta.annotation.Nonnull Editor editor, @jakarta.annotation.Nonnull PsiExpression expression) {
     expression.replace(CodeInsightServicesUtil.invertCondition(expression));
   }
 

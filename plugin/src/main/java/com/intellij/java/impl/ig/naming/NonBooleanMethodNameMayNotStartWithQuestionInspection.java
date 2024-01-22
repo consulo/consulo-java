@@ -35,7 +35,7 @@ import com.siyeh.ig.psiutils.MethodUtils;
 import com.intellij.java.impl.ig.ui.UiUtils;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -69,7 +69,7 @@ public class NonBooleanMethodNameMayNotStartWithQuestionInspection extends BaseI
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("non.boolean.method.name.must.not.start.with.question.problem.descriptor");
   }
@@ -122,7 +122,7 @@ public class NonBooleanMethodNameMayNotStartWithQuestionInspection extends BaseI
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
       super.visitMethod(method);
       final PsiType returnType = method.getReturnType();
       if (returnType == null || returnType.equals(PsiType.BOOLEAN)) {

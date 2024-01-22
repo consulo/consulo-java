@@ -25,7 +25,7 @@ import consulo.language.editor.generation.ClassMember;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 
 public class GenerateGetterHandler extends GenerateGetterSetterHandlerBase {

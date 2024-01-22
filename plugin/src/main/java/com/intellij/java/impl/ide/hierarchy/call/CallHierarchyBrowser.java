@@ -29,7 +29,7 @@ import consulo.project.Project;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.Comparator;
@@ -38,12 +38,12 @@ import java.util.Map;
 public class CallHierarchyBrowser extends CallHierarchyBrowserBase {
   private static final Logger LOG = Logger.getInstance(CallHierarchyBrowser.class);
 
-  public CallHierarchyBrowser(@Nonnull Project project, @Nonnull PsiMethod method) {
+  public CallHierarchyBrowser(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull PsiMethod method) {
     super(project, method);
   }
 
   @Override
-  protected void createTrees(@Nonnull final Map<String, JTree> type2TreeMap) {
+  protected void createTrees(@jakarta.annotation.Nonnull final Map<String, JTree> type2TreeMap) {
     ActionGroup group = (ActionGroup)ActionManager.getInstance().getAction(IdeActions.GROUP_CALL_HIERARCHY_POPUP);
     final JTree tree1 = createTree(false);
     PopupHandler.installPopupHandler(tree1, group, ActionPlaces.CALL_HIERARCHY_VIEW_POPUP, ActionManager.getInstance());
@@ -69,7 +69,7 @@ public class CallHierarchyBrowser extends CallHierarchyBrowserBase {
   }
 
   @Override
-  protected PsiElement getOpenFileElementFromDescriptor(@Nonnull HierarchyNodeDescriptor descriptor) {
+  protected PsiElement getOpenFileElementFromDescriptor(@jakarta.annotation.Nonnull HierarchyNodeDescriptor descriptor) {
     if (descriptor instanceof CallHierarchyNodeDescriptor) {
       CallHierarchyNodeDescriptor nodeDescriptor = (CallHierarchyNodeDescriptor)descriptor;
       return nodeDescriptor.getTargetElement();
@@ -83,7 +83,7 @@ public class CallHierarchyBrowser extends CallHierarchyBrowserBase {
   }
 
   @Override
-  protected HierarchyTreeStructure createHierarchyTreeStructure(@Nonnull final String typeName, @Nonnull final PsiElement psiElement) {
+  protected HierarchyTreeStructure createHierarchyTreeStructure(@Nonnull final String typeName, @jakarta.annotation.Nonnull final PsiElement psiElement) {
     if (CALLER_TYPE.equals(typeName)) {
       return new CallerMethodsTreeStructure(myProject, (PsiMethod)psiElement, getCurrentScopeType());
     }

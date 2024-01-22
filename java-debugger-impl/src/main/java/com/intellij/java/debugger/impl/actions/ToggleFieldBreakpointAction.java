@@ -55,8 +55,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.internal.com.sun.jdi.Field;
 import consulo.internal.com.sun.jdi.ObjectReference;
-
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public class ToggleFieldBreakpointAction extends AnAction
 {

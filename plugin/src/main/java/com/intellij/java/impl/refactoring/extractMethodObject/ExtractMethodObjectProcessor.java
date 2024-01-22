@@ -62,7 +62,7 @@ import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.util.*;
 import java.util.function.Function;
@@ -95,8 +95,8 @@ public class ExtractMethodObjectProcessor extends BaseRefactoringProcessor {
     myElementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
   }
 
-  @Nonnull
-  protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull final UsageInfo[] usages) {
+  @jakarta.annotation.Nonnull
+  protected UsageViewDescriptor createUsageViewDescriptor(@jakarta.annotation.Nonnull final UsageInfo[] usages) {
     return new ExtractMethodObjectViewDescriptor(getMethod());
   }
 

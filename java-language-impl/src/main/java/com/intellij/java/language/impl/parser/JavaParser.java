@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.impl.parser;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class JavaParser {
   public static final JavaParser INSTANCE = new JavaParser();
@@ -26,6 +26,7 @@ public class JavaParser {
   private final StatementParser myStatementParser;
   private final ExpressionParser myExpressionParser;
   private final ReferenceParser myReferenceParser;
+  private final PatternParser myPatternParser;
 
   public JavaParser() {
     myFileParser = new FileParser(this);
@@ -34,6 +35,7 @@ public class JavaParser {
     myStatementParser = new StatementParser(this);
     myExpressionParser = new ExpressionParser(this);
     myReferenceParser = new ReferenceParser(this);
+    myPatternParser = new PatternParser(this);
   }
 
   @Nonnull
@@ -56,7 +58,7 @@ public class JavaParser {
     return myStatementParser;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public ExpressionParser getExpressionParser() {
     return myExpressionParser;
   }
@@ -64,5 +66,9 @@ public class JavaParser {
   @Nonnull
   public ReferenceParser getReferenceParser() {
     return myReferenceParser;
+  }
+
+  public PatternParser getPatternParser() {
+    return myPatternParser;
   }
 }

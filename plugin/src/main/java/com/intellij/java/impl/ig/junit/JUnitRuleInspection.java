@@ -30,10 +30,11 @@ import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 
 /**
@@ -63,13 +64,13 @@ public class JUnitRuleInspection extends BaseInspection {
     return panel;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return (String)infos[0];
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {
     return infos.length > 1 ? new MakePublicStaticFix((String)infos[1], (String)infos[2]) : null;
@@ -145,7 +146,7 @@ public class JUnitRuleInspection extends BaseInspection {
       }
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     @Override
     public String getName() {
       return myName;

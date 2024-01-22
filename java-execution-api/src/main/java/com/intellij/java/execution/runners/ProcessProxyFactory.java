@@ -22,7 +22,7 @@ import consulo.ide.ServiceManager;
 import consulo.process.ExecutionException;
 import consulo.process.ProcessHandler;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 @ServiceAPI(ComponentScope.APPLICATION)
 public abstract class ProcessProxyFactory {
@@ -30,7 +30,7 @@ public abstract class ProcessProxyFactory {
     return ServiceManager.getService(ProcessProxyFactory.class);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public abstract ProcessProxy createCommandLineProxy(JavaCommandLine javaCmdLine) throws ExecutionException;
 
   @Nullable

@@ -15,8 +15,7 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import consulo.language.ast.ASTNode;
 import consulo.logging.Logger;
 import com.intellij.java.language.psi.JavaElementVisitor;
@@ -30,6 +29,7 @@ import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
 import consulo.language.ast.ChildRoleBase;
 import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.PsiUtil;
+import jakarta.annotation.Nonnull;
 
 public class PsiTypeCastExpressionImpl extends ExpressionPsiElement implements PsiTypeCastExpression, Constants
 {

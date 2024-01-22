@@ -23,8 +23,9 @@ import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.*;
 
 /**
@@ -86,7 +87,7 @@ public class InferenceVariable extends LightTypeParameter {
     }
   }
 
-  public boolean addBound(PsiType classType, InferenceBound inferenceBound, @Nullable InferenceIncorporationPhase incorporationPhase) {
+  public boolean addBound(PsiType classType, InferenceBound inferenceBound, @jakarta.annotation.Nullable InferenceIncorporationPhase incorporationPhase) {
     if (inferenceBound == InferenceBound.EQ && PsiUtil.resolveClassInClassTypeOnly(classType) == this) {
       return false;
     }

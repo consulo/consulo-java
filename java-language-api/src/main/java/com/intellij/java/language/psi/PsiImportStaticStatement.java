@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.psi;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * Represents a Java <code>import static</code> statement.
@@ -34,7 +34,7 @@ public interface PsiImportStaticStatement extends PsiImportStatementBase {
    * @return the class from which members are imported, or null if the reference resolve failed
    * or the resolve target is not a class.
    */
-  @Nullable
+  @jakarta.annotation.Nullable
   PsiClass resolveTargetClass();
 
   /**

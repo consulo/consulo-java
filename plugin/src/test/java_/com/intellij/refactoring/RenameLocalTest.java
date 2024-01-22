@@ -5,7 +5,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.HashSet;
 
-import javax.annotation.Nonnull;
 import com.intellij.JavaTestUtil;
 import consulo.ide.impl.idea.codeInsight.template.impl.TemplateManagerImpl;
 import consulo.language.editor.template.TemplateState;
@@ -21,6 +20,7 @@ import com.intellij.testFramework.fixtures.CodeInsightTestUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.language.editor.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author ven

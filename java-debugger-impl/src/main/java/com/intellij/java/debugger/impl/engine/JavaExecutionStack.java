@@ -18,8 +18,7 @@ package com.intellij.java.debugger.impl.engine;
 import java.util.Collections;
 import java.util.Iterator;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
@@ -38,6 +37,7 @@ import consulo.logging.Logger;
 import consulo.internal.com.sun.jdi.Location;
 import consulo.internal.com.sun.jdi.ThreadReference;
 import consulo.ui.image.Image;
+import jakarta.annotation.Nullable;
 
 /**
  * @author egor
@@ -52,7 +52,7 @@ public class JavaExecutionStack extends XExecutionStack
 	private volatile boolean myTopFrameReady = false;
 	private final MethodsTracker myTracker = new MethodsTracker();
 
-	public JavaExecutionStack(@Nonnull ThreadReferenceProxyImpl threadProxy, @Nonnull DebugProcessImpl debugProcess, boolean current)
+	public JavaExecutionStack(@jakarta.annotation.Nonnull ThreadReferenceProxyImpl threadProxy, @jakarta.annotation.Nonnull DebugProcessImpl debugProcess, boolean current)
 	{
 		super(calcRepresentation(threadProxy), calcIcon(threadProxy, current));
 		myThreadProxy = threadProxy;
@@ -106,7 +106,7 @@ public class JavaExecutionStack extends XExecutionStack
 		}
 	}
 
-	private static XStackFrame createStackFrame(@Nonnull StackFrameProxyImpl stackFrameProxy, @Nonnull MethodsTracker tracker)
+	private static XStackFrame createStackFrame(@Nonnull StackFrameProxyImpl stackFrameProxy, @jakarta.annotation.Nonnull MethodsTracker tracker)
 	{
 		StackFrameDescriptorImpl descriptor = new StackFrameDescriptorImpl(stackFrameProxy, tracker);
 		DebugProcessImpl debugProcess = (DebugProcessImpl) descriptor.getDebugProcess();
@@ -241,7 +241,7 @@ public class JavaExecutionStack extends XExecutionStack
 		}
 	}
 
-	private static boolean showFrame(@Nonnull XStackFrame frame)
+	private static boolean showFrame(@jakarta.annotation.Nonnull XStackFrame frame)
 	{
 		if(XDebuggerSettingsManager.getInstance().getDataViewSettings().isShowLibraryStackFrames())
 		{

@@ -15,12 +15,11 @@
  */
 package com.intellij.java.impl.ig.methodmetrics;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiMethod;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NonCommentSourceStatementsInspection
@@ -28,12 +27,12 @@ public class NonCommentSourceStatementsInspection
 
   private static final int DEFAULT_LIMIT = 30;
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "OverlyLongMethod";
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "non.comment.source.statements.display.name");
@@ -64,7 +63,7 @@ public class NonCommentSourceStatementsInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
       // note: no call to super
       if (method.getNameIdentifier() == null) {
         return;

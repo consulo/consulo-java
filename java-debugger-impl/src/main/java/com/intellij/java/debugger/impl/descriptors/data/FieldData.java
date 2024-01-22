@@ -19,7 +19,7 @@ import com.intellij.java.debugger.impl.ui.impl.watch.FieldDescriptorImpl;
 import consulo.project.Project;
 import consulo.internal.com.sun.jdi.Field;
 import consulo.internal.com.sun.jdi.ObjectReference;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public final class FieldData extends DescriptorData<FieldDescriptorImpl>{
   private final ObjectReference myObjRef;

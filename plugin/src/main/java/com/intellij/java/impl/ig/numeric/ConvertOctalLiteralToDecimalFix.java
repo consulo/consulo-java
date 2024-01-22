@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.numeric;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.JavaPsiFacade;

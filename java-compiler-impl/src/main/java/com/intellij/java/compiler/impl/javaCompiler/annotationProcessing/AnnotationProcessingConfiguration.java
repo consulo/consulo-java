@@ -15,7 +15,7 @@
  */
 package com.intellij.java.compiler.impl.javaCompiler.annotationProcessing;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.Map;
 import java.util.Set;
@@ -27,7 +27,7 @@ import java.util.Set;
 public interface AnnotationProcessingConfiguration {
   boolean isEnabled();
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   String getProcessorPath();
 
   @Nonnull

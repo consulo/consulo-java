@@ -28,7 +28,7 @@ import consulo.language.editor.inspection.SuppressionUtil;
 import consulo.language.psi.PsiComment;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class SuppressionAnnotationInspection extends BaseInspection {

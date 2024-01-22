@@ -33,14 +33,14 @@ import consulo.language.impl.ast.SharedImplUtil;
 import consulo.language.impl.ast.TreeUtil;
 import consulo.language.util.CharTable;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class FieldElement extends CompositeElement {
   public FieldElement() {
     super(Constants.FIELD);
   }
 
-  protected FieldElement(@Nonnull IElementType type) {
+  protected FieldElement(@jakarta.annotation.Nonnull IElementType type) {
     super(type);
   }
 

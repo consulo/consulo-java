@@ -25,7 +25,7 @@ import consulo.ui.ex.awt.IdeBorderFactory;
 import consulo.ui.ex.awt.StateRestoringCheckBox;
 import consulo.ui.ex.awt.UIUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 
@@ -36,9 +36,9 @@ public class FindThrowUsagesDialog extends JavaFindUsagesDialog<JavaThrowFindUsa
 	private boolean myHasFindWhatPanel;
 	private ThrowSearchUtil.Root[] myRoots;
 
-	public FindThrowUsagesDialog(@Nonnull PsiElement element,
+	public FindThrowUsagesDialog(@jakarta.annotation.Nonnull PsiElement element,
 			@Nonnull Project project,
-			@Nonnull JavaThrowFindUsagesOptions findUsagesOptions,
+			@jakarta.annotation.Nonnull JavaThrowFindUsagesOptions findUsagesOptions,
 			boolean toShowInNewTab,
 			boolean mustOpenInNewTab,
 			boolean isSingleFile,

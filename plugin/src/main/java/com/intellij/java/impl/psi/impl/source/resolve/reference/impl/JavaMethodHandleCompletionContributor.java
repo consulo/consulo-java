@@ -36,8 +36,8 @@ import consulo.ui.image.Image;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
@@ -70,13 +70,13 @@ public class JavaMethodHandleCompletionContributor extends CompletionContributor
       .toStringArray(FIELD_HANDLE_FACTORY_NAMES))));
 
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private static PsiMethodPattern methodPattern(String... methodNames) {
     return psiMethod().withName(methodNames).definedInClass(JAVA_LANG_INVOKE_METHOD_HANDLES_LOOKUP);
   }
 
   @Override
-  public void fillCompletionVariants(@Nonnull CompletionParameters parameters, @Nonnull CompletionResultSet result) {
+  public void fillCompletionVariants(@Nonnull CompletionParameters parameters, @jakarta.annotation.Nonnull CompletionResultSet result) {
     final PsiElement position = parameters.getPosition();
     if (!isInJavaContext(position)) {
       return;
@@ -89,7 +89,7 @@ public class JavaMethodHandleCompletionContributor extends CompletionContributor
     }
   }
 
-  private static void addMethodHandleVariants(@Nonnull PsiElement position, @Nonnull Consumer<LookupElement> result) {
+  private static void addMethodHandleVariants(@jakarta.annotation.Nonnull PsiElement position, @jakarta.annotation.Nonnull Consumer<LookupElement> result) {
     final PsiMethodCallExpression methodCall = PsiTreeUtil.getParentOfType(position, PsiMethodCallExpression.class);
     if (methodCall != null) {
       final String methodName = methodCall.getMethodExpression().getReferenceName();
@@ -115,7 +115,7 @@ public class JavaMethodHandleCompletionContributor extends CompletionContributor
     }
   }
 
-  private static void addConstructorSignatures(@Nonnull PsiClass psiClass, @Nonnull PsiElement context, @Nonnull Consumer<LookupElement> result) {
+  private static void addConstructorSignatures(@jakarta.annotation.Nonnull PsiClass psiClass, @jakarta.annotation.Nonnull PsiElement context, @jakarta.annotation.Nonnull Consumer<LookupElement> result) {
     final String className = psiClass.getName();
     if (className != null) {
       final PsiMethod[] constructors = psiClass.getConstructors();
@@ -127,7 +127,7 @@ public class JavaMethodHandleCompletionContributor extends CompletionContributor
     }
   }
 
-  private static void addMethodSignatures(@Nonnull PsiClass psiClass, @Nonnull String methodName, boolean isStaticExpected, @Nonnull PsiElement context, @Nonnull Consumer<LookupElement> result) {
+  private static void addMethodSignatures(@jakarta.annotation.Nonnull PsiClass psiClass, @Nonnull String methodName, boolean isStaticExpected, @jakarta.annotation.Nonnull PsiElement context, @jakarta.annotation.Nonnull Consumer<LookupElement> result) {
     final PsiMethod[] methods = psiClass.findMethodsByName(methodName, false);
     if (methods.length != 0) {
       final Stream<PsiMethod> methodStream = Arrays.stream(methods).filter(method -> method.hasModifierProperty(PsiModifier.STATIC) == isStaticExpected);
@@ -135,13 +135,13 @@ public class JavaMethodHandleCompletionContributor extends CompletionContributor
     }
   }
 
-  private static void lookupMethodTypes(@Nonnull Stream<PsiMethod> methods, @Nonnull PsiElement context, @Nonnull Consumer<LookupElement> result) {
+  private static void lookupMethodTypes(@Nonnull Stream<PsiMethod> methods, @jakarta.annotation.Nonnull PsiElement context, @jakarta.annotation.Nonnull Consumer<LookupElement> result) {
     methods.map(JavaReflectionReferenceUtil::getMethodSignature).filter(Objects::nonNull).sorted(ReflectiveSignature::compareTo).map(signature -> lookupSignature(signature, context)).forEach
         (result::accept);
   }
 
-  @Nonnull
-  private static LookupElement lookupSignature(@Nonnull ReflectiveSignature signature, @Nonnull PsiElement context) {
+  @jakarta.annotation.Nonnull
+  private static LookupElement lookupSignature(@jakarta.annotation.Nonnull ReflectiveSignature signature, @jakarta.annotation.Nonnull PsiElement context) {
     final String expressionText = getMethodTypeExpressionText(signature);
     final PsiElementFactory factory = JavaPsiFacade.getInstance(context.getProject()).getElementFactory();
     final PsiExpression expression = factory.createExpressionFromText(expressionText, context);
@@ -153,7 +153,7 @@ public class JavaMethodHandleCompletionContributor extends CompletionContributor
     return lookupExpression(expression, AllIcons.Nodes.Method, presentableText, lookupText);
   }
 
-  private static void addFieldHandleVariants(@Nonnull PsiElement position, @Nonnull Consumer<LookupElement> result) {
+  private static void addFieldHandleVariants(@jakarta.annotation.Nonnull PsiElement position, @jakarta.annotation.Nonnull Consumer<LookupElement> result) {
     final PsiMethodCallExpression methodCall = PsiTreeUtil.getParentOfType(position, PsiMethodCallExpression.class);
     if (methodCall != null) {
       final String methodName = methodCall.getMethodExpression().getReferenceName();
@@ -172,7 +172,7 @@ public class JavaMethodHandleCompletionContributor extends CompletionContributor
     }
   }
 
-  private static void addFieldType(@Nonnull PsiClass psiClass, @Nonnull String fieldName, @Nonnull PsiElement context, @Nonnull Consumer<LookupElement> result) {
+  private static void addFieldType(@jakarta.annotation.Nonnull PsiClass psiClass, @jakarta.annotation.Nonnull String fieldName, @jakarta.annotation.Nonnull PsiElement context, @Nonnull Consumer<LookupElement> result) {
     final PsiField field = psiClass.findFieldByName(fieldName, false);
     if (field != null) {
       final String typeText = getTypeText(field.getType());
@@ -184,8 +184,8 @@ public class JavaMethodHandleCompletionContributor extends CompletionContributor
     }
   }
 
-  @Nonnull
-  private static LookupElement lookupExpression(@Nonnull PsiExpression expression, @Nullable Image icon, @Nonnull String presentableText, @Nonnull String lookupText) {
+  @jakarta.annotation.Nonnull
+  private static LookupElement lookupExpression(@jakarta.annotation.Nonnull PsiExpression expression, @Nullable Image icon, @jakarta.annotation.Nonnull String presentableText, @jakarta.annotation.Nonnull String lookupText) {
     final LookupElement element = new ExpressionLookupItem(expression, icon, presentableText, lookupText) {
       @Override
       public void handleInsert(InsertionContext context) {
@@ -197,7 +197,7 @@ public class JavaMethodHandleCompletionContributor extends CompletionContributor
     return PrioritizedLookupElement.withPriority(element, 1);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

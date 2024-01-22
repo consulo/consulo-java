@@ -20,7 +20,7 @@ import com.intellij.java.language.psi.PsiImportStatementBase;
 import com.intellij.java.language.psi.PsiJavaFile;
 import consulo.language.psi.*;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 class OnDemandImportPredicate implements PsiElementPredicate {
 

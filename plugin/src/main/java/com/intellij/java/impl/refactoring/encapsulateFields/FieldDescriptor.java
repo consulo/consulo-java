@@ -17,8 +17,8 @@ package com.intellij.java.impl.refactoring.encapsulateFields;
 
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Max Medvedev
@@ -39,5 +39,5 @@ public interface FieldDescriptor {
   @Nullable
   PsiMethod getSetterPrototype();
 
-  void refreshField(@Nonnull PsiField newField);
+  void refreshField(@jakarta.annotation.Nonnull PsiField newField);
 }

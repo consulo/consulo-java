@@ -19,7 +19,7 @@ import com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTempl
 import consulo.codeEditor.Editor;
 import consulo.language.psi.PsiElement;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import static com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.IS_NOT_PRIMITIVE;
 import static com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
@@ -34,7 +34,7 @@ public class SynchronizedStatementPostfixTemplate extends JavaStatementWrapPostf
     JavaPostfixTemplatesUtils.formatPsiCodeBlock(newStatement, editor);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected String getHead() {
     return "synchronized (";

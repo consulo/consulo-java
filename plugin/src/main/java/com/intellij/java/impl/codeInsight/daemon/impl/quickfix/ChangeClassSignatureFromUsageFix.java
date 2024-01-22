@@ -26,7 +26,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.*;
 
 /**
@@ -149,7 +149,7 @@ public class ChangeClassSignatureFromUsageFix extends BaseIntentionAction implem
     }
 
     @Nonnull
-    public String suggest(@Nonnull PsiClassType type) {
+    public String suggest(@jakarta.annotation.Nonnull PsiClassType type) {
       return suggestUnusedName(type.getClassName().substring(0, 1).toUpperCase());
     }
   }

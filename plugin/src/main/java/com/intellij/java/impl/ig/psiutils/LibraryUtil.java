@@ -15,12 +15,10 @@
  */
 package com.intellij.java.impl.ig.psiutils;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;
-
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class LibraryUtil {
 
@@ -28,12 +26,12 @@ public class LibraryUtil {
     super();
   }
 
-  public static boolean classIsInLibrary(@Nullable PsiClass aClass) {
+  public static boolean classIsInLibrary(@jakarta.annotation.Nullable PsiClass aClass) {
     return aClass instanceof PsiCompiledElement;
   }
 
   public static boolean callOnLibraryMethod(
-    @Nonnull PsiMethodCallExpression expression) {
+    @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
     final PsiMethod method = expression.resolveMethod();
     return method instanceof PsiCompiledElement;
   }

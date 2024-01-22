@@ -15,8 +15,6 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.javadoc;
 
-import javax.annotation.Nonnull;
-
 import consulo.language.ast.ASTNode;
 import com.intellij.java.language.psi.JavaDocTokenType;
 import com.intellij.java.language.psi.JavaElementVisitor;
@@ -25,6 +23,7 @@ import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
 import consulo.language.impl.psi.CompositePsiElement;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author yole

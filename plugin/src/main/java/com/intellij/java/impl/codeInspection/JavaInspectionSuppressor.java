@@ -10,7 +10,7 @@ import consulo.language.editor.inspection.SuppressQuickFix;
 import consulo.language.editor.rawHighlight.HighlightDisplayKey;
 import consulo.language.psi.PsiElement;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -31,7 +31,7 @@ public class JavaInspectionSuppressor implements InspectionSuppressor
 		return SuppressManager.getInstance().createBatchSuppressActions(HighlightDisplayKey.find(toolShortName));
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
 	public Language getLanguage()
 	{

@@ -8,8 +8,8 @@ import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -40,7 +40,7 @@ public final class VariableNameGenerator
 	 * @param context the place where new variable will be declared
 	 * @param kind    kind of variable to generate
 	 */
-	public VariableNameGenerator(@Nonnull PsiElement context, @Nonnull VariableKind kind)
+	public VariableNameGenerator(@Nonnull PsiElement context, @jakarta.annotation.Nonnull VariableKind kind)
 	{
 		myManager = JavaCodeStyleManager.getInstance(context.getProject());
 		myContext = context;
@@ -69,7 +69,7 @@ public final class VariableNameGenerator
 	 * @param expression expression which value will be stored to the new variable
 	 * @return this generator
 	 */
-	public VariableNameGenerator byExpression(@Nullable PsiExpression expression)
+	public VariableNameGenerator byExpression(@jakarta.annotation.Nullable PsiExpression expression)
 	{
 		if(expression != null)
 		{

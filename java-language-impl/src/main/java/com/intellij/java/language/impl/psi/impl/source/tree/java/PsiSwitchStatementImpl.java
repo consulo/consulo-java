@@ -12,7 +12,7 @@ import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import consulo.language.ast.ChildRoleBase;
 import consulo.language.ast.IElementType;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class PsiSwitchStatementImpl extends PsiSwitchBlockImpl implements PsiSwitchStatement
 {

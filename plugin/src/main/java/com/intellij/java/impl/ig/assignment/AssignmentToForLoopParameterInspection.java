@@ -27,9 +27,9 @@ import consulo.language.ast.IElementType;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 
 @ExtensionImpl
@@ -83,7 +83,7 @@ public class AssignmentToForLoopParameterInspection
 
     @Override
     public void visitAssignmentExpression(
-      @Nonnull PsiAssignmentExpression expression) {
+      @jakarta.annotation.Nonnull PsiAssignmentExpression expression) {
       super.visitAssignmentExpression(expression);
       if (!WellFormednessUtils.isWellFormed(expression)) {
         return;
@@ -95,7 +95,7 @@ public class AssignmentToForLoopParameterInspection
 
     @Override
     public void visitPrefixExpression(
-      @Nonnull PsiPrefixExpression expression) {
+      @jakarta.annotation.Nonnull PsiPrefixExpression expression) {
       super.visitPrefixExpression(expression);
       final IElementType tokenType = expression.getOperationTokenType();
       if (!tokenType.equals(JavaTokenType.PLUSPLUS) &&
@@ -112,7 +112,7 @@ public class AssignmentToForLoopParameterInspection
 
     @Override
     public void visitPostfixExpression(
-      @Nonnull PsiPostfixExpression expression) {
+      @jakarta.annotation.Nonnull PsiPostfixExpression expression) {
       super.visitPostfixExpression(expression);
       final IElementType tokenType = expression.getOperationTokenType();
       if (!tokenType.equals(JavaTokenType.PLUSPLUS) &&

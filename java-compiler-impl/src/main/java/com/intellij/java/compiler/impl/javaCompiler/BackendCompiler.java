@@ -26,8 +26,8 @@ import consulo.java.compiler.impl.javaCompiler.BackendCompilerMonitor;
 import consulo.java.compiler.impl.javaCompiler.BackendCompilerProcessBuilder;
 import consulo.process.ProcessHandler;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.io.IOException;
 
 @ExtensionAPI(ComponentScope.PROJECT)
@@ -42,7 +42,7 @@ public interface BackendCompiler {
     return null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   default OutputParser createOutputParser(BackendCompilerProcessBuilder processBuilder, @Nonnull String outputDir) {
     return null;
   }

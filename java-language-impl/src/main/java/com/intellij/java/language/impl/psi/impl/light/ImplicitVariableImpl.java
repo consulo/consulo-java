@@ -22,8 +22,7 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.util.IncorrectOperationException;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author dsl
@@ -35,7 +34,7 @@ public abstract class ImplicitVariableImpl extends LightVariableBase implements 
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitImplicitVariable(this);
     } else {

@@ -25,7 +25,7 @@ import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.SideEffectChecker;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author Bas Leijdekkers
@@ -38,7 +38,7 @@ public abstract class EqualsWithItselfInspection extends BaseInspection {
     return InspectionGadgetsBundle.message("equals.with.itself.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("equals.with.itself.problem.descriptor");

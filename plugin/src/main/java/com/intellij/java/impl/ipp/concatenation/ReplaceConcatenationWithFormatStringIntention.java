@@ -25,7 +25,7 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +40,7 @@ public class ReplaceConcatenationWithFormatStringIntention extends Intention {
   }
 
   @Override
-  protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+  protected void processIntention(@jakarta.annotation.Nonnull PsiElement element) throws IncorrectOperationException {
     PsiPolyadicExpression expression = (PsiPolyadicExpression)element;
     PsiElement parent = expression.getParent();
     while (ConcatenationUtils.isConcatenation(parent)) {

@@ -22,7 +22,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -39,7 +39,7 @@ public class EmptyStatementBodyInspection extends BaseInspection {
     return "StatementWithEmptyBody";
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("statement.with.empty.body.display.name");
   }
@@ -65,7 +65,7 @@ public class EmptyStatementBodyInspection extends BaseInspection {
   private class EmptyStatementVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitDoWhileStatement(@Nonnull PsiDoWhileStatement statement) {
+    public void visitDoWhileStatement(@jakarta.annotation.Nonnull PsiDoWhileStatement statement) {
       super.visitDoWhileStatement(statement);
       checkLoopStatement(statement);
     }
@@ -83,7 +83,7 @@ public class EmptyStatementBodyInspection extends BaseInspection {
     }
 
     @Override
-    public void visitForeachStatement(@Nonnull PsiForeachStatement statement) {
+    public void visitForeachStatement(@jakarta.annotation.Nonnull PsiForeachStatement statement) {
       super.visitForeachStatement(statement);
       checkLoopStatement(statement);
     }

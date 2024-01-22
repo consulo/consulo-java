@@ -31,7 +31,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.InsertLiteralUnderscoresAction", categories = {"Java", "Numbers"}, fileExtensions = "java")
@@ -55,7 +55,7 @@ public class InsertLiteralUnderscoresAction extends PsiElementBaseIntentionActio
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, final Editor editor, @Nonnull final PsiElement element) throws IncorrectOperationException {
+  public void invoke(@jakarta.annotation.Nonnull final Project project, final Editor editor, @Nonnull final PsiElement element) throws IncorrectOperationException {
     final PsiLiteralExpression literalExpression = PsiTreeUtil.getParentOfType(element, PsiLiteralExpression.class, false);
     if (literalExpression == null) return;
 

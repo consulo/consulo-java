@@ -30,7 +30,7 @@ import consulo.module.Module;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.ref.Ref;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public abstract class AbstractApplicationConfigurationProducer<T extends ApplicationConfiguration> extends JavaRunConfigurationProducerBase<T> {
   public AbstractApplicationConfigurationProducer(final ApplicationConfigurationType configurationType) {

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.threading;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -41,7 +41,7 @@ public class ThreadRunInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "CallToThreadRun";
   }
@@ -66,7 +66,7 @@ public class ThreadRunInspection extends BaseInspection {
     }
 
     @Override
-    public void doFix(@Nonnull Project project, ProblemDescriptor descriptor)
+    public void doFix(@jakarta.annotation.Nonnull Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
       final PsiElement methodNameIdentifier = descriptor.getPsiElement();
       final PsiReferenceExpression methodExpression =
@@ -92,7 +92,7 @@ public class ThreadRunInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();

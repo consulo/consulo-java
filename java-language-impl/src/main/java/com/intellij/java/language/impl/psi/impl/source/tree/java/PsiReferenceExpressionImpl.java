@@ -49,8 +49,8 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
 
@@ -136,7 +136,7 @@ public class PsiReferenceExpressionImpl extends ExpressionPsiElement implements 
     }
   }
 
-  private static List<PsiJavaCodeReferenceElement> getImportsFromClass(@Nonnull PsiImportList importList, String className) {
+  private static List<PsiJavaCodeReferenceElement> getImportsFromClass(@jakarta.annotation.Nonnull PsiImportList importList, String className) {
     final List<PsiJavaCodeReferenceElement> array = new ArrayList<>();
     for (PsiImportStaticStatement staticStatement : importList.getImportStaticStatements()) {
       final PsiClass psiClass = staticStatement.resolveTargetClass();
@@ -148,7 +148,7 @@ public class PsiReferenceExpressionImpl extends ExpressionPsiElement implements 
   }
 
   @Override
-  public void setQualifierExpression(@Nullable PsiExpression newQualifier) throws IncorrectOperationException {
+  public void setQualifierExpression(@jakarta.annotation.Nullable PsiExpression newQualifier) throws IncorrectOperationException {
     final PsiExpression oldQualifier = getQualifierExpression();
     if (newQualifier == null) {
       if (oldQualifier != null) {
@@ -191,7 +191,7 @@ public class PsiReferenceExpressionImpl extends ExpressionPsiElement implements 
 
     @Nonnull
     @Override
-    public ResolveResult[] resolve(@Nonnull PsiJavaReference ref, @Nonnull PsiFile containingFile, boolean incompleteCode) {
+    public ResolveResult[] resolve(@Nonnull PsiJavaReference ref, @jakarta.annotation.Nonnull PsiFile containingFile, boolean incompleteCode) {
       PsiReferenceExpressionImpl expression = (PsiReferenceExpressionImpl) ref;
       CompositeElement treeParent = expression.getTreeParent();
       IElementType parentType = treeParent == null ? null : treeParent.getElementType();
@@ -343,7 +343,7 @@ public class PsiReferenceExpressionImpl extends ExpressionPsiElement implements 
     return processor.getResult();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private JavaResolveResult[] resolveToPackage(@Nonnull PsiFile containingFile) {
     final String packageName = getCachedNormalizedText();
     Project project = containingFile.getProject();
@@ -385,7 +385,7 @@ public class PsiReferenceExpressionImpl extends ExpressionPsiElement implements 
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getCanonicalText() {
     final PsiElement element = resolve();
     if (element instanceof PsiClass) {
@@ -512,7 +512,7 @@ public class PsiReferenceExpressionImpl extends ExpressionPsiElement implements 
   }
 
   @Override
-  public void processVariants(@Nonnull PsiScopeProcessor processor) {
+  public void processVariants(@jakarta.annotation.Nonnull PsiScopeProcessor processor) {
     DelegatingScopeProcessor filterProcessor = new DelegatingScopeProcessor(processor) {
       private PsiElement myResolveContext;
       private final Set<String> myVarNames = new HashSet<>();
@@ -895,7 +895,7 @@ public class PsiReferenceExpressionImpl extends ExpressionPsiElement implements 
     return getCanonicalText();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private String getCachedNormalizedText() {
     String whiteSpaceAndComments = myCachedNormalizedText;
     if (whiteSpaceAndComments == null) {

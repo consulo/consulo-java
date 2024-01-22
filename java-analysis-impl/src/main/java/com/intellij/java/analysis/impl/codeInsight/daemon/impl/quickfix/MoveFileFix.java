@@ -21,9 +21,9 @@ import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 
 public class MoveFileFix implements SyntheticIntentionAction {
@@ -31,21 +31,21 @@ public class MoveFileFix implements SyntheticIntentionAction {
   private final VirtualFile myTarget;
   private final String myMessage;
 
-  public MoveFileFix(@Nonnull VirtualFile file, @Nonnull VirtualFile target, @Nonnull @Nls String message) {
+  public MoveFileFix(@jakarta.annotation.Nonnull VirtualFile file, @jakarta.annotation.Nonnull VirtualFile target, @jakarta.annotation.Nonnull @Nls String message) {
     myFile = file;
     myTarget = target;
     myMessage = message;
   }
 
   @Nls
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getText() {
     return myMessage;
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
     return true;
   }
 

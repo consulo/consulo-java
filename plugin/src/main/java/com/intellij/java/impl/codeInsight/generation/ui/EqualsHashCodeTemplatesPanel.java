@@ -27,13 +27,13 @@ import consulo.ui.ex.awt.TitledSeparator;
 import consulo.util.collection.HashingStrategy;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.Couple;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.java.impl.generate.template.TemplateResource;
 import com.intellij.java.impl.generate.view.GenerateTemplateConfigurable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -142,7 +142,7 @@ public class EqualsHashCodeTemplatesPanel extends NamedItemsListEditor<Couple<Te
     final GenerateTemplateConfigurable equalsConfigurable = new GenerateTemplateConfigurable(item.first, GenerateEqualsHelper.getEqualsImplicitVars(myProject), myProject);
     final GenerateTemplateConfigurable hashCodeConfigurable = new GenerateTemplateConfigurable(item.second, GenerateEqualsHelper.getHashCodeImplicitVars(), myProject);
     return new UnnamedConfigurable() {
-      @Nullable
+      @jakarta.annotation.Nullable
       @Override
       public JComponent createComponent() {
         final Splitter splitter = new Splitter(true);

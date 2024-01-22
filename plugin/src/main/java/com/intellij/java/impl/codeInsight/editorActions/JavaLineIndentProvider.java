@@ -28,9 +28,9 @@ import consulo.language.codeStyle.lineIndent.JavaLikeLangLineIndentProvider;
 import consulo.language.codeStyle.lineIndent.SemanticEditorPosition;
 import consulo.language.codeStyle.lineIndent.SemanticEditorPositionFactory;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.HashMap;
 
 import static consulo.language.codeStyle.Indent.Type.CONTINUATION;
@@ -70,9 +70,9 @@ public class JavaLineIndentProvider extends JavaLikeLangLineIndentProvider
 		SYNTAX_MAP.put(JavaTokenType.TRY_KEYWORD, TryKeyword);
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	@Override
-	protected SemanticEditorPosition.SyntaxElement mapType(@Nonnull IElementType tokenType)
+	protected SemanticEditorPosition.SyntaxElement mapType(@jakarta.annotation.Nonnull IElementType tokenType)
 	{
 		return SYNTAX_MAP.get(tokenType);
 	}
@@ -109,7 +109,7 @@ public class JavaLineIndentProvider extends JavaLikeLangLineIndentProvider
 	}
 
 	@Override
-	protected boolean isInArray(@Nonnull SemanticEditorPositionFactory factory, int offset)
+	protected boolean isInArray(@jakarta.annotation.Nonnull SemanticEditorPositionFactory factory, int offset)
 	{
 		SemanticEditorPosition position = getPosition(factory, offset);
 		position.moveBefore();
@@ -124,7 +124,7 @@ public class JavaLineIndentProvider extends JavaLikeLangLineIndentProvider
 	}
 
 	@Override
-	protected boolean isIndentProvider(@Nonnull SemanticEditorPosition position, boolean ignoreLabels)
+	protected boolean isIndentProvider(@jakarta.annotation.Nonnull SemanticEditorPosition position, boolean ignoreLabels)
 	{
 		return !(position.afterOptionalMix(Whitespace, BlockComment).after().isAt(Colon)
 				&& position.isAt(JavaTokenType.IDENTIFIER));

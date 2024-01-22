@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.ig.serialization;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.siyeh.InspectionGadgetsBundle;
@@ -26,6 +24,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.MakeSerializableFix;
 import com.intellij.java.impl.ig.psiutils.SerializationUtils;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NonSerializableWithSerializationMethodsInspection
@@ -38,7 +37,7 @@ public class NonSerializableWithSerializationMethodsInspection
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "non.serializable.class.with.readwriteobject.display.name");
@@ -53,7 +52,7 @@ public class NonSerializableWithSerializationMethodsInspection
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     final boolean hasReadObject = ((Boolean)infos[0]).booleanValue();
     final boolean hasWriteObject = ((Boolean)infos[1]).booleanValue();
@@ -97,7 +96,7 @@ public class NonSerializableWithSerializationMethodsInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
       // no call to super, so it doesn't drill down
       if (aClass.isInterface() || aClass.isAnnotationType()) {
         return;

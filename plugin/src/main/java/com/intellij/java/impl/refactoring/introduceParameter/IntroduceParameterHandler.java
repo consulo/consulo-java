@@ -75,8 +75,8 @@ import consulo.util.collection.primitive.ints.IntLists;
 import consulo.util.lang.Pair;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -95,7 +95,7 @@ public class IntroduceParameterHandler extends IntroduceHandlerBase {
   private JBPopup myEnclosingMethodsPopup;
   private InplaceIntroduceParameterPopup myInplaceIntroduceParameterPopup;
 
-  public void invoke(@Nonnull final Project project, final Editor editor, PsiFile file, DataContext dataContext) {
+  public void invoke(@jakarta.annotation.Nonnull final Project project, final Editor editor, PsiFile file, DataContext dataContext) {
     PsiDocumentManager.getInstance(project).commitAllDocuments();
     editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
     ElementToWorkOn.processElementToWorkOn(editor, file, REFACTORING_NAME, HelpID.INTRODUCE_PARAMETER, project, new ElementToWorkOn.ElementsProcessor<ElementToWorkOn>() {
@@ -346,7 +346,7 @@ public class IntroduceParameterHandler extends IntroduceHandlerBase {
 
 
   @Nullable
-  public static PsiMethod chooseEnclosingMethod(@Nonnull PsiMethod method) {
+  public static PsiMethod chooseEnclosingMethod(@jakarta.annotation.Nonnull PsiMethod method) {
     final List<PsiMethod> validEnclosingMethods = getEnclosingMethods(method);
     if (validEnclosingMethods.size() > 1 && !ApplicationManager.getApplication().isUnitTestMode()) {
       final EnclosingMethodSelectionDialog dialog = new EnclosingMethodSelectionDialog(method.getProject(), validEnclosingMethods);

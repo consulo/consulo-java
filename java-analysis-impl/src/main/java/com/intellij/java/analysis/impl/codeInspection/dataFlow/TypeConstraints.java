@@ -10,8 +10,8 @@ import consulo.project.Project;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Contract;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 public final class TypeConstraints {
@@ -25,14 +25,14 @@ public final class TypeConstraints {
       return this;
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     @Override
     public TypeConstraint meet(@Nonnull TypeConstraint other) {
       return other;
     }
 
     @Override
-    public boolean isSuperConstraintOf(@Nonnull TypeConstraint other) {
+    public boolean isSuperConstraintOf(@jakarta.annotation.Nonnull TypeConstraint other) {
       return true;
     }
 
@@ -63,7 +63,7 @@ public final class TypeConstraints {
     }
 
     @Override
-    public boolean isSuperConstraintOf(@Nonnull TypeConstraint other) {
+    public boolean isSuperConstraintOf(@jakarta.annotation.Nonnull TypeConstraint other) {
       return other == this;
     }
 
@@ -98,7 +98,7 @@ public final class TypeConstraints {
     }
 
     @Override
-    public boolean isConvertibleFrom(@Nonnull Exact other) {
+    public boolean isConvertibleFrom(@jakarta.annotation.Nonnull Exact other) {
       return true;
     }
 
@@ -126,7 +126,7 @@ public final class TypeConstraints {
   };
 
   @Nullable
-  private static TypeConstraint.Exact createExact(@Nonnull PsiType type) {
+  private static TypeConstraint.Exact createExact(@jakarta.annotation.Nonnull PsiType type) {
     if (type instanceof PsiArrayType) {
       PsiType componentType = ((PsiArrayType) type).getComponentType();
       if (componentType instanceof PsiPrimitiveType) {
@@ -159,7 +159,7 @@ public final class TypeConstraints {
    */
   @Nonnull
   @Contract(pure = true)
-  public static TypeConstraint exact(@Nonnull PsiType type) {
+  public static TypeConstraint exact(@jakarta.annotation.Nonnull PsiType type) {
     type = normalizeType(type);
     TypeConstraint.Exact exact = createExact(type);
     if (exact != null && exact.canBeInstantiated()) {
@@ -201,7 +201,7 @@ public final class TypeConstraints {
     return exact.instanceOf();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private static PsiType normalizeType(@Nonnull PsiType psiType) {
     if (psiType instanceof PsiArrayType) {
       return PsiTypesUtil.createArrayType(normalizeType(psiType.getDeepComponentType()), psiType.getArrayDimensions());
@@ -226,7 +226,7 @@ public final class TypeConstraints {
   }
 
   @Nonnull
-  private static PsiType normalizeClassType(@Nonnull PsiClassType psiType, Set<PsiClass> processed) {
+  private static PsiType normalizeClassType(@jakarta.annotation.Nonnull PsiClassType psiType, Set<PsiClass> processed) {
     PsiClass aClass = psiType.resolve();
     if (aClass instanceof PsiTypeParameter) {
       PsiClassType[] types = aClass.getExtendsListTypes();
@@ -277,13 +277,13 @@ public final class TypeConstraints {
       myType = type;
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     @Override
     public PsiType getPsiType(Project project) {
       return myType.createArrayType();
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     @Override
     public String toString() {
       return myType.getCanonicalText() + "[]";
@@ -321,7 +321,7 @@ public final class TypeConstraints {
     @Nonnull
     String myReference;
 
-    ArraySuperInterface(@Nonnull String reference) {
+    ArraySuperInterface(@jakarta.annotation.Nonnull String reference) {
       myReference = reference;
     }
 
@@ -331,7 +331,7 @@ public final class TypeConstraints {
       return JavaPsiFacade.getElementFactory(project).createTypeByFQClassName(myReference);
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     @Override
     public String toString() {
       return myReference;
@@ -377,7 +377,7 @@ public final class TypeConstraints {
     @Nonnull
     PsiClass myClass;
 
-    ExactClass(@Nonnull PsiClass aClass) {
+    ExactClass(@jakarta.annotation.Nonnull PsiClass aClass) {
       assert !(aClass instanceof PsiTypeParameter);
       myClass = aClass;
     }
@@ -445,7 +445,7 @@ public final class TypeConstraints {
     }
 
     @Override
-    public boolean isAssignableFrom(@Nonnull Exact other) {
+    public boolean isAssignableFrom(@jakarta.annotation.Nonnull Exact other) {
       if (equals(other) || other instanceof Unresolved) {
         return true;
       }
@@ -491,7 +491,7 @@ public final class TypeConstraints {
 
   private static final class ExactArray implements TypeConstraint.Exact {
     private final
-    @Nonnull
+    @jakarta.annotation.Nonnull
     Exact myComponent;
 
     private ExactArray(@Nonnull Exact component) {
@@ -602,7 +602,7 @@ public final class TypeConstraints {
     }
 
     @Override
-    public boolean isAssignableFrom(@Nonnull Exact other) {
+    public boolean isAssignableFrom(@jakarta.annotation.Nonnull Exact other) {
       return other instanceof Unresolved || other instanceof ExactClass;
     }
 

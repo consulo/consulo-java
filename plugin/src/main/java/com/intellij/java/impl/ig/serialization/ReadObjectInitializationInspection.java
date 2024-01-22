@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.serialization;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
@@ -29,18 +29,18 @@ import consulo.annotation.component.ExtensionImpl;
 @ExtensionImpl
 public class ReadObjectInitializationInspection extends BaseInspection {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "InstanceVariableMayNotBeInitializedByReadObject";
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "readobject.initialization.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "readobject.initialization.problem.descriptor");
@@ -54,7 +54,7 @@ public class ReadObjectInitializationInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
       // no call to super, so it doesn't drill down
       final PsiClass aClass = method.getContainingClass();
       if (aClass == null) {
@@ -91,7 +91,7 @@ public class ReadObjectInitializationInspection extends BaseInspection {
     }
 
     public static boolean isFieldInitialized(@Nonnull PsiField field,
-                                             @Nonnull PsiMethod method) {
+                                             @jakarta.annotation.Nonnull PsiMethod method) {
       if (field.hasModifierProperty(PsiModifier.STATIC)) {
         return true;
       }

@@ -20,8 +20,8 @@ import consulo.language.codeStyle.arrangement.ArrangementEntry;
 import consulo.language.codeStyle.arrangement.match.TextAwareArrangementEntry;
 import consulo.language.codeStyle.arrangement.std.ArrangementSettingsToken;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class JavaSectionArrangementEntry extends JavaElementArrangementEntry implements TextAwareArrangementEntry {
   @Nonnull
@@ -31,7 +31,7 @@ public class JavaSectionArrangementEntry extends JavaElementArrangementEntry imp
       @Nullable ArrangementEntry parent,
       @Nonnull ArrangementSettingsToken type,
       @Nonnull TextRange range,
-      @Nonnull String text,
+      @jakarta.annotation.Nonnull String text,
       boolean canBeMatched) {
     super(parent, range.getStartOffset(), range.getEndOffset(), type, "SECTION", canBeMatched);
     myText = text;

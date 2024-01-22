@@ -4,7 +4,7 @@
  */
 package com.intellij.codeInspection;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;

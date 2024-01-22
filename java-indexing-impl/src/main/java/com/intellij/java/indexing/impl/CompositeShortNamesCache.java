@@ -33,8 +33,8 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -173,7 +173,7 @@ public class CompositeShortNamesCache extends PsiShortNamesCache {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiMethod[] getMethodsByNameIfNotMoreThan(@NonNls @Nonnull final String name, @Nonnull final GlobalSearchScope scope, final int maxCount) {
     Merger<PsiMethod> merger = null;
     for (PsiShortNameProvider cache : myCaches) {
@@ -218,7 +218,7 @@ public class CompositeShortNamesCache extends PsiShortNamesCache {
   }
 
   @Override
-  public boolean processMethodsWithName(@NonNls @Nonnull String name, @Nonnull Processor<? super PsiMethod> processor,
+  public boolean processMethodsWithName(@NonNls @jakarta.annotation.Nonnull String name, @Nonnull Processor<? super PsiMethod> processor,
                                         @Nonnull GlobalSearchScope scope, @Nullable IdFilter idFilter) {
     for (PsiShortNameProvider cache : myCaches) {
       if (!cache.processMethodsWithName(name, processor, scope, idFilter)) {
@@ -248,7 +248,7 @@ public class CompositeShortNamesCache extends PsiShortNamesCache {
 
   @Override
   @Nonnull
-  public PsiField[] getFieldsByName(@Nonnull String name, @Nonnull GlobalSearchScope scope) {
+  public PsiField[] getFieldsByName(@Nonnull String name, @jakarta.annotation.Nonnull GlobalSearchScope scope) {
     Merger<PsiField> merger = null;
     for (PsiShortNameProvider cache : myCaches) {
       PsiField[] classes = cache.getFieldsByName(name, scope);
@@ -288,7 +288,7 @@ public class CompositeShortNamesCache extends PsiShortNamesCache {
   }
 
   @Override
-  public boolean processFieldsWithName(@Nonnull String key, @Nonnull Processor<? super PsiField> processor, @Nonnull GlobalSearchScope scope,
+  public boolean processFieldsWithName(@jakarta.annotation.Nonnull String key, @Nonnull Processor<? super PsiField> processor, @jakarta.annotation.Nonnull GlobalSearchScope scope,
                                        @Nullable IdFilter filter) {
     for (PsiShortNameProvider cache : myCaches) {
       if (!cache.processFieldsWithName(key, processor, scope, filter)) {
@@ -299,7 +299,7 @@ public class CompositeShortNamesCache extends PsiShortNamesCache {
   }
 
   @Override
-  public boolean processClassesWithName(@Nonnull String key, @Nonnull Processor<? super PsiClass> processor, @Nonnull GlobalSearchScope scope,
+  public boolean processClassesWithName(@Nonnull String key, @Nonnull Processor<? super PsiClass> processor, @jakarta.annotation.Nonnull GlobalSearchScope scope,
                                         @Nullable IdFilter filter) {
     for (PsiShortNameProvider cache : myCaches) {
       if (!cache.processClassesWithName(key, processor, scope, filter)) {

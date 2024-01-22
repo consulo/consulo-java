@@ -31,8 +31,8 @@ import consulo.util.lang.StringUtil;
 import consulo.ui.ex.awt.tree.SimpleNode;
 import consulo.ui.ex.OpenSourceUtil;
 import consulo.ui.image.Image;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.awt.event.InputEvent;
 
@@ -68,10 +68,10 @@ public abstract class JamNodeDescriptor<P> extends SimpleNode implements DataPro
     return myElement;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   protected abstract String getNewNodeText();
 
-  @Nullable
+  @jakarta.annotation.Nullable
   protected Image getNewIcon() {
     return getIcon();
   }
@@ -84,7 +84,7 @@ public abstract class JamNodeDescriptor<P> extends SimpleNode implements DataPro
     return EMPTY_ARRAY;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public Object getData(String dataId) {
     return null;
   }
@@ -102,7 +102,7 @@ public abstract class JamNodeDescriptor<P> extends SimpleNode implements DataPro
     return 0;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   protected DeleteProvider getDeleteProvider() {
     return null;
   }
@@ -111,7 +111,7 @@ public abstract class JamNodeDescriptor<P> extends SimpleNode implements DataPro
     return myParameters;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public final Object getDataForElement(Key<?> dataId) {
     if (PlatformDataKeys.DELETE_ELEMENT_PROVIDER == dataId) {
       return getDeleteProvider();
@@ -123,7 +123,7 @@ public abstract class JamNodeDescriptor<P> extends SimpleNode implements DataPro
     return myElement;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public String getComment() {
     return null;
   }

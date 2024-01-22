@@ -21,7 +21,7 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.language.psi.PsiElement;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -88,7 +88,7 @@ public class PsiPolyExpressionUtil {
       return false;
     }
     return returnType.accept(new PsiTypeVisitor<Boolean>() {
-      @Nullable
+      @jakarta.annotation.Nullable
       @Override
       public Boolean visitType(PsiType type) {
         return false;
@@ -116,7 +116,7 @@ public class PsiPolyExpressionUtil {
         return psiClass instanceof PsiTypeParameter && typeParameters.contains(psiClass);
       }
 
-      @Nullable
+      @jakarta.annotation.Nullable
       @Override
       public Boolean visitArrayType(PsiArrayType arrayType) {
         return arrayType.getComponentType().accept(this);
@@ -150,7 +150,7 @@ public class PsiPolyExpressionUtil {
     return false;
   }
 
-  public static boolean isExpressionOfPrimitiveType(@Nullable PsiExpression arg) {
+  public static boolean isExpressionOfPrimitiveType(@jakarta.annotation.Nullable PsiExpression arg) {
     if (arg != null && !isPolyExpression(arg)) {
       final PsiType type = arg.getType();
       return type instanceof PsiPrimitiveType && type != PsiType.NULL;

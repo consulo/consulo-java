@@ -30,9 +30,9 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Pair;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public class CreateAnnotationMethodFromUsageFix extends CreateFromUsageBaseFix {
   private static final Logger LOG = Logger.getInstance(CreateAnnotationMethodFromUsageFix.class);

@@ -23,7 +23,7 @@ import com.intellij.java.language.psi.PsiTypeElement;
 import com.intellij.java.language.impl.psi.impl.cache.TypeAnnotationContainer;
 import consulo.language.impl.ast.TreeElement;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,8 +40,8 @@ public class ClsReferenceParameterListImpl extends ClsElementImpl implements Psi
 	private volatile PsiType[] myTypeParametersCachedTypes;
 
 	public ClsReferenceParameterListImpl(PsiElement parent,
-										 @Nonnull String[] classParameters,
-										 @Nonnull TypeAnnotationContainer annotations)
+										 @jakarta.annotation.Nonnull String[] classParameters,
+										 @jakarta.annotation.Nonnull TypeAnnotationContainer annotations)
 	{
 		myParent = parent;
 
@@ -78,17 +78,17 @@ public class ClsReferenceParameterListImpl extends ClsElementImpl implements Psi
 	}
 
 	@Override
-	public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer)
+	public void appendMirrorText(int indentLevel, @jakarta.annotation.Nonnull StringBuilder buffer)
 	{
 	}
 
 	@Override
-	public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException
+	public void setMirror(@jakarta.annotation.Nonnull TreeElement element) throws InvalidMirrorException
 	{
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public PsiTypeElement[] getTypeParameterElements()
 	{
 		return myTypeParameters;
@@ -112,7 +112,7 @@ public class ClsReferenceParameterListImpl extends ClsElementImpl implements Psi
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public PsiElement[] getChildren()
 	{
 		return myTypeParameters;

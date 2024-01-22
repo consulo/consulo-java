@@ -31,7 +31,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author Danila Ponomarenko
@@ -46,7 +46,7 @@ public class IntroduceVariableIntentionAction extends BaseRefactoringIntentionAc
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, @jakarta.annotation.Nonnull PsiElement element) {
     if (element instanceof SyntheticElement){
       return false;
     }

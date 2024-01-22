@@ -35,7 +35,7 @@ import consulo.logging.Logger;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -64,7 +64,7 @@ public class InvertBooleanProcessor extends BaseRefactoringProcessor {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
     return new InvertBooleanUsageViewDescriptor(myElement);
   }

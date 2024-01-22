@@ -28,8 +28,8 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.logging.Logger;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author ven
@@ -137,7 +137,7 @@ public abstract class CreateClassFromUsageBaseFix extends BaseIntentionAction im
     return myRefElement.getElement();
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   protected String getSuperClassName(final PsiJavaCodeReferenceElement element) {
     String superClassName = null;
     PsiElement parent = element.getParent();

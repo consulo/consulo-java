@@ -17,13 +17,12 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import java.util.Arrays;
 
-import javax.annotation.Nonnull;
-
 import consulo.codeEditor.Editor;
 import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiMethod;
+import jakarta.annotation.Nonnull;
 
 public class InsertThisFix extends InsertConstructorCallFix
 {

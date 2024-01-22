@@ -47,10 +47,10 @@ import consulo.ui.ex.awt.tree.TreeUtil;
 import consulo.ui.ex.content.Content;
 import consulo.util.dataholder.Key;
 import consulo.virtualFileSystem.VirtualFile;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -538,7 +538,7 @@ public class CyclicDependenciesPanel extends JPanel implements Disposable, DataP
       return null;
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     public PackageDependenciesNode getSelectedNode() {
       TreePath[] paths = getSelectionPaths();
       if (paths == null || paths.length != 1) return null;

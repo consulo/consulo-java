@@ -20,13 +20,13 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
 @ExtensionImpl
 public class UseOfSunClassesInspection extends BaseInspection {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("use.sun.classes.display.name");
   }
@@ -45,7 +45,7 @@ public class UseOfSunClassesInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitVariable(@Nonnull PsiVariable variable) {
+    public void visitVariable(@jakarta.annotation.Nonnull PsiVariable variable) {
       super.visitVariable(variable);
       final PsiType type = variable.getType();
       final PsiType deepComponentType = type.getDeepComponentType();
@@ -66,7 +66,7 @@ public class UseOfSunClassesInspection extends BaseInspection {
 
     @Override
     public void visitNewExpression(
-      @Nonnull PsiNewExpression newExpression) {
+      @jakarta.annotation.Nonnull PsiNewExpression newExpression) {
       super.visitNewExpression(newExpression);
       final PsiType type = newExpression.getType();
       if (type == null) {

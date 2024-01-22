@@ -27,12 +27,11 @@ import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiFile;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class SuperMethodReturnFix implements SyntheticIntentionAction {
 
@@ -45,7 +44,7 @@ public class SuperMethodReturnFix implements SyntheticIntentionAction {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getText() {
     String name = PsiFormatUtil.formatMethod(
             mySuperMethod,
@@ -58,7 +57,7 @@ public class SuperMethodReturnFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
     return
             mySuperMethod != null
             && mySuperMethod.isValid()

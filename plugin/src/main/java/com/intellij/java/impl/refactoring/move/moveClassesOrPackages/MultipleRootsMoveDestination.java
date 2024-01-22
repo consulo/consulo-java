@@ -26,7 +26,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.MultiMap;
 import consulo.logging.Logger;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.Collection;
 
 /**

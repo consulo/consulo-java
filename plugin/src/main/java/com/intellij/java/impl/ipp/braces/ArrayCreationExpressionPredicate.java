@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ipp.braces;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiArrayInitializerExpression;
 import consulo.language.psi.PsiElement;

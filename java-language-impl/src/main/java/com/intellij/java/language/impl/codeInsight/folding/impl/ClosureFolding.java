@@ -28,8 +28,8 @@ import consulo.util.lang.CharArrayUtil;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,25 +37,25 @@ import java.util.List;
  * @author peter
  */
 class ClosureFolding {
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private final PsiAnonymousClass myAnonymousClass;
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private final PsiNewExpression myNewExpression;
-  @Nullable
+  @jakarta.annotation.Nullable
   private final PsiClass myBaseClass;
   @Nonnull
   private final JavaFoldingBuilderBase myBuilder;
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private final PsiMethod myMethod;
-  @Nonnull
+  @jakarta.annotation.Nonnull
   final PsiCodeBlock methodBody;
   private final boolean myQuick;
 
-  private ClosureFolding(@Nonnull PsiAnonymousClass anonymousClass,
-                         @Nonnull PsiNewExpression newExpression,
+  private ClosureFolding(@jakarta.annotation.Nonnull PsiAnonymousClass anonymousClass,
+                         @jakarta.annotation.Nonnull PsiNewExpression newExpression,
                          boolean quick,
                          @Nullable PsiClass baseClass,
-                         @Nonnull JavaFoldingBuilderBase builder,
+                         @jakarta.annotation.Nonnull JavaFoldingBuilderBase builder,
                          @Nonnull PsiMethod method,
                          @Nonnull PsiCodeBlock methodBody) {
     myAnonymousClass = anonymousClass;
@@ -67,7 +67,7 @@ class ClosureFolding {
     this.methodBody = methodBody;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   List<NamedFoldingDescriptor> process(Document document) {
     PsiJavaToken lbrace = methodBody.getLBrace();
     PsiJavaToken rbrace = methodBody.getRBrace();
@@ -127,7 +127,7 @@ class ClosureFolding {
     return myNewExpression.getTextRange().getStartOffset();
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private List<NamedFoldingDescriptor> createDescriptors(PsiElement classRBrace, int rangeStart, int rangeEnd, String header, String footer) {
     if (rangeStart >= rangeEnd) {
       return null;
@@ -142,7 +142,7 @@ class ClosureFolding {
     return foldElements;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static String getClosureContents(int rangeStart, int rangeEnd, CharSequence seq) {
     int firstLineStart = CharArrayUtil.shiftForward(seq, rangeStart, " \t");
     if (firstLineStart < seq.length() - 1 && seq.charAt(firstLineStart) == '\n') {
@@ -216,7 +216,7 @@ class ClosureFolding {
     return true;
   }
 
-  static boolean seemsLikeLambda(@Nullable PsiClass baseClass, @Nonnull PsiElement context) {
+  static boolean seemsLikeLambda(@jakarta.annotation.Nullable PsiClass baseClass, @jakarta.annotation.Nonnull PsiElement context) {
     if (baseClass == null || !PsiUtil.hasDefaultConstructor(baseClass, true)) {
       return false;
     }

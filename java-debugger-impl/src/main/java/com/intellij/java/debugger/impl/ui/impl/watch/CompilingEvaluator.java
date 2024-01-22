@@ -17,8 +17,7 @@ package com.intellij.java.debugger.impl.ui.impl.watch;
 
 import java.util.Collection;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 import consulo.internal.org.objectweb.asm.ClassReader;
 import consulo.internal.org.objectweb.asm.ClassVisitor;
@@ -31,6 +30,7 @@ import com.intellij.java.debugger.engine.evaluation.expression.Modifier;
 import com.intellij.java.compiler.ClassObject;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import consulo.internal.com.sun.jdi.Value;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author egor

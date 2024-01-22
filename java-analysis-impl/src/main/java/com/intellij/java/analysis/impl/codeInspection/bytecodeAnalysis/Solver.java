@@ -15,7 +15,7 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -188,7 +188,7 @@ final class Solver
 	}
 
 	// substitute id -> value into pending
-	Result substitute(@Nonnull Pending pending, @Nonnull EKey id, @Nonnull Value value)
+	Result substitute(@jakarta.annotation.Nonnull Pending pending, @Nonnull EKey id, @jakarta.annotation.Nonnull Value value)
 	{
 		Component[] sum = pending.delta;
 		for(Component intIdComponent : sum)
@@ -201,7 +201,7 @@ final class Solver
 		return normalize(sum);
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	Result normalize(@Nonnull Component[] sum)
 	{
 		Value acc = lattice.bot;

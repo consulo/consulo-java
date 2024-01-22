@@ -28,7 +28,7 @@ import com.intellij.java.impl.refactoring.ui.MemberSelectionPanel;
 import com.intellij.java.impl.refactoring.ui.MemberSelectionTable;
 import consulo.language.editor.refactoring.ui.RefactoringDialog;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;

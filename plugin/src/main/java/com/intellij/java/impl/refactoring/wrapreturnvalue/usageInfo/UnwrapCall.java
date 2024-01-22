@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.refactoring.wrapreturnvalue.usageInfo;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiCallExpression;
 import com.intellij.java.impl.refactoring.psi.MutationUtils;
@@ -29,7 +29,7 @@ public class UnwrapCall extends FixableUsageInfo {
     @Nonnull
     private final String unwrapMethod;
 
-    public UnwrapCall(@Nonnull PsiCallExpression call, @Nonnull String unwrapMethod) {
+    public UnwrapCall(@jakarta.annotation.Nonnull PsiCallExpression call, @Nonnull String unwrapMethod) {
         super(call);
         this.call =call;
         this.unwrapMethod = unwrapMethod;

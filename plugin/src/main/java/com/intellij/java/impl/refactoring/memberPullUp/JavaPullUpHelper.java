@@ -46,8 +46,8 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.function.Condition;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.*;
 
 /**

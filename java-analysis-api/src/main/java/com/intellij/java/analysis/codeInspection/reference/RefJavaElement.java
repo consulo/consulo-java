@@ -23,8 +23,8 @@ package com.intellij.java.analysis.codeInspection.reference;
 import consulo.language.editor.inspection.reference.RefElement;
 import com.intellij.java.language.psi.PsiModifier;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Collection;
 
 public interface RefJavaElement extends RefElement

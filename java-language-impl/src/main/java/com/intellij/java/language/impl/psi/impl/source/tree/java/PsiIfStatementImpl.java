@@ -36,7 +36,7 @@ import consulo.language.psi.resolve.ResolveState;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class PsiIfStatementImpl extends CompositePsiElement implements PsiIfStatement, Constants {
   private static final Logger LOG = Logger.getInstance(PsiIfStatementImpl.class);
@@ -51,7 +51,7 @@ public class PsiIfStatementImpl extends CompositePsiElement implements PsiIfStat
   }
 
   @Override
-  public void deleteChildInternal(@Nonnull ASTNode child) {
+  public void deleteChildInternal(@jakarta.annotation.Nonnull ASTNode child) {
     if (child == getElseBranch()) {
       ASTNode elseKeyword = findChildByRole(ChildRole.ELSE_KEYWORD);
       if (elseKeyword != null) {
@@ -87,7 +87,7 @@ public class PsiIfStatementImpl extends CompositePsiElement implements PsiIfStat
   }
 
   @Override
-  public void setElseBranch(@Nonnull PsiStatement statement) throws IncorrectOperationException {
+  public void setElseBranch(@jakarta.annotation.Nonnull PsiStatement statement) throws IncorrectOperationException {
     PsiStatement elseBranch = getElseBranch();
     if (elseBranch != null) {
       elseBranch.delete();
@@ -205,7 +205,7 @@ public class PsiIfStatementImpl extends CompositePsiElement implements PsiIfStat
   public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
                                      @Nonnull ResolveState state,
                                      PsiElement lastParent,
-                                     @Nonnull PsiElement place) {
+                                     @jakarta.annotation.Nonnull PsiElement place) {
     ElementClassHint elementClassHint = processor.getHint(ElementClassHint.KEY);
     if (elementClassHint != null && !elementClassHint.shouldProcess(ElementClassHint.DeclarationKind.VARIABLE)) return true;
     PsiExpression condition = getCondition();

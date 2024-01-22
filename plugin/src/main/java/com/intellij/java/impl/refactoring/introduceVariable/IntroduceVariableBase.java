@@ -78,8 +78,8 @@ import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.Ref;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -99,7 +99,7 @@ public abstract class IntroduceVariableBase extends IntroduceHandlerBase {
     return getSuggestedName(type, expression, expression);
   }
 
-  public static SuggestedNameInfo getSuggestedName(@Nullable PsiType type, @Nonnull final PsiExpression expression, final PsiElement anchor) {
+  public static SuggestedNameInfo getSuggestedName(@jakarta.annotation.Nullable PsiType type, @jakarta.annotation.Nonnull final PsiExpression expression, final PsiElement anchor) {
     final JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(expression.getProject());
     final SuggestedNameInfo nameInfo = codeStyleManager.suggestVariableName(VariableKind.LOCAL_VARIABLE, null, expression, type);
     final String[] strings = JavaCompletionUtil.completeVariableNameForRefactoring(codeStyleManager, type, VariableKind.LOCAL_VARIABLE,
@@ -108,7 +108,7 @@ public abstract class IntroduceVariableBase extends IntroduceHandlerBase {
     return codeStyleManager.suggestUniqueVariableName(delegate, anchor, true);
   }
 
-  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file, DataContext dataContext) {
+  public void invoke(@jakarta.annotation.Nonnull final Project project, final Editor editor, final PsiFile file, DataContext dataContext) {
     final SelectionModel selectionModel = editor.getSelectionModel();
     if (!selectionModel.hasSelection()) {
       final int offset = editor.getCaretModel().getOffset();
@@ -458,7 +458,7 @@ public abstract class IntroduceVariableBase extends IntroduceHandlerBase {
         injectedLanguageManager.injectedToHost(file, endOffset));
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static String getErrorMessage(PsiExpression expr) {
     final Boolean needParenthesis = expr.getCopyableUserData(NEED_PARENTHESIS);
     if (needParenthesis != null && needParenthesis.booleanValue()) {

@@ -18,8 +18,7 @@ package com.intellij.java.debugger.impl.actions;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.JavaValue;
@@ -32,9 +31,9 @@ import consulo.execution.debug.frame.XValue;
 import consulo.ui.ex.action.*;
 import consulo.ui.ex.action.ToggleAction;
 import consulo.application.dumb.DumbAware;
-import consulo.ide.impl.idea.xdebugger.impl.ui.tree.actions.XDebuggerTreeActionBase;
 import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 import consulo.logging.Logger;
+import jakarta.annotation.Nullable;
 
 public class ViewAsGroup extends ActionGroup implements DumbAware
 {
@@ -110,7 +109,7 @@ public class ViewAsGroup extends ActionGroup implements DumbAware
 		}
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public AnAction[] getChildren(@Nullable final AnActionEvent e)
 	{
 		return myChildren;

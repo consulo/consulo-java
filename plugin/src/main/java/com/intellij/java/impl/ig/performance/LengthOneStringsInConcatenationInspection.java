@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.performance;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -38,7 +38,7 @@ public class LengthOneStringsInConcatenationInspection
   extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "length.one.strings.in.concatenation.display.name");
@@ -106,7 +106,7 @@ public class LengthOneStringsInConcatenationInspection
 
     @Override
     public void visitLiteralExpression(
-      @Nonnull PsiLiteralExpression expression) {
+      @jakarta.annotation.Nonnull PsiLiteralExpression expression) {
       super.visitLiteralExpression(expression);
       final PsiType type = expression.getType();
       if (!TypeUtils.isJavaLangString(type)) {

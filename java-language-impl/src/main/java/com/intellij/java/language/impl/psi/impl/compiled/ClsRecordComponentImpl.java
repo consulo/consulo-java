@@ -17,8 +17,8 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.ObjectUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public final class ClsRecordComponentImpl extends ClsRepositoryPsiElement<PsiRecordComponentStub> implements PsiRecordComponent {
   private final NotNullLazyValue<PsiTypeElement> myType;
@@ -40,7 +40,7 @@ public final class ClsRecordComponentImpl extends ClsRepositoryPsiElement<PsiRec
   }
 
   @Override
-  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
+  public PsiElement setName(@jakarta.annotation.Nonnull String name) throws IncorrectOperationException {
     throw cannotModifyException(this);
   }
 
@@ -51,7 +51,7 @@ public final class ClsRecordComponentImpl extends ClsRepositoryPsiElement<PsiRec
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiType getType() {
     return getTypeElement().getType();
   }
@@ -100,7 +100,7 @@ public final class ClsRecordComponentImpl extends ClsRepositoryPsiElement<PsiRec
   }
 
   @Override
-  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(@jakarta.annotation.Nonnull TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, null);
 
     PsiParameter mirror = SourceTreeToPsiMap.treeToPsiNotNull(element);
@@ -123,7 +123,7 @@ public final class ClsRecordComponentImpl extends ClsRepositoryPsiElement<PsiRec
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public SearchScope getUseScope() {
     return new LocalSearchScope(getParent());
   }

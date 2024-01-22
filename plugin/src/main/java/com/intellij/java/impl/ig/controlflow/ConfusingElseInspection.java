@@ -31,8 +31,8 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import javax.swing.*;
 
@@ -170,7 +170,7 @@ public class ConfusingElseInspection extends BaseInspection {
       return !(parent instanceof PsiCodeBlock);
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     private PsiStatement getNextStatement(PsiIfStatement statement) {
       while (true) {
         final PsiElement parent = statement.getParent();

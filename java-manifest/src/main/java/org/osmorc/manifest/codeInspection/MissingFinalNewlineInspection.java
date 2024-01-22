@@ -44,8 +44,8 @@ import org.osmorc.manifest.lang.psi.Header;
 import org.osmorc.manifest.lang.psi.ManifestFile;
 import org.osmorc.manifest.lang.psi.Section;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)
@@ -53,7 +53,7 @@ import javax.annotation.Nullable;
 @ExtensionImpl
 public class MissingFinalNewlineInspection extends LocalInspectionTool {
   @Nls
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getGroupDisplayName() {
     return "General";
   }
@@ -70,7 +70,7 @@ public class MissingFinalNewlineInspection extends LocalInspectionTool {
     return "Missing Final New Line";
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getShortName() {
     return getClass().getSimpleName();
   }
@@ -79,13 +79,13 @@ public class MissingFinalNewlineInspection extends LocalInspectionTool {
     return true;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public HighlightDisplayLevel getDefaultLevel() {
     return HighlightDisplayLevel.ERROR;
   }
 
   @Override
-  public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean isOnTheFly) {
+  public ProblemDescriptor[] checkFile(@jakarta.annotation.Nonnull PsiFile file, @jakarta.annotation.Nonnull InspectionManager manager, boolean isOnTheFly) {
     if (file instanceof ManifestFile) {
       String text = file.getText();
       // http://ea.jetbrains.com/browser/ea_problems/22570
@@ -117,7 +117,7 @@ public class MissingFinalNewlineInspection extends LocalInspectionTool {
       return "Add newline";
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getFamilyName() {
       return "Osmorc";
     }

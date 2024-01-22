@@ -4,10 +4,10 @@ import consulo.java.manifest.internal.header.ManifestHeaderParserRegistratorImpl
 import consulo.language.editor.completion.CompletionParameters;
 import consulo.language.editor.ui.awt.TextFieldWithAutoCompletionListProvider;
 import consulo.ui.image.Image;
+import jakarta.annotation.Nonnull;
 import org.osmorc.manifest.lang.ManifestFileType;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -31,27 +31,27 @@ public class HeaderKeyCompletionProvider extends TextFieldWithAutoCompletionList
     return list;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
-  protected Image getIcon(@Nonnull String item) {
+  protected Image getIcon(@jakarta.annotation.Nonnull String item) {
     return ManifestFileType.INSTANCE.getIcon();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
-  protected String getLookupString(@Nonnull String item) {
+  protected String getLookupString(@jakarta.annotation.Nonnull String item) {
     return item;
   }
 
   @Nullable
   @Override
-  protected String getTailText(@Nonnull String item) {
+  protected String getTailText(@jakarta.annotation.Nonnull String item) {
     return null;
   }
 
   @Nullable
   @Override
-  protected String getTypeText(@Nonnull String item) {
+  protected String getTypeText(@jakarta.annotation.Nonnull String item) {
     return null;
   }
 

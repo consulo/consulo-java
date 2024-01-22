@@ -25,8 +25,8 @@ import com.siyeh.ig.psiutils.MethodUtils;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class EqualsUsesNonFinalVariableInspection extends BaseInspection {
@@ -36,13 +36,13 @@ public class EqualsUsesNonFinalVariableInspection extends BaseInspection {
     return "NonFinalFieldReferenceInEquals";
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "non.final.field.in.equals.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "non.final.field.in.equals.problem.descriptor");
@@ -62,7 +62,7 @@ public class EqualsUsesNonFinalVariableInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
       if (MethodUtils.isEquals(method)) {
         method.accept(new JavaRecursiveElementVisitor() {
 

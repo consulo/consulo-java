@@ -29,16 +29,16 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class ImplicitArrayToStringInspection extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "implicit.array.to.string.display.name");
@@ -91,7 +91,7 @@ public class ImplicitArrayToStringInspection extends BaseInspection {
       this.removeToString = removeToString;
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       @NonNls final String expressionText;
       if (deepString) {

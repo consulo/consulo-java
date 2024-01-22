@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -37,7 +37,7 @@ public class UtilityClassWithPublicConstructorInspection
   extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "utility.class.with.public.constructor.display.name");
@@ -105,7 +105,7 @@ public class UtilityClassWithPublicConstructorInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
       // no call to super, so that it doesn't drill down to inner classes
       if (!UtilityClassUtil.isUtilityClass(aClass)) {
         return;

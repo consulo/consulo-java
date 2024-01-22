@@ -3,14 +3,14 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.rangeSet.LongRangeSet;
 import com.intellij.java.language.psi.PsiPrimitiveType;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 class DfLongConstantType extends DfConstantType<Long> implements DfLongType {
   DfLongConstantType(long value) {
     super(value);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public PsiPrimitiveType getPsiType() {
     return DfLongType.super.getPsiType();

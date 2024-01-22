@@ -25,7 +25,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.intellij.java.impl.ig.psiutils.SerializationUtils;
 import consulo.annotation.component.ExtensionImpl;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -60,7 +60,7 @@ public class SerializableWithUnconstructableAncestorInspection extends BaseInspe
   private static class SerializableWithUnconstructableAncestorVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
       if (aClass.isInterface() || aClass.isAnnotationType()) {
         return;
       }

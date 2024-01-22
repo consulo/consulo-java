@@ -23,7 +23,7 @@ import consulo.codeEditor.EditorHighlighter;
 import consulo.virtualFileSystem.fileType.FileType;
 import consulo.language.codeStyle.CodeStyleSettings;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 
 /**

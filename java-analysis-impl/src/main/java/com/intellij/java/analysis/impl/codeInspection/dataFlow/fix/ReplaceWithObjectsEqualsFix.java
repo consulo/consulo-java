@@ -15,11 +15,11 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.fix;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.project.Project;
@@ -86,7 +86,7 @@ public class ReplaceWithObjectsEqualsFix implements LocalQuickFix
 	}
 
 	@Nullable
-	public static ReplaceWithObjectsEqualsFix createFix(@Nonnull PsiMethodCallExpression call, @Nonnull PsiReferenceExpression methodExpression)
+	public static ReplaceWithObjectsEqualsFix createFix(@jakarta.annotation.Nonnull PsiMethodCallExpression call, @Nonnull PsiReferenceExpression methodExpression)
 	{
 		if(!"equals".equals(methodExpression.getReferenceName()) || call.getArgumentList().getExpressions().length != 1 || !PsiUtil.getLanguageLevel(call).isAtLeast(LanguageLevel.JDK_1_7))
 		{

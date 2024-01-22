@@ -29,7 +29,7 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class MissingDeprecatedAnnotationInspection extends BaseInspection {
@@ -41,7 +41,7 @@ public class MissingDeprecatedAnnotationInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("missing.deprecated.annotation.problem.descriptor");
   }
@@ -88,7 +88,7 @@ public class MissingDeprecatedAnnotationInspection extends BaseInspection {
   private static class MissingDeprecatedAnnotationVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
       super.visitClass(aClass);
       if (!PsiUtil.isLanguageLevel5OrHigher(aClass)) {
         return;
@@ -100,7 +100,7 @@ public class MissingDeprecatedAnnotationInspection extends BaseInspection {
     }
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
       if (!PsiUtil.isLanguageLevel5OrHigher(method)) {
         return;
       }
@@ -114,7 +114,7 @@ public class MissingDeprecatedAnnotationInspection extends BaseInspection {
     }
 
     @Override
-    public void visitField(@Nonnull PsiField field) {
+    public void visitField(@jakarta.annotation.Nonnull PsiField field) {
       if (!PsiUtil.isLanguageLevel5OrHigher(field)) {
         return;
       }

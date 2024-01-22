@@ -46,8 +46,8 @@ import consulo.virtualFileSystem.VirtualFile;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
@@ -67,7 +67,7 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
     super("java-line", DebuggerBundle.message("line.breakpoints.tab.title"));
   }
 
-  protected JavaLineBreakpointType(@NonNls @Nonnull String id, @Nls @Nonnull String title) {
+  protected JavaLineBreakpointType(@NonNls @jakarta.annotation.Nonnull String id, @Nls @jakarta.annotation.Nonnull String title) {
     super(id, title);
   }
 
@@ -86,7 +86,7 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
     return XDebuggerUtil.getInstance().getGroupingByFileRuleAsList();
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public JavaLineBreakpointProperties createProperties() {
     return new JavaLineBreakpointProperties();
@@ -94,19 +94,19 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
 
   @Nonnull
   @Override
-  public JavaLineBreakpointProperties createBreakpointProperties(@Nonnull VirtualFile file, int line) {
+  public JavaLineBreakpointProperties createBreakpointProperties(@jakarta.annotation.Nonnull VirtualFile file, int line) {
     return new JavaLineBreakpointProperties();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Breakpoint<JavaLineBreakpointProperties> createJavaBreakpoint(Project project, XBreakpoint breakpoint) {
     return new LineBreakpoint<>(project, breakpoint);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
-  public List<JavaBreakpointVariant> computeVariants(@Nonnull Project project, @Nonnull XSourcePosition position) {
+  public List<JavaBreakpointVariant> computeVariants(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull XSourcePosition position) {
     SourcePosition pos = DebuggerUtilsEx.toSourcePosition(position, project);
     if (pos == null) {
       return Collections.emptyList();
@@ -154,7 +154,7 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
     return res;
   }
 
-  public boolean matchesPosition(@Nonnull LineBreakpoint<?> breakpoint, @Nonnull SourcePosition position) {
+  public boolean matchesPosition(@jakarta.annotation.Nonnull LineBreakpoint<?> breakpoint, @jakarta.annotation.Nonnull SourcePosition position) {
     JavaBreakpointProperties properties = breakpoint.getProperties();
     if (properties instanceof JavaLineBreakpointProperties) {
       if (!(breakpoint instanceof RunToCursorBreakpoint) && ((JavaLineBreakpointProperties)properties).getLambdaOrdinal() == null) {
@@ -169,8 +169,8 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
     return true;
   }
 
-  @Nullable
-  public PsiElement getContainingMethod(@Nonnull LineBreakpoint<?> breakpoint) {
+  @jakarta.annotation.Nullable
+  public PsiElement getContainingMethod(@jakarta.annotation.Nonnull LineBreakpoint<?> breakpoint) {
     SourcePosition position = breakpoint.getSourcePosition();
     if (position == null) {
       return null;
@@ -190,7 +190,7 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
   }
 
   public class JavaBreakpointVariant extends XLineBreakpointAllVariant {
-    public JavaBreakpointVariant(@Nonnull XSourcePosition position) {
+    public JavaBreakpointVariant(@jakarta.annotation.Nonnull XSourcePosition position) {
       super(position);
     }
   }
@@ -199,7 +199,7 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
     private final PsiElement myElement;
     private final Integer myLambdaOrdinal;
 
-    public ExactJavaBreakpointVariant(@Nonnull XSourcePosition position, @Nullable PsiElement element, Integer lambdaOrdinal) {
+    public ExactJavaBreakpointVariant(@jakarta.annotation.Nonnull XSourcePosition position, @jakarta.annotation.Nullable PsiElement element, Integer lambdaOrdinal) {
       super(position);
       myElement = element;
       myLambdaOrdinal = lambdaOrdinal;
@@ -234,7 +234,7 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
   }
 
   public class LineJavaBreakpointVariant extends ExactJavaBreakpointVariant {
-    public LineJavaBreakpointVariant(@Nonnull XSourcePosition position, @Nullable PsiElement element, Integer lambdaOrdinal) {
+    public LineJavaBreakpointVariant(@jakarta.annotation.Nonnull XSourcePosition position, @jakarta.annotation.Nullable PsiElement element, Integer lambdaOrdinal) {
       super(position, element, lambdaOrdinal);
     }
 
@@ -250,7 +250,7 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
   }
 
   public class LambdaJavaBreakpointVariant extends ExactJavaBreakpointVariant {
-    public LambdaJavaBreakpointVariant(@Nonnull XSourcePosition position, @Nonnull PsiElement element, Integer lambdaOrdinal) {
+    public LambdaJavaBreakpointVariant(@jakarta.annotation.Nonnull XSourcePosition position, @Nonnull PsiElement element, Integer lambdaOrdinal) {
       super(position, element, lambdaOrdinal);
     }
 
@@ -260,7 +260,7 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
     }
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public TextRange getHighlightRange(XLineBreakpoint<JavaLineBreakpointProperties> breakpoint) {
     Integer ordinal = getLambdaOrdinal(breakpoint);
@@ -294,7 +294,7 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
     return properties != null ? properties.getLambdaOrdinal() : null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static SourcePosition createLineSourcePosition(XLineBreakpoint breakpoint) {
     VirtualFile file = breakpoint.getFile();
     if (file != null) {

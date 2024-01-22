@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiExpressionList;
@@ -54,7 +54,7 @@ public class ObjectEqualsNullInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression call) {
+      @jakarta.annotation.Nonnull PsiMethodCallExpression call) {
       super.visitMethodCallExpression(call);
       if (!MethodCallUtils.isEqualsCall(call)) {
         return;

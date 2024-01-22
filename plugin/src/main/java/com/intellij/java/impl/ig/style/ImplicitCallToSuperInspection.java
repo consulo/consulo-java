@@ -30,7 +30,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 
 @ExtensionImpl
@@ -105,7 +105,7 @@ public class ImplicitCallToSuperInspection extends BaseInspection {
   private class ImplicitCallToSuperVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
       super.visitMethod(method);
       if (!method.isConstructor()) {
         return;

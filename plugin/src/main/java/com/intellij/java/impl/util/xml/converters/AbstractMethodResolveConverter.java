@@ -30,8 +30,9 @@ import consulo.xml.util.xml.DomElement;
 import consulo.xml.util.xml.GenericDomValue;
 import consulo.xml.util.xml.ResolvingConverter;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.*;
 import java.util.function.Function;
 
@@ -79,7 +80,7 @@ public abstract class AbstractMethodResolveConverter<ParentType extends DomEleme
     return parent;
   }
 
-  public boolean isReferenceTo(@Nonnull final PsiElement element, final String stringValue, final PsiMethod resolveResult,
+  public boolean isReferenceTo(@jakarta.annotation.Nonnull final PsiElement element, final String stringValue, final PsiMethod resolveResult,
                                final ConvertContext context) {
     if (super.isReferenceTo(element, stringValue, resolveResult, context)) return true;
 
@@ -110,7 +111,7 @@ public abstract class AbstractMethodResolveConverter<ParentType extends DomEleme
     }
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public Collection<? extends PsiMethod> getVariants(final ConvertContext context) {
     LinkedHashSet<PsiMethod> methodList = new LinkedHashSet<PsiMethod>();
     Processor<PsiMethod> processor = CommonProcessors.notNullProcessor(new CommonProcessors.CollectProcessor<PsiMethod>(methodList));
@@ -169,7 +170,7 @@ public abstract class AbstractMethodResolveConverter<ParentType extends DomEleme
     return method.getName();
   }
 
-  public static String getReferenceCanonicalText(final String name, @Nullable final AbstractMethodParams methodParams) {
+  public static String getReferenceCanonicalText(final String name, @jakarta.annotation.Nullable final AbstractMethodParams methodParams) {
     StringBuilder sb = new StringBuilder(name);
     if (methodParams == null) {
       sb.append("()");
@@ -188,8 +189,8 @@ public abstract class AbstractMethodResolveConverter<ParentType extends DomEleme
     return sb.toString();
   }
 
-  @Nullable
-  public static PsiMethod findMethod(final PsiClass psiClass, final String methodName, @Nullable final AbstractMethodParams methodParameters) {
+  @jakarta.annotation.Nullable
+  public static PsiMethod findMethod(final PsiClass psiClass, final String methodName, @jakarta.annotation.Nullable final AbstractMethodParams methodParameters) {
     if (psiClass == null || methodName == null) return null;
     return ContainerUtil.find(psiClass.findMethodsByName(methodName, true), new Condition<PsiMethod>() {
       public boolean value(final PsiMethod object) {
@@ -198,7 +199,7 @@ public abstract class AbstractMethodResolveConverter<ParentType extends DomEleme
     });
   }
 
-  public static boolean methodParamsMatchSignature(@Nullable final AbstractMethodParams params, final PsiMethod psiMethod) {
+  public static boolean methodParamsMatchSignature(@jakarta.annotation.Nullable final AbstractMethodParams params, final PsiMethod psiMethod) {
     if (params != null && params.getXmlTag() == null) return true;
 
     PsiParameter[] parameters = psiMethod.getParameterList().getParameters();

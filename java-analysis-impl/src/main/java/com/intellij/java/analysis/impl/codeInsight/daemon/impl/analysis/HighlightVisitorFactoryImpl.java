@@ -9,7 +9,7 @@ import consulo.language.inject.InjectedLanguageManager;
 import consulo.language.psi.PsiFile;
 import jakarta.inject.Inject;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -33,7 +33,7 @@ public class HighlightVisitorFactoryImpl implements HighlightVisitorFactory
 		return file instanceof PsiImportHolder && !InjectedLanguageManager.getInstance(file.getProject()).isInjectedFragment(file);
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
 	public HighlightVisitor createVisitor()
 	{

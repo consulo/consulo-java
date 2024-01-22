@@ -25,7 +25,7 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.intellij.java.impl.ig.psiutils.FormatUtils;
 import consulo.annotation.component.ExtensionImpl;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class MalformedFormatStringInspection extends BaseInspection {

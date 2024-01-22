@@ -19,7 +19,7 @@ import com.intellij.java.language.psi.JavaRecursiveElementVisitor;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiReferenceExpression;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 class CatchParameterUsedVisitor extends JavaRecursiveElementVisitor {
 

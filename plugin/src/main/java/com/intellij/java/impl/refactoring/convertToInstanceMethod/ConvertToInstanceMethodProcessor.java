@@ -46,9 +46,9 @@ import consulo.usage.UsageViewDescriptor;
 import consulo.util.collection.MultiMap;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.ref.Ref;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -99,7 +99,7 @@ public class ConvertToInstanceMethodProcessor extends BaseRefactoringProcessor {
     myTargetClass = (PsiClass) elements[2];
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected UsageInfo[] findUsages() {
     LOG.assertTrue(myTargetParameter.getDeclarationScope() == myMethod);
     final Project project = myMethod.getProject();

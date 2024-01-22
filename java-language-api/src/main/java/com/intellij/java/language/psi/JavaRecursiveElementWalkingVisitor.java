@@ -23,7 +23,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiRecursiveVisitor;
 import consulo.language.psi.PsiWalkingState;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public abstract class JavaRecursiveElementWalkingVisitor extends JavaElementVisitor implements PsiRecursiveVisitor {
   private final PsiWalkingState myWalkingState = new PsiWalkingState(this){

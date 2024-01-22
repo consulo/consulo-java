@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.serialization;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.JComponent;
 
 import com.intellij.java.language.codeInsight.AnnotationUtil;
@@ -39,14 +39,14 @@ public class NonSerializableFieldInSerializableClassInspection extends Serializa
   public final ExternalizableStringSet ignorableAnnotations = new ExternalizableStringSet();
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "non.serializable.field.in.serializable.class.display.name");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "non.serializable.field.in.serializable.class.problem.descriptor");
@@ -58,7 +58,7 @@ public class NonSerializableFieldInSerializableClassInspection extends Serializa
       ignorableAnnotations, InspectionGadgetsBundle.message("ignore.if.annotated.by"))};
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     final PsiField field = (PsiField)infos[0];

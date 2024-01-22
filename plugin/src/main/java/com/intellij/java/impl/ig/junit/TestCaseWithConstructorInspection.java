@@ -15,8 +15,7 @@
  */
 package com.intellij.java.impl.ig.junit;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
@@ -24,6 +23,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TestUtils;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class TestCaseWithConstructorInspection extends BaseInspection {

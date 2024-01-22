@@ -15,7 +15,7 @@ import consulo.project.Project;
 import consulo.util.lang.ObjectUtil;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.List;
 import java.util.Objects;
 

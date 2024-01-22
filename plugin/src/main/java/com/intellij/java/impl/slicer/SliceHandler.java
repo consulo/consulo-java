@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.slicer;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import consulo.language.editor.hint.HintManager;
 import consulo.language.editor.scope.AnalysisScope;
@@ -47,7 +47,7 @@ public class SliceHandler implements CodeInsightActionHandler {
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, @Nonnull final Editor editor, @Nonnull final PsiFile file) {
+  public void invoke(@jakarta.annotation.Nonnull final Project project, @jakarta.annotation.Nonnull final Editor editor, @Nonnull final PsiFile file) {
     PsiDocumentManager.getInstance(project).commitAllDocuments(); // prevents problems with smart pointers creation
     PsiElement expression = getExpressionAtCaret(editor, file);
     if (expression == null) {

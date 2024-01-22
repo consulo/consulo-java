@@ -22,13 +22,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.debugger.engine.SuspendContext;
 import consulo.logging.Logger;
+import jakarta.annotation.Nullable;
 import org.intellij.lang.annotations.MagicConstant;
 
-import javax.annotation.Nullable;
 import consulo.application.util.Patches;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
@@ -72,7 +72,7 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
 
 	private JavaExecutionStack myActiveExecutionStack;
 
-	SuspendContextImpl(@Nonnull DebugProcessImpl debugProcess, @MagicConstant(flagsFromClass = EventRequest.class) int suspendPolicy, int eventVotes, EventSet set)
+	SuspendContextImpl(@jakarta.annotation.Nonnull DebugProcessImpl debugProcess, @MagicConstant(flagsFromClass = EventRequest.class) int suspendPolicy, int eventVotes, EventSet set)
 	{
 		myDebugProcess = debugProcess;
 		mySuspendPolicy = suspendPolicy;
@@ -131,7 +131,7 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
 	}
 
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	public EventSet getEventSet()
 	{
 		return myEventSet;
@@ -178,7 +178,7 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
 		myVotesToVote = 1000000000;
 	}
 
-	public boolean isExplicitlyResumed(@Nullable ThreadReferenceProxyImpl thread)
+	public boolean isExplicitlyResumed(@jakarta.annotation.Nullable ThreadReferenceProxyImpl thread)
 	{
 		return myResumedThreads != null && myResumedThreads.contains(thread);
 	}
@@ -263,7 +263,7 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
 		return myPostponedCommands.poll();
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	@Override
 	public JavaExecutionStack getActiveExecutionStack()
 	{

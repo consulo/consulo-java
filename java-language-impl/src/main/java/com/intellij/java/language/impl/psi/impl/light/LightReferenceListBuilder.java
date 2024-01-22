@@ -20,9 +20,8 @@ import com.intellij.java.language.psi.*;
 import consulo.language.Language;
 import consulo.language.impl.psi.LightElement;
 import consulo.language.psi.PsiManager;
-import consulo.util.collection.ContainerUtil;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,7 +67,7 @@ public class LightReferenceListBuilder extends LightElement implements PsiRefere
     myRefs.add(ref);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public PsiJavaCodeReferenceElement[] getReferenceElements() {
     if (myCachedRefs == null) {

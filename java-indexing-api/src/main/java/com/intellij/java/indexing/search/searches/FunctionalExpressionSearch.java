@@ -29,7 +29,7 @@ import consulo.language.psi.PsiUtilCore;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.PsiSearchHelper;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class FunctionalExpressionSearch extends ExtensibleQueryFactory<PsiFunctionalExpression, FunctionalExpressionSearch.SearchParameters> {
   public static final FunctionalExpressionSearch INSTANCE = new FunctionalExpressionSearch();
@@ -47,7 +47,7 @@ public class FunctionalExpressionSearch extends ExtensibleQueryFactory<PsiFuncti
       return myElementToSearch;
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public SearchScope getEffectiveSearchScope() {
       SearchScope accessScope = PsiSearchHelper.getInstance(myElementToSearch.getProject()).getUseScope(myElementToSearch);
       return myScope.intersectWith(accessScope);
@@ -58,7 +58,7 @@ public class FunctionalExpressionSearch extends ExtensibleQueryFactory<PsiFuncti
     super(FunctionalExpressionSearchExecutor.class);
   }
 
-  public static Query<PsiFunctionalExpression> search(@Nonnull final PsiClass aClass, @Nonnull SearchScope scope) {
+  public static Query<PsiFunctionalExpression> search(@Nonnull final PsiClass aClass, @jakarta.annotation.Nonnull SearchScope scope) {
     return INSTANCE.createUniqueResultsQuery(new SearchParameters(aClass, scope));
   }
 

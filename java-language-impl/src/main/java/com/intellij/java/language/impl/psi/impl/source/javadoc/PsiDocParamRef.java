@@ -37,8 +37,8 @@ import consulo.language.psi.resolve.ResolveState;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.CharTable;
 import consulo.language.util.IncorrectOperationException;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -93,7 +93,7 @@ public class PsiDocParamRef extends CompositePsiElement implements PsiDocTagValu
       }
 
       @Override
-      @Nonnull
+      @jakarta.annotation.Nonnull
       public String getCanonicalText() {
         return valueToken.getText();
       }
@@ -107,7 +107,7 @@ public class PsiDocParamRef extends CompositePsiElement implements PsiDocTagValu
       }
 
       @Override
-      public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException {
+      public PsiElement bindToElement(@jakarta.annotation.Nonnull PsiElement element) throws IncorrectOperationException {
         if (isReferenceTo(element)) {
           return PsiDocParamRef.this;
         }
@@ -130,7 +130,7 @@ public class PsiDocParamRef extends CompositePsiElement implements PsiDocTagValu
       }
 
       @Override
-      @Nonnull
+      @jakarta.annotation.Nonnull
       public PsiElement[] getVariants() {
         final PsiElement firstChild = getFirstChild();
 
@@ -176,7 +176,7 @@ public class PsiDocParamRef extends CompositePsiElement implements PsiDocTagValu
       }
 
       @Override
-      public void processVariants(@Nonnull PsiScopeProcessor processor) {
+      public void processVariants(@jakarta.annotation.Nonnull PsiScopeProcessor processor) {
         for (final PsiElement element : getVariants()) {
           if (!processor.execute(element, ResolveState.initial())) {
             return;
@@ -191,7 +191,7 @@ public class PsiDocParamRef extends CompositePsiElement implements PsiDocTagValu
       }
 
       @Override
-      @Nonnull
+      @jakarta.annotation.Nonnull
       public JavaResolveResult[] multiResolve(boolean incompleteCode) {
         return resultReference == null ? JavaResolveResult.EMPTY_ARRAY : new JavaResolveResult[]{new CandidateInfo(resultReference, PsiSubstitutor.EMPTY)};
       }
@@ -199,7 +199,7 @@ public class PsiDocParamRef extends CompositePsiElement implements PsiDocTagValu
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitDocTagValue(this);
     } else {

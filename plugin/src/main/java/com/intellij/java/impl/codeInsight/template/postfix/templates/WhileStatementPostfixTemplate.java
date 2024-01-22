@@ -19,8 +19,7 @@ import consulo.language.editor.postfixTemplate.TypedPostfixTemplate;
 import com.intellij.java.language.psi.*;
 import consulo.codeEditor.Editor;
 import consulo.language.psi.PsiElement;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import static com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.IS_BOOLEAN;
 import static com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
@@ -31,7 +30,7 @@ public class WhileStatementPostfixTemplate extends TypedPostfixTemplate {
   }
 
   @Override
-  public void expand(@Nonnull PsiElement context, @Nonnull Editor editor) {
+  public void expand(@Nonnull PsiElement context, @jakarta.annotation.Nonnull Editor editor) {
     PsiElement expression = myPsiInfo.getTopmostExpression(context);
     assert expression != null;
 

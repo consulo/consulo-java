@@ -23,7 +23,7 @@ import consulo.language.editor.impl.inspection.scheme.GlobalInspectionToolWrappe
 import consulo.language.editor.inspection.scheme.InspectionToolWrapper;
 import consulo.ui.image.Image;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author max

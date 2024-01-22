@@ -32,7 +32,7 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.List;
 
 /**
@@ -114,7 +114,7 @@ public class GenerateEqualsHandler extends GenerateMembersHandlerBase {
   }
 
   @Override
-  protected boolean hasMembers(@Nonnull PsiClass aClass) {
+  protected boolean hasMembers(@jakarta.annotation.Nonnull PsiClass aClass) {
     return hasNonStaticFields(aClass);
   }
 

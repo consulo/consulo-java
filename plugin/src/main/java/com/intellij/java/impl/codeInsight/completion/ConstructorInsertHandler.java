@@ -39,8 +39,8 @@ import consulo.undoRedo.CommandProcessor;
 import consulo.undoRedo.UndoConfirmationPolicy;
 import org.jetbrains.annotations.Contract;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -168,7 +168,7 @@ public class ConstructorInsertHandler implements InsertHandler<LookupElementDeco
   }
 
   @Nullable
-  private static PsiExpressionList getEnclosingExpressionList(@Nonnull PsiElement element) {
+  private static PsiExpressionList getEnclosingExpressionList(@jakarta.annotation.Nonnull PsiElement element) {
     if (!(element instanceof PsiAnonymousClass)) {
       return null;
     }
@@ -210,7 +210,7 @@ public class ConstructorInsertHandler implements InsertHandler<LookupElementDeco
     return true;
   }
 
-  static boolean hasConstructorParameters(PsiClass psiClass, @Nonnull PsiElement place) {
+  static boolean hasConstructorParameters(PsiClass psiClass, @jakarta.annotation.Nonnull PsiElement place) {
     final PsiResolveHelper resolveHelper = JavaPsiFacade.getInstance(place.getProject()).getResolveHelper();
     boolean hasParams = false;
     for (PsiMethod constructor : psiClass.getConstructors()) {
@@ -225,7 +225,7 @@ public class ConstructorInsertHandler implements InsertHandler<LookupElementDeco
     return hasParams;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static Runnable generateAnonymousBody(final Editor editor, final PsiFile file) {
     final Project project = file.getProject();
     PsiDocumentManager.getInstance(project).commitAllDocuments();

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.errorhandling;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiBreakStatement;
 import com.intellij.java.language.psi.PsiContinueStatement;
@@ -30,7 +30,7 @@ import consulo.annotation.component.ExtensionImpl;
 public class ContinueOrBreakFromFinallyBlockInspection
   extends BaseInspection {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "continue.or.break.from.finally.block.display.name");
@@ -55,7 +55,7 @@ public class ContinueOrBreakFromFinallyBlockInspection
 
     @Override
     public void visitContinueStatement(
-      @Nonnull PsiContinueStatement statement) {
+      @jakarta.annotation.Nonnull PsiContinueStatement statement) {
       super.visitContinueStatement(statement);
       if (!ControlFlowUtils.isInFinallyBlock(statement)) {
         return;

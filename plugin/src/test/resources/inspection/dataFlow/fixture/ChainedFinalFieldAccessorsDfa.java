@@ -1,4 +1,4 @@
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 import java.lang.String;
 
@@ -44,27 +44,27 @@ public class BrokenAlignment {
     @Nullable final String text;
     @Nullable final Data inner;
 
-    Data(@javax.annotation.Nullable String text, Data inner) {
+    Data(@Nullable String text, Data inner) {
       this.text = text;
       this.inner = inner;
     }
 
-    @javax.annotation.Nullable
+    @jakarta.annotation.Nullable
     public String getText() {
       return text;
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     public Data getInner() {
       return inner;
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     public Data getInnerOverridden() {
       return inner;
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     public String something() {
       return new String();
     }
@@ -75,7 +75,7 @@ public class BrokenAlignment {
       super(text, inner);
     }
 
-    @javax.annotation.Nullable
+    @jakarta.annotation.Nullable
     @Override
     public Data getInnerOverridden() {
       return super.getInnerOverridden();

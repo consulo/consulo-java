@@ -24,8 +24,8 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.util.lang.Comparing;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.*;
 
 /**

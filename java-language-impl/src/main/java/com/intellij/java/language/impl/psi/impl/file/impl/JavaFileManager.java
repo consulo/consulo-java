@@ -27,8 +27,8 @@ import consulo.ide.ServiceManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Collection;
 
 @ServiceAPI(ComponentScope.PROJECT)
@@ -38,12 +38,12 @@ public interface JavaFileManager {
   }
 
   @Nullable
-  PsiClass findClass(@Nonnull String qName, @Nonnull GlobalSearchScope scope);
+  PsiClass findClass(@jakarta.annotation.Nonnull String qName, @Nonnull GlobalSearchScope scope);
 
-  PsiClass[] findClasses(@Nonnull String qName, @Nonnull GlobalSearchScope scope);
+  PsiClass[] findClasses(@jakarta.annotation.Nonnull String qName, @jakarta.annotation.Nonnull GlobalSearchScope scope);
 
   Collection<String> getNonTrivialPackagePrefixes();
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   Collection<PsiJavaModule> findModules(@Nonnull String moduleName, @Nonnull GlobalSearchScope scope);
 }

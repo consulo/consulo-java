@@ -1,4 +1,4 @@
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 class IfCanBeSwitch {
   void m1(int i) {  // ok

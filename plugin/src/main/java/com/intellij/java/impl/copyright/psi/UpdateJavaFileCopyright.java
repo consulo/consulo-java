@@ -16,26 +16,21 @@
 
 package com.intellij.java.impl.copyright.psi;
 
-import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassOwner;
 import com.intellij.java.language.psi.PsiImportList;
 import com.intellij.java.language.psi.PsiJavaFile;
-import consulo.language.copyright.UpdateCopyrightsProvider;
 import consulo.language.copyright.UpdatePsiFileCopyright;
 import consulo.language.copyright.config.CopyrightFileConfig;
 import consulo.language.copyright.config.CopyrightProfile;
-import consulo.language.copyright.ui.TemplateCommentPanel;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.logging.Logger;
-import consulo.project.Project;
-import consulo.virtualFileSystem.fileType.FileType;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.swing.*;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +39,7 @@ public class UpdateJavaFileCopyright extends UpdatePsiFileCopyright<CopyrightFil
   public static final int LOCATION_BEFORE_IMPORT = 2;
   public static final int LOCATION_BEFORE_CLASS = 3;
 
-  public UpdateJavaFileCopyright(@Nonnull PsiFile psiFile, @Nonnull CopyrightProfile copyrightProfile) {
+  public UpdateJavaFileCopyright(@jakarta.annotation.Nonnull PsiFile psiFile, @Nonnull CopyrightProfile copyrightProfile) {
     super(psiFile, copyrightProfile);
   }
 
@@ -97,7 +92,7 @@ public class UpdateJavaFileCopyright extends UpdatePsiFileCopyright<CopyrightFil
     checkComments(topclass.getModifierList(), location == LOCATION_BEFORE_CLASS, comments);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   protected PsiElement[] getImportsList() {
     final PsiJavaFile javaFile = (PsiJavaFile) getFile();
     final PsiImportList importList = javaFile.getImportList();

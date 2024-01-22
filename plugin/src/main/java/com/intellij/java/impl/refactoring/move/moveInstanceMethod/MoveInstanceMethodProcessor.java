@@ -49,7 +49,7 @@ import consulo.util.lang.Comparing;
 import consulo.util.lang.ref.Ref;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.*;
 
 /**
@@ -85,7 +85,7 @@ public class MoveInstanceMethodProcessor extends BaseRefactoringProcessor {
     myNewVisibility = newVisibility;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
     return new MoveInstanceMethodViewDescriptor(myMethod, myTargetVariable, myTargetClass);
   }
@@ -523,7 +523,7 @@ public class MoveInstanceMethodProcessor extends BaseRefactoringProcessor {
     }
   }
 
-  private String getParameterNameToCreate(@Nonnull PsiClass aClass) {
+  private String getParameterNameToCreate(@jakarta.annotation.Nonnull PsiClass aClass) {
     return myOldClassParameterNames.get(aClass);
   }
 }

@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
@@ -41,7 +41,7 @@ public class ClassNameDiffersFromFileNameInspection extends BaseInspection
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	protected String buildErrorString(Object... infos)
 	{
 		return InspectionGadgetsBundle.message("class.name.differs.from.file.name.problem.descriptor");

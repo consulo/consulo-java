@@ -34,7 +34,7 @@ import consulo.project.Project;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -78,7 +78,7 @@ public class DynamicRegexReplaceableByCompiledPatternInspection extends BaseInsp
 
   private static class DynamicRegexReplaceableByCompiledPatternFix extends InspectionGadgetsFix {
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
           "dynamic.regex.replaceable.by.compiled.pattern.quickfix");

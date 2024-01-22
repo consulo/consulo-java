@@ -39,8 +39,8 @@ import consulo.ui.ex.action.ActionToolbarPosition;
 import consulo.ui.ex.awt.*;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import javax.swing.*;
 import javax.swing.event.ChangeListener;
 import java.awt.event.ItemEvent;

@@ -19,8 +19,7 @@ package consulo.java.language.psi;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.LanguageLevel;
 import consulo.language.version.LanguageVersion;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL

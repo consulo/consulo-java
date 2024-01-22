@@ -36,8 +36,8 @@ import consulo.util.xml.serializer.WriteExternalException;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
@@ -99,8 +99,8 @@ public class SuspiciousNameCombinationInspection extends BaseLocalInspectionTool
   }
 
   @Override
-  @Nonnull
-  public PsiElementVisitor buildVisitorImpl(@Nonnull ProblemsHolder holder,
+  @jakarta.annotation.Nonnull
+  public PsiElementVisitor buildVisitorImpl(@jakarta.annotation.Nonnull ProblemsHolder holder,
                                             boolean isOnTheFly,
                                             LocalInspectionToolSession session,
                                             Object state) {
@@ -112,7 +112,7 @@ public class SuspiciousNameCombinationInspection extends BaseLocalInspectionTool
     return new MyOptionsPanel();
   }
 
-  @Override public void readSettings(@Nonnull Element node) throws InvalidDataException {
+  @Override public void readSettings(@jakarta.annotation.Nonnull Element node) throws InvalidDataException {
     clearNameGroups();
     for(Object o: node.getChildren(ELEMENT_GROUPS)) {
       Element e = (Element) o;
@@ -185,7 +185,7 @@ public class SuspiciousNameCombinationInspection extends BaseLocalInspectionTool
     }
 
     private void checkCombination(final PsiElement location,
-                                  @Nullable final String name,
+                                  @jakarta.annotation.Nullable final String name,
                                   @Nullable final String referenceName,
                                   final String key) {
       String nameGroup1 = findNameGroup(name);
@@ -196,7 +196,7 @@ public class SuspiciousNameCombinationInspection extends BaseLocalInspectionTool
     }
 
     @Nullable
-	private String findNameGroup(@Nullable final String name) {
+	private String findNameGroup(@jakarta.annotation.Nullable final String name) {
       if (name == null) {
         return null;
       }

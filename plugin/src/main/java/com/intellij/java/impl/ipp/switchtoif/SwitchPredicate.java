@@ -20,7 +20,7 @@ import consulo.language.psi.*;
 import consulo.language.ast.IElementType;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.ErrorUtil;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 class SwitchPredicate implements PsiElementPredicate {
 

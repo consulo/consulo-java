@@ -1,8 +1,7 @@
 package consulo.java.language.impl.util;
 
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Contract;
-
-import javax.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -10,7 +9,7 @@ import javax.annotation.Nonnull;
  */
 public class ArrayUtil2 {
   @Contract(pure = true)
-  public static int max(@Nonnull int[] values) {
+  public static int max(@jakarta.annotation.Nonnull int[] values) {
     int max = Integer.MIN_VALUE;
     for (int value : values) {
       if (value > max)

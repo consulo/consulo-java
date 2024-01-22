@@ -30,9 +30,9 @@ import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.primitive.ints.IntSet;
 import consulo.util.collection.primitive.ints.IntSets;
 import consulo.util.lang.ObjectUtil;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -55,7 +55,7 @@ public class MethodInfo extends MemberInfo
 	private final boolean myIsConstructor;
 	private final AnnotationConstantValue[][] myRuntimeVisibleParameterAnnotations;
 	private final AnnotationConstantValue[][] myRuntimeInvisibleParameterAnnotations;
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	private final ConstantValue myAnnotationDefault;
 
 	public MethodInfo(int name, int descriptor, boolean isConstructor)

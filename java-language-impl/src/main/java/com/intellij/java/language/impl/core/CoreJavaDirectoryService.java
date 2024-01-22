@@ -29,7 +29,7 @@ import consulo.logging.Logger;
 import consulo.util.collection.ContainerUtil;
 import consulo.virtualFileSystem.VirtualFile;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -41,13 +41,13 @@ public class CoreJavaDirectoryService extends JavaDirectoryService {
   private static final Logger LOG = Logger.getInstance(CoreJavaDirectoryService.class);
 
   @Override
-  public PsiJavaPackage getPackage(@Nonnull PsiDirectory dir) {
+  public PsiJavaPackage getPackage(@jakarta.annotation.Nonnull PsiDirectory dir) {
     return null;//TODO [VISTALL] ServiceManager.getService(dir.getProject(), CoreJavaFileManager.class).getPackage(dir);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
-  public PsiClass[] getClasses(@Nonnull PsiDirectory dir) {
+  public PsiClass[] getClasses(@jakarta.annotation.Nonnull PsiDirectory dir) {
     LOG.assertTrue(dir.isValid());
 
     FileIndexFacade index = FileIndexFacade.getInstance(dir.getProject());
@@ -69,65 +69,65 @@ public class CoreJavaDirectoryService extends JavaDirectoryService {
     return classes == null ? PsiClass.EMPTY_ARRAY : classes.toArray(new PsiClass[classes.size()]);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
-  public PsiClass createClass(@Nonnull PsiDirectory dir, @Nonnull String name) throws IncorrectOperationException {
+  public PsiClass createClass(@jakarta.annotation.Nonnull PsiDirectory dir, @jakarta.annotation.Nonnull String name) throws IncorrectOperationException {
     throw new UnsupportedOperationException();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
-  public PsiClass createClass(@Nonnull PsiDirectory dir, @Nonnull String name, @Nonnull String templateName)
+  public PsiClass createClass(@jakarta.annotation.Nonnull PsiDirectory dir, @jakarta.annotation.Nonnull String name, @jakarta.annotation.Nonnull String templateName)
     throws IncorrectOperationException {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public PsiClass createClass(@Nonnull PsiDirectory dir,
-                              @Nonnull String name,
-                              @Nonnull String templateName,
+  public PsiClass createClass(@jakarta.annotation.Nonnull PsiDirectory dir,
+                              @jakarta.annotation.Nonnull String name,
+                              @jakarta.annotation.Nonnull String templateName,
                               boolean askForUndefinedVariables) throws IncorrectOperationException {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public PsiClass createClass(@Nonnull PsiDirectory dir,
-                              @Nonnull String name,
-                              @Nonnull String templateName,
+  public PsiClass createClass(@jakarta.annotation.Nonnull PsiDirectory dir,
+                              @jakarta.annotation.Nonnull String name,
+                              @jakarta.annotation.Nonnull String templateName,
                               boolean askForUndefinedVariables, @Nonnull final Map<String, String> additionalProperties) throws IncorrectOperationException {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public void checkCreateClass(@Nonnull PsiDirectory dir, @Nonnull String name) throws IncorrectOperationException {
+  public void checkCreateClass(@jakarta.annotation.Nonnull PsiDirectory dir, @Nonnull String name) throws IncorrectOperationException {
     throw new UnsupportedOperationException();
   }
 
   @Nonnull
   @Override
-  public PsiClass createInterface(@Nonnull PsiDirectory dir, @Nonnull String name) throws IncorrectOperationException {
+  public PsiClass createInterface(@jakarta.annotation.Nonnull PsiDirectory dir, @jakarta.annotation.Nonnull String name) throws IncorrectOperationException {
     throw new UnsupportedOperationException();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
-  public PsiClass createEnum(@Nonnull PsiDirectory dir, @Nonnull String name) throws IncorrectOperationException {
+  public PsiClass createEnum(@jakarta.annotation.Nonnull PsiDirectory dir, @jakarta.annotation.Nonnull String name) throws IncorrectOperationException {
     throw new UnsupportedOperationException();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
-  public PsiClass createAnnotationType(@Nonnull PsiDirectory dir, @Nonnull String name) throws IncorrectOperationException {
+  public PsiClass createAnnotationType(@jakarta.annotation.Nonnull PsiDirectory dir, @jakarta.annotation.Nonnull String name) throws IncorrectOperationException {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public boolean isSourceRoot(@Nonnull PsiDirectory dir) {
+  public boolean isSourceRoot(@jakarta.annotation.Nonnull PsiDirectory dir) {
     return false;
   }
 
   @Override
-  public LanguageLevel getLanguageLevel(@Nonnull PsiDirectory dir) {
+  public LanguageLevel getLanguageLevel(@jakarta.annotation.Nonnull PsiDirectory dir) {
     return LanguageLevel.HIGHEST;
   }
 }

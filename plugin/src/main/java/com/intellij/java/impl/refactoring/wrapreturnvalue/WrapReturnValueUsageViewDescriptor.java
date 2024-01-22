@@ -15,21 +15,20 @@
  */
 package com.intellij.java.impl.refactoring.wrapreturnvalue;
 
-import javax.annotation.Nonnull;
-
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.impl.refactoring.RefactorJBundle;
 import com.intellij.java.impl.refactoring.psi.MyUsageViewUtil;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
+import jakarta.annotation.Nonnull;
 
 class WrapReturnValueUsageViewDescriptor implements UsageViewDescriptor {
 
     @Nonnull
     private final PsiMethod method;
 
-    WrapReturnValueUsageViewDescriptor(@Nonnull PsiMethod method,
+    WrapReturnValueUsageViewDescriptor(@jakarta.annotation.Nonnull PsiMethod method,
                                        UsageInfo[] usages){
         super();
         this.method = method;

@@ -23,14 +23,13 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class UnconstructableTestCaseInspection extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "UnconstructableJUnitTestCase";
   }
@@ -58,7 +57,7 @@ public class UnconstructableTestCaseInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
       if (aClass.isInterface() || aClass.isEnum() ||
           aClass.isAnnotationType() ||
           aClass.hasModifierProperty(PsiModifier.ABSTRACT)) {

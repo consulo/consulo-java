@@ -36,8 +36,8 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.Pair;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.*;
 
 public class InputVariables {
@@ -172,7 +172,7 @@ public class InputVariables {
     return name;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private PsiType checkTopLevelInstanceOf(final PsiType currentType) {
     final PsiElement[] scope = myScope.getScope();
     if (scope.length == 1 && scope[0] instanceof PsiIfStatement) {

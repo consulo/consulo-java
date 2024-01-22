@@ -18,22 +18,22 @@ package com.siyeh.ig.psiutils;
 import com.intellij.java.language.psi.*;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 class ArrayContentsAssignedVisitor extends JavaRecursiveElementVisitor {
 
   private boolean assigned = false;
   private final PsiVariable variable;
 
-  public ArrayContentsAssignedVisitor(@Nonnull PsiVariable variable) {
+  public ArrayContentsAssignedVisitor(@jakarta.annotation.Nonnull PsiVariable variable) {
     this.variable = variable;
   }
 
   @Override
   public void visitAssignmentExpression(
-    @Nonnull PsiAssignmentExpression assignment) {
+    @jakarta.annotation.Nonnull PsiAssignmentExpression assignment) {
     if (assigned) {
       return;
     }
@@ -56,7 +56,7 @@ class ArrayContentsAssignedVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitPrefixExpression(
-    @Nonnull PsiPrefixExpression expression) {
+    @jakarta.annotation.Nonnull PsiPrefixExpression expression) {
     if (assigned) {
       return;
     }

@@ -23,7 +23,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
 import consulo.annotation.component.ExtensionImpl;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -55,7 +55,7 @@ public class HardcodedLineSeparatorsInspection extends BaseInspection {
   private static class HardcodedLineSeparatorsVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitLiteralExpression(@Nonnull PsiLiteralExpression expression) {
+    public void visitLiteralExpression(@jakarta.annotation.Nonnull PsiLiteralExpression expression) {
       super.visitLiteralExpression(expression);
       final PsiType type = expression.getType();
       if (type == null || !TypeUtils.isJavaLangString(type) && !type.equals(PsiType.CHAR)) {

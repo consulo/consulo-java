@@ -21,7 +21,7 @@ import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.language.util.IncorrectOperationException;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * User: ik
@@ -68,6 +68,6 @@ public abstract class GenericReference extends CachingReference implements Empty
   @Nullable
   public abstract PsiElement getContext();
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public abstract PsiReference getContextReference();
 }

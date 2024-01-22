@@ -7,8 +7,9 @@ import com.intellij.java.language.psi.JavaTokenType;
 import consulo.language.ast.*;
 import consulo.util.collection.ContainerUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.*;
 
 import static com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType.*;
@@ -158,7 +159,7 @@ class ParameterNullityInferenceKt {
       CommonClassNames.JAVA_LANG_THROWABLE, CommonClassNames.JAVA_LANG_EXCEPTION,
       CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION, CommonClassNames.JAVA_LANG_NULL_POINTER_EXCEPTION);
 
-  private static boolean canCatchNpe(LighterAST tree, @Nullable LighterASTNode type) {
+  private static boolean canCatchNpe(LighterAST tree, @jakarta.annotation.Nullable LighterASTNode type) {
     if (type == null) {
       return false;
     }

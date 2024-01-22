@@ -28,8 +28,8 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import org.jetbrains.annotations.Nls;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * This inspection finds instances of null checks followed by an instanceof check
@@ -78,7 +78,7 @@ public class PointlessNullCheckInspection extends BaseInspection {
     }
 
     @Override
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("pointless.nullcheck.simplify.quickfix", myExpressionText);
     }

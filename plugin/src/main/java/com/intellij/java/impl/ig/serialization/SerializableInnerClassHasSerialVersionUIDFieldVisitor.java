@@ -22,7 +22,7 @@ import com.intellij.java.language.psi.PsiModifier;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.intellij.java.impl.ig.psiutils.SerializationUtils;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 class SerializableInnerClassHasSerialVersionUIDFieldVisitor
   extends BaseInspectionVisitor {

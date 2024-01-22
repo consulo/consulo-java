@@ -4,13 +4,13 @@
     <annotation name="org.jetbrains.annotations.NonNls" />
   </item>
   <item name="org.jdom.Element java.util.List getChildren()">
-    <annotation name="javax.annotation.Nonnull" />
+    <annotation name="jakarta.annotation.Nonnull" />
   </item>
   <item name="org.jdom.Element java.util.List getChildren(java.lang.String)">
-    <annotation name="javax.annotation.Nonnull" />
+    <annotation name="jakarta.annotation.Nonnull" />
   </item>
   <item name="org.jdom.Element java.util.List getChildren(java.lang.String, org.jdom.Namespace)">
-    <annotation name="javax.annotation.Nonnull" />
+    <annotation name="jakarta.annotation.Nonnull" />
   </item>
 </root>
 

@@ -15,143 +15,127 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.javadoc;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.JavaDocTokenType;
-import consulo.language.ast.ASTNode;
-import com.intellij.java.language.psi.JavaElementVisitor;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiElementVisitor;
-import consulo.language.ast.TokenType;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.language.impl.psi.impl.source.Constants;
-import consulo.language.impl.psi.SourceTreeToPsiMap;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
-import consulo.language.impl.psi.CompositePsiElement;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
+import com.intellij.java.language.psi.JavaDocTokenType;
+import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
 import com.intellij.java.language.psi.javadoc.PsiInlineDocTag;
-import consulo.language.ast.ChildRoleBase;
-import consulo.language.ast.IElementType;
-import consulo.language.ast.TokenSet;
+import consulo.language.ast.*;
+import consulo.language.impl.psi.CompositePsiElement;
+import consulo.language.impl.psi.SourceTreeToPsiMap;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
 import consulo.language.util.IncorrectOperationException;
+import jakarta.annotation.Nonnull;
 
-public class PsiInlineDocTagImpl extends CompositePsiElement implements PsiInlineDocTag, Constants
-{
-	private static final TokenSet TAG_VALUE_BIT_SET = TokenSet.create(DOC_TAG_VALUE_ELEMENT, DOC_METHOD_OR_FIELD_REF);
-	private static final TokenSet VALUE_NO_WHITESPACE_BIT_SET = TokenSet.orSet(TAG_VALUE_BIT_SET, TokenSet.create(
-			JAVA_CODE_REFERENCE, JavaDocTokenType.DOC_TAG_VALUE_TOKEN, JavaDocTokenType.DOC_COMMENT_DATA, DOC_INLINE_TAG, DOC_REFERENCE_HOLDER, JavaDocTokenType.DOC_COMMENT_BAD_CHARACTER));
-	private static final TokenSet VALUE_BIT_SET = TokenSet.orSet(TAG_VALUE_BIT_SET, TokenSet.create(
-			JAVA_CODE_REFERENCE, JavaDocTokenType.DOC_TAG_VALUE_TOKEN, TokenType.WHITE_SPACE, JavaDocTokenType.DOC_COMMENT_DATA, DOC_INLINE_TAG, DOC_REFERENCE_HOLDER, JavaDocTokenType.DOC_COMMENT_BAD_CHARACTER));
+public class PsiInlineDocTagImpl extends CompositePsiElement implements PsiInlineDocTag, Constants {
+  private static final TokenSet TAG_VALUE_BIT_SET = TokenSet.create(DOC_TAG_VALUE_ELEMENT, DOC_METHOD_OR_FIELD_REF);
+  private static final TokenSet VALUE_NO_WHITESPACE_BIT_SET = TokenSet.orSet(TAG_VALUE_BIT_SET, TokenSet.create(
+    JAVA_CODE_REFERENCE,
+    JavaDocTokenType.DOC_TAG_VALUE_TOKEN,
+    JavaDocTokenType.DOC_COMMENT_DATA,
+    DOC_INLINE_TAG,
+    DOC_REFERENCE_HOLDER,
+    JavaDocTokenType.DOC_COMMENT_BAD_CHARACTER));
+  public static final TokenSet VALUE_BIT_SET = TokenSet.orSet(TAG_VALUE_BIT_SET, TokenSet.create(
+    JAVA_CODE_REFERENCE,
+    JavaDocTokenType.DOC_TAG_VALUE_TOKEN,
+    TokenType.WHITE_SPACE,
+    JavaDocTokenType.DOC_COMMENT_DATA,
+    DOC_INLINE_TAG,
+    DOC_REFERENCE_HOLDER,
+    JavaDocTokenType.DOC_COMMENT_BAD_CHARACTER));
 
-	public PsiInlineDocTagImpl()
-	{
-		super(DOC_INLINE_TAG);
-	}
+  public PsiInlineDocTagImpl() {
+    super(DOC_INLINE_TAG);
+  }
 
-	@Override
-	public PsiDocComment getContainingComment()
-	{
-		ASTNode scope = getTreeParent();
-		while(scope.getElementType() != JavaDocElementType.DOC_COMMENT)
-		{
-			scope = scope.getTreeParent();
-		}
-		return (PsiDocComment) SourceTreeToPsiMap.treeElementToPsi(scope);
-	}
+  @Override
+  public PsiDocComment getContainingComment() {
+    ASTNode scope = getTreeParent();
+    while (scope.getElementType() != JavaDocElementType.DOC_COMMENT) {
+      scope = scope.getTreeParent();
+    }
+    return (PsiDocComment)SourceTreeToPsiMap.treeElementToPsi(scope);
+  }
 
-	@Override
-	public PsiElement getNameElement()
-	{
-		return findPsiChildByType(JavaDocTokenType.DOC_TAG_NAME);
-	}
+  @Override
+  public PsiElement getNameElement() {
+    return findPsiChildByType(JavaDocTokenType.DOC_TAG_NAME);
+  }
 
-	@Override
-	public PsiElement[] getDataElements()
-	{
-		return getChildrenAsPsiElements(VALUE_BIT_SET, PsiElement.ARRAY_FACTORY);
-	}
+  @Override
+  public PsiElement[] getDataElements() {
+    return getChildrenAsPsiElements(VALUE_BIT_SET, PsiElement.ARRAY_FACTORY);
+  }
 
-	@Override
-	public PsiDocTagValue getValueElement()
-	{
-		return (PsiDocTagValue) findPsiChildByType(TAG_VALUE_BIT_SET);
-	}
+  @Override
+  public PsiDocTagValue getValueElement() {
+    return (PsiDocTagValue)findPsiChildByType(TAG_VALUE_BIT_SET);
+  }
 
-	@Nonnull
-	public PsiElement[] getDataElementsIgnoreWhitespaces()
-	{
-		return getChildrenAsPsiElements(VALUE_NO_WHITESPACE_BIT_SET, PsiElement.ARRAY_FACTORY);
-	}
+  @Nonnull
+  public PsiElement[] getDataElementsIgnoreWhitespaces() {
+    return getChildrenAsPsiElements(VALUE_NO_WHITESPACE_BIT_SET, PsiElement.ARRAY_FACTORY);
+  }
 
-	@Nonnull
-	@Override
-	public String getName()
-	{
-		final PsiElement nameElement = getNameElement();
-		if(nameElement == null)
-		{
-			return "";
-		}
-		return nameElement.getText().substring(1);
-	}
+  @Nonnull
+  @Override
+  public String getName() {
+    final PsiElement nameElement = getNameElement();
+    if (nameElement == null) {
+      return "";
+    }
+    return nameElement.getText().substring(1);
+  }
 
-	@Override
-	public int getChildRole(ASTNode child)
-	{
-		assert child.getTreeParent() == this : child.getTreeParent();
-		IElementType i = child.getElementType();
-		if(i == JavaDocTokenType.DOC_TAG_NAME)
-		{
-			return ChildRole.DOC_TAG_NAME;
-		}
-		else if(i == JavaDocElementType.DOC_COMMENT || i == DOC_INLINE_TAG)
-		{
-			return ChildRole.DOC_CONTENT;
-		}
-		else if(i == JavaDocTokenType.DOC_INLINE_TAG_START)
-		{
-			return ChildRole.DOC_INLINE_TAG_START;
-		}
-		else if(i == JavaDocTokenType.DOC_INLINE_TAG_END)
-		{
-			return ChildRole.DOC_INLINE_TAG_END;
-		}
-		else if(TAG_VALUE_BIT_SET.contains(i))
-		{
-			return ChildRole.DOC_TAG_VALUE;
-		}
-		else
-		{
-			return ChildRoleBase.NONE;
-		}
-	}
+  @Override
+  public int getChildRole(ASTNode child) {
+    assert child.getTreeParent() == this : child.getTreeParent();
+    IElementType i = child.getElementType();
+    if (i == JavaDocTokenType.DOC_TAG_NAME) {
+      return ChildRole.DOC_TAG_NAME;
+    }
+    else if (i == JavaDocElementType.DOC_COMMENT || i == DOC_INLINE_TAG) {
+      return ChildRole.DOC_CONTENT;
+    }
+    else if (i == JavaDocTokenType.DOC_INLINE_TAG_START) {
+      return ChildRole.DOC_INLINE_TAG_START;
+    }
+    else if (i == JavaDocTokenType.DOC_INLINE_TAG_END) {
+      return ChildRole.DOC_INLINE_TAG_END;
+    }
+    else if (TAG_VALUE_BIT_SET.contains(i)) {
+      return ChildRole.DOC_TAG_VALUE;
+    }
+    else {
+      return ChildRoleBase.NONE;
+    }
+  }
 
-	@Override
-	public void accept(@Nonnull PsiElementVisitor visitor)
-	{
-		if(visitor instanceof JavaElementVisitor)
-		{
-			((JavaElementVisitor) visitor).visitInlineDocTag(this);
-		}
-		else
-		{
-			visitor.visitElement(this);
-		}
-	}
+  @Override
+  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
+    if (visitor instanceof JavaElementVisitor) {
+      ((JavaElementVisitor)visitor).visitInlineDocTag(this);
+    }
+    else {
+      visitor.visitElement(this);
+    }
+  }
 
-	@Override
-	public String toString()
-	{
-		PsiElement nameElement = getNameElement();
-		return "PsiInlineDocTag:" + (nameElement != null ? nameElement.getText() : null);
-	}
+  @Override
+  public String toString() {
+    PsiElement nameElement = getNameElement();
+    return "PsiInlineDocTag:" + (nameElement != null ? nameElement.getText() : null);
+  }
 
-	@Override
-	public PsiElement setName(@Nonnull String name) throws IncorrectOperationException
-	{
-		PsiImplUtil.setName(getNameElement(), name);
-		return this;
-	}
+  @Override
+  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
+    PsiImplUtil.setName(getNameElement(), name);
+    return this;
+  }
 }

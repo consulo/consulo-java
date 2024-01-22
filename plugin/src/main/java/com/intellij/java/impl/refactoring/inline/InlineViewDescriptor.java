@@ -16,7 +16,7 @@
  */
 package com.intellij.java.impl.refactoring.inline;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;

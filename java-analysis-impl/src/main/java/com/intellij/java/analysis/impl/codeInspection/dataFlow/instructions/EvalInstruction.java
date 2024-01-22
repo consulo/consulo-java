@@ -8,7 +8,7 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.InstructionVisito
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.java.language.psi.PsiExpression;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * An instruction that takes fixed number of operands from the stack and computes a single result without branching.
@@ -50,7 +50,7 @@ public abstract class EvalInstruction extends ExpressionPushingInstruction<PsiEx
 	 */
 	public abstract
 	@Nonnull
-	DfaValue eval(@Nonnull DfaValueFactory factory,
+	DfaValue eval(@jakarta.annotation.Nonnull DfaValueFactory factory,
 				  @Nonnull DfaMemoryState state,
-				  @Nonnull DfaValue  ... arguments);
+				  @jakarta.annotation.Nonnull DfaValue  ... arguments);
 }

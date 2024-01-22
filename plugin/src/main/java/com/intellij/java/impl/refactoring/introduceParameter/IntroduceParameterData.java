@@ -22,8 +22,8 @@ import com.intellij.java.language.psi.PsiType;
 import consulo.util.collection.primitive.ints.IntList;
 import org.intellij.lang.annotations.MagicConstant;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import static com.intellij.java.impl.refactoring.IntroduceParameterRefactoring.*;
 
@@ -33,7 +33,7 @@ public interface IntroduceParameterData {
 
   PsiMethod getMethodToReplaceIn();
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   PsiMethod getMethodToSearchFor();
 
   ExpressionWrapper getParameterInitializer();
@@ -61,7 +61,7 @@ public interface IntroduceParameterData {
     @Nullable
     PsiType getType();
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     RealExpression getExpression();
 
   }

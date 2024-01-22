@@ -6,9 +6,9 @@ import com.intellij.java.language.psi.PsiModifierListOwner;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -24,7 +24,7 @@ public interface InferredAnnotationProvider {
    * different instances of {@link PsiAnnotation}, which are not guaranteed to be equal.
    */
   @Nullable
-  PsiAnnotation findInferredAnnotation(@Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN);
+  PsiAnnotation findInferredAnnotation(@Nonnull PsiModifierListOwner listOwner, @jakarta.annotation.Nonnull String annotationFQN);
 
   /**
    * When annotation name is known, prefer {@link #findInferredAnnotation(PsiModifierListOwner, String)} as
@@ -32,7 +32,7 @@ public interface InferredAnnotationProvider {
    *
    * @return all inferred annotations for the given element.
    */
-  @Nonnull
-  List<PsiAnnotation> findInferredAnnotations(@Nonnull PsiModifierListOwner listOwner);
+  @jakarta.annotation.Nonnull
+  List<PsiAnnotation> findInferredAnnotations(@jakarta.annotation.Nonnull PsiModifierListOwner listOwner);
 
 }

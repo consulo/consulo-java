@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.security;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
@@ -41,7 +41,7 @@ public class SystemSetSecurityManagerInspection extends BaseInspection {
       "system.set.security.manager.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "system.set.security.manager.problem.descriptor");
@@ -56,7 +56,7 @@ public class SystemSetSecurityManagerInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!isSetSecurityManager(expression)) {
         return;

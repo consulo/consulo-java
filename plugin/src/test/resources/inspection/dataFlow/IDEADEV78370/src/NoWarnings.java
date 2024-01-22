@@ -1,5 +1,7 @@
+import jakarta.annotation.Nullable;
+
 public class NoWarnings {
-    int f(@javax.annotation.Nullable String value)  {
+    int f(@Nullable String value)  {
         value = value == null ? "" : value;
         return value.hashCode();
     }

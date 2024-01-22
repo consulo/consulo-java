@@ -28,8 +28,8 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -44,7 +44,7 @@ public abstract class AbstractMethodOverridesAbstractMethodInspection extends Ba
   public boolean ignoreAnnotations = false;
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("abstract.method.overrides.abstract.method.display.name");
   }
@@ -55,7 +55,7 @@ public abstract class AbstractMethodOverridesAbstractMethodInspection extends Ba
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("abstract.method.overrides.abstract.method.problem.descriptor");
   }
@@ -95,7 +95,7 @@ public abstract class AbstractMethodOverridesAbstractMethodInspection extends Ba
   private class AbstractMethodOverridesAbstractMethodVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
       //no call to super, so we don't drill into anonymous classes
       if (method.isConstructor()) {
         return;

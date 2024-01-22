@@ -26,7 +26,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NoExplicitFinalizeCallsInspection extends BaseInspection {
@@ -42,7 +42,7 @@ public class NoExplicitFinalizeCallsInspection extends BaseInspection {
       "finalize.called.explicitly.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "finalize.called.explicitly.problem.descriptor");
@@ -61,7 +61,7 @@ public class NoExplicitFinalizeCallsInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!MethodCallUtils.isCallToMethod(expression, null, PsiType.VOID,
                                           HardcodedMethodConstants.FINALIZE)) {

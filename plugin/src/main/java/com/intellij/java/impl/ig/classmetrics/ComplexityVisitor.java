@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.classmetrics;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 
@@ -40,7 +40,7 @@ class ComplexityVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitIfStatement(@Nonnull PsiIfStatement statement) {
+  public void visitIfStatement(@jakarta.annotation.Nonnull PsiIfStatement statement) {
     super.visitIfStatement(statement);
     m_complexity++;
   }
@@ -80,7 +80,7 @@ class ComplexityVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitWhileStatement(@Nonnull PsiWhileStatement statement) {
+  public void visitWhileStatement(@jakarta.annotation.Nonnull PsiWhileStatement statement) {
     super.visitWhileStatement(statement);
     m_complexity++;
   }

@@ -22,7 +22,7 @@ import consulo.language.impl.ast.TreeElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 class ClsPrefixExpressionImpl extends ClsElementImpl implements PsiPrefixExpression {
   private final ClsElementImpl myParent;

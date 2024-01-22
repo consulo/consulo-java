@@ -28,7 +28,7 @@ import consulo.language.editor.rawHighlight.HighlightInfo;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.infos.CandidateInfo;
 import consulo.document.util.TextRange;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class ConstructorParametersFixer {
   public static void registerFixActions(@Nonnull PsiJavaCodeReferenceElement ctrRef, PsiConstructorCall constructorCall, HighlightInfo highlightInfo,

@@ -34,7 +34,7 @@ import com.intellij.java.impl.refactoring.ui.TypeSelectorManagerImpl;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.util.collection.MultiMap;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 

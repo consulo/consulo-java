@@ -15,10 +15,10 @@
  */
 package com.intellij.java.impl.generate.config;
 
-import javax.annotation.Nonnull;
 import consulo.codeEditor.Editor;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
+import jakarta.annotation.Nonnull;
 
 /**
  * This policy is to cancel.

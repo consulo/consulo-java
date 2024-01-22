@@ -40,8 +40,8 @@ import consulo.util.lang.Comparing;
 import consulo.util.lang.Pair;
 import consulo.virtualFileSystem.VirtualFile;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Stream;
@@ -61,7 +61,7 @@ public class MetaAnnotationUtil {
     }
   };
 
-  public static Collection<PsiClass> getAnnotationTypesWithChildren(@Nonnull final Module module, final String annotationName, final boolean includeTests) {
+  public static Collection<PsiClass> getAnnotationTypesWithChildren(@jakarta.annotation.Nonnull final Module module, final String annotationName, final boolean includeTests) {
     final Project project = module.getProject();
 
     Map<Pair<String, Boolean>, Collection<PsiClass>> map = CachedValuesManager.getManager(project).getCachedValue(module, () ->
@@ -124,7 +124,7 @@ public class MetaAnnotationUtil {
     }, false);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private static Collection<PsiClass> getAnnotationTypesWithChildren(PsiClass annotationClass, GlobalSearchScope scope) {
     final Set<PsiClass> classes = Sets.newHashSet(HASHING_STRATEGY);
 
@@ -162,7 +162,7 @@ public class MetaAnnotationUtil {
   /**
    * Check if listOwner is annotated with annotations or listOwner's annotations contain given annotations
    */
-  public static boolean isMetaAnnotated(@Nonnull PsiModifierListOwner listOwner, @Nonnull final Collection<String> annotations) {
+  public static boolean isMetaAnnotated(@Nonnull PsiModifierListOwner listOwner, @jakarta.annotation.Nonnull final Collection<String> annotations) {
     if (AnnotationUtil.isAnnotated(listOwner, annotations, false)) {
       return true;
     }
@@ -179,7 +179,7 @@ public class MetaAnnotationUtil {
     return false;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static PsiAnnotation metaAnnotationCached(PsiClass subjectAnnotation, String annotationToFind) {
     ConcurrentMap<String, PsiAnnotation> cachedValue = LanguageCachedValueUtil.getCachedValue(subjectAnnotation, () ->
     {
@@ -209,8 +209,8 @@ public class MetaAnnotationUtil {
   }
 
 
-  @Nonnull
-  public static Stream<PsiAnnotation> findMetaAnnotations(@Nonnull PsiModifierListOwner listOwner, @Nonnull final Collection<String> annotations) {
+  @jakarta.annotation.Nonnull
+  public static Stream<PsiAnnotation> findMetaAnnotations(@jakarta.annotation.Nonnull PsiModifierListOwner listOwner, @Nonnull final Collection<String> annotations) {
     Stream<PsiAnnotation> directAnnotations = Stream.of(AnnotationUtil.findAnnotations(listOwner, annotations));
 
     Stream<PsiClass> lazyResolvedAnnotations = Stream.generate(() -> getResolvedClassesInAnnotationsList(listOwner)).limit(1).flatMap(it -> it.stream());

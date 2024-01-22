@@ -27,11 +27,12 @@ import consulo.util.collection.Maps;
 import consulo.util.concurrent.ConcurrencyUtil;
 import consulo.util.dataholder.Key;
 import consulo.util.dataholder.NotNullLazyKey;
+import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
@@ -123,7 +124,7 @@ public class JavaResolveCache {
               AttachmentFactory.get().create(file.getName(), file.getText()));
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public Object computeConstantValueWithCaching(@Nonnull PsiVariable variable,
                                                 @Nonnull ConstValueComputer computer,
                                                 Set<PsiVariable> visitedVars) {

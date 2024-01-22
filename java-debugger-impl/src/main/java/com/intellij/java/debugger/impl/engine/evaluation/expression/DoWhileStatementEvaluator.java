@@ -15,13 +15,12 @@
  */
 package com.intellij.java.debugger.impl.engine.evaluation.expression;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.evaluation.EvaluateExceptionUtil;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.engine.evaluation.expression.Modifier;
 import consulo.internal.com.sun.jdi.BooleanValue;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author egor

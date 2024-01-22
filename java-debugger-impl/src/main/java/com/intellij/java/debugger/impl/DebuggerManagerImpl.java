@@ -67,8 +67,8 @@ import jakarta.inject.Singleton;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import java.io.File;
 import java.util.*;
@@ -172,14 +172,14 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
     myBreakpointManager.init();
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public DebuggerSession getSession(DebugProcess process) {
     ApplicationManager.getApplication().assertIsDispatchThread();
     return getSessions().stream().filter(debuggerSession -> process == debuggerSession.getProcess()).findFirst().orElse(null);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Collection<DebuggerSession> getSessions() {
     synchronized (mySessions) {
@@ -188,7 +188,7 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
     }
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public Element getState() {
     Element state = new Element("state");
@@ -215,7 +215,7 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
 
   @Override
   @Nullable
-  public DebuggerSession attachVirtualMachine(@Nonnull DebugEnvironment environment) throws ExecutionException {
+  public DebuggerSession attachVirtualMachine(@jakarta.annotation.Nonnull DebugEnvironment environment) throws ExecutionException {
     ApplicationManager.getApplication().assertIsDispatchThread();
     DebugProcessEvents debugProcess = new DebugProcessEvents(myProject);
     DebuggerSession session = DebuggerSession.create(environment.getSessionName(), debugProcess, environment);
@@ -359,7 +359,7 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
     return myBreakpointManager;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public DebuggerContextImpl getContext() {
     return getContextManager().getContext();
@@ -540,7 +540,7 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
   private static class MyDebuggerStateManager extends DebuggerStateManager {
     private DebuggerSession myDebuggerSession;
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     @Override
     public DebuggerContextImpl getContext() {
       return myDebuggerSession == null ? DebuggerContextImpl.EMPTY_CONTEXT : myDebuggerSession.getContextManager().getContext();

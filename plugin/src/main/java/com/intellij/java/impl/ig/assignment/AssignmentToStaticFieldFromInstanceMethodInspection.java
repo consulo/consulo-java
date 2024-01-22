@@ -25,8 +25,7 @@ import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.util.PsiTreeUtil;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class AssignmentToStaticFieldFromInstanceMethodInspection
@@ -38,7 +37,7 @@ public class AssignmentToStaticFieldFromInstanceMethodInspection
       "assignment.to.static.field.from.instance.method.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "assignment.to.static.field.from.instance.method.problem.descriptor");
@@ -53,7 +52,7 @@ public class AssignmentToStaticFieldFromInstanceMethodInspection
 
     @Override
     public void visitAssignmentExpression(
-      @Nonnull PsiAssignmentExpression expression) {
+      @jakarta.annotation.Nonnull PsiAssignmentExpression expression) {
       if (!WellFormednessUtils.isWellFormed(expression)) {
         return;
       }
@@ -78,7 +77,7 @@ public class AssignmentToStaticFieldFromInstanceMethodInspection
 
     @Override
     public void visitPostfixExpression(
-      @Nonnull PsiPostfixExpression expression) {
+      @jakarta.annotation.Nonnull PsiPostfixExpression expression) {
       final IElementType tokenType = expression.getOperationTokenType();
       if (!tokenType.equals(JavaTokenType.PLUSPLUS) &&
           !tokenType.equals(JavaTokenType.MINUSMINUS)) {

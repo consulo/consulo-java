@@ -22,7 +22,7 @@ package com.intellij.java.impl.refactoring.turnRefsToSuper;
 
 import java.util.ArrayList;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.dataContext.DataContext;
 import consulo.language.editor.PlatformDataKeys;

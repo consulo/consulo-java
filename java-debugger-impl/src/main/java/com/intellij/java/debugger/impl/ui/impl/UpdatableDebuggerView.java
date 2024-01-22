@@ -20,7 +20,7 @@ import java.awt.BorderLayout;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.DebuggerContextListener;
 import com.intellij.java.debugger.impl.DebuggerSession;
@@ -114,7 +114,7 @@ public abstract class UpdatableDebuggerView extends JPanel implements DebuggerVi
 		myDisposables.add(disposable);
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public DebuggerContextImpl getContext()
 	{
 		return myStateManager.getContext();

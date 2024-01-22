@@ -29,8 +29,8 @@ import consulo.language.psi.PsiReference;
 import consulo.ui.ex.action.IdeActions;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author peter
@@ -38,7 +38,7 @@ import javax.annotation.Nullable;
 @ExtensionImpl(id = "javaClassReference", order = "before legacy")
 public class JavaClassReferenceCompletionContributor extends CompletionContributor {
   @Override
-  public void duringCompletion(@Nonnull CompletionInitializationContext context) {
+  public void duringCompletion(@jakarta.annotation.Nonnull CompletionInitializationContext context) {
     JavaClassReference reference = findJavaClassReference(context.getFile(), context.getStartOffset());
     if (reference != null && reference.getExtendClassNames() != null) {
       JavaClassReferenceSet set = reference.getJavaClassReferenceSet();

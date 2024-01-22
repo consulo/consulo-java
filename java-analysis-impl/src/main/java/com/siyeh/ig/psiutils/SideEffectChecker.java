@@ -30,8 +30,8 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.collection.SmartList;
 import one.util.streamex.StreamEx;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -74,7 +74,7 @@ public class SideEffectChecker {
     return visitor.mayHaveSideEffects();
   }
 
-  public static boolean mayHaveSideEffects(@Nonnull PsiElement element, Predicate<? super PsiElement> shouldIgnoreElement) {
+  public static boolean mayHaveSideEffects(@jakarta.annotation.Nonnull PsiElement element, Predicate<? super PsiElement> shouldIgnoreElement) {
     final SideEffectsVisitor visitor = new SideEffectsVisitor(null, element, shouldIgnoreElement);
     element.accept(visitor);
     return visitor.mayHaveSideEffects();
@@ -87,7 +87,7 @@ public class SideEffectChecker {
    * @param element element to check
    * @return true if element execution may cause non-local side-effect.
    */
-  public static boolean mayHaveNonLocalSideEffects(@Nonnull PsiElement element) {
+  public static boolean mayHaveNonLocalSideEffects(@jakarta.annotation.Nonnull PsiElement element) {
     return mayHaveSideEffects(element, SideEffectChecker::isLocalSideEffect);
   }
 
@@ -125,7 +125,7 @@ public class SideEffectChecker {
 
   public static boolean checkSideEffects(@Nonnull PsiExpression element,
                                          @Nullable List<? super PsiElement> sideEffects,
-                                         @Nonnull Predicate<? super PsiElement> ignoreElement) {
+                                         @jakarta.annotation.Nonnull Predicate<? super PsiElement> ignoreElement) {
     final SideEffectsVisitor visitor = new SideEffectsVisitor(sideEffects, element, ignoreElement);
     element.accept(visitor);
     return visitor.mayHaveSideEffects();
@@ -142,18 +142,18 @@ public class SideEffectChecker {
     @Nullable
     List<? super PsiElement> mySideEffects;
     private final
-    @Nonnull
+    @jakarta.annotation.Nonnull
     PsiElement myStartElement;
     private final
     @Nonnull
     Predicate<? super PsiElement> myIgnorePredicate;
     boolean found;
 
-    SideEffectsVisitor(@Nullable List<? super PsiElement> sideEffects, @Nonnull PsiElement startElement) {
+    SideEffectsVisitor(@jakarta.annotation.Nullable List<? super PsiElement> sideEffects, @jakarta.annotation.Nonnull PsiElement startElement) {
       this(sideEffects, startElement, call -> false);
     }
 
-    SideEffectsVisitor(@Nullable List<? super PsiElement> sideEffects, @Nonnull PsiElement startElement, @Nonnull Predicate<? super PsiElement> predicate) {
+    SideEffectsVisitor(@Nullable List<? super PsiElement> sideEffects, @jakarta.annotation.Nonnull PsiElement startElement, @jakarta.annotation.Nonnull Predicate<? super PsiElement> predicate) {
       myStartElement = startElement;
       myIgnorePredicate = predicate;
       mySideEffects = sideEffects;
@@ -181,7 +181,7 @@ public class SideEffectChecker {
     }
 
     @Override
-    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(@jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
       final PsiMethod method = expression.resolveMethod();
       if (!isPure(method)) {
         if (addSideEffect(expression)) {
@@ -203,7 +203,7 @@ public class SideEffectChecker {
     }
 
     @Override
-    public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+    public void visitNewExpression(@jakarta.annotation.Nonnull PsiNewExpression expression) {
       if (!expression.isArrayCreation() && !isSideEffectFreeConstructor(expression)) {
         if (addSideEffect(expression)) {
           return;
@@ -213,7 +213,7 @@ public class SideEffectChecker {
     }
 
     @Override
-    public void visitUnaryExpression(@Nonnull PsiUnaryExpression expression) {
+    public void visitUnaryExpression(@jakarta.annotation.Nonnull PsiUnaryExpression expression) {
       final IElementType tokenType = expression.getOperationTokenType();
       if (tokenType.equals(JavaTokenType.PLUSPLUS) || tokenType.equals(JavaTokenType.MINUSMINUS)) {
         if (addSideEffect(expression)) {

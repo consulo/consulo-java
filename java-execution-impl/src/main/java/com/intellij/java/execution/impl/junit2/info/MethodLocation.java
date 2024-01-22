@@ -24,9 +24,9 @@ import consulo.language.util.ModuleUtilCore;
 import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Iterator;
 
 // Author: dyoma
@@ -34,11 +34,11 @@ import java.util.Iterator;
 public class MethodLocation extends Location<PsiMethod> {
   private static final Logger LOG = Logger.getInstance(MethodLocation.class);
   private final Project myProject;
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private final PsiMethod myMethod;
   private final Location<PsiClass> myClassLocation;
 
-  public MethodLocation(@Nonnull final Project project, @Nonnull final PsiMethod method, @Nonnull final Location<PsiClass> classLocation) {
+  public MethodLocation(@Nonnull final Project project, @jakarta.annotation.Nonnull final PsiMethod method, @jakarta.annotation.Nonnull final Location<PsiClass> classLocation) {
     myProject = project;
     myMethod = method;
     myClassLocation = classLocation;
@@ -49,12 +49,12 @@ public class MethodLocation extends Location<PsiMethod> {
     return new MethodLocation(classLocation.getProject(), psiElement, classLocation);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiMethod getPsiElement() {
     return myMethod;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public Project getProject() {
     return myProject;
   }
@@ -69,7 +69,7 @@ public class MethodLocation extends Location<PsiMethod> {
     return myClassLocation.getPsiElement();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public <T extends PsiElement> Iterator<Location<T>> getAncestors(final Class<T> ancestorClass, final boolean strict) {
     final Iterator<Location<T>> fromClass = myClassLocation.getAncestors(ancestorClass, false);
     if (strict) return fromClass;

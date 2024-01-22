@@ -24,7 +24,7 @@ import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.LambdaHi
 import com.intellij.java.language.psi.PsiClass;
 import consulo.language.psi.scope.GlobalSearchScope;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public abstract class FunctionalInterfaceTest extends LightDaemonAnalyzerTestCase {
   @NonNls static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/lambda/functionalInterface";

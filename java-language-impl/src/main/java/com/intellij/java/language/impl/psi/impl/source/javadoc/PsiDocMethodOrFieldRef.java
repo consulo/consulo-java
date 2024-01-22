@@ -48,8 +48,8 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.SmartList;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -170,7 +170,7 @@ public class PsiDocMethodOrFieldRef extends CompositePsiElement implements PsiDo
     return sharp != null ? SourceTreeToPsiMap.treeToPsiNotNull(sharp).getNextSibling() : null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public String[] getSignature() {
     PsiElement element = getNameElement();
     if (element == null) return null;
@@ -252,7 +252,7 @@ public class PsiDocMethodOrFieldRef extends CompositePsiElement implements PsiDo
     }
 
     @Override
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public JavaResolveResult[] multiResolve(boolean incompleteCode) {
       return myReferredElement == null ? JavaResolveResult.EMPTY_ARRAY
                                   : new JavaResolveResult[]{new CandidateInfo(myReferredElement, PsiSubstitutor.EMPTY)};

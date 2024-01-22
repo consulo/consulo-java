@@ -25,9 +25,8 @@ import consulo.component.persist.Storage;
 import consulo.disposer.Disposable;
 import consulo.ide.ServiceManager;
 import consulo.proxy.EventDispatcher;
+import jakarta.annotation.Nonnull;
 import jakarta.inject.Singleton;
-
-import javax.annotation.Nonnull;
 
 @Singleton
 @State(name = "MemoryViewSettings", storages = @Storage("memory.view.xml"))

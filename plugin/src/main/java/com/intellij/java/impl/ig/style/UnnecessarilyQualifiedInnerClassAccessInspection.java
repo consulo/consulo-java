@@ -29,8 +29,8 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.psiutils.ImportUtils;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
-import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -49,7 +49,7 @@ public class UnnecessarilyQualifiedInnerClassAccessInspection
       "unnecessarily.qualified.inner.class.access.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     final PsiClass aClass = (PsiClass)infos[0];
@@ -74,7 +74,7 @@ public class UnnecessarilyQualifiedInnerClassAccessInspection
   private static class UnnecessarilyQualifiedInnerClassAccessFix
     extends InspectionGadgetsFix {
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "unnecessarily.qualified.inner.class.access.quickfix");

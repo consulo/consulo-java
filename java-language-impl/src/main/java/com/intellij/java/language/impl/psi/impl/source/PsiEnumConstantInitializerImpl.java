@@ -24,7 +24,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.logging.Logger;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class PsiEnumConstantInitializerImpl extends PsiClassImpl implements PsiEnumConstantInitializer {
   private static final Logger LOG = Logger.getInstance(PsiEnumConstantInitializerImpl.class);
@@ -85,7 +85,7 @@ public class PsiEnumConstantInitializerImpl extends PsiClassImpl implements PsiE
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiClassType getBaseClassType() {
     if (myCachedBaseType == null) {
       myCachedBaseType = JavaPsiFacade.getInstance(getProject()).getElementFactory().createType(getBaseClass());
@@ -109,7 +109,7 @@ public class PsiEnumConstantInitializerImpl extends PsiClassImpl implements PsiE
   }
 
   @Override
-  public boolean hasModifierProperty(@Nonnull String name) {
+  public boolean hasModifierProperty(@jakarta.annotation.Nonnull String name) {
     return false;
   }
 

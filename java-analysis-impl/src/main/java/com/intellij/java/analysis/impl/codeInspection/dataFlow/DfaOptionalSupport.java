@@ -13,9 +13,9 @@ import consulo.language.editor.intention.CommonQuickFixBundle;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author anet, peter
@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 public final class DfaOptionalSupport {
 
   @Nullable
-  public static LocalQuickFix registerReplaceOptionalOfWithOfNullableFix(@Nonnull PsiExpression qualifier) {
+  public static LocalQuickFix registerReplaceOptionalOfWithOfNullableFix(@jakarta.annotation.Nonnull PsiExpression qualifier) {
     final PsiMethodCallExpression call = findCallExpression(qualifier);
     final PsiMethod method = call == null ? null : call.resolveMethod();
     final PsiClass containingClass = method == null ? null : method.getContainingClass();
@@ -39,7 +39,7 @@ public final class DfaOptionalSupport {
     return null;
   }
 
-  private static PsiMethodCallExpression findCallExpression(@Nonnull PsiElement anchor) {
+  private static PsiMethodCallExpression findCallExpression(@jakarta.annotation.Nonnull PsiElement anchor) {
     final PsiElement argList = PsiUtil.skipParenthesizedExprUp(anchor).getParent();
     if (argList instanceof PsiExpressionList) {
       final PsiElement parent = argList.getParent();
@@ -50,7 +50,7 @@ public final class DfaOptionalSupport {
     return null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static LocalQuickFix createReplaceOptionalOfNullableWithEmptyFix(@Nonnull PsiElement anchor) {
     final PsiMethodCallExpression parent = findCallExpression(anchor);
     if (parent == null)
@@ -60,7 +60,7 @@ public final class DfaOptionalSupport {
   }
 
   @Nullable
-  public static LocalQuickFix createReplaceOptionalOfNullableWithOfFix(@Nonnull PsiElement anchor) {
+  public static LocalQuickFix createReplaceOptionalOfNullableWithOfFix(@jakarta.annotation.Nonnull PsiElement anchor) {
     final PsiMethodCallExpression parent = findCallExpression(anchor);
     if (parent == null)
       return null;
@@ -73,7 +73,7 @@ public final class DfaOptionalSupport {
    * @param present whether the value should be present
    * @return a DfType representing an Optional
    */
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static DfType getOptionalValue(boolean present) {
     DfType valueType = present ? DfTypes.NOT_NULL_OBJECT : DfTypes.NULL;
     return SpecialField.OPTIONAL_VALUE.asDfType(valueType);
@@ -88,14 +88,14 @@ public final class DfaOptionalSupport {
       myClearArguments = clearArguments;
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     @Override
     public String getFamilyName() {
       return CommonQuickFixBundle.message("fix.replace.with.x", "." + myTargetMethodName + "()");
     }
 
     @Override
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull ProblemDescriptor descriptor) {
       final PsiMethodCallExpression
           methodCallExpression = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiMethodCallExpression.class);
       if (methodCallExpression != null) {

@@ -1,8 +1,8 @@
 // "Remove annotation" "true"
 
-import javax.annotation.*;
+import jakarta.annotation.Nullable;
 
 class Foo {
-  <caret>@Nonnull @javax.annotation.Nullable
+  <caret>@jakarta.annotation.Nonnull @Nullable
   String foo(){return "";}
 }

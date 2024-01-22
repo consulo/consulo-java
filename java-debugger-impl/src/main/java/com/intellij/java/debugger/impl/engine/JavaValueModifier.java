@@ -17,7 +17,7 @@ package com.intellij.java.debugger.impl.engine;
 
 import static consulo.java.language.module.util.JavaClassNames.JAVA_LANG_STRING;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.DebuggerInvocationUtil;
@@ -124,10 +124,10 @@ public abstract class JavaValueModifier extends XValueModifier
 		//node.setState(context);
 	}
 
-	protected abstract void setValueImpl(@Nonnull String expression, @Nonnull XModificationCallback callback);
+	protected abstract void setValueImpl(@jakarta.annotation.Nonnull String expression, @Nonnull XModificationCallback callback);
 
 	@Override
-	public void setValue(@Nonnull String expression, @Nonnull XModificationCallback callback)
+	public void setValue(@jakarta.annotation.Nonnull String expression, @Nonnull XModificationCallback callback)
 	{
 		final NodeDescriptorImpl descriptor = myJavaValue.getDescriptor();
 		if(!((ValueDescriptorImpl) descriptor).canSetValue())
@@ -250,7 +250,7 @@ public abstract class JavaValueModifier extends XValueModifier
 				return Priority.HIGH;
 			}
 
-			public void threadAction(@Nonnull SuspendContextImpl suspendContext)
+			public void threadAction(@jakarta.annotation.Nonnull SuspendContextImpl suspendContext)
 			{
 				ExpressionEvaluator evaluator;
 				try

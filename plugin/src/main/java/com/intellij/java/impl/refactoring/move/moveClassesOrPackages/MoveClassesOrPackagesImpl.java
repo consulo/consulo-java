@@ -59,7 +59,7 @@ import consulo.util.lang.Comparing;
 import consulo.util.lang.ref.Ref;
 import consulo.virtualFileSystem.VirtualFile;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -306,7 +306,7 @@ public class MoveClassesOrPackagesImpl {
     return initialTargetDirectory;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static PsiDirectory getContainerDirectory(final PsiElement psiElement) {
     if (psiElement instanceof PsiJavaPackage) {
       final PsiDirectory[] directories = ((PsiJavaPackage)psiElement).getDirectories();

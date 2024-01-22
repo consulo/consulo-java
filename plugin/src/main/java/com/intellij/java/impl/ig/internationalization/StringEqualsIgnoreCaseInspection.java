@@ -28,7 +28,7 @@ import com.siyeh.ig.psiutils.TypeUtils;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +37,7 @@ import java.util.List;
 public class StringEqualsIgnoreCaseInspection extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "CallToStringEqualsIgnoreCase";
   }
@@ -57,7 +57,7 @@ public class StringEqualsIgnoreCaseInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     final PsiMethodCallExpression methodCallExpression =
       (PsiMethodCallExpression)infos[0];
@@ -94,7 +94,7 @@ public class StringEqualsIgnoreCaseInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();

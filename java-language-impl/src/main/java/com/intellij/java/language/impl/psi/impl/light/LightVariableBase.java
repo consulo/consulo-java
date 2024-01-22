@@ -24,9 +24,8 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.lang.StringUtil;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author ven
@@ -72,13 +71,13 @@ public abstract class LightVariableBase extends LightElement implements PsiVaria
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getName() {
     return StringUtil.notNullize(getNameIdentifier().getText());
   }
 
   @Override
-  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
+  public PsiElement setName(@jakarta.annotation.Nonnull String name) throws IncorrectOperationException {
     PsiImplUtil.setName(getNameIdentifier(), name);
     return this;
   }
@@ -92,13 +91,13 @@ public abstract class LightVariableBase extends LightElement implements PsiVaria
     return myType;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected PsiType computeType() {
     return PsiType.VOID;
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiTypeElement getTypeElement() {
     return JavaPsiFacade.getInstance(getProject()).getElementFactory().createTypeElement(myType);
   }
@@ -109,7 +108,7 @@ public abstract class LightVariableBase extends LightElement implements PsiVaria
   }
 
   @Override
-  public boolean hasModifierProperty(@Nonnull String name) {
+  public boolean hasModifierProperty(@jakarta.annotation.Nonnull String name) {
     return getModifierList().hasModifierProperty(name);
   }
 

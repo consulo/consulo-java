@@ -21,7 +21,7 @@ import consulo.component.extension.ExtensionPointName;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.module.Module;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * User: anna

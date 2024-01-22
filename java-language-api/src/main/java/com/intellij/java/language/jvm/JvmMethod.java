@@ -18,8 +18,8 @@ package com.intellij.java.language.jvm;
 import com.intellij.java.language.jvm.types.JvmReferenceType;
 import com.intellij.java.language.jvm.types.JvmType;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
@@ -68,6 +68,6 @@ public interface JvmMethod extends JvmTypeParametersOwner {
    * @see Method#getGenericExceptionTypes
    * @see Method#getAnnotatedExceptionTypes
    */
-  @Nonnull
+  @jakarta.annotation.Nonnull
   JvmReferenceType[] getThrowsTypes();
 }

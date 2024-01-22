@@ -15,14 +15,11 @@
  */
 package com.intellij.java.indexing.search.searches;
 
-import consulo.component.extension.ExtensionPointName;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.content.scope.SearchScope;
 import consulo.application.util.query.ExtensibleQueryFactory;
 import consulo.application.util.query.Query;
-import consulo.application.util.query.QueryExecutor;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Searcher that searches for classes which have members annotated with the specified annotation.
@@ -54,7 +51,7 @@ public class ClassesWithAnnotatedMembersSearch extends ExtensibleQueryFactory<Ps
     super(ClassesWithAnnotatedMembersSearchExecutor.class);
   }
 
-  public static Query<PsiClass> search(@Nonnull PsiClass annotationClass, @Nonnull SearchScope scope) {
+  public static Query<PsiClass> search(@Nonnull PsiClass annotationClass, @jakarta.annotation.Nonnull SearchScope scope) {
     return INSTANCE.createQuery(new Parameters(annotationClass, scope));
   }
 }

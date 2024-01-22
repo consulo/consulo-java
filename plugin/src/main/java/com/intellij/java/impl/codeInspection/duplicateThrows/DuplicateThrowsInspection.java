@@ -26,8 +26,8 @@ import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import javax.swing.*;
 
@@ -49,13 +49,13 @@ public class DuplicateThrowsInspection extends BaseLocalInspectionTool {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getGroupDisplayName() {
     return GroupNames.DECLARATION_REDUNDANCY;
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getShortName() {
     return "DuplicateThrows";
   }
@@ -68,8 +68,8 @@ public class DuplicateThrowsInspection extends BaseLocalInspectionTool {
   }
 
   @Override
-  @Nonnull
-  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
+  @jakarta.annotation.Nonnull
+  public PsiElementVisitor buildVisitorImpl(@jakarta.annotation.Nonnull final ProblemsHolder holder,
                                             boolean isOnTheFly,
                                             LocalInspectionToolSession session,
                                             Object state) {

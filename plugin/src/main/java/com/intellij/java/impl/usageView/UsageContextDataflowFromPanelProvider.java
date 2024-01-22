@@ -5,7 +5,7 @@ import consulo.ide.impl.idea.usages.impl.UsageViewImpl;
 import consulo.usage.UsageContextPanel;
 import consulo.usage.UsageView;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class UsageContextDataflowFromPanelProvider extends UsageContextDataflowToPaneProvider {

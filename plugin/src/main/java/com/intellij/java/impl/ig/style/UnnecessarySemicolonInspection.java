@@ -27,8 +27,8 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class UnnecessarySemicolonInspection extends BaseInspection {
@@ -181,7 +181,7 @@ public class UnnecessarySemicolonInspection extends BaseInspection {
       }
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     private static PsiElement skipForwardWhiteSpacesAndComments(
       PsiElement element) {
       return PsiTreeUtil.skipSiblingsForward(element,

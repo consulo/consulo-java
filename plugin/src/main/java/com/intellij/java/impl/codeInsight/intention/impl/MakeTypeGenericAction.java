@@ -27,8 +27,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.lang.Pair;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  *  @author dsl
@@ -49,7 +48,7 @@ public class MakeTypeGenericAction extends PsiElementBaseIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, @jakarta.annotation.Nonnull PsiElement element) {
     if (!PsiUtil.isLanguageLevel5OrHigher(element)) return false;
     if (!element.isWritable()) return false;
     return findVariable(element) != null;
@@ -95,7 +94,7 @@ public class MakeTypeGenericAction extends PsiElementBaseIntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
+  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, @jakarta.annotation.Nonnull PsiElement element) throws IncorrectOperationException {
     Pair<PsiVariable, PsiType> pair = findVariable(element);
     if (pair == null) return;
     PsiVariable variable = pair.getFirst();

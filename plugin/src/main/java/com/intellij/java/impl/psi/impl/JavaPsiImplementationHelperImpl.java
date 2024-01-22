@@ -57,8 +57,8 @@ import consulo.virtualFileSystem.VirtualFile;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -152,7 +152,7 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
     return clsFile;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public LanguageLevel getClassesLanguageLevel(VirtualFile virtualFile) {
     final ProjectFileIndex index = ProjectRootManager.getInstance(myProject).getFileIndex();
@@ -208,7 +208,7 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
     return importHelper.getDefaultAnchor(list, statement);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public PsiElement getDefaultMemberAnchor(@Nonnull PsiClass aClass, @Nonnull PsiMember member) {
     CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(aClass.getProject());

@@ -20,8 +20,7 @@ import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.project.Project;
 import consulo.internal.com.sun.jdi.ReferenceType;
-
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public abstract class ClassesActionBase extends AnAction
 {

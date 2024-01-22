@@ -15,24 +15,23 @@
  */
 package com.intellij.java.impl.ig.errorhandling;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiReturnStatement;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ReturnFromFinallyBlockInspection extends BaseInspection {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "ReturnInsideFinallyBlock";
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("return.from.finally.block.display.name");
   }
@@ -53,7 +52,7 @@ public class ReturnFromFinallyBlockInspection extends BaseInspection {
   private static class ReturnFromFinallyBlockVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
+    public void visitReturnStatement(@jakarta.annotation.Nonnull PsiReturnStatement statement) {
       super.visitReturnStatement(statement);
       if (!ControlFlowUtils.isInFinallyBlock(statement)) {
         return;

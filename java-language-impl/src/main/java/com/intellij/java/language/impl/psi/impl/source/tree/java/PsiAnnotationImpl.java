@@ -33,8 +33,8 @@ import consulo.util.lang.StringUtil;
 import consulo.util.lang.function.PairFunction;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author ven
@@ -82,7 +82,7 @@ public class PsiAnnotationImpl extends JavaStubPsiElement<PsiAnnotationStub> imp
   }
 
   @Override
-  @Nullable
+  @jakarta.annotation.Nullable
   public PsiAnnotationMemberValue findDeclaredAttributeValue(@NonNls final String attributeName) {
     return PsiImplUtil.findDeclaredAttributeValue(this, attributeName);
   }
@@ -132,7 +132,7 @@ public class PsiAnnotationImpl extends JavaStubPsiElement<PsiAnnotationStub> imp
     return StringUtil.getShortName(qualifiedName).equals(getShortName()) && PsiAnnotation.super.hasQualifiedName(qualifiedName);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public PsiAnnotationOwner getOwner() {
     PsiElement parent = getParent();

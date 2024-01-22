@@ -33,8 +33,8 @@ import consulo.ui.ex.action.AnAction;
 import consulo.ui.image.Image;
 import consulo.util.lang.Comparing;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -53,7 +53,7 @@ public class RecursiveCallLineMarkerProvider extends LineMarkerProviderDescripto
 
   @RequiredReadAction
   @Override
-  public void collectSlowLineMarkers(@Nonnull List<PsiElement> elements, @Nonnull Collection<LineMarkerInfo> result) {
+  public void collectSlowLineMarkers(@jakarta.annotation.Nonnull List<PsiElement> elements, @Nonnull Collection<LineMarkerInfo> result) {
     final Set<PsiStatement> statements = new HashSet<>();
 
     for (PsiElement element : elements) {

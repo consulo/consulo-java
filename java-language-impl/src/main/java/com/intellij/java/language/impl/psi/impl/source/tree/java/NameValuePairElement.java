@@ -24,7 +24,7 @@ import consulo.language.ast.ChildRoleBase;
 import consulo.language.impl.ast.*;
 import consulo.language.util.CharTable;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author ven

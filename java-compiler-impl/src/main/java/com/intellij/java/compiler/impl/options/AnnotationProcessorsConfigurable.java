@@ -23,10 +23,10 @@ import consulo.configurable.ConfigurationException;
 import consulo.configurable.ProjectConfigurable;
 import consulo.configurable.SearchableConfigurable;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import jakarta.inject.Inject;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import java.util.HashMap;
 import java.util.List;
@@ -61,7 +61,7 @@ public class AnnotationProcessorsConfigurable implements ProjectConfigurable, Se
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getId() {
     return "project.propCompiler.java.annotation.processors";
   }

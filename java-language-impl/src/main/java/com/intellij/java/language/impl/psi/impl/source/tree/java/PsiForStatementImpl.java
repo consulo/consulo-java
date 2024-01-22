@@ -34,7 +34,7 @@ import consulo.language.psi.resolve.ResolveState;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class PsiForStatementImpl extends CompositePsiElement implements PsiForStatement, Constants {
   private static final Logger LOG = Logger.getInstance(PsiForStatementImpl.class);

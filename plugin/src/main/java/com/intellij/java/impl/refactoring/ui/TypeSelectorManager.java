@@ -16,7 +16,7 @@
 package com.intellij.java.impl.refactoring.ui;
 
 import com.intellij.java.language.psi.PsiType;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author dsl

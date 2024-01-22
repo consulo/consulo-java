@@ -15,8 +15,6 @@
  */
 package com.intellij.java.language.impl.psi.presentation.java;
 
-import javax.annotation.Nullable;
-
 import consulo.ui.ex.ColoredItemPresentation;
 import consulo.navigation.ItemPresentation;
 import consulo.codeEditor.CodeInsightColors;
@@ -35,6 +33,7 @@ import com.intellij.java.language.psi.util.PsiFormatUtil;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.ui.image.Image;
+import jakarta.annotation.Nullable;
 
 public class JavaPresentationUtil {
   private JavaPresentationUtil() {

@@ -46,8 +46,9 @@ import consulo.util.dataholder.Key;
 import consulo.util.lang.ref.Ref;
 import consulo.virtualFileSystem.VirtualFile;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -139,7 +140,7 @@ public class ChangedConstantsDependencyProcessor {
     final Ref<CacheCorruptedException> exRef = new Ref<CacheCorruptedException>(null);
     processIdentifiers(psiSearchHelper, new PsiElementProcessor<PsiIdentifier>() {
       @Override
-      public synchronized boolean execute(@Nonnull PsiIdentifier identifier) {
+      public synchronized boolean execute(@jakarta.annotation.Nonnull PsiIdentifier identifier) {
         try {
           final PsiElement parent = identifier.getParent();
           if (parent instanceof PsiReferenceExpression) {
@@ -178,8 +179,8 @@ public class ChangedConstantsDependencyProcessor {
 
   private static boolean processIdentifiers(PsiSearchHelper helper,
                                             @Nonnull final PsiElementProcessor<PsiIdentifier> processor,
-                                            @Nonnull final String identifier,
-                                            @Nonnull SearchScope searchScope,
+                                            @jakarta.annotation.Nonnull final String identifier,
+                                            @jakarta.annotation.Nonnull SearchScope searchScope,
                                             short searchContext) {
     TextOccurenceProcessor processor1 = new TextOccurenceProcessor() {
       public boolean execute(PsiElement element, int offsetInElement) {
@@ -285,7 +286,7 @@ public class ChangedConstantsDependencyProcessor {
   }
   */
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static PsiField getOwnerField(PsiElement element) {
     while (!(element instanceof PsiFile)) {
       if (element instanceof PsiClass) {
@@ -310,7 +311,7 @@ public class ChangedConstantsDependencyProcessor {
     return null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static PsiClass getOwnerClass(PsiElement element) {
     while (!(element instanceof PsiFile)) {
       if (element instanceof PsiClass && element.getParent() instanceof PsiJavaFile) { // top-level class

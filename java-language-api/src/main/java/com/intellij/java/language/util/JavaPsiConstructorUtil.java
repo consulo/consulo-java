@@ -8,7 +8,7 @@ import consulo.language.psi.PsiElement;
 import consulo.util.lang.ObjectUtil;
 import org.jetbrains.annotations.Contract;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -47,7 +47,7 @@ public class JavaPsiConstructorUtil {
    * @return true if given element is a chained constructor call
    */
   @Contract("null -> false")
-  public static boolean isChainedConstructorCall(@Nullable PsiElement call) {
+  public static boolean isChainedConstructorCall(@jakarta.annotation.Nullable PsiElement call) {
     if (!(call instanceof PsiMethodCallExpression))
       return false;
     PsiElement child = ((PsiMethodCallExpression) call).getMethodExpression().getReferenceNameElement();
@@ -75,7 +75,7 @@ public class JavaPsiConstructorUtil {
    * @return true if given element is chained or super constructor call
    */
   @Contract("null -> false")
-  public static boolean isConstructorCall(@Nullable PsiElement call) {
+  public static boolean isConstructorCall(@jakarta.annotation.Nullable PsiElement call) {
     if (!(call instanceof PsiMethodCallExpression))
       return false;
     PsiElement child = ((PsiMethodCallExpression) call).getMethodExpression().getReferenceNameElement();

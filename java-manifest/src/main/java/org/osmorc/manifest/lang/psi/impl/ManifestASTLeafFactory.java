@@ -32,8 +32,8 @@ import consulo.language.impl.ast.LeafElement;
 import consulo.language.version.LanguageVersion;
 import org.osmorc.manifest.lang.ManifestTokenType;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)
@@ -42,7 +42,7 @@ import javax.annotation.Nullable;
 public class ManifestASTLeafFactory implements ASTLeafFactory {
   @Nonnull
   @Override
-  public LeafElement createLeaf(@Nonnull IElementType type, @Nonnull LanguageVersion languageVersion, @Nonnull CharSequence text) {
+  public LeafElement createLeaf(@Nonnull IElementType type, @Nonnull LanguageVersion languageVersion, @jakarta.annotation.Nonnull CharSequence text) {
     return new ManifestTokenImpl((ManifestTokenType) type, text);
   }
 

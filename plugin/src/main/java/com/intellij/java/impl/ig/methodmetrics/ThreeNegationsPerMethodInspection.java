@@ -22,8 +22,8 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodUtils;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import javax.swing.*;
 
 @ExtensionImpl
@@ -38,13 +38,13 @@ public class ThreeNegationsPerMethodInspection extends BaseInspection {
   public boolean ignoreInAssert = false;
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "MethodWithMoreThanThreeNegations";
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "three.negations.per.method.display.name");
@@ -74,7 +74,7 @@ public class ThreeNegationsPerMethodInspection extends BaseInspection {
   private class ThreeNegationsPerMethodVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
       // note: no call to super
       if (method.getNameIdentifier() == null) {
         return;

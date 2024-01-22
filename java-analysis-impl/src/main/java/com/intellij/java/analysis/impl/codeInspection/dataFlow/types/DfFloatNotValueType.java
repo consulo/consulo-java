@@ -4,7 +4,7 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 import com.intellij.java.analysis.JavaAnalysisBundle;
 import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.PsiKeyword;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -15,16 +15,16 @@ class DfFloatNotValueType extends DfAntiConstantType<Float> implements DfFloatTy
   }
 
   @Override
-  public boolean isSuperType(@Nonnull DfType other) {
+  public boolean isSuperType(@jakarta.annotation.Nonnull DfType other) {
     if (other == DfTypes.BOTTOM || other.equals(this)) return true;
     if (other instanceof DfFloatNotValueType) return ((DfFloatNotValueType)other).myNotValues.containsAll(myNotValues);
     if (other instanceof DfFloatConstantType) return !myNotValues.contains(((DfFloatConstantType)other).getValue());
     return false;
   }
   
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
-  public DfType join(@Nonnull DfType other) {
+  public DfType join(@jakarta.annotation.Nonnull DfType other) {
     if (isSuperType(other)) return this;
     if (other.isSuperType(this)) return other;
     if (other instanceof DfFloatNotValueType) {
@@ -35,7 +35,7 @@ class DfFloatNotValueType extends DfAntiConstantType<Float> implements DfFloatTy
     return DfTypes.TOP;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public DfType meet(@Nonnull DfType other) {
     if (isSuperType(other)) return other;

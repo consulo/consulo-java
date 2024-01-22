@@ -1,18 +1,18 @@
-import javax.annotation.*;
+import jakarta.annotation.Nullable;
 
 class Test {
-     @javax.annotation.Nullable
+     @Nullable
 	 private final String baseFile;
-     @javax.annotation.Nullable
+     @jakarta.annotation.Nullable
 	 private final String baseFile1;
 
 
-     public Test(@Nonnull String baseFile) {
+     public Test(@jakarta.annotation.Nonnull String baseFile) {
          this.baseFile = baseFile;
          this.baseFile1 = null;
      }
 
-     public Test(@Nonnull String baseFile1, boolean a) {
+     public Test(@jakarta.annotation.Nonnull String baseFile1, boolean a) {
          this.baseFile1 = baseFile1;
          if (baseFile1.contains("foo")) {
            this.baseFile = null;

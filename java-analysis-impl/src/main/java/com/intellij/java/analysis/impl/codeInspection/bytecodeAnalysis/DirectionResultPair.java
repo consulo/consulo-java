@@ -1,14 +1,14 @@
 package com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 class DirectionResultPair {
   final int directionKey;
   @Nonnull
   final Result result;
 
-  DirectionResultPair(int directionKey, @Nonnull Result result) {
+  DirectionResultPair(int directionKey, @jakarta.annotation.Nonnull Result result) {
     this.directionKey = directionKey;
     this.result = result;
   }

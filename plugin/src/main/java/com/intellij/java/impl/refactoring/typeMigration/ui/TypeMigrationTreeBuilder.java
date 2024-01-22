@@ -1,7 +1,7 @@
 // Copyright 2000-2017 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.impl.refactoring.typeMigration.ui;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeModel;
 

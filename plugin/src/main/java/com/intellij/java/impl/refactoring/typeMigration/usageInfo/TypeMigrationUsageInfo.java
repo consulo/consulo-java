@@ -18,7 +18,7 @@ package com.intellij.java.impl.refactoring.typeMigration.usageInfo;
 import consulo.language.psi.PsiElement;
 import consulo.usage.UsageInfo;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author anna

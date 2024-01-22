@@ -17,8 +17,7 @@ package com.intellij.java.debugger.impl.memory.filtering;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.SuspendContextImpl;
@@ -32,6 +31,7 @@ import com.intellij.java.debugger.impl.ui.tree.render.CachedEvaluator;
 import consulo.project.Project;
 import consulo.execution.debug.breakpoint.XExpression;
 import consulo.internal.com.sun.jdi.ObjectReference;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Vitaliy.Bibaev

@@ -27,7 +27,7 @@ import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import consulo.language.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class InstanceGuardedByStaticInspection extends BaseJavaLocalInspectionTool {
@@ -40,19 +40,19 @@ public class InstanceGuardedByStaticInspection extends BaseJavaLocalInspectionTo
 
   @Override
   @Nls
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return "Instance member guarded by static field";
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getShortName() {
     return "InstanceGuardedByStatic";
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiElementVisitor buildVisitorImpl(@Nonnull ProblemsHolder holder,
                                             boolean isOnTheFly,
                                             LocalInspectionToolSession session,

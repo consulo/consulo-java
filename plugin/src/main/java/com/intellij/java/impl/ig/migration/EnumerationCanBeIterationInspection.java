@@ -40,10 +40,10 @@ import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -74,7 +74,7 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "enumeration.can.be.iteration.problem.descriptor", infos[0]);
@@ -89,7 +89,7 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
   private static class EnumerationCanBeIterationFix
     extends InspectionGadgetsFix {
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "enumeration.can.be.iteration.quickfix");
@@ -460,7 +460,7 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
     }
 
     private static boolean isEnumerationMethodCalled(
-      @Nonnull PsiVariable variable, @Nonnull PsiElement context) {
+      @jakarta.annotation.Nonnull PsiVariable variable, @jakarta.annotation.Nonnull PsiElement context) {
       final EnumerationMethodCalledVisitor visitor =
         new EnumerationMethodCalledVisitor(variable);
       context.accept(visitor);
@@ -473,7 +473,7 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
       private final PsiVariable variable;
       private boolean enumerationMethodCalled = false;
 
-      EnumerationMethodCalledVisitor(@Nonnull PsiVariable variable) {
+      EnumerationMethodCalledVisitor(@jakarta.annotation.Nonnull PsiVariable variable) {
         this.variable = variable;
       }
 

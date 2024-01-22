@@ -21,8 +21,9 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.lang.Comparing;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,11 +82,11 @@ public class EquivalenceChecker {
     }
   }
 
-  public boolean statementsAreEquivalent(@Nullable PsiStatement statement1, @Nullable PsiStatement statement2) {
+  public boolean statementsAreEquivalent(@jakarta.annotation.Nullable PsiStatement statement1, @jakarta.annotation.Nullable PsiStatement statement2) {
     return statementsAreEquivalentDecision(statement1, statement2).getExactlyMatches();
   }
 
-  public Decision statementsAreEquivalentDecision(@Nullable PsiStatement statement1, @Nullable PsiStatement statement2) {
+  public Decision statementsAreEquivalentDecision(@jakarta.annotation.Nullable PsiStatement statement1, @jakarta.annotation.Nullable PsiStatement statement2) {
     statement1 = ControlFlowUtils.stripBraces(statement1);
     statement2 = ControlFlowUtils.stripBraces(statement2);
     if (statement1 == null) {
@@ -162,7 +163,7 @@ public class EquivalenceChecker {
     return text1.equals(text2) ? EXACTLY_MATCHES : EXACTLY_UN_MATCHES;
   }
 
-  protected Decision declarationStatementsAreEquivalentDecision(@Nonnull PsiDeclarationStatement statement1, @Nonnull PsiDeclarationStatement statement2) {
+  protected Decision declarationStatementsAreEquivalentDecision(@jakarta.annotation.Nonnull PsiDeclarationStatement statement1, @Nonnull PsiDeclarationStatement statement2) {
     final PsiElement[] elements1 = statement1.getDeclaredElements();
     final List<PsiLocalVariable> vars1 = new ArrayList<>(elements1.length);
     for (PsiElement anElement : elements1) {
@@ -191,7 +192,7 @@ public class EquivalenceChecker {
     return EXACTLY_MATCHES;
   }
 
-  protected Decision localVariablesAreEquivalent(@Nonnull PsiLocalVariable localVariable1, @Nonnull PsiLocalVariable localVariable2) {
+  protected Decision localVariablesAreEquivalent(@jakarta.annotation.Nonnull PsiLocalVariable localVariable1, @Nonnull PsiLocalVariable localVariable2) {
     final PsiType type1 = localVariable1.getType();
     final PsiType type2 = localVariable2.getType();
     if (!typesAreEquivalent(type1, type2)) {
@@ -210,7 +211,7 @@ public class EquivalenceChecker {
     return expressionsAreEquivalentDecision(initializer1, initializer2).setConcreteIfExactUnMatches(initializer1, initializer2);
   }
 
-  protected Decision tryStatementsAreEquivalentDecision(@Nonnull PsiTryStatement statement1, @Nonnull PsiTryStatement statement2) {
+  protected Decision tryStatementsAreEquivalentDecision(@jakarta.annotation.Nonnull PsiTryStatement statement1, @jakarta.annotation.Nonnull PsiTryStatement statement2) {
     final PsiCodeBlock tryBlock1 = statement1.getTryBlock();
     final PsiCodeBlock tryBlock2 = statement2.getTryBlock();
     if (!codeBlocksAreEquivalentDecision(tryBlock1, tryBlock2).getExactlyMatches()) {
@@ -273,7 +274,7 @@ public class EquivalenceChecker {
     return EXACTLY_MATCHES;
   }
 
-  protected Decision parametersAreEquivalent(@Nonnull PsiParameter parameter1, @Nonnull PsiParameter parameter2) {
+  protected Decision parametersAreEquivalent(@Nonnull PsiParameter parameter1, @jakarta.annotation.Nonnull PsiParameter parameter2) {
     final PsiType type1 = parameter1.getType();
     final PsiType type2 = parameter2.getType();
     if (!typesAreEquivalent(type1, type2)) {
@@ -287,7 +288,7 @@ public class EquivalenceChecker {
     return Decision.exact(name1.equals(name2));
   }
 
-  public boolean typesAreEquivalent(@Nullable PsiType type1, @Nullable PsiType type2) {
+  public boolean typesAreEquivalent(@jakarta.annotation.Nullable PsiType type1, @jakarta.annotation.Nullable PsiType type2) {
     if (type1 == null) {
       return type2 == null;
     }
@@ -299,7 +300,7 @@ public class EquivalenceChecker {
     return type1Text.equals(type2Text);
   }
 
-  protected Decision whileStatementsAreEquivalentDecision(@Nonnull PsiWhileStatement statement1, @Nonnull PsiWhileStatement statement2) {
+  protected Decision whileStatementsAreEquivalentDecision(@jakarta.annotation.Nonnull PsiWhileStatement statement1, @jakarta.annotation.Nonnull PsiWhileStatement statement2) {
     final PsiExpression condition1 = statement1.getCondition();
     final PsiExpression condition2 = statement2.getCondition();
     final PsiStatement body1 = statement1.getBody();
@@ -310,7 +311,7 @@ public class EquivalenceChecker {
     return getComplexElementDecision(bodyEquivalence, conditionEquivalence, body1, body2, condition1, condition2);
   }
 
-  protected Decision forStatementsAreEquivalentDecision(@Nonnull PsiForStatement statement1, @Nonnull PsiForStatement statement2) {
+  protected Decision forStatementsAreEquivalentDecision(@Nonnull PsiForStatement statement1, @jakarta.annotation.Nonnull PsiForStatement statement2) {
     final PsiExpression condition1 = statement1.getCondition();
     final PsiExpression condition2 = statement2.getCondition();
     if (!expressionsAreEquivalentDecision(condition1, condition2).getExactlyMatches()) {
@@ -331,7 +332,7 @@ public class EquivalenceChecker {
     return statementsAreEquivalentDecision(body1, body2).setConcreteIfExactUnMatches(body1, body2);
   }
 
-  protected Decision forEachStatementsAreEquivalentDecision(@Nonnull PsiForeachStatement statement1, @Nonnull PsiForeachStatement statement2) {
+  protected Decision forEachStatementsAreEquivalentDecision(@jakarta.annotation.Nonnull PsiForeachStatement statement1, @Nonnull PsiForeachStatement statement2) {
     final PsiExpression value1 = statement1.getIteratedValue();
     final PsiExpression value2 = statement2.getIteratedValue();
     if (!expressionsAreEquivalentDecision(value1, value2).getExactlyMatches()) {
@@ -355,7 +356,7 @@ public class EquivalenceChecker {
     return statementsAreEquivalentDecision(body1, body2).setConcreteIfExactUnMatches(body1, body2);
   }
 
-  protected Decision switchStatementsAreEquivalentDecision(@Nonnull PsiSwitchStatement statement1, @Nonnull PsiSwitchStatement statement2) {
+  protected Decision switchStatementsAreEquivalentDecision(@Nonnull PsiSwitchStatement statement1, @jakarta.annotation.Nonnull PsiSwitchStatement statement2) {
     final PsiExpression switchExpression1 = statement1.getExpression();
     final PsiExpression switchExpression2 = statement2.getExpression();
     final PsiCodeBlock body1 = statement1.getBody();
@@ -367,7 +368,7 @@ public class EquivalenceChecker {
     return expressionsAreEquivalentDecision(switchExpression1, switchExpression2).setConcreteIfExactUnMatches(switchExpression1, switchExpression2);
   }
 
-  protected Decision doWhileStatementsAreEquivalentDecision(@Nonnull PsiDoWhileStatement statement1, @Nonnull PsiDoWhileStatement statement2) {
+  protected Decision doWhileStatementsAreEquivalentDecision(@jakarta.annotation.Nonnull PsiDoWhileStatement statement1, @Nonnull PsiDoWhileStatement statement2) {
     final PsiExpression condition1 = statement1.getCondition();
     final PsiExpression condition2 = statement2.getCondition();
     final PsiStatement body1 = statement1.getBody();
@@ -377,7 +378,7 @@ public class EquivalenceChecker {
     return getComplexElementDecision(bodyEq, conditionEq, body1, body2, condition1, condition2);
   }
 
-  protected Decision assertStatementsAreEquivalentDecision(@Nonnull PsiAssertStatement statement1, @Nonnull PsiAssertStatement statement2) {
+  protected Decision assertStatementsAreEquivalentDecision(@jakarta.annotation.Nonnull PsiAssertStatement statement1, @jakarta.annotation.Nonnull PsiAssertStatement statement2) {
     final PsiExpression condition1 = statement1.getAssertCondition();
     final PsiExpression condition2 = statement2.getAssertCondition();
     final PsiExpression description1 = statement1.getAssertDescription();
@@ -387,7 +388,7 @@ public class EquivalenceChecker {
     return getComplexElementDecision(condEq, exprEq, condition1, condition2, description1, description2);
   }
 
-  protected Decision synchronizedStatementsAreEquivalentDecision(@Nonnull PsiSynchronizedStatement statement1, @Nonnull PsiSynchronizedStatement statement2) {
+  protected Decision synchronizedStatementsAreEquivalentDecision(@Nonnull PsiSynchronizedStatement statement1, @jakarta.annotation.Nonnull PsiSynchronizedStatement statement2) {
     final PsiExpression lock1 = statement1.getLockExpression();
     final PsiExpression lock2 = statement2.getLockExpression();
     final PsiCodeBlock body1 = statement1.getBody();
@@ -397,13 +398,13 @@ public class EquivalenceChecker {
     return getComplexElementDecision(blockEq, lockEq, body1, body2, lock1, lock2);
   }
 
-  protected Decision blockStatementsAreEquivalentDecision(@Nonnull PsiBlockStatement statement1, @Nonnull PsiBlockStatement statement2) {
+  protected Decision blockStatementsAreEquivalentDecision(@jakarta.annotation.Nonnull PsiBlockStatement statement1, @jakarta.annotation.Nonnull PsiBlockStatement statement2) {
     final PsiCodeBlock block1 = statement1.getCodeBlock();
     final PsiCodeBlock block2 = statement2.getCodeBlock();
     return codeBlocksAreEquivalentDecision(block1, block2);
   }
 
-  protected Decision breakStatementsAreEquivalentDecision(@Nonnull PsiBreakStatement statement1, @Nonnull PsiBreakStatement statement2) {
+  protected Decision breakStatementsAreEquivalentDecision(@jakarta.annotation.Nonnull PsiBreakStatement statement1, @jakarta.annotation.Nonnull PsiBreakStatement statement2) {
     final PsiIdentifier identifier1 = statement1.getLabelIdentifier();
     final PsiIdentifier identifier2 = statement2.getLabelIdentifier();
     if (identifier1 == null) {
@@ -417,7 +418,7 @@ public class EquivalenceChecker {
     return Decision.exact(text1.equals(text2));
   }
 
-  protected Decision continueStatementsAreEquivalentDecision(@Nonnull PsiContinueStatement statement1, @Nonnull PsiContinueStatement statement2) {
+  protected Decision continueStatementsAreEquivalentDecision(@Nonnull PsiContinueStatement statement1, @jakarta.annotation.Nonnull PsiContinueStatement statement2) {
     final PsiIdentifier identifier1 = statement1.getLabelIdentifier();
     final PsiIdentifier identifier2 = statement2.getLabelIdentifier();
     if (identifier1 == null) {
@@ -431,7 +432,7 @@ public class EquivalenceChecker {
     return Decision.exact(text1.equals(text2));
   }
 
-  protected Decision switchLabelStatementsAreEquivalentDecision(@Nonnull PsiSwitchLabelStatement statement1, @Nonnull PsiSwitchLabelStatement statement2) {
+  protected Decision switchLabelStatementsAreEquivalentDecision(@jakarta.annotation.Nonnull PsiSwitchLabelStatement statement1, @Nonnull PsiSwitchLabelStatement statement2) {
     if (statement1.isDefaultCase()) {
       return Decision.exact(statement2.isDefaultCase());
     }
@@ -443,7 +444,7 @@ public class EquivalenceChecker {
     return expressionsAreEquivalentDecision(caseExpression1, caseExpression2).setConcreteIfExactUnMatches(caseExpression1, caseExpression2);
   }
 
-  protected Decision labeledStatementsAreEquivalentDecision(@Nonnull PsiLabeledStatement statement1, @Nonnull PsiLabeledStatement statement2) {
+  protected Decision labeledStatementsAreEquivalentDecision(@jakarta.annotation.Nonnull PsiLabeledStatement statement1, @jakarta.annotation.Nonnull PsiLabeledStatement statement2) {
     final PsiIdentifier identifier1 = statement1.getLabelIdentifier();
     final PsiIdentifier identifier2 = statement2.getLabelIdentifier();
     final String text1 = identifier1.getText();
@@ -451,11 +452,11 @@ public class EquivalenceChecker {
     return Decision.exact(text1.equals(text2));
   }
 
-  public boolean codeBlocksAreEquivalent(@Nullable PsiCodeBlock block1, @Nullable PsiCodeBlock block2) {
+  public boolean codeBlocksAreEquivalent(@jakarta.annotation.Nullable PsiCodeBlock block1, @jakarta.annotation.Nullable PsiCodeBlock block2) {
     return codeBlocksAreEquivalentDecision(block1, block2).getExactlyMatches();
   }
 
-  protected Decision codeBlocksAreEquivalentDecision(@Nullable PsiCodeBlock block1, @Nullable PsiCodeBlock block2) {
+  protected Decision codeBlocksAreEquivalentDecision(@jakarta.annotation.Nullable PsiCodeBlock block1, @jakarta.annotation.Nullable PsiCodeBlock block2) {
     if (block1 == null && block2 == null) {
       return EXACTLY_MATCHES;
     }
@@ -491,13 +492,13 @@ public class EquivalenceChecker {
     return EXACTLY_UN_MATCHES;
   }
 
-  protected Decision expressionStatementsAreEquivalentDecision(@Nonnull PsiExpressionStatement statement1, @Nonnull PsiExpressionStatement statement2) {
+  protected Decision expressionStatementsAreEquivalentDecision(@jakarta.annotation.Nonnull PsiExpressionStatement statement1, @Nonnull PsiExpressionStatement statement2) {
     final PsiExpression expression1 = statement1.getExpression();
     final PsiExpression expression2 = statement2.getExpression();
     return expressionsAreEquivalentDecision(expression1, expression2);
   }
 
-  protected Decision returnStatementsAreEquivalentDecision(@Nonnull PsiReturnStatement statement1, @Nonnull PsiReturnStatement statement2) {
+  protected Decision returnStatementsAreEquivalentDecision(@jakarta.annotation.Nonnull PsiReturnStatement statement1, @jakarta.annotation.Nonnull PsiReturnStatement statement2) {
     final PsiExpression returnValue1 = statement1.getReturnValue();
     final PsiExpression returnValue2 = statement2.getReturnValue();
     final Decision decision = expressionsAreEquivalentDecision(returnValue1, returnValue2);
@@ -513,7 +514,7 @@ public class EquivalenceChecker {
     return expressionsAreEquivalentDecision(exception1, exception2);
   }
 
-  protected Decision expressionListStatementsAreEquivalentDecision(@Nonnull PsiExpressionListStatement statement1, @Nonnull PsiExpressionListStatement statement2) {
+  protected Decision expressionListStatementsAreEquivalentDecision(@jakarta.annotation.Nonnull PsiExpressionListStatement statement1, @Nonnull PsiExpressionListStatement statement2) {
     final PsiExpressionList expressionList1 = statement1.getExpressionList();
     final PsiExpression[] expressions1 = expressionList1.getExpressions();
     final PsiExpressionList expressionList2 = statement2.getExpressionList();
@@ -521,11 +522,11 @@ public class EquivalenceChecker {
     return expressionListsAreEquivalent(expressions1, expressions2);
   }
 
-  public boolean expressionsAreEquivalent(@Nullable PsiExpression expression1, @Nullable PsiExpression expression2) {
+  public boolean expressionsAreEquivalent(@jakarta.annotation.Nullable PsiExpression expression1, @jakarta.annotation.Nullable PsiExpression expression2) {
     return expressionsAreEquivalentDecision(expression1, expression2).getExactlyMatches();
   }
 
-  public Decision expressionsAreEquivalentDecision(@Nullable PsiExpression expression1, @Nullable PsiExpression expression2) {
+  public Decision expressionsAreEquivalentDecision(@Nullable PsiExpression expression1, @jakarta.annotation.Nullable PsiExpression expression2) {
     expression1 = ParenthesesUtils.stripParentheses(expression1);
     expression2 = ParenthesesUtils.stripParentheses(expression2);
     if (expression1 == null) {
@@ -697,7 +698,7 @@ public class EquivalenceChecker {
     return decision;
   }
 
-  protected Decision newExpressionsAreEquivalentDecision(@Nonnull PsiNewExpression newExpression1, @Nonnull PsiNewExpression newExpression2) {
+  protected Decision newExpressionsAreEquivalentDecision(@jakarta.annotation.Nonnull PsiNewExpression newExpression1, @jakarta.annotation.Nonnull PsiNewExpression newExpression2) {
     final PsiJavaCodeReferenceElement classReference1 = newExpression1.getClassReference();
     final PsiJavaCodeReferenceElement classReference2 = newExpression2.getClassReference();
     if (classReference1 == null || classReference2 == null) {
@@ -738,14 +739,14 @@ public class EquivalenceChecker {
     return expressionListsAreEquivalent(args1, args2);
   }
 
-  protected Decision arrayInitializerExpressionsAreEquivalentDecision(@Nonnull PsiArrayInitializerExpression arrayInitializerExpression1,
-                                                                      @Nonnull PsiArrayInitializerExpression arrayInitializerExpression2) {
+  protected Decision arrayInitializerExpressionsAreEquivalentDecision(@jakarta.annotation.Nonnull PsiArrayInitializerExpression arrayInitializerExpression1,
+                                                                      @jakarta.annotation.Nonnull PsiArrayInitializerExpression arrayInitializerExpression2) {
     final PsiExpression[] initializers1 = arrayInitializerExpression1.getInitializers();
     final PsiExpression[] initializers2 = arrayInitializerExpression2.getInitializers();
     return expressionListsAreEquivalent(initializers1, initializers2);
   }
 
-  protected Decision typeCastExpressionsAreEquivalentDecision(@Nonnull PsiTypeCastExpression typeCastExpression1, @Nonnull PsiTypeCastExpression typeCastExpression2) {
+  protected Decision typeCastExpressionsAreEquivalentDecision(@jakarta.annotation.Nonnull PsiTypeCastExpression typeCastExpression1, @Nonnull PsiTypeCastExpression typeCastExpression2) {
     final PsiTypeElement typeElement1 = typeCastExpression1.getCastType();
     final PsiTypeElement typeElement2 = typeCastExpression2.getCastType();
     if (!typeElementsAreEquivalent(typeElement1, typeElement2).getExactlyMatches()) {
@@ -759,7 +760,7 @@ public class EquivalenceChecker {
     return expressionsAreEquivalentDecision(operand1, operand2).setConcreteIfExactUnMatches(operand1, operand2);
   }
 
-  protected Decision arrayAccessExpressionsAreEquivalentDecision(@Nonnull PsiArrayAccessExpression arrayAccessExpression1, @Nonnull PsiArrayAccessExpression arrayAccessExpression2) {
+  protected Decision arrayAccessExpressionsAreEquivalentDecision(@jakarta.annotation.Nonnull PsiArrayAccessExpression arrayAccessExpression1, @Nonnull PsiArrayAccessExpression arrayAccessExpression2) {
     final PsiExpression arrayExpression2 = arrayAccessExpression1.getArrayExpression();
     final PsiExpression arrayExpression1 = arrayAccessExpression2.getArrayExpression();
     final PsiExpression indexExpression2 = arrayAccessExpression1.getIndexExpression();
@@ -771,7 +772,7 @@ public class EquivalenceChecker {
     return expressionsAreEquivalentDecision(indexExpression1, indexExpression2).setConcreteIfExactUnMatches(indexExpression1, indexExpression2);
   }
 
-  protected Decision prefixExpressionsAreEquivalentDecision(@Nonnull PsiPrefixExpression prefixExpression1, @Nonnull PsiPrefixExpression prefixExpression2) {
+  protected Decision prefixExpressionsAreEquivalentDecision(@Nonnull PsiPrefixExpression prefixExpression1, @jakarta.annotation.Nonnull PsiPrefixExpression prefixExpression2) {
     final IElementType tokenType1 = prefixExpression1.getOperationTokenType();
     if (!tokenType1.equals(prefixExpression2.getOperationTokenType())) {
       return EXACTLY_UN_MATCHES;
@@ -781,7 +782,7 @@ public class EquivalenceChecker {
     return expressionsAreEquivalentDecision(operand1, operand2);
   }
 
-  protected Decision postfixExpressionsAreEquivalentDecision(@Nonnull PsiPostfixExpression postfixExpression1, @Nonnull PsiPostfixExpression postfixExpression2) {
+  protected Decision postfixExpressionsAreEquivalentDecision(@jakarta.annotation.Nonnull PsiPostfixExpression postfixExpression1, @jakarta.annotation.Nonnull PsiPostfixExpression postfixExpression2) {
     final IElementType tokenType1 = postfixExpression1.getOperationTokenType();
     if (!tokenType1.equals(postfixExpression2.getOperationTokenType())) {
       return EXACTLY_UN_MATCHES;
@@ -791,7 +792,7 @@ public class EquivalenceChecker {
     return expressionsAreEquivalentDecision(operand1, operand2);
   }
 
-  protected Decision polyadicExpressionsAreEquivalentDecision(@Nonnull PsiPolyadicExpression polyadicExpression1, @Nonnull PsiPolyadicExpression polyadicExpression2) {
+  protected Decision polyadicExpressionsAreEquivalentDecision(@Nonnull PsiPolyadicExpression polyadicExpression1, @jakarta.annotation.Nonnull PsiPolyadicExpression polyadicExpression2) {
     final IElementType tokenType1 = polyadicExpression1.getOperationTokenType();
     final IElementType tokenType2 = polyadicExpression2.getOperationTokenType();
     if (!tokenType1.equals(tokenType2)) {
@@ -817,7 +818,7 @@ public class EquivalenceChecker {
     return incompleteDecision != null ? incompleteDecision : EXACTLY_MATCHES;
   }
 
-  protected Decision assignmentExpressionsAreEquivalentDecision(@Nonnull PsiAssignmentExpression assignmentExpression1, @Nonnull PsiAssignmentExpression assignmentExpression2) {
+  protected Decision assignmentExpressionsAreEquivalentDecision(@jakarta.annotation.Nonnull PsiAssignmentExpression assignmentExpression1, @jakarta.annotation.Nonnull PsiAssignmentExpression assignmentExpression2) {
     final IElementType tokenType1 = assignmentExpression1.getOperationTokenType();
     if (!tokenType1.equals(assignmentExpression2.getOperationTokenType())) {
       return EXACTLY_UN_MATCHES;
@@ -831,7 +832,7 @@ public class EquivalenceChecker {
     return getComplexElementDecision(leftEq, rightEq, lhs1, lhs2, rhs1, rhs2);
   }
 
-  protected Decision conditionalExpressionsAreEquivalentDecision(@Nonnull PsiConditionalExpression conditionalExpression1, @Nonnull PsiConditionalExpression conditionalExpression2) {
+  protected Decision conditionalExpressionsAreEquivalentDecision(@jakarta.annotation.Nonnull PsiConditionalExpression conditionalExpression1, @jakarta.annotation.Nonnull PsiConditionalExpression conditionalExpression2) {
     final PsiExpression condition1 = conditionalExpression1.getCondition();
     final PsiExpression condition2 = conditionalExpression2.getCondition();
     final PsiExpression thenExpression1 = conditionalExpression1.getThenExpression();
@@ -846,7 +847,7 @@ public class EquivalenceChecker {
     return EXACTLY_UN_MATCHES;
   }
 
-  protected Decision expressionListsAreEquivalent(@Nullable PsiExpression[] expressions1, @Nullable PsiExpression[] expressions2) {
+  protected Decision expressionListsAreEquivalent(@jakarta.annotation.Nullable PsiExpression[] expressions1, @jakarta.annotation.Nullable PsiExpression[] expressions2) {
     if (expressions1 == null && expressions2 == null) {
       return Decision.exact(true);
     }
@@ -871,7 +872,7 @@ public class EquivalenceChecker {
     return oneUnMatchedDecision == null ? EXACTLY_MATCHES : oneUnMatchedDecision;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private Decision getComplexElementDecision(Decision equivalence1, Decision equivalence2, PsiElement left1, PsiElement right1, PsiElement left2, PsiElement right2) {
     if (equivalence2 == EXACTLY_MATCHES) {
       if (equivalence1 == EXACTLY_MATCHES) {

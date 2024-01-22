@@ -21,7 +21,7 @@ import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import consulo.java.language.module.util.JavaClassNames;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.regex.Pattern;
 
 public class IteratorUtils {

@@ -21,8 +21,8 @@ import consulo.language.ast.IElementType;
 import consulo.language.impl.ast.ASTCompositeFactory;
 import consulo.language.impl.ast.CompositeElement;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author VISTALL

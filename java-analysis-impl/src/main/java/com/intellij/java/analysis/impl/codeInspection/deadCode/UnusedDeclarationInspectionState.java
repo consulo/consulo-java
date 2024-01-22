@@ -5,8 +5,8 @@ import com.intellij.java.analysis.codeInspection.ex.EntryPointState;
 import consulo.language.editor.inspection.InspectionToolState;
 import consulo.util.xml.serializer.XmlSerializerUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 

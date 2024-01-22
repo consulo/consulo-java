@@ -14,10 +14,11 @@ import consulo.util.lang.StringUtil;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import jakarta.annotation.Nullable;
 import one.util.streamex.StreamEx;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +31,7 @@ import static com.intellij.java.analysis.impl.codeInspection.dataFlow.StandardMe
  */
 public abstract class ContractInspection extends AbstractBaseJavaLocalInspectionTool {
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
                                             final boolean isOnTheFly,
                                             LocalInspectionToolSession session,

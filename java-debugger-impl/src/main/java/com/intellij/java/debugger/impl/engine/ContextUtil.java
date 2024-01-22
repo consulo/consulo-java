@@ -17,7 +17,6 @@ package com.intellij.java.debugger.impl.engine;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
 import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.debugger.impl.engine.evaluation.DefaultCodeFragmentFactory;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
@@ -38,14 +37,15 @@ import com.intellij.java.language.psi.PsiResolveHelper;
 import com.intellij.java.language.psi.PsiStatement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.internal.com.sun.jdi.Location;
+import jakarta.annotation.Nullable;
 
 public class ContextUtil
 {
 	public static final Key<Boolean> IS_JSP_IMPLICIT = new Key<>("JspImplicit");
 	private static final Logger LOG = Logger.getInstance("#com.intellij.java.debugger.impl.PositionUtil");
 
-	@Nullable
-	public static SourcePosition getSourcePosition(@Nullable final StackFrameContext context)
+	@jakarta.annotation.Nullable
+	public static SourcePosition getSourcePosition(@jakarta.annotation.Nullable final StackFrameContext context)
 	{
 		if(context == null)
 		{
@@ -77,13 +77,13 @@ public class ContextUtil
 		return debugProcess.getPositionManager().getSourcePosition(location);
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	public static PsiElement getContextElement(final StackFrameContext context)
 	{
 		return getContextElement(context, getSourcePosition(context));
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	public static PsiElement getContextElement(final StackFrameContext context, final SourcePosition position)
 	{
 		if(LOG.isDebugEnabled())
@@ -164,7 +164,7 @@ public class ContextUtil
 		});
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	public static PsiElement getContextElement(@Nullable SourcePosition position)
 	{
 		return position == null ? null : position.getElementAt();

@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.PropertyKey;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.function.Supplier;
 
 public final class JavaPsiBundle extends AbstractBundle {
@@ -26,7 +26,7 @@ public final class JavaPsiBundle extends AbstractBundle {
     return INSTANCE.getMessage(key, params);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static Supplier<String> messagePointer(@Nonnull @PropertyKey(resourceBundle = BUNDLE) String key, Object... params) {
     return () -> INSTANCE.getMessage(key, params);
   }
@@ -37,8 +37,8 @@ public final class JavaPsiBundle extends AbstractBundle {
    * Note that it's not localized in the usual sense: modifiers returned from this method are kept in English,
    * regardless of the active language pack. It's believed that this way it's more clear.
    */
-  @Nonnull
-  public static String visibilityPresentation(@Nonnull @PsiModifier.ModifierConstant String modifier) {
+  @jakarta.annotation.Nonnull
+  public static String visibilityPresentation(@jakarta.annotation.Nonnull @PsiModifier.ModifierConstant String modifier) {
     return modifier.equals(PsiModifier.PACKAGE_LOCAL) ? "package-private" : modifier;
   }
 }

@@ -25,8 +25,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.ChangeModifierFix;
 import com.intellij.java.impl.ig.psiutils.SerializationUtils;
 import consulo.annotation.component.ExtensionImpl;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ReadResolveAndWriteReplaceProtectedInspection
@@ -56,7 +55,7 @@ public class ReadResolveAndWriteReplaceProtectedInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
       // no call to super, so it doesn't drill down
       final PsiClass aClass = method.getContainingClass();
       if (aClass == null) {

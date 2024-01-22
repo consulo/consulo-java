@@ -19,8 +19,8 @@ import consulo.internal.org.objectweb.asm.Opcodes;
 import consulo.internal.org.objectweb.asm.tree.MethodNode;
 import consulo.internal.org.objectweb.asm.tree.analysis.Analyzer;
 import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 

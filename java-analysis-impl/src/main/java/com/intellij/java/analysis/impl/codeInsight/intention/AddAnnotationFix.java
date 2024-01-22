@@ -24,7 +24,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author ven
@@ -35,20 +35,20 @@ public class AddAnnotationFix extends AddAnnotationPsiFix implements SyntheticIn
     this(fqn, modifierListOwner, PsiNameValuePair.EMPTY_ARRAY, annotationsToRemove);
   }
 
-  public AddAnnotationFix(@Nonnull String fqn,
+  public AddAnnotationFix(@jakarta.annotation.Nonnull String fqn,
                           @Nonnull PsiModifierListOwner modifierListOwner,
                           @Nonnull PsiNameValuePair[] values,
-                          @Nonnull String... annotationsToRemove) {
+                          @jakarta.annotation.Nonnull String... annotationsToRemove) {
     super(fqn, modifierListOwner, values, annotationsToRemove);
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
     return isAvailable();
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     applyFix();
   }
 

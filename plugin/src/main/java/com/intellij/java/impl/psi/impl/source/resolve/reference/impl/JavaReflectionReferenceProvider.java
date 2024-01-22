@@ -24,8 +24,8 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.PsiReferenceProvider;
 import consulo.language.util.ProcessingContext;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Konstantin Bulenkov
@@ -54,5 +54,5 @@ abstract class JavaReflectionReferenceProvider extends PsiReferenceProvider {
   }
 
   @Nullable
-  protected abstract PsiReference[] getReferencesByMethod(@Nonnull PsiLiteralExpression literalArgument, @Nonnull PsiReferenceExpression methodReference, @Nonnull ProcessingContext context);
+  protected abstract PsiReference[] getReferencesByMethod(@Nonnull PsiLiteralExpression literalArgument, @jakarta.annotation.Nonnull PsiReferenceExpression methodReference, @Nonnull ProcessingContext context);
 }

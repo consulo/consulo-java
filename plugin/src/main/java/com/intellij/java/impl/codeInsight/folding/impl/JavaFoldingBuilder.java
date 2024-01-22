@@ -32,14 +32,14 @@ import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 import consulo.ui.ex.awt.FontUtil;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.awt.*;
 
 @ExtensionImpl
 public class JavaFoldingBuilder extends JavaFoldingBuilderBase {
   @Override
-  protected boolean isBelowRightMargin(@Nonnull Project project, int lineLength) {
+  protected boolean isBelowRightMargin(@jakarta.annotation.Nonnull Project project, int lineLength) {
     final CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(project);
     return lineLength <= settings.getRightMargin(JavaLanguage.INSTANCE);
   }
@@ -56,7 +56,7 @@ public class JavaFoldingBuilder extends JavaFoldingBuilderBase {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String rightArrow() {
     return getRightArrow();
   }
@@ -67,7 +67,7 @@ public class JavaFoldingBuilder extends JavaFoldingBuilderBase {
     return FontUtil.rightArrow(font);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

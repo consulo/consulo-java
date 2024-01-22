@@ -26,8 +26,8 @@ import consulo.language.psi.PsiDirectory;
 import consulo.language.util.IncorrectOperationException;
 import consulo.ide.ServiceManager;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Map;
 
 @ServiceAPI(ComponentScope.APPLICATION)
@@ -59,7 +59,7 @@ public abstract class JavaDirectoryService {
    * @return the created class instance.
    * @throws IncorrectOperationException if the operation failed for some reason.
    */
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public abstract PsiClass createClass(@Nonnull PsiDirectory dir, @Nonnull String name) throws IncorrectOperationException;
 
   /**
@@ -72,7 +72,7 @@ public abstract class JavaDirectoryService {
    * @since 5.1
    */
   @Nonnull
-  public abstract PsiClass createClass(@Nonnull PsiDirectory dir, @Nonnull String name, @Nonnull String templateName) throws IncorrectOperationException;
+  public abstract PsiClass createClass(@jakarta.annotation.Nonnull PsiDirectory dir, @Nonnull String name, @Nonnull String templateName) throws IncorrectOperationException;
 
   /**
    * @param askForUndefinedVariables
@@ -98,7 +98,7 @@ public abstract class JavaDirectoryService {
    * @param name the name of the class to check creation possibility (not including the file extension).
    * @throws IncorrectOperationException if the creation is not possible.
    */
-  public abstract void checkCreateClass(@Nonnull PsiDirectory dir, @Nonnull String name) throws IncorrectOperationException;
+  public abstract void checkCreateClass(@jakarta.annotation.Nonnull PsiDirectory dir, @Nonnull String name) throws IncorrectOperationException;
 
   /**
    * Creates an interface class with the specified name in the directory.

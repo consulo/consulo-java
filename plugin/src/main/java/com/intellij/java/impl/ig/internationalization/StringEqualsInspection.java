@@ -28,7 +28,7 @@ import com.siyeh.ig.psiutils.TypeUtils;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,13 +36,13 @@ import java.util.List;
 public class StringEqualsInspection extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "CallToStringEquals";
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
         "string.equals.call.display.name");
@@ -56,7 +56,7 @@ public class StringEqualsInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     final PsiMethodCallExpression methodCallExpression =
         (PsiMethodCallExpression) infos[0];
@@ -93,7 +93,7 @@ public class StringEqualsInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-        @Nonnull PsiMethodCallExpression expression) {
+        @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!MethodCallUtils.isEqualsCall(expression)) {
         return;

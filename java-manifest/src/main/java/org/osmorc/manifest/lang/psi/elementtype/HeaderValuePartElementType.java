@@ -30,7 +30,7 @@ import consulo.language.psi.stub.IndexSink;
 import consulo.language.psi.stub.StubElement;
 import consulo.language.psi.stub.StubInputStream;
 import consulo.language.psi.stub.StubOutputStream;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import org.osmorc.manifest.lang.psi.HeaderValuePart;
 import org.osmorc.manifest.lang.psi.impl.HeaderValuePartImpl;
 import org.osmorc.manifest.lang.psi.stub.HeaderValuePartStub;
@@ -57,7 +57,7 @@ public class HeaderValuePartElementType extends AbstractManifestStubElementType<
   }
 
   @Override
-  public HeaderValuePartStub createStub(@Nonnull HeaderValuePart psi, StubElement parentStub) {
+  public HeaderValuePartStub createStub(@jakarta.annotation.Nonnull HeaderValuePart psi, StubElement parentStub) {
     return new HeaderValuePartStubImpl(parentStub, psi.getUnwrappedText());
   }
 

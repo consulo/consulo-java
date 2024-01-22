@@ -22,8 +22,7 @@ import consulo.language.ast.IElementType;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.ig.psiutils.EquivalenceChecker;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class InstanceOfUtils {
 

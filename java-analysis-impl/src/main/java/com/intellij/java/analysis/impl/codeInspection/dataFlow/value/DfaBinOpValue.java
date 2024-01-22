@@ -12,8 +12,8 @@ import com.intellij.java.language.psi.PsiType;
 import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,7 +34,7 @@ public final class DfaBinOpValue extends DfaValue
 	@Nonnull
 	LongRangeBinOp myOp;
 
-	private DfaBinOpValue(@Nonnull DfaVariableValue left, @Nonnull DfaValue right, boolean isLong, @Nonnull LongRangeBinOp op)
+	private DfaBinOpValue(@jakarta.annotation.Nonnull DfaVariableValue left, @Nonnull DfaValue right, boolean isLong, @Nonnull LongRangeBinOp op)
 	{
 		super(left.getFactory());
 		switch(op)

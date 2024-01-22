@@ -52,10 +52,10 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -145,21 +145,21 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public String getDisplayName()
 	{
 		return DISPLAY_NAME;
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public String getGroupDisplayName()
 	{
 		return GroupNames.DECLARATION_REDUNDANCY;
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public String getShortName()
 	{
 		return SHORT_NAME;
@@ -331,7 +331,7 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
 		return refElement instanceof RefClass && RefJavaUtil.getInstance().getTopLevelClass(refElement) == refElement;
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	@PsiModifier.ModifierConstant
 	private String getWeakerAccess(@PsiModifier.ModifierConstant String curAccess, RefElement refElement)
 	{
@@ -600,7 +600,7 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
 		manager.iterate(new RefJavaVisitor()
 		{
 			@Override
-			public void visitElement(@Nonnull final RefEntity refEntity)
+			public void visitElement(@jakarta.annotation.Nonnull final RefEntity refEntity)
 			{
 				if(!(refEntity instanceof RefElement))
 				{
@@ -613,7 +613,7 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
 				refEntity.accept(new RefJavaVisitor()
 				{
 					@Override
-					public void visitField(@Nonnull final RefField refField)
+					public void visitField(@jakarta.annotation.Nonnull final RefField refField)
 					{
 						if(refField.getAccessModifier() != PsiModifier.PRIVATE)
 						{
@@ -630,7 +630,7 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
 					}
 
 					@Override
-					public void visitMethod(@Nonnull final RefMethod refMethod)
+					public void visitMethod(@jakarta.annotation.Nonnull final RefMethod refMethod)
 					{
 						if(!refMethod.isExternalOverride() && refMethod.getAccessModifier() != PsiModifier.PRIVATE &&
 								!(refMethod instanceof RefImplicitConstructor))
@@ -682,7 +682,7 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
 					}
 
 					@Override
-					public void visitClass(@Nonnull final RefClass refClass)
+					public void visitClass(@jakarta.annotation.Nonnull final RefClass refClass)
 					{
 						if(!refClass.isAnonymous())
 						{
@@ -714,7 +714,7 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
 		return false;
 	}
 
-	private static void ignoreElement(@Nonnull ProblemDescriptionsProcessor processor, @Nonnull RefEntity refElement)
+	private static void ignoreElement(@jakarta.annotation.Nonnull ProblemDescriptionsProcessor processor, @jakarta.annotation.Nonnull RefEntity refElement)
 	{
 		processor.ignoreElement(refElement);
 
@@ -743,7 +743,7 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
 	}
 
 	@Override
-	@Nullable
+	@jakarta.annotation.Nullable
 	public QuickFix getQuickFix(final String hint)
 	{
 		return new AcceptSuggestedAccess(null, hint);
@@ -769,21 +769,21 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
 		}
 
 		@Override
-		@Nonnull
+		@jakarta.annotation.Nonnull
 		public String getName()
 		{
 			return InspectionsBundle.message("inspection.visibility.accept.quickfix");
 		}
 
 		@Override
-		@Nonnull
+		@jakarta.annotation.Nonnull
 		public String getFamilyName()
 		{
 			return getName();
 		}
 
 		@Override
-		public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
+		public void applyFix(@Nonnull Project project, @jakarta.annotation.Nonnull ProblemDescriptor descriptor)
 		{
 			if(!FileModificationService.getInstance().preparePsiElementForWrite(descriptor.getPsiElement()))
 			{

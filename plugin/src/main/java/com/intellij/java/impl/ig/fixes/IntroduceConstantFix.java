@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.fixes;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.dataContext.DataManager;
@@ -31,7 +31,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 
 public class IntroduceConstantFix extends InspectionGadgetsFix {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getName() {
     return InspectionGadgetsBundle.message("introduce.constant.quickfix");
   }

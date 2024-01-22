@@ -34,8 +34,9 @@ import consulo.language.parser.PsiBuilder;
 import consulo.language.util.FlyweightCapableTreeStructure;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.function.Supplier;
 
 public interface JavaElementType {
@@ -98,7 +99,8 @@ public interface JavaElementType {
   IElementType IMPORT_STATIC_REFERENCE = new JavaCompositeElementType("IMPORT_STATIC_REFERENCE", PsiImportStaticReferenceElementImpl::new);
   IElementType TYPE = new JavaCompositeElementType("TYPE", PsiTypeElementImpl::new);
   IElementType DIAMOND_TYPE = new JavaCompositeElementType("DIAMOND_TYPE", PsiDiamondTypeElementImpl::new);
-  IElementType REFERENCE_PARAMETER_LIST = new JavaCompositeElementType("REFERENCE_PARAMETER_LIST", PsiReferenceParameterListImpl::new, true);
+  IElementType REFERENCE_PARAMETER_LIST =
+    new JavaCompositeElementType("REFERENCE_PARAMETER_LIST", PsiReferenceParameterListImpl::new, true);
   IElementType JAVA_CODE_REFERENCE = new JavaCompositeElementType("JAVA_CODE_REFERENCE", PsiJavaCodeReferenceElementImpl::new);
   IElementType PACKAGE_STATEMENT = new JavaCompositeElementType("PACKAGE_STATEMENT", PsiPackageStatementImpl::new);
   IElementType LOCAL_VARIABLE = new JavaCompositeElementType("LOCAL_VARIABLE", PsiLocalVariableImpl::new);
@@ -116,9 +118,11 @@ public interface JavaElementType {
   IElementType ASSIGNMENT_EXPRESSION = new JavaCompositeElementType("ASSIGNMENT_EXPRESSION", PsiAssignmentExpressionImpl::new);
   IElementType NEW_EXPRESSION = new JavaCompositeElementType("NEW_EXPRESSION", PsiNewExpressionImpl::new);
   IElementType ARRAY_ACCESS_EXPRESSION = new JavaCompositeElementType("ARRAY_ACCESS_EXPRESSION", PsiArrayAccessExpressionImpl::new);
-  IElementType ARRAY_INITIALIZER_EXPRESSION = new JavaCompositeElementType("ARRAY_INITIALIZER_EXPRESSION", PsiArrayInitializerExpressionImpl::new);
+  IElementType ARRAY_INITIALIZER_EXPRESSION =
+    new JavaCompositeElementType("ARRAY_INITIALIZER_EXPRESSION", PsiArrayInitializerExpressionImpl::new);
   IElementType INSTANCE_OF_EXPRESSION = new JavaCompositeElementType("INSTANCE_OF_EXPRESSION", PsiInstanceOfExpressionImpl::new);
-  IElementType CLASS_OBJECT_ACCESS_EXPRESSION = new JavaCompositeElementType("CLASS_OBJECT_ACCESS_EXPRESSION", PsiClassObjectAccessExpressionImpl::new);
+  IElementType CLASS_OBJECT_ACCESS_EXPRESSION =
+    new JavaCompositeElementType("CLASS_OBJECT_ACCESS_EXPRESSION", PsiClassObjectAccessExpressionImpl::new);
   IElementType EMPTY_EXPRESSION = new JavaCompositeElementType("EMPTY_EXPRESSION", PsiEmptyExpressionImpl::new, true);
   IElementType EXPRESSION_LIST = new JavaCompositeElementType("EXPRESSION_LIST", PsiExpressionListImpl::new, true);
   IElementType EMPTY_STATEMENT = new JavaCompositeElementType("EMPTY_STATEMENT", PsiEmptyStatementImpl::new);
@@ -134,6 +138,7 @@ public interface JavaElementType {
   IElementType SWITCH_STATEMENT = new JavaCompositeElementType("SWITCH_STATEMENT", PsiSwitchStatementImpl::new);
   IElementType SWITCH_EXPRESSION = new JavaCompositeElementType("SWITCH_EXPRESSION", PsiSwitchExpressionImpl::new);
   IElementType SWITCH_LABEL_STATEMENT = new JavaCompositeElementType("SWITCH_LABEL_STATEMENT", PsiSwitchLabelStatementImpl::new);
+  IElementType SWITCH_LABELED_RULE = new JavaCompositeElementType("SWITCH_LABELED_RULE", PsiSwitchLabeledRuleStatementImpl::new);
   IElementType YIELD_STATEMENT = new JavaCompositeElementType("YIELD_STATEMENT", PsiYieldStatementImpl::new);
   IElementType BREAK_STATEMENT = new JavaCompositeElementType("BREAK_STATEMENT", PsiBreakStatementImpl::new);
   IElementType CONTINUE_STATEMENT = new JavaCompositeElementType("CONTINUE_STATEMENT", PsiContinueStatementImpl::new);
@@ -147,11 +152,27 @@ public interface JavaElementType {
   IElementType CATCH_SECTION = new JavaCompositeElementType("CATCH_SECTION", PsiCatchSectionImpl::new);
   IElementType LABELED_STATEMENT = new JavaCompositeElementType("LABELED_STATEMENT", PsiLabeledStatementImpl::new);
   IElementType ASSERT_STATEMENT = new JavaCompositeElementType("ASSERT_STATEMENT", PsiAssertStatementImpl::new);
-  IElementType ANNOTATION_ARRAY_INITIALIZER = new JavaCompositeElementType("ANNOTATION_ARRAY_INITIALIZER", PsiArrayInitializerMemberValueImpl::new);
+  IElementType ANNOTATION_ARRAY_INITIALIZER =
+    new JavaCompositeElementType("ANNOTATION_ARRAY_INITIALIZER", PsiArrayInitializerMemberValueImpl::new);
   IElementType RECEIVER_PARAMETER = new JavaCompositeElementType("RECEIVER", PsiReceiverParameterImpl::new);
   IElementType MODULE_REFERENCE = new JavaCompositeElementType("MODULE_REFERENCE", PsiJavaModuleReferenceElementImpl::new);
   IElementType TYPE_TEST_PATTERN = new JavaCompositeElementType("TYPE_TEST_PATTERN", PsiTypeTestPatternImpl::new);
+  IElementType DECONSTRUCTION_PATTERN = new JavaCompositeElementType("DECONSTRUCTION_PATTERN", PsiDeconstructionPatternImpl::new);
   IElementType PATTERN_VARIABLE = new JavaCompositeElementType("PATTERN_VARIABLE", PsiPatternVariableImpl::new);
+  IElementType DECONSTRUCTION_LIST =
+    new JavaCompositeElementType("DECONSTRUCTION_LIST", PsiDeconstructionListImpl::new);
+  IElementType DECONSTRUCTION_PATTERN_VARIABLE =
+    new JavaCompositeElementType("DECONSTRUCTION_PATTERN_VARIABLE", PsiDeconstructionPatternVariableImpl::new);
+  IElementType PARENTHESIZED_PATTERN =
+    new JavaCompositeElementType("PARENTHESIZED_PATTERN", PsiParenthesizedPatternImpl::new);
+  IElementType DEFAULT_CASE_LABEL_ELEMENT =
+    new JavaCompositeElementType("DEFAULT_CASE_LABEL_ELEMENT", PsiDefaultLabelElementImpl::new);
+  IElementType CASE_LABEL_ELEMENT_LIST =
+    new JavaCompositeElementType("CASE_LABEL_ELEMENT_LIST", PsiCaseLabelElementListImpl::new);
+  IElementType UNNAMED_PATTERN =
+    new JavaCompositeElementType("UNNAMED_PATTERN", PsiUnnamedPatternImpl::new);
+  IElementType FOREACH_PATTERN_STATEMENT =
+    new JavaCompositeElementType("FOREACH_PATTERN_STATEMENT", PsiForeachPatternStatementImpl::new);
 
   class ICodeBlockElementType extends IErrorCounterReparseableElementType implements ICompositeElementType, ILightLazyParseableElementType {
     private ICodeBlockElementType() {
@@ -201,7 +222,10 @@ public interface JavaElementType {
      * @param rightBrace - right brace element type
      * @return true if `text` passes the checks
      */
-    public static boolean hasProperBraceBalance(@Nonnull CharSequence text, @Nonnull Lexer lexer, @Nonnull IElementType leftBrace, @Nonnull IElementType rightBrace) {
+    public static boolean hasProperBraceBalance(@jakarta.annotation.Nonnull CharSequence text,
+                                                @Nonnull Lexer lexer,
+                                                @Nonnull IElementType leftBrace,
+                                                @Nonnull IElementType rightBrace) {
       lexer.start(text);
 
       if (lexer.getTokenType() != leftBrace) {
@@ -226,7 +250,8 @@ public interface JavaElementType {
 
         if (type == leftBrace) {
           balance++;
-        } else if (type == rightBrace) {
+        }
+        else if (type == rightBrace) {
           balance--;
         }
 
@@ -238,9 +263,9 @@ public interface JavaElementType {
   ILazyParseableElementType CODE_BLOCK = new ICodeBlockElementType();
 
   IElementType STATEMENTS = new ICodeFragmentElementType("STATEMENTS", JavaLanguage.INSTANCE) {
-    private final JavaParserUtil.ParserWrapper myParser = builder -> JavaParser.INSTANCE.getStatementParser().parseStatements(builder);
+    private final JavaParserUtil.ParserWrapper myParser = JavaParser.INSTANCE.getStatementParser()::parseStatements;
 
-    @Nullable
+    @jakarta.annotation.Nullable
     @Override
     public ASTNode parseContents(final ASTNode chameleon) {
       return JavaParserUtil.parseFragment(chameleon, myParser);
@@ -248,9 +273,9 @@ public interface JavaElementType {
   };
 
   IElementType EXPRESSION_TEXT = new ICodeFragmentElementType("EXPRESSION_TEXT", JavaLanguage.INSTANCE) {
-    private final JavaParserUtil.ParserWrapper myParser = builder -> JavaParser.INSTANCE.getExpressionParser().parse(builder);
+    private final JavaParserUtil.ParserWrapper myParser = JavaParser.INSTANCE.getExpressionParser()::parse;
 
-    @Nullable
+    @jakarta.annotation.Nullable
     @Override
     public ASTNode parseContents(final ASTNode chameleon) {
       return JavaParserUtil.parseFragment(chameleon, myParser);
@@ -258,9 +283,10 @@ public interface JavaElementType {
   };
 
   IElementType REFERENCE_TEXT = new ICodeFragmentElementType("REFERENCE_TEXT", JavaLanguage.INSTANCE) {
-    private final JavaParserUtil.ParserWrapper myParser = builder -> JavaParser.INSTANCE.getReferenceParser().parseJavaCodeReference(builder, false, true, false, false);
+    private final JavaParserUtil.ParserWrapper myParser =
+      builder -> JavaParser.INSTANCE.getReferenceParser().parseJavaCodeReference(builder, false, true, false, false);
 
-    @Nullable
+    @jakarta.annotation.Nullable
     @Override
     public ASTNode parseContents(final ASTNode chameleon) {
       return JavaParserUtil.parseFragment(chameleon, myParser);
@@ -305,11 +331,11 @@ public interface JavaElementType {
       };
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     @Override
     public ASTNode parseContents(final ASTNode chameleon) {
       assert chameleon instanceof JavaDummyElement : chameleon;
-      final JavaDummyElement dummyElement = (JavaDummyElement) chameleon;
+      final JavaDummyElement dummyElement = (JavaDummyElement)chameleon;
       return JavaParserUtil.parseFragment(chameleon, dummyElement.getParser(), dummyElement.consumeAll(), dummyElement.getLanguageLevel());
     }
   }

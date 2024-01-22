@@ -23,8 +23,8 @@ package com.intellij.java.debugger.impl.ui.breakpoints;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;

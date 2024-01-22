@@ -27,7 +27,7 @@ package org.osmorc.manifest.lang;
 import consulo.language.lexer.LexerBase;
 import consulo.language.ast.TokenType;
 import consulo.language.ast.IElementType;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)

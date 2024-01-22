@@ -14,9 +14,9 @@ import consulo.language.inject.InjectedLanguageManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.SyntaxTraverser;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 import static com.intellij.java.analysis.impl.codeInspection.dataFlow.ContractReturnValue.*;
@@ -149,7 +149,7 @@ public final class HardcodedContracts {
       .register(staticCall("java.lang.System", "arraycopy"), expression -> getArraycopyContract());
 
   private static
-  @Nonnull
+  @jakarta.annotation.Nonnull
   ContractProvider getArraycopyContract() {
     ContractValue src = ContractValue.argument(0);
     ContractValue srcPos = ContractValue.argument(1);
@@ -234,7 +234,7 @@ public final class HardcodedContracts {
   }
 
   private static
-  @Nonnull
+  @jakarta.annotation.Nonnull
   List<MethodContract> getSubstringContracts(boolean endLimited) {
     List<MethodContract> contracts = new ArrayList<>(3);
     contracts.add(specialFieldRangeContract(0, RelationType.LE, SpecialField.STRING_LENGTH));
@@ -422,7 +422,7 @@ public final class HardcodedContracts {
   }
 
   private static
-  @Nonnull
+  @jakarta.annotation.Nonnull
   List<MethodContract> handleAssertThat(int paramCount, @Nonnull PsiMethodCallExpression call) {
     PsiExpression[] args = call.getArgumentList().getExpressions();
     if (args.length == paramCount) {
@@ -498,7 +498,7 @@ public final class HardcodedContracts {
   }
 
   private static
-  @Nonnull
+  @jakarta.annotation.Nonnull
   List<MethodContract> failIfNull(int argIndex, int argCount, boolean returnArg) {
     ValueConstraint[] constraints = createConstraintArray(argCount);
     constraints[argIndex] = NULL_VALUE;

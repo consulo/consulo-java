@@ -25,10 +25,11 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.HashingStrategy;
 import consulo.util.collection.Maps;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.util.Map;
 import java.util.function.Function;
 
@@ -52,7 +53,7 @@ class TypeCorrector extends PsiTypeMapper {
   }
 
   @Nullable
-  public <T extends PsiType> T correctType(@Nonnull T type) {
+  public <T extends PsiType> T correctType(@jakarta.annotation.Nonnull T type) {
     if (type instanceof PsiClassType) {
       PsiClassType classType = (PsiClassType) type;
       if (classType.getParameterCount() == 0) {
@@ -96,7 +97,7 @@ class TypeCorrector extends PsiTypeMapper {
     return mappedType;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private PsiSubstitutor mapSubstitutor(PsiClass originalClass, PsiClass mappedClass, PsiSubstitutor substitutor) {
     PsiTypeParameter[] typeParameters = mappedClass.getTypeParameters();
     PsiTypeParameter[] originalTypeParameters = originalClass.getTypeParameters();
@@ -159,7 +160,7 @@ class TypeCorrector extends PsiTypeMapper {
       myResolveResult = resolveResult;
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     @Override
     public PsiClass resolve() {
       return myResolveResult.myMappedClass;
@@ -170,7 +171,7 @@ class TypeCorrector extends PsiTypeMapper {
       return myDelegate.getClassName();
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     @Override
     public PsiType[] getParameters() {
       return ContainerUtil.map2Array(myDelegate.getParameters(), PsiType.class, new Function<PsiType, PsiType>() {
@@ -196,7 +197,7 @@ class TypeCorrector extends PsiTypeMapper {
       return myResolveResult;
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     @Override
     public PsiClassType rawType() {
       PsiClass psiClass = resolve();
@@ -204,21 +205,21 @@ class TypeCorrector extends PsiTypeMapper {
       return factory.createType(psiClass, factory.createRawSubstitutor(psiClass));
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     @Override
     public GlobalSearchScope getResolveScope() {
       return myResolveScope;
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     @Override
     public LanguageLevel getLanguageLevel() {
       return myLanguageLevel;
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     @Override
-    public PsiClassType setLanguageLevel(@Nonnull LanguageLevel languageLevel) {
+    public PsiClassType setLanguageLevel(@jakarta.annotation.Nonnull LanguageLevel languageLevel) {
       return new PsiCorrectedClassType(languageLevel, myDelegate, myResolveResult);
     }
 
@@ -234,7 +235,7 @@ class TypeCorrector extends PsiTypeMapper {
       return myDelegate.getCanonicalText(annotated);
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     @Override
     public String getInternalCanonicalText() {
       return myDelegate.getInternalCanonicalText();
@@ -246,7 +247,7 @@ class TypeCorrector extends PsiTypeMapper {
     }
 
     @Override
-    public boolean equalsToText(@Nonnull @NonNls String text) {
+    public boolean equalsToText(@jakarta.annotation.Nonnull @NonNls String text) {
       return myDelegate.equalsToText(text);
     }
   }
@@ -265,7 +266,7 @@ class TypeCorrector extends PsiTypeMapper {
       myClassResolveResult = classResolveResult;
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     @Override
     public PsiSubstitutor getSubstitutor() {
       PsiSubstitutor result = myLazySubstitutor;

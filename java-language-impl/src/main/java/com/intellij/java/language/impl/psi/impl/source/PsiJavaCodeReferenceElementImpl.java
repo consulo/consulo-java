@@ -48,8 +48,8 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -100,8 +100,8 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
     return type == TokenType.DUMMY_HOLDER || type == JavaElementType.DUMMY_ELEMENT;
   }
 
-  @Nonnull
-  public Kind getKindEnum(@Nonnull PsiFile containingFile) {
+  @jakarta.annotation.Nonnull
+  public Kind getKindEnum(@jakarta.annotation.Nonnull PsiFile containingFile) {
     if (!containingFile.isValid()) {
       // optimization to avoid relatively expensive this.isValid check
       // but still provide diagnostics for this element, not for its containing DummyHolder file
@@ -197,7 +197,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
     return Kind.CLASS_NAME_KIND;
   }
 
-  private void diagnoseUnknownParent(@Nonnull CompositeElement parent, @Nonnull IElementType parentElementType) {
+  private void diagnoseUnknownParent(@jakarta.annotation.Nonnull CompositeElement parent, @Nonnull IElementType parentElementType) {
     String msg = "Java code reference '" + getText() + "' has unknown parent: '" + parent + "' (" + parent.getClass() + ")" +
       "; of type: " + parentElementType + "\n";
     while (parent != null && parent.getPsi() instanceof PsiExpression) {
@@ -215,7 +215,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
   }
 
   @Override
-  public void deleteChildInternal(@Nonnull ASTNode child) {
+  public void deleteChildInternal(@jakarta.annotation.Nonnull ASTNode child) {
     if (getChildRole(child) == ChildRole.QUALIFIER) {
       ASTNode dot = findChildByType(JavaTokenType.DOT, child);
       assert dot != null : this;
@@ -294,13 +294,13 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
     return getCanonicalText(false, null, getContainingFile());
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getCanonicalText(boolean annotated, @Nullable PsiAnnotation[] annotations) {
     return getCanonicalText(annotated, annotations, getContainingFile());
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private String getCanonicalText(boolean annotated, @Nullable PsiAnnotation[] annotations, @Nonnull PsiFile containingFile) {
     Kind kind = getKindEnum(containingFile);
     switch (kind) {
@@ -373,7 +373,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
     return advancedResolve(false).getElement();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static TextRange calcRangeInElement(CompositePsiElement refElement) {
     TreeElement nameChild = (TreeElement)refElement.findChildByRole(ChildRole.REFERENCE_NAME);
     if (nameChild == null) {
@@ -389,9 +389,9 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
   private static final class OurGenericsResolver implements ResolveCache.PolyVariantContextResolver<PsiJavaReference> {
     private static final OurGenericsResolver INSTANCE = new OurGenericsResolver();
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     @Override
-    public ResolveResult[] resolve(@Nonnull PsiJavaReference ref, @Nonnull PsiFile containingFile, boolean incompleteCode) {
+    public ResolveResult[] resolve(@jakarta.annotation.Nonnull PsiJavaReference ref, @Nonnull PsiFile containingFile, boolean incompleteCode) {
       PsiJavaCodeReferenceElementImpl referenceElement = (PsiJavaCodeReferenceElementImpl)ref;
       Kind kind = referenceElement.getKindEnum(containingFile);
       JavaResolveResult[] result = referenceElement.resolve(kind, containingFile);
@@ -444,21 +444,21 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public JavaResolveResult[] multiResolve(boolean incompleteCode) {
     return PsiImplUtil.multiResolveImpl(this, incompleteCode, OurGenericsResolver.INSTANCE);
   }
 
   @Nonnull
   private PsiSubstitutor updateSubstitutor(@Nonnull PsiClass psiClass) {
-    @Nonnull PsiSubstitutor subst = PsiSubstitutor.EMPTY;
+    @jakarta.annotation.Nonnull PsiSubstitutor subst = PsiSubstitutor.EMPTY;
     final PsiType[] parameters = getTypeParameters();
     subst = subst.putAll(psiClass, parameters);
     return subst;
   }
 
-  @Nonnull
-  private JavaResolveResult[] resolve(@Nonnull Kind kind, @Nonnull PsiFile containingFile) {
+  @jakarta.annotation.Nonnull
+  private JavaResolveResult[] resolve(@Nonnull Kind kind, @jakarta.annotation.Nonnull PsiFile containingFile) {
     ProgressManager.checkCanceled();
     switch (kind) {
       case CLASS_FQ_NAME_KIND:
@@ -576,7 +576,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
   }
 
   @Override
-  public final PsiElement handleElementRename(@Nonnull final String newElementName) throws IncorrectOperationException {
+  public final PsiElement handleElementRename(@jakarta.annotation.Nonnull final String newElementName) throws IncorrectOperationException {
     final PsiElement oldIdentifier = getReferenceNameElement();
     if (oldIdentifier == null) {
       throw new IncorrectOperationException();
@@ -587,7 +587,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
   }
 
   @Override
-  public PsiElement bindToElement(@Nonnull final PsiElement element) throws IncorrectOperationException {
+  public PsiElement bindToElement(@jakarta.annotation.Nonnull final PsiElement element) throws IncorrectOperationException {
     PsiFile containingFile = getContainingFile();
     CheckUtil.checkWritable(containingFile);
     if (isReferenceTo(element)) {
@@ -642,12 +642,12 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
     }
   }
 
-  @Nonnull
-  private static IncorrectOperationException cannotBindError(@Nonnull PsiElement element, @Nonnull Kind kind) {
+  @jakarta.annotation.Nonnull
+  private static IncorrectOperationException cannotBindError(@Nonnull PsiElement element, @jakarta.annotation.Nonnull Kind kind) {
     return new IncorrectOperationException("Cannot bind to " + element + " of kind: " + kind);
   }
 
-  private PsiElement bindToClass(@Nonnull PsiClass aClass, @Nonnull PsiFile containingFile) throws IncorrectOperationException {
+  private PsiElement bindToClass(@jakarta.annotation.Nonnull PsiClass aClass, @jakarta.annotation.Nonnull PsiFile containingFile) throws IncorrectOperationException {
     String qName = aClass.getQualifiedName();
     Project project = containingFile.getProject();
     boolean preserveQualification = JavaCodeStyleSettingsFacade.getInstance(project).useFQClassNames() && isFullyQualified(containingFile);
@@ -704,7 +704,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
     return ref;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private List<PsiAnnotation> getAnnotations() {
     List<PsiAnnotation> annotations = PsiTreeUtil.getChildrenOfTypeAsList(this, PsiAnnotation.class);
 
@@ -719,7 +719,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
     return annotations;
   }
 
-  private boolean isFullyQualified(@Nonnull PsiFile containingFile) {
+  private boolean isFullyQualified(@jakarta.annotation.Nonnull PsiFile containingFile) {
     Kind kind = getKindEnum(containingFile);
     switch (kind) {
       case CLASS_OR_PACKAGE_NAME_KIND:
@@ -756,7 +756,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
     return SourceTreeToPsiMap.<PsiJavaCodeReferenceElementImpl>treeToPsiNotNull(qualifier).isFullyQualified(containingFile);
   }
 
-  private PsiElement bindToPackage(@Nonnull PsiPackage aPackage) throws IncorrectOperationException {
+  private PsiElement bindToPackage(@jakarta.annotation.Nonnull PsiPackage aPackage) throws IncorrectOperationException {
     final String qName = aPackage.getQualifiedName();
     if (qName.isEmpty()) {
       throw new IncorrectOperationException("Cannot bind to default package: " + aPackage);
@@ -768,12 +768,12 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
   }
 
   @Override
-  public boolean isReferenceTo(@Nonnull final PsiElement element) {
+  public boolean isReferenceTo(@jakarta.annotation.Nonnull final PsiElement element) {
     PsiFile containingFile = getContainingFile();
     return isReferenceTo(element, containingFile);
   }
 
-  private boolean isReferenceTo(PsiElement element, @Nonnull PsiFile containingFile) {
+  private boolean isReferenceTo(PsiElement element, @jakarta.annotation.Nonnull PsiFile containingFile) {
     Kind kind = getKindEnum(containingFile);
     switch (kind) {
       case CLASS_NAME_KIND:
@@ -922,7 +922,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
   }
 
   @Override
-  public void processVariants(@Nonnull PsiScopeProcessor processor) {
+  public void processVariants(@jakarta.annotation.Nonnull PsiScopeProcessor processor) {
     List<ElementFilter> filters = new ArrayList<>();
 
     if (isInCode() && !(getParent() instanceof PsiImportStatement) && !(getParent() instanceof PsiReferenceList)) {
@@ -1021,7 +1021,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
     return SourceTreeToPsiMap.treeElementToPsi(getReferenceNameNode());
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private ASTNode getReferenceNameNode() {
     return findChildByRole(ChildRole.REFERENCE_NAME);
   }
@@ -1099,7 +1099,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
   }
 
   @Override
-  public final void accept(@Nonnull final PsiElementVisitor visitor) {
+  public final void accept(@jakarta.annotation.Nonnull final PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitReferenceElement(this);
     }

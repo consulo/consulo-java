@@ -32,8 +32,8 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.collection.ArrayUtil;
 import org.intellij.lang.annotations.Pattern;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 
 @ExtensionImpl
@@ -56,13 +56,13 @@ public class ReturnNullInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("return.of.null.display.name");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "return.of.null.problem.descriptor");
@@ -108,7 +108,7 @@ public class ReturnNullInspection extends BaseInspection {
 
     @Override
     public void visitLiteralExpression(
-      @Nonnull PsiLiteralExpression value) {
+      @jakarta.annotation.Nonnull PsiLiteralExpression value) {
       super.visitLiteralExpression(value);
       final String text = value.getText();
       if (!PsiKeyword.NULL.equals(text)) {

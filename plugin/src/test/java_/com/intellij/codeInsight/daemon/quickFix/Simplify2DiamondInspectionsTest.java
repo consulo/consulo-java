@@ -15,10 +15,9 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.impl.codeInspection.ExplicitTypeCanBeDiamondInspection;
 import consulo.language.editor.inspection.LocalInspectionTool;
+import jakarta.annotation.Nonnull;
 
 
 //todo test3 should be checked if it compiles - as now javac infers Object instead of String?!

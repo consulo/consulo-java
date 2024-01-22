@@ -28,26 +28,26 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.SmartPointerManager;
 import consulo.language.psi.SmartPsiElementPointer;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
 public class StaticImportMethodFix extends StaticImportMemberFix<PsiMethod> {
   private final SmartPsiElementPointer<PsiMethodCallExpression> myMethodCall;
 
-  public StaticImportMethodFix(@Nonnull PsiMethodCallExpression methodCallExpression) {
+  public StaticImportMethodFix(@jakarta.annotation.Nonnull PsiMethodCallExpression methodCallExpression) {
     myMethodCall = SmartPointerManager.getInstance(methodCallExpression.getProject()).createSmartPsiElementPointer(methodCallExpression);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected String getBaseText() {
     return JavaQuickFixBundle.message("static.import.method.text");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected String getMemberPresentableText(PsiMethod method) {
     return PsiFormatUtil.formatMethod(method, PsiSubstitutor.EMPTY, PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_CONTAINING_CLASS | PsiFormatUtilBase.SHOW_FQ_NAME, 0);
@@ -69,18 +69,18 @@ public class StaticImportMethodFix extends StaticImportMemberFix<PsiMethod> {
     return processor.getMembersToImport(applicableOnly);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected StaticImportMethodQuestionAction<PsiMethod> createQuestionAction(List<PsiMethod> methodsToImport, @Nonnull Project project, Editor editor) {
     return new StaticImportMethodQuestionAction<>(project, editor, methodsToImport, myMethodCall);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   protected PsiElement getElement() {
     return myMethodCall.getElement();
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   protected PsiElement getQualifierExpression() {
     final PsiMethodCallExpression element = myMethodCall.getElement();

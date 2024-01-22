@@ -24,7 +24,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -42,8 +42,8 @@ public abstract class DefUseInspectionBase extends BaseJavaBatchLocalInspectionT
   public static final String SHORT_NAME = "UnusedAssignment";
 
   @Override
-  @Nonnull
-  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
+  @jakarta.annotation.Nonnull
+  public PsiElementVisitor buildVisitorImpl(@jakarta.annotation.Nonnull final ProblemsHolder holder,
                                             final boolean isOnTheFly,
                                             LocalInspectionToolSession session,
                                             Object state) {
@@ -219,13 +219,13 @@ public abstract class DefUseInspectionBase extends BaseJavaBatchLocalInspectionT
 
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return DISPLAY_NAME;
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getGroupDisplayName() {
     return GroupNames.BUGS_GROUP_NAME;
   }

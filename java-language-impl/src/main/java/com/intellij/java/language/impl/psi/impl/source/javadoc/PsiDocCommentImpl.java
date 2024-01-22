@@ -43,7 +43,7 @@ import consulo.project.Project;
 import consulo.util.collection.ArrayFactory;
 import consulo.util.lang.CharArrayUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.psi.filters.getters;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import org.jetbrains.annotations.NonNls;
 import consulo.language.editor.completion.lookup.InsertionContext;
@@ -49,7 +49,7 @@ public class ClassLiteralLookupElement extends LookupElement implements TypedLoo
     myExpr = JavaPsiFacade.getInstance(context.getProject()).getElementFactory().createExpressionFromText(myCanonicalText + DOT_CLASS, context);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getLookupString() {
     return myPresentableText + ".class";

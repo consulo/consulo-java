@@ -29,15 +29,15 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class PrivateMemberAccessBetweenOuterAndInnerClassInspection
   extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "private.member.access.between.outer.and.inner.classes.display.name");
@@ -87,7 +87,7 @@ public class PrivateMemberAccessBetweenOuterAndInnerClassInspection
     }
 
     @Override
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       if (constructor) {
         return InspectionGadgetsBundle.message(
@@ -216,7 +216,7 @@ public class PrivateMemberAccessBetweenOuterAndInnerClassInspection
 
     @Override
     public void visitReferenceExpression(
-      @Nonnull PsiReferenceExpression expression) {
+      @jakarta.annotation.Nonnull PsiReferenceExpression expression) {
     /*  if (JspPsiUtil.isInJspFile(expression)) {
         // disable for jsp files IDEADEV-12957
         return;

@@ -29,7 +29,7 @@ import consulo.internal.com.sun.jdi.*;
 import consulo.util.dataholder.UserDataHolder;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.List;
 
 /**
@@ -96,7 +96,7 @@ public interface DebugProcess extends UserDataHolder
 	/**
 	 * @return the search scope used by debugger to find sources corresponding to classes being executed
 	 */
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	GlobalSearchScope getSearchScope();
 
 	void printToConsole(String text);

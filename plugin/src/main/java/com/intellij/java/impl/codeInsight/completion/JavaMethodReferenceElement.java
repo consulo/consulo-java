@@ -14,7 +14,7 @@ import consulo.component.util.Iconable;
 import consulo.language.psi.PsiElement;
 import consulo.language.icon.IconDescriptorUpdaters;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Objects;
 
 class JavaMethodReferenceElement extends LookupElement {

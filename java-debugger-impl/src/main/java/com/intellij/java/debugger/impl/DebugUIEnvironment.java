@@ -20,7 +20,7 @@ import consulo.execution.ui.RunContentDescriptor;
 import consulo.ui.ex.action.DefaultActionGroup;
 import consulo.ui.image.Image;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * Created by IntelliJ IDEA.

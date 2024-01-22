@@ -33,8 +33,9 @@ import consulo.module.content.ModuleRootManager;
 import consulo.module.content.layer.ModifiableRootModel;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -89,7 +90,7 @@ public class JavaProjectDataService implements ProjectDataService<JavaProjectDat
   }
 
   @Nullable
-  private static Sdk findJdk(@Nonnull JavaSdkVersion version) {
+  private static Sdk findJdk(@jakarta.annotation.Nonnull JavaSdkVersion version) {
     JavaSdk javaSdk = JavaSdk.getInstance();
     List<Sdk> javaSdks = SdkTable.getInstance().getSdksOfType(javaSdk);
     Sdk candidate = null;
@@ -105,6 +106,6 @@ public class JavaProjectDataService implements ProjectDataService<JavaProjectDat
   }
 
   @Override
-  public void removeData(@Nonnull Collection<? extends Project> toRemove, @Nonnull Project project, boolean synchronous) {
+  public void removeData(@Nonnull Collection<? extends Project> toRemove, @jakarta.annotation.Nonnull Project project, boolean synchronous) {
   }
 }

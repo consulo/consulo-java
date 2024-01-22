@@ -6,7 +6,6 @@ import com.intellij.java.language.impl.psi.NonClasspathClassFinder;
 import com.intellij.java.language.impl.psi.NonClasspathDirectoriesScope;
 import com.intellij.java.language.psi.PsiElementFinder;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.component.extension.Extensions;
 import consulo.content.scope.SearchScope;
 import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
 import consulo.language.psi.ResolveScopeEnlarger;
@@ -14,8 +13,8 @@ import consulo.module.content.ProjectFileIndex;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 
 /**

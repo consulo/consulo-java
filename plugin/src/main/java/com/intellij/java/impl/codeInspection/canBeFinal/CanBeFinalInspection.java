@@ -52,8 +52,8 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -163,7 +163,7 @@ public class CanBeFinalInspection extends GlobalJavaInspectionTool implements Ol
 
 
 	@Override
-	@Nullable
+	@jakarta.annotation.Nullable
 	public CommonProblemDescriptor[] checkElement(final RefEntity refEntity,
 												  final AnalysisScope scope,
 												  final InspectionManager manager,
@@ -263,7 +263,7 @@ public class CanBeFinalInspection extends GlobalJavaInspectionTool implements Ol
 		manager.iterate(new RefJavaVisitor()
 		{
 			@Override
-			public void visitElement(@Nonnull RefEntity refEntity)
+			public void visitElement(@jakarta.annotation.Nonnull RefEntity refEntity)
 			{
 				if(problemsProcessor.getDescriptions(refEntity) == null)
 				{
@@ -272,7 +272,7 @@ public class CanBeFinalInspection extends GlobalJavaInspectionTool implements Ol
 				refEntity.accept(new RefJavaVisitor()
 				{
 					@Override
-					public void visitMethod(@Nonnull final RefMethod refMethod)
+					public void visitMethod(@jakarta.annotation.Nonnull final RefMethod refMethod)
 					{
 						if(!refMethod.isStatic() && !PsiModifier.PRIVATE.equals(refMethod.getAccessModifier()) &&
 								!(refMethod instanceof RefImplicitConstructor))
@@ -291,7 +291,7 @@ public class CanBeFinalInspection extends GlobalJavaInspectionTool implements Ol
 					}
 
 					@Override
-					public void visitClass(@Nonnull final RefClass refClass)
+					public void visitClass(@jakarta.annotation.Nonnull final RefClass refClass)
 					{
 						if(!refClass.isAnonymous())
 						{

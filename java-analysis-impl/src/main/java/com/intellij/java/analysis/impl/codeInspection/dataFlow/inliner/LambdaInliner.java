@@ -19,8 +19,8 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.CFGBuilder;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaPsiUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
+import jakarta.annotation.Nonnull;
 import one.util.streamex.EntryStream;
-import javax.annotation.Nonnull;
 
 /**
  * An inliner which is capable to inline a call like ((IntSupplier)(() -> 5)).getAsInt() to the lambda body.
@@ -29,7 +29,7 @@ import javax.annotation.Nonnull;
 public class LambdaInliner implements CallInliner
 {
 	@Override
-	public boolean tryInlineCall(@Nonnull CFGBuilder builder, @Nonnull PsiMethodCallExpression call)
+	public boolean tryInlineCall(@jakarta.annotation.Nonnull CFGBuilder builder, @Nonnull PsiMethodCallExpression call)
 	{
 		PsiExpression qualifier = PsiUtil.skipParenthesizedExprDown(call.getMethodExpression().getQualifierExpression());
 		if(qualifier == null)

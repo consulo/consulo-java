@@ -43,8 +43,8 @@ import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.util.lang.Trinity;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -79,7 +79,7 @@ public class ExceptionExFilterFactory implements ExceptionFilterFactory {
     }
 
     @Override
-    public void applyHeavyFilter(@Nonnull final Document copiedFragment, final int startOffset, int startLineNumber, @Nonnull final Consumer<? super AdditionalHighlight> consumer) {
+    public void applyHeavyFilter(@jakarta.annotation.Nonnull final Document copiedFragment, final int startOffset, int startLineNumber, @jakarta.annotation.Nonnull final Consumer<? super AdditionalHighlight> consumer) {
       Map<String, Trinity<TextRange, TextRange, TextRange>> visited = new HashMap<String, Trinity<TextRange, TextRange, TextRange>>();
       final Trinity<TextRange, TextRange, TextRange> emptyInfo = Trinity.create(null, null, null);
 

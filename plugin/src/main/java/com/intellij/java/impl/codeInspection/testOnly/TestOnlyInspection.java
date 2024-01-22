@@ -32,14 +32,14 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.module.content.ProjectRootManager;
 import consulo.virtualFileSystem.VirtualFile;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class TestOnlyInspection extends BaseJavaLocalInspectionTool {
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionsBundle.message("inspection.test.only.problems.display.name");
   }
@@ -51,14 +51,14 @@ public class TestOnlyInspection extends BaseJavaLocalInspectionTool {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getGroupDisplayName() {
     return "General";
   }
 
   @Override
   @Nonnull
-  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder h,
+  public PsiElementVisitor buildVisitorImpl(@jakarta.annotation.Nonnull final ProblemsHolder h,
                                             boolean isOnTheFly,
                                             LocalInspectionToolSession session,
                                             Object state) {

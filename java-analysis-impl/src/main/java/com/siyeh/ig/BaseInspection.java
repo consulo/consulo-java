@@ -28,8 +28,8 @@ import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.text.Document;
@@ -40,7 +40,7 @@ import java.util.function.IntConsumer;
 import java.util.function.IntSupplier;
 
 public abstract class BaseInspection extends BaseJavaBatchLocalInspectionTool {
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public HighlightDisplayLevel getDefaultLevel() {
     return HighlightDisplayLevel.WARNING;
@@ -58,7 +58,7 @@ public abstract class BaseInspection extends BaseJavaBatchLocalInspectionTool {
     return GroupDisplayNameUtil.getGroupDisplayName(getClass());
   }
 
-  @Nonnull                                                                                                      
+  @jakarta.annotation.Nonnull
   protected abstract String buildErrorString(Object... infos);
 
   protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {
@@ -78,7 +78,7 @@ public abstract class BaseInspection extends BaseJavaBatchLocalInspectionTool {
   public abstract BaseInspectionVisitor buildVisitor();
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public final PsiElementVisitor buildVisitorImpl(@Nonnull ProblemsHolder holder,
                                                   boolean isOnTheFly,
                                                   LocalInspectionToolSession session,

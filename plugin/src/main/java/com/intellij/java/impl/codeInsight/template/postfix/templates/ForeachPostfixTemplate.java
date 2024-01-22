@@ -30,7 +30,7 @@ import consulo.codeEditor.Editor;
 import consulo.project.Project;
 import consulo.language.psi.PsiElement;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class ForeachPostfixTemplate extends PostfixTemplate {
   public ForeachPostfixTemplate() {

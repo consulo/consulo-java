@@ -45,8 +45,8 @@ import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.logging.Logger;
 import consulo.ui.image.Image;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -290,7 +290,7 @@ public class CoverageConfigurable extends SettingsEditor<RunConfigurationBase> {
     private @Nonnull
 	String myRunnerId;
 
-    private CoverageRunnerItem(@Nonnull CoverageRunner runner) {
+    private CoverageRunnerItem(@jakarta.annotation.Nonnull CoverageRunner runner) {
       myRunner = runner;
       myRunnerId = runner.getId();
     }

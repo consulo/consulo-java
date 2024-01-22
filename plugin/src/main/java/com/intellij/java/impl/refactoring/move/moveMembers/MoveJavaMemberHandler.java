@@ -40,8 +40,8 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.collection.MultiMap;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -50,7 +50,7 @@ import java.util.*;
 @ExtensionImpl
 public class MoveJavaMemberHandler implements MoveMemberHandler {
   @Override
-  @Nullable
+  @jakarta.annotation.Nullable
   public MoveMembersProcessor.MoveMembersUsageInfo getUsage(@Nonnull PsiMember member, @Nonnull PsiReference psiReference,
                                                             @Nonnull Set<PsiMember> membersToMove, @Nonnull PsiClass targetClass) {
     PsiElement ref = psiReference.getElement();
@@ -82,8 +82,8 @@ public class MoveJavaMemberHandler implements MoveMemberHandler {
   }
 
   @Override
-  public void checkConflictsOnUsage(@Nonnull MoveMembersProcessor.MoveMembersUsageInfo usageInfo, @Nullable String newVisibility,
-                                    @Nullable PsiModifierList modifierListCopy, @Nonnull PsiClass targetClass, @Nonnull Set<PsiMember> membersToMove,
+  public void checkConflictsOnUsage(@Nonnull MoveMembersProcessor.MoveMembersUsageInfo usageInfo, @jakarta.annotation.Nullable String newVisibility,
+                                    @jakarta.annotation.Nullable PsiModifierList modifierListCopy, @jakarta.annotation.Nonnull PsiClass targetClass, @Nonnull Set<PsiMember> membersToMove,
                                     @Nonnull MultiMap<PsiElement, String> conflicts) {
     final PsiElement element = usageInfo.getElement();
     if (element == null) {
@@ -124,8 +124,8 @@ public class MoveJavaMemberHandler implements MoveMemberHandler {
   }
 
   @Override
-  public void checkConflictsOnMember(@Nonnull PsiMember member, @Nullable String newVisibility, @Nullable PsiModifierList modifierListCopy,
-                                     @Nonnull PsiClass targetClass, @Nonnull Set<PsiMember> membersToMove, @Nonnull MultiMap<PsiElement, String> conflicts) {
+  public void checkConflictsOnMember(@Nonnull PsiMember member, @jakarta.annotation.Nullable String newVisibility, @jakarta.annotation.Nullable PsiModifierList modifierListCopy,
+                                     @jakarta.annotation.Nonnull PsiClass targetClass, @Nonnull Set<PsiMember> membersToMove, @Nonnull MultiMap<PsiElement, String> conflicts) {
     if (member instanceof PsiMethod && hasMethod(targetClass, (PsiMethod) member) || member instanceof PsiField && hasField(targetClass,
         (PsiField) member)) {
       String message = RefactoringBundle.message("0.already.exists.in.the.target.class", RefactoringUIUtil.getDescription(member, false));
@@ -158,7 +158,7 @@ public class MoveJavaMemberHandler implements MoveMemberHandler {
   }
 
   @Override
-  public boolean changeExternalUsage(@Nonnull MoveMembersOptions options, @Nonnull MoveMembersProcessor.MoveMembersUsageInfo usage) {
+  public boolean changeExternalUsage(@jakarta.annotation.Nonnull MoveMembersOptions options, @Nonnull MoveMembersProcessor.MoveMembersUsageInfo usage) {
     final PsiElement element = usage.getElement();
     if (element == null || !element.isValid()) {
       return true;
@@ -204,7 +204,7 @@ public class MoveJavaMemberHandler implements MoveMemberHandler {
 
   @Override
   @Nonnull
-  public PsiMember doMove(@Nonnull MoveMembersOptions options, @Nonnull PsiMember member, PsiElement anchor, @Nonnull PsiClass targetClass) {
+  public PsiMember doMove(@jakarta.annotation.Nonnull MoveMembersOptions options, @Nonnull PsiMember member, PsiElement anchor, @Nonnull PsiClass targetClass) {
     if (member instanceof PsiVariable) {
       ((PsiVariable) member).normalizeDeclaration();
     }

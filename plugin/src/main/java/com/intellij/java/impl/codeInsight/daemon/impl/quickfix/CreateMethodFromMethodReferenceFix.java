@@ -29,9 +29,9 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Pair;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
@@ -83,7 +83,7 @@ public class CreateMethodFromMethodReferenceFix extends CreateFromUsageBaseFix {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected List<PsiClass> getTargetClasses(PsiElement element) {
     List<PsiClass> targets = super.getTargetClasses(element);
     PsiMethodReferenceExpression call = getMethodReference();

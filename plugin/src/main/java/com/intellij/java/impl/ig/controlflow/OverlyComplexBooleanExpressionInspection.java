@@ -24,9 +24,8 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
-import consulo.ui.CheckBox;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 import java.text.NumberFormat;
@@ -57,7 +56,7 @@ public class OverlyComplexBooleanExpressionInspection extends BaseInspection {
   public boolean m_ignorePureConjunctionsDisjunctions = true;
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("overly.complex.boolean.expression.display.name");
   }
@@ -117,19 +116,19 @@ public class OverlyComplexBooleanExpressionInspection extends BaseInspection {
   private class OverlyComplexBooleanExpressionVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitPolyadicExpression(@Nonnull PsiPolyadicExpression expression) {
+    public void visitPolyadicExpression(@jakarta.annotation.Nonnull PsiPolyadicExpression expression) {
       super.visitPolyadicExpression(expression);
       checkExpression(expression);
     }
 
     @Override
-    public void visitPrefixExpression(@Nonnull PsiPrefixExpression expression) {
+    public void visitPrefixExpression(@jakarta.annotation.Nonnull PsiPrefixExpression expression) {
       super.visitPrefixExpression(expression);
       checkExpression(expression);
     }
 
     @Override
-    public void visitParenthesizedExpression(@Nonnull PsiParenthesizedExpression expression) {
+    public void visitParenthesizedExpression(@jakarta.annotation.Nonnull PsiParenthesizedExpression expression) {
       super.visitParenthesizedExpression(expression);
       checkExpression(expression);
     }

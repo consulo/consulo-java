@@ -28,8 +28,8 @@ import consulo.util.collection.Maps;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.ObjectUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Supplier;
@@ -94,7 +94,7 @@ public class JavaConstantExpressionEvaluator extends JavaRecursiveElementWalking
   private Object getCached(@Nonnull PsiElement element) {
     return map().get(element);
   }
-  private Object cache(@Nonnull PsiElement element, @Nullable Object value) {
+  private Object cache(@jakarta.annotation.Nonnull PsiElement element, @jakarta.annotation.Nullable Object value) {
     value = Maps.cacheOrGet(map(), element, value == null ? NO_VALUE : value);
     if (value == NO_VALUE) {
       value = null;
@@ -111,7 +111,7 @@ public class JavaConstantExpressionEvaluator extends JavaRecursiveElementWalking
     return computeConstantExpression(expression, visitedVars, throwExceptionOnOverflow, null);
   }
 
-  public static Object computeConstantExpression(PsiExpression expression, @Nullable Set<PsiVariable> visitedVars, boolean throwExceptionOnOverflow,
+  public static Object computeConstantExpression(PsiExpression expression, @jakarta.annotation.Nullable Set<PsiVariable> visitedVars, boolean throwExceptionOnOverflow,
                                                  final PsiConstantEvaluationHelper.AuxEvaluator auxEvaluator) {
     if (expression == null) return null;
 

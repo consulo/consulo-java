@@ -17,8 +17,8 @@ package com.intellij.java.language.projectRoots.roots;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author nik
@@ -43,13 +43,13 @@ public abstract class ExternalLibraryDescriptor
 		myMaxVersion = maxVersion;
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public String getLibraryGroupId()
 	{
 		return myLibraryGroupId;
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public String getLibraryArtifactId()
 	{
 		return myLibraryArtifactId;

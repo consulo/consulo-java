@@ -26,8 +26,8 @@ import consulo.virtualFileSystem.VirtualFile;
 import consulo.xml.psi.xml.XmlElement;
 import consulo.xml.util.xml.DomElement;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author peter
@@ -69,7 +69,7 @@ public class DomJavaUtil {
   }
 
   @Nullable
-  public static PsiClass findClass(@Nullable String name, @Nonnull DomElement element) {
+  public static PsiClass findClass(@jakarta.annotation.Nullable String name, @jakarta.annotation.Nonnull DomElement element) {
     assert element.isValid();
     XmlElement xmlElement = element.getXmlElement();
     if (xmlElement != null) {

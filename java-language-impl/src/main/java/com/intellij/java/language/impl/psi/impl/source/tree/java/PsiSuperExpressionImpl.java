@@ -28,8 +28,8 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class PsiSuperExpressionImpl extends ExpressionPsiElement implements PsiSuperExpression, Constants {
   private static final Logger LOG = Logger.getInstance(PsiSuperExpressionImpl.class);

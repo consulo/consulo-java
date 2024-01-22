@@ -28,9 +28,9 @@ import consulo.ui.ex.awt.PanelWithAnchor;
 import consulo.ui.ex.awt.TextFieldWithBrowseButton;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.util.io.FileUtil;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 
 public class JarApplicationConfigurable extends SettingsEditor<JarApplicationConfiguration> implements PanelWithAnchor {
@@ -60,14 +60,14 @@ public class JarApplicationConfigurable extends SettingsEditor<JarApplicationCon
     configuration.setModule(myModuleComponent.getComponent().getSelectedModule());
   }
 
-  public void resetEditorFrom(@Nonnull final JarApplicationConfiguration configuration) {
+  public void resetEditorFrom(@jakarta.annotation.Nonnull final JarApplicationConfiguration configuration) {
     myCommonProgramParameters.reset(configuration);
     myJarPathComponent.getComponent().setText(FileUtil.toSystemDependentName(configuration.getJarPath()));
     myJrePathEditor.setPathOrName(configuration.getAlternativeJrePath(), configuration.isAlternativeJrePathEnabled());
     myModuleComponent.getComponent().setSelectedModule(configuration.getModule());
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public JComponent createEditor() {
     return myWholePanel;
   }

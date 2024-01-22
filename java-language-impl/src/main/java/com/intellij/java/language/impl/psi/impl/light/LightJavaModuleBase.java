@@ -13,8 +13,8 @@ import consulo.navigation.ItemPresentationProvider;
 import consulo.util.lang.lazy.LazyValue;
 import consulo.virtualFileSystem.VirtualFile;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
@@ -32,7 +32,7 @@ public abstract class LightJavaModuleBase extends LightElement implements PsiJav
   public abstract VirtualFile getRootVirtualFile();
 
   @Override
-  @Nullable
+  @jakarta.annotation.Nullable
   public final PsiDocComment getDocComment() {
     return null;
   }
@@ -72,7 +72,7 @@ public abstract class LightJavaModuleBase extends LightElement implements PsiJav
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public final PsiJavaModuleReferenceElement getNameIdentifier() {
     return myRefElement;
   }
@@ -122,7 +122,7 @@ public abstract class LightJavaModuleBase extends LightElement implements PsiJav
     }
 
     @Override
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getReferenceText() {
       return myText;
     }
@@ -176,7 +176,7 @@ public abstract class LightJavaModuleBase extends LightElement implements PsiJav
 
     @Override
     public
-    @Nonnull
+    @jakarta.annotation.Nonnull
     List<String> getModuleNames() {
       return Collections.emptyList();
     }

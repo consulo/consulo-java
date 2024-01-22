@@ -26,7 +26,7 @@ import consulo.language.psi.stub.IndexSink;
 import consulo.language.psi.stub.StubElement;
 import consulo.language.psi.stub.StubInputStream;
 import consulo.language.psi.stub.StubOutputStream;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.io.IOException;
 
@@ -45,12 +45,12 @@ public class JavaTypeParameterListElementType extends JavaStubElementType<PsiTyp
   }
 
   @Override
-  public PsiTypeParameterList createPsi(@Nonnull final PsiTypeParameterListStub stub) {
+  public PsiTypeParameterList createPsi(@jakarta.annotation.Nonnull final PsiTypeParameterListStub stub) {
     return getPsiFactory(stub).createTypeParameterList(stub);
   }
 
   @Override
-  public PsiTypeParameterList createPsi(@Nonnull final ASTNode node) {
+  public PsiTypeParameterList createPsi(@jakarta.annotation.Nonnull final ASTNode node) {
     return new PsiTypeParameterListImpl(node);
   }
 

@@ -18,8 +18,6 @@ package com.intellij.java.impl.ig.fixes;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.annotation.Nonnull;
-
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.project.Project;
 import com.intellij.java.language.psi.JavaPsiFacade;
@@ -38,6 +36,7 @@ import consulo.application.util.query.Query;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.psiutils.HighlightUtils;
+import jakarta.annotation.Nonnull;
 
 public class InlineVariableFix extends InspectionGadgetsFix {
 
@@ -47,7 +46,7 @@ public class InlineVariableFix extends InspectionGadgetsFix {
   }
 
   @Override
-  public void doFix(@Nonnull final Project project, final ProblemDescriptor descriptor) {
+  public void doFix(@jakarta.annotation.Nonnull final Project project, final ProblemDescriptor descriptor) {
     final PsiElement nameElement = descriptor.getPsiElement();
     final PsiLocalVariable variable =
       (PsiLocalVariable)nameElement.getParent();

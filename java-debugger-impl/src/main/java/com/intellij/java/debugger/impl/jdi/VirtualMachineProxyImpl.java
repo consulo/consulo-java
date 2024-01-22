@@ -30,10 +30,11 @@ import consulo.internal.com.sun.jdi.request.EventRequestManager;
 import consulo.logging.Logger;
 import consulo.util.lang.ExceptionUtil;
 import consulo.util.lang.ThreeState;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -59,7 +60,7 @@ public class VirtualMachineProxyImpl implements JdiTimer, VirtualMachineProxy
 	private final boolean myVersionHigher_15;
 	private final boolean myVersionHigher_14;
 
-	public VirtualMachineProxyImpl(DebugProcessImpl debugProcess, @Nonnull VirtualMachine virtualMachine)
+	public VirtualMachineProxyImpl(DebugProcessImpl debugProcess, @jakarta.annotation.Nonnull VirtualMachine virtualMachine)
 	{
 		myVirtualMachine = virtualMachine;
 		myDebugProcess = debugProcess;
@@ -94,7 +95,7 @@ public class VirtualMachineProxyImpl implements JdiTimer, VirtualMachineProxy
 		}
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public VirtualMachine getVirtualMachine()
 	{
 		return myVirtualMachine;
@@ -753,7 +754,7 @@ public class VirtualMachineProxyImpl implements JdiTimer, VirtualMachineProxy
 		myVirtualMachine.setDebugTraceMode(i);
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	@Contract("null -> null; !null -> !null")
 	public ThreadReferenceProxyImpl getThreadReferenceProxy(@Nullable ThreadReference thread)
 	{

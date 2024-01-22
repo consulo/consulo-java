@@ -18,8 +18,7 @@ package com.intellij.java.debugger.impl.engine;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
 import consulo.execution.debug.frame.XFullValueEvaluator;
-
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author egor

@@ -23,7 +23,7 @@ import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.ui.ex.awt.GridBag;
 import consulo.ui.ex.awt.UIUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 
@@ -33,7 +33,7 @@ public abstract class ConstructorCountInspection extends ClassMetricInspection {
 
   public boolean ignoreDeprecatedConstructors = false;
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "ClassWithTooManyConstructors";
   }

@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.ig.threading;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiStatement;
 import com.intellij.java.language.psi.PsiSynchronizedStatement;
@@ -24,6 +22,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class EmptySynchronizedStatementInspection extends BaseInspection {
@@ -34,7 +33,7 @@ public class EmptySynchronizedStatementInspection extends BaseInspection {
       "empty.synchronized.statement.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "empty.synchronized.statement.problem.descriptor");
@@ -49,7 +48,7 @@ public class EmptySynchronizedStatementInspection extends BaseInspection {
 
     @Override
     public void visitSynchronizedStatement(
-      @Nonnull PsiSynchronizedStatement statement) {
+      @jakarta.annotation.Nonnull PsiSynchronizedStatement statement) {
       super.visitSynchronizedStatement(statement);
      /* if (JspPsiUtil.isInJspFile(statement.getContainingFile())) {
         return;

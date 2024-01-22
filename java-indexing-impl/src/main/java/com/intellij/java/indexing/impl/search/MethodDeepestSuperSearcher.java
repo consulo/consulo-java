@@ -22,7 +22,7 @@ import consulo.application.ApplicationManager;
 import consulo.application.util.function.Computable;
 import consulo.application.util.function.Processor;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Set;
 

@@ -59,8 +59,8 @@ import consulo.ui.ex.awt.*;
 import consulo.ui.ex.awt.event.DoubleClickListener;
 import consulo.ui.ex.awt.update.UiNotifyConnector;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.tree.TreeNode;
 import java.awt.*;
@@ -84,7 +84,7 @@ public class InstancesWindow extends DialogWrapper
 	private final String myClassName;
 	private final MyInstancesView myInstancesView;
 
-	public InstancesWindow(@Nonnull XDebugSession session, @Nonnull InstancesProvider provider, @Nonnull String className)
+	public InstancesWindow(@Nonnull XDebugSession session, @jakarta.annotation.Nonnull InstancesProvider provider, @Nonnull String className)
 	{
 		super(session.getProject(), false);
 
@@ -125,7 +125,7 @@ public class InstancesWindow extends DialogWrapper
 		return "#org.jetbrains.debugger.memory.view.InstancesWindow";
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	@Override
 	protected JComponent createCenterPanel()
 	{
@@ -175,7 +175,7 @@ public class InstancesWindow extends DialogWrapper
 
 		private volatile MyFilteringWorker myFilteringTask = null;
 
-		MyInstancesView(@Nonnull XDebugSession session)
+		MyInstancesView(@jakarta.annotation.Nonnull XDebugSession session)
 		{
 			super(new BorderLayout(0, JBUI.scale(BORDER_LAYOUT_DEFAULT_GAP)));
 
@@ -421,7 +421,7 @@ public class InstancesWindow extends DialogWrapper
 
 			@Nonnull
 			@Override
-			public Action matched(@Nonnull ObjectReference ref)
+			public Action matched(@jakarta.annotation.Nonnull ObjectReference ref)
 			{
 				final JavaValue val = new InstanceJavaValue(new InstanceValueDescriptor(myProject, ref), myEvaluationContext, myNodeManager);
 				myMatchedCount++;
@@ -443,7 +443,7 @@ public class InstancesWindow extends DialogWrapper
 				return Action.CONTINUE;
 			}
 
-			@Nonnull
+			@jakarta.annotation.Nonnull
 			@Override
 			public Action error(@Nonnull ObjectReference ref, @Nonnull String description)
 			{
@@ -456,7 +456,7 @@ public class InstancesWindow extends DialogWrapper
 			}
 
 			@Override
-			public void completed(@Nonnull FilteringResult reason)
+			public void completed(@jakarta.annotation.Nonnull FilteringResult reason)
 			{
 				if(!myErrorsGroup.isEmpty())
 				{
@@ -510,7 +510,7 @@ public class InstancesWindow extends DialogWrapper
 		{
 			private final FilteringTask myTask;
 
-			MyFilteringWorker(@Nonnull List<ObjectReference> refs, @Nonnull XExpression expression, @Nonnull EvaluationContextImpl evaluationContext)
+			MyFilteringWorker(@Nonnull List<ObjectReference> refs, @Nonnull XExpression expression, @jakarta.annotation.Nonnull EvaluationContextImpl evaluationContext)
 			{
 				myTask = new FilteringTask(myClassName, myDebugProcess, expression, refs, new MyFilteringCallback(evaluationContext));
 			}

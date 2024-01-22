@@ -18,7 +18,7 @@ package com.intellij.java.impl.ide.hierarchy.method;
 import java.util.Comparator;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.JPanel;
 import javax.swing.JTree;
 
@@ -76,7 +76,7 @@ public class MethodHierarchyBrowser extends MethodHierarchyBrowserBase {
     return psiElement instanceof PsiMethod;
   }
 
-  protected HierarchyTreeStructure createHierarchyTreeStructure(@Nonnull final String typeName, @Nonnull final PsiElement psiElement) {
+  protected HierarchyTreeStructure createHierarchyTreeStructure(@jakarta.annotation.Nonnull final String typeName, @Nonnull final PsiElement psiElement) {
     if (!METHOD_TYPE.equals(typeName)) {
       LOG.error("unexpected type: " + typeName);
       return null;

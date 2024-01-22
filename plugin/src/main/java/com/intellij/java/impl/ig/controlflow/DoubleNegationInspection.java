@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -32,8 +32,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.BoolUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
-
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class DoubleNegationInspection extends BaseInspection {
@@ -53,7 +52,7 @@ public class DoubleNegationInspection extends BaseInspection {
     return true;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   protected InspectionGadgetsFix buildFix(Object... infos) {
     return new DoubleNegationFix();
   }

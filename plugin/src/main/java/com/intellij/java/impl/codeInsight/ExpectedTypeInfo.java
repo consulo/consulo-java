@@ -20,7 +20,7 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiType;
 import org.intellij.lang.annotations.MagicConstant;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author ven
@@ -52,7 +52,7 @@ public interface ExpectedTypeInfo {
 
   String toString();
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   ExpectedTypeInfo[] intersect(@Nonnull ExpectedTypeInfo info);
 
   @Nonnull

@@ -27,9 +27,9 @@ import consulo.language.psi.PsiElement;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import consulo.language.ast.IElementType;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author max
@@ -69,13 +69,13 @@ public class JavaCommenter implements CodeDocumentationAwareCommenterEx {
   }
 
   @Override
-  @Nullable
+  @jakarta.annotation.Nullable
   public IElementType getBlockCommentTokenType() {
     return JavaTokenType.C_STYLE_COMMENT;
   }
 
   @Override
-  @Nullable
+  @jakarta.annotation.Nullable
   public IElementType getDocumentationCommentTokenType() {
     return JavaDocElementType.DOC_COMMENT;
   }

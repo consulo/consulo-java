@@ -22,7 +22,7 @@ import consulo.util.collection.SmartList;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.Ref;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +41,7 @@ public class ContextComputationProcessor {
     myEvaluationHelper = new SubstitutedExpressionEvaluationHelper(project);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static List<Object> collectOperands(@Nonnull final String prefix, final String suffix, final Ref<Boolean> unparsable, final PsiElement[] operands) {
     final ArrayList<Object> result = new ArrayList<Object>();
     final ContextComputationProcessor processor = new ContextComputationProcessor(operands[0].getProject());
@@ -111,7 +111,7 @@ public class ContextComputationProcessor {
   }
 
   @Nonnull
-  public static PsiElement getTopLevelInjectionTarget(@Nonnull final PsiElement host) {
+  public static PsiElement getTopLevelInjectionTarget(@jakarta.annotation.Nonnull final PsiElement host) {
     PsiElement target = host;
     PsiElement parent = target.getParent();
     for (; parent != null; target = parent, parent = target.getParent()) {

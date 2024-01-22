@@ -21,7 +21,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.InspectionGadgetsBundle;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class DeleteImportFix extends InspectionGadgetsFix {
   @Nonnull

@@ -1,9 +1,9 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import consulo.internal.org.objectweb.asm.tree.MethodInsnNode;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.security.MessageDigest;
 
@@ -20,7 +20,7 @@ public final class Member implements MemberDescriptor
 	 * @param methodName        method name
 	 * @param methodDesc        method descriptor in asm format
 	 */
-	public Member(@Nonnull String internalClassName, @Nonnull String methodName, @Nonnull String methodDesc)
+	public Member(@Nonnull String internalClassName, @jakarta.annotation.Nonnull String methodName, @Nonnull String methodDesc)
 	{
 		this.internalClassName = internalClassName;
 		this.methodName = methodName;
@@ -59,7 +59,7 @@ public final class Member implements MemberDescriptor
 		return result;
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
 	public HMember hashed(@Nullable MessageDigest md)
 	{

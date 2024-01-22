@@ -28,7 +28,7 @@ import consulo.module.content.layer.ContentEntry;
 import consulo.module.content.layer.ModifiableRootModel;
 import consulo.ui.ex.wizard.WizardStep;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.function.Consumer;
 
 /**
@@ -57,7 +57,7 @@ public class JavaNewModuleBuilder implements NewModuleBuilder {
 
       @RequiredReadAction
       @Override
-      public void process(@Nonnull JavaNewModuleWizardContext context, @Nonnull ContentEntry contentEntry, @Nonnull ModifiableRootModel modifiableRootModel) {
+      public void process(@jakarta.annotation.Nonnull JavaNewModuleWizardContext context, @Nonnull ContentEntry contentEntry, @Nonnull ModifiableRootModel modifiableRootModel) {
         setupModule(context, contentEntry, modifiableRootModel);
       }
     });
@@ -70,7 +70,7 @@ public class JavaNewModuleBuilder implements NewModuleBuilder {
       }
 
       @Override
-      public void buildSteps(@Nonnull Consumer<WizardStep<JavaNewModuleWizardContext>> consumer, @Nonnull JavaNewModuleWizardContext context) {
+      public void buildSteps(@jakarta.annotation.Nonnull Consumer<WizardStep<JavaNewModuleWizardContext>> consumer, @Nonnull JavaNewModuleWizardContext context) {
         consumer.accept(new JavaSdkSelectStep(context));
       }
 
@@ -85,7 +85,7 @@ public class JavaNewModuleBuilder implements NewModuleBuilder {
   }
 
   @RequiredReadAction
-  private static void setupModule(@Nonnull JavaNewModuleWizardContext context, @Nonnull ContentEntry contentEntry, @Nonnull ModifiableRootModel modifiableRootModel) {
+  private static void setupModule(@jakarta.annotation.Nonnull JavaNewModuleWizardContext context, @jakarta.annotation.Nonnull ContentEntry contentEntry, @Nonnull ModifiableRootModel modifiableRootModel) {
     // need get by id - due, extension can be from original Java impl, or from other plugin, like IKVM.NET
     JavaMutableModuleExtension<?> javaMutableModuleExtension = modifiableRootModel.getExtensionWithoutCheck("java");
     assert javaMutableModuleExtension != null;

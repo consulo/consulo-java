@@ -21,7 +21,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.internal.com.sun.jdi.TypeComponent;
 import consulo.internal.com.sun.jdi.VirtualMachine;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author Nikolay.Tropin

@@ -26,14 +26,14 @@ import consulo.usage.UsageViewBundle;
 import consulo.usage.UsageViewLongNameLocation;
 import consulo.usage.UsageViewShortNameLocation;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author yole
  */
 @ExtensionImpl
 public class JavaUsageViewDescriptionProvider implements ElementDescriptionProvider {
-  public String getElementDescription(@Nonnull final PsiElement element, @Nonnull final ElementDescriptionLocation location) {
+  public String getElementDescription(@jakarta.annotation.Nonnull final PsiElement element, @Nonnull final ElementDescriptionLocation location) {
     if (location instanceof UsageViewShortNameLocation) {
       if (element instanceof PsiThrowStatement) {
         return UsageViewBundle.message("usage.target.exception");

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.generation.actions;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.language.editor.action.CodeInsightActionHandler;
 import consulo.language.editor.impl.action.BaseCodeInsightAction;
@@ -33,7 +33,7 @@ public class GenerateSuperMethodCallAction extends BaseCodeInsightAction {
   }
 
   @Override
-  protected boolean isValidForFile(@Nonnull Project project, @Nonnull Editor editor, @Nonnull final PsiFile file) {
+  protected boolean isValidForFile(@Nonnull Project project, @Nonnull Editor editor, @jakarta.annotation.Nonnull final PsiFile file) {
     if (!(file instanceof PsiJavaFile)) {
       return false;
     }

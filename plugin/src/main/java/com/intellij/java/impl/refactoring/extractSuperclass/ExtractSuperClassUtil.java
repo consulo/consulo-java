@@ -41,9 +41,9 @@ import consulo.ui.ex.awt.DialogWrapper;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.function.Condition;
 import consulo.virtualFileSystem.VirtualFile;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nullable;
 import java.util.*;
 
 /**

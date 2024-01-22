@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.jvm.types;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @see Class#isArray

@@ -17,7 +17,7 @@ package com.intellij.java.analysis.codeInsight.daemon;
 
 import consulo.language.psi.PsiElement;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public interface UnusedImportProvider
 {

@@ -54,12 +54,12 @@ import consulo.util.lang.StringUtil;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.JDOMExternalizerUtil;
 import consulo.util.xml.serializer.WriteExternalException;
+import jakarta.annotation.Nonnull;
 import jakarta.inject.Singleton;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -550,7 +550,7 @@ public class NodeRendererSettings implements PersistentStateComponent<Element> {
 
   private static class DescriptorUpdater implements DescriptorLabelListener {
     private final ValueDescriptor myTargetDescriptor;
-    @Nullable
+    @jakarta.annotation.Nullable
     private ValueDescriptorImpl myKeyDescriptor;
     @Nullable
     private ValueDescriptorImpl myValueDescriptor;

@@ -14,7 +14,7 @@ import consulo.language.psi.stub.ScalarIndexExtension;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Collection;
 
 import static java.util.Collections.singletonMap;
@@ -68,7 +68,7 @@ public class JavaAutoModuleNameIndex extends ScalarIndexExtension<String> {
   }
 
   @Nonnull
-  public static Collection<VirtualFile> getFilesByKey(@Nonnull String moduleName, @Nonnull GlobalSearchScope scope) {
+  public static Collection<VirtualFile> getFilesByKey(@jakarta.annotation.Nonnull String moduleName, @Nonnull GlobalSearchScope scope) {
     return FileBasedIndex.getInstance().getContainingFiles(NAME, moduleName, scope);
   }
 

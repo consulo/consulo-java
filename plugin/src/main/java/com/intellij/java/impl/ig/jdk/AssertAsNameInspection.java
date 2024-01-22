@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.ig.jdk;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
@@ -24,25 +22,26 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.RenameFix;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class AssertAsNameInspection extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "AssertAsIdentifier";
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "use.assert.as.identifier.display.name");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "use.assert.as.identifier.problem.descriptor");
@@ -66,7 +65,7 @@ public class AssertAsNameInspection extends BaseInspection {
   private static class AssertAsNameVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitVariable(@Nonnull PsiVariable variable) {
+    public void visitVariable(@jakarta.annotation.Nonnull PsiVariable variable) {
       super.visitVariable(variable);
       final String variableName = variable.getName();
       if (!PsiKeyword.ASSERT.equals(variableName)) {
@@ -86,7 +85,7 @@ public class AssertAsNameInspection extends BaseInspection {
     }
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
       //note: no call to super, to avoid drill-down
       final String name = aClass.getName();
       if (!PsiKeyword.ASSERT.equals(name)) {

@@ -13,11 +13,11 @@ import consulo.util.collection.FilteringIterator;
 import consulo.util.collection.MultiMap;
 import consulo.util.collection.primitive.ints.IntSet;
 import consulo.util.collection.primitive.ints.IntSets;
+import jakarta.annotation.Nonnull;
 import one.util.streamex.IntStreamEx;
 import one.util.streamex.StreamEx;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.*;
 import java.util.function.BiFunction;
 
@@ -112,7 +112,7 @@ public final class LiveVariablesAnalyzer {
         instruction instanceof ControlTransferInstruction;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private Map<FinishElementInstruction, BitSet> findLiveVars() {
     final Map<FinishElementInstruction, BitSet> result = new HashMap<>();
 

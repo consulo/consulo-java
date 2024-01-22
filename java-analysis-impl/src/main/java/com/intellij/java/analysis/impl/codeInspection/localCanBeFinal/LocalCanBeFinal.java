@@ -35,8 +35,8 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -64,20 +64,20 @@ public class LocalCanBeFinal extends BaseJavaBatchLocalInspectionTool {
     myQuickFix = new AcceptSuggested();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public HighlightDisplayLevel getDefaultLevel() {
     return HighlightDisplayLevel.WARNING;
   }
 
   @Override
-  public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod method, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
+  public ProblemDescriptor[] checkMethod(@jakarta.annotation.Nonnull PsiMethod method, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
     List<ProblemDescriptor> list = checkCodeBlock(method.getBody(), manager, isOnTheFly);
     return list == null ? null : list.toArray(new ProblemDescriptor[list.size()]);
   }
 
   @Override
-  public ProblemDescriptor[] checkClass(@Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
+  public ProblemDescriptor[] checkClass(@Nonnull PsiClass aClass, @jakarta.annotation.Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
     List<ProblemDescriptor> allProblems = null;
     final PsiClassInitializer[] initializers = aClass.getInitializers();
     for (PsiClassInitializer initializer : initializers) {
@@ -260,7 +260,7 @@ public class LocalCanBeFinal extends BaseJavaBatchLocalInspectionTool {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getGroupDisplayName() {
     return GroupNames.STYLE_GROUP_NAME;
   }
@@ -273,13 +273,13 @@ public class LocalCanBeFinal extends BaseJavaBatchLocalInspectionTool {
 
   private static class AcceptSuggested implements LocalQuickFix {
     @Override
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionsBundle.message("inspection.can.be.final.accept.quickfix");
     }
 
     @Override
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor problem) {
+    public void applyFix(@Nonnull Project project, @jakarta.annotation.Nonnull ProblemDescriptor problem) {
       if (!FileModificationService.getInstance().preparePsiElementForWrite(problem.getPsiElement())) return;
       PsiElement nameIdentifier = problem.getPsiElement();
       if (nameIdentifier == null) return;

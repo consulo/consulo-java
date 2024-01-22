@@ -32,8 +32,8 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Pair;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.List;
 import java.util.function.Function;
 
@@ -70,8 +70,8 @@ public class CreateMethodQuickFix extends LocalQuickFixAndIntentionActionOnPsiEl
   @Override
   public void invoke(@Nonnull Project project,
                      @Nonnull PsiFile file,
-                     @Nullable Editor editor,
-                     @Nonnull PsiElement startElement,
+                     @jakarta.annotation.Nullable Editor editor,
+                     @jakarta.annotation.Nonnull PsiElement startElement,
                      @Nonnull PsiElement endElement) {
     PsiClass myTargetClass = (PsiClass) startElement;
     if (!FileModificationService.getInstance().preparePsiElementForWrite(myTargetClass.getContainingFile())) return;

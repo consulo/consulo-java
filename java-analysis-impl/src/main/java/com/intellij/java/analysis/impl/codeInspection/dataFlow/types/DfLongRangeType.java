@@ -4,7 +4,7 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.rangeSet.LongRangeSet;
 import com.intellij.java.language.psi.PsiKeyword;
 import com.intellij.java.language.psi.PsiType;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 class DfLongRangeType implements DfLongType {
   private final LongRangeSet myRange;
@@ -13,7 +13,7 @@ class DfLongRangeType implements DfLongType {
     myRange = range;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public LongRangeSet getRange() {
     return myRange;

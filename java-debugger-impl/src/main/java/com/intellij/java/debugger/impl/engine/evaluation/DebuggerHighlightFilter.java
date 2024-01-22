@@ -21,7 +21,7 @@ import consulo.language.editor.rawHighlight.HighlightInfoFilter;
 import consulo.language.editor.rawHighlight.HighlightInfoType;
 import consulo.language.psi.PsiFile;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class DebuggerHighlightFilter implements HighlightInfoFilter {

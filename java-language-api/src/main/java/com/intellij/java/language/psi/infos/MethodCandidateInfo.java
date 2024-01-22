@@ -30,10 +30,10 @@ import consulo.util.lang.ThreeState;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.MagicConstant;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.Map;
 
 /**
@@ -55,7 +55,7 @@ public class MethodCandidateInfo extends CandidateInfo
 	private volatile String myInferenceError;
 	private final LanguageLevel myLanguageLevel;
 
-	public MethodCandidateInfo(@Nonnull PsiElement candidate,
+	public MethodCandidateInfo(@jakarta.annotation.Nonnull PsiElement candidate,
 			PsiSubstitutor substitutor,
 			boolean accessProblem,
 			boolean staticsProblem,
@@ -67,15 +67,15 @@ public class MethodCandidateInfo extends CandidateInfo
 		this(candidate, substitutor, accessProblem, staticsProblem, argumentList, currFileContext, argumentTypes, typeArguments, PsiUtil.getLanguageLevel(argumentList));
 	}
 
-	public MethodCandidateInfo(@Nonnull PsiElement candidate,
-			@Nonnull PsiSubstitutor substitutor,
+	public MethodCandidateInfo(@jakarta.annotation.Nonnull PsiElement candidate,
+			@jakarta.annotation.Nonnull PsiSubstitutor substitutor,
 			boolean accessProblem,
 			boolean staticsProblem,
 			PsiElement argumentList,
 			PsiElement currFileContext,
-			@Nullable PsiType[] argumentTypes,
+			@jakarta.annotation.Nullable PsiType[] argumentTypes,
 			PsiType[] typeArguments,
-			@Nonnull LanguageLevel languageLevel)
+			@jakarta.annotation.Nonnull LanguageLevel languageLevel)
 	{
 		super(candidate, substitutor, accessProblem, staticsProblem, currFileContext);
 		myArgumentList = argumentList;
@@ -332,7 +332,7 @@ public class MethodCandidateInfo extends CandidateInfo
 		}
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public PsiSubstitutor getSiteSubstitutor()
 	{
 		PsiSubstitutor incompleteSubstitutor = super.getSubstitutor();
@@ -348,14 +348,14 @@ public class MethodCandidateInfo extends CandidateInfo
 		return incompleteSubstitutor;
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
 	public PsiSubstitutor getSubstitutor()
 	{
 		return getSubstitutor(true);
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public PsiSubstitutor getSubstitutor(boolean includeReturnConstraint)
 	{
 		PsiSubstitutor substitutor = myCalcedSubstitutor;
@@ -429,20 +429,20 @@ public class MethodCandidateInfo extends CandidateInfo
 		return super.isValidResult() && isApplicable();
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
 	public PsiMethod getElement()
 	{
 		return (PsiMethod) super.getElement();
 	}
 
-	@Nonnull
-	public PsiSubstitutor inferTypeArguments(@Nonnull ParameterTypeInferencePolicy policy, boolean includeReturnConstraint)
+	@jakarta.annotation.Nonnull
+	public PsiSubstitutor inferTypeArguments(@jakarta.annotation.Nonnull ParameterTypeInferencePolicy policy, boolean includeReturnConstraint)
 	{
 		return inferTypeArguments(policy, myArgumentList instanceof PsiExpressionList ? ((PsiExpressionList) myArgumentList).getExpressions() : PsiExpression.EMPTY_ARRAY, includeReturnConstraint);
 	}
 
-	public PsiSubstitutor inferSubstitutorFromArgs(@Nonnull ParameterTypeInferencePolicy policy, final PsiExpression[] arguments)
+	public PsiSubstitutor inferSubstitutorFromArgs(@jakarta.annotation.Nonnull ParameterTypeInferencePolicy policy, final PsiExpression[] arguments)
 	{
 		if(myTypeArguments == null)
 		{
@@ -458,7 +458,7 @@ public class MethodCandidateInfo extends CandidateInfo
 	 * If iterated through all candidates, should be called under {@link #ourOverloadGuard} guard so results won't be cached on the top level call
 	 */
 	@Nonnull
-	public PsiSubstitutor inferTypeArguments(@Nonnull final ParameterTypeInferencePolicy policy, @Nonnull final PsiExpression[] arguments, boolean includeReturnConstraint)
+	public PsiSubstitutor inferTypeArguments(@jakarta.annotation.Nonnull final ParameterTypeInferencePolicy policy, @jakarta.annotation.Nonnull final PsiExpression[] arguments, boolean includeReturnConstraint)
 	{
 		return computeForOverloadedCandidate(() ->
 		{

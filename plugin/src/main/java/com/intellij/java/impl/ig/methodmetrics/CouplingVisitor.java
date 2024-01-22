@@ -18,7 +18,7 @@ package com.intellij.java.impl.ig.methodmetrics;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import org.jetbrains.annotations.NonNls;

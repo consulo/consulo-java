@@ -24,8 +24,9 @@ import consulo.language.psi.path.CustomizableReferenceProvider;
 import consulo.util.collection.ArrayUtil;
 import consulo.xml.lang.xml.XMLLanguage;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -46,11 +47,11 @@ public class JavaClassReferenceSet {
   private final int myStartInElement;
   private final JavaClassReferenceProvider myProvider;
 
-  public JavaClassReferenceSet(@Nonnull String str, @Nonnull PsiElement element, int startInElement, final boolean isStatic, @Nonnull JavaClassReferenceProvider provider) {
+  public JavaClassReferenceSet(@Nonnull String str, @Nonnull PsiElement element, int startInElement, final boolean isStatic, @jakarta.annotation.Nonnull JavaClassReferenceProvider provider) {
     this(str, element, startInElement, isStatic, provider, null);
   }
 
-  private JavaClassReferenceSet(@Nonnull String str,
+  private JavaClassReferenceSet(@jakarta.annotation.Nonnull String str,
                                 @Nonnull PsiElement element,
                                 int startInElement,
                                 final boolean isStatic,
@@ -72,7 +73,7 @@ public class JavaClassReferenceSet {
     return new TextRange(references[0].getRangeInElement().getStartOffset(), references[references.length - 1].getRangeInElement().getEndOffset());
   }
 
-  private void reparse(@Nonnull String str, @Nonnull PsiElement element, final boolean isStaticImport, JavaClassReferenceSet context) {
+  private void reparse(@jakarta.annotation.Nonnull String str, @jakarta.annotation.Nonnull PsiElement element, final boolean isStaticImport, JavaClassReferenceSet context) {
     myElement = element;
     myContext = context;
     final List<JavaClassReference> referencesList = new ArrayList<JavaClassReference>();

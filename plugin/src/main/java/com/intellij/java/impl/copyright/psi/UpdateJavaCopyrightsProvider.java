@@ -11,7 +11,7 @@ import consulo.language.psi.PsiFile;
 import consulo.project.Project;
 import consulo.virtualFileSystem.fileType.FileType;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 
 @ExtensionImpl
@@ -22,25 +22,25 @@ public class UpdateJavaCopyrightsProvider extends UpdateCopyrightsProvider<Copyr
     return JavaFileType.INSTANCE;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
-  public UpdatePsiFileCopyright<CopyrightFileConfig> createInstance(@Nonnull PsiFile file, @Nonnull CopyrightProfile copyrightProfile) {
+  public UpdatePsiFileCopyright<CopyrightFileConfig> createInstance(@Nonnull PsiFile file, @jakarta.annotation.Nonnull CopyrightProfile copyrightProfile) {
     return new UpdateJavaFileCopyright(file, copyrightProfile);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public CopyrightFileConfig createDefaultOptions() {
     return new CopyrightFileConfig();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
-  public TemplateCommentPanel createConfigurable(@Nonnull Project project, @Nonnull TemplateCommentPanel parentPane,
-                                                 @Nonnull FileType fileType) {
+  public TemplateCommentPanel createConfigurable(@Nonnull Project project, @jakarta.annotation.Nonnull TemplateCommentPanel parentPane,
+                                                 @jakarta.annotation.Nonnull FileType fileType) {
     return new TemplateCommentPanel(fileType, parentPane, project) {
       @Override
-      public void addAdditionalComponents(@Nonnull JPanel additionalPanel) {
+      public void addAdditionalComponents(@jakarta.annotation.Nonnull JPanel additionalPanel) {
         addLocationInFile(new String[]{
             "Before Package",
             "Before Imports",

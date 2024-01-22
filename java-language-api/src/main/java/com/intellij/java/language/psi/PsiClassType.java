@@ -27,10 +27,11 @@ import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.util.collection.ArrayFactory;
 import consulo.util.lang.Comparing;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.util.Arrays;
 
 /**
@@ -48,19 +49,19 @@ public abstract class PsiClassType extends PsiType implements JvmReferenceType {
     this(languageLevel, PsiAnnotation.EMPTY_ARRAY);
   }
 
-  protected PsiClassType(LanguageLevel languageLevel, @Nonnull PsiAnnotation[] annotations) {
+  protected PsiClassType(LanguageLevel languageLevel, @jakarta.annotation.Nonnull PsiAnnotation[] annotations) {
     super(annotations);
     myLanguageLevel = languageLevel;
   }
 
-  public PsiClassType(LanguageLevel languageLevel, @Nonnull TypeAnnotationProvider provider) {
+  public PsiClassType(LanguageLevel languageLevel, @jakarta.annotation.Nonnull TypeAnnotationProvider provider) {
     super(provider);
     myLanguageLevel = languageLevel;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
-  public PsiClassType annotate(@Nonnull TypeAnnotationProvider provider) {
+  public PsiClassType annotate(@jakarta.annotation.Nonnull TypeAnnotationProvider provider) {
     return (PsiClassType) super.annotate(provider);
   }
 
@@ -69,7 +70,7 @@ public abstract class PsiClassType extends PsiType implements JvmReferenceType {
    *
    * @return the class instance, or null if the reference resolve failed.
    */
-  @Nullable
+  @jakarta.annotation.Nullable
   public abstract PsiClass resolve();
 
   /**
@@ -189,7 +190,7 @@ public abstract class PsiClassType extends PsiType implements JvmReferenceType {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiType[] getSuperTypes() {
     ClassResolveResult resolveResult = resolveGenerics();
     PsiClass aClass = resolveResult.getElement();
@@ -251,11 +252,11 @@ public abstract class PsiClassType extends PsiType implements JvmReferenceType {
 
 
   @Override
-  public <A> A accept(@Nonnull PsiTypeVisitor<A> visitor) {
+  public <A> A accept(@jakarta.annotation.Nonnull PsiTypeVisitor<A> visitor) {
     return visitor.visitClassType(this);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public abstract LanguageLevel getLanguageLevel();
 
   /**
@@ -264,9 +265,9 @@ public abstract class PsiClassType extends PsiType implements JvmReferenceType {
    * @param languageLevel level to obtain class type with
    * @return type with requested language level
    */
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Contract(pure = true)
-  public abstract PsiClassType setLanguageLevel(@Nonnull LanguageLevel languageLevel);
+  public abstract PsiClassType setLanguageLevel(@jakarta.annotation.Nonnull LanguageLevel languageLevel);
 
   @Nonnull
   @Override
@@ -279,7 +280,7 @@ public abstract class PsiClassType extends PsiType implements JvmReferenceType {
    *
    * @return reference which the type is created from. Returns null if not applicable.
    */
-  @Nullable
+  @jakarta.annotation.Nullable
   public PsiElement getPsiContext() {
     return null;
   }
@@ -293,7 +294,7 @@ public abstract class PsiClassType extends PsiType implements JvmReferenceType {
 
       private final JvmSubstitutor mySubstitutor = new PsiJvmConversionHelper.PsiJvmSubstitutor(resolveResult.getSubstitutor());
 
-      @Nonnull
+      @jakarta.annotation.Nonnull
       @Override
       public JvmTypeDeclaration getDeclaration() {
         return clazz;
@@ -360,25 +361,25 @@ public abstract class PsiClassType extends PsiType implements JvmReferenceType {
   }
 
   public abstract static class Stub extends PsiClassType {
-    protected Stub(LanguageLevel languageLevel, @Nonnull PsiAnnotation[] annotations) {
+    protected Stub(LanguageLevel languageLevel, @jakarta.annotation.Nonnull PsiAnnotation[] annotations) {
       super(languageLevel, annotations);
     }
 
-    protected Stub(LanguageLevel languageLevel, @Nonnull TypeAnnotationProvider annotations) {
+    protected Stub(LanguageLevel languageLevel, @jakarta.annotation.Nonnull TypeAnnotationProvider annotations) {
       super(languageLevel, annotations);
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     @Override
     public final String getPresentableText() {
       return getPresentableText(false);
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     @Override
     public abstract String getPresentableText(boolean annotated);
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     @Override
     public final String getCanonicalText() {
       return getCanonicalText(false);

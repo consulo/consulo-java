@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.psi;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * Represents a {@code requires} directive of a Java module declaration.
@@ -34,7 +34,7 @@ public interface PsiRequiresStatement extends PsiModifierListOwner, PsiStatement
 	PsiJavaModuleReference getModuleReference();
 
 	default
-	@Nullable
+	@jakarta.annotation.Nullable
 	PsiJavaModule resolve()
 	{
 		PsiJavaModuleReference ref = getModuleReference();

@@ -24,8 +24,7 @@ import consulo.language.psi.ElementDescriptionLocation;
 import consulo.language.psi.ElementDescriptionProvider;
 import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.util.NonCodeSearchDescriptionLocation;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author yole
@@ -33,7 +32,7 @@ import javax.annotation.Nonnull;
 @ExtensionImpl
 public class JavaNonCodeSearchElementDescriptionProvider implements ElementDescriptionProvider {
   @Override
-  public String getElementDescription(@Nonnull final PsiElement element, @Nonnull final ElementDescriptionLocation location) {
+  public String getElementDescription(@Nonnull final PsiElement element, @jakarta.annotation.Nonnull final ElementDescriptionLocation location) {
     if (!(location instanceof NonCodeSearchDescriptionLocation)) return null;
     NonCodeSearchDescriptionLocation ncdLocation = (NonCodeSearchDescriptionLocation) location;
     if (element instanceof PsiJavaPackage) {

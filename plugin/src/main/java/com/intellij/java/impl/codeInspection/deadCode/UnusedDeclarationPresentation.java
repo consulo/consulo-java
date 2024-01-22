@@ -61,11 +61,12 @@ import consulo.project.Project;
 import consulo.util.lang.CharArrayUtil;
 import consulo.util.lang.Comparing;
 import consulo.virtualFileSystem.status.FileStatus;
+import jakarta.annotation.Nullable;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;

@@ -18,9 +18,9 @@ package com.intellij.java.debugger.impl.actions;
 import consulo.ide.impl.idea.ide.util.PropertiesComponent;
 import consulo.ide.impl.idea.xdebugger.impl.ui.tree.ValueMarkerPresentationDialogBase;
 import consulo.ui.ex.awt.MultiLineLabel;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 

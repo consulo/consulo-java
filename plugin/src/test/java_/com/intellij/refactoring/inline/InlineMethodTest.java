@@ -20,9 +20,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.impl.refactoring.inline.InlineMethodProcessor;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
 import com.intellij.java.language.LanguageLevel;

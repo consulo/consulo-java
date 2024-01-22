@@ -26,10 +26,11 @@ import consulo.project.Project;
 import consulo.ui.ex.awt.*;
 import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
@@ -49,7 +50,7 @@ public class EditContractIntention extends BaseIntentionAction implements LowPri
     setText("Edit method contract");
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static PsiMethod getTargetMethod(Editor editor, PsiFile file) {
     final PsiModifierListOwner owner = AddAnnotationPsiFix.getContainer(file, editor.getCaretModel().getOffset(), true);
     if (owner instanceof PsiMethod && ExternalAnnotationsManagerImpl.areExternalAnnotationsApplicable(owner)) {
@@ -196,7 +197,7 @@ public class EditContractIntention extends BaseIntentionAction implements LowPri
     return StringUtil.isEmpty(mutates) ? null : MutationSignature.checkSignature(mutates, method);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static String getContractErrorMessage(String contract, PsiMethod method) {
     if (StringUtil.isEmpty(contract)) {
       return null;

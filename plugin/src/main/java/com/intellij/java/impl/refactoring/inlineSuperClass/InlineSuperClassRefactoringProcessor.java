@@ -46,9 +46,9 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.application.util.function.Processor;
 import consulo.util.collection.MultiMap;
 import consulo.logging.Logger;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,7 +80,7 @@ public class InlineSuperClassRefactoringProcessor extends FixableUsagesRefactori
     myMemberInfos = members.toArray(new MemberInfo[members.size()]);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(final UsageInfo[] usages) {
     return new InlineSuperClassUsageViewDescriptor(mySuperClass);
   }

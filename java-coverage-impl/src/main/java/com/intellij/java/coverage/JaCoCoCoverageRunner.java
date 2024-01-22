@@ -21,14 +21,14 @@ import consulo.module.ModuleManager;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jacoco.core.analysis.*;
 import org.jacoco.core.data.ExecutionDataReader;
 import org.jacoco.core.data.ExecutionDataStore;
 import org.jacoco.core.data.ISessionInfoVisitor;
 import org.jacoco.core.data.SessionInfo;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -37,7 +37,7 @@ import java.util.Collection;
 @ExtensionImpl
 public class JaCoCoCoverageRunner extends JavaCoverageRunner {
   @Override
-  public ProjectData loadCoverageData(@Nonnull File sessionDataFile, @Nullable CoverageSuite baseCoverageSuite) {
+  public ProjectData loadCoverageData(@jakarta.annotation.Nonnull File sessionDataFile, @Nullable CoverageSuite baseCoverageSuite) {
     final ProjectData data = new ProjectData();
     try {
       final Project project = baseCoverageSuite instanceof BaseCoverageSuite ? ((BaseCoverageSuite) baseCoverageSuite).getProject() : null;

@@ -25,9 +25,9 @@ import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.language.pattern.StandardPatterns;
 import consulo.language.psi.PsiElement;
 import consulo.java.language.module.util.JavaClassNames;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 import static com.intellij.java.language.patterns.PsiJavaPatterns.psiMethod;
 
@@ -52,9 +52,9 @@ class PreferMostUsedWeigher extends LookupElementWeigher
 		return null;
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	@Override
-	public Integer weigh(@Nonnull LookupElement element)
+	public Integer weigh(@jakarta.annotation.Nonnull LookupElement element)
 	{
 		throw new UnsupportedOperationException();
 		/*final PsiElement psi = ObjectUtils.tryCast(element.getObject(), PsiElement.class);
@@ -79,7 +79,7 @@ class PreferMostUsedWeigher extends LookupElementWeigher
 	}
 
 	//Objects.requireNonNull is an example
-	private static boolean looksLikeHelperMethodOrConst(@Nonnull PsiElement element)
+	private static boolean looksLikeHelperMethodOrConst(@jakarta.annotation.Nonnull PsiElement element)
 	{
 		if(!(element instanceof PsiMethod))
 		{
@@ -110,7 +110,7 @@ class PreferMostUsedWeigher extends LookupElementWeigher
 		return false;
 	}
 
-	private static boolean isRawDeepTypeEqualToObject(@Nullable PsiType type)
+	private static boolean isRawDeepTypeEqualToObject(@jakarta.annotation.Nullable PsiType type)
 	{
 		if(type == null)
 		{

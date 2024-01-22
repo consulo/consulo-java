@@ -24,13 +24,14 @@ import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiManager;
 import consulo.util.collection.ArrayUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.Arrays;
 import java.util.Set;
 
 public class JavaVarTypeUtil {
-  public static PsiType getUpwardProjection(@Nonnull PsiType t) {
+  public static PsiType getUpwardProjection(@jakarta.annotation.Nonnull PsiType t) {
     return t.accept(new UpwardProjectionTypeVisitor());
   }
 
@@ -70,7 +71,7 @@ public class JavaVarTypeUtil {
       return componentType.accept(this).createArrayType();
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     @Override
     public PsiType visitLambdaExpressionType(PsiLambdaExpressionType lambdaExpressionType) {
       return lambdaExpressionType;

@@ -7,7 +7,7 @@ import static org.junit.Assert.fail;
 
 import java.util.HashMap;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import org.junit.Assert;
 import com.intellij.JavaTestUtil;
 import consulo.language.psi.PsiElement;

@@ -27,8 +27,8 @@ import consulo.util.xml.serializer.WriteExternalException;
 import org.intellij.lang.annotations.Pattern;
 import org.jdom.Element;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Set;
@@ -53,14 +53,14 @@ public class CollectionsMustHaveInitialCapacityInspection extends BaseInspection
   }
 
   @Override
-  public void writeSettings(@Nonnull Element node) throws WriteExternalException {
+  public void writeSettings(@jakarta.annotation.Nonnull Element node) throws WriteExternalException {
     mySettings.writeSettings(node);
     if (myIgnoreFields) {
       JDOMExternalizer.write(node, "ignoreFields", true);
     }
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public JComponent createOptionsPanel() {
     JPanel p = new JPanel(new BorderLayout());
@@ -83,7 +83,7 @@ public class CollectionsMustHaveInitialCapacityInspection extends BaseInspection
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("collections.must.have.initial.capacity.problem.descriptor");
   }

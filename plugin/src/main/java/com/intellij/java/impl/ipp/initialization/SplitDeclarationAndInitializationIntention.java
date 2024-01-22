@@ -30,7 +30,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.SplitDeclarationAndInitializationIntention", fileExtensions = "java", categories = {"Java", "Declaration"})
@@ -43,7 +43,7 @@ public class SplitDeclarationAndInitializationIntention extends Intention {
   }
 
   @Override
-  public void processIntention(@Nonnull PsiElement element)
+  public void processIntention(@jakarta.annotation.Nonnull PsiElement element)
     throws IncorrectOperationException {
     final PsiField field = (PsiField)element.getParent();
     field.normalizeDeclaration();

@@ -14,13 +14,13 @@ import consulo.process.event.ProcessEvent;
 import consulo.util.dataholder.Key;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
+import jakarta.annotation.Nonnull;
 import org.apache.thrift.TException;
 import org.apache.thrift.server.TServer;
 import org.apache.thrift.server.TSimpleServer;
 import org.apache.thrift.transport.TServerSocket;
 import org.apache.thrift.transport.TTransportException;
 
-import javax.annotation.Nonnull;
 import java.io.File;
 import java.net.InetSocketAddress;
 import java.net.URI;

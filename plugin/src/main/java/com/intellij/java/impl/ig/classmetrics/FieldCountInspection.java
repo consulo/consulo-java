@@ -25,7 +25,7 @@ import com.siyeh.ig.psiutils.ClassUtils;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.ui.ex.awt.UIUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 

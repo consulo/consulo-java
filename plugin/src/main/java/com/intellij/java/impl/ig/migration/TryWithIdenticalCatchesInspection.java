@@ -31,8 +31,8 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
-import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,7 +49,7 @@ public class TryWithIdenticalCatchesInspection extends BaseInspection {
     return true;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     final PsiType type = (PsiType)infos[1];
@@ -62,7 +62,7 @@ public class TryWithIdenticalCatchesInspection extends BaseInspection {
   }
 
   @Nls
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("try.with.identical.catches.display.name");

@@ -44,8 +44,9 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Pair;
 import consulo.virtualFileSystem.VirtualFile;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -126,7 +127,7 @@ class AddModuleDependencyFix extends AddOrderEntryFix {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, @Nullable Editor editor, PsiFile file) {
+  public void invoke(@Nonnull Project project, @jakarta.annotation.Nullable Editor editor, PsiFile file) {
     if (myModules.size() == 1) {
       addDependencyOnModule(project, editor, ContainerUtil.getFirstItem(myModules));
     } else {

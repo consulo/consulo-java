@@ -24,7 +24,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.util.IncorrectOperationException;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class PsiIdentifierImpl extends LeafPsiElement implements PsiIdentifier, PsiJavaToken {
   public PsiIdentifierImpl(CharSequence text) {
@@ -46,7 +46,7 @@ public class PsiIdentifierImpl extends LeafPsiElement implements PsiIdentifier, 
   }
 
   @Override
-  public PsiElement replace(@Nonnull PsiElement newElement) throws IncorrectOperationException {
+  public PsiElement replace(@jakarta.annotation.Nonnull PsiElement newElement) throws IncorrectOperationException {
     PsiElement result = super.replace(newElement);
 
     // We want to reformat method parameters on method name change as well because there is a possible situation that they are aligned

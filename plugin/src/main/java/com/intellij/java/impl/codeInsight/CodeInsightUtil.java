@@ -50,7 +50,7 @@ import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.JBTreeTraverser;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -145,12 +145,12 @@ public class CodeInsightUtil extends JavaCodeInsightUtilCore {
     }
   }
 
-  public static Editor positionCursorAtLBrace(final Project project, PsiFile targetFile, @Nonnull PsiClass psiClass) {
+  public static Editor positionCursorAtLBrace(final Project project, PsiFile targetFile, @jakarta.annotation.Nonnull PsiClass psiClass) {
     final PsiElement lBrace = psiClass.getLBrace();
     return positionCursor(project, targetFile, lBrace != null ? lBrace : psiClass);
   }
 
-  public static Editor positionCursor(final Project project, PsiFile targetFile, @Nonnull PsiElement element) {
+  public static Editor positionCursor(final Project project, PsiFile targetFile, @jakarta.annotation.Nonnull PsiElement element) {
     TextRange range = element.getTextRange();
     LOG.assertTrue(range != null, "element: " + element + "; valid: " + element.isValid());
     int textOffset = range.getStartOffset();
@@ -159,11 +159,11 @@ public class CodeInsightUtil extends JavaCodeInsightUtilCore {
     return FileEditorManager.getInstance(project).openTextEditor(descriptor, true);
   }
 
-  public static boolean preparePsiElementsForWrite(@Nonnull PsiElement... elements) {
+  public static boolean preparePsiElementsForWrite(@jakarta.annotation.Nonnull PsiElement... elements) {
     return FileModificationService.getInstance().preparePsiElementsForWrite(Arrays.asList(elements));
   }
 
-  public static void processSubTypes(PsiType psiType, final PsiElement context, boolean getRawSubtypes, @Nonnull final PrefixMatcher matcher, Consumer<PsiType> consumer) {
+  public static void processSubTypes(PsiType psiType, final PsiElement context, boolean getRawSubtypes, @jakarta.annotation.Nonnull final PrefixMatcher matcher, Consumer<PsiType> consumer) {
     int arrayDim = psiType.getArrayDimensions();
 
     psiType = psiType.getDeepComponentType();
@@ -228,7 +228,7 @@ public class CodeInsightUtil extends JavaCodeInsightUtilCore {
                                                               int arrayDim,
                                                               boolean getRawSubtypes,
                                                               Consumer<PsiType> result,
-                                                              @Nonnull PsiClass baseClass,
+                                                              @jakarta.annotation.Nonnull PsiClass baseClass,
                                                               PsiSubstitutor baseSubstitutor) {
     PsiManager manager = context.getManager();
     JavaPsiFacade facade = JavaPsiFacade.getInstance(manager.getProject());

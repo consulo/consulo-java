@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.ig.serialization;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
@@ -25,6 +23,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.AddSerialVersionUIDFix;
 import com.intellij.java.impl.ig.psiutils.SerializationUtils;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
@@ -32,20 +31,20 @@ public class SerializableHasSerialVersionUIDFieldInspection extends Serializable
 
   @Pattern("[a-zA-Z_0-9.-]+")
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "serial";
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "serializable.class.without.serialversionuid.display.name");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "serializable.class.without.serialversionuid.problem.descriptor");

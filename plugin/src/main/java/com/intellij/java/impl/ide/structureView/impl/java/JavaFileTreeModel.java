@@ -29,8 +29,9 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.ui.ex.PlaceHolder;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -43,7 +44,7 @@ public class JavaFileTreeModel extends TextEditorBasedStructureViewModel impleme
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public Filter[] getFilters() {
     return new Filter[]{
         new FieldsFilter(),
@@ -51,14 +52,14 @@ public class JavaFileTreeModel extends TextEditorBasedStructureViewModel impleme
     };
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Collection<NodeProvider> getNodeProviders() {
     return NODE_PROVIDERS;
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public Grouper[] getGroupers() {
     return new Grouper[]{
         new SuperTypesGrouper(),
@@ -67,7 +68,7 @@ public class JavaFileTreeModel extends TextEditorBasedStructureViewModel impleme
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public StructureViewTreeElement getRoot() {
     return new JavaFileTreeElement(getPsiFile());
   }
@@ -130,7 +131,7 @@ public class JavaFileTreeModel extends TextEditorBasedStructureViewModel impleme
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected Class[] getSuitableClasses() {
     return new Class[]{
         PsiClass.class,
@@ -142,7 +143,7 @@ public class JavaFileTreeModel extends TextEditorBasedStructureViewModel impleme
   }
 
   @Override
-  public void setPlace(@Nonnull String place) {
+  public void setPlace(@jakarta.annotation.Nonnull String place) {
     myPlace = place;
   }
 

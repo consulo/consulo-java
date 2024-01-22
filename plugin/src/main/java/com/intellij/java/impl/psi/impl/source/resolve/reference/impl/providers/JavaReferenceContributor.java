@@ -14,7 +14,7 @@ import consulo.language.psi.PsiReferenceProvider;
 import consulo.language.psi.PsiReferenceRegistrar;
 import consulo.language.psi.filter.ElementFilter;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 

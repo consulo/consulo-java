@@ -25,12 +25,11 @@
 
 package org.osmorc.manifest.lang.psi.elementtype;
 
-import javax.annotation.Nonnull;
-
 import consulo.language.ast.ASTNode;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.stub.IStubElementType;
 import consulo.language.psi.stub.StubElement;
+import jakarta.annotation.Nonnull;
 import org.osmorc.manifest.lang.ManifestLanguage;
 
 /**
@@ -41,7 +40,7 @@ public abstract class AbstractManifestStubElementType<StubT extends StubElement,
   private static final String ETERNAL_ID_PREFIX = "manifest.";
   private final String externalId;
 
-  public AbstractManifestStubElementType(@Nonnull final String debugName) {
+  public AbstractManifestStubElementType(@jakarta.annotation.Nonnull final String debugName) {
     super(debugName, ManifestLanguage.INSTANCE);
     externalId = ETERNAL_ID_PREFIX + debugName;
   }

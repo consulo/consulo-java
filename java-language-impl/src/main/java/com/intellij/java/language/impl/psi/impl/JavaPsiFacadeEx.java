@@ -21,19 +21,16 @@ package com.intellij.java.language.impl.psi.impl;
 
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.disposer.Disposable;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
-import consulo.virtualFileSystem.VirtualFileFilter;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.TestOnly;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public abstract class JavaPsiFacadeEx extends JavaPsiFacade
 {
 	@TestOnly
-	public static JavaPsiFacadeEx getInstanceEx(@Nonnull Project project)
+	public static JavaPsiFacadeEx getInstanceEx(@jakarta.annotation.Nonnull Project project)
 	{
 		return (JavaPsiFacadeEx) getInstance(project);
 	}

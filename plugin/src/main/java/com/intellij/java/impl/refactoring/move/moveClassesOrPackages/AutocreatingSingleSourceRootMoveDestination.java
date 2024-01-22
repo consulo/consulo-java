@@ -31,8 +31,8 @@ import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import consulo.usage.UsageInfo;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.MultiMap;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.util.Collection;
 

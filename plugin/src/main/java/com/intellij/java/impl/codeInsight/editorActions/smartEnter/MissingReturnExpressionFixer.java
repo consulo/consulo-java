@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions.smartEnter;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
 import consulo.codeEditor.Editor;

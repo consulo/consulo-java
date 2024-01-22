@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.ig.style;
 
-import javax.annotation.Nonnull;
-
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.project.Project;
@@ -30,6 +28,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ConstantOnLHSOfComparisonInspection extends BaseInspection {
@@ -41,13 +40,13 @@ public class ConstantOnLHSOfComparisonInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("constant.on.lhs.of.comparison.display.name");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("constant.on.lhs.of.comparison.problem.descriptor");
   }
@@ -64,7 +63,7 @@ public class ConstantOnLHSOfComparisonInspection extends BaseInspection {
 
   private static class SwapComparisonFix extends InspectionGadgetsFix {
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("flip.comparison.quickfix");
     }
@@ -90,7 +89,7 @@ public class ConstantOnLHSOfComparisonInspection extends BaseInspection {
   private static class ConstantOnLHSOfComparisonVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitBinaryExpression(@Nonnull PsiBinaryExpression expression) {
+    public void visitBinaryExpression(@jakarta.annotation.Nonnull PsiBinaryExpression expression) {
       super.visitBinaryExpression(expression);
       if (!ComparisonUtils.isComparison(expression)) {
         return;

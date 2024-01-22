@@ -29,9 +29,8 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * User: anna
@@ -59,7 +58,7 @@ public class AddTypeArgumentsConditionalFix implements SyntheticIntentionAction 
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
     if (mySubstitutor.isValid() && myExpression.isValid() && myMethod.isValid()) {
       return true;
     }
@@ -67,7 +66,7 @@ public class AddTypeArgumentsConditionalFix implements SyntheticIntentionAction 
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     final PsiTypeParameter[] typeParameters = myMethod.getTypeParameters();
     final String typeArguments = "<" + StringUtil.join(typeParameters, parameter -> {
       final PsiType substituteTypeParam = mySubstitutor.substitute(parameter);
@@ -102,7 +101,7 @@ public class AddTypeArgumentsConditionalFix implements SyntheticIntentionAction 
     return true;
   }
 
-  public static void register(HighlightInfo highlightInfo, PsiExpression expression, @Nonnull PsiType lType) {
+  public static void register(HighlightInfo highlightInfo, PsiExpression expression, @jakarta.annotation.Nonnull PsiType lType) {
     if (lType != PsiType.NULL && expression instanceof PsiConditionalExpression) {
       final PsiExpression thenExpression = ((PsiConditionalExpression) expression).getThenExpression();
       final PsiExpression elseExpression = ((PsiConditionalExpression) expression).getElseExpression();

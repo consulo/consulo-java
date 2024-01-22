@@ -14,8 +14,8 @@ import consulo.module.Module;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author VISTALL
@@ -45,7 +45,7 @@ public class JavaLanguageVersionResolver implements LanguageVersionResolver {
   @Nonnull
   @RequiredReadAction
   @Override
-  public LanguageVersion getLanguageVersion(@Nonnull Language language, @Nullable Project project, @Nullable VirtualFile virtualFile) {
+  public LanguageVersion getLanguageVersion(@jakarta.annotation.Nonnull Language language, @jakarta.annotation.Nullable Project project, @jakarta.annotation.Nullable VirtualFile virtualFile) {
     if (project == null || virtualFile == null) {
       return LanguageLevel.HIGHEST.toLangVersion();
     }

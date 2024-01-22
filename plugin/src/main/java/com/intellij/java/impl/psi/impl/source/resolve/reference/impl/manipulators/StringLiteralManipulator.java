@@ -24,7 +24,7 @@ import consulo.util.lang.StringUtil;
 import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author ven

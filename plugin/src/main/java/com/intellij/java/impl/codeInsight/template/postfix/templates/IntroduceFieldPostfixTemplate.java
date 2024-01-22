@@ -25,7 +25,7 @@ import consulo.project.Project;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.refactoring.introduceField.IntroduceFieldHandler;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class IntroduceFieldPostfixTemplate extends ExpressionPostfixTemplateWithChooser {
   public IntroduceFieldPostfixTemplate() {
@@ -39,7 +39,7 @@ public class IntroduceFieldPostfixTemplate extends ExpressionPostfixTemplateWith
   }
 
   @Nonnull
-  private static IntroduceFieldHandler getMockHandler(@Nonnull final PsiExpression expression) {
+  private static IntroduceFieldHandler getMockHandler(@jakarta.annotation.Nonnull final PsiExpression expression) {
     final PsiClass containingClass = PsiTreeUtil.getParentOfType(expression, PsiClass.class);
     assert containingClass != null;
 

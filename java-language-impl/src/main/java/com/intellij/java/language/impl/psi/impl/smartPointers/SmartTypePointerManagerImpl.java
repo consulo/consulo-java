@@ -26,11 +26,12 @@ import consulo.language.psi.SmartPointerManager;
 import consulo.language.psi.SmartPsiElementPointer;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
+import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -57,8 +58,8 @@ public class SmartTypePointerManagerImpl extends SmartTypePointerManager {
   }
 
   @Override
-  @Nonnull
-  public SmartTypePointer createSmartTypePointer(@Nonnull PsiType type) {
+  @jakarta.annotation.Nonnull
+  public SmartTypePointer createSmartTypePointer(@jakarta.annotation.Nonnull PsiType type) {
     final SmartTypePointer pointer = type.accept(new SmartTypeCreatingVisitor());
     return pointer != null ? pointer : NULL_POINTER;
   }
@@ -66,7 +67,7 @@ public class SmartTypePointerManagerImpl extends SmartTypePointerManager {
   private static class SimpleTypePointer implements SmartTypePointer {
     private final PsiType myType;
 
-    private SimpleTypePointer(@Nonnull PsiType type) {
+    private SimpleTypePointer(@jakarta.annotation.Nonnull PsiType type) {
       myType = type;
     }
 
@@ -79,7 +80,7 @@ public class SmartTypePointerManagerImpl extends SmartTypePointerManager {
   private static class ArrayTypePointer extends TypePointerBase<PsiArrayType> {
     private final SmartTypePointer myComponentTypePointer;
 
-    public ArrayTypePointer(@Nonnull PsiArrayType type, @Nonnull SmartTypePointer componentTypePointer) {
+    public ArrayTypePointer(@Nonnull PsiArrayType type, @jakarta.annotation.Nonnull SmartTypePointer componentTypePointer) {
       super(type);
       myComponentTypePointer = componentTypePointer;
     }
@@ -97,7 +98,7 @@ public class SmartTypePointerManagerImpl extends SmartTypePointerManager {
     private final SmartTypePointer myBoundPointer;
     private final boolean myIsExtending;
 
-    public WildcardTypePointer(@Nonnull PsiWildcardType type, @Nullable SmartTypePointer boundPointer) {
+    public WildcardTypePointer(@Nonnull PsiWildcardType type, @jakarta.annotation.Nullable SmartTypePointer boundPointer) {
       super(type);
       myManager = type.getManager();
       myBoundPointer = boundPointer;
@@ -126,10 +127,10 @@ public class SmartTypePointerManagerImpl extends SmartTypePointerManager {
     private final SmartPsiElementPointer<?>[] myAnnotations;
 
     ClassTypePointer(@Nonnull PsiClassType type,
-                     @Nonnull SmartPsiElementPointer<?> aClass,
+                     @jakarta.annotation.Nonnull SmartPsiElementPointer<?> aClass,
                      @Nonnull LanguageLevel languageLevel,
                      @Nonnull Map<SmartPsiElementPointer<PsiTypeParameter>, SmartTypePointer> map,
-                     @Nonnull SmartPsiElementPointer<?>[] annotations) {
+                     @jakarta.annotation.Nonnull SmartPsiElementPointer<?>[] annotations) {
       super(type);
       myClass = aClass;
       myLevel = languageLevel;

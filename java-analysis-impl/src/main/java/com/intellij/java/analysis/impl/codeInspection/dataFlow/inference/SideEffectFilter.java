@@ -22,8 +22,8 @@ import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiMethod;
 import com.siyeh.ig.psiutils.SideEffectChecker;
 import consulo.annotation.access.RequiredReadAction;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;

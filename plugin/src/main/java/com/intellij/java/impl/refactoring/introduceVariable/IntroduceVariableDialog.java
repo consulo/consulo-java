@@ -21,7 +21,6 @@ import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
-import javax.annotation.Nonnull;
 import javax.swing.Action;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -46,6 +45,7 @@ import com.intellij.java.impl.refactoring.ui.TypeSelector;
 import com.intellij.java.impl.refactoring.ui.TypeSelectorManager;
 import consulo.ui.ex.awt.NonFocusableCheckBox;
 import consulo.ui.ex.awt.StateRestoringCheckBox;
+import jakarta.annotation.Nonnull;
 
 class IntroduceVariableDialog extends DialogWrapper implements IntroduceVariableSettings {
   private final Project myProject;

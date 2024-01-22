@@ -41,8 +41,9 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -90,13 +91,13 @@ public class TestIntegrationUtils {
     public abstract FileTemplateDescriptor getFileTemplateDescriptor(@Nonnull TestFramework framework);
   }
 
-  public static boolean isTest(@Nonnull PsiElement element) {
+  public static boolean isTest(@jakarta.annotation.Nonnull PsiElement element) {
     PsiClass klass = findOuterClass(element);
     return klass != null && TestFrameworks.getInstance().isTestClass(klass);
   }
 
   @Nullable
-  public static PsiClass findOuterClass(@Nonnull PsiElement element) {
+  public static PsiClass findOuterClass(@jakarta.annotation.Nonnull PsiElement element) {
     PsiClass result = PsiTreeUtil.getParentOfType(element, PsiClass.class, false);
     if (result == null) {
        final PsiFile containingFile = element.getContainingFile();
@@ -141,7 +142,7 @@ public class TestIntegrationUtils {
                                            final Editor editor,
                                            final PsiClass targetClass,
                                            final PsiMethod method,
-                                           @Nullable String name,
+                                           @jakarta.annotation.Nullable String name,
                                            boolean automatic) {
     Template template = createTestMethodTemplate(methodKind, framework, targetClass, name, automatic);
 
@@ -184,7 +185,7 @@ public class TestIntegrationUtils {
   private static Template createTestMethodTemplate(MethodKind methodKind,
                                                    TestFramework descriptor,
                                                    PsiClass targetClass,
-                                                   @Nullable String name,
+                                                   @jakarta.annotation.Nullable String name,
                                                    boolean automatic) {
     FileTemplateDescriptor templateDesc = methodKind.getFileTemplateDescriptor(descriptor);
     String templateName = templateDesc.getFileName();

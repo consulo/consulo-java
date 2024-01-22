@@ -15,8 +15,6 @@
  */
 package com.intellij.java.language.impl.psi.impl.java.stubs.impl;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.impl.lexer.JavaLexer;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
@@ -24,13 +22,14 @@ import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiLiteralExpre
 import consulo.language.psi.stub.StubBase;
 import consulo.language.psi.stub.StubElement;
 import consulo.language.ast.IElementType;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
  */
 public class PsiLiteralStub extends StubBase<PsiLiteralExpressionImpl>
 {
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	private final String myLiteralText;
 	private volatile IElementType myLiteralType;
 
@@ -40,13 +39,13 @@ public class PsiLiteralStub extends StubBase<PsiLiteralExpressionImpl>
 		myLiteralText = literalText;
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public String getLiteralText()
 	{
 		return myLiteralText;
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public IElementType getLiteralType()
 	{
 		IElementType type = myLiteralType;

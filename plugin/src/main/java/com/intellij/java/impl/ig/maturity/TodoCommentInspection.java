@@ -15,13 +15,12 @@
  */
 package com.intellij.java.impl.ig.maturity;
 
-import javax.annotation.Nonnull;
-
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiComment;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class TodoCommentInspection extends BaseInspection {
@@ -31,7 +30,7 @@ public class TodoCommentInspection extends BaseInspection {
     return InspectionGadgetsBundle.message("todo.comment.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("todo.comment.problem.descriptor");
   }

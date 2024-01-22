@@ -3,8 +3,8 @@ package com.intellij.java.impl.codeInsight.editorActions.smartEnter;
 import java.util.Collection;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import com.intellij.java.impl.javadoc.JavadocHelper;
 import consulo.codeEditor.CaretModel;
 import consulo.document.Document;

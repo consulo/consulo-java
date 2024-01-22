@@ -20,8 +20,7 @@ import consulo.dataContext.DataContext;
 import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.action.BaseRefactoringAction;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author dsl
@@ -35,7 +34,7 @@ public class MethodDuplicatesAction extends BaseRefactoringAction {
     return false;
   }
 
-  protected RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
+  protected RefactoringActionHandler getHandler(@jakarta.annotation.Nonnull DataContext dataContext) {
     return new MethodDuplicatesHandler();
   }
 }

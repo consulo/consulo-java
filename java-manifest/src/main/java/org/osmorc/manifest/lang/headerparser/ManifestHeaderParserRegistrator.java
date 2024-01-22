@@ -1,6 +1,6 @@
 package org.osmorc.manifest.lang.headerparser;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL

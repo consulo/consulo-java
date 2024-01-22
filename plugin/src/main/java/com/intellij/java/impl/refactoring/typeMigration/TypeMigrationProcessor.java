@@ -38,8 +38,8 @@ import consulo.util.collection.SmartList;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.function.Functions;
 import consulo.util.lang.ref.Ref;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.function.Function;
 
@@ -88,7 +88,7 @@ public class TypeMigrationProcessor extends BaseRefactoringProcessor {
     final Set<PsiFile> containingFiles = ContainerUtil.map2Set(roots, PsiElement::getContainingFile);
     final TypeMigrationProcessor processor = new TypeMigrationProcessor(project, roots, migrationTypeFunction, rules, allowDependentRoots) {
       @Override
-      public void performRefactoring(@Nonnull final UsageInfo[] usages) {
+      public void performRefactoring(@jakarta.annotation.Nonnull final UsageInfo[] usages) {
         super.performRefactoring(usages);
         if (editor != null) {
           ApplicationManager.getApplication().invokeLater(() ->
@@ -130,14 +130,14 @@ public class TypeMigrationProcessor extends BaseRefactoringProcessor {
   }
 
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
     return new TypeMigrationViewDescriptor(myRoots[0]);
   }
 
   @Override
-  protected boolean preprocessUsages(@Nonnull Ref<UsageInfo[]> refUsages) {
+  protected boolean preprocessUsages(@jakarta.annotation.Nonnull Ref<UsageInfo[]> refUsages) {
     if (hasFailedConversions()) {
       if (ApplicationManager.getApplication().isUnitTestMode()) {
         if (ourSkipFailedConversionInTestMode) {
@@ -165,7 +165,7 @@ public class TypeMigrationProcessor extends BaseRefactoringProcessor {
   }
 
   @Override
-  protected void previewRefactoring(@Nonnull final UsageInfo[] usages) {
+  protected void previewRefactoring(@jakarta.annotation.Nonnull final UsageInfo[] usages) {
     MigrationPanel panel = new MigrationPanel(myRoots, myLabeler, myProject, isPreviewUsages());
     String name;
     if (myRoots.length == 1) {
@@ -223,7 +223,7 @@ public class TypeMigrationProcessor extends BaseRefactoringProcessor {
   }
 
   @Override
-  protected void refreshElements(@Nonnull PsiElement[] elements) {
+  protected void refreshElements(@jakarta.annotation.Nonnull PsiElement[] elements) {
     myRoots = elements;
   }
 

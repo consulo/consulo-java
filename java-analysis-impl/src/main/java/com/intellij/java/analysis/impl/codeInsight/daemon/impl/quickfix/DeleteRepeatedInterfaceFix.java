@@ -26,8 +26,8 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 
 public class DeleteRepeatedInterfaceFix implements SyntheticIntentionAction {
@@ -39,14 +39,14 @@ public class DeleteRepeatedInterfaceFix implements SyntheticIntentionAction {
     myConjList = conjList;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getText() {
     return "Delete repeated '" + myConjunct.getText() + "'";
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
     for (PsiTypeElement element : myConjList) {
       if (!element.isValid()) {
         return false;

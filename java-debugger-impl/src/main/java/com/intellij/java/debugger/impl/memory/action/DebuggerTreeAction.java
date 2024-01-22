@@ -23,9 +23,8 @@ import consulo.ide.impl.idea.xdebugger.impl.ui.tree.actions.XDebuggerTreeActionB
 import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.Value;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public abstract class DebuggerTreeAction extends XDebuggerTreeActionBase
 {

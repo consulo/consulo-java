@@ -22,7 +22,7 @@ import consulo.content.scope.SearchScope;
 import consulo.application.util.query.ExtensibleQueryFactory;
 import consulo.application.util.query.Query;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author max

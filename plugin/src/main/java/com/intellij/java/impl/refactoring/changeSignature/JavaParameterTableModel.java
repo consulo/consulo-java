@@ -36,7 +36,7 @@ import consulo.language.editor.ui.awt.EditorTextField;
 import consulo.ui.ex.SimpleTextAttributes;
 import consulo.ui.ex.awt.ColumnInfo;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.table.TableCellEditor;

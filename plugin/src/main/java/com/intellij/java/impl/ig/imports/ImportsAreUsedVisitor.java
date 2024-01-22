@@ -19,7 +19,7 @@ import com.intellij.java.language.psi.*;
 import consulo.util.lang.StringUtil;
 import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,7 +45,7 @@ class ImportsAreUsedVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitReferenceElement(@Nonnull PsiJavaCodeReferenceElement reference) {
+  public void visitReferenceElement(@jakarta.annotation.Nonnull PsiJavaCodeReferenceElement reference) {
     followReferenceToImport(reference);
     super.visitReferenceElement(reference);
   }

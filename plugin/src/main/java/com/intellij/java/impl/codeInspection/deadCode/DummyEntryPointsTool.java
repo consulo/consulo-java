@@ -21,9 +21,8 @@ import consulo.language.editor.inspection.ProblemDescriptionsProcessor;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.inspection.scheme.JobDescriptor;
 import consulo.language.editor.scope.AnalysisScope;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author max
@@ -34,9 +33,9 @@ public class DummyEntryPointsTool extends UnusedDeclarationInspection {
   }
 
   @Override
-  public void runInspection(@Nonnull AnalysisScope scope,
-                            @Nonnull InspectionManager manager,
-                            @Nonnull GlobalInspectionContext globalContext,
+  public void runInspection(@jakarta.annotation.Nonnull AnalysisScope scope,
+                            @jakarta.annotation.Nonnull InspectionManager manager,
+                            @jakarta.annotation.Nonnull GlobalInspectionContext globalContext,
                             @Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor,
                             Object state) {
   }
@@ -48,19 +47,19 @@ public class DummyEntryPointsTool extends UnusedDeclarationInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionsBundle.message("inspection.dead.code.entry.points.display.name");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getGroupDisplayName() {
     return "";
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getShortName() {
     //noinspection InspectionDescriptionNotFoundInspection
     return "";

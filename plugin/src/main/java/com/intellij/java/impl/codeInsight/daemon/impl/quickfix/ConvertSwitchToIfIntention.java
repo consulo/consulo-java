@@ -28,7 +28,7 @@ import consulo.util.lang.ObjectUtil;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -198,7 +198,7 @@ public class ConvertSwitchToIfIntention implements SyntheticIntentionAction {
     }
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private static List<SwitchStatementBranch> extractBranches(CommentTracker commentTracker,
                                                              PsiCodeBlock body,
                                                              Set<PsiSwitchLabelStatementBase> fallThroughTargets) {

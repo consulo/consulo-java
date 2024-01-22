@@ -2,9 +2,8 @@ package consulo.java.deadCodeNotWorking;
 
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
+import jakarta.annotation.Nonnull;
 import org.jdom.Element;
-
-import javax.annotation.Nonnull;
 
 /**
  * This inspection style not worked - just for compilation
@@ -20,7 +19,7 @@ public interface OldStyleInspection
 		throw new Error();
 	}
 
-	default void readSettings(@Nonnull Element node) throws InvalidDataException
+	default void readSettings(@jakarta.annotation.Nonnull Element node) throws InvalidDataException
 	{
 		throw new Error();
 	}

@@ -1,9 +1,11 @@
+import jakarta.annotation.Nullable;
+
 class TestIDEAWarn {
-  void method(@javax.annotation.Nullable MyEnum e) {
+  void method(@Nullable MyEnum e) {
     if (e != MyEnum.foo) {return;}
     System.out.println(e.hashCode());
   }
-  void method2(@javax.annotation.Nullable MyEnum e) {
+  void method2(@Nullable MyEnum e) {
     if (e == MyEnum.foo) {
       System.out.println(e.hashCode());
     }

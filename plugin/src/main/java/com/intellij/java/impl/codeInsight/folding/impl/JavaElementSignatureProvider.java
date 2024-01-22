@@ -24,8 +24,9 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.logging.Logger;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
@@ -36,7 +37,7 @@ public class JavaElementSignatureProvider extends AbstractElementSignatureProvid
 
   @Override
   @Nullable
-  public String getSignature(@Nonnull final PsiElement element) {
+  public String getSignature(@jakarta.annotation.Nonnull final PsiElement element) {
     PsiFile file = element.getContainingFile();
     if (!(file instanceof PsiJavaFile)) {
       return null;
@@ -164,7 +165,7 @@ public class JavaElementSignatureProvider extends AbstractElementSignatureProvid
                                                 @Nonnull PsiElement parent,
                                                 @Nonnull String type,
                                                 @Nonnull StringTokenizer tokenizer,
-                                                @Nullable StringBuilder processingInfoStorage) {
+                                                @jakarta.annotation.Nullable StringBuilder processingInfoStorage) {
     if (type.equals("imports")) {
       if (!(file instanceof PsiJavaFile)) return null;
       return ((PsiJavaFile) file).getImportList();

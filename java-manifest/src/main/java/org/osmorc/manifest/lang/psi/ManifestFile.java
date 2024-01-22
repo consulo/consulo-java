@@ -26,8 +26,8 @@
 package org.osmorc.manifest.lang.psi;
 
 import consulo.language.psi.PsiFile;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.util.List;
 
@@ -56,7 +56,7 @@ public interface ManifestFile extends PsiFile {
   @Nullable
   Object getValueByKey(@Nonnull String key);
 
-  @Nullable
+  @jakarta.annotation.Nullable
   String getStringValueByKey(@Nonnull String key);
 
   @Nonnull

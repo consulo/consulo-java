@@ -26,8 +26,7 @@ import consulo.language.psi.PsiManager;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.util.IncorrectOperationException;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.MakeMethodVarargsIntention", fileExtensions = "java", categories = {"Java", "Declaration"})
@@ -38,7 +37,7 @@ public class MakeMethodVarargsIntention extends Intention {
     return new MakeMethodVarargsPredicate();
   }
 
-  protected void processIntention(@Nonnull PsiElement element)
+  protected void processIntention(@jakarta.annotation.Nonnull PsiElement element)
     throws IncorrectOperationException {
     makeMethodVarargs(element);
     makeMethodCallsVarargs(element);

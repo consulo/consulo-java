@@ -16,14 +16,13 @@
 package com.intellij.java.debugger.impl;
 
 import consulo.proxy.EventDispatcher;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public abstract class DebuggerStateManager
 {
 	private final EventDispatcher<DebuggerContextListener> myEventDispatcher = EventDispatcher.create(DebuggerContextListener.class);
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public abstract DebuggerContextImpl getContext();
 
 	public abstract void setState(@Nonnull DebuggerContextImpl context, DebuggerSession.State state, DebuggerSession.Event event, String description);
@@ -40,7 +39,7 @@ public abstract class DebuggerStateManager
 		myEventDispatcher.removeListener(listener);
 	}
 
-	protected void fireStateChanged(@Nonnull DebuggerContextImpl newContext, DebuggerSession.Event event)
+	protected void fireStateChanged(@jakarta.annotation.Nonnull DebuggerContextImpl newContext, DebuggerSession.Event event)
 	{
 		myEventDispatcher.getMulticaster().changeEvent(newContext, event);
 	}

@@ -21,14 +21,14 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaInstructionSta
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaMemoryState;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.InstructionVisitor;
 import consulo.language.psi.PsiElement;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Indicates the closure (lambda or class) inside the analyzed code block
  */
 public class ClosureInstruction extends Instruction
 {
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	private final PsiElement myClosure;
 
 	public ClosureInstruction(@Nonnull PsiElement closure)
@@ -36,7 +36,7 @@ public class ClosureInstruction extends Instruction
 		myClosure = closure;
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public PsiElement getClosureElement()
 	{
 		return myClosure;

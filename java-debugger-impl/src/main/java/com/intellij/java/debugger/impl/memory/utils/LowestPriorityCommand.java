@@ -15,9 +15,9 @@
  */
 package com.intellij.java.debugger.impl.memory.utils;
 
-import javax.annotation.Nullable;
 import com.intellij.java.debugger.impl.engine.SuspendContextImpl;
 import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;
+import jakarta.annotation.Nullable;
 
 public class LowestPriorityCommand extends SuspendContextCommandImpl
 {

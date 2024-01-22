@@ -17,8 +17,8 @@ package com.intellij.java.language.psi.util;
 
 import com.intellij.java.language.psi.*;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.util.Arrays;
 
@@ -46,7 +46,7 @@ public abstract class MethodSignatureBase implements MethodSignature {
 
   protected MethodSignatureBase(@Nonnull PsiSubstitutor substitutor,
                                 @Nullable PsiParameterList parameterList,
-                                @Nullable PsiTypeParameterList typeParameterList) {
+                                @jakarta.annotation.Nullable PsiTypeParameterList typeParameterList) {
     mySubstitutor = substitutor;
     if (parameterList == null) {
       myParameterTypes = PsiType.EMPTY_ARRAY;

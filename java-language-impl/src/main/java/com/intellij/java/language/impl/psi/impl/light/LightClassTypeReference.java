@@ -22,8 +22,8 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class LightClassTypeReference extends LightClassReferenceBase implements PsiJavaCodeReferenceElement {
 
@@ -31,12 +31,12 @@ public class LightClassTypeReference extends LightClassReferenceBase implements 
   private final
   PsiClassType myType;
 
-  private LightClassTypeReference(@Nonnull PsiManager manager, @Nonnull String text, @Nonnull PsiClassType type) {
+  private LightClassTypeReference(@Nonnull PsiManager manager, @Nonnull String text, @jakarta.annotation.Nonnull PsiClassType type) {
     super(manager, text);
     myType = type;
   }
 
-  public LightClassTypeReference(@Nonnull PsiManager manager, @Nonnull PsiClassType type) {
+  public LightClassTypeReference(@Nonnull PsiManager manager, @jakarta.annotation.Nonnull PsiClassType type) {
     this(manager, type.getCanonicalText(true), type);
   }
 
@@ -46,13 +46,13 @@ public class LightClassTypeReference extends LightClassReferenceBase implements 
     return myType.resolve();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public JavaResolveResult advancedResolve(boolean incompleteCode) {
     return myType.resolveGenerics();
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public String getReferenceName() {
     return myType.getClassName();
@@ -68,12 +68,12 @@ public class LightClassTypeReference extends LightClassReferenceBase implements 
     return myType.isValid();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiClassType getType() {
     return myType;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public GlobalSearchScope getResolveScope() {
     return myType.getResolveScope();

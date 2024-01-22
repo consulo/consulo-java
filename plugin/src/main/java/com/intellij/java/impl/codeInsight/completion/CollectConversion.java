@@ -29,7 +29,7 @@ import consulo.language.editor.completion.lookup.LookupElementPresentation;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Set;
 import java.util.function.Consumer;

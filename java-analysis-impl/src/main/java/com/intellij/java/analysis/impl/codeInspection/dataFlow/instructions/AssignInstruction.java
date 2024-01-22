@@ -27,19 +27,19 @@ import com.intellij.java.language.psi.PsiVariable;
 import consulo.util.lang.ObjectUtil;
 import org.jetbrains.annotations.Contract;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public class AssignInstruction extends ExpressionPushingInstruction<PsiAssignmentExpression> {
   private final PsiExpression myRExpression;
   private final PsiExpression myLExpression;
-  @Nullable
+  @jakarta.annotation.Nullable
   private final DfaValue myAssignedValue;
 
   public AssignInstruction(PsiExpression rExpression, @Nullable DfaValue assignedValue) {
     this(getLeftHandOfAssignment(rExpression), rExpression, assignedValue);
   }
 
-  public AssignInstruction(PsiExpression lExpression, PsiExpression rExpression, @Nullable DfaValue assignedValue) {
+  public AssignInstruction(PsiExpression lExpression, PsiExpression rExpression, @jakarta.annotation.Nullable DfaValue assignedValue) {
     super(rExpression == null ? null : ObjectUtil.tryCast(rExpression.getParent(), PsiAssignmentExpression.class));
     myLExpression = lExpression;
     myRExpression = rExpression;
@@ -75,7 +75,7 @@ public class AssignInstruction extends ExpressionPushingInstruction<PsiAssignmen
   }
 
   @Contract("null -> null")
-  @Nullable
+  @jakarta.annotation.Nullable
   private static PsiExpression getLeftHandOfAssignment(PsiExpression rExpression) {
     if (rExpression == null) {
       return null;

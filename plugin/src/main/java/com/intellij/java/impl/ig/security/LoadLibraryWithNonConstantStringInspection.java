@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.security;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.ConstantExpressionUtil;
@@ -39,7 +39,7 @@ public class LoadLibraryWithNonConstantStringInspection
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "load.library.with.non.constant.string.problem.descriptor");
@@ -54,7 +54,7 @@ public class LoadLibraryWithNonConstantStringInspection
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();

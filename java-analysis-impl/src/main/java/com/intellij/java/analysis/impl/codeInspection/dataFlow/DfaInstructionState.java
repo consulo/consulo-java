@@ -10,7 +10,7 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.MultiMap;
 import one.util.streamex.StreamEx;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.*;
 
 public class DfaInstructionState implements Comparable<DfaInstructionState> {
@@ -18,7 +18,7 @@ public class DfaInstructionState implements Comparable<DfaInstructionState> {
   private final DfaMemoryState myBeforeMemoryState;
   private final Instruction myInstruction;
 
-  public DfaInstructionState(@Nonnull Instruction myInstruction, @Nonnull DfaMemoryState myBeforeMemoryState) {
+  public DfaInstructionState(@Nonnull Instruction myInstruction, @jakarta.annotation.Nonnull DfaMemoryState myBeforeMemoryState) {
     this.myBeforeMemoryState = myBeforeMemoryState;
     this.myInstruction = myInstruction;
   }
@@ -28,7 +28,7 @@ public class DfaInstructionState implements Comparable<DfaInstructionState> {
     return myInstruction;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public DfaMemoryState getMemoryState() {
     return myBeforeMemoryState;
   }
@@ -38,7 +38,7 @@ public class DfaInstructionState implements Comparable<DfaInstructionState> {
   }
 
   @Override
-  public int compareTo(@Nonnull DfaInstructionState o) {
+  public int compareTo(@jakarta.annotation.Nonnull DfaInstructionState o) {
     return Integer.compare(myInstruction.getIndex(), o.myInstruction.getIndex());
   }
 }
@@ -59,7 +59,7 @@ class StateQueue {
     return myQueue.isEmpty();
   }
 
-  boolean processAll(@Nonnull Processor<? super DfaInstructionState> processor) {
+  boolean processAll(@jakarta.annotation.Nonnull Processor<? super DfaInstructionState> processor) {
     for (DfaInstructionState state : myQueue) {
       if (!processor.process(state)) {
         return false;
@@ -68,7 +68,7 @@ class StateQueue {
     return true;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   List<DfaInstructionState> getNextInstructionStates(Set<Instruction> joinInstructions) {
     DfaInstructionState state = myQueue.remove();
     final Instruction instruction = state.getInstruction();

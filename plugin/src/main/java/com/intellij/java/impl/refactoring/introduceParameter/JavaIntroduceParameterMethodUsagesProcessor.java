@@ -40,8 +40,8 @@ import consulo.util.collection.MultiMap;
 import consulo.util.collection.primitive.ints.IntList;
 import consulo.util.collection.primitive.ints.IntLists;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Maxim.Medvedev
@@ -244,7 +244,7 @@ public class JavaIntroduceParameterMethodUsagesProcessor implements IntroducePar
     return false;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static PsiParameter getAnchorParameter(PsiMethod methodToReplaceIn) {
     PsiParameterList parameterList = methodToReplaceIn.getParameterList();
     final PsiParameter anchorParameter;

@@ -18,8 +18,7 @@ package com.intellij.java.impl.ide.structureView.impl.java;
 import consulo.ui.ex.tree.AlphaComparator;
 import com.intellij.java.impl.ide.util.treeView.SourceComparator;
 import consulo.logging.Logger;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.Comparator;
 
@@ -37,7 +36,7 @@ public class VisibilityComparator implements Comparator {
     myNextComparator = comparator;
   }
 
-  public int compare(@Nonnull Object descriptor1, @Nonnull Object descriptor2) {
+  public int compare(@jakarta.annotation.Nonnull Object descriptor1, @jakarta.annotation.Nonnull Object descriptor2) {
     int accessLevel1 = getAccessLevel(descriptor1);
     int accessLevel2 = getAccessLevel(descriptor2);
     if (accessLevel1 == accessLevel2 && myNextComparator != null) {

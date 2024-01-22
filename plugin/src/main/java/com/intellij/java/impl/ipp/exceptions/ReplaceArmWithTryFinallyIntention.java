@@ -23,7 +23,7 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.List;
 
 @ExtensionImpl
@@ -31,7 +31,7 @@ import java.util.List;
 public class ReplaceArmWithTryFinallyIntention
   extends Intention {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected PsiElementPredicate getElementPredicate() {
     return new AutomaticResourceManagementPredicate();

@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.JavaTestUtil;
 import com.intellij.java.impl.refactoring.inline.InlineLocalHandler;
 import consulo.codeEditor.Editor;
@@ -20,6 +18,7 @@ import com.intellij.testFramework.LightCodeInsightTestCase;
 import consulo.util.collection.ContainerUtil;
 import consulo.language.editor.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author ven

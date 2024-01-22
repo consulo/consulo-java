@@ -15,8 +15,8 @@
  */
 package com.intellij.java.language.psi.compiled;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import com.intellij.java.language.util.cls.ClsFormatException;
 import consulo.language.psi.stub.FileContent;

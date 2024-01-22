@@ -20,10 +20,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 import consulo.execution.debug.setting.XDebuggerSettingsManager;
+import jakarta.annotation.Nullable;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.java.debugger.DebuggerBundle;
@@ -230,7 +230,7 @@ public class ClassRenderer extends NodeRendererImpl
 		builder.setChildren(children);
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	protected FieldDescriptor createFieldDescriptor(ValueDescriptorImpl parentDescriptor,
 			NodeDescriptorFactory nodeDescriptorFactory,
 			ObjectReference objRef,
@@ -240,7 +240,7 @@ public class ClassRenderer extends NodeRendererImpl
 		return nodeDescriptorFactory.getFieldDescriptor(parentDescriptor, objRef, field);
 	}
 
-	protected boolean shouldDisplay(EvaluationContext context, @Nonnull ObjectReference objInstance, @Nonnull Field field)
+	protected boolean shouldDisplay(EvaluationContext context, @Nonnull ObjectReference objInstance, @jakarta.annotation.Nonnull Field field)
 	{
 		final boolean isSynthetic = DebuggerUtils.isSynthetic(field);
 		if(!SHOW_SYNTHETICS && isSynthetic)

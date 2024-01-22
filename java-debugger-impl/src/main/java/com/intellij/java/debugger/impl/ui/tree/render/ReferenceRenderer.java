@@ -15,10 +15,10 @@
  */
 package com.intellij.java.debugger.impl.ui.tree.render;
 
-import javax.annotation.Nonnull;
 import com.intellij.java.debugger.engine.DebuggerUtils;
 import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.internal.com.sun.jdi.Type;
+import jakarta.annotation.Nonnull;
 
 public abstract class ReferenceRenderer extends TypeRenderer
 {

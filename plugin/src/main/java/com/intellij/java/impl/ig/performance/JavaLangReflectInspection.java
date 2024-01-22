@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.ig.performance;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiTypeElement;
@@ -25,12 +23,13 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class JavaLangReflectInspection extends BaseInspection {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "java.lang.reflect.display.name");
@@ -49,7 +48,7 @@ public class JavaLangReflectInspection extends BaseInspection {
   private static class JavaLangReflectVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitVariable(@Nonnull PsiVariable variable) {
+    public void visitVariable(@jakarta.annotation.Nonnull PsiVariable variable) {
       super.visitVariable(variable);
       final PsiType type = variable.getType();
       final PsiType componentType = type.getDeepComponentType();

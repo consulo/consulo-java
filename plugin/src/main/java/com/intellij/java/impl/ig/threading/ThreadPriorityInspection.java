@@ -22,22 +22,22 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ThreadPriorityInspection extends BaseInspection {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "CallToThreadSetPriority";
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("thread.priority.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "thread.priority.problem.descriptor");
@@ -52,7 +52,7 @@ public class ThreadPriorityInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression methodCallExpression) {
+      @jakarta.annotation.Nonnull PsiMethodCallExpression methodCallExpression) {
       super.visitMethodCallExpression(methodCallExpression);
       if (!isThreadSetPriority(methodCallExpression)) {
         return;
@@ -85,7 +85,7 @@ public class ThreadPriorityInspection extends BaseInspection {
     }
 
     private static boolean hasNormalPriorityArgument(
-      @Nonnull PsiMethodCallExpression methodCallExpression) {
+      @jakarta.annotation.Nonnull PsiMethodCallExpression methodCallExpression) {
       final PsiExpressionList argumentList =
         methodCallExpression.getArgumentList();
       final PsiExpression[] expressions = argumentList.getExpressions();

@@ -24,8 +24,8 @@ import com.intellij.java.language.psi.PsiType;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.FList;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +51,7 @@ class ControlTransferHandler
 		this.traps = transferValue.getTraps();
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public List<DfaInstructionState> dispatch()
 	{
 		Trap head = traps.getHead();
@@ -134,7 +134,7 @@ class ControlTransferHandler
 		return ContainerUtil.concat(result, dispatch());
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	private List<TypeConstraint> allCaughtTypes(PsiParameter param)
 	{
 		PsiType type = param.getType();

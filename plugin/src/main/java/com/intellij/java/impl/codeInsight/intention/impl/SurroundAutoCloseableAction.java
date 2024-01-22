@@ -39,7 +39,7 @@ import consulo.project.Project;
 import consulo.project.content.scope.ProjectScopes;
 import consulo.util.collection.SmartList;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.List;
 
 @ExtensionImpl
@@ -70,7 +70,7 @@ public class SurroundAutoCloseableAction extends PsiElementBaseIntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, final Editor editor, @Nonnull final PsiElement element) throws IncorrectOperationException {
+  public void invoke(@Nonnull final Project project, final Editor editor, @jakarta.annotation.Nonnull final PsiElement element) throws IncorrectOperationException {
     final PsiLocalVariable variable = PsiTreeUtil.getParentOfType(element, PsiLocalVariable.class);
     if (variable == null) return;
     final PsiExpression initializer = variable.getInitializer();

@@ -13,8 +13,8 @@ import consulo.virtualFileSystem.pointer.VirtualFilePointerManager;
 import consulo.xml.psi.xml.XmlDocument;
 import consulo.xml.psi.xml.XmlFile;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
 
@@ -30,7 +30,7 @@ public class ConfigFileImpl implements ConfigFile {
   private final Project myProject;
   private long myModificationCount;
 
-  public ConfigFileImpl(@Nonnull final ConfigFileContainerImpl container, @Nonnull final ConfigFileInfo configuration) {
+  public ConfigFileImpl(@jakarta.annotation.Nonnull final ConfigFileContainerImpl container, @Nonnull final ConfigFileInfo configuration) {
     myContainer = container;
     myInfo = configuration;
     final VirtualFilePointerManager pointerManager = VirtualFilePointerManager.getInstance();

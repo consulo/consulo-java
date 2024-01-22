@@ -25,10 +25,9 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import consulo.java.language.module.util.JavaClassNames;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 
 @ExtensionImpl
@@ -43,7 +42,7 @@ public class SynchronizedOnLiteralObjectInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     final String typeText = ((PsiType)infos[0]).getPresentableText();
     final int message = ((Integer)infos[1]).intValue();
@@ -74,7 +73,7 @@ public class SynchronizedOnLiteralObjectInspection extends BaseInspection {
   private class SynchronizeOnLiteralVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitSynchronizedStatement(@Nonnull PsiSynchronizedStatement statement) {
+    public void visitSynchronizedStatement(@jakarta.annotation.Nonnull PsiSynchronizedStatement statement) {
       super.visitSynchronizedStatement(statement);
       final PsiExpression lockExpression = statement.getLockExpression();
       if (lockExpression == null) {

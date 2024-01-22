@@ -27,8 +27,9 @@ import consulo.language.psi.search.PsiSearchHelper;
 import consulo.language.psi.util.LanguageCachedValueUtil;
 import consulo.language.psi.util.PsiTreeUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.List;
 
 public class JCiPUtil {
@@ -43,7 +44,7 @@ public class JCiPUtil {
     return isImmutable(aClass, true);
   }
 
-  public static boolean isImmutable(@Nonnull PsiClass aClass, boolean checkDocComment) {
+  public static boolean isImmutable(@jakarta.annotation.Nonnull PsiClass aClass, boolean checkDocComment) {
     final PsiAnnotation annotation = AnnotationUtil.findAnnotation(aClass, ConcurrencyAnnotationsManager.getInstance(aClass.getProject()).getImmutableAnnotations());
     if (annotation != null) {
       return true;
@@ -60,7 +61,7 @@ public class JCiPUtil {
         CachedValueProvider.Result.create(PsiSearchHelper.getInstance(file.getProject()).hasIdentifierInFile(file, "Immutable"), file));
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static String findGuardForMember(@Nonnull PsiMember member) {
     final PsiAnnotation annotation = AnnotationUtil.findAnnotation(member, ConcurrencyAnnotationsManager.getInstance(member.getProject()).getGuardedByAnnotations());
     if (annotation != null) {
@@ -77,7 +78,7 @@ public class JCiPUtil {
     return visitor.getGuardString();
   }
 
-  public static boolean isGuardedBy(@Nonnull PsiMember member, @Nonnull String guard) {
+  public static boolean isGuardedBy(@jakarta.annotation.Nonnull PsiMember member, @Nonnull String guard) {
     final List<String> annotations = ConcurrencyAnnotationsManager.getInstance(member.getProject()).getGuardedByAnnotations();
     final PsiAnnotation annotation = AnnotationUtil.findAnnotation(member, annotations);
     return annotation != null && guard.equals(getGuardValue(annotation));
@@ -87,7 +88,7 @@ public class JCiPUtil {
     return isGuardedBy(member, field.getName());
   }
 
-  public static boolean isGuardedByAnnotation(@Nonnull PsiAnnotation annotation) {
+  public static boolean isGuardedByAnnotation(@jakarta.annotation.Nonnull PsiAnnotation annotation) {
     return ConcurrencyAnnotationsManager.getInstance(annotation.getProject()).getGuardedByAnnotations().contains(annotation.getQualifiedName());
   }
 
@@ -115,7 +116,7 @@ public class JCiPUtil {
     return null;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static String getGuardValue(PsiDocTag tag) {
     final String text = tag.getText();
     return text.substring(text.indexOf((int) '(') + 1, text.indexOf((int) ')')).trim();
@@ -133,7 +134,7 @@ public class JCiPUtil {
       }
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     private String getGuardString() {
       return guardString;
     }

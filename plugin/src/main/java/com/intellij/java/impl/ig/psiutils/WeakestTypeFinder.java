@@ -34,8 +34,8 @@ import com.siyeh.ig.psiutils.TypeUtils;
 import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 public class WeakestTypeFinder {
@@ -311,7 +311,7 @@ public class WeakestTypeFinder {
     return checkType(type, substitutor, weakestTypeClasses);
   }
 
-  private static boolean checkType(@Nullable PsiType type, @Nonnull PsiSubstitutor substitutor,
+  private static boolean checkType(@jakarta.annotation.Nullable PsiType type, @Nonnull PsiSubstitutor substitutor,
                                    @Nonnull Collection<PsiClass> weakestTypeClasses) {
     if (!(type instanceof PsiClassType)) {
       return false;
@@ -529,7 +529,7 @@ public class WeakestTypeFinder {
     return null;
   }
 
-  private static void checkClass(@Nullable PsiClass aClass, @Nonnull Collection<PsiClass> weakestTypeClasses) {
+  private static void checkClass(@jakarta.annotation.Nullable PsiClass aClass, @Nonnull Collection<PsiClass> weakestTypeClasses) {
     if (aClass == null) {
       return;
     }

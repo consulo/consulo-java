@@ -28,9 +28,9 @@ import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ExtractIncrementIntention", fileExtensions = "java", categories = {"Java", "Other"})
@@ -51,7 +51,7 @@ public class ExtractIncrementIntention extends MutablyNamedIntention {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new ExtractIncrementPredicate();
   }
@@ -262,19 +262,19 @@ public class ExtractIncrementIntention extends MutablyNamedIntention {
     replaceExpression(operandText, (PsiExpression)element);
   }
 
-  private static String getElementText(@Nonnull PsiElement element,
-                                       @Nullable PsiElement elementToReplace,
-                                       @Nullable String replacement) {
+  private static String getElementText(@jakarta.annotation.Nonnull PsiElement element,
+                                       @jakarta.annotation.Nullable PsiElement elementToReplace,
+                                       @jakarta.annotation.Nullable String replacement) {
     final StringBuilder out = new StringBuilder();
     getElementText(element, elementToReplace, replacement, out);
     return out.toString();
   }
 
   private static void getElementText(
-    @Nonnull PsiElement element,
+    @jakarta.annotation.Nonnull PsiElement element,
     @Nullable PsiElement elementToReplace,
-    @Nullable String replacement,
-    @Nonnull StringBuilder out) {
+    @jakarta.annotation.Nullable String replacement,
+    @jakarta.annotation.Nonnull StringBuilder out) {
     if (element.equals(elementToReplace)) {
       out.append(replacement);
       return;

@@ -25,8 +25,8 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.util.collection.Maps;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 public class PsiSuperMethodUtil
@@ -111,7 +111,7 @@ public class PsiSuperMethodUtil
 		return false;
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public static PsiSubstitutor obtainFinalSubstitutor(@Nonnull PsiClass superClass, @Nonnull PsiSubstitutor superSubstitutor, @Nonnull PsiSubstitutor derivedSubstitutor, boolean inRawContext)
 	{
 		if(inRawContext)
@@ -135,8 +135,8 @@ public class PsiSuperMethodUtil
 		return map == null ? PsiSubstitutor.EMPTY : JavaPsiFacade.getInstance(superClass.getProject()).getElementFactory().createSubstitutor(map);
 	}
 
-	@Nonnull
-	public static Map<MethodSignature, Set<PsiMethod>> collectOverrideEquivalents(@Nonnull PsiClass aClass)
+	@jakarta.annotation.Nonnull
+	public static Map<MethodSignature, Set<PsiMethod>> collectOverrideEquivalents(@jakarta.annotation.Nonnull PsiClass aClass)
 	{
 		final Map<MethodSignature, Set<PsiMethod>> overrideEquivalent = Maps.newHashMap(MethodSignatureUtil.METHOD_PARAMETERS_ERASURE_EQUALITY);
 		final GlobalSearchScope resolveScope = aClass.getResolveScope();

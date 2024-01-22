@@ -19,7 +19,7 @@ import com.intellij.java.language.impl.codeInsight.PackageChooserDialog;
 import consulo.project.Project;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.java.impl.ui.ReferenceEditorComboWithBrowseButton;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

@@ -17,7 +17,7 @@ package com.intellij.java.impl.codeInspection.defaultFileTemplateUsage;
 
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.InspectionsBundle;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author cdr
@@ -30,7 +30,7 @@ public abstract class ReplaceWithFileTemplateFix implements LocalQuickFix {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getFamilyName() {
     return getName();
   }

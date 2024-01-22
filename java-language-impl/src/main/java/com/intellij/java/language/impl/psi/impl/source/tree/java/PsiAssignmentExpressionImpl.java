@@ -26,7 +26,7 @@ import consulo.language.ast.TokenSet;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.logging.Logger;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class PsiAssignmentExpressionImpl extends ExpressionPsiElement implements PsiAssignmentExpression {
   private static final Logger LOG = Logger.getInstance(PsiAssignmentExpressionImpl.class);

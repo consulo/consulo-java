@@ -38,9 +38,9 @@ import consulo.language.psi.PsiFile;
 import consulo.module.content.ProjectRootManager;
 import consulo.util.dataholder.Key;
 import consulo.virtualFileSystem.VirtualFile;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public abstract class ElementOnlyUsedFromTestCodeInspection extends BaseGlobalInspection
 {
@@ -48,7 +48,7 @@ public abstract class ElementOnlyUsedFromTestCodeInspection extends BaseGlobalIn
 	private static final Key<Boolean> ONLY_USED_FROM_TEST_CODE =
 			Key.create("ONLY_USED_FROM_TEST_CODE");
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
 	public String getDisplayName()
 	{

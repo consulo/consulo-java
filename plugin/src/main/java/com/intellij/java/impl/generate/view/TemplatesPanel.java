@@ -32,7 +32,7 @@ import com.intellij.java.impl.generate.template.TemplateResource;
 import com.intellij.java.impl.generate.template.TemplatesManager;
 import com.intellij.java.impl.generate.template.toString.ToStringTemplatesManager;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.function.Supplier;

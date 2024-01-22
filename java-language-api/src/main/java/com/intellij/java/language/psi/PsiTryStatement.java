@@ -15,8 +15,8 @@
  */
 package com.intellij.java.language.psi;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * Represents a Java <code>try ... catch ... finally</code> statement.
@@ -53,7 +53,7 @@ public interface PsiTryStatement extends PsiStatement {
    * @return the array of <code>catch</code> sections, or an empty array if the statement
    * has no catch sections.
    */
-  @Nonnull
+  @jakarta.annotation.Nonnull
   PsiCatchSection[] getCatchSections();
 
   /**

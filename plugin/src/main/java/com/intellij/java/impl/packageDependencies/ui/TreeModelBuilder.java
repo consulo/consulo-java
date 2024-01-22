@@ -43,9 +43,9 @@ import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileVisitor;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -199,7 +199,7 @@ public class TreeModelBuilder {
     return new TreeModel(myRoot, myTotalFileCount, myMarkedFileCount);
   }
 
-  private void processFilesRecursively(@Nonnull VirtualFile file) {
+  private void processFilesRecursively(@jakarta.annotation.Nonnull VirtualFile file) {
     VfsUtilCore.visitChildrenRecursively(file, new VirtualFileVisitor() {
       private PackageDependenciesNode parent = null;
 
@@ -215,7 +215,7 @@ public class TreeModelBuilder {
       }
 
       @Override
-      public void afterChildrenVisited(@Nonnull VirtualFile file) {
+      public void afterChildrenVisited(@jakarta.annotation.Nonnull VirtualFile file) {
         if (file.isDirectory()) {
           parent = null;
         }
@@ -226,7 +226,7 @@ public class TreeModelBuilder {
   private void countFilesRecursively(VirtualFile file) {
     VfsUtilCore.visitChildrenRecursively(file, new VirtualFileVisitor() {
       @Override
-      public boolean visitFile(@Nonnull VirtualFile file) {
+      public boolean visitFile(@jakarta.annotation.Nonnull VirtualFile file) {
         if (!file.isDirectory()) {
           counting();
         }
@@ -270,7 +270,7 @@ public class TreeModelBuilder {
     return new TreeModel(myRoot, myTotalFileCount, myMarkedFileCount);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private PackageDependenciesNode buildFileNode(final VirtualFile file, @Nullable PackageDependenciesNode parent) {
     final ProgressIndicator indicator = ProgressManager.getInstance().getProgressIndicator();
     if (indicator != null) {
@@ -295,7 +295,7 @@ public class TreeModelBuilder {
     return null;
   }
 
-  public @Nullable
+  public @jakarta.annotation.Nullable
   PackageDependenciesNode getFileParentNode(VirtualFile vFile) {
     LOG.assertTrue(vFile != null);
     final VirtualFile containingDirectory = vFile.getParent();
@@ -323,7 +323,7 @@ public class TreeModelBuilder {
     return ScopeType.SOURCE;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private OrderEntry getLibraryForFile(VirtualFile virtualFile) {
     if (virtualFile == null) return null;
     List<OrderEntry> orders = myFileIndex.getOrderEntriesForFile(virtualFile);
@@ -387,7 +387,7 @@ public class TreeModelBuilder {
   }
 
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private PackageDependenciesNode getModuleNode(Module module, ScopeType scopeType) {
     if (module == null || !myShowModules) {
       return getRootNode(scopeType);
@@ -454,7 +454,7 @@ public class TreeModelBuilder {
   }
 
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private PackageDependenciesNode getRootNode(ScopeType scopeType) {
     if (!myGroupByScopeType) {
       return myRoot;

@@ -7,13 +7,13 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.usage.*;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class UsageContextDataflowToPaneProvider implements UsageContextPanelProvider {
   @Nonnull
   @Override
-  public UsageContextPanel create(@Nonnull UsageView usageView) {
+  public UsageContextPanel create(@jakarta.annotation.Nonnull UsageView usageView) {
     return new UsageContextDataflowToPanel(((consulo.ide.impl.idea.usages.impl.UsageViewImpl) usageView).getProject(), usageView.getPresentation());
   }
 

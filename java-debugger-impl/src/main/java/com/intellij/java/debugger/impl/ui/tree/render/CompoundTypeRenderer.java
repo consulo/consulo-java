@@ -16,7 +16,7 @@
 package com.intellij.java.debugger.impl.ui.tree.render;
 
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import com.intellij.java.debugger.DebuggerContext;
 import com.intellij.java.debugger.engine.DebugProcess;
 import com.intellij.java.debugger.engine.DebuggerUtils;
@@ -131,7 +131,7 @@ public class CompoundTypeRenderer extends CompoundNodeRenderer
 		return UNIQUE_ID;
 	}
 
-	public void setClassName(@Nonnull String name)
+	public void setClassName(@jakarta.annotation.Nonnull String name)
 	{
 		myProperties.setClassName(name);
 		if(getRawLabelRenderer() != null)

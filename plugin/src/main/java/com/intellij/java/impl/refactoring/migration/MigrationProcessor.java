@@ -36,7 +36,7 @@ import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.Ref;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 
 /**
@@ -94,13 +94,13 @@ public class MigrationProcessor extends BaseRefactoringProcessor
 	}
 
 	@Override
-	protected void refreshElements(@Nonnull PsiElement[] elements)
+	protected void refreshElements(@jakarta.annotation.Nonnull PsiElement[] elements)
 	{
 		myPsiMigration = startMigration(myProject);
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	protected UsageInfo[] findUsages()
 	{
 		ArrayList<UsageInfo> usagesVector = new ArrayList<>();
@@ -160,7 +160,7 @@ public class MigrationProcessor extends BaseRefactoringProcessor
 	}
 
 	@Override
-	protected void performRefactoring(@Nonnull UsageInfo[] usages)
+	protected void performRefactoring(@jakarta.annotation.Nonnull UsageInfo[] usages)
 	{
 		finishFindMigration();
 		final PsiMigration psiMigration = PsiMigrationManager.getInstance(myProject).startMigration();
@@ -210,7 +210,7 @@ public class MigrationProcessor extends BaseRefactoringProcessor
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	protected String getCommandName()
 	{
 		return REFACTORING_NAME;

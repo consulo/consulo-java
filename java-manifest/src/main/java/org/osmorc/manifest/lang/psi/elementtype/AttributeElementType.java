@@ -30,7 +30,7 @@ import consulo.language.psi.stub.IndexSink;
 import consulo.language.psi.stub.StubElement;
 import consulo.language.psi.stub.StubInputStream;
 import consulo.language.psi.stub.StubOutputStream;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import org.osmorc.manifest.lang.psi.Attribute;
 import org.osmorc.manifest.lang.psi.impl.AttributeImpl;
 import org.osmorc.manifest.lang.psi.stub.AttributeStub;

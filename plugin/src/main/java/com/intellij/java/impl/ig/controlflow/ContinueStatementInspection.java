@@ -15,13 +15,12 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiContinueStatement;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ContinueStatementInspection extends BaseInspection {
@@ -32,7 +31,7 @@ public class ContinueStatementInspection extends BaseInspection {
       "continue.statement.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "statement.problem.descriptor");

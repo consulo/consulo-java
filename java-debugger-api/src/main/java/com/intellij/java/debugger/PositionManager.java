@@ -18,8 +18,8 @@ package com.intellij.java.debugger;
 import java.util.List;
 import java.util.Set;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import com.intellij.java.debugger.engine.JSR45PositionManager;
 import com.intellij.java.debugger.engine.jdi.VirtualMachineProxy;
@@ -57,7 +57,7 @@ public interface PositionManager
 	 * @see VirtualMachineProxy#classesByName
 	 */
 	@Nonnull
-	List<ReferenceType> getAllClasses(@Nonnull SourcePosition classPosition) throws NoDataException;
+	List<ReferenceType> getAllClasses(@jakarta.annotation.Nonnull SourcePosition classPosition) throws NoDataException;
 
 	/**
 	 * Returns the list of bytecode locations in a specific class corresponding to the specified position in the source code.
@@ -69,7 +69,7 @@ public interface PositionManager
 	 * @see ReferenceType#locationsOfLine(int)
 	 */
 	@Nonnull
-	List<Location> locationsOfLine(@Nonnull ReferenceType type, @Nonnull SourcePosition position) throws NoDataException;
+	List<Location> locationsOfLine(@jakarta.annotation.Nonnull ReferenceType type, @jakarta.annotation.Nonnull SourcePosition position) throws NoDataException;
 
 	/**
 	 * Called to request the JVM to notify the debugger engine when a class corresponding to a breakpoint location is loaded.
@@ -81,8 +81,8 @@ public interface PositionManager
 	 * @return the prepare request, or null if the code is managed by this {@code PositionManager} but no class prepare notification is needed
 	 * @throws NoDataException if the position is not in the code managed by this {@code PositionManager}
 	 */
-	@Nullable
-	ClassPrepareRequest createPrepareRequest(@Nonnull ClassPrepareRequestor requestor, @Nonnull SourcePosition position) throws NoDataException;
+	@jakarta.annotation.Nullable
+	ClassPrepareRequest createPrepareRequest(@jakarta.annotation.Nonnull ClassPrepareRequestor requestor, @Nonnull SourcePosition position) throws NoDataException;
 
 	/**
 	 * Return file types this position manager accepts

@@ -7,8 +7,8 @@ import com.intellij.java.language.psi.PsiType;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Objects;
 
 /**
@@ -62,7 +62,7 @@ public abstract class DfConstantType<T> implements DfType {
    * @param value  constant value
    * @return true if given dfType represents a constant that is equal to given value
    */
-  public static boolean isConst(@Nonnull DfType dfType, @Nullable Object value) {
+  public static boolean isConst(@Nonnull DfType dfType, @jakarta.annotation.Nullable Object value) {
     return dfType instanceof DfConstantType && Objects.equals(((DfConstantType<?>) dfType).getValue(), value);
   }
 

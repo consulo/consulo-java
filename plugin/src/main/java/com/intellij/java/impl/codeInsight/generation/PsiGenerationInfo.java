@@ -15,8 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.generation;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import consulo.logging.Logger;
@@ -29,6 +28,7 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifierList;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import consulo.language.util.IncorrectOperationException;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
@@ -58,7 +58,7 @@ public class PsiGenerationInfo<T extends PsiMember> extends GenerationInfoBase i
 	}
 
 	@Override
-	public void insert(@Nonnull final PsiClass aClass, @Nullable PsiElement anchor, boolean before) throws IncorrectOperationException
+	public void insert(@jakarta.annotation.Nonnull final PsiClass aClass, @Nullable PsiElement anchor, boolean before) throws IncorrectOperationException
 	{
 		final PsiMember existingMember;
 		if(myMember instanceof PsiField)

@@ -17,8 +17,9 @@ import consulo.navigation.ItemPresentationProvider;
 import consulo.util.collection.JBIterable;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.List;
 
 import static consulo.util.collection.ContainerUtil.newArrayList;
@@ -31,13 +32,13 @@ public class ClsJavaModuleImpl extends ClsRepositoryPsiElement<PsiJavaModuleStub
     myReference = new ClsJavaModuleReferenceElementImpl(this, stub.getName());
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Iterable<PsiRequiresStatement> getRequires() {
     return JBIterable.of(getStub().getChildrenByType(JavaElementType.REQUIRES_STATEMENT, PsiRequiresStatement.EMPTY_ARRAY));
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Iterable<PsiPackageAccessibilityStatement> getExports() {
     return JBIterable.of(getStub().getChildrenByType(JavaElementType.EXPORTS_STATEMENT, PsiPackageAccessibilityStatement.EMPTY_ARRAY));
@@ -62,7 +63,7 @@ public class ClsJavaModuleImpl extends ClsRepositoryPsiElement<PsiJavaModuleStub
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, @jakarta.annotation.Nonnull StringBuilder buffer) {
     appendText(getModifierList(), indentLevel, buffer);
     buffer.append("module ").append(getName()).append(" {\n");
 
@@ -122,7 +123,7 @@ public class ClsJavaModuleImpl extends ClsRepositoryPsiElement<PsiJavaModuleStub
   }
 
   @Override
-  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
+  public PsiElement setName(@jakarta.annotation.Nonnull String name) throws IncorrectOperationException {
     throw cannotModifyException(this);
   }
 
@@ -167,7 +168,7 @@ public class ClsJavaModuleImpl extends ClsRepositoryPsiElement<PsiJavaModuleStub
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitModule(this);
     } else {

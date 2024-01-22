@@ -20,7 +20,7 @@ import com.intellij.jam.JamElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementRef;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.function.Function;
 
 /**

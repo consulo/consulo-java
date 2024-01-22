@@ -15,8 +15,8 @@
  */
 package com.intellij.java.language.jvm;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import org.jetbrains.annotations.NonNls;
 import com.intellij.java.language.jvm.types.JvmReferenceType;
@@ -37,7 +37,7 @@ public interface JvmClass extends JvmTypeParametersOwner, JvmTypeDeclaration
 	 * @return the qualified name, of {@code null} if the class is anonymous or local
 	 * @see Class#getCanonicalName
 	 */
-	@Nullable
+	@jakarta.annotation.Nullable
 	@NonNls
 	String getQualifiedName();
 
@@ -50,7 +50,7 @@ public interface JvmClass extends JvmTypeParametersOwner, JvmTypeDeclaration
 	 * @see Class#getGenericSuperclass
 	 * @see Class#getAnnotatedSuperclass
 	 */
-	@Nullable
+	@jakarta.annotation.Nullable
 	JvmReferenceType getSuperClassType();
 
 	/**
@@ -76,7 +76,7 @@ public interface JvmClass extends JvmTypeParametersOwner, JvmTypeDeclaration
 	 * @return all (static, private, etc) fields declared by this class but excluding inherited ones
 	 * @see Class#getDeclaredFields
 	 */
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	JvmField[] getFields();
 
 	/**

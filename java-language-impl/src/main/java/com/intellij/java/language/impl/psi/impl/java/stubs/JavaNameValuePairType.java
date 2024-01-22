@@ -31,7 +31,7 @@ import consulo.language.psi.stub.StubElement;
 import consulo.language.psi.stub.StubInputStream;
 import consulo.language.psi.stub.StubOutputStream;
 import consulo.index.io.StringRef;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.io.IOException;
 import java.util.List;
@@ -51,7 +51,7 @@ public class JavaNameValuePairType extends JavaStubElementType<PsiNameValuePairS
     return new PsiNameValuePairImpl(node);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public ASTNode createCompositeNode() {
     return new NameValuePairElement();
@@ -80,7 +80,7 @@ public class JavaNameValuePairType extends JavaStubElementType<PsiNameValuePairS
   }
 
   @Override
-  public void serialize(@Nonnull PsiNameValuePairStub stub, @Nonnull StubOutputStream dataStream) throws IOException {
+  public void serialize(@jakarta.annotation.Nonnull PsiNameValuePairStub stub, @Nonnull StubOutputStream dataStream) throws IOException {
     dataStream.writeName(stub.getName());
     dataStream.writeName(stub.getValue());
   }

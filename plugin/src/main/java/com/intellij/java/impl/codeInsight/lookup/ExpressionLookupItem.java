@@ -26,8 +26,8 @@ import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.language.psi.PsiElement;
 import consulo.ui.image.Image;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Set;
 
 /**
@@ -44,7 +44,7 @@ public class ExpressionLookupItem extends LookupElement implements TypedLookupIt
     this(expression, getExpressionIcon(expression), expression.getText(), expression.getText());
   }
 
-  public ExpressionLookupItem(final PsiExpression expression, @Nullable Image icon, String presentableText, String... lookupStrings) {
+  public ExpressionLookupItem(final PsiExpression expression, @jakarta.annotation.Nullable Image icon, String presentableText, String... lookupStrings) {
     myExpression = expression;
     myPresentableText = presentableText;
     myIcon = icon;

@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.refactoring.ui;
 
-import javax.annotation.Nonnull;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
@@ -25,6 +24,7 @@ import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.ui.ex.awt.ListCellRendererWrapper;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.language.icon.IconDescriptorUpdaters;
+import jakarta.annotation.Nonnull;
 
 /**
  * Renders a list cell which contains a class.

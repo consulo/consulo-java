@@ -33,11 +33,10 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.module.Module;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.osmorc.manifest.lang.headerparser.impl.AbstractHeaderParserImpl;
 import org.osmorc.manifest.lang.psi.Clause;
 import org.osmorc.manifest.lang.psi.HeaderValuePart;
-
-import javax.annotation.Nonnull;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)
@@ -70,7 +69,7 @@ public class BundleActivatorParser extends AbstractHeaderParserImpl{
   }
 
   @Override
-  public boolean isAcceptable(@Nonnull Object o) {
+  public boolean isAcceptable(@jakarta.annotation.Nonnull Object o) {
     return o instanceof PsiClass;
   }
 }

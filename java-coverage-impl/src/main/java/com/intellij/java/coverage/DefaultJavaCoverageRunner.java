@@ -22,11 +22,11 @@ import consulo.execution.coverage.CoverageEngine;
 import consulo.execution.coverage.CoverageExecutor;
 import consulo.execution.coverage.CoverageRunnerData;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl(id = "DefaultJavaCoverageRunner")
 public class DefaultJavaCoverageRunner extends DefaultJavaProgramRunner {
-  public boolean canRun(@Nonnull final String executorId, @Nonnull final RunProfile profile) {
+  public boolean canRun(@jakarta.annotation.Nonnull final String executorId, @Nonnull final RunProfile profile) {
     try {
       return executorId.equals(CoverageExecutor.EXECUTOR_ID) &&
           //profile instanceof ModuleBasedConfiguration &&
@@ -43,7 +43,7 @@ public class DefaultJavaCoverageRunner extends DefaultJavaProgramRunner {
     return new CoverageRunnerData();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getRunnerId() {
     return "Cover";

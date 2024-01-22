@@ -55,7 +55,7 @@ import consulo.usage.*;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.function.Condition;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 @ExtensionImpl(id = "javaProcessor")
@@ -104,7 +104,7 @@ public class JavaSafeDeleteProcessor extends SafeDeleteProcessorDelegateBase {
   @Nullable
   @Override
   public Collection<? extends PsiElement> getElementsToSearch(PsiElement element,
-                                                              @Nullable Module module,
+                                                              @jakarta.annotation.Nullable Module module,
                                                               Collection<PsiElement> allElementsToDelete) {
     Project project = element.getProject();
     if (element instanceof PsiPackage && module != null) {

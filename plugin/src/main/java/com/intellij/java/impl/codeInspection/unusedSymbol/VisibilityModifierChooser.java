@@ -30,7 +30,7 @@ import consulo.ui.ex.popup.JBPopupFactory;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -55,7 +55,7 @@ public class VisibilityModifierChooser extends JLabel implements UserActivityPro
   private final Set<ChangeListener> myListeners = new HashSet<>();
   private String myCurrentModifier;
 
-  public VisibilityModifierChooser(@Nonnull Supplier<Boolean> canBeEnabled, @Nonnull String modifier, @Nonnull Consumer<String> modifierChangedConsumer) {
+  public VisibilityModifierChooser(@Nonnull Supplier<Boolean> canBeEnabled, @jakarta.annotation.Nonnull String modifier, @Nonnull Consumer<String> modifierChangedConsumer) {
     this(canBeEnabled, modifier, modifierChangedConsumer, MODIFIERS);
   }
 
@@ -65,7 +65,7 @@ public class VisibilityModifierChooser extends JLabel implements UserActivityPro
     super.setText(text);
   }
 
-  public VisibilityModifierChooser(@Nonnull Supplier<Boolean> canBeEnabled, @Nonnull String modifier, @Nonnull Consumer<String> modifierChangedConsumer, @Nonnull String[] modifiers) {
+  public VisibilityModifierChooser(@Nonnull Supplier<Boolean> canBeEnabled, @Nonnull String modifier, @jakarta.annotation.Nonnull Consumer<String> modifierChangedConsumer, @jakarta.annotation.Nonnull String[] modifiers) {
     myCanBeEnabled = canBeEnabled;
     setIcon(TargetAWT.to(PlatformIconGroup.generalArrowdown()));
     setDisabledIcon(TargetAWT.to(PlatformIconGroup.generalArrowdown()));

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.methodmetrics;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameterList;
@@ -32,13 +32,13 @@ public class ParametersPerMethodInspection extends MethodMetricInspection {
     return "MethodWithTooManyParameters";
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "parameters.per.method.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     final Integer parameterCount = (Integer)infos[0];
     return InspectionGadgetsBundle.message(
@@ -60,7 +60,7 @@ public class ParametersPerMethodInspection extends MethodMetricInspection {
   private class ParametersPerMethodVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
       // note: no call to super
       if (method.getNameIdentifier() == null) {
         return;

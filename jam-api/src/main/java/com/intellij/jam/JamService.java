@@ -35,8 +35,8 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -102,8 +102,8 @@ public class JamService {
     return null;
   }
 
-  @Nullable
-  public <T extends JamElement> T getJamElement(@Nonnull PsiElement psi,
+  @jakarta.annotation.Nullable
+  public <T extends JamElement> T getJamElement(@jakarta.annotation.Nonnull PsiElement psi,
                                                 JamMemberMeta<? extends PsiModifierListOwner, ? extends T>... metas) {
     for (JamMemberMeta<? extends PsiModifierListOwner, ? extends T> meta : metas) {
       final JamElement element = mySemService.getSemElement(meta.getJamKey(), psi);
@@ -113,7 +113,7 @@ public class JamService {
   }
 
   @Nullable
-  public <T extends JamElement> T getJamElement(SemKey<T> key, @Nonnull PsiElement psi) {
+  public <T extends JamElement> T getJamElement(SemKey<T> key, @jakarta.annotation.Nonnull PsiElement psi) {
     if (!psi.isValid()) {
       throw new PsiInvalidElementAccessException(psi);
     }
@@ -125,13 +125,13 @@ public class JamService {
     }
   }
 
-  @Nonnull
-  public <T extends PsiModifierListOwner> List<JamMemberMeta> getMetas(@Nonnull T psi) {
+  @jakarta.annotation.Nonnull
+  public <T extends PsiModifierListOwner> List<JamMemberMeta> getMetas(@jakarta.annotation.Nonnull T psi) {
     return mySemService.getSemElements(JamService.MEMBER_META_KEY, psi);
   }
 
   @Nullable
-  public <T extends PsiModifierListOwner> JamMemberMeta<T, ?> getMeta(@Nonnull T psi, SemKey<? extends JamMemberMeta<T, ?>> key) {
+  public <T extends PsiModifierListOwner> JamMemberMeta<T, ?> getMeta(@jakarta.annotation.Nonnull T psi, SemKey<? extends JamMemberMeta<T, ?>> key) {
     return mySemService.getSemElement(key, psi);
   }
 
@@ -159,7 +159,7 @@ public class JamService {
     return getJamFieldElements(meta.getJamKey(), anno, scope);
   }
 
-  public <T extends JamElement> List<T> getAnnotatedMembersList(@Nonnull final PsiClass psiClass,
+  public <T extends JamElement> List<T> getAnnotatedMembersList(@jakarta.annotation.Nonnull final PsiClass psiClass,
                                                                 final boolean checkClass,
                                                                 final boolean checkMethods,
                                                                 final boolean checkFields,
@@ -223,7 +223,7 @@ public class JamService {
     return result;
   }
 
-  public <T extends JamElement> List<T> getAnnotatedMembersList(@Nonnull final PsiClass psiClass,
+  public <T extends JamElement> List<T> getAnnotatedMembersList(@jakarta.annotation.Nonnull final PsiClass psiClass,
                                                                 final SemKey<T> clazz,
                                                                 final boolean checkClass,
                                                                 final boolean checkMethods,

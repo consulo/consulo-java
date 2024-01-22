@@ -33,10 +33,10 @@ import consulo.util.xml.serializer.XmlSerializer;
 import consulo.util.xml.serializer.annotation.AbstractCollection;
 import consulo.util.xml.serializer.annotation.Tag;
 import consulo.util.xml.serializer.annotation.Transient;
+import jakarta.annotation.Nullable;
 import jakarta.inject.Singleton;
 import org.jdom.Element;
 
-import javax.annotation.Nullable;
 import java.util.*;
 
 @Singleton

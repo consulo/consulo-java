@@ -47,7 +47,7 @@ import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -227,7 +227,7 @@ public class IntroduceParameterObjectDialog extends RefactoringDialog {
     return myInnerClassNameTextField.getText().trim();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getPackageName() {
     return packageTextField.getText().trim();
   }
@@ -237,7 +237,7 @@ public class IntroduceParameterObjectDialog extends RefactoringDialog {
     return existingClassField.getText().trim();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getClassName() {
     return classNameField.getText().trim();
   }

@@ -30,7 +30,7 @@ import consulo.util.lang.Comparing;
 import consulo.util.lang.ref.Ref;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.function.BiPredicate;
 
 /**
@@ -44,7 +44,7 @@ public class PsiMethodPattern extends PsiMemberPattern<PsiMethod,PsiMethodPatter
   public PsiMethodPattern withParameterCount(@NonNls final int paramCount) {
     return with(new PatternCondition<PsiMethod>("withParameterCount") {
       @Override
-      public boolean accepts(@Nonnull final PsiMethod method, final ProcessingContext context) {
+      public boolean accepts(@jakarta.annotation.Nonnull final PsiMethod method, final ProcessingContext context) {
         return method.getParameterList().getParametersCount() == paramCount;
       }
     });
@@ -128,7 +128,7 @@ public class PsiMethodPattern extends PsiMemberPattern<PsiMethod,PsiMethodPatter
   public PsiMethodPattern constructor(final boolean isConstructor) {
     return with(new PatternCondition<PsiMethod>("constructor") {
       @Override
-      public boolean accepts(@Nonnull final PsiMethod method, final ProcessingContext context) {
+      public boolean accepts(@jakarta.annotation.Nonnull final PsiMethod method, final ProcessingContext context) {
         return method.isConstructor() == isConstructor;
       }
     });

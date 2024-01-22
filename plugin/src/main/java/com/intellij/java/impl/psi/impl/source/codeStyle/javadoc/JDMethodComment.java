@@ -17,8 +17,8 @@ package com.intellij.java.impl.psi.impl.source.codeStyle.javadoc;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import consulo.ide.impl.idea.util.containers.ContainerUtilRt;
 
@@ -38,7 +38,7 @@ public class JDMethodComment extends JDParamListOwnerComment
 	}
 
 	@Override
-	protected void generateSpecial(@Nonnull String prefix, @Nonnull StringBuilder sb)
+	protected void generateSpecial(@jakarta.annotation.Nonnull String prefix, @jakarta.annotation.Nonnull StringBuilder sb)
 	{
 		super.generateSpecial(prefix, sb);
 
@@ -70,7 +70,7 @@ public class JDMethodComment extends JDParamListOwnerComment
 		}
 	}
 
-	public void setReturnTag(@Nonnull String returnTag)
+	public void setReturnTag(@jakarta.annotation.Nonnull String returnTag)
 	{
 		this.myReturnTag = returnTag;
 	}

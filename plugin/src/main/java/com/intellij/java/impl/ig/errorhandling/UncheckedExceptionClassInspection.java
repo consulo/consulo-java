@@ -23,7 +23,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class UncheckedExceptionClassInspection extends BaseInspection {
@@ -51,7 +51,7 @@ public class UncheckedExceptionClassInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
       if (!InheritanceUtil.isInheritor(aClass,
                                        JavaClassNames.JAVA_LANG_THROWABLE)) {
         return;

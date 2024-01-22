@@ -23,7 +23,7 @@ import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author Dmitry Avdeev
@@ -31,7 +31,7 @@ import javax.annotation.Nonnull;
  */
 public class JavaDocAnnotator implements Annotator {
   @Override
-  public void annotate(@Nonnull PsiElement element, @Nonnull AnnotationHolder holder) {
+  public void annotate(@Nonnull PsiElement element, @jakarta.annotation.Nonnull AnnotationHolder holder) {
     if (element instanceof PsiDocTag) {
       String name = ((PsiDocTag)element).getName();
       if ("param".equals(name)) {

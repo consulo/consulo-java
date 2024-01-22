@@ -24,14 +24,13 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class AssignmentToCatchBlockParameterInspection extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
         "assignment.to.catch.block.parameter.display.name");
@@ -59,7 +58,7 @@ public class AssignmentToCatchBlockParameterInspection extends BaseInspection {
 
     @Override
     public void visitAssignmentExpression(
-        @Nonnull PsiAssignmentExpression expression) {
+        @jakarta.annotation.Nonnull PsiAssignmentExpression expression) {
       super.visitAssignmentExpression(expression);
       if (!WellFormednessUtils.isWellFormed(expression)) {
         return;

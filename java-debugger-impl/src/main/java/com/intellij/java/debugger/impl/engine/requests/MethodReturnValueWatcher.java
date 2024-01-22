@@ -17,8 +17,7 @@ package com.intellij.java.debugger.impl.engine.requests;
 
 import java.lang.reflect.InvocationTargetException;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
 import consulo.util.lang.Comparing;
@@ -37,6 +36,7 @@ import consulo.internal.com.sun.jdi.request.MethodEntryRequest;
 import consulo.internal.com.sun.jdi.request.MethodExitRequest;
 import consulo.java.debugger.impl.JavaRegistry;
 import consulo.logging.Logger;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author Eugene Zhuravlev
@@ -249,7 +249,7 @@ public class MethodReturnValueWatcher
 		return myEntryRequest;
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	private MethodExitRequest createExitRequest()
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread(); // to ensure EventRequestManager synchronization

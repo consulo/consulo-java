@@ -51,8 +51,8 @@ import consulo.util.lang.ref.Ref;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 @ServiceAPI(ComponentScope.APPLICATION)
@@ -150,7 +150,7 @@ public abstract class DebuggerUtils {
   }
 
   @Nullable
-  public static Method findMethod(@Nonnull ReferenceType refType, @NonNls String methodName, @NonNls String methodSignature) {
+  public static Method findMethod(@jakarta.annotation.Nonnull ReferenceType refType, @NonNls String methodName, @NonNls String methodSignature) {
     if (refType instanceof ArrayType) {
       // for array types methodByName() in JDI always returns empty list
       final Method method = findMethod(refType.virtualMachine().classesByName(JavaClassNames.JAVA_LANG_OBJECT).get(0), methodName, methodSignature);
@@ -206,7 +206,7 @@ public abstract class DebuggerUtils {
   }
 
   @Nullable
-  protected static ArrayClass getArrayClass(@Nonnull String className) {
+  protected static ArrayClass getArrayClass(@jakarta.annotation.Nonnull String className) {
     boolean searchBracket = false;
     int dims = 0;
     int pos;
@@ -241,7 +241,7 @@ public abstract class DebuggerUtils {
     return new ArrayClass(className.substring(0, pos + 1), dims);
   }
 
-  public static boolean instanceOf(@Nonnull String subType, @Nonnull String superType, @Nullable Project project) {
+  public static boolean instanceOf(@jakarta.annotation.Nonnull String subType, @Nonnull String superType, @jakarta.annotation.Nullable Project project) {
     if (project == null) {
       return subType.equals(superType);
     }
@@ -264,7 +264,7 @@ public abstract class DebuggerUtils {
   }
 
   @Nullable
-  public static Type getSuperType(@Nullable Type subType, @Nonnull String superType) {
+  public static Type getSuperType(@Nullable Type subType, @jakarta.annotation.Nonnull String superType) {
     if (subType == null) {
       return null;
     }
@@ -351,12 +351,12 @@ public abstract class DebuggerUtils {
     return null;
   }
 
-  public static boolean instanceOf(@Nullable Type subType, @Nonnull String superType) {
+  public static boolean instanceOf(@Nullable Type subType, @jakarta.annotation.Nonnull String superType) {
     return getSuperType(subType, superType) != null;
   }
 
   @Nullable
-  public static PsiClass findClass(@Nonnull final String className, @Nonnull Project project, final GlobalSearchScope scope) {
+  public static PsiClass findClass(@jakarta.annotation.Nonnull final String className, @jakarta.annotation.Nonnull Project project, final GlobalSearchScope scope) {
     ApplicationManager.getApplication().assertReadAccessAllowed();
     try {
       if (getArrayClass(className) != null) {
@@ -382,7 +382,7 @@ public abstract class DebuggerUtils {
   }
 
   @Nullable
-  public static PsiType getType(@Nonnull String className, @Nonnull Project project) {
+  public static PsiType getType(@jakarta.annotation.Nonnull String className, @jakarta.annotation.Nonnull Project project) {
     ApplicationManager.getApplication().assertReadAccessAllowed();
 
     final PsiManager psiManager = PsiManager.getInstance(project);
@@ -479,7 +479,7 @@ public abstract class DebuggerUtils {
     return rv.get().booleanValue();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public abstract TransportService.ListenKey findAvailableDebugAddress(int type) throws ExecutionException;
 
   public static boolean isSynthetic(TypeComponent typeComponent) {

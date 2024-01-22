@@ -21,7 +21,6 @@ import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
-import javax.annotation.Nullable;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -29,8 +28,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
-import javax.annotation.Nonnull;
 
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
@@ -46,6 +43,8 @@ import consulo.ui.ex.awt.StateRestoringCheckBox;
 import com.intellij.java.debugger.impl.classFilter.ClassFilterEditor;
 import consulo.ui.ex.awt.JBUI;
 import consulo.ui.annotation.RequiredUIAccess;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Eugene Belyaev
@@ -327,7 +326,7 @@ public class DebuggerDataViewsConfigurable implements SearchableConfigurable
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public String getId()
 	{
 		return getHelpTopic();

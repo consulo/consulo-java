@@ -31,7 +31,7 @@ import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 import consulo.ide.impl.idea.util.FunctionUtil;
 import consulo.util.collection.ContainerUtil;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;

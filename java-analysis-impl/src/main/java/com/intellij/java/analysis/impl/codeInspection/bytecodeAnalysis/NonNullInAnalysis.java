@@ -23,7 +23,7 @@ import consulo.internal.org.objectweb.asm.tree.JumpInsnNode;
 import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
 import consulo.internal.org.objectweb.asm.tree.analysis.BasicValue;
 import consulo.internal.org.objectweb.asm.tree.analysis.Frame;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.List;
 import java.util.Set;
@@ -88,7 +88,7 @@ class NonNullInAnalysis extends Analysis<PResult>
 	private PResult subResult;
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	protected Equation analyze() throws AnalyzerException
 	{
 		pendingPush(new ProceedState(createStartState()));

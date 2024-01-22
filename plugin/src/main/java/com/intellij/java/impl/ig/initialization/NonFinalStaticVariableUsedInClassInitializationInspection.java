@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.initialization;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiField;
 import com.siyeh.InspectionGadgetsBundle;
@@ -25,13 +25,13 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.MakeFieldFinalFix;
 import consulo.annotation.component.ExtensionImpl;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class NonFinalStaticVariableUsedInClassInitializationInspection
   extends BaseInspection {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "non.final.static.variable.initialization.display.name");

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.numeric;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiArrayInitializerExpression;
 import com.intellij.java.language.psi.PsiExpression;
@@ -39,14 +39,14 @@ public class OctalAndDecimalIntegersMixedInspection
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "octal.and.decimal.integers.in.same.array.display.name");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "octal.and.decimal.integers.in.same.array.problem.descriptor");

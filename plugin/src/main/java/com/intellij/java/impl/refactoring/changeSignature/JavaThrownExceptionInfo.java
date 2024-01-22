@@ -22,7 +22,7 @@ import consulo.language.psi.*;
 import com.intellij.java.impl.refactoring.util.CanonicalTypes;
 import consulo.language.util.IncorrectOperationException;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Maxim.Medvedev

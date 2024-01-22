@@ -15,8 +15,7 @@
  */
 package com.siyeh.ig;
 
-import javax.annotation.Nonnull;
-
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 import consulo.language.editor.inspection.GlobalInspectionTool;
 

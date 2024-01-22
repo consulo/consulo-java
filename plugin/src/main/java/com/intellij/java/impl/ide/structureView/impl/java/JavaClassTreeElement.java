@@ -6,7 +6,7 @@ import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import consulo.language.impl.psi.LightElement;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
@@ -31,7 +31,7 @@ public class JavaClassTreeElement extends JavaClassTreeElementBase<PsiClass>
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public Collection<StructureViewTreeElement> getChildrenBase()
 	{
 		return getClassChildren(getElement());
@@ -83,7 +83,7 @@ public class JavaClassTreeElement extends JavaClassTreeElementBase<PsiClass>
 		return members;
 	}
 
-	private static void addPhysicalElements(@Nonnull PsiMember[] elements, @Nonnull Collection<? super PsiElement> to, @Nonnull PsiClass aClass)
+	private static void addPhysicalElements(@Nonnull PsiMember[] elements, @Nonnull Collection<? super PsiElement> to, @jakarta.annotation.Nonnull PsiClass aClass)
 	{
 		for(PsiMember element : elements)
 		{

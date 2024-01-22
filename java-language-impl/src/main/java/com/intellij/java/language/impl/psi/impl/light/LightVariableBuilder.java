@@ -10,8 +10,8 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.navigation.NavigationItem;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author peter
@@ -23,12 +23,12 @@ public class LightVariableBuilder<T extends LightVariableBuilder> extends LightE
   private volatile LightModifierList myModifierList;
   private String myOriginInfo;
 
-  public LightVariableBuilder(@Nonnull String name, @Nonnull String type, @Nonnull PsiElement navigationElement) {
+  public LightVariableBuilder(@jakarta.annotation.Nonnull String name, @Nonnull String type, @Nonnull PsiElement navigationElement) {
     this(name, JavaPsiFacade.getElementFactory(navigationElement.getProject()).createTypeFromText(type,
         navigationElement), navigationElement);
   }
 
-  public LightVariableBuilder(@Nonnull String name, @Nonnull PsiType type, @Nonnull PsiElement navigationElement) {
+  public LightVariableBuilder(@jakarta.annotation.Nonnull String name, @Nonnull PsiType type, @Nonnull PsiElement navigationElement) {
     this(navigationElement.getManager(), name, type, JavaLanguage.INSTANCE);
     setNavigationElement(navigationElement);
   }
@@ -45,7 +45,7 @@ public class LightVariableBuilder<T extends LightVariableBuilder> extends LightE
     return "LightVariableBuilder:" + getName();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public PsiType getType() {
     return myType;
@@ -72,7 +72,7 @@ public class LightVariableBuilder<T extends LightVariableBuilder> extends LightE
     return myModifierList.hasModifierProperty(name);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getName() {
     return myName;

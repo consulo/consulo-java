@@ -22,7 +22,7 @@ import consulo.content.library.Library;
 import consulo.virtualFileSystem.VirtualFile;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -38,7 +38,7 @@ public abstract class LibrariesHelper {
 
   public abstract boolean isClassAvailable(@NonNls String[] urls, @NonNls String fqn);
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public abstract VirtualFile findJarByClass(final Library library, @NonNls String fqn);
 
   @Nullable

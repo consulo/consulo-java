@@ -38,8 +38,8 @@ import consulo.project.Project;
 import consulo.util.lang.Comparing;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.AssignFieldFromParameterAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
@@ -51,7 +51,7 @@ public class AssignFieldFromParameterAction extends BaseIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
     final PsiParameter myParameter = FieldFromParameterUtils.findParameterAtCursor(file, editor);
     final PsiType type = FieldFromParameterUtils.getType(myParameter);
     final PsiClass targetClass = PsiTreeUtil.getParentOfType(myParameter, PsiClass.class);
@@ -67,7 +67,7 @@ public class AssignFieldFromParameterAction extends BaseIntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
     final PsiParameter myParameter = FieldFromParameterUtils.findParameterAtCursor(file, editor);
     if (!FileModificationService.getInstance().prepareFileForWrite(myParameter.getContainingFile())) return;
 
@@ -81,8 +81,8 @@ public class AssignFieldFromParameterAction extends BaseIntentionAction {
   }
 
   @Nullable
-  private static PsiField findFieldToAssign(@Nonnull Project project,
-                                            @Nonnull PsiParameter myParameter) {
+  private static PsiField findFieldToAssign(@jakarta.annotation.Nonnull Project project,
+                                            @jakarta.annotation.Nonnull PsiParameter myParameter) {
     final JavaCodeStyleManager styleManager = JavaCodeStyleManager.getInstance(project);
     final String parameterName = myParameter.getName();
     final String propertyName = styleManager.variableNameToPropertyName(parameterName, VariableKind.PARAMETER);
@@ -104,8 +104,8 @@ public class AssignFieldFromParameterAction extends BaseIntentionAction {
     return field;
   }
 
-  public static void addFieldAssignmentStatement(@Nonnull Project project,
-                                                 @Nonnull PsiField field,
+  public static void addFieldAssignmentStatement(@jakarta.annotation.Nonnull Project project,
+                                                 @jakarta.annotation.Nonnull PsiField field,
                                                  @Nonnull PsiParameter parameter,
                                                  @Nonnull Editor editor) throws IncorrectOperationException {
     final PsiMethod method = (PsiMethod) parameter.getDeclarationScope();

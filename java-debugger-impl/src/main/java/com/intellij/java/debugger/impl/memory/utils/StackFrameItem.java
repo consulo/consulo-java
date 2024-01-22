@@ -40,9 +40,9 @@ import consulo.ui.ex.SimpleTextAttributes;
 import consulo.ui.image.Image;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -81,8 +81,8 @@ public class StackFrameItem {
     return DebuggerUtilsEx.getLineNumber(myLocation, false);
   }
 
-  @Nonnull
-  public static List<StackFrameItem> createFrames(@Nonnull SuspendContextImpl suspendContext, boolean withVars) throws EvaluateException {
+  @jakarta.annotation.Nonnull
+  public static List<StackFrameItem> createFrames(@jakarta.annotation.Nonnull SuspendContextImpl suspendContext, boolean withVars) throws EvaluateException {
     ThreadReferenceProxyImpl threadReferenceProxy = suspendContext.getThread();
     if (threadReferenceProxy != null) {
       List<StackFrameProxyImpl> frameProxies = threadReferenceProxy.forceFrames();
@@ -189,7 +189,7 @@ public class StackFrameItem {
     }
 
     @Override
-    public void computePresentation(@Nonnull XValueNode node, @Nonnull XValuePlace place) {
+    public void computePresentation(@jakarta.annotation.Nonnull XValueNode node, @jakarta.annotation.Nonnull XValuePlace place) {
       ClassRenderer classRenderer = NodeRendererSettings.getInstance().getClassRenderer();
       String type = classRenderer.renderTypeName(myType);
       Image icon = myVarType == VariableItem.VarType.PARAM ? AllIcons.Nodes.Parameter : AllIcons.Debugger.Value;
@@ -250,7 +250,7 @@ public class StackFrameItem {
     }
 
     @Override
-    public void customizePresentation(@Nonnull ColoredTextContainer component) {
+    public void customizePresentation(@jakarta.annotation.Nonnull ColoredTextContainer component) {
       component.setIcon(Image.empty(6));
       component.append(String.format("%s:%d, %s", myMethodName, myLineNumber, StringUtil.getShortName(myPath)), getAttributes());
       String packageName = StringUtil.getPackageName(myPath);
@@ -260,7 +260,7 @@ public class StackFrameItem {
     }
 
     @Override
-    public void computeChildren(@Nonnull XCompositeNode node) {
+    public void computeChildren(@jakarta.annotation.Nonnull XCompositeNode node) {
       if (myVariables == VARS_CAPTURE_DISABLED) {
         node.setMessage(DebuggerBundle.message("message.node.local.variables.capture.disabled"), null, SimpleTextAttributes.REGULAR_ATTRIBUTES, CAPTURE_SETTINGS_OPENER);
       } else if (myVariables != null) {

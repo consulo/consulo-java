@@ -20,7 +20,7 @@ import com.intellij.java.debugger.impl.classFilter.ClassFilterEditor;
 import com.intellij.java.debugger.impl.ui.JavaDebuggerSupport;
 import consulo.configurable.IdeaConfigurableUi;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -36,7 +36,7 @@ class DebuggerSteppingConfigurable implements IdeaConfigurableUi<DebuggerSetting
 	private JCheckBox myCbSkipSimpleGetters;
 
 	@Override
-	public void reset(@Nonnull DebuggerSettings settings)
+	public void reset(@jakarta.annotation.Nonnull DebuggerSettings settings)
 	{
 		myCbSkipSimpleGetters.setSelected(settings.SKIP_GETTERS);
 		myCbSkipSyntheticMethods.setSelected(settings.SKIP_SYNTHETIC_METHODS);
@@ -76,7 +76,7 @@ class DebuggerSteppingConfigurable implements IdeaConfigurableUi<DebuggerSetting
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public JComponent getComponent()
 	{
 		final JPanel panel = new JPanel(new GridBagLayout());

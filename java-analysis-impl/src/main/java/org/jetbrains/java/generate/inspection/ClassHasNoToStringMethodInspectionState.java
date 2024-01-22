@@ -8,7 +8,7 @@ import consulo.localize.LocalizeValue;
 import consulo.ui.Label;
 import consulo.util.xml.serializer.XmlSerializerUtil;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author VISTALL

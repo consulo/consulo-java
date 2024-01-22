@@ -44,8 +44,8 @@ import consulo.util.collection.MultiMap;
 import consulo.java.impl.refactoring.changeSignature.ChangeSignatureUsageProcessorEx;
 import consulo.logging.Logger;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
@@ -92,7 +92,7 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
     return new ChangeSignatureViewDescriptor(getChangeInfo().getMethod());
   }

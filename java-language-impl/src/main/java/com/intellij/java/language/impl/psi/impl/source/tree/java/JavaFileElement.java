@@ -15,8 +15,7 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 import consulo.language.ast.ASTNode;
 import consulo.logging.Logger;
 import com.intellij.java.language.psi.PsiJavaFile;
@@ -29,6 +28,7 @@ import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import consulo.language.impl.ast.TreeElement;
 import consulo.language.ast.ChildRoleBase;
 import consulo.language.ast.IElementType;
+import jakarta.annotation.Nullable;
 
 public class JavaFileElement extends FileElement
 {
@@ -73,7 +73,7 @@ public class JavaFileElement extends FileElement
 	}
 
 	@Override
-	public int getChildRole(@Nonnull ASTNode child)
+	public int getChildRole(@jakarta.annotation.Nonnull ASTNode child)
 	{
 		LOG.assertTrue(child.getTreeParent() == this);
 		IElementType i = child.getElementType();

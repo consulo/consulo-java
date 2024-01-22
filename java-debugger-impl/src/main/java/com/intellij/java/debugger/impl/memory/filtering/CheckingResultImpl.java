@@ -15,7 +15,7 @@
  */
 package com.intellij.java.debugger.impl.memory.filtering;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author Vitaliy.Bibaev
@@ -28,13 +28,13 @@ public class CheckingResultImpl implements CheckingResult
 	private final Result myResult;
 	private final String myDescription;
 
-	private CheckingResultImpl(@Nonnull Result result, @Nonnull String description)
+	private CheckingResultImpl(@jakarta.annotation.Nonnull Result result, @jakarta.annotation.Nonnull String description)
 	{
 		myResult = result;
 		myDescription = description;
 	}
 
-	public static CheckingResult error(@Nonnull String description)
+	public static CheckingResult error(@jakarta.annotation.Nonnull String description)
 	{
 		return new CheckingResultImpl(Result.ERROR, description);
 	}
@@ -47,7 +47,7 @@ public class CheckingResultImpl implements CheckingResult
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public String getFailureDescription()
 	{
 		return myDescription;

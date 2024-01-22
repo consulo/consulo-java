@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
@@ -31,7 +31,7 @@ import org.jetbrains.annotations.NonNls;
 public class SuspiciousToArrayCallInspection extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "suspicious.to.array.call.display.name");
@@ -98,7 +98,7 @@ public class SuspiciousToArrayCallInspection extends BaseInspection {
     private void checkCollectionAndArrayTypes(
       @Nonnull PsiClassType collectionType,
       @Nonnull PsiExpression argument,
-      @Nonnull PsiMethodCallExpression expression) {
+      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
       final PsiType argumentType = argument.getType();
       if (!(argumentType instanceof PsiArrayType)) {
         return;

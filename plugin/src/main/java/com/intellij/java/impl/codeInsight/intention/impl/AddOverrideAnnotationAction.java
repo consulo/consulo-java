@@ -32,7 +32,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author ven
@@ -43,7 +43,7 @@ public class AddOverrideAnnotationAction implements IntentionAction {
   private static final String JAVA_LANG_OVERRIDE = "java.lang.Override";
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getText() {
     return CodeInsightBundle.message("intention.add.override.annotation");
   }
@@ -67,7 +67,7 @@ public class AddOverrideAnnotationAction implements IntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     PsiMethod method = findMethod(file, editor.getCaretModel().getOffset());
     if (method != null) {
       new AddAnnotationFix(JAVA_LANG_OVERRIDE, method).invoke(project, editor, file);

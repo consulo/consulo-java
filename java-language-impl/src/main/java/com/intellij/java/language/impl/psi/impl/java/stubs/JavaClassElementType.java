@@ -23,25 +23,25 @@ import consulo.language.psi.stub.StubElement;
 import consulo.language.psi.stub.StubInputStream;
 import consulo.language.psi.stub.StubOutputStream;
 import consulo.language.ast.IElementType;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.io.IOException;
 
 public abstract class JavaClassElementType extends JavaStubElementType<PsiClassStub<?>, PsiClass>
 {
-	public JavaClassElementType(@Nonnull String id)
+	public JavaClassElementType(@jakarta.annotation.Nonnull String id)
 	{
 		super(id);
 	}
 
 	@Override
-	public PsiClass createPsi(@Nonnull final PsiClassStub stub)
+	public PsiClass createPsi(@jakarta.annotation.Nonnull final PsiClassStub stub)
 	{
 		return getPsiFactory(stub).createClass(stub);
 	}
 
 	@Override
-	public PsiClass createPsi(@Nonnull final ASTNode node)
+	public PsiClass createPsi(@jakarta.annotation.Nonnull final ASTNode node)
 	{
 		if(node instanceof EnumConstantInitializerElement)
 		{
@@ -55,9 +55,9 @@ public abstract class JavaClassElementType extends JavaStubElementType<PsiClassS
 		return new PsiClassImpl(node);
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
-	public PsiClassStub createStub(@Nonnull final LighterAST tree, @Nonnull final LighterASTNode node, @Nonnull final StubElement parentStub)
+	public PsiClassStub createStub(@jakarta.annotation.Nonnull final LighterAST tree, @jakarta.annotation.Nonnull final LighterASTNode node, @jakarta.annotation.Nonnull final StubElement parentStub)
 	{
 		boolean isDeprecatedByComment = false;
 		boolean isInterface = false;
@@ -177,7 +177,7 @@ public abstract class JavaClassElementType extends JavaStubElementType<PsiClassS
 	}
 
 	@Override
-	public void serialize(@Nonnull PsiClassStub stub, @Nonnull StubOutputStream dataStream) throws IOException
+	public void serialize(@jakarta.annotation.Nonnull PsiClassStub stub, @jakarta.annotation.Nonnull StubOutputStream dataStream) throws IOException
 	{
 		dataStream.writeShort(((PsiClassStubImpl<?>) stub).getFlags());
 		if(!stub.isAnonymous())
@@ -192,9 +192,9 @@ public abstract class JavaClassElementType extends JavaStubElementType<PsiClassS
 		}
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
-	public PsiClassStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException
+	public PsiClassStub deserialize(@jakarta.annotation.Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException
 	{
 		short flags = dataStream.readShort();
 		boolean isAnonymous = PsiClassStubImpl.isAnonymous(flags);
@@ -218,7 +218,7 @@ public abstract class JavaClassElementType extends JavaStubElementType<PsiClassS
 	}
 
 	@Override
-	public void indexStub(@Nonnull PsiClassStub stub, @Nonnull IndexSink sink)
+	public void indexStub(@jakarta.annotation.Nonnull PsiClassStub stub, @jakarta.annotation.Nonnull IndexSink sink)
 	{
 		boolean isAnonymous = stub.isAnonymous();
 		if(isAnonymous)

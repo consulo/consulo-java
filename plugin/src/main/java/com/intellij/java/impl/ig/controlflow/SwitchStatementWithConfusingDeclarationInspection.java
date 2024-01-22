@@ -21,7 +21,7 @@ import consulo.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -29,7 +29,7 @@ import java.util.Set;
 @ExtensionImpl
 public class SwitchStatementWithConfusingDeclarationInspection extends BaseInspection {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "LocalVariableUsedAndDeclaredInDifferentSwitchBranches";
   }
@@ -39,7 +39,7 @@ public class SwitchStatementWithConfusingDeclarationInspection extends BaseInspe
     return InspectionGadgetsBundle.message("switch.statement.with.confusing.declaration.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("switch.statement.with.confusing.declaration.problem.descriptor");
   }
@@ -51,7 +51,7 @@ public class SwitchStatementWithConfusingDeclarationInspection extends BaseInspe
   private static class SwitchStatementWithConfusingDeclarationVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitSwitchStatement(@Nonnull PsiSwitchStatement statement) {
+    public void visitSwitchStatement(@jakarta.annotation.Nonnull PsiSwitchStatement statement) {
       final PsiCodeBlock body = statement.getBody();
       if (body == null) {
         return;
@@ -88,7 +88,7 @@ public class SwitchStatementWithConfusingDeclarationInspection extends BaseInspe
       }
 
       @Override
-      public void visitReferenceExpression(@Nonnull PsiReferenceExpression referenceExpression) {
+      public void visitReferenceExpression(@jakarta.annotation.Nonnull PsiReferenceExpression referenceExpression) {
         super.visitReferenceExpression(referenceExpression);
         final PsiExpression qualifier = referenceExpression.getQualifierExpression();
         if (qualifier != null) {

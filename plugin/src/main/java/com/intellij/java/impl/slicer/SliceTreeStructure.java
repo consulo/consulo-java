@@ -18,8 +18,8 @@ package com.intellij.java.impl.slicer;
 import consulo.project.Project;
 import consulo.project.ui.view.tree.AbstractTreeStructureBase;
 import consulo.project.ui.view.tree.TreeStructureProvider;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,7 +29,7 @@ import java.util.List;
 public class SliceTreeStructure extends AbstractTreeStructureBase {
   private final SliceNode myRoot;
 
-  public SliceTreeStructure(@Nonnull Project project, @Nonnull SliceNode rootNode) {
+  public SliceTreeStructure(@jakarta.annotation.Nonnull Project project, @Nonnull SliceNode rootNode) {
     super(project);
     myRoot = rootNode;
   }

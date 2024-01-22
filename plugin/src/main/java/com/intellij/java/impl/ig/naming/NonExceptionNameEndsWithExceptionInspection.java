@@ -31,14 +31,14 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NonExceptionNameEndsWithExceptionInspection
   extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "non.exception.name.ends.with.exception.display.name");
@@ -52,7 +52,7 @@ public class NonExceptionNameEndsWithExceptionInspection
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     final String name = (String)infos[0];
     final Boolean onTheFly = (Boolean)infos[1];
@@ -74,7 +74,7 @@ public class NonExceptionNameEndsWithExceptionInspection
       this.name = name;
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "non.exception.name.ends.with.exception.quickfix", name);

@@ -32,8 +32,9 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +42,7 @@ import java.util.Map;
 @ExtensionImpl
 public class DefaultQuickFixProvider extends UnresolvedReferenceQuickFixProvider<PsiJavaCodeReferenceElement> {
   @Override
-  public void registerFixes(@Nonnull PsiJavaCodeReferenceElement ref, @Nonnull QuickFixActionRegistrar registrar) {
+  public void registerFixes(@Nonnull PsiJavaCodeReferenceElement ref, @jakarta.annotation.Nonnull QuickFixActionRegistrar registrar) {
     if (PsiUtil.isModuleFile(ref.getContainingFile())) {
       List<LocalQuickFix> fixes = OrderEntryFix.registerFixes(ref);
       if (fixes != null) {
@@ -96,9 +97,9 @@ public class DefaultQuickFixProvider extends UnresolvedReferenceQuickFixProvider
     }
   }
 
-  private static void registerPriorityActions(@Nonnull QuickFixActionRegistrar registrar,
+  private static void registerPriorityActions(@jakarta.annotation.Nonnull QuickFixActionRegistrar registrar,
                                               @Nonnull TextRange fixRange,
-                                              @Nonnull PsiReferenceExpression refExpr) {
+                                              @jakarta.annotation.Nonnull PsiReferenceExpression refExpr) {
     final JavaCodeStyleManager styleManager = JavaCodeStyleManager.getInstance(refExpr.getProject());
 
     final Map<VariableKind, IntentionAction> map = new EnumMap<>(VariableKind.class);

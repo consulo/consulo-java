@@ -28,8 +28,8 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -110,7 +110,7 @@ public class ExtractMethodUtil {
     }
   }
 
-  public static void addCastsToEnsureResolveTarget(@Nonnull final PsiMethod oldTarget, @Nonnull final PsiMethodCallExpression call) throws IncorrectOperationException {
+  public static void addCastsToEnsureResolveTarget(@Nonnull final PsiMethod oldTarget, @jakarta.annotation.Nonnull final PsiMethodCallExpression call) throws IncorrectOperationException {
     final PsiMethod newTarget = call.resolveMethod();
     final PsiManager manager = oldTarget.getManager();
     final PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();

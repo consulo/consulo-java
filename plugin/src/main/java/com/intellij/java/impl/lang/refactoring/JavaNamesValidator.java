@@ -22,7 +22,7 @@ import consulo.language.Language;
 import consulo.language.editor.refactoring.NamesValidator;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Default NamesValidator interface implementation. Uses java language keyword set and java language rules for identifier.

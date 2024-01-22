@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.refactoring.introduceParameter;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
@@ -27,7 +27,7 @@ import com.intellij.java.language.psi.PsiType;
 public class JavaExpressionWrapper implements IntroduceParameterData.ExpressionWrapper {
   private final PsiExpression myExpression;
 
-  public JavaExpressionWrapper(@Nonnull PsiExpression expression) {
+  public JavaExpressionWrapper(@jakarta.annotation.Nonnull PsiExpression expression) {
     myExpression = expression;
   }
 

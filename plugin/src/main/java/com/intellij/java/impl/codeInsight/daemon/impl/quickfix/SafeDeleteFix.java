@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import consulo.language.editor.FileModificationService;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightMessageUtil;
@@ -30,28 +30,28 @@ import consulo.language.editor.refactoring.safeDelete.SafeDeleteHandler;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 
 public class SafeDeleteFix extends LocalQuickFixAndIntentionActionOnPsiElement {
-  public SafeDeleteFix(@Nonnull PsiElement element) {
+  public SafeDeleteFix(@jakarta.annotation.Nonnull PsiElement element) {
     super(element);
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getText() {
     PsiElement startElement = getStartElement();
     return JavaQuickFixBundle.message("safe.delete.text", startElement == null ? "" : HighlightMessageUtil.getSymbolName(startElement, PsiSubstitutor.EMPTY));
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("safe.delete.family");
   }
 
   @Override
-  public void invoke(@Nonnull Project project,
+  public void invoke(@jakarta.annotation.Nonnull Project project,
                      @Nonnull PsiFile file,
                      @Nullable Editor editor,
-                     @Nonnull PsiElement startElement,
+                     @jakarta.annotation.Nonnull PsiElement startElement,
                      @Nonnull PsiElement endElement) {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
     SafeDeleteHandler.invoke(project, new PsiElement[]{startElement}, false);

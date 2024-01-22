@@ -21,8 +21,8 @@ import com.intellij.java.debugger.impl.engine.SuspendContextImpl;
 import consulo.logging.Logger;
 import consulo.util.collection.Stack;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * Performs contextAction when evaluation is available in suspend context

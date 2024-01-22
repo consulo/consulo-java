@@ -17,9 +17,9 @@ package com.intellij.java.impl.codeInsight.template.postfix.templates;
 
 import com.intellij.java.language.psi.PsiExpression;
 import consulo.util.lang.Pair;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public class ForAscendingPostfixTemplate extends ForIndexedPostfixTemplate {
   public ForAscendingPostfixTemplate() {
@@ -27,20 +27,20 @@ public class ForAscendingPostfixTemplate extends ForIndexedPostfixTemplate {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String getOperator() {
     return "++";
   }
 
   @Nonnull
   @Override
-  protected String getComparativeSign(@Nonnull PsiExpression expr) {
+  protected String getComparativeSign(@jakarta.annotation.Nonnull PsiExpression expr) {
     return "<";
   }
 
   @Nullable
   @Override
-  protected Pair<String, String> calculateBounds(@Nonnull PsiExpression expression) {
+  protected Pair<String, String> calculateBounds(@jakarta.annotation.Nonnull PsiExpression expression) {
     String bound = getExpressionBound(expression);
     return bound != null ? Pair.create("0", bound) : null;
   }

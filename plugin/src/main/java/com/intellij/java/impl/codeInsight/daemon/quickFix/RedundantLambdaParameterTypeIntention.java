@@ -30,7 +30,7 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * User: anna
@@ -123,7 +123,7 @@ public class RedundantLambdaParameterTypeIntention extends PsiElementBaseIntenti
   }
 
   @Override
-  public void invoke(@Nonnull Project project,
+  public void invoke(@jakarta.annotation.Nonnull Project project,
                      Editor editor,
                      @Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(element, PsiLambdaExpression.class);

@@ -41,15 +41,16 @@ import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
 @ExtensionImpl
 public class JavaReferenceAdjuster implements ReferenceAdjuster {
   @Override
-  public ASTNode process(@Nonnull ASTNode element, boolean addImports, boolean incompleteCode, boolean useFqInJavadoc, boolean useFqInCode) {
+  public ASTNode process(@jakarta.annotation.Nonnull ASTNode element, boolean addImports, boolean incompleteCode, boolean useFqInJavadoc, boolean useFqInCode) {
     IElementType elementType = element.getElementType();
     if ((elementType == JavaElementType.JAVA_CODE_REFERENCE || elementType == JavaElementType.REFERENCE_EXPRESSION) && !isAnnotated(element)) {
       IElementType parentType = element.getTreeParent().getElementType();
@@ -153,7 +154,7 @@ public class JavaReferenceAdjuster implements ReferenceAdjuster {
   }
 
   @Override
-  public ASTNode process(@Nonnull ASTNode element, boolean addImports, boolean incompleteCode, Project project) {
+  public ASTNode process(@jakarta.annotation.Nonnull ASTNode element, boolean addImports, boolean incompleteCode, Project project) {
     final CodeStyleSettings settings = CodeStyle.getSettings(element.getPsi().getContainingFile());
     JavaCodeStyleSettings javaSettings = settings.getCustomSettings(JavaCodeStyleSettings.class);
     return process(element, addImports, incompleteCode, javaSettings.useFqNamesInJavadocAlways(), javaSettings.USE_FQ_CLASS_NAMES);
@@ -242,7 +243,7 @@ public class JavaReferenceAdjuster implements ReferenceAdjuster {
 
   @Nonnull
   private static ASTNode makeShortReference(@Nonnull CompositeElement reference, @Nonnull PsiClass refClass, boolean addImports) {
-    @Nonnull final PsiJavaCodeReferenceElement psiReference = (PsiJavaCodeReferenceElement) reference.getPsi();
+    @jakarta.annotation.Nonnull final PsiJavaCodeReferenceElement psiReference = (PsiJavaCodeReferenceElement) reference.getPsi();
     final PsiQualifiedReferenceElement reference1 = getClassReferenceToShorten(refClass, addImports, psiReference);
     if (reference1 != null) {
       replaceReferenceWithShort(reference1);

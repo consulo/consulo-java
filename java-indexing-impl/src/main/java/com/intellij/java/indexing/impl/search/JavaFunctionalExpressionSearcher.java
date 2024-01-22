@@ -54,7 +54,7 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.ref.Ref;
 import consulo.virtualFileSystem.VirtualFile;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.*;
 
 import static consulo.util.collection.ContainerUtil.addIfNotNull;
@@ -75,7 +75,7 @@ public class JavaFunctionalExpressionSearcher extends QueryExecutorBase<PsiFunct
   public static final int SMART_SEARCH_THRESHOLD = 5;
 
   @Override
-  public void processQuery(@Nonnull FunctionalExpressionSearch.SearchParameters queryParameters,
+  public void processQuery(@jakarta.annotation.Nonnull FunctionalExpressionSearch.SearchParameters queryParameters,
                            @Nonnull Processor<? super PsiFunctionalExpression> consumer) {
     final PsiClass aClass = queryParameters.getElementToSearch();
 

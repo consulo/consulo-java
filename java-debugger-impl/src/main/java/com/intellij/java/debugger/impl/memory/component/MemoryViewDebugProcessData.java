@@ -19,12 +19,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 import com.intellij.java.debugger.impl.memory.utils.StackFrameItem;
 import consulo.util.dataholder.Key;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.ReferenceType;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Vitaliy.Bibaev
@@ -35,7 +35,7 @@ public class MemoryViewDebugProcessData
 
 	private final TrackedStacksContainer myStacksContainer = new MyStackContainer();
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public TrackedStacksContainer getTrackedStacks()
 	{
 		return myStacksContainer;
@@ -47,9 +47,9 @@ public class MemoryViewDebugProcessData
 
 		private final Map<ReferenceType, Map<ObjectReference, List<StackFrameItem>>> myPinnedType2Reference2Stack = new ConcurrentHashMap<>();
 
-		@Nullable
+		@jakarta.annotation.Nullable
 		@Override
-		public List<StackFrameItem> getStack(@Nonnull ObjectReference reference)
+		public List<StackFrameItem> getStack(@jakarta.annotation.Nonnull ObjectReference reference)
 		{
 			final List<StackFrameItem> stack = extract(myType2Reference2Stack, reference);
 			return stack != null ? stack : extract(myPinnedType2Reference2Stack, reference);
@@ -62,7 +62,7 @@ public class MemoryViewDebugProcessData
 		}
 
 		@Override
-		public void pinStacks(@Nonnull ReferenceType referenceType)
+		public void pinStacks(@jakarta.annotation.Nonnull ReferenceType referenceType)
 		{
 			final Map<ObjectReference, List<StackFrameItem>> ref2Stack = myType2Reference2Stack.get(referenceType);
 			if(ref2Stack != null)
@@ -91,7 +91,7 @@ public class MemoryViewDebugProcessData
 		}
 
 		@Nullable
-		private static List<StackFrameItem> extract(@Nonnull Map<ReferenceType, Map<ObjectReference, List<StackFrameItem>>> map, @Nonnull ObjectReference ref)
+		private static List<StackFrameItem> extract(@Nonnull Map<ReferenceType, Map<ObjectReference, List<StackFrameItem>>> map, @jakarta.annotation.Nonnull ObjectReference ref)
 		{
 			final Map<ObjectReference, List<StackFrameItem>> ref2Stack = map.get(ref.referenceType());
 			return ref2Stack != null ? ref2Stack.get(ref) : null;

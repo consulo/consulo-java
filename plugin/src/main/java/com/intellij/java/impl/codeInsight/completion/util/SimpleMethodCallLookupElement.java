@@ -24,8 +24,7 @@ import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import consulo.language.icon.IconDescriptorUpdaters;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author peter

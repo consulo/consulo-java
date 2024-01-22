@@ -21,7 +21,7 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaInstructionSta
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaMemoryState;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.InstructionVisitor;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaVariableValue;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Flush single variable
@@ -29,13 +29,13 @@ import javax.annotation.Nonnull;
 public class FlushVariableInstruction extends Instruction
 {
 	private final
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	DfaVariableValue myVariable;
 
 	/**
 	 * @param variable variable to flush
 	 */
-	public FlushVariableInstruction(@Nonnull DfaVariableValue variable)
+	public FlushVariableInstruction(@jakarta.annotation.Nonnull DfaVariableValue variable)
 	{
 		myVariable = variable;
 	}

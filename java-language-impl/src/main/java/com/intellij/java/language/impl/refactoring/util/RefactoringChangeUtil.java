@@ -25,14 +25,14 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class RefactoringChangeUtil {
   private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.util.ChangeUtil");
 
-  @Nullable
-  private static String getMethodExpressionName(@Nullable PsiElement element) {
+  @jakarta.annotation.Nullable
+  private static String getMethodExpressionName(@jakarta.annotation.Nullable PsiElement element) {
     if (!(element instanceof PsiMethodCallExpression)) {
       return null;
     }
@@ -40,7 +40,7 @@ public class RefactoringChangeUtil {
     return methodExpression.getReferenceName();
   }
 
-  public static boolean isSuperOrThisMethodCall(@Nullable PsiElement element) {
+  public static boolean isSuperOrThisMethodCall(@jakarta.annotation.Nullable PsiElement element) {
     String name = getMethodExpressionName(element);
     return PsiKeyword.SUPER.equals(name) || PsiKeyword.THIS.equals(name);
   }
@@ -77,9 +77,9 @@ public class RefactoringChangeUtil {
     return GenericsUtil.getVariableTypeByExpressionType(type);
   }
 
-  public static PsiReferenceExpression qualifyReference(@Nonnull PsiReferenceExpression referenceExpression,
+  public static PsiReferenceExpression qualifyReference(@jakarta.annotation.Nonnull PsiReferenceExpression referenceExpression,
                                                         @Nonnull PsiMember member,
-                                                        @Nullable final PsiClass qualifyingClass) throws IncorrectOperationException {
+                                                        @jakarta.annotation.Nullable final PsiClass qualifyingClass) throws IncorrectOperationException {
     PsiManager manager = referenceExpression.getManager();
     PsiMethodCallExpression methodCallExpression = PsiTreeUtil.getParentOfType(referenceExpression,
         PsiMethodCallExpression.class, true);
@@ -118,7 +118,7 @@ public class RefactoringChangeUtil {
     return (PsiReferenceExpression) referenceExpression.replace(expressionFromText);
   }
 
-  public static PsiClass getThisClass(@Nonnull PsiElement place) {
+  public static PsiClass getThisClass(@jakarta.annotation.Nonnull PsiElement place) {
     PsiElement parent = place.getContext();
     if (parent == null) {
       return null;
@@ -138,7 +138,7 @@ public class RefactoringChangeUtil {
     }
   }
 
-  static <T extends PsiQualifiedExpression> T createQualifiedExpression(@Nonnull PsiManager manager,
+  static <T extends PsiQualifiedExpression> T createQualifiedExpression(@jakarta.annotation.Nonnull PsiManager manager,
                                                                         PsiClass qualifierClass,
                                                                         @Nonnull String qName) throws IncorrectOperationException {
     PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();

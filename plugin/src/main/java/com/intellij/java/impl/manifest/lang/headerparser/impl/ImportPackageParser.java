@@ -31,7 +31,7 @@ import org.osmorc.manifest.lang.headerparser.impl.AbstractHeaderParserImpl;
 import org.osmorc.manifest.lang.psi.Clause;
 import org.osmorc.manifest.lang.psi.HeaderValuePart;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)

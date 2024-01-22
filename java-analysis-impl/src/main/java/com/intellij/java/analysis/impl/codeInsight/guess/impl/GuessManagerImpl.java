@@ -32,8 +32,8 @@ import consulo.util.lang.BitUtil;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 @Singleton
@@ -73,7 +73,7 @@ public final class GuessManagerImpl extends GuessManager {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiType[] guessContainerElementType(PsiExpression containerExpr, TextRange rangeToIgnore) {
     HashSet<PsiType> typesSet = new HashSet<>();
 
@@ -143,7 +143,7 @@ public final class GuessManagerImpl extends GuessManager {
     return MultiMap.empty();
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static PsiType getTypeFromDataflow(PsiExpression forPlace, boolean honorAssignments) {
     PsiType type = forPlace.getType();
     TypeConstraint initial = type == null ? TypeConstraints.TOP : TypeConstraints.instanceOf(type);
@@ -162,10 +162,10 @@ public final class GuessManagerImpl extends GuessManager {
       TypeConstraint constraint = TypeConstraints.BOTTOM;
 
       @Override
-      protected void beforeExpressionPush(@Nonnull DfaValue value,
-                                          @Nonnull PsiExpression expression,
+      protected void beforeExpressionPush(@jakarta.annotation.Nonnull DfaValue value,
+                                          @jakarta.annotation.Nonnull PsiExpression expression,
                                           @Nullable TextRange range,
-                                          @Nonnull DfaMemoryState state) {
+                                          @jakarta.annotation.Nonnull DfaMemoryState state) {
         if (expression == forPlace && range == null) {
           if (!(value instanceof DfaVariableValue) || ((DfaVariableValue)value).isFlushableByCalls()) {
             value = runner.getFactory().getVarFactory().createVariableValue(new ExpressionVariableDescriptor(expression));
@@ -176,7 +176,7 @@ public final class GuessManagerImpl extends GuessManager {
       }
 
       @Override
-      boolean isInteresting(@Nonnull DfaValue value, @Nonnull PsiExpression expression) {
+      boolean isInteresting(@jakarta.annotation.Nonnull DfaValue value, @jakarta.annotation.Nonnull PsiExpression expression) {
         return (!(value instanceof DfaVariableValue) || ((DfaVariableValue)value).isFlushableByCalls()) &&
           ExpressionVariableDescriptor.EXPRESSION_HASHING_STRATEGY.equals(expression, forPlace);
       }
@@ -188,7 +188,7 @@ public final class GuessManagerImpl extends GuessManager {
     return null;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private static DataFlowRunner createRunner(boolean honorAssignments, PsiElement scope) {
     return honorAssignments ? new DataFlowRunner(scope.getProject()) : new DataFlowRunner(scope.getProject()) {
       @Nonnull
@@ -419,7 +419,7 @@ public final class GuessManagerImpl extends GuessManager {
     return result;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private static GuessTypeVisitor tryGuessingTypeWithoutDfa(PsiExpression place, boolean honorAssignments) {
     List<PsiElement> exprsAndVars = getPotentiallyAffectingElements(place);
     GuessTypeVisitor visitor = new GuessTypeVisitor(place, honorAssignments);
@@ -445,19 +445,19 @@ public final class GuessManagerImpl extends GuessManager {
     private static final CallMatcher OBJECT_GET_CLASS =
       CallMatcher.exactInstanceCall(CommonClassNames.JAVA_LANG_OBJECT, "getClass").parameterCount(0);
     private final
-    @Nonnull
+    @jakarta.annotation.Nonnull
     PsiExpression myPlace;
     PsiType mySpecificType;
     private boolean myNeedDfa;
     private boolean myDeclared;
     private final boolean myHonorAssignments;
 
-    GuessTypeVisitor(@Nonnull PsiExpression place, boolean honorAssignments) {
+    GuessTypeVisitor(@jakarta.annotation.Nonnull PsiExpression place, boolean honorAssignments) {
       myPlace = place;
       myHonorAssignments = honorAssignments;
     }
 
-    protected void handleAssignment(@Nullable PsiExpression expression) {
+    protected void handleAssignment(@jakarta.annotation.Nullable PsiExpression expression) {
       if (!myHonorAssignments || expression == null) {
         return;
       }
@@ -559,7 +559,7 @@ public final class GuessManagerImpl extends GuessManager {
       return value;
     }
 
-    boolean isInteresting(@Nonnull DfaValue value, @Nonnull PsiExpression expression) {
+    boolean isInteresting(@jakarta.annotation.Nonnull DfaValue value, @jakarta.annotation.Nonnull PsiExpression expression) {
       return true;
     }
   }
@@ -568,7 +568,7 @@ public final class GuessManagerImpl extends GuessManager {
     private final Map<DfaVariableValue, TypeConstraint> myResult = new HashMap<>();
     private final PsiElement myForPlace;
 
-    private ExpressionTypeInstructionVisitor(@Nonnull PsiElement forPlace) {
+    private ExpressionTypeInstructionVisitor(@jakarta.annotation.Nonnull PsiElement forPlace) {
       myForPlace = PsiUtil.skipParenthesizedExprUp(forPlace);
     }
 
@@ -591,10 +591,10 @@ public final class GuessManagerImpl extends GuessManager {
     }
 
     @Override
-    protected void beforeExpressionPush(@Nonnull DfaValue value,
-                                        @Nonnull PsiExpression expression,
-                                        @Nullable TextRange range,
-                                        @Nonnull DfaMemoryState state) {
+    protected void beforeExpressionPush(@jakarta.annotation.Nonnull DfaValue value,
+                                        @jakarta.annotation.Nonnull PsiExpression expression,
+                                        @jakarta.annotation.Nullable TextRange range,
+                                        @jakarta.annotation.Nonnull DfaMemoryState state) {
       if (range == null && myForPlace == expression) {
         ((DfaMemoryStateImpl)state).forRecordedVariableTypes((var, dfType) -> {
           myResult.merge(var, TypeConstraint.fromDfType(dfType), TypeConstraint::join);

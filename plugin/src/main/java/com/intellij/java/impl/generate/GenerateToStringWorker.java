@@ -29,6 +29,7 @@ import com.intellij.java.analysis.impl.generate.config.DuplicationPolicy;
 import com.intellij.java.analysis.impl.generate.config.InsertWhere;
 import com.intellij.java.language.psi.*;
 import consulo.language.editor.hint.HintManager;
+import jakarta.annotation.Nullable;
 import org.jetbrains.java.generate.GenerateToStringContext;
 import com.intellij.java.impl.generate.config.*;
 import com.intellij.java.impl.generate.exception.GenerateCodeException;
@@ -49,8 +50,6 @@ import consulo.language.codeStyle.CodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import consulo.language.util.IncorrectOperationException;
-
-import javax.annotation.Nullable;
 
 public class GenerateToStringWorker
 {

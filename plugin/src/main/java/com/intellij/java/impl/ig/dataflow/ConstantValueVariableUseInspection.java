@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.dataflow;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -31,13 +31,13 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class ConstantValueVariableUseInspection extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "constant.value.variable.use.display.name");
@@ -68,7 +68,7 @@ public class ConstantValueVariableUseInspection extends BaseInspection {
     }
 
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "replace.reference.with.expression.quickfix",
@@ -152,9 +152,9 @@ public class ConstantValueVariableUseInspection extends BaseInspection {
     }
 
     private boolean checkConstantValueVariableUse(
-      @Nullable PsiExpression expression,
-      @Nonnull PsiExpression constantExpression,
-      @Nonnull PsiElement body) {
+      @jakarta.annotation.Nullable PsiExpression expression,
+      @jakarta.annotation.Nonnull PsiExpression constantExpression,
+      @jakarta.annotation.Nonnull PsiElement body) {
       final PsiType constantType = constantExpression.getType();
       if (PsiType.DOUBLE.equals(constantType)) {
         final Object result = ExpressionUtils.computeConstantExpression(
@@ -202,7 +202,7 @@ public class ConstantValueVariableUseInspection extends BaseInspection {
     }
 
     @Override
-    public void visitElement(@Nonnull PsiElement element) {
+    public void visitElement(@jakarta.annotation.Nonnull PsiElement element) {
       if (read || written) {
         return;
       }
@@ -264,7 +264,7 @@ public class ConstantValueVariableUseInspection extends BaseInspection {
 
     @Override
     public void visitPostfixExpression(
-      @Nonnull PsiPostfixExpression postfixExpression) {
+      @jakarta.annotation.Nonnull PsiPostfixExpression postfixExpression) {
       if (read || written) {
         return;
       }
@@ -288,7 +288,7 @@ public class ConstantValueVariableUseInspection extends BaseInspection {
     }
 
     @Override
-    public void visitVariable(@Nonnull PsiVariable variable) {
+    public void visitVariable(@jakarta.annotation.Nonnull PsiVariable variable) {
       if (read || written) {
         return;
       }
@@ -327,7 +327,7 @@ public class ConstantValueVariableUseInspection extends BaseInspection {
 
     @Override
     public void visitNewExpression(
-      @Nonnull PsiNewExpression newExpression) {
+      @jakarta.annotation.Nonnull PsiNewExpression newExpression) {
       if (read || written) {
         return;
       }
@@ -434,7 +434,7 @@ public class ConstantValueVariableUseInspection extends BaseInspection {
 
     @Override
     public void visitReferenceExpression(
-      @Nonnull PsiReferenceExpression expression) {
+      @jakarta.annotation.Nonnull PsiReferenceExpression expression) {
       if (used) {
         return;
       }

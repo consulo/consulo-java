@@ -1,6 +1,6 @@
 package consulo.java.manifest.lang;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import org.osmorc.manifest.lang.ManifestLanguage;
 import org.osmorc.manifest.lang.ManifestLexer;
@@ -26,7 +26,7 @@ public abstract class ManifestLanguageVersion extends LanguageVersion implements
 			return new ManifestLexer();
 		}
 
-		@Nonnull
+		@jakarta.annotation.Nonnull
 		@Override
 		public TokenSet getCommentTokens()
 		{
@@ -43,7 +43,7 @@ public abstract class ManifestLanguageVersion extends LanguageVersion implements
 			return new BndLexer();
 		}
 
-		@Nonnull
+		@jakarta.annotation.Nonnull
 		@Override
 		public TokenSet getCommentTokens()
 		{

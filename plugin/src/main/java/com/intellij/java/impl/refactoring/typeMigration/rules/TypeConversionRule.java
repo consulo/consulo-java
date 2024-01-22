@@ -25,8 +25,7 @@ import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
 import consulo.util.lang.Pair;
-
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author anna
@@ -43,7 +42,7 @@ public abstract class TypeConversionRule {
                                                               final TypeMigrationLabeler labeler);
 
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public Pair<PsiType, PsiType> bindTypeParameters(PsiType from,
                                                    PsiType to,
                                                    final PsiMethod method,

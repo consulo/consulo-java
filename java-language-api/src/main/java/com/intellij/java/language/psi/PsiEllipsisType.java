@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.psi;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Represents the type of a variable arguments array passed as a method parameter.
@@ -38,7 +38,7 @@ public class PsiEllipsisType extends PsiArrayType {
   /**
    * @deprecated use {@link #annotate(TypeAnnotationProvider)} (to be removed in IDEA 18)
    */
-  public static PsiType createEllipsis(@Nonnull PsiType componentType, @Nonnull PsiAnnotation[] annotations) {
+  public static PsiType createEllipsis(@jakarta.annotation.Nonnull PsiType componentType, @Nonnull PsiAnnotation[] annotations) {
     return new PsiEllipsisType(componentType, annotations);
   }
 

@@ -28,7 +28,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NullThrownInspection extends BaseInspection {
@@ -40,7 +40,7 @@ public class NullThrownInspection extends BaseInspection {
     return InspectionGadgetsBundle.message("null.thrown.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(

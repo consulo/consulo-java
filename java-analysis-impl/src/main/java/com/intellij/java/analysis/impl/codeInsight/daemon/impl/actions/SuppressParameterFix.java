@@ -26,8 +26,8 @@ import com.intellij.java.language.psi.PsiParameter;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author ven
@@ -60,8 +60,8 @@ public class SuppressParameterFix extends AbstractBatchSuppressByNoInspectionCom
   }
 
   @Override
-  protected void createSuppression(@Nonnull Project project, @Nonnull PsiElement element,
-                                   @Nonnull PsiElement cont) throws IncorrectOperationException {
+  protected void createSuppression(@jakarta.annotation.Nonnull Project project, @Nonnull PsiElement element,
+                                   @jakarta.annotation.Nonnull PsiElement cont) throws IncorrectOperationException {
     PsiModifierListOwner container = (PsiModifierListOwner) cont;
     final PsiModifierList modifierList = container.getModifierList();
     if (modifierList != null) {

@@ -24,14 +24,14 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.annotation.access.RequiredReadAction;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class JavaMoveLeftRightHandler implements MoveElementLeftRightHandler {
   @RequiredReadAction
   @Nonnull
   @Override
-  public PsiElement[] getMovableSubElements(@Nonnull PsiElement element) {
+  public PsiElement[] getMovableSubElements(@jakarta.annotation.Nonnull PsiElement element) {
     if (element instanceof PsiParameterList) {
       return ((PsiParameterList) element).getParameters();
     } else if (element instanceof PsiExpressionList) {

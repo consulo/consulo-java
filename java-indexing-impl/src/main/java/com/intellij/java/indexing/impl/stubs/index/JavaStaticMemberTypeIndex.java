@@ -27,8 +27,8 @@ import consulo.language.psi.stub.StringStubIndexExtension;
 import consulo.language.psi.stub.StubIndexKey;
 import consulo.project.Project;
 import consulo.project.content.scope.ProjectAwareSearchScope;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.util.Collection;
 
 @ExtensionImpl
@@ -46,7 +46,7 @@ public class JavaStaticMemberTypeIndex extends StringStubIndexExtension<PsiMembe
     return JavaStubIndexKeys.JVM_STATIC_MEMBERS_TYPES;
   }
 
-  public Collection<PsiMember> getStaticMembers(@Nonnull final String shortTypeText, final Project project, @Nonnull final ProjectAwareSearchScope scope) {
+  public Collection<PsiMember> getStaticMembers(@jakarta.annotation.Nonnull final String shortTypeText, final Project project, @jakarta.annotation.Nonnull final ProjectAwareSearchScope scope) {
     return super.get(shortTypeText, project, new JavaSourceFilterScope(scope));
   }
 }

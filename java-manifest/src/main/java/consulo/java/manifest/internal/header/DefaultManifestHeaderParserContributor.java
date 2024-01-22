@@ -3,11 +3,10 @@ package consulo.java.manifest.internal.header;
 import com.intellij.java.language.psi.PsiJavaModule;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.manifest.lang.headerparser.impl.SimpleHeaderParser;
+import jakarta.annotation.Nonnull;
 import org.osmorc.manifest.lang.headerparser.ManifestHeaderParserContributor;
 import org.osmorc.manifest.lang.headerparser.ManifestHeaderParserRegistrator;
 import org.osmorc.manifest.lang.headerparser.impl.GenericComplexHeaderParser;
-
-import javax.annotation.Nonnull;
 
 /**
  * @author VISTALL

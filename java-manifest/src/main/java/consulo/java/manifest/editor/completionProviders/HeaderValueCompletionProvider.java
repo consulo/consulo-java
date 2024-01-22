@@ -16,8 +16,8 @@ import org.osmorc.manifest.lang.psi.Clause;
 import org.osmorc.manifest.lang.psi.Header;
 import org.osmorc.manifest.lang.psi.HeaderValuePart;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -93,13 +93,13 @@ public class HeaderValueCompletionProvider extends TextFieldWithAutoCompletionLi
     return item.toString();
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   protected String getTailText(@Nonnull Object item) {
     return null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   protected String getTypeText(@Nonnull Object item) {
     return null;

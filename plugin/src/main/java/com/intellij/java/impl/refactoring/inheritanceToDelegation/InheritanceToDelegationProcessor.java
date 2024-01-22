@@ -52,10 +52,11 @@ import consulo.project.ui.wm.WindowManager;
 import consulo.usage.*;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.ref.Ref;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.util.*;
 
 /**
@@ -152,7 +153,7 @@ public class InheritanceToDelegationProcessor extends BaseRefactoringProcessor {
     return new InheritanceToDelegationViewDescriptor(myClass);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected UsageInfo[] findUsages() {
     ArrayList<UsageInfo> usages = new ArrayList<UsageInfo>();
     final PsiClass[] inheritors = ClassInheritorsSearch.search(myClass, true).toArray(PsiClass.EMPTY_ARRAY);

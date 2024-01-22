@@ -28,7 +28,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class EmptyInitializerInspection extends BaseInspection {
@@ -38,13 +38,13 @@ public class EmptyInitializerInspection extends BaseInspection {
     return "EmptyClassInitializer";
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "empty.class.initializer.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "empty.class.initializer.problem.descriptor");
@@ -56,7 +56,7 @@ public class EmptyInitializerInspection extends BaseInspection {
 
   private static class EmptyInitializerFix extends InspectionGadgetsFix {
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "empty.class.initializer.delete.quickfix");
@@ -81,7 +81,7 @@ public class EmptyInitializerInspection extends BaseInspection {
 
     @Override
     public void visitClassInitializer(
-      @Nonnull PsiClassInitializer initializer) {
+      @jakarta.annotation.Nonnull PsiClassInitializer initializer) {
       super.visitClassInitializer(initializer);
       final PsiCodeBlock body = initializer.getBody();
       if (!codeBlockIsEmpty(body)) {

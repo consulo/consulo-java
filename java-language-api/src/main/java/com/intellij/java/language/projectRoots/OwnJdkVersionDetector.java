@@ -8,9 +8,9 @@ import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
 import consulo.ide.ServiceManager;
 import consulo.application.util.JavaVersion;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author nik
@@ -26,19 +26,19 @@ public abstract class OwnJdkVersionDetector {
    */
   @Deprecated
   @Nullable
-  public String detectJdkVersion(@Nonnull String homePath) {
+  public String detectJdkVersion(@jakarta.annotation.Nonnull String homePath) {
     JdkVersionInfo info = detectJdkVersionInfo(homePath);
     return info != null ? info.getVersion() : null;
   }
 
   @Nullable
-  public abstract JdkVersionInfo detectJdkVersionInfo(@Nonnull String homePath);
+  public abstract JdkVersionInfo detectJdkVersionInfo(@jakarta.annotation.Nonnull String homePath);
 
   public static final class JdkVersionInfo {
     public final JavaVersion version;
     public final Bitness bitness;
 
-    public JdkVersionInfo(@Nonnull JavaVersion version, @Nonnull Bitness bitness) {
+    public JdkVersionInfo(@Nonnull JavaVersion version, @jakarta.annotation.Nonnull Bitness bitness) {
       this.version = version;
       this.bitness = bitness;
     }
@@ -65,7 +65,7 @@ public abstract class OwnJdkVersionDetector {
     }
   }
 
-  public static String formatVersionString(@Nonnull JavaVersion version) {
+  public static String formatVersionString(@jakarta.annotation.Nonnull JavaVersion version) {
     return "java version \"" + version + '"';
   }
 }

@@ -2,8 +2,6 @@ package com.intellij.codeInsight.completion;
 
 import static org.junit.Assert.assertEquals;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.JavaTestUtil;
 import consulo.language.editor.completion.lookup.Lookup;
 import consulo.language.editor.completion.lookup.LookupElement;
@@ -15,6 +13,7 @@ import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.codeStyle.CommonCodeStyleSettings;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 import com.intellij.testFramework.TestDataPath;
+import jakarta.annotation.Nonnull;
 
 /**
  * Created by IntelliJ IDEA.

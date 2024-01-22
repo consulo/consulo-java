@@ -27,8 +27,8 @@ import consulo.language.psi.SyntheticElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Danila Ponomarenko
@@ -37,14 +37,14 @@ import javax.annotation.Nullable;
 @IntentionMetaData(ignoreId = "java.EncapsulateFieldAction", categories = {"Java", "Refactorings"}, fileExtensions = "java")
 public class EncapsulateFieldAction extends BaseRefactoringIntentionAction {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getText() {
     return CodeInsightBundle.message("intention.encapsulate.field.text");
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     if (element instanceof SyntheticElement){
       return false;
     }
@@ -54,7 +54,7 @@ public class EncapsulateFieldAction extends BaseRefactoringIntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
+  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, @jakarta.annotation.Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiField field = getField(element);
     if (field == null) {
       return;
@@ -64,7 +64,7 @@ public class EncapsulateFieldAction extends BaseRefactoringIntentionAction {
   }
 
 
-  @Nullable
+  @jakarta.annotation.Nullable
   protected static PsiField getField(@Nullable PsiElement element) {
     if (element == null || !(element instanceof PsiIdentifier)) {
       return null;

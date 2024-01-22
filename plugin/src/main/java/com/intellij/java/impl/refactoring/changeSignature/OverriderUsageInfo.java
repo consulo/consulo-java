@@ -19,7 +19,7 @@ import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
 import consulo.usage.UsageInfo;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author ven

@@ -25,7 +25,7 @@ import consulo.annotation.component.ServiceAPI;
 import consulo.ide.ServiceManager;
 import consulo.language.psi.PsiElement;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ServiceAPI(ComponentScope.APPLICATION)
 public class JavaVersionService {
@@ -33,11 +33,11 @@ public class JavaVersionService {
     return ServiceManager.getService(JavaVersionService.class);
   }
 
-  public boolean isAtLeast(@Nonnull PsiElement element, @Nonnull JavaSdkVersion version) {
+  public boolean isAtLeast(@Nonnull PsiElement element, @jakarta.annotation.Nonnull JavaSdkVersion version) {
     return PsiUtil.getLanguageLevel(element).isAtLeast(version.getMaxLanguageLevel());
   }
 
-  public JavaSdkVersion getJavaSdkVersion(@Nonnull PsiElement element) {
+  public JavaSdkVersion getJavaSdkVersion(@jakarta.annotation.Nonnull PsiElement element) {
     return JavaSdkVersion.fromLanguageLevel(PsiUtil.getLanguageLevel(element));
   }
 }

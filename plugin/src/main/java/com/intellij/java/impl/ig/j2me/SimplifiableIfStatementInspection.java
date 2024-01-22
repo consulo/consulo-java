@@ -15,13 +15,12 @@
  */
 package com.intellij.java.impl.ig.j2me;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
@@ -66,7 +65,7 @@ public class SimplifiableIfStatementInspection extends BaseInspection {
                                            StringUtil.escapeXml(calculateReplacementStatement(statement)));
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @NonNls
   static String calculateReplacementStatement(PsiIfStatement statement) {
     final PsiStatement thenBranch = ControlFlowUtils.stripBraces(statement.getThenBranch());
@@ -275,7 +274,7 @@ public class SimplifiableIfStatementInspection extends BaseInspection {
   private static class SimplifiableIfStatementFix extends InspectionGadgetsFix {
 
     @Override
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("constant.conditional.expression.simplify.quickfix");
     }
@@ -399,7 +398,7 @@ public class SimplifiableIfStatementInspection extends BaseInspection {
       return EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalent(thenLhs, elseLhs);
     }
 
-    public static boolean isAssignment(@Nullable PsiStatement statement) {
+    public static boolean isAssignment(@jakarta.annotation.Nullable PsiStatement statement) {
       if (!(statement instanceof PsiExpressionStatement)) {
         return false;
       }

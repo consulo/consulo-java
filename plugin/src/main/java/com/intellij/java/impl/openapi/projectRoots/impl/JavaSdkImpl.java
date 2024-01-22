@@ -53,8 +53,8 @@ import consulo.virtualFileSystem.archive.ZipArchiveFileType;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
@@ -85,7 +85,7 @@ public class JavaSdkImpl extends JavaSdk {
     super("JDK");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getPresentableName() {
     return ProjectBundle.message("sdk.java.name");
@@ -96,7 +96,7 @@ public class JavaSdkImpl extends JavaSdk {
     return JavaIcons.Java;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getHelpTopic() {
     return "reference.project.structure.sdk.java";
@@ -105,7 +105,7 @@ public class JavaSdkImpl extends JavaSdk {
   @NonNls
   @Override
   @Nullable
-  public String getDefaultDocumentationUrl(@Nonnull final Sdk sdk) {
+  public String getDefaultDocumentationUrl(@jakarta.annotation.Nonnull final Sdk sdk) {
     final JavaSdkVersion version = getVersion(sdk);
     if (version == JavaSdkVersion.JDK_1_5) {
       return "http://docs.oracle.com/javase/1.5.0/docs/api/";
@@ -149,7 +149,7 @@ public class JavaSdkImpl extends JavaSdk {
   }
 
   @Override
-  public void setupCommandLine(@Nonnull GeneralCommandLine commandLine, @Nonnull Sdk sdk) {
+  public void setupCommandLine(@jakarta.annotation.Nonnull GeneralCommandLine commandLine, @jakarta.annotation.Nonnull Sdk sdk) {
     commandLine.setExePath(getBinPath(sdk) + File.separator + VM_EXE_NAME);
   }
 
@@ -194,7 +194,7 @@ public class JavaSdkImpl extends JavaSdk {
     return list;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Set<String> getEnviromentVariables(@Nonnull Platform platform) {
     return Set.of("JAVA_HOME");
@@ -294,7 +294,7 @@ public class JavaSdkImpl extends JavaSdk {
     return suggestedName;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private static String getVersionNumber(@Nonnull String versionString) {
     if (versionString.startsWith(JAVA_VERSION_PREFIX) || versionString.startsWith(OPENJDK_VERSION_PREFIX)) {
       boolean openJdk = versionString.startsWith(OPENJDK_VERSION_PREFIX);
@@ -443,7 +443,7 @@ public class JavaSdkImpl extends JavaSdk {
     return null;
   }
 
-  public static boolean attachJdkAnnotations(@Nonnull SdkModificator modificator) {
+  public static boolean attachJdkAnnotations(@jakarta.annotation.Nonnull SdkModificator modificator) {
     File pluginPath = PluginManager.getPluginPath(JavaSdkImpl.class);
 
     File file = new File(pluginPath, "jdk-annotations.jar");
@@ -474,12 +474,12 @@ public class JavaSdkImpl extends JavaSdk {
   }
 
   @Override
-  public int compareTo(@Nonnull String versionString, @Nonnull String versionNumber) {
+  public int compareTo(@jakarta.annotation.Nonnull String versionString, @jakarta.annotation.Nonnull String versionNumber) {
     return getVersionNumber(versionString).compareTo(versionNumber);
   }
 
   @Override
-  public JavaSdkVersion getVersion(@Nonnull Sdk sdk) {
+  public JavaSdkVersion getVersion(@jakarta.annotation.Nonnull Sdk sdk) {
     return getVersion1(sdk);
   }
 
@@ -498,13 +498,13 @@ public class JavaSdkImpl extends JavaSdk {
   }
 
   @Override
-  public boolean isOfVersionOrHigher(@Nonnull Sdk sdk, @Nonnull JavaSdkVersion version) {
+  public boolean isOfVersionOrHigher(@Nonnull Sdk sdk, @jakarta.annotation.Nonnull JavaSdkVersion version) {
     JavaSdkVersion sdkVersion = getVersion(sdk);
     return sdkVersion != null && sdkVersion.isAtLeast(version);
   }
 
   @Override
-  public Sdk createJdk(@Nonnull String jdkName, @Nonnull String home, boolean isJre) {
+  public Sdk createJdk(@jakarta.annotation.Nonnull String jdkName, @jakarta.annotation.Nonnull String home, boolean isJre) {
     Sdk jdk = SdkTable.getInstance().createSdk(jdkName, this);
     SdkModificator sdkModificator = jdk.getSdkModificator();
 
@@ -606,7 +606,7 @@ public class JavaSdkImpl extends JavaSdk {
   }
 
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static String getCanonicalPath(File file) {
     try {
       return file.getCanonicalPath();

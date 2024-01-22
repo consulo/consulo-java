@@ -28,7 +28,7 @@ import consulo.language.impl.ast.CompositeElement;
 import consulo.language.impl.ast.TreeElement;
 import consulo.util.lang.ObjectUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.List;
 
 public class LambdaExpressionElementType extends FunctionalExpressionElementType<PsiLambdaExpression> {
@@ -71,9 +71,9 @@ public class LambdaExpressionElementType extends FunctionalExpressionElementType
     };
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
-  protected String getPresentableText(@Nonnull LighterAST tree, @Nonnull LighterASTNode funExpr) {
+  protected String getPresentableText(@jakarta.annotation.Nonnull LighterAST tree, @Nonnull LighterASTNode funExpr) {
     LighterASTNode parameterList = ObjectUtil.notNull(LightTreeUtil.firstChildOfType(tree, funExpr, JavaStubElementTypes.PARAMETER_LIST));
     return getLambdaPresentableText(tree, parameterList);
   }

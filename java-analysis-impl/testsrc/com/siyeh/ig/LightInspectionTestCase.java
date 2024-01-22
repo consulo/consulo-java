@@ -17,9 +17,9 @@ package com.siyeh.ig;
 
 import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
 /**
  * @author Bas Leijdekkers

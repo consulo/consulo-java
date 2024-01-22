@@ -20,10 +20,11 @@ import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -93,14 +94,14 @@ public class ParenthesesUtils {
     s_binaryOperatorPrecedence.put(JavaTokenType.NE, EQUALITY_PRECEDENCE);
   }
 
-  public static String getText(@Nonnull PsiExpression expression, int precedence) {
+  public static String getText(@jakarta.annotation.Nonnull PsiExpression expression, int precedence) {
     if (getPrecedence(expression) >= precedence) {
       return '(' + expression.getText() + ')';
     }
     return expression.getText();
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static PsiElement getParentSkipParentheses(PsiElement element) {
     PsiElement parent = element.getParent();
     while (parent instanceof PsiParenthesizedExpression || parent instanceof PsiTypeCastExpression) {
@@ -349,18 +350,18 @@ public class ParenthesesUtils {
     }
   }
 
-  private static void removeParensFromInstanceOfExpression(@Nonnull PsiInstanceOfExpression instanceofExpression, boolean ignoreClarifyingParentheses) {
+  private static void removeParensFromInstanceOfExpression(@jakarta.annotation.Nonnull PsiInstanceOfExpression instanceofExpression, boolean ignoreClarifyingParentheses) {
     final PsiExpression operand = instanceofExpression.getOperand();
     removeParentheses(operand, ignoreClarifyingParentheses);
   }
 
-  private static void removeParensFromPolyadicExpression(@Nonnull PsiPolyadicExpression polyadicExpression, boolean ignoreClarifyingParentheses) {
+  private static void removeParensFromPolyadicExpression(@jakarta.annotation.Nonnull PsiPolyadicExpression polyadicExpression, boolean ignoreClarifyingParentheses) {
     for (PsiExpression operand : polyadicExpression.getOperands()) {
       removeParentheses(operand, ignoreClarifyingParentheses);
     }
   }
 
-  private static void removeParensFromPostfixExpression(@Nonnull PsiPostfixExpression postfixExpression, boolean ignoreClarifyingParentheses) {
+  private static void removeParensFromPostfixExpression(@jakarta.annotation.Nonnull PsiPostfixExpression postfixExpression, boolean ignoreClarifyingParentheses) {
     final PsiExpression operand = postfixExpression.getOperand();
     removeParentheses(operand, ignoreClarifyingParentheses);
   }

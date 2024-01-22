@@ -35,8 +35,8 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +56,7 @@ public class MethodParameterFix extends LocalQuickFixAndIntentionActionOnPsiElem
     myName = method.getName();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getText() {
     return JavaQuickFixBundle.message("fix.parameter.type.text",
@@ -65,16 +65,16 @@ public class MethodParameterFix extends LocalQuickFixAndIntentionActionOnPsiElem
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("fix.parameter.type.family");
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project,
+  public boolean isAvailable(@jakarta.annotation.Nonnull Project project,
                              @Nonnull PsiFile file,
-                             @Nonnull PsiElement startElement,
-                             @Nonnull PsiElement endElement) {
+                             @jakarta.annotation.Nonnull PsiElement startElement,
+                             @jakarta.annotation.Nonnull PsiElement endElement) {
     final PsiMethod myMethod = (PsiMethod)startElement;
     return myMethod.isValid()
         && myMethod.getManager().isInProject(myMethod)

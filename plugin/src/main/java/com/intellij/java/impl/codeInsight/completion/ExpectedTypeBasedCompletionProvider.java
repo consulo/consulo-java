@@ -23,7 +23,7 @@ import consulo.language.editor.completion.CompletionResultSet;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.ProcessingContext;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Set;
 
@@ -32,7 +32,7 @@ import java.util.Set;
  */
 public abstract class ExpectedTypeBasedCompletionProvider implements CompletionProvider {
   @Override
-  public void addCompletions(@Nonnull final CompletionParameters params, final ProcessingContext matchingContext, @Nonnull final CompletionResultSet result) {
+  public void addCompletions(@Nonnull final CompletionParameters params, final ProcessingContext matchingContext, @jakarta.annotation.Nonnull final CompletionResultSet result) {
     final PsiElement position = params.getPosition();
     if (position.getParent() instanceof PsiLiteralExpression) return;
 

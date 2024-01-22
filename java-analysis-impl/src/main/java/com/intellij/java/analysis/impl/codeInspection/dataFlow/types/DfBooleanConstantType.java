@@ -2,7 +2,7 @@
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 
 import com.intellij.java.language.psi.PsiPrimitiveType;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 class DfBooleanConstantType extends DfConstantType<Boolean> implements DfBooleanType {
   DfBooleanConstantType(boolean value) {
@@ -23,7 +23,7 @@ class DfBooleanConstantType extends DfConstantType<Boolean> implements DfBoolean
     return DfBooleanType.super.getPsiType();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public DfType tryNegate() {
     return getValue() ? DfTypes.FALSE : DfTypes.TRUE;

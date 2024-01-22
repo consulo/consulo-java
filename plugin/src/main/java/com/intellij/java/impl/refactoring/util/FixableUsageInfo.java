@@ -18,7 +18,7 @@ package com.intellij.java.impl.refactoring.util;
 import consulo.language.psi.PsiElement;
 import consulo.usage.UsageInfo;
 import consulo.language.util.IncorrectOperationException;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 
 @SuppressWarnings({"AbstractClassExtendsConcreteClass"})

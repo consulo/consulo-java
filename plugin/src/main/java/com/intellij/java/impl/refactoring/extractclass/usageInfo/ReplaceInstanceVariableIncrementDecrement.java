@@ -21,13 +21,14 @@ import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.refactoring.psi.MutationUtils;
 import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
 import consulo.language.util.IncorrectOperationException;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public class ReplaceInstanceVariableIncrementDecrement extends FixableUsageInfo {
   private final PsiExpression reference;
   private final @Nullable
   String setterName;
-  private final @Nullable String getterName;
+  private final @jakarta.annotation.Nullable
+  String getterName;
   private final String delegateName;
   private final String fieldName;
 

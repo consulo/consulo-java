@@ -15,7 +15,7 @@
  */
 package com.intellij.java.debugger.impl.engine.evaluation.expression;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.evaluation.EvaluateExceptionUtil;

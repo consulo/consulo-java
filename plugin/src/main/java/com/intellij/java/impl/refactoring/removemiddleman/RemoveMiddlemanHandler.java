@@ -17,7 +17,7 @@ package com.intellij.java.impl.refactoring.removemiddleman;
 
 import java.util.Set;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.language.editor.PlatformDataKeys;
 import org.jetbrains.annotations.NonNls;
@@ -49,7 +49,7 @@ public class RemoveMiddlemanHandler implements RefactoringActionHandler {
     return HelpID.RemoveMiddleman;
   }
 
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
     final ScrollingModel scrollingModel = editor.getScrollingModel();
     scrollingModel.scrollToCaret(ScrollType.MAKE_VISIBLE);
     final PsiElement element = dataContext.getData(LangDataKeys.PSI_ELEMENT);
@@ -61,7 +61,7 @@ public class RemoveMiddlemanHandler implements RefactoringActionHandler {
     invoke((PsiField)element, editor);
   }
 
-  public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+  public void invoke(@jakarta.annotation.Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
     if (elements.length != 1) {
       return;
     }

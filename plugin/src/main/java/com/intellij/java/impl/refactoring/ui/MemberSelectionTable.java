@@ -32,8 +32,8 @@ import com.intellij.java.language.psi.PsiModifier;
 import consulo.language.editor.refactoring.classMember.MemberInfoModel;
 import consulo.ide.impl.idea.refactoring.ui.AbstractMemberSelectionTable;
 import consulo.ui.image.Image;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class MemberSelectionTable extends AbstractMemberSelectionTable<PsiMember, MemberInfo> {

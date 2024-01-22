@@ -25,9 +25,9 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.InferLambdaParameterTypeIntention", fileExtensions = "java", categories = {"Java", "Declaration"})
@@ -35,13 +35,13 @@ public class InferLambdaParameterTypeIntention extends Intention {
   private static final Logger LOG = Logger.getInstance(InferLambdaParameterTypeIntention.class);
   private String myInferredTypesText;
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected PsiElementPredicate getElementPredicate() {
     return new LambdaParametersPredicate();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getText() {
     return "Expand lambda to " + myInferredTypesText + " -> {...}";

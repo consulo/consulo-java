@@ -15,11 +15,11 @@
  */
 package com.intellij.java.impl.refactoring.typeMigration;
 
-import javax.annotation.Nonnull;
 import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.usage.UsageViewBundle;
 import consulo.usage.UsageViewDescriptor;
+import jakarta.annotation.Nonnull;
 
 class TypeMigrationViewDescriptor implements UsageViewDescriptor
 {

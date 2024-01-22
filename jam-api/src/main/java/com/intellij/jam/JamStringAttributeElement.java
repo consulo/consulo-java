@@ -21,9 +21,8 @@ import com.intellij.java.language.psi.ref.AnnotationAttributeChildLink;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementRef;
 import consulo.xml.util.xml.MutableGenericValue;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author peter
@@ -31,7 +30,7 @@ import javax.annotation.Nullable;
 public class JamStringAttributeElement<T> extends JamAttributeElement<T> implements MutableGenericValue<T> {
   private final JamConverter<T> myConverter;
 
-  public JamStringAttributeElement(@Nonnull PsiElementRef<PsiAnnotation> parent, String attributeName, JamConverter<T> converter) {
+  public JamStringAttributeElement(@jakarta.annotation.Nonnull PsiElementRef<PsiAnnotation> parent, String attributeName, JamConverter<T> converter) {
     super(attributeName, parent);
     myConverter = converter;
   }
@@ -49,7 +48,7 @@ public class JamStringAttributeElement<T> extends JamAttributeElement<T> impleme
     return JamCommonUtil.getObjectValue(value, String.class);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public PsiLiteral getPsiLiteral() {
     final PsiAnnotationMemberValue value = getPsiElement();
     return value instanceof PsiLiteral ? (PsiLiteral) value : null;

@@ -31,8 +31,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiReference;
 import consulo.language.editor.refactoring.rename.RenameHandler;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class RenameWrongRefHandler implements RenameHandler {
@@ -58,7 +57,7 @@ public class RenameWrongRefHandler implements RenameHandler {
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file, final DataContext dataContext) {
+  public void invoke(@jakarta.annotation.Nonnull final Project project, final Editor editor, final PsiFile file, final DataContext dataContext) {
     final PsiReferenceExpression reference = (PsiReferenceExpression) file.findReferenceAt(editor.getCaretModel().getOffset());
     new WriteCommandAction(project) {
       @Override
@@ -69,6 +68,6 @@ public class RenameWrongRefHandler implements RenameHandler {
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, @Nonnull final PsiElement[] elements, final DataContext dataContext) {
+  public void invoke(@jakarta.annotation.Nonnull final Project project, @Nonnull final PsiElement[] elements, final DataContext dataContext) {
   }
 }

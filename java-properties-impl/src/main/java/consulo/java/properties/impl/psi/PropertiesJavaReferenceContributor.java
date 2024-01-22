@@ -10,7 +10,7 @@ import consulo.language.Language;
 import consulo.language.psi.*;
 import consulo.language.util.ProcessingContext;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -20,13 +20,13 @@ import javax.annotation.Nonnull;
 public class PropertiesJavaReferenceContributor extends PsiReferenceContributor
 {
 	@Override
-	public void registerReferenceProviders(@Nonnull PsiReferenceRegistrar registrar)
+	public void registerReferenceProviders(@jakarta.annotation.Nonnull PsiReferenceRegistrar registrar)
 	{
 		registrar.registerReferenceProvider(PsiJavaPatterns.psiElement(PropertyValueImpl.class), new PsiReferenceProvider()
 		{
 			@Nonnull
 			@Override
-			public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull ProcessingContext context)
+			public PsiReference[] getReferencesByElement(@jakarta.annotation.Nonnull PsiElement element, @Nonnull ProcessingContext context)
 			{
 				String text = element.getText();
 				String[] words = text.split("\\s");

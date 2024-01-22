@@ -1,13 +1,12 @@
 package com.intellij.refactoring;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.JavaTestUtil;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.impl.refactoring.replaceConstructorWithFactory.ReplaceConstructorWithFactoryProcessor;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 /**

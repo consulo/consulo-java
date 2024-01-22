@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.threading;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
@@ -29,13 +29,13 @@ import com.siyeh.ig.psiutils.TypeUtils;
 @ExtensionImpl
 public class ThreadWithDefaultRunMethodInspection extends BaseInspection {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "thread.with.default.run.method.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "InstantiatingAThreadWithDefaultRunMethod";
   }

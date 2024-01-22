@@ -21,7 +21,7 @@ package com.intellij.java.execution.impl.remote;
 
 import java.util.Collection;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.execution.ExecutionBundle;
 import consulo.execution.configuration.*;
@@ -90,7 +90,7 @@ public class RemoteConfiguration extends ModuleBasedConfiguration<JavaRunConfigu
 	}
 
 	@Override
-	public RunProfileState getState(@Nonnull final Executor executor, @Nonnull final ExecutionEnvironment env) throws ExecutionException
+	public RunProfileState getState(@Nonnull final Executor executor, @jakarta.annotation.Nonnull final ExecutionEnvironment env) throws ExecutionException
 	{
 		GenericDebuggerRunnerSettings debuggerSettings = (GenericDebuggerRunnerSettings) env.getRunnerSettings();
 		debuggerSettings.LOCAL = false;
@@ -100,7 +100,7 @@ public class RemoteConfiguration extends ModuleBasedConfiguration<JavaRunConfigu
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public SettingsEditor<? extends RunConfiguration> getConfigurationEditor()
 	{
 		SettingsEditorGroup<RemoteConfiguration> group = new SettingsEditorGroup<RemoteConfiguration>();

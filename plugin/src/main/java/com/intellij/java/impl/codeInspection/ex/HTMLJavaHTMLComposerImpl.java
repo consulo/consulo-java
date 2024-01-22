@@ -33,8 +33,8 @@ import consulo.language.editor.inspection.reference.RefFile;
 import consulo.language.psi.PsiFile;
 import consulo.util.lang.xml.XmlStringUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class HTMLJavaHTMLComposerImpl extends HTMLJavaHTMLComposer {
   private final HTMLComposerImpl myComposer;
@@ -152,7 +152,7 @@ public class HTMLJavaHTMLComposerImpl extends HTMLJavaHTMLComposer {
     }
     refElement.accept(new RefJavaVisitor() {
       @Override
-      public void visitClass(@Nonnull RefClass refClass) {
+      public void visitClass(@jakarta.annotation.Nonnull RefClass refClass) {
         if (refClass.isStatic()) {
           buf.append(InspectionsBundle.message("inspection.export.results.static"));
           buf.append(HTMLComposerImpl.NBSP);
@@ -166,7 +166,7 @@ public class HTMLJavaHTMLComposerImpl extends HTMLJavaHTMLComposer {
       }
 
       @Override
-      public void visitField(@Nonnull RefField field) {
+      public void visitField(@jakarta.annotation.Nonnull RefField field) {
         PsiField psiField = field.getElement();
         if (psiField != null) {
           if (field.isStatic()) {
@@ -185,7 +185,7 @@ public class HTMLJavaHTMLComposerImpl extends HTMLJavaHTMLComposer {
       }
 
       @Override
-      public void visitMethod(@Nonnull RefMethod method) {
+      public void visitMethod(@jakarta.annotation.Nonnull RefMethod method) {
         PsiMethod psiMethod = (PsiMethod) method.getElement();
         if (psiMethod != null) {
           PsiType returnType = psiMethod.getReturnType();

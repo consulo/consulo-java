@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.style;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -35,14 +35,14 @@ import consulo.java.language.module.util.JavaClassNames;
 public class TypeParameterExtendsObjectInspection extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "type.parameter.extends.object.display.name");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "TypeParameterExplicitlyExtendsObject";
   }
@@ -80,7 +80,7 @@ public class TypeParameterExtendsObjectInspection extends BaseInspection {
     }
 
     @Override
-    public void doFix(@Nonnull Project project,
+    public void doFix(@jakarta.annotation.Nonnull Project project,
                       ProblemDescriptor descriptor)
       throws IncorrectOperationException {
       final PsiElement identifier = descriptor.getPsiElement();

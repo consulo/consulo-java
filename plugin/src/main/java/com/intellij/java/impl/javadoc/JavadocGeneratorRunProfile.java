@@ -58,9 +58,9 @@ import consulo.ui.image.Image;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.PathsList;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -82,12 +82,12 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
     myConfiguration = configuration;
   }
 
-  public static Sdk getSdk(@Nonnull Project project) {
+  public static Sdk getSdk(@jakarta.annotation.Nonnull Project project) {
     return PathUtilEx.getAnyJdk(project);
   }
 
   @Override
-  public RunProfileState getState(@Nonnull final Executor executor, @Nonnull final ExecutionEnvironment env) throws ExecutionException {
+  public RunProfileState getState(@jakarta.annotation.Nonnull final Executor executor, @Nonnull final ExecutionEnvironment env) throws ExecutionException {
     return new MyJavaCommandLineState(myConfiguration, myProject, myGenerationScope, env);
   }
 
@@ -102,7 +102,7 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public Module[] getModules() {
     return Module.EMPTY_ARRAY;
   }
@@ -293,7 +293,7 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
     }
 
     @Override
-    @Nonnull
+    @jakarta.annotation.Nonnull
     protected ProcessHandler startProcess() throws ExecutionException {
       final ProcessHandler handler = JavaCommandLineStateUtil.startProcess(createCommandLine());
       ProcessTerminatedListener.attach(handler, myProject, JavadocBundle.message("javadoc.generate.exited"));

@@ -26,13 +26,13 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ConvertJUnit3TestCaseToJUnit4Intention", fileExtensions = "java", categories = {"Java", "JUnit"})
 public class ConvertJUnit3TestCaseToJUnit4Intention extends Intention {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected PsiElementPredicate getElementPredicate() {
     return new ConvertJUnit3TestCaseToJUnit4Predicate();
@@ -109,7 +109,7 @@ public class ConvertJUnit3TestCaseToJUnit4Intention extends Intention {
     @Nonnull
 	private final String myLifeCycleMethodName;
 
-    private SuperLifeCycleCallRemover(@Nonnull String lifeCycleMethodName) {
+    private SuperLifeCycleCallRemover(@jakarta.annotation.Nonnull String lifeCycleMethodName) {
       myLifeCycleMethodName = lifeCycleMethodName;
     }
 

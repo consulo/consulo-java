@@ -10,12 +10,12 @@ import consulo.project.Project;
 import consulo.util.lang.Pair;
 import jakarta.inject.Inject;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class JavaConcatenationToInjectorAdapter extends BaseConcatenation2InjectorAdapter implements MultiHostInjector {
   @Inject
-  public JavaConcatenationToInjectorAdapter(@Nonnull Project project) {
+  public JavaConcatenationToInjectorAdapter(@jakarta.annotation.Nonnull Project project) {
     super(project);
   }
 

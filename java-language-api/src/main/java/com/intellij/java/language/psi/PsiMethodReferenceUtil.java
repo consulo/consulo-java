@@ -22,8 +22,8 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
 import consulo.util.lang.ref.Ref;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * User: anna
@@ -181,7 +181,7 @@ public class PsiMethodReferenceUtil {
     return false;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static QualifierResolveResult getQualifierResolveResult(@Nonnull PsiMethodReferenceExpression methodReferenceExpression) {
     PsiClass containingClass = null;
     PsiSubstitutor substitutor = PsiSubstitutor.EMPTY;

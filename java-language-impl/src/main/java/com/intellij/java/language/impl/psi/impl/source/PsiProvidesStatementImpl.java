@@ -22,8 +22,8 @@ import consulo.language.ast.ASTNode;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class PsiProvidesStatementImpl extends JavaStubPsiElement<PsiProvidesStatementStub> implements PsiProvidesStatement {
   public PsiProvidesStatementImpl(@Nonnull PsiProvidesStatementStub stub) {
@@ -34,7 +34,7 @@ public class PsiProvidesStatementImpl extends JavaStubPsiElement<PsiProvidesStat
     super(node);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public PsiJavaCodeReferenceElement getInterfaceReference() {
     return PsiTreeUtil.getChildOfType(this, PsiJavaCodeReferenceElement.class);

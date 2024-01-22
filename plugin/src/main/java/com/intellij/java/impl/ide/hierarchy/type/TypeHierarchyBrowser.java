@@ -19,8 +19,8 @@ import java.text.MessageFormat;
 import java.util.Comparator;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import javax.swing.JPanel;
 import javax.swing.JTree;
 
@@ -40,6 +40,7 @@ import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.impl.psi.presentation.java.ClassPresentationUtil;
+import jakarta.annotation.Nullable;
 
 public class TypeHierarchyBrowser extends TypeHierarchyBrowserBase
 {

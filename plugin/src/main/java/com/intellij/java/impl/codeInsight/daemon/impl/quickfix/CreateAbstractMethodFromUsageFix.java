@@ -18,7 +18,7 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.language.psi.PsiElement;
@@ -29,7 +29,7 @@ import com.intellij.java.language.psi.util.PsiUtil;
 
 public class CreateAbstractMethodFromUsageFix extends CreateMethodFromUsageFix
 {
-	public CreateAbstractMethodFromUsageFix(@Nonnull PsiMethodCallExpression methodCall)
+	public CreateAbstractMethodFromUsageFix(@jakarta.annotation.Nonnull PsiMethodCallExpression methodCall)
 	{
 		super(methodCall);
 	}

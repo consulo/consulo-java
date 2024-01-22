@@ -19,10 +19,10 @@ import javax.swing.JComponent;
 
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.project.Project;
@@ -51,7 +51,7 @@ public class IfMayBeConditionalInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "if.may.be.conditional.problem.descriptor");
@@ -70,7 +70,7 @@ public class IfMayBeConditionalInspection extends BaseInspection {
 
   private static class IfMayBeConditionalFix extends InspectionGadgetsFix {
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "if.may.be.conditional.quickfix");

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.visibility;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
@@ -26,7 +26,7 @@ import consulo.annotation.component.ExtensionImpl;
 @ExtensionImpl
 public class ClassEscapesItsScopeInspection extends BaseInspection {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "ClassEscapesDefinedScope";
   }
@@ -37,7 +37,7 @@ public class ClassEscapesItsScopeInspection extends BaseInspection {
       "class.escapes.defined.scope.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "class.escapes.defined.scope.problem.descriptor");
@@ -51,7 +51,7 @@ public class ClassEscapesItsScopeInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
       //no call to super, so we don't drill into anonymous classes
       if (method.isConstructor()) {
         return;

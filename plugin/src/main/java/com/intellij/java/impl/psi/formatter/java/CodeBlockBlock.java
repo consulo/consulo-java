@@ -18,8 +18,6 @@ package com.intellij.java.impl.psi.formatter.java;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import consulo.language.codeStyle.Alignment;
 import consulo.language.codeStyle.Block;
 import consulo.language.codeStyle.ChildAttributes;
@@ -41,6 +39,8 @@ import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.impl.psi.impl.source.tree.StdTokenSets;
 import consulo.language.ast.IElementType;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class CodeBlockBlock extends AbstractJavaBlock
 {
@@ -77,7 +77,7 @@ public class CodeBlockBlock extends AbstractJavaBlock
 	 * @param baseNode  base AST node
 	 * @return alignment strategy to use for the given node
 	 */
-	private static AlignmentStrategy getAlignmentStrategy(Alignment alignment, ASTNode baseNode, @Nonnull CommonCodeStyleSettings settings)
+	private static AlignmentStrategy getAlignmentStrategy(Alignment alignment, ASTNode baseNode, @jakarta.annotation.Nonnull CommonCodeStyleSettings settings)
 	{
 		if(baseNode.getElementType() != JavaElementType.CLASS || !settings.ALIGN_MULTILINE_EXTENDS_LIST)
 		{
@@ -226,7 +226,7 @@ public class CodeBlockBlock extends AbstractJavaBlock
 		final SyntheticCodeBlock result = new SyntheticCodeBlock(localResult, childAlignment, getSettings(), myJavaSettings, indent, childWrap)
 		{
 			@Override
-			@Nonnull
+			@jakarta.annotation.Nonnull
 			public ChildAttributes getChildAttributes(final int newChildIndex)
 			{
 				IElementType prevElementType = null;

@@ -41,8 +41,8 @@ import consulo.ui.ex.awt.TextFieldWithBrowseButton;
 import consulo.util.lang.StringUtil;
 import consulo.ui.ex.awt.ScrollPaneFactory;
 import consulo.internal.com.sun.jdi.*;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;

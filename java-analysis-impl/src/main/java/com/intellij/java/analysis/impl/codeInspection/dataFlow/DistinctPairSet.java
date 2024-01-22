@@ -8,9 +8,9 @@ import consulo.util.collection.primitive.longs.LongList;
 import consulo.util.collection.primitive.longs.LongLists;
 import consulo.util.collection.primitive.longs.LongSet;
 import consulo.util.collection.primitive.longs.LongSets;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.AbstractSet;
 import java.util.Iterator;
 import java.util.List;

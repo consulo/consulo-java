@@ -29,7 +29,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.util.PsiTreeUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 
 public abstract class UnnecessaryLocalVariableInspection extends BaseInspection {
@@ -45,7 +45,7 @@ public abstract class UnnecessaryLocalVariableInspection extends BaseInspection 
   public boolean m_ignoreAnnotatedVariables = false;
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("redundant.local.variable.display.name");
   }
@@ -66,7 +66,7 @@ public abstract class UnnecessaryLocalVariableInspection extends BaseInspection 
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("unnecessary.local.variable.problem.descriptor");
   }

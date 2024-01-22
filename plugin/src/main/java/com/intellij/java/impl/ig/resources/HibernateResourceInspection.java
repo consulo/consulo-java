@@ -23,7 +23,7 @@ import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -34,7 +34,7 @@ public class HibernateResourceInspection extends ResourceInspection {
   public boolean insideTryAllowed = false;
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "HibernateResourceOpenedButNotSafelyClosed";
   }
@@ -47,7 +47,7 @@ public class HibernateResourceInspection extends ResourceInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     final PsiExpression expression = (PsiExpression)infos[0];
     final PsiType type = expression.getType();
@@ -74,7 +74,7 @@ public class HibernateResourceInspection extends ResourceInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!isHibernateFactoryMethod(expression)) {
         return;

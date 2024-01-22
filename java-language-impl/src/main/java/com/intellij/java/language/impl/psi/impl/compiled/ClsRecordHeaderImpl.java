@@ -11,8 +11,8 @@ import consulo.language.impl.ast.TreeElement;
 import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.language.psi.PsiElementVisitor;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class ClsRecordHeaderImpl extends ClsRepositoryPsiElement<PsiRecordHeaderStub> implements PsiRecordHeader {
   public ClsRecordHeaderImpl(@Nonnull PsiRecordHeaderStub stub) {

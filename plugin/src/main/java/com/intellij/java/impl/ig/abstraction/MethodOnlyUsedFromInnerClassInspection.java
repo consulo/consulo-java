@@ -33,8 +33,9 @@ import consulo.language.psi.search.PsiSearchHelper;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 
 @ExtensionImpl
@@ -50,13 +51,13 @@ public class MethodOnlyUsedFromInnerClassInspection extends BaseInspection {
   public boolean onlyReportStaticMethods = false;
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("method.only.used.from.inner.class.display.name");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     final PsiNamedElement element = (PsiNamedElement)infos[0];
     final String name = element.getName();

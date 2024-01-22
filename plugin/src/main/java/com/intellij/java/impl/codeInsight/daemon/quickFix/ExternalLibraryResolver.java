@@ -22,8 +22,8 @@ import consulo.component.extension.ExtensionPointName;
 import consulo.module.Module;
 import consulo.util.lang.ThreeState;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author nik
@@ -35,11 +35,11 @@ public abstract class ExternalLibraryResolver {
 
   @Nullable
   public abstract ExternalClassResolveResult resolveClass(@Nonnull String shortClassName,
-                                                          @Nonnull ThreeState isAnnotation,
+                                                          @jakarta.annotation.Nonnull ThreeState isAnnotation,
                                                           @Nonnull Module contextModule);
 
-  @Nullable
-  public ExternalLibraryDescriptor resolvePackage(@Nonnull String packageName) {
+  @jakarta.annotation.Nullable
+  public ExternalLibraryDescriptor resolvePackage(@jakarta.annotation.Nonnull String packageName) {
     return null;
   }
 

@@ -41,8 +41,8 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.dataholder.Key;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author max
@@ -56,7 +56,7 @@ public class JavaTreeGenerator implements TreeGenerator {
 
   @Override
   @Nullable
-  public TreeElement generateTreeFor(@Nonnull PsiElement original, @Nonnull final CharTable table, @Nonnull final PsiManager manager) {
+  public TreeElement generateTreeFor(@jakarta.annotation.Nonnull PsiElement original, @jakarta.annotation.Nonnull final CharTable table, @jakarta.annotation.Nonnull final PsiManager manager) {
     if (original instanceof PsiKeyword || original instanceof PsiIdentifier) {
       final String text = original.getText();
       return createLeafFromText(text, table, manager, original, ((PsiJavaToken)original).getTokenType());
@@ -158,7 +158,7 @@ public class JavaTreeGenerator implements TreeGenerator {
     return Factory.createSingleLeafElement(type, text, 0, text.length(), table, manager, CodeEditUtil.isNodeGenerated(original.getNode()));
   }
 
-  private static TreeElement markGeneratedIfNeeded(@Nonnull PsiElement original, @Nonnull TreeElement copy) {
+  private static TreeElement markGeneratedIfNeeded(@Nonnull PsiElement original, @jakarta.annotation.Nonnull TreeElement copy) {
     if (CodeEditUtil.isNodeGenerated(original.getNode())) {
       CodeEditUtil.markGenerated(copy);
     }
@@ -235,7 +235,7 @@ public class JavaTreeGenerator implements TreeGenerator {
     }
   }
 
-  private static void encodeClassTypeInfoInReference(@Nonnull CompositeElement reference,
+  private static void encodeClassTypeInfoInReference(@jakarta.annotation.Nonnull CompositeElement reference,
                                                      PsiClass referencedClass,
                                                      PsiSubstitutor substitutor) {
     reference.putCopyableUserData(REFERENCED_CLASS_KEY, referencedClass);

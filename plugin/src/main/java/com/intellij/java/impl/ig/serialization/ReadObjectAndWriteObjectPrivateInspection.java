@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.serialization;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
@@ -37,7 +37,7 @@ public class ReadObjectAndWriteObjectPrivateInspection
     return "NonPrivateSerializationMethod";
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "readwriteobject.private.display.name");

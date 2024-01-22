@@ -1,16 +1,17 @@
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 class B {
     public void f(@Nonnull String p){}
-    @Nonnull
-    public String nn(@javax.annotation.Nullable String param) {
+    @jakarta.annotation.Nonnull
+    public String nn(@Nullable String param) {
         return "";
     }
 }
          
 public class Y extends B {
-    @Nonnull
-	@javax.annotation.Nullable
+    @jakarta.annotation.Nonnull
+	@Nullable
 	String s;
     public void f(String p){}
        
@@ -18,10 +19,10 @@ public class Y extends B {
     public String nn(@Nonnull String param) {
         return "";
     }
-    void p(@Nonnull @javax.annotation.Nullable String p2){}
+    void p(@jakarta.annotation.Nonnull @Nullable String p2){}
 
 
-    @javax.annotation.Nullable
+    @Nullable
 	int f;
     @Nonnull
 	void vf(){}

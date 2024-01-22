@@ -23,7 +23,7 @@ package com.intellij.java.impl.refactoring.util;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.language.util.IncorrectOperationException;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 import java.util.Set;
 

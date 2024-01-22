@@ -28,8 +28,8 @@ import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.util.Collection;
 import java.util.List;
@@ -38,13 +38,13 @@ import java.util.List;
 public class AbstractMethodWithMissingImplementationsInspection
   extends BaseInspection {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "abstract.method.with.missing.implementations.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "abstract.method.with.missing.implementations.problem.descriptor");
@@ -85,8 +85,8 @@ public class AbstractMethodWithMissingImplementationsInspection
     }
 
     private static boolean hasMatchingImplementation(
-      @Nonnull PsiClass aClass,
-      @Nonnull PsiMethod method) {
+      @jakarta.annotation.Nonnull PsiClass aClass,
+      @jakarta.annotation.Nonnull PsiMethod method) {
       final PsiMethod overridingMethod =
         findOverridingMethod(aClass, method);
       if (overridingMethod == null ||

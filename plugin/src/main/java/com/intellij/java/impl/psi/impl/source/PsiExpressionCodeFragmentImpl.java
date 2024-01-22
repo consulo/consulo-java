@@ -28,7 +28,7 @@ import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public class PsiExpressionCodeFragmentImpl extends PsiCodeFragmentImpl implements PsiExpressionCodeFragment {
   private static final Logger LOG = Logger.getInstance(PsiExpressionCodeFragmentImpl.class);

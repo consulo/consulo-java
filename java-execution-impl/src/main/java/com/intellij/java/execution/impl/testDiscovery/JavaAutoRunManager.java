@@ -32,7 +32,7 @@ import consulo.project.Project;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @Singleton
 @State(name = "JavaAutoRunManager", storages = {@Storage(StoragePathMacros.WORKSPACE_FILE)})
@@ -45,11 +45,11 @@ public class JavaAutoRunManager extends AbstractAutoTestManager {
   }
 
   @Inject
-  public JavaAutoRunManager(@Nonnull Project project) {
+  public JavaAutoRunManager(@jakarta.annotation.Nonnull Project project) {
     super(project);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected AutoTestWatcher createWatcher(Project project) {
     return new AutoTestWatcher() {

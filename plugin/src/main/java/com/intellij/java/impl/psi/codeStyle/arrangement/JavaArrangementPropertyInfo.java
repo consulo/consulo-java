@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.psi.codeStyle.arrangement;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Denis Zhdanov
@@ -23,19 +23,21 @@ import javax.annotation.Nullable;
  */
 public class JavaArrangementPropertyInfo {
 
-  @Nullable private JavaElementArrangementEntry myGetter;
-  @Nullable private JavaElementArrangementEntry mySetter;
+  @jakarta.annotation.Nullable
+  private JavaElementArrangementEntry myGetter;
+  @jakarta.annotation.Nullable
+  private JavaElementArrangementEntry mySetter;
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public JavaElementArrangementEntry getGetter() {
     return myGetter;
   }
 
-  public void setGetter(@Nullable JavaElementArrangementEntry getter) {
+  public void setGetter(@jakarta.annotation.Nullable JavaElementArrangementEntry getter) {
     myGetter = getter;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public JavaElementArrangementEntry getSetter() {
     return mySetter;
   }

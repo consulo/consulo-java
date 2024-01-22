@@ -36,8 +36,8 @@ import consulo.util.xml.serializer.annotation.Tag;
 import jakarta.inject.Singleton;
 import org.jetbrains.annotations.TestOnly;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -59,11 +59,11 @@ public class JavaProjectCodeInsightSettings implements PersistentStateComponent<
   @AbstractCollection(surroundWithTag = false, elementTag = "name", elementValueAttribute = "")
   public List<String> excludedNames = new ArrayList<>();
 
-  public static JavaProjectCodeInsightSettings getSettings(@Nonnull Project project) {
+  public static JavaProjectCodeInsightSettings getSettings(@jakarta.annotation.Nonnull Project project) {
     return ServiceManager.getService(project, JavaProjectCodeInsightSettings.class);
   }
 
-  public boolean isExcluded(@Nonnull String name) {
+  public boolean isExcluded(@jakarta.annotation.Nonnull String name) {
     for (String excluded : excludedNames) {
       if (nameMatches(name, excluded)) {
         return true;
@@ -78,7 +78,7 @@ public class JavaProjectCodeInsightSettings implements PersistentStateComponent<
     return false;
   }
 
-  private static boolean nameMatches(@Nonnull String name, String excluded) {
+  private static boolean nameMatches(@jakarta.annotation.Nonnull String name, String excluded) {
     int length = getMatchingLength(name, excluded);
     return length > 0 && (name.length() == length || name.charAt(length) == '.');
   }

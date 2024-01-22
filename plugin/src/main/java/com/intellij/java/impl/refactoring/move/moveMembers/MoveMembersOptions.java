@@ -16,7 +16,7 @@
 package com.intellij.java.impl.refactoring.move.moveMembers;
 
 import com.intellij.java.language.psi.PsiMember;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author dyoma

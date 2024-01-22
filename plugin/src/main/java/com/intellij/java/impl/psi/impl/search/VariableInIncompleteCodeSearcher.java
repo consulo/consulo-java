@@ -32,7 +32,7 @@ import consulo.language.psi.search.ReferencesSearchQueryExecutor;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.util.query.QueryExecutorBase;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Looks for references to local variable or method parameter in invalid (incomplete) code.

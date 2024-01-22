@@ -16,7 +16,7 @@
 package com.intellij.java.debugger.impl.ui.breakpoints;
 
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
 * @author Eugene Zhuravlev

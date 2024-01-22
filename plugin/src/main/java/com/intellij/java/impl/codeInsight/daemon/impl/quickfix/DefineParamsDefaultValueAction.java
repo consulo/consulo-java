@@ -49,8 +49,9 @@ import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -75,7 +76,7 @@ public class DefineParamsDefaultValueAction extends PsiElementBaseIntentionActio
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, @jakarta.annotation.Nonnull PsiElement element) {
     if (!JavaLanguage.INSTANCE.equals(element.getLanguage())) {
       return false;
     }
@@ -97,7 +98,7 @@ public class DefineParamsDefaultValueAction extends PsiElementBaseIntentionActio
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, final Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
+  public void invoke(@Nonnull final Project project, final Editor editor, @jakarta.annotation.Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiParameter[] parameters = getParams(element);
     if (parameters == null || parameters.length == 0) {
       return;

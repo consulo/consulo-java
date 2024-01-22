@@ -23,8 +23,8 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodUtils;
 import consulo.java.language.module.util.JavaClassNames;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
-import javax.annotation.Nonnull;
 
 import java.util.*;
 
@@ -34,7 +34,7 @@ public class ComparatorMethodParameterNotUsedInspection
 
   @Override
   @Nls
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "comparator.method.parameter.not.used.display.name");

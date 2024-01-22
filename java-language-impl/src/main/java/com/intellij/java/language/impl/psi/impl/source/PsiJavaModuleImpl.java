@@ -29,8 +29,8 @@ import consulo.navigation.ItemPresentation;
 import consulo.navigation.ItemPresentationProvider;
 import consulo.util.collection.JBIterable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import static consulo.language.psi.SyntaxTraverser.psiTraverser;
 
@@ -39,7 +39,7 @@ public class PsiJavaModuleImpl extends JavaStubPsiElement<PsiJavaModuleStub> imp
     super(stub, JavaStubElementTypes.MODULE);
   }
 
-  public PsiJavaModuleImpl(@Nonnull ASTNode node) {
+  public PsiJavaModuleImpl(@jakarta.annotation.Nonnull ASTNode node) {
     super(node);
   }
 
@@ -54,7 +54,7 @@ public class PsiJavaModuleImpl extends JavaStubPsiElement<PsiJavaModuleStub> imp
     }
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Iterable<PsiPackageAccessibilityStatement> getExports() {
     PsiJavaModuleStub stub = getGreenStub();
@@ -76,7 +76,7 @@ public class PsiJavaModuleImpl extends JavaStubPsiElement<PsiJavaModuleStub> imp
     }
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Iterable<PsiUsesStatement> getUses() {
     return psiTraverser().children(this).filter(PsiUsesStatement.class);
@@ -106,7 +106,7 @@ public class PsiJavaModuleImpl extends JavaStubPsiElement<PsiJavaModuleStub> imp
   }
 
   @Override
-  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
+  public PsiElement setName(@jakarta.annotation.Nonnull String name) throws IncorrectOperationException {
     PsiElementFactory factory = PsiElementFactory.SERVICE.getInstance(getProject());
     PsiJavaModuleReferenceElement newName = factory.createModuleFromText("module " + name + " {}").getNameIdentifier();
     getNameIdentifier().replace(newName);
@@ -147,7 +147,7 @@ public class PsiJavaModuleImpl extends JavaStubPsiElement<PsiJavaModuleStub> imp
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitModule(this);
     } else {

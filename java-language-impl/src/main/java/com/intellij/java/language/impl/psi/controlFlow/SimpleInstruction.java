@@ -17,8 +17,7 @@
 package com.intellij.java.language.impl.psi.controlFlow;
 
 import consulo.logging.Logger;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public abstract class SimpleInstruction extends InstructionBase {
   private static final Logger LOG = Logger.getInstance(SimpleInstruction.class);

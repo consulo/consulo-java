@@ -28,10 +28,10 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.lang.Comparing;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * User: anna
@@ -40,7 +40,7 @@ import javax.annotation.Nullable;
 @ExtensionImpl
 public class SillyAssignmentInspection extends BaseJavaLocalInspectionTool {
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionsBundle.message("inspection.variable.assigned.to.itself.display.name");
   }
@@ -58,8 +58,8 @@ public class SillyAssignmentInspection extends BaseJavaLocalInspectionTool {
   }
 
   @Override
-  @Nonnull
-  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
+  @jakarta.annotation.Nonnull
+  public PsiElementVisitor buildVisitorImpl(@jakarta.annotation.Nonnull final ProblemsHolder holder,
                                             boolean isOnTheFly,
                                             LocalInspectionToolSession session,
                                             Object state) {
@@ -131,7 +131,7 @@ public class SillyAssignmentInspection extends BaseJavaLocalInspectionTool {
   /**
    * @return true if both expressions resolve to the same variable/class or field in the same instance of the class
    */
-  private static boolean sameInstanceReferences(@Nullable PsiJavaCodeReferenceElement lRef, @Nullable PsiJavaCodeReferenceElement rRef, PsiManager manager) {
+  private static boolean sameInstanceReferences(@Nullable PsiJavaCodeReferenceElement lRef, @jakarta.annotation.Nullable PsiJavaCodeReferenceElement rRef, PsiManager manager) {
     if (lRef == null && rRef == null) return true;
     if (lRef == null || rRef == null) return false;
     PsiElement lResolved = lRef.resolve();

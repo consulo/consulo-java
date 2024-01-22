@@ -26,8 +26,9 @@ import consulo.language.psi.PsiFile;
 import consulo.project.Project;
 import consulo.util.dataholder.NotNullLazyKey;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.List;
 
 /**
@@ -74,19 +75,19 @@ public abstract class ExternalAnnotationsManager {
 
   public abstract boolean isExternalAnnotation(@Nonnull PsiAnnotation annotation);
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public abstract PsiAnnotation findExternalAnnotation(@Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN);
 
   // Method used in Kotlin plugin
   public abstract boolean isExternalAnnotationWritable(@Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN);
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public abstract PsiAnnotation[] findExternalAnnotations(@Nonnull PsiModifierListOwner listOwner);
 
   public abstract void annotateExternally(@Nonnull PsiModifierListOwner listOwner,
                                           @Nonnull String annotationFQName,
                                           @Nonnull PsiFile fromFile,
-                                          @Nullable PsiNameValuePair[] value) throws CanceledConfigurationException;
+                                          @jakarta.annotation.Nullable PsiNameValuePair[] value) throws CanceledConfigurationException;
 
   public abstract boolean deannotate(@Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN);
 
@@ -97,7 +98,7 @@ public abstract class ExternalAnnotationsManager {
 
   public abstract AnnotationPlace chooseAnnotationsPlace(@Nonnull PsiElement element);
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public abstract List<PsiFile> findExternalAnnotationsFiles(@Nonnull PsiModifierListOwner listOwner);
 
   /**

@@ -45,8 +45,8 @@ import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -59,7 +59,7 @@ public final class TrackingRunner extends DataFlowRunner {
   private final List<DfaInstructionState> afterStates = new ArrayList<>();
   private final List<TrackingDfaMemoryState> killedStates = new ArrayList<>();
 
-  private TrackingRunner(@Nonnull PsiElement context,
+  private TrackingRunner(@jakarta.annotation.Nonnull PsiElement context,
                          PsiExpression expression,
                          boolean unknownMembersAreNullable,
                          boolean ignoreAssertions) {
@@ -103,7 +103,7 @@ public final class TrackingRunner extends DataFlowRunner {
 
   @Override
   @Nonnull
-  protected DfaInstructionState[] acceptInstruction(@Nonnull InstructionVisitor visitor, @Nonnull DfaInstructionState instructionState) {
+  protected DfaInstructionState[] acceptInstruction(@Nonnull InstructionVisitor visitor, @jakarta.annotation.Nonnull DfaInstructionState instructionState) {
     Instruction instruction = instructionState.getInstruction();
     TrackingDfaMemoryState memState = (TrackingDfaMemoryState) instructionState.getMemoryState().createCopy();
     DfaInstructionState[] states = super.acceptInstruction(visitor, instructionState);
@@ -126,7 +126,7 @@ public final class TrackingRunner extends DataFlowRunner {
     return states;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static CauseItem findProblemCause(boolean unknownAreNullables,
                                            boolean ignoreAssertions,
                                            PsiExpression expression,
@@ -239,26 +239,26 @@ public final class TrackingRunner extends DataFlowRunner {
   public static class CauseItem {
     private static final String PLACE_POINTER = "___PLACE___";
     final
-    @Nonnull
+    @jakarta.annotation.Nonnull
     List<CauseItem> myChildren;
     final
     @Nonnull
     DfaProblemType myProblem;
     final
-    @Nullable
+    @jakarta.annotation.Nullable
     SmartPsiFileRange myTarget;
 
-    private CauseItem(@Nonnull List<CauseItem> children, @Nonnull DfaProblemType problem, @Nullable SmartPsiFileRange target) {
+    private CauseItem(@Nonnull List<CauseItem> children, @Nonnull DfaProblemType problem, @jakarta.annotation.Nullable SmartPsiFileRange target) {
       myChildren = children;
       myProblem = problem;
       myTarget = target;
     }
 
-    CauseItem(@Nonnull @Nls String problem, @Nullable PsiElement target) {
+    CauseItem(@Nonnull @Nls String problem, @jakarta.annotation.Nullable PsiElement target) {
       this(new CustomDfaProblemType(problem), target);
     }
 
-    CauseItem(@Nonnull DfaProblemType problem, @Nullable PsiElement target) {
+    CauseItem(@Nonnull DfaProblemType problem, @jakarta.annotation.Nullable PsiElement target) {
       myChildren = new ArrayList<>();
       myProblem = problem;
       if (target != null) {
@@ -269,7 +269,7 @@ public final class TrackingRunner extends DataFlowRunner {
       }
     }
 
-    CauseItem(@Nonnull @Nls String problem, @Nonnull MemoryStateChange change) {
+    CauseItem(@jakarta.annotation.Nonnull @Nls String problem, @Nonnull MemoryStateChange change) {
       this(new CustomDfaProblemType(problem), change);
     }
 
@@ -328,7 +328,7 @@ public final class TrackingRunner extends DataFlowRunner {
       return StreamEx.of(myChildren);
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     public PsiFile getFile() {
       return myTarget != null ? myTarget.getContainingFile() : null;
     }
@@ -500,23 +500,23 @@ public final class TrackingRunner extends DataFlowRunner {
 
   static class RangeDfaProblemType extends DfaProblemType {
     final
-    @Nonnull
+    @jakarta.annotation.Nonnull
     @Nls
     String myTemplate;
     final
-    @Nonnull
+    @jakarta.annotation.Nonnull
     LongRangeSet myRangeSet;
     final
-    @Nullable
+    @jakarta.annotation.Nullable
     PsiPrimitiveType myType;
 
-    RangeDfaProblemType(@Nonnull @Nls String template, @Nonnull LongRangeSet set, @Nullable PsiPrimitiveType type) {
+    RangeDfaProblemType(@jakarta.annotation.Nonnull @Nls String template, @Nonnull LongRangeSet set, @Nullable PsiPrimitiveType type) {
       myTemplate = template;
       myRangeSet = set;
       myType = type;
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     @Override
     DfaProblemType tryMerge(DfaProblemType other) {
       if (other instanceof RangeDfaProblemType) {
@@ -568,7 +568,7 @@ public final class TrackingRunner extends DataFlowRunner {
     }
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private CauseItem[] findConstantValueCause(PsiExpression expression, MemoryStateChange history, Object expectedValue) {
     if (expression instanceof PsiLiteralExpression) {
       return new CauseItem[0];
@@ -611,7 +611,7 @@ public final class TrackingRunner extends DataFlowRunner {
     return new CauseItem[0];
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Contract("_, _ -> new")
   private static CauseItem createAssignmentCause(AssignInstruction instruction, DfaValue target) {
     PsiExpression rExpression = instruction.getRExpression();
@@ -1097,7 +1097,7 @@ public final class TrackingRunner extends DataFlowRunner {
     return counterpart == relation.myCounterpart && type != null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static DfaRelation getBinaryExpressionRelation(MemoryStateChange change, PsiBinaryExpression binOp) {
     PsiExpression lOperand = binOp.getLOperand();
     PsiExpression rOperand = binOp.getROperand();
@@ -1364,7 +1364,7 @@ public final class TrackingRunner extends DataFlowRunner {
   }
 
   private static
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Nls
   String getContractKind(PsiCallExpression call) {
     PsiMethod method = call.resolveMethod();
@@ -1382,7 +1382,7 @@ public final class TrackingRunner extends DataFlowRunner {
   }
 
   @Nonnull
-  private ThreeState contractApplies(@Nonnull PsiMethodCallExpression call, @Nonnull MethodContract contract) {
+  private ThreeState contractApplies(@Nonnull PsiMethodCallExpression call, @jakarta.annotation.Nonnull MethodContract contract) {
     List<ContractValue> conditions = contract.getConditions();
     for (ContractValue condition : conditions) {
       DfaCondition cond = condition.fromCall(getFactory(), call);
@@ -1397,8 +1397,8 @@ public final class TrackingRunner extends DataFlowRunner {
   }
 
   @Nonnull
-  private CauseItem fromSingleContract(@Nonnull MemoryStateChange history, @Nonnull PsiMethodCallExpression call,
-                                       @Nonnull PsiMethod method, @Nonnull MethodContract contract) {
+  private CauseItem fromSingleContract(@jakarta.annotation.Nonnull MemoryStateChange history, @jakarta.annotation.Nonnull PsiMethodCallExpression call,
+                                       @jakarta.annotation.Nonnull PsiMethod method, @Nonnull MethodContract contract) {
     List<ContractValue> conditions = contract.getConditions();
     String conditionsText = StringUtil.join(conditions, c -> c.getPresentationText(method),
         JavaAnalysisBundle.message("dfa.find.cause.condition.joiner"));

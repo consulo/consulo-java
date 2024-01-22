@@ -29,8 +29,8 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.PsiMultiReference;
 import consulo.util.lang.ThreeState;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import static com.intellij.java.language.patterns.PsiJavaPatterns.psiElement;
 
@@ -42,7 +42,7 @@ public class JavadocCompletionConfidence extends CompletionConfidence {
 
   @Nonnull
   @Override
-  public ThreeState shouldSkipAutopopup(@Nonnull PsiElement contextElement, @Nonnull PsiFile psiFile, int offset) {
+  public ThreeState shouldSkipAutopopup(@jakarta.annotation.Nonnull PsiElement contextElement, @Nonnull PsiFile psiFile, int offset) {
     if (psiElement().inside(PsiDocTag.class).accepts(contextElement)) {
       if (findJavaReference(psiFile, offset - 1) != null) {
         return ThreeState.NO;
@@ -70,7 +70,7 @@ public class JavadocCompletionConfidence extends CompletionConfidence {
     return reference instanceof PsiJavaReference ? (PsiJavaReference) reference : null;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

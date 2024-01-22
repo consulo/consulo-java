@@ -21,10 +21,9 @@ import com.intellij.java.language.psi.PsiModifierListOwner;
 import consulo.language.psi.PsiChildLink;
 import consulo.language.psi.PsiElementRef;
 import consulo.language.util.IncorrectOperationException;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * @author peter
@@ -40,7 +39,7 @@ public class AnnotationChildLink extends PsiChildLink<PsiModifierListOwner, PsiA
     return myAnnoFqn;
   }
 
-  public static PsiElementRef<PsiAnnotation> createRef(@Nonnull PsiModifierListOwner parent, @NonNls String fqn) {
+  public static PsiElementRef<PsiAnnotation> createRef(@jakarta.annotation.Nonnull PsiModifierListOwner parent, @NonNls String fqn) {
     return new AnnotationChildLink(fqn).createChildRef(parent);
   }
 
@@ -54,7 +53,7 @@ public class AnnotationChildLink extends PsiChildLink<PsiModifierListOwner, PsiA
 
   @Override
   @Nonnull
-  public PsiAnnotation createChild(@Nonnull PsiModifierListOwner member) throws IncorrectOperationException {
+  public PsiAnnotation createChild(@jakarta.annotation.Nonnull PsiModifierListOwner member) throws IncorrectOperationException {
     final PsiModifierList modifierList = member.getModifierList();
     assert modifierList != null;
     return modifierList.addAnnotation(myAnnoFqn);

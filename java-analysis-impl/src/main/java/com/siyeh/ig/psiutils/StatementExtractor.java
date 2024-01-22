@@ -25,7 +25,7 @@ import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.ObjectUtil;
 import one.util.streamex.StreamEx;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.List;
 
 public class StatementExtractor {
@@ -141,7 +141,7 @@ public class StatementExtractor {
     Node myElseBranch;
     private final int myLimit;
 
-    private Cond(@Nonnull PsiExpression anchor, @Nonnull PsiExpression condition, int limit, @Nonnull Node thenBranch, @Nonnull Node elseBranch) {
+    private Cond(@Nonnull PsiExpression anchor, @Nonnull PsiExpression condition, int limit, @Nonnull Node thenBranch, @jakarta.annotation.Nonnull Node elseBranch) {
       super(anchor);
       myCondition = condition;
       myLimit = limit;

@@ -30,13 +30,13 @@ import consulo.language.editor.refactoring.rename.NameSuggestionProvider;
 import consulo.usage.UsageViewUtil;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.*;
 
 @ExtensionImpl(id = "java")
 public class JavaNameSuggestionProvider implements NameSuggestionProvider {
-  @Nullable
+  @jakarta.annotation.Nullable
   public SuggestedNameInfo getSuggestedNames(final PsiElement element, final PsiElement nameSuggestionContext, Set<String> result) {
     String initialName = UsageViewUtil.getShortName(element);
     SuggestedNameInfo info = suggestNamesForElement(element, nameSuggestionContext);
@@ -83,7 +83,7 @@ public class JavaNameSuggestionProvider implements NameSuggestionProvider {
     return info;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static String getSuperMethodName(final PsiParameter psiParameter, final PsiMethod method) {
     final int index = method.getParameterList().getParameterIndex(psiParameter);
     final PsiMethod[] superMethods = method.findSuperMethods();
@@ -143,7 +143,7 @@ public class JavaNameSuggestionProvider implements NameSuggestionProvider {
     return buffer.toString();
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static SuggestedNameInfo suggestNamesForElement(final PsiElement element, PsiElement nameSuggestionContext) {
     PsiVariable var = null;
     if (element instanceof PsiVariable) {

@@ -18,7 +18,7 @@ package com.intellij.java.execution.filters;
 import consulo.execution.ui.console.Filter;
 import consulo.language.psi.scope.GlobalSearchScope;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +32,7 @@ public class ExceptionFilters {
   private ExceptionFilters() {
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static List<Filter> getFilters(@Nonnull GlobalSearchScope searchScope) {
     ExceptionFilterFactory[] extensions = ExceptionFilterFactory.EP_NAME.getExtensions();
     List<Filter> filters = new ArrayList<Filter>(extensions.length);

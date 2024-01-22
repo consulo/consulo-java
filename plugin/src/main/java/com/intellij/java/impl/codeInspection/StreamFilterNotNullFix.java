@@ -33,8 +33,8 @@ import com.siyeh.ig.psiutils.StreamApiUtil;
 import consulo.java.analysis.impl.codeInsight.JavaInspectionsBundle;
 import consulo.java.language.module.util.JavaClassNames;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import static consulo.util.lang.ObjectUtil.tryCast;
 
@@ -46,7 +46,7 @@ public class StreamFilterNotNullFix implements LocalQuickFix, HighPriorityAction
   }
 
   @Override
-  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+  public void applyFix(@jakarta.annotation.Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
     PsiFunctionalExpression function = findFunction(descriptor.getStartElement());
     if (function == null) {
       return;
@@ -66,7 +66,7 @@ public class StreamFilterNotNullFix implements LocalQuickFix, HighPriorityAction
     LambdaCanBeMethodReferenceInspection.replaceAllLambdasWithMethodReferences(result.getArgumentList());
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private static String suggestVariableName(@Nonnull PsiFunctionalExpression function, @Nonnull PsiExpression qualifier) {
     String name = null;
     if (function instanceof PsiLambdaExpression) {

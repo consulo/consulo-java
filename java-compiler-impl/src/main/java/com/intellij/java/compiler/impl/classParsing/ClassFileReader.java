@@ -28,9 +28,9 @@ import consulo.compiler.CacheCorruptedException;
 import consulo.compiler.CompilerBundle;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.util.collection.ArrayUtil;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;

@@ -36,7 +36,7 @@ import consulo.util.collection.ArrayUtil;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 
 public class VisibilityUtil {
@@ -111,7 +111,7 @@ public class VisibilityUtil {
     return PsiModifier.PACKAGE_LOCAL;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @NonNls
   public static String getVisibilityString(@PsiModifier.ModifierConstant String visibilityModifier) {
     if (PsiModifier.PACKAGE_LOCAL.equals(visibilityModifier)) {
@@ -121,7 +121,7 @@ public class VisibilityUtil {
   }
 
   @Nls
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static String getVisibilityStringToDisplay(@Nonnull PsiMember member) {
     if (member.hasModifierProperty(PsiModifier.PUBLIC)) {
       return toPresentableText(PsiModifier.PUBLIC);

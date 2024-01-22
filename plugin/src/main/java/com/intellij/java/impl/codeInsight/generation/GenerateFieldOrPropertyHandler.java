@@ -27,8 +27,8 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -104,7 +104,7 @@ public class GenerateFieldOrPropertyHandler extends GenerateMembersHandlerBase {
   }
 
   @Nullable
-  public PsiMember findExistingMember(@Nonnull PsiClass aClass, @Nonnull PropertyMemberType memberType) {
+  public PsiMember findExistingMember(@jakarta.annotation.Nonnull PsiClass aClass, @Nonnull PropertyMemberType memberType) {
     if (memberType == PropertyMemberType.FIELD) {
       return aClass.findFieldByName(getFieldName(aClass), false);
     } else if (memberType == PropertyMemberType.GETTER) {

@@ -17,13 +17,13 @@ package com.intellij.java.language.impl.psi;
 
 import com.intellij.java.language.psi.PsiTypeVisitor;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author ven
  */
 public class PsiTypeVisitorEx<A> extends PsiTypeVisitor<A> {
-  @Nullable
+  @jakarta.annotation.Nullable
   public A visitTypeVariable(PsiTypeVariable var) {
     return visitType(var);
   }

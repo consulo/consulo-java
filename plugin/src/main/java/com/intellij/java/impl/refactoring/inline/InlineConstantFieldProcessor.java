@@ -43,7 +43,7 @@ import consulo.usage.UsageViewDescriptor;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.ref.Ref;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.*;
 
 /**
@@ -83,14 +83,14 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor
 	}
 
 	@Override
-	@Nonnull
-	protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages)
+	@jakarta.annotation.Nonnull
+	protected UsageViewDescriptor createUsageViewDescriptor(@jakarta.annotation.Nonnull UsageInfo[] usages)
 	{
 		return new InlineViewDescriptor(myField);
 	}
 
 	@Override
-	protected boolean isPreviewUsages(@Nonnull UsageInfo[] usages)
+	protected boolean isPreviewUsages(@jakarta.annotation.Nonnull UsageInfo[] usages)
 	{
 		if(super.isPreviewUsages(usages))
 		{
@@ -108,7 +108,7 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor
 
 	private static class UsageFromJavaDoc extends UsageInfo
 	{
-		private UsageFromJavaDoc(@Nonnull PsiElement element)
+		private UsageFromJavaDoc(@jakarta.annotation.Nonnull PsiElement element)
 		{
 			super(element, true);
 		}
@@ -178,7 +178,7 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor
 	}
 
 	@Override
-	protected void performRefactoring(@Nonnull UsageInfo[] usages)
+	protected void performRefactoring(@jakarta.annotation.Nonnull UsageInfo[] usages)
 	{
 		PsiExpression initializer = myField.getInitializer();
 		LOG.assertTrue(initializer != null);
@@ -380,8 +380,8 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor
 	}
 
 	@Override
-	@Nonnull
-	protected Collection<? extends PsiElement> getElementsToWrite(@Nonnull final UsageViewDescriptor descriptor)
+	@jakarta.annotation.Nonnull
+	protected Collection<? extends PsiElement> getElementsToWrite(@jakarta.annotation.Nonnull final UsageViewDescriptor descriptor)
 	{
 		if(myInlineThisOnly)
 		{

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -33,7 +33,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 public class UnnecessaryLabelOnBreakStatementInspection
   extends BaseInspection {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "unnecessary.label.on.break.statement.display.name");
@@ -84,7 +84,7 @@ public class UnnecessaryLabelOnBreakStatementInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitBreakStatement(@Nonnull PsiBreakStatement statement) {
+    public void visitBreakStatement(@jakarta.annotation.Nonnull PsiBreakStatement statement) {
       final PsiIdentifier labelIdentifier =
         statement.getLabelIdentifier();
       if (labelIdentifier == null) {

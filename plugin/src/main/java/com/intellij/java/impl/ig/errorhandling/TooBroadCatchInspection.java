@@ -35,8 +35,8 @@ import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.util.*;
 
@@ -53,19 +53,19 @@ public class TooBroadCatchInspection extends BaseInspection {
   public boolean ignoreThrown = false;
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "OverlyBroadCatchBlock";
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("too.broad.catch.display.name");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     final List<PsiClass> typesMasked = (List<PsiClass>)infos[0];
     String typesMaskedString = typesMasked.get(0).getName();
@@ -115,7 +115,7 @@ public class TooBroadCatchInspection extends BaseInspection {
     }
 
     @Override
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("too.broad.catch.quickfix", myText);
     }
@@ -196,7 +196,7 @@ public class TooBroadCatchInspection extends BaseInspection {
   private class TooBroadCatchVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitTryStatement(@Nonnull PsiTryStatement statement) {
+    public void visitTryStatement(@jakarta.annotation.Nonnull PsiTryStatement statement) {
       super.visitTryStatement(statement);
       final PsiCodeBlock tryBlock = statement.getTryBlock();
       if (tryBlock == null) {

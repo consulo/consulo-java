@@ -19,7 +19,7 @@ package com.intellij.java.impl.psi.impl.beanProperties;
 import consulo.find.FindUsagesHandler;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 

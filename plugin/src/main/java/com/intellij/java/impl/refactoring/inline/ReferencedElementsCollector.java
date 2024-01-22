@@ -20,7 +20,7 @@ import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import consulo.language.psi.*;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
 

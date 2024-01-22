@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.annotation.component.ExtensionImpl;
 import org.jetbrains.annotations.NonNls;
@@ -52,7 +52,7 @@ public class TrivialIfInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("trivial.if.display.name");
   }
@@ -63,7 +63,7 @@ public class TrivialIfInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("trivial.if.problem.descriptor");
   }
@@ -74,7 +74,7 @@ public class TrivialIfInspection extends BaseInspection {
   }
 
   private static class TrivialIfFix extends InspectionGadgetsFix {
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "constant.conditional.expression.simplify.quickfix");

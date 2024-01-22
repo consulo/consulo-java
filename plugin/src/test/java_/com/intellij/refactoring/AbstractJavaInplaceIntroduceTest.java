@@ -15,8 +15,6 @@
  */
 package com.intellij.refactoring;
 
-import javax.annotation.Nonnull;
-
 import consulo.codeEditor.Editor;
 import consulo.project.Project;
 import consulo.content.bundle.Sdk;
@@ -28,8 +26,9 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.editor.refactoring.introduce.inplace.AbstractInplaceIntroducer;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.LightPlatformTestCase;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * User: anna

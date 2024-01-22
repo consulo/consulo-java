@@ -72,11 +72,11 @@ import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.ThreeState;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.JDOMExternalizerUtil;
+import jakarta.annotation.Nonnull;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Function;
@@ -99,13 +99,13 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		myXBreakpoint = xBreakpoint;
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public Project getProject()
 	{
 		return myProject;
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	protected P getProperties()
 	{
 		return myXBreakpoint.getProperties();
@@ -116,7 +116,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		return myXBreakpoint;
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	public abstract PsiClass getPsiClass();
 
 	/**
@@ -161,7 +161,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		return getDisplayName();
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	public String getClassName()
 	{
 		return null;
@@ -198,7 +198,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		return dotIndex >= 0 && dotIndex + 1 < className.length() ? className.substring(dotIndex + 1) : className;
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	public String getPackageName()
 	{
 		return null;
@@ -230,7 +230,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		debugProcess.getVirtualMachineProxy().classesByName(classToBeLoaded).stream().filter(ReferenceType::isPrepared).forEach(aList -> processClassPrepare(debugProcess, aList));
 	}
 
-	protected void createOrWaitPrepare(final DebugProcessImpl debugProcess, @Nonnull final SourcePosition classPosition)
+	protected void createOrWaitPrepare(final DebugProcessImpl debugProcess, @jakarta.annotation.Nonnull final SourcePosition classPosition)
 	{
 		debugProcess.getRequestsManager().callbackOnPrepareClasses(this, classPosition);
 
@@ -447,7 +447,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 			myEvaluator = evaluator;
 		}
 
-		@Nullable
+		@jakarta.annotation.Nullable
 		static ExpressionEvaluator cacheOrGet(String propertyName,
 				EventRequest request,
 				PsiElement context,
@@ -506,7 +506,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		return event.location().declaringType().name();
 	}
 
-	protected static boolean typeMatchesClassFilters(@Nullable String typeName, ClassFilter[] includeFilters, ClassFilter[] exludeFilters)
+	protected static boolean typeMatchesClassFilters(@jakarta.annotation.Nullable String typeName, ClassFilter[] includeFilters, ClassFilter[] exludeFilters)
 	{
 		if(typeName == null)
 		{
@@ -806,7 +806,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		return !getCondition().isEmpty();
 	}
 
-	public void setCondition(@Nullable TextWithImports condition)
+	public void setCondition(@jakarta.annotation.Nullable TextWithImports condition)
 	{
 		myXBreakpoint.setConditionExpression(TextWithImportsImpl.toXExpression(condition));
 	}

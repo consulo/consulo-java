@@ -17,7 +17,7 @@ package com.intellij.java.impl.generate.template;
 
 import java.io.Serializable;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * A template contains the method body and the filename of the resource where
@@ -128,7 +128,7 @@ public class TemplateResource implements Serializable
 	 *
 	 * @return the javadoc, null if no javadoc.
 	 */
-	@Nullable
+	@jakarta.annotation.Nullable
 	public String getJavaDoc()
 	{
 		int i = template.indexOf("*/");

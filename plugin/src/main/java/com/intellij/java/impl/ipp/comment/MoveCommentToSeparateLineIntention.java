@@ -29,7 +29,7 @@ import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.MoveCommentToSeparateLineIntention", fileExtensions = "java", categories = {"Java", "Comments"})
@@ -40,7 +40,7 @@ public class MoveCommentToSeparateLineIntention extends Intention {
     return new CommentOnLineWithSourcePredicate();
   }
 
-  public void processIntention(@Nonnull PsiElement element)
+  public void processIntention(@jakarta.annotation.Nonnull PsiElement element)
     throws IncorrectOperationException {
     final PsiComment selectedComment = (PsiComment)element;
     PsiElement elementToCheck = selectedComment;

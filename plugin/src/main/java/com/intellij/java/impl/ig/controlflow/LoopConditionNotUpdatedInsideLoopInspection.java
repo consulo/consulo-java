@@ -28,9 +28,9 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.BoolUtils;
 import com.intellij.java.impl.ig.psiutils.IteratorUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nullable;
 import javax.swing.*;
 import java.util.List;
 
@@ -47,13 +47,13 @@ public class LoopConditionNotUpdatedInsideLoopInspection
       "loop.condition.not.updated.inside.loop.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "loop.condition.not.updated.inside.loop.problem.descriptor");
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public JComponent createOptionsPanel() {
     return new SingleCheckboxOptionsPanel(
       InspectionGadgetsBundle.message("ignore.iterator.loop.variables"),
@@ -111,7 +111,7 @@ public class LoopConditionNotUpdatedInsideLoopInspection
     }
 
     private boolean checkCondition(@Nullable PsiExpression condition,
-                                   @Nonnull PsiStatement context,
+                                   @jakarta.annotation.Nonnull PsiStatement context,
                                    List<PsiExpression> notUpdated) {
       if (condition == null) {
         return false;

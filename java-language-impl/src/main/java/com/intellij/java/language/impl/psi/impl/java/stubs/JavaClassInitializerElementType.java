@@ -26,7 +26,7 @@ import consulo.language.psi.stub.IndexSink;
 import consulo.language.psi.stub.StubElement;
 import consulo.language.psi.stub.StubInputStream;
 import consulo.language.psi.stub.StubOutputStream;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.io.IOException;
 
@@ -38,7 +38,7 @@ public class JavaClassInitializerElementType extends JavaStubElementType<PsiClas
     super("CLASS_INITIALIZER");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public ASTNode createCompositeNode() {
     return new ClassInitializerElement();
@@ -50,7 +50,7 @@ public class JavaClassInitializerElementType extends JavaStubElementType<PsiClas
   }
 
   @Override
-  public PsiClassInitializer createPsi(@Nonnull final ASTNode node) {
+  public PsiClassInitializer createPsi(@jakarta.annotation.Nonnull final ASTNode node) {
     return new PsiClassInitializerImpl(node);
   }
 
@@ -62,12 +62,12 @@ public class JavaClassInitializerElementType extends JavaStubElementType<PsiClas
   }
 
   @Override
-  public void serialize(@Nonnull final PsiClassInitializerStub stub, @Nonnull final StubOutputStream dataStream) throws IOException {
+  public void serialize(@jakarta.annotation.Nonnull final PsiClassInitializerStub stub, @jakarta.annotation.Nonnull final StubOutputStream dataStream) throws IOException {
   }
 
   @Nonnull
   @Override
-  public PsiClassInitializerStub deserialize(@Nonnull final StubInputStream dataStream, final StubElement parentStub) throws IOException {
+  public PsiClassInitializerStub deserialize(@jakarta.annotation.Nonnull final StubInputStream dataStream, final StubElement parentStub) throws IOException {
     return new PsiClassInitializerStubImpl(parentStub);
   }
 

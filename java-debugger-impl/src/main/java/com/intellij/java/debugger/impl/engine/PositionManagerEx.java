@@ -15,19 +15,19 @@
  */
 package com.intellij.java.debugger.impl.engine;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 import com.intellij.java.debugger.PositionManager;
 import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
 import consulo.execution.debug.frame.XStackFrame;
 import consulo.util.lang.ThreeState;
 import consulo.internal.com.sun.jdi.Location;
+import jakarta.annotation.Nullable;
 
 public abstract class PositionManagerEx implements PositionManager
 {
 	@Nullable
-	public abstract XStackFrame createStackFrame(@Nonnull StackFrameProxyImpl frame, @Nonnull DebugProcessImpl debugProcess, @Nonnull Location location);
+	public abstract XStackFrame createStackFrame(@jakarta.annotation.Nonnull StackFrameProxyImpl frame, @jakarta.annotation.Nonnull DebugProcessImpl debugProcess, @jakarta.annotation.Nonnull Location location);
 
-	public abstract ThreeState evaluateCondition(@Nonnull EvaluationContext context, @Nonnull StackFrameProxyImpl frame, @Nonnull Location location, @Nonnull String expression);
+	public abstract ThreeState evaluateCondition(@jakarta.annotation.Nonnull EvaluationContext context, @Nonnull StackFrameProxyImpl frame, @jakarta.annotation.Nonnull Location location, @jakarta.annotation.Nonnull String expression);
 }

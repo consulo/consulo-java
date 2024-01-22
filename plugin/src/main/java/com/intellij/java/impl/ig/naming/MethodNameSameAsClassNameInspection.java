@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.naming;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -35,14 +35,14 @@ import com.intellij.java.impl.ig.fixes.RenameFix;
 public class MethodNameSameAsClassNameInspection extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "method.name.same.as.class.name.display.name");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "method.name.same.as.class.name.problem.descriptor");
@@ -71,7 +71,7 @@ public class MethodNameSameAsClassNameInspection extends BaseInspection {
   private static class MethodNameSameAsClassNameFix
     extends InspectionGadgetsFix {
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("make.method.ctr.quickfix");
     }

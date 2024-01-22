@@ -17,8 +17,8 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.instructions;
 
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.*;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class CheckNotNullInstruction extends Instruction {
   private final
@@ -28,18 +28,18 @@ public class CheckNotNullInstruction extends Instruction {
   @Nullable
   DfaControlTransferValue myTransferValue;
 
-  public CheckNotNullInstruction(@Nonnull NullabilityProblemKind.NullabilityProblem<?> problem,
+  public CheckNotNullInstruction(@jakarta.annotation.Nonnull NullabilityProblemKind.NullabilityProblem<?> problem,
                                  @Nullable DfaControlTransferValue transferValue) {
     myProblem = problem;
     myTransferValue = transferValue;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public DfaControlTransferValue getOnNullTransfer() {
     return myTransferValue;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public NullabilityProblemKind.NullabilityProblem<?> getProblem() {
     return myProblem;
   }

@@ -29,7 +29,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.HashSet;
@@ -68,7 +68,7 @@ public class PointlessArithmeticExpressionInspection
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "pointless.arithmetic.expression.display.name");
@@ -80,7 +80,7 @@ public class PointlessArithmeticExpressionInspection
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "expression.can.be.replaced.problem.descriptor",
@@ -143,7 +143,7 @@ public class PointlessArithmeticExpressionInspection
 
   private class PointlessArithmeticFix extends InspectionGadgetsFix {
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "constant.conditional.expression.simplify.quickfix");

@@ -28,7 +28,7 @@ import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.Pair;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.AddDeprecationAnnotationIntention", categories = {"Java", "Control Flow"}, fileExtensions = "java")

@@ -1,4 +1,4 @@
-import javax.annotation.*;
+import jakarta.annotation.Nullable;
 
 class Test {
   String foo1() {
@@ -39,7 +39,7 @@ class Test {
     }
   }
 
-  @javax.annotation.Nullable
+  @jakarta.annotation.Nullable
   String bar9() {
     return foo3("");
   }
@@ -49,12 +49,12 @@ class Test {
   }
 
 
-  @javax.annotation.Nullable
+  @Nullable
   String bar10() {
     return foo3("");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   String bar101() {
     return foo3("");
   }

@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.ig.inheritance;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.JComponent;
 
 import consulo.annotation.component.ExtensionImpl;
@@ -63,7 +63,7 @@ public class RefusedBequestInspection extends BaseInspection {
   private class RefusedBequestVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
       super.visitMethod(method);
       final PsiCodeBlock body = method.getBody();
       if (body == null) {

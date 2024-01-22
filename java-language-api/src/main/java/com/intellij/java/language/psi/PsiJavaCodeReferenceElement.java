@@ -18,9 +18,9 @@ package com.intellij.java.language.psi;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiQualifiedReferenceElement;
 import consulo.util.collection.ArrayFactory;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * Represents a reference found in Java code (either an identifier or a sequence of identifiers
@@ -62,7 +62,7 @@ public interface PsiJavaCodeReferenceElement extends PsiJavaReference, PsiQualif
    *
    * @return the array of types, or an empty array if the reference does not have any type arguments.
    */
-  @Nonnull
+  @jakarta.annotation.Nonnull
   PsiType[] getTypeParameters();
 
   /**

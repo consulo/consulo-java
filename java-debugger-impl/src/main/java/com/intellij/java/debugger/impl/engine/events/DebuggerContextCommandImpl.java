@@ -15,8 +15,7 @@
  */
 package com.intellij.java.debugger.impl.engine.events;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 import com.intellij.java.debugger.impl.engine.SuspendContextImpl;
 import com.intellij.java.debugger.impl.engine.SuspendManager;
 import com.intellij.java.debugger.impl.engine.SuspendManagerUtil;
@@ -24,6 +23,7 @@ import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.jdi.ThreadReferenceProxyImpl;
 import consulo.logging.Logger;
 import consulo.internal.com.sun.jdi.ObjectCollectedException;
+import jakarta.annotation.Nullable;
 
 public abstract class DebuggerContextCommandImpl extends SuspendContextCommandImpl
 {
@@ -45,7 +45,7 @@ public abstract class DebuggerContextCommandImpl extends SuspendContextCommandIm
 		myCustomThread = customThread;
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	@Override
 	public SuspendContextImpl getSuspendContext()
 	{
@@ -72,7 +72,7 @@ public abstract class DebuggerContextCommandImpl extends SuspendContextCommandIm
 	}
 
 	@Override
-	public final void contextAction(@Nonnull SuspendContextImpl suspendContext) throws Exception
+	public final void contextAction(@jakarta.annotation.Nonnull SuspendContextImpl suspendContext) throws Exception
 	{
 		SuspendManager suspendManager = myDebuggerContext.getDebugProcess().getSuspendManager();
 		boolean isSuspendedByContext;

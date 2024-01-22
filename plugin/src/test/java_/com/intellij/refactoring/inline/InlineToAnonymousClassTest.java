@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Iterator;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.impl.refactoring.inline.InlineToAnonymousClassHandler;
 import com.intellij.java.impl.refactoring.inline.InlineToAnonymousClassProcessor;

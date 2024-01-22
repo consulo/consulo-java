@@ -1,4 +1,4 @@
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 class Test {
   void foo(@Nonnull String s) {
@@ -8,7 +8,7 @@ class Test {
   /**
    * @param str
    */
-  void bar(@Nonnull String str) {
+  void bar(@jakarta.annotation.Nonnull String str) {
     if (str.substring(0) == null) {
     }
   }
@@ -16,7 +16,7 @@ class Test {
   /**
    * @param str
    */
-  void bar(@Nonnull String str) {
+  void bar(@jakarta.annotation.Nonnull String str) {
     if ((str).substring(0) == null) {
     }
   }

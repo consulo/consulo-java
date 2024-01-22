@@ -28,8 +28,8 @@ import consulo.language.extension.LanguageExtension;
 import consulo.language.extension.LanguageOneToOne;
 import consulo.language.psi.PsiReference;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Max Medvedev
@@ -39,7 +39,7 @@ public abstract class EncapsulateFieldHelper implements LanguageExtension {
  private static final ExtensionPointCacheKey<EncapsulateFieldHelper, ByLanguageValue<EncapsulateFieldHelper>> KEY = ExtensionPointCacheKey.create("EncapsulateFieldHelper", LanguageOneToOne.build());
 
   @Nullable
-  public static EncapsulateFieldHelper forLanguage(@Nonnull Language language) {
+  public static EncapsulateFieldHelper forLanguage(@jakarta.annotation.Nonnull Language language) {
     return Application.get().getExtensionPoint(EncapsulateFieldHelper.class).getOrBuildCache(KEY).get(language);
   }
 
@@ -49,7 +49,7 @@ public abstract class EncapsulateFieldHelper implements LanguageExtension {
   @Nonnull
   public abstract String suggestSetterName(@Nonnull PsiField field);
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public abstract String suggestGetterName(@Nonnull PsiField field);
 
   @Nullable
@@ -60,7 +60,7 @@ public abstract class EncapsulateFieldHelper implements LanguageExtension {
                                        PsiMethod setter,
                                        PsiMethod getter);
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public abstract EncapsulateFieldUsageInfo createUsage(@Nonnull EncapsulateFieldsDescriptor descriptor,
                                                         @Nonnull FieldDescriptor fieldDescriptor,
                                                         @Nonnull PsiReference reference);

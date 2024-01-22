@@ -30,8 +30,8 @@ import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.ide.impl.idea.refactoring.ui.VisibilityPanelBase;
 import consulo.ui.ex.awt.IdeBorderFactory;
 import consulo.ui.ex.awt.UIUtil;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import java.awt.*;
@@ -110,7 +110,7 @@ public class JavaVisibilityPanel extends VisibilityPanelBase<String> {
   }
 
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public String getVisibility() {
     if (myRbPublic.isSelected()) {
       return PsiModifier.PUBLIC;

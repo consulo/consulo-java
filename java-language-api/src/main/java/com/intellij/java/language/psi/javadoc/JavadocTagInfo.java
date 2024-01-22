@@ -19,8 +19,7 @@ import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
-
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author mike
@@ -39,7 +38,7 @@ public interface JavadocTagInfo {
    * @param value Doc tag to check.
    * @return Returns null if correct, error message otherwise.
    */
-  @Nullable
+  @jakarta.annotation.Nullable
   String checkTagValue(PsiDocTagValue value);
 
   @Nullable

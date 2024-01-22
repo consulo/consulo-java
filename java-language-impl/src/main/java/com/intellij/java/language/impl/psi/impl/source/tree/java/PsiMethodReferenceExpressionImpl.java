@@ -44,8 +44,8 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.util.lang.Comparing;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +54,7 @@ public class PsiMethodReferenceExpressionImpl extends JavaStubPsiElement<Functio
   private static final Logger LOG = Logger.getInstance(PsiMethodReferenceExpressionImpl.class);
   private static final MethodReferenceResolver RESOLVER = new MethodReferenceResolver();
 
-  public PsiMethodReferenceExpressionImpl(@Nonnull FunctionalExpressionStub<PsiMethodReferenceExpression> stub) {
+  public PsiMethodReferenceExpressionImpl(@jakarta.annotation.Nonnull FunctionalExpressionStub<PsiMethodReferenceExpression> stub) {
     super(stub, JavaStubElementTypes.METHOD_REFERENCE);
   }
 
@@ -241,7 +241,7 @@ public class PsiMethodReferenceExpressionImpl extends JavaStubPsiElement<Functio
   }
 
   @Override
-  public void processVariants(@Nonnull final PsiScopeProcessor processor) {
+  public void processVariants(@jakarta.annotation.Nonnull final PsiScopeProcessor processor) {
     final FilterScopeProcessor proc = new FilterScopeProcessor(ElementClassFilter.METHOD, processor);
     PsiScopesUtil.resolveAndWalk(proc, this, null, true);
   }
@@ -263,7 +263,7 @@ public class PsiMethodReferenceExpressionImpl extends JavaStubPsiElement<Functio
     }
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public JavaResolveResult[] multiResolve(boolean incompleteCode) {
     return PsiImplUtil.multiResolveImpl(this, incompleteCode, RESOLVER);
@@ -291,7 +291,7 @@ public class PsiMethodReferenceExpressionImpl extends JavaStubPsiElement<Functio
     return null;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getCanonicalText() {
     return getText();
@@ -319,7 +319,7 @@ public class PsiMethodReferenceExpressionImpl extends JavaStubPsiElement<Functio
   }
 
   @Override
-  public void accept(@Nonnull final PsiElementVisitor visitor) {
+  public void accept(@jakarta.annotation.Nonnull final PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitMethodReferenceExpression(this);
     } else {
@@ -442,7 +442,7 @@ public class PsiMethodReferenceExpressionImpl extends JavaStubPsiElement<Functio
   }
 
   @Override
-  public PsiElement bindToElementViaStaticImport(@Nonnull final PsiClass qualifierClass) throws IncorrectOperationException {
+  public PsiElement bindToElementViaStaticImport(@jakarta.annotation.Nonnull final PsiClass qualifierClass) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 

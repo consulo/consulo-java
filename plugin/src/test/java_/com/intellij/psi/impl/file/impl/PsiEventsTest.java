@@ -18,7 +18,7 @@ import consulo.ide.impl.idea.util.WaitFor;
 import consulo.ide.impl.idea.util.io.ReadOnlyAttributeUtil;
 import consulo.logging.Logger;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.io.File;
 import java.io.IOException;
@@ -536,7 +536,7 @@ public abstract class PsiEventsTest extends PsiTestCase {
       }
 
       @Override
-      public void beforeChildMovement(@Nonnull PsiTreeChangeEvent event) {
+      public void beforeChildMovement(@jakarta.annotation.Nonnull PsiTreeChangeEvent event) {
         logEvent(event);
       }
 
@@ -563,7 +563,7 @@ public abstract class PsiEventsTest extends PsiTestCase {
       }
 
       @Override
-      public void childReplaced(@Nonnull PsiTreeChangeEvent event) {
+      public void childReplaced(@jakarta.annotation.Nonnull PsiTreeChangeEvent event) {
         logEvent(event);
         assertBeforeEventFired(event);
       }
@@ -575,13 +575,13 @@ public abstract class PsiEventsTest extends PsiTestCase {
       }
 
       @Override
-      public void childMoved(@Nonnull PsiTreeChangeEvent event) {
+      public void childMoved(@jakarta.annotation.Nonnull PsiTreeChangeEvent event) {
         logEvent(event);
         assertBeforeEventFired(event);
       }
 
       @Override
-      public void propertyChanged(@Nonnull PsiTreeChangeEvent event) {
+      public void propertyChanged(@jakarta.annotation.Nonnull PsiTreeChangeEvent event) {
         logEvent(event);
         assertBeforeEventFired(event);
       }

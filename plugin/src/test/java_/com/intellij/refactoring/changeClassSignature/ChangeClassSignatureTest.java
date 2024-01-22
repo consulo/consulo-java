@@ -2,7 +2,7 @@ package com.intellij.refactoring.changeClassSignature;
 
 import static org.junit.Assert.assertTrue;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.impl.refactoring.changeClassSignature.ChangeClassSignatureProcessor;
 import com.intellij.java.impl.refactoring.changeClassSignature.TypeParameterInfo;

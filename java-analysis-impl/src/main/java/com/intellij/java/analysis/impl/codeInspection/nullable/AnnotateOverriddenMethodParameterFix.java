@@ -18,7 +18,7 @@ package com.intellij.java.analysis.impl.codeInspection.nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import consulo.language.editor.FileModificationService;

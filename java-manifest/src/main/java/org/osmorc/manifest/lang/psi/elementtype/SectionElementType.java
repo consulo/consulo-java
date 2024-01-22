@@ -30,7 +30,7 @@ import consulo.language.psi.stub.IndexSink;
 import consulo.language.psi.stub.StubElement;
 import consulo.language.psi.stub.StubInputStream;
 import consulo.language.psi.stub.StubOutputStream;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import org.osmorc.manifest.lang.psi.Section;
 import org.osmorc.manifest.lang.psi.impl.SectionImpl;
 import org.osmorc.manifest.lang.psi.stub.SectionStub;
@@ -48,7 +48,7 @@ public class SectionElementType extends AbstractManifestStubElementType<SectionS
 
 
   @Override
-  public Section createPsi(@Nonnull SectionStub stub) {
+  public Section createPsi(@jakarta.annotation.Nonnull SectionStub stub) {
     return new SectionImpl(stub, this);
   }
 
@@ -58,18 +58,18 @@ public class SectionElementType extends AbstractManifestStubElementType<SectionS
   }
 
   @Override
-  public SectionStub createStub(@Nonnull Section psi, StubElement parentStub) {
+  public SectionStub createStub(@jakarta.annotation.Nonnull Section psi, StubElement parentStub) {
     return new SectionStubImpl(parentStub);
   }
 
-  public void serialize(@Nonnull SectionStub stub, @Nonnull StubOutputStream dataStream) throws IOException {
+  public void serialize(@jakarta.annotation.Nonnull SectionStub stub, @jakarta.annotation.Nonnull StubOutputStream dataStream) throws IOException {
   }
 
-  @Nonnull
-  public SectionStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
+  @jakarta.annotation.Nonnull
+  public SectionStub deserialize(@jakarta.annotation.Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
     return new SectionStubImpl(parentStub);
   }
 
-  public void indexStub(@Nonnull SectionStub stub, @Nonnull IndexSink sink) {
+  public void indexStub(@Nonnull SectionStub stub, @jakarta.annotation.Nonnull IndexSink sink) {
   }
 }

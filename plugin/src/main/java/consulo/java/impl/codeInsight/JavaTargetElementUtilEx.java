@@ -18,8 +18,8 @@ import consulo.xml.psi.xml.XmlAttributeValue;
 import consulo.xml.psi.xml.XmlTag;
 import consulo.xml.psi.xml.XmlText;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -59,7 +59,7 @@ public class JavaTargetElementUtilEx implements TargetElementUtilExtender {
   }
 
   @Override
-  public void collectReferenceSearchFlags(@Nonnull Set<String> set) {
+  public void collectReferenceSearchFlags(@jakarta.annotation.Nonnull Set<String> set) {
     set.add(NEW_AS_CONSTRUCTOR);
   }
 
@@ -181,12 +181,12 @@ public class JavaTargetElementUtilEx implements TargetElementUtilExtender {
     return null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
-  public PsiElement modifyReferenceOrReferencedElement(@Nullable PsiElement refElement,
-                                                       @Nonnull PsiFile file,
-                                                       @Nonnull Editor editor,
-                                                       @Nonnull Set<String> flags,
+  public PsiElement modifyReferenceOrReferencedElement(@jakarta.annotation.Nullable PsiElement refElement,
+                                                       @jakarta.annotation.Nonnull PsiFile file,
+                                                       @jakarta.annotation.Nonnull Editor editor,
+                                                       @jakarta.annotation.Nonnull Set<String> flags,
                                                        int offset) {
     PsiReference ref = null;
     if (refElement == null) {
@@ -237,7 +237,7 @@ public class JavaTargetElementUtilEx implements TargetElementUtilExtender {
 
   @Nullable
   @Override
-  public PsiElement modifyTargetElement(@Nonnull PsiElement element, @Nonnull Set<String> flags) {
+  public PsiElement modifyTargetElement(@Nonnull PsiElement element, @jakarta.annotation.Nonnull Set<String> flags) {
     if (element instanceof PsiKeyword) {
       if (element.getParent() instanceof PsiThisExpression) {
         if (!flags.contains(THIS_ACCEPTED)) {

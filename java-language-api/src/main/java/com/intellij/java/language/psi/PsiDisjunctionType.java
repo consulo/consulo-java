@@ -25,7 +25,7 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.application.util.CachedValuesManager;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.*;
 
 /**
@@ -67,7 +67,7 @@ public class PsiDisjunctionType extends PsiType.Stub {
     return myLubCache.getValue();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public List<PsiType> getDisjunctions() {
     return myTypes;
   }

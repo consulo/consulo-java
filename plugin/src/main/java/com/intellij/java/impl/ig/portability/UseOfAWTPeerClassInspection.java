@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.portability;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
@@ -35,7 +35,7 @@ public class UseOfAWTPeerClassInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "use.of.awt.peer.class.problem.descriptor");
@@ -85,7 +85,7 @@ public class UseOfAWTPeerClassInspection extends BaseInspection {
 
     @Override
     public void visitNewExpression(
-      @Nonnull PsiNewExpression newExpression) {
+      @jakarta.annotation.Nonnull PsiNewExpression newExpression) {
       super.visitNewExpression(newExpression);
       final PsiType type = newExpression.getType();
       if (type == null) {

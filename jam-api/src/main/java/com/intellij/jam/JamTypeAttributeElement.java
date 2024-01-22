@@ -21,8 +21,7 @@ import com.intellij.java.language.psi.PsiClassObjectAccessExpression;
 import com.intellij.java.language.psi.PsiType;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElementRef;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author peter

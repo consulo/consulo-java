@@ -30,7 +30,6 @@ import consulo.content.bundle.Sdk;
 import consulo.ide.impl.idea.openapi.module.ModuleUtil;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -42,7 +41,7 @@ import consulo.project.Project;
 import consulo.util.lang.Comparing;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class ReplaceAddAllArrayToCollectionFix implements SyntheticIntentionAction {
   private final PsiMethodCallExpression myMethodCall;
@@ -58,7 +57,7 @@ public class ReplaceAddAllArrayToCollectionFix implements SyntheticIntentionActi
   }
 
   @Override
-  public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
+  public boolean isAvailable(@jakarta.annotation.Nonnull final Project project, final Editor editor, final PsiFile file) {
     if (myMethodCall == null || !myMethodCall.isValid()) return false;
 
     final Module module = ModuleUtilCore.findModuleForPsiElement(file);
@@ -93,7 +92,7 @@ public class ReplaceAddAllArrayToCollectionFix implements SyntheticIntentionActi
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
+  public void invoke(@jakarta.annotation.Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
     final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
     final PsiExpression toReplace = elementFactory.createExpressionFromText(getCollectionsMethodCall(), myMethodCall);

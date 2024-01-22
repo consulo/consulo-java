@@ -4,8 +4,9 @@ package com.intellij.java.language.projectRoots;
 import com.intellij.java.language.LanguageLevel;
 import consulo.application.util.JavaVersion;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.Arrays;
 
 /**
@@ -93,8 +94,8 @@ public enum JavaSdkVersion
 	/**
 	 * See {@link JavaVersion#parse(String)} for supported formats.
 	 */
-	@Nullable
-	public static JavaSdkVersion fromVersionString(@Nonnull String versionString)
+	@jakarta.annotation.Nullable
+	public static JavaSdkVersion fromVersionString(@jakarta.annotation.Nonnull String versionString)
 	{
 		JavaVersion version = JavaVersion.tryParse(versionString);
 		return version != null ? fromJavaVersion(version) : null;

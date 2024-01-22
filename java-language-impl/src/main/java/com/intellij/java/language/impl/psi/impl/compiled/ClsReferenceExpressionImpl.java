@@ -24,8 +24,8 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.util.IncorrectOperationException;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class ClsReferenceExpressionImpl extends ClsElementImpl implements PsiReferenceExpression {
   private final ClsElementImpl myParent;
@@ -61,7 +61,7 @@ public class ClsReferenceExpressionImpl extends ClsElementImpl implements PsiRef
   }
 
   @Override
-  public PsiElement bindToElementViaStaticImport(@Nonnull PsiClass aClass) throws IncorrectOperationException {
+  public PsiElement bindToElementViaStaticImport(@jakarta.annotation.Nonnull PsiClass aClass) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 
@@ -112,13 +112,13 @@ public class ClsReferenceExpressionImpl extends ClsElementImpl implements PsiRef
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public JavaResolveResult advancedResolve(boolean incompleteCode) {
     return myPatternExpression.advancedResolve(incompleteCode);
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public JavaResolveResult[] multiResolve(boolean incompleteCode) {
     final JavaResolveResult result = advancedResolve(incompleteCode);
     return result != JavaResolveResult.EMPTY ? new JavaResolveResult[]{result} : JavaResolveResult.EMPTY_ARRAY;
@@ -156,7 +156,7 @@ public class ClsReferenceExpressionImpl extends ClsElementImpl implements PsiRef
   }
 
   @Override
-  public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException {
+  public PsiElement bindToElement(@jakarta.annotation.Nonnull PsiElement element) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 
@@ -166,7 +166,7 @@ public class ClsReferenceExpressionImpl extends ClsElementImpl implements PsiRef
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public Object[] getVariants() {
     return myPatternExpression.getVariants();
   }
@@ -182,7 +182,7 @@ public class ClsReferenceExpressionImpl extends ClsElementImpl implements PsiRef
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, @jakarta.annotation.Nonnull StringBuilder buffer) {
     buffer.append(getText());
   }
 
@@ -192,7 +192,7 @@ public class ClsReferenceExpressionImpl extends ClsElementImpl implements PsiRef
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitReferenceExpression(this);
     }
@@ -202,7 +202,7 @@ public class ClsReferenceExpressionImpl extends ClsElementImpl implements PsiRef
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiType[] getTypeParameters() {
     return PsiType.EMPTY_ARRAY;
   }

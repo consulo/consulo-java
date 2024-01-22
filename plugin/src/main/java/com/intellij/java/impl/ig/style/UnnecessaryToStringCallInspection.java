@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.ig.style;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -72,7 +72,7 @@ public class UnnecessaryToStringCallInspection extends BaseInspection {
       this.replacementText = replacementText;
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("unnecessary.call.to.string.valueof.quickfix", replacementText);
     }

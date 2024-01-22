@@ -34,7 +34,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.*;
 
 @ExtensionImpl
@@ -52,13 +52,13 @@ public class StaticImportInspectionBase extends BaseInspection {
   public Set<String> allowedClasses = new LinkedHashSet<>();
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("static.import.display.name");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("static.import.problem.descriptor");
   }
@@ -81,7 +81,7 @@ public class StaticImportInspectionBase extends BaseInspection {
   private static class StaticImportFix extends InspectionGadgetsFix {
 
     @Override
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getFamilyName() {
       return InspectionGadgetsBundle.message("static.import.replace.quickfix");
     }
@@ -148,7 +148,7 @@ public class StaticImportInspectionBase extends BaseInspection {
       private final boolean onDemand;
       private final List<PsiJavaCodeReferenceElement> references = new ArrayList<>();
 
-      StaticImportReferenceCollector(@Nonnull JavaResolveResult[] importTargets, boolean onDemand) {
+      StaticImportReferenceCollector(@jakarta.annotation.Nonnull JavaResolveResult[] importTargets, boolean onDemand) {
         this.importTargets = importTargets;
         this.onDemand = onDemand;
       }

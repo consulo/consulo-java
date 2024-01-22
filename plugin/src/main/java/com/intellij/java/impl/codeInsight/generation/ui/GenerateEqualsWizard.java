@@ -19,7 +19,6 @@ import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.impl.codeInsight.generation.EqualsHashCodeTemplatesManager;
 import com.intellij.java.impl.codeInsight.generation.GenerateEqualsHelper;
-import consulo.ide.impl.idea.ide.wizard.StepAdapter;
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
 import consulo.ide.setting.ShowSettingsUtil;
@@ -40,7 +39,7 @@ import consulo.ui.ex.awt.ComboBox;
 import consulo.ui.ex.awt.ComponentWithBrowseButton;
 import org.jetbrains.java.generate.psi.PsiAdapter;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -477,7 +476,7 @@ public class GenerateEqualsWizard extends AbstractGenerateEqualsWizard<PsiClass,
 			checkbox.addActionListener(new ActionListener()
 			{
 				@Override
-				public void actionPerformed(@Nonnull final ActionEvent M)
+				public void actionPerformed(@jakarta.annotation.Nonnull final ActionEvent M)
 				{
 					JavaCodeInsightSettings.getInstance().USE_INSTANCEOF_ON_EQUALS_PARAMETER = checkbox.isSelected();
 				}

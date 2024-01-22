@@ -1,4 +1,5 @@
-import javax.annotation.*;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 class Test {
   String myFoo = "";
@@ -10,7 +11,7 @@ class Test {
   String foo2() { return "";}
 
   String myFoo3 = foo3();
-  @javax.annotation.Nullable
+  @jakarta.annotation.Nullable
   String foo3() { return null;}
 
   String myFoo4;
@@ -32,7 +33,7 @@ class Test {
   /**
    * {@link #myFoo6}
    */
-  Test(@Nonnull String param, @javax.annotation.Nullable String paramNullable, String simpleParam) {
+  Test(@jakarta.annotation.Nonnull String param, @Nullable String paramNullable, String simpleParam) {
     myFoo5 = "";
     myFoo6 = null;
     myFoo7 = param;

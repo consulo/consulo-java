@@ -20,14 +20,13 @@ import consulo.language.psi.PsiBundle;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class ClassPresentationUtil {
   private ClassPresentationUtil() {
   }
 
-  public static String getNameForClass(@Nonnull PsiClass aClass, boolean qualified) {
+  public static String getNameForClass(@jakarta.annotation.Nonnull PsiClass aClass, boolean qualified) {
     if (aClass instanceof PsiAnonymousClass) {
       if (aClass instanceof PsiEnumConstantInitializer) {
         PsiEnumConstant enumConstant = ((PsiEnumConstantInitializer) aClass).getEnumConstant();
@@ -48,7 +47,7 @@ public class ClassPresentationUtil {
     return contextName != null ? PsiBundle.message("class.context.display", className, contextName) : className;
   }
 
-  private static String getNameForElement(@Nonnull PsiElement element, boolean qualified) {
+  private static String getNameForElement(@jakarta.annotation.Nonnull PsiElement element, boolean qualified) {
     if (element instanceof PsiClass) {
       return getNameForClass((PsiClass) element, qualified);
     } else if (element instanceof PsiMethod) {

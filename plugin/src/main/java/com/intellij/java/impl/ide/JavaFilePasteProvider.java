@@ -35,8 +35,8 @@ import consulo.project.Project;
 import consulo.ui.ex.awt.CopyPasteManager;
 import consulo.undoRedo.CommandProcessor;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 
@@ -45,7 +45,7 @@ import java.awt.datatransfer.Transferable;
  */
 @ExtensionImpl
 public class JavaFilePasteProvider implements FilePasteProvider {
-  public void performPaste(@Nonnull final DataContext dataContext) {
+  public void performPaste(@jakarta.annotation.Nonnull final DataContext dataContext) {
     final Project project = dataContext.getData(CommonDataKeys.PROJECT);
     final IdeView ideView = dataContext.getData(IdeView.KEY);
     if (project == null || ideView == null) return;

@@ -19,10 +19,10 @@ import consulo.language.psi.PsiPackage;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.util.collection.ArrayFactory;
 import consulo.virtualFileSystem.VirtualFile;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 /**
  * Represents a Java package.
@@ -36,7 +36,7 @@ public interface PsiJavaPackage extends PsiJvmModifiersOwner, PsiPackage
 
   ArrayFactory<PsiJavaPackage> ARRAY_FACTORY = count -> count == 0 ? EMPTY_ARRAY : new PsiJavaPackage[count];
 
-  @Nullable
+  @jakarta.annotation.Nullable
   PsiJavaPackage getParentPackage();
 
   /**
@@ -53,15 +53,15 @@ public interface PsiJavaPackage extends PsiJvmModifiersOwner, PsiPackage
    * @param scope the scope in which packages are searched.
    * @return the array of subpackages.
    */
-  @Nonnull
-  PsiJavaPackage[] getSubPackages(@Nonnull GlobalSearchScope scope);
+  @jakarta.annotation.Nonnull
+  PsiJavaPackage[] getSubPackages(@jakarta.annotation.Nonnull GlobalSearchScope scope);
 
   /**
    * Returns the list of classes in all directories corresponding to the package.
    *
    * @return the array of classes.
    */
-  @Nonnull
+  @jakarta.annotation.Nonnull
   PsiClass[] getClasses();
 
   /**
@@ -71,8 +71,8 @@ public interface PsiJavaPackage extends PsiJvmModifiersOwner, PsiPackage
    * @param scope the scope in which directories are searched.
    * @return the array of classes.
    */
-  @Nonnull
-  PsiClass[] getClasses(@Nonnull GlobalSearchScope scope);
+  @jakarta.annotation.Nonnull
+  PsiClass[] getClasses(@jakarta.annotation.Nonnull GlobalSearchScope scope);
 
   /**
    * Returns the list of package-level annotations for the package.
@@ -92,6 +92,6 @@ public interface PsiJavaPackage extends PsiJvmModifiersOwner, PsiPackage
 
   boolean containsClassNamed(String name);
 
-  @Nonnull
-  PsiClass[] findClassByShortName(@Nonnull String name, @Nonnull GlobalSearchScope scope);
+  @jakarta.annotation.Nonnull
+  PsiClass[] findClassByShortName(@jakarta.annotation.Nonnull String name, @jakarta.annotation.Nonnull GlobalSearchScope scope);
 }

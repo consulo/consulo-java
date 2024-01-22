@@ -22,8 +22,8 @@ import consulo.java.language.module.util.JavaClassNames;
 import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * Represents a wildcard type, with bounds.
@@ -41,14 +41,14 @@ public class PsiWildcardType extends PsiType.Stub {
   private final boolean myIsExtending;
   private final PsiType myBound;
 
-  private PsiWildcardType(@Nonnull PsiManager manager, boolean isExtending, @Nullable PsiType bound) {
+  private PsiWildcardType(@jakarta.annotation.Nonnull PsiManager manager, boolean isExtending, @Nullable PsiType bound) {
     super(TypeAnnotationProvider.EMPTY);
     myManager = manager;
     myIsExtending = isExtending;
     myBound = bound;
   }
 
-  private PsiWildcardType(@Nonnull PsiWildcardType type, @Nonnull TypeAnnotationProvider provider) {
+  private PsiWildcardType(@jakarta.annotation.Nonnull PsiWildcardType type, @Nonnull TypeAnnotationProvider provider) {
     super(provider);
     myManager = type.myManager;
     myIsExtending = type.myIsExtending;
@@ -56,7 +56,7 @@ public class PsiWildcardType extends PsiType.Stub {
   }
 
   @Nonnull
-  public static PsiWildcardType createUnbounded(@Nonnull PsiManager manager) {
+  public static PsiWildcardType createUnbounded(@jakarta.annotation.Nonnull PsiManager manager) {
     PsiWildcardType unboundedWildcard = manager.getUserData(UNBOUNDED_WILDCARD);
     if (unboundedWildcard == null) {
       unboundedWildcard = manager.putUserDataIfAbsent(UNBOUNDED_WILDCARD, new PsiWildcardType(manager, false, null));
@@ -64,14 +64,14 @@ public class PsiWildcardType extends PsiType.Stub {
     return unboundedWildcard;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static PsiWildcardType createExtends(@Nonnull PsiManager manager, @Nonnull PsiType bound) {
     LOG.assertTrue(!(bound instanceof PsiWildcardType));
     LOG.assertTrue(bound != PsiType.NULL);
     return new PsiWildcardType(manager, true, bound);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static PsiWildcardType createSuper(@Nonnull PsiManager manager, @Nonnull PsiType bound) {
     LOG.assertTrue(!(bound instanceof PsiWildcardType));
     LOG.assertTrue(bound != PsiType.NULL);
@@ -97,7 +97,7 @@ public class PsiWildcardType extends PsiType.Stub {
     return getText(true, annotated, myBound == null ? null : myBound.getCanonicalText(annotated));
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getInternalCanonicalText() {
     return getText(true, true, myBound == null ? null : myBound.getInternalCanonicalText());
@@ -123,7 +123,7 @@ public class PsiWildcardType extends PsiType.Stub {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public GlobalSearchScope getResolveScope() {
     if (myBound != null) {
       GlobalSearchScope scope = myBound.getResolveScope();
@@ -151,7 +151,7 @@ public class PsiWildcardType extends PsiType.Stub {
     }
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiManager getManager() {
     return myManager;
   }
@@ -185,7 +185,7 @@ public class PsiWildcardType extends PsiType.Stub {
   }
 
   @Override
-  public <A> A accept(@Nonnull PsiTypeVisitor<A> visitor) {
+  public <A> A accept(@jakarta.annotation.Nonnull PsiTypeVisitor<A> visitor) {
     return visitor.visitWildcardType(this);
   }
 
@@ -232,7 +232,7 @@ public class PsiWildcardType extends PsiType.Stub {
    *
    * @return {@code PsiType} representing a lower bound. Never returns {@code null}.
    */
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiType getExtendsBound() {
     if (myBound == null || !myIsExtending) {
       return getJavaLangObject(myManager, getResolveScope());

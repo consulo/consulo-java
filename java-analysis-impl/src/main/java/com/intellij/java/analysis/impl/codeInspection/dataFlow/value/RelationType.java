@@ -3,8 +3,8 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.value;
 
 import com.intellij.java.language.psi.JavaTokenType;
 import consulo.language.ast.IElementType;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public enum RelationType
 {
@@ -38,7 +38,7 @@ public enum RelationType
 	 * @return result of meet operation: the relation that is a sub-relation of both this and other;
 	 * null if result is bottom
 	 */
-	@Nullable
+	@jakarta.annotation.Nullable
 	public RelationType meet(@Nonnull RelationType other)
 	{
 		if(isSubRelation(other))

@@ -30,7 +30,7 @@ import consulo.language.editor.rawHighlight.HighlightDisplayKey;
 import consulo.language.psi.PsiElement;
 import jakarta.inject.Singleton;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @Singleton
 @ServiceImpl
@@ -48,7 +48,7 @@ public class SuppressManagerImpl extends SuppressManager {
 //  }
 //
   @Override
-  public boolean isSuppressedFor(@Nonnull final PsiElement element, final String toolId) {
+  public boolean isSuppressedFor(@jakarta.annotation.Nonnull final PsiElement element, final String toolId) {
     return JavaSuppressionUtil.getElementToolSuppressedIn(element, toolId) != null;
   }
 //

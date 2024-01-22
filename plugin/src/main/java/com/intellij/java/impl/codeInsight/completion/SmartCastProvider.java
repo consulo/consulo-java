@@ -32,7 +32,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.ProcessingContext;
 import consulo.util.collection.ContainerUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
@@ -64,11 +64,11 @@ class SmartCastProvider implements CompletionProvider {
 
   @RequiredReadAction
   @Override
-  public void addCompletions(@Nonnull final CompletionParameters parameters, @Nonnull final ProcessingContext context, @Nonnull final CompletionResultSet result) {
+  public void addCompletions(@Nonnull final CompletionParameters parameters, @jakarta.annotation.Nonnull final ProcessingContext context, @jakarta.annotation.Nonnull final CompletionResultSet result) {
     addCastVariants(parameters, result.getPrefixMatcher(), result, false);
   }
 
-  static void addCastVariants(@Nonnull CompletionParameters parameters, PrefixMatcher matcher, @Nonnull Consumer<? super LookupElement> result, boolean quick) {
+  static void addCastVariants(@jakarta.annotation.Nonnull CompletionParameters parameters, PrefixMatcher matcher, @Nonnull Consumer<? super LookupElement> result, boolean quick) {
     if (!shouldSuggestCast(parameters)) {
       return;
     }
@@ -115,7 +115,7 @@ class SmartCastProvider implements CompletionProvider {
     }
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   static List<ExpectedTypeInfo> getParenthesizedCastExpectationByOperandType(PsiElement position) {
     PsiElement parenthesisOwner = getParenthesisOwner(position);
     PsiExpression operand = getCastedExpression(parenthesisOwner);
@@ -180,7 +180,7 @@ class SmartCastProvider implements CompletionProvider {
         PsiTypeLookupItem.createLookupItem(type, parameters.getPosition())) {
 
       @Override
-      public void handleInsert(@Nonnull InsertionContext context) {
+      public void handleInsert(@jakarta.annotation.Nonnull InsertionContext context) {
         FeatureUsageTracker.getInstance().triggerFeatureUsed("editing.completion.smarttype.casting");
 
         final Editor editor = context.getEditor();

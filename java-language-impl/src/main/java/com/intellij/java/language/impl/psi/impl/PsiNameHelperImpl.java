@@ -20,18 +20,18 @@ import com.intellij.java.language.psi.PsiNameHelper;
 import com.intellij.java.language.impl.lexer.JavaLexer;
 import consulo.annotation.component.ServiceImpl;
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 @Singleton
 @ServiceImpl
 public class PsiNameHelperImpl extends PsiNameHelper {
 
   @Override
-  public boolean isIdentifier(@Nullable String text) {
+  public boolean isIdentifier(@jakarta.annotation.Nullable String text) {
     return isIdentifier(text, getLanguageLevel());
   }
 
@@ -40,7 +40,7 @@ public class PsiNameHelperImpl extends PsiNameHelper {
   }
 
   @Override
-  public boolean isIdentifier(@Nullable String text, @Nonnull LanguageLevel languageLevel) {
+  public boolean isIdentifier(@jakarta.annotation.Nullable String text, @Nonnull LanguageLevel languageLevel) {
     return text != null && StringUtil.isJavaIdentifier(text) && !JavaLexer.isKeyword(text, languageLevel);
   }
 
@@ -50,7 +50,7 @@ public class PsiNameHelperImpl extends PsiNameHelper {
   }
 
   @Override
-  public boolean isQualifiedName(@Nullable String text) {
+  public boolean isQualifiedName(@jakarta.annotation.Nullable String text) {
     if (text == null) return false;
     int index = 0;
     while (true) {

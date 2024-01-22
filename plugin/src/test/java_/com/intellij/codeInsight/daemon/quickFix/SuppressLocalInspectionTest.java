@@ -1,9 +1,9 @@
 
 package com.intellij.codeInsight.daemon.quickFix;
 
-import javax.annotation.Nonnull;
 import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.analysis.impl.codeInspection.localCanBeFinal.LocalCanBeFinal;
+import jakarta.annotation.Nonnull;
 
 public abstract class SuppressLocalInspectionTest extends LightQuickFixTestCase {
   @Override

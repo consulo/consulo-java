@@ -16,7 +16,7 @@ import consulo.language.psi.PsiElement;
 import consulo.ui.ex.action.KeyboardShortcut;
 import consulo.ui.ex.action.Shortcut;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -29,7 +29,7 @@ public class JavaAnonymousClassesNodeProvider implements FileStructureNodeProvid
   public static final String ID = "SHOW_ANONYMOUS";
   public static final String JAVA_ANONYMOUS_PROPERTY_NAME = "java.anonymous.provider";
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Collection<JavaAnonymousClassTreeElement> provideNodes(@Nonnull TreeElement node) {
     if (node instanceof PsiMethodTreeElement || node instanceof PsiFieldTreeElement || node instanceof ClassInitializerTreeElement) {

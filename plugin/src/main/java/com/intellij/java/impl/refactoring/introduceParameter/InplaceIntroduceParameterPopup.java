@@ -42,8 +42,8 @@ import consulo.util.collection.primitive.ints.IntList;
 import consulo.util.collection.primitive.ints.IntLists;
 import consulo.virtualFileSystem.VirtualFile;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -151,7 +151,7 @@ public class InplaceIntroduceParameterPopup extends AbstractJavaInplaceIntroduce
   }
 
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private PsiParameter getParameter() {
     if (!myMethod.isValid()) {
       return null;
@@ -241,7 +241,7 @@ public class InplaceIntroduceParameterPopup extends AbstractJavaInplaceIntroduce
   }
 
   @Override
-  protected void updateTitle(@Nullable PsiVariable variable) {
+  protected void updateTitle(@jakarta.annotation.Nullable PsiVariable variable) {
     if (variable == null) {
       return;
     }

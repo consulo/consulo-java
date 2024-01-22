@@ -38,8 +38,8 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.collection.SmartHashSet;
 import consulo.util.dataholder.Key;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.Set;
 
 /**
@@ -156,7 +156,7 @@ public class DebuggerTreeNodeExpression
 	}
 
 	@Nullable
-	public static PsiExpression substituteThis(@Nullable PsiElement expressionWithThis, PsiExpression howToEvaluateThis, Value howToEvaluateThisValue) throws EvaluateException
+	public static PsiExpression substituteThis(@jakarta.annotation.Nullable PsiElement expressionWithThis, PsiExpression howToEvaluateThis, Value howToEvaluateThisValue) throws EvaluateException
 	{
 		if(expressionWithThis == null)
 		{

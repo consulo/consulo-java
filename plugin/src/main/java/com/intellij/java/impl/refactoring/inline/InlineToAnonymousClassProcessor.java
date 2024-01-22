@@ -36,8 +36,8 @@ import consulo.usage.UsageViewDescriptor;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.ref.Ref;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -67,12 +67,12 @@ public class InlineToAnonymousClassProcessor extends BaseRefactoringProcessor {
     mySearchInNonJavaFiles = searchInNonJavaFiles;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
     return new InlineViewDescriptor(myClass);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected UsageInfo[] findUsages() {
     if (myInlineThisOnly) {
       return new UsageInfo[] { new UsageInfo(myCallToInline) };
@@ -286,7 +286,7 @@ public class InlineToAnonymousClassProcessor extends BaseRefactoringProcessor {
     }
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static PsiClassType getSuperType(final PsiClass aClass) {
     PsiElementFactory factory = JavaPsiFacade.getInstance(aClass.getProject()).getElementFactory();
 

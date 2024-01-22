@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.ipp.braces;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
 import consulo.document.util.TextRange;
@@ -38,7 +38,7 @@ public abstract class BaseBracesIntention extends MutablyNamedIntention {
     return IntentionPowerPackBundle.message(getMessageKey(), getKeyword(body.getParent(), body));
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected abstract String getMessageKey();
 
   @Nonnull

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.methodmetrics;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiMethod;
 import com.siyeh.InspectionGadgetsBundle;
@@ -47,7 +47,7 @@ public class MethodWithMultipleLoopsInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
       // note: no call to super
       if (method.getNameIdentifier() == null) {
         return;

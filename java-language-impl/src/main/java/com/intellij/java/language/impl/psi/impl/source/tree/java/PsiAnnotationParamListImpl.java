@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.language.ast.ASTNode;
 import com.intellij.java.language.psi.JavaElementVisitor;
@@ -32,7 +32,7 @@ import com.intellij.java.language.impl.psi.impl.source.JavaStubPsiElement;
  */
 public class PsiAnnotationParamListImpl extends JavaStubPsiElement<PsiAnnotationParameterListStub> implements PsiAnnotationParameterList
 {
-	public PsiAnnotationParamListImpl(@Nonnull PsiAnnotationParameterListStub stub)
+	public PsiAnnotationParamListImpl(@jakarta.annotation.Nonnull PsiAnnotationParameterListStub stub)
 	{
 		super(stub, JavaStubElementTypes.ANNOTATION_PARAMETER_LIST);
 	}
@@ -50,7 +50,7 @@ public class PsiAnnotationParamListImpl extends JavaStubPsiElement<PsiAnnotation
 	}
 
 	@Override
-	public void accept(@Nonnull PsiElementVisitor visitor)
+	public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{

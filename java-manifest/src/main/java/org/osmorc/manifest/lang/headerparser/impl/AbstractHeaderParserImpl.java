@@ -24,7 +24,7 @@
  */
 package org.osmorc.manifest.lang.headerparser.impl;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.language.editor.annotation.AnnotationHolder;
 import consulo.language.psi.PsiReference;
@@ -48,11 +48,11 @@ public abstract class AbstractHeaderParserImpl implements HeaderParser {
     return true;
   }
 
-  public PsiReference[] getReferences(@Nonnull HeaderValuePart headerValuePart) {
+  public PsiReference[] getReferences(@jakarta.annotation.Nonnull HeaderValuePart headerValuePart) {
     return PsiReference.EMPTY_ARRAY;
   }
 
-  public void annotate(@Nonnull HeaderValuePart headerValue, @Nonnull AnnotationHolder holder) {
+  public void annotate(@Nonnull HeaderValuePart headerValue, @jakarta.annotation.Nonnull AnnotationHolder holder) {
 
   }
 }

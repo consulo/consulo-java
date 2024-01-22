@@ -36,9 +36,9 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.HashSet;
 
 /**
@@ -50,7 +50,7 @@ public class IterateOverIterableIntention implements IntentionAction {
   private static final Logger LOG = Logger.getInstance(IterateOverIterableIntention.class);
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
     final Template template = getTemplate();
     if (template != null) {
       int offset = editor.getCaretModel().getOffset();
@@ -77,13 +77,13 @@ public class IterateOverIterableIntention implements IntentionAction {
     return false;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static Template getTemplate() {
     return TemplateSettings.getInstance().getTemplate("I", "surround");
   }
 
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getText() {
     return "Iterate";

@@ -28,8 +28,8 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TypeUtils;
 import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -77,7 +77,7 @@ public class UnnecessaryTemporaryOnConversionFromStringInspection
       replacementString);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @NonNls
   static String calculateReplacementExpression(
     PsiMethodCallExpression expression) {
@@ -189,7 +189,7 @@ public class UnnecessaryTemporaryOnConversionFromStringInspection
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();

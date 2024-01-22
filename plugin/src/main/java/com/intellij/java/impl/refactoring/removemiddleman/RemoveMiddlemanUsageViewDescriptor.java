@@ -20,13 +20,13 @@ import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.impl.refactoring.RefactorJBundle;
 import com.intellij.java.impl.refactoring.psi.MyUsageViewUtil;
 import consulo.usage.UsageViewDescriptor;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 class RemoveMiddlemanUsageViewDescriptor implements UsageViewDescriptor {
   private @Nonnull
   final PsiField field;
 
-  RemoveMiddlemanUsageViewDescriptor(@Nonnull PsiField field) {
+  RemoveMiddlemanUsageViewDescriptor(@jakarta.annotation.Nonnull PsiField field) {
     super();
     this.field = field;
   }

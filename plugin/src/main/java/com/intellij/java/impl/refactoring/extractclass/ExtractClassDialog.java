@@ -44,10 +44,10 @@ import consulo.ui.ex.awt.JBLabelDecorator;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.ex.awt.event.DocumentAdapter;
-import consulo.ui.util.FormBuilder;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -197,7 +197,7 @@ class ExtractClassDialog extends RefactoringDialog implements MemberInfoChangeLi
     }
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getPackageName() {
     return packageTextField.getText().trim();
   }

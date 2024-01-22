@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.psi.impl.source.codeStyle.javadoc;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import consulo.util.lang.StringUtil;
 
@@ -40,7 +40,7 @@ public enum JDTag
 	@Nonnull
 	private final String myTag;
 
-	JDTag(@Nonnull String tag)
+	JDTag(@jakarta.annotation.Nonnull String tag)
 	{
 		this.myTag = tag;
 	}
@@ -51,7 +51,7 @@ public enum JDTag
 		return prefix + StringUtil.repeatSymbol(' ', getWithEndWhitespace().length());
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public String getWithEndWhitespace()
 	{
 		return "@" + myTag + " ";

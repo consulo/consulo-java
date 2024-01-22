@@ -28,28 +28,28 @@ import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiPackage;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
 public abstract class AccessStaticViaInstanceBase extends BaseJavaBatchLocalInspectionTool {
   @NonNls public static final String ACCESS_STATIC_VIA_INSTANCE = "AccessStaticViaInstance";
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getGroupDisplayName() {
     return "";
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionsBundle.message("access.static.via.instance");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @NonNls
   public String getShortName() {
     return ACCESS_STATIC_VIA_INSTANCE;
@@ -66,7 +66,7 @@ public abstract class AccessStaticViaInstanceBase extends BaseJavaBatchLocalInsp
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
                                             final boolean isOnTheFly,
                                             LocalInspectionToolSession session,

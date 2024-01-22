@@ -22,11 +22,11 @@ import consulo.language.Language;
 import consulo.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.PsiUtil;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl(id = "java")
 public class MoveJavaInnerHandler implements MoveInnerHandler {
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public PsiClass copyClass(@Nonnull final MoveInnerOptions options) {
     PsiClass innerClass = options.getInnerClass();

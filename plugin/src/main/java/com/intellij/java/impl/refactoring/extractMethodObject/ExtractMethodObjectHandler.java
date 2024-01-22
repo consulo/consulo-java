@@ -42,7 +42,7 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.undoRedo.CommandProcessor;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.function.Consumer;
 
 public class ExtractMethodObjectHandler implements RefactoringActionHandler {
@@ -56,7 +56,7 @@ public class ExtractMethodObjectHandler implements RefactoringActionHandler {
     });
   }
 
-  private void invokeOnElements(@Nonnull final Project project, @Nonnull final Editor editor, @Nonnull PsiFile file, @Nonnull PsiElement[] elements) {
+  private void invokeOnElements(@jakarta.annotation.Nonnull final Project project, @Nonnull final Editor editor, @Nonnull PsiFile file, @Nonnull PsiElement[] elements) {
     if (elements.length == 0) {
       String message = RefactoringBundle
           .getCannotRefactorMessage(RefactoringBundle.message("selected.block.should.represent.a.set.of.statements.or.an.expression"));
@@ -84,7 +84,7 @@ public class ExtractMethodObjectHandler implements RefactoringActionHandler {
   public static void run(@Nonnull final Project project,
                          @Nonnull final Editor editor,
                          @Nonnull final ExtractMethodObjectProcessor processor,
-                         @Nonnull final ExtractMethodObjectProcessor.MyExtractMethodProcessor extractProcessor) {
+                         @jakarta.annotation.Nonnull final ExtractMethodObjectProcessor.MyExtractMethodProcessor extractProcessor) {
     final int offset = editor.getCaretModel().getOffset();
     final RangeMarker marker = editor.getDocument().createRangeMarker(new TextRange(offset, offset));
     CommandProcessor.getInstance().executeCommand(project, new Runnable() {

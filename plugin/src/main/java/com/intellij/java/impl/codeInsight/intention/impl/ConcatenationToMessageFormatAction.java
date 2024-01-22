@@ -35,8 +35,8 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -141,7 +141,7 @@ public class ConcatenationToMessageFormatAction implements IntentionAction {
     return file.findElementAt(editor.getCaretModel().getOffset());
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static PsiPolyadicExpression getEnclosingLiteralConcatenation(final PsiElement element) {
     PsiPolyadicExpression binaryExpression = PsiTreeUtil.getParentOfType(element, PsiPolyadicExpression.class, false, PsiMember.class);
     if (binaryExpression == null) return null;

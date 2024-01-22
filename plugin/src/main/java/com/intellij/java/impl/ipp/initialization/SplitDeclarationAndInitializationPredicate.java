@@ -21,7 +21,7 @@ import com.intellij.java.language.psi.PsiField;
 import consulo.language.psi.*;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.ErrorUtil;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 class SplitDeclarationAndInitializationPredicate
   implements PsiElementPredicate {

@@ -23,8 +23,8 @@ import consulo.language.editor.inspection.reference.RefEntity;
 import com.intellij.java.analysis.codeInspection.reference.RefPackage;
 import com.siyeh.InspectionGadgetsBundle;
 import com.intellij.java.impl.ig.BaseGlobalInspection;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;

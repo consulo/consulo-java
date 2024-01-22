@@ -24,8 +24,8 @@ import consulo.annotation.component.ServiceImpl;
 import consulo.language.psi.scope.GlobalSearchScope;
 import jakarta.inject.Singleton;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -85,11 +85,11 @@ public class JavaClassSupersImpl extends JavaClassSupers
 				derivedSubstitutor);
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	private static PsiSubstitutor getSuperSubstitutorWithCaching(@Nonnull PsiClass superClass,
 																 @Nonnull PsiClass derivedClass,
 																 @Nonnull GlobalSearchScope resolveScope,
-																 @Nonnull PsiSubstitutor derivedSubstitutor)
+																 @jakarta.annotation.Nonnull PsiSubstitutor derivedSubstitutor)
 	{
 		PsiSubstitutor substitutor = ScopedClassHierarchy.getSuperClassSubstitutor(derivedClass, resolveScope, superClass);
 		if(substitutor == null)

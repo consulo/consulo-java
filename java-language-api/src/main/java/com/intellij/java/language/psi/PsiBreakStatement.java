@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.psi;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * Represents a Java <code>break</code> statement.
@@ -35,6 +35,6 @@ public interface PsiBreakStatement extends PsiStatement {
    *
    * @return the statement instance, or null if the statement is not valid in the context where it is located.
    */
-  @Nullable
+  @jakarta.annotation.Nullable
   PsiStatement findExitedStatement();
 }

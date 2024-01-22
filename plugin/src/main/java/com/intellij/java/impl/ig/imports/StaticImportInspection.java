@@ -25,8 +25,8 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.SmartList;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;

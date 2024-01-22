@@ -32,8 +32,8 @@ import consulo.project.Project;
 import consulo.project.content.scope.ProjectAwareSearchScope;
 import consulo.util.collection.ArrayUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 
 @ExtensionImpl
@@ -92,13 +92,13 @@ public class DefaultClassNavigationContributor implements GotoClassOrTypeContrib
   }
 
   @Override
-  public void processNames(@Nonnull Processor<String> processor, @Nonnull SearchScope scope, @Nullable IdFilter filter) {
+  public void processNames(@jakarta.annotation.Nonnull Processor<String> processor, @jakarta.annotation.Nonnull SearchScope scope, @Nullable IdFilter filter) {
     PsiShortNamesCache.getInstance(((ProjectAwareSearchScope) scope).getProject()).processAllClassNames(processor, (GlobalSearchScope) scope, filter);
   }
 
   @Override
   public void processElementsWithName(@Nonnull String name,
-                                      @Nonnull Processor<NavigationItem> processor,
+                                      @jakarta.annotation.Nonnull Processor<NavigationItem> processor,
                                       @Nonnull FindSymbolParameters parameters) {
     PsiShortNamesCache.getInstance(parameters.getProject()).processClassesWithName(name, processor, (GlobalSearchScope) parameters.getSearchScope(), parameters.getIdFilter());
   }

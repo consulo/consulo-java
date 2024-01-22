@@ -27,7 +27,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.RemoveBracesIntention", fileExtensions = "java", categories = {"Java", "Declaration"})
@@ -62,7 +62,7 @@ public class RemoveBracesIntention extends BaseBracesIntention {
     return "remove.braces.intention.name";
   }
 
-  protected void processIntention(@Nonnull PsiElement element)
+  protected void processIntention(@jakarta.annotation.Nonnull PsiElement element)
     throws IncorrectOperationException {
     final PsiStatement body = getSurroundingStatement(element);
     if (body == null || !(body instanceof PsiBlockStatement)) return;

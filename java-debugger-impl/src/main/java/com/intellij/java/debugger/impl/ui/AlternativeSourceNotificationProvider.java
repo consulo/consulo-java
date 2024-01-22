@@ -54,8 +54,8 @@ import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import jakarta.inject.Inject;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -73,7 +73,7 @@ public class AlternativeSourceNotificationProvider implements EditorNotification
     myProject = project;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getId() {
     return "java-debugger-alternative-source";
@@ -82,7 +82,7 @@ public class AlternativeSourceNotificationProvider implements EditorNotification
   @RequiredReadAction
   @Nullable
   @Override
-  public EditorNotificationBuilder buildNotification(@Nonnull VirtualFile file, @Nonnull FileEditor fileEditor, @Nonnull Supplier<EditorNotificationBuilder> builderFactory) {
+  public EditorNotificationBuilder buildNotification(@jakarta.annotation.Nonnull VirtualFile file, @jakarta.annotation.Nonnull FileEditor fileEditor, @jakarta.annotation.Nonnull Supplier<EditorNotificationBuilder> builderFactory) {
     if (!DebuggerSettings.getInstance().SHOW_ALTERNATIVE_SOURCE) {
       return null;
     }

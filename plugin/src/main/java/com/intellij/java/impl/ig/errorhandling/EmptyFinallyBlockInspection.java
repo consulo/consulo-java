@@ -28,13 +28,12 @@ import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class EmptyFinallyBlockInspection extends BaseInspection {
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("empty.finally.block.display.name");
   }
@@ -45,7 +44,7 @@ public class EmptyFinallyBlockInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("empty.finally.block.problem.descriptor");
   }
@@ -62,7 +61,7 @@ public class EmptyFinallyBlockInspection extends BaseInspection {
   }
 
   private static class RemoveTryFinallyBlockFix extends InspectionGadgetsFix {
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("remove.try.finally.block.quickfix");
     }
@@ -103,7 +102,7 @@ public class EmptyFinallyBlockInspection extends BaseInspection {
   }
 
   private static class RemoveFinallyBlockFix extends InspectionGadgetsFix {
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("remove.finally.block.quickfix");
     }

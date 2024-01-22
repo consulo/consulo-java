@@ -17,8 +17,8 @@ package com.intellij.java.debugger.impl.memory.tracking;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
 import consulo.internal.com.sun.jdi.ObjectReference;
+import jakarta.annotation.Nonnull;
 
 public interface TrackerForNewInstances
 {

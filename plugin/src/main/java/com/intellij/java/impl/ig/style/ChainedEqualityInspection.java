@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.ig.style;
 
-import javax.annotation.Nonnull;
-
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
@@ -25,16 +23,17 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ComparisonUtils;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ChainedEqualityInspection extends BaseInspection {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "ChainedEqualityComparisons";
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("chained.equality.comparisons.display.name");
   }

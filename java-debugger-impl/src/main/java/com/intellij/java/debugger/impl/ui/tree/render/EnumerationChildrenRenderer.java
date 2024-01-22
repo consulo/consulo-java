@@ -41,7 +41,7 @@ import consulo.util.xml.serializer.WriteExternalException;
 import consulo.language.psi.PsiElement;
 import consulo.internal.com.sun.jdi.Value;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public final class EnumerationChildrenRenderer extends TypeRenderer implements ChildrenRenderer
 {

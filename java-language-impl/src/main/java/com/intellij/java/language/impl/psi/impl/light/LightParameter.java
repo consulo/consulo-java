@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.impl.psi.impl.light;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.language.Language;
 import com.intellij.java.language.psi.JavaElementVisitor;
@@ -39,14 +39,14 @@ public class LightParameter extends LightVariableBuilder<LightVariableBuilder> i
     this(name, type, declarationScope, language, type instanceof PsiEllipsisType);
   }
 
-  public LightParameter(@Nonnull String name, @Nonnull PsiType type, PsiElement declarationScope, Language language, boolean isVarArgs) {
+  public LightParameter(@Nonnull String name, @jakarta.annotation.Nonnull PsiType type, PsiElement declarationScope, Language language, boolean isVarArgs) {
     super(declarationScope.getManager(), name, type, language);
     myName = name;
     myDeclarationScope = declarationScope;
     myVarArgs = isVarArgs;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public PsiElement getDeclarationScope() {
     return myDeclarationScope;
@@ -69,7 +69,7 @@ public class LightParameter extends LightVariableBuilder<LightVariableBuilder> i
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getName() {
     return myName;
   }

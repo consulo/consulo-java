@@ -33,13 +33,13 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Collection;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.AnnotateOverriddenMethodsIntention", fileExtensions = "java", categories = {"Java", "Annotations"})
 public class AnnotateOverriddenMethodsIntention extends MutablyNamedIntention {
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected PsiElementPredicate getElementPredicate() {
     return new AnnotateOverriddenMethodsPredicate();

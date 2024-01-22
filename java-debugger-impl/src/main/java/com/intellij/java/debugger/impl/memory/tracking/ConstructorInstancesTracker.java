@@ -20,8 +20,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import com.intellij.java.debugger.impl.breakpoints.properties.JavaLineBreakpointProperties;
 import com.intellij.java.debugger.DebuggerManager;
@@ -41,7 +41,6 @@ import consulo.execution.debug.XDebugSession;
 import consulo.execution.debug.breakpoint.XBreakpoint;
 import consulo.project.Project;
 import consulo.execution.debug.XDebuggerManager;
-import consulo.ide.impl.idea.xdebugger.impl.XDebuggerManagerImpl;
 import consulo.ide.impl.idea.xdebugger.impl.breakpoints.LineBreakpointState;
 import consulo.ide.impl.idea.xdebugger.impl.breakpoints.XLineBreakpointImpl;
 import consulo.disposer.Disposable;
@@ -63,13 +62,13 @@ public class ConstructorInstancesTracker implements TrackerForNewInstances, Disp
 	@Nullable
 	private HashSet<ObjectReference> myNewObjects = null;
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	private HashSet<ObjectReference> myTrackedObjects = new HashSet<>();
 
 	private volatile boolean myIsBackgroundMode;
 	private volatile boolean myIsBackgroundTrackingEnabled;
 
-	public ConstructorInstancesTracker(@Nonnull ReferenceType ref, @Nonnull XDebugSession debugSession, @Nonnull InstancesTracker instancesTracker)
+	public ConstructorInstancesTracker(@jakarta.annotation.Nonnull ReferenceType ref, @jakarta.annotation.Nonnull XDebugSession debugSession, @Nonnull InstancesTracker instancesTracker)
 	{
 		myProject = debugSession.getProject();
 		myIsBackgroundTrackingEnabled = instancesTracker.isBackgroundTrackingEnabled();
@@ -144,7 +143,7 @@ public class ConstructorInstancesTracker implements TrackerForNewInstances, Disp
 		myTrackedObjects = new HashSet<>();
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
 	public List<ObjectReference> getNewInstances()
 	{
@@ -286,7 +285,7 @@ public class ConstructorInstancesTracker implements TrackerForNewInstances, Disp
 			}
 		}
 
-		private void handleEvent(@Nonnull SuspendContextCommandImpl action, @Nonnull LocatableEvent event)
+		private void handleEvent(@jakarta.annotation.Nonnull SuspendContextCommandImpl action, @jakarta.annotation.Nonnull LocatableEvent event)
 		{
 			try
 			{

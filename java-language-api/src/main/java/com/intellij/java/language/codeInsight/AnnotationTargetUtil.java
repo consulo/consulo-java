@@ -25,8 +25,8 @@ import consulo.language.psi.PsiReference;
 import consulo.logging.Logger;
 import consulo.util.collection.ContainerUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -154,7 +154,7 @@ public class AnnotationTargetUtil {
   }
 
   @Nullable
-  public static Set<TargetType> extractRequiredAnnotationTargets(@Nullable PsiAnnotationMemberValue value) {
+  public static Set<TargetType> extractRequiredAnnotationTargets(@jakarta.annotation.Nullable PsiAnnotationMemberValue value) {
     if (value instanceof PsiReference) {
       TargetType targetType = translateTargetRef((PsiReference) value);
       if (targetType != null) {

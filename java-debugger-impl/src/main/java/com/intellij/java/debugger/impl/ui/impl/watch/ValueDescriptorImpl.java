@@ -45,8 +45,8 @@ import consulo.project.Project;
 import consulo.ui.image.Image;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -69,7 +69,7 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 	private String myValueText;
 	private boolean myFullValue = false;
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	private Image myValueIcon;
 
 	protected boolean myIsNew = true;
@@ -509,7 +509,7 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 	}
 
 	//returns expression that evaluates tree to this descriptor
-	@Nullable
+	@jakarta.annotation.Nullable
 	public PsiElement getTreeEvaluation(JavaValue value, DebuggerContextImpl context) throws EvaluateException
 	{
 		JavaValue parent = value.getParent();
@@ -686,7 +686,7 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 	}
 
 	@Override
-	public void setMarkup(final DebugProcess debugProcess, @Nullable final ValueMarkup markup)
+	public void setMarkup(final DebugProcess debugProcess, @jakarta.annotation.Nullable final ValueMarkup markup)
 	{
 		final Value value = getValue();
 		if(value instanceof ObjectReference)

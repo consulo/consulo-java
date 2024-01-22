@@ -18,7 +18,7 @@ package com.intellij.java.impl.ig.methodmetrics;
 import com.intellij.java.language.psi.PsiMethod;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public abstract class CyclomaticComplexityInspection extends MethodMetricInspection {
 
@@ -27,7 +27,7 @@ public abstract class CyclomaticComplexityInspection extends MethodMetricInspect
     return "OverlyComplexMethod";
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "cyclomatic.complexity.display.name");
@@ -56,7 +56,7 @@ public abstract class CyclomaticComplexityInspection extends MethodMetricInspect
   private class MethodComplexityVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
       // note: no call to super
       if (method.getNameIdentifier() == null) {
         return;

@@ -27,8 +27,8 @@ import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author max
@@ -37,7 +37,7 @@ import javax.annotation.Nullable;
 public class JavaClsStructureViewBuilderProvider implements StructureViewBuilderProvider {
   @Override
   @Nullable
-  public StructureViewBuilder getStructureViewBuilder(@Nonnull FileType fileType, @Nonnull VirtualFile file, @Nonnull Project project) {
+  public StructureViewBuilder getStructureViewBuilder(@Nonnull FileType fileType, @jakarta.annotation.Nonnull VirtualFile file, @Nonnull Project project) {
     if (fileType == JavaClassFileType.INSTANCE) {
       PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
 

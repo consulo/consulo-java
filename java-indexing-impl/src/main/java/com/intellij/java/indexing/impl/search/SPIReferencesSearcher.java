@@ -32,7 +32,7 @@ import consulo.language.psi.search.ReferencesSearchQueryExecutor;
 import consulo.project.Project;
 import consulo.project.util.query.QueryExecutorBase;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class SPIReferencesSearcher extends QueryExecutorBase<PsiReference, ReferencesSearch.SearchParameters> implements ReferencesSearchQueryExecutor {

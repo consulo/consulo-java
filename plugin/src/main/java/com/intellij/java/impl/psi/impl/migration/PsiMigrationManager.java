@@ -24,10 +24,9 @@ import consulo.ide.ServiceManager;
 import consulo.language.psi.PsiManager;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-
-import javax.annotation.Nonnull;
 
 @Singleton
 @ServiceAPI(ComponentScope.PROJECT)

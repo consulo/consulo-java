@@ -22,15 +22,14 @@ import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Danila Ponomarenko
@@ -42,7 +41,7 @@ public class ReplaceWithListAccessFix implements SyntheticIntentionAction {
     myArrayAccessExpression = arrayAccessExpression;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getText() {
     return JavaQuickFixBundle.message("replace.with.list.access.text");
@@ -84,7 +83,7 @@ public class ReplaceWithListAccessFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
     final PsiExpression arrayExpression = myArrayAccessExpression.getArrayExpression();
     final PsiExpression indexExpression = myArrayAccessExpression.getIndexExpression();
@@ -108,12 +107,12 @@ public class ReplaceWithListAccessFix implements SyntheticIntentionAction {
     replaceWithGet(factory, codeStyleManager, arrayExpression, indexExpression, myArrayAccessExpression);
   }
 
-  @Nonnull
-  private static PsiElement replaceWithGet(@Nonnull PsiElementFactory factory,
-                                           @Nonnull CodeStyleManager codeStyleManager,
-                                           @Nonnull PsiExpression arrayExpression,
-                                           @Nonnull PsiExpression indexExpression,
-                                           @Nonnull PsiElement anchor) {
+  @jakarta.annotation.Nonnull
+  private static PsiElement replaceWithGet(@jakarta.annotation.Nonnull PsiElementFactory factory,
+                                           @jakarta.annotation.Nonnull CodeStyleManager codeStyleManager,
+                                           @jakarta.annotation.Nonnull PsiExpression arrayExpression,
+                                           @jakarta.annotation.Nonnull PsiExpression indexExpression,
+                                           @jakarta.annotation.Nonnull PsiElement anchor) {
 
     final PsiElement listAccess = factory.createExpressionFromText(
       arrayExpression.getText() + ".get(" + indexExpression.getText() + ")",

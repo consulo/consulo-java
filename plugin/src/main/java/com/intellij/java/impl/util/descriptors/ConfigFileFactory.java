@@ -22,7 +22,7 @@ import consulo.ide.ServiceManager;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author nik
@@ -44,7 +44,7 @@ public abstract class ConfigFileFactory {
 
   public abstract ConfigFileMetaDataRegistry createMetaDataRegistry();
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public abstract VirtualFile createFile(@Nullable Project project, String url, ConfigFileVersion version, final boolean forceNew);
 
   public abstract ConfigFileContainer createSingleFileContainer(Project project, ConfigFileMetaData metaData);

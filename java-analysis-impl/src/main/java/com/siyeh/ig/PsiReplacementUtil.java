@@ -13,8 +13,8 @@ import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class PsiReplacementUtil {
 
@@ -87,7 +87,7 @@ public class PsiReplacementUtil {
   /**
    * Consider to use {@link #replaceStatementAndShortenClassNames(PsiStatement, String, CommentTracker)} to preserve comments
    */
-  public static void replaceStatementAndShortenClassNames(@Nonnull PsiStatement statement, @Nonnull @NonNls String newStatementText) {
+  public static void replaceStatementAndShortenClassNames(@jakarta.annotation.Nonnull PsiStatement statement, @Nonnull @NonNls String newStatementText) {
     replaceStatementAndShortenClassNames(statement, newStatementText, null);
   }
 
@@ -130,8 +130,8 @@ public class PsiReplacementUtil {
     return out.toString();
   }
 
-  private static void getElementText(@Nonnull PsiElement element, @Nullable PsiElement elementToReplace,
-                                     @Nullable String replacement, @Nonnull StringBuilder out) {
+  private static void getElementText(@Nonnull PsiElement element, @jakarta.annotation.Nullable PsiElement elementToReplace,
+                                     @jakarta.annotation.Nullable String replacement, @Nonnull StringBuilder out) {
     if (element.equals(elementToReplace)) {
       out.append(replacement);
       return;

@@ -23,8 +23,8 @@ import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaSourceUtil;
 import consulo.language.impl.ast.TreeElement;
 import consulo.language.ast.TokenSet;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class RecordHeaderElement extends CompositeElement implements Constants
 {

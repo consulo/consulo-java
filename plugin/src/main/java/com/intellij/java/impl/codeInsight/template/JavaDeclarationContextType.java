@@ -3,8 +3,7 @@ package com.intellij.java.impl.codeInsight.template;
 import com.intellij.java.impl.codeInsight.completion.JavaKeywordCompletion;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class JavaDeclarationContextType extends JavaCodeContextType {

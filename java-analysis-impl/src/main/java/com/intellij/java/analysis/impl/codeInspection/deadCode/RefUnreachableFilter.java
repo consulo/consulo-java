@@ -30,21 +30,21 @@ import consulo.language.editor.impl.inspection.reference.RefElementImpl;
 import consulo.language.editor.inspection.GlobalInspectionContext;
 import consulo.language.editor.inspection.GlobalInspectionTool;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class RefUnreachableFilter extends RefFilter {
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected GlobalInspectionTool myTool;
   @Nonnull
   protected final GlobalInspectionContext myContext;
 
-  public RefUnreachableFilter(@Nonnull GlobalInspectionTool tool, @Nonnull GlobalInspectionContext context) {
+  public RefUnreachableFilter(@jakarta.annotation.Nonnull GlobalInspectionTool tool, @Nonnull GlobalInspectionContext context) {
     myTool = tool;
     myContext = context;
   }
 
   @Override
-  public int getElementProblemCount(@Nonnull RefJavaElement refElement) {
+  public int getElementProblemCount(@jakarta.annotation.Nonnull RefJavaElement refElement) {
     if (refElement instanceof RefParameter) return 0;
     if (refElement.isSyntheticJSP()) return 0;
     if (!(refElement instanceof RefMethod || refElement instanceof RefClass || refElement instanceof RefField))

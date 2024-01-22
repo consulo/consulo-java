@@ -26,8 +26,8 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.RenameFix;
 import consulo.java.language.module.util.JavaClassNames;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
 import javax.swing.JComponent;
 import java.util.HashMap;
@@ -87,7 +87,7 @@ public class StandardVariableNamesInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     final PsiVariable variable = (PsiVariable)infos[0];
     final String name = variable.getName();
@@ -121,7 +121,7 @@ public class StandardVariableNamesInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitVariable(@Nonnull PsiVariable variable) {
+    public void visitVariable(@jakarta.annotation.Nonnull PsiVariable variable) {
       super.visitVariable(variable);
       final String variableName = variable.getName();
       final String expectedType = s_expectedTypes.get(variableName);

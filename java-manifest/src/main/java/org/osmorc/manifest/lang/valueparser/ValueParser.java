@@ -25,17 +25,17 @@
 package org.osmorc.manifest.lang.valueparser;
 
 import consulo.language.editor.annotation.AnnotationHolder;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 import org.osmorc.manifest.lang.psi.HeaderValuePart;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)
  */
 public interface ValueParser<T> {
-  T parseValue(@Nonnull HeaderValuePart headerValuePart, @Nullable AnnotationHolder annotationHolder);
+  T parseValue(@jakarta.annotation.Nonnull HeaderValuePart headerValuePart, @Nullable AnnotationHolder annotationHolder);
 
   T parseValue(@Nonnull HeaderValuePart headerValuePart, int start, int end, @Nullable AnnotationHolder annotationHolder);
 
-  T parseValue(@Nonnull String text, int start, int end);
+  T parseValue(@jakarta.annotation.Nonnull String text, int start, int end);
 }

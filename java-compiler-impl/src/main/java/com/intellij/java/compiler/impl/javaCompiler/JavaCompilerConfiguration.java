@@ -23,8 +23,8 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.jdom.Element;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.io.File;
 import java.util.*;
 
@@ -37,7 +37,7 @@ import java.util.*;
 @ServiceAPI(ComponentScope.PROJECT)
 @ServiceImpl
 public class JavaCompilerConfiguration implements PersistentStateComponent<Element> {
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static JavaCompilerConfiguration getInstance(@Nonnull Project project) {
     return ServiceManager.getService(project, JavaCompilerConfiguration.class);
   }
@@ -74,13 +74,13 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
   private final Map<String, String> myModuleBytecodeTarget = new HashMap<String, String>();
 
   @Inject
-  public JavaCompilerConfiguration(@Nonnull Project project) {
+  public JavaCompilerConfiguration(@jakarta.annotation.Nonnull Project project) {
     myProject = project;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @RequiredReadAction
-  public String getBytecodeTargetLevel(@Nonnull Module module) {
+  public String getBytecodeTargetLevel(@jakarta.annotation.Nonnull Module module) {
     String level = myModuleBytecodeTarget.get(module.getName());
     if (level != null) {
       return level.isEmpty() ? null : level;
@@ -104,12 +104,12 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
     return myBackendCompilerCache;
   }
 
-  public void setActiveCompiler(@Nonnull BackendCompiler key) {
+  public void setActiveCompiler(@jakarta.annotation.Nonnull BackendCompiler key) {
     myBackendCompilerCache = key;
   }
 
-  @Nullable
-  public BackendCompiler findCompiler(@Nonnull String className) {
+  @jakarta.annotation.Nullable
+  public BackendCompiler findCompiler(@jakarta.annotation.Nonnull String className) {
     for (BackendCompiler backendCompiler : BackendCompiler.EP_NAME.getExtensionList(myProject)) {
       if (className.equals(backendCompiler.getClass().getSimpleName())) {
         return backendCompiler;
@@ -320,7 +320,7 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
     return profile != null ? profile : myDefaultProcessorsProfile;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public ProcessorConfigProfile getDefaultProcessorProfile() {
     return myDefaultProcessorsProfile;
   }
@@ -357,7 +357,7 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
     myProcessorsProfilesMap = null; // clear cache
   }
 
-  public void addModuleProcessorProfile(@Nonnull ProcessorConfigProfile profile) {
+  public void addModuleProcessorProfile(@jakarta.annotation.Nonnull ProcessorConfigProfile profile) {
     myModuleProcessorProfiles.add(profile);
     myProcessorsProfilesMap = null; // clear cache
   }
@@ -382,7 +382,7 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
   }
 
   @Deprecated
-  public void setModulesBytecodeTargetMap(@Nonnull Map<String, String> mapping) {
+  public void setModulesBytecodeTargetMap(@jakarta.annotation.Nonnull Map<String, String> mapping) {
     myModuleBytecodeTarget.clear();
     myModuleBytecodeTarget.putAll(mapping);
   }
@@ -392,7 +392,7 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
     return myModuleBytecodeTarget;
   }
 
-  public void setProjectBytecodeTarget(@Nullable String level) {
+  public void setProjectBytecodeTarget(@jakarta.annotation.Nullable String level) {
     myBytecodeTargetLevel = level;
   }
 

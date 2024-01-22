@@ -28,8 +28,7 @@ import consulo.language.ast.IElementType;
 import consulo.language.ast.TokenSet;
 import consulo.language.editor.completion.WordCompletionElementFilter;
 import consulo.language.version.LanguageVersion;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class JavaWordCompletionFilter implements WordCompletionElementFilter {

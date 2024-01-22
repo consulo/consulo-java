@@ -17,7 +17,7 @@ package com.intellij.java.language.psi;
 
 import consulo.language.psi.NavigatablePsiElement;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * Represents a member of a Java class (for example, a field or a method).

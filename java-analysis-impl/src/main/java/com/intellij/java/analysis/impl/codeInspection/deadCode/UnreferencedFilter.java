@@ -28,11 +28,10 @@ import com.intellij.java.analysis.codeInspection.reference.*;
 import consulo.language.editor.impl.inspection.reference.RefElementImpl;
 import consulo.language.editor.inspection.GlobalInspectionContext;
 import consulo.language.editor.inspection.GlobalInspectionTool;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class UnreferencedFilter extends RefUnreachableFilter {
-  public UnreferencedFilter(@Nonnull GlobalInspectionTool tool, @Nonnull GlobalInspectionContext context) {
+  public UnreferencedFilter(@jakarta.annotation.Nonnull GlobalInspectionTool tool, @jakarta.annotation.Nonnull GlobalInspectionContext context) {
     super(tool, context);
   }
 

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.security;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
@@ -49,7 +49,7 @@ public class PublicStaticCollectionFieldInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@Nonnull PsiField field) {
+    public void visitField(@jakarta.annotation.Nonnull PsiField field) {
       super.visitField(field);
       if (!field.hasModifierProperty(PsiModifier.PUBLIC)) {
         return;

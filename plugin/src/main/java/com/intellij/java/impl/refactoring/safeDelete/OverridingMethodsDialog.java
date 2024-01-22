@@ -35,9 +35,9 @@ import consulo.usage.UsageInfo;
 import consulo.usage.UsagePreviewPanel;
 import consulo.usage.UsagePreviewPanelFactory;
 import consulo.usage.UsageViewPresentation;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;

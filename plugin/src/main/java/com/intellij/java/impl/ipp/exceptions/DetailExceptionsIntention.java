@@ -24,7 +24,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.*;
 
 @ExtensionImpl
@@ -38,7 +38,7 @@ public class DetailExceptionsIntention extends Intention {
   }
 
   @Override
-  public void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+  public void processIntention(@jakarta.annotation.Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiJavaToken token = (PsiJavaToken)element;
     PsiElement parent = token.getParent();
     if (parent instanceof PsiCatchSection) {

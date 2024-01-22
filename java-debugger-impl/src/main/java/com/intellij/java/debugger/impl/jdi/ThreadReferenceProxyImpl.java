@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
@@ -259,7 +259,7 @@ public final class ThreadReferenceProxyImpl extends ObjectReferenceProxyImpl imp
 	 * this is useful when you need all frames but do not plan to invoke anything
 	 * as only one request is sent
 	 */
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public List<StackFrameProxyImpl> forceFrames() throws EvaluateException
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();

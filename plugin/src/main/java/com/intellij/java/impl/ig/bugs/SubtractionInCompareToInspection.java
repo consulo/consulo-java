@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiClass;
@@ -38,7 +38,7 @@ public class SubtractionInCompareToInspection extends BaseInspection {
       "subtraction.in.compareto.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "subtraction.in.compareto.problem.descriptor");

@@ -30,7 +30,7 @@ import consulo.language.ast.IElementType;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.FlipExpressionIntention", fileExtensions = "java", categories = {"Java", "Other"})
@@ -53,7 +53,7 @@ public class FlipExpressionIntention extends MutablyNamedIntention {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new ExpressionPredicate();
   }
@@ -86,7 +86,7 @@ public class FlipExpressionIntention extends MutablyNamedIntention {
   }
 
   @Override
-  protected void processIntention(Editor editor, @Nonnull PsiElement element) {
+  protected void processIntention(Editor editor, @jakarta.annotation.Nonnull PsiElement element) {
     final CaretModel caretModel = editor.getCaretModel();
     final int offset = caretModel.getOffset();
     super.processIntention(editor, element);

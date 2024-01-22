@@ -16,7 +16,7 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.impl.codeInspection.accessStaticViaInstance.AccessStaticViaInstance;

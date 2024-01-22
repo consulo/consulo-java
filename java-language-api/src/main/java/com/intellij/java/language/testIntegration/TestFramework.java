@@ -26,20 +26,20 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.module.Module;
 import consulo.ui.image.Image;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface TestFramework {
   ExtensionPointName<TestFramework> EXTENSION_NAME = ExtensionPointName.create(TestFramework.class);
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   String getName();
 
   @Nonnull
   Image getIcon();
 
-  boolean isLibraryAttached(@Nonnull Module module);
+  boolean isLibraryAttached(@jakarta.annotation.Nonnull Module module);
 
   @Nullable
   String getLibraryPath();
@@ -47,18 +47,18 @@ public interface TestFramework {
   @Nullable
   String getDefaultSuperClass();
 
-  boolean isTestClass(@Nonnull PsiElement clazz);
+  boolean isTestClass(@jakarta.annotation.Nonnull PsiElement clazz);
 
   boolean isPotentialTestClass(@Nonnull PsiElement clazz);
 
   @Nullable
-  PsiElement findSetUpMethod(@Nonnull PsiElement clazz);
+  PsiElement findSetUpMethod(@jakarta.annotation.Nonnull PsiElement clazz);
 
-  @Nullable
+  @jakarta.annotation.Nullable
   PsiElement findTearDownMethod(@Nonnull PsiElement clazz);
 
-  @Nullable
-  PsiElement findOrCreateSetUpMethod(@Nonnull PsiElement clazz) throws IncorrectOperationException;
+  @jakarta.annotation.Nullable
+  PsiElement findOrCreateSetUpMethod(@jakarta.annotation.Nonnull PsiElement clazz) throws IncorrectOperationException;
 
   FileTemplateDescriptor getSetUpMethodFileTemplateDescriptor();
 
@@ -81,6 +81,6 @@ public interface TestFramework {
     return isTestMethod(element);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   Language getLanguage();
 }

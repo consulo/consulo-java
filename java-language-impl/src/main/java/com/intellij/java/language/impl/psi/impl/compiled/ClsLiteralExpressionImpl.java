@@ -22,8 +22,7 @@ import com.intellij.java.language.psi.PsiType;
 import consulo.language.impl.ast.TreeElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class ClsLiteralExpressionImpl extends ClsElementImpl implements PsiLiteralExpression {
   private ClsElementImpl myParent;
@@ -68,7 +67,7 @@ public class ClsLiteralExpressionImpl extends ClsElementImpl implements PsiLiter
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiElement[] getChildren() {
     return PsiElement.EMPTY_ARRAY;
   }
@@ -83,7 +82,7 @@ public class ClsLiteralExpressionImpl extends ClsElementImpl implements PsiLiter
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitLiteralExpression(this);
     }

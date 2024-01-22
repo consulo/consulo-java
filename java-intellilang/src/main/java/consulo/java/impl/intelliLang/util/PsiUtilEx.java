@@ -30,8 +30,8 @@ import consulo.project.Project;
 import consulo.util.lang.Comparing;
 import consulo.virtualFileSystem.VirtualFile;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class PsiUtilEx {
 
@@ -98,7 +98,7 @@ public class PsiUtilEx {
     return JavaClassNames.JAVA_LANG_STRING.equals(type.getCanonicalText());
   }
 
-  public static boolean isStringOrStringArray(@Nonnull PsiType type) {
+  public static boolean isStringOrStringArray(@jakarta.annotation.Nonnull PsiType type) {
     if (type instanceof PsiArrayType) {
       return isString(((PsiArrayType)type).getComponentType());
     }

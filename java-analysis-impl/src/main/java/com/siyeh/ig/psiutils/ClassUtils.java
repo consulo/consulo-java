@@ -23,10 +23,10 @@ import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Contract;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -193,7 +193,7 @@ public class ClassUtils {
     return parentClass != null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static PsiClass getContainingClass(PsiElement element) {
     return PsiTreeUtil.getParentOfType(element, PsiClass.class);
   }

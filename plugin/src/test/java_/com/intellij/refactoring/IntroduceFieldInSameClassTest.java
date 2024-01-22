@@ -7,7 +7,7 @@ import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.impl.refactoring.introduceField.BaseExpressionToFieldHandler;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import com.intellij.testFramework.LightCodeInsightTestCase;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.List;
 

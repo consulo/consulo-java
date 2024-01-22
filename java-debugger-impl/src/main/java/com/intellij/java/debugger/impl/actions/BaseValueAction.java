@@ -19,7 +19,7 @@
  */
 package com.intellij.java.debugger.impl.actions;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.DebuggerInvocationUtil;
 import com.intellij.java.debugger.impl.DebuggerManagerEx;

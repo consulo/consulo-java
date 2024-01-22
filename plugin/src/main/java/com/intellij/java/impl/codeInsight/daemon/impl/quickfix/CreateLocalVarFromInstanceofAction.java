@@ -49,8 +49,8 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -209,7 +209,7 @@ public class CreateLocalVarFromInstanceofAction extends BaseIntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) {
+  public void invoke(@jakarta.annotation.Nonnull final Project project, final Editor editor, final PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
 
     PsiInstanceOfExpression instanceOfExpression = getInstanceOfExpressionAtCaret(editor, file);
@@ -290,7 +290,7 @@ public class CreateLocalVarFromInstanceofAction extends BaseIntentionAction {
     return null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static PsiDeclarationStatement createLocalVariableDeclaration(final PsiInstanceOfExpression instanceOfExpression,
                                                                         final PsiStatement statementInside) throws IncorrectOperationException {
     PsiElementFactory factory = JavaPsiFacade.getInstance(instanceOfExpression.getProject()).getElementFactory();

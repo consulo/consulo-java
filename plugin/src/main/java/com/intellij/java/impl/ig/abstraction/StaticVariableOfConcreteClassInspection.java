@@ -23,7 +23,7 @@ import com.intellij.java.language.psi.PsiTypeElement;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.JComponent;
 
@@ -41,7 +41,7 @@ public class StaticVariableOfConcreteClassInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "static.variable.of.concrete.class.problem.descriptor",
@@ -65,7 +65,7 @@ public class StaticVariableOfConcreteClassInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@Nonnull PsiField field) {
+    public void visitField(@jakarta.annotation.Nonnull PsiField field) {
       super.visitField(field);
       if (!field.hasModifierProperty(PsiModifier.STATIC)) {
         return;

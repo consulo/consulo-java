@@ -15,8 +15,8 @@ import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Objects;
 
 public class PsiPatternVariableImpl extends CompositePsiElement implements PsiPatternVariable, Constants {
@@ -31,7 +31,7 @@ public class PsiPatternVariableImpl extends CompositePsiElement implements PsiPa
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiIdentifier getNameIdentifier() {
     return Objects.requireNonNull(PsiTreeUtil.getChildOfType(this, PsiIdentifier.class));
   }
@@ -122,7 +122,7 @@ public class PsiPatternVariableImpl extends CompositePsiElement implements PsiPa
     return Objects.requireNonNull(PsiTreeUtil.getChildOfType(this, PsiTypeElement.class));
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public PsiExpression getInitializer() {
     return null;

@@ -1,8 +1,10 @@
 // "Bind Constructor Parameters to Fields" "true"
 
+import jakarta.annotation.Nullable;
+
 public class TestBefore {
 
-    public TestBefore(@javax.annotation.Nullable String name<caret>, @javax.annotation.Nullable String name2) {
+    public TestBefore(@Nullable String name<caret>, @Nullable String name2) {
         super();
     }
 }

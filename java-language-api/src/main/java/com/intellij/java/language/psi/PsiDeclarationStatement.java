@@ -16,8 +16,7 @@
 package com.intellij.java.language.psi;
 
 import consulo.language.psi.PsiElement;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Represents a Java local variable or class declaration statement.

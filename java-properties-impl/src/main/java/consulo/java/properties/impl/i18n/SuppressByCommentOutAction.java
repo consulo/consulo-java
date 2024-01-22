@@ -23,7 +23,6 @@ import consulo.language.ast.IElementType;
 import consulo.language.editor.DaemonCodeAnalyzer;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.inject.InjectedEditorManager;
-import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.intention.SuppressIntentionAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiComment;
@@ -34,7 +33,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * User: cdr
@@ -47,7 +46,7 @@ class SuppressByCommentOutAction extends SuppressIntentionAction implements Synt
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
+  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, @jakarta.annotation.Nonnull PsiElement element) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(element)) return;
     element = findJavaCodeUpThere(element);
     PsiFile file = element.getContainingFile();
@@ -78,7 +77,7 @@ class SuppressByCommentOutAction extends SuppressIntentionAction implements Synt
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, @jakarta.annotation.Nonnull PsiElement element) {
     if (!element.isValid()) {
       return false;
     }
@@ -94,7 +93,7 @@ class SuppressByCommentOutAction extends SuppressIntentionAction implements Synt
     return null;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getText() {
     return "Suppress with '" + nonNlsCommentPattern + "' comment";

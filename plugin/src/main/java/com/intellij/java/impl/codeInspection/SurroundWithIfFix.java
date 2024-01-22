@@ -39,7 +39,7 @@ import com.siyeh.ig.psiutils.ParenthesesUtils;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author ven
@@ -50,7 +50,7 @@ public class SurroundWithIfFix implements LocalQuickFix {
   private final String mySuffix;
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getName() {
     return InspectionsBundle.message("inspection.surround.if.quickfix", myText, mySuffix);
   }
@@ -61,7 +61,7 @@ public class SurroundWithIfFix implements LocalQuickFix {
   }
 
   @Override
-  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+  public void applyFix(@jakarta.annotation.Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
     PsiElement element = descriptor.getPsiElement();
     PsiElement anchorStatement = RefactoringUtil.getParentStatement(element, false);
     LOG.assertTrue(anchorStatement != null);

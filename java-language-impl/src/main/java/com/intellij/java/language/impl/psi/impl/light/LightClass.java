@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.impl.psi.impl.light;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.language.Language;
 import com.intellij.java.language.JavaLanguage;

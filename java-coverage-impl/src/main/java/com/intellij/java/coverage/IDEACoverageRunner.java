@@ -7,9 +7,9 @@ import consulo.container.plugin.PluginManager;
 import consulo.execution.coverage.CoverageSuite;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.logging.Logger;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 

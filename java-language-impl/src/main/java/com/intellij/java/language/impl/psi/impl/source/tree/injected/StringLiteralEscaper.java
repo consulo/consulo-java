@@ -20,7 +20,7 @@ import consulo.document.util.TextRange;
 import consulo.language.psi.LiteralTextEscaper;
 import consulo.language.psi.PsiLanguageInjectionHost;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiLiteralExpressionImpl;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author cdr

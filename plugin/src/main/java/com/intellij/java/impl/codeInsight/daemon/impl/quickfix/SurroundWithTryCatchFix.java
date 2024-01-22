@@ -19,7 +19,6 @@ import consulo.language.editor.FileModificationService;
 import com.intellij.java.language.psi.*;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.java.impl.codeInsight.generation.surroundWith.JavaWithTryCatchSurrounder;
-import consulo.language.editor.intention.IntentionAction;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.LogicalPosition;
 import consulo.codeEditor.ScrollType;
@@ -32,7 +31,7 @@ import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author mike
@@ -60,7 +59,7 @@ public class SurroundWithTryCatchFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
     return myStatement != null &&
            myStatement.isValid() &&
            (!(myStatement instanceof PsiExpressionStatement) ||

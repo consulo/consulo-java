@@ -35,7 +35,7 @@ import consulo.project.Project;
 import consulo.project.util.query.QueryExecutorBase;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author max
@@ -43,7 +43,7 @@ import javax.annotation.Nonnull;
 @ExtensionImpl
 public class MethodUsagesSearcher extends QueryExecutorBase<PsiReference, MethodReferencesSearch.SearchParameters> implements MethodReferencesSearchExecutor {
   @Override
-  public void processQuery(@Nonnull final MethodReferencesSearch.SearchParameters p, @Nonnull final Processor<? super PsiReference> consumer) {
+  public void processQuery(@jakarta.annotation.Nonnull final MethodReferencesSearch.SearchParameters p, @jakarta.annotation.Nonnull final Processor<? super PsiReference> consumer) {
     final PsiMethod method = p.getMethod();
     final boolean[] isConstructor = new boolean[1];
     final PsiManager[] psiManager = new PsiManager[1];
@@ -126,7 +126,7 @@ public class MethodUsagesSearcher extends QueryExecutorBase<PsiReference, Method
     });
   }
 
-  static <T> T resolveInReadAction(@Nonnull Project p, @Nonnull Computable<T> computable) {
+  static <T> T resolveInReadAction(@Nonnull Project p, @jakarta.annotation.Nonnull Computable<T> computable) {
     return ApplicationManager.getApplication().isReadAccessAllowed() ? computable.compute() : DumbService.getInstance(p).runReadActionInSmartMode(computable);
   }
 

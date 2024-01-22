@@ -14,7 +14,7 @@ import consulo.language.psi.stub.StubElement;
 import consulo.util.collection.ArrayUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.ContainerUtil;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class PsiClassReferenceListStubImpl extends StubBase<PsiReferenceList> implements PsiClassReferenceListStub
 {

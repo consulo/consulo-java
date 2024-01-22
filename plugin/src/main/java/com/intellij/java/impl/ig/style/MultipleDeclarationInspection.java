@@ -24,7 +24,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.NormalizeDeclarationFix;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -35,14 +35,14 @@ public class MultipleDeclarationInspection extends BaseInspection {
   public boolean ignoreForLoopDeclarations = true;
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "multiple.declaration.display.name");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "MultipleVariablesInDeclaration";
   }
@@ -101,7 +101,7 @@ public class MultipleDeclarationInspection extends BaseInspection {
     }
 
     @Override
-    public void visitField(@Nonnull PsiField field) {
+    public void visitField(@jakarta.annotation.Nonnull PsiField field) {
       super.visitField(field);
       if (childrenContainTypeElement(field)) {
         return;

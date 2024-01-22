@@ -19,14 +19,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.JavaTestUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.rename.inplace.MemberInplaceRenameHandler;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 import com.intellij.testFramework.fixtures.CodeInsightTestUtil;
 import consulo.language.editor.TargetElementUtil;
+import jakarta.annotation.Nonnull;
 
 /**
  * User: anna

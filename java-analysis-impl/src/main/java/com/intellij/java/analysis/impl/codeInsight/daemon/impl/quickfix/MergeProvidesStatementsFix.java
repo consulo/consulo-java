@@ -19,10 +19,10 @@ import com.intellij.java.language.psi.*;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.psi.PsiElement;
 import consulo.util.collection.ContainerUtil;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,7 +34,7 @@ import java.util.stream.StreamSupport;
 public class MergeProvidesStatementsFix extends MergeModuleStatementsFix<PsiProvidesStatement> {
   private final String myInterfaceName;
 
-  MergeProvidesStatementsFix(@Nonnull PsiJavaModule javaModule, @Nonnull String interfaceName) {
+  MergeProvidesStatementsFix(@jakarta.annotation.Nonnull PsiJavaModule javaModule, @jakarta.annotation.Nonnull String interfaceName) {
     super(javaModule);
     myInterfaceName = interfaceName;
   }
@@ -46,22 +46,22 @@ public class MergeProvidesStatementsFix extends MergeModuleStatementsFix<PsiProv
   }
 
   @Nls
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getFamilyName() {
     return JavaQuickFixBundle.message("java.9.merge.module.statements.fix.family.name", PsiKeyword.PROVIDES);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
-  protected String getReplacementText(@Nonnull List<PsiProvidesStatement> statementsToMerge) {
+  protected String getReplacementText(@jakarta.annotation.Nonnull List<PsiProvidesStatement> statementsToMerge) {
     final List<String> implementationNames = getImplementationNames(statementsToMerge);
     LOG.assertTrue(!implementationNames.isEmpty());
     return PsiKeyword.PROVIDES + " " + myInterfaceName + " " + PsiKeyword.WITH + " " + joinUniqueNames(implementationNames) + ";";
   }
 
-  @Nonnull
-  private static List<String> getImplementationNames(@Nonnull List<PsiProvidesStatement> statements) {
+  @jakarta.annotation.Nonnull
+  private static List<String> getImplementationNames(@jakarta.annotation.Nonnull List<PsiProvidesStatement> statements) {
     List<String> list = new ArrayList<>();
     for (PsiProvidesStatement statement : statements) {
       PsiReferenceList implementationList = statement.getImplementationList();
@@ -75,9 +75,9 @@ public class MergeProvidesStatementsFix extends MergeModuleStatementsFix<PsiProv
     return list;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
-  protected List<PsiProvidesStatement> getStatementsToMerge(@Nonnull PsiJavaModule javaModule) {
+  protected List<PsiProvidesStatement> getStatementsToMerge(@jakarta.annotation.Nonnull PsiJavaModule javaModule) {
     return StreamSupport.stream(javaModule.getProvides().spliterator(), false).filter(statement ->
     {
       final PsiJavaCodeReferenceElement reference = statement.getInterfaceReference();

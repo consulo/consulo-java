@@ -2,7 +2,7 @@ package com.siyeh.igtest.style;
 
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class One extends BaseInspection {
 

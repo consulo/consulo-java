@@ -16,8 +16,8 @@ import consulo.util.lang.CharArrayUtil;
 import consulo.util.lang.Pair;
 import org.jetbrains.annotations.PropertyKey;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import static com.intellij.java.language.impl.parser.JavaParserUtil.*;
 import static consulo.language.parser.PsiBuilderUtil.expect;
@@ -757,7 +757,7 @@ public class DeclarationParser {
     return param;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private PsiBuilder.Marker parseFieldOrLocalVariable(PsiBuilder builder, PsiBuilder.Marker declaration, int declarationStart, Context context) {
     final IElementType varType;
     if (context == Context.CLASS || context == Context.ANNOTATION_INTERFACE) {

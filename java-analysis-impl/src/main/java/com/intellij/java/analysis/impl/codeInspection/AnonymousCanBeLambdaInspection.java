@@ -45,7 +45,7 @@ import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.*;
@@ -95,7 +95,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
     return new AnonymousCanBeLambdaInspectionState();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
                                             boolean isOnTheFly,
@@ -200,7 +200,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
     return PsiType.NULL;
   }
 
-  public static boolean canBeConvertedToLambda(PsiAnonymousClass aClass, boolean acceptParameterizedFunctionTypes, @Nonnull Set<String> ignoredRuntimeAnnotations) {
+  public static boolean canBeConvertedToLambda(PsiAnonymousClass aClass, boolean acceptParameterizedFunctionTypes, @jakarta.annotation.Nonnull Set<String> ignoredRuntimeAnnotations) {
     return canBeConvertedToLambda(aClass, acceptParameterizedFunctionTypes, true, ignoredRuntimeAnnotations);
   }
 
@@ -242,7 +242,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
     return false;
   }
 
-  public static PsiExpression replaceAnonymousWithLambda(@Nonnull PsiElement anonymousClass, PsiType expectedType) {
+  public static PsiExpression replaceAnonymousWithLambda(@jakarta.annotation.Nonnull PsiElement anonymousClass, PsiType expectedType) {
     PsiNewExpression newArrayExpression = (PsiNewExpression) JavaPsiFacade.getElementFactory(anonymousClass.getProject()).createExpressionFromText("new " + expectedType.getCanonicalText() +
         "[]{" + anonymousClass.getText() + "}", anonymousClass);
     PsiArrayInitializerExpression initializer = newArrayExpression.getArrayInitializer();
@@ -393,7 +393,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
     }
 
     @Override
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(@jakarta.annotation.Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
       final PsiElement element = descriptor.getPsiElement();
       if (element != null) {
         replacePsiElementWithLambda(element, false, false);

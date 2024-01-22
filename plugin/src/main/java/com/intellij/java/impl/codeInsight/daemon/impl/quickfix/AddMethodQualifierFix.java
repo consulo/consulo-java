@@ -23,7 +23,6 @@ import consulo.ide.impl.idea.ui.popup.list.ListPopupImpl;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.WriteCommandAction;
-import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.language.psi.PsiElement;
@@ -37,7 +36,7 @@ import consulo.ui.ex.popup.PopupStep;
 import consulo.ui.image.Image;
 import org.jetbrains.annotations.TestOnly;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,7 +68,7 @@ public class AddMethodQualifierFix implements SyntheticIntentionAction {
 
   @Override
   @RequiredReadAction
-  public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
+  public boolean isAvailable(@jakarta.annotation.Nonnull final Project project, final Editor editor, final PsiFile file) {
     final PsiMethodCallExpression element = myMethodCall.getElement();
     if (element == null || !element.isValid()) {
       return false;
@@ -120,7 +119,7 @@ public class AddMethodQualifierFix implements SyntheticIntentionAction {
 
   @Override
   @RequiredWriteAction
-  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
+  public void invoke(@jakarta.annotation.Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementsForWrite(file)) {
       return;
     }
@@ -149,7 +148,7 @@ public class AddMethodQualifierFix implements SyntheticIntentionAction {
           return FINAL_CHOICE;
         }
 
-        @Nonnull
+        @jakarta.annotation.Nonnull
         @Override
         public String getTextFor(final PsiVariable value) {
           return value.getName();

@@ -25,7 +25,7 @@ import consulo.module.content.ModuleRootManager;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -38,7 +38,7 @@ public class LanguageLevelUsagesCollector extends AbstractApplicationUsagesColle
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public Set<UsageDescriptor> getProjectUsages(@Nonnull Project project) {
     final Set<String> languageLevels = new HashSet<String>();
     for (Module module : ModuleManager.getInstance(project).getModules()) {

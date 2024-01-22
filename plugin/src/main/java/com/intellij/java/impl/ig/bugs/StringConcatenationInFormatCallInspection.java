@@ -27,14 +27,14 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.intellij.java.impl.ig.psiutils.FormatUtils;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
-import javax.annotation.Nonnull;
 
 @ExtensionImpl
 public class StringConcatenationInFormatCallInspection extends BaseInspection {
 
   @Nls
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("string.concatenation.in.format.call.display.name");
@@ -60,7 +60,7 @@ public class StringConcatenationInFormatCallInspection extends BaseInspection {
       myPlural = plural;
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       if (myPlural) {
         return InspectionGadgetsBundle.message("string.concatenation.in.format.call.plural.quickfix");

@@ -20,7 +20,7 @@ import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.io.IOException;
 import java.util.*;
 

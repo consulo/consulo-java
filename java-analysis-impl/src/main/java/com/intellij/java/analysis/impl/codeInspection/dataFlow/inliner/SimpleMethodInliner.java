@@ -13,8 +13,7 @@ import com.siyeh.ig.psiutils.ControlFlowUtils;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.lang.ref.Ref;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import static consulo.util.lang.ObjectUtil.tryCast;
 

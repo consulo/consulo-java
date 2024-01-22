@@ -26,10 +26,10 @@ import consulo.language.psi.PsiQualifiedReferenceElement;
 import consulo.logging.Logger;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.xml.XmlStringUtil;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.intellij.lang.annotations.Flow;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -39,7 +39,7 @@ public class AnnotationDocGenerator {
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.javadoc.AnnotationGenerator");
   @Nonnull
   private final PsiAnnotation myAnnotation;
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private final PsiJavaCodeReferenceElement myNameReference;
   @Nonnull
   private final PsiModifierListOwner myOwner;
@@ -47,7 +47,7 @@ public class AnnotationDocGenerator {
   private final PsiClass myTargetClass;
   private final boolean myResolveNotPossible;
 
-  private AnnotationDocGenerator(@Nonnull PsiAnnotation annotation, @Nonnull PsiJavaCodeReferenceElement nameReference, @Nonnull PsiModifierListOwner owner) {
+  private AnnotationDocGenerator(@Nonnull PsiAnnotation annotation, @Nonnull PsiJavaCodeReferenceElement nameReference, @jakarta.annotation.Nonnull PsiModifierListOwner owner) {
     myAnnotation = annotation;
     myNameReference = nameReference;
     myOwner = owner;
@@ -189,7 +189,7 @@ public class AnnotationDocGenerator {
     buffer.append(XmlStringUtil.escapeString(memberValue.getText()));
   }
 
-  public static List<AnnotationDocGenerator> getAnnotationsToShow(@Nonnull PsiModifierListOwner owner) {
+  public static List<AnnotationDocGenerator> getAnnotationsToShow(@jakarta.annotation.Nonnull PsiModifierListOwner owner) {
     List<AnnotationDocGenerator> infos = new ArrayList<>();
 
 		Set<String> shownAnnotations = new HashSet<>();

@@ -31,9 +31,8 @@ import consulo.language.psi.AbstractElementManipulator;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiFileFactory;
 import consulo.language.util.IncorrectOperationException;
+import jakarta.annotation.Nonnull;
 import org.osmorc.manifest.lang.ManifestFileType;
-
-import javax.annotation.Nonnull;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)

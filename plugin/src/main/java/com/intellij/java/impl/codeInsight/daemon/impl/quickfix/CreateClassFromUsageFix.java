@@ -30,8 +30,7 @@ import com.intellij.java.language.psi.PsiClass;
 import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import consulo.language.util.IncorrectOperationException;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author Mike

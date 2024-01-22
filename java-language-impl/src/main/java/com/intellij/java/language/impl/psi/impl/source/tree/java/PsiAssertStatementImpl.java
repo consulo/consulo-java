@@ -27,7 +27,7 @@ import consulo.language.ast.IElementType;
 import consulo.language.ast.ChildRoleBase;
 import consulo.logging.Logger;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class PsiAssertStatementImpl extends CompositePsiElement implements PsiAssertStatement, Constants {
   private static final Logger LOG = Logger.getInstance(PsiAssertStatementImpl.class);

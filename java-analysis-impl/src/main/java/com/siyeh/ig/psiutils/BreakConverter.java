@@ -5,9 +5,9 @@ import com.intellij.java.language.psi.*;
 import com.siyeh.ig.fixes.DeleteUnnecessaryStatementFix;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -126,7 +126,7 @@ public class BreakConverter {
     return false;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static BreakConverter from(PsiSwitchBlock switchStatement) {
     String replacement = switchStatement instanceof PsiSwitchStatement ? getReplacement((PsiStatement) switchStatement) : null;
     if (replacement == null) {

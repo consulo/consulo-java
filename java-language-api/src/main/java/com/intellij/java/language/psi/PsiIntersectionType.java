@@ -20,7 +20,7 @@ import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.*;
 
 /**
@@ -37,7 +37,7 @@ public class PsiIntersectionType extends PsiType.Stub {
   }
 
   @Nonnull
-  public static PsiType createIntersection(@Nonnull List<PsiType> conjuncts) {
+  public static PsiType createIntersection(@jakarta.annotation.Nonnull List<PsiType> conjuncts) {
     return createIntersection(conjuncts.toArray(createArray(conjuncts.size())));
   }
 
@@ -140,7 +140,7 @@ public class PsiIntersectionType extends PsiType.Stub {
   }
 
   @Override
-  public <A> A accept(@Nonnull PsiTypeVisitor<A> visitor) {
+  public <A> A accept(@jakarta.annotation.Nonnull PsiTypeVisitor<A> visitor) {
     return visitor.visitIntersectionType(this);
   }
 

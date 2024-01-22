@@ -17,9 +17,9 @@ package com.intellij.java.language.impl.psi.scope;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 import com.intellij.java.language.psi.infos.CandidateInfo;
+import jakarta.annotation.Nullable;
 
 /**
  * Created by IntelliJ IDEA.

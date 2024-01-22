@@ -16,8 +16,8 @@ import consulo.language.psi.ResolveResult;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.lang.ref.Ref;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.HashMap;
@@ -91,8 +91,8 @@ public class JavaPropertiesUtil {
 
 
   public static boolean isValidPropertyReference(@Nonnull Project project,
-                                                 @Nonnull PsiLiteralExpression expression,
-                                                 @Nonnull String key,
+                                                 @jakarta.annotation.Nonnull PsiLiteralExpression expression,
+                                                 @jakarta.annotation.Nonnull String key,
                                                  @Nonnull Ref<String> outResourceBundle) {
     final HashMap<String, Object> annotationAttributeValues = new HashMap<String, Object>();
     annotationAttributeValues.put(AnnotationUtil.PROPERTY_KEY_RESOURCE_BUNDLE_PARAMETER, null);

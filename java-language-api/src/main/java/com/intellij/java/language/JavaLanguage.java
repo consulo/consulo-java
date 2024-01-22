@@ -17,7 +17,7 @@ package com.intellij.java.language;
 
 import java.util.Arrays;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.language.version.LanguageVersion;
 import consulo.language.Language;

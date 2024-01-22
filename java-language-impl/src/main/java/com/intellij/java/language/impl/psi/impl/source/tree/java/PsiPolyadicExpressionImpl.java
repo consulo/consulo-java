@@ -34,8 +34,8 @@ import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.logging.Logger;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.function.Function;
 
 public class PsiPolyadicExpressionImpl extends ExpressionPsiElement implements PsiPolyadicExpression {
@@ -46,13 +46,13 @@ public class PsiPolyadicExpressionImpl extends ExpressionPsiElement implements P
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public IElementType getOperationTokenType() {
     return ((PsiJavaToken) findChildByRoleAsPsiElement(ChildRole.OPERATION_SIGN)).getTokenType();
   }
 
   @Override
-  public PsiJavaToken getTokenBeforeOperand(@Nonnull PsiExpression operand) {
+  public PsiJavaToken getTokenBeforeOperand(@jakarta.annotation.Nonnull PsiExpression operand) {
     PsiElement element = operand;
     while (element != null) {
       if (getChildRole(element.getNode()) == ChildRole.OPERATION_SIGN) {
@@ -139,15 +139,15 @@ public class PsiPolyadicExpressionImpl extends ExpressionPsiElement implements P
   }
 
   @Override
-  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
+  public boolean processDeclarations(@jakarta.annotation.Nonnull PsiScopeProcessor processor,
                                      @Nonnull ResolveState state,
                                      PsiElement lastParent,
-                                     @Nonnull PsiElement place) {
+                                     @jakarta.annotation.Nonnull PsiElement place) {
     return processDeclarations(this, processor, state, lastParent, place);
   }
 
-  static boolean processDeclarations(@Nonnull PsiPolyadicExpression expression,
-                                     @Nonnull PsiScopeProcessor processor,
+  static boolean processDeclarations(@jakarta.annotation.Nonnull PsiPolyadicExpression expression,
+                                     @jakarta.annotation.Nonnull PsiScopeProcessor processor,
                                      @Nonnull ResolveState state,
                                      PsiElement lastParent,
                                      @Nonnull PsiElement place) {

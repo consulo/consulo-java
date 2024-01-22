@@ -17,7 +17,7 @@ package com.intellij.java.debugger.impl.memory.utils;
 
 import java.util.regex.Pattern;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.util.lang.StringUtil;
 import consulo.internal.com.sun.jdi.ArrayReference;
@@ -25,7 +25,7 @@ import consulo.internal.com.sun.jdi.ObjectReference;
 
 class NamesUtils
 {
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	static String getUniqueName(@Nonnull ObjectReference ref)
 	{
 		String shortName = StringUtil.getShortName(ref.referenceType().name());

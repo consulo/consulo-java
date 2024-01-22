@@ -24,7 +24,7 @@
  */
 package org.osmorc.manifest.lang.valueparser.impl.valueobject;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Author: Robert F. Beeger (robert@beeger.net)
@@ -40,8 +40,8 @@ public class VersionRange {
   private final Boundary _ceilingBoundary;
 
   public VersionRange(@Nonnull Boundary floorBoundary,
-                      @Nonnull Version floor,
-                      @Nonnull Version ceiling,
+                      @jakarta.annotation.Nonnull Version floor,
+                      @jakarta.annotation.Nonnull Version ceiling,
                       @Nonnull Boundary ceilingBoundary) {
     _floorBoundary = floorBoundary;
     _floor = floor;
@@ -49,14 +49,14 @@ public class VersionRange {
     _ceilingBoundary = ceilingBoundary;
   }
 
-  public VersionRange(@Nonnull Version atleast) {
+  public VersionRange(@jakarta.annotation.Nonnull Version atleast) {
     _floor = atleast;
     _floorBoundary = Boundary.INCLUSIVE;
     _ceiling = null;
     _ceilingBoundary = null;
   }
 
-  public boolean contains(@Nonnull Version version) {
+  public boolean contains(@jakarta.annotation.Nonnull Version version) {
     return checkFloor(version) && checkCeiling(version);
   }
 
@@ -65,7 +65,7 @@ public class VersionRange {
     return _floorBoundary == Boundary.INCLUSIVE ? comparison >= 0 : comparison > 0;
   }
 
-  private boolean checkCeiling(@Nonnull Version version) {
+  private boolean checkCeiling(@jakarta.annotation.Nonnull Version version) {
     if (_ceiling != null) {
       int comparison = version.compareTo(_ceiling);
       return _ceilingBoundary == Boundary.INCLUSIVE ? comparison <= 0 : comparison < 0;

@@ -30,8 +30,8 @@ import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.HashSet;
 
 /**
@@ -57,8 +57,8 @@ public abstract class PsiShortNamesCache {
    * @param name the name of the files to find.
    * @return the list of files in the project which have the specified name.
    */
-  @Nonnull
-  public PsiFile[] getFilesByName(@Nonnull String name) {
+  @jakarta.annotation.Nonnull
+  public PsiFile[] getFilesByName(@jakarta.annotation.Nonnull String name) {
     return PsiFile.EMPTY_ARRAY;
   }
 
@@ -80,7 +80,7 @@ public abstract class PsiShortNamesCache {
    * @return the list of found classes.
    */
   @Nonnull
-  public abstract PsiClass[] getClassesByName(@Nonnull @NonNls String name, @Nonnull GlobalSearchScope scope);
+  public abstract PsiClass[] getClassesByName(@jakarta.annotation.Nonnull @NonNls String name, @jakarta.annotation.Nonnull GlobalSearchScope scope);
 
   /**
    * Returns the list of names of all classes in the project and
@@ -88,7 +88,7 @@ public abstract class PsiShortNamesCache {
    *
    * @return the list of all class names.
    */
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public abstract String[] getAllClassNames();
 
   public boolean processAllClassNames(Processor<String> processor) {
@@ -114,20 +114,20 @@ public abstract class PsiShortNamesCache {
    * @param scope the scope in which methods are searched.
    * @return the list of found methods.
    */
-  @Nonnull
-  public abstract PsiMethod[] getMethodsByName(@NonNls @Nonnull String name, @Nonnull GlobalSearchScope scope);
+  @jakarta.annotation.Nonnull
+  public abstract PsiMethod[] getMethodsByName(@NonNls @jakarta.annotation.Nonnull String name, @jakarta.annotation.Nonnull GlobalSearchScope scope);
 
-  @Nonnull
-  public abstract PsiMethod[] getMethodsByNameIfNotMoreThan(@NonNls @Nonnull String name, @Nonnull GlobalSearchScope scope, int maxCount);
+  @jakarta.annotation.Nonnull
+  public abstract PsiMethod[] getMethodsByNameIfNotMoreThan(@NonNls @jakarta.annotation.Nonnull String name, @jakarta.annotation.Nonnull GlobalSearchScope scope, int maxCount);
 
-  @Nonnull
-  public abstract PsiField[] getFieldsByNameIfNotMoreThan(@NonNls @Nonnull String name, @Nonnull GlobalSearchScope scope, int maxCount);
+  @jakarta.annotation.Nonnull
+  public abstract PsiField[] getFieldsByNameIfNotMoreThan(@NonNls @jakarta.annotation.Nonnull String name, @jakarta.annotation.Nonnull GlobalSearchScope scope, int maxCount);
 
-  public abstract boolean processMethodsWithName(@NonNls @Nonnull String name, @Nonnull GlobalSearchScope scope,
-                                                 @Nonnull Processor<PsiMethod> processor);
+  public abstract boolean processMethodsWithName(@NonNls @Nonnull String name, @jakarta.annotation.Nonnull GlobalSearchScope scope,
+                                                 @jakarta.annotation.Nonnull Processor<PsiMethod> processor);
 
-  public abstract boolean processMethodsWithName(@NonNls @Nonnull String name, @Nonnull Processor<? super PsiMethod> processor,
-                                                 @Nonnull GlobalSearchScope scope, @Nullable IdFilter filter);
+  public abstract boolean processMethodsWithName(@NonNls @jakarta.annotation.Nonnull String name, @jakarta.annotation.Nonnull Processor<? super PsiMethod> processor,
+                                                 @jakarta.annotation.Nonnull GlobalSearchScope scope, @Nullable IdFilter filter);
 
   public boolean processAllMethodNames(Processor<String> processor, GlobalSearchScope scope, IdFilter filter) {
     return ContainerUtil.process(getAllFieldNames(), processor);
@@ -152,7 +152,7 @@ public abstract class PsiShortNamesCache {
    *
    * @param set the set to add the names to.
    */
-  public abstract void getAllMethodNames(@Nonnull HashSet<String> set);
+  public abstract void getAllMethodNames(@jakarta.annotation.Nonnull HashSet<String> set);
 
   /**
    * Returns the list of all fields with the specified name in the specified scope.
@@ -162,7 +162,7 @@ public abstract class PsiShortNamesCache {
    * @return the list of found fields.
    */
   @Nonnull
-  public abstract PsiField[] getFieldsByName(@Nonnull @NonNls String name, @Nonnull GlobalSearchScope scope);
+  public abstract PsiField[] getFieldsByName(@jakarta.annotation.Nonnull @NonNls String name, @jakarta.annotation.Nonnull GlobalSearchScope scope);
 
   /**
    * Returns the list of names of all fields in the project and
@@ -179,11 +179,11 @@ public abstract class PsiShortNamesCache {
    *
    * @param set the set to add the names to.
    */
-  public abstract void getAllFieldNames(@Nonnull HashSet<String> set);
+  public abstract void getAllFieldNames(@jakarta.annotation.Nonnull HashSet<String> set);
 
-  public abstract boolean processFieldsWithName(@Nonnull String name, @Nonnull Processor<? super PsiField> processor,
+  public abstract boolean processFieldsWithName(@jakarta.annotation.Nonnull String name, @jakarta.annotation.Nonnull Processor<? super PsiField> processor,
                                                 @Nonnull GlobalSearchScope scope, @Nullable IdFilter filter);
 
-  public abstract boolean processClassesWithName(@Nonnull String name, @Nonnull Processor<? super PsiClass> processor,
-                                                 @Nonnull GlobalSearchScope scope, @Nullable IdFilter filter);
+  public abstract boolean processClassesWithName(@jakarta.annotation.Nonnull String name, @jakarta.annotation.Nonnull Processor<? super PsiClass> processor,
+                                                 @jakarta.annotation.Nonnull GlobalSearchScope scope, @Nullable IdFilter filter);
 }

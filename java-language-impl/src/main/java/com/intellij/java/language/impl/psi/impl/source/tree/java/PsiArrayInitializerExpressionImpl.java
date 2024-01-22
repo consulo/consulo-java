@@ -29,7 +29,7 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.util.CharTable;
 import consulo.logging.Logger;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class PsiArrayInitializerExpressionImpl extends ExpressionPsiElement implements PsiArrayInitializerExpression, Constants {
   private static final Logger LOG = Logger.getInstance(PsiArrayInitializerExpressionImpl.class);
@@ -104,7 +104,7 @@ public class PsiArrayInitializerExpressionImpl extends ExpressionPsiElement impl
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor){
+  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor){
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitArrayInitializerExpression(this);
     }

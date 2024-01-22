@@ -29,8 +29,8 @@ import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.Pair;
 import org.jetbrains.annotations.Contract;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
 
@@ -192,7 +192,7 @@ public final class JavaReflectionReferenceUtil {
     return null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static ReflectiveType getClassInstanceType(@Nullable PsiExpression expression) {
     expression = PsiUtil.skipParenthesizedExprDown(expression);
     if (expression == null) {
@@ -227,13 +227,13 @@ public final class JavaReflectionReferenceUtil {
 
   @Contract("null,_->null")
   @Nullable
-  public static <T> T computeConstantExpression(@Nullable PsiExpression expression, @Nonnull Class<T> expectedType) {
+  public static <T> T computeConstantExpression(@Nullable PsiExpression expression, @jakarta.annotation.Nonnull Class<T> expectedType) {
     expression = PsiUtil.skipParenthesizedExprDown(expression);
     final Object computed = JavaConstantExpressionEvaluator.computeConstantExpression(expression, false);
     return ObjectUtil.tryCast(computed, expectedType);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static ReflectiveClass getReflectiveClass(PsiExpression context) {
     final ReflectiveType reflectiveType = getReflectiveType(context);
     return reflectiveType != null ? reflectiveType.getReflectiveClass() : null;
@@ -251,14 +251,14 @@ public final class JavaReflectionReferenceUtil {
     return expression;
   }
 
-  @Nullable
-  private static PsiExpression findVariableDefinition(@Nonnull PsiReferenceExpression referenceExpression) {
+  @jakarta.annotation.Nullable
+  private static PsiExpression findVariableDefinition(@jakarta.annotation.Nonnull PsiReferenceExpression referenceExpression) {
     final PsiElement resolved = referenceExpression.resolve();
     return resolved instanceof PsiVariable ? findVariableDefinition(referenceExpression, (PsiVariable) resolved) : null;
   }
 
-  @Nullable
-  private static PsiExpression findVariableDefinition(@Nonnull PsiReferenceExpression referenceExpression, @Nonnull PsiVariable variable) {
+  @jakarta.annotation.Nullable
+  private static PsiExpression findVariableDefinition(@jakarta.annotation.Nonnull PsiReferenceExpression referenceExpression, @jakarta.annotation.Nonnull PsiVariable variable) {
     if (variable.hasModifierProperty(PsiModifier.FINAL)) {
       final PsiExpression initializer = variable.getInitializer();
       if (initializer != null) {
@@ -271,8 +271,8 @@ public final class JavaReflectionReferenceUtil {
     return DeclarationSearchUtils.findDefinition(referenceExpression, variable);
   }
 
-  @Nullable
-  private static PsiExpression findFinalFieldDefinition(@Nonnull PsiReferenceExpression referenceExpression, @Nonnull PsiField field) {
+  @jakarta.annotation.Nullable
+  private static PsiExpression findFinalFieldDefinition(@jakarta.annotation.Nonnull PsiReferenceExpression referenceExpression, @jakarta.annotation.Nonnull PsiField field) {
     if (!field.hasModifierProperty(PsiModifier.FINAL)) {
       return null;
     }
@@ -302,31 +302,31 @@ public final class JavaReflectionReferenceUtil {
     return null;
   }
 
-  @Nullable
-  private static PsiExpression getAssignedExpression(@Nonnull PsiMember maybeContainsAssignment, @Nonnull PsiField field) {
+  @jakarta.annotation.Nullable
+  private static PsiExpression getAssignedExpression(@jakarta.annotation.Nonnull PsiMember maybeContainsAssignment, @jakarta.annotation.Nonnull PsiField field) {
     final PsiAssignmentExpression assignment = SyntaxTraverser.psiTraverser(maybeContainsAssignment)
         .filter(PsiAssignmentExpression.class)
         .find(expression -> ExpressionUtils.isReferenceTo(expression.getLExpression(), field));
     return assignment != null ? assignment.getRExpression() : null;
   }
 
-  private static PsiClass findClass(@Nonnull String qualifiedName, @Nonnull PsiElement context) {
+  private static PsiClass findClass(@jakarta.annotation.Nonnull String qualifiedName, @jakarta.annotation.Nonnull PsiElement context) {
     final Project project = context.getProject();
     return JavaPsiFacade.getInstance(project).findClass(qualifiedName, GlobalSearchScope.allScope(project));
   }
 
   @Contract("null -> false")
-  public static boolean isJavaLangClass(@Nullable PsiClass aClass) {
+  public static boolean isJavaLangClass(@jakarta.annotation.Nullable PsiClass aClass) {
     return isClassWithName(aClass, CommonClassNames.JAVA_LANG_CLASS);
   }
 
   @Contract("null -> false")
-  public static boolean isJavaLangObject(@Nullable PsiClass aClass) {
+  public static boolean isJavaLangObject(@jakarta.annotation.Nullable PsiClass aClass) {
     return isClassWithName(aClass, CommonClassNames.JAVA_LANG_OBJECT);
   }
 
   @Contract("null, _ -> false")
-  public static boolean isClassWithName(@Nullable PsiClass aClass, @Nonnull String name) {
+  public static boolean isClassWithName(@Nullable PsiClass aClass, @jakarta.annotation.Nonnull String name) {
     return aClass != null && name.equals(aClass.getQualifiedName());
   }
 
@@ -335,11 +335,11 @@ public final class JavaReflectionReferenceUtil {
     return method != null && !method.isConstructor();
   }
 
-  public static boolean isPublic(@Nonnull PsiMember member) {
+  public static boolean isPublic(@jakarta.annotation.Nonnull PsiMember member) {
     return member.hasModifierProperty(PsiModifier.PUBLIC);
   }
 
-  public static boolean isAtomicallyUpdateable(@Nonnull PsiField field) {
+  public static boolean isAtomicallyUpdateable(@jakarta.annotation.Nonnull PsiField field) {
     if (field.hasModifierProperty(PsiModifier.STATIC) || !field.hasModifierProperty(PsiModifier.VOLATILE)) {
       return false;
     }
@@ -347,7 +347,7 @@ public final class JavaReflectionReferenceUtil {
     return !(type instanceof PsiPrimitiveType) || PsiType.INT.equals(type) || PsiType.LONG.equals(type);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static String getParameterTypesText(@Nonnull PsiMethod method) {
     final StringJoiner joiner = new StringJoiner(", ");
     for (PsiParameter parameter : method.getParameterList().getParameters()) {
@@ -357,7 +357,7 @@ public final class JavaReflectionReferenceUtil {
     return joiner.toString();
   }
 
-  public static void shortenArgumentsClassReferences(@Nonnull InsertionContext context) {
+  public static void shortenArgumentsClassReferences(@jakarta.annotation.Nonnull InsertionContext context) {
     final PsiElement parameter = PsiUtilCore.getElementAtOffset(context.getFile(), context.getStartOffset());
     final PsiExpressionList parameterList = PsiTreeUtil.getParentOfType(parameter, PsiExpressionList.class);
     if (parameterList != null && parameterList.getParent() instanceof PsiMethodCallExpression) {
@@ -365,28 +365,28 @@ public final class JavaReflectionReferenceUtil {
     }
   }
 
-  @Nonnull
-  public static LookupElement withPriority(@Nonnull LookupElement lookupElement, boolean hasPriority) {
+  @jakarta.annotation.Nonnull
+  public static LookupElement withPriority(@jakarta.annotation.Nonnull LookupElement lookupElement, boolean hasPriority) {
     return hasPriority ? lookupElement : PrioritizedLookupElement.withPriority(lookupElement, -1);
   }
 
-  @Nullable
-  public static LookupElement withPriority(@Nullable LookupElement lookupElement, int priority) {
+  @jakarta.annotation.Nullable
+  public static LookupElement withPriority(@jakarta.annotation.Nullable LookupElement lookupElement, int priority) {
     return priority == 0 || lookupElement == null ? lookupElement : PrioritizedLookupElement.withPriority(lookupElement, priority);
   }
 
-  public static int getMethodSortOrder(@Nonnull PsiMethod method) {
+  public static int getMethodSortOrder(@jakarta.annotation.Nonnull PsiMethod method) {
     return isJavaLangObject(method.getContainingClass()) ? 1 : isPublic(method) ? -1 : 0;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static String getMemberType(@Nullable PsiElement element) {
     final PsiMethodCallExpression methodCall = PsiTreeUtil.getParentOfType(element, PsiMethodCallExpression.class);
     return methodCall != null ? methodCall.getMethodExpression().getReferenceName() : null;
   }
 
   @Nullable
-  public static LookupElement lookupMethod(@Nonnull PsiMethod method, @Nullable InsertHandler<LookupElement> insertHandler) {
+  public static LookupElement lookupMethod(@jakarta.annotation.Nonnull PsiMethod method, @Nullable InsertHandler<LookupElement> insertHandler) {
     final ReflectiveSignature signature = getMethodSignature(method);
     return signature != null
         ? LookupElementBuilder.create(signature, method.getName())
@@ -396,7 +396,7 @@ public final class JavaReflectionReferenceUtil {
         : null;
   }
 
-  public static void replaceText(@Nonnull InsertionContext context, @Nonnull String text) {
+  public static void replaceText(@jakarta.annotation.Nonnull InsertionContext context, @jakarta.annotation.Nonnull String text) {
     final PsiElement newElement = PsiUtilCore.getElementAtOffset(context.getFile(), context.getStartOffset());
     final PsiElement params = newElement.getParent().getParent();
     final int end = params.getTextRange().getEndOffset() - 1;
@@ -407,21 +407,21 @@ public final class JavaReflectionReferenceUtil {
     shortenArgumentsClassReferences(context);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static String getTypeText(@Nonnull PsiType type) {
     final ReflectiveType reflectiveType = ReflectiveType.create(type, false);
     return reflectiveType.getQualifiedName();
   }
 
-  @Nullable
-  public static String getTypeText(@Nullable PsiExpression argument) {
+  @jakarta.annotation.Nullable
+  public static String getTypeText(@jakarta.annotation.Nullable PsiExpression argument) {
     final ReflectiveType reflectiveType = getReflectiveType(argument);
     return reflectiveType != null ? reflectiveType.getQualifiedName() : null;
   }
 
   @Contract("null -> null")
-  @Nullable
-  public static ReflectiveSignature getMethodSignature(@Nullable PsiMethod method) {
+  @jakarta.annotation.Nullable
+  public static ReflectiveSignature getMethodSignature(@jakarta.annotation.Nullable PsiMethod method) {
     if (method != null) {
       final List<String> types = new ArrayList<>();
       final PsiType returnType = method.getReturnType();
@@ -437,12 +437,12 @@ public final class JavaReflectionReferenceUtil {
   }
 
   @Nonnull
-  public static String getMethodTypeExpressionText(@Nonnull ReflectiveSignature signature) {
+  public static String getMethodTypeExpressionText(@jakarta.annotation.Nonnull ReflectiveSignature signature) {
     final String types = signature.getText(true, type -> type + ".class");
     return JAVA_LANG_INVOKE_METHOD_TYPE + "." + METHOD_TYPE + types;
   }
 
-  public static boolean isCallToMethod(@Nonnull PsiMethodCallExpression methodCall, @Nonnull String className, @Nonnull String methodName) {
+  public static boolean isCallToMethod(@jakarta.annotation.Nonnull PsiMethodCallExpression methodCall, @Nonnull String className, @Nonnull String methodName) {
     return MethodCallUtils.isCallToMethod(methodCall, className, null, methodName, (PsiType[]) null);
   }
 
@@ -492,8 +492,8 @@ public final class JavaReflectionReferenceUtil {
    * Take method's return type and parameter types
    * from arguments of MethodType.methodType(Class...) and MethodType.genericMethodType(int, boolean?)
    */
-  @Nullable
-  public static ReflectiveSignature composeMethodSignature(@Nullable PsiExpression methodTypeExpression) {
+  @jakarta.annotation.Nullable
+  public static ReflectiveSignature composeMethodSignature(@jakarta.annotation.Nullable PsiExpression methodTypeExpression) {
     final PsiExpression typeDefinition = findDefinition(methodTypeExpression);
     if (typeDefinition instanceof PsiMethodCallExpression) {
       final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) typeDefinition;
@@ -520,14 +520,14 @@ public final class JavaReflectionReferenceUtil {
     return null;
   }
 
-  @Nullable
-  private static ReflectiveSignature composeMethodSignatureFromTypes(@Nonnull PsiExpression[] returnAndParameterTypes) {
+  @jakarta.annotation.Nullable
+  private static ReflectiveSignature composeMethodSignatureFromTypes(@jakarta.annotation.Nonnull PsiExpression[] returnAndParameterTypes) {
     final List<String> typeTexts = ContainerUtil.map(returnAndParameterTypes, JavaReflectionReferenceUtil::getTypeText);
     return ReflectiveSignature.create(typeTexts);
   }
 
-  @Nullable
-  public static Pair.NonNull<Integer, Boolean> getGenericSignature(@Nonnull PsiExpression[] genericSignatureShape) {
+  @jakarta.annotation.Nullable
+  public static Pair.NonNull<Integer, Boolean> getGenericSignature(@jakarta.annotation.Nonnull PsiExpression[] genericSignatureShape) {
     if (genericSignatureShape.length == 0 || genericSignatureShape.length > 2) {
       return null;
     }
@@ -548,8 +548,8 @@ public final class JavaReflectionReferenceUtil {
   /**
    * All the types in the method signature are either unbounded type parameters or java.lang.Object (with possible vararg)
    */
-  @Nullable
-  private static ReflectiveSignature composeGenericMethodSignature(@Nonnull PsiExpression[] genericSignatureShape) {
+  @jakarta.annotation.Nullable
+  private static ReflectiveSignature composeGenericMethodSignature(@jakarta.annotation.Nonnull PsiExpression[] genericSignatureShape) {
     final Pair.NonNull<Integer, Boolean> signature = getGenericSignature(genericSignatureShape);
     if (signature == null) {
       return null;
@@ -574,12 +574,12 @@ public final class JavaReflectionReferenceUtil {
     final PsiType myType;
     final boolean myIsExact;
 
-    private ReflectiveType(@Nonnull PsiType erasedType, boolean isExact) {
+    private ReflectiveType(@jakarta.annotation.Nonnull PsiType erasedType, boolean isExact) {
       myType = erasedType;
       myIsExact = isExact;
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getQualifiedName() {
       return myType.getCanonicalText();
     }
@@ -589,11 +589,11 @@ public final class JavaReflectionReferenceUtil {
       return myType.getCanonicalText();
     }
 
-    public boolean isEqualTo(@Nullable PsiType otherType) {
+    public boolean isEqualTo(@jakarta.annotation.Nullable PsiType otherType) {
       return otherType != null && myType.equals(erasure(otherType));
     }
 
-    public boolean isAssignableFrom(@Nonnull PsiType type) {
+    public boolean isAssignableFrom(@jakarta.annotation.Nonnull PsiType type) {
       return myType.isAssignableFrom(type);
     }
 
@@ -601,7 +601,7 @@ public final class JavaReflectionReferenceUtil {
       return myType instanceof PsiPrimitiveType;
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public PsiType getType() {
       return myType;
     }
@@ -610,7 +610,7 @@ public final class JavaReflectionReferenceUtil {
       return myIsExact;
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     public ReflectiveClass getReflectiveClass() {
       PsiClass psiClass = getPsiClass();
       if (psiClass != null) {
@@ -619,7 +619,7 @@ public final class JavaReflectionReferenceUtil {
       return null;
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     public ReflectiveType getArrayComponentType() {
       if (myType instanceof PsiArrayType) {
         PsiType componentType = ((PsiArrayType) myType).getComponentType();
@@ -628,7 +628,7 @@ public final class JavaReflectionReferenceUtil {
       return null;
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     public PsiClass getPsiClass() {
       return PsiTypesUtil.getPsiClass(myType);
     }
@@ -644,7 +644,7 @@ public final class JavaReflectionReferenceUtil {
 
     @Contract("!null,_ -> !null; null,_ -> null")
     @Nullable
-    public static ReflectiveType create(@Nullable PsiClass psiClass, boolean isExact) {
+    public static ReflectiveType create(@jakarta.annotation.Nullable PsiClass psiClass, boolean isExact) {
       if (psiClass != null) {
         final PsiElementFactory factory = JavaPsiFacade.getElementFactory(psiClass.getProject());
         return new ReflectiveType(factory.createType(psiClass), isExact);
@@ -654,15 +654,15 @@ public final class JavaReflectionReferenceUtil {
 
     @Contract("!null -> !null; null -> null")
     @Nullable
-    public static ReflectiveType arrayOf(@Nullable ReflectiveType itemType) {
+    public static ReflectiveType arrayOf(@jakarta.annotation.Nullable ReflectiveType itemType) {
       if (itemType != null) {
         return new ReflectiveType(itemType.myType.createArrayType(), itemType.myIsExact);
       }
       return null;
     }
 
-    @Nonnull
-    private static PsiType erasure(@Nonnull PsiType type) {
+    @jakarta.annotation.Nonnull
+    private static PsiType erasure(@jakarta.annotation.Nonnull PsiType type) {
       final PsiType erasure = TypeConversionUtil.erasure(type);
       if (erasure instanceof PsiEllipsisType) {
         return ((PsiEllipsisType) erasure).toArrayType();
@@ -675,12 +675,12 @@ public final class JavaReflectionReferenceUtil {
     final PsiClass myPsiClass;
     final boolean myIsExact;
 
-    public ReflectiveClass(@Nonnull PsiClass psiClass, boolean isExact) {
+    public ReflectiveClass(@jakarta.annotation.Nonnull PsiClass psiClass, boolean isExact) {
       myPsiClass = psiClass;
       myIsExact = isExact;
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public PsiClass getPsiClass() {
       return myPsiClass;
     }
@@ -695,18 +695,18 @@ public final class JavaReflectionReferenceUtil {
         new ReflectiveSignature(null, PsiKeyword.VOID, ArrayUtil.EMPTY_STRING_ARRAY);
 
     private final Image myIcon;
-    @Nonnull
+    @jakarta.annotation.Nonnull
     private final String myReturnType;
-    @Nonnull
+    @jakarta.annotation.Nonnull
     private final String[] myArgumentTypes;
 
-    @Nullable
-    public static ReflectiveSignature create(@Nonnull List<String> typeTexts) {
+    @jakarta.annotation.Nullable
+    public static ReflectiveSignature create(@jakarta.annotation.Nonnull List<String> typeTexts) {
       return create(null, typeTexts);
     }
 
     @Nullable
-    public static ReflectiveSignature create(@Nullable Image icon, @Nonnull List<String> typeTexts) {
+    public static ReflectiveSignature create(@Nullable Image icon, @jakarta.annotation.Nonnull List<String> typeTexts) {
       if (!typeTexts.isEmpty() && !typeTexts.contains(null)) {
         final String[] argumentTypes = ArrayUtil.toStringArray(typeTexts.subList(1, typeTexts.size()));
         return new ReflectiveSignature(icon, typeTexts.get(0), argumentTypes);
@@ -714,13 +714,13 @@ public final class JavaReflectionReferenceUtil {
       return null;
     }
 
-    private ReflectiveSignature(@Nullable Image icon, @Nonnull String returnType, @Nonnull String[] argumentTypes) {
+    private ReflectiveSignature(@jakarta.annotation.Nullable Image icon, @Nonnull String returnType, @Nonnull String[] argumentTypes) {
       myIcon = icon;
       myReturnType = returnType;
       myArgumentTypes = argumentTypes;
     }
 
-    public String getText(boolean withReturnType, @Nonnull Function<? super String, String> transformation) {
+    public String getText(boolean withReturnType, @jakarta.annotation.Nonnull Function<? super String, String> transformation) {
       return getText(withReturnType, true, transformation);
     }
 
@@ -735,23 +735,23 @@ public final class JavaReflectionReferenceUtil {
       return joiner.toString();
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getShortReturnType() {
       return PsiNameHelper.getShortClassName(myReturnType);
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getShortArgumentTypes() {
       return getText(false, PsiNameHelper::getShortClassName);
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public Image getIcon() {
       return myIcon != null ? myIcon : PlatformIconGroup.nodesMethod();
     }
 
     @Override
-    public int compareTo(@Nonnull ReflectiveSignature other) {
+    public int compareTo(@jakarta.annotation.Nonnull ReflectiveSignature other) {
       int c = myArgumentTypes.length - other.myArgumentTypes.length;
       if (c != 0) {
         return c;

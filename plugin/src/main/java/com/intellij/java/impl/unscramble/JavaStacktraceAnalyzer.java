@@ -10,8 +10,8 @@ import consulo.util.lang.CharArrayUtil;
 import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
@@ -26,14 +26,14 @@ public class JavaStacktraceAnalyzer implements StacktraceAnalyzer {
   private static final Pattern STACKTRACE_LINE =
       Pattern.compile("[\t]*at [[_a-zA-Z0-9]+\\.]+[_a-zA-Z$0-9]+\\.[a-zA-Z0-9_]+\\([A-Za-z0-9_]+\\.java:[\\d]+\\)+[ [~]*\\[[a-zA-Z0-9\\.\\:/]\\]]*");
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public LocalizeValue getName() {
     return LocalizeValue.localizeTODO("JVM");
   }
 
   @Override
-  public boolean isPreferredForProject(@Nonnull Project project) {
+  public boolean isPreferredForProject(@jakarta.annotation.Nonnull Project project) {
     return ModuleExtensionHelper.getInstance(project).hasModuleExtension(JavaModuleExtension.class);
   }
 
@@ -132,9 +132,9 @@ public class JavaStacktraceAnalyzer implements StacktraceAnalyzer {
     return false;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
-  public String parseAsException(@Nonnull String stacktrace) {
+  public String parseAsException(@jakarta.annotation.Nonnull String stacktrace) {
     return StringUtil.nullize(getExceptionName(stacktrace));
   }
 
@@ -159,7 +159,7 @@ public class JavaStacktraceAnalyzer implements StacktraceAnalyzer {
     return null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static String getExceptionAbbreviation(String line) {
     int lastDelimiter = 0;
     for (int j = 0; j < line.length(); j++) {

@@ -8,10 +8,10 @@ import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import consulo.util.collection.ArrayUtil;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 /**
  * Represents a model of PsiExpression which checks whether two expressions are equal (via Object.equals directly or indirectly).
@@ -24,11 +24,11 @@ public class EqualityCheck {
   @Nonnull
   PsiExpression myLeft;
   private final
-  @Nonnull
+  @jakarta.annotation.Nonnull
   PsiExpression myRight;
   private final boolean myLeftDereferenced;
 
-  private EqualityCheck(@Nonnull PsiExpression left, @Nonnull PsiExpression right, boolean leftDereferenced) {
+  private EqualityCheck(@Nonnull PsiExpression left, @jakarta.annotation.Nonnull PsiExpression right, boolean leftDereferenced) {
     myLeft = left;
     myRight = right;
     myLeftDereferenced = leftDereferenced;
@@ -85,7 +85,7 @@ public class EqualityCheck {
     return myLeft;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiExpression getRight() {
     return myRight;
   }

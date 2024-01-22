@@ -27,7 +27,7 @@ import consulo.language.impl.psi.CompositePsiElement;
 import consulo.language.impl.ast.TreeUtil;
 import consulo.language.ast.IElementType;
 import consulo.language.ast.ChildRoleBase;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class PsiThrowStatementImpl extends CompositePsiElement implements PsiThrowStatement, Constants {
   private static final Logger LOG = Logger.getInstance(PsiThrowStatementImpl.class);

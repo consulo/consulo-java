@@ -32,8 +32,7 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.module.Module;
 import consulo.project.Project;
 import consulo.ui.ex.awt.MessagesEx;
-
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public abstract class ClassBrowser extends BrowseModuleValueActionListener {
   private final String myTitle;
@@ -91,7 +90,7 @@ public abstract class ClassBrowser extends BrowseModuleValueActionListener {
         return ConfigurationUtil.MAIN_CLASS.test(aClass) && findMainMethod(aClass) != null;
       }
 
-      @Nullable
+      @jakarta.annotation.Nullable
       private PsiMethod findMainMethod(final PsiClass aClass) {
         return ReadAction.compute(() -> PsiMethodUtil.findMainMethod(aClass));
       }

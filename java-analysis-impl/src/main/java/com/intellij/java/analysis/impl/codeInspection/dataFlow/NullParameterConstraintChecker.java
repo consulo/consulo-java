@@ -17,7 +17,7 @@ import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiPrimitiveType;
 import com.intellij.java.analysis.impl.psi.impl.search.JavaNullMethodArgumentUtil;
 import consulo.util.collection.SmartList;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.HashSet;

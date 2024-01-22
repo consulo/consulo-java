@@ -15,10 +15,9 @@
  */
 package com.intellij.java.impl.ig.dataflow;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.project.Project;
@@ -37,14 +36,14 @@ import com.siyeh.ig.InspectionGadgetsFix;
 public class BooleanVariableAlwaysNegatedInspection extends BaseInspection {
 
   @Nls
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "boolean.variable.always.inverted.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     final PsiVariable variable = (PsiVariable)infos[0];

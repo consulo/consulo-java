@@ -25,7 +25,7 @@ import consulo.internal.com.sun.jdi.Value;
 import consulo.language.psi.PsiElement;
 import consulo.ui.image.Image;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public interface ValueDescriptor extends NodeDescriptor
 {
@@ -33,7 +33,7 @@ public interface ValueDescriptor extends NodeDescriptor
 
 	Value getValue();
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	default Type getType()
 	{
 		Value value = getValue();

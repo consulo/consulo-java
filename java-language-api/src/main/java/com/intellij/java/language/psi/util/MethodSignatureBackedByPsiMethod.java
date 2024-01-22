@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.psi.util;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.PsiInvalidElementAccessException;
@@ -27,7 +27,7 @@ public class MethodSignatureBackedByPsiMethod extends MethodSignatureBase {
   private final PsiMethod myMethod;
   private final boolean myIsRaw;
 
-  protected MethodSignatureBackedByPsiMethod(@Nonnull PsiMethod method,
+  protected MethodSignatureBackedByPsiMethod(@jakarta.annotation.Nonnull PsiMethod method,
                                              @Nonnull PsiSubstitutor substitutor,
                                              boolean isRaw,
                                              @Nonnull PsiType[] parameterTypes,

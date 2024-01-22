@@ -19,10 +19,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.SwingUtilities;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
 import consulo.ui.ex.awt.Messages;
@@ -86,7 +86,7 @@ public class NullityInferrer
 		return visitor.getNeverReturnsNull();
 	}
 
-	private boolean variableNeverAssignedNull(@Nonnull PsiVariable variable)
+	private boolean variableNeverAssignedNull(@jakarta.annotation.Nonnull PsiVariable variable)
 	{
 		final PsiExpression initializer = variable.getInitializer();
 		if(initializer != null)
@@ -151,7 +151,7 @@ public class NullityInferrer
 		return false;
 	}
 
-	public void collect(@Nonnull PsiFile file)
+	public void collect(@jakarta.annotation.Nonnull PsiFile file)
 	{
 		int prevNumAnnotationsAdded;
 		int pass = 0;
@@ -253,7 +253,7 @@ public class NullityInferrer
 		registerAnnotation(method, true);
 	}
 
-	private void registerNotNullAnnotation(@Nonnull PsiModifierListOwner method)
+	private void registerNotNullAnnotation(@jakarta.annotation.Nonnull PsiModifierListOwner method)
 	{
 		registerAnnotation(method, false);
 	}
@@ -282,7 +282,7 @@ public class NullityInferrer
 
 	private static class NotNullUsageInfo extends UsageInfo
 	{
-		private NotNullUsageInfo(@Nonnull PsiElement element)
+		private NotNullUsageInfo(@jakarta.annotation.Nonnull PsiElement element)
 		{
 			super(element);
 		}
@@ -312,7 +312,7 @@ public class NullityInferrer
 		private boolean neverNull = true;
 
 		@Override
-		public void visitLiteralExpression(@Nonnull PsiLiteralExpression expression)
+		public void visitLiteralExpression(@jakarta.annotation.Nonnull PsiLiteralExpression expression)
 		{
 			neverNull = !"null".equals(expression.getText());
 		}
@@ -329,7 +329,7 @@ public class NullityInferrer
 		}
 
 		@Override
-		public void visitConditionalExpression(@Nonnull PsiConditionalExpression expression)
+		public void visitConditionalExpression(@jakarta.annotation.Nonnull PsiConditionalExpression expression)
 		{
 			final PsiExpression condition = expression.getCondition();
 			final PsiExpression thenExpression = expression.getThenExpression();
@@ -473,7 +473,7 @@ public class NullityInferrer
 		}
 
 		@Override
-		public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression)
+		public void visitMethodCallExpression(@jakarta.annotation.Nonnull PsiMethodCallExpression expression)
 		{
 			final PsiMethod method = expression.resolveMethod();
 			if(method != null)

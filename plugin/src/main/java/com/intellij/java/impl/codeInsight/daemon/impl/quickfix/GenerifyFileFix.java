@@ -30,31 +30,31 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class GenerifyFileFix implements SyntheticIntentionAction, LocalQuickFix {
   private String myFileName;
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getText() {
     return JavaQuickFixBundle.message("generify.text", myFileName);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getName() {
     return getText();
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("generify.family");
   }
 
   @Override
-  public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor) {
+  public void applyFix(@jakarta.annotation.Nonnull final Project project, @jakarta.annotation.Nonnull final ProblemDescriptor descriptor) {
     final PsiElement element = descriptor.getPsiElement();
     if (element == null) return;
     final PsiFile file = element.getContainingFile();
@@ -70,7 +70,7 @@ public class GenerifyFileFix implements SyntheticIntentionAction, LocalQuickFix 
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
     if (file != null && file.isValid()) {
       myFileName = file.getName();
       return PsiManager.getInstance(project).isInProject(file);

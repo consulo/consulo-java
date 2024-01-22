@@ -1,6 +1,6 @@
 package com.intellij.psi.impl.file.impl;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.language.psi.event.PsiTreeChangeEvent;
 import consulo.language.psi.event.PsiTreeChangeListener;
@@ -26,7 +26,7 @@ class EventsTestListener implements PsiTreeChangeListener {
   }
 
   @Override
-  public void beforeChildReplacement(@Nonnull PsiTreeChangeEvent event) {
+  public void beforeChildReplacement(@jakarta.annotation.Nonnull PsiTreeChangeEvent event) {
     myBuffer.append("beforeChildReplacement\n");
   }
 

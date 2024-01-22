@@ -24,7 +24,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.util.lang.Pair;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -144,7 +144,7 @@ public class MoveInstanceMembersUtil {
     }
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static PsiClass getClassReferencedByThis(final PsiExpression expression) {
     PsiClass enclosingClass = PsiTreeUtil.getParentOfType(expression, PsiClass.class);
     if (enclosingClass == null) return null;

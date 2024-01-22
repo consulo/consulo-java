@@ -21,7 +21,7 @@ import com.intellij.java.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -31,7 +31,7 @@ public class SwitchStatementsWithoutDefaultInspection extends BaseInspection {
   @SuppressWarnings("PublicField")
   public boolean m_ignoreFullyCoveredEnums = true;
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("switch.statements.without.default.display.name");
   }

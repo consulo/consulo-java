@@ -26,8 +26,8 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.ExtractParameterAsLocalVariableFix;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import javax.swing.*;
 
@@ -39,7 +39,7 @@ public class AssignmentToMethodParameterInspection
   public boolean ignoreTransformationOfOriginalParameter = false;
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "assignment.to.method.parameter.display.name");
@@ -75,7 +75,7 @@ public class AssignmentToMethodParameterInspection
 
     @Override
     public void visitAssignmentExpression(
-      @Nonnull PsiAssignmentExpression expression) {
+      @jakarta.annotation.Nonnull PsiAssignmentExpression expression) {
       super.visitAssignmentExpression(expression);
       final PsiExpression lhs = expression.getLExpression();
       final PsiParameter parameter = getMethodParameter(lhs);
@@ -108,7 +108,7 @@ public class AssignmentToMethodParameterInspection
 
     @Override
     public void visitPrefixExpression(
-      @Nonnull PsiPrefixExpression expression) {
+      @jakarta.annotation.Nonnull PsiPrefixExpression expression) {
       if (ignoreTransformationOfOriginalParameter) {
         return;
       }
@@ -131,7 +131,7 @@ public class AssignmentToMethodParameterInspection
 
     @Override
     public void visitPostfixExpression(
-      @Nonnull PsiPostfixExpression expression) {
+      @jakarta.annotation.Nonnull PsiPostfixExpression expression) {
       if (ignoreTransformationOfOriginalParameter) {
         return;
       }
@@ -149,7 +149,7 @@ public class AssignmentToMethodParameterInspection
       registerError(operand);
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     private PsiParameter getMethodParameter(PsiExpression expression) {
       if (!(expression instanceof PsiReferenceExpression)) {
         return null;

@@ -27,8 +27,8 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import javax.swing.*;
 
@@ -64,7 +64,7 @@ public class RedundantFieldInitializationInspection extends BaseInspection {
   private static class RedundantFieldInitializationFix extends InspectionGadgetsFix {
 
     @Override
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("redundant.field.initialization.remove.quickfix");
     }
@@ -83,7 +83,7 @@ public class RedundantFieldInitializationInspection extends BaseInspection {
   private class RedundantFieldInitializationVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@Nonnull PsiField field) {
+    public void visitField(@jakarta.annotation.Nonnull PsiField field) {
       super.visitField(field);
       if (!field.hasInitializer() || field.hasModifierProperty(PsiModifier.FINAL)) {
         return;

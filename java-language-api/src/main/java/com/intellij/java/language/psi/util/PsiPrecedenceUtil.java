@@ -5,8 +5,8 @@ import com.intellij.java.language.psi.*;
 import consulo.language.psi.PsiElement;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.util.PsiTreeUtil;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -149,7 +149,7 @@ public class PsiPrecedenceUtil {
     return -1;
   }
 
-  public static int getPrecedenceForOperator(@Nonnull IElementType operator) {
+  public static int getPrecedenceForOperator(@jakarta.annotation.Nonnull IElementType operator) {
     final Integer precedence = s_binaryOperatorPrecedence.get(operator);
     if (precedence == null) {
       throw new IllegalArgumentException("unknown operator: " + operator);

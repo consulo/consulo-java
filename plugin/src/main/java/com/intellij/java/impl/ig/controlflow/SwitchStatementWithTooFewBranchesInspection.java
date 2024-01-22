@@ -29,8 +29,8 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 
 public abstract class SwitchStatementWithTooFewBranchesInspection extends BaseInspection {
@@ -153,14 +153,14 @@ public abstract class SwitchStatementWithTooFewBranchesInspection extends BaseIn
     }
 
     @Nls(capitalization = Nls.Capitalization.Sentence)
-    @Nonnull
+    @jakarta.annotation.Nonnull
     @Override
     public String getName() {
       return myBranchCount == 0 ? getFamilyName() : JavaQuickFixBundle.message("fix.replace.x.with.y", PsiKeyword.SWITCH, PsiKeyword.IF);
     }
 
     @Nls(capitalization = Nls.Capitalization.Sentence)
-    @Nonnull
+    @jakarta.annotation.Nonnull
     @Override
     public String getFamilyName() {
       return JavaQuickFixBundle.message("fix.unwrap", PsiKeyword.SWITCH);

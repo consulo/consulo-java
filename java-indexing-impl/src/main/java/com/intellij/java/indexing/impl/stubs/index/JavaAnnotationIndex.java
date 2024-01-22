@@ -29,7 +29,7 @@ import consulo.language.psi.stub.StubIndexKey;
 import consulo.project.Project;
 import consulo.project.content.scope.ProjectAwareSearchScope;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Collection;
 
 @ExtensionImpl
@@ -40,14 +40,14 @@ public class JavaAnnotationIndex extends StringStubIndexExtension<PsiAnnotation>
     return ourInstance;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public StubIndexKey<String, PsiAnnotation> getKey() {
     return JavaStubIndexKeys.ANNOTATIONS;
   }
 
   @Override
-  public Collection<PsiAnnotation> get(@Nonnull final String s, @Nonnull final Project project, @Nonnull final ProjectAwareSearchScope scope) {
+  public Collection<PsiAnnotation> get(@Nonnull final String s, @jakarta.annotation.Nonnull final Project project, @Nonnull final ProjectAwareSearchScope scope) {
     return StubIndex.getElements(getKey(), s, project, new JavaSourceFilterScope(scope), PsiAnnotation.class);
   }
 }

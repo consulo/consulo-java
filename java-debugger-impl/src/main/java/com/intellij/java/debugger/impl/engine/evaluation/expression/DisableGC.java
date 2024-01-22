@@ -15,12 +15,11 @@
  */
 package com.intellij.java.debugger.impl.engine.evaluation.expression;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.engine.evaluation.expression.Modifier;
 import consulo.internal.com.sun.jdi.ObjectReference;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author Eugene Zhuravlev
@@ -35,7 +34,7 @@ public class DisableGC implements Evaluator
 		myDelegate = delegate;
 	}
 
-	public static Evaluator create(@Nonnull Evaluator delegate)
+	public static Evaluator create(@jakarta.annotation.Nonnull Evaluator delegate)
 	{
 		if(!(delegate instanceof DisableGC))
 		{

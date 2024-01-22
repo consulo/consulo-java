@@ -35,8 +35,8 @@ import consulo.xml.util.xml.DomUtil;
 import consulo.xml.util.xml.GenericValue;
 import consulo.xml.util.xml.MergedObject;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
 
@@ -131,18 +131,18 @@ public class ManualModelMergerUtil {
     Collection<? extends T> map(V v);
     @Nullable
     Object key(T t);
-    @Nonnull
+    @jakarta.annotation.Nonnull
     T join(@Nullable T prev, T next, Collection<T> notToBeMergedSet);
   }
 
   public static abstract class SimpleJoiner<V, T extends CommonModelElement> implements Joiner<V, T> {
     @Override
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public final T join(@Nullable T prev, T next, final Collection<T> notToBeMergedSet) {
       return prev == null ? next : prev instanceof MyMergedObject ? ((MyMergedObject<T>)prev).addImplementation(next) : createMergedImplementation(prev, next);
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     protected abstract T createMergedImplementation(T prev, T next);
   }
 
@@ -165,7 +165,7 @@ public class ManualModelMergerUtil {
       return joinInner(prev, next);
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     protected T joinInner(@Nullable T prev, T next) {
       if (prev instanceof MyMergedObject) return ((MyMergedObject<T>)prev).addImplementation(next);
       if (prev != null) return createMergedImplementation(prev, next);
@@ -176,10 +176,10 @@ public class ManualModelMergerUtil {
       return createMergedImplementation(anno, next);
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     protected abstract T getCurrentJam(final T next, final Psi psiMember);
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     protected abstract T createMergedImplementation(T prev, T next);
     @Nullable
     protected abstract Psi getPsiMember(T element);
@@ -405,7 +405,7 @@ public class ManualModelMergerUtil {
     }
 
     @Override
-    public MyRenameableTarget setName(@Nonnull final String newName) {
+    public MyRenameableTarget setName(@jakarta.annotation.Nonnull final String newName) {
       final ArrayList<PomRenameableTarget> list = new ArrayList<PomRenameableTarget>(myTargets.size());
       for (PomRenameableTarget target : myTargets) {
         final Object result = target.setName(newName);

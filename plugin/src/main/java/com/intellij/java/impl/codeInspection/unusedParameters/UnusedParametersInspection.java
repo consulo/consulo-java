@@ -57,10 +57,11 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.util.lang.Comparing;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -227,14 +228,14 @@ public class UnusedParametersInspection extends GlobalJavaBatchInspectionTool im
 	}
 
 	@Override
-	@Nullable
+	@jakarta.annotation.Nullable
 	public String getHint(@Nonnull final QuickFix fix)
 	{
 		return ((AcceptSuggested) fix).getHint();
 	}
 
 	@Override
-	@Nullable
+	@jakarta.annotation.Nullable
 	public QuickFix getQuickFix(final String hint)
 	{
 		return new AcceptSuggested(null, null, hint);
@@ -295,7 +296,7 @@ public class UnusedParametersInspection extends GlobalJavaBatchInspectionTool im
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public String getDisplayName()
 	{
 		return InspectionsBundle.message("inspection.unused.parameter.display.name");
@@ -309,7 +310,7 @@ public class UnusedParametersInspection extends GlobalJavaBatchInspectionTool im
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public String getShortName()
 	{
 		return SHORT_NAME;
@@ -345,7 +346,7 @@ public class UnusedParametersInspection extends GlobalJavaBatchInspectionTool im
 		}
 
 		@Override
-		@Nonnull
+		@jakarta.annotation.Nonnull
 		public String getName()
 		{
 			return InspectionsBundle.message("inspection.unused.parameter.delete.quickfix");

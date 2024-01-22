@@ -24,7 +24,7 @@ import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiInstanceOfExpression;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
@@ -39,7 +39,7 @@ public class RedundantInstanceofFix implements LocalQuickFix
 	}
 
 	@Override
-	public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
+	public void applyFix(@jakarta.annotation.Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 	{
 		final PsiElement psiElement = descriptor.getPsiElement();
 		if(psiElement instanceof PsiInstanceOfExpression)

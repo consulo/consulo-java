@@ -18,7 +18,7 @@ package com.intellij.java.language.impl.psi.impl.source.tree.java;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.language.ast.ASTNode;
 import com.intellij.java.language.psi.JavaElementVisitor;
@@ -70,7 +70,7 @@ public class PsiResourceListImpl extends CompositePsiElement implements PsiResou
 	}
 
 	@Override
-	public void accept(@Nonnull PsiElementVisitor visitor)
+	public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{
@@ -83,7 +83,7 @@ public class PsiResourceListImpl extends CompositePsiElement implements PsiResou
 	}
 
 	@Override
-	public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
+	public boolean processDeclarations(@jakarta.annotation.Nonnull PsiScopeProcessor processor,
 			@Nonnull ResolveState state,
 			PsiElement lastParent,
 			@Nonnull PsiElement place)

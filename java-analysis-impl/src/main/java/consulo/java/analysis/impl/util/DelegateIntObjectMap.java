@@ -4,8 +4,8 @@ import consulo.util.collection.primitive.ints.IntObjConsumer;
 import consulo.util.collection.primitive.ints.IntObjectMap;
 import consulo.util.collection.primitive.ints.IntSet;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Collection;
 import java.util.Set;
 
@@ -49,7 +49,7 @@ public class DelegateIntObjectMap<V> implements IntObjectMap<V>
 	}
 
 	@Override
-	@Nullable
+	@jakarta.annotation.Nullable
 	public V get(int i)
 	{
 		return myDelegate.get(i);

@@ -29,8 +29,8 @@ import consulo.language.psi.stub.FileBasedIndex;
 import consulo.logging.Logger;
 import consulo.virtualFileSystem.VirtualFile;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -65,7 +65,7 @@ public class JavaNullMethodArgumentUtil {
     }
   }
 
-  private static void processCallsWithNullArguments(@Nonnull PsiMethod method, int argumentIdx, @Nonnull Processor<PsiExpression> nullArgumentProcessor, Collection<VirtualFile> candidateFiles) {
+  private static void processCallsWithNullArguments(@jakarta.annotation.Nonnull PsiMethod method, int argumentIdx, @Nonnull Processor<PsiExpression> nullArgumentProcessor, Collection<VirtualFile> candidateFiles) {
     if (candidateFiles.isEmpty()) {
       return;
     }
@@ -99,7 +99,7 @@ public class JavaNullMethodArgumentUtil {
     return null;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private static Collection<VirtualFile> getFilesWithPotentialNullPassingCalls(@Nonnull PsiMethod method, int parameterIndex) {
     final FileBasedIndex fileBasedIndex = FileBasedIndex.getInstance();
     final CommonProcessors.CollectProcessor<VirtualFile> collector = new CommonProcessors.CollectProcessor<>(new ArrayList<>());

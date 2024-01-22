@@ -25,7 +25,7 @@ import consulo.language.ast.TokenSet;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.util.collection.ArrayFactory;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 

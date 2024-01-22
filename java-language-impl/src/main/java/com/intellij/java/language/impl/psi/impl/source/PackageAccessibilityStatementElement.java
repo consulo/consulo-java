@@ -15,8 +15,8 @@
  */
 package com.intellij.java.language.impl.psi.impl.source;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import consulo.language.ast.ASTNode;
 import com.intellij.java.language.psi.JavaTokenType;

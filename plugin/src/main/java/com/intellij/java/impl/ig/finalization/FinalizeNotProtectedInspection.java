@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.finalization;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -41,7 +41,7 @@ public class FinalizeNotProtectedInspection extends BaseInspection {
       "finalize.not.declared.protected.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "finalize.not.declared.protected.problem.descriptor");
@@ -57,7 +57,7 @@ public class FinalizeNotProtectedInspection extends BaseInspection {
 
   private static class ProtectedFinalizeFix extends InspectionGadgetsFix {
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("make.protected.quickfix");
     }

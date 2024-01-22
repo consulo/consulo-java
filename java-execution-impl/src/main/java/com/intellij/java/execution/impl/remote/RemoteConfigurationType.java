@@ -30,7 +30,7 @@ import consulo.module.extension.ModuleExtensionHelper;
 import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class RemoteConfigurationType extends ConfigurationTypeBase {

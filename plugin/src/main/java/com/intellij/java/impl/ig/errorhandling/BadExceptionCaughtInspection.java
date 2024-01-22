@@ -29,7 +29,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.ui.ExternalizableStringSet;
 import com.intellij.java.impl.ig.ui.UiUtils;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.List;
@@ -63,7 +63,7 @@ public class BadExceptionCaughtInspection extends BaseInspection {
     }
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "ProhibitedExceptionCaught";
   }
@@ -75,7 +75,7 @@ public class BadExceptionCaughtInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("bad.exception.caught.problem.descriptor");
   }

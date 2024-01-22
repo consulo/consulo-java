@@ -42,7 +42,7 @@ import com.intellij.java.impl.spi.psi.SPIPackageOrClassReferenceElement;
 import consulo.language.version.LanguageVersion;
 import consulo.logging.Logger;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * User: anna
@@ -54,7 +54,7 @@ public class SPIParserDefinition implements ParserDefinition {
   private static final TokenSet WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE);
   private static final Logger LOG = Logger.getInstance(SPIParserDefinition.class);
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Language getLanguage() {
     return SPILanguage.INSTANCE;
@@ -69,7 +69,7 @@ public class SPIParserDefinition implements ParserDefinition {
   @Override
   public PsiParser createParser(LanguageVersion languageVersion) {
     return new PsiParser() {
-      @Nonnull
+      @jakarta.annotation.Nonnull
       @Override
       public ASTNode parse(IElementType root, PsiBuilder builder, LanguageVersion languageVersion) {
         final PsiBuilder.Marker rootMarker = builder.mark();
@@ -89,13 +89,13 @@ public class SPIParserDefinition implements ParserDefinition {
     return SPI_FILE_ELEMENT_TYPE;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public TokenSet getWhitespaceTokens(LanguageVersion languageVersion) {
     return WHITE_SPACES;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public TokenSet getCommentTokens(LanguageVersion languageVersion) {
     return TokenSet.create(JavaTokenType.END_OF_LINE_COMMENT);
@@ -107,7 +107,7 @@ public class SPIParserDefinition implements ParserDefinition {
     return TokenSet.EMPTY;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public PsiElement createElement(ASTNode node) {
     final IElementType elementType = node.getElementType();

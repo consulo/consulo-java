@@ -17,7 +17,7 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.RelationType;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -73,7 +73,7 @@ public abstract class MethodContract {
     };
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static MethodContract singleConditionContract(ContractValue left,
                                                        RelationType relationType,
                                                        ContractValue right,

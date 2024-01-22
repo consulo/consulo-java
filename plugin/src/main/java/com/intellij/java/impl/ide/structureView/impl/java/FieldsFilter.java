@@ -23,7 +23,7 @@ import consulo.fileEditor.structureView.tree.TreeElement;
 import consulo.ide.IdeBundle;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class FieldsFilter implements Filter {
   @NonNls

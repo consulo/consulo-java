@@ -33,21 +33,21 @@ import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.fileType.FileType;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.List;
 
 @ExtensionImpl
 public class JavaChangeSignatureDetector implements LanguageChangeSignatureDetector<DetectedJavaChangeInfo> {
   private static final Logger LOG = Logger.getInstance(JavaChangeSignatureDetector.class);
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
-  public DetectedJavaChangeInfo createInitialChangeInfo(final @Nonnull PsiElement element) {
+  public DetectedJavaChangeInfo createInitialChangeInfo(final @jakarta.annotation.Nonnull PsiElement element) {
     return DetectedJavaChangeInfo.createFromMethod(PsiTreeUtil.getParentOfType(element, PsiMethod.class), false);
   }
 
   @Override
-  public void performChange(final DetectedJavaChangeInfo changeInfo, Editor editor, @Nonnull final String oldText) {
+  public void performChange(final DetectedJavaChangeInfo changeInfo, Editor editor, @jakarta.annotation.Nonnull final String oldText) {
     changeInfo.perform(oldText, editor, true);
   }
 

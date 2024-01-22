@@ -19,7 +19,6 @@ import com.intellij.java.language.psi.*;
 import consulo.codeEditor.Editor;
 import consulo.document.Document;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
-import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.template.EmptyExpression;
 import consulo.language.editor.template.TemplateBuilder;
@@ -36,7 +35,7 @@ import consulo.util.collection.primitive.objects.ObjectMaps;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Collection;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -71,12 +70,12 @@ public class AddMissingRequiredAnnotationParametersFix implements SyntheticInten
   }
 
   @Override
-  public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
+  public boolean isAvailable(@jakarta.annotation.Nonnull final Project project, final Editor editor, final PsiFile file) {
     return myAnnotation.isValid();
   }
 
   @Override
-  public void invoke(@Nonnull final Project project,
+  public void invoke(@jakarta.annotation.Nonnull final Project project,
                      final Editor editor,
                      final PsiFile file) throws IncorrectOperationException {
     final PsiNameValuePair[] addedParameters = myAnnotation.getParameterList().getAttributes();

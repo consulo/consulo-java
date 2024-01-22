@@ -17,7 +17,7 @@ package consulo.java.impl.intelliLang.pattern.compiler;
 
 import java.io.File;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.compiler.FileProcessingCompiler;
 import consulo.compiler.ValidityState;
@@ -42,7 +42,7 @@ class InstrumentationItem implements FileProcessingCompiler.ProcessingItem
 		return VfsUtilCore.virtualToIoFile(myClassFile);
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public VirtualFile getClassFile()
 	{
 		return myClassFile;

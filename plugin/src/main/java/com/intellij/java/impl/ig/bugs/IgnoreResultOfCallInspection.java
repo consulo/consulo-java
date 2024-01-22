@@ -28,10 +28,10 @@ import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
 import consulo.language.psi.PsiUtilCore;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
+import jakarta.annotation.Nonnull;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
@@ -71,7 +71,7 @@ public class IgnoreResultOfCallInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "ResultOfMethodCallIgnored";
   }
@@ -83,7 +83,7 @@ public class IgnoreResultOfCallInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     final PsiClass containingClass = (PsiClass)infos[0];
     final String className = containingClass.getName();
@@ -91,13 +91,13 @@ public class IgnoreResultOfCallInspection extends BaseInspection {
   }
 
   @Override
-  public void readSettings(@Nonnull Element element) throws InvalidDataException {
+  public void readSettings(@jakarta.annotation.Nonnull Element element) throws InvalidDataException {
     super.readSettings(element);
     parseString(callCheckString, classNames, methodNamePatterns);
   }
 
   @Override
-  public void writeSettings(@Nonnull Element element) throws WriteExternalException {
+  public void writeSettings(@jakarta.annotation.Nonnull Element element) throws WriteExternalException {
     callCheckString = formatString(classNames, methodNamePatterns);
     super.writeSettings(element);
   }
@@ -129,7 +129,7 @@ public class IgnoreResultOfCallInspection extends BaseInspection {
   private class IgnoreResultOfCallVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitExpressionStatement(@Nonnull PsiExpressionStatement statement) {
+    public void visitExpressionStatement(@jakarta.annotation.Nonnull PsiExpressionStatement statement) {
       super.visitExpressionStatement(statement);
       final PsiExpression expression = statement.getExpression();
       if (!(expression instanceof PsiMethodCallExpression)) {

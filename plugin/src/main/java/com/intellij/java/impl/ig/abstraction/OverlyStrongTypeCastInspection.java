@@ -29,9 +29,9 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpectedTypeUtils;
 import com.intellij.java.impl.ig.psiutils.InstanceOfUtils;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -49,7 +49,7 @@ public class OverlyStrongTypeCastInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     final PsiType expectedType = (PsiType)infos[0];
     final String typeText = expectedType.getPresentableText();

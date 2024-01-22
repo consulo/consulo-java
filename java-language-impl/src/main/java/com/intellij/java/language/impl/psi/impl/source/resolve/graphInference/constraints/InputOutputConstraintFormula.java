@@ -23,8 +23,7 @@ import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.Fu
 import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.InferenceSession;
 import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.InferenceVariable;
 import com.intellij.java.language.psi.util.PsiUtil;
-
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * User: anna

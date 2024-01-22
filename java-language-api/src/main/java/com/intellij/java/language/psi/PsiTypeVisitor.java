@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.psi;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * Visitor which can be used to visit Java types.
@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
  */
 public class PsiTypeVisitor<A>
 {
-	@Nullable
+	@jakarta.annotation.Nullable
 	public A visitType(PsiType type)
 	{
 		return null;
@@ -48,7 +48,7 @@ public class PsiTypeVisitor<A>
 		return visitType(classType);
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	public A visitCapturedWildcardType(PsiCapturedWildcardType capturedWildcardType)
 	{
 		return visitWildcardType(capturedWildcardType.getWildcard());

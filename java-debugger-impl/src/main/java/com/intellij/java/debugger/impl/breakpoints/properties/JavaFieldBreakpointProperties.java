@@ -17,7 +17,7 @@ package com.intellij.java.debugger.impl.breakpoints.properties;
 
 import consulo.util.xml.serializer.annotation.Attribute;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author egor

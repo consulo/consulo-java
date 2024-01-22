@@ -41,10 +41,10 @@ import consulo.util.io.FileUtil;
 import consulo.util.lang.StringUtil;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
+import jakarta.annotation.Nonnull;
 import org.jdom.Element;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -57,14 +57,14 @@ public class TestDiscoveryExtension extends RunConfigurationExtension {
 
   private static final Logger LOG = Logger.getInstance(TestDiscoveryExtension.class);
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getSerializationId() {
     return "testDiscovery";
   }
 
   @Override
-  protected void attachToProcess(@Nonnull final RunConfigurationBase configuration, @Nonnull final ProcessHandler handler, @Nullable RunnerSettings runnerSettings) {
+  protected void attachToProcess(@jakarta.annotation.Nonnull final RunConfigurationBase configuration, @Nonnull final ProcessHandler handler, @Nullable RunnerSettings runnerSettings) {
     if (runnerSettings == null && isApplicableFor(configuration)) {
       final String frameworkPrefix = ((JavaTestConfigurationBase) configuration).getFrameworkPrefix();
       final String moduleName = ((JavaTestConfigurationBase) configuration).getConfigurationModule().getModuleName();
@@ -93,7 +93,7 @@ public class TestDiscoveryExtension extends RunConfigurationExtension {
         }
 
         @Override
-        public void onTestingFinished(@Nonnull SMTestProxy.SMRootTestProxy testsRoot) {
+        public void onTestingFinished(@jakarta.annotation.Nonnull SMTestProxy.SMRootTestProxy testsRoot) {
           if (testsRoot.getHandler() == handler) {
             processTracesAlarm.cancelAllRequests();
             processTracesAlarm.addRequest(() ->
@@ -134,20 +134,20 @@ public class TestDiscoveryExtension extends RunConfigurationExtension {
   }
 
   @Override
-  public void readExternal(@Nonnull final RunConfigurationBase runConfiguration, @Nonnull Element element) throws InvalidDataException {
+  public void readExternal(@jakarta.annotation.Nonnull final RunConfigurationBase runConfiguration, @jakarta.annotation.Nonnull Element element) throws InvalidDataException {
   }
 
   @Override
-  public void writeExternal(@Nonnull RunConfigurationBase runConfiguration, @Nonnull Element element) throws WriteExternalException {
+  public void writeExternal(@jakarta.annotation.Nonnull RunConfigurationBase runConfiguration, @jakarta.annotation.Nonnull Element element) throws WriteExternalException {
     throw new WriteExternalException();
   }
 
   @Override
-  protected boolean isApplicableFor(@Nonnull final RunConfigurationBase configuration) {
+  protected boolean isApplicableFor(@jakarta.annotation.Nonnull final RunConfigurationBase configuration) {
     return configuration instanceof JavaTestConfigurationBase && TESTDISCOVERY_ENABLED;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static Path baseTestDiscoveryPathForProject(Project project) {
     return ProjectUtil.getProjectCachePath(project, "testDiscovery", true);
   }

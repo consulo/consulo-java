@@ -18,6 +18,7 @@ package com.intellij.java.debugger.impl.ui.tree.render;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.annotation.Nullable;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.java.debugger.DebuggerBundle;
@@ -43,8 +44,6 @@ import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.PsiExpression;
 import consulo.internal.com.sun.jdi.BooleanValue;
 import consulo.internal.com.sun.jdi.Value;
-
-import javax.annotation.Nullable;
 
 public class ExpressionChildrenRenderer extends TypeRenderer implements ChildrenRenderer
 {

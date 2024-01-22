@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.psi;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * Represents a Java type cast expression.
@@ -34,6 +34,6 @@ public interface PsiTypeCastExpression extends PsiExpression {
    *
    * @return the operand of the type cast expression.
    */
-  @Nullable
+  @jakarta.annotation.Nullable
   PsiExpression getOperand();
 }

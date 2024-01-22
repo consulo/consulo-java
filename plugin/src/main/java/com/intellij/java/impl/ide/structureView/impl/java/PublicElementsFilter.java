@@ -23,7 +23,7 @@ import consulo.fileEditor.structureView.tree.TreeElement;
 import consulo.ide.IdeBundle;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class PublicElementsFilter implements Filter {
   @NonNls
@@ -37,7 +37,7 @@ public class PublicElementsFilter implements Filter {
     }
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public ActionPresentation getPresentation() {
     return new ActionPresentationData(IdeBundle.message("action.structureview.show.non.public"), null, AllIcons.Nodes.C_private);
   }

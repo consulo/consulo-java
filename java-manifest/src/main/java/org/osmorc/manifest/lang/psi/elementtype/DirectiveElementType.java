@@ -30,7 +30,7 @@ import consulo.language.psi.stub.IndexSink;
 import consulo.language.psi.stub.StubElement;
 import consulo.language.psi.stub.StubInputStream;
 import consulo.language.psi.stub.StubOutputStream;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import org.osmorc.manifest.lang.psi.Directive;
 import org.osmorc.manifest.lang.psi.impl.DirectiveImpl;
 import org.osmorc.manifest.lang.psi.stub.DirectiveStub;
@@ -47,7 +47,7 @@ public class DirectiveElementType extends AbstractManifestStubElementType<Direct
   }
 
   @Override
-  public Directive createPsi(@Nonnull DirectiveStub stub) {
+  public Directive createPsi(@jakarta.annotation.Nonnull DirectiveStub stub) {
     return new DirectiveImpl(stub, this);
   }
 
@@ -61,16 +61,16 @@ public class DirectiveElementType extends AbstractManifestStubElementType<Direct
     return new DirectiveStubImpl(parentStub, psi.getName(), psi.getValue());
   }
 
-  public void serialize(@Nonnull DirectiveStub stub, @Nonnull StubOutputStream dataStream) throws IOException {
+  public void serialize(@jakarta.annotation.Nonnull DirectiveStub stub, @jakarta.annotation.Nonnull StubOutputStream dataStream) throws IOException {
     dataStream.writeName(stub.getName());
     dataStream.writeUTFFast(stub.getValue());
   }
 
   @Nonnull
-  public DirectiveStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
+  public DirectiveStub deserialize(@jakarta.annotation.Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
     return new DirectiveStubImpl(parentStub, dataStream.readName().toString(), dataStream.readUTFFast());
   }
 
-  public void indexStub(@Nonnull DirectiveStub stub, @Nonnull IndexSink sink) {
+  public void indexStub(@jakarta.annotation.Nonnull DirectiveStub stub, @jakarta.annotation.Nonnull IndexSink sink) {
   }
 }

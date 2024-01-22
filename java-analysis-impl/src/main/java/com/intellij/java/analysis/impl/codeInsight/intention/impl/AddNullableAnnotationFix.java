@@ -24,7 +24,7 @@ package com.intellij.java.analysis.impl.codeInsight.intention.impl;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.language.psi.PsiModifierListOwner;
@@ -37,8 +37,8 @@ public class AddNullableAnnotationFix extends AddNullableNotNullAnnotationFix {
 				getNotNulls(owner));
 	}
 
-	@Nonnull
-	private static String[] getNotNulls(@Nonnull PsiModifierListOwner owner) {
+	@jakarta.annotation.Nonnull
+	private static String[] getNotNulls(@jakarta.annotation.Nonnull PsiModifierListOwner owner) {
 		final List<String> notnulls = NullableNotNullManager.getInstance(owner.getProject()).getNotNulls();
 		return ArrayUtil.toStringArray(notnulls);
 	}

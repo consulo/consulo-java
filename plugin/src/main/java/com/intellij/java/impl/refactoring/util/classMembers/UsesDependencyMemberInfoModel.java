@@ -24,7 +24,7 @@
  */
 package com.intellij.java.impl.refactoring.util.classMembers;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.language.psi.NavigatablePsiElement;
 import consulo.language.psi.PsiElement;

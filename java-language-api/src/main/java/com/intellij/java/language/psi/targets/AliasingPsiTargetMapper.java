@@ -19,7 +19,7 @@ import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
 import consulo.language.pom.PomTarget;
-import org.jetbrains.annotations.NotNull;
+import jakarta.annotation.Nonnull;
 
 import java.util.Set;
 
@@ -27,6 +27,6 @@ import java.util.Set;
 public interface AliasingPsiTargetMapper {
   ExtensionPointName<AliasingPsiTargetMapper> EP_NAME = ExtensionPointName.create(AliasingPsiTargetMapper.class);
 
-  @NotNull
-  Set<AliasingPsiTarget> getTargets(@NotNull PomTarget target);
+  @Nonnull
+  Set<AliasingPsiTarget> getTargets(@Nonnull PomTarget target);
 }

@@ -21,7 +21,7 @@ import consulo.component.extension.ExtensionPointName;
 import consulo.execution.ui.console.Filter;
 import consulo.language.psi.scope.GlobalSearchScope;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * User: Irina.Chernushina
@@ -33,5 +33,5 @@ public interface ExceptionFilterFactory {
   ExtensionPointName<ExceptionFilterFactory> EP_NAME = ExtensionPointName.create(ExceptionFilterFactory.class);
 
   @Nonnull
-  Filter create(@Nonnull GlobalSearchScope searchScope);
+  Filter create(@jakarta.annotation.Nonnull GlobalSearchScope searchScope);
 }

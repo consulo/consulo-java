@@ -27,17 +27,17 @@ import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import consulo.project.Project;
 import consulo.language.psi.PsiElement;
 import consulo.ui.ex.awt.StateRestoringCheckBox;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import javax.swing.*;
 
 public abstract class JavaFindUsagesDialog<T extends JavaFindUsagesOptions> extends CommonFindUsagesDialog {
   private StateRestoringCheckBox myCbIncludeOverloadedMethods;
   private boolean myIncludeOverloadedMethodsAvailable;
 
-  protected JavaFindUsagesDialog(@Nonnull PsiElement element,
+  protected JavaFindUsagesDialog(@jakarta.annotation.Nonnull PsiElement element,
                                  @Nonnull Project project,
-                                 @Nonnull FindUsagesOptions findUsagesOptions,
+                                 @jakarta.annotation.Nonnull FindUsagesOptions findUsagesOptions,
                                  boolean toShowInNewTab,
                                  boolean mustOpenInNewTab,
                                  boolean isSingleFile,

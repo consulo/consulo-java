@@ -30,8 +30,8 @@ import consulo.language.util.ProcessingContext;
 import consulo.util.collection.ContainerUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.language.editor.completion.CompletionProvider;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 
 import static consulo.language.pattern.PlatformPatterns.psiElement;
@@ -48,7 +48,7 @@ class LabelReferenceCompletion implements CompletionProvider {
 
   @RequiredReadAction
   @Override
-  public void addCompletions(@Nonnull CompletionParameters parameters, ProcessingContext context, @Nonnull CompletionResultSet result) {
+  public void addCompletions(@jakarta.annotation.Nonnull CompletionParameters parameters, ProcessingContext context, @Nonnull CompletionResultSet result) {
     PsiReference ref = parameters.getPosition().getContainingFile().findReferenceAt(parameters.getOffset());
     if (ref instanceof PsiLabelReference) {
       result.addAllElements(processLabelReference((PsiLabelReference) ref));

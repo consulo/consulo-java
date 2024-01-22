@@ -41,8 +41,8 @@ import consulo.module.content.ProjectRootManager;
 import consulo.ui.image.Image;
 import consulo.virtualFileSystem.VirtualFile;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.awt.*;
 
 /**
@@ -63,7 +63,7 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 
 	private Image myIcon = AllIcons.Debugger.StackFrame;
 
-	public StackFrameDescriptorImpl(@Nonnull StackFrameProxyImpl frame, @Nonnull MethodsTracker tracker)
+	public StackFrameDescriptorImpl(@jakarta.annotation.Nonnull StackFrameProxyImpl frame, @jakarta.annotation.Nonnull MethodsTracker tracker)
 	{
 		myFrame = frame;
 
@@ -167,7 +167,7 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 		return myMethodOccurrence.isRecursive();
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	public ValueMarkup getValueMarkup()
 	{
 		if(myThisObject != null)
@@ -308,7 +308,7 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 		return myIsInLibraryContent;
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	public Location getLocation()
 	{
 		return myLocation;

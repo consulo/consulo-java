@@ -11,7 +11,7 @@ import consulo.undoRedo.ProjectUndoManager;
 import consulo.virtualFileSystem.VirtualFile;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Set;
 
 /**
@@ -36,7 +36,7 @@ public class IgnoreClassFix extends InspectionGadgetsFix {
   }
 
   @Nls
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getFamilyName() {
     return "Ignore for these types";

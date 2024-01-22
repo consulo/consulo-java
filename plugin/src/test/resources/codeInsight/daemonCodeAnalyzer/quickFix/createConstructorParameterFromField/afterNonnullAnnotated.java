@@ -1,8 +1,11 @@
+import jakarta.annotation.Nonnull;
+
 // "Add constructor parameter" "true"
 class A {
-  @javax.annotation.Nonnull private final Object field;
+  @Nonnull
+  private final Object field;
 
-  A(@javax.annotation.Nonnull Object field, String... strs) {
+  A(@Nonnull Object field, String... strs) {
       this.field = field;<caret>
   }
 

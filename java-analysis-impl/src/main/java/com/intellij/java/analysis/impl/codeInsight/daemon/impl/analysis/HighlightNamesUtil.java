@@ -41,8 +41,8 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
 import consulo.util.lang.Pair;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.List;
 
 public class HighlightNamesUtil {
@@ -91,7 +91,7 @@ public class HighlightNamesUtil {
     return null;
   }
 
-  private static boolean isCalledOnThis(@Nonnull PsiElement elementToHighlight) {
+  private static boolean isCalledOnThis(@jakarta.annotation.Nonnull PsiElement elementToHighlight) {
     PsiMethodCallExpression methodCallExpression = PsiTreeUtil.getParentOfType(elementToHighlight, PsiMethodCallExpression.class);
     if (methodCallExpression != null) {
       PsiElement qualifier = methodCallExpression.getMethodExpression().getQualifier();
@@ -157,7 +157,7 @@ public class HighlightNamesUtil {
     return RainbowHighlighter.isRainbowEnabledWithInheritance(colorsScheme, JavaLanguage.INSTANCE) ? builder.createUnconditionally() : builder.create();
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static HighlightInfo highlightClassNameInQualifier(@Nonnull PsiJavaCodeReferenceElement element, @Nonnull TextAttributesScheme colorsScheme) {
     PsiElement qualifierExpression = element.getQualifier();
     if (qualifierExpression instanceof PsiJavaCodeReferenceElement) {
@@ -188,7 +188,7 @@ public class HighlightNamesUtil {
     return JavaHighlightInfoTypes.METHOD_CALL;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static HighlightInfoType getVariableNameHighlightType(@Nonnull PsiVariable var) {
     if (var instanceof PsiLocalVariable || var instanceof PsiParameter && ((PsiParameter) var).getDeclarationScope() instanceof PsiForeachStatement) {
       return JavaHighlightInfoTypes.LOCAL_VARIABLE;
@@ -203,7 +203,7 @@ public class HighlightNamesUtil {
     return null;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private static HighlightInfoType getClassNameHighlightType(@Nullable PsiClass aClass, @Nullable PsiElement element) {
     if (element instanceof PsiJavaCodeReferenceElement && element.getParent() instanceof PsiAnonymousClass) {
       return JavaHighlightInfoTypes.ANONYMOUS_CLASS_NAME;

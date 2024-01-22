@@ -36,7 +36,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.logging.Logger;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class MoveToPackageFix implements LocalQuickFix {
   private static final Logger LOG = Logger.getInstance(MoveToPackageFix.class);

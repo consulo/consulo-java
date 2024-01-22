@@ -34,6 +34,7 @@ open module consulo.java.language.api {
   exports com.intellij.java.language.psi.search.searches;
   exports com.intellij.java.language.psi.stubs;
   exports com.intellij.java.language.psi.targets;
+  exports com.intellij.java.language.psi.tree;
   exports com.intellij.java.language.psi.tree.java;
   exports com.intellij.java.language.psi.util;
   exports com.intellij.java.language.spi;

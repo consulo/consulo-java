@@ -28,10 +28,10 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Bas Leijdekkers
@@ -48,7 +48,7 @@ public class ChangeToAppendFix implements SyntheticIntentionAction {
     myAssignmentExpression = assignmentExpression;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getText() {
     return JavaQuickFixBundle.message("change.to.append.text",
@@ -58,7 +58,7 @@ public class ChangeToAppendFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
     return JavaTokenType.PLUSEQ == myTokenType &&
            myAssignmentExpression.isValid() &&
            PsiManager.getInstance(project).isInProject(myAssignmentExpression) &&

@@ -25,8 +25,8 @@ import consulo.application.util.function.ThrowableComputable;
 import consulo.compiler.CacheCorruptedException;
 import consulo.compiler.CompileContext;
 import consulo.module.Module;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 

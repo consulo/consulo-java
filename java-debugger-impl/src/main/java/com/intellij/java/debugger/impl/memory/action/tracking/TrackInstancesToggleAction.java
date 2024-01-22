@@ -23,9 +23,9 @@ import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.project.Project;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.action.ToggleAction;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public class TrackInstancesToggleAction extends ToggleAction
 {

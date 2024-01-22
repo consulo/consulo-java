@@ -39,11 +39,9 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import consulo.util.xml.serializer.WriteExternalException;
-import org.jdom.Element;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +57,7 @@ public class UnusedReturnValue extends GlobalJavaInspectionTool implements OldSt
 	public boolean IGNORE_BUILDER_PATTERN = false;
 
 	@Override
-	@Nullable
+	@jakarta.annotation.Nullable
 	public CommonProblemDescriptor[] checkElement(RefEntity refEntity,
 												  AnalysisScope scope,
 												  InspectionManager manager,
@@ -131,7 +129,7 @@ public class UnusedReturnValue extends GlobalJavaInspectionTool implements OldSt
 					refEntity.accept(new RefJavaVisitor()
 					{
 						@Override
-						public void visitMethod(@Nonnull final RefMethod refMethod)
+						public void visitMethod(@jakarta.annotation.Nonnull final RefMethod refMethod)
 						{
 							globalContext.enqueueMethodUsagesProcessor(refMethod, new GlobalJavaInspectionContext.UsagesProcessor()
 							{
@@ -159,7 +157,7 @@ public class UnusedReturnValue extends GlobalJavaInspectionTool implements OldSt
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public String getGroupDisplayName()
 	{
 		return GroupNames.DECLARATION_REDUNDANCY;
@@ -230,7 +228,7 @@ public class UnusedReturnValue extends GlobalJavaInspectionTool implements OldSt
 		}
 
 		@Override
-		@Nonnull
+		@jakarta.annotation.Nonnull
 		public String getFamilyName()
 		{
 			return getName();

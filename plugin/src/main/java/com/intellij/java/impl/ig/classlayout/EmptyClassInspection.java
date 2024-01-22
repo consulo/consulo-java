@@ -30,7 +30,7 @@ import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.language.psi.PsiFile;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 
@@ -53,7 +53,7 @@ public class EmptyClassInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     final Object element = infos[0];
     if (element instanceof PsiAnonymousClass) {
@@ -90,7 +90,7 @@ public class EmptyClassInspection extends BaseInspection {
     return panel;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     final Object info = infos[0];

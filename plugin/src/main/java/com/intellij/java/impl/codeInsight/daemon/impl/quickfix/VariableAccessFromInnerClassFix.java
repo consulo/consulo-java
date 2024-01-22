@@ -24,7 +24,6 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.psi.PsiElement;
@@ -39,7 +38,7 @@ import consulo.util.dataholder.Key;
 import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.*;
 
 public class VariableAccessFromInnerClassFix implements SyntheticIntentionAction {
@@ -52,7 +51,7 @@ public class VariableAccessFromInnerClassFix implements SyntheticIntentionAction
   private static final int COPY_TO_FINAL = 2;
   private static final Key<Map<PsiVariable,Boolean>>[] VARS = new Key[] {Key.create("VARS_TO_MAKE_FINAL"), Key.create("VARS_TO_TRANSFORM"), Key.create("???")};
 
-  public VariableAccessFromInnerClassFix(@Nonnull PsiVariable variable, @Nonnull PsiElement element) {
+  public VariableAccessFromInnerClassFix(@Nonnull PsiVariable variable, @jakarta.annotation.Nonnull PsiElement element) {
     myVariable = variable;
     myContext = element;
     myFixType = getQuickFixType(variable);
@@ -97,7 +96,7 @@ public class VariableAccessFromInnerClassFix implements SyntheticIntentionAction
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
     if (!FileModificationService.getInstance().preparePsiElementsForWrite(myContext, myVariable)) return;
     try {
       switch (myFixType) {
@@ -307,7 +306,7 @@ public class VariableAccessFromInnerClassFix implements SyntheticIntentionAction
     return type;
   }
 
-  private static boolean canBeFinal(@Nonnull PsiVariable variable, @Nonnull List<PsiReferenceExpression> references) {
+  private static boolean canBeFinal(@jakarta.annotation.Nonnull PsiVariable variable, @Nonnull List<PsiReferenceExpression> references) {
     // if there is at least one assignment to this variable, it cannot be final
     Map<PsiElement, Collection<PsiReferenceExpression>> uninitializedVarProblems = new HashMap<PsiElement, Collection<PsiReferenceExpression>>();
     Map<PsiElement, Collection<ControlFlowUtil.VariableInfo>> finalVarProblems = new HashMap<PsiElement, Collection<ControlFlowUtil.VariableInfo>>();

@@ -20,7 +20,7 @@ import com.intellij.java.language.psi.PsiAnnotationMethod;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.util.PsiUtil;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 enum InitializerRequirement {
   NONE_REQUIRED, VALUE_REQUIRED, OTHER_REQUIRED;

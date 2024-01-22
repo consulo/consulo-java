@@ -16,12 +16,11 @@
 
 package com.intellij.java.impl.refactoring.migration;
 
-import javax.annotation.Nonnull;
-
 import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.usage.UsageViewBundle;
 import consulo.usage.UsageViewDescriptor;
+import jakarta.annotation.Nonnull;
 
 class MigrationUsagesViewDescriptor implements UsageViewDescriptor
 {

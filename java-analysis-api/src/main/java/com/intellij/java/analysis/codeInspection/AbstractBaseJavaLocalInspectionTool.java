@@ -31,8 +31,8 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiNamedElement;
 import consulo.language.psi.util.PsiTreeUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public abstract class AbstractBaseJavaLocalInspectionTool<State> extends LocalInspectionTool implements OldStyleInspection {
   /**
@@ -44,8 +44,8 @@ public abstract class AbstractBaseJavaLocalInspectionTool<State> extends LocalIn
    * @param state
    * @return <code>null</code> if no problems found or not applicable at method level.
    */
-  @Nullable
-  public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod method, @Nonnull InspectionManager manager, boolean isOnTheFly, State state) {
+  @jakarta.annotation.Nullable
+  public ProblemDescriptor[] checkMethod(@jakarta.annotation.Nonnull PsiMethod method, @jakarta.annotation.Nonnull InspectionManager manager, boolean isOnTheFly, State state) {
     return null;
   }
 
@@ -58,7 +58,7 @@ public abstract class AbstractBaseJavaLocalInspectionTool<State> extends LocalIn
    * @param state
    * @return <code>null</code> if no problems found or not applicable at class level.
    */
-  @Nullable
+  @jakarta.annotation.Nullable
   public ProblemDescriptor[] checkClass(@Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly, State state) {
     return null;
   }
@@ -72,8 +72,8 @@ public abstract class AbstractBaseJavaLocalInspectionTool<State> extends LocalIn
    * @param state
    * @return <code>null</code> if no problems found or not applicable at field level.
    */
-  @Nullable
-  public ProblemDescriptor[] checkField(@Nonnull PsiField field, @Nonnull InspectionManager manager, boolean isOnTheFly, State state) {
+  @jakarta.annotation.Nullable
+  public ProblemDescriptor[] checkField(@Nonnull PsiField field, @jakarta.annotation.Nonnull InspectionManager manager, boolean isOnTheFly, State state) {
     return null;
   }
 
@@ -91,7 +91,7 @@ public abstract class AbstractBaseJavaLocalInspectionTool<State> extends LocalIn
    * @param isOnTheFly true if called during on the fly editor highlighting. Called from Inspect Code action otherwise.
    * @return <code>null</code> if no problems found or not applicable at file level.
    */
-  @Nullable
+  @jakarta.annotation.Nullable
   public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean isOnTheFly, State state) {
     return null;
   }
@@ -106,14 +106,14 @@ public abstract class AbstractBaseJavaLocalInspectionTool<State> extends LocalIn
   @Nonnull
   @Override
   @SuppressWarnings("unchecked")
-  public final PsiElementVisitor buildVisitor(@Nonnull ProblemsHolder holder,
+  public final PsiElementVisitor buildVisitor(@jakarta.annotation.Nonnull ProblemsHolder holder,
                                         boolean isOnTheFly,
                                         @Nonnull LocalInspectionToolSession session,
                                         @Nonnull Object state) {
     return buildVisitorImpl(holder, isOnTheFly, session, (State)state);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
                                             final boolean isOnTheFly,
                                             LocalInspectionToolSession session,
@@ -159,7 +159,7 @@ public abstract class AbstractBaseJavaLocalInspectionTool<State> extends LocalIn
     return false;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;
@@ -171,7 +171,7 @@ public abstract class AbstractBaseJavaLocalInspectionTool<State> extends LocalIn
     return "General";
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public HighlightDisplayLevel getDefaultLevel() {
     return HighlightDisplayLevel.WARNING;

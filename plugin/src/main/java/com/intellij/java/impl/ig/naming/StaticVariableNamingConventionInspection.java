@@ -26,7 +26,7 @@ import com.siyeh.ig.psiutils.ClassUtils;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.CheckBox;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.JComponent;
 import java.util.Arrays;
@@ -107,7 +107,7 @@ public class StaticVariableNamingConventionInspection
   private class NamingConventionsVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@Nonnull PsiField field) {
+    public void visitField(@jakarta.annotation.Nonnull PsiField field) {
       if (!field.hasModifierProperty(PsiModifier.STATIC)) {
         return;
       }

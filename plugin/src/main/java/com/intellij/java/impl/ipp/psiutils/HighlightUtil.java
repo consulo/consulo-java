@@ -38,7 +38,7 @@ import consulo.project.Project;
 import consulo.project.ui.wm.StatusBar;
 import consulo.project.ui.wm.WindowManager;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -49,7 +49,7 @@ public class HighlightUtil {
   }
 
   public static void highlightElements(
-    @Nonnull final Collection<? extends PsiElement> elementCollection,
+    @jakarta.annotation.Nonnull final Collection<? extends PsiElement> elementCollection,
     @Nonnull final String statusBarText) {
     if (elementCollection.isEmpty()) {
       return;
@@ -96,7 +96,7 @@ public class HighlightUtil {
   }
 
   public static void highlightElement(
-    @Nonnull PsiElement element, @Nonnull final String statusBarText) {
+    @Nonnull PsiElement element, @jakarta.annotation.Nonnull final String statusBarText) {
     final List<PsiElement> elements = Collections.singletonList(element);
     highlightElements(elements, statusBarText);
   }

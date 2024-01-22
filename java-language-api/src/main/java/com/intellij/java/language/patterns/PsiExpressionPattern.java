@@ -21,7 +21,7 @@ import consulo.language.pattern.ElementPattern;
 import consulo.language.pattern.PatternCondition;
 import consulo.language.util.ProcessingContext;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
@@ -56,7 +56,7 @@ public class PsiExpressionPattern<T extends PsiExpression, Self extends PsiExpre
   public Self skipParentheses(final ElementPattern<? extends PsiExpression> expressionPattern) {
     return with(new PatternCondition<T>("skipParentheses") {
       @Override
-      public boolean accepts(@Nonnull T t, ProcessingContext context) {
+      public boolean accepts(@jakarta.annotation.Nonnull T t, ProcessingContext context) {
         PsiExpression expression = t;
         while (expression instanceof PsiParenthesizedExpression) {
           expression = ((PsiParenthesizedExpression)expression).getExpression();

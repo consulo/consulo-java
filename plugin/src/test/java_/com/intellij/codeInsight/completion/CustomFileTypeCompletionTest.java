@@ -2,7 +2,7 @@ package com.intellij.codeInsight.completion;
 
 import java.io.IOException;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.JavaTestUtil;
 import consulo.ide.impl.idea.openapi.fileTypes.MockLanguageFileType;

@@ -26,7 +26,7 @@ import com.intellij.java.language.psi.PsiModifierListOwner;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author yole

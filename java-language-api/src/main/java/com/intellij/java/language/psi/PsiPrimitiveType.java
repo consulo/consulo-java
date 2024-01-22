@@ -22,8 +22,9 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -46,7 +47,7 @@ public class PsiPrimitiveType extends PsiType.Stub {
     }
   }
 
-  public PsiPrimitiveType(@Nonnull String name, @Nonnull PsiAnnotation[] annotations) {
+  public PsiPrimitiveType(@jakarta.annotation.Nonnull String name, @Nonnull PsiAnnotation[] annotations) {
     super(annotations);
     myName = name;
   }
@@ -74,7 +75,7 @@ public class PsiPrimitiveType extends PsiType.Stub {
     return getText(true, annotated);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getInternalCanonicalText() {
     return getCanonicalText(true);
@@ -121,7 +122,7 @@ public class PsiPrimitiveType extends PsiType.Stub {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiType[] getSuperTypes() {
     return EMPTY_ARRAY;
   }
@@ -132,7 +133,7 @@ public class PsiPrimitiveType extends PsiType.Stub {
    * @param type the type to get the unboxed primitive type for.
    * @return the primitive type, or null if the type does not represent a boxed primitive type.
    */
-  @Nullable
+  @jakarta.annotation.Nullable
   public static PsiPrimitiveType getUnboxedType(PsiType type) {
     if (!(type instanceof PsiClassType)) {
       return null;
@@ -173,7 +174,7 @@ public class PsiPrimitiveType extends PsiType.Stub {
    * @return the class type, or null if the current language level does not support autoboxing or
    * it was not possible to resolve the reference to the class.
    */
-  @Nullable
+  @jakarta.annotation.Nullable
   public PsiClassType getBoxedType(@Nonnull PsiElement context) {
     PsiFile file = context.getContainingFile();
     if (file == null) {
@@ -199,7 +200,7 @@ public class PsiPrimitiveType extends PsiType.Stub {
     return factory.createType(aClass, PsiSubstitutor.EMPTY, languageLevel).annotate(getAnnotationProvider());
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public PsiClassType getBoxedType(@Nonnull PsiManager manager, @Nonnull GlobalSearchScope resolveScope) {
     String boxedQName = getBoxedTypeName();
     if (boxedQName == null) {

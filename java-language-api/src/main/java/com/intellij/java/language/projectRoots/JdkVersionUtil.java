@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.projectRoots;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @SuppressWarnings("unused")
 public class JdkVersionUtil

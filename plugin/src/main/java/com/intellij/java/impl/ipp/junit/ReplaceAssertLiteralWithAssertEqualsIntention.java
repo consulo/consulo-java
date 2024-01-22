@@ -28,7 +28,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ReplaceAssertLiteralWithAssertEqualsIntention", fileExtensions = "java", categories = {"Java", "JUnit"})
@@ -68,7 +68,7 @@ public class ReplaceAssertLiteralWithAssertEqualsIntention extends MutablyNamedI
   }
 
   @Override
-  public void processIntention(@Nonnull PsiElement element) {
+  public void processIntention(@jakarta.annotation.Nonnull PsiElement element) {
     final PsiMethodCallExpression call = (PsiMethodCallExpression)element;
     final PsiReferenceExpression methodExpression = call.getMethodExpression();
     @NonNls final String methodName = methodExpression.getReferenceName();

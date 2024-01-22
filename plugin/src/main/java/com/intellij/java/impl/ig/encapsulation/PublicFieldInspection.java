@@ -28,8 +28,9 @@ import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.ui.ExternalizableStringSet;
 import consulo.annotation.component.ExtensionImpl;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -93,7 +94,7 @@ public class PublicFieldInspection extends BaseInspection {
   private class PublicFieldVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@Nonnull PsiField field) {
+    public void visitField(@jakarta.annotation.Nonnull PsiField field) {
       if (!field.hasModifierProperty(PsiModifier.PUBLIC)) {
         return;
       }

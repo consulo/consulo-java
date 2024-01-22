@@ -54,7 +54,7 @@ import consulo.util.collection.Maps;
 import consulo.util.collection.Sets;
 import consulo.virtualFileSystem.VirtualFile;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
@@ -294,7 +294,7 @@ public class ExtractMethodSignatureSuggester {
   }
 
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private InputVariables detectTopLevelExpressionsToReplaceWithParameters(List<PsiExpression> copies) {
     final PsiParameter[] parameters = myExtractedMethod.getParameterList().getParameters();
     final List<PsiVariable> inputVariables = new ArrayList<PsiVariable>(Arrays.asList(parameters));
@@ -388,14 +388,14 @@ public class ExtractMethodSignatureSuggester {
       init();
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     @Override
     protected JComponent createNorthPanel() {
       return new JLabel("<html><b>No exact method duplicates were found</b>, though changed method as shown below has " + myDuplicatesNumber + " duplicate" + (myDuplicatesNumber > 1 ? "s" :
           "") + " </html>");
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     @Override
     @RequiredUIAccess
     protected JComponent createCenterPanel() {

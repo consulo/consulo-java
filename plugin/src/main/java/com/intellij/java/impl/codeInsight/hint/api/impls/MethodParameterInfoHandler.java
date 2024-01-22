@@ -43,8 +43,8 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.project.DumbService;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -68,8 +68,8 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
   }
 
   @Override
-  @Nullable
-  public PsiExpressionList findElementForParameterInfo(@Nonnull final CreateParameterInfoContext context) {
+  @jakarta.annotation.Nullable
+  public PsiExpressionList findElementForParameterInfo(@jakarta.annotation.Nonnull final CreateParameterInfoContext context) {
     PsiExpressionList argumentList = findArgumentList(context.getFile(), context.getOffset(), context.getParameterListStart());
 
     if (argumentList != null) {
@@ -110,7 +110,7 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
   }
 
   @Override
-  public void updateParameterInfo(@Nonnull final PsiExpressionList o, @Nonnull final UpdateParameterInfoContext context) {
+  public void updateParameterInfo(@jakarta.annotation.Nonnull final PsiExpressionList o, @jakarta.annotation.Nonnull final UpdateParameterInfoContext context) {
     PsiElement parameterOwner = context.getParameterOwner();
     if (parameterOwner != o) {
       context.removeHint();
@@ -236,13 +236,13 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public Class<PsiExpressionList> getArgumentListClass() {
     return PsiExpressionList.class;
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public IElementType getActualParametersRBraceType() {
     return JavaTokenType.RBRACE;
   }
@@ -253,7 +253,7 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
     return ourArgumentListAllowedParentClassesSet;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Set<? extends Class<?>> getArgListStopSearchClasses() {
     return ourStopSearch;
@@ -434,7 +434,7 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
         .getDefaultParameterColor());
   }
 
-  private static void appendModifierList(@Nonnull StringBuilder buffer, @Nonnull PsiModifierListOwner owner) {
+  private static void appendModifierList(@Nonnull StringBuilder buffer, @jakarta.annotation.Nonnull PsiModifierListOwner owner) {
     int lastSize = buffer.length();
 		Set<String> shownAnnotations = new HashSet<>();
     for (PsiAnnotation annotation : AnnotationUtil.getAllAnnotations(owner, false, null, !DumbService.isDumb(owner.getProject()))) {

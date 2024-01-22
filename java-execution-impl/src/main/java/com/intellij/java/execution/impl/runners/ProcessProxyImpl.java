@@ -10,8 +10,8 @@ import consulo.process.ProcessHandler;
 import consulo.process.ProcessHandlerFeature;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.function.ThrowableRunnable;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;

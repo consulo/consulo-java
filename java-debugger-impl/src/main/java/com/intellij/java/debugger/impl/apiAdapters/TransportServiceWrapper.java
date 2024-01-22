@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
 import consulo.process.ExecutionException;
@@ -84,7 +84,7 @@ public class TransportServiceWrapper
 		myDelegateObject.stopListening(listenKey);
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public String transportId()
 	{
 		if(myDelegateClass == TransportClassDelegates.getSharedMemoryTransportServiceClass())

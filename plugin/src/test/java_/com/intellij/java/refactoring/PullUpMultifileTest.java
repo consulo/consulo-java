@@ -23,8 +23,6 @@ import static org.junit.Assert.fail;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.JavaTestUtil;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiClass;
@@ -39,6 +37,7 @@ import com.intellij.java.impl.refactoring.memberPullUp.PullUpProcessor;
 import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import consulo.util.collection.MultiMap;
+import jakarta.annotation.Nonnull;
 
 //pull first method from class a.A to class b.B
 public abstract class PullUpMultifileTest extends MultiFileTestCase

@@ -19,7 +19,7 @@
  */
 package com.intellij.java.language.impl.psi.impl.java.stubs;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiJavaModule;

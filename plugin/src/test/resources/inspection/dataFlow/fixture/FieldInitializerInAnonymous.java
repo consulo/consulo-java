@@ -1,6 +1,8 @@
+import jakarta.annotation.Nullable;
+
 class Zoo2 {
 
-  void foo(@javax.annotation.Nullable Object foo) {
+  void foo(@Nullable Object foo) {
     if (foo == null) {
       return;
     }

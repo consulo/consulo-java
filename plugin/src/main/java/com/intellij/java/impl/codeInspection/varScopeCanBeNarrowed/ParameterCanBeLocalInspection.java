@@ -33,10 +33,11 @@ import com.intellij.java.impl.refactoring.changeSignature.ChangeSignatureProcess
 import com.intellij.java.impl.refactoring.changeSignature.ParameterInfoImpl;
 import consulo.usage.UsageInfo;
 import consulo.ide.impl.idea.util.NotNullFunction;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.util.*;
 
 /**
@@ -72,7 +73,7 @@ public class ParameterCanBeLocalInspection extends BaseJavaLocalInspectionTool {
   }
 
   @Override
-  public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod method, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
+  public ProblemDescriptor[] checkMethod(@jakarta.annotation.Nonnull PsiMethod method, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
     final Collection<PsiParameter> parameters = filterFinal(method.getParameterList().getParameters());
     final PsiCodeBlock body = method.getBody();
     if (body == null || parameters.isEmpty() || isOverrides(method)) {
@@ -101,7 +102,7 @@ public class ParameterCanBeLocalInspection extends BaseJavaLocalInspectionTool {
   }
 
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private static ProblemDescriptor createProblem(@Nonnull InspectionManager manager,
                                                  @Nonnull PsiIdentifier identifier,
                                                  boolean isOnTheFly) {
@@ -148,7 +149,7 @@ public class ParameterCanBeLocalInspection extends BaseJavaLocalInspectionTool {
     return SuperMethodsSearch.search(method, null, true, false).findFirst() != null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static ControlFlow getControlFlow(final PsiElement context) {
     try {
       return ControlFlowFactory.getInstance(context.getProject())
@@ -201,7 +202,7 @@ public class ParameterCanBeLocalInspection extends BaseJavaLocalInspectionTool {
 
     @Nonnull
     @Override
-    protected String suggestLocalName(@Nonnull Project project, @Nonnull PsiParameter parameter, @Nonnull PsiCodeBlock scope) {
+    protected String suggestLocalName(@Nonnull Project project, @jakarta.annotation.Nonnull PsiParameter parameter, @jakarta.annotation.Nonnull PsiCodeBlock scope) {
       return parameter.getName();
     }
   }

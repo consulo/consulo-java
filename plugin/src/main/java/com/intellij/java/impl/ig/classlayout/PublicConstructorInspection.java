@@ -16,12 +16,12 @@
 
 package com.intellij.java.impl.ig.classlayout;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nullable;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.dataContext.DataManager;
 import consulo.dataContext.DataContext;
@@ -50,14 +50,14 @@ public class PublicConstructorInspection extends BaseInspection
 {
 
 	@Nls
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
 	public String getDisplayName()
 	{
 		return InspectionGadgetsBundle.message("public.constructor.display.name");
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
 	protected String buildErrorString(Object... infos)
 	{

@@ -24,8 +24,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author Dmitry Batkovich
@@ -51,7 +50,7 @@ public class SurroundWithQuotesAnnotationParameterValueFix implements SyntheticI
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     String newText = myValue.getText();
     newText = StringUtil.stripQuotesAroundValue(newText);
     newText = "\"" + newText + "\"";

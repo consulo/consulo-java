@@ -28,8 +28,8 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import org.jetbrains.annotations.Nls;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class UnnecessarySuperQualifierInspection extends BaseInspection {
@@ -58,7 +58,7 @@ public class UnnecessarySuperQualifierInspection extends BaseInspection {
 
   private static class UnnecessarySuperQualifierFix
     extends InspectionGadgetsFix {
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "unnecessary.super.qualifier.quickfix");

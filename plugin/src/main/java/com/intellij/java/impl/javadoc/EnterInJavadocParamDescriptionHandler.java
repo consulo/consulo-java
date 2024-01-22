@@ -15,7 +15,7 @@ import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiFile;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.util.lang.CharArrayUtil;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class EnterInJavadocParamDescriptionHandler extends EnterHandlerDelegateA
   private final JavadocHelper myHelper = JavadocHelper.getInstance();
 
   @Override
-  public Result postProcessEnter(@Nonnull final PsiFile file, @Nonnull Editor editor, @Nonnull DataContext dataContext) {
+  public Result postProcessEnter(@Nonnull final PsiFile file, @Nonnull Editor editor, @jakarta.annotation.Nonnull DataContext dataContext) {
     if (!CodeInsightSettings.getInstance().SMART_INDENT_ON_ENTER
         || !CodeStyleSettingsManager.getSettings(file.getProject()).JD_ALIGN_PARAM_COMMENTS)
     {

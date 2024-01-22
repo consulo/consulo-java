@@ -26,9 +26,9 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.MakeFieldFinalFix;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nullable;
 import javax.swing.*;
 import java.util.Set;
 
@@ -42,7 +42,7 @@ public class FieldAccessedSynchronizedAndUnsynchronizedInspection
   public boolean countGettersAndSetters = false;
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "field.accessed.synchronized.and.unsynchronized.display.name");

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.junit;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.siyeh.InspectionGadgetsBundle;
@@ -64,7 +64,7 @@ public class TestCaseInProductCodeInspectionBase extends BaseInspection
 	{
 
 		@Override
-		public void visitClass(@Nonnull PsiClass aClass)
+		public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass)
 		{
 			if(TestUtils.isInTestSourceContent(aClass) || !TestUtils.isJUnitTestClass(aClass))
 			{

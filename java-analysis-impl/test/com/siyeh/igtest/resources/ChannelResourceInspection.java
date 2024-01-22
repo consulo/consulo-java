@@ -1,6 +1,6 @@
 package com.siyeh.igtest.resources;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.io.*;
 import java.net.ServerSocket;

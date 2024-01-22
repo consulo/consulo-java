@@ -31,10 +31,11 @@ import com.intellij.lang.properties.psi.PropertiesFile;
 import com.intellij.lang.properties.psi.Property;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -48,7 +49,7 @@ import java.util.Set;
 public class UnusedMessageFormatParameterInspection extends BaseLocalInspectionTool {
   public static final String REGEXP = "regexp";
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public Language getLanguage() {
     return PropertiesLanguage.INSTANCE;
@@ -66,7 +67,7 @@ public class UnusedMessageFormatParameterInspection extends BaseLocalInspectionT
   }
 
   @Nullable
-  public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
+  public ProblemDescriptor[] checkFile(@jakarta.annotation.Nonnull PsiFile file, @jakarta.annotation.Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
     if (!(file instanceof PropertiesFile)) return null;
     PropertiesFile propertiesFile = (PropertiesFile) file;
     final List<IProperty> properties = propertiesFile.getProperties();

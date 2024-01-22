@@ -15,9 +15,6 @@
  */
 package com.intellij.java.language.impl.psi.impl.source;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.intellij.java.language.impl.JavaFileType;
 import consulo.virtualFileSystem.fileType.FileType;
 import consulo.language.file.FileViewProvider;
@@ -26,6 +23,8 @@ import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiJavaFileStub;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.annotation.access.RequiredReadAction;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class PsiJavaFileImpl extends PsiJavaFileBaseImpl
 {

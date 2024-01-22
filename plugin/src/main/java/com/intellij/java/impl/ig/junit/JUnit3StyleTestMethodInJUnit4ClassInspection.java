@@ -15,11 +15,11 @@
  */
 package com.intellij.java.impl.ig.junit;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Nls;
 import com.intellij.java.analysis.impl.codeInspection.AnnotateMethodFix;
 import consulo.language.psi.*;
@@ -37,7 +37,7 @@ import com.siyeh.ig.psiutils.TestUtils;
 public class JUnit3StyleTestMethodInJUnit4ClassInspection extends BaseInspection {
 
   @Nls
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("junit3.style.test.method.in.junit4.class.display.name");

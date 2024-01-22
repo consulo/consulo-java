@@ -14,7 +14,7 @@ import consulo.language.psi.PsiUtilCore;
 import consulo.logging.Logger;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.*;
 
 public class OverrideImplementExploreUtil {
@@ -38,7 +38,7 @@ public class OverrideImplementExploreUtil {
     return getMapToOverrideImplement(aClass, false).keySet();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static Map<MethodSignature, CandidateInfo> getMapToOverrideImplement(PsiClass aClass, boolean toImplement) {
     return getMapToOverrideImplement(aClass, toImplement, true);
   }

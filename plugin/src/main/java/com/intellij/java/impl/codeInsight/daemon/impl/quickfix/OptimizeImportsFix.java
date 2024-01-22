@@ -26,13 +26,13 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class OptimizeImportsFix implements SyntheticIntentionAction {
   private static final Logger LOG = Logger.getInstance(OptimizeImportsFix.class);
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getText() {
     return JavaQuickFixBundle.message("optimize.imports.fix");
   }

@@ -16,7 +16,7 @@
 package com.intellij.java.language.jvm;
 
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public interface JvmAnnotation extends JvmElement
 {

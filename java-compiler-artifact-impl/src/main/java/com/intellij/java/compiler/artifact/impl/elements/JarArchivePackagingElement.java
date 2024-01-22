@@ -19,7 +19,7 @@ import consulo.compiler.artifact.element.ArchivePackageWriter;
 import consulo.compiler.artifact.element.ArchivePackagingElement;
 import consulo.compiler.artifact.element.ZipArchivePackagingElement;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL

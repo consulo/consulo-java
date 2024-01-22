@@ -13,8 +13,8 @@ import consulo.language.psi.util.LanguageCachedValueUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.DumbService;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -25,7 +25,7 @@ public class LightRecordField extends LightField implements LightRecordMember {
 
   public LightRecordField(@Nonnull PsiManager manager,
                           @Nonnull PsiField field,
-                          @Nonnull PsiClass containingClass,
+                          @jakarta.annotation.Nonnull PsiClass containingClass,
                           @Nonnull PsiRecordComponent component) {
     super(manager, field, containingClass);
     myRecordComponent = component;
@@ -64,7 +64,7 @@ public class LightRecordField extends LightField implements LightRecordMember {
 
   @Override
   public
-  @Nonnull
+  @jakarta.annotation.Nonnull
   PsiType getType() {
     if (DumbService.isDumb(myRecordComponent.getProject())) {
       return myRecordComponent.getType();
@@ -93,7 +93,7 @@ public class LightRecordField extends LightField implements LightRecordMember {
 
   @Override
   @Nullable
-  public PsiAnnotation getAnnotation(@Nonnull String fqn) {
+  public PsiAnnotation getAnnotation(@jakarta.annotation.Nonnull String fqn) {
     return getType().findAnnotation(fqn);
   }
 
@@ -116,7 +116,7 @@ public class LightRecordField extends LightField implements LightRecordMember {
 
   @Override
   public
-  @Nonnull
+  @jakarta.annotation.Nonnull
   SearchScope getUseScope() {
     PsiClass aClass = Objects.requireNonNull(getContainingClass());
     PsiClass containingClass = aClass.getContainingClass();

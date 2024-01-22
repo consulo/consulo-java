@@ -79,9 +79,9 @@ import consulo.util.io.ClassPathUtil;
 import consulo.util.io.FileUtil;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -116,7 +116,7 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
     super(environment);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected abstract String getFrameworkName();
 
   @Nonnull
@@ -124,16 +124,16 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
 
   protected abstract void passTempFile(ParametersList parametersList, String tempFilePath);
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected abstract T getConfiguration();
 
   @Nullable
   protected abstract TestSearchScope getScope();
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected abstract String getForkMode();
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected abstract ProcessHandler createHandler(Executor executor) throws ExecutionException;
 
   public SearchForTestsTask createSearchingForTestsTask() {
@@ -158,9 +158,9 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
     return commandLine;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
-  public ExecutionResult execute(@Nonnull Executor executor, @Nonnull ProgramRunner runner) throws ExecutionException {
+  public ExecutionResult execute(@jakarta.annotation.Nonnull Executor executor, @jakarta.annotation.Nonnull ProgramRunner runner) throws ExecutionException {
     final RunnerSettings runnerSettings = getRunnerSettings();
 
     final SMTRunnerConsoleProperties testConsoleProperties = getConfiguration().createTestConsoleProperties(executor);
@@ -184,7 +184,7 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
     }
     handler.addProcessListener(new ProcessAdapter() {
       @Override
-      public void startNotified(@Nonnull ProcessEvent event) {
+      public void startNotified(@jakarta.annotation.Nonnull ProcessEvent event) {
         if (getConfiguration().isSaveOutputToFile()) {
           final File file = OutputFileUtil.getOutputFile(getConfiguration());
           root.setOutputFilePath(file != null ? file.getAbsolutePath() : null);
@@ -192,7 +192,7 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
       }
 
       @Override
-      public void processTerminated(@Nonnull ProcessEvent event) {
+      public void processTerminated(@jakarta.annotation.Nonnull ProcessEvent event) {
         Runnable runnable = () ->
         {
           root.flushOutputFile();

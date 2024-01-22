@@ -23,7 +23,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.util.lang.ThreeState;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author Konstantin Bulenkov
@@ -31,7 +31,7 @@ import javax.annotation.Nonnull;
 @ExtensionImpl(id = "javaReflection")
 public class JavaReflectionCompletionConfidence extends CompletionConfidence {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public ThreeState shouldSkipAutopopup(@Nonnull PsiElement contextElement, @Nonnull PsiFile psiFile, int offset) {
     final PsiElement literal = contextElement.getParent();

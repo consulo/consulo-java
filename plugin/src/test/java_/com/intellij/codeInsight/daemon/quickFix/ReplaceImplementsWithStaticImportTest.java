@@ -20,9 +20,8 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.JavaTestUtil;
+import jakarta.annotation.Nonnull;
 
 public abstract class ReplaceImplementsWithStaticImportTest extends LightQuickFixTestCase {
   @Nonnull

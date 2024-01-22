@@ -19,7 +19,7 @@ package consulo.java.properties.impl.psi;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.lang.properties.psi.PropertiesFile;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author nik

@@ -21,7 +21,7 @@ import consulo.ide.impl.idea.ui.components.panels.VerticalBox;
 import consulo.java.debugger.impl.apiAdapters.TransportClassDelegates;
 import consulo.ui.ex.awt.StateRestoringCheckBox;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 
@@ -53,7 +53,7 @@ class DebuggerLaunchingConfigurable implements IdeaConfigurableUi<DebuggerSettin
 	}
 
 	@Override
-	public void apply(@Nonnull DebuggerSettings settings)
+	public void apply(@jakarta.annotation.Nonnull DebuggerSettings settings)
 	{
 		getSettingsTo(settings);
 	}
@@ -80,7 +80,7 @@ class DebuggerLaunchingConfigurable implements IdeaConfigurableUi<DebuggerSettin
 		return !debuggerSettings.equals(currentSettings);
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
 	public JComponent getComponent()
 	{

@@ -15,8 +15,8 @@
  */
 package com.intellij.java.language.psi.util;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.PsiDirectory;
@@ -99,7 +99,7 @@ public class ClassUtil
 		}
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	private static PsiClass getContainerClass(final PsiClass aClass)
 	{
 		PsiElement parent = aClass.getContext();
@@ -147,12 +147,12 @@ public class ClassUtil
 		return result[0];
 	}
 
-	public static PsiClass findNonQualifiedClassByIndex(final String indexName, @Nonnull final PsiClass containingClass)
+	public static PsiClass findNonQualifiedClassByIndex(final String indexName, @jakarta.annotation.Nonnull final PsiClass containingClass)
 	{
 		return findNonQualifiedClassByIndex(indexName, containingClass, false);
 	}
 
-	public static PsiClass findNonQualifiedClassByIndex(final String indexName, @Nonnull final PsiClass containingClass, final boolean jvmCompatible)
+	public static PsiClass findNonQualifiedClassByIndex(final String indexName, @jakarta.annotation.Nonnull final PsiClass containingClass, final boolean jvmCompatible)
 	{
 		String prefix = getDigitPrefix(indexName);
 		final int idx = prefix.length() > 0 ? Integer.parseInt(prefix) : -1;
@@ -240,7 +240,7 @@ public class ClassUtil
 	 * @param externalName class qualified name
 	 * @return found psiClass
 	 */
-	@Nullable
+	@jakarta.annotation.Nullable
 	public static PsiClass findPsiClass(final PsiManager psiManager, String externalName)
 	{
 		return findPsiClass(psiManager, externalName, null, false);
@@ -252,8 +252,8 @@ public class ClassUtil
 		return findPsiClass(psiManager, externalName, psiClass, jvmCompatible, GlobalSearchScope.allScope(psiManager.getProject()));
 	}
 
-	@Nullable
-	public static PsiClass findPsiClass(final PsiManager psiManager, String externalName, @Nullable PsiClass psiClass, boolean jvmCompatible, final GlobalSearchScope scope)
+	@jakarta.annotation.Nullable
+	public static PsiClass findPsiClass(final PsiManager psiManager, String externalName, @jakarta.annotation.Nullable PsiClass psiClass, boolean jvmCompatible, final GlobalSearchScope scope)
 	{
 		final int topIdx = externalName.indexOf('$');
 		if(topIdx > -1)

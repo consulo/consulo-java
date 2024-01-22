@@ -30,7 +30,7 @@ import consulo.ide.ui.OrderRootTypeUIFactory;
 import consulo.ide.ui.SdkPathEditor;
 import consulo.ui.image.Image;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class AnnotationsOrderRootTypeUIFactory implements OrderRootTypeUIFactory {
@@ -46,7 +46,7 @@ public class AnnotationsOrderRootTypeUIFactory implements OrderRootTypeUIFactory
     return JavaCoreBundle.message("sdk.configure.external.annotations.tab");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getOrderRootTypeId() {
     return "javaExternalAnnotations";

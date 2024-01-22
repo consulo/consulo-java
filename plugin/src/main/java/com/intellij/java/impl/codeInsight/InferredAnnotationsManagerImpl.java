@@ -8,11 +8,12 @@ import com.intellij.java.language.psi.PsiModifierListOwner;
 import consulo.annotation.component.ServiceImpl;
 import consulo.project.Project;
 import consulo.util.dataholder.Key;
+import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class InferredAnnotationsManagerImpl extends InferredAnnotationsManager {
 
   @Nullable
   @Override
-  public PsiAnnotation findInferredAnnotation(@Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN) {
+  public PsiAnnotation findInferredAnnotation(@jakarta.annotation.Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN) {
     for (InferredAnnotationProvider provider : InferredAnnotationProvider.EP_NAME.getExtensionList(myProject)) {
       PsiAnnotation annotation = provider.findInferredAnnotation(listOwner, annotationFQN);
       if (annotation != null) {
@@ -42,7 +43,7 @@ public class InferredAnnotationsManagerImpl extends InferredAnnotationsManager {
 
   @Nonnull
   @Override
-  public PsiAnnotation[] findInferredAnnotations(@Nonnull PsiModifierListOwner listOwner) {
+  public PsiAnnotation[] findInferredAnnotations(@jakarta.annotation.Nonnull PsiModifierListOwner listOwner) {
     List<PsiAnnotation> result = new ArrayList<>();
     for (InferredAnnotationProvider provider : InferredAnnotationProvider.EP_NAME.getExtensionList(myProject)) {
       List<PsiAnnotation> annotations = provider.findInferredAnnotations(listOwner);
@@ -59,7 +60,7 @@ public class InferredAnnotationsManagerImpl extends InferredAnnotationsManager {
     return annotation.getUserData(INFERRED_ANNOTATION) != null;
   }
 
-  private static void markInferred(@Nonnull PsiAnnotation annotation) {
+  private static void markInferred(@jakarta.annotation.Nonnull PsiAnnotation annotation) {
     annotation.putUserData(INFERRED_ANNOTATION, Boolean.TRUE);
   }
 

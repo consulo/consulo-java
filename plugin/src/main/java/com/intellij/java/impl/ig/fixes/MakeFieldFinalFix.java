@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.fixes;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.PsiField;
@@ -29,7 +29,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.psiutils.FinalUtils;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public class MakeFieldFinalFix extends InspectionGadgetsFix {
 

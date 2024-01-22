@@ -32,7 +32,7 @@ import consulo.project.Project;
 import consulo.application.util.function.Computable;
 import consulo.language.psi.PsiElement;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author lex

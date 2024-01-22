@@ -1,7 +1,6 @@
 package com.intellij.codeInsight.daemon.quickFix;
 
-import javax.annotation.Nonnull;
-
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.java.analysis.impl.codeInspection.AnnotateMethodFix;
 import consulo.language.editor.inspection.LocalInspectionTool;

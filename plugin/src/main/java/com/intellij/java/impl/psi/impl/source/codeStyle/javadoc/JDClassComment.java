@@ -17,10 +17,10 @@ package com.intellij.java.impl.psi.impl.source.codeStyle.javadoc;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 import consulo.ide.impl.idea.util.containers.ContainerUtilRt;
+import jakarta.annotation.Nullable;
 
 /**
  * Class comment
@@ -38,7 +38,7 @@ public class JDClassComment extends JDParamListOwnerComment
 	}
 
 	@Override
-	protected void generateSpecial(@Nonnull String prefix, @Nonnull StringBuilder sb)
+	protected void generateSpecial(@jakarta.annotation.Nonnull String prefix, @Nonnull StringBuilder sb)
 	{
 		super.generateSpecial(prefix, sb);
 		String continuationPrefix = prefix + javadocContinuationIndent();
@@ -76,7 +76,7 @@ public class JDClassComment extends JDParamListOwnerComment
 		return myVersion;
 	}
 
-	public void setVersion(@Nonnull String version)
+	public void setVersion(@jakarta.annotation.Nonnull String version)
 	{
 		this.myVersion = version;
 	}

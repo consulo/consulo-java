@@ -3,7 +3,7 @@ package com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis;
 
 import consulo.internal.org.objectweb.asm.Type;
 import consulo.internal.org.objectweb.asm.tree.analysis.BasicValue;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.List;

@@ -15,11 +15,10 @@
  */
 package com.intellij.java.language.psi;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.language.ast.IElementType;
-
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * User: cdr
@@ -28,7 +27,7 @@ public interface PsiPolyadicExpression extends PsiExpression {
   @Nonnull
   PsiExpression[] getOperands();
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   IElementType getOperationTokenType();
 
   @Nullable

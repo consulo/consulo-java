@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameterList;
 import com.siyeh.HardcodedMethodConstants;
@@ -26,12 +24,13 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.RenameFix;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class MisspelledCompareToInspection extends BaseInspection {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "misspelled.compareto.display.name");
@@ -55,7 +54,7 @@ public class MisspelledCompareToInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
       //note: no call to super
       @NonNls final String methodName = method.getName();
       if (!"compareto".equals(methodName)) {

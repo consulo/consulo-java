@@ -19,8 +19,7 @@ package com.intellij.java.impl.util.descriptors;
 import consulo.project.Project;
 import consulo.disposer.Disposable;
 import consulo.component.util.ModificationTracker;
-
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author nik

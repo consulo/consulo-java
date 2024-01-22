@@ -21,8 +21,7 @@ import consulo.execution.runner.ExecutionEnvironment;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.process.ExecutionException;
 import consulo.util.io.FileUtil;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author nik

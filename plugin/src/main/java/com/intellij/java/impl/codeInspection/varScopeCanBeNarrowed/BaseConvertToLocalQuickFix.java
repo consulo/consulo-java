@@ -38,8 +38,8 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.ex.awt.IJSwingUtilities;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -77,7 +77,7 @@ public abstract class BaseConvertToLocalQuickFix<V extends PsiVariable> implemen
   @Nullable
   protected abstract V getVariable(@Nonnull ProblemDescriptor descriptor);
 
-  protected static void positionCaretToDeclaration(@Nonnull Project project, @Nonnull PsiFile psiFile, @Nonnull PsiElement declaration) {
+  protected static void positionCaretToDeclaration(@jakarta.annotation.Nonnull Project project, @Nonnull PsiFile psiFile, @Nonnull PsiElement declaration) {
     final Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
     if (editor != null && (IJSwingUtilities.hasFocus(editor.getComponent()) || ApplicationManager.getApplication().isUnitTestMode())) {
       final PsiFile openedFile = PsiDocumentManager.getInstance(project).getPsiFile(editor.getDocument());
@@ -91,7 +91,7 @@ public abstract class BaseConvertToLocalQuickFix<V extends PsiVariable> implemen
   protected void beforeDelete(@Nonnull Project project, @Nonnull V variable, @Nonnull PsiElement newDeclaration) {
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private PsiElement moveDeclaration(@Nonnull Project project, @Nonnull V variable) {
     final Collection<PsiReference> references = ReferencesSearch.search(variable).findAll();
     if (references.isEmpty()) return null;
@@ -118,7 +118,7 @@ public abstract class BaseConvertToLocalQuickFix<V extends PsiVariable> implemen
           variable,
           refsSet,
           new NotNullFunction<PsiDeclarationStatement, PsiElement>() {
-            @Nonnull
+            @jakarta.annotation.Nonnull
             @Override
             public PsiElement apply(PsiDeclarationStatement declaration) {
               if (!mayBeFinal(firstElement, references)) {
@@ -151,7 +151,7 @@ public abstract class BaseConvertToLocalQuickFix<V extends PsiVariable> implemen
                                     final @Nullable PsiExpression initializer,
                                     final @Nonnull V variable,
                                     final @Nonnull Collection<PsiReference> references,
-                                    final @Nonnull NotNullFunction<PsiDeclarationStatement, PsiElement> action) {
+                                    final @jakarta.annotation.Nonnull NotNullFunction<PsiDeclarationStatement, PsiElement> action) {
     final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(project);
 
     return ApplicationManager.getApplication().runWriteAction(
@@ -180,7 +180,7 @@ public abstract class BaseConvertToLocalQuickFix<V extends PsiVariable> implemen
     return newDeclaration;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static PsiAssignmentExpression searchAssignmentExpression(@Nullable PsiElement anchor) {
     if (!(anchor instanceof PsiExpressionStatement)) {
       return null;
@@ -214,7 +214,7 @@ public abstract class BaseConvertToLocalQuickFix<V extends PsiVariable> implemen
   }
 
   @Nonnull
-  protected abstract String suggestLocalName(@Nonnull Project project, @Nonnull V variable, @Nonnull PsiCodeBlock scope);
+  protected abstract String suggestLocalName(@Nonnull Project project, @Nonnull V variable, @jakarta.annotation.Nonnull PsiCodeBlock scope);
 
   private static boolean mayBeFinal(PsiElement firstElement, @Nonnull Collection<PsiReference> references) {
     for (PsiReference reference : references) {
@@ -241,7 +241,7 @@ public abstract class BaseConvertToLocalQuickFix<V extends PsiVariable> implemen
     return getName();
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static PsiElement getAnchorElement(PsiCodeBlock anchorBlock, @Nonnull PsiElement firstElement) {
     PsiElement element = firstElement;
     while (element != null && element.getParent() != anchorBlock) {
@@ -250,7 +250,7 @@ public abstract class BaseConvertToLocalQuickFix<V extends PsiVariable> implemen
     return element;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static PsiElement getLowestOffsetElement(@Nonnull Collection<PsiReference> refs) {
     PsiElement firstElement = null;
     for (PsiReference reference : refs) {

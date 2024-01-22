@@ -15,11 +15,11 @@ import consulo.ui.TextBoxWithExpandAction;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.layout.VerticalLayout;
 import consulo.ui.util.LabeledBuilder;
+import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
 import jakarta.inject.Provider;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -46,16 +46,16 @@ public class JavacConfigurable extends SimpleConfigurableByProperties implements
     return "project.propCompiler.java.java";
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getDisplayName() {
     return "Javac";
   }
 
   @RequiredUIAccess
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
-  protected Component createLayout(@Nonnull PropertyBuilder propertyBuilder, @Nonnull Disposable disposable) {
+  protected Component createLayout(@jakarta.annotation.Nonnull PropertyBuilder propertyBuilder, @jakarta.annotation.Nonnull Disposable disposable) {
     JavacCompilerConfiguration configuration = myJavacCompilerConfigurationProvider.get();
 
     JpsJavaCompilerOptions state = configuration.getState();

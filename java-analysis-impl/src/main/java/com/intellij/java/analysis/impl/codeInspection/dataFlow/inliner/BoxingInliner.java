@@ -8,7 +8,7 @@ import com.intellij.java.language.psi.PsiPrimitiveType;
 import com.intellij.java.language.psi.PsiType;
 import com.siyeh.ig.callMatcher.CallMatcher;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import static com.intellij.java.language.psi.CommonClassNames.*;
 

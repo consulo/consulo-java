@@ -5,7 +5,7 @@ import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
 import consulo.language.psi.PsiFile;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author Eugene.Kudelevsky
@@ -15,7 +15,7 @@ public abstract class ImportFilter {
   public static final ExtensionPointName<ImportFilter> EP_NAME = ExtensionPointName.create(ImportFilter.class);
 
   public abstract boolean shouldUseFullyQualifiedName(@Nonnull PsiFile targetFile,
-                                                      @Nonnull String classQualifiedName);
+                                                      @jakarta.annotation.Nonnull String classQualifiedName);
 
   public static boolean shouldImport(@Nonnull PsiFile targetFile, @Nonnull String classQualifiedName) {
     for (ImportFilter filter : EP_NAME.getExtensionList()) {

@@ -31,8 +31,8 @@ import consulo.project.Project;
 import consulo.util.io.CharsetToolkit;
 import consulo.virtualFileSystem.util.PathsList;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.nio.charset.Charset;
 
 /**
@@ -105,7 +105,7 @@ public class OwnSimpleJavaParameters extends SimpleProgramParameters
 		return myVmParameters;
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	public Charset getCharset()
 	{
 		return myCharset;
@@ -227,7 +227,7 @@ public class OwnSimpleJavaParameters extends SimpleProgramParameters
 		return OwnJdkUtil.setupJVMCommandLine(this);
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public ProcessHandler createOSProcessHandler() throws ExecutionException
 	{
 		ProcessHandler processHandler = ProcessHandlerFactory.getInstance().createProcessHandler(toCommandLine());

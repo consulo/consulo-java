@@ -15,7 +15,7 @@
  */
 package com.intellij.java.compiler.impl.javaCompiler;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author cdr
@@ -24,7 +24,7 @@ class OutputDir {
   private final String myPath;
   private final int myKind;
 
-  OutputDir(@Nonnull String path, int kind) {
+  OutputDir(@jakarta.annotation.Nonnull String path, int kind) {
     myPath = path;
     myKind = kind;
   }

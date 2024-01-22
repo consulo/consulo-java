@@ -35,7 +35,7 @@ import consulo.ui.ex.awt.JBUI;
 import consulo.ui.image.Image;
 import jakarta.inject.Inject;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * Created by Egor on 04.10.2014.

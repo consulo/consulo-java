@@ -21,7 +21,7 @@ import consulo.language.psi.filter.ElementFilter;
 import com.intellij.java.impl.psi.filters.FilterUtil;
 import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.psi.util.PsiUtil;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 
 /**

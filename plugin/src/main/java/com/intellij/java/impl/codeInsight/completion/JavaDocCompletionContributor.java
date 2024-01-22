@@ -62,7 +62,7 @@ import consulo.util.lang.SystemProperties;
 import consulo.util.lang.function.Conditions;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.*;
 
 import static consulo.language.pattern.PlatformPatterns.psiElement;

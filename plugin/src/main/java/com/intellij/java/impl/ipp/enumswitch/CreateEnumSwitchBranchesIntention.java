@@ -25,7 +25,7 @@ import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +33,7 @@ import java.util.List;
 @IntentionMetaData(ignoreId = "java.CreateEnumSwitchBranchesIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class CreateEnumSwitchBranchesIntention extends Intention {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected PsiElementPredicate getElementPredicate() {
     return new EnumSwitchPredicate();
   }

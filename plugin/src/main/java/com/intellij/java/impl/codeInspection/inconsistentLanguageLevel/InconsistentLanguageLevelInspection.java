@@ -42,7 +42,7 @@ import consulo.project.ProjectBundle;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -60,7 +60,7 @@ public abstract class InconsistentLanguageLevelInspection extends GlobalInspecti
 	public void runInspection(@Nonnull AnalysisScope scope,
 							  @Nonnull InspectionManager manager,
 							  @Nonnull GlobalInspectionContext globalContext,
-							  @Nonnull ProblemDescriptionsProcessor problemProcessor,
+							  @jakarta.annotation.Nonnull ProblemDescriptionsProcessor problemProcessor,
 							  Object state)
 	{
 		final Set<Module> modules = new HashSet<Module>();
@@ -121,7 +121,7 @@ public abstract class InconsistentLanguageLevelInspection extends GlobalInspecti
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public String getDisplayName()
 	{
 		return "Inconsistent language level settings";
@@ -145,7 +145,7 @@ public abstract class InconsistentLanguageLevelInspection extends GlobalInspecti
 		}
 
 		@Override
-		@Nonnull
+		@jakarta.annotation.Nonnull
 		public String getName()
 		{
 			return "Open module " + myModule.getName() + " settings";

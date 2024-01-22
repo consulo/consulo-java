@@ -26,8 +26,8 @@ import consulo.project.Project;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,7 +49,7 @@ public class TypeUtils {
   }
 
   @Contract("_, null -> false")
-  public static boolean typeEquals(@NonNls @Nonnull String typeName, @Nullable PsiType targetType) {
+  public static boolean typeEquals(@NonNls @Nonnull String typeName, @jakarta.annotation.Nullable PsiType targetType) {
     return targetType != null && targetType.equalsToText(typeName);
   }
 
@@ -75,23 +75,23 @@ public class TypeUtils {
   /**
    * JLS 5.1.3. Narrowing Primitive Conversion
    */
-  public static boolean isNarrowingConversion(@Nullable PsiType sourceType, @Nullable PsiType targetType) {
+  public static boolean isNarrowingConversion(@jakarta.annotation.Nullable PsiType sourceType, @jakarta.annotation.Nullable PsiType targetType) {
     final Integer sourcePrecision = typePrecisions.get(sourceType);
     final Integer targetPrecision = typePrecisions.get(targetType);
     return sourcePrecision != null && targetPrecision != null && targetPrecision.intValue() < sourcePrecision.intValue();
   }
 
   @Contract("null -> false")
-  public static boolean isJavaLangObject(@Nullable PsiType targetType) {
+  public static boolean isJavaLangObject(@jakarta.annotation.Nullable PsiType targetType) {
     return typeEquals(JavaClassNames.JAVA_LANG_OBJECT, targetType);
   }
 
   @Contract("null -> false")
-  public static boolean isJavaLangString(@Nullable PsiType targetType) {
+  public static boolean isJavaLangString(@jakarta.annotation.Nullable PsiType targetType) {
     return typeEquals(JavaClassNames.JAVA_LANG_STRING, targetType);
   }
 
-  public static boolean isOptional(@Nullable PsiType type) {
+  public static boolean isOptional(@jakarta.annotation.Nullable PsiType type) {
     return isOptional(PsiUtil.resolveClassInClassTypeOnly(type));
   }
 
@@ -120,7 +120,7 @@ public class TypeUtils {
     return false;
   }
 
-  public static boolean expressionHasTypeOrSubtype(@Nullable PsiExpression expression, @NonNls @Nonnull String typeName) {
+  public static boolean expressionHasTypeOrSubtype(@jakarta.annotation.Nullable PsiExpression expression, @NonNls @Nonnull String typeName) {
     return expressionHasTypeOrSubtype(expression, new String[]{typeName}) != null;
   }
 
@@ -149,7 +149,7 @@ public class TypeUtils {
     return null;
   }
 
-  public static boolean expressionHasTypeOrSubtype(@Nullable PsiExpression expression, @NonNls @Nonnull Iterable<String> typeNames) {
+  public static boolean expressionHasTypeOrSubtype(@jakarta.annotation.Nullable PsiExpression expression, @NonNls @Nonnull Iterable<String> typeNames) {
     if (expression == null) {
       return false;
     }
@@ -173,7 +173,7 @@ public class TypeUtils {
     return false;
   }
 
-  public static boolean variableHasTypeOrSubtype(@Nullable PsiVariable variable, @NonNls @Nonnull String... typeNames) {
+  public static boolean variableHasTypeOrSubtype(@jakarta.annotation.Nullable PsiVariable variable, @NonNls @jakarta.annotation.Nonnull String... typeNames) {
     if (variable == null) {
       return false;
     }
@@ -194,7 +194,7 @@ public class TypeUtils {
     return false;
   }
 
-  public static boolean hasFloatingPointType(@Nullable PsiExpression expression) {
+  public static boolean hasFloatingPointType(@jakarta.annotation.Nullable PsiExpression expression) {
     if (expression == null) {
       return false;
     }

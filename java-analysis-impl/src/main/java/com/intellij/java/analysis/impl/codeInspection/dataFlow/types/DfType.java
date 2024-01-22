@@ -1,8 +1,8 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * Represents a domain of possible values within data flow analysis
@@ -31,7 +31,7 @@ public interface DfType
 	 * @return the result of the join operation
 	 */
 	@Nonnull
-	DfType join(@Nonnull DfType other);
+	DfType join(@jakarta.annotation.Nonnull DfType other);
 
 	/**
 	 * Returns the least specific type that contains all values that belong both to this type and to other type.
@@ -40,7 +40,7 @@ public interface DfType
 	 * @return the result of the meet operation.
 	 */
 	@Nonnull
-	DfType meet(@Nonnull DfType other);
+	DfType meet(@jakarta.annotation.Nonnull DfType other);
 
 	/**
 	 * @return a type that contains all the values of the corresponding JVM type except the values of given type;

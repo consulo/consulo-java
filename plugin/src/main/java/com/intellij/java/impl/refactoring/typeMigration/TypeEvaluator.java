@@ -8,8 +8,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
@@ -28,6 +27,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.impl.refactoring.typeMigration.usageInfo.TypeMigrationUsageInfo;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author db
@@ -125,7 +125,7 @@ public class TypeEvaluator
 		return getType(new TypeMigrationUsageInfo(element));
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	public PsiType getType(final TypeMigrationUsageInfo usageInfo)
 	{
 		final LinkedList<PsiType> e = myTypeMap.get(usageInfo);
@@ -307,7 +307,7 @@ public class TypeEvaluator
 		return getType(expr);
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	private PsiType evaluateReferenceExpressionType(PsiExpression expr)
 	{
 		final PsiReferenceExpression ref = (PsiReferenceExpression) expr;
@@ -534,7 +534,7 @@ public class TypeEvaluator
 		return migrationTtype;
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	public <T> T getSettings(Class<T> aClass)
 	{
 		return myRules.getConversionSettings(aClass);

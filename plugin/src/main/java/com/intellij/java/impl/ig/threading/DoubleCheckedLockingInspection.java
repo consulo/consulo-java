@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.ig.threading;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.JComponent;
 
 import consulo.annotation.component.ExtensionImpl;
@@ -44,14 +44,14 @@ public class DoubleCheckedLockingInspection extends BaseInspection {
   public boolean ignoreOnVolatileVariables = false;
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "double.checked.locking.display.name");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "double.checked.locking.problem.descriptor");
@@ -110,7 +110,7 @@ public class DoubleCheckedLockingInspection extends BaseInspection {
 
     @Override
     public void visitIfStatement(
-      @Nonnull PsiIfStatement statement) {
+      @jakarta.annotation.Nonnull PsiIfStatement statement) {
       super.visitIfStatement(statement);
       final PsiExpression outerCondition = statement.getCondition();
       if (outerCondition == null) {

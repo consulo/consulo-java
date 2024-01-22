@@ -15,8 +15,8 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import com.intellij.java.language.psi.JavaElementVisitor;
 import consulo.language.psi.PsiElementVisitor;
 import com.intellij.java.language.psi.PsiExpression;
@@ -32,7 +32,7 @@ public class PsiResourceExpressionImpl extends CompositePsiElement implements Ps
 		super(JavaElementType.RESOURCE_EXPRESSION);
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
 	public PsiExpression getExpression()
 	{

@@ -33,8 +33,8 @@ import consulo.ui.ex.popup.PopupStep;
 import consulo.ui.image.Image;
 import consulo.util.lang.ObjectUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -51,7 +51,7 @@ public class AddImportAction implements QuestionAction {
   public AddImportAction(@Nonnull Project project,
                          @Nonnull PsiReference ref,
                          @Nonnull Editor editor,
-                         @Nonnull PsiClass... targetClasses) {
+                         @jakarta.annotation.Nonnull PsiClass... targetClasses) {
     myProject = project;
     myReference = ref;
     myTargetClasses = targetClasses;
@@ -158,7 +158,7 @@ public class AddImportAction implements QuestionAction {
     List<String> toExclude = getAllExcludableStrings(qname);
 
     return new BaseListPopupStep<String>(null, toExclude) {
-      @Nonnull
+      @jakarta.annotation.Nonnull
       @Override
       public String getTextFor(String value) {
         return "Exclude '" + value + "' from auto-import";
@@ -186,7 +186,7 @@ public class AddImportAction implements QuestionAction {
     });
   }
 
-  public static List<String> getAllExcludableStrings(@Nonnull String qname) {
+  public static List<String> getAllExcludableStrings(@jakarta.annotation.Nonnull String qname) {
     List<String> toExclude = new ArrayList<>();
     while (true) {
       toExclude.add(qname);

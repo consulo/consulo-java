@@ -15,8 +15,8 @@
  */
 package com.intellij.java.debugger.impl.engine;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
 import com.intellij.java.debugger.impl.ui.breakpoints.Breakpoint;
@@ -50,7 +50,7 @@ public class JavaBreakpointHandler extends XBreakpointHandler
 	}
 
 	@Override
-	public void registerBreakpoint(@Nonnull XBreakpoint breakpoint)
+	public void registerBreakpoint(@jakarta.annotation.Nonnull XBreakpoint breakpoint)
 	{
 		Breakpoint javaBreakpoint = BreakpointManager.getJavaBreakpoint(breakpoint);
 		if(javaBreakpoint == null)
@@ -81,7 +81,7 @@ public class JavaBreakpointHandler extends XBreakpointHandler
 	}
 
 	@Override
-	public void unregisterBreakpoint(@Nonnull final XBreakpoint breakpoint, boolean temporary)
+	public void unregisterBreakpoint(@jakarta.annotation.Nonnull final XBreakpoint breakpoint, boolean temporary)
 	{
 		final Breakpoint javaBreakpoint = BreakpointManager.getJavaBreakpoint(breakpoint);
 		if(javaBreakpoint != null)

@@ -29,7 +29,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ShiftOutOfRangeInspection extends BaseInspection {
@@ -130,7 +130,7 @@ public class ShiftOutOfRangeInspection extends BaseInspection {
 
     @Override
     public void visitBinaryExpression(
-      @Nonnull PsiBinaryExpression expression) {
+      @jakarta.annotation.Nonnull PsiBinaryExpression expression) {
       super.visitBinaryExpression(expression);
       final PsiJavaToken sign = expression.getOperationSign();
       final IElementType tokenType = sign.getTokenType();

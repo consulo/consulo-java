@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.ig.migration;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.JComponent;
 
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.project.Project;
@@ -64,7 +64,7 @@ public class UnnecessaryBoxingInspection extends BaseInspection
 		return true;
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	@Override
 	public JComponent createOptionsPanel()
 	{
@@ -204,7 +204,7 @@ public class UnnecessaryBoxingInspection extends BaseInspection
 	{
 
 		@Override
-		public void visitNewExpression(@Nonnull PsiNewExpression expression)
+		public void visitNewExpression(@jakarta.annotation.Nonnull PsiNewExpression expression)
 		{
 			super.visitNewExpression(expression);
 			final PsiExpressionList argumentList = expression.getArgumentList();

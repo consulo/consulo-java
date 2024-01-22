@@ -32,8 +32,8 @@ import com.siyeh.ig.psiutils.TypeUtils;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -82,7 +82,7 @@ public class StringConcatenationArgumentToLogCallInspection extends BaseInspecti
 
     public StringConcatenationArgumentToLogCallFix() {}
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     @Override
     public String getName() {
       return InspectionGadgetsBundle.message("string.concatenation.in.format.call.quickfix");
@@ -276,7 +276,7 @@ public class StringConcatenationArgumentToLogCallInspection extends BaseInspecti
       registerMethodCallError(expression, argument);
     }
 
-    private static boolean containsNonConstantConcatenation(@Nullable PsiExpression expression) {
+    private static boolean containsNonConstantConcatenation(@jakarta.annotation.Nullable PsiExpression expression) {
       if (expression instanceof PsiParenthesizedExpression) {
         final PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression)expression;
         return containsNonConstantConcatenation(parenthesizedExpression.getExpression());

@@ -18,8 +18,6 @@ package com.intellij.java.impl.spi.psi;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 import consulo.language.editor.completion.lookup.LookupElementBuilder;
 import consulo.language.ast.ASTNode;
 import com.intellij.java.language.psi.JavaPsiFacade;
@@ -28,6 +26,7 @@ import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.psi.util.ClassUtil;
 import consulo.util.collection.ArrayUtil;
 import consulo.application.util.function.Processor;
+import jakarta.annotation.Nonnull;
 
 /**
  * User: anna

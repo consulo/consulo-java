@@ -41,8 +41,8 @@ import consulo.logging.Logger;
 import consulo.util.lang.Range;
 import org.intellij.lang.annotations.MagicConstant;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class RequestHint
 {
@@ -129,7 +129,7 @@ public class RequestHint
 				}
 
 				@Override
-				@Nonnull
+				@jakarta.annotation.Nonnull
 				public DebugProcess getDebugProcess()
 				{
 					return suspendContext.getDebugProcess();
@@ -196,7 +196,7 @@ public class RequestHint
 		return myDepth;
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	public MethodFilter getMethodFilter()
 	{
 		return myMethodFilter;

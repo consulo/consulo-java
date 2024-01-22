@@ -30,8 +30,8 @@ import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class VariableArrayTypeFix extends LocalQuickFixOnPsiElement {
   @Nonnull
@@ -115,7 +115,7 @@ public class VariableArrayTypeFix extends LocalQuickFixOnPsiElement {
     return newExpressionLocal;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static PsiVariable getFromAssignment(final PsiAssignmentExpression assignment) {
     final PsiExpression reference = assignment.getLExpression();
     final PsiElement referencedElement = reference instanceof PsiReferenceExpression ? ((PsiReferenceExpression) reference).resolve() : null;

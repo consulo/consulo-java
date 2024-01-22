@@ -5,7 +5,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.component.ComponentManager;
 import consulo.component.extension.ExtensionExtender;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.function.Consumer;
 
 /**

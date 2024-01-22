@@ -6,9 +6,9 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfReference
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfType;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes;
 import com.intellij.java.analysis.JavaAnalysisBundle;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Nls;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 import java.util.function.Supplier;
 
@@ -37,7 +37,7 @@ public enum DfaNullability
 	@Nonnull
 	String myInternalName;
 	private final
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	Supplier<String> myPresentationalName;
 	private final
 	@Nonnull
@@ -65,7 +65,7 @@ public enum DfaNullability
 	}
 
 	@Nonnull
-	public DfaNullability unite(@Nonnull DfaNullability other)
+	public DfaNullability unite(@jakarta.annotation.Nonnull DfaNullability other)
 	{
 		if(this == other)
 		{
@@ -83,7 +83,7 @@ public enum DfaNullability
 		return UNKNOWN;
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	public DfaNullability intersect(@Nonnull DfaNullability right)
 	{
 		if(this == NOT_NULL)

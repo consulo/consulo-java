@@ -22,7 +22,7 @@ import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.ui.UsageViewDescriptorAdapter;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import com.intellij.java.impl.refactoring.util.classMembers.ClassMembersUtil;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.List;
 import java.util.ArrayList;

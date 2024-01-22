@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.ig.javadoc;
 
-import javax.annotation.Nonnull;
-
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.project.Project;
@@ -34,6 +32,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
@@ -41,7 +40,7 @@ import org.jetbrains.annotations.NonNls;
 public class HtmlTagCanBeJavadocTagInspection extends BaseInspection {
 
   @Nls
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("html.tag.can.be.javadoc.tag.display.name");
@@ -68,7 +67,7 @@ public class HtmlTagCanBeJavadocTagInspection extends BaseInspection {
     }
 
     @Override
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "html.tag.can.be.javadoc.tag.quickfix");

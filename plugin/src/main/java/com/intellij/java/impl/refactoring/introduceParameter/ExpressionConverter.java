@@ -27,8 +27,8 @@ import consulo.language.extension.LanguageOneToOne;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Maxim.Medvedev
@@ -37,7 +37,7 @@ import javax.annotation.Nullable;
 public interface ExpressionConverter extends LanguageExtension {
   ExtensionPointCacheKey<ExpressionConverter, ByLanguageValue<ExpressionConverter>> KEY = ExtensionPointCacheKey.create("ExpressionConverter", LanguageOneToOne.build());
 
-  @Nullable
+  @jakarta.annotation.Nullable
   static ExpressionConverter forLanguage(@Nonnull Language language) {
     return Application.get().getExtensionPoint(ExpressionConverter.class).getOrBuildCache(KEY).get(language);
   }

@@ -28,8 +28,8 @@ import consulo.internal.com.sun.jdi.InvalidStackFrameException;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

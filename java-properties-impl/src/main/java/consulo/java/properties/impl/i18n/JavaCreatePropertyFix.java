@@ -33,8 +33,8 @@ import consulo.project.Project;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -78,8 +78,8 @@ public class JavaCreatePropertyFix extends CreatePropertyFix implements Syntheti
   @Nullable
   protected Pair<String, String> invokeAction(@Nonnull final Project project,
                                               @Nonnull PsiFile file,
-                                              @Nonnull PsiElement psiElement,
-                                              @Nullable final String suggestedKey,
+                                              @jakarta.annotation.Nonnull PsiElement psiElement,
+                                              @jakarta.annotation.Nullable final String suggestedKey,
                                               @Nullable String suggestedValue,
                                               @Nullable final List<PropertiesFile> propertiesFiles) {
     final PsiLiteralExpression literalExpression = psiElement instanceof PsiLiteralExpression ? (PsiLiteralExpression)psiElement : null;

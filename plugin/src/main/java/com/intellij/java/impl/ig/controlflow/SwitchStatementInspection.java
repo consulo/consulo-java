@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiSwitchStatement;
 import com.siyeh.InspectionGadgetsBundle;
@@ -46,7 +46,7 @@ public class SwitchStatementInspection extends BaseInspection {
 
     @Override
     public void visitSwitchStatement(
-      @Nonnull PsiSwitchStatement statement) {
+      @jakarta.annotation.Nonnull PsiSwitchStatement statement) {
       super.visitSwitchStatement(statement);
       registerStatementError(statement);
     }

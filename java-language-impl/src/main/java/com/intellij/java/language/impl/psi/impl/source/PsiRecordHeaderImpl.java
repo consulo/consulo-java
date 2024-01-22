@@ -11,11 +11,11 @@ import consulo.language.ast.ASTNode;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class PsiRecordHeaderImpl extends JavaStubPsiElement<PsiRecordHeaderStub> implements PsiRecordHeader {
-  public PsiRecordHeaderImpl(@Nonnull PsiRecordHeaderStub stub) {
+  public PsiRecordHeaderImpl(@jakarta.annotation.Nonnull PsiRecordHeaderStub stub) {
     super(stub, JavaStubElementTypes.RECORD_HEADER);
   }
 

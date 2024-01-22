@@ -25,17 +25,17 @@ import consulo.language.editor.folding.CollapseBlockHandler;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author ven
  */
 @ExtensionImpl
 public class JavaCollapseBlockHandler implements CollapseBlockHandler {
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
-  public PsiElement findParentBlock(@Nullable PsiElement element) {
+  public PsiElement findParentBlock(@jakarta.annotation.Nullable PsiElement element) {
     return PsiTreeUtil.getParentOfType(element, PsiCodeBlock.class);
   }
 

@@ -24,8 +24,8 @@ import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author ven
@@ -35,20 +35,20 @@ class ClsNameValuePairImpl extends ClsElementImpl implements PsiNameValuePair {
   private final ClsIdentifierImpl myNameIdentifier;
   private final PsiAnnotationMemberValue myMemberValue;
 
-  ClsNameValuePairImpl(@Nonnull ClsElementImpl parent, @Nullable String name, @Nonnull PsiAnnotationMemberValue value) {
+  ClsNameValuePairImpl(@jakarta.annotation.Nonnull ClsElementImpl parent, @Nullable String name, @Nonnull PsiAnnotationMemberValue value) {
     myParent = parent;
     myNameIdentifier = name != null ? new ClsIdentifierImpl(this, name) : null;
     myMemberValue = ClsParsingUtil.getMemberValue(value, this);
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, @jakarta.annotation.Nonnull StringBuilder buffer) {
     appendText(myNameIdentifier, 0, buffer, " = ");
     appendText(myMemberValue, 0, buffer);
   }
 
   @Override
-  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(@jakarta.annotation.Nonnull TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, null);
 
     PsiNameValuePair mirror = SourceTreeToPsiMap.treeToPsiNotNull(element);

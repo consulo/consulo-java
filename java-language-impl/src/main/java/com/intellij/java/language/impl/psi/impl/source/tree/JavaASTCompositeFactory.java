@@ -21,7 +21,7 @@ import consulo.language.impl.ast.CompositeElement;
 import consulo.language.ast.IElementType;
 import consulo.java.language.impl.psi.CoreJavaASTCompositeFactory;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author max

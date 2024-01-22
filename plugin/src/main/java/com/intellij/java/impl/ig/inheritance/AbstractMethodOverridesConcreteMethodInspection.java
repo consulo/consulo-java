@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.inheritance;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;

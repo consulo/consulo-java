@@ -34,7 +34,7 @@ import consulo.project.Project;
 import consulo.util.dataholder.Key;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * User: cdr
@@ -68,7 +68,7 @@ public class NumericOverflowInspection extends BaseJavaBatchLocalInspectionTool 
     return "NumericOverflow";
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
                                             boolean isOnTheFly,

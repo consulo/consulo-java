@@ -25,8 +25,8 @@ import consulo.language.extension.ByLanguageValue;
 import consulo.language.extension.LanguageExtension;
 import consulo.language.extension.LanguageOneToOne;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface MoveInnerHandler extends LanguageExtension {
@@ -38,5 +38,5 @@ public interface MoveInnerHandler extends LanguageExtension {
   }
 
   @Nonnull
-  PsiClass copyClass(@Nonnull MoveInnerOptions options);
+  PsiClass copyClass(@jakarta.annotation.Nonnull MoveInnerOptions options);
 }

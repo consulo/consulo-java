@@ -7,7 +7,7 @@ import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.MethodCallUtils;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * JUnit4 Assume.assumeNotNull is a vararg method and each passed null will make the call failing

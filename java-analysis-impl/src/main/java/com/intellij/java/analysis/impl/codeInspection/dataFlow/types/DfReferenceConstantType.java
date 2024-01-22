@@ -5,8 +5,9 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.*;
 import com.intellij.java.language.psi.PsiModifierListOwner;
 import com.intellij.java.language.psi.PsiType;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.Objects;
 import java.util.Set;
 
@@ -16,16 +17,16 @@ import static com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTy
 public class DfReferenceConstantType extends DfConstantType<Object> implements DfReferenceType {
   private final @Nonnull
   PsiType myPsiType;
-  private final @Nonnull
+  private final @jakarta.annotation.Nonnull
   TypeConstraint myConstraint;
-  private final @Nonnull
+  private final @jakarta.annotation.Nonnull
   Mutability myMutability;
-  private final @Nullable
+  private final @jakarta.annotation.Nullable
   SpecialField mySpecialField;
   private final @Nonnull
   DfType mySpecialFieldType;
   
-  DfReferenceConstantType(@Nonnull Object constant, @Nonnull PsiType psiType, @Nonnull TypeConstraint type) {
+  DfReferenceConstantType(@jakarta.annotation.Nonnull Object constant, @Nonnull PsiType psiType, @Nonnull TypeConstraint type) {
     super(constant);
     myPsiType = psiType;
     myConstraint = type;
@@ -34,9 +35,9 @@ public class DfReferenceConstantType extends DfConstantType<Object> implements D
     mySpecialFieldType = mySpecialField == null ? BOTTOM : mySpecialField.fromConstant(constant);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
-  public DfType meet(@Nonnull DfType other) {
+  public DfType meet(@jakarta.annotation.Nonnull DfType other) {
     if (other.isSuperType(this)) return this;
     if (other instanceof DfEphemeralReferenceType) return BOTTOM;
     if (other instanceof DfGenericObjectType) {
@@ -51,7 +52,7 @@ public class DfReferenceConstantType extends DfConstantType<Object> implements D
     return BOTTOM;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public PsiType getPsiType() {
     return myPsiType;
@@ -63,13 +64,13 @@ public class DfReferenceConstantType extends DfConstantType<Object> implements D
     return DfaNullability.NOT_NULL;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public TypeConstraint getConstraint() {
     return myConstraint;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Mutability getMutability() {
     return myMutability;
@@ -93,7 +94,7 @@ public class DfReferenceConstantType extends DfConstantType<Object> implements D
                                    null, BOTTOM, false);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public DfReferenceType dropNullability() {
     return this;
@@ -101,7 +102,7 @@ public class DfReferenceConstantType extends DfConstantType<Object> implements D
 
   @Nonnull
   @Override
-  public DfType join(@Nonnull DfType other) {
+  public DfType join(@jakarta.annotation.Nonnull DfType other) {
     if (other instanceof DfGenericObjectType || other instanceof DfEphemeralReferenceType) {
       return other.join(this);
     }

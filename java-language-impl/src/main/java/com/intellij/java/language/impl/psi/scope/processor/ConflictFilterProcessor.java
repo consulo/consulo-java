@@ -29,7 +29,7 @@ import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.util.dataholder.Key;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.List;
 
 /**
@@ -44,8 +44,8 @@ public class ConflictFilterProcessor extends FilterScopeProcessor<CandidateInfo>
 
   public ConflictFilterProcessor(String name,
                                  @Nonnull ElementFilter filter,
-                                 @Nonnull PsiConflictResolver[] resolvers,
-                                 @Nonnull List<CandidateInfo> container,
+                                 @jakarta.annotation.Nonnull PsiConflictResolver[] resolvers,
+                                 @jakarta.annotation.Nonnull List<CandidateInfo> container,
                                  @Nonnull PsiElement place,
                                  PsiFile placeFile) {
     super(filter, container);
@@ -56,7 +56,7 @@ public class ConflictFilterProcessor extends FilterScopeProcessor<CandidateInfo>
   }
 
   @Override
-  public boolean execute(@Nonnull PsiElement element, @Nonnull ResolveState state) {
+  public boolean execute(@jakarta.annotation.Nonnull PsiElement element, @Nonnull ResolveState state) {
     JavaResolveResult[] cachedResult = myCachedResult;
     if (cachedResult != null && cachedResult.length == 1 && stopAtFoundResult(cachedResult[0])) {
       return false;
@@ -72,7 +72,7 @@ public class ConflictFilterProcessor extends FilterScopeProcessor<CandidateInfo>
   }
 
   @Override
-  protected void add(@Nonnull PsiElement element, @Nonnull PsiSubstitutor substitutor) {
+  protected void add(@jakarta.annotation.Nonnull PsiElement element, @Nonnull PsiSubstitutor substitutor) {
     add(new CandidateInfo(element, substitutor));
   }
 
@@ -82,13 +82,13 @@ public class ConflictFilterProcessor extends FilterScopeProcessor<CandidateInfo>
   }
 
   @Override
-  public void handleEvent(@Nonnull PsiScopeProcessor.Event event, Object associated) {
+  public void handleEvent(@jakarta.annotation.Nonnull PsiScopeProcessor.Event event, Object associated) {
     if (event == JavaScopeProcessorEvent.CHANGE_LEVEL && myName != null) {
       getResult();
     }
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public JavaResolveResult[] getResult() {
     JavaResolveResult[] cachedResult = myCachedResult;
     if (cachedResult == null) {
@@ -110,7 +110,7 @@ public class ConflictFilterProcessor extends FilterScopeProcessor<CandidateInfo>
   }
 
   @Override
-  public String getName(@Nonnull ResolveState state) {
+  public String getName(@jakarta.annotation.Nonnull ResolveState state) {
     return myName;
   }
 

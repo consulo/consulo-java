@@ -27,7 +27,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.util.PsiTreeUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.List;
 
 /**
@@ -76,7 +76,7 @@ public class JavaStaticMemberProcessor extends StaticMemberProcessor {
   }
 
   @Override
-  protected LookupElement createLookupElement(@Nonnull List<PsiMethod> overloads, @Nonnull PsiClass containingClass, boolean shouldImport) {
+  protected LookupElement createLookupElement(@Nonnull List<PsiMethod> overloads, @jakarta.annotation.Nonnull PsiClass containingClass, boolean shouldImport) {
     shouldImport |= myOriginalPosition != null && PsiTreeUtil.isAncestor(containingClass, myOriginalPosition, false);
 
     final JavaMethodCallElement element = new GlobalMethodCallElement(overloads.get(0), shouldImport, true);

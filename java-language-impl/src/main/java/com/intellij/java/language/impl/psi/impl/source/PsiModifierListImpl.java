@@ -27,7 +27,7 @@ import consulo.util.interner.Interner;
 import consulo.util.lang.BitUtil;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.*;
 
 import static com.intellij.java.language.psi.PsiModifier.*;
@@ -316,7 +316,7 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiAnnotation addAnnotation(@Nonnull @NonNls String qualifiedName) {
     return (PsiAnnotation) addAfter(JavaPsiFacade.getElementFactory(getProject()).createAnnotationFromText("@" + qualifiedName, this), null);
   }
@@ -341,7 +341,7 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
     final List<String> modifiers;
     final long modCount;
 
-    ModifierCache(@Nonnull PsiFile file, @Nonnull Set<String> modifiers) {
+    ModifierCache(@jakarta.annotation.Nonnull PsiFile file, @Nonnull Set<String> modifiers) {
       this.file = file;
       List<String> modifierList = new ArrayList<>(modifiers);
       Collections.sort(modifierList);

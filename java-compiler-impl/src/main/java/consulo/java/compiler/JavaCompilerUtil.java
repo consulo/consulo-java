@@ -33,8 +33,8 @@ import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Collections;
 import java.util.Set;
 
@@ -200,7 +200,7 @@ public class JavaCompilerUtil
 		return getSdkForCompilation(chunk.getModule());
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public static Set<VirtualFile> getCompilationClasspath(@Nonnull CompileContext compileContext, final ModuleChunk moduleChunk)
 	{
 		JavaModuleExtension<?> extension = ModuleUtilCore.getExtension(moduleChunk.getModule(), JavaModuleExtension.class);

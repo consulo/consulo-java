@@ -23,7 +23,7 @@ import consulo.ui.ex.awt.Messages;
 import com.intellij.java.language.psi.PsiVariable;
 import consulo.ui.ex.awt.UIUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -101,7 +101,7 @@ public class SideEffectWarningDialog extends DialogWrapper {
     return actions.toArray(new Action[actions.size()]);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected Action getCancelAction() {
     return myCancelAllAction;

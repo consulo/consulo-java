@@ -17,7 +17,7 @@ package com.intellij.java.debugger.engine;
 
 import consulo.project.Project;
 import consulo.language.psi.PsiFile;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Eugene Zhuravlev

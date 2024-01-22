@@ -28,7 +28,7 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.popup.*;
 import consulo.ui.image.Image;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.List;
 
 /**
@@ -88,7 +88,7 @@ class PsiMethodListPopupStep implements ListPopupStep<SmartStepTarget>
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public String getTextFor(SmartStepTarget value)
 	{
 		final String label = value.getLabel();

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.inheritance;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiClass;
 import consulo.annotation.component.ExtensionImpl;
@@ -35,7 +35,7 @@ public class ExtendsAnnotationInspection extends BaseInspection {
     return "ClassExplicitlyAnnotation";
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "extends.annotation.display.name");

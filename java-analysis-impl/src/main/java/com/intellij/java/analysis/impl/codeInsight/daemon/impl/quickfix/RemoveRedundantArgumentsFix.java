@@ -30,8 +30,9 @@ import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.Arrays;
 
 /**
@@ -42,22 +43,22 @@ public class RemoveRedundantArgumentsFix implements SyntheticIntentionAction {
   private final PsiExpression[] myArguments;
   private final PsiSubstitutor mySubstitutor;
 
-  private RemoveRedundantArgumentsFix(@Nonnull PsiMethod targetMethod,
+  private RemoveRedundantArgumentsFix(@jakarta.annotation.Nonnull PsiMethod targetMethod,
                                       @Nonnull PsiExpression[] arguments,
-                                      @Nonnull PsiSubstitutor substitutor) {
+                                      @jakarta.annotation.Nonnull PsiSubstitutor substitutor) {
     myTargetMethod = targetMethod;
     myArguments = arguments;
     mySubstitutor = substitutor;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getText() {
     return JavaQuickFixBundle.message("remove.redundant.arguments.text", JavaHighlightUtil.formatMethod(myTargetMethod));
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
     if (!myTargetMethod.isValid() || myTargetMethod.getContainingClass() == null) return false;
     for (PsiExpression expression : myArguments) {
       if (!expression.isValid()) return false;
@@ -67,7 +68,7 @@ public class RemoveRedundantArgumentsFix implements SyntheticIntentionAction {
     return findRedundantArgument(myArguments, myTargetMethod.getParameterList().getParameters(), mySubstitutor) != null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static PsiExpression[] findRedundantArgument(@Nonnull PsiExpression[] arguments,
                                                        @Nonnull PsiParameter[] parameters,
                                                        @Nonnull PsiSubstitutor substitutor) {
@@ -90,7 +91,7 @@ public class RemoveRedundantArgumentsFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
     final PsiExpression[] redundantArguments = findRedundantArgument(myArguments, myTargetMethod.getParameterList().getParameters(), mySubstitutor);
     if (redundantArguments != null) {
@@ -106,8 +107,8 @@ public class RemoveRedundantArgumentsFix implements SyntheticIntentionAction {
   }
 
   public static void registerIntentions(@Nonnull JavaResolveResult[] candidates,
-                                        @Nonnull PsiExpressionList arguments,
-                                        @Nullable HighlightInfo highlightInfo,
+                                        @jakarta.annotation.Nonnull PsiExpressionList arguments,
+                                        @jakarta.annotation.Nullable HighlightInfo highlightInfo,
                                         TextRange fixRange) {
     for (JavaResolveResult candidate : candidates) {
       registerIntention(arguments, highlightInfo, fixRange, candidate, arguments);
@@ -117,8 +118,8 @@ public class RemoveRedundantArgumentsFix implements SyntheticIntentionAction {
   private static void registerIntention(@Nonnull PsiExpressionList arguments,
                                         @Nullable HighlightInfo highlightInfo,
                                         TextRange fixRange,
-                                        @Nonnull JavaResolveResult candidate,
-                                        @Nonnull PsiElement context) {
+                                        @jakarta.annotation.Nonnull JavaResolveResult candidate,
+                                        @jakarta.annotation.Nonnull PsiElement context) {
     if (!candidate.isStaticsScopeCorrect()) return;
     PsiMethod method = (PsiMethod) candidate.getElement();
     PsiSubstitutor substitutor = candidate.getSubstitutor();

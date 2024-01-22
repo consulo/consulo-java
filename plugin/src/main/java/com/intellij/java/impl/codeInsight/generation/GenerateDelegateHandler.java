@@ -49,10 +49,10 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.ex.awt.DialogWrapper;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -72,7 +72,7 @@ public class GenerateDelegateHandler implements DelegateMethodHandler {
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, @Nonnull final Editor editor, @Nonnull final PsiFile file) {
+  public void invoke(@jakarta.annotation.Nonnull final Project project, @Nonnull final Editor editor, @jakarta.annotation.Nonnull final PsiFile file) {
     if (!CodeInsightUtilBase.prepareEditorForWrite(editor)) {
       return;
     }
@@ -238,7 +238,7 @@ public class GenerateDelegateHandler implements DelegateMethodHandler {
     }
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private PsiMethodMember[] chooseMethods(PsiElementClassMember targetMember, PsiFile file, Editor editor, Project project) {
     PsiClassType.ClassResolveResult resolveResult = null;
     final PsiDocCommentOwner target = targetMember.getElement();
@@ -352,7 +352,7 @@ public class GenerateDelegateHandler implements DelegateMethodHandler {
     return targetElements != null && targetElements.length > 0;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static PsiElementClassMember chooseTarget(PsiFile file, Editor editor, Project project) {
     final PsiElementClassMember[] targetElements = getTargetElements(file, editor);
     if (targetElements == null || targetElements.length == 0) {
@@ -462,7 +462,7 @@ public class GenerateDelegateHandler implements DelegateMethodHandler {
     }
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

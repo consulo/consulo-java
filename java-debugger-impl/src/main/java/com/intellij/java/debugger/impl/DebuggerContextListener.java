@@ -15,9 +15,9 @@
  */
 package com.intellij.java.debugger.impl;
 
-import java.util.EventListener;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
+import java.util.EventListener;
 
 
 public interface DebuggerContextListener extends EventListener

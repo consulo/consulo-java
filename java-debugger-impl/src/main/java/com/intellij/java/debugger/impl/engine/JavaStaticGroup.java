@@ -17,8 +17,7 @@ package com.intellij.java.debugger.impl.engine;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;
@@ -34,6 +33,7 @@ import consulo.execution.debug.frame.XValueGroup;
 import consulo.internal.com.sun.jdi.Field;
 import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.ui.image.Image;
+import jakarta.annotation.Nullable;
 
 /**
  * @author egor

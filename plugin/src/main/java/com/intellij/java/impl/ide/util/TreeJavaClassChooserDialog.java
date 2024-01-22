@@ -34,8 +34,8 @@ import consulo.project.content.scope.ProjectAwareSearchScope;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.function.Conditions;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.util.List;
 import java.util.function.Predicate;
@@ -53,7 +53,7 @@ public class TreeJavaClassChooserDialog extends AbstractTreeClassChooserDialog<P
   }
 
   public TreeJavaClassChooserDialog(String title,
-                                    @Nonnull Project project,
+                                    @jakarta.annotation.Nonnull Project project,
                                     GlobalSearchScope scope,
                                     final ClassFilter classFilter, @Nullable PsiClass initialClass) {
     super(title, project, scope, PsiClass.class, createFilter(classFilter), initialClass);
@@ -61,7 +61,7 @@ public class TreeJavaClassChooserDialog extends AbstractTreeClassChooserDialog<P
 
 
   public TreeJavaClassChooserDialog(String title,
-                                    @Nonnull Project project,
+                                    @jakarta.annotation.Nonnull Project project,
                                     GlobalSearchScope scope,
                                     @Nullable ClassFilter classFilter,
                                     PsiClass baseClass,
@@ -116,7 +116,7 @@ public class TreeJavaClassChooserDialog extends AbstractTreeClassChooserDialog<P
     return ContainerUtil.newArrayList(classes);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected TreeClassInheritorsProvider<PsiClass> getInheritorsProvider(@Nonnull PsiClass baseClass) {
     return new JavaInheritorsProvider(getProject(), baseClass, (GlobalSearchScope) getScope());
@@ -135,7 +135,7 @@ public class TreeJavaClassChooserDialog extends AbstractTreeClassChooserDialog<P
       myProject = project;
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     @Override
     public Query<PsiClass> searchForInheritors(PsiClass baseClass, ProjectAwareSearchScope searchScope, boolean checkDeep) {
       return ClassInheritorsSearch.search(baseClass, searchScope, checkDeep);

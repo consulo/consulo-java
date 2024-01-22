@@ -10,11 +10,12 @@ import consulo.ui.ex.awt.LabeledComponent;
 import consulo.ui.ex.awt.ListCellRendererWrapper;
 import consulo.ui.ex.awt.VerticalFlowLayout;
 import consulo.util.lang.Comparing;
+import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 
 @ExtensionImpl
@@ -51,7 +52,7 @@ public class JavaCompilerConfigurable implements ProjectConfigurable {
   }
 
   @RequiredUIAccess
-	@Nullable
+	@jakarta.annotation.Nullable
   @Override
   public JComponent createComponent() {
     JPanel panel = new JPanel(new VerticalFlowLayout());

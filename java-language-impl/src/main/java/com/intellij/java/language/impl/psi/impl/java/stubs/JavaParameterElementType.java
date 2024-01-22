@@ -18,7 +18,7 @@ import consulo.language.psi.stub.StubElement;
 import consulo.language.psi.stub.StubInputStream;
 import consulo.language.psi.stub.StubOutputStream;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.io.IOException;
 
 /**
@@ -47,7 +47,7 @@ public class JavaParameterElementType extends JavaStubElementType<PsiParameterSt
 
   @Nonnull
   @Override
-  public PsiParameterStub createStub(@Nonnull LighterAST tree, @Nonnull LighterASTNode node, @Nonnull StubElement parentStub) {
+  public PsiParameterStub createStub(@Nonnull LighterAST tree, @jakarta.annotation.Nonnull LighterASTNode node, @jakarta.annotation.Nonnull StubElement parentStub) {
     TypeInfo typeInfo = TypeInfo.create(tree, node, parentStub);
     LighterASTNode id = LightTreeUtil.requiredChildOfType(tree, node, JavaTokenType.IDENTIFIER);
     String name = RecordUtil.intern(tree.getCharTable(), id);

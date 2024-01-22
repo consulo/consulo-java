@@ -36,7 +36,7 @@ import consulo.java.analysis.codeInspection.JavaExtensionPoints;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -60,7 +60,7 @@ public abstract class LightAdvHighlightingJdk7Test extends LightDaemonAnalyzerTe
     doTest(BASE_PATH + "/" + getTestName(false) + ".java", checkWarnings, checkWeakWarnings, checkInfos);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{

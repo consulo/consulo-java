@@ -10,7 +10,7 @@ import consulo.language.psi.PsiElementVisitor;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public abstract class EmptyIntentionInspectionQuickFixTest extends LightQuickFix
     return "/codeInsight/daemonCodeAnalyzer/quickFix/emptyIntention";
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{new DefUseInspection(), new LocalInspectionTool() {
@@ -37,7 +37,7 @@ public abstract class EmptyIntentionInspectionQuickFixTest extends LightQuickFix
 
       @Override
       @Nls
-      @Nonnull
+      @jakarta.annotation.Nonnull
       public String getDisplayName() {
         return "My";
       }

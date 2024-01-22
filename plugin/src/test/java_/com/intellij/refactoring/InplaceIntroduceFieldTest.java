@@ -15,8 +15,6 @@
  */
 package com.intellij.refactoring;
 
-import javax.annotation.Nonnull;
-
 import consulo.codeEditor.Editor;
 import consulo.project.Project;
 import com.intellij.openapi.util.Pass;
@@ -24,6 +22,7 @@ import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLocalVariable;
 import consulo.language.editor.refactoring.introduce.inplace.AbstractInplaceIntroducer;
 import com.intellij.java.impl.refactoring.introduceField.IntroduceFieldHandler;
+import jakarta.annotation.Nonnull;
 
 /**
  * User: anna

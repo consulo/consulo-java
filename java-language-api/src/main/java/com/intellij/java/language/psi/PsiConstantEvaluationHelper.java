@@ -18,7 +18,7 @@ package com.intellij.java.language.psi;
 import com.intellij.java.language.psi.util.ConstantEvaluationOverflowException;
 import consulo.language.psi.PsiElement;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.concurrent.ConcurrentMap;
 
 /**
@@ -51,7 +51,7 @@ public abstract class PsiConstantEvaluationHelper {
   public abstract Object computeConstantExpression(PsiElement expression, boolean throwExceptionOnOverflow);
 
   public abstract Object computeExpression(PsiExpression expression, boolean throwExceptionOnOverflow,
-                                           @Nullable final AuxEvaluator auxEvaluator);
+                                           @jakarta.annotation.Nullable final AuxEvaluator auxEvaluator);
 
   public interface AuxEvaluator {
     Object computeExpression(final PsiExpression expression, final AuxEvaluator auxEvaluator);

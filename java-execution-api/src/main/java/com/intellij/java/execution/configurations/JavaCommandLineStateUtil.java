@@ -20,8 +20,7 @@ import consulo.process.ExecutionException;
 import consulo.process.ProcessHandler;
 import consulo.process.cmd.GeneralCommandLine;
 import consulo.process.local.ProcessHandlerFactory;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author spleaner
@@ -31,12 +30,12 @@ public class JavaCommandLineStateUtil {
   private JavaCommandLineStateUtil() {
   }
 
-  @Nonnull
-  public static ProcessHandler startProcess(@Nonnull final GeneralCommandLine commandLine) throws ExecutionException {
+  @jakarta.annotation.Nonnull
+  public static ProcessHandler startProcess(@jakarta.annotation.Nonnull final GeneralCommandLine commandLine) throws ExecutionException {
     return startProcess(commandLine, false);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static ProcessHandler startProcess(@Nonnull final GeneralCommandLine commandLine, final boolean ansiColoring) throws ExecutionException {
     ProcessHandler processHandler = ansiColoring ? ProcessHandlerFactory.getInstance().createColoredProcessHandler(commandLine) : ProcessHandlerFactory.getInstance().createProcessHandler(commandLine);
     ProcessTerminatedListener.attach(processHandler);

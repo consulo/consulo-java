@@ -29,7 +29,7 @@ import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 import jakarta.inject.Inject;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author peter

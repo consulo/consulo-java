@@ -13,8 +13,8 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiPackage;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author peter
@@ -24,11 +24,11 @@ public class PackageLookupItem extends LookupElement {
   private final String myString;
   private final boolean myAddDot;
 
-  public PackageLookupItem(@Nonnull PsiPackage aPackage) {
+  public PackageLookupItem(@jakarta.annotation.Nonnull PsiPackage aPackage) {
     this(aPackage, null);
   }
 
-  public PackageLookupItem(@Nonnull PsiPackage pkg, @Nullable PsiElement context) {
+  public PackageLookupItem(@jakarta.annotation.Nonnull PsiPackage pkg, @Nullable PsiElement context) {
     myPackage = pkg;
     myString = StringUtil.notNullize(myPackage.getName());
 

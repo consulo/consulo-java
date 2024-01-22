@@ -18,7 +18,7 @@ package com.intellij.java.impl.ipp.commutative;
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 class SwapMethodCallArgumentsPredicate implements PsiElementPredicate {
 

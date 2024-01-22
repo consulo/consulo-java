@@ -26,9 +26,9 @@ import consulo.platform.Platform;
 import consulo.ui.ex.JBColor;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.event.DoubleClickListener;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;

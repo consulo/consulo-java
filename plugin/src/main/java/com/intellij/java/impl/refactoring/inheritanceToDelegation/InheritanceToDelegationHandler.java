@@ -40,9 +40,9 @@ import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfoStorage;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.logging.Logger;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -86,7 +86,7 @@ public class InheritanceToDelegationHandler implements RefactoringActionHandler 
     }
   }
 
-  public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+  public void invoke(@jakarta.annotation.Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
     if (elements.length != 1) return;
 
     final PsiClass aClass = (PsiClass)elements[0];

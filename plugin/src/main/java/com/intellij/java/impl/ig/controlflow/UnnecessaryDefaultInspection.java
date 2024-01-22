@@ -15,8 +15,7 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
@@ -26,6 +25,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.intellij.java.impl.ig.psiutils.InitializationUtils;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class UnnecessaryDefaultInspection extends BaseInspection {
@@ -36,7 +36,7 @@ public class UnnecessaryDefaultInspection extends BaseInspection {
       "unnecessary.default.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "unnecessary.default.problem.descriptor");
@@ -51,7 +51,7 @@ public class UnnecessaryDefaultInspection extends BaseInspection {
 
     @Override
     public void visitSwitchStatement(
-      @Nonnull PsiSwitchStatement statement) {
+      @jakarta.annotation.Nonnull PsiSwitchStatement statement) {
       super.visitSwitchStatement(statement);
       final PsiSwitchLabelStatement defaultStatement =
         retrieveUnnecessaryDefault(statement);

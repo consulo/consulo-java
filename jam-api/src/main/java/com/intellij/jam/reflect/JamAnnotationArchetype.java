@@ -17,7 +17,7 @@ package com.intellij.jam.reflect;
 
 import consulo.util.collection.SmartList;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 import java.util.List;
 
@@ -46,12 +46,12 @@ public class JamAnnotationArchetype {
     return myAttributes;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public JamAnnotationArchetype getArchetype() {
     return myArchetype;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public JamAttributeMeta<?> findAttribute(@Nullable @NonNls String name) {
     if (name == null) name = "value";
     for (final JamAttributeMeta<?> attribute : myAttributes) {

@@ -30,8 +30,8 @@ import consulo.logging.Logger;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 public class JavaChangeInfoImpl implements JavaChangeInfo {
@@ -77,7 +77,7 @@ public class JavaChangeInfoImpl implements JavaChangeInfo {
                     PsiMethod method,
                     String newName,
                     CanonicalTypes.Type newType,
-                    @Nonnull ParameterInfoImpl[] newParms,
+                    @jakarta.annotation.Nonnull ParameterInfoImpl[] newParms,
                     ThrownExceptionInfo[] newExceptions,
                     boolean generateDelegate,
                     Set<PsiMethod> propagateParametersMethods,
@@ -219,7 +219,7 @@ public class JavaChangeInfoImpl implements JavaChangeInfo {
     }
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public JavaParameterInfo[] getNewParameters() {
     return newParms;
   }
@@ -351,7 +351,7 @@ public class JavaChangeInfoImpl implements JavaChangeInfo {
     return oldParameterNames;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String[] getOldParameterTypes() {
     return oldParameterTypes;
   }

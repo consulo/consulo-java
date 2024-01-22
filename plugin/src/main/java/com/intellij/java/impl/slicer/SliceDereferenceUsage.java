@@ -22,13 +22,13 @@ import consulo.ui.image.Image;
 import consulo.usage.TextChunk;
 import consulo.usage.UsagePresentation;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * User: cdr
  */
 public class SliceDereferenceUsage extends SliceUsage {
-  public SliceDereferenceUsage(@Nonnull PsiElement element, @Nonnull SliceUsage parent, @Nonnull PsiSubstitutor substitutor) {
+  public SliceDereferenceUsage(@jakarta.annotation.Nonnull PsiElement element, @Nonnull SliceUsage parent, @Nonnull PsiSubstitutor substitutor) {
     super(element, parent, substitutor, 0, "");
   }
 
@@ -37,7 +37,7 @@ public class SliceDereferenceUsage extends SliceUsage {
     // no children
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public UsagePresentation getPresentation() {
     final UsagePresentation presentation = super.getPresentation();

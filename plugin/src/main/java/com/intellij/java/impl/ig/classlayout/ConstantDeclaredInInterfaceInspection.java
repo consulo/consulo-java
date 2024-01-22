@@ -22,7 +22,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import consulo.annotation.component.ExtensionImpl;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ConstantDeclaredInInterfaceInspection extends BaseInspection {
@@ -47,7 +47,7 @@ public class ConstantDeclaredInInterfaceInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@Nonnull PsiField field) {
+    public void visitField(@jakarta.annotation.Nonnull PsiField field) {
       //no call to super, so we don't drill into anonymous classes
       final PsiClass containingClass = field.getContainingClass();
       if (containingClass == null) {

@@ -3,7 +3,7 @@ package com.intellij.java.language.psi;
 
 import com.intellij.java.language.jvm.JvmMember;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * Not all PsiMember inheritors are JvmMembers, e.g. {@link PsiClassInitializer}.

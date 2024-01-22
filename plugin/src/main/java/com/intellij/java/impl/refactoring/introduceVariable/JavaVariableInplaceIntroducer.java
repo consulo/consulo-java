@@ -44,9 +44,9 @@ import consulo.ui.ex.keymap.Keymap;
 import consulo.ui.ex.keymap.KeymapManager;
 import consulo.ui.ex.keymap.util.KeymapUtil;
 import consulo.util.lang.Comparing;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -113,7 +113,7 @@ public class JavaVariableInplaceIntroducer extends InplaceVariableIntroducer<Psi
     myConflictResolver = resolveSnapshotProvider != null ? resolveSnapshotProvider.createSnapshot(myScope) : null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   protected PsiVariable getVariable() {
     final PsiDeclarationStatement declarationStatement = myPointer.getElement();
     if (declarationStatement != null) {

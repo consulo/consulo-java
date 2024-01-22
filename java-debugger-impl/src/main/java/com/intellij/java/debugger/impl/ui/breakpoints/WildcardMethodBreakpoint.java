@@ -20,10 +20,10 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 import consulo.execution.debug.breakpoint.XBreakpoint;
+import jakarta.annotation.Nullable;
 import org.jdom.Element;
 import com.intellij.java.debugger.impl.breakpoints.properties.JavaMethodBreakpointProperties;
 import com.intellij.java.debugger.DebuggerBundle;

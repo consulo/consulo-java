@@ -16,8 +16,7 @@
 package com.intellij.java.language.psi;
 
 import consulo.language.psi.PsiElement;
-
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * Common interface for {@link PsiResourceVariable} and {@link PsiResourceExpression}.

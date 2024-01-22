@@ -29,8 +29,7 @@ import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiReference;
 import consulo.logging.Logger;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class PsiBreakStatementImpl extends CompositePsiElement implements PsiBreakStatement, Constants {
   private static final Logger LOG = Logger.getInstance(PsiBreakStatementImpl.class);
@@ -124,7 +123,7 @@ public class PsiBreakStatementImpl extends CompositePsiElement implements PsiBre
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiReference[] getReferences() {
     if (getLabelIdentifier() == null)
       return PsiReference.EMPTY_ARRAY;

@@ -21,7 +21,6 @@ import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.HighPriorityAction;
-import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.util.LanguageUndoUtil;
 import consulo.language.psi.PsiFile;
@@ -30,7 +29,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class InsertSuperFix implements SyntheticIntentionAction, HighPriorityAction {
   private static final Logger LOG = Logger.getInstance(InsertSuperFix.class);

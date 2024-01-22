@@ -27,8 +27,8 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.MakeFieldStaticFinalFix;
 import com.intellij.java.impl.ig.ui.UiUtils;
+import jakarta.annotation.Nonnull;
 import org.jdom.Element;
-import javax.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -46,19 +46,19 @@ public class NonStaticFinalLoggerInspection extends BaseInspection {
   private final List<String> loggerClassNames = new ArrayList();
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "NonConstantLogger";
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("non.constant.logger.display.name");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("non.constant.logger.problem.descriptor");
   }

@@ -11,8 +11,8 @@ import consulo.language.psi.SyntheticElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.lang.ObjectUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.stream.Stream;
 
 /**
@@ -24,8 +24,8 @@ public final class JavaPsiRecordUtil {
    * @return a corresponding record component, or null if the supplied method is not an accessor for the record component.
    * Note that if accessor is not well-formed (e.g. has wrong return type), the corresponding record component will still be returned.
    */
-  @Nullable
-  public static PsiRecordComponent getRecordComponentForAccessor(@Nonnull PsiMethod accessor) {
+  @jakarta.annotation.Nullable
+  public static PsiRecordComponent getRecordComponentForAccessor(@jakarta.annotation.Nonnull PsiMethod accessor) {
     PsiClass aClass = accessor.getContainingClass();
     if (aClass == null) {
       PsiElement parent = accessor.getParent();
@@ -50,7 +50,7 @@ public final class JavaPsiRecordUtil {
    * @param component record component
    * @return synthetic field that corresponds to given component, or null if not found (e.g. if this component doesn't belong to a class)
    */
-  @Nullable
+  @jakarta.annotation.Nullable
   public static PsiField getFieldForComponent(@Nonnull PsiRecordComponent component) {
     PsiClass aClass = component.getContainingClass();
     if (aClass == null)
@@ -68,7 +68,7 @@ public final class JavaPsiRecordUtil {
    * @param parameter of canonical constructor of the record
    * @return record component that corresponds to the parameter
    */
-  @Nullable
+  @jakarta.annotation.Nullable
   public static PsiRecordComponent getComponentForCanonicalConstructorParameter(@Nonnull PsiParameter parameter) {
     PsiClass aClass = PsiTreeUtil.getParentOfType(parameter, PsiClass.class);
     if (aClass == null)
@@ -84,7 +84,7 @@ public final class JavaPsiRecordUtil {
    * @param field synthetic field that corresponds to the record component
    * @return the corresponding record component; null if given field doesn't correspond to the record component.
    */
-  @Nullable
+  @jakarta.annotation.Nullable
   public static PsiRecordComponent getComponentForField(@Nonnull PsiField field) {
     return field instanceof LightRecordField ? ((LightRecordField) field).getRecordComponent() : null;
   }
@@ -102,7 +102,7 @@ public final class JavaPsiRecordUtil {
    * @param method method to check
    * @return true if given method is an explicit canonical (non-compact) constructor for a record class
    */
-  public static boolean isExplicitCanonicalConstructor(@Nonnull PsiMethod method) {
+  public static boolean isExplicitCanonicalConstructor(@jakarta.annotation.Nonnull PsiMethod method) {
     if (!method.isConstructor() || isCompactConstructor(method))
       return false;
     if (method instanceof SyntheticElement)
@@ -117,7 +117,7 @@ public final class JavaPsiRecordUtil {
    * @param method method to check
    * @return true if given method is a canonical constructor for a record class (either compact, or non-compact, or implicit constructor)
    */
-  public static boolean isCanonicalConstructor(@Nonnull PsiMethod method) {
+  public static boolean isCanonicalConstructor(@jakarta.annotation.Nonnull PsiMethod method) {
     if (method instanceof LightRecordCanonicalConstructor)
       return true;
     if (!method.isConstructor())
@@ -128,7 +128,7 @@ public final class JavaPsiRecordUtil {
     return method.getParameterList().getText() == null || hasCanonicalSignature(method, aClass.getRecordComponents());
   }
 
-  private static boolean hasCanonicalSignature(@Nonnull PsiMethod method, PsiRecordComponent[] components) {
+  private static boolean hasCanonicalSignature(@jakarta.annotation.Nonnull PsiMethod method, PsiRecordComponent[] components) {
     PsiParameter[] parameters = method.getParameterList().getParameters();
     if (components.length != parameters.length)
       return false;

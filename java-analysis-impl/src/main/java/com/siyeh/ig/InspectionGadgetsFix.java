@@ -15,11 +15,11 @@
  */
 package com.siyeh.ig;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.logging.Logger;
@@ -55,7 +55,7 @@ public abstract class InspectionGadgetsFix implements LocalQuickFix {
   }
 
   public final void applyFix(@Nonnull Project project,
-                             @Nonnull ProblemDescriptor descriptor) {
+                             @jakarta.annotation.Nonnull ProblemDescriptor descriptor) {
     final PsiElement problemElement = descriptor.getPsiElement();
     if (problemElement == null || !problemElement.isValid()) {
       return;
@@ -83,7 +83,7 @@ public abstract class InspectionGadgetsFix implements LocalQuickFix {
   }
 
   protected static void replaceExpression(
-    @Nonnull PsiExpression expression,
+    @jakarta.annotation.Nonnull PsiExpression expression,
     @Nonnull @NonNls String newExpressionText)
     throws IncorrectOperationException {
     final Project project = expression.getProject();
@@ -100,7 +100,7 @@ public abstract class InspectionGadgetsFix implements LocalQuickFix {
 
   protected static void replaceExpressionWithReferenceTo(
     @Nonnull PsiExpression expression,
-    @Nonnull PsiMember target)
+    @jakarta.annotation.Nonnull PsiMember target)
     throws IncorrectOperationException {
     final Project project = expression.getProject();
     final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
@@ -116,7 +116,7 @@ public abstract class InspectionGadgetsFix implements LocalQuickFix {
   }
 
   protected static void replaceExpressionAndShorten(
-    @Nonnull PsiExpression expression,
+    @jakarta.annotation.Nonnull PsiExpression expression,
     @Nonnull @NonNls String newExpressionText)
     throws IncorrectOperationException {
     final Project project = expression.getProject();
@@ -134,8 +134,8 @@ public abstract class InspectionGadgetsFix implements LocalQuickFix {
   }
 
   protected static void replaceStatement(
-    @Nonnull PsiStatement statement,
-    @Nonnull @NonNls String newStatementText)
+    @jakarta.annotation.Nonnull PsiStatement statement,
+    @jakarta.annotation.Nonnull @NonNls String newStatementText)
     throws IncorrectOperationException {
     final Project project = statement.getProject();
     final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
@@ -149,8 +149,8 @@ public abstract class InspectionGadgetsFix implements LocalQuickFix {
   }
 
   protected static void replaceStatementAndShortenClassNames(
-    @Nonnull PsiStatement statement,
-    @Nonnull @NonNls String newStatementText)
+    @jakarta.annotation.Nonnull PsiStatement statement,
+    @jakarta.annotation.Nonnull @NonNls String newStatementText)
     throws IncorrectOperationException {
     final Project project = statement.getProject();
     final CodeStyleManager styleManager =
@@ -224,8 +224,8 @@ public abstract class InspectionGadgetsFix implements LocalQuickFix {
   }
 
   protected static String getElementText(@Nonnull PsiElement element,
-                                         @Nullable PsiElement elementToReplace,
-                                         @Nullable String replacement) {
+                                         @jakarta.annotation.Nullable PsiElement elementToReplace,
+                                         @jakarta.annotation.Nullable String replacement) {
     final StringBuilder out = new StringBuilder();
     getElementText(element, elementToReplace, replacement, out);
     return out.toString();
@@ -234,7 +234,7 @@ public abstract class InspectionGadgetsFix implements LocalQuickFix {
   private static void getElementText(
     @Nonnull PsiElement element,
     @Nullable PsiElement elementToReplace,
-    @Nullable String replacement,
+    @jakarta.annotation.Nullable String replacement,
     @Nonnull StringBuilder out) {
     if (element.equals(elementToReplace)) {
       out.append(replacement);

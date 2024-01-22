@@ -14,13 +14,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.codeInsight.ExternalAnnotationsListener;
 import com.intellij.java.language.codeInsight.ExternalAnnotationsManager;
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import consulo.virtualFileSystem.LocalFileSystem;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationPsiFix;
 import consulo.language.editor.intention.IntentionAction;
@@ -42,7 +41,6 @@ import consulo.content.library.LibraryTable;
 import consulo.util.lang.Trinity;
 import consulo.ide.impl.idea.openapi.util.io.FileUtil;
 import consulo.util.io.StreamUtil;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiAnnotation;
@@ -101,7 +99,7 @@ public abstract class AddAnnotationFixTest extends UsefulTestCase {
     addLibrary("/content/anno");
   }
 
-  private void addLibrary(final @Nonnull String... annotationsDirs) {
+  private void addLibrary(final @jakarta.annotation.Nonnull String... annotationsDirs) {
     ApplicationManager.getApplication().runWriteAction(new Runnable() {
       @Override
       public void run() {
@@ -131,13 +129,13 @@ public abstract class AddAnnotationFixTest extends UsefulTestCase {
     return container;
   }
 
-  private void startListening(@Nonnull final List<Trinity<PsiModifierListOwner, String, Boolean>> expectedSequence) {
+  private void startListening(@jakarta.annotation.Nonnull final List<Trinity<PsiModifierListOwner, String, Boolean>> expectedSequence) {
     myBusConnection = myProject.getMessageBus().connect();
     myBusConnection.subscribe(ExternalAnnotationsManager.TOPIC, new DefaultAnnotationsListener() {
       private int index = 0;
 
       @Override
-      public void afterExternalAnnotationChanging(@Nonnull PsiModifierListOwner owner, @Nonnull String annotationFQName,
+      public void afterExternalAnnotationChanging(@jakarta.annotation.Nonnull PsiModifierListOwner owner, @jakarta.annotation.Nonnull String annotationFQName,
                                                   boolean successful) {
         if (index < expectedSequence.size() && expectedSequence.get(index).first == owner
             && expectedSequence.get(index).second.equals(annotationFQName) && expectedSequence.get(index).third == successful) {
@@ -151,7 +149,7 @@ public abstract class AddAnnotationFixTest extends UsefulTestCase {
     });
   }
 
-  private void startListening(@Nonnull final PsiModifierListOwner expectedOwner, @Nonnull final String expectedAnnotationFQName,
+  private void startListening(@jakarta.annotation.Nonnull final PsiModifierListOwner expectedOwner, @jakarta.annotation.Nonnull final String expectedAnnotationFQName,
                               final boolean expectedSuccessful) {
     startListening(Arrays.asList(Trinity.create(expectedOwner, expectedAnnotationFQName, expectedSuccessful)));
   }
@@ -422,7 +420,7 @@ public abstract class AddAnnotationFixTest extends UsefulTestCase {
 
   private class DefaultAnnotationsListener extends ExternalAnnotationsListener.Adapter {
     @Override
-    public void afterExternalAnnotationChanging(@Nonnull PsiModifierListOwner owner, @Nonnull String annotationFQName,
+    public void afterExternalAnnotationChanging(@jakarta.annotation.Nonnull PsiModifierListOwner owner, @Nonnull String annotationFQName,
                                                 boolean successful) {
       System.err.println("Unexpected ExternalAnnotationsListener.afterExternalAnnotationChanging event produced");
       System.err.println("owner = [" + owner + "], annotationFQName = [" + annotationFQName + "], successful = [" + successful + "]");

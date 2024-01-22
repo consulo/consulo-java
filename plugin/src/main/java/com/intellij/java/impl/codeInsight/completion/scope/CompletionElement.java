@@ -22,8 +22,8 @@ import consulo.language.psi.PsiPackage;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.Pair;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * Created by IntelliJ IDEA.
@@ -105,7 +105,7 @@ public class CompletionElement {
     return myEqualityObject != null ? myEqualityObject.hashCode() : 0;
   }
 
-  public boolean isMoreSpecificThan(@Nonnull CompletionElement prev) {
+  public boolean isMoreSpecificThan(@jakarta.annotation.Nonnull CompletionElement prev) {
     Object prevElement = prev.getElement();
     if (!(prevElement instanceof PsiMethod && myElement instanceof PsiMethod)) {
       return false;

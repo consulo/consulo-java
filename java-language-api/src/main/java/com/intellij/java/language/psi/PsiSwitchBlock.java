@@ -2,8 +2,7 @@
 package com.intellij.java.language.psi;
 
 import consulo.language.psi.PsiElement;
-
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * Represents a Java {@code switch} statement or {@code switch} expression.
@@ -21,12 +20,12 @@ public interface PsiSwitchBlock extends PsiElement {
   /**
    * Returns the body of the switch statement, or {@code null} if the statement is incomplete.
    */
-  @Nullable
+  @jakarta.annotation.Nullable
   PsiCodeBlock getBody();
 
-  @Nullable
+  @jakarta.annotation.Nullable
   PsiJavaToken getLParenth();
 
-  @Nullable
+  @jakarta.annotation.Nullable
   PsiJavaToken getRParenth();
 }

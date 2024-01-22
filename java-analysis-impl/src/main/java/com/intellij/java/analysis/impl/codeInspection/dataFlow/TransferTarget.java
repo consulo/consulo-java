@@ -17,7 +17,7 @@
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
 import javax.annotation.Nonnegative;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 

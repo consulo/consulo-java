@@ -30,19 +30,19 @@ import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class BooleanConstructorInspection extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "BooleanConstructorCall";
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("boolean.constructor.display.name");
   }
@@ -53,7 +53,7 @@ public class BooleanConstructorInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("boolean.constructor.problem.descriptor");
   }
@@ -74,7 +74,7 @@ public class BooleanConstructorInspection extends BaseInspection {
     private static final String FALSE = '\"' + PsiKeyword.FALSE + '\"';
 
     @Override
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("boolean.constructor.simplify.quickfix");
     }

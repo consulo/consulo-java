@@ -36,8 +36,8 @@ import consulo.logging.Logger;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 @Singleton
 @ServiceImpl
@@ -131,7 +131,7 @@ public class PsiResolveHelperImpl implements PsiResolveHelper {
 
   @Override
   public boolean isAccessible(@Nonnull PsiMember member,
-                              @Nullable PsiModifierList modifierList,
+                              @jakarta.annotation.Nullable PsiModifierList modifierList,
                               @Nonnull PsiElement place,
                               @Nullable PsiClass accessObjectClass,
                               @Nullable PsiElement currentFileResolveScope) {
@@ -168,7 +168,7 @@ public class PsiResolveHelperImpl implements PsiResolveHelper {
                                                  @Nonnull PsiParameter[] parameters,
                                                  @Nonnull PsiExpression[] arguments,
                                                  @Nonnull PsiSubstitutor partialSubstitutor,
-                                                 @Nullable PsiElement parent,
+                                                 @jakarta.annotation.Nullable PsiElement parent,
                                                  @Nonnull ParameterTypeInferencePolicy policy) {
     return getInferenceHelper(PsiUtil.getLanguageLevel(parent != null ? parent : typeParameter)).inferTypeForMethodTypeParameter(typeParameter, parameters, arguments, partialSubstitutor, parent,
         policy);

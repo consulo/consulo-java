@@ -35,7 +35,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.SimplifyBooleanExpressionAction", categories = {"Java", "Boolean"}, fileExtensions = "java")
@@ -66,7 +66,7 @@ public class SimplifyBooleanExpressionAction implements IntentionAction{
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
     PsiExpression expression = getExpressionToSimplify(editor, file);
     SimplifyBooleanExpressionFix.simplifyExpression(expression);

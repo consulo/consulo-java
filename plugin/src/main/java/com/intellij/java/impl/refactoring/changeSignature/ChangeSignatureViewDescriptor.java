@@ -20,8 +20,6 @@
  */
 package com.intellij.java.impl.refactoring.changeSignature;
 
-import javax.annotation.Nonnull;
-
 import consulo.util.lang.StringUtil;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
@@ -29,6 +27,7 @@ import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.usage.UsageViewBundle;
 import consulo.usage.UsageViewDescriptor;
 import consulo.usage.UsageViewUtil;
+import jakarta.annotation.Nonnull;
 
 public class ChangeSignatureViewDescriptor implements UsageViewDescriptor {
 

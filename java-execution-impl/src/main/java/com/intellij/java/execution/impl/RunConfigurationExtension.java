@@ -34,9 +34,9 @@ import consulo.language.editor.refactoring.event.RefactoringElementListener;
 import consulo.language.psi.PsiElement;
 import consulo.process.ExecutionException;
 import consulo.process.cmd.GeneralCommandLine;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 @ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class RunConfigurationExtension extends RunConfigurationExtensionBase<RunConfigurationBase> {
@@ -49,15 +49,15 @@ public abstract class RunConfigurationExtension extends RunConfigurationExtensio
   protected void patchCommandLine(@Nonnull RunConfigurationBase configuration,
                                   RunnerSettings runnerSettings,
                                   @Nonnull GeneralCommandLine cmdLine,
-                                  @Nonnull String runnerId)  throws ExecutionException {}
+                                  @jakarta.annotation.Nonnull String runnerId)  throws ExecutionException {}
 
   @Override
-  protected boolean isEnabledFor(@Nonnull RunConfigurationBase applicableConfiguration, @Nullable RunnerSettings runnerSettings) {
+  protected boolean isEnabledFor(@jakarta.annotation.Nonnull RunConfigurationBase applicableConfiguration, @Nullable RunnerSettings runnerSettings) {
     return true;
   }
 
   @Override
-  protected void extendTemplateConfiguration(@Nonnull RunConfigurationBase configuration) {
+  protected void extendTemplateConfiguration(@jakarta.annotation.Nonnull RunConfigurationBase configuration) {
   }
 
   public void cleanUserData(RunConfigurationBase runConfigurationBase) {}

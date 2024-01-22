@@ -30,7 +30,7 @@ import consulo.language.psi.path.FileReference;
 import consulo.language.psi.path.FileReferenceSet;
 import consulo.language.util.ProcessingContext;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.*;
 
 /**
@@ -52,7 +52,7 @@ public class FilePathReferenceProvider extends PsiReferenceProvider {
     return getReferencesByElement(element, text, offset, soft, Module.EMPTY_ARRAY);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiReference[] getReferencesByElement(PsiElement element, String text, int offset, final boolean soft,
                                                final @Nonnull Module... forModules) {
     return new FileReferenceSet(text, element, offset, this, true, myEndingSlashNotAllowed) {
@@ -122,8 +122,8 @@ public class FilePathReferenceProvider extends PsiReferenceProvider {
   }
 
   @Override
-  @Nonnull
-  public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull final ProcessingContext context) {
+  @jakarta.annotation.Nonnull
+  public PsiReference[] getReferencesByElement(@jakarta.annotation.Nonnull PsiElement element, @Nonnull final ProcessingContext context) {
     String text = null;
     if (element instanceof PsiLiteralExpression) {
       Object value = ((PsiLiteralExpression) element).getValue();
@@ -140,7 +140,7 @@ public class FilePathReferenceProvider extends PsiReferenceProvider {
     return getReferencesByElement(element, text, 1, true);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static Collection<PsiFileSystemItem> getRoots(final Module thisModule, boolean includingClasses) {
     if (thisModule == null) {
       return Collections.emptyList();

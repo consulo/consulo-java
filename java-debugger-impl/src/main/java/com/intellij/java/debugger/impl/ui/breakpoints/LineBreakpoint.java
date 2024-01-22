@@ -60,8 +60,8 @@ import consulo.virtualFileSystem.VirtualFile;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -247,7 +247,7 @@ public class LineBreakpoint<P extends JavaBreakpointProperties> extends Breakpoi
 		});
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	protected JavaLineBreakpointType getXBreakpointType()
 	{
 		XBreakpointType<?, P> type = myXBreakpoint.getType();
@@ -314,7 +314,7 @@ public class LineBreakpoint<P extends JavaBreakpointProperties> extends Breakpoi
 		return true;
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	private Collection<VirtualFile> findClassCandidatesInSourceContent(final String className, final GlobalSearchScope scope, final ProjectFileIndex fileIndex)
 	{
 		final int dollarIndex = className.indexOf("$");
@@ -607,7 +607,7 @@ public class LineBreakpoint<P extends JavaBreakpointProperties> extends Breakpoi
 		return canAdd[0];
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	public String getMethodName()
 	{
 		XSourcePosition position = myXBreakpoint.getSourcePosition();

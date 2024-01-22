@@ -19,7 +19,7 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.instructions.Instruction;
 import consulo.util.collection.ContainerUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,10 +31,10 @@ import java.util.stream.Collectors;
  */
 public class ControlTransferInstruction extends Instruction
 {
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	private DfaControlTransferValue transfer;
 
-	public ControlTransferInstruction(@Nonnull DfaControlTransferValue transfer)
+	public ControlTransferInstruction(@jakarta.annotation.Nonnull DfaControlTransferValue transfer)
 	{
 		this.transfer = transfer;
 		this.transfer.getTraps().forEach(trap -> trap.link(this));
@@ -46,7 +46,7 @@ public class ControlTransferInstruction extends Instruction
 		return visitor.visitControlTransfer(this, runner, state);
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public DfaControlTransferValue getTransfer()
 	{
 		return transfer;

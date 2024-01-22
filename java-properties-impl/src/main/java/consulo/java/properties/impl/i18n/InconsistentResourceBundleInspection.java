@@ -29,8 +29,8 @@ import consulo.util.collection.BidirectionalMap;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.Comparing;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -48,21 +48,21 @@ public class InconsistentResourceBundleInspection extends GlobalSimpleInspection
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public String getDisplayName()
 	{
 		return InspectionsBundle.message("inconsistent.resource.bundle.display.name");
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public String getShortName()
 	{
 		return "InconsistentResourceBundle";
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public HighlightDisplayLevel getDefaultLevel()
 	{
 		return HighlightDisplayLevel.ERROR;
@@ -75,7 +75,7 @@ public class InconsistentResourceBundleInspection extends GlobalSimpleInspection
 		return PropertiesLanguage.INSTANCE;
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
 	public InspectionToolState<?> createStateProvider()
 	{
@@ -83,29 +83,29 @@ public class InconsistentResourceBundleInspection extends GlobalSimpleInspection
 	}
 
 	@Override
-	public void inspectionStarted(@Nonnull InspectionManager manager,
-								  @Nonnull GlobalInspectionContext globalContext,
+	public void inspectionStarted(@jakarta.annotation.Nonnull InspectionManager manager,
+								  @jakarta.annotation.Nonnull GlobalInspectionContext globalContext,
 								  @Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor,
-								  @Nonnull Object state)
+								  @jakarta.annotation.Nonnull Object state)
 	{
 		globalContext.putUserData(VISITED_BUNDLES_KEY, new HashSet<>());
 	}
 
 	@Override
 	public void checkFile(@Nonnull PsiFile file,
-						  @Nonnull InspectionManager manager,
-						  @Nonnull ProblemsHolder problemsHolder,
-						  @Nonnull GlobalInspectionContext globalContext,
-						  @Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor,
+						  @jakarta.annotation.Nonnull InspectionManager manager,
+						  @jakarta.annotation.Nonnull ProblemsHolder problemsHolder,
+						  @jakarta.annotation.Nonnull GlobalInspectionContext globalContext,
+						  @jakarta.annotation.Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor,
 						  @Nonnull Object state)
 	{
 		Set<ResourceBundle> visitedBundles = globalContext.getUserData(VISITED_BUNDLES_KEY);
 		checkFile(file, manager, visitedBundles, globalContext.getRefManager(), problemDescriptionsProcessor, (InconsistentResourceBundleInspectionState) state);
 	}
 
-	private void checkFile(@Nonnull final PsiFile file,
+	private void checkFile(@jakarta.annotation.Nonnull final PsiFile file,
 						   @Nonnull final InspectionManager manager,
-						   @Nonnull Set<ResourceBundle> visitedBundles,
+						   @jakarta.annotation.Nonnull Set<ResourceBundle> visitedBundles,
 						   RefManager refManager,
 						   ProblemDescriptionsProcessor processor,
 						   InconsistentResourceBundleInspectionState state)

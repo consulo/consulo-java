@@ -24,8 +24,8 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ClassUtils;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import javax.swing.*;
 
@@ -43,7 +43,7 @@ public class ThrowCaughtLocallyInspection extends BaseInspection {
       "throw.caught.locally.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "throw.caught.locally.problem.descriptor");

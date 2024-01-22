@@ -33,9 +33,9 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.ui.UiUtils;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,7 +64,7 @@ public class LoggerInitializedWithForeignClassInspection extends BaseInspection 
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("logger.initialized.with.foreign.class.problem.descriptor");
   }
@@ -211,7 +211,7 @@ public class LoggerInitializedWithForeignClassInspection extends BaseInspection 
   }
 
   @Override
-  public void writeSettings(@Nonnull Element element) throws WriteExternalException {
+  public void writeSettings(@jakarta.annotation.Nonnull Element element) throws WriteExternalException {
     loggerClassName = formatString(loggerFactoryClassNames);
     loggerFactoryMethodName = formatString(loggerFactoryMethodNames);
     super.writeSettings(element);

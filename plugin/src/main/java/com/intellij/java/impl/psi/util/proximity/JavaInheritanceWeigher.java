@@ -26,10 +26,10 @@ import consulo.ide.impl.psi.util.proximity.ProximityWeigher;
 import consulo.ide.impl.idea.util.NotNullFunction;
 import consulo.application.util.function.Processor;
 import consulo.ide.impl.idea.util.containers.ContainerUtilRt;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -58,7 +58,7 @@ public class JavaInheritanceWeigher extends ProximityWeigher {
   });
 
   @Override
-  public Comparable weigh(@Nonnull final PsiElement element, @Nonnull final ProximityLocation location) {
+  public Comparable weigh(@jakarta.annotation.Nonnull final PsiElement element, @Nonnull final ProximityLocation location) {
     if (location.getPosition() == null || !(element instanceof PsiClass)) {
       return null;
     }
@@ -88,7 +88,7 @@ public class JavaInheritanceWeigher extends ProximityWeigher {
     return false;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static PsiClass findPlaceClass(PsiElement element, PsiElement position) {
     if (position.getParent() instanceof PsiReferenceExpression) {
       final PsiExpression qualifierExpression = ((PsiReferenceExpression) position.getParent()).getQualifierExpression();

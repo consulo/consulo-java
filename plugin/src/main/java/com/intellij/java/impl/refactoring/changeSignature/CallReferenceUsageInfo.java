@@ -17,8 +17,7 @@ package com.intellij.java.impl.refactoring.changeSignature;
 
 import consulo.language.editor.refactoring.changeSignature.PsiCallReference;
 import consulo.usage.UsageInfo;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author yole

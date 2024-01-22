@@ -30,9 +30,8 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.java.analysis.codeInspection.CantBeStaticCondition;
 import consulo.java.analysis.codeInspection.JavaExtensionPoints;
 import consulo.language.psi.PsiElement;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
-
-import javax.annotation.Nonnull;
 
 /**
  * @author max

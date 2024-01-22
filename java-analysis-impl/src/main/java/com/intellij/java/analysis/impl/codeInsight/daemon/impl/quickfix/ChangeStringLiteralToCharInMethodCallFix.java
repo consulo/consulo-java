@@ -30,8 +30,9 @@ import consulo.project.Project;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -54,12 +55,12 @@ public class ChangeStringLiteralToCharInMethodCallFix implements SyntheticIntent
   }
 
   @Override
-  public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
+  public boolean isAvailable(@jakarta.annotation.Nonnull final Project project, final Editor editor, final PsiFile file) {
     return myCall.isValid() && myLiteral.isValid() && myCall.getManager().isInProject(myCall);
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
+  public void invoke(@jakarta.annotation.Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
 
     final Object value = myLiteral.getValue();
@@ -89,8 +90,8 @@ public class ChangeStringLiteralToCharInMethodCallFix implements SyntheticIntent
     return builder.toString();
   }
 
-  public static void registerFixes(@Nonnull final PsiMethod[] candidates, @Nonnull final PsiConstructorCall call,
-                                   @Nonnull final HighlightInfo out) {
+  public static void registerFixes(@jakarta.annotation.Nonnull final PsiMethod[] candidates, @Nonnull final PsiConstructorCall call,
+                                   @jakarta.annotation.Nonnull final HighlightInfo out) {
     final Set<PsiLiteralExpression> literals = new HashSet<PsiLiteralExpression>();
     if (call.getArgumentList() == null) {
       return;
@@ -105,7 +106,7 @@ public class ChangeStringLiteralToCharInMethodCallFix implements SyntheticIntent
   }
 
   public static void registerFixes(@Nonnull final CandidateInfo[] candidates,
-                                   @Nonnull final PsiMethodCallExpression methodCall,
+                                   @jakarta.annotation.Nonnull final PsiMethodCallExpression methodCall,
                                    @Nullable final HighlightInfo info) {
     if (info == null) return;
     final Set<PsiLiteralExpression> literals = new HashSet<PsiLiteralExpression>();
@@ -121,7 +122,7 @@ public class ChangeStringLiteralToCharInMethodCallFix implements SyntheticIntent
     }
   }
 
-  private static void processLiterals(@Nonnull final Set<PsiLiteralExpression> literals,
+  private static void processLiterals(@jakarta.annotation.Nonnull final Set<PsiLiteralExpression> literals,
                                       @Nonnull final PsiCall call,
                                       @Nonnull final HighlightInfo info) {
     for (PsiLiteralExpression literal : literals) {

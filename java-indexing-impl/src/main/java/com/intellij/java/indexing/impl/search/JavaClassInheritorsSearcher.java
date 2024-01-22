@@ -43,7 +43,7 @@ import consulo.project.util.query.QueryExecutorBase;
 import consulo.util.collection.Stack;
 import consulo.util.lang.ref.Ref;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -72,10 +72,10 @@ public class JavaClassInheritorsSearcher extends QueryExecutorBase<PsiClass, Cla
     }
   }
 
-  private static void processInheritors(@Nonnull final Processor<? super PsiClass> consumer,
-                                        @Nonnull final PsiClass baseClass,
+  private static void processInheritors(@jakarta.annotation.Nonnull final Processor<? super PsiClass> consumer,
+                                        @jakarta.annotation.Nonnull final PsiClass baseClass,
                                         @Nonnull final SearchScope searchScope,
-                                        @Nonnull final ClassInheritorsSearch.SearchParameters parameters) {
+                                        @jakarta.annotation.Nonnull final ClassInheritorsSearch.SearchParameters parameters) {
     if (baseClass instanceof PsiAnonymousClass || isFinal(baseClass)) {
       return;
     }
@@ -167,7 +167,7 @@ public class JavaClassInheritorsSearcher extends QueryExecutorBase<PsiClass, Cla
     });
   }
 
-  private static boolean isFinal(@Nonnull final PsiClass baseClass) {
+  private static boolean isFinal(@jakarta.annotation.Nonnull final PsiClass baseClass) {
     return ApplicationManager.getApplication().runReadAction(new Computable<Boolean>() {
       @Override
       public Boolean compute() {

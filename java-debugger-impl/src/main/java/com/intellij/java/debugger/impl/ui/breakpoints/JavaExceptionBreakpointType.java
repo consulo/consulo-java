@@ -35,8 +35,8 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
 import consulo.ui.image.Image;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 
 /**
@@ -56,7 +56,7 @@ public class JavaExceptionBreakpointType extends JavaBreakpointTypeBase<JavaExce
     return AllIcons.Debugger.Db_exception_breakpoint;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Image getDisabledIcon() {
     return AllIcons.Debugger.Db_disabled_exception_breakpoint;
@@ -83,7 +83,7 @@ public class JavaExceptionBreakpointType extends JavaBreakpointTypeBase<JavaExce
     }
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public JavaExceptionBreakpointProperties createProperties() {
     return new JavaExceptionBreakpointProperties();
@@ -95,7 +95,7 @@ public class JavaExceptionBreakpointType extends JavaBreakpointTypeBase<JavaExce
     return new ExceptionBreakpointPropertiesPanel();
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public XBreakpoint<JavaExceptionBreakpointProperties> createDefaultBreakpoint(@Nonnull XBreakpointCreator<JavaExceptionBreakpointProperties>
                                                                                   creator) {

@@ -16,7 +16,7 @@
 
 package com.intellij.java.language.impl.psi.controlFlow;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public abstract class BranchingInstruction extends InstructionBase
 {
@@ -31,7 +31,7 @@ public abstract class BranchingInstruction extends InstructionBase
 		END
 	}
 
-	public BranchingInstruction(int offset, @Nonnull Role role)
+	public BranchingInstruction(int offset, @jakarta.annotation.Nonnull Role role)
 	{
 		this.offset = offset;
 		this.role = role;

@@ -31,9 +31,9 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.*;
 import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -293,7 +293,7 @@ public class AutoBoxingInspection extends BaseInspection {
       checkExpression(expression);
     }
 
-    private void checkExpression(@Nonnull PsiExpression expression) {
+    private void checkExpression(@jakarta.annotation.Nonnull PsiExpression expression) {
       if (expression.getParent() instanceof PsiParenthesizedExpression) {
         return;
       }

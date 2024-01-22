@@ -34,7 +34,7 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import org.jetbrains.annotations.TestOnly;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -47,7 +47,7 @@ public class DebuggerManagerThreadImpl extends InvokeAndWaitThread<DebuggerComma
 
 	private volatile boolean myDisposed;
 
-	DebuggerManagerThreadImpl(@Nonnull Disposable parent, Project project)
+	DebuggerManagerThreadImpl(@jakarta.annotation.Nonnull Disposable parent, Project project)
 	{
 		super(project);
 		Disposer.register(parent, this);

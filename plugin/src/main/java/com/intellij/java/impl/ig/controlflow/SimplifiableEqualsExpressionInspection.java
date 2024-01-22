@@ -15,8 +15,7 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -32,6 +31,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
@@ -63,7 +63,7 @@ public class SimplifiableEqualsExpressionInspection extends BaseInspection {
       myMethodName = methodName;
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     @Override
     public String getName() {
       return InspectionGadgetsBundle.message("simplifiable.equals.expression.quickfix", myMethodName);

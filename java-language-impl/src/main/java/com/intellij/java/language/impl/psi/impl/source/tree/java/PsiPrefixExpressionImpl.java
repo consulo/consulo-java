@@ -31,7 +31,7 @@ import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.logging.Logger;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class PsiPrefixExpressionImpl extends ExpressionPsiElement implements PsiPrefixExpression {
   private static final Logger LOG = Logger.getInstance(PsiPrefixExpressionImpl.class);
@@ -46,7 +46,7 @@ public class PsiPrefixExpressionImpl extends ExpressionPsiElement implements Psi
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiJavaToken getOperationSign() {
     return (PsiJavaToken) findChildByRoleAsPsiElement(ChildRole.OPERATION_SIGN);
   }
@@ -102,7 +102,7 @@ public class PsiPrefixExpressionImpl extends ExpressionPsiElement implements Psi
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitPrefixExpression(this);
     } else {
@@ -114,7 +114,7 @@ public class PsiPrefixExpressionImpl extends ExpressionPsiElement implements Psi
   public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
                                      @Nonnull ResolveState state,
                                      PsiElement lastParent,
-                                     @Nonnull PsiElement place) {
+                                     @jakarta.annotation.Nonnull PsiElement place) {
     if (lastParent != null || !getOperationTokenType().equals(JavaTokenType.EXCL)) return true;
     ElementClassHint elementClassHint = processor.getHint(ElementClassHint.KEY);
     if (elementClassHint != null && !elementClassHint.shouldProcess(ElementClassHint.DeclarationKind.VARIABLE)) return true;

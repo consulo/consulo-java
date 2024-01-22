@@ -23,9 +23,9 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import consulo.java.language.module.util.JavaClassNames;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -34,7 +34,7 @@ import java.util.Set;
 public class CollectionContainsUrlInspection extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "collection.contains.url.display.name");
@@ -115,7 +115,7 @@ public class CollectionContainsUrlInspection extends BaseInspection {
     }
 
     private static ClassType isMapOrSet(
-      @Nullable PsiClass aClass, Set<PsiClass> visitedClasses) {
+      @jakarta.annotation.Nullable PsiClass aClass, Set<PsiClass> visitedClasses) {
       if (aClass == null) {
         return ClassType.OTHER;
       }

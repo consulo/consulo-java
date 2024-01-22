@@ -15,7 +15,7 @@
  */
 package com.intellij.java.analysis.impl.refactoring.util;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiVariable;

@@ -35,7 +35,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.action.BaseRefactoringAction;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class MakeStaticAction extends BaseRefactoringAction {
   protected boolean isAvailableInEditorOnly() {
@@ -46,7 +46,7 @@ public class MakeStaticAction extends BaseRefactoringAction {
     return (elements.length == 1) && (elements[0] instanceof PsiMethod) && !((PsiMethod) elements[0]).isConstructor();
   }
 
-  protected boolean isAvailableOnElementInEditorAndFile(@Nonnull PsiElement element, @Nonnull final Editor editor, @Nonnull PsiFile file, @Nonnull DataContext context) {
+  protected boolean isAvailableOnElementInEditorAndFile(@Nonnull PsiElement element, @jakarta.annotation.Nonnull final Editor editor, @Nonnull PsiFile file, @Nonnull DataContext context) {
     if (element instanceof PsiIdentifier) {
       element = element.getParent();
     }

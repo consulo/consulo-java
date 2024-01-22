@@ -27,7 +27,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.JComponent;
 
@@ -80,7 +80,7 @@ public class UnnecessaryConstructorInspection extends BaseInspection {
 
   private static class UnnecessaryConstructorFix
     extends InspectionGadgetsFix {
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "unnecessary.constructor.remove.quickfix");

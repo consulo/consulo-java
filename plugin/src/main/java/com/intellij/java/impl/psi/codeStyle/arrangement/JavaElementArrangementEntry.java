@@ -21,8 +21,8 @@ import consulo.language.codeStyle.arrangement.*;
 import consulo.language.codeStyle.arrangement.std.ArrangementSettingsToken;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Set;
 
 /**
@@ -66,7 +66,7 @@ public class JavaElementArrangementEntry extends DefaultArrangementEntry
     myName = name;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Set<ArrangementSettingsToken> getModifiers() {
     return myModifiers;
@@ -82,7 +82,7 @@ public class JavaElementArrangementEntry extends DefaultArrangementEntry
     return myName;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Set<ArrangementSettingsToken> getTypes() {
     return myTypes;

@@ -27,9 +27,9 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -68,7 +68,7 @@ public abstract class AbsoluteAlignmentInUserInterfaceInspection extends BaseIns
   }
 
   @Nls
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("absolute.alignment.in.user.interface.display.name");
@@ -97,7 +97,7 @@ public abstract class AbsoluteAlignmentInUserInterfaceInspection extends BaseIns
       myReplacement = replacement;
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     @Override
     public String getName() {
       final String shortClassName = myClassName.substring(myClassName.lastIndexOf('.') + 1);

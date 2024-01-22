@@ -26,7 +26,7 @@ import consulo.internal.org.objectweb.asm.tree.analysis.BasicValue;
 import consulo.internal.org.objectweb.asm.tree.analysis.Frame;
 import one.util.streamex.EntryStream;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -207,7 +207,7 @@ final class CombinedAnalysis
 		return new Equation(key, result);
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	final Equation failEquation(boolean stable)
 	{
 		final EKey key = new EKey(method, Throw, stable);
@@ -229,7 +229,7 @@ final class CombinedAnalysis
 		return new Equation(key, result);
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	final Equation failEquation(int i, Value inValue, boolean stable)
 	{
 		final InThrow direction = new InThrow(i, inValue);
@@ -256,7 +256,7 @@ final class CombinedAnalysis
 		return new Equation(key, result);
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	final Equation outContractEquation(boolean stable)
 	{
 		return outEquation(exception, method, returnValue, stable);
@@ -271,7 +271,7 @@ final class CombinedAnalysis
 				.toList();
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	private static Equation outEquation(boolean exception, Member member, BasicValue returnValue, boolean stable)
 	{
 		final EKey key = new EKey(member, Out, stable);

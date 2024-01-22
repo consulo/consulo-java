@@ -6,8 +6,7 @@ import consulo.configurable.UnnamedConfigurable;
 import consulo.language.editor.inspection.InspectionToolState;
 import consulo.localize.LocalizeValue;
 import consulo.util.xml.serializer.XmlSerializerUtil;
-
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author VISTALL
@@ -19,7 +18,7 @@ public class InconsistentResourceBundleInspectionState implements InspectionTool
 	public boolean REPORT_INCONSISTENT_PROPERTIES = true;
 	public boolean REPORT_DUPLICATED_PROPERTIES = true;
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	@Override
 	public UnnamedConfigurable createConfigurable()
 	{

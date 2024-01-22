@@ -7,11 +7,11 @@ import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import consulo.util.lang.ObjectUtil;
+import jakarta.annotation.Nonnull;
 import one.util.streamex.IntStreamEx;
 import one.util.streamex.StreamEx;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -162,7 +162,7 @@ public final class MutationSignature {
    * @return a parsed mutation signature
    * @throws IllegalArgumentException if signature is invalid
    */
-  public static MutationSignature parse(@Nonnull String signature) {
+  public static MutationSignature parse(@jakarta.annotation.Nonnull String signature) {
     if (signature.trim().isEmpty()) {
       return UNKNOWN;
     }
@@ -202,7 +202,7 @@ public final class MutationSignature {
    * @return error message or null if signature is valid
    */
   @Nullable
-  public static String checkSignature(@Nonnull String signature, @Nonnull PsiMethod method) {
+  public static String checkSignature(@jakarta.annotation.Nonnull String signature, @Nonnull PsiMethod method) {
     try {
       MutationSignature ms = parse(signature);
       if (ms.myThis && method.hasModifierProperty(PsiModifier.STATIC)) {
@@ -227,7 +227,7 @@ public final class MutationSignature {
   }
 
   public static
-  @Nonnull
+  @jakarta.annotation.Nonnull
   MutationSignature fromMethod(@Nullable PsiMethod method) {
     if (method == null) {
       return UNKNOWN;
@@ -236,7 +236,7 @@ public final class MutationSignature {
   }
 
   public static
-  @Nonnull
+  @jakarta.annotation.Nonnull
   MutationSignature fromCall(@Nullable PsiCall call) {
     if (call == null) {
       return UNKNOWN;
@@ -301,7 +301,7 @@ public final class MutationSignature {
   /**
    * @return a signature of the unknown method, which may mutate anything
    */
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static MutationSignature unknown() {
     return UNKNOWN;
   }

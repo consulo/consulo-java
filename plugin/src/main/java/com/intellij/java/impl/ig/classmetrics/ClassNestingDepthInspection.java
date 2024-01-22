@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.classmetrics;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiClass;
 import consulo.annotation.component.ExtensionImpl;
@@ -50,7 +50,7 @@ public class ClassNestingDepthInspection
       "inner.class.too.deeply.nested.nesting.limit.option");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     final Integer nestingLevel = (Integer)infos[0];
     return InspectionGadgetsBundle.message(

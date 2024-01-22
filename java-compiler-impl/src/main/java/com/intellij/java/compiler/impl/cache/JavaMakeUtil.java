@@ -37,7 +37,7 @@ import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public class JavaMakeUtil extends MakeUtil {
   private static final Logger LOGGER = Logger.getInstance(JavaMakeUtil.class);

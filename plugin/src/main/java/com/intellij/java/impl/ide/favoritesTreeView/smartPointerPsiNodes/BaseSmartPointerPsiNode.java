@@ -28,7 +28,7 @@ import consulo.ui.ex.tree.PresentationData;
 import consulo.ui.image.Image;
 import consulo.virtualFileSystem.VirtualFile;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -49,7 +49,7 @@ public abstract class BaseSmartPointerPsiNode<Type extends SmartPsiElementPointe
     return getChildrenImpl();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected abstract Collection<AbstractTreeNode> getChildrenImpl();
 
   protected boolean isMarkReadOnly() {

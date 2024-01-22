@@ -30,8 +30,8 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.layout.VerticalLayout;
 import consulo.util.lang.Comparing;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import java.util.List;
 
@@ -54,7 +54,7 @@ public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl impl
   @RequiredUIAccess
   @Nullable
   @Override
-  public Component createConfigurationComponent(@Nonnull Disposable disposable, @Nonnull Runnable runnable) {
+  public Component createConfigurationComponent(@Nonnull Disposable disposable, @jakarta.annotation.Nonnull Runnable runnable) {
     return VerticalLayout.create().add(Label.create("Unsupported platform"));
   }
 
@@ -70,7 +70,7 @@ public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl impl
   }
 
   @Override
-  public void setBytecodeVersion(@Nullable String version) {
+  public void setBytecodeVersion(@jakarta.annotation.Nullable String version) {
     myBytecodeVersion = version;
   }
 
@@ -81,12 +81,12 @@ public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl impl
   }
 
   @Override
-  public void setSpecialDirLocation(@Nonnull SpecialDirLocation specialDirLocation) {
+  public void setSpecialDirLocation(@jakarta.annotation.Nonnull SpecialDirLocation specialDirLocation) {
     mySpecialDirLocation = specialDirLocation;
   }
 
   @Override
-  public boolean isModified(@Nonnull JavaModuleExtensionImpl javaModuleExtension) {
+  public boolean isModified(@jakarta.annotation.Nonnull JavaModuleExtensionImpl javaModuleExtension) {
     if (isModifiedImpl(javaModuleExtension)) {
       return true;
     }
@@ -109,7 +109,7 @@ public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl impl
     return false;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public MutableModuleInheritableNamedPointer<Sdk> getInheritableSdk() {
     return (MutableModuleInheritableNamedPointer<Sdk>) super.getInheritableSdk();

@@ -34,7 +34,6 @@ import consulo.project.Project;
 import consulo.util.lang.Comparing;
 import consulo.language.psi.PsiElement;
 import consulo.ide.impl.psi.statistics.StatisticsInfo;
-import consulo.ide.impl.psi.statistics.StatisticsManager;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.classMember.MemberInfoModel;
 import consulo.ide.impl.idea.refactoring.memberPullUp.PullUpDialogBase;
@@ -42,8 +41,8 @@ import consulo.ide.impl.idea.refactoring.ui.AbstractMemberSelectionTable;
 import consulo.ide.impl.idea.refactoring.ui.DocCommentPanel;
 import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
 import consulo.ui.ex.awt.UIUtil;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;

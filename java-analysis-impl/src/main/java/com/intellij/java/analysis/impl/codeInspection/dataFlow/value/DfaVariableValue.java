@@ -30,8 +30,8 @@ import consulo.util.lang.Pair;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.util.collection.SmartList;
 import org.jetbrains.annotations.Contract;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -50,7 +50,7 @@ public final class DfaVariableValue extends DfaValue
 			myFactory = factory;
 		}
 
-		@Nonnull
+		@jakarta.annotation.Nonnull
 		public DfaVariableValue createVariableValue(PsiVariable variable)
 		{
 			DfaVariableValue qualifier = null;
@@ -83,8 +83,8 @@ public final class DfaVariableValue extends DfaValue
 			return createVariableValue(descriptor, null);
 		}
 
-		@Nonnull
-		DfaVariableValue createVariableValue(@Nonnull VariableDescriptor descriptor, @Nullable DfaVariableValue qualifier)
+		@jakarta.annotation.Nonnull
+		DfaVariableValue createVariableValue(@jakarta.annotation.Nonnull VariableDescriptor descriptor, @Nullable DfaVariableValue qualifier)
 		{
 			Pair<VariableDescriptor, DfaVariableValue> key = Pair.create(descriptor, qualifier);
 			DfaVariableValue var = myExistingVars.get(key);
@@ -110,7 +110,7 @@ public final class DfaVariableValue extends DfaValue
 	private DfType myInherentType;
 	private final List<DfaVariableValue> myDependents = new SmartList<>();
 
-	private DfaVariableValue(@Nonnull VariableDescriptor descriptor, @Nonnull DfaValueFactory factory, @Nullable DfaVariableValue qualifier)
+	private DfaVariableValue(@Nonnull VariableDescriptor descriptor, @jakarta.annotation.Nonnull DfaValueFactory factory, @Nullable DfaVariableValue qualifier)
 	{
 		super(factory);
 		myDescriptor = descriptor;
@@ -128,7 +128,7 @@ public final class DfaVariableValue extends DfaValue
 		return myDescriptor.getPsiElement();
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public VariableDescriptor getDescriptor()
 	{
 		return myDescriptor;
@@ -150,7 +150,7 @@ public final class DfaVariableValue extends DfaValue
 	/**
 	 * @return list of all variables created within the same factory which are directly or indirectly qualified by this variable.
 	 */
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public List<DfaVariableValue> getDependentVariables()
 	{
 		return myDependents;
@@ -168,7 +168,7 @@ public final class DfaVariableValue extends DfaValue
 		return depth;
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Contract(pure = true)
 	public DfaVariableValue withQualifier(DfaVariableValue newQualifier)
 	{

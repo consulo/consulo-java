@@ -37,7 +37,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.project.ui.wm.StatusBar;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.MoveDeclarationIntention", fileExtensions = "java", categories = {"Java", "Declaration"})
@@ -111,7 +111,7 @@ public class MoveDeclarationIntention extends Intention {
   }
 
   private static PsiDeclarationStatement moveDeclarationToReference(
-    @Nonnull PsiElement referenceElement,
+    @jakarta.annotation.Nonnull PsiElement referenceElement,
     @Nonnull PsiLocalVariable variable,
     @Nonnull PsiCodeBlock block)
     throws IncorrectOperationException {

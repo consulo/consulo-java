@@ -22,8 +22,8 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import consulo.deadCodeNotWorking.impl.SingleIntegerFieldOptionsPanel;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import javax.swing.*;
 
 public abstract class SwitchStatementWithTooManyBranchesInspection extends BaseInspection {
@@ -36,7 +36,7 @@ public abstract class SwitchStatementWithTooManyBranchesInspection extends BaseI
    */
   public int m_limit = DEFAULT_BRANCH_LIMIT;
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "switch.statement.with.too.many.branches.display.name");
@@ -49,7 +49,7 @@ public abstract class SwitchStatementWithTooManyBranchesInspection extends BaseI
       this, "m_limit");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     final Integer branchCount = (Integer)infos[0];
     return InspectionGadgetsBundle.message(

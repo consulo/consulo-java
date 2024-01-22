@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.JComponent;
 
 import consulo.annotation.component.ExtensionImpl;
@@ -66,7 +66,7 @@ public class UnnecessaryFullyQualifiedNameInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     final boolean inSameFile = ((Boolean)infos[0]).booleanValue();
     if (inSameFile) {

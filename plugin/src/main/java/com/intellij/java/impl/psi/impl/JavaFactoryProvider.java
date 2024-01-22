@@ -23,7 +23,7 @@ import com.intellij.java.language.psi.JVMElementFactory;
 import com.intellij.java.language.psi.JVMElementFactoryProvider;
 import com.intellij.java.language.psi.JavaPsiFacade;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
 * @author Medvedev Max

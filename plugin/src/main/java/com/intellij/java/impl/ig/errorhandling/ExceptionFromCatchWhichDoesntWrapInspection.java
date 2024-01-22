@@ -29,10 +29,10 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.swing.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -47,13 +47,13 @@ public class ExceptionFromCatchWhichDoesntWrapInspection extends BaseInspection 
   public boolean ignoreCantWrap = false;
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "ThrowInsideCatchBlockWhichIgnoresCaughtException";
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("exception.from.catch.which.doesnt.wrap.display.name");
   }

@@ -29,17 +29,18 @@ import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.lang.Pair;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.*;
 
 /**
  * @author cdr
  */
 public class SliceForwardUtil {
-  public static boolean processUsagesFlownFromThe(@Nonnull PsiElement element,
-                                                  @Nonnull final Processor<SliceUsage> processor,
-                                                  @Nonnull final SliceUsage parent) {
+  public static boolean processUsagesFlownFromThe(@jakarta.annotation.Nonnull PsiElement element,
+                                                  @jakarta.annotation.Nonnull final Processor<SliceUsage> processor,
+                                                  @jakarta.annotation.Nonnull final SliceUsage parent) {
     Pair<PsiElement, PsiSubstitutor> pair = getAssignmentTarget(element, parent);
     if (pair != null) {
       PsiElement target = pair.getFirst();
@@ -196,7 +197,7 @@ public class SliceForwardUtil {
     return true;
   }
 
-  private static boolean searchReferencesAndProcessAssignmentTarget(@Nonnull PsiElement element,
+  private static boolean searchReferencesAndProcessAssignmentTarget(@jakarta.annotation.Nonnull PsiElement element,
                                                                     @Nullable final PsiElement context,
                                                                     final SliceUsage parent,
                                                                     final Processor<SliceUsage> processor) {
@@ -290,8 +291,8 @@ public class SliceForwardUtil {
     return target == null ? null : Pair.create(target, substitutor);
   }
 
-  @Nonnull
-  public static PsiElement complexify(@Nonnull PsiElement element) {
+  @jakarta.annotation.Nonnull
+  public static PsiElement complexify(@jakarta.annotation.Nonnull PsiElement element) {
     PsiElement parent = element.getParent();
     if (parent instanceof PsiParenthesizedExpression && element.equals(((PsiParenthesizedExpression) parent).getExpression())) {
       return complexify(parent);

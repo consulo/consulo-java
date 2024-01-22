@@ -23,16 +23,16 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.editor.refactoring.changeSignature.ParameterInfo;
 import consulo.language.util.IncorrectOperationException;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Maxim.Medvedev
  */
 public interface JavaParameterInfo extends ParameterInfo {
-  @Nullable
-  PsiType createType(@Nullable PsiElement context, final PsiManager manager) throws IncorrectOperationException;
+  @jakarta.annotation.Nullable
+  PsiType createType(@jakarta.annotation.Nullable PsiElement context, final PsiManager manager) throws IncorrectOperationException;
 
   @Nullable
   default PsiType createType(@Nonnull PsiElement context) {

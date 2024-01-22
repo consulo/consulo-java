@@ -24,7 +24,7 @@ import consulo.util.lang.StringUtil;
 import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.java.analysis.codeInsight.JavaCodeInsightBundle;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.Collections;

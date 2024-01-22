@@ -21,8 +21,8 @@ import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import javax.swing.*;
 
@@ -80,7 +80,7 @@ public class EnumSwitchStatementWhichMissesCasesInspection
 
     @Override
     public void visitSwitchStatement(
-      @Nonnull PsiSwitchStatement statement) {
+      @jakarta.annotation.Nonnull PsiSwitchStatement statement) {
       super.visitSwitchStatement(statement);
       if (!switchStatementMissingCases(statement)) {
         return;

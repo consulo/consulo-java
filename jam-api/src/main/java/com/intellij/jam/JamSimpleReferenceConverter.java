@@ -25,8 +25,9 @@ import consulo.language.psi.PsiReference;
 import consulo.util.collection.ContainerUtil;
 import consulo.xml.util.xml.ElementPresentationManager;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.function.Function;
@@ -49,7 +50,7 @@ public abstract class JamSimpleReferenceConverter<T> extends JamConverter<T>{
   }
 
   @Nullable
-  protected PsiElement getPsiElementFor(@Nonnull T target) {
+  protected PsiElement getPsiElementFor(@jakarta.annotation.Nonnull T target) {
     if (target instanceof PsiElement) {
       return (PsiElement)target;
     } else if (target instanceof CommonModelElement) {
@@ -58,7 +59,7 @@ public abstract class JamSimpleReferenceConverter<T> extends JamConverter<T>{
     return null;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected LookupElement createLookupElementFor(@Nonnull T target) {
     String name = ElementPresentationManager.getElementName(target);
     if (name != null) {

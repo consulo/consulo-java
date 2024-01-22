@@ -14,10 +14,11 @@ import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.HashingStrategy;
 import consulo.util.collection.UnmodifiableHashMap;
 import consulo.util.lang.Comparing;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -51,7 +52,7 @@ public final class PsiSubstitutorImpl implements PsiSubstitutor {
 
   private PsiSubstitutorImpl(@Nonnull UnmodifiableHashMap<PsiTypeParameter, PsiType> map,
                              @Nonnull PsiTypeParameter additionalKey,
-                             @Nullable PsiType additionalValue) {
+                             @jakarta.annotation.Nullable PsiType additionalValue) {
     mySubstitutionMap = map.with(additionalKey, additionalValue);
   }
 
@@ -337,7 +338,7 @@ public final class PsiSubstitutorImpl implements PsiSubstitutor {
 
   @Nonnull
   @Override
-  public PsiSubstitutor putAll(@Nonnull Map<? extends PsiTypeParameter, ? extends PsiType> map) {
+  public PsiSubstitutor putAll(@jakarta.annotation.Nonnull Map<? extends PsiTypeParameter, ? extends PsiType> map) {
     if (map.isEmpty()) {
       return this;
     }

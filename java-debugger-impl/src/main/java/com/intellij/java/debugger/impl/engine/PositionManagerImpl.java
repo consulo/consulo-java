@@ -52,8 +52,8 @@ import consulo.util.lang.ref.Ref;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.VirtualFileManager;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -515,7 +515,7 @@ public class PositionManagerImpl implements PositionManager, MultiRequestPositio
 		return psiClass;
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	private PsiFile findAlternativeJreSourceFile(ClsClassImpl psiClass)
 	{
 		String sourceFileName = psiClass.getSourceFileName();
@@ -851,7 +851,7 @@ public class PositionManagerImpl implements PositionManager, MultiRequestPositio
 		}
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	private static SourcePosition calcLineMappedSourcePosition(PsiFile psiFile, int originalLine)
 	{
 		int line = DebuggerUtilsEx.bytecodeToSourceLine(psiFile, originalLine);

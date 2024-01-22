@@ -24,7 +24,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiRecursiveElementWalkingVisitor;
 import consulo.project.Project;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -127,7 +127,7 @@ public class SubstitutedExpressionEvaluationHelper {
     });
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private Object calcSubstituted(final PsiModifierListOwner owner) {
     final PsiAnnotation annotation = AnnotationUtil.findAnnotation(owner, myConfiguration.getAdvancedConfiguration().getSubstAnnotationPair().second);
     if (annotation != null) {

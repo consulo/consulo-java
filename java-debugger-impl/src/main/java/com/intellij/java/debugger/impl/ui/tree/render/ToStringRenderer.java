@@ -20,7 +20,7 @@ import static consulo.java.language.module.util.JavaClassNames.JAVA_LANG_STRING;
 import consulo.execution.debug.ui.XDebuggerUIConstants;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.DebuggerContext;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;

@@ -1,7 +1,7 @@
 package com.siyeh.igtest.inheritance.abstract_method_overrides_abstract_method;
 
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public abstract class AbstractMethodOverridesAbstractMethod {
   public abstract Object foo() throws Exception;

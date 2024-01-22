@@ -15,10 +15,10 @@
  */
 package com.intellij.java.impl.refactoring.migration;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 import consulo.project.Project;
+import jakarta.annotation.Nullable;
 
 public class MigrationManager
 {

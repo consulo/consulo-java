@@ -24,8 +24,8 @@ import consulo.logging.Logger;
 import consulo.util.xml.serializer.JDOMExternalizable;
 import org.jdom.Element;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 @ExtensionAPI(ComponentScope.APPLICATION)
 @Deprecated

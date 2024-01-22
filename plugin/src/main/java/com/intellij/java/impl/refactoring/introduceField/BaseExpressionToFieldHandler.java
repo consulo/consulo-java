@@ -73,8 +73,8 @@ import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -529,7 +529,7 @@ public abstract class BaseExpressionToFieldHandler extends IntroduceHandlerBase 
       return myVisibility;
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     public PsiClass getDestinationClass() {
       return myTargetClass != null ? myTargetClass.getTargetClass() : null;
     }
@@ -908,7 +908,7 @@ public abstract class BaseExpressionToFieldHandler extends IntroduceHandlerBase 
     }
 
     @Nullable
-    private static PsiField checkForwardRefs(@Nullable final PsiExpression initializer, final PsiClass parentClass) {
+    private static PsiField checkForwardRefs(@jakarta.annotation.Nullable final PsiExpression initializer, final PsiClass parentClass) {
       if (initializer == null) return null;
       final PsiField[] refConstantFields = new PsiField[1];
       initializer.accept(new JavaRecursiveElementWalkingVisitor() {

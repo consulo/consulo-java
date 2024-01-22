@@ -19,8 +19,8 @@ import com.intellij.java.language.LanguageLevel;
 import consulo.language.psi.PsiElement;
 import consulo.annotation.access.RequiredReadAction;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * Represents a Java, JSP or class file.
@@ -99,16 +99,16 @@ public interface PsiJavaFile extends PsiImportHolder, PsiClassOwner {
    * @param aClass the class to return the import statement for.
    * @return the Java code reference under the import statement, or null if there is no such statement.
    */
-  @Nullable
+  @jakarta.annotation.Nullable
   PsiJavaCodeReferenceElement findImportReferenceTo(PsiClass aClass);
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   LanguageLevel getLanguageLevel();
 
   /**
    * Returns a Java module declaration element, or {@code null} if the file is not a module-info one.
    */
-  @Nullable
+  @jakarta.annotation.Nullable
   @RequiredReadAction
   PsiJavaModule getModuleDeclaration();
 }

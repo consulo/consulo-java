@@ -18,7 +18,7 @@ package com.intellij.java.language.impl.psi.controlFlow;
 
 import consulo.language.psi.PsiElement;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,14 +93,14 @@ public class ControlFlowSubRange implements ControlFlow
 	}
 
 	@Override
-	public int getStartOffset(@Nonnull PsiElement element)
+	public int getStartOffset(@jakarta.annotation.Nonnull PsiElement element)
 	{
 		return patchOffset(myControlFlow.getStartOffset(element));
 		//return (myControlFlow.getStartOffset(element));
 	}
 
 	@Override
-	public int getEndOffset(@Nonnull PsiElement element)
+	public int getEndOffset(@jakarta.annotation.Nonnull PsiElement element)
 	{
 		return patchOffset(myControlFlow.getEndOffset(element));
 		//return myControlFlow.getEndOffset(element);

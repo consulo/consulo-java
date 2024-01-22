@@ -20,7 +20,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.impl.source.resolve.graphInference.PsiPolyExpressionUtil;
 import consulo.logging.Logger;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.Set;
 
 public class FunctionalInterfaceParameterizationUtil {
@@ -48,18 +48,18 @@ public class FunctionalInterfaceParameterizationUtil {
     return false;
   }
 
-  @Nullable
-  public static PsiType getGroundTargetType(@Nullable PsiType psiClassType) {
+  @jakarta.annotation.Nullable
+  public static PsiType getGroundTargetType(@jakarta.annotation.Nullable PsiType psiClassType) {
     return getGroundTargetType(psiClassType, null);
   }
 
   @Nullable
-  public static PsiType getGroundTargetType(@Nullable PsiType psiClassType, @Nullable PsiLambdaExpression expr) {
+  public static PsiType getGroundTargetType(@jakarta.annotation.Nullable PsiType psiClassType, @Nullable PsiLambdaExpression expr) {
     return getGroundTargetType(psiClassType, expr, true);
   }
 
   @Nullable
-  public static PsiType getGroundTargetType(@Nullable PsiType psiClassType, @Nullable PsiLambdaExpression expr, boolean performFinalCheck) {
+  public static PsiType getGroundTargetType(@jakarta.annotation.Nullable PsiType psiClassType, @jakarta.annotation.Nullable PsiLambdaExpression expr, boolean performFinalCheck) {
     if (!isWildcardParameterized(psiClassType)) {
       return psiClassType;
     }

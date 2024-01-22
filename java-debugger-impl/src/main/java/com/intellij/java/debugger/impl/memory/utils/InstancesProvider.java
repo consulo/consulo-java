@@ -17,8 +17,8 @@ package com.intellij.java.debugger.impl.memory.utils;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
 import consulo.internal.com.sun.jdi.ObjectReference;
+import jakarta.annotation.Nonnull;
 
 @FunctionalInterface
 public interface InstancesProvider

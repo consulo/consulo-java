@@ -41,8 +41,9 @@ import consulo.ui.ex.awt.ColoredListCellRenderer;
 import consulo.ui.ex.awt.JBList;
 import consulo.ui.ex.popup.JBPopup;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 import java.util.Collections;
 import java.util.List;
@@ -83,7 +84,7 @@ public class BaseGenerateTestSupportMethodAction extends BaseGenerateAction {
   }
 
   @Override
-  protected boolean isValidForFile(@Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiFile file) {
+  protected boolean isValidForFile(@jakarta.annotation.Nonnull Project project, @Nonnull Editor editor, @jakarta.annotation.Nonnull PsiFile file) {
     if (file instanceof PsiCompiledElement) {
       return false;
     }
@@ -106,7 +107,7 @@ public class BaseGenerateTestSupportMethodAction extends BaseGenerateAction {
       myMethodKind = methodKind;
     }
 
-    public void invoke(@Nonnull Project project, @Nonnull final Editor editor, @Nonnull final PsiFile file) {
+    public void invoke(@Nonnull Project project, @jakarta.annotation.Nonnull final Editor editor, @Nonnull final PsiFile file) {
       final PsiClass targetClass = findTargetClass(editor, file);
       final List<TestFramework> frameworks = TestIntegrationUtils.findSuitableFrameworks(targetClass);
       if (frameworks.isEmpty()) {
@@ -178,7 +179,7 @@ public class BaseGenerateTestSupportMethodAction extends BaseGenerateAction {
       });
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     private static PsiMethod generateDummyMethod(Editor editor, PsiFile file) throws IncorrectOperationException {
       final PsiMethod method = TestIntegrationUtils.createDummyMethod(file);
       final PsiGenerationInfo<PsiMethod> info = OverrideImplementUtil.createGenerationInfo(method);

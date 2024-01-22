@@ -26,9 +26,8 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.MakeSerializableFix;
 import com.intellij.java.impl.ig.psiutils.SerializationUtils;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class ComparatorNotSerializableInspection extends BaseInspection {
@@ -41,7 +40,7 @@ public class ComparatorNotSerializableInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "comparator.not.serializable.problem.descriptor");

@@ -17,7 +17,7 @@ package com.intellij.java.execution.runners;
 
 import consulo.process.ProcessHandler;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public interface ProcessProxy
 {

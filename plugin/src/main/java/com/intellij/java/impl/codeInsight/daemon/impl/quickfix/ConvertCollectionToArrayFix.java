@@ -20,7 +20,6 @@ import com.siyeh.ig.psiutils.ParenthesesUtils;
 import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.java.language.module.util.JavaClassNames;
-import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
@@ -28,7 +27,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author Pavel.Dolgov
@@ -37,7 +36,7 @@ public class ConvertCollectionToArrayFix implements SyntheticIntentionAction {
   private final PsiExpression myCollectionExpression;
   private final String myNewArrayText;
 
-  public ConvertCollectionToArrayFix(@Nonnull PsiExpression collectionExpression, @Nonnull PsiArrayType arrayType) {
+  public ConvertCollectionToArrayFix(@Nonnull PsiExpression collectionExpression, @jakarta.annotation.Nonnull PsiArrayType arrayType) {
     myCollectionExpression = collectionExpression;
 
     PsiType componentType = arrayType.getComponentType();
@@ -45,19 +44,19 @@ public class ConvertCollectionToArrayFix implements SyntheticIntentionAction {
   }
 
   @Nls
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getText() {
     return JavaQuickFixBundle.message("collection.to.array.text", myNewArrayText);
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
     return myCollectionExpression.isValid() && PsiManager.getInstance(project).isInProject(myCollectionExpression);
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
     String replacement =
       ParenthesesUtils.getText(myCollectionExpression, ParenthesesUtils.POSTFIX_PRECEDENCE) + ".toArray(" + myNewArrayText + ")";
@@ -69,7 +68,7 @@ public class ConvertCollectionToArrayFix implements SyntheticIntentionAction {
     return true;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private static String getArrayTypeText(PsiType componentType) {
     if (componentType instanceof PsiArrayType) {
       return getArrayTypeText(((PsiArrayType)componentType).getComponentType()) + "[]";

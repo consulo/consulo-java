@@ -27,26 +27,26 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NonFinalGuardInspection extends BaseJavaLocalInspectionTool {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getGroupDisplayName() {
     return GroupNames.CONCURRENCY_ANNOTATION_ISSUES;
   }
 
   @Override
   @Nls
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return "Non-final @GuardedBy field";
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getShortName() {
     return "NonFinalGuard";
   }
@@ -54,7 +54,7 @@ public class NonFinalGuardInspection extends BaseJavaLocalInspectionTool {
 
   @Override
   @Nonnull
-  public PsiElementVisitor buildVisitorImpl(@Nonnull ProblemsHolder holder,
+  public PsiElementVisitor buildVisitorImpl(@jakarta.annotation.Nonnull ProblemsHolder holder,
                                             boolean isOnTheFly,
                                             LocalInspectionToolSession session,
                                             Object state) {

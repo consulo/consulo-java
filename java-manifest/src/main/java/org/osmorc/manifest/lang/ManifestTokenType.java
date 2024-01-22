@@ -24,8 +24,7 @@
  */
 package org.osmorc.manifest.lang;
 
-import javax.annotation.Nonnull;
-
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 import consulo.language.ast.IElementType;
 

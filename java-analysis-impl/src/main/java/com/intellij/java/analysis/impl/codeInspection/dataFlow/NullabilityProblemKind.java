@@ -18,8 +18,8 @@ import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.PropertyKey;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -52,12 +52,12 @@ public final class NullabilityProblemKind<T extends PsiElement> {
     myNormalMessage = null;
   }
 
-  private NullabilityProblemKind(@Nullable String exception, @Nonnull String name,
+  private NullabilityProblemKind(@jakarta.annotation.Nullable String exception, @Nonnull String name,
                                  @Nonnull @PropertyKey(resourceBundle = BUNDLE) String message) {
     this(exception, name, message, message);
   }
 
-  private NullabilityProblemKind(@Nullable String exception, @Nonnull String name,
+  private NullabilityProblemKind(@jakarta.annotation.Nullable String exception, @Nonnull String name,
                                  @Nonnull @PropertyKey(resourceBundle = BUNDLE) String alwaysNullMessage,
                                  @Nonnull @PropertyKey(resourceBundle = BUNDLE) String normalMessage) {
     myException = exception;
@@ -123,7 +123,7 @@ public final class NullabilityProblemKind<T extends PsiElement> {
    */
   @Contract("null, _ -> null")
   @Nullable
-  public final NullabilityProblem<T> problem(@Nullable T anchor, @Nullable PsiExpression expression) {
+  public final NullabilityProblem<T> problem(@Nullable T anchor, @jakarta.annotation.Nullable PsiExpression expression) {
     return anchor == null || this == noProblem ? null : new NullabilityProblem<>(this, anchor, expression);
   }
 
@@ -505,7 +505,7 @@ public final class NullabilityProblemKind<T extends PsiElement> {
      * @return name of exception (or its superclass) which is thrown if violation occurs,
      * or null if no exception is thrown (e.g. when assigning null to variable annotated as notnull).
      */
-    @Nullable
+    @jakarta.annotation.Nullable
     public String thrownException() {
       return myKind.myException;
     }

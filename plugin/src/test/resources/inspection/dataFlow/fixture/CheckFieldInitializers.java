@@ -1,8 +1,9 @@
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 
 class Foo {
-  @javax.annotation.Nullable
+  @Nullable
   static Object foo() { return null; }
   static String bar(@Nonnull Object arg) { return ""; }
 }

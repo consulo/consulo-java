@@ -30,8 +30,7 @@ import consulo.language.ast.TokenType;
 import consulo.language.impl.ast.*;
 import consulo.language.util.CharTable;
 import consulo.logging.Logger;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class MethodElement extends CompositeElement implements Constants {
   private static final Logger LOG = Logger.getInstance(MethodElement.class);

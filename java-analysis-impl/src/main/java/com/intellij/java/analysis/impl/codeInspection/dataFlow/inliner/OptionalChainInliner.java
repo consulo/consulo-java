@@ -33,7 +33,7 @@ import consulo.util.lang.ObjectUtil;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Contract;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.function.BiConsumer;
 
 import static com.intellij.java.analysis.impl.codeInspection.util.OptionalUtil.*;

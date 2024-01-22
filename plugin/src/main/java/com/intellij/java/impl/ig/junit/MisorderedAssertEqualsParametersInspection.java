@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.junit;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -29,9 +29,8 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TypeUtils;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 
 @ExtensionImpl
 public class MisorderedAssertEqualsParametersInspection extends BaseInspection {
@@ -49,7 +48,7 @@ public class MisorderedAssertEqualsParametersInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("misordered.assert.equals.parameters.problem.descriptor");
   }
@@ -62,7 +61,7 @@ public class MisorderedAssertEqualsParametersInspection extends BaseInspection {
   private static class FlipParametersFix extends InspectionGadgetsFix {
 
     @Override
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("misordered.assert.equals.parameters.flip.quickfix");
     }

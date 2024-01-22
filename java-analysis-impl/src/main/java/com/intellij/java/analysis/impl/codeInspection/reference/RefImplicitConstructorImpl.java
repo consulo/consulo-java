@@ -33,7 +33,7 @@ import consulo.application.util.function.Computable;
 import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiModifierListOwner;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public class RefImplicitConstructorImpl extends RefMethodImpl implements RefImplicitConstructor {
 

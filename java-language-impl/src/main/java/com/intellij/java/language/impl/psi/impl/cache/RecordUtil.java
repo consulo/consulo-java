@@ -34,7 +34,7 @@ import consulo.language.ast.LighterASTTokenNode;
 import consulo.language.psi.stub.StubElement;
 import consulo.language.util.CharTable;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author max
@@ -82,7 +82,7 @@ public class RecordUtil {
     return false;
   }
 
-  public static int packModifierList(@Nonnull LighterAST tree, @Nonnull LighterASTNode modList) {
+  public static int packModifierList(@jakarta.annotation.Nonnull LighterAST tree, @Nonnull LighterASTNode modList) {
     int packed = 0;
     for (final LighterASTNode child : tree.getChildren(modList)) {
       packed |= ModifierFlags.KEYWORD_TO_MODIFIER_FLAG_MAP.getInt(child.getTokenType());

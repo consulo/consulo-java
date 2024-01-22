@@ -34,8 +34,9 @@ import consulo.language.psi.resolve.PsiElementProcessorAdapter;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 import java.util.Collection;
 
@@ -58,7 +59,7 @@ public class ObjectEqualityInspection extends BaseInspection {
   public boolean m_ignorePrivateConstructors = false;
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("object.comparison.display.name");
   }
@@ -93,7 +94,7 @@ public class ObjectEqualityInspection extends BaseInspection {
   private class ObjectEqualityVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitBinaryExpression(@Nonnull PsiBinaryExpression expression) {
+    public void visitBinaryExpression(@jakarta.annotation.Nonnull PsiBinaryExpression expression) {
       super.visitBinaryExpression(expression);
       if (!ComparisonUtils.isEqualityComparison(expression)) {
         return;
@@ -180,7 +181,7 @@ public class ObjectEqualityInspection extends BaseInspection {
       return true;
     }
 
-    private boolean isClass(@Nullable PsiExpression expression) {
+    private boolean isClass(@jakarta.annotation.Nullable PsiExpression expression) {
       if (expression == null) {
         return false;
       }
@@ -196,7 +197,7 @@ public class ObjectEqualityInspection extends BaseInspection {
       return rawType.equalsToText(JavaClassNames.JAVA_LANG_CLASS);
     }
 
-    private boolean isEnumType(@Nullable PsiExpression expression) {
+    private boolean isEnumType(@jakarta.annotation.Nullable PsiExpression expression) {
       return expression != null && TypeUtils.expressionHasTypeOrSubtype(expression, JavaClassNames.JAVA_LANG_ENUM);
     }
 

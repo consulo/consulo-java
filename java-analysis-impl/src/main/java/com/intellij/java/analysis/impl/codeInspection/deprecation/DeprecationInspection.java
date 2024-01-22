@@ -35,8 +35,8 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -50,7 +50,7 @@ public class DeprecationInspection extends BaseJavaBatchLocalInspectionTool<Depr
 
   @Override
   @Nonnull
-  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
+  public PsiElementVisitor buildVisitorImpl(@jakarta.annotation.Nonnull final ProblemsHolder holder,
                                             boolean isOnTheFly,
                                             LocalInspectionToolSession session,
                                             DeprecationInspectionState state) {
@@ -61,7 +61,7 @@ public class DeprecationInspection extends BaseJavaBatchLocalInspectionTool<Depr
                                          state.IGNORE_METHODS_OF_DEPRECATED);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public InspectionToolState<? extends DeprecationInspectionState> createStateProvider() {
     return new DeprecationInspectionState();
@@ -277,7 +277,7 @@ public class DeprecationInspection extends BaseJavaBatchLocalInspectionTool<Depr
 
   public static void checkDeprecated(PsiElement refElement,
                                      PsiElement elementToHighlight,
-                                     @Nullable TextRange rangeInElement,
+                                     @jakarta.annotation.Nullable TextRange rangeInElement,
                                      boolean ignoreInsideDeprecated,
                                      boolean ignoreImportStatements,
                                      boolean ignoreMethodsOfDeprecated,

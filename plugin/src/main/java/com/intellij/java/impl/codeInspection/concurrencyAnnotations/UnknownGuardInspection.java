@@ -30,7 +30,7 @@ import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * check locks according to http://www.javaconcurrencyinpractice.com/annotations/doc/net/jcip/annotations/GuardedBy.html
@@ -39,7 +39,7 @@ import javax.annotation.Nonnull;
 public class UnknownGuardInspection extends BaseJavaLocalInspectionTool {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getGroupDisplayName() {
     return GroupNames.CONCURRENCY_ANNOTATION_ISSUES;
   }
@@ -52,7 +52,7 @@ public class UnknownGuardInspection extends BaseJavaLocalInspectionTool {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getShortName() {
     return "UnknownGuard";
   }

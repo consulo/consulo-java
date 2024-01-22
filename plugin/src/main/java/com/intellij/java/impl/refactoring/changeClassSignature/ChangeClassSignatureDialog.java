@@ -36,8 +36,9 @@ import consulo.ui.ex.awt.table.JBTable;
 import consulo.ui.ex.awt.util.TableUtil;
 import consulo.util.collection.ContainerUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
@@ -75,7 +76,7 @@ public class ChangeClassSignatureDialog extends RefactoringDialog {
     );
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private static List<TypeParameterInfo> initTypeParameterInfos(int length) {
     final List<TypeParameterInfo> result = new ArrayList<TypeParameterInfo>();
     for (int i = 0; i < length; i++) {
@@ -93,14 +94,14 @@ public class ChangeClassSignatureDialog extends RefactoringDialog {
     return result;
   }
 
-  public ChangeClassSignatureDialog(@Nonnull PsiClass aClass,
-                                    @Nonnull Map<TypeParameterInfo, PsiTypeCodeFragment> parameters,
+  public ChangeClassSignatureDialog(@jakarta.annotation.Nonnull PsiClass aClass,
+                                    @jakarta.annotation.Nonnull Map<TypeParameterInfo, PsiTypeCodeFragment> parameters,
                                     boolean hideDefaultValueColumn) {
     this(aClass, parameters.keySet(), parameters.values(), hideDefaultValueColumn);
   }
 
   public ChangeClassSignatureDialog(@Nonnull PsiClass aClass,
-                                    @Nonnull Collection<TypeParameterInfo> typeParameterInfos,
+                                    @jakarta.annotation.Nonnull Collection<TypeParameterInfo> typeParameterInfos,
                                     @Nonnull Collection<PsiTypeCodeFragment> typeCodeFragments,
                                     boolean hideDefaultValueColumn) {
     super(aClass.getProject(), true);

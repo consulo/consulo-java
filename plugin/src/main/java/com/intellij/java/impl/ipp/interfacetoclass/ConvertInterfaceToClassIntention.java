@@ -35,9 +35,9 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.collection.MultiMap;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.Collection;
 
 @ExtensionImpl
@@ -162,7 +162,7 @@ public class ConvertInterfaceToClassIntention extends Intention {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected PsiElementPredicate getElementPredicate() {
     return new ConvertInterfaceToClassPredicate();
   }
@@ -201,8 +201,8 @@ public class ConvertInterfaceToClassIntention extends Intention {
     return true;
   }
 
-  private static void moveReference(@Nonnull PsiReferenceList source, @Nullable PsiReferenceList target,
-                                    @Nonnull PsiJavaCodeReferenceElement reference) throws IncorrectOperationException {
+  private static void moveReference(@jakarta.annotation.Nonnull PsiReferenceList source, @Nullable PsiReferenceList target,
+                                    @jakarta.annotation.Nonnull PsiJavaCodeReferenceElement reference) throws IncorrectOperationException {
     final PsiJavaCodeReferenceElement[] implementsReferences = source.getReferenceElements();
     final String qualifiedName = reference.getQualifiedName();
     for (PsiJavaCodeReferenceElement implementsReference : implementsReferences) {

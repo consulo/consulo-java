@@ -25,11 +25,11 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.ui.ExternalizableStringSet;
 import com.intellij.java.impl.ig.ui.UiUtils;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
-import javax.annotation.Nullable;
 import javax.swing.JComponent;
 import java.util.List;
 
@@ -58,7 +58,7 @@ public class AccessToNonThreadSafeStaticFieldFromInstanceInspection
     }
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getID() {
     return "AccessToNonThreadSafeStaticField";
@@ -73,7 +73,7 @@ public class AccessToNonThreadSafeStaticFieldFromInstanceInspection
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "access.to.non.thread.safe.static.field.from.instance.field.problem.descriptor",

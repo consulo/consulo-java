@@ -27,7 +27,7 @@ import consulo.language.editor.refactoring.action.RefactoringActionHandlerFactor
 import consulo.dataContext.DataManager;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.InspectionGadgetsBundle;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class MoveClassFix extends InspectionGadgetsFix {
 

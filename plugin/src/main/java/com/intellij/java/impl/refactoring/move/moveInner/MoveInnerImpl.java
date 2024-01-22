@@ -31,8 +31,7 @@ import consulo.language.psi.*;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.move.MoveCallback;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
-
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public class MoveInnerImpl {
   private static final Logger LOG = Logger.getInstance(MoveInnerImpl.class);

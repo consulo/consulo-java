@@ -22,7 +22,7 @@ import consulo.language.psi.search.ReferencesSearch;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import consulo.language.psi.util.PsiTreeUtil;
 import java.util.HashMap;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.HashSet;

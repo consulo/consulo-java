@@ -18,8 +18,7 @@ package com.intellij.java.impl.psi.formatter.java;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 import consulo.language.codeStyle.ASTBlock;
 import consulo.language.codeStyle.Alignment;
 import consulo.language.codeStyle.Block;
@@ -33,6 +32,7 @@ import consulo.document.util.TextRange;
 import consulo.language.codeStyle.ExtraRangesProvider;
 import consulo.language.codeStyle.NodeIndentRangesCalculator;
 import com.intellij.java.impl.psi.impl.source.codeStyle.ShiftIndentInsideHelper;
+import jakarta.annotation.Nullable;
 
 public class LeafBlock implements ASTBlock, ExtraRangesProvider
 {
@@ -62,7 +62,7 @@ public class LeafBlock implements ASTBlock, ExtraRangesProvider
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public TextRange getTextRange()
 	{
 		if(myStartOffset != -1)
@@ -73,7 +73,7 @@ public class LeafBlock implements ASTBlock, ExtraRangesProvider
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public List<Block> getSubBlocks()
 	{
 		return EMPTY_SUB_BLOCKS;
@@ -98,7 +98,7 @@ public class LeafBlock implements ASTBlock, ExtraRangesProvider
 	}
 
 	@Override
-	public Spacing getSpacing(Block child1, @Nonnull Block child2)
+	public Spacing getSpacing(Block child1, @jakarta.annotation.Nonnull Block child2)
 	{
 		return null;
 	}
@@ -109,7 +109,7 @@ public class LeafBlock implements ASTBlock, ExtraRangesProvider
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public ChildAttributes getChildAttributes(final int newChildIndex)
 	{
 		return new ChildAttributes(getIndent(), null);

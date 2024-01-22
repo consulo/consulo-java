@@ -42,10 +42,11 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.undoRedo.CommandProcessor;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.util.*;
 
 public class AnonymousToInnerHandler implements RefactoringActionHandler {
@@ -65,13 +66,13 @@ public class AnonymousToInnerHandler implements RefactoringActionHandler {
   protected boolean myMakeStatic;
   private final Set<PsiTypeParameter> myTypeParametersToCreate = new LinkedHashSet<PsiTypeParameter>();
 
-  public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+  public void invoke(@Nonnull Project project, @jakarta.annotation.Nonnull PsiElement[] elements, DataContext dataContext) {
     if (elements.length == 1 && elements[0] instanceof PsiAnonymousClass) {
       invoke(project, dataContext.getData(PlatformDataKeys.EDITOR), (PsiAnonymousClass)elements[0]);
     }
   }
 
-  public void invoke(@Nonnull final Project project, Editor editor, final PsiFile file, DataContext dataContext) {
+  public void invoke(@jakarta.annotation.Nonnull final Project project, Editor editor, final PsiFile file, DataContext dataContext) {
     if (!CommonRefactoringUtil.checkReadOnlyStatus(project, file)) return;
 
     final int offset = editor.getCaretModel().getOffset();

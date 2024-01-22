@@ -24,8 +24,8 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -36,7 +36,7 @@ import java.util.Set;
   "Declaration"})
 public class ReplaceOnDemandImportIntention extends Intention {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected PsiElementPredicate getElementPredicate() {
     return new OnDemandImportPredicate();
   }

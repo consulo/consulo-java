@@ -28,7 +28,7 @@ import com.intellij.java.impl.refactoring.typeCook.deductive.resolver.Binding;
 import com.intellij.java.impl.refactoring.typeCook.deductive.resolver.ResolverTree;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -52,7 +52,7 @@ public class TypeCookProcessor extends BaseRefactoringProcessor {
     return new TypeCookViewDescriptor(myElements);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected UsageInfo[] findUsages() {
     final SystemBuilder systemBuilder = new SystemBuilder(myProject, mySettings);
 

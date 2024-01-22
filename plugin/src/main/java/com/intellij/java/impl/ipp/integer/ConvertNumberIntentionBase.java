@@ -15,8 +15,7 @@
  */
 package com.intellij.java.impl.ipp.integer;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiType;
@@ -24,6 +23,7 @@ import consulo.language.util.IncorrectOperationException;
 import com.siyeh.ig.PsiReplacementUtil;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.intellij.java.impl.ipp.base.Intention;
+import jakarta.annotation.Nullable;
 
 public abstract class ConvertNumberIntentionBase extends Intention
 {

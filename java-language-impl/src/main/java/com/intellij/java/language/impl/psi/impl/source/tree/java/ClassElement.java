@@ -32,8 +32,8 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.CharTable;
 import consulo.logging.Logger;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class ClassElement extends CompositeElement implements Constants {
   private static final Logger LOG = Logger.getInstance(ClassElement.class);

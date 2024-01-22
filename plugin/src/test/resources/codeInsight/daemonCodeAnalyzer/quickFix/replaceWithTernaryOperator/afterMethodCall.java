@@ -1,6 +1,6 @@
 // "Replace with 'list != null ?:'" "true"
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 class A{
   void test(@Nonnull List l) {

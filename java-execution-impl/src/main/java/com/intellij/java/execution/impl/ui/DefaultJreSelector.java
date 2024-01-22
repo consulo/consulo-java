@@ -33,7 +33,7 @@ import consulo.annotation.DeprecationInfo;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.java.language.module.extension.JavaModuleExtension;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -138,7 +138,7 @@ public abstract class DefaultJreSelector
 		return new SdkFromModuleDependencies<>(modulesCombobox, ModuleDescriptionsComboBox::getSelectedModule, () -> productionOnly);
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public static DefaultJreSelector fromSourceRootsDependencies(ModulesComboBox modulesCombobox, EditorTextFieldWithBrowseButton classSelector)
 	{
 		return new SdkFromSourceRootDependencies<>(modulesCombobox, ModulesComboBox::getSelectedModule, classSelector);

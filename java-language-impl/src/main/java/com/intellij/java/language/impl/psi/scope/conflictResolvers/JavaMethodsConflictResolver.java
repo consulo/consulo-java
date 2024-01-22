@@ -41,8 +41,8 @@ import consulo.util.collection.primitive.ints.IntLists;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.ThreeState;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -59,11 +59,11 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver {
   private final PsiType[] myActualParameterTypes;
   protected LanguageLevel myLanguageLevel;
 
-  public JavaMethodsConflictResolver(@Nonnull PsiExpressionList list, @Nonnull LanguageLevel languageLevel) {
+  public JavaMethodsConflictResolver(@jakarta.annotation.Nonnull PsiExpressionList list, @jakarta.annotation.Nonnull LanguageLevel languageLevel) {
     this(list, null, languageLevel);
   }
 
-  public JavaMethodsConflictResolver(@Nonnull PsiElement argumentsList, PsiType[] actualParameterTypes, @Nonnull LanguageLevel languageLevel) {
+  public JavaMethodsConflictResolver(@jakarta.annotation.Nonnull PsiElement argumentsList, PsiType[] actualParameterTypes, @jakarta.annotation.Nonnull LanguageLevel languageLevel) {
     myArgumentsList = argumentsList;
     myActualParameterTypes = actualParameterTypes;
     myLanguageLevel = languageLevel;
@@ -86,7 +86,7 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver {
     });
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   protected CandidateInfo guardedOverloadResolution(@Nonnull List<CandidateInfo> conflicts) {
     if (conflicts.isEmpty()) {
       return null;
@@ -156,7 +156,7 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver {
     return null;
   }
 
-  private static void checkPotentiallyCompatibleMethods(@Nonnull List<CandidateInfo> conflicts) {
+  private static void checkPotentiallyCompatibleMethods(@jakarta.annotation.Nonnull List<CandidateInfo> conflicts) {
     List<CandidateInfo> partiallyApplicable = new ArrayList<CandidateInfo>();
     for (Iterator<CandidateInfo> iterator = conflicts.iterator(); iterator.hasNext(); ) {
       CandidateInfo conflict = iterator.next();
@@ -175,14 +175,14 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver {
     }
   }
 
-  public void checkSpecifics(@Nonnull List<CandidateInfo> conflicts, @MethodCandidateInfo.ApplicabilityLevelConstant int applicabilityLevel, @Nonnull LanguageLevel languageLevel) {
+  public void checkSpecifics(@jakarta.annotation.Nonnull List<CandidateInfo> conflicts, @MethodCandidateInfo.ApplicabilityLevelConstant int applicabilityLevel, @jakarta.annotation.Nonnull LanguageLevel languageLevel) {
     checkSpecifics(conflicts, applicabilityLevel, null, languageLevel);
   }
 
   public void checkSpecifics(@Nonnull List<CandidateInfo> conflicts,
                              @MethodCandidateInfo.ApplicabilityLevelConstant int applicabilityLevel,
                              Map<MethodCandidateInfo, PsiSubstitutor> map,
-                             @Nonnull LanguageLevel languageLevel) {
+                             @jakarta.annotation.Nonnull LanguageLevel languageLevel) {
     final boolean applicable = applicabilityLevel > MethodCandidateInfo.ApplicabilityLevel.NOT_APPLICABLE;
 
     int conflictsCount = conflicts.size();
@@ -217,7 +217,7 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver {
     return false;
   }
 
-  protected static void checkAccessStaticLevels(@Nonnull List<CandidateInfo> conflicts, boolean checkAccessible) {
+  protected static void checkAccessStaticLevels(@jakarta.annotation.Nonnull List<CandidateInfo> conflicts, boolean checkAccessible) {
     int conflictsCount = conflicts.size();
 
     int maxCheckLevel = -1;
@@ -239,7 +239,7 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver {
     }
   }
 
-  protected void checkSameSignatures(@Nonnull List<CandidateInfo> conflicts) {
+  protected void checkSameSignatures(@jakarta.annotation.Nonnull List<CandidateInfo> conflicts) {
     checkSameSignatures(conflicts, null);
   }
 
@@ -394,7 +394,7 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver {
     return map != null ? map.get(existing) : existing.getSubstitutor(false);
   }
 
-  private static boolean areTypeParametersAgree(@Nonnull CandidateInfo info) {
+  private static boolean areTypeParametersAgree(@jakarta.annotation.Nonnull CandidateInfo info) {
     return ((MethodCandidateInfo) info).getPertinentApplicabilityLevel() != MethodCandidateInfo.ApplicabilityLevel.NOT_APPLICABLE;
   }
 
@@ -404,7 +404,7 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver {
    * <p>
    * but these methods should be ignored during overload resolution if another methods are present
    */
-  private void checkStaticMethodsOfInterfaces(@Nonnull List<CandidateInfo> conflicts) {
+  private void checkStaticMethodsOfInterfaces(@jakarta.annotation.Nonnull List<CandidateInfo> conflicts) {
     if (!(myArgumentsList instanceof PsiExpressionList)) {
       return;
     }
@@ -540,7 +540,7 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver {
     return conflict.getPertinentApplicabilityLevel();
   }
 
-  private static int getCheckAccessLevel(@Nonnull MethodCandidateInfo method) {
+  private static int getCheckAccessLevel(@jakarta.annotation.Nonnull MethodCandidateInfo method) {
     boolean visible = method.isAccessible();
     return visible ? 1 : 0;
   }
@@ -565,7 +565,7 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver {
   }
 
   private Specifics isMoreSpecific(@Nonnull MethodCandidateInfo info1,
-                                   @Nonnull MethodCandidateInfo info2,
+                                   @jakarta.annotation.Nonnull MethodCandidateInfo info2,
                                    @MethodCandidateInfo.ApplicabilityLevelConstant int applicabilityLevel,
                                    Map<MethodCandidateInfo, PsiSubstitutor> map,
                                    @Nonnull LanguageLevel languageLevel) {
@@ -748,7 +748,7 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver {
         !boxingHappened[0];
   }
 
-  private boolean isApplicableTo(@Nonnull PsiType[] types2AtSite,
+  private boolean isApplicableTo(@jakarta.annotation.Nonnull PsiType[] types2AtSite,
                                  @Nonnull PsiMethod method1,
                                  @Nonnull final LanguageLevel languageLevel,
                                  boolean varargsPosition,
@@ -794,7 +794,7 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver {
     return false;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private static PsiType[] typesAtSite(@Nonnull PsiType[] types1, @Nonnull PsiSubstitutor siteSubstitutor1) {
     final PsiType[] types = PsiType.createArray(types1.length);
     for (int i = 0; i < types1.length; i++) {
@@ -803,13 +803,13 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver {
     return types;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private static PsiSubstitutor calculateMethodSubstitutor(@Nonnull PsiTypeParameter[] typeParameters,
-                                                           @Nonnull PsiMethod method,
-                                                           @Nonnull PsiSubstitutor siteSubstitutor,
+                                                           @jakarta.annotation.Nonnull PsiMethod method,
+                                                           @jakarta.annotation.Nonnull PsiSubstitutor siteSubstitutor,
                                                            @Nonnull PsiType[] types1,
-                                                           @Nonnull PsiType[] types2,
-                                                           @Nonnull LanguageLevel languageLevel) {
+                                                           @jakarta.annotation.Nonnull PsiType[] types2,
+                                                           @jakarta.annotation.Nonnull LanguageLevel languageLevel) {
     PsiSubstitutor substitutor = PsiResolveHelper.SERVICE.getInstance(method.getProject()).inferTypeArguments(typeParameters, types1, types2, languageLevel);
     for (PsiTypeParameter typeParameter : PsiUtil.typeParametersIterable(method)) {
       ProgressManager.checkCanceled();

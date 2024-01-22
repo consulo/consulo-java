@@ -27,7 +27,7 @@ import consulo.language.ast.TokenSet;
 import consulo.language.codeStyle.AlignmentStrategy;
 import consulo.language.codeStyle.CommonCodeStyleSettings;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Set;
 
 public class SubsequentFieldAligner extends ChildAlignmentStrategyProvider

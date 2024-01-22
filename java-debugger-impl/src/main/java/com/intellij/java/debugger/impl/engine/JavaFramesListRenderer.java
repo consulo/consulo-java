@@ -24,7 +24,7 @@ import consulo.ui.ex.ColoredTextContainer;
 import consulo.ui.ex.SimpleTextAttributes;
 import consulo.util.lang.Comparing;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 // Copied from FramesListRenderer
 class JavaFramesListRenderer /*extends ColoredListCellRenderer*/

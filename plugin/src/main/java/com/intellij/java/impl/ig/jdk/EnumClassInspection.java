@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.jdk;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.siyeh.InspectionGadgetsBundle;
@@ -44,7 +44,7 @@ public class EnumClassInspection extends BaseInspection {
   private static class EnumClassVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
       if (!aClass.isEnum()) {
         return;
       }

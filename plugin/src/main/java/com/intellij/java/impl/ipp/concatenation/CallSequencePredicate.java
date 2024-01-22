@@ -19,7 +19,7 @@ import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Bas Leijdekkers
@@ -44,7 +44,7 @@ class CallSequencePredicate implements PsiElementPredicate {
     return variable1.equals(variable2);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static PsiVariable getVariable(PsiStatement statement) {
     if (!(statement instanceof PsiExpressionStatement)) {
       return null;

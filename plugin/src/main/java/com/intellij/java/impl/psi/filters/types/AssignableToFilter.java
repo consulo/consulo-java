@@ -15,14 +15,13 @@
  */
 package com.intellij.java.impl.psi.filters.types;
 
-import javax.annotation.Nonnull;
-
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.PsiType;
 import consulo.language.psi.filter.ElementFilter;
 import com.intellij.java.impl.psi.filters.FilterUtil;
 import com.intellij.java.language.psi.infos.CandidateInfo;
+import jakarta.annotation.Nonnull;
 
 /**
  * Created by IntelliJ IDEA.

@@ -29,8 +29,8 @@ import com.siyeh.ig.psiutils.MethodCallUtils;
 import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class CallToStringConcatCanBeReplacedByOperatorInspection
@@ -38,7 +38,7 @@ public class CallToStringConcatCanBeReplacedByOperatorInspection
 
   @Override
   @Nls
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "call.to.string.concat.can.be.replaced.by.operator.display.name");
@@ -65,7 +65,7 @@ public class CallToStringConcatCanBeReplacedByOperatorInspection
   private static class CallToStringConcatCanBeReplacedByOperatorFix
     extends InspectionGadgetsFix {
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("call.to.string.concat.can.be.replaced.by.operator.quickfix");
     }

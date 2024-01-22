@@ -18,20 +18,20 @@ package com.intellij.java.impl.ipp.psiutils;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;
 import consulo.language.ast.IElementType;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import jakarta.annotation.Nullable;
 
 public class EquivalenceChecker {
 
   private EquivalenceChecker() {}
 
   public static boolean modifierListsAreEquivalent(
-    @Nullable PsiModifierList list1, @Nullable PsiModifierList list2) {
+    @Nullable PsiModifierList list1, @jakarta.annotation.Nullable PsiModifierList list2) {
     if (list1 == null) {
       return list2 == null;
     }
@@ -96,7 +96,7 @@ public class EquivalenceChecker {
              !list2.hasModifierProperty(PsiModifier.VOLATILE));
   }
 
-  public static boolean statementsAreEquivalent(@Nullable PsiStatement statement1, @Nullable PsiStatement statement2) {
+  public static boolean statementsAreEquivalent(@jakarta.annotation.Nullable PsiStatement statement1, @jakarta.annotation.Nullable PsiStatement statement2) {
     if (statement1 == null) {
       return statement2 == null;
     } else if (statement2 == null) {
@@ -317,7 +317,7 @@ public class EquivalenceChecker {
   }
 
   public static boolean typesAreEquivalent(
-    @Nullable PsiType type1, @Nullable PsiType type2) {
+    @jakarta.annotation.Nullable PsiType type1, @jakarta.annotation.Nullable PsiType type2) {
     if (type1 == null) {
       return type2 == null;
     }
@@ -498,7 +498,7 @@ public class EquivalenceChecker {
   }
 
   public static boolean codeBlocksAreEquivalent(
-    @Nullable PsiCodeBlock block1, @Nullable PsiCodeBlock block2) {
+    @jakarta.annotation.Nullable PsiCodeBlock block1, @jakarta.annotation.Nullable PsiCodeBlock block2) {
     if (block1 == null && block2 == null) {
       return true;
     }
@@ -568,7 +568,7 @@ public class EquivalenceChecker {
     return expressionListsAreEquivalent(expressions1, expressions2);
   }
 
-  public static boolean expressionsAreEquivalent(@Nullable PsiExpression expression1, @Nullable PsiExpression expression2) {
+  public static boolean expressionsAreEquivalent(@jakarta.annotation.Nullable PsiExpression expression1, @jakarta.annotation.Nullable PsiExpression expression2) {
     expression1 = ParenthesesUtils.stripParentheses(expression1);
     expression2 = ParenthesesUtils.stripParentheses(expression2);
     if (expression1 == null) {
@@ -914,8 +914,8 @@ public class EquivalenceChecker {
   }
 
   private static boolean expressionListsAreEquivalent(
-    @Nullable PsiExpression[] expressions1,
-    @Nullable PsiExpression[] expressions2) {
+    @jakarta.annotation.Nullable PsiExpression[] expressions1,
+    @jakarta.annotation.Nullable PsiExpression[] expressions2) {
     if (expressions1 == null && expressions2 == null) {
       return true;
     }

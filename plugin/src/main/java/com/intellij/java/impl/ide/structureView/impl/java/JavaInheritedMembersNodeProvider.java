@@ -22,8 +22,8 @@ import consulo.fileEditor.structureView.tree.TreeElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.util.collection.ContainerUtil;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.util.*;
 
 /**
@@ -32,7 +32,7 @@ import java.util.*;
 public class JavaInheritedMembersNodeProvider extends InheritedMembersNodeProvider {
   @Nonnull
   @Override
-  public Collection<TreeElement> provideNodes(@Nonnull TreeElement node) {
+  public Collection<TreeElement> provideNodes(@jakarta.annotation.Nonnull TreeElement node) {
     if (!(node instanceof JavaClassTreeElement)) {
       return Collections.emptyList();
     }

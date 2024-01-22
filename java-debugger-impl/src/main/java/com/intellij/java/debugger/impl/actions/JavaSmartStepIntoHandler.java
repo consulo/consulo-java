@@ -29,9 +29,9 @@ import consulo.language.psi.PsiFile;
 import consulo.util.lang.CharArrayUtil;
 import consulo.util.lang.Range;
 import consulo.virtualFileSystem.VirtualFile;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 /**

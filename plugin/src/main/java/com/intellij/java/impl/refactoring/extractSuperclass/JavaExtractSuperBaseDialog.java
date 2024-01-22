@@ -39,7 +39,7 @@ import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.ide.impl.idea.refactoring.extractSuperclass.ExtractSuperBaseDialog;
 import consulo.language.editor.ui.awt.EditorComboBox;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;

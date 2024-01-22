@@ -27,8 +27,8 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.ChangeLocalityDetector;
 import consulo.language.psi.PsiElement;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class JavaChangeLocalityDetector implements ChangeLocalityDetector {

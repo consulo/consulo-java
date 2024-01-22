@@ -26,7 +26,7 @@ import com.siyeh.ig.BaseInspection;
 import com.intellij.java.impl.ig.ui.BlankFiller;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;

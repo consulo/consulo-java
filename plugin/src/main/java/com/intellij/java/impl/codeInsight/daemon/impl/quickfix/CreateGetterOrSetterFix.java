@@ -31,7 +31,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -45,7 +45,7 @@ public class CreateGetterOrSetterFix implements SyntheticIntentionAction, LowPri
   private final PsiField myField;
   private final String myPropertyName;
 
-  public CreateGetterOrSetterFix(boolean createGetter, boolean createSetter, @Nonnull PsiField field) {
+  public CreateGetterOrSetterFix(boolean createGetter, boolean createSetter, @jakarta.annotation.Nonnull PsiField field) {
     myCreateGetter = createGetter;
     myCreateSetter = createSetter;
     myField = field;
@@ -73,7 +73,7 @@ public class CreateGetterOrSetterFix implements SyntheticIntentionAction, LowPri
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
     if (!myField.isValid()) {
       return false;
     }

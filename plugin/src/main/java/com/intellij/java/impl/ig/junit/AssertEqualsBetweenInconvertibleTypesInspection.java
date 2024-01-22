@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.junit;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
@@ -39,7 +39,7 @@ public class AssertEqualsBetweenInconvertibleTypesInspection extends BaseInspect
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     final PsiType comparedType = (PsiType)infos[0];
     final PsiType comparisonType = (PsiType)infos[1];
@@ -63,7 +63,7 @@ public class AssertEqualsBetweenInconvertibleTypesInspection extends BaseInspect
   private static class AssertEqualsBetweenInconvertibleTypesVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(@jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression = expression.getMethodExpression();
       @NonNls final String methodName = methodExpression.getReferenceName();

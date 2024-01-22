@@ -22,7 +22,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.CollectionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public abstract class ExtendsConcreteCollectionInspectionBase extends BaseInspection {
   @Override
@@ -32,7 +32,7 @@ public abstract class ExtendsConcreteCollectionInspectionBase extends BaseInspec
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("extends.concrete.collection.display.name");
   }

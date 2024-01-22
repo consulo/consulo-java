@@ -19,10 +19,10 @@ import consulo.module.content.layer.orderEntry.ModuleOrderEntry;
 import consulo.module.content.layer.orderEntry.OrderEntry;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -35,7 +35,7 @@ import java.util.Set;
 public class UnnecessaryModuleDependencyInspection extends GlobalInspectionTool
 {
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
 	public HighlightDisplayLevel getDefaultLevel()
 	{
@@ -109,14 +109,14 @@ public class UnnecessaryModuleDependencyInspection extends GlobalInspectionTool
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public String getDisplayName()
 	{
 		return InspectionsBundle.message("unnecessary.module.dependency.display.name");
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@NonNls
 	public String getShortName()
 	{
@@ -135,21 +135,21 @@ public class UnnecessaryModuleDependencyInspection extends GlobalInspectionTool
 		}
 
 		@Override
-		@Nonnull
+		@jakarta.annotation.Nonnull
 		public String getName()
 		{
 			return "Remove dependency";
 		}
 
 		@Override
-		@Nonnull
+		@jakarta.annotation.Nonnull
 		public String getFamilyName()
 		{
 			return getName();
 		}
 
 		@Override
-		public void applyFix(@Nonnull Project project, @Nonnull CommonProblemDescriptor descriptor)
+		public void applyFix(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull CommonProblemDescriptor descriptor)
 		{
 			final ModifiableRootModel model = ModuleRootManager.getInstance(myModule).getModifiableModel();
 			for(OrderEntry entry : model.getOrderEntries())

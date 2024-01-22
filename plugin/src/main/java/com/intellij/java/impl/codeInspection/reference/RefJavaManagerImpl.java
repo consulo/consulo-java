@@ -55,8 +55,8 @@ import consulo.util.lang.Pair;
 import consulo.util.lang.function.Conditions;
 import org.jdom.Element;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -174,7 +174,7 @@ public class RefJavaManagerImpl extends RefJavaManager
 		}
 	};
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	private Pair<UnusedDeclarationInspection, UnusedDeclarationInspectionState> getDeadCodeTool(PsiElement element)
 	{
 		PsiFile file = element.getContainingFile();
@@ -196,7 +196,7 @@ public class RefJavaManagerImpl extends RefJavaManager
 	}
 
 	@Override
-	public boolean shouldProcessExternalFile(@Nonnull PsiFile file)
+	public boolean shouldProcessExternalFile(@jakarta.annotation.Nonnull PsiFile file)
 	{
 		return file instanceof PsiClassOwner;
 	}
@@ -320,8 +320,8 @@ public class RefJavaManagerImpl extends RefJavaManager
 	}
 
 	@Override
-	@Nullable
-	public RefElement createRefElement(@Nonnull final PsiElement elem)
+	@jakarta.annotation.Nullable
+	public RefElement createRefElement(@jakarta.annotation.Nonnull final PsiElement elem)
 	{
 		if(elem instanceof PsiClass)
 		{
@@ -418,7 +418,7 @@ public class RefJavaManagerImpl extends RefJavaManager
 	}
 
 	@Override
-	public void visitElement(@Nonnull final PsiElement element)
+	public void visitElement(@jakarta.annotation.Nonnull final PsiElement element)
 	{
 		if(myProjectIterator == null)
 		{

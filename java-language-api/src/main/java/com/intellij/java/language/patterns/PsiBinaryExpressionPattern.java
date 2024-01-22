@@ -20,7 +20,7 @@ import consulo.language.pattern.PatternCondition;
 import consulo.language.pattern.ElementPattern;
 import consulo.language.util.ProcessingContext;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
@@ -38,7 +38,7 @@ public class PsiBinaryExpressionPattern extends PsiExpressionPattern<PsiBinaryEx
     });
   }
 
-  public PsiBinaryExpressionPattern right(@Nonnull final ElementPattern pattern) {
+  public PsiBinaryExpressionPattern right(@jakarta.annotation.Nonnull final ElementPattern pattern) {
     return with(new PatternCondition<PsiBinaryExpression>("right") {
       public boolean accepts(@Nonnull final PsiBinaryExpression psiBinaryExpression, final ProcessingContext context) {
         return pattern.getCondition().accepts(psiBinaryExpression.getROperand(), context);

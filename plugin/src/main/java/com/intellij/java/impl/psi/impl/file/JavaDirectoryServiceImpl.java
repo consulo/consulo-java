@@ -39,9 +39,9 @@ import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
+import jakarta.annotation.Nonnull;
 import jakarta.inject.Singleton;
 
-import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Properties;
@@ -55,7 +55,7 @@ public class JavaDirectoryServiceImpl extends CoreJavaDirectoryService {
   private static final Logger LOG = Logger.getInstance(JavaDirectoryServiceImpl.class);
 
   @Override
-  public PsiJavaPackage getPackage(@Nonnull PsiDirectory dir) {
+  public PsiJavaPackage getPackage(@jakarta.annotation.Nonnull PsiDirectory dir) {
     ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(dir.getProject()).getFileIndex();
     String packageName = projectFileIndex.getPackageNameByDirectory(dir.getVirtualFile());
     if (packageName == null) {
@@ -66,33 +66,33 @@ public class JavaDirectoryServiceImpl extends CoreJavaDirectoryService {
 
   @Override
   @Nonnull
-  public PsiClass createClass(@Nonnull PsiDirectory dir, @Nonnull String name) throws IncorrectOperationException {
+  public PsiClass createClass(@jakarta.annotation.Nonnull PsiDirectory dir, @jakarta.annotation.Nonnull String name) throws IncorrectOperationException {
     return createClassFromTemplate(dir, name, JavaTemplateUtil.INTERNAL_CLASS_TEMPLATE_NAME);
   }
 
   @Override
   @Nonnull
-  public PsiClass createClass(@Nonnull PsiDirectory dir, @Nonnull String name, @Nonnull String templateName) throws IncorrectOperationException {
+  public PsiClass createClass(@jakarta.annotation.Nonnull PsiDirectory dir, @jakarta.annotation.Nonnull String name, @jakarta.annotation.Nonnull String templateName) throws IncorrectOperationException {
     return createClassFromTemplate(dir, name, templateName);
   }
 
   @Override
-  public PsiClass createClass(@Nonnull PsiDirectory dir, @Nonnull String name, @Nonnull String templateName, boolean askForUndefinedVariables) throws IncorrectOperationException {
+  public PsiClass createClass(@jakarta.annotation.Nonnull PsiDirectory dir, @jakarta.annotation.Nonnull String name, @jakarta.annotation.Nonnull String templateName, boolean askForUndefinedVariables) throws IncorrectOperationException {
     return createClass(dir, name, templateName, askForUndefinedVariables, Collections.<String, String>emptyMap());
   }
 
   @Override
-  public PsiClass createClass(@Nonnull PsiDirectory dir,
-                              @Nonnull String name,
-                              @Nonnull String templateName,
+  public PsiClass createClass(@jakarta.annotation.Nonnull PsiDirectory dir,
+                              @jakarta.annotation.Nonnull String name,
+                              @jakarta.annotation.Nonnull String templateName,
                               boolean askForUndefinedVariables,
-                              @Nonnull final Map<String, String> additionalProperties) throws IncorrectOperationException {
+                              @jakarta.annotation.Nonnull final Map<String, String> additionalProperties) throws IncorrectOperationException {
     return createClassFromTemplate(dir, name, templateName, askForUndefinedVariables, additionalProperties);
   }
 
   @Override
-  @Nonnull
-  public PsiClass createInterface(@Nonnull PsiDirectory dir, @Nonnull String name) throws IncorrectOperationException {
+  @jakarta.annotation.Nonnull
+  public PsiClass createInterface(@jakarta.annotation.Nonnull PsiDirectory dir, @jakarta.annotation.Nonnull String name) throws IncorrectOperationException {
     String templateName = JavaTemplateUtil.INTERNAL_INTERFACE_TEMPLATE_NAME;
     PsiClass someClass = createClassFromTemplate(dir, name, templateName);
     if (!someClass.isInterface()) {
@@ -103,7 +103,7 @@ public class JavaDirectoryServiceImpl extends CoreJavaDirectoryService {
 
   @Override
   @Nonnull
-  public PsiClass createEnum(@Nonnull PsiDirectory dir, @Nonnull String name) throws IncorrectOperationException {
+  public PsiClass createEnum(@jakarta.annotation.Nonnull PsiDirectory dir, @jakarta.annotation.Nonnull String name) throws IncorrectOperationException {
     String templateName = JavaTemplateUtil.INTERNAL_ENUM_TEMPLATE_NAME;
     PsiClass someClass = createClassFromTemplate(dir, name, templateName);
     if (!someClass.isEnum()) {
@@ -113,8 +113,8 @@ public class JavaDirectoryServiceImpl extends CoreJavaDirectoryService {
   }
 
   @Override
-  @Nonnull
-  public PsiClass createAnnotationType(@Nonnull PsiDirectory dir, @Nonnull String name) throws IncorrectOperationException {
+  @jakarta.annotation.Nonnull
+  public PsiClass createAnnotationType(@jakarta.annotation.Nonnull PsiDirectory dir, @jakarta.annotation.Nonnull String name) throws IncorrectOperationException {
     String templateName = JavaTemplateUtil.INTERNAL_ANNOTATION_TYPE_TEMPLATE_NAME;
     PsiClass someClass = createClassFromTemplate(dir, name, templateName);
     if (!someClass.isAnnotationType()) {
@@ -123,15 +123,15 @@ public class JavaDirectoryServiceImpl extends CoreJavaDirectoryService {
     return someClass;
   }
 
-  private static PsiClass createClassFromTemplate(@Nonnull PsiDirectory dir, String name, String templateName) throws IncorrectOperationException {
+  private static PsiClass createClassFromTemplate(@jakarta.annotation.Nonnull PsiDirectory dir, String name, String templateName) throws IncorrectOperationException {
     return createClassFromTemplate(dir, name, templateName, false, Collections.<String, String>emptyMap());
   }
 
-  private static PsiClass createClassFromTemplate(@Nonnull PsiDirectory dir,
+  private static PsiClass createClassFromTemplate(@jakarta.annotation.Nonnull PsiDirectory dir,
                                                   String name,
                                                   String templateName,
                                                   boolean askToDefineVariables,
-                                                  @Nonnull Map<String, String> additionalProperties) throws IncorrectOperationException {
+                                                  @jakarta.annotation.Nonnull Map<String, String> additionalProperties) throws IncorrectOperationException {
     //checkCreateClassOrInterface(dir, name);
 
     Project project = dir.getProject();
@@ -173,7 +173,7 @@ public class JavaDirectoryServiceImpl extends CoreJavaDirectoryService {
   }
 
   @Override
-  public void checkCreateClass(@Nonnull PsiDirectory dir, @Nonnull String name) throws IncorrectOperationException {
+  public void checkCreateClass(@jakarta.annotation.Nonnull PsiDirectory dir, @jakarta.annotation.Nonnull String name) throws IncorrectOperationException {
     checkCreateClassOrInterface(dir, name);
   }
 
@@ -192,14 +192,14 @@ public class JavaDirectoryServiceImpl extends CoreJavaDirectoryService {
   }
 
   @Override
-  public boolean isSourceRoot(@Nonnull PsiDirectory dir) {
+  public boolean isSourceRoot(@jakarta.annotation.Nonnull PsiDirectory dir) {
     final VirtualFile file = dir.getVirtualFile();
     final VirtualFile sourceRoot = ProjectRootManager.getInstance(dir.getProject()).getFileIndex().getSourceRootForFile(file);
     return file.equals(sourceRoot);
   }
 
   @Override
-  public LanguageLevel getLanguageLevel(@Nonnull PsiDirectory dir) {
+  public LanguageLevel getLanguageLevel(@jakarta.annotation.Nonnull PsiDirectory dir) {
     JavaModuleExtension extension = ModuleUtilCore.getExtension(dir, JavaModuleExtension.class);
     return extension == null ? LanguageLevel.HIGHEST : extension.getLanguageLevel();
   }

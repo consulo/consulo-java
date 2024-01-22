@@ -17,8 +17,6 @@ package com.intellij.java.language.impl.psi.impl.java.stubs;
 
 import java.io.IOException;
 
-import javax.annotation.Nonnull;
-
 import consulo.language.ast.ASTNode;
 import consulo.language.ast.LighterAST;
 import consulo.language.ast.LighterASTNode;
@@ -30,6 +28,7 @@ import consulo.language.psi.stub.IndexSink;
 import consulo.language.psi.stub.StubElement;
 import consulo.language.psi.stub.StubInputStream;
 import consulo.language.psi.stub.StubOutputStream;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author max
@@ -41,7 +40,7 @@ public class JavaImportListElementType extends JavaStubElementType<PsiImportList
 		super("IMPORT_LIST");
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
 	public ASTNode createCompositeNode()
 	{
@@ -49,13 +48,13 @@ public class JavaImportListElementType extends JavaStubElementType<PsiImportList
 	}
 
 	@Override
-	public PsiImportList createPsi(@Nonnull final PsiImportListStub stub)
+	public PsiImportList createPsi(@jakarta.annotation.Nonnull final PsiImportListStub stub)
 	{
 		return getPsiFactory(stub).createImportList(stub);
 	}
 
 	@Override
-	public PsiImportList createPsi(@Nonnull final ASTNode node)
+	public PsiImportList createPsi(@jakarta.annotation.Nonnull final ASTNode node)
 	{
 		return new PsiImportListImpl(node);
 	}
@@ -67,19 +66,19 @@ public class JavaImportListElementType extends JavaStubElementType<PsiImportList
 	}
 
 	@Override
-	public void serialize(@Nonnull final PsiImportListStub stub, @Nonnull final StubOutputStream dataStream) throws IOException
+	public void serialize(@Nonnull final PsiImportListStub stub, @jakarta.annotation.Nonnull final StubOutputStream dataStream) throws IOException
 	{
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
-	public PsiImportListStub deserialize(@Nonnull final StubInputStream dataStream, final StubElement parentStub) throws IOException
+	public PsiImportListStub deserialize(@jakarta.annotation.Nonnull final StubInputStream dataStream, final StubElement parentStub) throws IOException
 	{
 		return new PsiImportListStubImpl(parentStub);
 	}
 
 	@Override
-	public void indexStub(@Nonnull final PsiImportListStub stub, @Nonnull final IndexSink sink)
+	public void indexStub(@jakarta.annotation.Nonnull final PsiImportListStub stub, @jakarta.annotation.Nonnull final IndexSink sink)
 	{
 	}
 }

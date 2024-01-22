@@ -26,8 +26,8 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.ObjectUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -48,7 +48,7 @@ public abstract class InstructionVisitor {
   protected void beforeExpressionPush(@Nonnull DfaValue value,
                                       @Nonnull PsiExpression expression,
                                       @Nullable TextRange range,
-                                      @Nonnull DfaMemoryState state) {
+                                      @jakarta.annotation.Nonnull DfaMemoryState state) {
 
   }
 
@@ -78,7 +78,7 @@ public abstract class InstructionVisitor {
    */
   protected void checkReturnValue(@Nonnull DfaValue value,
                                   @Nonnull PsiExpression expression,
-                                  @Nonnull PsiParameterListOwner context,
+                                  @jakarta.annotation.Nonnull PsiParameterListOwner context,
                                   @Nonnull DfaMemoryState state) {
 
   }
@@ -100,7 +100,7 @@ public abstract class InstructionVisitor {
     state.push(value);
   }
 
-  private static boolean isExpressionPush(@Nonnull ExpressionPushingInstruction<?> instruction, PsiExpression anchor) {
+  private static boolean isExpressionPush(@jakarta.annotation.Nonnull ExpressionPushingInstruction<?> instruction, PsiExpression anchor) {
     if (anchor == null) {
       return false;
     }
@@ -120,7 +120,7 @@ public abstract class InstructionVisitor {
 
   private void callBeforeExpressionPush(@Nonnull DfaValue value,
                                         @Nonnull ExpressionPushingInstruction<?> instruction,
-                                        @Nonnull DfaMemoryState state, PsiExpression anchor) {
+                                        @jakarta.annotation.Nonnull DfaMemoryState state, PsiExpression anchor) {
     beforeExpressionPush(value, anchor, instruction.getExpressionRange(), state);
     PsiElement parent = PsiUtil.skipParenthesizedExprUp(anchor.getParent());
     if (parent instanceof PsiLambdaExpression) {
@@ -191,7 +191,7 @@ public abstract class InstructionVisitor {
 
   @Nonnull
   public DfaInstructionState[] visitControlTransfer(@Nonnull ControlTransferInstruction controlTransferInstruction,
-                                                    @Nonnull DataFlowRunner runner, @Nonnull DfaMemoryState state) {
+                                                    @jakarta.annotation.Nonnull DataFlowRunner runner, @jakarta.annotation.Nonnull DfaMemoryState state) {
     return controlTransferInstruction.getTransfer().dispatch(state, runner).toArray(DfaInstructionState.EMPTY_ARRAY);
   }
 

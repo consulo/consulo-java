@@ -18,7 +18,6 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 import consulo.fileEditor.FileEditorManager;
 import consulo.language.editor.FileModificationService;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
-import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.logging.Logger;
 import consulo.codeEditor.Editor;
@@ -31,9 +30,9 @@ import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiFile;
 import com.intellij.java.impl.psi.impl.file.JavaDirectoryServiceImpl;
 import consulo.language.util.IncorrectOperationException;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public class MoveClassToSeparateFileFix implements SyntheticIntentionAction {
   private static final Logger LOG = Logger.getInstance(MoveClassToSeparateFileFix.class);
@@ -45,13 +44,13 @@ public class MoveClassToSeparateFileFix implements SyntheticIntentionAction {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getText() {
     return JavaQuickFixBundle.message("move.class.to.separate.file.text", myClass.getName());
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, @Nullable Editor editor, @Nonnull PsiFile file) {
+  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, @Nullable Editor editor, @jakarta.annotation.Nonnull PsiFile file) {
     if  (!myClass.isValid() || !myClass.getManager().isInProject(myClass)) return false;
     PsiDirectory dir = file.getContainingDirectory();
     if (dir == null) return false;
@@ -66,7 +65,7 @@ public class MoveClassToSeparateFileFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, @Nullable Editor editor, @Nonnull PsiFile file) {
+  public void invoke(@Nonnull Project project, @Nullable Editor editor, @jakarta.annotation.Nonnull PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(myClass.getContainingFile())) return;
 
     PsiDirectory dir = file.getContainingDirectory();

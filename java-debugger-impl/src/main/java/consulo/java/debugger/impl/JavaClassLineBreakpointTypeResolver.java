@@ -3,8 +3,7 @@ package consulo.java.debugger.impl;
 import com.intellij.java.language.impl.JavaClassFileType;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.virtualFileSystem.fileType.FileType;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL

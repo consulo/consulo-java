@@ -21,7 +21,7 @@ import consulo.application.util.query.ExtensibleQueryFactory;
 import consulo.application.util.query.InstanceofQuery;
 import consulo.application.util.query.Query;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class AnnotatedElementsSearch extends ExtensibleQueryFactory<PsiModifierListOwner, AnnotatedElementsSearch.Parameters> {
   public static final AnnotatedElementsSearch INSTANCE = new AnnotatedElementsSearch();
@@ -66,7 +66,7 @@ public class AnnotatedElementsSearch extends ExtensibleQueryFactory<PsiModifierL
     return new InstanceofQuery<>(createDelegateQuery(annotationClass, scope, types), types);
   }
 
-  public static Query<PsiClass> searchPsiClasses(@Nonnull PsiClass annotationClass, @Nonnull SearchScope scope) {
+  public static Query<PsiClass> searchPsiClasses(@Nonnull PsiClass annotationClass, @jakarta.annotation.Nonnull SearchScope scope) {
     return searchElements(annotationClass, scope, PsiClass.class);
   }
 
@@ -78,11 +78,11 @@ public class AnnotatedElementsSearch extends ExtensibleQueryFactory<PsiModifierL
     return searchElements(annotationClass, scope, PsiMember.class);
   }
 
-  public static Query<PsiField> searchPsiFields(@Nonnull PsiClass annotationClass, @Nonnull SearchScope scope) {
+  public static Query<PsiField> searchPsiFields(@jakarta.annotation.Nonnull PsiClass annotationClass, @jakarta.annotation.Nonnull SearchScope scope) {
     return searchElements(annotationClass, scope, PsiField.class);
   }
 
-  public static Query<PsiParameter> searchPsiParameters(@Nonnull PsiClass annotationClass, @Nonnull SearchScope scope) {
+  public static Query<PsiParameter> searchPsiParameters(@jakarta.annotation.Nonnull PsiClass annotationClass, @jakarta.annotation.Nonnull SearchScope scope) {
     return searchElements(annotationClass, scope, PsiParameter.class);
   }
 }

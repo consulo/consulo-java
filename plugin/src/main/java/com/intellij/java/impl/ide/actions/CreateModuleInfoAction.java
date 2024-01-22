@@ -39,8 +39,9 @@ import consulo.project.Project;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.virtualFileSystem.VirtualFile;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
@@ -92,7 +93,7 @@ public class CreateModuleInfoAction extends CreateFromTemplateActionBase {
   }
 
   @Override
-  protected Map<String, String> getLiveTemplateDefaults(@Nonnull DataContext ctx, @Nonnull PsiFile file) {
+  protected Map<String, String> getLiveTemplateDefaults(@jakarta.annotation.Nonnull DataContext ctx, @Nonnull PsiFile file) {
     Module module = ctx.getData(LangDataKeys.MODULE);
     return Collections.singletonMap("MODULE_NAME", module != null ? AutomaticJavaModule.moduleName(module.getName()) : "module_name");
   }

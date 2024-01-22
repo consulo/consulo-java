@@ -34,8 +34,9 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.*;
 
 /**
@@ -121,7 +122,7 @@ public class AddExceptionToThrowsFix extends BaseIntentionAction implements Synt
                     });
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private static PsiMethod[] getSuperMethods(@Nonnull PsiMethod targetMethod) {
     List<PsiMethod> result = new ArrayList<>();
     collectSuperMethods(targetMethod, result);
@@ -136,8 +137,8 @@ public class AddExceptionToThrowsFix extends BaseIntentionAction implements Synt
     }
   }
 
-  private static boolean hasSuperMethodsWithoutExceptions(@Nonnull PsiMethod[] superMethods,
-                                                          @Nonnull Set<PsiClassType> unhandledExceptions) {
+  private static boolean hasSuperMethodsWithoutExceptions(@jakarta.annotation.Nonnull PsiMethod[] superMethods,
+                                                          @jakarta.annotation.Nonnull Set<PsiClassType> unhandledExceptions) {
     for (PsiMethod superMethod : superMethods) {
       PsiClassType[] referencedTypes = superMethod.getThrowsList().getReferencedTypes();
 
@@ -158,8 +159,8 @@ public class AddExceptionToThrowsFix extends BaseIntentionAction implements Synt
     return false;
   }
 
-  private static void processMethod(@Nonnull Project project,
-                                    @Nonnull PsiMethod targetMethod,
+  private static void processMethod(@jakarta.annotation.Nonnull Project project,
+                                    @jakarta.annotation.Nonnull PsiMethod targetMethod,
                                     @Nonnull Set<PsiClassType> unhandledExceptions) throws IncorrectOperationException {
     for (PsiClassType unhandledException : unhandledExceptions) {
       PsiClass exceptionClass = unhandledException.resolve();
@@ -189,7 +190,7 @@ public class AddExceptionToThrowsFix extends BaseIntentionAction implements Synt
     return true;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private PsiMethod collectExceptions(List<PsiClassType> unhandled) {
     PsiElement targetElement = null;
     PsiMethod targetMethod = null;
@@ -219,8 +220,8 @@ public class AddExceptionToThrowsFix extends BaseIntentionAction implements Synt
     return targetMethod;
   }
 
-  @Nullable
-  private static List<PsiClassType> getUnhandledExceptions(@Nullable PsiElement element, PsiElement topElement, PsiMethod targetMethod) {
+  @jakarta.annotation.Nullable
+  private static List<PsiClassType> getUnhandledExceptions(@jakarta.annotation.Nullable PsiElement element, PsiElement topElement, PsiMethod targetMethod) {
     if (element == null || element == topElement && !(topElement instanceof PsiMethodReferenceExpression)) {
       return null;
     }

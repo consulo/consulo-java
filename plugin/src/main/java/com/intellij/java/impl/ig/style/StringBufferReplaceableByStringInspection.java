@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.style;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -33,9 +33,8 @@ import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
 import consulo.java.language.module.util.JavaClassNames;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 
 @ExtensionImpl
 public class StringBufferReplaceableByStringInspection extends BaseInspection {
@@ -47,7 +46,7 @@ public class StringBufferReplaceableByStringInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     final PsiElement element = (PsiElement)infos[0];
     if (element instanceof PsiNewExpression) {
@@ -298,7 +297,7 @@ public class StringBufferReplaceableByStringInspection extends BaseInspection {
     }
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static PsiExpression getCompleteExpression(PsiNewExpression expression) {
     PsiElement completeExpression = expression;
     boolean found = false;

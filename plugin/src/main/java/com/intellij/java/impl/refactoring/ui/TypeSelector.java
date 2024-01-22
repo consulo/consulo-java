@@ -21,10 +21,9 @@ import consulo.util.lang.Comparing;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.SmartTypePointer;
 import com.intellij.java.language.psi.SmartTypePointerManager;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import java.awt.event.ItemListener;
 

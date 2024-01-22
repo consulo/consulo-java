@@ -27,7 +27,7 @@ import consulo.language.psi.*;
 import consulo.language.util.ProcessingContext;
 import consulo.util.lang.Comparing;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import static com.intellij.java.language.patterns.PsiJavaPatterns.literalExpression;
 
@@ -51,9 +51,9 @@ public class LanguageReferenceProvider extends PsiReferenceContributor {
           return PsiUtilEx.isStringOrCharacterLiteral(expression);
         }
       })), new PsiReferenceProvider() {
-        @Nonnull
+        @jakarta.annotation.Nonnull
         @Override
-        public PsiReference[] getReferencesByElement(@Nonnull final PsiElement element, @Nonnull final ProcessingContext context) {
+        public PsiReference[] getReferencesByElement(@jakarta.annotation.Nonnull final PsiElement element, @jakarta.annotation.Nonnull final ProcessingContext context) {
           return new PsiReference[]{new LanguageReference((PsiLiteralExpression)element)};
         }
       });

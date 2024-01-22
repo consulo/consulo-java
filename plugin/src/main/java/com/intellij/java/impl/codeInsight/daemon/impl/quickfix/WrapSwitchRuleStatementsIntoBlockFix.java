@@ -13,9 +13,8 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.ObjectUtil;
-import org.jetbrains.annotations.Nls;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.util.Objects;
 
 public class WrapSwitchRuleStatementsIntoBlockFix extends BaseIntentionAction implements SyntheticIntentionAction {
@@ -46,7 +45,7 @@ public class WrapSwitchRuleStatementsIntoBlockFix extends BaseIntentionAction im
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!myRuleStatement.isValid()) {
       return;
     }

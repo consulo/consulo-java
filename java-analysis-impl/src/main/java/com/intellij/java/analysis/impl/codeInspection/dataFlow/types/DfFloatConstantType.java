@@ -2,7 +2,7 @@
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 
 import com.intellij.java.language.psi.PsiPrimitiveType;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.Collections;
 
@@ -19,7 +19,7 @@ class DfFloatConstantType extends DfConstantType<Float> implements DfFloatType {
     return DfTypes.TOP;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public PsiPrimitiveType getPsiType() {
     return DfFloatType.super.getPsiType();

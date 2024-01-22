@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.threading;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
@@ -34,7 +34,7 @@ public class VolatileLongOrDoubleFieldInspection extends BaseInspection {
       "volatile.long.or.double.field.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     final PsiType type = (PsiType)infos[0];
     final String typeString = type.getPresentableText();
@@ -50,7 +50,7 @@ public class VolatileLongOrDoubleFieldInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@Nonnull PsiField field) {
+    public void visitField(@jakarta.annotation.Nonnull PsiField field) {
       super.visitField(field);
       if (!field.hasModifierProperty(PsiModifier.VOLATILE)) {
         return;

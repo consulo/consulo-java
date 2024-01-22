@@ -21,8 +21,7 @@ import consulo.language.pom.PomRenameableTarget;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.xml.util.xml.ElementPresentationManager;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author Gregory.Shrago

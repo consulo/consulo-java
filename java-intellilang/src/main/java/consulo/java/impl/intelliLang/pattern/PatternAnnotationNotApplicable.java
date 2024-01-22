@@ -28,10 +28,10 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.java.impl.intelliLang.util.PsiUtilEx;
 import consulo.java.impl.intelliLang.util.RemoveAnnotationFix;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class PatternAnnotationNotApplicable extends LocalInspectionTool {

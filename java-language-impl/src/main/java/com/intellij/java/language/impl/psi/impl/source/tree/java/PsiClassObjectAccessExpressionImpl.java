@@ -27,8 +27,7 @@ import consulo.language.ast.ChildRoleBase;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.logging.Logger;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class PsiClassObjectAccessExpressionImpl extends ExpressionPsiElement implements PsiClassObjectAccessExpression, Constants {
   private static final Logger LOG = Logger.getInstance(PsiClassObjectAccessExpressionImpl.class);
@@ -82,7 +81,7 @@ public class PsiClassObjectAccessExpressionImpl extends ExpressionPsiElement imp
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitClassObjectAccessExpression(this);
     } else {

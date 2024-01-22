@@ -31,8 +31,8 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.ProcessingContext;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -48,7 +48,7 @@ class MethodReturnTypeProvider implements CompletionProvider {
 
   @RequiredReadAction
   @Override
-  public void addCompletions(@Nonnull CompletionParameters parameters, ProcessingContext context, @Nonnull final CompletionResultSet result) {
+  public void addCompletions(@jakarta.annotation.Nonnull CompletionParameters parameters, ProcessingContext context, @Nonnull final CompletionResultSet result) {
     addProbableReturnTypes(parameters, result);
   }
 

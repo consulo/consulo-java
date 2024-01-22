@@ -39,8 +39,8 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -95,7 +95,7 @@ public class JavaClassReferenceProvider extends JavaClassPsiReferenceProvider im
     option.putValue(myOptions, value);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public <T> T getOption(CustomizationKey<T> option) {
     return myOptions == null ? null : (T) myOptions.get(option);
   }
@@ -105,30 +105,30 @@ public class JavaClassReferenceProvider extends JavaClassPsiReferenceProvider im
     return null;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiFile getContextFile(@Nonnull PsiElement element) {
     return element.getContainingFile();
   }
 
   @Nullable
-  public PsiClass getContextClass(@Nonnull PsiElement element) {
+  public PsiClass getContextClass(@jakarta.annotation.Nonnull PsiElement element) {
     return null;
   }
 
   @Override
-  @Nonnull
-  public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull final ProcessingContext context) {
+  @jakarta.annotation.Nonnull
+  public PsiReference[] getReferencesByElement(@jakarta.annotation.Nonnull PsiElement element, @jakarta.annotation.Nonnull final ProcessingContext context) {
     return getReferencesByElement(element);
   }
 
-  public PsiReference[] getReferencesByElement(@Nonnull PsiElement element) {
+  public PsiReference[] getReferencesByElement(@jakarta.annotation.Nonnull PsiElement element) {
     final int offsetInElement = ElementManipulators.getOffsetInElement(element);
     final String text = ElementManipulators.getValueText(element);
     return getReferencesByString(text, element, offsetInElement);
   }
 
-  @Nonnull
-  public PsiReference[] getReferencesByString(String str, @Nonnull PsiElement position, int offsetInPosition) {
+  @jakarta.annotation.Nonnull
+  public PsiReference[] getReferencesByString(String str, @jakarta.annotation.Nonnull PsiElement position, int offsetInPosition) {
     if (myAllowEmpty && StringUtil.isEmpty(str)) {
       return PsiReference.EMPTY_ARRAY;
     }
@@ -172,7 +172,7 @@ public class JavaClassReferenceProvider extends JavaClassPsiReferenceProvider im
   }
 
   @Override
-  @Nullable
+  @jakarta.annotation.Nullable
   public Map<CustomizationKey, Object> getOptions() {
     return myOptions;
   }

@@ -32,8 +32,8 @@ import org.intellij.lang.regexp.DefaultRegExpPropertiesProvider;
 import org.intellij.lang.regexp.RegExpLanguageHost;
 import org.intellij.lang.regexp.psi.*;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -302,7 +302,7 @@ public class JavaRegExpHost implements RegExpLanguageHost {
     }
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Class getHostClass() {
     return PsiLiteralExpression.class;
@@ -344,7 +344,7 @@ public class JavaRegExpHost implements RegExpLanguageHost {
   }
 
   @Override
-  public boolean isValidGroupName(String name, @Nonnull PsiElement context) {
+  public boolean isValidGroupName(String name, @jakarta.annotation.Nonnull PsiElement context) {
     for (int i = 0, length = name.length(); i < length; i++) {
       final char c = name.charAt(i);
       if (!AsciiUtil.isLetterOrDigit(c)) {
@@ -409,7 +409,7 @@ public class JavaRegExpHost implements RegExpLanguageHost {
     return getJavaVersion(element).isAtLeast(version);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @RequiredReadAction
   private static JavaSdkVersion getJavaVersion(PsiElement element) {
     final Module module = ModuleUtilCore.findModuleForPsiElement(element);
@@ -480,7 +480,7 @@ public class JavaRegExpHost implements RegExpLanguageHost {
     return false;
   }
 
-  private boolean isValidUnicodeBlock(@Nonnull String category) {
+  private boolean isValidUnicodeBlock(@jakarta.annotation.Nonnull String category) {
     try {
       return Character.UnicodeBlock.forName(category.substring(2)) != null;
     } catch (IllegalArgumentException e) {
@@ -488,7 +488,7 @@ public class JavaRegExpHost implements RegExpLanguageHost {
     }
   }
 
-  private boolean isValidUnicodeScript(@Nonnull String category) {
+  private boolean isValidUnicodeScript(@jakarta.annotation.Nonnull String category) {
     try {
       return Character.UnicodeScript.forName(category) != null;
     } catch (IllegalArgumentException ignore) {
@@ -501,7 +501,7 @@ public class JavaRegExpHost implements RegExpLanguageHost {
     return UnicodeCharacterRegistry.listCharacters().stream().filter(it -> Objects.equals(it.getName(), namedCharacter.getName())).findFirst().isPresent();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String[][] getAllKnownProperties() {
     return myPropertyNames;
@@ -521,7 +521,7 @@ public class JavaRegExpHost implements RegExpLanguageHost {
     return null;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String[][] getKnownCharacterClasses() {
     return myPropertiesProvider.getKnownCharacterClasses();

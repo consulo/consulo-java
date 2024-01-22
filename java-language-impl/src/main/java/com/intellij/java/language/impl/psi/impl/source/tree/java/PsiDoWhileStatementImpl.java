@@ -30,9 +30,7 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.logging.Logger;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class PsiDoWhileStatementImpl extends CompositePsiElement implements PsiDoWhileStatement, Constants {
   private static final Logger LOG = Logger.getInstance(PsiDoWhileStatementImpl.class);
@@ -122,7 +120,7 @@ public class PsiDoWhileStatementImpl extends CompositePsiElement implements PsiD
   }
 
   @Override
-  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
+  public boolean processDeclarations(@jakarta.annotation.Nonnull PsiScopeProcessor processor,
                                      @Nonnull ResolveState state,
                                      PsiElement lastParent,
                                      @Nonnull PsiElement place) {

@@ -23,7 +23,7 @@ package com.intellij.java.impl.refactoring.extractMethodObject;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
 import consulo.usage.UsageViewDescriptor;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class ExtractMethodObjectViewDescriptor implements UsageViewDescriptor {
   private final PsiMethod myMethod;

@@ -25,7 +25,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.MoveClassFix;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -54,7 +54,7 @@ public class InnerClassOnInterfaceInspection extends BaseInspection {
                                           this, "m_ignoreInnerInterfaces");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     final PsiClass parentInterface = (PsiClass)infos[0];
     final String interfaceName = parentInterface.getName();

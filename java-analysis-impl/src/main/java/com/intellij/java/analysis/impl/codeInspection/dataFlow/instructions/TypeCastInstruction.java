@@ -22,19 +22,19 @@ import com.intellij.java.language.psi.PsiPrimitiveType;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiTypeCastExpression;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public class TypeCastInstruction extends ExpressionPushingInstruction<PsiTypeCastExpression> {
   private final PsiExpression myCasted;
   private final PsiType myCastTo;
   private final
-  @Nullable
+  @jakarta.annotation.Nullable
   DfaControlTransferValue myTransferValue;
 
   public TypeCastInstruction(PsiTypeCastExpression castExpression,
                              PsiExpression casted,
                              PsiType castTo,
-                             @Nullable DfaControlTransferValue value) {
+                             @jakarta.annotation.Nullable DfaControlTransferValue value) {
     super(castExpression);
     assert !(castTo instanceof PsiPrimitiveType);
     myCasted = casted;

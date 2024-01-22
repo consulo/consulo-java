@@ -17,7 +17,7 @@ package com.intellij.java.language.psi;
 
 import consulo.language.psi.NavigatablePsiElement;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public interface PsiFunctionalExpression extends PsiExpression, NavigatablePsiElement {
   PsiFunctionalExpression[] EMPTY_ARRAY = new PsiFunctionalExpression[0];

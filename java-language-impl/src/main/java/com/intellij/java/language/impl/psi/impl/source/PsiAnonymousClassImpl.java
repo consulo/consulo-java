@@ -29,7 +29,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.SoftReference;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class PsiAnonymousClassImpl extends PsiClassImpl implements PsiAnonymousClass {
   private SoftReference<PsiClassType> myCachedBaseType;

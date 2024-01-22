@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.ig.redundancy;
 
-import javax.annotation.Nonnull;
-
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
@@ -27,12 +25,13 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class UnusedLabelInspection extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("unused.label.display.name");
   }
@@ -116,7 +115,7 @@ public class UnusedLabelInspection extends BaseInspection {
     }
 
     @Override
-    public void visitElement(@Nonnull PsiElement element) {
+    public void visitElement(@jakarta.annotation.Nonnull PsiElement element) {
       if (found) {
         return;
       }
@@ -125,7 +124,7 @@ public class UnusedLabelInspection extends BaseInspection {
 
     @Override
     public void visitContinueStatement(
-      @Nonnull PsiContinueStatement continueStatement) {
+      @jakarta.annotation.Nonnull PsiContinueStatement continueStatement) {
       if (found) {
         return;
       }
@@ -139,7 +138,7 @@ public class UnusedLabelInspection extends BaseInspection {
 
     @Override
     public void visitBreakStatement(
-      @Nonnull PsiBreakStatement breakStatement) {
+      @jakarta.annotation.Nonnull PsiBreakStatement breakStatement) {
       if (found) {
         return;
       }

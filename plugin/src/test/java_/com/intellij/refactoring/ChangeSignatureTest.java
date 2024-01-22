@@ -19,12 +19,11 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.HashSet;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import com.intellij.JavaTestUtil;
 import com.intellij.java.impl.refactoring.changeSignature.ChangeSignatureProcessor;
 import com.intellij.java.impl.refactoring.changeSignature.JavaThrownExceptionInfo;
@@ -423,9 +422,9 @@ public abstract class ChangeSignatureTest extends LightRefactoringTestCase
 		doTest(null, null, newReturnType, parameterInfos, new ThrownExceptionInfo[0], generateDelegate);
 	}
 
-	private void doTest(@PsiModifier.ModifierConstant @Nullable String newVisibility,
-			@Nullable String newName,
-			@Nullable String newReturnType,
+	private void doTest(@PsiModifier.ModifierConstant @jakarta.annotation.Nullable String newVisibility,
+			@jakarta.annotation.Nullable String newName,
+			@jakarta.annotation.Nullable String newReturnType,
 			ParameterInfoImpl[] parameterInfo,
 			ThrownExceptionInfo[] exceptionInfo,
 			final boolean generateDelegate) throws Exception
@@ -433,18 +432,18 @@ public abstract class ChangeSignatureTest extends LightRefactoringTestCase
 		doTest(newVisibility, newName, newReturnType, new SimpleParameterGen(parameterInfo), new SimpleExceptionsGen(exceptionInfo), generateDelegate);
 	}
 
-	private void doTest(@PsiModifier.ModifierConstant @Nullable String newVisibility,
-			@Nullable String newName,
-			@Nullable @NonNls String newReturnType,
+	private void doTest(@PsiModifier.ModifierConstant @jakarta.annotation.Nullable String newVisibility,
+			@jakarta.annotation.Nullable String newName,
+			@jakarta.annotation.Nullable @NonNls String newReturnType,
 			GenParams gen,
 			final boolean generateDelegate) throws Exception
 	{
 		doTest(newVisibility, newName, newReturnType, gen, new SimpleExceptionsGen(), generateDelegate);
 	}
 
-	private void doTest(@PsiModifier.ModifierConstant @Nullable String newVisibility,
-			@Nullable String newName,
-			@Nullable String newReturnType,
+	private void doTest(@PsiModifier.ModifierConstant @jakarta.annotation.Nullable String newVisibility,
+			@jakarta.annotation.Nullable String newName,
+			@jakarta.annotation.Nullable String newReturnType,
 			GenParams genParams,
 			GenExceptions genExceptions,
 			final boolean generateDelegate) throws Exception

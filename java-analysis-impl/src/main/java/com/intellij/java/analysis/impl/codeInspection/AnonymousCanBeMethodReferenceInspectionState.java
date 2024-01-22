@@ -7,7 +7,7 @@ import consulo.language.editor.inspection.InspectionToolState;
 import consulo.localize.LocalizeValue;
 import consulo.util.xml.serializer.XmlSerializerUtil;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author VISTALL
@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
 public class AnonymousCanBeMethodReferenceInspectionState implements InspectionToolState<AnonymousCanBeMethodReferenceInspectionState> {
   public boolean reportNotAnnotatedInterfaces = true;
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public AnonymousCanBeMethodReferenceInspectionState getState() {
     return this;

@@ -1,12 +1,13 @@
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class Npe {
    Object foo(@Nonnull Object o) {
      return o;
    }
 
-   @Nullable Object nullable() {
+   @Nullable
+   Object nullable() {
      return null;
    }
 

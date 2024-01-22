@@ -23,10 +23,10 @@ import consulo.component.extension.ExtensionPointName;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.language.psi.PsiFile;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.List;
 
 @ExtensionAPI(ComponentScope.PROJECT)
@@ -78,12 +78,12 @@ public abstract class ResourceBundleManager {
     return manager.isActive(context) ? manager : null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public PropertyCreationHandler getPropertyCreationHandler() {
     return null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public String suggestPropertyKey(@Nonnull final String value) {
     return null;
   }

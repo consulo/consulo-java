@@ -22,8 +22,7 @@ import consulo.dataContext.DataContext;
 import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.action.BaseRefactoringAction;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class InheritanceToDelegationAction extends BaseRefactoringAction {
   public boolean isAvailableInEditorOnly() {
@@ -37,7 +36,7 @@ public class InheritanceToDelegationAction extends BaseRefactoringAction {
         elements[0].getLanguage().isKindOf(JavaLanguage.INSTANCE);
   }
 
-  public RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
+  public RefactoringActionHandler getHandler(@jakarta.annotation.Nonnull DataContext dataContext) {
     return new InheritanceToDelegationHandler();
   }
 }

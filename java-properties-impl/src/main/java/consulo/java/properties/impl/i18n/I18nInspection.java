@@ -66,8 +66,8 @@ import consulo.util.xml.serializer.WriteExternalException;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -99,7 +99,7 @@ public class I18nInspection extends BaseLocalInspectionTool {
   private static final LocalQuickFix I18N_QUICK_FIX = new I18nizeQuickFix();
   private static final I18nizeConcatenationQuickFix I18N_CONCATENATION_QUICK_FIX = new I18nizeConcatenationQuickFix();
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private Pattern myCachedNonNlsPattern;
   @NonNls
   private static final String TO_STRING = "toString";
@@ -146,7 +146,7 @@ public class I18nInspection extends BaseLocalInspectionTool {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getGroupDisplayName() {
     return GroupNames.INTERNATIONALIZATION_GROUP_NAME;
   }
@@ -570,7 +570,7 @@ public class I18nInspection extends BaseLocalInspectionTool {
     }
   }
 
-  private boolean canBeI18ned(@Nonnull Project project,
+  private boolean canBeI18ned(@jakarta.annotation.Nonnull Project project,
                               @Nonnull PsiLiteralExpression expression,
                               @Nonnull String value,
                               @Nonnull Set<PsiModifierListOwner> nonNlsTargets) {

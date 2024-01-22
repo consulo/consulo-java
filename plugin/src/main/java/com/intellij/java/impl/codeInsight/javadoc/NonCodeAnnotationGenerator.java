@@ -22,7 +22,7 @@ import consulo.language.psi.PsiNamedElement;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.MultiMap;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -32,7 +32,7 @@ public class NonCodeAnnotationGenerator {
   private final PsiModifierListOwner myOwner;
   private final StringBuilder myOutput;
 
-  NonCodeAnnotationGenerator(@Nonnull PsiModifierListOwner owner, StringBuilder output) {
+  NonCodeAnnotationGenerator(@jakarta.annotation.Nonnull PsiModifierListOwner owner, StringBuilder output) {
     myOwner = owner;
     myOutput = output;
   }
@@ -88,7 +88,7 @@ public class NonCodeAnnotationGenerator {
     return allOwners;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public static String getNonCodeHeader(Collection<? extends AnnotationDocGenerator> values) {
     boolean hasExternal = values.stream().anyMatch(AnnotationDocGenerator::isExternal);
     boolean hasInferred = values.stream().anyMatch(AnnotationDocGenerator::isInferred);

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.impl.psi;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiType;
@@ -66,7 +66,7 @@ public class Bottom extends PsiType {
   }
 
   @Override
-  public <A> A accept(@Nonnull PsiTypeVisitor<A> visitor) {
+  public <A> A accept(@jakarta.annotation.Nonnull PsiTypeVisitor<A> visitor) {
     if (visitor instanceof PsiTypeVisitorEx) {
       return ((PsiTypeVisitorEx<A>)visitor).visitBottom(this);
     }

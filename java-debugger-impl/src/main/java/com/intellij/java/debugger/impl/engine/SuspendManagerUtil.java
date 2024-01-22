@@ -17,8 +17,8 @@ package com.intellij.java.debugger.impl.engine;
 
 import java.util.Set;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import com.intellij.java.debugger.impl.jdi.ThreadReferenceProxyImpl;
 import consulo.util.collection.SmartHashSet;
 import consulo.internal.com.sun.jdi.request.EventRequest;

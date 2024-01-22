@@ -13,7 +13,7 @@ import java.util.List;
 
 import org.jdom.Document;
 import org.jdom.Element;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import com.intellij.codeInsight.CodeInsightTestCase;
 import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
 import consulo.ide.impl.idea.ide.hierarchy.HierarchyTreeStructure;

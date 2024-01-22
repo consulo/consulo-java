@@ -18,7 +18,7 @@ package com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis.asm;
 
 import java.util.Arrays;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.internal.org.objectweb.asm.tree.analysis.Value;
 

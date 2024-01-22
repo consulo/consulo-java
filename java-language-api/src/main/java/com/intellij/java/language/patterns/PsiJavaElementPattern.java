@@ -26,10 +26,10 @@ import consulo.language.psi.PsiElement;
 import consulo.language.pattern.StandardPatterns;
 import consulo.language.util.ProcessingContext;
 import consulo.util.collection.ContainerUtil;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
@@ -77,7 +77,7 @@ public class PsiJavaElementPattern<T extends PsiElement, Self extends PsiJavaEle
     return insideAnnotationParam(annotationQualifiedName, VALUE);
   }
 
-  public Self insideAnnotationParam(@Nonnull String annotationQualifiedName) {
+  public Self insideAnnotationParam(@jakarta.annotation.Nonnull String annotationQualifiedName) {
     return insideAnnotationParam(StandardPatterns.string().equalTo(annotationQualifiedName));
   }
 
@@ -165,7 +165,7 @@ public class PsiJavaElementPattern<T extends PsiElement, Self extends PsiJavaEle
   public Self constructorParameter(final int index, final String... fqns) {
     return with(new PatternCondition<T>("constructorParameter") {
       @Override
-      public boolean accepts(@Nonnull final T literal, final ProcessingContext context) {
+      public boolean accepts(@jakarta.annotation.Nonnull final T literal, final ProcessingContext context) {
         final PsiElement parent = literal.getParent();
         if (parent instanceof PsiExpressionList) {
           final PsiExpressionList psiExpressionList = (PsiExpressionList) parent;

@@ -23,8 +23,8 @@ import com.siyeh.ig.psiutils.ClassUtils;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiNamedElement;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class ClassReferencesSubclassInspection extends BaseInspection {
@@ -35,7 +35,7 @@ public class ClassReferencesSubclassInspection extends BaseInspection {
       "class.references.subclass.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     final PsiNamedElement element = (PsiNamedElement)infos[0];
     final String containingClassName = element.getName();
@@ -71,7 +71,7 @@ public class ClassReferencesSubclassInspection extends BaseInspection {
 
     @Override
     public void visitInstanceOfExpression(
-      @Nonnull PsiInstanceOfExpression expression) {
+      @jakarta.annotation.Nonnull PsiInstanceOfExpression expression) {
       final PsiTypeElement typeElement = expression.getCheckType();
       checkTypeElement(typeElement);
     }
@@ -85,7 +85,7 @@ public class ClassReferencesSubclassInspection extends BaseInspection {
 
     @Override
     public void visitClassObjectAccessExpression(
-      @Nonnull PsiClassObjectAccessExpression expression) {
+      @jakarta.annotation.Nonnull PsiClassObjectAccessExpression expression) {
       final PsiTypeElement typeElement = expression.getOperand();
       checkTypeElement(typeElement);
     }
@@ -113,7 +113,7 @@ public class ClassReferencesSubclassInspection extends BaseInspection {
     }
 
     private static boolean isSubclass(@Nullable PsiClass childClass,
-                                      @Nullable PsiClass parent) {
+                                      @jakarta.annotation.Nullable PsiClass parent) {
       if (childClass == null) {
         return false;
       }

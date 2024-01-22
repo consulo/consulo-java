@@ -24,8 +24,8 @@ import consulo.index.io.data.IOUtil;
 import consulo.util.collection.primitive.ints.*;
 import consulo.util.io.PathKt;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.io.*;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -191,13 +191,13 @@ final class TestInfoHolder {
     }
   }
 
-  private static void writeVersion(@Nonnull Path versionFile) throws IOException {
+  private static void writeVersion(@jakarta.annotation.Nonnull Path versionFile) throws IOException {
     try (final DataOutputStream versionOut = new DataOutputStream(PathKt.outputStream(versionFile))) {
       DataInputOutputUtil.writeINT(versionOut, VERSION);
     }
   }
 
-  private static int readVersion(@Nonnull Path versionFile) throws IOException {
+  private static int readVersion(@jakarta.annotation.Nonnull Path versionFile) throws IOException {
     InputStream inputStream = PathKt.inputStreamIfExists(versionFile);
     if (inputStream == null) {
       return 0;
@@ -219,7 +219,7 @@ final class TestInfoHolder {
   private static final int REMOVED_MARKER = -1;
 
   void doUpdateFromDiff(final int testNameId,
-                        @Nullable IntObjectMap<IntList> classData,
+                        @jakarta.annotation.Nullable IntObjectMap<IntList> classData,
                         @Nullable IntObjectMap<IntList> previousClassData,
                         @Nullable Integer moduleId) throws IOException {
     ValueDiff valueDiff = new ValueDiff(classData, previousClassData);
@@ -295,7 +295,7 @@ final class TestInfoHolder {
   }
 
   private static class ClassesAndMethodsMapDataExternalizer implements DataExternalizer<IntObjectMap<IntList>> {
-    public void save(@Nonnull final DataOutput dataOutput, IntObjectMap<IntList> classAndMethodsMap) throws IOException {
+    public void save(@jakarta.annotation.Nonnull final DataOutput dataOutput, IntObjectMap<IntList> classAndMethodsMap) throws IOException {
       DataInputOutputUtil.writeINT(dataOutput, classAndMethodsMap.size());
       final int[] classNameIds = classAndMethodsMap.keys();
       Arrays.sort(classNameIds);
@@ -317,7 +317,7 @@ final class TestInfoHolder {
       }
     }
 
-    public IntObjectMap<IntList> read(@Nonnull DataInput dataInput) throws IOException {
+    public IntObjectMap<IntList> read(@jakarta.annotation.Nonnull DataInput dataInput) throws IOException {
       int numberOfClasses = DataInputOutputUtil.readINT(dataInput);
       IntObjectMap<IntList> result = IntMaps.newIntObjectHashMap();
       int prevClassNameId = 0;
@@ -345,12 +345,12 @@ final class TestInfoHolder {
     public static final MethodQNameSerializer INSTANCE = new MethodQNameSerializer();
 
     @Override
-    public void save(@Nonnull DataOutput out, Long value) throws IOException {
+    public void save(@jakarta.annotation.Nonnull DataOutput out, Long value) throws IOException {
       out.writeLong(value);
     }
 
     @Override
-    public Long read(@Nonnull DataInput in) throws IOException {
+    public Long read(@jakarta.annotation.Nonnull DataInput in) throws IOException {
       return in.readLong();
     }
   }

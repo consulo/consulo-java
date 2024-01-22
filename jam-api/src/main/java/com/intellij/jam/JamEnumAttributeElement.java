@@ -21,9 +21,9 @@ import com.intellij.java.language.psi.PsiEnumConstant;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementRef;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author peter

@@ -13,8 +13,8 @@ import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -48,7 +48,7 @@ public class SuperClassHasFrequentlyUsedInheritorsInspection extends BaseJavaLoc
 
   @Nullable
   @Override
-  public ProblemDescriptor[] checkClass(@Nonnull final PsiClass aClass,
+  public ProblemDescriptor[] checkClass(@jakarta.annotation.Nonnull final PsiClass aClass,
                                         @Nonnull final InspectionManager manager,
                                         final boolean isOnTheFly, Object state) {
     if (aClass.isInterface() ||
@@ -91,7 +91,7 @@ public class SuperClassHasFrequentlyUsedInheritorsInspection extends BaseJavaLoc
   }
 
   @Nullable
-  private static PsiClass getSuperIfUnique(final @Nonnull PsiClass aClass) {
+  private static PsiClass getSuperIfUnique(final @jakarta.annotation.Nonnull PsiClass aClass) {
     if (aClass instanceof PsiAnonymousClass) {
       return (PsiClass)((PsiAnonymousClass)aClass).getBaseClassReference().resolve();
     }

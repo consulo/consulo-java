@@ -1,5 +1,7 @@
+import jakarta.annotation.Nullable;
+
 public class Foo {
-    @javax.annotation.Nullable
+    @Nullable
 	Foo foo() {
         return null;
     }

@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiDeclarationStatement;
 import com.siyeh.InspectionGadgetsBundle;
@@ -25,6 +23,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.MoveClassFix;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class LimitedScopeInnerClassInspection extends BaseInspection {
@@ -57,7 +56,7 @@ public class LimitedScopeInnerClassInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
       if (aClass.getParent() instanceof PsiDeclarationStatement) {
         registerClassError(aClass);
       }

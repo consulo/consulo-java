@@ -29,7 +29,7 @@ import consulo.language.psi.PsiFile;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.Pair;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.List;
 

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.debugger.impl.descriptors.data;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import com.intellij.java.debugger.impl.jdi.DecompiledLocalVariable;
 import com.intellij.java.debugger.impl.ui.impl.watch.ArgumentValueDescriptorImpl;
 import consulo.project.Project;

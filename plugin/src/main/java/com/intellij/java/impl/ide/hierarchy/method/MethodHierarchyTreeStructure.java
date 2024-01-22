@@ -20,8 +20,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 import consulo.ide.impl.idea.ide.hierarchy.HierarchyBrowserManager;
 import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
 import consulo.ide.impl.idea.ide.hierarchy.HierarchyTreeStructure;
@@ -33,6 +32,7 @@ import com.intellij.java.indexing.search.searches.FunctionalExpressionSearch;
 import consulo.util.collection.ArrayUtil;
 import consulo.application.util.function.Processor;
 import consulo.java.language.module.util.JavaClassNames;
+import jakarta.annotation.Nullable;
 
 public final class MethodHierarchyTreeStructure extends HierarchyTreeStructure
 {

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.psi;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * Represents a Java <code>continue</code> statement.
@@ -26,7 +26,7 @@ public interface PsiContinueStatement extends PsiStatement {
    *
    * @return the identifier for the label, or null if the statement has no label.
    */
-  @Nullable
+  @jakarta.annotation.Nullable
   PsiIdentifier getLabelIdentifier();
 
   /**

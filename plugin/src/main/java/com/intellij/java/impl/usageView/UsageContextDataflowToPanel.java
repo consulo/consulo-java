@@ -17,22 +17,20 @@
 package com.intellij.java.impl.usageView;
 
 import com.intellij.java.impl.slicer.*;
-import com.intellij.java.language.psi.PsiJavaFile;
-import com.intellij.java.language.psi.PsiVariable;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
 import consulo.ide.impl.idea.usages.impl.UsageContextPanelBase;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiFile;
 import consulo.project.Project;
 import consulo.project.ui.wm.ToolWindowId;
 import consulo.project.ui.wm.ToolWindowManager;
 import consulo.ui.ex.toolWindow.ToolWindow;
 import consulo.usage.*;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
@@ -42,7 +40,7 @@ public class UsageContextDataflowToPanel extends UsageContextPanelBase {
   private final UsageViewPresentation myPresentation;
   private JComponent myPanel;
 
-  public UsageContextDataflowToPanel(@Nonnull Project project, @Nonnull UsageViewPresentation presentation) {
+  public UsageContextDataflowToPanel(@jakarta.annotation.Nonnull Project project, @Nonnull UsageViewPresentation presentation) {
     super(project, presentation);
     myPresentation = presentation;
   }
@@ -83,7 +81,7 @@ public class UsageContextDataflowToPanel extends UsageContextPanelBase {
     return true;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   private static SliceAnalysisParams createParams(PsiElement element, boolean dataFlowToThis) {
     SliceAnalysisParams params = new SliceAnalysisParams();
     params.scope = new AnalysisScope(element.getProject());
@@ -92,8 +90,8 @@ public class UsageContextDataflowToPanel extends UsageContextPanelBase {
     return params;
   }
 
-  @Nonnull
-  protected JComponent createPanel(@Nonnull PsiElement element, final boolean dataFlowToThis) {
+  @jakarta.annotation.Nonnull
+  protected JComponent createPanel(@jakarta.annotation.Nonnull PsiElement element, final boolean dataFlowToThis) {
     ToolWindow toolWindow = ToolWindowManager.getInstance(myProject).getToolWindow(ToolWindowId.FIND);
     SliceAnalysisParams params = createParams(element, dataFlowToThis);
 

@@ -27,9 +27,9 @@ import consulo.execution.debug.breakpoint.XBreakpoint;
 import consulo.execution.debug.breakpoint.ui.XBreakpointCustomPropertiesPanel;
 import consulo.project.Project;
 import consulo.ui.image.Image;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 
 /**
@@ -41,7 +41,7 @@ public class JavaWildcardMethodBreakpointType extends JavaBreakpointTypeBase<Jav
     super("java-wildcard-method", DebuggerBundle.message("method.breakpoints.tab.title"));
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Image getEnabledIcon() {
     return AllIcons.Debugger.Db_method_breakpoint;
@@ -68,7 +68,7 @@ public class JavaWildcardMethodBreakpointType extends JavaBreakpointTypeBase<Jav
     return JavaMethodBreakpointType.getText(breakpoint);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public XBreakpointCustomPropertiesPanel<XBreakpoint<JavaMethodBreakpointProperties>> createCustomPropertiesPanel() {
     return new MethodBreakpointPropertiesPanel();
@@ -79,7 +79,7 @@ public class JavaWildcardMethodBreakpointType extends JavaBreakpointTypeBase<Jav
   //  return MethodBreakpoint.CATEGORY;
   //}
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public JavaMethodBreakpointProperties createProperties() {
     return new JavaMethodBreakpointProperties();

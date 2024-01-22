@@ -11,7 +11,7 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Collection;
 
 public class PsiJavaModuleReferenceImpl extends PsiReferenceBase.Poly<PsiJavaModuleReferenceElement> implements PsiJavaModuleReference {

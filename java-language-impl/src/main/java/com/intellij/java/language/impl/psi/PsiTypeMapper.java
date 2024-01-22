@@ -19,9 +19,9 @@ import com.intellij.java.language.psi.*;
 import consulo.language.psi.PsiManager;
 import consulo.logging.Logger;
 import consulo.util.collection.SmartList;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.List;
 
 /**

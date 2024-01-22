@@ -11,8 +11,8 @@ import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import consulo.language.ast.IElementType;
 import consulo.language.ast.TokenSet;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.util.function.Predicate;
 
@@ -27,12 +27,12 @@ public class FileParser
 
 	private final JavaParser myParser;
 
-	public FileParser(@Nonnull JavaParser javaParser)
+	public FileParser(@jakarta.annotation.Nonnull JavaParser javaParser)
 	{
 		myParser = javaParser;
 	}
 
-	public void parse(@Nonnull PsiBuilder builder)
+	public void parse(@jakarta.annotation.Nonnull PsiBuilder builder)
 	{
 		parseFile(builder, FileParser::stopImportListParsing, JavaErrorBundle.getInstance(), "expected.class.or.interface");
 	}
@@ -40,7 +40,7 @@ public class FileParser
 	public void parseFile(@Nonnull PsiBuilder builder,
 						  @Nonnull Predicate<? super PsiBuilder> importListStopper,
 						  @Nonnull AbstractBundle bundle,
-						  @Nonnull String errorMessageKey)
+						  @jakarta.annotation.Nonnull String errorMessageKey)
 	{
 		parsePackageStatement(builder);
 
@@ -155,7 +155,7 @@ public class FileParser
 		done(statement, JavaElementType.PACKAGE_STATEMENT);
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	protected Pair<PsiBuilder.Marker, Boolean> parseImportList(PsiBuilder builder, Predicate<? super PsiBuilder> stopper)
 	{
 		PsiBuilder.Marker list = builder.mark();
@@ -209,7 +209,7 @@ public class FileParser
 		return Pair.create(list, isEmpty);
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	protected PsiBuilder.Marker parseImportStatement(PsiBuilder builder)
 	{
 		if(builder.getTokenType() != JavaTokenType.IMPORT_KEYWORD)
@@ -234,7 +234,7 @@ public class FileParser
 	}
 
 	@Nonnull
-	private static String error(@Nonnull AbstractBundle bundle, @Nonnull String errorMessageKey)
+	private static String error(@Nonnull AbstractBundle bundle, @jakarta.annotation.Nonnull String errorMessageKey)
 	{
 		return bundle.getMessage(errorMessageKey);
 	}

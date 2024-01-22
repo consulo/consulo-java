@@ -24,7 +24,7 @@ import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.logging.Logger;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class PsiPostfixExpressionImpl extends ExpressionPsiElement implements PsiPostfixExpression {
   private static final Logger LOG = Logger.getInstance(PsiPostfixExpressionImpl.class);
@@ -34,19 +34,19 @@ public class PsiPostfixExpressionImpl extends ExpressionPsiElement implements Ps
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiExpression getOperand() {
     return (PsiExpression) findChildByRoleAsPsiElement(ChildRole.OPERAND);
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiJavaToken getOperationSign() {
     return (PsiJavaToken) findChildByRoleAsPsiElement(ChildRole.OPERATION_SIGN);
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public IElementType getOperationTokenType() {
     return getOperationSign().getTokenType();
   }

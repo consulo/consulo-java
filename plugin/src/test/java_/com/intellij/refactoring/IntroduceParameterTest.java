@@ -17,10 +17,10 @@ import consulo.util.collection.primitive.ints.IntList;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 import consulo.util.collection.primitive.ints.IntLists;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
@@ -416,7 +416,7 @@ public abstract class IntroduceParameterTest extends LightRefactoringTestCase
 			{
 				@Nullable
 				@Override
-				public <T> T getData(@Nonnull Key<T> key)
+				public <T> T getData(@jakarta.annotation.Nonnull Key<T> key)
 				{
 					return null;
 				}

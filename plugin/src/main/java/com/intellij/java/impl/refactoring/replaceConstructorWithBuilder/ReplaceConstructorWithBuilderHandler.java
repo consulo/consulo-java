@@ -32,11 +32,11 @@ import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.refactoring.HelpID;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class ReplaceConstructorWithBuilderHandler implements RefactoringActionHandler {
-  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file, final DataContext dataContext) {
+  public void invoke(@jakarta.annotation.Nonnull final Project project, final Editor editor, final PsiFile file, final DataContext dataContext) {
     final int offset = editor.getCaretModel().getOffset();
     final PsiElement element = file.findElementAt(offset);
     final PsiClass psiClass = getParentNamedClass(element);
@@ -70,7 +70,7 @@ public class ReplaceConstructorWithBuilderHandler implements RefactoringActionHa
     return psiClass;
   }
 
-  public void invoke(@Nonnull final Project project, @Nonnull final PsiElement[] elements, final DataContext dataContext) {
+  public void invoke(@jakarta.annotation.Nonnull final Project project, @Nonnull final PsiElement[] elements, final DataContext dataContext) {
     throw new UnsupportedOperationException();
   }
 

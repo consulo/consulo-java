@@ -28,10 +28,10 @@ import com.siyeh.ig.psiutils.CommentTracker;
 import com.siyeh.ig.psiutils.SideEffectChecker;
 import com.siyeh.ig.psiutils.StatementExtractor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Nls;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 
@@ -77,7 +77,7 @@ public class DeleteSideEffectsAwareFix extends LocalQuickFixAndIntentionActionOn
 	}
 
 	@Nls
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
 	public String getText()
 	{
@@ -85,7 +85,7 @@ public class DeleteSideEffectsAwareFix extends LocalQuickFixAndIntentionActionOn
 	}
 
 	@Nls
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -94,9 +94,9 @@ public class DeleteSideEffectsAwareFix extends LocalQuickFixAndIntentionActionOn
 
 	@Override
 	public boolean isAvailable(@Nonnull Project project,
-							   @Nonnull PsiFile file,
+							   @jakarta.annotation.Nonnull PsiFile file,
 							   @Nonnull PsiElement startElement,
-							   @Nonnull PsiElement endElement)
+							   @jakarta.annotation.Nonnull PsiElement endElement)
 	{
 		return myIsAvailable;
 	}
@@ -105,7 +105,7 @@ public class DeleteSideEffectsAwareFix extends LocalQuickFixAndIntentionActionOn
 	public void invoke(@Nonnull Project project,
 					   @Nonnull PsiFile file,
 					   @Nullable Editor editor,
-					   @Nonnull PsiElement startElement,
+					   @jakarta.annotation.Nonnull PsiElement startElement,
 					   @Nonnull PsiElement endElement)
 	{
 		PsiStatement statement = myStatementPtr.getElement();

@@ -16,9 +16,8 @@
 
 package com.intellij.java.language.impl.psi.controlFlow;
 
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nonnull;
 
 public abstract class InstructionBase implements Instruction, Cloneable {
   @Nonnull

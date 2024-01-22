@@ -21,8 +21,8 @@ import consulo.virtualFileSystem.event.VFileContentChangeEvent;
 import consulo.virtualFileSystem.event.VFileDeleteEvent;
 import consulo.virtualFileSystem.event.VFileEvent;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -32,7 +32,7 @@ public class JrtFileSystemImpl extends ArchiveFileSystem implements JrtFileSyste
   private final Map<String, ArchiveHandler> myHandlers = Collections.synchronizedMap(Maps.newHashMap(FileUtil.PATH_HASHING_STRATEGY));
   private final AtomicBoolean mySubscribed = new AtomicBoolean(false);
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getProtocol() {
     return PROTOCOL;
@@ -40,34 +40,34 @@ public class JrtFileSystemImpl extends ArchiveFileSystem implements JrtFileSyste
 
   @Nonnull
   @Override
-  public String normalize(@Nonnull String path) {
+  public String normalize(@jakarta.annotation.Nonnull String path) {
     int p = path.indexOf(SEPARATOR);
     return p > 0 ? FileUtil.normalize(path.substring(0, p)) + path.substring(p) : super.normalize(path);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
-  protected String extractLocalPath(@Nonnull String rootPath) {
+  protected String extractLocalPath(@jakarta.annotation.Nonnull String rootPath) {
     return StringUtil.trimEnd(rootPath, SEPARATOR);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
-  protected String composeRootPath(@Nonnull String localPath) {
+  protected String composeRootPath(@jakarta.annotation.Nonnull String localPath) {
     return localPath + SEPARATOR;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
-  public String extractRootPath(@Nonnull String entryPath) {
+  public String extractRootPath(@jakarta.annotation.Nonnull String entryPath) {
     int separatorIndex = entryPath.indexOf(SEPARATOR);
     assert separatorIndex >= 0 : "Path passed to JrtFileSystem must have a separator '!/' but got: " + entryPath;
     return entryPath.substring(0, separatorIndex + SEPARATOR.length());
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
-  protected ArchiveHandler getHandler(@Nonnull VirtualFile entryFile) {
+  protected ArchiveHandler getHandler(@jakarta.annotation.Nonnull VirtualFile entryFile) {
     checkSubscription();
 
     String homePath = extractLocalPath(extractRootPath(entryFile.getPath()));
@@ -91,7 +91,7 @@ public class JrtFileSystemImpl extends ArchiveFileSystem implements JrtFileSyste
     }
     app.getMessageBus().connect(app).subscribe(BulkFileListener.class, new BulkFileListener() {
       @Override
-      public void after(@Nonnull List<? extends VFileEvent> events) {
+      public void after(@jakarta.annotation.Nonnull List<? extends VFileEvent> events) {
         Set<VirtualFile> toRefresh = null;
 
         for (VFileEvent e : events) {
@@ -138,7 +138,7 @@ public class JrtFileSystemImpl extends ArchiveFileSystem implements JrtFileSyste
   }
 
   @Override
-  public VirtualFile findFileByPathIfCached(@Nonnull String path) {
+  public VirtualFile findFileByPathIfCached(@jakarta.annotation.Nonnull String path) {
     return VfsImplUtil.findFileByPathIfCached(this, path);
   }
 
@@ -153,20 +153,20 @@ public class JrtFileSystemImpl extends ArchiveFileSystem implements JrtFileSyste
   }
 
   @Override
-  protected boolean isCorrectFileType(@Nonnull VirtualFile local) {
+  protected boolean isCorrectFileType(@jakarta.annotation.Nonnull VirtualFile local) {
     String path = local.getPath();
     return OwnJdkUtil.isModularRuntime(path) && !OwnJdkUtil.isExplodedModularRuntime(path);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public VirtualFile getLocalVirtualFileFor(@Nullable VirtualFile virtualFile) {
     return getLocalByEntry(virtualFile);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
-  public VirtualFile findLocalVirtualFileByPath(@Nonnull String s) {
+  public VirtualFile findLocalVirtualFileByPath(@jakarta.annotation.Nonnull String s) {
     return findLocalByRootPath(s);
   }
 

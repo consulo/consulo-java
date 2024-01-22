@@ -31,8 +31,9 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.query.Query;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 
 @ExtensionImpl
@@ -87,7 +88,7 @@ public class ParameterNameDiffersFromOverriddenParameterInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
       final PsiParameterList parameterList = method.getParameterList();
       if (parameterList.getParametersCount() == 0) {
         return;

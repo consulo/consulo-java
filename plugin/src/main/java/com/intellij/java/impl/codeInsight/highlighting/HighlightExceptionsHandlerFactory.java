@@ -26,8 +26,8 @@ import consulo.util.lang.function.Condition;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.editor.TargetElementUtil;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -55,7 +55,7 @@ public class HighlightExceptionsHandlerFactory implements HighlightUsagesHandler
     return null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static HighlightUsagesHandlerBase createHighlightTryHandler(final Editor editor,
                                                                       final PsiFile file,
                                                                       final PsiElement target,
@@ -68,7 +68,7 @@ public class HighlightExceptionsHandlerFactory implements HighlightUsagesHandler
     return new HighlightExceptionsHandler(editor, file, target, psiClassTypes.toArray(new PsiClassType[psiClassTypes.size()]), tryBlock, Condition.TRUE);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static HighlightUsagesHandlerBase createHighlightCatchHandler(final Editor editor,
                                                                         final PsiFile file,
                                                                         final PsiElement target,

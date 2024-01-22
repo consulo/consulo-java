@@ -30,7 +30,7 @@ import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -115,7 +115,7 @@ public class HardcodedFileSeparatorsInspection extends BaseInspection {
    */
   public boolean m_recognizeExampleMediaType = false;
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "HardcodedFileSeparator";
   }
@@ -148,7 +148,7 @@ public class HardcodedFileSeparatorsInspection extends BaseInspection {
 
     @Override
     public void visitLiteralExpression(
-        @Nonnull PsiLiteralExpression expression) {
+        @jakarta.annotation.Nonnull PsiLiteralExpression expression) {
       super.visitLiteralExpression(expression);
       final PsiType type = expression.getType();
       if (TypeUtils.isJavaLangString(type)) {

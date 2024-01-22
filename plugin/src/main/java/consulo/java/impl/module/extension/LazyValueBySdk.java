@@ -21,7 +21,7 @@ import consulo.util.lang.Comparing;
 import consulo.ide.impl.idea.util.NotNullFunction;
 import consulo.module.extension.ModuleExtensionWithSdk;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL

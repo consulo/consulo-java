@@ -1,7 +1,8 @@
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class TestNPEafterNew {
-  @javax.annotation.Nullable
+  @Nullable
   Object[] arr;
   void test(@Nonnull Object[] notnull) {
       arr = notnull;

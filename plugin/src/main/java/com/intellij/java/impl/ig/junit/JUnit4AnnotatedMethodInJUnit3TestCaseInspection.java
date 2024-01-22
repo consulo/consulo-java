@@ -31,7 +31,7 @@ import consulo.project.Project;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +42,7 @@ public class JUnit4AnnotatedMethodInJUnit3TestCaseInspection extends BaseInspect
 
   @Override
   @Nls
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("junit4.test.method.in.class.extending.junit3.testcase.display.name");
   }
@@ -61,7 +61,7 @@ public class JUnit4AnnotatedMethodInJUnit3TestCaseInspection extends BaseInspect
     return true;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     final List<InspectionGadgetsFix> fixes = new ArrayList(3);

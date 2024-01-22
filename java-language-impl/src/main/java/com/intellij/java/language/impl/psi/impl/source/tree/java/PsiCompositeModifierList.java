@@ -24,7 +24,7 @@ import consulo.language.psi.PsiManager;
 import com.intellij.java.language.psi.PsiModifierList;
 import com.intellij.java.language.impl.psi.impl.light.LightModifierList;
 import consulo.util.collection.ContainerUtil;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,7 @@ public class PsiCompositeModifierList extends LightModifierList {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiAnnotation[] getAnnotations() {
     List<PsiAnnotation> annotations = new ArrayList<PsiAnnotation>();
     for (PsiModifierList list : mySublists) {
@@ -48,7 +48,7 @@ public class PsiCompositeModifierList extends LightModifierList {
   }
 
   @Override
-  public PsiAnnotation findAnnotation(@Nonnull final String qualifiedName) {
+  public PsiAnnotation findAnnotation(@jakarta.annotation.Nonnull final String qualifiedName) {
     for (PsiModifierList sublist : mySublists) {
       final PsiAnnotation annotation = sublist.findAnnotation(qualifiedName);
       if (annotation != null) return annotation;
@@ -66,7 +66,7 @@ public class PsiCompositeModifierList extends LightModifierList {
   }
 
   @Override
-  public boolean hasExplicitModifier(@Nonnull final String name) {
+  public boolean hasExplicitModifier(@jakarta.annotation.Nonnull final String name) {
     for (PsiModifierList sublist : mySublists) {
       if (sublist.hasExplicitModifier(name)) return true;
     }

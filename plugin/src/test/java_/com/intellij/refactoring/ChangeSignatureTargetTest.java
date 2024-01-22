@@ -25,8 +25,8 @@ import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.impl.refactoring.changeSignature.JavaChangeSignatureHandler;
 import com.intellij.testFramework.LightCodeInsightTestCase;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
 public abstract class ChangeSignatureTargetTest extends LightCodeInsightTestCase {
   @Nonnull

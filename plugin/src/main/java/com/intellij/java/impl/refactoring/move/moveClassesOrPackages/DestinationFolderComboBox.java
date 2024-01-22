@@ -34,7 +34,7 @@ import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.util.lang.Comparing;
 import consulo.virtualFileSystem.VirtualFile;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -158,7 +158,7 @@ public abstract class DestinationFolderComboBox extends ComboboxWithBrowseButton
     });
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public MoveDestination selectDirectory(final PackageWrapper targetPackage, final boolean showChooserWhenDefault) {
     final DirectoryChooser.ItemWrapper selectedItem = (DirectoryChooser.ItemWrapper) getComboBox().getSelectedItem();
     if (selectedItem == null || selectedItem == NULL_WRAPPER) {

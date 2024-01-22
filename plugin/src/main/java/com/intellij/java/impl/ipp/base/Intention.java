@@ -33,8 +33,8 @@ import consulo.virtualFileSystem.ReadonlyStatusHandler;
 import consulo.virtualFileSystem.VirtualFile;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public abstract class Intention extends BaseElementAtCaretIntentionAction {
 
@@ -48,7 +48,7 @@ public abstract class Intention extends BaseElementAtCaretIntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element){
+  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, @Nonnull PsiElement element){
     if (!isWritable(project, element)) {
       return;
     }
@@ -65,10 +65,10 @@ public abstract class Intention extends BaseElementAtCaretIntentionAction {
     processIntention(element);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected abstract PsiElementPredicate getElementPredicate();
 
-  protected static void replaceExpression(@Nonnull String newExpression, @Nonnull PsiExpression expression){
+  protected static void replaceExpression(@jakarta.annotation.Nonnull String newExpression, @jakarta.annotation.Nonnull PsiExpression expression){
     final Project project = expression.getProject();
     final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
     final PsiExpression newCall = factory.createExpressionFromText(newExpression, expression);
@@ -77,7 +77,7 @@ public abstract class Intention extends BaseElementAtCaretIntentionAction {
     codeStyleManager.reformat(insertedElement);
   }
 
-  protected static void replaceExpressionWithNegatedExpression(@Nonnull PsiExpression newExpression, @Nonnull PsiExpression expression){
+  protected static void replaceExpressionWithNegatedExpression(@Nonnull PsiExpression newExpression, @jakarta.annotation.Nonnull PsiExpression expression){
     final Project project = expression.getProject();
     final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
     PsiExpression expressionToReplace = expression;
@@ -110,7 +110,7 @@ public abstract class Intention extends BaseElementAtCaretIntentionAction {
     codeStyleManager.reformat(insertedElement);
   }
 
-  protected static void replaceExpressionWithNegatedExpressionString(@Nonnull String newExpression, @Nonnull PsiExpression expression) {
+  protected static void replaceExpressionWithNegatedExpressionString(@Nonnull String newExpression, @jakarta.annotation.Nonnull PsiExpression expression) {
     final Project project = expression.getProject();
     final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
     final PsiElementFactory factory = psiFacade.getElementFactory();
@@ -135,7 +135,7 @@ public abstract class Intention extends BaseElementAtCaretIntentionAction {
     codeStyleManager.reformat(insertedElement);
   }
 
-  protected static void replaceStatement(@NonNls @Nonnull String newStatementText, @NonNls @Nonnull PsiStatement statement) {
+  protected static void replaceStatement(@NonNls @jakarta.annotation.Nonnull String newStatementText, @NonNls @jakarta.annotation.Nonnull PsiStatement statement) {
     final Project project = statement.getProject();
     final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
     final PsiStatement newStatement = factory.createStatementFromText(newStatementText, statement);
@@ -144,7 +144,7 @@ public abstract class Intention extends BaseElementAtCaretIntentionAction {
     codeStyleManager.reformat(insertedElement);
   }
 
-  protected static void replaceStatementAndShorten(@NonNls @Nonnull String newStatementText, @NonNls @Nonnull PsiStatement statement) {
+  protected static void replaceStatementAndShorten(@NonNls @jakarta.annotation.Nonnull String newStatementText, @NonNls @jakarta.annotation.Nonnull PsiStatement statement) {
     final Project project = statement.getProject();
     final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
     final PsiElementFactory factory = psiFacade.getElementFactory();
@@ -164,7 +164,7 @@ public abstract class Intention extends BaseElementAtCaretIntentionAction {
     CodeStyleManager.getInstance(project).reformat(addedStatement);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   PsiElement findMatchingElement(@Nullable PsiElement element, Editor editor) {
     while (element != null) {
       if (!JavaLanguage.INSTANCE.equals(element.getLanguage())) {
@@ -187,7 +187,7 @@ public abstract class Intention extends BaseElementAtCaretIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     return findMatchingElement(element, editor) != null;
   }
 
@@ -225,7 +225,7 @@ public abstract class Intention extends BaseElementAtCaretIntentionAction {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getText() {
     //noinspection UnresolvedPropertyKey
     return IntentionPowerPackBundle.message(getPrefix() + ".name");

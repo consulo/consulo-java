@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.codeInsight.ExpectedTypesProvider;
@@ -41,6 +40,7 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.application.util.function.Processor;
 import consulo.util.collection.LinkedMultiMap;
 import consulo.util.collection.MultiMap;
+import jakarta.annotation.Nonnull;
 
 abstract class StaticMembersProcessor<T extends PsiMember & PsiDocCommentOwner> implements Processor<T>
 {

@@ -39,10 +39,10 @@ import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.VirtualFileManager;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.swing.*;
 
 public abstract class EmptyDirectoryInspection extends BaseGlobalInspection {
@@ -144,21 +144,21 @@ public abstract class EmptyDirectoryInspection extends BaseGlobalInspection {
       this.name = name;
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     @Override
     public String getName() {
       return InspectionGadgetsBundle.message(
         "empty.directories.delete.quickfix", name);
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     @Override
     public String getFamilyName() {
       return getName();
     }
 
     @Override
-    public void applyFix(@Nonnull Project project, @Nonnull CommonProblemDescriptor descriptor) {
+    public void applyFix(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull CommonProblemDescriptor descriptor) {
       final VirtualFile file = VirtualFileManager.getInstance().findFileByUrl(url);
       if (file == null) {
         return;

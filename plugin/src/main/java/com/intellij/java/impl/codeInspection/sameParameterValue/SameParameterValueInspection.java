@@ -43,8 +43,8 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -58,7 +58,7 @@ public class SameParameterValueInspection extends GlobalJavaInspectionTool
 	private static final Logger LOG = Logger.getInstance(SameParameterValueInspection.class);
 
 	@Override
-	@Nullable
+	@jakarta.annotation.Nullable
 	public CommonProblemDescriptor[] checkElement(RefEntity refEntity, AnalysisScope scope, InspectionManager manager, GlobalInspectionContext globalContext,
 												  ProblemDescriptionsProcessor processor, Object state)
 	{
@@ -136,14 +136,14 @@ public class SameParameterValueInspection extends GlobalJavaInspectionTool
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public String getDisplayName()
 	{
 		return InspectionsBundle.message("inspection.same.parameter.display.name");
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public String getGroupDisplayName()
 	{
 		return GroupNames.DECLARATION_REDUNDANCY;
@@ -157,7 +157,7 @@ public class SameParameterValueInspection extends GlobalJavaInspectionTool
 	}
 
 	@Override
-	@Nullable
+	@jakarta.annotation.Nullable
 	public QuickFix getQuickFix(final String hint)
 	{
 		if(hint == null)
@@ -201,14 +201,14 @@ public class SameParameterValueInspection extends GlobalJavaInspectionTool
 		}
 
 		@Override
-		@Nonnull
+		@jakarta.annotation.Nonnull
 		public String getFamilyName()
 		{
 			return getName();
 		}
 
 		@Override
-		public void applyFix(@Nonnull final Project project, @Nonnull ProblemDescriptor descriptor)
+		public void applyFix(@jakarta.annotation.Nonnull final Project project, @jakarta.annotation.Nonnull ProblemDescriptor descriptor)
 		{
 			final PsiElement element = descriptor.getPsiElement();
 			final PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class);

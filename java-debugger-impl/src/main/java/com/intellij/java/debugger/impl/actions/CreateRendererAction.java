@@ -32,7 +32,7 @@ import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.List;
 
 public class CreateRendererAction extends AnAction {
@@ -69,7 +69,7 @@ public class CreateRendererAction extends AnAction {
           final UserRenderersConfigurable ui = new UserRenderersConfigurable();
           IdeaConfigurableBase<UserRenderersConfigurable, NodeRendererSettings> configurable = new IdeaConfigurableBase<UserRenderersConfigurable, NodeRendererSettings>("reference.idesettings" +
               ".debugger.typerenderers", DebuggerBundle.message("user.renderers.configurable.display.name"), "reference.idesettings.debugger.typerenderers") {
-            @Nonnull
+            @jakarta.annotation.Nonnull
             @Override
             protected NodeRendererSettings getSettings() {
               return NodeRendererSettings.getInstance();

@@ -27,7 +27,7 @@ import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.SoftReference;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author ven

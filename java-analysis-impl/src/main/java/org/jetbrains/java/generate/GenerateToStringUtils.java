@@ -18,7 +18,7 @@ package org.jetbrains.java.generate;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.analysis.impl.generate.config.Config;
 import com.intellij.java.analysis.impl.generate.config.FilterPattern;

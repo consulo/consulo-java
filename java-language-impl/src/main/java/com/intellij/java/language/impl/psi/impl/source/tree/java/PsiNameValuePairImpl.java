@@ -33,8 +33,8 @@ import consulo.language.psi.PsiReference;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Dmitry Avdeev
@@ -46,7 +46,7 @@ public class PsiNameValuePairImpl extends JavaStubPsiElement<PsiNameValuePairStu
     super(stub, JavaStubElementTypes.NAME_VALUE_PAIR);
   }
 
-  public PsiNameValuePairImpl(@Nonnull ASTNode node) {
+  public PsiNameValuePairImpl(@jakarta.annotation.Nonnull ASTNode node) {
     super(node);
   }
 
@@ -85,9 +85,9 @@ public class PsiNameValuePairImpl extends JavaStubPsiElement<PsiNameValuePairStu
     return node == null ? null : (PsiAnnotationMemberValue) node.getPsi();
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
-  public PsiAnnotationMemberValue setValue(@Nonnull PsiAnnotationMemberValue newValue) {
+  public PsiAnnotationMemberValue setValue(@jakarta.annotation.Nonnull PsiAnnotationMemberValue newValue) {
     getValue().replace(newValue);
     return getValue();
   }
@@ -174,7 +174,7 @@ public class PsiNameValuePairImpl extends JavaStubPsiElement<PsiNameValuePairStu
   }
 
   @Override
-  public final void accept(@Nonnull PsiElementVisitor visitor) {
+  public final void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitNameValuePair(this);
     } else {

@@ -25,7 +25,7 @@
 
 package org.osmorc.manifest.lang.psi;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiNamedElement;

@@ -17,8 +17,8 @@ package com.intellij.java.language.psi;
 
 import consulo.language.ast.IElementType;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * Represents a Java unary operation (either prefix or postfix)
@@ -46,6 +46,6 @@ public interface PsiUnaryExpression extends PsiExpression
 	 *
 	 * @return the token type.
 	 */
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	IElementType getOperationTokenType();
 }

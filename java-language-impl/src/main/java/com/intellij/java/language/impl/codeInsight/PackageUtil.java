@@ -43,8 +43,8 @@ import consulo.ui.ex.awt.Messages;
 import consulo.undoRedo.CommandProcessor;
 import consulo.virtualFileSystem.VirtualFile;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +53,7 @@ public class PackageUtil
 {
 	private static final Logger LOG = Logger.getInstance(PackageUtil.class);
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	public static PsiDirectory findPossiblePackageDirectoryInModule(Module module, String packageName)
 	{
 		PsiDirectory psiDirectory = null;
@@ -209,13 +209,13 @@ public class PackageUtil
 		return psiDirectory[0];
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	public static PsiDirectory findOrCreateDirectoryForPackage(@Nonnull Module module, String packageName, @Nullable PsiDirectory baseDir, boolean askUserToCreate) throws IncorrectOperationException
 	{
 		return findOrCreateDirectoryForPackage(module, packageName, baseDir, askUserToCreate, false);
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	public static PsiDirectory findOrCreateDirectoryForPackage(@Nonnull Module module,
 															   String packageName,
 															   PsiDirectory baseDir,

@@ -25,7 +25,7 @@ import com.intellij.java.impl.ig.psiutils.ExceptionUtils;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.Nls;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.Set;
 
@@ -33,7 +33,7 @@ import java.util.Set;
 public class ExpectedExceptionNeverThrownInspection
   extends BaseInspection {
   @Nls
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(

@@ -24,9 +24,9 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public class PsiReceiverParameterImpl extends CompositePsiElement implements PsiReceiverParameter {
   public PsiReceiverParameterImpl() {
@@ -39,25 +39,25 @@ public class PsiReceiverParameterImpl extends CompositePsiElement implements Psi
     return PsiTreeUtil.getRequiredChildOfType(this, PsiThisExpression.class);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public PsiModifierList getModifierList() {
     return PsiTreeUtil.getChildOfType(this, PsiModifierList.class);
   }
 
   @Override
-  public boolean hasModifierProperty(@PsiModifier.ModifierConstant @Nonnull String name) {
+  public boolean hasModifierProperty(@PsiModifier.ModifierConstant @jakarta.annotation.Nonnull String name) {
     PsiModifierList modifierList = getModifierList();
     return modifierList != null && modifierList.hasModifierProperty(name);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public PsiType getType() {
     return JavaSharedImplUtil.getType(getTypeElement(), getIdentifier());
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public PsiTypeElement getTypeElement() {
     return PsiTreeUtil.getRequiredChildOfType(this, PsiTypeElement.class);
@@ -74,14 +74,14 @@ public class PsiReceiverParameterImpl extends CompositePsiElement implements Psi
     return false;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public PsiIdentifier getNameIdentifier() {
     return null;
   }
 
   @Override
-  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
+  public PsiElement setName(@jakarta.annotation.Nonnull String name) throws IncorrectOperationException {
     throw new IncorrectOperationException("Cannot rename receiver parameter");
   }
 
@@ -89,14 +89,14 @@ public class PsiReceiverParameterImpl extends CompositePsiElement implements Psi
   public void normalizeDeclaration() throws IncorrectOperationException {
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public Object computeConstantValue() {
     return null;
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitReceiverParameter(this);
     } else {

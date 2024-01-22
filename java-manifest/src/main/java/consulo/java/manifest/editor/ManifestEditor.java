@@ -28,6 +28,7 @@ import consulo.ui.ex.awt.table.JBTable;
 import consulo.util.dataholder.UserDataHolderBase;
 import consulo.virtualFileSystem.ReadonlyStatusHandler;
 import consulo.virtualFileSystem.VirtualFile;
+import jakarta.annotation.Nullable;
 import kava.beans.PropertyChangeListener;
 import org.osmorc.manifest.lang.headerparser.HeaderParser;
 import org.osmorc.manifest.lang.psi.Clause;
@@ -35,8 +36,8 @@ import org.osmorc.manifest.lang.psi.Header;
 import org.osmorc.manifest.lang.psi.HeaderValuePart;
 import org.osmorc.manifest.lang.psi.ManifestFile;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -274,13 +275,13 @@ public class ManifestEditor extends UserDataHolderBase implements FileEditor {
     }
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public JComponent getComponent() {
     return myRoot;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public JComponent getPreferredFocusedComponent() {
     return myRoot;
@@ -299,7 +300,7 @@ public class ManifestEditor extends UserDataHolderBase implements FileEditor {
   }
 
   @Override
-  public void setState(@Nonnull FileEditorState state) {
+  public void setState(@jakarta.annotation.Nonnull FileEditorState state) {
   }
 
   @Override
@@ -328,25 +329,25 @@ public class ManifestEditor extends UserDataHolderBase implements FileEditor {
   public void removePropertyChangeListener(@Nonnull PropertyChangeListener listener) {
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public BackgroundEditorHighlighter getBackgroundHighlighter() {
     return null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public FileEditorLocation getCurrentLocation() {
     return null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public StructureViewBuilder getStructureViewBuilder() {
     return null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public VirtualFile getFile() {
     return myVirtualFile;

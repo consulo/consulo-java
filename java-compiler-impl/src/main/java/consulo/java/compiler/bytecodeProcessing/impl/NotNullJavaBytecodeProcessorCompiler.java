@@ -37,7 +37,7 @@ import consulo.java.compiler.JavaCompilerUtil;
 import consulo.java.compiler.bytecodeProcessing.JavaBytecodeProcessor;
 import consulo.internal.org.objectweb.asm.ClassWriter;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 

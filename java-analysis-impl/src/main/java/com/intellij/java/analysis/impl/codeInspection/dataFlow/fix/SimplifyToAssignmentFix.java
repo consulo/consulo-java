@@ -15,7 +15,7 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.fix;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -39,7 +39,7 @@ public class SimplifyToAssignmentFix implements LocalQuickFix
 		return InspectionsBundle.message("inspection.data.flow.simplify.to.assignment.quickfix.name");
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -47,7 +47,7 @@ public class SimplifyToAssignmentFix implements LocalQuickFix
 	}
 
 	@Override
-	public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
+	public void applyFix(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull ProblemDescriptor descriptor)
 	{
 		final PsiElement psiElement = descriptor.getPsiElement();
 		if(psiElement == null)

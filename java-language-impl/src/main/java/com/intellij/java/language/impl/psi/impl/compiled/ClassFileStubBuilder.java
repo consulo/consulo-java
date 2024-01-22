@@ -28,9 +28,9 @@ import consulo.language.psi.stub.StubElement;
 import consulo.logging.Logger;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
+import jakarta.annotation.Nonnull;
 import jakarta.inject.Inject;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -59,12 +59,12 @@ public class ClassFileStubBuilder implements BinaryFileStubBuilder {
   }
 
   @Override
-  public boolean acceptsFile(@Nonnull VirtualFile file) {
+  public boolean acceptsFile(@jakarta.annotation.Nonnull VirtualFile file) {
     return true;
   }
 
   @Override
-  public StubElement buildStubTree(@Nonnull FileContent fileContent) {
+  public StubElement buildStubTree(@jakarta.annotation.Nonnull FileContent fileContent) {
     VirtualFile file = fileContent.getFile();
     byte[] content = fileContent.getContent();
 

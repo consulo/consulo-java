@@ -40,7 +40,6 @@ import consulo.java.jam.util.JamCommonService;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.PlatformDataKeys;
 import consulo.language.editor.util.PsiUtilBase;
-import consulo.language.impl.ast.Factory;
 import consulo.language.pom.PomTarget;
 import consulo.language.pom.PomTargetPsiElement;
 import consulo.language.psi.*;
@@ -72,8 +71,8 @@ import consulo.xml.psi.xml.XmlTag;
 import consulo.xml.util.xml.*;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;
 import java.util.*;
@@ -116,7 +115,7 @@ public class JamCommonUtil {
     return null;
   }
 
-  public static boolean isSuperClass(@Nullable final PsiClass firstClass, final String superClassQName) {
+  public static boolean isSuperClass(@jakarta.annotation.Nullable final PsiClass firstClass, final String superClassQName) {
     return !processSuperClassList(firstClass, new SmartList<PsiClass>(), new Processor<PsiClass>() {
       public boolean process(final PsiClass superClass) {
         return !Comparing.equal(superClass.getQualifiedName(), superClassQName);
@@ -177,7 +176,7 @@ public class JamCommonUtil {
     return null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static String getElementName(final CommonModelElement element) {
     return ElementPresentationManager.getElementName(element);
   }
@@ -186,7 +185,7 @@ public class JamCommonUtil {
     return ElementPresentationManager.getTypeNameForObject(element);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static Module findModuleForPsiElement(final PsiElement element) {
     PsiFile psiFile = element.getContainingFile();
     if (psiFile == null) {
@@ -483,7 +482,7 @@ public class JamCommonUtil {
     return annos == null || annos.isEmpty() ? null : annos.get(0).getAnnoName();
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static Object getModelObject(PsiElement element) {
     if (!(element instanceof PomTargetPsiElement)) {
       return null;

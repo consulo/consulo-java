@@ -21,7 +21,7 @@ import consulo.fileTemplate.FileTemplate;
 import consulo.language.psi.PsiDirectory;
 import consulo.util.collection.ArrayUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class JavaInternalTemplatesHandler extends JavaCreateFromTemplateHandler {

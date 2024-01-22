@@ -28,8 +28,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.search.IndexPatternBuilder;
 import consulo.xml.psi.xml.XmlElementType;
 import consulo.xml.psi.xml.XmlTokenType;
-
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author yole
@@ -49,7 +48,7 @@ public class JavaIndexPatternBuilder implements IndexPatternBuilder {
   }
 
   @Override
-  @Nullable
+  @jakarta.annotation.Nullable
   public TokenSet getCommentTokenSet(final PsiFile file) {
     if (file instanceof PsiJavaFile /*&& !(file instanceof JspFile)*/) {
       return TokenSet.orSet(StdTokenSets.COMMENT_BIT_SET, XML_COMMENT_BIT_SET, JavaDocTokenType.ALL_JAVADOC_TOKENS, XML_DATA_CHARS);

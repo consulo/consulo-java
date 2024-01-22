@@ -1,7 +1,7 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.Arrays;
 import java.util.Set;
@@ -14,7 +14,7 @@ final class Component
 	static final Component[] EMPTY_ARRAY = new Component[0];
 	@Nonnull
 	Value value;
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	final EKey[] ids;
 
 	Component(@Nonnull Value value, @Nonnull Set<EKey> ids)

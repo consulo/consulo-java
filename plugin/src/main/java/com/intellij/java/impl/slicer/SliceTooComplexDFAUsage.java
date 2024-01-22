@@ -25,23 +25,23 @@ import consulo.ui.style.StandardColors;
 import consulo.usage.TextChunk;
 import consulo.usage.UsagePresentation;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.awt.*;
 
 /**
  * User: cdr
  */
 public class SliceTooComplexDFAUsage extends SliceUsage {
-  public SliceTooComplexDFAUsage(@Nonnull PsiElement element, @Nonnull SliceUsage parent, @Nonnull PsiSubstitutor substitutor) {
+  public SliceTooComplexDFAUsage(@Nonnull PsiElement element, @Nonnull SliceUsage parent, @jakarta.annotation.Nonnull PsiSubstitutor substitutor) {
     super(element, parent, substitutor, 0, "");
   }
 
   @Override
-  public void processChildren(@Nonnull Processor<SliceUsage> processor) {
+  public void processChildren(@jakarta.annotation.Nonnull Processor<SliceUsage> processor) {
     // no children
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public UsagePresentation getPresentation() {
     final UsagePresentation presentation = super.getPresentation();

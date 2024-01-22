@@ -20,7 +20,7 @@ import consulo.language.editor.HighlightErrorFilter;
 import consulo.language.psi.PsiErrorElement;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import consulo.language.psi.util.PsiTreeUtil;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author yole

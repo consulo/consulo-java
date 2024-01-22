@@ -28,7 +28,7 @@ import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.psi.PsiElementVisitor;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NonFinalFieldInImmutableInspection extends BaseJavaLocalInspectionTool {
@@ -41,7 +41,7 @@ public class NonFinalFieldInImmutableInspection extends BaseJavaLocalInspectionT
 
   @Override
   @Nls
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return "Non-final field in @Immutable class";
   }
@@ -55,7 +55,7 @@ public class NonFinalFieldInImmutableInspection extends BaseJavaLocalInspectionT
 
   @Override
   @Nonnull
-  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
+  public PsiElementVisitor buildVisitorImpl(@jakarta.annotation.Nonnull final ProblemsHolder holder,
                                             boolean isOnTheFly,
                                             LocalInspectionToolSession session,
                                             Object state) {

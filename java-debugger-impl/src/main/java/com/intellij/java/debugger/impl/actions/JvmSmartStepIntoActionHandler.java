@@ -14,8 +14,9 @@ import consulo.util.collection.ContainerUtil;
 import consulo.execution.debug.XSourcePosition;
 import consulo.ui.image.Image;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.List;
 
 public class JvmSmartStepIntoActionHandler extends XSmartStepIntoHandler<JvmSmartStepIntoActionHandler.JvmSmartStepIntoVariant>
@@ -49,7 +50,7 @@ public class JvmSmartStepIntoActionHandler extends XSmartStepIntoHandler<JvmSmar
 	}
 
 	@Override
-	public void startStepInto(@Nonnull JvmSmartStepIntoVariant variant, @Nullable XSuspendContext context)
+	public void startStepInto(@jakarta.annotation.Nonnull JvmSmartStepIntoVariant variant, @Nullable XSuspendContext context)
 	{
 		mySession.stepInto(true, variant.myHandler.createMethodFilter(variant.myTarget));
 	}
@@ -71,14 +72,14 @@ public class JvmSmartStepIntoActionHandler extends XSmartStepIntoHandler<JvmSmar
 			return myTarget.getPresentation();
 		}
 
-		@Nullable
+		@jakarta.annotation.Nullable
 		@Override
 		public Image getIcon()
 		{
 			return myTarget.getIcon();
 		}
 
-		@Nullable
+		@jakarta.annotation.Nullable
 		//@Override
 		public TextRange getHighlightRange()
 		{

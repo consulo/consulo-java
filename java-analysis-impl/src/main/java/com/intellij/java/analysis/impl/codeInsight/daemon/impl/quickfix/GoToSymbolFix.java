@@ -25,13 +25,13 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import org.jetbrains.annotations.Nls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class GoToSymbolFix implements SyntheticIntentionAction {
   private final SmartPsiElementPointer<NavigatablePsiElement> myPointer;
   private final String myMessage;
 
-  public GoToSymbolFix(@Nonnull NavigatablePsiElement symbol, @Nonnull @Nls String message) {
+  public GoToSymbolFix(@jakarta.annotation.Nonnull NavigatablePsiElement symbol, @Nonnull @Nls String message) {
     myPointer = SmartPointerManager.getInstance(symbol.getProject()).createSmartPsiElementPointer(symbol);
     myMessage = message;
   }

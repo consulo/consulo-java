@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.psi.infos;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiSubstitutor;
@@ -30,7 +30,7 @@ import consulo.language.psi.PsiElement;
  */
 public class ClassCandidateInfo extends CandidateInfo
 {
-	public ClassCandidateInfo(@Nonnull PsiElement candidate, @Nonnull PsiSubstitutor substitutor, boolean accessProblem, PsiElement currFileContext)
+	public ClassCandidateInfo(@jakarta.annotation.Nonnull PsiElement candidate, @Nonnull PsiSubstitutor substitutor, boolean accessProblem, PsiElement currFileContext)
 	{
 		super(candidate, substitutor, accessProblem, false, currFileContext);
 	}

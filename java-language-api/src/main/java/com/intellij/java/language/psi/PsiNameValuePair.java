@@ -17,10 +17,10 @@ package com.intellij.java.language.psi;
 
 import consulo.util.collection.ArrayFactory;
 import consulo.language.psi.PsiElement;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * Represents a single element-value pair of an annotation parameter list.
@@ -36,7 +36,7 @@ public interface PsiNameValuePair extends PsiElement {
   PsiNameValuePair[] EMPTY_ARRAY = new PsiNameValuePair[0];
 
   ArrayFactory<PsiNameValuePair> ARRAY_FACTORY = new ArrayFactory<PsiNameValuePair>() {
-    @Nonnull
+    @jakarta.annotation.Nonnull
     @Override
     public PsiNameValuePair[] create(final int count) {
       return count == 0 ? EMPTY_ARRAY : new PsiNameValuePair[count];
@@ -71,6 +71,6 @@ public interface PsiNameValuePair extends PsiElement {
   @Nullable
   PsiAnnotationMemberValue getValue();
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   PsiAnnotationMemberValue setValue(@Nonnull PsiAnnotationMemberValue newValue);
 }

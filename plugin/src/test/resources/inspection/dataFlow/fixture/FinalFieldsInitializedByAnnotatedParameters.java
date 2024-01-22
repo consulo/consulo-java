@@ -1,4 +1,5 @@
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.lang.Object;
 
@@ -7,7 +8,7 @@ public class Doo {
   private final Object myB;
   private final Object myC;
 
-  public Doo(@javax.annotation.Nullable Object myA, @Nonnull Object myB, Object c) {
+  public Doo(@Nullable Object myA, @Nonnull Object myB, Object c) {
     this.myA = myA;
     this.myB = myB;
     myC = c;

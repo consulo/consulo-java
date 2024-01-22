@@ -27,21 +27,20 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nonnull;
 
 @ExtensionImpl
 public class SetupCallsSuperSetupInspection extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getID() {
     return "SetUpDoesntCallSuperSetUp";
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "setup.calls.super.setup.display.name");
@@ -56,7 +55,7 @@ public class SetupCallsSuperSetupInspection extends BaseInspection {
 
   private static class AddSuperSetUpCall extends InspectionGadgetsFix {
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "setup.calls.super.setup.add.quickfix");
@@ -98,7 +97,7 @@ public class SetupCallsSuperSetupInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
       //note: no call to super;
       @NonNls final String methodName = method.getName();
       if (!"setUp".equals(methodName)) {

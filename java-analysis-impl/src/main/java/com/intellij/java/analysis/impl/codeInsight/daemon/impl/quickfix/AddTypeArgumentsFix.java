@@ -24,7 +24,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class AddTypeArgumentsFix extends MethodArgumentFix {
   private static final Logger LOG = Logger.getInstance(AddTypeArgumentsFix.class);

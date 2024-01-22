@@ -24,8 +24,8 @@ import consulo.language.sem.SemRegistrar;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.function.PairConsumer;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -57,7 +57,7 @@ public class JamMemberArchetype<Psi extends PsiModifierListOwner, Jam extends Ja
   }
 
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public JamAnnotationMeta findAnnotationMeta(@Nonnull PsiAnnotation annotation) {
     final String qname = annotation.getQualifiedName();
     for (final JamAnnotationMeta anno : myAnnos) {
@@ -112,7 +112,7 @@ public class JamMemberArchetype<Psi extends PsiModifierListOwner, Jam extends Ja
     return list;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public JamMemberMeta findChildMeta(@Nonnull PsiModifierListOwner member) {
     for (final JamChildrenQuery<?> child : myChildren) {
       final JamMemberMeta meta = ((JamChildrenQuery)child).getMeta(member);

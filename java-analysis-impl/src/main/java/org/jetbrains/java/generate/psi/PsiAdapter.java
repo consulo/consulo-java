@@ -31,9 +31,9 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.*;
 
 import static consulo.java.language.module.util.JavaClassNames.*;
@@ -577,7 +577,7 @@ public class PsiAdapter {
    * @param clazz the class.
    * @return the method if it exists, null if not.
    */
-  @Nullable
+  @jakarta.annotation.Nullable
   public static PsiMethod findHashCodeMethod(PsiClass clazz) {
     PsiMethod[] methods = clazz.findMethodsByName("hashCode", false);
 

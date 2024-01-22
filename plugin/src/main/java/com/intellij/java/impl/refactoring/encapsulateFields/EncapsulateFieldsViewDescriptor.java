@@ -21,7 +21,7 @@ import com.intellij.java.language.psi.PsiField;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.usage.UsageViewBundle;
 import consulo.usage.UsageViewDescriptor;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 class EncapsulateFieldsViewDescriptor implements UsageViewDescriptor {
   private final PsiField[] myFields;

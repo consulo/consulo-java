@@ -27,9 +27,8 @@ import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * User: anna
@@ -42,7 +41,7 @@ public class ConvertDoubleToFloatFix implements SyntheticIntentionAction {
     myExpression = expression;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getText() {
     return "Convert '" + myExpression.getText() + "' to float";
@@ -61,7 +60,7 @@ public class ConvertDoubleToFloatFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     myExpression.replace(createFloatingPointExpression(project));
   }
 
@@ -79,8 +78,8 @@ public class ConvertDoubleToFloatFix implements SyntheticIntentionAction {
     return true;
   }
 
-  public static void registerIntentions(@Nonnull JavaResolveResult[] candidates,
-                                        @Nonnull PsiExpressionList list,
+  public static void registerIntentions(@jakarta.annotation.Nonnull JavaResolveResult[] candidates,
+                                        @jakarta.annotation.Nonnull PsiExpressionList list,
                                         @Nullable HighlightInfo highlightInfo,
                                         TextRange fixRange) {
     if (candidates.length == 0) return;
@@ -91,10 +90,10 @@ public class ConvertDoubleToFloatFix implements SyntheticIntentionAction {
   }
 
   private static void registerIntention(@Nonnull PsiExpression[] expressions,
-                                        @Nullable HighlightInfo highlightInfo,
+                                        @jakarta.annotation.Nullable HighlightInfo highlightInfo,
                                         TextRange fixRange,
-                                        @Nonnull JavaResolveResult candidate,
-                                        @Nonnull PsiElement context) {
+                                        @jakarta.annotation.Nonnull JavaResolveResult candidate,
+                                        @jakarta.annotation.Nonnull PsiElement context) {
     if (!candidate.isStaticsScopeCorrect()) return;
     PsiMethod method = (PsiMethod) candidate.getElement();
     if (method != null && context.getManager().isInProject(method)) {

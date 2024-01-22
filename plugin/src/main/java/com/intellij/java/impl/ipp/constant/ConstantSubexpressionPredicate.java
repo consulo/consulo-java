@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ipp.constant;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiElementFactory;

@@ -24,8 +24,8 @@ import com.intellij.java.language.psi.*;
 import consulo.language.psi.PsiElement;
 import consulo.util.lang.ObjectUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -42,20 +42,20 @@ public class MethodCallInstruction extends ExpressionPushingInstruction<PsiExpre
   @Nonnull
   MutationSignature myMutation;
   private final
-  @Nonnull
+  @jakarta.annotation.Nonnull
   PsiElement myContext; // PsiCall or PsiMethodReferenceExpression
   private final
-  @Nullable
+  @jakarta.annotation.Nullable
   PsiMethod myTargetMethod;
   private final List<MethodContract> myContracts;
   private final
-  @Nullable
+  @jakarta.annotation.Nullable
   DfaValue myPrecalculatedReturnValue;
   private final boolean myVarArgCall;
   private final Nullability[] myArgRequiredNullability;
   private final Nullability myReturnNullability;
 
-  public MethodCallInstruction(@Nonnull PsiMethodReferenceExpression reference, @Nonnull List<? extends MethodContract> contracts) {
+  public MethodCallInstruction(@Nonnull PsiMethodReferenceExpression reference, @jakarta.annotation.Nonnull List<? extends MethodContract> contracts) {
     super(reference);
     myContext = reference;
     JavaResolveResult resolveResult = reference.advancedResolve(false);
@@ -85,7 +85,7 @@ public class MethodCallInstruction extends ExpressionPushingInstruction<PsiExpre
     myMutation = MutationSignature.fromMethod(myTargetMethod);
   }
 
-  public MethodCallInstruction(@Nonnull PsiCall call, @Nullable DfaValue precalculatedReturnValue, List<? extends MethodContract> contracts) {
+  public MethodCallInstruction(@jakarta.annotation.Nonnull PsiCall call, @jakarta.annotation.Nullable DfaValue precalculatedReturnValue, List<? extends MethodContract> contracts) {
     super(ObjectUtil.tryCast(call, PsiExpression.class));
     myContext = call;
     myContracts = Collections.unmodifiableList(contracts);
@@ -176,7 +176,7 @@ public class MethodCallInstruction extends ExpressionPushingInstruction<PsiExpre
   }
 
   public
-  @Nullable
+  @jakarta.annotation.Nullable
   PsiType getResultType() {
     return myType;
   }
@@ -186,13 +186,13 @@ public class MethodCallInstruction extends ExpressionPushingInstruction<PsiExpre
   }
 
   public
-  @Nonnull
+  @jakarta.annotation.Nonnull
   MutationSignature getMutationSignature() {
     return myMutation;
   }
 
   public
-  @Nullable
+  @jakarta.annotation.Nullable
   PsiMethod getTargetMethod() {
     return myTargetMethod;
   }
@@ -216,7 +216,7 @@ public class MethodCallInstruction extends ExpressionPushingInstruction<PsiExpre
     return visitor.visitMethodCall(this, runner, stateBefore);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public PsiCall getCallExpression() {
     return ObjectUtil.tryCast(myContext, PsiCall.class);
   }
@@ -228,13 +228,13 @@ public class MethodCallInstruction extends ExpressionPushingInstruction<PsiExpre
   }
 
   public
-  @Nullable
+  @jakarta.annotation.Nullable
   DfaValue getPrecalculatedReturnValue() {
     return myPrecalculatedReturnValue;
   }
 
   public
-  @Nonnull
+  @jakarta.annotation.Nonnull
   Nullability getReturnNullability() {
     return myReturnNullability;
   }

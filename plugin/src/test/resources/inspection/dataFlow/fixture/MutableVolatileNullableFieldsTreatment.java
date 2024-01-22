@@ -1,7 +1,8 @@
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 class Foo {
-  @Nullable volatile Object data;
+  @Nullable
+  volatile Object data;
 
   void checkNotNullAndUse(Foo f) {
     if (f.data != null) {

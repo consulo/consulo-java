@@ -13,9 +13,9 @@ import consulo.util.collection.MultiMap;
 import consulo.internal.com.sun.jdi.*;
 import consulo.internal.org.objectweb.asm.Type;
 import consulo.internal.org.objectweb.asm.*;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -103,7 +103,7 @@ public class MethodBytecodeUtil
 		}, 0);
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	private static Attribute createAttribute(String name, ThrowableConsumer<DataOutputStream, IOException> generator)
 	{
 		BufferExposingByteArrayOutputStream bytes = new BufferExposingByteArrayOutputStream();
@@ -245,8 +245,8 @@ public class MethodBytecodeUtil
 		}
 	}
 
-	@Nullable
-	public static Method getLambdaMethod(ReferenceType clsType, @Nonnull VirtualMachineProxy vm)
+	@jakarta.annotation.Nullable
+	public static Method getLambdaMethod(ReferenceType clsType, @jakarta.annotation.Nonnull VirtualMachineProxy vm)
 	{
 		Ref<Method> methodRef = Ref.create();
 		if(DebuggerUtilsEx.isLambdaClassName(clsType.name()))
@@ -275,7 +275,7 @@ public class MethodBytecodeUtil
 		return methodRef.get();
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	public static Method getBridgeTargetMethod(Method method, @Nonnull VirtualMachineProxy vm)
 	{
 		Ref<Method> methodRef = Ref.create();
@@ -315,7 +315,7 @@ public class MethodBytecodeUtil
 		return methodRef.get();
 	}
 
-	public static List<Location> removeSameLineLocations(@Nonnull List<Location> locations)
+	public static List<Location> removeSameLineLocations(@jakarta.annotation.Nonnull List<Location> locations)
 	{
 		if(locations.size() < 2)
 		{
@@ -334,7 +334,7 @@ public class MethodBytecodeUtil
 		return res;
 	}
 
-	private static Collection<Location> removeMethodSameLineLocations(@Nonnull Method method, @Nonnull List<Location> locations)
+	private static Collection<Location> removeMethodSameLineLocations(@jakarta.annotation.Nonnull Method method, @Nonnull List<Location> locations)
 	{
 		int locationsSize = locations.size();
 		if(locationsSize < 2)

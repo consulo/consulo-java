@@ -36,7 +36,7 @@ import consulo.ui.ex.awt.JBCheckBox;
 import consulo.ui.ex.awt.LabeledComponent;
 import consulo.ui.ex.awt.UIUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 
 public class ApplicationConfigurable extends SettingsEditor<ApplicationConfiguration> {

@@ -20,7 +20,7 @@ import consulo.project.ui.view.tree.AbstractTreeNode;
 import consulo.application.progress.ProgressIndicator;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.util.Collection;
 import java.util.Collections;
@@ -33,7 +33,7 @@ public class SliceRootNode extends SliceNode
 {
 	private final SliceUsage myRootUsage;
 
-	public SliceRootNode(@Nonnull Project project, @Nonnull DuplicateMap targetEqualUsages, final SliceUsage rootUsage)
+	public SliceRootNode(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull DuplicateMap targetEqualUsages, final SliceUsage rootUsage)
 	{
 		super(project, SliceUsage.createRootUsage(rootUsage.getElement().getContainingFile(), rootUsage.params), targetEqualUsages);
 		myRootUsage = rootUsage;
@@ -45,7 +45,7 @@ public class SliceRootNode extends SliceNode
 		myCachedChildren = Collections.singletonList(node);
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	@Override
 	SliceRootNode copy()
 	{
@@ -57,7 +57,7 @@ public class SliceRootNode extends SliceNode
 	}
 
 	@Override
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	public Collection<? extends AbstractTreeNode<?>> getChildren()
 	{
 		if(myCachedChildren == null)
@@ -69,7 +69,7 @@ public class SliceRootNode extends SliceNode
 
 	@Nonnull
 	@Override
-	public List<? extends AbstractTreeNode> getChildrenUnderProgress(@Nonnull ProgressIndicator progress)
+	public List<? extends AbstractTreeNode> getChildrenUnderProgress(@jakarta.annotation.Nonnull ProgressIndicator progress)
 	{
 		return (List<? extends AbstractTreeNode>) getChildren();
 	}
@@ -92,8 +92,8 @@ public class SliceRootNode extends SliceNode
 
 
 	@Override
-	public void customizeCellRenderer(@Nonnull SliceUsageCellRenderer renderer,
-			@Nonnull JTree tree,
+	public void customizeCellRenderer(@jakarta.annotation.Nonnull SliceUsageCellRenderer renderer,
+			@jakarta.annotation.Nonnull JTree tree,
 			Object value,
 			boolean selected,
 			boolean expanded,

@@ -23,8 +23,9 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,7 +51,7 @@ public class TypeAnnotationContainer {
    * @return type annotation container for array element
    * (assuming that this type annotation container is used for the array type)
    */
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public TypeAnnotationContainer forArrayElement() {
     if (isEmpty()) {
       return this;
@@ -63,7 +64,7 @@ public class TypeAnnotationContainer {
    * @return type annotation container for enclosing class
    * (assuming that this type annotation container is used for the inner class)
    */
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public TypeAnnotationContainer forEnclosingClass() {
     if (isEmpty()) {
       return this;
@@ -76,7 +77,7 @@ public class TypeAnnotationContainer {
    * @return type annotation container for wildcard bound
    * (assuming that this type annotation container is used for the bounded wildcard type)
    */
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public TypeAnnotationContainer forBound() {
     if (isEmpty()) {
       return this;
@@ -90,7 +91,7 @@ public class TypeAnnotationContainer {
    * @return type annotation container for given type argument
    * (assuming that this type annotation container is used for class type with type arguments)
    */
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public TypeAnnotationContainer forTypeArgument(int index) {
     if (isEmpty()) {
       return this;
@@ -116,7 +117,7 @@ public class TypeAnnotationContainer {
     }
     return new TypeAnnotationProvider() {
       @Override
-      @Nonnull
+      @jakarta.annotation.Nonnull
       public PsiAnnotation[] getAnnotations() {
         List<PsiAnnotation> result = new ArrayList<>();
         for (TypeAnnotationEntry entry : myList) {
@@ -171,7 +172,7 @@ public class TypeAnnotationContainer {
    * @param container  a container to serialize
    * @throws IOException if the stream throws
    */
-  public static void writeTypeAnnotations(@Nonnull StubOutputStream dataStream, @Nonnull TypeAnnotationContainer container)
+  public static void writeTypeAnnotations(@jakarta.annotation.Nonnull StubOutputStream dataStream, @jakarta.annotation.Nonnull TypeAnnotationContainer container)
       throws IOException {
     dataStream.writeShort(container.myList.size());
     for (TypeAnnotationEntry entry : container.myList) {
@@ -189,8 +190,8 @@ public class TypeAnnotationContainer {
    * @throws IOException if the stream throws
    */
   public static
-  @Nonnull
-  TypeAnnotationContainer readTypeAnnotations(@Nonnull StubInputStream dataStream) throws IOException {
+  @jakarta.annotation.Nonnull
+  TypeAnnotationContainer readTypeAnnotations(@jakarta.annotation.Nonnull StubInputStream dataStream) throws IOException {
     short count = dataStream.readShort();
     TypeAnnotationEntry[] entries = new TypeAnnotationEntry[count];
     for (int i = 0; i < count; i++) {
@@ -215,17 +216,17 @@ public class TypeAnnotationContainer {
     public static final byte TYPE_ARGUMENT = 3;
 
     private final
-    @Nonnull
+    @jakarta.annotation.Nonnull
     ArrayList<TypeAnnotationEntry> myList = new ArrayList<>();
     protected final
-    @Nonnull
+    @jakarta.annotation.Nonnull
     TypeInfo myTypeInfo;
 
-    public Collector(@Nonnull TypeInfo info) {
+    public Collector(@jakarta.annotation.Nonnull TypeInfo info) {
       myTypeInfo = info;
     }
 
-    public void add(@Nonnull byte[] path, @Nonnull String text) {
+    public void add(@jakarta.annotation.Nonnull byte[] path, @jakarta.annotation.Nonnull String text) {
       myList.add(new TypeAnnotationEntry(path, text));
     }
 
@@ -250,7 +251,7 @@ public class TypeAnnotationContainer {
     @Nonnull
     String myText;
 
-    private TypeAnnotationEntry(@Nonnull byte[] path, @Nonnull String text) {
+    private TypeAnnotationEntry(@jakarta.annotation.Nonnull byte[] path, @jakarta.annotation.Nonnull String text) {
       myPath = path;
       myText = text;
     }
@@ -324,45 +325,45 @@ public class TypeAnnotationContainer {
     }
 
     @Override
-    @Nullable
+    @jakarta.annotation.Nullable
     public String getQualifiedName() {
       return getNameReferenceElement().getCanonicalText();
     }
 
     @Override
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public PsiJavaCodeReferenceElement getNameReferenceElement() {
       return myReferenceElement.getValue();
     }
 
     @Override
     public
-    @Nullable
+    @jakarta.annotation.Nullable
     PsiAnnotationMemberValue findAttributeValue(@Nullable String attributeName) {
       return PsiImplUtil.findAttributeValue(this, attributeName);
     }
 
     @Override
     public
-    @Nullable
-    PsiAnnotationMemberValue findDeclaredAttributeValue(@Nullable String attributeName) {
+    @jakarta.annotation.Nullable
+    PsiAnnotationMemberValue findDeclaredAttributeValue(@jakarta.annotation.Nullable String attributeName) {
       return PsiImplUtil.findDeclaredAttributeValue(this, attributeName);
     }
 
     @Override
-    public <T extends PsiAnnotationMemberValue> T setDeclaredAttributeValue(@Nullable String attributeName, @Nullable T value) {
+    public <T extends PsiAnnotationMemberValue> T setDeclaredAttributeValue(@jakarta.annotation.Nullable String attributeName, @jakarta.annotation.Nullable T value) {
       throw new UnsupportedOperationException();
     }
 
     @Override
     public
-    @Nullable
+    @jakarta.annotation.Nullable
     PsiAnnotationOwner getOwner() {
       return ObjectUtil.tryCast(myParent, PsiAnnotationOwner.class);
     }
 
     @Override
-    public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+    public void appendMirrorText(int indentLevel, @jakarta.annotation.Nonnull StringBuilder buffer) {
       buffer.append(myText);
     }
 
@@ -372,7 +373,7 @@ public class TypeAnnotationContainer {
     }
 
     @Override
-    public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
+    public void setMirror(@jakarta.annotation.Nonnull TreeElement element) throws InvalidMirrorException {
       setMirrorCheckingType(element, null);
       PsiAnnotation mirror = SourceTreeToPsiMap.treeToPsiNotNull(element);
       setMirror(getNameReferenceElement(), mirror.getNameReferenceElement());
@@ -394,7 +395,7 @@ public class TypeAnnotationContainer {
     }
 
     @Override
-    public void accept(@Nonnull PsiElementVisitor visitor) {
+    public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
       if (visitor instanceof JavaElementVisitor) {
         ((JavaElementVisitor) visitor).visitAnnotation(this);
       } else {
@@ -402,7 +403,7 @@ public class TypeAnnotationContainer {
       }
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     @Override
     public PsiMetaData getMetaData() {
       return MetaDataService.getInstance().getMeta(this);

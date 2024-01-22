@@ -21,7 +21,7 @@ package com.intellij.java.language.impl.psi.impl.java.stubs;
 
 import com.intellij.java.language.psi.PsiTypeParameter;
 import consulo.language.psi.stub.NamedStub;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import java.util.List;
 

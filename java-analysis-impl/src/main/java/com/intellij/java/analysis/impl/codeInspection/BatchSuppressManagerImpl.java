@@ -25,8 +25,8 @@ import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiModifierListOwner;
 import jakarta.inject.Singleton;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Collection;
 
 @Singleton
@@ -52,7 +52,7 @@ public class BatchSuppressManagerImpl implements BatchSuppressManager {
   }
 
   @Override
-  @Nullable
+  @jakarta.annotation.Nullable
   public PsiElement getElementMemberSuppressedIn(@Nonnull final PsiDocCommentOwner owner, final String inspectionToolID) {
     return JavaSuppressionUtil.getElementMemberSuppressedIn(owner, inspectionToolID);
   }
@@ -64,7 +64,7 @@ public class BatchSuppressManagerImpl implements BatchSuppressManager {
   }
 
   @Override
-  @Nullable
+  @jakarta.annotation.Nullable
   public PsiElement getDocCommentToolSuppressedIn(@Nonnull final PsiDocCommentOwner owner, final String inspectionToolID) {
     return JavaSuppressionUtil.getDocCommentToolSuppressedIn(owner, inspectionToolID);
   }

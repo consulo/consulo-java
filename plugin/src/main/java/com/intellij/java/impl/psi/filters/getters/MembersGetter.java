@@ -35,9 +35,9 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import consulo.util.dataholder.Key;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -85,7 +85,7 @@ public abstract class MembersGetter {
     return true;
   }
 
-  public void processMembers(final Consumer<LookupElement> results, @Nullable final PsiClass where, final boolean acceptMethods, final boolean searchInheritors) {
+  public void processMembers(final Consumer<LookupElement> results, @jakarta.annotation.Nullable final PsiClass where, final boolean acceptMethods, final boolean searchInheritors) {
     if (where == null || isPrimitiveClass(where)) {
       return;
     }
@@ -159,9 +159,9 @@ public abstract class MembersGetter {
     }
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   protected abstract LookupElement createFieldElement(PsiField field);
 
-  @Nullable
+  @jakarta.annotation.Nullable
   protected abstract LookupElement createMethodElement(PsiMethod method);
 }

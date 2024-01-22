@@ -69,8 +69,8 @@ import consulo.util.lang.Comparing;
 import consulo.util.lang.Pair;
 import consulo.util.lang.TimeoutUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import javax.swing.event.HyperlinkEvent;
 import java.util.Collection;
 import java.util.List;
@@ -243,7 +243,7 @@ public class DebuggerSession implements AbstractDebuggerSession
 		}
 	}
 
-	static DebuggerSession create(String sessionName, @Nonnull final DebugProcessImpl debugProcess, DebugEnvironment environment) throws ExecutionException
+	static DebuggerSession create(String sessionName, @jakarta.annotation.Nonnull final DebugProcessImpl debugProcess, DebugEnvironment environment) throws ExecutionException
 	{
 		DebuggerSession session = new DebuggerSession(sessionName, debugProcess, environment);
 		try
@@ -398,7 +398,7 @@ public class DebuggerSession implements AbstractDebuggerSession
 		stepOver(ignoreBreakpoints, StepRequest.STEP_LINE);
 	}
 
-	public void stepInto(final boolean ignoreFilters, final @Nullable MethodFilter smartStepFilter, int stepSize)
+	public void stepInto(final boolean ignoreFilters, final @jakarta.annotation.Nullable MethodFilter smartStepFilter, int stepSize)
 	{
 		final SuspendContextImpl suspendContext = getSuspendContext();
 		DebugProcessImpl.ResumeCommand cmd = null;
@@ -540,7 +540,7 @@ public class DebuggerSession implements AbstractDebuggerSession
 		return getContextManager().getContext().getSuspendContext();
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	private ExecutionResult attach(DebugEnvironment environment) throws ExecutionException
 	{
 		RemoteConnection remoteConnection = environment.getRemoteConnection();
@@ -595,7 +595,7 @@ public class DebuggerSession implements AbstractDebuggerSession
 								".breakpoint.reached.in.thread.switch"), NotificationType.INFORMATION, new NotificationListener()
 						{
 							@Override
-							public void hyperlinkUpdate(@Nonnull Notification notification, @Nonnull HyperlinkEvent event)
+							public void hyperlinkUpdate(@Nonnull Notification notification, @jakarta.annotation.Nonnull HyperlinkEvent event)
 							{
 								if(event.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
 								{

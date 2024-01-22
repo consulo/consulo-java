@@ -36,9 +36,9 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,14 +47,14 @@ public class AccessStaticViaInstanceFix extends LocalQuickFixAndIntentionActionO
   private final boolean myOnTheFly;
   private final String myText;
 
-  public AccessStaticViaInstanceFix(@Nonnull PsiReferenceExpression expression, @Nonnull JavaResolveResult result, boolean onTheFly) {
+  public AccessStaticViaInstanceFix(@jakarta.annotation.Nonnull PsiReferenceExpression expression, @Nonnull JavaResolveResult result, boolean onTheFly) {
     super(expression);
     myOnTheFly = onTheFly;
     PsiMember member = (PsiMember)result.getElement();
     myText = calcText(member, result.getSubstitutor());
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public String getText() {
     return myText;
@@ -70,17 +70,17 @@ public class AccessStaticViaInstanceFix extends LocalQuickFixAndIntentionActionO
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("access.static.via.class.reference.family");
   }
 
   @Override
-  public void invoke(@Nonnull Project project,
-                     @Nonnull PsiFile file,
+  public void invoke(@jakarta.annotation.Nonnull Project project,
+                     @jakarta.annotation.Nonnull PsiFile file,
                      @Nullable Editor editor,
-                     @Nonnull PsiElement startElement,
-                     @Nonnull PsiElement endElement) {
+                     @jakarta.annotation.Nonnull PsiElement startElement,
+                     @jakarta.annotation.Nonnull PsiElement endElement) {
     final PsiReferenceExpression myExpression = (PsiReferenceExpression)startElement;
 
     if (!myExpression.isValid()) return;

@@ -1,32 +1,17 @@
-/*
- * Copyright 2000-2017 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2022 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.intellij.java.language.psi;
 
 import com.intellij.java.language.jvm.JvmParameter;
-import consulo.language.psi.NavigatablePsiElement;
 import consulo.language.psi.PsiElement;
+import consulo.navigation.NavigationItem;
 import consulo.util.collection.ArrayFactory;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * Represents the parameter of a Java method, foreach (enhanced for) statement or catch block.
  */
-public interface PsiParameter extends PsiVariable, JvmParameter, PsiJvmModifiersOwner, NavigatablePsiElement {
+public interface PsiParameter extends PsiVariable, JvmParameter, PsiJvmModifiersOwner, NavigationItem {
   /**
    * The empty array of PSI parameters which can be reused to avoid unnecessary allocations.
    */
@@ -57,9 +42,20 @@ public interface PsiParameter extends PsiVariable, JvmParameter, PsiJvmModifiers
   @Nullable
   PsiTypeElement getTypeElement();
 
-  /* This explicit declaration is required to force javac generate bridge method 'JvmType getType()'; without it calling
-  JvmParameter#getType() method on instances which weren't recompiled against the new API will cause AbstractMethodError. */
-  @Nonnull
+  // This explicit declaration is required to force javac to generate a bridge method 'JvmType getType()'; without it calling
+  // JvmParameter#getType() method on instances which weren't recompiled against the new API will cause AbstractMethodError.
   @Override
+  @Nonnull
   PsiType getType();
+
+  // binary compatibility
+  @Override
+  @Nonnull
+  default PsiAnnotation [] getAnnotations() {
+    return PsiJvmModifiersOwner.super.getAnnotations();
+  }
+
+  @Override
+  @Nonnull
+  String getName();
 }

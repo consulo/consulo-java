@@ -19,10 +19,10 @@ import com.intellij.java.language.psi.*;
 import consulo.language.psi.PsiChildLink;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.lang.ObjectUtil;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author peter
@@ -30,11 +30,11 @@ import javax.annotation.Nullable;
 public class AnnotationAttributeChildLink extends PsiChildLink<PsiAnnotation, PsiAnnotationMemberValue> {
   private final String myAttributeName;
 
-  public AnnotationAttributeChildLink(@Nonnull @NonNls String attributeName) {
+  public AnnotationAttributeChildLink(@jakarta.annotation.Nonnull @NonNls String attributeName) {
     myAttributeName = attributeName;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getAttributeName() {
     return myAttributeName;
   }
@@ -49,7 +49,7 @@ public class AnnotationAttributeChildLink extends PsiChildLink<PsiAnnotation, Ps
 
   @Override
   @Nonnull
-  public PsiAnnotationMemberValue createChild(@Nonnull PsiAnnotation psiAnnotation) throws IncorrectOperationException {
+  public PsiAnnotationMemberValue createChild(@jakarta.annotation.Nonnull PsiAnnotation psiAnnotation) throws IncorrectOperationException {
     psiAnnotation.getText();
     final PsiExpression nullValue = JavaPsiFacade.getElementFactory(psiAnnotation.getProject()).createExpressionFromText(PsiKeyword.NULL, null);
     psiAnnotation.setDeclaredAttributeValue(myAttributeName, nullValue);

@@ -25,7 +25,7 @@
 
 package org.osmorc.manifest.lang.psi.impl;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.language.ast.ASTNode;
 import consulo.language.psi.stub.IStubElementType;
@@ -52,7 +52,7 @@ public class ClauseImpl extends ManifestElementBase<ClauseStub> implements Claus
     return findChildByClass(HeaderValuePart.class);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Directive[] getDirectives() {
     return findChildrenByClass(Directive.class);

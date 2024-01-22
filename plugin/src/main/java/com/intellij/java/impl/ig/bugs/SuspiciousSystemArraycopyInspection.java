@@ -15,21 +15,20 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class SuspiciousSystemArraycopyInspection extends BaseInspection {
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "suspicious.system.arraycopy.display.name");
@@ -56,7 +55,7 @@ public class SuspiciousSystemArraycopyInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
@@ -141,7 +140,7 @@ public class SuspiciousSystemArraycopyInspection extends BaseInspection {
     }
 
     private static boolean isNegativeArgument(
-      @Nonnull PsiExpression argument) {
+      @jakarta.annotation.Nonnull PsiExpression argument) {
       final Object constant =
         ExpressionUtils.computeConstantExpression(argument);
       if (!(constant instanceof Integer)) {

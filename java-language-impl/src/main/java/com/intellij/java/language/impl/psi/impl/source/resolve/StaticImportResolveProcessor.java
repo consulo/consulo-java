@@ -24,7 +24,7 @@ import consulo.language.psi.resolve.ResolveState;
 import consulo.util.collection.SmartList;
 import consulo.util.dataholder.Key;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -89,7 +89,7 @@ public class StaticImportResolveProcessor extends BaseScopeProcessor implements 
   }
 
   @Override
-  public <T> T getHint(@Nonnull final Key<T> hintKey) {
+  public <T> T getHint(@jakarta.annotation.Nonnull final Key<T> hintKey) {
     if (hintKey == NameHint.KEY) {
       //noinspection unchecked
       return (T) this;

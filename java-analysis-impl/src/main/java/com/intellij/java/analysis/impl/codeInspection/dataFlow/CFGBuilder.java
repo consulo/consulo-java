@@ -36,8 +36,8 @@ import consulo.util.lang.ObjectUtil;
 import one.util.streamex.IntStreamEx;
 import one.util.streamex.StreamEx;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -114,7 +114,7 @@ public class CFGBuilder {
    *                   Passing {@code null} means no custom problem to register (just like {@link #pushExpression(PsiExpression)}).
    * @return this builder
    */
-  public CFGBuilder pushExpression(@Nonnull PsiExpression expression, @Nullable NullabilityProblemKind<? super PsiExpression> kind) {
+  public CFGBuilder pushExpression(@jakarta.annotation.Nonnull PsiExpression expression, @jakarta.annotation.Nullable NullabilityProblemKind<? super PsiExpression> kind) {
     if (kind == null) {
       return pushExpression(expression);
     }
@@ -314,7 +314,7 @@ public class CFGBuilder {
    * @param castType cast type (pushed before)
    * @return this builder
    */
-  public CFGBuilder isInstance(PsiExpression anchor, @Nullable PsiExpression operand, @Nonnull PsiType castType) {
+  public CFGBuilder isInstance(PsiExpression anchor, @jakarta.annotation.Nullable PsiExpression operand, @jakarta.annotation.Nonnull PsiType castType) {
     return add(new InstanceofInstruction(anchor, operand, castType));
   }
 
@@ -644,7 +644,7 @@ public class CFGBuilder {
    * @param functionalExpression a functional expression to evaluate
    * @return this builder
    */
-  public CFGBuilder evaluateFunction(@Nullable PsiExpression functionalExpression) {
+  public CFGBuilder evaluateFunction(@jakarta.annotation.Nullable PsiExpression functionalExpression) {
     PsiExpression stripped = PsiUtil.deparenthesizeExpression(functionalExpression);
     if (stripped == null || stripped instanceof PsiLambdaExpression) {
       return this;
@@ -674,7 +674,7 @@ public class CFGBuilder {
    * @param functionalExpression a functional expression to invoke
    * @return this builder
    */
-  public CFGBuilder invokeFunction(int argCount, @Nullable PsiExpression functionalExpression) {
+  public CFGBuilder invokeFunction(int argCount, @jakarta.annotation.Nullable PsiExpression functionalExpression) {
     return invokeFunction(argCount, functionalExpression, Nullability.UNKNOWN);
   }
 
@@ -899,7 +899,7 @@ public class CFGBuilder {
    * @return newly created variable
    */
   @Nonnull
-  public DfaVariableValue createTempVariable(@Nullable PsiType type) {
+  public DfaVariableValue createTempVariable(@jakarta.annotation.Nullable PsiType type) {
     return myAnalyzer.createTempVariable(type);
   }
 

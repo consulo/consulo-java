@@ -21,8 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
@@ -48,6 +47,7 @@ import com.intellij.java.impl.refactoring.makeStatic.MakeStaticHandler;
 import com.intellij.java.impl.refactoring.move.MoveInstanceMembersUtil;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.util.collection.ContainerUtil;
+import jakarta.annotation.Nullable;
 
 /**
  * @author ven

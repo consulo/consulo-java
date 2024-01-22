@@ -26,9 +26,8 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.execution.debug.frame.XFullValueEvaluator;
 import consulo.internal.com.sun.jdi.*;
 import consulo.ui.image.Image;
+import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
-
-import javax.annotation.Nullable;
 
 /**
  * @author egor

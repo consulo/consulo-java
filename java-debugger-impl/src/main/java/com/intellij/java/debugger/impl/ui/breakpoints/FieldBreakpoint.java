@@ -16,7 +16,7 @@
 
 package com.intellij.java.debugger.impl.ui.breakpoints;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.execution.debug.breakpoint.XBreakpoint;
 import consulo.logging.Logger;
@@ -312,7 +312,7 @@ public class FieldBreakpoint extends BreakpointWithHighlighter<JavaFieldBreakpoi
 		return className != null && !className.isEmpty() ? className + "." + getFieldName() : getFieldName();
 	}
 
-	public static FieldBreakpoint create(@Nonnull Project project, String fieldName, XBreakpoint xBreakpoint)
+	public static FieldBreakpoint create(@jakarta.annotation.Nonnull Project project, String fieldName, XBreakpoint xBreakpoint)
 	{
 		FieldBreakpoint breakpoint = new FieldBreakpoint(project, fieldName, xBreakpoint);
 		return (FieldBreakpoint) breakpoint.init();
@@ -330,7 +330,7 @@ public class FieldBreakpoint extends BreakpointWithHighlighter<JavaFieldBreakpoi
 	}
 
 	@Override
-	public boolean isAt(@Nonnull Document document, int offset)
+	public boolean isAt(@jakarta.annotation.Nonnull Document document, int offset)
 	{
 		PsiField field = findField(myProject, document, offset);
 		return field == getPsiField();

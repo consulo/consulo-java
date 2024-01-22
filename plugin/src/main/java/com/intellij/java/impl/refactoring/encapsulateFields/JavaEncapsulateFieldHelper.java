@@ -32,8 +32,8 @@ import consulo.logging.Logger;
 import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Max Medvedev
@@ -263,7 +263,7 @@ public class JavaEncapsulateFieldHelper extends EncapsulateFieldHelper {
     return methodCall;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static PsiMethodCallExpression createGetterCall(FieldDescriptor fieldDescriptor,
                                                           PsiReferenceExpression expr,
                                                           PsiClass aClass,
@@ -288,7 +288,7 @@ public class JavaEncapsulateFieldHelper extends EncapsulateFieldHelper {
     return methodCall;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static PsiMethodCallExpression checkMethodResolvable(PsiMethodCallExpression methodCall,
                                                                PsiMethod targetMethod,
                                                                PsiReferenceExpression context,

@@ -24,7 +24,7 @@ import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.usage.UsageInfo;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.MultiMap;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 import java.lang.String;
 import java.util.Collection;
@@ -58,9 +58,9 @@ public interface MoveDestination {
 
   @Nullable
   String verify(PsiFile source);
-  @Nullable
+  @jakarta.annotation.Nullable
   String verify(PsiDirectory source);
-  @Nullable
+  @jakarta.annotation.Nullable
   String verify(PsiJavaPackage source);
 
   void analyzeModuleConflicts(final Collection<PsiElement> elements, MultiMap<PsiElement,String> conflicts, final UsageInfo[] usages);

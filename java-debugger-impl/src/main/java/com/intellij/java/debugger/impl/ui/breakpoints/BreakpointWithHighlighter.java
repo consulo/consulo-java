@@ -15,8 +15,8 @@
  */
 package com.intellij.java.debugger.impl.ui.breakpoints;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import consulo.execution.debug.XSourcePosition;
 import consulo.execution.debug.breakpoint.XLineBreakpoint;
@@ -188,7 +188,7 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 		return getSetIcon(muted);
 	}
 
-	protected BreakpointWithHighlighter(@Nonnull Project project, XBreakpoint xBreakpoint)
+	protected BreakpointWithHighlighter(@jakarta.annotation.Nonnull Project project, XBreakpoint xBreakpoint)
 	{
 		//for persistency
 		super(project, xBreakpoint);
@@ -259,7 +259,7 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 		}
 	}
 
-	static void createLocationBreakpointRequest(@Nonnull FilteredRequestor requestor, @Nullable Location location, @Nonnull DebugProcessImpl debugProcess)
+	static void createLocationBreakpointRequest(@jakarta.annotation.Nonnull FilteredRequestor requestor, @Nullable Location location, @jakarta.annotation.Nonnull DebugProcessImpl debugProcess)
 	{
 		if(location != null)
 		{
@@ -364,7 +364,7 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 		}
 	}
 
-	public boolean isAt(@Nonnull Document document, int offset)
+	public boolean isAt(@jakarta.annotation.Nonnull Document document, int offset)
 	{
 		final VirtualFile file = FileDocumentManager.getInstance().getFile(document);
 		int line = document.getLineNumber(offset);

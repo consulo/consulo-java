@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.internationalization;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
@@ -39,7 +39,7 @@ public class DateToStringInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "call.to.date.tostring.display.name");

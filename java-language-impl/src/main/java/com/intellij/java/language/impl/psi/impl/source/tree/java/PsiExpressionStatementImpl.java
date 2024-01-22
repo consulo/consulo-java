@@ -32,7 +32,7 @@ import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.logging.Logger;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class PsiExpressionStatementImpl extends CompositePsiElement implements PsiExpressionStatement {
   private static final Logger LOG = Logger.getInstance(PsiExpressionStatementImpl.class);
@@ -42,7 +42,7 @@ public class PsiExpressionStatementImpl extends CompositePsiElement implements P
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiExpression getExpression() {
     PsiExpression expression = (PsiExpression)SourceTreeToPsiMap.treeElementToPsi(findChildByType(ElementType.EXPRESSION_BIT_SET));
     if (expression != null) return expression;
@@ -81,7 +81,7 @@ public class PsiExpressionStatementImpl extends CompositePsiElement implements P
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitExpressionStatement(this);
     }

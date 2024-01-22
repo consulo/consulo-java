@@ -17,8 +17,7 @@ package com.intellij.java.language.impl.psi.scope.processor;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 import consulo.util.dataholder.Key;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiSubstitutor;
@@ -27,6 +26,7 @@ import consulo.language.psi.filter.ElementFilter;
 import consulo.language.psi.resolve.BaseScopeProcessor;
 import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.util.collection.SmartList;
+import jakarta.annotation.Nullable;
 
 /**
  * @author ik
@@ -39,12 +39,12 @@ public class FilterScopeProcessor<T> extends BaseScopeProcessor
 	private final ElementFilter myFilter;
 	private final PsiScopeProcessor myProcessor;
 
-	public FilterScopeProcessor(@Nonnull ElementFilter filter, @Nonnull List<T> container)
+	public FilterScopeProcessor(@Nonnull ElementFilter filter, @jakarta.annotation.Nonnull List<T> container)
 	{
 		this(filter, null, container);
 	}
 
-	public FilterScopeProcessor(@Nonnull ElementFilter filter, @Nonnull PsiScopeProcessor processor)
+	public FilterScopeProcessor(@jakarta.annotation.Nonnull ElementFilter filter, @jakarta.annotation.Nonnull PsiScopeProcessor processor)
 	{
 		this(filter, processor, new SmartList<T>());
 	}
@@ -77,7 +77,7 @@ public class FilterScopeProcessor<T> extends BaseScopeProcessor
 	}
 
 	@Override
-	public boolean execute(@Nonnull PsiElement element, @Nonnull ResolveState state)
+	public boolean execute(@jakarta.annotation.Nonnull PsiElement element, @jakarta.annotation.Nonnull ResolveState state)
 	{
 		if(myFilter.isAcceptable(element, myCurrentDeclarationHolder))
 		{
@@ -90,14 +90,14 @@ public class FilterScopeProcessor<T> extends BaseScopeProcessor
 		return true;
 	}
 
-	protected void add(@Nonnull PsiElement element, @Nonnull PsiSubstitutor substitutor)
+	protected void add(@jakarta.annotation.Nonnull PsiElement element, @Nonnull PsiSubstitutor substitutor)
 	{
 		//noinspection unchecked
 		myResults.add((T) element);
 	}
 
 	@Override
-	public <K> K getHint(@Nonnull Key<K> hintKey)
+	public <K> K getHint(@jakarta.annotation.Nonnull Key<K> hintKey)
 	{
 		if(myProcessor != null)
 		{

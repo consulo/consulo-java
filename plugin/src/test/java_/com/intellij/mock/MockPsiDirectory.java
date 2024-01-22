@@ -3,7 +3,7 @@
  */
 package com.intellij.mock;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.navigation.ItemPresentation;
@@ -14,7 +14,7 @@ import consulo.language.Language;
 import consulo.disposer.Disposable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author peter
@@ -32,7 +32,7 @@ public class MockPsiDirectory extends MockPsiElement implements PsiDirectory {
     return true;
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public Language getLanguage() {
     return Language.ANY;
@@ -44,7 +44,7 @@ public class MockPsiDirectory extends MockPsiElement implements PsiDirectory {
   }
 
   @Override
-  public void checkCreateSubdirectory(@Nonnull final String name) throws IncorrectOperationException {
+  public void checkCreateSubdirectory(@jakarta.annotation.Nonnull final String name) throws IncorrectOperationException {
     throw new IncorrectOperationException("Method checkCreateSubdirectory is not yet implemented in " + getClass().getName());
   }
 
@@ -56,7 +56,7 @@ public class MockPsiDirectory extends MockPsiElement implements PsiDirectory {
 
   @Override
   @Nonnull
-  public PsiFile createFile(@Nonnull final String name) throws IncorrectOperationException {
+  public PsiFile createFile(@jakarta.annotation.Nonnull final String name) throws IncorrectOperationException {
     throw new IncorrectOperationException("Method createFile is not yet implemented in " + getClass().getName());
   }
 
@@ -67,25 +67,25 @@ public class MockPsiDirectory extends MockPsiElement implements PsiDirectory {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiDirectory createSubdirectory(@Nonnull final String name) throws IncorrectOperationException {
     throw new IncorrectOperationException("Method createSubdirectory is not yet implemented in " + getClass().getName());
   }
 
   @Override
-  @Nullable
+  @jakarta.annotation.Nullable
   public PsiFile findFile(@Nonnull @NonNls final String name) {
     throw new UnsupportedOperationException("Method findFile is not yet implemented in " + getClass().getName());
   }
 
   @Override
   @Nullable
-  public PsiDirectory findSubdirectory(@Nonnull final String name) {
+  public PsiDirectory findSubdirectory(@jakarta.annotation.Nonnull final String name) {
     throw new UnsupportedOperationException("Method findSubdirectory is not yet implemented in " + getClass().getName());
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiFile[] getFiles() {
     throw new UnsupportedOperationException("Method getFiles is not yet implemented in " + getClass().getName());
   }
@@ -97,20 +97,20 @@ public class MockPsiDirectory extends MockPsiElement implements PsiDirectory {
   }
 
   @Override
-  @Nullable
+  @jakarta.annotation.Nullable
   public PsiDirectory getParentDirectory() {
     final PsiJavaPackage psiPackage = myPackage.getParentPackage();
     return psiPackage == null ? null : new MockPsiDirectory(psiPackage, getProject());
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiDirectory[] getSubdirectories() {
     throw new UnsupportedOperationException("Method getSubdirectories is not yet implemented in " + getClass().getName());
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public VirtualFile getVirtualFile() {
     throw new UnsupportedOperationException("Method getVirtualFile is not yet implemented in " + getClass().getName());
   }
@@ -121,8 +121,8 @@ public class MockPsiDirectory extends MockPsiElement implements PsiDirectory {
   }
 
   @Override
-  @Nonnull
-  public PsiElement setName(@Nonnull final String name) throws IncorrectOperationException {
+  @jakarta.annotation.Nonnull
+  public PsiElement setName(@jakarta.annotation.Nonnull final String name) throws IncorrectOperationException {
     throw new IncorrectOperationException("Method setName is not yet implemented in " + getClass().getName());
   }
 

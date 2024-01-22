@@ -19,13 +19,12 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
-import javax.annotation.Nullable;
 import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.impl.codeInsight.completion.JavaCompletionUtil;
 import consulo.application.HelpManager;
@@ -54,6 +53,7 @@ import com.intellij.java.impl.refactoring.ui.TypeSelectorManager;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import com.intellij.java.impl.refactoring.util.RefactoringMessageUtil;
 import consulo.util.collection.ArrayUtil;
+import jakarta.annotation.Nullable;
 
 class IntroduceFieldDialog extends DialogWrapper {
 

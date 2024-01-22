@@ -28,12 +28,11 @@ import consulo.language.editor.inspection.reference.RefElement;
 import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.reference.RefManager;
 import consulo.language.psi.PsiElement;
-
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 @ServiceAPI(ComponentScope.APPLICATION)
 public abstract class RefJavaUtil {
-  public abstract void addReferences(final PsiModifierListOwner psiFrom, final RefJavaElement ref, @Nullable PsiElement findIn);
+  public abstract void addReferences(final PsiModifierListOwner psiFrom, final RefJavaElement ref, @jakarta.annotation.Nullable PsiElement findIn);
 
   public abstract RefClass getTopLevelClass(RefElement refElement);
 
@@ -42,10 +41,10 @@ public abstract class RefJavaUtil {
   @Nullable //default package name
   public abstract String getPackageName(RefEntity refEntity);
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public abstract RefClass getOwnerClass(RefManager refManager, PsiElement psiElement);
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public abstract RefClass getOwnerClass(RefElement refElement);
 
   public abstract int compareAccess(String a1, String a2);
@@ -64,7 +63,7 @@ public abstract class RefJavaUtil {
     return psiResolved instanceof PsiDocCommentOwner && ((PsiDocCommentOwner)psiResolved).isDeprecated();
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static RefPackage getPackage(RefEntity refEntity) {
     while (refEntity != null && !(refEntity instanceof RefPackage)) refEntity = refEntity.getOwner();
 

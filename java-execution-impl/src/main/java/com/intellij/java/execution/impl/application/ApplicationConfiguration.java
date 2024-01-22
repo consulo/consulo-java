@@ -50,8 +50,8 @@ import consulo.util.xml.serializer.DefaultJDOMExternalizer;
 import consulo.virtualFileSystem.util.PathsList;
 import org.jdom.Element;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -114,7 +114,7 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
   }
 
   @Override
-  @Nullable
+  @jakarta.annotation.Nullable
   public PsiClass getMainClass() {
     return getConfigurationModule().findClass(MAIN_CLASS_NAME);
   }
@@ -141,7 +141,7 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
   }
 
   @Override
-  @Nullable
+  @jakarta.annotation.Nullable
   public String suggestedName() {
     if (MAIN_CLASS_NAME == null) {
       return null;
@@ -227,13 +227,13 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
   }
 
   @Override
-  @Nullable
+  @jakarta.annotation.Nullable
   public String getRunClass() {
     return MAIN_CLASS_NAME;
   }
 
   @Override
-  @Nullable
+  @jakarta.annotation.Nullable
   public String getPackage() {
     return null;
   }
@@ -295,7 +295,7 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
     ShortenCommandLine.writeShortenClasspathMethod(element, myShortenCommandLine);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public ShortenCommandLine getShortenCommandLine() {
     return myShortenCommandLine;

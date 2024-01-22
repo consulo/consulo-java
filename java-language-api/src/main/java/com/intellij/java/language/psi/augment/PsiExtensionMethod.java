@@ -3,8 +3,8 @@ package com.intellij.java.language.psi.augment;
 
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * An extension instance method that delegates to another method.
@@ -30,6 +30,6 @@ public interface PsiExtensionMethod extends PsiMethod
 	 * @return a target method parameter that corresponds to the parameter of this extension method having the specified index;
 	 * null if the specified parameter does not correspond to any parameter of the target method.
 	 */
-	@Nullable
+	@jakarta.annotation.Nullable
 	PsiParameter getTargetParameter(int index);
 }

@@ -24,8 +24,8 @@ import consulo.util.lang.function.Condition;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -40,7 +40,7 @@ public class InheritanceUtil {
    * @param checkDeep true to check deeper than aClass.super (see {@linkplain PsiClass#isInheritor(PsiClass, boolean)}).
    * @return true if aClass is the baseClass or baseClass inheritor
    */
-  public static boolean isInheritorOrSelf(@Nullable PsiClass aClass, @Nullable PsiClass baseClass, boolean checkDeep) {
+  public static boolean isInheritorOrSelf(@jakarta.annotation.Nullable PsiClass aClass, @Nullable PsiClass baseClass, boolean checkDeep) {
     if (aClass == null || baseClass == null) {
       return false;
     }
@@ -48,7 +48,7 @@ public class InheritanceUtil {
     return manager.areElementsEquivalent(baseClass, aClass) || aClass.isInheritor(baseClass, checkDeep);
   }
 
-  public static boolean processSupers(@Nullable PsiClass aClass, boolean includeSelf, @Nonnull Processor<PsiClass> superProcessor) {
+  public static boolean processSupers(@jakarta.annotation.Nullable PsiClass aClass, boolean includeSelf, @jakarta.annotation.Nonnull Processor<PsiClass> superProcessor) {
     if (aClass == null) {
       return true;
     }
@@ -60,7 +60,7 @@ public class InheritanceUtil {
     return processSupers(aClass, superProcessor, new HashSet<>());
   }
 
-  private static boolean processSupers(@Nonnull PsiClass aClass, @Nonnull Processor<PsiClass> superProcessor, @Nonnull Set<PsiClass> visited) {
+  private static boolean processSupers(@jakarta.annotation.Nonnull PsiClass aClass, @jakarta.annotation.Nonnull Processor<PsiClass> superProcessor, @Nonnull Set<PsiClass> visited) {
     if (!visited.add(aClass)) {
       return true;
     }
@@ -80,7 +80,7 @@ public class InheritanceUtil {
   }
 
   @Contract("null, _ -> false")
-  public static boolean isInheritor(@Nullable PsiType type, @Nonnull @NonNls final String baseClassName) {
+  public static boolean isInheritor(@Nullable PsiType type, @jakarta.annotation.Nonnull @NonNls final String baseClassName) {
     if (type instanceof PsiClassType) {
       return isInheritor(((PsiClassType) type).resolve(), baseClassName);
     }
@@ -97,7 +97,7 @@ public class InheritanceUtil {
   }
 
   @Contract("null, _ -> false")
-  public static boolean isInheritor(@Nullable PsiClass psiClass, @Nonnull final String baseClassName) {
+  public static boolean isInheritor(@jakarta.annotation.Nullable PsiClass psiClass, @Nonnull final String baseClassName) {
     return isInheritor(psiClass, false, baseClassName);
   }
 
@@ -122,18 +122,18 @@ public class InheritanceUtil {
    * @param results
    * @param includeNonProject
    */
-  public static void getSuperClasses(@Nonnull PsiClass aClass, @Nonnull Set<PsiClass> results, boolean includeNonProject) {
+  public static void getSuperClasses(@jakarta.annotation.Nonnull PsiClass aClass, @Nonnull Set<PsiClass> results, boolean includeNonProject) {
     getSuperClassesOfList(aClass.getSuperTypes(), results, includeNonProject, new HashSet<>(), aClass.getManager());
   }
 
-  public static LinkedHashSet<PsiClass> getSuperClasses(@Nonnull PsiClass aClass) {
+  public static LinkedHashSet<PsiClass> getSuperClasses(@jakarta.annotation.Nonnull PsiClass aClass) {
     LinkedHashSet<PsiClass> result = new LinkedHashSet<>();
     getSuperClasses(aClass, result, true);
     return result;
   }
 
 
-  private static void getSuperClassesOfList(@Nonnull PsiClassType[] types, @Nonnull Set<PsiClass> results, boolean includeNonProject, @Nonnull Set<PsiClass> visited, @Nonnull PsiManager manager) {
+  private static void getSuperClassesOfList(@Nonnull PsiClassType[] types, @jakarta.annotation.Nonnull Set<PsiClass> results, boolean includeNonProject, @jakarta.annotation.Nonnull Set<PsiClass> visited, @Nonnull PsiManager manager) {
     for (PsiClassType type : types) {
       PsiClass resolved = type.resolve();
       if (resolved != null && visited.add(resolved)) {
@@ -178,7 +178,7 @@ public class InheritanceUtil {
     return place == aClass;
   }
 
-  public static boolean processSuperTypes(@Nonnull PsiType type, boolean includeSelf, @Nonnull Processor<PsiType> processor) {
+  public static boolean processSuperTypes(@jakarta.annotation.Nonnull PsiType type, boolean includeSelf, @jakarta.annotation.Nonnull Processor<PsiType> processor) {
     if (includeSelf && !processor.process(type)) {
       return false;
     }

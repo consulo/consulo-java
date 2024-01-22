@@ -26,8 +26,8 @@ import consulo.language.psi.PsiElement;
 import consulo.util.collection.Stack;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.function.Consumer;
 
 import static consulo.language.codeStyle.arrangement.std.StdArrangementTokens.Section.END_SECTION;
@@ -47,7 +47,7 @@ public class ArrangementSectionDetector {
   private final Stack<ArrangementSectionRule> myOpenedSections = new Stack<>();
 
   public ArrangementSectionDetector(
-      @Nullable Document document, @Nonnull ArrangementSettings settings, @Nonnull Consumer<ArrangementSectionEntryTemplate> producer) {
+    @Nullable Document document, @jakarta.annotation.Nonnull ArrangementSettings settings, @Nonnull Consumer<ArrangementSectionEntryTemplate> producer) {
     myDocument = document;
     mySettings = settings;
     mySectionEntryProducer = producer;
@@ -82,7 +82,7 @@ public class ArrangementSectionDetector {
     return false;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public static ArrangementSectionRule isSectionStartComment(@Nonnull ArrangementSettings settings, @Nonnull String comment) {
     for (ArrangementSectionRule rule : settings.getSections()) {
       if (rule.getStartComment() != null && StringUtil.equals(comment, rule.getStartComment())) {
@@ -99,7 +99,7 @@ public class ArrangementSectionDetector {
     private String myText;
 
     public ArrangementSectionEntryTemplate(
-        @Nonnull PsiElement element, @Nonnull ArrangementSettingsToken token, @Nonnull TextRange range, @Nonnull String text) {
+      @jakarta.annotation.Nonnull PsiElement element, @Nonnull ArrangementSettingsToken token, @jakarta.annotation.Nonnull TextRange range, @Nonnull String text) {
       myElement = element;
       myToken = token;
       myTextRange = range;

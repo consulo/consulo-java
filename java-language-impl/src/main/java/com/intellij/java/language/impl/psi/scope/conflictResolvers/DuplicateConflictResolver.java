@@ -22,7 +22,7 @@ import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.java.language.impl.psi.scope.PsiConflictResolver;
 import consulo.language.psi.PsiUtilCore;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.ig.j2me;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
@@ -61,7 +61,7 @@ public class MethodCallInLoopConditionInspection extends BaseInspection {
   private static class MethodCallInLoopConditionVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitForStatement(@Nonnull PsiForStatement statement) {
+    public void visitForStatement(@jakarta.annotation.Nonnull PsiForStatement statement) {
       super.visitForStatement(statement);
       final PsiExpression condition = statement.getCondition();
       if (condition == null) {
@@ -71,7 +71,7 @@ public class MethodCallInLoopConditionInspection extends BaseInspection {
     }
 
     @Override
-    public void visitWhileStatement(@Nonnull PsiWhileStatement statement) {
+    public void visitWhileStatement(@jakarta.annotation.Nonnull PsiWhileStatement statement) {
       super.visitWhileStatement(statement);
       final PsiExpression condition = statement.getCondition();
       if (condition == null) {

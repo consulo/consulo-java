@@ -29,9 +29,9 @@ import consulo.language.impl.ast.TreeElement;
 import consulo.language.util.CharTable;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public class ParameterListElement extends CompositeElement implements Constants {
   private static final Logger LOG = Logger.getInstance(ParameterListElement.class);

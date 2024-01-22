@@ -25,7 +25,7 @@ import com.intellij.java.analysis.refactoring.JavaRefactoringActionHandlerFactor
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class InlineCallFix extends InspectionGadgetsFix {
 

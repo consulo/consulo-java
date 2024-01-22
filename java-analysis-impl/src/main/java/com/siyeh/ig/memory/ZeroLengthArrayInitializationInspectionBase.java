@@ -25,7 +25,7 @@ import com.siyeh.ig.psiutils.ConstructionUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import org.intellij.lang.annotations.Pattern;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public abstract class ZeroLengthArrayInitializationInspectionBase extends BaseInspection {
   @Pattern(VALID_ID_PATTERN)
@@ -36,13 +36,13 @@ public abstract class ZeroLengthArrayInitializationInspectionBase extends BaseIn
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("array.allocation.zero.length.display.name");
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("array.allocation.zero.length.problem.descriptor");
   }
@@ -60,7 +60,7 @@ public abstract class ZeroLengthArrayInitializationInspectionBase extends BaseIn
   private static class ZeroLengthArrayInitializationVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+    public void visitNewExpression(@jakarta.annotation.Nonnull PsiNewExpression expression) {
       super.visitNewExpression(expression);
       if (!ConstructionUtils.isEmptyArrayInitializer(expression)) {
         return;

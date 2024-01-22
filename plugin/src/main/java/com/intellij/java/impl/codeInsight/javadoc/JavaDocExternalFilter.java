@@ -28,10 +28,11 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
 import consulo.util.io.URLUtil;
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -128,7 +129,7 @@ public class JavaDocExternalFilter extends AbstractExternalFilter {
   }
 
   @Override
-  @Nullable
+  @jakarta.annotation.Nullable
   public String getExternalDocInfoForElement(final String docURL, final PsiElement element) throws Exception {
     String externalDoc = super.getExternalDocInfoForElement(docURL, element);
     if (externalDoc != null) {
@@ -136,7 +137,7 @@ public class JavaDocExternalFilter extends AbstractExternalFilter {
         final String className = ApplicationManager.getApplication().runReadAction(new
                                                                                        Supplier<String>() {
                                                                                          @Override
-                                                                                         @Nullable
+                                                                                         @jakarta.annotation.Nullable
                                                                                          public String get() {
                                                                                            PsiClass aClass = ((PsiMethod) element).getContainingClass();
                                                                                            return aClass == null ? null : aClass.getQualifiedName();

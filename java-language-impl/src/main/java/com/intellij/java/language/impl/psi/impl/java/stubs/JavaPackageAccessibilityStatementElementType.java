@@ -33,17 +33,17 @@ import consulo.language.psi.stub.StubOutputStream;
 import consulo.util.collection.SmartList;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
 
 public class JavaPackageAccessibilityStatementElementType extends JavaStubElementType<PsiPackageAccessibilityStatementStub, PsiPackageAccessibilityStatement> {
-  public JavaPackageAccessibilityStatementElementType(@Nonnull String debugName) {
+  public JavaPackageAccessibilityStatementElementType(@jakarta.annotation.Nonnull String debugName) {
     super(debugName);
   }
 
   @Override
-  public PsiPackageAccessibilityStatement createPsi(@Nonnull PsiPackageAccessibilityStatementStub stub) {
+  public PsiPackageAccessibilityStatement createPsi(@jakarta.annotation.Nonnull PsiPackageAccessibilityStatementStub stub) {
     return getPsiFactory(stub).createPackageAccessibilityStatement(stub);
   }
 
@@ -81,16 +81,16 @@ public class JavaPackageAccessibilityStatementElementType extends JavaStubElemen
     dataStream.writeUTFFast(StringUtil.join(stub.getTargets(), "/"));
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
-  public PsiPackageAccessibilityStatementStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
+  public PsiPackageAccessibilityStatementStub deserialize(@jakarta.annotation.Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
     String packageName = StringRef.toString(dataStream.readName());
     List<String> targets = StringUtil.split(dataStream.readUTFFast(), "/");
     return new PsiPackageAccessibilityStatementStubImpl(parentStub, this, packageName, targets);
   }
 
   @Override
-  public void indexStub(@Nonnull PsiPackageAccessibilityStatementStub stub, @Nonnull IndexSink sink) {
+  public void indexStub(@jakarta.annotation.Nonnull PsiPackageAccessibilityStatementStub stub, @Nonnull IndexSink sink) {
   }
 
   @Nonnull

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.psi;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * Represents a method or constructor reference.
@@ -51,7 +51,7 @@ public interface PsiMethodReferenceExpression extends PsiReferenceExpression, Ps
 	/**
 	 * @return potential applicable member for exact reference, otherwise null
 	 */
-	@Nullable
+	@jakarta.annotation.Nullable
 	PsiMember getPotentiallyApplicableMember();
 
 	/**

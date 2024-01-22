@@ -34,8 +34,9 @@ import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.psi.PsiUtilCore;
 import consulo.util.lang.ObjectUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.Collections;
 import java.util.Set;
 
@@ -169,8 +170,8 @@ public class JavaPsiClassReferenceElement extends LookupItem<Object> implements 
 			LookupElement item,
 			PsiClass psiClass,
 			boolean diamond,
-			@Nonnull String locationString,
-			@Nonnull PsiSubstitutor substitutor)
+			@jakarta.annotation.Nonnull String locationString,
+			@jakarta.annotation.Nonnull PsiSubstitutor substitutor)
 	{
 		if(!(psiClass instanceof PsiTypeParameter))
 		{
@@ -231,7 +232,7 @@ public class JavaPsiClassReferenceElement extends LookupItem<Object> implements 
 		return StringUtil.notNullize(name);
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	private static String formatTypeParameters(@Nonnull final PsiSubstitutor substitutor, final PsiTypeParameter[] params)
 	{
 		final boolean space = showSpaceAfterComma(params[0]);

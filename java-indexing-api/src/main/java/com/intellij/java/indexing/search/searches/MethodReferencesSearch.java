@@ -29,8 +29,9 @@ import consulo.project.Project;
 import consulo.project.util.query.DumbAwareSearchParameters;
 import consulo.util.collection.ContainerUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
@@ -48,8 +49,8 @@ public class MethodReferencesSearch extends ExtensibleQueryFactory<PsiReference,
     private final SearchRequestCollector myOptimizer;
     private final boolean isSharedOptimizer;
 
-    public SearchParameters(@Nonnull PsiMethod method,
-                            @Nonnull SearchScope scope,
+    public SearchParameters(@jakarta.annotation.Nonnull PsiMethod method,
+                            @jakarta.annotation.Nonnull SearchScope scope,
                             boolean strictSignatureSearch,
                             @Nullable SearchRequestCollector optimizer) {
       myMethod = method;
@@ -60,11 +61,11 @@ public class MethodReferencesSearch extends ExtensibleQueryFactory<PsiReference,
       myProject = PsiUtilCore.getProjectInReadAction(method);
     }
 
-    public SearchParameters(@Nonnull PsiMethod method, @Nonnull SearchScope scope, final boolean strict) {
+    public SearchParameters(@Nonnull PsiMethod method, @jakarta.annotation.Nonnull SearchScope scope, final boolean strict) {
       this(method, scope, strict, null);
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public Project getProject() {
       return myProject;
     }
@@ -96,12 +97,12 @@ public class MethodReferencesSearch extends ExtensibleQueryFactory<PsiReference,
      * #getEffectiveSearchScope()}.
      */
     @Deprecated
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public SearchScope getScope() {
       return getScopeDeterminedByUser();
     }
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public SearchScope getEffectiveSearchScope() {
       SearchScope accessScope = PsiSearchHelper.getInstance(myMethod.getProject()).getUseScope(myMethod);
       return myScope.intersectWith(accessScope);
@@ -112,7 +113,7 @@ public class MethodReferencesSearch extends ExtensibleQueryFactory<PsiReference,
     super(MethodReferencesSearchExecutor.class);
   }
 
-  public static Query<PsiReference> search(@Nonnull PsiMethod method,
+  public static Query<PsiReference> search(@jakarta.annotation.Nonnull PsiMethod method,
                                            SearchScope scope,
                                            final boolean strictSignatureSearch) {
     return search(new SearchParameters(method, scope, strictSignatureSearch));

@@ -25,7 +25,7 @@ import consulo.language.editor.ui.awt.ReferenceEditorWithBrowseButton;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.project.Project;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.awt.event.ActionListener;
 
 /**

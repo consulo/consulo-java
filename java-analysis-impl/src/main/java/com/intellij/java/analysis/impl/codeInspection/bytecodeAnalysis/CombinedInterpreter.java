@@ -24,8 +24,8 @@ import consulo.internal.org.objectweb.asm.tree.*;
 import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
 import consulo.internal.org.objectweb.asm.tree.analysis.BasicInterpreter;
 import consulo.internal.org.objectweb.asm.tree.analysis.BasicValue;
+import jakarta.annotation.Nonnull;
 import one.util.streamex.StreamEx;
-import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -36,8 +36,8 @@ import consulo.logging.Logger;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.SmartList;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class PsiNewExpressionImpl extends ExpressionPsiElement implements PsiNewExpression {
   private static final Logger LOG = Logger.getInstance(PsiNewExpressionImpl.class);
@@ -58,7 +58,7 @@ public class PsiNewExpressionImpl extends ExpressionPsiElement implements PsiNew
   }
 
   @Nullable
-  private PsiType doGetType(@Nullable PsiAnnotation stopAt) {
+  private PsiType doGetType(@jakarta.annotation.Nullable PsiAnnotation stopAt) {
     PsiType type = null;
     SmartList<PsiAnnotation> annotations = new SmartList<>();
     boolean stop = false;

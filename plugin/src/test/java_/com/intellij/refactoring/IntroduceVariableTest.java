@@ -29,9 +29,9 @@ import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableSet
 import com.intellij.java.impl.refactoring.ui.TypeSelectorManagerImpl;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 import consulo.util.collection.MultiMap;
+import jakarta.annotation.Nonnull;
 import junit.framework.Assert;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
 import java.util.Collection;
 

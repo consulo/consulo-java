@@ -25,16 +25,16 @@ import consulo.xml.util.xml.ConvertContext;
 import consulo.xml.util.xml.Converter;
 import consulo.xml.util.xml.CustomReferenceConverter;
 import consulo.xml.util.xml.GenericDomValue;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Konstantin Bulenkov
  */
 public class PsiPackageConverter extends Converter<PsiJavaPackage> implements CustomReferenceConverter<PsiJavaPackage> {
-  public PsiJavaPackage fromString(@Nullable @NonNls String s, final ConvertContext context) {
+  public PsiJavaPackage fromString(@jakarta.annotation.Nullable @NonNls String s, final ConvertContext context) {
     if (s == null) return null;
     return JavaPsiFacade.getInstance(context.getPsiManager().getProject()).findPackage(s);
   }

@@ -17,8 +17,8 @@ package com.intellij.java.impl.ig.bugs;
 
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
 import java.util.Set;
 
@@ -35,7 +35,7 @@ class CollectionQueryCalledVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitElement(@Nonnull PsiElement element) {
+  public void visitElement(@jakarta.annotation.Nonnull PsiElement element) {
     if (!queried) {
       super.visitElement(element);
     }
@@ -43,7 +43,7 @@ class CollectionQueryCalledVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitForeachStatement(
-    @Nonnull PsiForeachStatement statement) {
+    @jakarta.annotation.Nonnull PsiForeachStatement statement) {
     if (queried) {
       return;
     }

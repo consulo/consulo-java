@@ -36,8 +36,8 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.Collection;
 
 @ExtensionImpl
@@ -128,7 +128,7 @@ public class JavaTestGenerator implements TestGenerator {
                                      TestFramework descriptor,
                                      PsiClass targetClass,
                                      Editor editor,
-                                     @Nullable String name) {
+                                     @jakarta.annotation.Nullable String name) {
     PsiMethod method = (PsiMethod)targetClass.add(TestIntegrationUtils.createDummyMethod(targetClass));
     PsiDocumentManager.getInstance(targetClass.getProject()).doPostponedOperationsAndUnblockDocument(editor.getDocument());
     TestIntegrationUtils.runTestMethodTemplate(methodKind, descriptor, editor, targetClass, method, name, true);

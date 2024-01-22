@@ -23,7 +23,7 @@ import com.intellij.java.language.psi.PsiTypeElement;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.JComponent;
 
@@ -68,7 +68,7 @@ public class LocalVariableOfConcreteClassInspection
 
     @Override
     public void visitLocalVariable(
-      @Nonnull PsiLocalVariable variable) {
+      @jakarta.annotation.Nonnull PsiLocalVariable variable) {
       super.visitLocalVariable(variable);
       final PsiTypeElement typeElement = variable.getTypeElement();
       if (!ConcreteClassUtil.typeIsConcreteClass(typeElement,

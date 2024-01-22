@@ -22,7 +22,7 @@ import consulo.language.Language;
 import consulo.language.ast.ASTNode;
 import consulo.language.codeStyle.WhiteSpaceFormattingStrategyAdapter;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author max

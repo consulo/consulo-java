@@ -23,9 +23,9 @@ import consulo.language.psi.PsiManager;
 import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
 import consulo.xml.psi.xml.XmlTag;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public interface CommonModelElement {
   boolean isValid();
@@ -34,13 +34,13 @@ public interface CommonModelElement {
 
   PsiManager getPsiManager();
 
-  @Nullable
+  @jakarta.annotation.Nullable
   Module getModule();
 
   @Nullable
   PsiElement getIdentifyingPsiElement();
 
-  @Nullable
+  @jakarta.annotation.Nullable
   PsiFile getContainingFile();
 
   abstract class PsiBase implements CommonModelElement {
@@ -51,7 +51,7 @@ public interface CommonModelElement {
       return getPsiElement().isValid();
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     public XmlTag getXmlTag() {
       return null;
     }
@@ -75,14 +75,14 @@ public interface CommonModelElement {
 
   abstract class ModuleBase implements CommonModelElement{
 
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public abstract Module getModule();
 
     public boolean isValid() {
       return !getModule().isDisposed();
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     public XmlTag getXmlTag() {
       return null;
     }

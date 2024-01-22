@@ -15,8 +15,7 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 import com.intellij.java.language.psi.JavaResolveResult;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.language.psi.PsiElement;
@@ -28,6 +27,7 @@ import com.intellij.java.language.psi.PsiType;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import jakarta.annotation.Nullable;
 
 public abstract class PsiReferenceExpressionBase extends ExpressionPsiElement implements PsiReferenceExpression
 {

@@ -20,7 +20,7 @@ import com.intellij.jam.model.common.CommonModelElement;
 import com.intellij.jam.model.common.CommonModelManager;
 import consulo.dataContext.DataContext;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -51,7 +51,7 @@ public class JamDeleteProvider implements DeleteProvider {
     this(response, Collections.singletonList(element));
   }
 
-  public void deleteElement(@Nonnull DataContext dataContext) {
+  public void deleteElement(@jakarta.annotation.Nonnull DataContext dataContext) {
     CommonModelManager.getInstance().deleteModelElements(myElements, myResponse);
   }
 

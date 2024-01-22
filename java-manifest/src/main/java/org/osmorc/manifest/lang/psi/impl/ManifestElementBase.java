@@ -24,7 +24,7 @@
  */
 package org.osmorc.manifest.lang.psi.impl;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.language.impl.psi.stub.StubBasedPsiElementBase;
 import consulo.language.ast.ASTNode;

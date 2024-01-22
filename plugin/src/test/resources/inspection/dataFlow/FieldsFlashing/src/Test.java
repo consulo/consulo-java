@@ -1,17 +1,17 @@
-import javax.annotation.*;
+import jakarta.annotation.Nullable;
 
 public class TestNullableIntervening   // See http://www.jetbrains.net/jira/browse/IDEA-2845
 {
-    @javax.annotation.Nullable
+    @jakarta.annotation.Nullable
 	Object obj;
 
-    public TestNullableIntervening(final @javax.annotation.Nullable Object obj) {
+    public TestNullableIntervening(final @jakarta.annotation.Nullable Object obj) {
         this.obj = obj;
     }
 
-    @javax.annotation.Nullable
+    @Nullable
 	Object foo() { return null; }
-    void notnull(@Nonnull Object arg) {}
+    void notnull(@jakarta.annotation.Nonnull Object arg) {}
 
     void test1() {
         if (obj != null) {

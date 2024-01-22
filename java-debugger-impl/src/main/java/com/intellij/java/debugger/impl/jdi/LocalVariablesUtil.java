@@ -33,7 +33,7 @@ import consulo.logging.Logger;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.reflect.ReflectionUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -359,7 +359,7 @@ public class LocalVariablesUtil
 	}
 
 	@Nonnull
-	private static MultiMap<Integer, String> calcNames(@Nonnull final StackFrameContext context, final int firstLocalsSlot)
+	private static MultiMap<Integer, String> calcNames(@jakarta.annotation.Nonnull final StackFrameContext context, final int firstLocalsSlot)
 	{
 		SourcePosition position = ContextUtil.getSourcePosition(context);
 		if(position != null)

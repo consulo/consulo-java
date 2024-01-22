@@ -37,8 +37,8 @@ import consulo.xml.util.xml.GenericDomValue;
 import consulo.xml.util.xml.ui.DomWrapper;
 import consulo.xml.util.xml.ui.EditorTextFieldControl;
 import consulo.xml.util.xml.ui.PsiClassPanel;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

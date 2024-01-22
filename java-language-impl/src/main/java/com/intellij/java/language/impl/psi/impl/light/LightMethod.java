@@ -33,7 +33,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.navigation.ItemPresentation;
 import consulo.navigation.ItemPresentationProvider;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.List;
 
 /**
@@ -43,14 +43,14 @@ public class LightMethod extends LightElement implements PsiMethod {
   protected final PsiMethod myMethod;
   protected final PsiClass myContainingClass;
 
-  public LightMethod(@Nonnull PsiManager manager, @Nonnull PsiMethod method, @Nonnull PsiClass containingClass) {
+  public LightMethod(@jakarta.annotation.Nonnull PsiManager manager, @jakarta.annotation.Nonnull PsiMethod method, @jakarta.annotation.Nonnull PsiClass containingClass) {
     this(manager, method, containingClass, JavaLanguage.INSTANCE);
   }
 
-  public LightMethod(@Nonnull PsiManager manager,
-                     @Nonnull PsiMethod method,
-                     @Nonnull PsiClass containingClass,
-                     @Nonnull Language language) {
+  public LightMethod(@jakarta.annotation.Nonnull PsiManager manager,
+                     @jakarta.annotation.Nonnull PsiMethod method,
+                     @jakarta.annotation.Nonnull PsiClass containingClass,
+                     @jakarta.annotation.Nonnull Language language) {
     super(manager, language);
     myMethod = method;
     myContainingClass = containingClass;
@@ -67,7 +67,7 @@ public class LightMethod extends LightElement implements PsiMethod {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiTypeParameter[] getTypeParameters() {
     return myMethod.getTypeParameters();
   }
@@ -88,7 +88,7 @@ public class LightMethod extends LightElement implements PsiMethod {
   }
 
   @Override
-  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
+  public PsiElement setName(@jakarta.annotation.Nonnull String name) throws IncorrectOperationException {
     return myMethod.setName(name);
   }
 
@@ -99,13 +99,13 @@ public class LightMethod extends LightElement implements PsiMethod {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public HierarchicalMethodSignature getHierarchicalMethodSignature() {
     return myMethod.getHierarchicalMethodSignature();
   }
 
   @Override
-  public boolean hasModifierProperty(@Nonnull String name) {
+  public boolean hasModifierProperty(@jakarta.annotation.Nonnull String name) {
     return myMethod.hasModifierProperty(name);
   }
 
@@ -126,13 +126,13 @@ public class LightMethod extends LightElement implements PsiMethod {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiParameterList getParameterList() {
     return myMethod.getParameterList();
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiReferenceList getThrowsList() {
     return myMethod.getThrowsList();
   }
@@ -153,8 +153,8 @@ public class LightMethod extends LightElement implements PsiMethod {
   }
 
   @Override
-  @Nonnull
-  public MethodSignature getSignature(@Nonnull PsiSubstitutor substitutor) {
+  @jakarta.annotation.Nonnull
+  public MethodSignature getSignature(@jakarta.annotation.Nonnull PsiSubstitutor substitutor) {
     return myMethod.getSignature(substitutor);
   }
 
@@ -164,25 +164,25 @@ public class LightMethod extends LightElement implements PsiMethod {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiMethod[] findSuperMethods() {
     return myMethod.findSuperMethods();
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiMethod[] findSuperMethods(boolean checkAccess) {
     return myMethod.findSuperMethods(checkAccess);
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiMethod[] findSuperMethods(PsiClass parentClass) {
     return myMethod.findSuperMethods(parentClass);
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public List<MethodSignatureBackedByPsiMethod> findSuperMethodSignaturesIncludingStatic(boolean checkAccess) {
     return myMethod.findSuperMethodSignaturesIncludingStatic(checkAccess);
   }
@@ -194,7 +194,7 @@ public class LightMethod extends LightElement implements PsiMethod {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public PsiMethod[] findDeepestSuperMethods() {
     return myMethod.findDeepestSuperMethods();
   }
@@ -205,7 +205,7 @@ public class LightMethod extends LightElement implements PsiMethod {
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
     myMethod.accept(visitor);
   }
 
@@ -239,7 +239,7 @@ public class LightMethod extends LightElement implements PsiMethod {
   }
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public SearchScope getUseScope() {
     return PsiImplUtil.getMemberUseScope(this);
   }

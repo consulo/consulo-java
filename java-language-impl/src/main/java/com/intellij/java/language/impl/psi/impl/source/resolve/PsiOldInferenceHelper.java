@@ -33,8 +33,8 @@ import consulo.logging.Logger;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.Pair;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * User: anna
@@ -94,7 +94,7 @@ public class PsiOldInferenceHelper implements PsiInferenceHelper {
   private Pair<PsiType, ConstraintType> inferTypeForMethodTypeParameterInner(@Nonnull PsiTypeParameter typeParameter,
                                                                              @Nonnull PsiType[] paramTypes,
                                                                              @Nonnull PsiType[] argTypes,
-                                                                             @Nonnull PsiSubstitutor partialSubstitutor,
+                                                                             @jakarta.annotation.Nonnull PsiSubstitutor partialSubstitutor,
                                                                              @Nullable PsiElement parent,
                                                                              @Nonnull ParameterTypeInferencePolicy policy) {
     PsiWildcardType wildcardToCapture = null;
@@ -210,7 +210,7 @@ public class PsiOldInferenceHelper implements PsiInferenceHelper {
     return null;
   }
 
-  private static Pair<PsiType, ConstraintType> getFailedInferenceConstraint(@Nonnull PsiTypeParameter typeParameter) {
+  private static Pair<PsiType, ConstraintType> getFailedInferenceConstraint(@jakarta.annotation.Nonnull PsiTypeParameter typeParameter) {
     return new Pair<PsiType, ConstraintType>(JavaPsiFacade.getInstance(typeParameter.getProject()).getElementFactory().createType(typeParameter), ConstraintType.EQUALS);
   }
 
@@ -433,7 +433,7 @@ public class PsiOldInferenceHelper implements PsiInferenceHelper {
     return substitutor;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private static Pair<PsiType, ConstraintType> processArgType(PsiType arg, final ConstraintType constraintType, final boolean captureWildcard) {
     if (arg instanceof PsiWildcardType && !captureWildcard) {
       return FAILED_INFERENCE;
@@ -724,7 +724,7 @@ public class PsiOldInferenceHelper implements PsiInferenceHelper {
     return null;
   }
 
-  private Pair<PsiType, ConstraintType> inferMethodTypeParameterFromParent(@Nonnull final PsiElement parent,
+  private Pair<PsiType, ConstraintType> inferMethodTypeParameterFromParent(@jakarta.annotation.Nonnull final PsiElement parent,
                                                                            @Nonnull PsiExpression methodCall,
                                                                            @Nonnull PsiTypeParameter typeParameter,
                                                                            @Nonnull PsiSubstitutor substitutor,

@@ -9,7 +9,7 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValueFac
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaVariableValue;
 import com.intellij.java.language.psi.PsiLambdaExpression;
 import com.intellij.java.language.psi.PsiParameter;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * A memory state that may ignore type constraint known from assignment.

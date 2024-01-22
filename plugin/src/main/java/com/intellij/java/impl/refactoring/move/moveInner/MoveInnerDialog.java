@@ -33,8 +33,8 @@ import javax.swing.JPanel;
 import com.intellij.java.language.psi.*;
 import consulo.application.HelpManager;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import consulo.application.ApplicationManager;
 import consulo.project.Project;
 import consulo.module.content.ProjectRootManager;
@@ -108,7 +108,7 @@ public class MoveInnerDialog extends RefactoringDialog {
     return myClassNameField.getText().trim();
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   public String getParameterName() {
     if (myParameterField != null) {
       return myParameterField.getEnteredName();
@@ -192,7 +192,7 @@ public class MoveInnerDialog extends RefactoringDialog {
     return null;
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   private PsiElement getTargetContainer() {
     if (myTargetContainer instanceof PsiDirectory) {
       final PsiDirectory psiDirectory = (PsiDirectory)myTargetContainer;

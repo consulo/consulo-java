@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.psi.infos;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.projectRoots.JavaVersionService;
@@ -32,7 +32,7 @@ public class CandidateInfo implements JavaResolveResult
 
 	private final PsiElement myPlace;
 	private final PsiClass myAccessClass;
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	private final PsiElement myCandidate;
 	private final boolean myStaticsProblem;
 	protected final PsiSubstitutor mySubstitutor;
@@ -64,7 +64,7 @@ public class CandidateInfo implements JavaResolveResult
 		this(candidate, substitutor, !accessProblem, staticsProblem, currFileContext, null, null, false);
 	}
 
-	public CandidateInfo(@Nonnull PsiElement candidate, @Nonnull PsiSubstitutor substitutor, boolean accessProblem, boolean staticsProblem)
+	public CandidateInfo(@jakarta.annotation.Nonnull PsiElement candidate, @jakarta.annotation.Nonnull PsiSubstitutor substitutor, boolean accessProblem, boolean staticsProblem)
 	{
 		this(candidate, substitutor, accessProblem, staticsProblem, null);
 	}

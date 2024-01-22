@@ -15,7 +15,7 @@
  */
 package com.intellij.java.debugger.impl.memory.filtering;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import consulo.internal.com.sun.jdi.ObjectReference;
 /**
  * @author Vitaliy.Bibaev

@@ -20,10 +20,9 @@ import com.intellij.java.language.JavaLanguage;
 import com.siyeh.ig.GroupDisplayNameUtil;
 import consulo.java.deadCodeNotWorking.OldStyleInspection;
 import consulo.language.Language;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Nls;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public abstract class BaseGlobalInspection extends GlobalJavaInspectionTool implements OldStyleInspection
 {

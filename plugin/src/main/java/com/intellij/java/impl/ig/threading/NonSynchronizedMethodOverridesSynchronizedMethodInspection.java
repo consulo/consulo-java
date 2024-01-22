@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.ig.threading;
 
-import javax.annotation.Nonnull;
-
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -24,6 +22,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.ChangeModifierFix;
 import com.intellij.java.language.psi.PsiModifier;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NonSynchronizedMethodOverridesSynchronizedMethodInspection
@@ -35,7 +34,7 @@ public class NonSynchronizedMethodOverridesSynchronizedMethodInspection
       "non.synchronized.method.overrides.synchronized.method.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "non.synchronized.method.overrides.synchronized.method.problem.descriptor");

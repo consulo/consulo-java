@@ -22,7 +22,7 @@ import consulo.codeEditor.Editor;
 import consulo.util.lang.function.Condition;
 import consulo.language.psi.PsiElement;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public abstract class JavaStatementWrapPostfixTemplate extends StatementWrapPostfixTemplate {
 
@@ -34,7 +34,7 @@ public abstract class JavaStatementWrapPostfixTemplate extends StatementWrapPost
   }
 
   @Override
-  protected void afterExpand(@Nonnull PsiElement newElement, @Nonnull Editor editor) {
+  protected void afterExpand(@jakarta.annotation.Nonnull PsiElement newElement, @Nonnull Editor editor) {
     super.afterExpand(newElement, editor);
     JavaPostfixTemplateProvider.doNotDeleteSemicolon(newElement.getContainingFile());
   }

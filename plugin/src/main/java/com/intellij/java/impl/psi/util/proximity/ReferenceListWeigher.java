@@ -29,8 +29,8 @@ import consulo.ide.impl.psi.util.ProximityLocation;
 import consulo.ide.impl.psi.util.proximity.ProximityWeigher;
 import consulo.java.language.module.util.JavaClassNames;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import static com.intellij.java.impl.psi.util.proximity.ReferenceListWeigher.ReferenceListApplicability.*;
 
@@ -87,15 +87,15 @@ public class ReferenceListWeigher extends ProximityWeigher {
   }
 
   @Override
-  public ReferenceListApplicability weigh(@Nonnull PsiElement element, @Nonnull ProximityLocation location) {
+  public ReferenceListApplicability weigh(@Nonnull PsiElement element, @jakarta.annotation.Nonnull ProximityLocation location) {
     if (element instanceof PsiClass && location.getPosition() != null) {
       return getApplicability((PsiClass) element, location.getPosition());
     }
     return unknown;
   }
 
-  @Nonnull
-  public ReferenceListApplicability getApplicability(@Nonnull PsiClass aClass, @Nonnull PsiElement position) {
+  @jakarta.annotation.Nonnull
+  public ReferenceListApplicability getApplicability(@jakarta.annotation.Nonnull PsiClass aClass, @Nonnull PsiElement position) {
     Preference condition = getPreferredCondition(position);
     if (condition == Preference.Interfaces) {
       return aClass.isInterface() ? applicableByKind : inapplicable;

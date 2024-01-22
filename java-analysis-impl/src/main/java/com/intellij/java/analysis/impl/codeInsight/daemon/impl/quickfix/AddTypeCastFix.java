@@ -24,8 +24,7 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
 
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
@@ -44,6 +43,7 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
+import jakarta.annotation.Nullable;
 
 public class AddTypeCastFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   private final PsiType myType;

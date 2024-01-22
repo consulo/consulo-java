@@ -22,7 +22,7 @@ import consulo.language.ast.IElementType;
 import consulo.language.codeStyle.AlignmentStrategy;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Set;
 
 public class SubsequentVariablesAligner extends ChildAlignmentStrategyProvider {

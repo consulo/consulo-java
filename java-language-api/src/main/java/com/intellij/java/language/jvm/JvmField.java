@@ -16,8 +16,8 @@
 package com.intellij.java.language.jvm;
 
 import com.intellij.java.language.jvm.types.JvmType;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.lang.reflect.Field;
 
 /**
@@ -30,7 +30,7 @@ public interface JvmField extends JvmMember {
   /**
    * @see Field#getName
    */
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   String getName();
 

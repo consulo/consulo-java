@@ -32,7 +32,7 @@ import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.JavaMoveCla
 import com.intellij.java.impl.refactoring.move.moveMembers.MoveMembersHandler;
 import consulo.language.editor.refactoring.ui.RadioUpDownListener;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 
@@ -127,7 +127,7 @@ public class MoveInnerToUpperOrMembersHandler extends MoveHandlerDelegate {
       return panel;
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     public MoveHandlerDelegate getRefactoringHandler() {
       if (myRbMoveInner.isSelected()) {
         return new MoveInnerToUpperHandler();

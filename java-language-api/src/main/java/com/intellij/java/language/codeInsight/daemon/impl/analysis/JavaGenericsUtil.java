@@ -5,8 +5,7 @@ import static com.intellij.java.language.codeInsight.AnnotationUtil.CHECK_EXTERN
 
 import java.util.Iterator;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.*;
@@ -18,6 +17,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.java.language.module.util.JavaClassNames;
+import jakarta.annotation.Nonnull;
 
 public class JavaGenericsUtil
 {
@@ -98,7 +98,7 @@ public class JavaGenericsUtil
 		return false;
 	}
 
-	public static boolean isUncheckedWarning(@Nonnull PsiJavaCodeReferenceElement expression, @Nonnull JavaResolveResult resolveResult, @Nonnull LanguageLevel languageLevel)
+	public static boolean isUncheckedWarning(@jakarta.annotation.Nonnull PsiJavaCodeReferenceElement expression, @jakarta.annotation.Nonnull JavaResolveResult resolveResult, @Nonnull LanguageLevel languageLevel)
 	{
 		final PsiElement resolve = resolveResult.getElement();
 		if(!(resolve instanceof PsiMethod))
@@ -362,14 +362,14 @@ public class JavaGenericsUtil
 		return false;
 	}
 
-	@Nullable
-	public static PsiType getCollectionItemType(@Nonnull PsiExpression expression)
+	@jakarta.annotation.Nullable
+	public static PsiType getCollectionItemType(@jakarta.annotation.Nonnull PsiExpression expression)
 	{
 		return getCollectionItemType(expression.getType(), expression.getResolveScope());
 	}
 
 	@Nullable
-	public static PsiType getCollectionItemType(@Nullable PsiType type, @Nonnull GlobalSearchScope scope)
+	public static PsiType getCollectionItemType(@jakarta.annotation.Nullable PsiType type, @jakarta.annotation.Nonnull GlobalSearchScope scope)
 	{
 		if(type instanceof PsiArrayType)
 		{
@@ -442,7 +442,7 @@ public class JavaGenericsUtil
 		return null;
 	}
 
-	@Nullable
+	@jakarta.annotation.Nullable
 	private static PsiTypeParameter getIterableTypeParameter(final JavaPsiFacade facade, final PsiClass context)
 	{
 		PsiClass iterable = facade.findClass("java.lang.Iterable", context.getResolveScope());

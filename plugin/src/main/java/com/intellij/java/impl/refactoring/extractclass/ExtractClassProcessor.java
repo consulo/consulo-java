@@ -61,7 +61,7 @@ import consulo.util.lang.function.Condition;
 import consulo.util.lang.ref.Ref;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.*;
 
 public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
@@ -248,7 +248,7 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
     return RefactorJBundle.message("extracted.class.command.name", newClassName);
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usageInfos) {
     return new ExtractClassUsageViewDescriptor(sourceClass);
   }

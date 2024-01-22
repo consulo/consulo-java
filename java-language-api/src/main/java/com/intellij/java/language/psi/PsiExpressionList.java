@@ -16,8 +16,7 @@
 package com.intellij.java.language.psi;
 
 import consulo.language.psi.PsiElement;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Represents a list of expressions separated by commas.
@@ -31,7 +30,7 @@ public interface PsiExpressionList extends PsiElement {
    *
    * @return the array of expressions contained in the list.
    */
-  @Nonnull
+  @jakarta.annotation.Nonnull
   PsiExpression[] getExpressions();
 
   @Nonnull

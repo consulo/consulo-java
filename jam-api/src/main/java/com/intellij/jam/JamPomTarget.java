@@ -15,7 +15,7 @@
  */
 package com.intellij.jam;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.document.util.TextRange;
 import consulo.language.pom.PomRenameableTarget;
@@ -25,7 +25,7 @@ import consulo.language.psi.ElementManipulators;
 import com.intellij.java.language.psi.PsiLiteral;
 import consulo.util.lang.ObjectUtil;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author peter

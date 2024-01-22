@@ -28,7 +28,7 @@ import consulo.index.io.PersistentStringEnumerator;
 import consulo.util.collection.SLRUCache;
 import consulo.util.io.FileUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.io.File;
 import java.io.IOException;
 
@@ -39,7 +39,7 @@ public class SymbolTable {
   private static final int STRING_CACHE_SIZE = 1024;
 
   private final SLRUCache<Integer, String> myIndexStringCache = new SLRUCache<Integer, String>(STRING_CACHE_SIZE * 2, STRING_CACHE_SIZE) {
-    @Nonnull
+    @jakarta.annotation.Nonnull
     public String createValue(Integer key) {
       try {
         return myTrie.valueOf(key.intValue());

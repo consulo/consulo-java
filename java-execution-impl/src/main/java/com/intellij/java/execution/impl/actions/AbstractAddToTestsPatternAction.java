@@ -35,7 +35,7 @@ import consulo.ui.ex.popup.PopupStep;
 import consulo.ui.image.Image;
 import consulo.util.collection.ContainerUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.*;
 
 public abstract class AbstractAddToTestsPatternAction<T extends JavaTestConfigurationBase> extends AnAction {
@@ -79,7 +79,7 @@ public abstract class AbstractAddToTestsPatternAction<T extends JavaTestConfigur
           return configuration.getIcon();
         }
 
-        @Nonnull
+        @jakarta.annotation.Nonnull
         @Override
         public String getTextFor(T value) {
           return value.getName();

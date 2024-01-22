@@ -20,8 +20,9 @@ import consulo.module.content.ProjectRootManager;
 import consulo.usage.UsageViewShortNameLocation;
 import consulo.virtualFileSystem.VirtualFile;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.List;
 
 import static com.intellij.java.language.psi.util.PsiFormatUtilBase.*;
@@ -33,7 +34,7 @@ import static com.intellij.java.language.psi.util.PsiFormatUtilBase.*;
 public class JavaNavBarExtension extends StructureAwareNavBarModelExtension {
   private final List<NodeProvider<?>> myNodeProviders = List.of(new JavaLambdaNodeProvider(), new JavaAnonymousClassesNodeProvider());
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   @RequiredReadAction
   public String getPresentableText(Object object) {
@@ -74,7 +75,7 @@ public class JavaNavBarExtension extends StructureAwareNavBarModelExtension {
     return super.getParent(psiElement);
   }
 
-  @Nullable
+  @jakarta.annotation.Nullable
   @Override
   public PsiElement adjustElement(@Nonnull final PsiElement psiElement) {
     final ProjectFileIndex index = ProjectRootManager.getInstance(psiElement.getProject()).getFileIndex();

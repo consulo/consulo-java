@@ -17,7 +17,6 @@ package com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.c
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
 import com.intellij.java.language.psi.PsiArrayType;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassType;
@@ -28,6 +27,7 @@ import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.In
 import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.InferenceVariable;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import jakarta.annotation.Nonnull;
 
 /**
  * User: anna

@@ -51,7 +51,7 @@ import consulo.ui.image.Image;
 import consulo.ui.image.ImageEffects;
 import consulo.util.lang.Comparing;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -62,7 +62,7 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
   private final List<PsiReference> myReferences = new ArrayList<PsiReference>();
   private final boolean myNavigateToReference;
 
-  public CallHierarchyNodeDescriptor(@Nonnull Project project, final HierarchyNodeDescriptor parentDescriptor, @Nonnull PsiElement element, final boolean isBase, final boolean navigateToReference) {
+  public CallHierarchyNodeDescriptor(@Nonnull Project project, final HierarchyNodeDescriptor parentDescriptor, @jakarta.annotation.Nonnull PsiElement element, final boolean isBase, final boolean navigateToReference) {
     super(project, parentDescriptor, element, isBase);
     myNavigateToReference = navigateToReference;
   }

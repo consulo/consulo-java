@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
@@ -42,7 +42,7 @@ public class NonFinalFieldInEnumInspection extends BaseInspection {
     return InspectionGadgetsBundle.message("non.final.field.in.enum.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     final PsiClass enumClass = (PsiClass)infos[0];

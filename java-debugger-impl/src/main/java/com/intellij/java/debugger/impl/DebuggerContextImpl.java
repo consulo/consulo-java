@@ -20,7 +20,7 @@
  */
 package com.intellij.java.debugger.impl;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import com.intellij.java.debugger.DebuggerContext;
 import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.debugger.impl.engine.ContextUtil;
@@ -59,7 +59,7 @@ public final class DebuggerContextImpl implements DebuggerContext
 
 	private DebuggerContextImpl(
 			@Nullable DebuggerSession session,
-			@Nullable DebugProcessImpl debugProcess,
+			@jakarta.annotation.Nullable DebugProcessImpl debugProcess,
 			@Nullable SuspendContextImpl context,
 			ThreadReferenceProxyImpl threadProxy,
 			StackFrameProxyImpl frameProxy,

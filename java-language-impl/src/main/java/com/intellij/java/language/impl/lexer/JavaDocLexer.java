@@ -23,12 +23,12 @@ import consulo.language.lexer.LexerBase;
 import consulo.language.lexer.MergingLexerAdapter;
 import consulo.language.ast.IElementType;
 import consulo.util.lang.CharArrayUtil;
+import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 
 public class JavaDocLexer extends MergingLexerAdapter {
-  public JavaDocLexer(@Nonnull LanguageLevel level) {
+  public JavaDocLexer(@jakarta.annotation.Nonnull LanguageLevel level) {
     this(JavaDocTokenTypes.INSTANCE, level.isAtLeast(LanguageLevel.JDK_1_5));
   }
 

@@ -38,7 +38,7 @@ import consulo.project.Project;
 import consulo.xml.psi.xml.XmlTokenType;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class PsiBasedFormatterModelWithShiftIndentInside extends PsiBasedFormattingModel {
   private static final Logger LOG = Logger.getInstance(PsiBasedFormatterModelWithShiftIndentInside.class);

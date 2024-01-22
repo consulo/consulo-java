@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.numeric;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -44,7 +44,7 @@ public class LongLiteralsEndingWithLowercaseLInspection
       "long.literals.ending.with.lowercase.l.display.name");
   }
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "long.literals.ending.with.lowercase.l.problem.descriptor");
@@ -81,7 +81,7 @@ public class LongLiteralsEndingWithLowercaseLInspection
 
     @Override
     public void visitLiteralExpression(
-      @Nonnull PsiLiteralExpression expression) {
+      @jakarta.annotation.Nonnull PsiLiteralExpression expression) {
       super.visitLiteralExpression(expression);
       final PsiType type = expression.getType();
       if (type == null) {

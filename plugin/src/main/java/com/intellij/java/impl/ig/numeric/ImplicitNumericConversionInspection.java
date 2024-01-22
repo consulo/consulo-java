@@ -34,10 +34,10 @@ import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 import consulo.util.collection.primitive.objects.ObjectIntMap;
 import consulo.util.collection.primitive.objects.ObjectMaps;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.swing.*;
 
 @ExtensionImpl
@@ -68,7 +68,7 @@ public class ImplicitNumericConversionInspection extends BaseInspection {
   public boolean ignoreConstantConversions = false;
 
   @Override
-  @Nonnull
+  @jakarta.annotation.Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("implicit.numeric.conversion.display.name");
   }
@@ -148,7 +148,7 @@ public class ImplicitNumericConversionInspection extends BaseInspection {
       }
     }
 
-    @Nullable
+    @jakarta.annotation.Nullable
     @NonNls
     private static String convertExpression(PsiExpression expression, PsiType expectedType) {
       final PsiType expressionType = expression.getType();
@@ -229,7 +229,7 @@ public class ImplicitNumericConversionInspection extends BaseInspection {
       return PsiType.INT.equals(expressionType) || PsiType.LONG.equals(expressionType);
     }
 
-    private static boolean isFloatingPoint(@Nullable PsiType expressionType) {
+    private static boolean isFloatingPoint(@jakarta.annotation.Nullable PsiType expressionType) {
       return PsiType.FLOAT.equals(expressionType) || PsiType.DOUBLE.equals(expressionType);
     }
   }

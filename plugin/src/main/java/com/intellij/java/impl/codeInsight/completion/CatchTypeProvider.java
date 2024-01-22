@@ -30,7 +30,7 @@ import consulo.language.util.ProcessingContext;
 import consulo.language.editor.completion.CompletionProvider;
 import consulo.java.language.module.util.JavaClassNames;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -82,7 +82,7 @@ class CatchTypeProvider implements CompletionProvider
 		});
 	}
 
-	@Nonnull
+	@jakarta.annotation.Nonnull
 	private static LookupElement createCatchTypeVariant(PsiCodeBlock tryBlock, PsiClassType type)
 	{
 		return TailTypeDecorator.withTail(PsiTypeLookupItem.createLookupItem(type, tryBlock), TailType.HUMBLE_SPACE_BEFORE_WORD);

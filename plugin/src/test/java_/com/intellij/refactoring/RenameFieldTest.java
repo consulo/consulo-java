@@ -26,7 +26,7 @@ package com.intellij.refactoring;
 
 import static org.junit.Assert.assertFalse;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;

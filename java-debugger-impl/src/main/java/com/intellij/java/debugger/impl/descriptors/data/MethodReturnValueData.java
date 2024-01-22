@@ -20,15 +20,16 @@ import consulo.project.Project;
 import consulo.util.lang.Pair;
 import consulo.internal.com.sun.jdi.Method;
 import consulo.internal.com.sun.jdi.Value;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public final class MethodReturnValueData extends DescriptorData<MethodReturnValueDescriptorImpl>{
-  private final @Nullable Value myReturnValue;
-  private final @Nonnull
+  private final @jakarta.annotation.Nullable
+  Value myReturnValue;
+  private final @jakarta.annotation.Nonnull
   Method myMethod;
 
-  public MethodReturnValueData(@Nonnull Method method, @Nullable Value returnValue) {
+  public MethodReturnValueData(@jakarta.annotation.Nonnull Method method, @jakarta.annotation.Nullable Value returnValue) {
     super();
     myMethod = method;
     myReturnValue = returnValue;
@@ -39,7 +40,7 @@ public final class MethodReturnValueData extends DescriptorData<MethodReturnValu
     return myReturnValue;
   }
 
-  public @Nonnull
+  public @jakarta.annotation.Nonnull
   Method getMethod() {
     return myMethod;
   }

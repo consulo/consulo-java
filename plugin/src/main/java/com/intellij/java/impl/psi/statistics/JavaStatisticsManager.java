@@ -20,12 +20,12 @@ import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.ide.impl.psi.statistics.StatisticsInfo;
 import consulo.ide.impl.psi.statistics.StatisticsManager;
-import consulo.util.collection.ArrayUtil;
 import consulo.logging.Logger;
+import consulo.util.collection.ArrayUtil;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 
 /**
@@ -36,23 +36,23 @@ public abstract class JavaStatisticsManager {
   @NonNls
   public static final String CLASS_PREFIX = "class#";
 
-  private static consulo.ide.impl.psi.statistics.StatisticsInfo createVariableUseInfo(final String name, final VariableKind variableKind,
-                                                                                      final String propertyName,
-                                                                                      final PsiType type) {
-    String key1 = getVariableNameUseKey1(propertyName, type);
+  private static StatisticsInfo createVariableUseInfo(final String name, final VariableKind variableKind,
+                                                      final String propertyName,
+                                                      final String canonialTypeText) {
+    String key1 = getVariableNameUseKey1(propertyName, canonialTypeText);
     String key2 = getVariableNameUseKey2(variableKind, name);
-    return new consulo.ide.impl.psi.statistics.StatisticsInfo(key1, key2);
+    return new StatisticsInfo(key1, key2);
   }
 
-  private static String getVariableNameUseKey1(String propertyName, PsiType type) {
+  private static String getVariableNameUseKey1(String propertyName, String canonialTypeText) {
     @NonNls StringBuilder buffer = new StringBuilder();
     buffer.append("variableName#");
     if (propertyName != null) {
       buffer.append(propertyName);
     }
     buffer.append("#");
-    if (type != null) {
-      buffer.append(type.getCanonicalText());
+    if (canonialTypeText != null) {
+      buffer.append(canonialTypeText);
     }
     return buffer.toString();
   }
@@ -66,14 +66,18 @@ public abstract class JavaStatisticsManager {
   }
 
   public static int getVariableNameUseCount(String name, VariableKind variableKind, String propertyName, PsiType type) {
-    return createVariableUseInfo(name, variableKind, propertyName, type).getUseCount();
+    return createVariableUseInfo(name, variableKind, propertyName, type == null ? null : type.getCanonicalText()).getUseCount();
   }
 
   public static void incVariableNameUseCount(String name, VariableKind variableKind, String propertyName, PsiType type) {
-    createVariableUseInfo(name, variableKind, propertyName, type).incUseCount();
+    incVariableNameUseCount(name, variableKind, propertyName, type == null ? null : type.getCanonicalText());
   }
 
-  @Nullable
+  public static void incVariableNameUseCount(String name, VariableKind variableKind, String propertyName, String canonialTypeText) {
+    createVariableUseInfo(name, variableKind, propertyName, canonialTypeText).incUseCount();
+  }
+
+  @jakarta.annotation.Nullable
   public static String getName(String key2) {
     final int startIndex = key2.indexOf("#");
     LOG.assertTrue(startIndex >= 0);
@@ -107,7 +111,7 @@ public abstract class JavaStatisticsManager {
   @NonNls
   public static String getMemberUseKey2(PsiMember member) {
     if (member instanceof PsiMethod) {
-      PsiMethod method = (PsiMethod) member;
+      PsiMethod method = (PsiMethod)member;
       @NonNls StringBuilder buffer = new StringBuilder();
       buffer.append("method#");
       buffer.append(method.getName());
@@ -122,19 +126,20 @@ public abstract class JavaStatisticsManager {
       return "field#" + member.getName();
     }
 
-    return CLASS_PREFIX + ((PsiClass) member).getQualifiedName();
+    return CLASS_PREFIX + ((PsiClass)member).getQualifiedName();
   }
 
-  public static consulo.ide.impl.psi.statistics.StatisticsInfo createInfo(@Nullable final PsiType qualifierType, final PsiMember member) {
-    return new consulo.ide.impl.psi.statistics.StatisticsInfo(getMemberUseKey1(qualifierType), getMemberUseKey2(member));
+  public static StatisticsInfo createInfo(@jakarta.annotation.Nullable final PsiType qualifierType, final PsiMember member) {
+    return new StatisticsInfo(getMemberUseKey1(qualifierType), getMemberUseKey2(member));
   }
 
   public static String[] getAllVariableNamesUsed(VariableKind variableKind, String propertyName, PsiType type) {
-    consulo.ide.impl.psi.statistics.StatisticsInfo[] keys2 = consulo.ide.impl.psi.statistics.StatisticsManager.getInstance().getAllValues(getVariableNameUseKey1(propertyName, type));
+    StatisticsInfo[] keys2 =
+      StatisticsManager.getInstance().getAllValues(getVariableNameUseKey1(propertyName, type == null ? null : type.getCanonicalText()));
 
     ArrayList<String> list = new ArrayList<String>();
 
-    for (consulo.ide.impl.psi.statistics.StatisticsInfo key2 : keys2) {
+    for (StatisticsInfo key2 : keys2) {
       VariableKind variableKind1 = getVariableKindFromKey2(key2.getValue());
       if (variableKind1 != variableKind) continue;
       String name = getVariableNameFromKey2(key2.getValue());

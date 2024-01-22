@@ -24,11 +24,11 @@
  */
 package org.osmorc.manifest.lang.valueparser.impl;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import consulo.language.editor.annotation.AnnotationHolder;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import org.osmorc.manifest.lang.psi.HeaderValuePart;
 import org.osmorc.manifest.lang.valueparser.ValueParser;
 
@@ -36,12 +36,12 @@ import org.osmorc.manifest.lang.valueparser.ValueParser;
  * @author Robert F. Beeger (robert@beeger.net)
  */
 public abstract class AbstractValueParserImpl<T> implements ValueParser<T> {
-  public T parseValue(@Nonnull HeaderValuePart headerValuePart, @Nullable AnnotationHolder annotationHolder) {
+  public T parseValue(@Nonnull HeaderValuePart headerValuePart, @jakarta.annotation.Nullable AnnotationHolder annotationHolder) {
     String valueText = headerValuePart.getUnwrappedText();
     return parseValue(headerValuePart, valueText, 0, annotationHolder);
   }
 
-  public T parseValue(@Nonnull HeaderValuePart headerValuePart, int start, int end, @Nullable AnnotationHolder annotationHolder) {
+  public T parseValue(@Nonnull HeaderValuePart headerValuePart, int start, int end, @jakarta.annotation.Nullable AnnotationHolder annotationHolder) {
     String valueText = headerValuePart.getUnwrappedText();
     valueText = valueText.substring(start, end);
     return parseValue(headerValuePart, valueText, start, annotationHolder);

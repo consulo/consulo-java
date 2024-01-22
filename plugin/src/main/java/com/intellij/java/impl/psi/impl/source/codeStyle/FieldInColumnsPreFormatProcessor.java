@@ -30,7 +30,7 @@ import consulo.language.codeStyle.CommonCodeStyleSettings;
 import consulo.ide.impl.psi.impl.source.codeStyle.PreFormatProcessor;
 import consulo.language.psi.util.PsiTreeUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * There is a possible case that the project is configured to keep fields in columns:
@@ -53,7 +53,7 @@ import javax.annotation.Nonnull;
 @ExtensionImpl
 public class FieldInColumnsPreFormatProcessor implements PreFormatProcessor {
 
-  @Nonnull
+  @jakarta.annotation.Nonnull
   @Override
   public TextRange process(@Nonnull ASTNode element, @Nonnull TextRange range) {
     //region Checking that everything is ready to expand the range for the 'fields in columns'.

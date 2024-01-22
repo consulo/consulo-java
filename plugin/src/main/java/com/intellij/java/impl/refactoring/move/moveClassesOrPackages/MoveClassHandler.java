@@ -23,8 +23,9 @@ import consulo.language.psi.PsiDirectory;
 import consulo.language.util.IncorrectOperationException;
 import consulo.usage.UsageInfo;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.Collection;
 
 /**
