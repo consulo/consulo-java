@@ -20,6 +20,8 @@ import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.language.impl.psi.impl.PsiSuperMethodImplUtil;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiMethodStub;
+import com.intellij.java.language.impl.psi.impl.light.LightCompactConstructorParameter;
+import com.intellij.java.language.impl.psi.impl.light.LightParameterListBuilder;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaSharedImplUtil;
 import com.intellij.java.language.psi.*;
@@ -45,8 +47,8 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.navigation.ItemPresentation;
 import consulo.navigation.ItemPresentationProvider;
 import consulo.util.lang.ref.SoftReference;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -79,7 +81,7 @@ public class PsiMethodImpl extends JavaStubPsiElement<PsiMethodStub> implements 
 
   @Override
   protected Object clone() {
-    PsiMethodImpl clone = (PsiMethodImpl) super.clone();
+    PsiMethodImpl clone = (PsiMethodImpl)super.clone();
     clone.dropCached();
     return clone;
   }
@@ -87,7 +89,7 @@ public class PsiMethodImpl extends JavaStubPsiElement<PsiMethodStub> implements 
   @Override
   public PsiClass getContainingClass() {
     PsiElement parent = getParent();
-    return parent instanceof PsiClass ? (PsiClass) parent : PsiTreeUtil.getParentOfType(this, PsiSyntheticClass.class);
+    return parent instanceof PsiClass ? (PsiClass)parent : PsiTreeUtil.getParentOfType(this, PsiSyntheticClass.class);
   }
 
   @Override
@@ -98,7 +100,7 @@ public class PsiMethodImpl extends JavaStubPsiElement<PsiMethodStub> implements 
 
   @Override
   public PsiIdentifier getNameIdentifier() {
-    return (PsiIdentifier) getNode().findChildByRoleAsPsiElement(ChildRole.NAME);
+    return (PsiIdentifier)getNode().findChildByRoleAsPsiElement(ChildRole.NAME);
   }
 
   @Override
@@ -143,7 +145,8 @@ public class PsiMethodImpl extends JavaStubPsiElement<PsiMethodStub> implements 
     final PsiMethodStub stub = getGreenStub();
     if (stub != null) {
       name = stub.getName();
-    } else {
+    }
+    else {
       final PsiIdentifier nameIdentifier = getNameIdentifier();
       name = nameIdentifier == null ? null : nameIdentifier.getText();
     }
@@ -172,7 +175,7 @@ public class PsiMethodImpl extends JavaStubPsiElement<PsiMethodStub> implements 
     if (isConstructor()) {
       return null;
     }
-    return (PsiTypeElement) getNode().findChildByRoleAsPsiElement(ChildRole.TYPE);
+    return (PsiTypeElement)getNode().findChildByRoleAsPsiElement(ChildRole.TYPE);
   }
 
   @Override
@@ -226,7 +229,28 @@ public class PsiMethodImpl extends JavaStubPsiElement<PsiMethodStub> implements 
   @Override
   @Nonnull
   public PsiParameterList getParameterList() {
-    return getRequiredStubOrPsiChild(JavaStubElementTypes.PARAMETER_LIST);
+    PsiParameterList list = getStubOrPsiChild(JavaStubElementTypes.PARAMETER_LIST);
+    if (list == null) {
+      return LanguageCachedValueUtil.getCachedValue(this, () -> {
+        LightParameterListBuilder lightList = new LightParameterListBuilder(getManager(), getLanguage()) {
+          @Override
+          public String getText() {
+            return null;
+          }
+        };
+        PsiClass aClass = getContainingClass();
+        if (aClass != null) {
+          PsiRecordComponent[] recordComponents = aClass.getRecordComponents();
+          for (PsiRecordComponent component : recordComponents) {
+            String name = component.getName();
+            lightList.addParameter(new LightCompactConstructorParameter(name, component.getType(), this, component));
+          }
+        }
+
+        return CachedValueProvider.Result.create(lightList, this, PsiModificationTracker.MODIFICATION_COUNT);
+      });
+    }
+    return list;
   }
 
   @Override
@@ -238,20 +262,22 @@ public class PsiMethodImpl extends JavaStubPsiElement<PsiMethodStub> implements 
     }
 
     PsiMethodStub stub = getStub();
-    Stream<String> children = stub != null ? stub.getChildrenStubs().stream().map(s -> s.getClass().getSimpleName() + " : " + s.getStubType()) : Stream.of(getChildren()).map(e -> e.getClass()
-        .getSimpleName() + " : " + e.getNode().getElementType());
+    Stream<String> children =
+      stub != null ? stub.getChildrenStubs().stream().map(s -> s.getClass().getSimpleName() + " : " + s.getStubType()) : Stream.of(
+        getChildren()).map(e -> e.getClass()
+                                 .getSimpleName() + " : " + e.getNode().getElementType());
     throw new AssertionError("Missing throws list, file=" + getContainingFile() + " children:\n" + children.collect(Collectors.joining("\n")));
   }
 
   @Override
   public PsiCodeBlock getBody() {
-    return (PsiCodeBlock) getNode().findChildByRoleAsPsiElement(ChildRole.METHOD_BODY);
+    return (PsiCodeBlock)getNode().findChildByRoleAsPsiElement(ChildRole.METHOD_BODY);
   }
 
   @Override
   @Nonnull
   public CompositeElement getNode() {
-    return (CompositeElement) super.getNode();
+    return (CompositeElement)super.getNode();
   }
 
   @Override
@@ -271,7 +297,7 @@ public class PsiMethodImpl extends JavaStubPsiElement<PsiMethodStub> implements 
       return null;
     }
 
-    return (PsiDocComment) getNode().findChildByRoleAsPsiElement(ChildRole.DOC_COMMENT);
+    return (PsiDocComment)getNode().findChildByRoleAsPsiElement(ChildRole.DOC_COMMENT);
   }
 
   @Override
@@ -297,8 +323,9 @@ public class PsiMethodImpl extends JavaStubPsiElement<PsiMethodStub> implements 
   @Override
   public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor) visitor).visitMethod(this);
-    } else {
+      ((JavaElementVisitor)visitor).visitMethod(this);
+    }
+    else {
       visitor.visitElement(this);
     }
   }
@@ -309,7 +336,10 @@ public class PsiMethodImpl extends JavaStubPsiElement<PsiMethodStub> implements 
   }
 
   @Override
-  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place) {
+  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
+                                     @Nonnull ResolveState state,
+                                     PsiElement lastParent,
+                                     @Nonnull PsiElement place) {
     return PsiImplUtil.processDeclarationsInMethod(this, processor, state, lastParent, place);
 
   }
@@ -333,7 +363,7 @@ public class PsiMethodImpl extends JavaStubPsiElement<PsiMethodStub> implements 
     if (containingClass != null) {
       PsiElement original = containingClass.getOriginalElement();
       if (original != containingClass) {
-        final PsiMethod originalMethod = ((PsiClass) original).findMethodBySignature(this, false);
+        final PsiMethod originalMethod = ((PsiClass)original).findMethodBySignature(this, false);
         if (originalMethod != null) {
           return originalMethod;
         }
@@ -355,7 +385,7 @@ public class PsiMethodImpl extends JavaStubPsiElement<PsiMethodStub> implements 
   @Override
   @Nonnull
   public SearchScope getUseScope() {
-    return ApplicationManager.getApplication().runReadAction((Computable<SearchScope>) () -> PsiImplUtil.getMemberUseScope(this));
+    return ApplicationManager.getApplication().runReadAction((Computable<SearchScope>)() -> PsiImplUtil.getMemberUseScope(this));
   }
 
   @Override

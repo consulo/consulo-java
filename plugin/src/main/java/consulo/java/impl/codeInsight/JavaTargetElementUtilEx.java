@@ -1,8 +1,12 @@
 package consulo.java.impl.codeInsight;
 
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
+import com.intellij.java.language.impl.psi.impl.light.LightRecordCanonicalConstructor;
+import com.intellij.java.language.impl.psi.impl.light.LightRecordMember;
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.augment.PsiExtensionMethod;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationManager;
 import consulo.application.util.function.Computable;
@@ -17,9 +21,9 @@ import consulo.xml.psi.xml.XmlAttribute;
 import consulo.xml.psi.xml.XmlAttributeValue;
 import consulo.xml.psi.xml.XmlTag;
 import consulo.xml.psi.xml.XmlText;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.*;
 
 /**
@@ -59,7 +63,7 @@ public class JavaTargetElementUtilEx implements TargetElementUtilExtender {
   }
 
   @Override
-  public void collectReferenceSearchFlags(@jakarta.annotation.Nonnull Set<String> set) {
+  public void collectReferenceSearchFlags(@Nonnull Set<String> set) {
     set.add(NEW_AS_CONSTRUCTOR);
   }
 
@@ -181,12 +185,14 @@ public class JavaTargetElementUtilEx implements TargetElementUtilExtender {
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  
+  @Nullable
   @Override
-  public PsiElement modifyReferenceOrReferencedElement(@jakarta.annotation.Nullable PsiElement refElement,
-                                                       @jakarta.annotation.Nonnull PsiFile file,
-                                                       @jakarta.annotation.Nonnull Editor editor,
-                                                       @jakarta.annotation.Nonnull Set<String> flags,
+  @RequiredReadAction
+  public PsiElement modifyReferenceOrReferencedElement(@Nullable PsiElement refElement,
+                                                       @Nonnull PsiFile file,
+                                                       @Nonnull Editor editor,
+                                                       @Nonnull Set<String> flags,
                                                        int offset) {
     PsiReference ref = null;
     if (refElement == null) {
@@ -224,12 +230,22 @@ public class JavaTargetElementUtilEx implements TargetElementUtilExtender {
       if (refElement instanceof PsiClass) {
         final PsiFile containingFile = refElement.getContainingFile();
         if (containingFile != null && containingFile.getVirtualFile() == null) { // in mirror file of compiled class
-          String qualifiedName = ((PsiClass) refElement).getQualifiedName();
-          if (qualifiedName == null) {
-            return null;
-          }
+          String qualifiedName = ((PsiClass)refElement).getQualifiedName();
+          if (qualifiedName == null) return null;
           return JavaPsiFacade.getInstance(refElement.getProject()).findClass(qualifiedName, refElement.getResolveScope());
         }
+      }
+
+      if (refElement instanceof PsiExtensionMethod) {
+        refElement = ((PsiExtensionMethod)refElement).getTargetMethod();
+      }
+
+      if (refElement instanceof LightRecordMember) {
+        return ((LightRecordMember)refElement).getRecordComponent();
+      }
+
+      if (refElement instanceof LightRecordCanonicalConstructor) {
+        return ((LightRecordCanonicalConstructor)refElement).getContainingClass();
       }
     }
     return refElement;
@@ -237,7 +253,7 @@ public class JavaTargetElementUtilEx implements TargetElementUtilExtender {
 
   @Nullable
   @Override
-  public PsiElement modifyTargetElement(@Nonnull PsiElement element, @jakarta.annotation.Nonnull Set<String> flags) {
+  public PsiElement modifyTargetElement(@Nonnull PsiElement element, @Nonnull Set<String> flags) {
     if (element instanceof PsiKeyword) {
       if (element.getParent() instanceof PsiThisExpression) {
         if (!flags.contains(THIS_ACCEPTED)) {

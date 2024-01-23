@@ -3,11 +3,11 @@ package com.intellij.java.language.psi.util;
 
 import com.intellij.java.language.JavaPsiBundle;
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.javadoc.PsiSnippetDocTagBody;
 import consulo.language.psi.PsiElement;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.PropertyKey;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * Represents a kind of element that appears in Java source code.
@@ -18,6 +18,7 @@ public enum JavaElementKind {
   ANNOTATION("element.annotation"),
   ANONYMOUS_CLASS("element.anonymous_class"),
   CLASS("element.class"),
+  TYPE_PARAMETER("element.type.parameter"),
   CONSTANT("element.constant"),
   CONSTRUCTOR("element.constructor"),
   ENUM("element.enum"),
@@ -35,9 +36,16 @@ public enum JavaElementKind {
   PATTERN_VARIABLE("element.pattern_variable"),
   RECORD("element.record"),
   RECORD_COMPONENT("element.record_component"),
+  SNIPPET_BODY("element.snippet_body"),
   STATEMENT("element.statement"),
   UNKNOWN("element.unknown"),
-  VARIABLE("element.variable");
+  VARIABLE("element.variable"),
+  THROWS_LIST("element.throws.list"),
+  EXTENDS_LIST("element.extends.list"),
+  RECEIVER_PARAMETER("element.receiver.parameter"),
+  METHOD_CALL("element.method.call"),
+  TYPE_ARGUMENTS("element.type.arguments"),
+  SEMICOLON("element.type.semicolon");
 
   private final
   @PropertyKey(resourceBundle = JavaPsiBundle.BUNDLE)
@@ -69,9 +77,8 @@ public enum JavaElementKind {
    * @return less descriptive type for this type; usually result can be described in a single word
    * (e.g. LOCAL_VARIABLE is replaced with VARIABLE).
    */
-  public
   @Nonnull
-  JavaElementKind lessDescriptive() {
+  public JavaElementKind lessDescriptive() {
     switch (this) {
       case ABSTRACT_METHOD:
         return METHOD;
@@ -80,6 +87,7 @@ public enum JavaElementKind {
         return VARIABLE;
       case CONSTANT:
         return FIELD;
+      case TYPE_PARAMETER:
       case ANONYMOUS_CLASS:
         return CLASS;
       default:
@@ -93,7 +101,7 @@ public enum JavaElementKind {
    */
   public static JavaElementKind fromElement(@Nonnull PsiElement element) {
     if (element instanceof PsiClass) {
-      PsiClass psiClass = (PsiClass) element;
+      PsiClass psiClass = (PsiClass)element;
       if (psiClass instanceof PsiAnonymousClass) {
         return ANONYMOUS_CLASS;
       }
@@ -109,19 +117,22 @@ public enum JavaElementKind {
       if (psiClass.isInterface()) {
         return INTERFACE;
       }
+      if (psiClass instanceof PsiTypeParameter) {
+        return TYPE_PARAMETER;
+      }
       return CLASS;
     }
     if (element instanceof PsiMethod) {
-      if (((PsiMethod) element).isConstructor()) {
+      if (((PsiMethod)element).isConstructor()) {
         return CONSTRUCTOR;
       }
-      if (((PsiMethod) element).hasModifierProperty(PsiModifier.ABSTRACT)) {
+      if (((PsiMethod)element).hasModifierProperty(PsiModifier.ABSTRACT)) {
         return ABSTRACT_METHOD;
       }
       return METHOD;
     }
     if (element instanceof PsiField) {
-      PsiField field = (PsiField) element;
+      PsiField field = (PsiField)element;
       if (field instanceof PsiEnumConstant) {
         return ENUM_CONSTANT;
       }
@@ -129,6 +140,21 @@ public enum JavaElementKind {
         return CONSTANT;
       }
       return FIELD;
+    }
+    if (element instanceof PsiReferenceParameterList) {
+      return TYPE_ARGUMENTS;
+    }
+    if (element instanceof PsiReferenceList) {
+      PsiReferenceList.Role role = ((PsiReferenceList)element).getRole();
+      if (role == PsiReferenceList.Role.THROWS_LIST) {
+        return THROWS_LIST;
+      }
+      if (role == PsiReferenceList.Role.EXTENDS_LIST) {
+        return EXTENDS_LIST;
+      }
+    }
+    if (element instanceof PsiAnnotation) {
+      return ANNOTATION;
     }
     if (element instanceof PsiRecordComponent) {
       return RECORD_COMPONENT;
@@ -141,6 +167,9 @@ public enum JavaElementKind {
     }
     if (element instanceof PsiParameter) {
       return PARAMETER;
+    }
+    if (element instanceof PsiReceiverParameter) {
+      return RECEIVER_PARAMETER;
     }
     if (element instanceof PsiVariable) {
       return VARIABLE;
@@ -160,8 +189,17 @@ public enum JavaElementKind {
     if (element instanceof PsiStatement) {
       return STATEMENT;
     }
+    if (element instanceof PsiMethodCallExpression) {
+      return METHOD_CALL;
+    }
     if (element instanceof PsiExpression) {
       return EXPRESSION;
+    }
+    if (element instanceof PsiSnippetDocTagBody) {
+      return SNIPPET_BODY;
+    }
+    if (PsiUtil.isJavaToken(element, JavaTokenType.SEMICOLON)) {
+      return SEMICOLON;
     }
     return UNKNOWN;
   }
