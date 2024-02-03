@@ -20,7 +20,9 @@
 package com.intellij.java.language.impl.psi.impl.source.resolve;
 
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
+import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.PatternInference;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiExpressionListImpl;
+import com.intellij.java.language.impl.psi.util.JavaPsiPatternUtil;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.projectRoots.JavaVersionService;
 import com.intellij.java.language.psi.*;
@@ -40,7 +42,7 @@ import consulo.language.psi.resolve.ResolveCache;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
-
+import consulo.util.lang.ObjectUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -73,7 +75,7 @@ public class JavaResolveUtil {
     return isAccessible(member, memberClass, modifierList, place, accessObjectClass, fileResolveScope, place.getContainingFile());
   }
 
-  public static boolean isAccessible(@jakarta.annotation.Nonnull PsiMember member,
+  public static boolean isAccessible(@Nonnull PsiMember member,
                                      @Nullable PsiClass memberClass,
                                      @Nullable PsiModifierList modifierList,
                                      @Nonnull PsiElement place,
@@ -190,8 +192,8 @@ public class JavaResolveUtil {
     return true;
   }
 
-  public static boolean canAccessProtectedMember(@jakarta.annotation.Nonnull PsiMember member,
-                                                 @jakarta.annotation.Nonnull PsiClass memberClass,
+  public static boolean canAccessProtectedMember(@Nonnull PsiMember member,
+                                                 @Nonnull PsiClass memberClass,
                                                  @Nullable PsiClass accessObjectClass, @Nullable PsiClass contextClass, boolean isStatic) {
     while (contextClass != null) {
       if (InheritanceUtil.isInheritorOrSelf(contextClass, memberClass, true)) {
@@ -206,7 +208,7 @@ public class JavaResolveUtil {
     return false;
   }
 
-  private static boolean isInClassAnnotationParameterList(@jakarta.annotation.Nonnull PsiElement place, @Nullable PsiClass contextClass) {
+  private static boolean isInClassAnnotationParameterList(@Nonnull PsiElement place, @Nullable PsiClass contextClass) {
     if (contextClass != null) {
       PsiAnnotation annotation = PsiTreeUtil.getContextOfType(place, PsiAnnotation.class, true);
       if (annotation != null && PsiTreeUtil.isAncestor(contextClass.getModifierList(), annotation, false)) {
@@ -281,32 +283,38 @@ public class JavaResolveUtil {
     return true;
   }
 
-  public static void substituteResults(@Nonnull final PsiJavaCodeReferenceElement ref, @jakarta.annotation.Nonnull JavaResolveResult[] result) {
+  public static void substituteResults(@Nonnull final PsiJavaCodeReferenceElement ref, @Nonnull JavaResolveResult[] result) {
     if (result.length > 0 && result[0].getElement() instanceof PsiClass) {
+      PsiDeconstructionPattern pattern = ObjectUtil.tryCast(ref.getParent().getParent(), PsiDeconstructionPattern.class);
       for (int i = 0; i < result.length; i++) {
         final CandidateInfo resolveResult = (CandidateInfo)result[i];
         final PsiElement resultElement = resolveResult.getElement();
-        if (resultElement instanceof PsiClass && ((PsiClass)resultElement).hasTypeParameters()) {
-          PsiSubstitutor substitutor = resolveResult.getSubstitutor();
-          result[i] = new CandidateInfo(resolveResult, substitutor) {
-            @jakarta.annotation.Nonnull
-            @Override
-            public PsiSubstitutor getSubstitutor() {
-              final PsiType[] parameters = ref.getTypeParameters();
-              return super.getSubstitutor().putAll((PsiClass)resultElement, parameters);
-            }
-          };
+        if (resultElement instanceof PsiClass) {
+          PsiClass resultClass = (PsiClass)resultElement;
+          if (resultClass.hasTypeParameters()) {
+            PsiSubstitutor substitutor = resolveResult.getSubstitutor();
+            result[i] = pattern != null && ref.getTypeParameterCount() == 0
+              ? PatternInference.inferPatternGenerics(resolveResult, pattern, resultClass, JavaPsiPatternUtil.getContextType(pattern))
+              : new CandidateInfo(resolveResult, substitutor) {
+              @Nonnull
+              @Override
+              public PsiSubstitutor getSubstitutor() {
+                PsiType[] parameters = ref.getTypeParameters();
+                return super.getSubstitutor().putAll(resultClass, parameters);
+              }
+            };
+          }
         }
       }
     }
   }
 
   @Nonnull
-  public static <T extends PsiPolyVariantReference> JavaResolveResult[] resolveWithContainingFile(@jakarta.annotation.Nonnull T ref,
-                                                                                                  @jakarta.annotation.Nonnull ResolveCache.PolyVariantContextResolver<T> resolver,
+  public static <T extends PsiPolyVariantReference> JavaResolveResult[] resolveWithContainingFile(@Nonnull T ref,
+                                                                                                  @Nonnull ResolveCache.PolyVariantContextResolver<T> resolver,
                                                                                                   boolean needToPreventRecursion,
                                                                                                   boolean incompleteCode,
-                                                                                                  @jakarta.annotation.Nonnull PsiFile containingFile) {
+                                                                                                  @Nonnull PsiFile containingFile) {
     boolean valid = containingFile.isValid();
     if (!valid) {
       return JavaResolveResult.EMPTY_ARRAY;

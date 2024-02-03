@@ -642,6 +642,12 @@ public class PsiReferenceExpressionImpl extends ExpressionPsiElement implements 
     return PsiTreeUtil.getChildOfType(this, PsiReferenceParameterList.class);
   }
 
+  @Override
+  public int getTypeParameterCount() {
+    PsiReferenceParameterList parameterList = getParameterList();
+    return parameterList != null ? parameterList.getTypeArgumentCount() : 0;
+  }
+
   @Nonnull
   @Override
   public PsiType[] getTypeParameters() {

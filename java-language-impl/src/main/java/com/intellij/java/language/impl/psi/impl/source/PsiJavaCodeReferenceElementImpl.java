@@ -1083,6 +1083,13 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
   }
 
   @Override
+  public int getTypeParameterCount() {
+    PsiReferenceParameterList parameterList = getParameterList();
+    if (parameterList == null) return 0;
+    return parameterList.getTypeArgumentCount();
+  }
+
+  @Override
   @Nonnull
   public PsiType[] getTypeParameters() {
     final PsiReferenceParameterList parameterList = getParameterList();

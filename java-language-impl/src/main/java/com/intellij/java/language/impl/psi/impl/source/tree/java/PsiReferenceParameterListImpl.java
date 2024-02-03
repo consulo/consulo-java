@@ -19,10 +19,7 @@ import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.psi.*;
-import consulo.language.ast.ASTNode;
-import consulo.language.ast.ChildRoleBase;
-import consulo.language.ast.IElementType;
-import consulo.language.ast.TokenType;
+import consulo.language.ast.*;
 import consulo.language.impl.ast.Factory;
 import consulo.language.impl.ast.SharedImplUtil;
 import consulo.language.impl.ast.TreeElement;
@@ -30,7 +27,6 @@ import consulo.language.impl.psi.CompositePsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.util.CharTable;
 import consulo.logging.Logger;
-
 import jakarta.annotation.Nonnull;
 
 /**
@@ -38,6 +34,7 @@ import jakarta.annotation.Nonnull;
  */
 public class PsiReferenceParameterListImpl extends CompositePsiElement implements PsiReferenceParameterList {
   private static final Logger LOG = Logger.getInstance(PsiReferenceParameterListImpl.class);
+  private static final TokenSet TYPE_SET = TokenSet.create(JavaElementType.TYPE);
 
   public PsiReferenceParameterListImpl() {
     super(JavaElementType.REFERENCE_PARAMETER_LIST);
@@ -47,6 +44,20 @@ public class PsiReferenceParameterListImpl extends CompositePsiElement implement
   @Nonnull
   public PsiTypeElement[] getTypeParameterElements() {
     return getChildrenAsPsiElements(JavaElementType.TYPE, PsiTypeElement.ARRAY_FACTORY);
+  }
+
+  @Override
+  public int getTypeArgumentCount() {
+    int children = countChildren(TYPE_SET);
+    if (children == 1) {
+      PsiTypeElement typeElement = (PsiTypeElement)findChildByType(JavaElementType.TYPE);
+      LOG.assertTrue(typeElement != null);
+      PsiType soleType = typeElement.getType();
+      if (soleType instanceof PsiDiamondType) {
+        return ((PsiDiamondType)soleType).resolveInferredTypes().getInferredTypes().size();
+      }
+    }
+    return children;
   }
 
   @Override
@@ -185,7 +196,7 @@ public class PsiReferenceParameterListImpl extends CompositePsiElement implement
   }
 
   @Override
-  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitReferenceParameterList(this);
     }

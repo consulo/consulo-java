@@ -1,6 +1,7 @@
 // Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.language.impl.psi.util;
 
+import com.intellij.java.language.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
 import com.intellij.java.language.impl.psi.impl.source.JavaVarTypeUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
@@ -21,6 +22,85 @@ import java.util.List;
 public final class JavaPsiPatternUtil {
   public static @Nullable PsiType getDeconstructedImplicitPatternVariableType(@Nonnull PsiPatternVariable parameter) {
     return getDeconstructedImplicitPatternType(parameter.getPattern());
+  }
+
+  /**
+   * @return type of variable in pattern, or null if pattern is incomplete
+   */
+  @Contract(value = "null -> null", pure = true)
+  @Nullable
+  public static PsiType getPatternType(@Nullable PsiCaseLabelElement pattern) {
+    PsiTypeElement typeElement = getPatternTypeElement(pattern);
+    if (typeElement == null) return null;
+    return typeElement.getType();
+  }
+
+  /**
+   * @param pattern deconstruction pattern to find a context type for
+   * @return a context type for the pattern; null, if it cannot be determined. This method can perform
+   * the inference for outer patterns if necessary.
+   */
+  @Nullable
+  public static PsiType getContextType(@Nonnull PsiPattern pattern) {
+    PsiElement parent = pattern.getParent();
+    while (parent instanceof PsiParenthesizedPattern) {
+      parent = parent.getParent();
+    }
+    if (parent instanceof PsiInstanceOfExpression) {
+      return ((PsiInstanceOfExpression)parent).getOperand().getType();
+    }
+    if (parent instanceof PsiForeachPatternStatement) {
+      PsiExpression iteratedValue = ((PsiForeachPatternStatement)parent).getIteratedValue();
+      if (iteratedValue == null) {
+        return null;
+      }
+      return JavaGenericsUtil.getCollectionItemType(iteratedValue);
+    }
+    if (parent instanceof PsiCaseLabelElementList) {
+      PsiSwitchLabelStatementBase label = ObjectUtil.tryCast(parent.getParent(), PsiSwitchLabelStatementBase.class);
+      if (label != null) {
+        PsiSwitchBlock block = label.getEnclosingSwitchBlock();
+        if (block != null) {
+          PsiExpression expression = block.getExpression();
+          if (expression != null) {
+            return expression.getType();
+          }
+        }
+      }
+    }
+    if (parent instanceof PsiDeconstructionList) {
+      PsiDeconstructionPattern parentPattern = ObjectUtil.tryCast(parent.getParent(), PsiDeconstructionPattern.class);
+      if (parentPattern != null) {
+        int index = ArrayUtil.indexOf(((PsiDeconstructionList)parent).getDeconstructionComponents(), pattern);
+        if (index < 0) return null;
+        PsiType patternType = parentPattern.getTypeElement().getType();
+        if (!(patternType instanceof PsiClassType)) return null;
+        PsiSubstitutor parentSubstitutor = ((PsiClassType)patternType).resolveGenerics().getSubstitutor();
+        PsiClass parentRecord = PsiUtil.resolveClassInClassTypeOnly(parentPattern.getTypeElement().getType());
+        if (parentRecord == null) return null;
+        PsiRecordComponent[] components = parentRecord.getRecordComponents();
+        if (index >= components.length) return null;
+        return parentSubstitutor.substitute(components[index].getType());
+      }
+    }
+    return null;
+  }
+
+  public static @Nullable PsiTypeElement getPatternTypeElement(@Nullable PsiCaseLabelElement pattern) {
+    if (pattern == null) return null;
+    if (pattern instanceof PsiParenthesizedPattern) {
+      return getPatternTypeElement(((PsiParenthesizedPattern)pattern).getPattern());
+    }
+    else if (pattern instanceof PsiDeconstructionPattern) {
+      return ((PsiDeconstructionPattern)pattern).getTypeElement();
+    }
+    else if (pattern instanceof PsiTypeTestPattern) {
+      return ((PsiTypeTestPattern)pattern).getCheckType();
+    }
+    else if (pattern instanceof PsiUnnamedPattern) {
+      return ((PsiUnnamedPattern)pattern).getTypeElement();
+    }
+    return null;
   }
 
   public static @Nullable PsiType getDeconstructedImplicitPatternType(@Nonnull PsiPattern pattern) {

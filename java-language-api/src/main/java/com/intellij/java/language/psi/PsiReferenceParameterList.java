@@ -41,4 +41,11 @@ public interface PsiReferenceParameterList extends PsiElement {
    */
   @Nonnull
   PsiType[] getTypeArguments();
+
+  /**
+   * @return number of type arguments
+   */
+  default int getTypeArgumentCount() {
+    return getTypeParameterElements().length;
+  }
 }

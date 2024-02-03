@@ -41,7 +41,7 @@ public abstract class JavaPsiFacade {
     return INSTANCE_KEY.getValue(project);
   }
 
-  public static PsiElementFactory getElementFactory(@jakarta.annotation.Nonnull Project project) {
+  public static PsiElementFactory getElementFactory(@Nonnull Project project) {
     return getInstance(project).getElementFactory();
   }
 
@@ -53,8 +53,8 @@ public abstract class JavaPsiFacade {
    * @param scope         the scope to search.
    * @return the PSI class, or null if no class with such name is found.
    */
-  @jakarta.annotation.Nullable
-  public abstract PsiClass findClass(@Nonnull String qualifiedName, @jakarta.annotation.Nonnull GlobalSearchScope scope);
+  @Nullable
+  public abstract PsiClass findClass(@Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope);
 
   /**
    * Searches the specified scope within the project for classes with the specified full-qualified
@@ -64,8 +64,8 @@ public abstract class JavaPsiFacade {
    * @param scope         the scope to search.
    * @return the array of found classes, or an empty array if no classes are found.
    */
-  @jakarta.annotation.Nonnull
-  public abstract PsiClass[] findClasses(@NonNls @Nonnull String qualifiedName, @jakarta.annotation.Nonnull GlobalSearchScope scope);
+  @Nonnull
+  public abstract PsiClass[] findClasses(@NonNls @Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope);
 
   /**
    * Searches the project for the package with the specified full-qualified name and returns one
@@ -75,16 +75,16 @@ public abstract class JavaPsiFacade {
    * @return the PSI package, or null if no package with such name is found.
    */
   @Nullable
-  public abstract PsiJavaPackage findPackage(@jakarta.annotation.Nonnull String qualifiedName);
+  public abstract PsiJavaPackage findPackage(@Nonnull String qualifiedName);
 
   /**
    * Search java module for file. Can be automatic module or explicit declaration from java file
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   public abstract PsiJavaModule findModule(@Nonnull VirtualFile file);
 
   @Nonnull
-  public abstract PsiJavaPackage[] getSubPackages(@jakarta.annotation.Nonnull PsiJavaPackage psiPackage, @jakarta.annotation.Nonnull GlobalSearchScope scope);
+  public abstract PsiJavaPackage[] getSubPackages(@Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope);
 
   /**
    * Returns the element factory for the project, which can be used to
@@ -92,7 +92,7 @@ public abstract class JavaPsiFacade {
    *
    * @return the element factory instance.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public abstract PsiElementFactory getElementFactory();
 
   /**
@@ -103,7 +103,7 @@ public abstract class JavaPsiFacade {
    *
    * @return the parser facade.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public abstract PsiJavaParserFacade getParserFacade();
 
   /**
@@ -112,7 +112,7 @@ public abstract class JavaPsiFacade {
    *
    * @return the resolve helper instance.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Deprecated
   @DeprecationInfo(value = "Use PsiResolveHelper#getInstance(Project)")
   public abstract PsiResolveHelper getResolveHelper();
@@ -133,7 +133,7 @@ public abstract class JavaPsiFacade {
    *
    * @return the evaluator instance.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public abstract PsiConstantEvaluationHelper getConstantEvaluationHelper();
 
   /**
@@ -143,7 +143,7 @@ public abstract class JavaPsiFacade {
    * @param packageName the package name to check.
    * @return true if it is part of the package prefix, false otherwise.
    */
-  public abstract boolean isPartOfPackagePrefix(@jakarta.annotation.Nonnull String packageName);
+  public abstract boolean isPartOfPackagePrefix(@Nonnull String packageName);
 
   /**
    * Checks if the specified PSI element belongs to the specified package.
@@ -152,7 +152,7 @@ public abstract class JavaPsiFacade {
    * @param aPackage the package to check.
    * @return true if the element belongs to the package, false otherwise.
    */
-  public abstract boolean isInPackage(@jakarta.annotation.Nonnull PsiElement element, @jakarta.annotation.Nonnull PsiJavaPackage aPackage);
+  public abstract boolean isInPackage(@Nonnull PsiElement element, @Nonnull PsiJavaPackage aPackage);
 
   /**
    * Checks if the specified PSI elements belong to the same package.
@@ -161,9 +161,9 @@ public abstract class JavaPsiFacade {
    * @param element2 the second element to check.
    * @return true if the elements are in the same package, false otherwise.
    */
-  public abstract boolean arePackagesTheSame(@jakarta.annotation.Nonnull PsiElement element1, @Nonnull PsiElement element2);
+  public abstract boolean arePackagesTheSame(@Nonnull PsiElement element1, @Nonnull PsiElement element2);
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public abstract Project getProject();
 
 
@@ -171,11 +171,11 @@ public abstract class JavaPsiFacade {
    * Searches the scope for a unique Java module with the given name.
    */
   @Nullable
-  public abstract PsiJavaModule findModule(@jakarta.annotation.Nonnull String moduleName, @jakarta.annotation.Nonnull GlobalSearchScope scope);
+  public abstract PsiJavaModule findModule(@Nonnull String moduleName, @Nonnull GlobalSearchScope scope);
 
   /**
    * Searches the scope for Java modules with the given name.
    */
-  @jakarta.annotation.Nonnull
-  public abstract Collection<PsiJavaModule> findModules(@jakarta.annotation.Nonnull String moduleName, @jakarta.annotation.Nonnull GlobalSearchScope scope);
+  @Nonnull
+  public abstract Collection<PsiJavaModule> findModules(@Nonnull String moduleName, @Nonnull GlobalSearchScope scope);
 }

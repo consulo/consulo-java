@@ -22,15 +22,14 @@ import com.intellij.java.language.jvm.types.JvmSubstitutor;
 import com.intellij.java.language.jvm.types.JvmType;
 import com.intellij.java.language.jvm.types.JvmTypeResolveResult;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.util.collection.ArrayFactory;
 import consulo.util.lang.Comparing;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
-
-import jakarta.annotation.Nonnull;
 
 import java.util.Arrays;
 
@@ -49,20 +48,20 @@ public abstract class PsiClassType extends PsiType implements JvmReferenceType {
     this(languageLevel, PsiAnnotation.EMPTY_ARRAY);
   }
 
-  protected PsiClassType(LanguageLevel languageLevel, @jakarta.annotation.Nonnull PsiAnnotation[] annotations) {
+  protected PsiClassType(LanguageLevel languageLevel, @Nonnull PsiAnnotation[] annotations) {
     super(annotations);
     myLanguageLevel = languageLevel;
   }
 
-  public PsiClassType(LanguageLevel languageLevel, @jakarta.annotation.Nonnull TypeAnnotationProvider provider) {
+  public PsiClassType(LanguageLevel languageLevel, @Nonnull TypeAnnotationProvider provider) {
     super(provider);
     myLanguageLevel = languageLevel;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
-  public PsiClassType annotate(@jakarta.annotation.Nonnull TypeAnnotationProvider provider) {
-    return (PsiClassType) super.annotate(provider);
+  public PsiClassType annotate(@Nonnull TypeAnnotationProvider provider) {
+    return (PsiClassType)super.annotate(provider);
   }
 
   /**
@@ -70,7 +69,7 @@ public abstract class PsiClassType extends PsiType implements JvmReferenceType {
    *
    * @return the class instance, or null if the reference resolve failed.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   public abstract PsiClass resolve();
 
   /**
@@ -97,10 +96,12 @@ public abstract class PsiClassType extends PsiType implements JvmReferenceType {
       return true;
     }
     if (!(obj instanceof PsiClassType)) {
-      return obj instanceof PsiCapturedWildcardType && ((PsiCapturedWildcardType) obj).getLowerBound().equalsToText(JavaClassNames.JAVA_LANG_OBJECT) && equalsToText(JavaClassNames
+      return obj instanceof PsiCapturedWildcardType && ((PsiCapturedWildcardType)obj).getLowerBound()
+                                                                                     .equalsToText(JavaClassNames.JAVA_LANG_OBJECT) && equalsToText(
+        JavaClassNames
           .JAVA_LANG_OBJECT);
     }
-    PsiClassType otherClassType = (PsiClassType) obj;
+    PsiClassType otherClassType = (PsiClassType)obj;
 
     String className = getClassName();
     String otherClassName = otherClassType.getClassName();
@@ -123,8 +124,12 @@ public abstract class PsiClassType extends PsiType implements JvmReferenceType {
     if (aClass == null || otherClass == null) {
       return aClass == otherClass;
     }
-    return aClass.getManager().areElementsEquivalent(aClass, otherClass) && (PsiUtil.isRawSubstitutor(aClass, result.getSubstitutor()) || PsiUtil.equalOnEquivalentClasses(this, aClass,
-        otherClassType, otherClass));
+    return aClass.getManager().areElementsEquivalent(aClass, otherClass) && (PsiUtil.isRawSubstitutor(aClass,
+                                                                                                      result.getSubstitutor()) || PsiUtil.equalOnEquivalentClasses(
+      this,
+      aClass,
+      otherClassType,
+      otherClass));
   }
 
   /**
@@ -166,9 +171,9 @@ public abstract class PsiClassType extends PsiType implements JvmReferenceType {
         if (!(type instanceof PsiWildcardType)) {
           return true;
         }
-        final PsiType bound = ((PsiWildcardType) type).getBound();
+        final PsiType bound = ((PsiWildcardType)type).getBound();
         if (bound != null) {
-          if (((PsiWildcardType) type).isExtends()) {
+          if (((PsiWildcardType)type).isExtends()) {
             final PsiClass superClass = parameter.getSuperClass();
             if (superClass != null && PsiUtil.resolveClassInType(bound) == superClass) {
               continue;
@@ -190,7 +195,7 @@ public abstract class PsiClassType extends PsiType implements JvmReferenceType {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiType[] getSuperTypes() {
     ClassResolveResult resolveResult = resolveGenerics();
     PsiClass aClass = resolveResult.getElement();
@@ -252,11 +257,11 @@ public abstract class PsiClassType extends PsiType implements JvmReferenceType {
 
 
   @Override
-  public <A> A accept(@jakarta.annotation.Nonnull PsiTypeVisitor<A> visitor) {
+  public <A> A accept(@Nonnull PsiTypeVisitor<A> visitor) {
     return visitor.visitClassType(this);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public abstract LanguageLevel getLanguageLevel();
 
   /**
@@ -265,9 +270,9 @@ public abstract class PsiClassType extends PsiType implements JvmReferenceType {
    * @param languageLevel level to obtain class type with
    * @return type with requested language level
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Contract(pure = true)
-  public abstract PsiClassType setLanguageLevel(@jakarta.annotation.Nonnull LanguageLevel languageLevel);
+  public abstract PsiClassType setLanguageLevel(@Nonnull LanguageLevel languageLevel);
 
   @Nonnull
   @Override
@@ -280,7 +285,7 @@ public abstract class PsiClassType extends PsiType implements JvmReferenceType {
    *
    * @return reference which the type is created from. Returns null if not applicable.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   public PsiElement getPsiContext() {
     return null;
   }
@@ -294,7 +299,7 @@ public abstract class PsiClassType extends PsiType implements JvmReferenceType {
 
       private final JvmSubstitutor mySubstitutor = new PsiJvmConversionHelper.PsiJvmSubstitutor(resolveResult.getSubstitutor());
 
-      @jakarta.annotation.Nonnull
+      @Nonnull
       @Override
       public JvmTypeDeclaration getDeclaration() {
         return clazz;
@@ -320,6 +325,15 @@ public abstract class PsiClassType extends PsiType implements JvmReferenceType {
   public interface ClassResolveResult extends JavaResolveResult {
     @Override
     PsiClass getElement();
+
+    /**
+     * @return human-readable inference error if resolve of the class type involves type inference.
+     * Currently, the only possibility for this is inference in deconstruction pattern.
+     */
+    @Nullable
+    default String getInferenceError() {
+      return null;
+    }
 
     ClassResolveResult EMPTY = new ClassResolveResult() {
       @Override
@@ -361,25 +375,25 @@ public abstract class PsiClassType extends PsiType implements JvmReferenceType {
   }
 
   public abstract static class Stub extends PsiClassType {
-    protected Stub(LanguageLevel languageLevel, @jakarta.annotation.Nonnull PsiAnnotation[] annotations) {
+    protected Stub(LanguageLevel languageLevel, @Nonnull PsiAnnotation[] annotations) {
       super(languageLevel, annotations);
     }
 
-    protected Stub(LanguageLevel languageLevel, @jakarta.annotation.Nonnull TypeAnnotationProvider annotations) {
+    protected Stub(LanguageLevel languageLevel, @Nonnull TypeAnnotationProvider annotations) {
       super(languageLevel, annotations);
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public final String getPresentableText() {
       return getPresentableText(false);
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public abstract String getPresentableText(boolean annotated);
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public final String getCanonicalText() {
       return getCanonicalText(false);
