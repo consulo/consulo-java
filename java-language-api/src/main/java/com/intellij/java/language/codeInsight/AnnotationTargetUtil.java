@@ -24,9 +24,10 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.logging.Logger;
 import consulo.util.collection.ContainerUtil;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.Contract;
+
 import java.util.*;
 
 /**
@@ -266,24 +267,34 @@ public class AnnotationTargetUtil {
   @Nullable
   public static PsiAnnotationOwner getTarget(@Nonnull PsiModifierListOwner modifierListOwner, @Nonnull String annotation) {
     PsiModifierList list = modifierListOwner.getModifierList();
-    if (list == null) {
-      return null;
-    }
+    if (list == null) return null;
     PsiClass annotationClass = JavaPsiFacade.getInstance(modifierListOwner.getProject())
-        .findClass(annotation, modifierListOwner.getResolveScope());
-    if (annotationClass != null && findAnnotationTarget(annotationClass, TargetType.TYPE_USE) != null &&
-        // External annotations for types are not supported
-        !(modifierListOwner instanceof PsiCompiledElement)) {
+                                            .findClass(annotation, modifierListOwner.getResolveScope());
+    return getTarget(modifierListOwner, annotationClass != null && findAnnotationTarget(annotationClass, TargetType.TYPE_USE) != null);
+  }
+
+  /**
+   * @param modifierListOwner   modifier list owner
+   * @param existsTypeUseTarget true, if annotation contains a type use target
+   * @return a target annotation owner to add the annotation (either modifier list or type element depending on the annotation target)
+   * Returns null if {@code modifierListOwner.getModifierList()} is null.
+   * <p>The method should be called under read action
+   * and the caller should be prepared for {@link consulo.application.dumb.IndexNotReadyException}.
+   */
+  @Contract(pure = true)
+  public static @Nullable PsiAnnotationOwner getTarget(@Nonnull PsiModifierListOwner modifierListOwner, boolean existsTypeUseTarget) {
+    PsiModifierList list = modifierListOwner.getModifierList();
+    if (list == null) return null;
+    if (existsTypeUseTarget && !(modifierListOwner instanceof PsiCompiledElement)) {
       PsiElement parent = list.getParent();
       PsiTypeElement type = null;
       if (parent instanceof PsiMethod) {
-        type = ((PsiMethod) parent).getReturnTypeElement();
-      } else if (parent instanceof PsiVariable) {
-        type = ((PsiVariable) parent).getTypeElement();
+        type = ((PsiMethod)parent).getReturnTypeElement();
       }
-      if (type != null && !type.getType().equals(PsiType.VOID)) {
-        return type;
+      else if (parent instanceof PsiVariable) {
+        type = ((PsiVariable)parent).getTypeElement();
       }
+      if (type != null && type.acceptsAnnotations()) return type;
     }
     return list;
   }

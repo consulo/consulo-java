@@ -1,16 +1,17 @@
 // Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.language.impl.psi.util;
 
+import com.intellij.java.language.impl.psi.impl.source.JavaVarTypeUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.ObjectUtil;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
-
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,6 +19,45 @@ import java.util.Collections;
 import java.util.List;
 
 public final class JavaPsiPatternUtil {
+  public static @Nullable PsiType getDeconstructedImplicitPatternVariableType(@Nonnull PsiPatternVariable parameter) {
+    return getDeconstructedImplicitPatternType(parameter.getPattern());
+  }
+
+  public static @Nullable PsiType getDeconstructedImplicitPatternType(@Nonnull PsiPattern pattern) {
+    PsiRecordComponent recordComponent = getRecordComponentForPattern(pattern);
+    if (recordComponent != null) {
+      PsiDeconstructionList deconstructionList = ObjectUtil.tryCast(pattern.getParent(), PsiDeconstructionList.class);
+      if (deconstructionList == null) return null;
+      PsiDeconstructionPattern deconstructionPattern = (PsiDeconstructionPattern)deconstructionList.getParent();
+      PsiType patternType = deconstructionPattern.getTypeElement().getType();
+      if (patternType instanceof PsiClassType) {
+        patternType = PsiUtil.captureToplevelWildcards(patternType, pattern);
+        PsiSubstitutor substitutor = ((PsiClassType)patternType).resolveGenerics().getSubstitutor();
+        PsiType recordComponentType = recordComponent.getType();
+        return JavaVarTypeUtil.getUpwardProjection(substitutor.substitute(recordComponentType));
+      }
+    }
+    return null;
+  }
+
+  @Contract(pure = true)
+  @Nullable
+  public static PsiRecordComponent getRecordComponentForPattern(@Nonnull PsiPattern pattern) {
+    PsiDeconstructionList deconstructionList = ObjectUtil.tryCast(pattern.getParent(), PsiDeconstructionList.class);
+    if (deconstructionList == null) return null;
+    @Nonnull PsiPattern[] patterns = deconstructionList.getDeconstructionComponents();
+    int index = ArrayUtil.indexOf(patterns, pattern);
+    PsiDeconstructionPattern deconstructionPattern = ObjectUtil.tryCast(deconstructionList.getParent(), PsiDeconstructionPattern.class);
+    if (deconstructionPattern == null) return null;
+    PsiClassType classType = ObjectUtil.tryCast(deconstructionPattern.getTypeElement().getType(), PsiClassType.class);
+    if (classType == null) return null;
+    PsiClass aClass = classType.resolve();
+    if (aClass == null) return null;
+    PsiRecordComponent[] components = aClass.getRecordComponents();
+    if (components.length <= index) return null;
+    return components[index];
+  }
+
   /**
    * @param expression expression to search pattern variables in
    * @return list of pattern variables declared within an expression that could be visible outside of given expression.
@@ -28,10 +68,10 @@ public final class JavaPsiPatternUtil {
   List<PsiPatternVariable> getExposedPatternVariables(@Nonnull PsiExpression expression) {
     PsiElement parent = PsiUtil.skipParenthesizedExprUp(expression.getParent());
     boolean parentMayAccept =
-        parent instanceof PsiPrefixExpression && ((PsiPrefixExpression) parent).getOperationTokenType().equals(JavaTokenType.EXCL) ||
-            parent instanceof PsiPolyadicExpression && ((PsiPolyadicExpression) parent).getOperationTokenType().equals(JavaTokenType.ANDAND) ||
-            parent instanceof PsiPolyadicExpression && ((PsiPolyadicExpression) parent).getOperationTokenType().equals(JavaTokenType.OROR) ||
-            parent instanceof PsiConditionalExpression || parent instanceof PsiIfStatement || parent instanceof PsiConditionalLoopStatement;
+      parent instanceof PsiPrefixExpression && ((PsiPrefixExpression)parent).getOperationTokenType().equals(JavaTokenType.EXCL) ||
+        parent instanceof PsiPolyadicExpression && ((PsiPolyadicExpression)parent).getOperationTokenType().equals(JavaTokenType.ANDAND) ||
+        parent instanceof PsiPolyadicExpression && ((PsiPolyadicExpression)parent).getOperationTokenType().equals(JavaTokenType.OROR) ||
+        parent instanceof PsiConditionalExpression || parent instanceof PsiIfStatement || parent instanceof PsiConditionalLoopStatement;
     if (!parentMayAccept) {
       return Collections.emptyList();
     }
@@ -66,7 +106,7 @@ public final class JavaPsiPatternUtil {
     }
     if (pattern instanceof PsiTypeTestPattern) {
       PsiExpression operand = instanceOf.getOperand();
-      PsiTypeElement checkType = ((PsiTypeTestPattern) pattern).getCheckType();
+      PsiTypeElement checkType = ((PsiTypeTestPattern)pattern).getCheckType();
       if (checkType.getType().equals(operand.getType())) {
         return operand.getText();
       }
@@ -79,25 +119,27 @@ public final class JavaPsiPatternUtil {
                                                        Collection<PsiPatternVariable> candidates, boolean strict) {
     while (true) {
       if (expression instanceof PsiParenthesizedExpression) {
-        expression = ((PsiParenthesizedExpression) expression).getExpression();
-      } else if (expression instanceof PsiPrefixExpression &&
-          ((PsiPrefixExpression) expression).getOperationTokenType().equals(JavaTokenType.EXCL)) {
-        expression = ((PsiPrefixExpression) expression).getOperand();
-      } else {
+        expression = ((PsiParenthesizedExpression)expression).getExpression();
+      }
+      else if (expression instanceof PsiPrefixExpression &&
+        ((PsiPrefixExpression)expression).getOperationTokenType().equals(JavaTokenType.EXCL)) {
+        expression = ((PsiPrefixExpression)expression).getOperand();
+      }
+      else {
         break;
       }
     }
     if (expression instanceof PsiInstanceOfExpression) {
-      PsiPattern pattern = ((PsiInstanceOfExpression) expression).getPattern();
+      PsiPattern pattern = ((PsiInstanceOfExpression)expression).getPattern();
       if (pattern instanceof PsiTypeTestPattern) {
-        PsiPatternVariable variable = ((PsiTypeTestPattern) pattern).getPatternVariable();
+        PsiPatternVariable variable = ((PsiTypeTestPattern)pattern).getPatternVariable();
         if (variable != null && !PsiTreeUtil.isAncestor(scope, variable.getDeclarationScope(), strict)) {
           candidates.add(variable);
         }
       }
     }
     if (expression instanceof PsiPolyadicExpression) {
-      PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) expression;
+      PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)expression;
       IElementType tokenType = polyadicExpression.getOperationTokenType();
       if (tokenType.equals(JavaTokenType.ANDAND) || tokenType.equals(JavaTokenType.OROR)) {
         for (PsiExpression operand : polyadicExpression.getOperands()) {

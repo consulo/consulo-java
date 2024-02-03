@@ -40,9 +40,9 @@ import consulo.language.psi.SyntheticElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
 import consulo.util.lang.Pair;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.List;
 
 public class HighlightNamesUtil {
@@ -354,5 +354,14 @@ public class HighlightNamesUtil {
       builder.textAttributes(attributes);
     }
     return builder.createUnconditionally();
+  }
+
+  @Nonnull
+  private static HighlightInfo.Builder nameBuilder(@Nonnull HighlightInfoType type) {
+    return HighlightInfo.newHighlightInfo(type)/*.toolId(JavaNamesHighlightVisitor.class)*/;
+  }
+
+  static HighlightInfo highlightKeyword(@Nonnull PsiKeyword keyword) {
+    return nameBuilder(JavaHighlightInfoTypes.JAVA_KEYWORD).range(keyword).create();
   }
 }

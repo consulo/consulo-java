@@ -1,6 +1,7 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.language.impl.parser;
 
+import com.intellij.java.language.JavaPsiBundle;
 import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
@@ -11,10 +12,10 @@ import consulo.language.ast.TokenType;
 import consulo.language.parser.PsiBuilder;
 import consulo.language.parser.WhitespacesBinders;
 import consulo.util.lang.BitUtil;
-import org.jetbrains.annotations.PropertyKey;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.PropertyKey;
+
 import java.util.function.Function;
 
 import static com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle.BUNDLE;
@@ -234,11 +235,9 @@ public class ExpressionParser {
   }
 
   @Nullable
-  private PsiBuilder.Marker parseRelational(final PsiBuilder builder, int mode) {
+  private PsiBuilder.Marker parseRelational(final PsiBuilder builder, final int mode) {
     PsiBuilder.Marker left = parseExpression(builder, ExprType.SHIFT, mode);
-    if (left == null) {
-      return null;
-    }
+    if (left == null) return null;
 
     IElementType tokenType;
     while ((tokenType = getGtTokenType(builder)) != null) {
@@ -247,21 +246,35 @@ public class ExpressionParser {
       if (RELATIONAL_OPS.contains(tokenType)) {
         toCreate = JavaElementType.BINARY_EXPRESSION;
         patternExpected = false;
-      } else if (tokenType == JavaTokenType.INSTANCEOF_KEYWORD) {
+      }
+      else if (tokenType == JavaTokenType.INSTANCEOF_KEYWORD) {
         toCreate = JavaElementType.INSTANCE_OF_EXPRESSION;
         patternExpected = true;
-      } else {
+      }
+      else {
         break;
       }
 
       final PsiBuilder.Marker expression = left.precede();
       advanceGtToken(builder, tokenType);
-
-      final PsiBuilder.Marker right = patternExpected ? parsePattern(builder) : parseExpression(builder, ExprType.SHIFT, mode);
-      if (right == null) {
-        error(builder, JavaErrorBundle.message(patternExpected ? "expected.type" : "expected.expression"));
-        expression.done(toCreate);
-        return expression;
+      if (patternExpected) {
+        if (!myParser.getPatternParser().isPattern(builder)) {
+          PsiBuilder.Marker type = parseExpression(builder, ExprType.TYPE, mode);
+          if (type == null) {
+            error(builder, JavaPsiBundle.message("expected.type"));
+          }
+          expression.done(toCreate);
+          return expression;
+        }
+        myParser.getPatternParser().parsePrimaryPattern(builder, false);
+      }
+      else {
+        final PsiBuilder.Marker right = parseExpression(builder, ExprType.SHIFT, mode);
+        if (right == null) {
+          error(builder, JavaPsiBundle.message("expected.expression"));
+          expression.done(toCreate);
+          return expression;
+        }
       }
 
       expression.done(toCreate);
@@ -269,45 +282,6 @@ public class ExpressionParser {
     }
 
     return left;
-  }
-
-  @Nullable
-  private PsiBuilder.Marker parsePattern(final PsiBuilder builder) {
-    PsiBuilder.Marker typeTestPattern = parseSimpleTypeTest(builder);
-    if (typeTestPattern != null)
-      return typeTestPattern;
-
-    PsiBuilder.Marker pattern = builder.mark();
-    PsiBuilder.Marker patternVariable = builder.mark();
-    PsiBuilder.Marker modifiers = myParser.getDeclarationParser().parseModifierList(builder, PATTERN_MODIFIERS).first;
-
-    PsiBuilder.Marker type = myParser.getReferenceParser().parseType(builder, ReferenceParser.EAT_LAST_DOT | ReferenceParser.WILDCARD);
-    if (type == null) {
-      patternVariable.drop();
-      pattern.drop();
-      modifiers.drop();
-      return null;
-    }
-    if (!expect(builder, JavaTokenType.IDENTIFIER)) {
-      patternVariable.drop();
-      modifiers.drop();
-    } else {
-      patternVariable.done(JavaElementType.PATTERN_VARIABLE);
-    }
-    pattern.done(JavaElementType.TYPE_TEST_PATTERN);
-    return pattern;
-  }
-
-  @Nullable
-  private PsiBuilder.Marker parseSimpleTypeTest(final PsiBuilder builder) {
-    PsiBuilder.Marker pattern = builder.mark();
-    PsiBuilder.Marker type = myParser.getReferenceParser().parseType(builder, ReferenceParser.EAT_LAST_DOT | ReferenceParser.WILDCARD);
-    if (type == null || builder.getTokenType() == JavaTokenType.IDENTIFIER) {
-      pattern.rollbackTo();
-      return null;
-    }
-    pattern.done(JavaElementType.TYPE_TEST_PATTERN);
-    return pattern;
   }
 
   @Nullable
