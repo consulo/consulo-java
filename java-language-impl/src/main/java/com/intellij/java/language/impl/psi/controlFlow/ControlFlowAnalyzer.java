@@ -62,15 +62,15 @@ class ControlFlowAnalyzer extends JavaElementVisitor {
   private final PsiConstantEvaluationHelper myConstantEvaluationHelper;
   private final Map<PsiField, PsiParameter> myImplicitCompactConstructorAssignments;
 
-  ControlFlowAnalyzer(@jakarta.annotation.Nonnull PsiElement codeFragment,
+  ControlFlowAnalyzer(@Nonnull PsiElement codeFragment,
                       @Nonnull ControlFlowPolicy policy,
-                      @jakarta.annotation.Nonnull ControlFlowOptions options) {
+                      @Nonnull ControlFlowOptions options) {
     this(codeFragment, policy, options, false);
   }
 
   private ControlFlowAnalyzer(@Nonnull PsiElement codeFragment,
-                              @jakarta.annotation.Nonnull ControlFlowPolicy policy,
-                              @jakarta.annotation.Nonnull ControlFlowOptions options,
+                              @Nonnull ControlFlowPolicy policy,
+                              @Nonnull ControlFlowOptions options,
                               boolean assignmentTargetsAreElements) {
     myCodeFragment = codeFragment;
     myPolicy = policy;
@@ -136,7 +136,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor {
       myStatements.pop();
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     private PsiElement peekElement() {
       return myStatements.peek();
     }
@@ -145,13 +145,13 @@ class ControlFlowAnalyzer extends JavaElementVisitor {
       return myAtStart.get(myAtStart.size() - 1) == 1;
     }
 
-    private void pushStatement(@jakarta.annotation.Nonnull PsiElement statement, boolean atStart) {
+    private void pushStatement(@Nonnull PsiElement statement, boolean atStart) {
       myStatements.push(statement);
       myAtStart.add(atStart ? 1 : 0);
     }
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private IntList getEmptyIntArray() {
     if (intArrayPool.isEmpty()) {
       return IntLists.newArrayList(1);
@@ -161,13 +161,13 @@ class ControlFlowAnalyzer extends JavaElementVisitor {
     return list;
   }
 
-  private void poolIntArray(@jakarta.annotation.Nonnull IntList list) {
+  private void poolIntArray(@Nonnull IntList list) {
     intArrayPool.add(list);
   }
 
   // patch instruction currently added to control flow so that its jump offset corrected on getStartOffset(element) or getEndOffset(element)
   //  when corresponding element offset become available
-  private void addElementOffsetLater(@jakarta.annotation.Nonnull PsiElement element, boolean atStart) {
+  private void addElementOffsetLater(@Nonnull PsiElement element, boolean atStart) {
     Map<PsiElement, IntList> offsetsAddElement = atStart ? offsetsAddElementStart : offsetsAddElementEnd;
     IntList offsets = offsetsAddElement.get(element);
     if (offsets == null) {
@@ -221,7 +221,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor {
     return result;
   }
 
-  private void startElement(@jakarta.annotation.Nonnull PsiElement element) {
+  private void startElement(@Nonnull PsiElement element) {
     for (PsiElement child = element.getFirstChild(); child != null; child = child.getNextSibling()) {
       ProgressManager.checkCanceled();
       if (child instanceof PsiErrorElement && !Comparing.strEqual(((PsiErrorElement) child).getErrorDescription(), JavaPsiBundle.message("expected.semicolon"))) {
@@ -235,7 +235,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor {
     generateUncheckedExceptionJumpsIfNeeded(element, true);
   }
 
-  private void generateUncheckedExceptionJumpsIfNeeded(@jakarta.annotation.Nonnull PsiElement element, boolean atStart) {
+  private void generateUncheckedExceptionJumpsIfNeeded(@Nonnull PsiElement element, boolean atStart) {
     if (!myOptions.isExceptionAfterAssignment() && !atStart) {
       if (element instanceof PsiExpression) {
         PsiElement parent = PsiUtil.skipParenthesizedExprUp(element.getParent());
@@ -258,7 +258,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor {
     }
   }
 
-  private void finishElement(@jakarta.annotation.Nonnull PsiElement element) {
+  private void finishElement(@Nonnull PsiElement element) {
     generateUncheckedExceptionJumpsIfNeeded(element, false);
 
     myCurrentFlow.finishElement(element);
@@ -266,7 +266,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor {
   }
 
 
-  private void generateUncheckedExceptionJumps(@jakarta.annotation.Nonnull PsiElement element, boolean atStart) {
+  private void generateUncheckedExceptionJumps(@Nonnull PsiElement element, boolean atStart) {
     // optimization: if we just generated all necessary jumps, do not generate it once again
     if (atStart
         && element instanceof PsiStatement
@@ -334,7 +334,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor {
 
   private final Map<PsiElement, List<PsiElement>> finallyBlockToUnhandledExceptions = new HashMap<>();
 
-  private boolean patchCheckedThrowInstructionIfInsideFinally(@jakarta.annotation.Nonnull ConditionalThrowToInstruction instruction,
+  private boolean patchCheckedThrowInstructionIfInsideFinally(@Nonnull ConditionalThrowToInstruction instruction,
                                                               @Nonnull PsiElement throwingElement,
                                                               PsiElement elementToJumpTo) {
     final PsiElement finallyBlock = findEnclosingFinallyBlockElement(throwingElement, elementToJumpTo);
@@ -357,8 +357,8 @@ class ControlFlowAnalyzer extends JavaElementVisitor {
   }
 
   private boolean patchUncheckedThrowInstructionIfInsideFinally(@Nonnull ConditionalThrowToInstruction instruction,
-                                                                @jakarta.annotation.Nonnull PsiElement throwingElement,
-                                                                @jakarta.annotation.Nonnull PsiElement elementToJumpTo) {
+                                                                @Nonnull PsiElement throwingElement,
+                                                                @Nonnull PsiElement elementToJumpTo) {
     final PsiElement finallyBlock = findEnclosingFinallyBlockElement(throwingElement, elementToJumpTo);
     if (finallyBlock == null) {
       return false;
@@ -385,7 +385,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor {
     registerSubRange(codeFragment, prevOffset);
   }
 
-  private void registerSubRange(@jakarta.annotation.Nonnull PsiElement codeFragment, final int startOffset) {
+  private void registerSubRange(@Nonnull PsiElement codeFragment, final int startOffset) {
     mySubRanges.add(new SubRangeInfo(codeFragment, startOffset, myCurrentFlow.getSize()));
   }
 
@@ -480,7 +480,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor {
     }
   }
 
-  private PsiElement findEnclosingFinallyBlockElement(@jakarta.annotation.Nonnull PsiElement sourceElement, @Nullable PsiElement jumpElement) {
+  private PsiElement findEnclosingFinallyBlockElement(@Nonnull PsiElement sourceElement, @Nullable PsiElement jumpElement) {
     PsiElement element = sourceElement;
     while (element != null && !(element instanceof PsiFile)) {
       if (element instanceof PsiCodeBlock
@@ -549,7 +549,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor {
     finishElement(statement);
   }
 
-  private void processVariable(@jakarta.annotation.Nonnull PsiVariable element) {
+  private void processVariable(@Nonnull PsiVariable element) {
     final PsiExpression initializer = element.getInitializer();
     generateExpressionInstructions(initializer);
 
@@ -755,7 +755,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor {
     finishElement(statement);
   }
 
-  private void generateConditionalStatementInstructions(@jakarta.annotation.Nonnull PsiElement statement,
+  private void generateConditionalStatementInstructions(@Nonnull PsiElement statement,
                                                         @Nullable PsiExpression conditionExpression,
                                                         final PsiElement thenBranch,
                                                         final PsiElement elseBranch) {
@@ -906,7 +906,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor {
     finishElement(statement);
   }
 
-  private void generateCaseValueInstructions(@jakarta.annotation.Nullable PsiExpressionList values) {
+  private void generateCaseValueInstructions(@Nullable PsiExpressionList values) {
     if (values != null) {
       for (PsiExpression caseValue : values.getExpressions()) {
         ProgressManager.checkCanceled();
@@ -991,7 +991,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor {
     finishElement(statement);
   }
 
-  private void addThrowInstructions(@jakarta.annotation.Nonnull List<? extends PsiElement> blocks) {
+  private void addThrowInstructions(@Nonnull List<? extends PsiElement> blocks) {
     PsiElement element;
     if (blocks.isEmpty() || blocks.get(0) == null) {
       ThrowToInstruction instruction = new ThrowToInstruction(0);
@@ -1536,7 +1536,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor {
     finishElement(expression);
   }
 
-  private void generateLOperand(@jakarta.annotation.Nonnull PsiExpression lOperand, @Nullable PsiExpression rOperand, @jakarta.annotation.Nonnull IElementType signTokenType) {
+  private void generateLOperand(@Nonnull PsiExpression lOperand, @Nullable PsiExpression rOperand, @Nonnull IElementType signTokenType) {
     if (rOperand != null) {
       myStartJumpRoles.push(BranchingInstruction.Role.END);
       myEndJumpRoles.push(BranchingInstruction.Role.END);
@@ -1556,7 +1556,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor {
     }
   }
 
-  private static boolean isInsideIfCondition(@jakarta.annotation.Nonnull PsiExpression expression) {
+  private static boolean isInsideIfCondition(@Nonnull PsiExpression expression) {
     PsiElement element = expression;
     while (element instanceof PsiExpression) {
       final PsiElement parent = element.getParent();
@@ -1812,7 +1812,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor {
     finishElement(aClass);
   }
 
-  private void addUsedVariables(@jakarta.annotation.Nonnull List<? super PsiVariable> array, @jakarta.annotation.Nonnull PsiElement scope) {
+  private void addUsedVariables(@Nonnull List<? super PsiVariable> array, @Nonnull PsiElement scope) {
     if (scope instanceof PsiReferenceExpression) {
       PsiVariable variable = getUsedVariable((PsiReferenceExpression) scope);
       if (variable != null) {
@@ -1829,12 +1829,12 @@ class ControlFlowAnalyzer extends JavaElementVisitor {
     }
   }
 
-  private void generateReadInstruction(@jakarta.annotation.Nonnull PsiVariable variable) {
+  private void generateReadInstruction(@Nonnull PsiVariable variable) {
     Instruction instruction = new ReadVariableInstruction(variable);
     myCurrentFlow.addInstruction(instruction);
   }
 
-  private void generateWriteInstruction(@jakarta.annotation.Nonnull PsiVariable variable) {
+  private void generateWriteInstruction(@Nonnull PsiVariable variable) {
     Instruction instruction = new WriteVariableInstruction(variable);
     myCurrentFlow.addInstruction(instruction);
   }
@@ -1856,7 +1856,7 @@ class ControlFlowAnalyzer extends JavaElementVisitor {
       myCalls = new ArrayList<>();
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public PsiElement getElement() {
       return myElement;
     }

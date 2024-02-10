@@ -1,6 +1,7 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.language.impl.parser;
 
+import com.intellij.java.language.JavaPsiBundle;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
@@ -14,10 +15,9 @@ import consulo.language.parser.PsiBuilder;
 import consulo.language.parser.PsiBuilderUtil;
 import consulo.util.lang.CharArrayUtil;
 import consulo.util.lang.Pair;
-import org.jetbrains.annotations.PropertyKey;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.PropertyKey;
 
 import static com.intellij.java.language.impl.parser.JavaParserUtil.*;
 import static consulo.language.parser.PsiBuilderUtil.expect;
@@ -257,27 +257,25 @@ public class DeclarationParser {
 
   @Nullable
   public PsiBuilder.Marker parse(final PsiBuilder builder, final Context context) {
-    final IElementType tokenType = builder.getTokenType();
-    if (tokenType == null) {
-      return null;
-    }
+    IElementType tokenType = builder.getTokenType();
+    if (tokenType == null) return null;
 
     if (tokenType == JavaTokenType.LBRACE) {
-      if (context == Context.FILE || context == Context.CODE_BLOCK) {
-        return null;
+      if (context == Context.FILE || context == Context.CODE_BLOCK) return null;
+    }
+    else if (!isRecordToken(builder, tokenType) && !isSealedToken(builder, tokenType) && !isNonSealedToken(builder, tokenType)) {
+      if (!TYPE_START.contains(tokenType) || tokenType == JavaTokenType.AT) {
+        if (tokenType instanceof ILazyParseableElementType) {
+          builder.advanceLexer();
+          return null;
+        }
+        else if (!ElementType.MODIFIER_BIT_SET.contains(tokenType) &&
+          !ElementType.CLASS_KEYWORD_BIT_SET.contains(tokenType) &&
+          tokenType != JavaTokenType.AT &&
+          (context == Context.CODE_BLOCK || tokenType != JavaTokenType.LT)) {
+          return null;
+        }
       }
-    } else if (TYPE_START.contains(tokenType) && tokenType != JavaTokenType.AT) {
-      if (context == Context.FILE) {
-        return null;
-      }
-    } else if (tokenType instanceof ILazyParseableElementType) {
-      builder.advanceLexer();
-      return null;
-    } else if (!ElementType.MODIFIER_BIT_SET.contains(tokenType) &&
-        !ElementType.CLASS_KEYWORD_BIT_SET.contains(tokenType) &&
-        tokenType != JavaTokenType.AT &&
-        (context == Context.CODE_BLOCK || tokenType != JavaTokenType.LT)) {
-      return null;
     }
 
     final PsiBuilder.Marker declaration = builder.mark();
@@ -290,11 +288,13 @@ public class DeclarationParser {
       if (builder.getTokenType() == JavaTokenType.INTERFACE_KEYWORD) {
         final PsiBuilder.Marker result = parseClassFromKeyword(builder, declaration, true, context);
         return result != null ? result : modList;
-      } else {
+      }
+      else {
         declaration.rollbackTo();
         return null;
       }
-    } else if (ElementType.CLASS_KEYWORD_BIT_SET.contains(builder.getTokenType()) || isRecordToken(builder, builder.getTokenType())) {
+    }
+    if (ElementType.CLASS_KEYWORD_BIT_SET.contains(builder.getTokenType()) || isRecordToken(builder, builder.getTokenType())) {
       final PsiBuilder.Marker result = parseClassFromKeyword(builder, declaration, false, context);
       return result != null ? result : modList;
     }
@@ -304,15 +304,9 @@ public class DeclarationParser {
       typeParams = myParser.getReferenceParser().parseTypeParameters(builder);
     }
 
-    if (context == Context.FILE) {
-      error(builder, JavaErrorBundle.message("expected.class.or.interface"), typeParams);
-      declaration.drop();
-      return modList;
-    }
-
     if (builder.getTokenType() == JavaTokenType.LBRACE) {
       if (context == Context.CODE_BLOCK) {
-        error(builder, JavaErrorBundle.message("expected.identifier.or.type"), null);
+        error(builder, JavaPsiBundle.message("expected.identifier.or.type"), null);
         declaration.drop();
         return modList;
       }
@@ -322,7 +316,7 @@ public class DeclarationParser {
 
       if (typeParams != null) {
         PsiBuilder.Marker error = typeParams.precede();
-        error.errorBefore(JavaErrorBundle.message("unexpected.token"), codeBlock);
+        error.errorBefore(JavaPsiBundle.message("unexpected.token"), codeBlock);
       }
 
       done(declaration, JavaElementType.CLASS_INITIALIZER);
@@ -335,14 +329,13 @@ public class DeclarationParser {
       PsiBuilder.Marker pos = builder.mark();
 
       int flags = ReferenceParser.EAT_LAST_DOT | ReferenceParser.WILDCARD;
-      if (context == Context.CODE_BLOCK) {
-        flags |= ReferenceParser.VAR_TYPE;
-      }
+      if (context == Context.CODE_BLOCK) flags |= ReferenceParser.VAR_TYPE;
       type = myParser.getReferenceParser().parseTypeInfo(builder, flags);
 
       if (type == null) {
         pos.rollbackTo();
-      } else if (builder.getTokenType() == JavaTokenType.LPARENTH) {  // constructor
+      }
+      else if (builder.getTokenType() == JavaTokenType.LPARENTH || builder.getTokenType() == JavaTokenType.LBRACE) {  // constructor
         if (context == Context.CODE_BLOCK) {
           declaration.rollbackTo();
           return null;
@@ -358,45 +351,52 @@ public class DeclarationParser {
         if (!expect(builder, JavaTokenType.IDENTIFIER)) {
           PsiBuilder.Marker primitive = builder.mark();
           builder.advanceLexer();
-          primitive.error(JavaErrorBundle.message("expected.identifier"));
+          primitive.error(JavaPsiBundle.message("expected.identifier"));
         }
 
         if (builder.getTokenType() == JavaTokenType.LPARENTH) {
           return parseMethodFromLeftParenth(builder, declaration, false, true);
-        } else {
+        }
+        else if (builder.getTokenType() == JavaTokenType.LBRACE) { // compact constructor
+          emptyElement(builder, JavaElementType.THROWS_LIST);
+          return parseMethodBody(builder, declaration, false);
+        }
+        else {
           declaration.rollbackTo();
           return null;
         }
-      } else {
+      }
+      else {
         pos.drop();
       }
     }
 
     if (type == null) {
       PsiBuilder.Marker error = typeParams != null ? typeParams.precede() : builder.mark();
-      error.error(JavaErrorBundle.message("expected.identifier.or.type"));
+      error.error(JavaPsiBundle.message("expected.identifier.or.type"));
       declaration.drop();
       return modList;
     }
 
     if (!expect(builder, JavaTokenType.IDENTIFIER)) {
       if (context != Context.CODE_BLOCK ||
-          Boolean.FALSE.equals(modListInfo.second) ||
-          (type.isPrimitive && builder.getTokenType() != JavaTokenType.DOT)) {
+        Boolean.FALSE.equals(modListInfo.second) ||
+        (type.isPrimitive && builder.getTokenType() != JavaTokenType.DOT)) {
         if (typeParams != null) {
-          typeParams.precede().errorBefore(JavaErrorBundle.message("unexpected.token"), type.marker);
+          typeParams.precede().errorBefore(JavaPsiBundle.message("unexpected.token"), type.marker);
         }
-        builder.error(JavaErrorBundle.message("expected.identifier"));
+        builder.error(JavaPsiBundle.message("expected.identifier"));
         declaration.drop();
         return modList;
-      } else {
+      }
+      else {
         declaration.rollbackTo();
         return null;
       }
     }
 
     if (builder.getTokenType() == JavaTokenType.LPARENTH) {
-      if (context == Context.CLASS || context == Context.ANNOTATION_INTERFACE) {  // method
+      if (context == Context.CLASS || context == Context.ANNOTATION_INTERFACE || context == Context.FILE) {  // method
         if (typeParams == null) {
           emptyElement(type.marker, JavaElementType.TYPE_PARAMETER_LIST);
         }
@@ -405,7 +405,7 @@ public class DeclarationParser {
     }
 
     if (typeParams != null) {
-      typeParams.precede().errorBefore(JavaErrorBundle.message("unexpected.token"), type.marker);
+      typeParams.precede().errorBefore(JavaPsiBundle.message("unexpected.token"), type.marker);
     }
     return parseFieldOrLocalVariable(builder, declaration, declarationStart, context);
   }
@@ -483,17 +483,8 @@ public class DeclarationParser {
     return Pair.create(modList, isEmpty);
   }
 
-  private PsiBuilder.Marker parseMethodFromLeftParenth(PsiBuilder builder, PsiBuilder.Marker declaration, boolean anno, boolean constructor) {
-    parseParameterList(builder);
-
-    eatBrackets(builder, constructor ? "expected.semicolon" : null);
-
-    myParser.getReferenceParser().parseReferenceList(builder, JavaTokenType.THROWS_KEYWORD, JavaElementType.THROWS_LIST, JavaTokenType.COMMA);
-
-    if (anno && expect(builder, JavaTokenType.DEFAULT_KEYWORD)) {
-      parseAnnotationValue(builder);
-    }
-
+  @Nonnull
+  private PsiBuilder.Marker parseMethodBody(PsiBuilder builder, PsiBuilder.Marker declaration, boolean anno) {
     IElementType tokenType = builder.getTokenType();
     if (tokenType != JavaTokenType.SEMICOLON && tokenType != JavaTokenType.LBRACE) {
       PsiBuilder.Marker error = builder.mark();
@@ -505,15 +496,12 @@ public class DeclarationParser {
           char ch = text.charAt(i);
           if (ch == '\n') {
             break Loop;
-          } else if (ch != ' ' && ch != '\t') {
-            break;
           }
+          else if (ch != ' ' && ch != '\t') break;
         }
-        if (!expect(builder, APPEND_TO_METHOD_SET)) {
-          break;
-        }
+        if (!expect(builder, APPEND_TO_METHOD_SET)) break;
       }
-      error.error(JavaErrorBundle.message("expected.lbrace.or.semicolon"));
+      error.error(JavaPsiBundle.message("expected.lbrace.or.semicolon"));
     }
 
     if (!expect(builder, JavaTokenType.SEMICOLON)) {
@@ -524,6 +512,20 @@ public class DeclarationParser {
 
     done(declaration, anno ? JavaElementType.ANNOTATION_METHOD : JavaElementType.METHOD);
     return declaration;
+  }
+
+  private PsiBuilder.Marker parseMethodFromLeftParenth(PsiBuilder builder, PsiBuilder.Marker declaration, boolean anno, boolean constructor) {
+    parseParameterList(builder);
+
+    eatBrackets(builder, constructor ? "expected.lbrace" : null);
+
+    myParser.getReferenceParser().parseReferenceList(builder, JavaTokenType.THROWS_KEYWORD, JavaElementType.THROWS_LIST, JavaTokenType.COMMA);
+
+    if (anno && expect(builder, JavaTokenType.DEFAULT_KEYWORD)) {
+      parseAnnotationValue(builder);
+    }
+
+    return parseMethodBody(builder, declaration, anno);
   }
 
   public void parseParameterList(PsiBuilder builder) {
@@ -757,7 +759,7 @@ public class DeclarationParser {
     return param;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private PsiBuilder.Marker parseFieldOrLocalVariable(PsiBuilder builder, PsiBuilder.Marker declaration, int declarationStart, Context context) {
     final IElementType varType;
     if (context == Context.CLASS || context == Context.ANNOTATION_INTERFACE) {

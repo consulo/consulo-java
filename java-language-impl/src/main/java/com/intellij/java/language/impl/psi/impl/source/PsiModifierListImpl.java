@@ -25,9 +25,9 @@ import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.interner.Interner;
 import consulo.util.lang.BitUtil;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import java.util.*;
 
 import static com.intellij.java.language.psi.PsiModifier.*;
@@ -101,7 +101,8 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
           ContainerUtil.addIfNotNull(explicitModifiers, ModifierFlags.MODIFIER_FLAG_TO_NAME_MAP.get(flag));
         }
       }
-    } else {
+    }
+    else {
       for (ASTNode child : getNode().getChildren(null)) {
         ContainerUtil.addIfNotNull(explicitModifiers, KEYWORD_TYPE_TO_NAME_MAP.get(child.getElementType()));
       }
@@ -115,10 +116,10 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
     PsiElement parent = getParent();
     if (parent instanceof PsiClass) {
       PsiElement grandParent = parent.getContext();
-      if (grandParent instanceof PsiClass && ((PsiClass) grandParent).isInterface()) {
+      if (grandParent instanceof PsiClass && ((PsiClass)grandParent).isInterface()) {
         Collections.addAll(implicitModifiers, PUBLIC, STATIC);
       }
-      if (((PsiClass) parent).isInterface()) {
+      if (((PsiClass)parent).isInterface()) {
         implicitModifiers.add(ABSTRACT);
 
         // nested or local interface is implicitly static
@@ -126,27 +127,29 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
           implicitModifiers.add(STATIC);
         }
       }
-      if (((PsiClass) parent).isRecord()) {
+      if (((PsiClass)parent).isRecord()) {
         if (!(grandParent instanceof PsiFile)) {
           implicitModifiers.add(STATIC);
         }
         implicitModifiers.add(FINAL);
       }
-      if (((PsiClass) parent).isEnum()) {
+      if (((PsiClass)parent).isEnum()) {
         if (!(grandParent instanceof PsiFile)) {
           implicitModifiers.add(STATIC);
         }
-        List<PsiField> fields = parent instanceof PsiExtensibleClass ? ((PsiExtensibleClass) parent).getOwnFields()
-            : Arrays.asList(((PsiClass) parent).getFields());
-        boolean hasSubClass = ContainerUtil.find(fields, field -> field instanceof PsiEnumConstant && ((PsiEnumConstant) field).getInitializingClass() != null) != null;
+        List<PsiField> fields = parent instanceof PsiExtensibleClass ? ((PsiExtensibleClass)parent).getOwnFields()
+          : Arrays.asList(((PsiClass)parent).getFields());
+        boolean hasSubClass = ContainerUtil.find(fields,
+                                                 field -> field instanceof PsiEnumConstant && ((PsiEnumConstant)field).getInitializingClass() != null) != null;
         if (hasSubClass) {
           implicitModifiers.add(SEALED);
-        } else {
+        }
+        else {
           implicitModifiers.add(FINAL);
         }
 
-        List<PsiMethod> methods = parent instanceof PsiExtensibleClass ? ((PsiExtensibleClass) parent).getOwnMethods()
-            : Arrays.asList(((PsiClass) parent).getMethods());
+        List<PsiMethod> methods = parent instanceof PsiExtensibleClass ? ((PsiExtensibleClass)parent).getOwnMethods()
+          : Arrays.asList(((PsiClass)parent).getMethods());
         for (PsiMethod method : methods) {
           if (method.hasModifierProperty(ABSTRACT)) {
             implicitModifiers.add(ABSTRACT);
@@ -154,8 +157,9 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
           }
         }
       }
-    } else if (parent instanceof PsiMethod) {
-      PsiClass aClass = ((PsiMethod) parent).getContainingClass();
+    }
+    else if (parent instanceof PsiMethod) {
+      PsiClass aClass = ((PsiMethod)parent).getContainingClass();
       if (aClass != null && aClass.isInterface()) {
         if (!explicitModifiers.contains(PRIVATE)) {
           implicitModifiers.add(PUBLIC);
@@ -163,27 +167,34 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
             implicitModifiers.add(ABSTRACT);
           }
         }
-      } else if (aClass != null && aClass.isEnum() && ((PsiMethod) parent).isConstructor()) {
+      }
+      else if (aClass != null && aClass.isEnum() && ((PsiMethod)parent).isConstructor()) {
         implicitModifiers.add(PRIVATE);
       }
-    } else if (parent instanceof PsiRecordComponent) {
+    }
+    else if (parent instanceof PsiRecordComponent) {
       implicitModifiers.add(FINAL);
-    } else if (parent instanceof PsiField) {
+    }
+    else if (parent instanceof PsiField) {
       if (parent instanceof PsiEnumConstant) {
         Collections.addAll(implicitModifiers, PUBLIC, STATIC, FINAL);
-      } else {
-        PsiClass aClass = ((PsiField) parent).getContainingClass();
+      }
+      else {
+        PsiClass aClass = ((PsiField)parent).getContainingClass();
         if (aClass != null && aClass.isInterface()) {
           Collections.addAll(implicitModifiers, PUBLIC, STATIC, FINAL);
         }
       }
-    } else if (parent instanceof PsiParameter &&
-        parent.getParent() instanceof PsiCatchSection &&
-        ((PsiParameter) parent).getType() instanceof PsiDisjunctionType) {
+    }
+    else if (parent instanceof PsiParameter &&
+      parent.getParent() instanceof PsiCatchSection &&
+      ((PsiParameter)parent).getType() instanceof PsiDisjunctionType) {
       Collections.addAll(implicitModifiers, FINAL);
-    } else if (parent instanceof PsiResourceVariable) {
+    }
+    else if (parent instanceof PsiResourceVariable) {
       Collections.addAll(implicitModifiers, FINAL);
-    } else if (parent instanceof PsiPatternVariable && !PsiUtil.isLanguageLevel16OrHigher(parent)) {
+    }
+    else if (parent instanceof PsiPatternVariable && !PsiUtil.isLanguageLevel16OrHigher(parent)) {
       Collections.addAll(implicitModifiers, FINAL);
     }
     return implicitModifiers;
@@ -196,7 +207,7 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
       return BitUtil.isSet(stub.getModifiersMask(), ModifierFlags.NAME_TO_MODIFIER_FLAG_MAP.getInt(name));
     }
 
-    final CompositeElement tree = (CompositeElement) getNode();
+    final CompositeElement tree = (CompositeElement)getNode();
     final IElementType type = NAME_TO_KEYWORD_TYPE_MAP.get(name);
     return type != null && tree.findChildByType(type) != null;
   }
@@ -208,12 +219,12 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
     PsiElement parent = getParent();
     PsiElement grandParent = parent != null ? parent.getParent() : null;
     IElementType type = NAME_TO_KEYWORD_TYPE_MAP.get(name);
-    CompositeElement treeElement = (CompositeElement) getNode();
+    CompositeElement treeElement = (CompositeElement)getNode();
 
     // There is a possible case that parameters list occupies more than one line and its elements are aligned. Modifiers list change
     // changes horizontal position of parameters list start, hence, we need to reformat them in order to preserve alignment.
     if (parent instanceof PsiMethod) {
-      PsiMethod method = (PsiMethod) parent;
+      PsiMethod method = (PsiMethod)parent;
       ASTNode node = method.getParameterList().getNode();
       if (node != null) { // could be a compact constructor parameter list
         CodeEditUtil.markToReformat(node, true);
@@ -222,9 +233,9 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
 
     if (value) {
       if (type == JavaTokenType.PUBLIC_KEYWORD ||
-          type == JavaTokenType.PRIVATE_KEYWORD ||
-          type == JavaTokenType.PROTECTED_KEYWORD ||
-          type == null /* package-private */) {
+        type == JavaTokenType.PRIVATE_KEYWORD ||
+        type == JavaTokenType.PROTECTED_KEYWORD ||
+        type == null /* package-private */) {
         if (type != JavaTokenType.PUBLIC_KEYWORD) {
           setModifierProperty(PUBLIC, false);
         }
@@ -234,9 +245,7 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
         if (type != JavaTokenType.PROTECTED_KEYWORD) {
           setModifierProperty(PROTECTED, false);
         }
-        if (type == null) {
-          return;
-        }
+        if (type == null) return;
       }
 
       if (type == JavaTokenType.SEALED_KEYWORD || type == JavaTokenType.FINAL_KEYWORD || type == JavaTokenType.NON_SEALED_KEYWORD) {
@@ -251,29 +260,25 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
         }
       }
 
-      if (parent instanceof PsiField && grandParent instanceof PsiClass && ((PsiClass) grandParent).isInterface()) {
-        if (type == JavaTokenType.PUBLIC_KEYWORD || type == JavaTokenType.STATIC_KEYWORD || type == JavaTokenType.FINAL_KEYWORD) {
-          return;
-        }
-      } else if (parent instanceof PsiMethod && grandParent instanceof PsiClass && ((PsiClass) grandParent).isInterface()) {
-        if (type == JavaTokenType.PUBLIC_KEYWORD || type == JavaTokenType.ABSTRACT_KEYWORD) {
-          return;
-        }
-      } else if (parent instanceof PsiClass && grandParent instanceof PsiClass && ((PsiClass) grandParent).isInterface()) {
-        if (type == JavaTokenType.PUBLIC_KEYWORD) {
-          return;
-        }
-      } else if (parent instanceof PsiAnnotationMethod && grandParent instanceof PsiClass && ((PsiClass) grandParent).isAnnotationType()) {
-        if (type == JavaTokenType.PUBLIC_KEYWORD || type == JavaTokenType.ABSTRACT_KEYWORD) {
-          return;
-        }
+      if (parent instanceof PsiField && grandParent instanceof PsiClass && ((PsiClass)grandParent).isInterface()) {
+        if (type == JavaTokenType.PUBLIC_KEYWORD || type == JavaTokenType.STATIC_KEYWORD || type == JavaTokenType.FINAL_KEYWORD) return;
+      }
+      else if (parent instanceof PsiMethod && grandParent instanceof PsiClass && ((PsiClass)grandParent).isInterface()) {
+        if (type == JavaTokenType.PUBLIC_KEYWORD || type == JavaTokenType.ABSTRACT_KEYWORD) return;
+      }
+      else if (parent instanceof PsiClass && grandParent instanceof PsiClass && ((PsiClass)grandParent).isInterface()) {
+        if (type == JavaTokenType.PUBLIC_KEYWORD) return;
+      }
+      else if (parent instanceof PsiAnnotationMethod && grandParent instanceof PsiClass && ((PsiClass)grandParent).isAnnotationType()) {
+        if (type == JavaTokenType.PUBLIC_KEYWORD || type == JavaTokenType.ABSTRACT_KEYWORD) return;
       }
 
       if (treeElement.findChildByType(type) == null) {
         TreeElement keyword = Factory.createSingleLeafElement(type, name, null, getManager());
         treeElement.addInternal(keyword, keyword, null, null);
       }
-    } else {
+    }
+    else {
       if (type == null /* package-private */) {
         throw new IncorrectOperationException("Cannot reset package-private modifier."); //?
       }
@@ -318,14 +323,15 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
   @Override
   @jakarta.annotation.Nonnull
   public PsiAnnotation addAnnotation(@Nonnull @NonNls String qualifiedName) {
-    return (PsiAnnotation) addAfter(JavaPsiFacade.getElementFactory(getProject()).createAnnotationFromText("@" + qualifiedName, this), null);
+    return (PsiAnnotation)addAfter(JavaPsiFacade.getElementFactory(getProject()).createAnnotationFromText("@" + qualifiedName, this), null);
   }
 
   @Override
   public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor) visitor).visitModifierList(this);
-    } else {
+      ((JavaElementVisitor)visitor).visitModifierList(this);
+    }
+    else {
       visitor.visitElement(this);
     }
   }
