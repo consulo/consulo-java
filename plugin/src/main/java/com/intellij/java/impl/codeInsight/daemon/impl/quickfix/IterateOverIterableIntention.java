@@ -50,7 +50,7 @@ public class IterateOverIterableIntention implements IntentionAction {
   private static final Logger LOG = Logger.getInstance(IterateOverIterableIntention.class);
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     final Template template = getTemplate();
     if (template != null) {
       int offset = editor.getCaretModel().getOffset();
@@ -77,13 +77,13 @@ public class IterateOverIterableIntention implements IntentionAction {
     return false;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static Template getTemplate() {
     return TemplateSettings.getInstance().getTemplate("I", "surround");
   }
 
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getText() {
     return "Iterate";

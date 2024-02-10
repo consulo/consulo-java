@@ -49,7 +49,7 @@ public class ReturnOfCollectionFieldInspection extends BaseInspection {
   public boolean ignorePrivateMethods = true;
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "ReturnOfCollectionOrArrayField";
   }
@@ -61,14 +61,14 @@ public class ReturnOfCollectionFieldInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   public JComponent createOptionsPanel() {
     return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message("return.of.collection.array.field.option"),
                                           this, "ignorePrivateMethods");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiField field = (PsiField)infos[0];
     final PsiType type = field.getType();
@@ -121,7 +121,7 @@ public class ReturnOfCollectionFieldInspection extends BaseInspection {
       myQualifiedClassName = qualifiedClassName;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "return.of.collection.field.quickfix", myReplacementText);
@@ -191,7 +191,7 @@ public class ReturnOfCollectionFieldInspection extends BaseInspection {
   private class ReturnOfCollectionFieldVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitReturnStatement(@jakarta.annotation.Nonnull PsiReturnStatement statement) {
+    public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
       super.visitReturnStatement(statement);
       final PsiExpression returnValue = statement.getReturnValue();
       if (returnValue == null) {

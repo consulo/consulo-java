@@ -52,14 +52,14 @@ public class EmptyCatchBlockInspection extends BaseInspection {
   public boolean m_ignoreIgnoreParameter = true;
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "empty.catch.block.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "empty.catch.block.problem.descriptor");
@@ -131,7 +131,7 @@ public class EmptyCatchBlockInspection extends BaseInspection {
   private class EmptyCatchBlockVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitTryStatement(@jakarta.annotation.Nonnull PsiTryStatement statement) {
+    public void visitTryStatement(@Nonnull PsiTryStatement statement) {
       super.visitTryStatement(statement);
     /*  if (JspPsiUtil.isInJspFile(statement.getContainingFile())) {
         return;

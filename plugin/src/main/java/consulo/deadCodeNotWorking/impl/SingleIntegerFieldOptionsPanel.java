@@ -61,7 +61,7 @@ public class SingleIntegerFieldOptionsPanel extends JPanel
 		add(valueField, constraints);
 	}
 
-	public static JFormattedTextField createIntegerFieldTrackingValue(@Nonnull InspectionTool owner, @jakarta.annotation.Nonnull String property, int integerFieldColumns)
+	public static JFormattedTextField createIntegerFieldTrackingValue(@Nonnull InspectionTool owner, @Nonnull String property, int integerFieldColumns)
 	{
 		JFormattedTextField valueField = new JFormattedTextField();
 		valueField.setColumns(integerFieldColumns);

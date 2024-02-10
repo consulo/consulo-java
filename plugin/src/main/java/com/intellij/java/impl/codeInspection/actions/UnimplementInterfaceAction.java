@@ -46,7 +46,7 @@ public class UnimplementInterfaceAction implements IntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!(file instanceof PsiJavaFile)) return false;
     final PsiReference psiReference = TargetElementUtil.findReference(editor);
     if (psiReference == null) return false;
@@ -89,7 +89,7 @@ public class UnimplementInterfaceAction implements IntentionAction {
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(file)) return;
 
     final PsiReference psiReference = TargetElementUtil.findReference(editor);

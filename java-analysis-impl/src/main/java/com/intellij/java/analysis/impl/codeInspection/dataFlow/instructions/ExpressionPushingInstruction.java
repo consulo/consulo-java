@@ -20,7 +20,7 @@ public abstract class ExpressionPushingInstruction<T extends PsiExpression> exte
 	/**
 	 * @return a PsiExpression which result is pushed to the stack, or null if this instruction is not bound to any particular PsiExpression
 	 */
-	@jakarta.annotation.Nullable
+	@Nullable
 	public T getExpression()
 	{
 		return myExpression;

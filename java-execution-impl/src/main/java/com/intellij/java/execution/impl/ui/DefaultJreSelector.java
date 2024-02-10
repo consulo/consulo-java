@@ -138,7 +138,7 @@ public abstract class DefaultJreSelector
 		return new SdkFromModuleDependencies<>(modulesCombobox, ModuleDescriptionsComboBox::getSelectedModule, () -> productionOnly);
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public static DefaultJreSelector fromSourceRootsDependencies(ModulesComboBox modulesCombobox, EditorTextFieldWithBrowseButton classSelector)
 	{
 		return new SdkFromSourceRootDependencies<>(modulesCombobox, ModulesComboBox::getSelectedModule, classSelector);

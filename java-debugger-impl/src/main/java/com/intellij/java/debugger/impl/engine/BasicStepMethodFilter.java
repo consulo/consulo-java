@@ -51,12 +51,12 @@ public class BasicStepMethodFilter implements NamedMethodFilter
 	protected final JVMName myTargetMethodSignature;
 	private final Range<Integer> myCallingExpressionLines;
 
-	public BasicStepMethodFilter(@jakarta.annotation.Nonnull PsiMethod psiMethod, Range<Integer> callingExpressionLines)
+	public BasicStepMethodFilter(@Nonnull PsiMethod psiMethod, Range<Integer> callingExpressionLines)
 	{
 		this(JVMNameUtil.getJVMQualifiedName(psiMethod.getContainingClass()), JVMNameUtil.getJVMMethodName(psiMethod), JVMNameUtil.getJVMSignature(psiMethod), callingExpressionLines);
 	}
 
-	protected BasicStepMethodFilter(@Nonnull JVMName declaringClassName, @jakarta.annotation.Nonnull String targetMethodName, @jakarta.annotation.Nullable JVMName targetMethodSignature, Range<Integer> callingExpressionLines)
+	protected BasicStepMethodFilter(@Nonnull JVMName declaringClassName, @Nonnull String targetMethodName, @Nullable JVMName targetMethodSignature, Range<Integer> callingExpressionLines)
 	{
 		myDeclaringClassName = declaringClassName;
 		myTargetMethodName = targetMethodName;
@@ -77,7 +77,7 @@ public class BasicStepMethodFilter implements NamedMethodFilter
 		return locationMatches(process, location, () -> null);
 	}
 
-	public boolean locationMatches(DebugProcessImpl process, Location location, @jakarta.annotation.Nonnull EvaluatingComputable<ObjectReference> thisProvider) throws EvaluateException
+	public boolean locationMatches(DebugProcessImpl process, Location location, @Nonnull EvaluatingComputable<ObjectReference> thisProvider) throws EvaluateException
 	{
 		Method method = location.method();
 		String name = method.name();
@@ -148,7 +148,7 @@ public class BasicStepMethodFilter implements NamedMethodFilter
 		return false;
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	@Override
 	public Range<Integer> getCallingExpressionLines()
 	{

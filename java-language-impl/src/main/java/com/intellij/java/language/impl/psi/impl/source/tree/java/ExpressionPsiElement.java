@@ -37,7 +37,7 @@ public class ExpressionPsiElement extends CompositePsiElement
 	}
 
 	@Override
-	public void replaceChildInternal(@jakarta.annotation.Nonnull ASTNode child, @Nonnull TreeElement newElement)
+	public void replaceChildInternal(@Nonnull ASTNode child, @Nonnull TreeElement newElement)
 	{
 		super.replaceChildInternal(child, JavaSourceUtil.addParenthToReplacedChild(child, newElement, getManager()));
 	}

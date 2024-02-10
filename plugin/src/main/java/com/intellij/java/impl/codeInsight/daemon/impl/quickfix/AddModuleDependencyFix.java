@@ -127,7 +127,7 @@ class AddModuleDependencyFix extends AddOrderEntryFix {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, @jakarta.annotation.Nullable Editor editor, PsiFile file) {
+  public void invoke(@Nonnull Project project, @Nullable Editor editor, PsiFile file) {
     if (myModules.size() == 1) {
       addDependencyOnModule(project, editor, ContainerUtil.getFirstItem(myModules));
     } else {

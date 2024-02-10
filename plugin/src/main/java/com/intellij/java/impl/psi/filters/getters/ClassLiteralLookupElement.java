@@ -49,7 +49,7 @@ public class ClassLiteralLookupElement extends LookupElement implements TypedLoo
     myExpr = JavaPsiFacade.getInstance(context.getProject()).getElementFactory().createExpressionFromText(myCanonicalText + DOT_CLASS, context);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getLookupString() {
     return myPresentableText + ".class";

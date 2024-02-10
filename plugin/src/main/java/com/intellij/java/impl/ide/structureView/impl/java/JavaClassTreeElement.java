@@ -29,7 +29,7 @@ public class JavaClassTreeElement extends JavaClassTreeElementBase<PsiClass> {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public Collection<StructureViewTreeElement> getChildrenBase() {
     return getClassChildren(getElement());
   }
@@ -79,7 +79,7 @@ public class JavaClassTreeElement extends JavaClassTreeElementBase<PsiClass> {
 
   private static void addPhysicalElements(@Nonnull PsiMember[] elements,
                                           @Nonnull Collection<? super PsiElement> to,
-                                          @jakarta.annotation.Nonnull PsiClass aClass) {
+                                          @Nonnull PsiClass aClass) {
     for (PsiMember element : elements) {
       PsiElement mirror = PsiImplUtil.handleMirror(element);
       if (mirror instanceof LightElement) {

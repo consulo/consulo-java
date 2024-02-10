@@ -11,7 +11,7 @@ import jakarta.annotation.Nonnull;
 public abstract class JavadocHighlightingTest extends LightDaemonAnalyzerTestCase {
   private static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/javaDoc";
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

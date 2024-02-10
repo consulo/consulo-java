@@ -18,6 +18,7 @@ package com.intellij.java.language.codeInsight;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.PsiAnnotation.TargetType;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.application.dumb.IndexNotReadyException;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiCompiledElement;
 import consulo.language.psi.PsiElement;
@@ -155,7 +156,7 @@ public class AnnotationTargetUtil {
   }
 
   @Nullable
-  public static Set<TargetType> extractRequiredAnnotationTargets(@jakarta.annotation.Nullable PsiAnnotationMemberValue value) {
+  public static Set<TargetType> extractRequiredAnnotationTargets(@Nullable PsiAnnotationMemberValue value) {
     if (value instanceof PsiReference) {
       TargetType targetType = translateTargetRef((PsiReference) value);
       if (targetType != null) {
@@ -279,7 +280,7 @@ public class AnnotationTargetUtil {
    * @return a target annotation owner to add the annotation (either modifier list or type element depending on the annotation target)
    * Returns null if {@code modifierListOwner.getModifierList()} is null.
    * <p>The method should be called under read action
-   * and the caller should be prepared for {@link consulo.application.dumb.IndexNotReadyException}.
+   * and the caller should be prepared for {@link IndexNotReadyException}.
    */
   @Contract(pure = true)
   public static @Nullable PsiAnnotationOwner getTarget(@Nonnull PsiModifierListOwner modifierListOwner, boolean existsTypeUseTarget) {

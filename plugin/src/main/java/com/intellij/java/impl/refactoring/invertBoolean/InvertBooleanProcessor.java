@@ -64,7 +64,7 @@ public class InvertBooleanProcessor extends BaseRefactoringProcessor {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
     return new InvertBooleanUsageViewDescriptor(myElement);
   }

@@ -242,7 +242,7 @@ public abstract class JSR45PositionManager<Scope> implements PositionManager
 	}
 
 	@Override
-	public ClassPrepareRequest createPrepareRequest(@Nonnull final ClassPrepareRequestor requestor, @jakarta.annotation.Nonnull final SourcePosition position) throws NoDataException
+	public ClassPrepareRequest createPrepareRequest(@Nonnull final ClassPrepareRequestor requestor, @Nonnull final SourcePosition position) throws NoDataException
 	{
 		checkSourcePositionFileType(position);
 

@@ -435,7 +435,7 @@ public class OwnJdkUtil {
   }
 
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static Class getCommandLineWrapperClass() {
     try {
       return Class.forName(WRAPPER_CLASS);

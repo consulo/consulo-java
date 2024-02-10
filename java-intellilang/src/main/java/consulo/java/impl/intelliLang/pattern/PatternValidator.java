@@ -68,7 +68,7 @@ public class PatternValidator extends LocalInspectionTool
 		myConfiguration = configuration;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public InspectionToolState<?> createStateProvider()
 	{
@@ -81,7 +81,7 @@ public class PatternValidator extends LocalInspectionTool
 		return true;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public HighlightDisplayLevel getDefaultLevel()
 	{
@@ -103,14 +103,14 @@ public class PatternValidator extends LocalInspectionTool
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public String getShortName()
 	{
 		return "PatternValidation";
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly, LocalInspectionToolSession session, Object state)
 	{
 		PatternValidatorState inspectionState = (PatternValidatorState) state;
@@ -355,7 +355,7 @@ public class PatternValidator extends LocalInspectionTool
 		}
 
 		@Override
-		@jakarta.annotation.Nonnull
+		@Nonnull
 		public String getName()
 		{
 			return "Introduce Variable";
@@ -369,7 +369,7 @@ public class PatternValidator extends LocalInspectionTool
 		}
 
 		@Override
-		public void applyFix(@jakarta.annotation.Nonnull final Project project, @Nonnull ProblemDescriptor descriptor)
+		public void applyFix(@Nonnull final Project project, @Nonnull ProblemDescriptor descriptor)
 		{
 			final RefactoringActionHandler handler = JavaRefactoringActionHandlerFactory.getInstance().createIntroduceVariableHandler();
 			final AsyncResult<DataContext> dataContextContainer = DataManager.getInstance().getDataContextFromFocus();

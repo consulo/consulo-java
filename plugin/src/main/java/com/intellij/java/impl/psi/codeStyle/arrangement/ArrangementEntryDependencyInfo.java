@@ -27,7 +27,7 @@ import jakarta.annotation.Nonnull;
 public class ArrangementEntryDependencyInfo
 {
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	private final List<ArrangementEntryDependencyInfo> myDependentEntries = new ArrayList<ArrangementEntryDependencyInfo>();
 
 	@Nonnull
@@ -38,18 +38,18 @@ public class ArrangementEntryDependencyInfo
 		myAnchorEntry = entry;
 	}
 
-	public void addDependentEntryInfo(@jakarta.annotation.Nonnull ArrangementEntryDependencyInfo info)
+	public void addDependentEntryInfo(@Nonnull ArrangementEntryDependencyInfo info)
 	{
 		myDependentEntries.add(info);
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public List<ArrangementEntryDependencyInfo> getDependentEntriesInfos()
 	{
 		return myDependentEntries;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public JavaElementArrangementEntry getAnchorEntry()
 	{
 		return myAnchorEntry;

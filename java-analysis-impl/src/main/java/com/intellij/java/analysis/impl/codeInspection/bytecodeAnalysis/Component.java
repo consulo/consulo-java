@@ -14,7 +14,7 @@ final class Component
 	static final Component[] EMPTY_ARRAY = new Component[0];
 	@Nonnull
 	Value value;
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	final EKey[] ids;
 
 	Component(@Nonnull Value value, @Nonnull Set<EKey> ids)

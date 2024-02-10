@@ -51,7 +51,7 @@ public class NegatedIfElseInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("negated.if.else.display.name");
   }

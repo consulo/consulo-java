@@ -59,10 +59,10 @@ public enum Mutability {
   UNMODIFIABLE("mutability.unmodifiable", "org.jetbrains.annotations.Unmodifiable");
 
   public static final
-  @jakarta.annotation.Nonnull
+  @Nonnull
   String UNMODIFIABLE_ANNOTATION = UNMODIFIABLE.myAnnotation;
   public static final
-  @jakarta.annotation.Nonnull
+  @Nonnull
   String UNMODIFIABLE_VIEW_ANNOTATION = UNMODIFIABLE_VIEW.myAnnotation;
   private final
   @PropertyKey(resourceBundle = JavaAnalysisBundle.BUNDLE)
@@ -81,7 +81,7 @@ public enum Mutability {
   }
 
   public
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Nls
   String getPresentationName() {
     return JavaAnalysisBundle.message(myResourceKey);
@@ -91,7 +91,7 @@ public enum Mutability {
     return this == UNMODIFIABLE || this == UNMODIFIABLE_VIEW;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public Mutability unite(Mutability other) {
     if (this == other) {
       return this;
@@ -146,7 +146,7 @@ public enum Mutability {
    * @param owner an element to check the mutability
    * @return a Mutability enum value; {@link #UNKNOWN} if cannot be determined or specified element type is not supported.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static Mutability getMutability(@Nonnull PsiModifierListOwner owner) {
     if (owner instanceof LightElement) {
       return UNKNOWN;
@@ -155,8 +155,8 @@ public enum Mutability {
         CachedValueProvider.Result.create(calcMutability(owner), owner, PsiModificationTracker.MODIFICATION_COUNT));
   }
 
-  @jakarta.annotation.Nonnull
-  private static Mutability calcMutability(@jakarta.annotation.Nonnull PsiModifierListOwner owner) {
+  @Nonnull
+  private static Mutability calcMutability(@Nonnull PsiModifierListOwner owner) {
     if (owner instanceof PsiParameter && owner.getParent() instanceof PsiParameterList) {
       PsiParameterList list = (PsiParameterList) owner.getParent();
       PsiMethod method = ObjectUtil.tryCast(list.getParent(), PsiMethod.class);

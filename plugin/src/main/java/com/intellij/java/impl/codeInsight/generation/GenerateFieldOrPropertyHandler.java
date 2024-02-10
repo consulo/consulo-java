@@ -104,7 +104,7 @@ public class GenerateFieldOrPropertyHandler extends GenerateMembersHandlerBase {
   }
 
   @Nullable
-  public PsiMember findExistingMember(@jakarta.annotation.Nonnull PsiClass aClass, @Nonnull PropertyMemberType memberType) {
+  public PsiMember findExistingMember(@Nonnull PsiClass aClass, @Nonnull PropertyMemberType memberType) {
     if (memberType == PropertyMemberType.FIELD) {
       return aClass.findFieldByName(getFieldName(aClass), false);
     } else if (memberType == PropertyMemberType.GETTER) {

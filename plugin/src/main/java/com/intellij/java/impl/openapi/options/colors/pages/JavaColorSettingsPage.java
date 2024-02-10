@@ -129,13 +129,13 @@ public class JavaColorSettingsPage implements ColorSettingsPage {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return OptionsBundle.message("options.java.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public AttributesDescriptor[] getAttributeDescriptors() {
     return ourDescriptors;
   }
@@ -147,13 +147,13 @@ public class JavaColorSettingsPage implements ColorSettingsPage {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public SyntaxHighlighter getHighlighter() {
     return new JavaFileHighlighter(LanguageLevel.HIGHEST.toLangVersion());
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDemoText() {
     return "/* Block comment */\n" +
         "import <package>java.util.</package><class>Date</class>;\n" +

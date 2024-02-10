@@ -56,7 +56,7 @@ public class ExtendsClassChecker extends DomCustomAnnotationChecker<ExtendClass>
   }
 
   public List<DomElementProblemDescriptor> checkForProblems(@Nonnull final ExtendClass extend, @Nonnull final DomElement _element, @Nonnull final DomElementAnnotationHolder holder,
-                                                            @jakarta.annotation.Nonnull final DomHighlightingHelper helper) {
+                                                            @Nonnull final DomHighlightingHelper helper) {
     if (!(_element instanceof GenericDomValue)) return Collections.emptyList();
     GenericDomValue element = (GenericDomValue) _element;
 

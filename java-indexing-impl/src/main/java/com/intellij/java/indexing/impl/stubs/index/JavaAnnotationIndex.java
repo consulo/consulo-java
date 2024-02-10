@@ -40,14 +40,14 @@ public class JavaAnnotationIndex extends StringStubIndexExtension<PsiAnnotation>
     return ourInstance;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public StubIndexKey<String, PsiAnnotation> getKey() {
     return JavaStubIndexKeys.ANNOTATIONS;
   }
 
   @Override
-  public Collection<PsiAnnotation> get(@Nonnull final String s, @jakarta.annotation.Nonnull final Project project, @Nonnull final ProjectAwareSearchScope scope) {
+  public Collection<PsiAnnotation> get(@Nonnull final String s, @Nonnull final Project project, @Nonnull final ProjectAwareSearchScope scope) {
     return StubIndex.getElements(getKey(), s, project, new JavaSourceFilterScope(scope), PsiAnnotation.class);
   }
 }

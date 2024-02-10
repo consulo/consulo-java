@@ -262,7 +262,7 @@ public class UtilityClassWithoutPrivateConstructorInspection extends BaseInspect
     }
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   static PsiMethod getNullArgConstructor(PsiClass aClass) {
     final PsiMethod[] constructors = aClass.getConstructors();
     for (final PsiMethod constructor : constructors) {

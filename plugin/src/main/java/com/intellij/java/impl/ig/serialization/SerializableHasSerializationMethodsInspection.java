@@ -37,7 +37,7 @@ public class SerializableHasSerializationMethodsInspection
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final boolean hasReadObject = ((Boolean)infos[0]).booleanValue();
     final boolean hasWriteObject = ((Boolean)infos[1]).booleanValue();
@@ -64,7 +64,7 @@ public class SerializableHasSerializationMethodsInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       // no call to super, so it doesn't drill down
       if (aClass.isInterface() || aClass.isAnnotationType() ||
           aClass.isEnum()) {

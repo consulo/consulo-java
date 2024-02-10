@@ -78,12 +78,12 @@ public abstract class ResourceBundleManager {
     return manager.isActive(context) ? manager : null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public PropertyCreationHandler getPropertyCreationHandler() {
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public String suggestPropertyKey(@Nonnull final String value) {
     return null;
   }

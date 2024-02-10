@@ -24,13 +24,13 @@ public final class LightRecordMethod extends LightMethod implements LightRecordM
   public LightRecordMethod(@Nonnull PsiManager manager,
                            @Nonnull PsiMethod method,
                            @Nonnull PsiClass containingClass,
-                           @jakarta.annotation.Nonnull PsiRecordComponent component) {
+                           @Nonnull PsiRecordComponent component) {
     super(manager, method, containingClass);
     myRecordComponent = component;
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiRecordComponent getRecordComponent() {
     return myRecordComponent;
   }
@@ -83,7 +83,7 @@ public final class LightRecordMethod extends LightMethod implements LightRecordM
   }
 
   @Override
-  public boolean hasAnnotation(@jakarta.annotation.Nonnull String fqn) {
+  public boolean hasAnnotation(@Nonnull String fqn) {
     PsiType returnType = getReturnType();
     return returnType != null && returnType.hasAnnotation(fqn);
   }

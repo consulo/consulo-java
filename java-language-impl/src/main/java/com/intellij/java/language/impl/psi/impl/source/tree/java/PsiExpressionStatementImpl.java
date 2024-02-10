@@ -42,7 +42,7 @@ public class PsiExpressionStatementImpl extends CompositePsiElement implements P
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiExpression getExpression() {
     PsiExpression expression = (PsiExpression)SourceTreeToPsiMap.treeElementToPsi(findChildByType(ElementType.EXPRESSION_BIT_SET));
     if (expression != null) return expression;
@@ -81,7 +81,7 @@ public class PsiExpressionStatementImpl extends CompositePsiElement implements P
   }
 
   @Override
-  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitExpressionStatement(this);
     }

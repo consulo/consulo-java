@@ -29,7 +29,7 @@ import jakarta.annotation.Nonnull;
 public class UnconstructableTestCaseInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "UnconstructableJUnitTestCase";
   }
@@ -57,7 +57,7 @@ public class UnconstructableTestCaseInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       if (aClass.isInterface() || aClass.isEnum() ||
           aClass.isAnnotationType() ||
           aClass.hasModifierProperty(PsiModifier.ABSTRACT)) {

@@ -109,7 +109,7 @@ public class UnBoxingEvaluator implements Evaluator
 		return context.getDebugProcess().invokeMethod(context, value, method, Collections.emptyList());
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	public static PrimitiveValue getInnerPrimitiveValue(ObjectReference value)
 	{
 		ReferenceType type = value.referenceType();

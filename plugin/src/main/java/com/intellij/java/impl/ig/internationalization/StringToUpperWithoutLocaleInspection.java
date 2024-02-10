@@ -34,7 +34,7 @@ import consulo.java.language.module.util.JavaClassNames;
 public class StringToUpperWithoutLocaleInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "StringToUpperCaseOrToLowerCaseWithoutLocale";
   }

@@ -35,7 +35,7 @@ import jakarta.annotation.Nullable;
 @ExtensionImpl
 public class ClassMayBeInterfaceInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "class.may.be.interface.display.name");

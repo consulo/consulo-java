@@ -31,13 +31,13 @@ import org.jetbrains.annotations.NonNls;
 public class IteratorHasNextCallsIteratorNextInspection
   extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "iterator.hasnext.which.calls.next.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "iterator.hasnext.which.calls.next.problem.descriptor");

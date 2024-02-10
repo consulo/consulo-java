@@ -38,7 +38,7 @@ public class CallToStringConcatCanBeReplacedByOperatorInspection
 
   @Override
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "call.to.string.concat.can.be.replaced.by.operator.display.name");
@@ -65,7 +65,7 @@ public class CallToStringConcatCanBeReplacedByOperatorInspection
   private static class CallToStringConcatCanBeReplacedByOperatorFix
     extends InspectionGadgetsFix {
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("call.to.string.concat.can.be.replaced.by.operator.quickfix");
     }

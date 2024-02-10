@@ -172,7 +172,7 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
 	}
 
 	@Override
-	public Object getData(@jakarta.annotation.Nonnull Key dataId)
+	public Object getData(@Nonnull Key dataId)
 	{
 		if(DATA_KEY == dataId)
 		{
@@ -732,7 +732,7 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
 		}
 
 		@Override
-		public void addChildren(@jakarta.annotation.Nonnull XValueChildrenList children, boolean last)
+		public void addChildren(@Nonnull XValueChildrenList children, boolean last)
 		{
 		}
 
@@ -757,7 +757,7 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
 		}
 
 		@Override
-		public void setMessage(@Nonnull String message, @Nullable Image icon, @jakarta.annotation.Nonnull SimpleTextAttributes attributes, @Nullable XDebuggerTreeNodeHyperlink link)
+		public void setMessage(@Nonnull String message, @Nullable Image icon, @Nonnull SimpleTextAttributes attributes, @Nullable XDebuggerTreeNodeHyperlink link)
 		{
 		}
 

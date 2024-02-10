@@ -84,7 +84,7 @@ public class PropertyUtil {
   }
 
   @SuppressWarnings("HardCodedStringLiteral")
-  public static boolean isSimplePropertySetter(@jakarta.annotation.Nullable PsiMethod method) {
+  public static boolean isSimplePropertySetter(@Nullable PsiMethod method) {
     if (method == null) {
       return false;
     }
@@ -178,7 +178,7 @@ public class PropertyUtil {
   }
 
   @Nonnull
-  public static List<PsiMethod> getSetters(@jakarta.annotation.Nonnull final PsiClass psiClass, final String propertyName) {
+  public static List<PsiMethod> getSetters(@Nonnull final PsiClass psiClass, final String propertyName) {
     final String setterName = suggestSetterName(propertyName);
     final PsiMethod[] psiMethods = psiClass.findMethodsByName(setterName, true);
     final ArrayList<PsiMethod> list = new ArrayList<PsiMethod>(psiMethods.length);
@@ -216,7 +216,7 @@ public class PropertyUtil {
     return ContainerUtil.concat(getGetters(psiClass, propertyName), getSetters(psiClass, propertyName));
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiMethod findPropertyGetter(PsiClass aClass, @Nonnull String propertyName, boolean isStatic, boolean checkSuperClasses) {
     if (aClass == null) {
       return null;
@@ -263,7 +263,7 @@ public class PropertyUtil {
     return isSimplePropertyGetter(method) || isSimplePropertySetter(method);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiMethod findPropertySetter(PsiClass aClass, @Nonnull String propertyName, boolean isStatic, boolean checkSuperClasses) {
     if (aClass == null) {
       return null;
@@ -286,7 +286,7 @@ public class PropertyUtil {
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiMethod findPropertySetterWithType(String propertyName, boolean isStatic, PsiType type, Iterator<PsiMethod> methods) {
     while (methods.hasNext()) {
       PsiMethod method = methods.next();
@@ -306,7 +306,7 @@ public class PropertyUtil {
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiField findPropertyField(PsiClass aClass, String propertyName, boolean isStatic) {
     PsiField[] fields = aClass.getAllFields();
 
@@ -327,11 +327,11 @@ public class PropertyUtil {
     return StringUtil.getPropertyName(methodName);
   }
 
-  public static String suggestGetterName(@NonNls @Nonnull String propertyName, @jakarta.annotation.Nullable PsiType propertyType) {
+  public static String suggestGetterName(@NonNls @Nonnull String propertyName, @Nullable PsiType propertyType) {
     return suggestGetterName(propertyName, propertyType, null);
   }
 
-  public static String suggestGetterName(@Nonnull String propertyName, @jakarta.annotation.Nullable PsiType propertyType, @NonNls String existingGetterName) {
+  public static String suggestGetterName(@Nonnull String propertyName, @Nullable PsiType propertyType, @NonNls String existingGetterName) {
     @NonNls StringBuilder name = new StringBuilder(StringUtil.capitalizeWithJavaBeanConvention(StringUtil.sanitizeJavaIdentifier(propertyName)));
     if (isBoolean(propertyType)) {
       if (existingGetterName == null || !existingGetterName.startsWith("get")) {
@@ -346,12 +346,12 @@ public class PropertyUtil {
     return name.toString();
   }
 
-  private static boolean isBoolean(@jakarta.annotation.Nullable PsiType propertyType) {
+  private static boolean isBoolean(@Nullable PsiType propertyType) {
     return PsiType.BOOLEAN.equals(propertyType);
   }
 
   @NonNls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static String[] suggestGetterNames(@Nonnull String propertyName) {
     final String str = StringUtil.capitalizeWithJavaBeanConvention(StringUtil.sanitizeJavaIdentifier(propertyName));
     return new String[]{
@@ -394,7 +394,7 @@ public class PropertyUtil {
   }
 
   @Nonnull
-  public static String[] getWritableProperties(@jakarta.annotation.Nonnull PsiClass aClass, boolean includeSuperClass) {
+  public static String[] getWritableProperties(@Nonnull PsiClass aClass, boolean includeSuperClass) {
     List<String> result = new ArrayList<String>();
 
     PsiMethod[] methods = includeSuperClass ? aClass.getAllMethods() : aClass.getMethods();
@@ -417,8 +417,8 @@ public class PropertyUtil {
    * {@link com.intellij.codeInsight.generation.GenerateMembersUtil#generateSimpleGetterPrototype(PsiField)}
    * to add @Override annotation
    */
-  @jakarta.annotation.Nullable
-  public static PsiMethod generateGetterPrototype(@jakarta.annotation.Nonnull PsiField field) {
+  @Nullable
+  public static PsiMethod generateGetterPrototype(@Nonnull PsiField field) {
     PsiElementFactory factory = JavaPsiFacade.getInstance(field.getProject()).getElementFactory();
     Project project = field.getProject();
     String name = field.getName();
@@ -447,7 +447,7 @@ public class PropertyUtil {
    * or {@link com.intellij.codeInsight.generation.GenerateMembersUtil#generateSimpleSetterPrototype(PsiField)}
    * to add @Override annotation
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiMethod generateSetterPrototype(@Nonnull PsiField field) {
     return generateSetterPrototype(field, field.getContainingClass());
   }
@@ -457,7 +457,7 @@ public class PropertyUtil {
    * or {@link com.intellij.codeInsight.generation.GenerateMembersUtil#generateSimpleSetterPrototype(PsiField)}
    * to add @Override annotation
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiMethod generateSetterPrototype(@Nonnull PsiField field, @Nonnull PsiClass containingClass) {
     return generateSetterPrototype(field, containingClass, false);
   }
@@ -467,7 +467,7 @@ public class PropertyUtil {
    * or {@link com.intellij.codeInsight.generation.GenerateMembersUtil#generateSimpleSetterPrototype(PsiField)}
    * to add @Override annotation
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiMethod generateSetterPrototype(@Nonnull PsiField field, @Nonnull PsiClass containingClass, boolean returnSelf) {
     Project project = field.getProject();
     JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(project);
@@ -554,7 +554,7 @@ public class PropertyUtil {
     return suggestSetterName(propertyName);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static String getPropertyName(final PsiMember member) {
     if (member instanceof PsiMethod) {
       return getPropertyName((PsiMethod) member);
@@ -581,7 +581,7 @@ public class PropertyUtil {
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiTypeElement getPropertyTypeElement(final PsiMember member) {
     if (member instanceof PsiField) {
       return ((PsiField) member).getTypeElement();
@@ -597,7 +597,7 @@ public class PropertyUtil {
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiIdentifier getPropertyNameIdentifier(final PsiMember member) {
     if (member instanceof PsiField) {
       return ((PsiField) member).getNameIdentifier();
@@ -661,17 +661,17 @@ public class PropertyUtil {
    * @param method the method to check
    * @return the return value, or null if it doesn't match the condotions.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiExpression getGetterReturnExpression(PsiMethod method) {
     return method != null && hasGetterSignature(method) ? getSingleReturnValue(method) : null;
   }
 
-  private static boolean hasGetterSignature(@jakarta.annotation.Nonnull PsiMethod method) {
+  private static boolean hasGetterSignature(@Nonnull PsiMethod method) {
     return isSimplePropertyGetter(method) && !method.hasModifierProperty(PsiModifier.SYNCHRONIZED);
   }
 
-  @jakarta.annotation.Nullable
-  public static PsiExpression getSingleReturnValue(@jakarta.annotation.Nonnull PsiMethod method) {
+  @Nullable
+  public static PsiExpression getSingleReturnValue(@Nonnull PsiMethod method) {
     final PsiCodeBlock body = method.getBody();
     if (body == null) {
       return null;
@@ -693,8 +693,8 @@ public class PropertyUtil {
     return null;
   }
 
-  @jakarta.annotation.Nullable
-  public static PsiField getSimplyReturnedField(PsiMethod method, @jakarta.annotation.Nullable PsiExpression value) {
+  @Nullable
+  public static PsiField getSimplyReturnedField(PsiMethod method, @Nullable PsiExpression value) {
     if (!(value instanceof PsiReferenceExpression)) {
       return null;
     }
@@ -862,7 +862,7 @@ public class PropertyUtil {
     }
   }
 
-  private static PsiMethod findPropertyMethod(@Nonnull PsiClass aClass, @Nonnull String prefix, @jakarta.annotation.Nonnull String propertyName, @Nonnull PsiField field1) {
+  private static PsiMethod findPropertyMethod(@Nonnull PsiClass aClass, @Nonnull String prefix, @Nonnull String propertyName, @Nonnull PsiField field1) {
     final PsiMethod[] methods = aClass.findMethodsByName(prefix + propertyName, true);
     for (PsiMethod method : methods) {
       final PsiField field2 = prefix.equals("set") ? getFieldOfSetter(method) : getFieldOfGetter(method);

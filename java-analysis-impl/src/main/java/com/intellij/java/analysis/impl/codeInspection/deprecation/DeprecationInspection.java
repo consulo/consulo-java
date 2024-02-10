@@ -50,7 +50,7 @@ public class DeprecationInspection extends BaseJavaBatchLocalInspectionTool<Depr
 
   @Override
   @Nonnull
-  public PsiElementVisitor buildVisitorImpl(@jakarta.annotation.Nonnull final ProblemsHolder holder,
+  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
                                             boolean isOnTheFly,
                                             LocalInspectionToolSession session,
                                             DeprecationInspectionState state) {
@@ -61,7 +61,7 @@ public class DeprecationInspection extends BaseJavaBatchLocalInspectionTool<Depr
                                          state.IGNORE_METHODS_OF_DEPRECATED);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public InspectionToolState<? extends DeprecationInspectionState> createStateProvider() {
     return new DeprecationInspectionState();
@@ -277,7 +277,7 @@ public class DeprecationInspection extends BaseJavaBatchLocalInspectionTool<Depr
 
   public static void checkDeprecated(PsiElement refElement,
                                      PsiElement elementToHighlight,
-                                     @jakarta.annotation.Nullable TextRange rangeInElement,
+                                     @Nullable TextRange rangeInElement,
                                      boolean ignoreInsideDeprecated,
                                      boolean ignoreImportStatements,
                                      boolean ignoreMethodsOfDeprecated,

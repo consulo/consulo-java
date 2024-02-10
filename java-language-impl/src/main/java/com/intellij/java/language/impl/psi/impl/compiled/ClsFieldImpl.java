@@ -64,7 +64,7 @@ public class ClsFieldImpl extends ClsMemberImpl<PsiFieldStub> implements PsiFiel
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiElement[] getChildren() {
     return getChildren(getDocComment(), getModifierList(), getTypeElement(), getNameIdentifier());
   }
@@ -75,7 +75,7 @@ public class ClsFieldImpl extends ClsMemberImpl<PsiFieldStub> implements PsiFiel
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiType getType() {
     return assertNotNull(getTypeElement()).getType();
   }
@@ -91,7 +91,7 @@ public class ClsFieldImpl extends ClsMemberImpl<PsiFieldStub> implements PsiFiel
   }
 
   @Override
-  public boolean hasModifierProperty(@jakarta.annotation.Nonnull String name) {
+  public boolean hasModifierProperty(@Nonnull String name) {
     return assertNotNull(getModifierList()).hasModifierProperty(name);
   }
 
@@ -178,7 +178,7 @@ public class ClsFieldImpl extends ClsMemberImpl<PsiFieldStub> implements PsiFiel
   }
 
   @Override
-  public void setMirror(@jakarta.annotation.Nonnull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, null);
 
     PsiField mirror = SourceTreeToPsiMap.treeToPsiNotNull(element);
@@ -239,7 +239,7 @@ public class ClsFieldImpl extends ClsMemberImpl<PsiFieldStub> implements PsiFiel
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public SearchScope getUseScope() {
     return PsiImplUtil.getMemberUseScope(this);
   }

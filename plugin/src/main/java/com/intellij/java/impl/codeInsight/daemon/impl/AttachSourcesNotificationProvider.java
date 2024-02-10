@@ -96,7 +96,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 	}
 
 	@RequiredReadAction
-	@jakarta.annotation.Nullable
+	@Nullable
 	@Override
 	public EditorNotificationBuilder buildNotification(@Nonnull VirtualFile file, @Nonnull FileEditor fileEditor, @Nonnull Supplier<EditorNotificationBuilder> supplier)
 	{
@@ -204,7 +204,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 		return builder;
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	private static String getClassFileInfo(VirtualFile file)
 	{
 		try
@@ -256,7 +256,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 		return entries;
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	private static VirtualFile findSourceFileInSameJar(VirtualFile classFile)
 	{
 		String name = classFile.getName();
@@ -328,7 +328,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 			return AsyncResult.resolved();
 		}
 
-		@jakarta.annotation.Nullable
+		@Nullable
 		private VirtualFile findRoot(Library library)
 		{
 			for(VirtualFile classesRoot : library.getFiles(BinariesOrderRootType.getInstance()))

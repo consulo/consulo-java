@@ -181,7 +181,7 @@ public class RedundantThrows extends GlobalJavaInspectionTool
 		manager.iterate(new RefJavaVisitor()
 		{
 			@Override
-			public void visitElement(@jakarta.annotation.Nonnull RefEntity refEntity)
+			public void visitElement(@Nonnull RefEntity refEntity)
 			{
 				if(processor.getDescriptions(refEntity) != null)
 				{
@@ -209,21 +209,21 @@ public class RedundantThrows extends GlobalJavaInspectionTool
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return DISPLAY_NAME;
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public String getGroupDisplayName()
 	{
 		return GroupNames.DECLARATION_REDUNDANCY;
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public String getShortName()
 	{
 		return SHORT_NAME;
@@ -245,14 +245,14 @@ public class RedundantThrows extends GlobalJavaInspectionTool
 
 
 	@Override
-	@jakarta.annotation.Nullable
+	@Nullable
 	public QuickFix getQuickFix(String hint)
 	{
 		return getFix(null, hint);
 	}
 
 	@Override
-	@jakarta.annotation.Nullable
+	@Nullable
 	public String getHint(final QuickFix fix)
 	{
 		final List<String> hints = myQuickFixes.getKeysByValue(fix);
@@ -279,7 +279,7 @@ public class RedundantThrows extends GlobalJavaInspectionTool
 		}
 
 		@Override
-		public void applyFix(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull ProblemDescriptor descriptor)
+		public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 		{
 			if(myProcessor != null)
 			{
@@ -311,11 +311,11 @@ public class RedundantThrows extends GlobalJavaInspectionTool
 			return getName();
 		}
 
-		private void removeExcessiveThrows(@jakarta.annotation.Nullable RefMethod refMethod, @jakarta.annotation.Nullable final PsiModifierListOwner element, final CommonProblemDescriptor[] problems)
+		private void removeExcessiveThrows(@Nullable RefMethod refMethod, @Nullable final PsiModifierListOwner element, final CommonProblemDescriptor[] problems)
 		{
 			try
 			{
-				@jakarta.annotation.Nullable final PsiMethod psiMethod;
+				@Nullable final PsiMethod psiMethod;
 				if(element == null)
 				{
 					LOG.assertTrue(refMethod != null);

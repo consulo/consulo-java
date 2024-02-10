@@ -50,7 +50,7 @@ public class FieldDescriptorImpl extends ValueDescriptorImpl implements FieldDes
 	private Boolean myIsPrimitive = null;
 	private final boolean myIsStatic;
 
-	public FieldDescriptorImpl(Project project, ObjectReference objRef, @jakarta.annotation.Nonnull Field field)
+	public FieldDescriptorImpl(Project project, ObjectReference objRef, @Nonnull Field field)
 	{
 		super(project);
 		myObject = objRef;

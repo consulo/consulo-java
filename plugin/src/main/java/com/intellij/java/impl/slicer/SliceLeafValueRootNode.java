@@ -38,7 +38,7 @@ import java.util.List;
 public class SliceLeafValueRootNode extends SliceNode implements MyColoredTreeCellRenderer {
   protected final List<SliceNode> myCachedChildren;
 
-  public SliceLeafValueRootNode(@jakarta.annotation.Nonnull Project project,
+  public SliceLeafValueRootNode(@Nonnull Project project,
                                 PsiElement leafExpression,
                                 SliceNode root,
                                 List<SliceNode> children,
@@ -48,7 +48,7 @@ public class SliceLeafValueRootNode extends SliceNode implements MyColoredTreeCe
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public Collection<SliceNode> getChildren() {
     return myCachedChildren;
   }
@@ -72,7 +72,7 @@ public class SliceLeafValueRootNode extends SliceNode implements MyColoredTreeCe
 
   @Override
   public void customizeCellRenderer(@Nonnull SliceUsageCellRenderer renderer,
-                                    @jakarta.annotation.Nonnull JTree tree,
+                                    @Nonnull JTree tree,
                                     Object value,
                                     boolean selected,
                                     boolean expanded,
@@ -94,9 +94,9 @@ public class SliceLeafValueRootNode extends SliceNode implements MyColoredTreeCe
     }
   }
 
-  private static void appendElementText(@jakarta.annotation.Nonnull UsageInfo2UsageAdapter usage,
+  private static void appendElementText(@Nonnull UsageInfo2UsageAdapter usage,
                                         @Nonnull final PsiElement element,
-                                        @jakarta.annotation.Nonnull final SliceUsageCellRenderer renderer) {
+                                        @Nonnull final SliceUsageCellRenderer renderer) {
     PsiFile file = element.getContainingFile();
     List<TextChunk> result = new ArrayList<TextChunk>();
     ChunkExtractor.getExtractor(element.getContainingFile()).createTextChunks(usage, file.getText(), element.getTextRange().getStartOffset(),

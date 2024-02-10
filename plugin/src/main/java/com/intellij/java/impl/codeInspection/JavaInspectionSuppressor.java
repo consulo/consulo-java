@@ -31,7 +31,7 @@ public class JavaInspectionSuppressor implements InspectionSuppressor
 		return SuppressManager.getInstance().createBatchSuppressActions(HighlightDisplayKey.find(toolShortName));
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public Language getLanguage()
 	{

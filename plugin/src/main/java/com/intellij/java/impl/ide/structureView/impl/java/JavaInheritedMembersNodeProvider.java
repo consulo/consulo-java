@@ -32,7 +32,7 @@ import java.util.*;
 public class JavaInheritedMembersNodeProvider extends InheritedMembersNodeProvider {
   @Nonnull
   @Override
-  public Collection<TreeElement> provideNodes(@jakarta.annotation.Nonnull TreeElement node) {
+  public Collection<TreeElement> provideNodes(@Nonnull TreeElement node) {
     if (!(node instanceof JavaClassTreeElement)) {
       return Collections.emptyList();
     }

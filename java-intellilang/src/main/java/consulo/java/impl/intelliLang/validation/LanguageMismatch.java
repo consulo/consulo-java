@@ -52,7 +52,7 @@ public class LanguageMismatch extends LocalInspectionTool {
     return JavaLanguage.INSTANCE;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public HighlightDisplayLevel getDefaultLevel() {
     return HighlightDisplayLevel.WARNING;
@@ -88,7 +88,7 @@ public class LanguageMismatch extends LocalInspectionTool {
   }
 
   @Nonnull
-  public PsiElementVisitor buildVisitor(@jakarta.annotation.Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
+  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
     return new JavaElementVisitor() {
       final Pair<String, ? extends Set<String>> annotationName = Configuration.getProjectInstance(holder.getProject()).getAdvancedConfiguration().getLanguageAnnotationPair();
 

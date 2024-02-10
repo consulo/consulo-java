@@ -33,7 +33,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 public class UnnecessaryLabelOnBreakStatementInspection
   extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "unnecessary.label.on.break.statement.display.name");
@@ -84,7 +84,7 @@ public class UnnecessaryLabelOnBreakStatementInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitBreakStatement(@jakarta.annotation.Nonnull PsiBreakStatement statement) {
+    public void visitBreakStatement(@Nonnull PsiBreakStatement statement) {
       final PsiIdentifier labelIdentifier =
         statement.getLabelIdentifier();
       if (labelIdentifier == null) {

@@ -19,7 +19,7 @@ class DfFloatConstantType extends DfConstantType<Float> implements DfFloatType {
     return DfTypes.TOP;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public PsiPrimitiveType getPsiType() {
     return DfFloatType.super.getPsiType();

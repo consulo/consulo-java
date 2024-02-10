@@ -31,10 +31,10 @@ class AnnotationInvocationHandler implements InvocationHandler
 {
 	@Nonnull
 	private final Class<? extends Annotation> type;
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	private final PsiAnnotation myAnnotation;
 
-	AnnotationInvocationHandler(@Nonnull Class<? extends Annotation> type, @jakarta.annotation.Nonnull PsiAnnotation annotation)
+	AnnotationInvocationHandler(@Nonnull Class<? extends Annotation> type, @Nonnull PsiAnnotation annotation)
 	{
 		this.type = type;
 		myAnnotation = annotation;

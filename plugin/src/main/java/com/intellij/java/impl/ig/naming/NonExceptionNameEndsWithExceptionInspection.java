@@ -38,7 +38,7 @@ public class NonExceptionNameEndsWithExceptionInspection
   extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "non.exception.name.ends.with.exception.display.name");
@@ -52,7 +52,7 @@ public class NonExceptionNameEndsWithExceptionInspection
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     final String name = (String)infos[0];
     final Boolean onTheFly = (Boolean)infos[1];
@@ -74,7 +74,7 @@ public class NonExceptionNameEndsWithExceptionInspection
       this.name = name;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "non.exception.name.ends.with.exception.quickfix", name);

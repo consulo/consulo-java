@@ -179,7 +179,7 @@ public class RefFieldImpl extends RefJavaElementImpl implements RefField {
     });
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static RefField fieldFromExternalName(RefManager manager, String externalName) {
     return (RefField) manager.getReference(findPsiField(PsiManager.getInstance(manager.getProject()), externalName));
   }

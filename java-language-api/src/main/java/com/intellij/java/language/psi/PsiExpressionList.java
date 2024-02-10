@@ -30,7 +30,7 @@ public interface PsiExpressionList extends PsiElement {
    *
    * @return the array of expressions contained in the list.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   PsiExpression[] getExpressions();
 
   @Nonnull

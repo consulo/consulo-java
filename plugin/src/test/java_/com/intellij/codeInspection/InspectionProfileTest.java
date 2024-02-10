@@ -339,8 +339,8 @@ public abstract class InspectionProfileTest extends LightIdeaTestCase {
     return getInitializedTools(foo).size();
   }
 
-  @jakarta.annotation.Nonnull
-  public static List<InspectionToolWrapper> getInitializedTools(@jakarta.annotation.Nonnull Profile foo) {
+  @Nonnull
+  public static List<InspectionToolWrapper> getInitializedTools(@Nonnull Profile foo) {
     List<InspectionToolWrapper> initialized = new ArrayList<InspectionToolWrapper>();
     List<ScopeToolState> tools = ((InspectionProfileImpl)foo).getAllTools(getProject());
     for (ScopeToolState tool : tools) {

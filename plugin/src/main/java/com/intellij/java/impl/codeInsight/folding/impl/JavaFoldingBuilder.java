@@ -39,7 +39,7 @@ import java.awt.*;
 @ExtensionImpl
 public class JavaFoldingBuilder extends JavaFoldingBuilderBase {
   @Override
-  protected boolean isBelowRightMargin(@jakarta.annotation.Nonnull Project project, int lineLength) {
+  protected boolean isBelowRightMargin(@Nonnull Project project, int lineLength) {
     final CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(project);
     return lineLength <= settings.getRightMargin(JavaLanguage.INSTANCE);
   }
@@ -56,7 +56,7 @@ public class JavaFoldingBuilder extends JavaFoldingBuilderBase {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String rightArrow() {
     return getRightArrow();
   }
@@ -67,7 +67,7 @@ public class JavaFoldingBuilder extends JavaFoldingBuilderBase {
     return FontUtil.rightArrow(font);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

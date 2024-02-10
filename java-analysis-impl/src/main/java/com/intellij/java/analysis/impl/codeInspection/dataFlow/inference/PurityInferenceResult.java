@@ -35,10 +35,10 @@ import java.util.function.Supplier;
  */
 class PurityInferenceResult {
   private List<ExpressionRange> mutableRefs;
-  @jakarta.annotation.Nullable
+  @Nullable
   private ExpressionRange singleCall;
 
-  PurityInferenceResult(List<ExpressionRange> mutableRefs, @jakarta.annotation.Nullable ExpressionRange singleCall) {
+  PurityInferenceResult(List<ExpressionRange> mutableRefs, @Nullable ExpressionRange singleCall) {
     this.mutableRefs = mutableRefs;
     this.singleCall = singleCall;
   }

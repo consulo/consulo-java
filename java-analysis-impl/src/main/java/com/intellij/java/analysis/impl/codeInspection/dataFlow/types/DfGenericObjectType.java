@@ -73,13 +73,13 @@ class DfGenericObjectType extends DfAntiConstantType<Object> implements DfRefere
     return myLocal;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public SpecialField getSpecialField() {
     return mySpecialField;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public DfType getSpecialFieldType() {
     return mySpecialFieldType;
@@ -198,7 +198,7 @@ class DfGenericObjectType extends DfAntiConstantType<Object> implements DfRefere
   }
 
   @Override
-  public boolean isMergeable(@jakarta.annotation.Nonnull DfType other) {
+  public boolean isMergeable(@Nonnull DfType other) {
     if (!isSuperType(other)) {
       return false;
     }
@@ -245,7 +245,7 @@ class DfGenericObjectType extends DfAntiConstantType<Object> implements DfRefere
 
   @Nonnull
   @Override
-  public DfType meet(@jakarta.annotation.Nonnull DfType other) {
+  public DfType meet(@Nonnull DfType other) {
     if (other instanceof DfConstantType || other instanceof DfEphemeralReferenceType) {
       return other.meet(this);
     }

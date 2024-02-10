@@ -77,7 +77,7 @@ public abstract class JavaStatisticsManager {
     createVariableUseInfo(name, variableKind, propertyName, canonialTypeText).incUseCount();
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static String getName(String key2) {
     final int startIndex = key2.indexOf("#");
     LOG.assertTrue(startIndex >= 0);
@@ -129,7 +129,7 @@ public abstract class JavaStatisticsManager {
     return CLASS_PREFIX + ((PsiClass)member).getQualifiedName();
   }
 
-  public static StatisticsInfo createInfo(@jakarta.annotation.Nullable final PsiType qualifierType, final PsiMember member) {
+  public static StatisticsInfo createInfo(@Nullable final PsiType qualifierType, final PsiMember member) {
     return new StatisticsInfo(getMemberUseKey1(qualifierType), getMemberUseKey2(member));
   }
 

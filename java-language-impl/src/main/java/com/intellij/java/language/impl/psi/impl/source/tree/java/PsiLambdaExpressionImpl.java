@@ -77,7 +77,7 @@ public class PsiLambdaExpressionImpl extends JavaStubPsiElement<FunctionalExpres
   }
 
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public PsiType getFunctionalInterfaceType() {
     return FunctionalInterfaceParameterizationUtil.getGroundTargetType(LambdaUtil.getFunctionalInterfaceType(this, true), this);

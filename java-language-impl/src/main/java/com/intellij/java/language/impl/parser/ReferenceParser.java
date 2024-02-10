@@ -42,17 +42,17 @@ public class ReferenceParser {
 
   private final JavaParser myParser;
 
-  public ReferenceParser(@jakarta.annotation.Nonnull JavaParser javaParser) {
+  public ReferenceParser(@Nonnull JavaParser javaParser) {
     myParser = javaParser;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public PsiBuilder.Marker parseType(PsiBuilder builder, int flags) {
     TypeInfo typeInfo = parseTypeInfo(builder, flags);
     return typeInfo != null ? typeInfo.marker : null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public TypeInfo parseTypeInfo(PsiBuilder builder, int flags) {
     TypeInfo typeInfo = parseTypeInfo(builder, flags, false);
 
@@ -79,7 +79,7 @@ public class ReferenceParser {
     return typeInfo;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private TypeInfo parseTypeInfo(PsiBuilder builder, int flags, boolean badWildcard) {
     if (builder.getTokenType() == null) {
       return null;
@@ -191,7 +191,7 @@ public class ReferenceParser {
     }
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public PsiBuilder.Marker parseJavaCodeReference(PsiBuilder builder,
                                                   boolean eatLastDot,
                                                   boolean parameterList,
@@ -206,7 +206,7 @@ public class ReferenceParser {
     return !typeInfo.hasErrors;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private PsiBuilder.Marker parseJavaCodeReference(PsiBuilder builder,
                                                    boolean eatLastDot,
                                                    boolean parameterList,
@@ -355,7 +355,7 @@ public class ReferenceParser {
     return list;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public PsiBuilder.Marker parseTypeParameter(PsiBuilder builder) {
     PsiBuilder.Marker param = builder.mark();
 

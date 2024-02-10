@@ -28,6 +28,6 @@ import java.util.List;
 public interface JvmElementProvider {
   ExtensionPointName<JvmElementProvider> EP_NAME = ExtensionPointName.create(JvmElementProvider.class);
 
-  @jakarta.annotation.Nonnull
-  List<? extends JvmClass> getClasses(@jakarta.annotation.Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope);
+  @Nonnull
+  List<? extends JvmClass> getClasses(@Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope);
 }

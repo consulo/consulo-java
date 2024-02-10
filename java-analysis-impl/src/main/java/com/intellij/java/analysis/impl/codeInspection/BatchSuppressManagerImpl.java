@@ -52,7 +52,7 @@ public class BatchSuppressManagerImpl implements BatchSuppressManager {
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   public PsiElement getElementMemberSuppressedIn(@Nonnull final PsiDocCommentOwner owner, final String inspectionToolID) {
     return JavaSuppressionUtil.getElementMemberSuppressedIn(owner, inspectionToolID);
   }
@@ -64,7 +64,7 @@ public class BatchSuppressManagerImpl implements BatchSuppressManager {
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   public PsiElement getDocCommentToolSuppressedIn(@Nonnull final PsiDocCommentOwner owner, final String inspectionToolID) {
     return JavaSuppressionUtil.getDocCommentToolSuppressedIn(owner, inspectionToolID);
   }

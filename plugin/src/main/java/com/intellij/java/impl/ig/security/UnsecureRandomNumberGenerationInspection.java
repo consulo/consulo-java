@@ -31,14 +31,14 @@ public class UnsecureRandomNumberGenerationInspection
   extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "unsecure.random.number.generation.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     @NonNls final String text = ((PsiElement)infos[0]).getText();
     if ("random".equals(text)) {
@@ -89,7 +89,7 @@ public class UnsecureRandomNumberGenerationInspection
 
     @Override
     public void visitMethodCallExpression(
-      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();

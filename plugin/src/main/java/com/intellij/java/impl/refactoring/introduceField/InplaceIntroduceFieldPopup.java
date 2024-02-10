@@ -108,11 +108,11 @@ public class InplaceIntroduceFieldPopup extends AbstractInplaceIntroduceFieldPop
     return suggestFieldName(defaultType, (PsiLocalVariable) getLocalVariable(), myExpr != null && myExpr.isValid() ? myExpr : null, myStatic, myParentClass).names;
   }
 
-  public static SuggestedNameInfo suggestFieldName(@jakarta.annotation.Nullable PsiType defaultType,
+  public static SuggestedNameInfo suggestFieldName(@Nullable PsiType defaultType,
                                                    @Nullable final PsiLocalVariable localVariable,
                                                    final PsiExpression initializer,
                                                    final boolean forStatic,
-                                                   @jakarta.annotation.Nonnull final PsiClass parentClass) {
+                                                   @Nonnull final PsiClass parentClass) {
     return IntroduceFieldDialog.
         createGenerator(forStatic, localVariable, initializer, localVariable != null, null, parentClass, parentClass.getProject()).
         getSuggestedNameInfo(defaultType);
@@ -128,7 +128,7 @@ public class InplaceIntroduceFieldPopup extends AbstractInplaceIntroduceFieldPop
   }
 
   @Override
-  protected void updateTitle(@jakarta.annotation.Nullable PsiVariable variable, String value) {
+  protected void updateTitle(@Nullable PsiVariable variable, String value) {
     if (variable == null || !variable.hasInitializer()) {
       super.updateTitle(variable, value);
     } else {
@@ -143,7 +143,7 @@ public class InplaceIntroduceFieldPopup extends AbstractInplaceIntroduceFieldPop
   }
 
   @Override
-  protected void updateTitle(@jakarta.annotation.Nullable PsiVariable variable) {
+  protected void updateTitle(@Nullable PsiVariable variable) {
     if (variable != null) {
       updateTitle(variable, variable.getName());
     }

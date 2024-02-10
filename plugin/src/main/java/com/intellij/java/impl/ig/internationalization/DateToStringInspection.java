@@ -39,7 +39,7 @@ public class DateToStringInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "call.to.date.tostring.display.name");

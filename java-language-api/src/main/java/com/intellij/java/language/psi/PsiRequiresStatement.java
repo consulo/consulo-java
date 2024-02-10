@@ -34,7 +34,7 @@ public interface PsiRequiresStatement extends PsiModifierListOwner, PsiStatement
 	PsiJavaModuleReference getModuleReference();
 
 	default
-	@jakarta.annotation.Nullable
+	@Nullable
 	PsiJavaModule resolve()
 	{
 		PsiJavaModuleReference ref = getModuleReference();

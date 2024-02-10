@@ -114,7 +114,7 @@ public abstract class UpdatableDebuggerView extends JPanel implements DebuggerVi
 		myDisposables.add(disposable);
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public DebuggerContextImpl getContext()
 	{
 		return myStateManager.getContext();

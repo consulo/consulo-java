@@ -56,7 +56,7 @@ public class JavaLangInvokeHandleReference extends PsiReferenceBase<PsiLiteralEx
     return element;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public PsiElement resolve() {
     final Object value = myElement.getValue();
@@ -162,7 +162,7 @@ public class JavaLangInvokeHandleReference extends PsiReferenceBase<PsiLiteralEx
     return isRegularMethod(method) && !method.hasModifierProperty(PsiModifier.STATIC);
   }
 
-  private static boolean isStaticMethod(@jakarta.annotation.Nullable PsiMethod method) {
+  private static boolean isStaticMethod(@Nullable PsiMethod method) {
     return isRegularMethod(method) && method.hasModifierProperty(PsiModifier.STATIC);
   }
 

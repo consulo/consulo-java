@@ -126,7 +126,7 @@ public class BreakConverter {
     return false;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static BreakConverter from(PsiSwitchBlock switchStatement) {
     String replacement = switchStatement instanceof PsiSwitchStatement ? getReplacement((PsiStatement) switchStatement) : null;
     if (replacement == null) {

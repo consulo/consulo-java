@@ -52,7 +52,7 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
 
   @Override
   @Nonnull
-  public PsiElementVisitor buildVisitorImpl(@jakarta.annotation.Nonnull final ProblemsHolder holder,
+  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
                                             boolean isOnTheFly,
                                             LocalInspectionToolSession session,
                                             NullableStuffInspectionState state) {
@@ -261,7 +261,7 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
       }
 
       private void checkCollectionNullityOnAssignment(@Nonnull PsiElement errorElement,
-                                                      @jakarta.annotation.Nullable PsiType expectedType,
+                                                      @Nullable PsiType expectedType,
                                                       @Nullable PsiExpression assignedExpression) {
         if (assignedExpression == null) {
           return;
@@ -282,7 +282,7 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
       }
 
       private boolean isNullableNotNullCollectionConflict(@Nullable PsiType expectedType,
-                                                          @jakarta.annotation.Nullable PsiType assignedType,
+                                                          @Nullable PsiType assignedType,
                                                           @Nonnull Set<? super Couple<PsiType>> visited) {
         if (!visited.add(Couple.of(expectedType, assignedType))) {
           return false;
@@ -415,7 +415,7 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
 
   private static boolean checkNonStandardAnnotations(PsiField field,
                                                      Annotated annotated,
-                                                     NullableNotNullManager manager, String anno, @jakarta.annotation.Nonnull ProblemsHolder holder) {
+                                                     NullableNotNullManager manager, String anno, @Nonnull ProblemsHolder holder) {
     if (!AnnotationUtil.isAnnotatingApplicable(field, anno)) {
       String message = "Not \'";
       PsiAnnotation annotation = Objects.requireNonNull(annotated.isDeclaredNullable ? annotated.nullable : annotated.notNull);
@@ -438,7 +438,7 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
                               NullableNotNullManager manager,
                               final String anno,
                               final List<String> annoToRemove,
-                              @jakarta.annotation.Nonnull ProblemsHolder holder,
+                              @Nonnull ProblemsHolder holder,
                               NullableStuffInspectionState state) {
     String propName = JavaCodeStyleManager.getInstance(project).variableNameToPropertyName(field.getName(), VariableKind.FIELD);
     final boolean isStatic = field.hasModifierProperty(PsiModifier.STATIC);
@@ -494,7 +494,7 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
     }
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private static AddAnnotationPsiFix createAddAnnotationFix(String anno, List<String> annoToRemove, PsiParameter parameter) {
     return new AddAnnotationPsiFix(anno, parameter, PsiNameValuePair.EMPTY_ARRAY, ArrayUtil.toStringArray(annoToRemove));
   }
@@ -510,7 +510,7 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
                                           NullableNotNullManager manager,
                                           String anno,
                                           List<String> annoToRemove,
-                                          @jakarta.annotation.Nonnull ProblemsHolder holder,
+                                          @Nonnull ProblemsHolder holder,
                                           NullableStuffInspectionState state) {
     List<PsiExpression> initializers = DfaPsiUtil.findAllConstructorInitializers(field);
     if (initializers.isEmpty()) {
@@ -567,7 +567,7 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
   }
 
   @Nonnull
-  private static String getPresentableAnnoName(@jakarta.annotation.Nonnull PsiModifierListOwner owner) {
+  private static String getPresentableAnnoName(@Nonnull PsiModifierListOwner owner) {
     NullableNotNullManager manager = NullableNotNullManager.getInstance(owner.getProject());
     NullabilityAnnotationInfo info = manager.findEffectiveNullabilityInfo(owner);
     String name = info == null ? null : info.getAnnotation().getQualifiedName();
@@ -577,7 +577,7 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
     return StringUtil.getShortName(name);
   }
 
-  public static String getPresentableAnnoName(@jakarta.annotation.Nonnull PsiAnnotation annotation) {
+  public static String getPresentableAnnoName(@Nonnull PsiAnnotation annotation) {
     return StringUtil.getShortName(StringUtil.notNullize(annotation.getQualifiedName(), "???"));
   }
 
@@ -589,14 +589,14 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
     @Nullable
     private final PsiAnnotation nullable;
 
-    private Annotated(@Nullable PsiAnnotation notNull, @jakarta.annotation.Nullable PsiAnnotation nullable) {
+    private Annotated(@Nullable PsiAnnotation notNull, @Nullable PsiAnnotation nullable) {
       this.isDeclaredNotNull = notNull != null;
       this.isDeclaredNullable = nullable != null;
       this.notNull = notNull;
       this.nullable = nullable;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     static Annotated from(@Nonnull PsiModifierListOwner owner) {
       NullableNotNullManager manager = NullableNotNullManager.getInstance(owner.getProject());
       return new Annotated(manager.findExplicitNullabilityAnnotation(owner, Nullability.NOT_NULL),
@@ -610,10 +610,10 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
     return annotated;
   }
 
-  private static void checkType(@jakarta.annotation.Nullable PsiModifierListOwner listOwner,
+  private static void checkType(@Nullable PsiModifierListOwner listOwner,
                                 ProblemsHolder holder,
                                 PsiType type,
-                                @Nullable PsiAnnotation notNull, @jakarta.annotation.Nullable PsiAnnotation nullable) {
+                                @Nullable PsiAnnotation notNull, @Nullable PsiAnnotation nullable) {
     if (nullable != null && notNull != null) {
       reportNullableNotNullConflict(holder, listOwner, nullable, notNull);
     }
@@ -628,7 +628,7 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
 
   private static void checkLoopParameterNullability(ProblemsHolder holder,
                                                     @Nullable PsiAnnotation notNull,
-                                                    @jakarta.annotation.Nullable PsiAnnotation nullable,
+                                                    @Nullable PsiAnnotation nullable,
                                                     Nullability expectedNullability,
                                                     PsiParameter owner) {
     if (notNull != null && expectedNullability == Nullability.NULLABLE) {
@@ -646,26 +646,26 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
   }
 
   private static void reportPrimitiveType(ProblemsHolder holder, PsiAnnotation annotation,
-                                          @jakarta.annotation.Nullable PsiModifierListOwner listOwner) {
+                                          @Nullable PsiModifierListOwner listOwner) {
     holder.registerProblem(!annotation.isPhysical() && listOwner != null ? listOwner.getNavigationElement() : annotation,
                            InspectionsBundle.message("inspection.nullable.problems.primitive.type.annotation"),
                            ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new RemoveAnnotationQuickFix(annotation, listOwner));
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionsBundle.message("inspection.nullable.problems.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getGroupDisplayName() {
     return GroupNames.BUGS_GROUP_NAME;
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getShortName() {
     return "NullableProblems";
   }
@@ -864,8 +864,8 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
   }
 
   private void checkOverriders(@Nonnull PsiMethod method,
-                               @jakarta.annotation.Nonnull ProblemsHolder holder,
-                               @jakarta.annotation.Nonnull Annotated annotated,
+                               @Nonnull ProblemsHolder holder,
+                               @Nonnull Annotated annotated,
                                @Nonnull NullableNotNullManager nullableManager,
                                NullableStuffInspectionState state) {
     PsiParameter[] parameters = method.getParameterList().getParameters();
@@ -993,7 +993,7 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
     return DfaPsiUtil.getTypeNullability(getMemberType(owner)) == Nullability.NULLABLE || !AnnotationUtil.isInferredAnnotation(anno);
   }
 
-  private static PsiType getMemberType(@jakarta.annotation.Nonnull PsiModifierListOwner owner) {
+  private static PsiType getMemberType(@Nonnull PsiModifierListOwner owner) {
     return owner instanceof PsiMethod ? ((PsiMethod)owner).getReturnType() : owner instanceof PsiVariable ? ((PsiVariable)owner).getType() : null;
   }
 
@@ -1029,7 +1029,7 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
                            ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new RemoveAnnotationQuickFix(declaredNullable, listOwner));
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public NullableStuffInspectionState createStateProvider() {
     return new NullableStuffInspectionState();
@@ -1040,7 +1040,7 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
       super(defaultNotNull, annotationsToRemove);
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     protected String getPreposition() {
       return "as";

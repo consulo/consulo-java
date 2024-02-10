@@ -40,14 +40,14 @@ import java.util.List;
 public class JavaChangeSignatureDetector implements LanguageChangeSignatureDetector<DetectedJavaChangeInfo> {
   private static final Logger LOG = Logger.getInstance(JavaChangeSignatureDetector.class);
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
-  public DetectedJavaChangeInfo createInitialChangeInfo(final @jakarta.annotation.Nonnull PsiElement element) {
+  public DetectedJavaChangeInfo createInitialChangeInfo(final @Nonnull PsiElement element) {
     return DetectedJavaChangeInfo.createFromMethod(PsiTreeUtil.getParentOfType(element, PsiMethod.class), false);
   }
 
   @Override
-  public void performChange(final DetectedJavaChangeInfo changeInfo, Editor editor, @jakarta.annotation.Nonnull final String oldText) {
+  public void performChange(final DetectedJavaChangeInfo changeInfo, Editor editor, @Nonnull final String oldText) {
     changeInfo.perform(oldText, editor, true);
   }
 

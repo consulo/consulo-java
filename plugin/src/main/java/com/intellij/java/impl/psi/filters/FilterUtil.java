@@ -86,7 +86,7 @@ public class FilterUtil {
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiElement getPreviousElement(final PsiElement element, boolean skipReference) {
     PsiElement prev = element;
     if (element != null) {

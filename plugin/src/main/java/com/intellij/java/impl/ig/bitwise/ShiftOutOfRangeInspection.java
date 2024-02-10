@@ -130,7 +130,7 @@ public class ShiftOutOfRangeInspection extends BaseInspection {
 
     @Override
     public void visitBinaryExpression(
-      @jakarta.annotation.Nonnull PsiBinaryExpression expression) {
+      @Nonnull PsiBinaryExpression expression) {
       super.visitBinaryExpression(expression);
       final PsiJavaToken sign = expression.getOperationSign();
       final IElementType tokenType = sign.getTokenType();

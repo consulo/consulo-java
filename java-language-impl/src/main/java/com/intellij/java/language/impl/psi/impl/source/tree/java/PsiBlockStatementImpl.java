@@ -65,7 +65,7 @@ public class PsiBlockStatementImpl extends CompositePsiElement implements PsiBlo
   }
 
   @Override
-  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitBlockStatement(this);
     }

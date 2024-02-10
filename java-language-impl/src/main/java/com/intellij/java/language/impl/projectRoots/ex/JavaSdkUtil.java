@@ -65,7 +65,7 @@ public class JavaSdkUtil {
     return isJdkSupportsLevel(getRelevantJdk(project, module), level);
   }
 
-  private static boolean isJdkSupportsLevel(@jakarta.annotation.Nullable final Sdk jdk, @Nonnull LanguageLevel level) {
+  private static boolean isJdkSupportsLevel(@Nullable final Sdk jdk, @Nonnull LanguageLevel level) {
     if (jdk == null) {
       return true;
     }
@@ -73,7 +73,7 @@ public class JavaSdkUtil {
     return version != null && version.getMaxLanguageLevel().isAtLeast(level);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static Sdk getRelevantJdk(@Nonnull Project project, @Nonnull Module module) {
     Sdk moduleJdk = ModuleUtilCore.getSdk(module, JavaModuleExtension.class);
     return moduleJdk == null ? null : moduleJdk;

@@ -45,7 +45,7 @@ public class FieldNotUsedInToStringInspection extends AbstractToStringInspection
     return "Field not used in 'toString()' method";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getShortName() {
     return "FieldNotUsedInToString";
   }
@@ -57,7 +57,7 @@ public class FieldNotUsedInToStringInspection extends AbstractToStringInspection
 
   @Nonnull
   @Override
-  public PsiElementVisitor buildVisitor(@jakarta.annotation.Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
+  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
     return new FieldNotUsedInToStringVisitor(holder);
   }
 

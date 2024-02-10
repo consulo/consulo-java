@@ -78,7 +78,7 @@ public abstract class AddAnnotationIntention extends BaseIntentionAction {
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     PsiModifierListOwner owner = AddAnnotationPsiFix.getContainer(file, editor.getCaretModel().getOffset());
     if (owner == null || !owner.isValid()) {
       return;

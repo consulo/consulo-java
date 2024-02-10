@@ -32,14 +32,14 @@ public class CallToNativeMethodWhileLockedInspection
   extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "call.to.native.method.while.locked.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "call.to.native.method.while.locked.problem.descriptor");

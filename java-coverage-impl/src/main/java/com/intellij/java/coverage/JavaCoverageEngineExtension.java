@@ -23,16 +23,16 @@ public abstract class JavaCoverageEngineExtension {
   public static final ExtensionPointName<JavaCoverageEngineExtension> EP_NAME =
     ExtensionPointName.create(JavaCoverageEngineExtension.class);
 
-  public abstract boolean isApplicableTo(@jakarta.annotation.Nullable RunConfigurationBase conf);
+  public abstract boolean isApplicableTo(@Nullable RunConfigurationBase conf);
 
-  public boolean suggestQualifiedName(@jakarta.annotation.Nonnull PsiFile sourceFile, PsiClass[] classes, Set<String> names) {
+  public boolean suggestQualifiedName(@Nonnull PsiFile sourceFile, PsiClass[] classes, Set<String> names) {
     return false;
   }
 
-  public boolean collectOutputFiles(@jakarta.annotation.Nonnull final PsiFile srcFile,
+  public boolean collectOutputFiles(@Nonnull final PsiFile srcFile,
                                     @Nullable final VirtualFile output,
-                                    @jakarta.annotation.Nullable final VirtualFile testoutput,
-                                    @jakarta.annotation.Nonnull final CoverageSuitesBundle suite,
+                                    @Nullable final VirtualFile testoutput,
+                                    @Nonnull final CoverageSuitesBundle suite,
                                     @Nonnull final Set<File> classFiles) {
     return false;
   }

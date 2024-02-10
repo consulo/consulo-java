@@ -69,7 +69,7 @@ public class IntroduceConstantHandlerImpl extends BaseExpressionToFieldHandler i
     super.invoke(project, expressions, null);
   }
 
-  public void invoke(@jakarta.annotation.Nonnull final Project project, final Editor editor, PsiFile file, DataContext dataContext) {
+  public void invoke(@Nonnull final Project project, final Editor editor, PsiFile file, DataContext dataContext) {
     if (!CommonRefactoringUtil.checkReadOnlyStatus(project, file)) return;
 
     PsiDocumentManager.getInstance(project).commitAllDocuments();

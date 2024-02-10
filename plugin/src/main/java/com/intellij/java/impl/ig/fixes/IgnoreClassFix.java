@@ -36,7 +36,7 @@ public class IgnoreClassFix extends InspectionGadgetsFix {
   }
 
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getFamilyName() {
     return "Ignore for these types";

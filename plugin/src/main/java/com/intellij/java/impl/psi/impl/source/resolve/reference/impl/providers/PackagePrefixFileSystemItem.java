@@ -58,7 +58,7 @@ class PackagePrefixFileSystemItem extends PsiElementBase implements PsiFileSyste
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getName() {
     return StringUtil.notNullize(myPackages[myIndex].getName());
   }
@@ -122,7 +122,7 @@ class PackagePrefixFileSystemItem extends PsiElementBase implements PsiFileSyste
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public char[] textToCharArray() {
     return ArrayUtil.EMPTY_CHAR_ARRAY;
   }
@@ -133,12 +133,12 @@ class PackagePrefixFileSystemItem extends PsiElementBase implements PsiFileSyste
   }
 
   @Override
-  public boolean textMatches(@jakarta.annotation.Nonnull final PsiElement element) {
+  public boolean textMatches(@Nonnull final PsiElement element) {
     return false;
   }
 
   @Override
-  public void accept(@jakarta.annotation.Nonnull final PsiElementVisitor visitor) {
+  public void accept(@Nonnull final PsiElementVisitor visitor) {
   }
 
   @Override
@@ -147,17 +147,17 @@ class PackagePrefixFileSystemItem extends PsiElementBase implements PsiFileSyste
   }
 
   @Override
-  public PsiElement add(@jakarta.annotation.Nonnull final PsiElement element) throws IncorrectOperationException {
+  public PsiElement add(@Nonnull final PsiElement element) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 
   @Override
-  public PsiElement addBefore(@jakarta.annotation.Nonnull final PsiElement element, final PsiElement anchor) throws IncorrectOperationException {
+  public PsiElement addBefore(@Nonnull final PsiElement element, final PsiElement anchor) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 
   @Override
-  public PsiElement addAfter(@jakarta.annotation.Nonnull final PsiElement element, final PsiElement anchor) throws IncorrectOperationException {
+  public PsiElement addAfter(@Nonnull final PsiElement element, final PsiElement anchor) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 
@@ -177,7 +177,7 @@ class PackagePrefixFileSystemItem extends PsiElementBase implements PsiFileSyste
   }
 
   @Override
-  public PsiElement replace(@jakarta.annotation.Nonnull final PsiElement newElement) throws IncorrectOperationException {
+  public PsiElement replace(@Nonnull final PsiElement newElement) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 
@@ -199,7 +199,7 @@ class PackagePrefixFileSystemItem extends PsiElementBase implements PsiFileSyste
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   public ASTNode getNode() {
     return null;
   }
@@ -215,7 +215,7 @@ class PackagePrefixFileSystemItem extends PsiElementBase implements PsiFileSyste
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public Language getLanguage() {
     return Language.ANY;
   }

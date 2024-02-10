@@ -107,7 +107,7 @@ public abstract class JamAnnotationAttributeMeta<T extends JamElement, JamType> 
       super(attrName, annoMeta, instantiator);
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public T getJam(PsiElementRef<PsiAnnotation> anno) {
       final PsiAnnotation psiElement = anno.getPsiElement();
       assert psiElement != null;
@@ -130,7 +130,7 @@ public abstract class JamAnnotationAttributeMeta<T extends JamElement, JamType> 
       super(attrName, annoMeta, instantiator);
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public List<T> getJam(final PsiElementRef<PsiAnnotation> anno) {
       return getCollectionJam(anno, new Function<PsiAnnotationMemberValue, T>() {
         public T apply(PsiAnnotationMemberValue psiAnnotationMemberValue) {

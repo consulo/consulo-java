@@ -51,7 +51,7 @@ public class PsiParameterImpl extends JavaStubPsiElement<PsiParameterStub> imple
     this(stub, JavaStubElementTypes.PARAMETER);
   }
 
-  protected PsiParameterImpl(@jakarta.annotation.Nonnull PsiParameterStub stub, @Nonnull IStubElementType type) {
+  protected PsiParameterImpl(@Nonnull PsiParameterStub stub, @Nonnull IStubElementType type) {
     super(stub, type);
   }
 
@@ -204,7 +204,7 @@ public class PsiParameterImpl extends JavaStubPsiElement<PsiParameterStub> imple
   }
 
   @Override
-  public boolean hasModifierProperty(@jakarta.annotation.Nonnull String name) {
+  public boolean hasModifierProperty(@Nonnull String name) {
     return getModifierList().hasModifierProperty(name);
   }
 
@@ -230,7 +230,7 @@ public class PsiParameterImpl extends JavaStubPsiElement<PsiParameterStub> imple
   }
 
   @Override
-  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitParameter(this);
     } else {

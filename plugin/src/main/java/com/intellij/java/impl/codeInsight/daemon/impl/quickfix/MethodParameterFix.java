@@ -56,7 +56,7 @@ public class MethodParameterFix extends LocalQuickFixAndIntentionActionOnPsiElem
     myName = method.getName();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getText() {
     return JavaQuickFixBundle.message("fix.parameter.type.text",
@@ -65,16 +65,16 @@ public class MethodParameterFix extends LocalQuickFixAndIntentionActionOnPsiElem
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("fix.parameter.type.family");
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project,
+  public boolean isAvailable(@Nonnull Project project,
                              @Nonnull PsiFile file,
-                             @jakarta.annotation.Nonnull PsiElement startElement,
-                             @jakarta.annotation.Nonnull PsiElement endElement) {
+                             @Nonnull PsiElement startElement,
+                             @Nonnull PsiElement endElement) {
     final PsiMethod myMethod = (PsiMethod)startElement;
     return myMethod.isValid()
         && myMethod.getManager().isInProject(myMethod)

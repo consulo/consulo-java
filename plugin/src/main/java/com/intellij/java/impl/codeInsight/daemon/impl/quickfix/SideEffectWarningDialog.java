@@ -101,7 +101,7 @@ public class SideEffectWarningDialog extends DialogWrapper {
     return actions.toArray(new Action[actions.size()]);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected Action getCancelAction() {
     return myCancelAllAction;

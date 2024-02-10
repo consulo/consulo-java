@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nls;
 public class StringConcatenationInFormatCallInspection extends BaseInspection {
 
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("string.concatenation.in.format.call.display.name");
@@ -60,7 +60,7 @@ public class StringConcatenationInFormatCallInspection extends BaseInspection {
       myPlural = plural;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       if (myPlural) {
         return InspectionGadgetsBundle.message("string.concatenation.in.format.call.plural.quickfix");

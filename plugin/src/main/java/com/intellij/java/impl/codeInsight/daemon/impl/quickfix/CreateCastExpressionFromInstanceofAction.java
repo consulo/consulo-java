@@ -42,7 +42,7 @@ public class CreateCastExpressionFromInstanceofAction extends CreateLocalVarFrom
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     boolean available = super.isAvailable(project, editor, file);
     if (!available) return false;
     PsiInstanceOfExpression instanceOfExpression = getInstanceOfExpressionAtCaret(editor, file);

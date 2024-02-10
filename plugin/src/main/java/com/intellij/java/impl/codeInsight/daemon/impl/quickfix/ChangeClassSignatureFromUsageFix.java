@@ -149,7 +149,7 @@ public class ChangeClassSignatureFromUsageFix extends BaseIntentionAction implem
     }
 
     @Nonnull
-    public String suggest(@jakarta.annotation.Nonnull PsiClassType type) {
+    public String suggest(@Nonnull PsiClassType type) {
       return suggestUnusedName(type.getClassName().substring(0, 1).toUpperCase());
     }
   }

@@ -82,7 +82,7 @@ public class PsiAnnotationImpl extends JavaStubPsiElement<PsiAnnotationStub> imp
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   public PsiAnnotationMemberValue findDeclaredAttributeValue(@NonNls final String attributeName) {
     return PsiImplUtil.findDeclaredAttributeValue(this, attributeName);
   }
@@ -132,7 +132,7 @@ public class PsiAnnotationImpl extends JavaStubPsiElement<PsiAnnotationStub> imp
     return StringUtil.getShortName(qualifiedName).equals(getShortName()) && PsiAnnotation.super.hasQualifiedName(qualifiedName);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public PsiAnnotationOwner getOwner() {
     PsiElement parent = getParent();

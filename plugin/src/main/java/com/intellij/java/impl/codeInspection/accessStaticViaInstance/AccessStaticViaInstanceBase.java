@@ -37,19 +37,19 @@ public abstract class AccessStaticViaInstanceBase extends BaseJavaBatchLocalInsp
   @NonNls public static final String ACCESS_STATIC_VIA_INSTANCE = "AccessStaticViaInstance";
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getGroupDisplayName() {
     return "";
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionsBundle.message("access.static.via.instance");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @NonNls
   public String getShortName() {
     return ACCESS_STATIC_VIA_INSTANCE;
@@ -66,7 +66,7 @@ public abstract class AccessStaticViaInstanceBase extends BaseJavaBatchLocalInsp
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
                                             final boolean isOnTheFly,
                                             LocalInspectionToolSession session,

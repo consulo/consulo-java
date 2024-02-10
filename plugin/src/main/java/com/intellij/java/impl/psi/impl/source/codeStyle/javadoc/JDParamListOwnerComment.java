@@ -27,13 +27,13 @@ public class JDParamListOwnerComment extends JDComment
 {
 	protected List<TagDescription> myParamsList;
 
-	public JDParamListOwnerComment(@jakarta.annotation.Nonnull CommentFormatter formatter)
+	public JDParamListOwnerComment(@Nonnull CommentFormatter formatter)
 	{
 		super(formatter);
 	}
 
 	@Override
-	protected void generateSpecial(@jakarta.annotation.Nonnull String prefix, @Nonnull StringBuilder sb)
+	protected void generateSpecial(@Nonnull String prefix, @Nonnull StringBuilder sb)
 	{
 		if(myParamsList != null)
 		{
@@ -53,8 +53,8 @@ public class JDParamListOwnerComment extends JDComment
 		}
 	}
 
-	@jakarta.annotation.Nullable
-	public TagDescription getParameter(@jakarta.annotation.Nullable String name)
+	@Nullable
+	public TagDescription getParameter(@Nullable String name)
 	{
 		return getNameDesc(name, myParamsList);
 	}
@@ -68,7 +68,7 @@ public class JDParamListOwnerComment extends JDComment
 		myParamsList.add(new TagDescription(name, description));
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	private static TagDescription getNameDesc(@Nullable String name, @Nullable List<TagDescription> list)
 	{
 		if(list == null)
@@ -130,7 +130,7 @@ public class JDParamListOwnerComment extends JDComment
 		}
 	}
 
-	private static int maxTagDescriptionNameLength(@jakarta.annotation.Nonnull List<TagDescription> tagBlocks,
+	private static int maxTagDescriptionNameLength(@Nonnull List<TagDescription> tagBlocks,
 												   boolean align_comments,
 												   boolean generate_empty_tags,
 												   boolean descriptionOnNewLine)
@@ -156,14 +156,14 @@ public class JDParamListOwnerComment extends JDComment
 		return max;
 	}
 
-	private StringBuilder formatJDTagDescription(@jakarta.annotation.Nullable String description,
+	private StringBuilder formatJDTagDescription(@Nullable String description,
 												 @Nonnull CharSequence firstLinePrefix,
-												 @jakarta.annotation.Nonnull CharSequence continuationPrefix)
+												 @Nonnull CharSequence continuationPrefix)
 	{
 		return myFormatter.getParser().formatJDTagDescription(description, firstLinePrefix, continuationPrefix);
 	}
 
-	private StringBuilder formatJDTagDescription(@jakarta.annotation.Nullable String description, @Nonnull CharSequence prefix)
+	private StringBuilder formatJDTagDescription(@Nullable String description, @Nonnull CharSequence prefix)
 	{
 		return formatJDTagDescription(description, prefix, prefix);
 	}

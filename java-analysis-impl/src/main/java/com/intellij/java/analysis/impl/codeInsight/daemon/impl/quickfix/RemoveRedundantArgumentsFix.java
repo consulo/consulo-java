@@ -43,22 +43,22 @@ public class RemoveRedundantArgumentsFix implements SyntheticIntentionAction {
   private final PsiExpression[] myArguments;
   private final PsiSubstitutor mySubstitutor;
 
-  private RemoveRedundantArgumentsFix(@jakarta.annotation.Nonnull PsiMethod targetMethod,
+  private RemoveRedundantArgumentsFix(@Nonnull PsiMethod targetMethod,
                                       @Nonnull PsiExpression[] arguments,
-                                      @jakarta.annotation.Nonnull PsiSubstitutor substitutor) {
+                                      @Nonnull PsiSubstitutor substitutor) {
     myTargetMethod = targetMethod;
     myArguments = arguments;
     mySubstitutor = substitutor;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getText() {
     return JavaQuickFixBundle.message("remove.redundant.arguments.text", JavaHighlightUtil.formatMethod(myTargetMethod));
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!myTargetMethod.isValid() || myTargetMethod.getContainingClass() == null) return false;
     for (PsiExpression expression : myArguments) {
       if (!expression.isValid()) return false;
@@ -68,7 +68,7 @@ public class RemoveRedundantArgumentsFix implements SyntheticIntentionAction {
     return findRedundantArgument(myArguments, myTargetMethod.getParameterList().getParameters(), mySubstitutor) != null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static PsiExpression[] findRedundantArgument(@Nonnull PsiExpression[] arguments,
                                                        @Nonnull PsiParameter[] parameters,
                                                        @Nonnull PsiSubstitutor substitutor) {
@@ -91,7 +91,7 @@ public class RemoveRedundantArgumentsFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
     final PsiExpression[] redundantArguments = findRedundantArgument(myArguments, myTargetMethod.getParameterList().getParameters(), mySubstitutor);
     if (redundantArguments != null) {
@@ -107,8 +107,8 @@ public class RemoveRedundantArgumentsFix implements SyntheticIntentionAction {
   }
 
   public static void registerIntentions(@Nonnull JavaResolveResult[] candidates,
-                                        @jakarta.annotation.Nonnull PsiExpressionList arguments,
-                                        @jakarta.annotation.Nullable HighlightInfo highlightInfo,
+                                        @Nonnull PsiExpressionList arguments,
+                                        @Nullable HighlightInfo highlightInfo,
                                         TextRange fixRange) {
     for (JavaResolveResult candidate : candidates) {
       registerIntention(arguments, highlightInfo, fixRange, candidate, arguments);
@@ -118,8 +118,8 @@ public class RemoveRedundantArgumentsFix implements SyntheticIntentionAction {
   private static void registerIntention(@Nonnull PsiExpressionList arguments,
                                         @Nullable HighlightInfo highlightInfo,
                                         TextRange fixRange,
-                                        @jakarta.annotation.Nonnull JavaResolveResult candidate,
-                                        @jakarta.annotation.Nonnull PsiElement context) {
+                                        @Nonnull JavaResolveResult candidate,
+                                        @Nonnull PsiElement context) {
     if (!candidate.isStaticsScopeCorrect()) return;
     PsiMethod method = (PsiMethod) candidate.getElement();
     PsiSubstitutor substitutor = candidate.getSubstitutor();

@@ -63,7 +63,7 @@ public abstract class UnnecessaryExplicitNumericCastInspection extends BaseInspe
     return InspectionGadgetsBundle.message("unnecessary.explicit.numeric.cast.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     final PsiExpression expression = (PsiExpression) infos[0];

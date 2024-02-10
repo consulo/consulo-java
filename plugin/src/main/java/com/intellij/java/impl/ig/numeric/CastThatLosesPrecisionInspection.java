@@ -66,7 +66,7 @@ public class CastThatLosesPrecisionInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiType operandType = (PsiType)infos[0];
     return InspectionGadgetsBundle.message("cast.that.loses.precision.problem.descriptor", operandType.getPresentableText());

@@ -44,7 +44,7 @@ public abstract class JavaTestFrameworkDebuggerRunner extends GenericDebuggerRun
   @Override
   public abstract String getRunnerId();
 
-  protected abstract boolean validForProfile(@jakarta.annotation.Nonnull RunProfile profile);
+  protected abstract boolean validForProfile(@Nonnull RunProfile profile);
 
   @Nonnull
   protected abstract String getThreadName();
@@ -56,7 +56,7 @@ public abstract class JavaTestFrameworkDebuggerRunner extends GenericDebuggerRun
 
   @Nullable
   @Override
-  protected RunContentDescriptor createContentDescriptor(@jakarta.annotation.Nonnull final RunProfileState state, @Nonnull final ExecutionEnvironment environment) throws ExecutionException {
+  protected RunContentDescriptor createContentDescriptor(@Nonnull final RunProfileState state, @Nonnull final ExecutionEnvironment environment) throws ExecutionException {
     final RunContentDescriptor res = super.createContentDescriptor(state, environment);
     final ServerSocket socket = ((JavaTestFrameworkRunnableState) state).getForkSocket();
     if (socket != null) {

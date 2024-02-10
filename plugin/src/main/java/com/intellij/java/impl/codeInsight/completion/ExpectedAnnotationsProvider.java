@@ -41,7 +41,7 @@ class ExpectedAnnotationsProvider implements CompletionProvider {
 
   @RequiredReadAction
   @Override
-  public void addCompletions(@Nonnull final CompletionParameters parameters, final ProcessingContext context, @jakarta.annotation.Nonnull final CompletionResultSet result) {
+  public void addCompletions(@Nonnull final CompletionParameters parameters, final ProcessingContext context, @Nonnull final CompletionResultSet result) {
     final PsiElement element = parameters.getPosition();
 
     for (final PsiType type : ExpectedTypesGetter.getExpectedTypes(element, false)) {

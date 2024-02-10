@@ -40,14 +40,14 @@ public class JavaModuleNameIndex extends StringStubIndexExtension<PsiJavaModule>
     return 3;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public StubIndexKey<String, PsiJavaModule> getKey() {
     return JavaStubIndexKeys.MODULE_NAMES;
   }
 
   @Override
-  public Collection<PsiJavaModule> get(@jakarta.annotation.Nonnull String name, @jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull ProjectAwareSearchScope scope) {
+  public Collection<PsiJavaModule> get(@Nonnull String name, @Nonnull Project project, @Nonnull ProjectAwareSearchScope scope) {
     Collection<PsiJavaModule> modules = StubIndex.getElements(getKey(), name, project, new JavaSourceFilterScope((GlobalSearchScope) scope, true), PsiJavaModule.class);
     if (modules.size() > 1) {
       modules = filterVersions(project, modules);

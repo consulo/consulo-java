@@ -533,9 +533,9 @@ public class EvaluatorBuilderImpl implements EvaluatorBuilder
 		private static Evaluator createBinaryEvaluator(Evaluator lResult,
 				PsiType lType,
 				Evaluator rResult,
-				@jakarta.annotation.Nonnull PsiType rType,
-				@jakarta.annotation.Nonnull IElementType operation,
-				@jakarta.annotation.Nonnull PsiType expressionExpectedType)
+				@Nonnull PsiType rType,
+				@Nonnull IElementType operation,
+				@Nonnull PsiType expressionExpectedType)
 		{
 			// handle unboxing if necessary
 			if(isUnboxingInBinaryExpressionApplicable(lType, rType, operation))

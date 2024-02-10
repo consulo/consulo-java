@@ -56,7 +56,7 @@ public class DuplicatesFinder {
   private final List<? extends PsiVariable> myOutputParameters;
   private final List<PsiElement> myPatternAsList;
   private boolean myMultipleExitPoints = false;
-  @jakarta.annotation.Nullable
+  @Nullable
   private final ReturnValue myReturnValue;
 
   public DuplicatesFinder(PsiElement[] pattern, InputVariables parameters, @Nullable ReturnValue returnValue, @Nonnull List<? extends PsiVariable> outputParameters) {
@@ -110,7 +110,7 @@ public class DuplicatesFinder {
     return myPattern;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public ReturnValue getReturnValue() {
     return myReturnValue;
   }

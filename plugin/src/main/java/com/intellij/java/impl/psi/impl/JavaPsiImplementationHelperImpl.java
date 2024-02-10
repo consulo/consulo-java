@@ -152,7 +152,7 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
     return clsFile;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public LanguageLevel getClassesLanguageLevel(VirtualFile virtualFile) {
     final ProjectFileIndex index = ProjectRootManager.getInstance(myProject).getFileIndex();
@@ -208,7 +208,7 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
     return importHelper.getDefaultAnchor(list, statement);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public PsiElement getDefaultMemberAnchor(@Nonnull PsiClass aClass, @Nonnull PsiMember member) {
     CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(aClass.getProject());

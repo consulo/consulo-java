@@ -86,7 +86,7 @@ public class CoreJavaFileManager implements JavaFileManager {
   }   */
 
   @Override
-  public PsiClass findClass(@jakarta.annotation.Nonnull String qName, @jakarta.annotation.Nonnull GlobalSearchScope scope) {
+  public PsiClass findClass(@Nonnull String qName, @Nonnull GlobalSearchScope scope) {
     for (VirtualFile root : roots()) {
       final PsiClass psiClass = findClassInClasspathRoot(qName, root, myPsiManager);
       if (psiClass != null) {
@@ -180,7 +180,7 @@ public class CoreJavaFileManager implements JavaFileManager {
   }
 
   @Override
-  public PsiClass[] findClasses(@Nonnull String qName, @jakarta.annotation.Nonnull GlobalSearchScope scope) {
+  public PsiClass[] findClasses(@Nonnull String qName, @Nonnull GlobalSearchScope scope) {
     List<PsiClass> result = new ArrayList<PsiClass>();
     for (VirtualFile file : roots()) {
       final PsiClass psiClass = findClassInClasspathRoot(qName, file, myPsiManager);
@@ -196,9 +196,9 @@ public class CoreJavaFileManager implements JavaFileManager {
     return Collections.emptyList();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
-  public Collection<PsiJavaModule> findModules(@jakarta.annotation.Nonnull String moduleName, @Nonnull GlobalSearchScope scope) {
+  public Collection<PsiJavaModule> findModules(@Nonnull String moduleName, @Nonnull GlobalSearchScope scope) {
     return Collections.emptySet();
   }
 

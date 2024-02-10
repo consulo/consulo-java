@@ -123,7 +123,7 @@ public class PsiBreakStatementImpl extends CompositePsiElement implements PsiBre
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiReference[] getReferences() {
     if (getLabelIdentifier() == null)
       return PsiReference.EMPTY_ARRAY;

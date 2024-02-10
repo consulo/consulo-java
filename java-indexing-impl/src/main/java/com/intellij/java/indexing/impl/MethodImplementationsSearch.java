@@ -34,7 +34,7 @@ import java.util.List;
 @ExtensionImpl
 public class MethodImplementationsSearch implements DefinitionsScopedSearchExecutor {
   @Override
-  public boolean execute(@Nonnull final DefinitionsScopedSearch.SearchParameters queryParameters, @jakarta.annotation.Nonnull final Processor<? super PsiElement> consumer) {
+  public boolean execute(@Nonnull final DefinitionsScopedSearch.SearchParameters queryParameters, @Nonnull final Processor<? super PsiElement> consumer) {
     final PsiElement sourceElement = queryParameters.getElement();
     if (sourceElement instanceof PsiMethod) {
       return processImplementations((PsiMethod) sourceElement, consumer, queryParameters.getScope());

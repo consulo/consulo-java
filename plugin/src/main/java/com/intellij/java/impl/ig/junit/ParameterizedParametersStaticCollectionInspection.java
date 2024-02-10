@@ -49,7 +49,7 @@ public class ParameterizedParametersStaticCollectionInspection extends BaseInspe
   private static final String PARAMETERS_FQN = "org.junit.runners.Parameterized.Parameters";
   private static final String PARAMETERIZED_FQN = "org.junit.runners.Parameterized";
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return infos.length > 0
            ? (String)infos[1]
@@ -153,7 +153,7 @@ public class ParameterizedParametersStaticCollectionInspection extends BaseInspe
   }
 
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return "@RunWith(Parameterized.class) without data provider";
   }

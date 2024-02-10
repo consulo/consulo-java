@@ -142,13 +142,13 @@ public final class Pluralizer {
     return (inclusive ? count + " " : "") + StringUtil.notNullize(pluralized, word);
   }
 
-  @jakarta.annotation.Nullable
-  public String plural(@jakarta.annotation.Nullable String word) {
+  @Nullable
+  public String plural(@Nullable String word) {
     return restoreCase(word, replaceWord(word, irregularSingles, irregularPlurals, pluralRules));
   }
 
   @Nullable
-  public String singular(@jakarta.annotation.Nullable String word) {
+  public String singular(@Nullable String word) {
     return restoreCase(word, replaceWord(word, irregularPlurals, irregularSingles, singularRules));
   }
 

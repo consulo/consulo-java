@@ -58,13 +58,13 @@ public class InvalidPropertyKeyInspection extends BaseJavaLocalInspectionTool {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return CodeInsightBundle.message("inspection.unresolved.property.key.reference.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getShortName() {
     return "UnresolvedPropertyKey";
   }
@@ -81,14 +81,14 @@ public class InvalidPropertyKeyInspection extends BaseJavaLocalInspectionTool {
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod method, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
     return checkElement(method, manager, isOnTheFly);
   }
 
   @Override
-  @jakarta.annotation.Nullable
-  public ProblemDescriptor[] checkClass(@jakarta.annotation.Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
+  @Nullable
+  public ProblemDescriptor[] checkClass(@Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
     final PsiClassInitializer[] initializers = aClass.getInitializers();
     List<ProblemDescriptor> result = new ArrayList<ProblemDescriptor>();
     for (PsiClassInitializer initializer : initializers) {
@@ -102,8 +102,8 @@ public class InvalidPropertyKeyInspection extends BaseJavaLocalInspectionTool {
   }
 
   @Override
-  @jakarta.annotation.Nullable
-  public ProblemDescriptor[] checkField(@jakarta.annotation.Nonnull PsiField field, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
+  @Nullable
+  public ProblemDescriptor[] checkField(@Nonnull PsiField field, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
     List<ProblemDescriptor> result = new ArrayList<ProblemDescriptor>();
     appendProblems(manager, isOnTheFly, result, field.getInitializer());
     appendProblems(manager, isOnTheFly, result, field.getModifierList());
@@ -223,10 +223,10 @@ public class InvalidPropertyKeyInspection extends BaseJavaLocalInspectionTool {
     }
 
     private static void appendPropertyKeyNotFoundProblem(@Nonnull String bundleName,
-                                                         @jakarta.annotation.Nonnull String key,
+                                                         @Nonnull String key,
                                                          @Nonnull PsiLiteralExpression expression,
                                                          @Nonnull InspectionManager manager,
-                                                         @jakarta.annotation.Nonnull List<ProblemDescriptor> problems,
+                                                         @Nonnull List<ProblemDescriptor> problems,
                                                          boolean onTheFly) {
       final String description = CodeInsightBundle.message("inspection.unresolved.property.key.reference.message", key);
       final List<PropertiesFile> propertiesFiles =
@@ -241,9 +241,9 @@ public class InvalidPropertyKeyInspection extends BaseJavaLocalInspectionTool {
       );
     }
 
-    @jakarta.annotation.Nonnull
-    private static List<PropertiesFile> filterNotInLibrary(@jakarta.annotation.Nonnull Project project,
-                                                           @jakarta.annotation.Nonnull List<PropertiesFile> propertiesFiles) {
+    @Nonnull
+    private static List<PropertiesFile> filterNotInLibrary(@Nonnull Project project,
+                                                           @Nonnull List<PropertiesFile> propertiesFiles) {
       final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
 
       final List<PropertiesFile> result = new ArrayList<PropertiesFile>(propertiesFiles.size());

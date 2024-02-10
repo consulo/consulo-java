@@ -38,7 +38,7 @@ public abstract class GenericsInspectionToolBase<State> extends BaseJavaBatchLoc
   }
 
   @Override
-  public ProblemDescriptor[] checkClass(@jakarta.annotation.Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly, State state) {
+  public ProblemDescriptor[] checkClass(@Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly, State state) {
     final PsiClassInitializer[] initializers = aClass.getInitializers();
     if (initializers.length == 0) return null;
     List<ProblemDescriptor> descriptors = new ArrayList<ProblemDescriptor>();
@@ -65,7 +65,7 @@ public abstract class GenericsInspectionToolBase<State> extends BaseJavaBatchLoc
   }
 
   @Override
-  public ProblemDescriptor[] checkMethod(@jakarta.annotation.Nonnull PsiMethod psiMethod, @jakarta.annotation.Nonnull InspectionManager manager, boolean isOnTheFly, State state) {
+  public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod psiMethod, @Nonnull InspectionManager manager, boolean isOnTheFly, State state) {
     final PsiCodeBlock body = psiMethod.getBody();
     if (body != null) {
       return getDescriptions(body, manager, isOnTheFly, state);

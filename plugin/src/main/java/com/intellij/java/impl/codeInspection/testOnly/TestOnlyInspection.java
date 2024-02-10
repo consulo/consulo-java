@@ -39,7 +39,7 @@ import jakarta.annotation.Nullable;
 @ExtensionImpl
 public class TestOnlyInspection extends BaseJavaLocalInspectionTool {
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionsBundle.message("inspection.test.only.problems.display.name");
   }
@@ -51,14 +51,14 @@ public class TestOnlyInspection extends BaseJavaLocalInspectionTool {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getGroupDisplayName() {
     return "General";
   }
 
   @Override
   @Nonnull
-  public PsiElementVisitor buildVisitorImpl(@jakarta.annotation.Nonnull final ProblemsHolder h,
+  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder h,
                                             boolean isOnTheFly,
                                             LocalInspectionToolSession session,
                                             Object state) {

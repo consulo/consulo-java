@@ -78,8 +78,8 @@ public class JavaCreatePropertyFix extends CreatePropertyFix implements Syntheti
   @Nullable
   protected Pair<String, String> invokeAction(@Nonnull final Project project,
                                               @Nonnull PsiFile file,
-                                              @jakarta.annotation.Nonnull PsiElement psiElement,
-                                              @jakarta.annotation.Nullable final String suggestedKey,
+                                              @Nonnull PsiElement psiElement,
+                                              @Nullable final String suggestedKey,
                                               @Nullable String suggestedValue,
                                               @Nullable final List<PropertiesFile> propertiesFiles) {
     final PsiLiteralExpression literalExpression = psiElement instanceof PsiLiteralExpression ? (PsiLiteralExpression)psiElement : null;

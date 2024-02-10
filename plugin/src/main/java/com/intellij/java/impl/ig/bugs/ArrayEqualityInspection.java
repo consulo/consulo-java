@@ -34,14 +34,14 @@ import org.jetbrains.annotations.NonNls;
 public class ArrayEqualityInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "array.comparison.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "array.comparison.problem.descriptor");
@@ -125,7 +125,7 @@ public class ArrayEqualityInspection extends BaseInspection {
 
     @Override
     public void visitBinaryExpression(
-      @jakarta.annotation.Nonnull PsiBinaryExpression expression) {
+      @Nonnull PsiBinaryExpression expression) {
       super.visitBinaryExpression(expression);
       final PsiExpression rhs = expression.getROperand();
       if (rhs == null) {

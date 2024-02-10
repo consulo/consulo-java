@@ -37,12 +37,12 @@ import java.util.List;
 public class AddNotNullAnnotationIntention extends AddAnnotationIntention {
   @Nonnull
   @Override
-  public Pair<String, String[]> getAnnotations(@jakarta.annotation.Nonnull Project project) {
+  public Pair<String, String[]> getAnnotations(@Nonnull Project project) {
     return new Pair<String, String[]>(NullableNotNullManager.getInstance(project).getDefaultNotNull(), getNullables(project));
   }
 
   @Nonnull
-  private static String[] getNullables(@jakarta.annotation.Nonnull Project project) {
+  private static String[] getNullables(@Nonnull Project project) {
     final List<String> nullables = NullableNotNullManager.getInstance(project).getNullables();
     return ArrayUtil.toStringArray(nullables);
   }

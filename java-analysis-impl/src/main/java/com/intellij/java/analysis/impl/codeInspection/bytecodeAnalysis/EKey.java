@@ -11,13 +11,13 @@ import java.security.MessageDigest;
 public final class EKey
 {
 	final
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	MemberDescriptor member;
 	final int dirKey;
 	final boolean stable;
 	final boolean negated;
 
-	public EKey(@jakarta.annotation.Nonnull MemberDescriptor member, Direction direction, boolean stable)
+	public EKey(@Nonnull MemberDescriptor member, Direction direction, boolean stable)
 	{
 		this(member, direction, stable, false);
 	}
@@ -27,7 +27,7 @@ public final class EKey
 		this(member, direction.asInt(), stable, negated);
 	}
 
-	EKey(@jakarta.annotation.Nonnull MemberDescriptor member, int dirKey, boolean stable, boolean negated)
+	EKey(@Nonnull MemberDescriptor member, int dirKey, boolean stable, boolean negated)
 	{
 		this.member = member;
 		this.dirKey = dirKey;

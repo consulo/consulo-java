@@ -37,7 +37,7 @@ public class MakeMethodVarargsIntention extends Intention {
     return new MakeMethodVarargsPredicate();
   }
 
-  protected void processIntention(@jakarta.annotation.Nonnull PsiElement element)
+  protected void processIntention(@Nonnull PsiElement element)
     throws IncorrectOperationException {
     makeMethodVarargs(element);
     makeMethodCallsVarargs(element);

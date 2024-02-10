@@ -46,7 +46,7 @@ public class CommentWithInjectionBlock extends AbstractJavaBlock
 									 Indent indent,
 									 CommonCodeStyleSettings settings,
 									 JavaCodeStyleSettings javaSettings,
-									 @jakarta.annotation.Nonnull FormattingMode formattingMode)
+									 @Nonnull FormattingMode formattingMode)
 	{
 		super(node, wrap, alignment, indent, settings, javaSettings, formattingMode);
 		myInjectedBlockBuilder = new JavaCommentInjectedBlockBuilder();
@@ -66,7 +66,7 @@ public class CommentWithInjectionBlock extends AbstractJavaBlock
 		return false;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public ChildAttributes getChildAttributes(int newChildIndex)
 	{
@@ -74,7 +74,7 @@ public class CommentWithInjectionBlock extends AbstractJavaBlock
 	}
 
 	@Override
-	public Spacing getSpacing(Block child1, @jakarta.annotation.Nonnull Block child2)
+	public Spacing getSpacing(Block child1, @Nonnull Block child2)
 	{
 		return null;
 	}

@@ -33,7 +33,7 @@ public class CovariantEqualsInspection extends BaseInspection {
       "covariant.equals.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "covariant.equals.problem.descriptor");
@@ -46,7 +46,7 @@ public class CovariantEqualsInspection extends BaseInspection {
   private static class CovariantEqualsVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       // note: no call to super
       final String name = method.getName();
       if (!HardcodedMethodConstants.EQUALS.equals(name)) {

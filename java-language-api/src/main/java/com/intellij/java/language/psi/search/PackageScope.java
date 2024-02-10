@@ -43,7 +43,7 @@ public class PackageScope extends GlobalSearchScope {
   protected final String myPackageQualifiedName;
   protected final String myPackageQNamePrefix;
 
-  public PackageScope(@jakarta.annotation.Nonnull PsiJavaPackage aPackage, boolean includeSubpackages, final boolean includeLibraries) {
+  public PackageScope(@Nonnull PsiJavaPackage aPackage, boolean includeSubpackages, final boolean includeLibraries) {
     super(aPackage.getProject());
     myPackage = aPackage;
     myIncludeSubpackages = includeSubpackages;
@@ -101,7 +101,7 @@ public class PackageScope extends GlobalSearchScope {
     return new PackageScope(aPackage, includeSubpackages, true);
   }
 
-  public static GlobalSearchScope packageScopeWithoutLibraries(@jakarta.annotation.Nonnull PsiJavaPackage aPackage, boolean includeSubpackages) {
+  public static GlobalSearchScope packageScopeWithoutLibraries(@Nonnull PsiJavaPackage aPackage, boolean includeSubpackages) {
     return new PackageScope(aPackage, includeSubpackages, false);
   }
 }

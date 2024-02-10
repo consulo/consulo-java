@@ -34,17 +34,17 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class ObjectNotifyInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "CallToNotifyInsteadOfNotifyAll";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("object.notify.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "object.notify.problem.descriptor");
@@ -91,7 +91,7 @@ public class ObjectNotifyInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();

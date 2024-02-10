@@ -28,7 +28,7 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class TypeParameterHidesVisibleTypeInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "type.parameter.hides.visible.type.display.name");

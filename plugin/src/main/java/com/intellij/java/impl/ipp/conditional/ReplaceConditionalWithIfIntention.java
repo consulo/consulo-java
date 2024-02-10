@@ -43,13 +43,13 @@ public class ReplaceConditionalWithIfIntention extends Intention {
   private static final Logger LOG = Logger.getInstance(ReplaceConditionalWithIfIntention.class);
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new ReplaceConditionalWithIfPredicate();
   }
 
   @Override
-  public void processIntention(@jakarta.annotation.Nonnull PsiElement element) throws IncorrectOperationException {
+  public void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiConditionalExpression expression = (PsiConditionalExpression) element;
     replaceConditionalWithIf(expression);
   }
@@ -136,7 +136,7 @@ public class ReplaceConditionalWithIfIntention extends Intention {
     }
   }
 
-  private static void appendElementTextWithoutParentheses(@jakarta.annotation.Nonnull PsiElement element, @jakarta.annotation.Nonnull PsiElement elementToReplace,
+  private static void appendElementTextWithoutParentheses(@Nonnull PsiElement element, @Nonnull PsiElement elementToReplace,
                                                           @Nullable PsiExpression replacementExpression, @Nonnull StringBuilder out) {
     final PsiElement expressionParent = elementToReplace.getParent();
     if (expressionParent instanceof PsiParenthesizedExpression) {
@@ -150,7 +150,7 @@ public class ReplaceConditionalWithIfIntention extends Intention {
     appendElementText(element, elementToReplace, replacementExpression, out);
   }
 
-  private static void appendElementText(@jakarta.annotation.Nonnull PsiElement element, @Nonnull PsiElement elementToReplace,
+  private static void appendElementText(@Nonnull PsiElement element, @Nonnull PsiElement elementToReplace,
                                         @Nullable PsiExpression replacementExpression, @Nonnull StringBuilder out) {
     if (element.equals(elementToReplace)) {
       final String replacementText = (replacementExpression == null) ? "" : replacementExpression.getText();

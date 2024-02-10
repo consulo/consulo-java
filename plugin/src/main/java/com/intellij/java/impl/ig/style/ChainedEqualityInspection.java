@@ -28,12 +28,12 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class ChainedEqualityInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "ChainedEqualityComparisons";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("chained.equality.comparisons.display.name");
   }

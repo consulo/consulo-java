@@ -26,6 +26,7 @@ import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorPopupHelper;
 import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
+import consulo.ide.impl.ui.impl.PopupChooserBuilder;
 import consulo.language.editor.action.CodeInsightActionHandler;
 import consulo.language.editor.hint.HintManager;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
@@ -84,7 +85,7 @@ public class BaseGenerateTestSupportMethodAction extends BaseGenerateAction {
   }
 
   @Override
-  protected boolean isValidForFile(@jakarta.annotation.Nonnull Project project, @Nonnull Editor editor, @jakarta.annotation.Nonnull PsiFile file) {
+  protected boolean isValidForFile(@Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiFile file) {
     if (file instanceof PsiCompiledElement) {
       return false;
     }
@@ -107,7 +108,7 @@ public class BaseGenerateTestSupportMethodAction extends BaseGenerateAction {
       myMethodKind = methodKind;
     }
 
-    public void invoke(@Nonnull Project project, @jakarta.annotation.Nonnull final Editor editor, @Nonnull final PsiFile file) {
+    public void invoke(@Nonnull Project project, @Nonnull final Editor editor, @Nonnull final PsiFile file) {
       final PsiClass targetClass = findTargetClass(editor, file);
       final List<TestFramework> frameworks = TestIntegrationUtils.findSuitableFrameworks(targetClass);
       if (frameworks.isEmpty()) {
@@ -138,7 +139,7 @@ public class BaseGenerateTestSupportMethodAction extends BaseGenerateAction {
         }
       };
 
-      consulo.ide.impl.ui.impl.PopupChooserBuilder builder = new consulo.ide.impl.ui.impl.PopupChooserBuilder(list);
+      PopupChooserBuilder builder = new PopupChooserBuilder(list);
       builder.setFilteringEnabled(new Function<Object, String>() {
         @Override
         public String apply(Object o) {
@@ -179,7 +180,7 @@ public class BaseGenerateTestSupportMethodAction extends BaseGenerateAction {
       });
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     private static PsiMethod generateDummyMethod(Editor editor, PsiFile file) throws IncorrectOperationException {
       final PsiMethod method = TestIntegrationUtils.createDummyMethod(file);
       final PsiGenerationInfo<PsiMethod> info = OverrideImplementUtil.createGenerationInfo(method);

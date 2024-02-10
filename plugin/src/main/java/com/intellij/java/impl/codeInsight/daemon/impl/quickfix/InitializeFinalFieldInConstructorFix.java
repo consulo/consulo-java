@@ -60,7 +60,7 @@ public class InitializeFinalFieldInConstructorFix implements SyntheticIntentionA
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!myField.isValid() || myField.hasModifierProperty(PsiModifier.STATIC) || myField.hasInitializer()) {
       return false;
     }
@@ -165,7 +165,7 @@ public class InitializeFinalFieldInConstructorFix implements SyntheticIntentionA
   }
 
   @Nonnull
-  private static List<PsiMethod> choose(@Nonnull PsiMethod[] ctors, @jakarta.annotation.Nonnull final Project project) {
+  private static List<PsiMethod> choose(@Nonnull PsiMethod[] ctors, @Nonnull final Project project) {
     if (ApplicationManager.getApplication().isUnitTestMode()) {
       return Arrays.asList(ctors);
     }

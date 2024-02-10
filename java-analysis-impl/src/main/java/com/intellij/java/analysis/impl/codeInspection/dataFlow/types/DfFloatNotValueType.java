@@ -15,16 +15,16 @@ class DfFloatNotValueType extends DfAntiConstantType<Float> implements DfFloatTy
   }
 
   @Override
-  public boolean isSuperType(@jakarta.annotation.Nonnull DfType other) {
+  public boolean isSuperType(@Nonnull DfType other) {
     if (other == DfTypes.BOTTOM || other.equals(this)) return true;
     if (other instanceof DfFloatNotValueType) return ((DfFloatNotValueType)other).myNotValues.containsAll(myNotValues);
     if (other instanceof DfFloatConstantType) return !myNotValues.contains(((DfFloatConstantType)other).getValue());
     return false;
   }
   
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
-  public DfType join(@jakarta.annotation.Nonnull DfType other) {
+  public DfType join(@Nonnull DfType other) {
     if (isSuperType(other)) return this;
     if (other.isSuperType(this)) return other;
     if (other instanceof DfFloatNotValueType) {
@@ -35,7 +35,7 @@ class DfFloatNotValueType extends DfAntiConstantType<Float> implements DfFloatTy
     return DfTypes.TOP;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public DfType meet(@Nonnull DfType other) {
     if (isSuperType(other)) return other;

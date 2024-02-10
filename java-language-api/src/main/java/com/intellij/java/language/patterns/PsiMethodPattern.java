@@ -44,7 +44,7 @@ public class PsiMethodPattern extends PsiMemberPattern<PsiMethod,PsiMethodPatter
   public PsiMethodPattern withParameterCount(@NonNls final int paramCount) {
     return with(new PatternCondition<PsiMethod>("withParameterCount") {
       @Override
-      public boolean accepts(@jakarta.annotation.Nonnull final PsiMethod method, final ProcessingContext context) {
+      public boolean accepts(@Nonnull final PsiMethod method, final ProcessingContext context) {
         return method.getParameterList().getParametersCount() == paramCount;
       }
     });
@@ -128,7 +128,7 @@ public class PsiMethodPattern extends PsiMemberPattern<PsiMethod,PsiMethodPatter
   public PsiMethodPattern constructor(final boolean isConstructor) {
     return with(new PatternCondition<PsiMethod>("constructor") {
       @Override
-      public boolean accepts(@jakarta.annotation.Nonnull final PsiMethod method, final ProcessingContext context) {
+      public boolean accepts(@Nonnull final PsiMethod method, final ProcessingContext context) {
         return method.isConstructor() == isConstructor;
       }
     });

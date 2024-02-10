@@ -44,7 +44,7 @@ public class JavaFileTreeModel extends TextEditorBasedStructureViewModel impleme
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public Filter[] getFilters() {
     return new Filter[]{
         new FieldsFilter(),
@@ -52,14 +52,14 @@ public class JavaFileTreeModel extends TextEditorBasedStructureViewModel impleme
     };
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Collection<NodeProvider> getNodeProviders() {
     return NODE_PROVIDERS;
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public Grouper[] getGroupers() {
     return new Grouper[]{
         new SuperTypesGrouper(),
@@ -68,7 +68,7 @@ public class JavaFileTreeModel extends TextEditorBasedStructureViewModel impleme
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public StructureViewTreeElement getRoot() {
     return new JavaFileTreeElement(getPsiFile());
   }
@@ -131,7 +131,7 @@ public class JavaFileTreeModel extends TextEditorBasedStructureViewModel impleme
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected Class[] getSuitableClasses() {
     return new Class[]{
         PsiClass.class,
@@ -143,7 +143,7 @@ public class JavaFileTreeModel extends TextEditorBasedStructureViewModel impleme
   }
 
   @Override
-  public void setPlace(@jakarta.annotation.Nonnull String place) {
+  public void setPlace(@Nonnull String place) {
     myPlace = place;
   }
 

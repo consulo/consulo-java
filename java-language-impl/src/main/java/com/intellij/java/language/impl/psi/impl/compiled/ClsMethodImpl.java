@@ -287,7 +287,7 @@ public class ClsMethodImpl extends ClsMemberImpl<PsiMethodStub> implements PsiAn
         FileIndexFacade.getInstance(getProject()).getRootModificationTracker()));
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private PsiMethod calcSourceMirrorMethod() {
     PsiClass sourceClassMirror = ((ClsClassImpl) getParent()).getSourceMirrorClass();
     if (sourceClassMirror == null) {

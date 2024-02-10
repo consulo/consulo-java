@@ -30,7 +30,7 @@ import org.jetbrains.annotations.Nls;
 public class ThreadLocalNotStaticFinalInspection extends BaseInspection {
 
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(

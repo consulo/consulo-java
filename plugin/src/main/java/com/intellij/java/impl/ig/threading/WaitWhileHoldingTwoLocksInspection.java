@@ -35,7 +35,7 @@ public class WaitWhileHoldingTwoLocksInspection extends BaseInspection {
       "wait.while.holding.two.locks.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "wait.while.holding.two.locks.problem.descriptor");
@@ -120,7 +120,7 @@ public class WaitWhileHoldingTwoLocksInspection extends BaseInspection {
 
         @Override
         public void visitSynchronizedStatement(
-          @jakarta.annotation.Nonnull PsiSynchronizedStatement synchronizedStatement) {
+          @Nonnull PsiSynchronizedStatement synchronizedStatement) {
           m_numLocksHeld++;
           super.visitSynchronizedStatement(synchronizedStatement);
           m_numLocksHeld--;

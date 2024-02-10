@@ -33,6 +33,7 @@ import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.application.util.function.Processor;
 import consulo.application.util.matcher.PrefixMatcher;
 import consulo.ide.impl.psi.statistics.StatisticsInfo;
+import consulo.ide.impl.psi.statistics.StatisticsManager;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.completion.AutoCompletionPolicy;
 import consulo.language.editor.completion.CompletionParameters;
@@ -84,7 +85,7 @@ public class JavaInheritorsGetter implements CompletionProvider {
   }
 
   @Override
-  public void addCompletions(@Nonnull final CompletionParameters parameters, final ProcessingContext matchingContext, @jakarta.annotation.Nonnull final CompletionResultSet result) {
+  public void addCompletions(@Nonnull final CompletionParameters parameters, final ProcessingContext matchingContext, @Nonnull final CompletionResultSet result) {
     final ExpectedTypeInfo[] infos = JavaSmartCompletionContributor.getExpectedTypes(parameters);
 
     final List<ExpectedTypeInfo> infoCollection = Arrays.asList(infos);
@@ -199,7 +200,7 @@ public class JavaInheritorsGetter implements CompletionProvider {
     return LookupElementDecorator.withInsertHandler(item, myConstructorInsertHandler);
   }
 
-  private static boolean areInferredTypesApplicable(@jakarta.annotation.Nonnull PsiType[] types, PsiElement position) {
+  private static boolean areInferredTypesApplicable(@Nonnull PsiType[] types, PsiElement position) {
     final PsiNewExpression newExpression = PsiTreeUtil.getParentOfType(position, PsiNewExpression.class, false);
     if (!PsiUtil.isLanguageLevel8OrHigher(position)) {
       return newExpression != null && PsiTypesUtil.getExpectedTypeByParent(newExpression) != null;
@@ -257,8 +258,8 @@ public class JavaInheritorsGetter implements CompletionProvider {
       final PsiSubstitutor baseSubstitutor = baseResult.getSubstitutor();
 
       final Processor<PsiClass> processor = CodeInsightUtil.createInheritorsProcessor(context, type, 0, false, consumer, baseClass, baseSubstitutor);
-      final StatisticsInfo[] stats = consulo.ide.impl.psi.statistics.StatisticsManager.getInstance().getAllValues(JavaStatisticsManager.getAfterNewKey(type));
-      for (final consulo.ide.impl.psi.statistics.StatisticsInfo statisticsInfo : stats) {
+      final StatisticsInfo[] stats = StatisticsManager.getInstance().getAllValues(JavaStatisticsManager.getAfterNewKey(type));
+      for (final StatisticsInfo statisticsInfo : stats) {
         final String value = statisticsInfo.getValue();
         if (value.startsWith(JavaStatisticsManager.CLASS_PREFIX)) {
           final String qname = value.substring(JavaStatisticsManager.CLASS_PREFIX.length());

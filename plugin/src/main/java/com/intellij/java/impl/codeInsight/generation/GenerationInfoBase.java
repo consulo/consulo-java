@@ -44,7 +44,7 @@ public abstract class GenerationInfoBase implements GenerationInfo
 	 */
 	@Override
 	@Nullable
-	public PsiElement findInsertionAnchor(@Nonnull PsiClass aClass, @jakarta.annotation.Nonnull PsiElement leaf)
+	public PsiElement findInsertionAnchor(@Nonnull PsiClass aClass, @Nonnull PsiElement leaf)
 	{
 		PsiElement element = leaf;
 		while(element.getParent() != aClass)

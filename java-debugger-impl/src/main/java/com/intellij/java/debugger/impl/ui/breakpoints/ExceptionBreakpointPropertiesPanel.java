@@ -111,7 +111,7 @@ public class ExceptionBreakpointPropertiesPanel extends XBreakpointCustomPropert
 	//}
 
 	@Override
-	public void loadFrom(@jakarta.annotation.Nonnull XBreakpoint<JavaExceptionBreakpointProperties> breakpoint)
+	public void loadFrom(@Nonnull XBreakpoint<JavaExceptionBreakpointProperties> breakpoint)
 	{
 		myNotifyCaughtCheckBox.setSelected(breakpoint.getProperties().NOTIFY_CAUGHT);
 		myNotifyUncaughtCheckBox.setSelected(breakpoint.getProperties().NOTIFY_UNCAUGHT);

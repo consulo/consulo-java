@@ -57,7 +57,7 @@ public class AddReturnFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(myMethod.getContainingFile())) return;
 
     try {

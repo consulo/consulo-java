@@ -235,7 +235,7 @@ class ChainMethodCallsBlockBuilder {
                                     node -> node.getText());
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     private String getIndentString() {
       if (nodes.size() > 0) {
         ASTNode prev = nodes.get(0).getTreePrev();

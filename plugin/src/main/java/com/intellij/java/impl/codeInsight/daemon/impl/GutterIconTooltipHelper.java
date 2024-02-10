@@ -38,7 +38,7 @@ public class GutterIconTooltipHelper
 	{
 	}
 
-	public static String composeText(@Nonnull PsiElement[] elements, @jakarta.annotation.Nonnull String start, @Nonnull String pattern)
+	public static String composeText(@Nonnull PsiElement[] elements, @Nonnull String start, @Nonnull String pattern)
 	{
 		return composeText(Arrays.asList(elements), start, pattern);
 	}

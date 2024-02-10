@@ -131,7 +131,7 @@ public class CompoundTypeRenderer extends CompoundNodeRenderer
 		return UNIQUE_ID;
 	}
 
-	public void setClassName(@jakarta.annotation.Nonnull String name)
+	public void setClassName(@Nonnull String name)
 	{
 		myProperties.setClassName(name);
 		if(getRawLabelRenderer() != null)

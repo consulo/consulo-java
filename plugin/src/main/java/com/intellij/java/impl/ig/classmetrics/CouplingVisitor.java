@@ -44,7 +44,7 @@ class CouplingVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitField(@jakarta.annotation.Nonnull PsiField field) {
+  public void visitField(@Nonnull PsiField field) {
     super.visitField(field);
     final PsiType type = field.getType();
     addDependency(type);

@@ -22,6 +22,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import jakarta.annotation.Nonnull;
@@ -56,7 +57,7 @@ public class OverlyComplexBooleanExpressionInspection extends BaseInspection {
   public boolean m_ignorePureConjunctionsDisjunctions = true;
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("overly.complex.boolean.expression.display.name");
   }
@@ -71,8 +72,8 @@ public class OverlyComplexBooleanExpressionInspection extends BaseInspection {
   @Override
   public JComponent createOptionsPanel() {
     final JPanel panel = new JPanel(new GridBagLayout());
-    final consulo.deadCodeNotWorking.impl.CheckBox ignoreConjunctionsDisjunctionsCheckBox =
-      new consulo.deadCodeNotWorking.impl.CheckBox(InspectionGadgetsBundle.message("overly.complex.boolean.expression.ignore.option"),
+    final CheckBox ignoreConjunctionsDisjunctionsCheckBox =
+      new CheckBox(InspectionGadgetsBundle.message("overly.complex.boolean.expression.ignore.option"),
                    this, "m_ignorePureConjunctionsDisjunctions");
     final NumberFormat formatter = NumberFormat.getIntegerInstance();
     formatter.setParseIntegerOnly(true);
@@ -116,19 +117,19 @@ public class OverlyComplexBooleanExpressionInspection extends BaseInspection {
   private class OverlyComplexBooleanExpressionVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitPolyadicExpression(@jakarta.annotation.Nonnull PsiPolyadicExpression expression) {
+    public void visitPolyadicExpression(@Nonnull PsiPolyadicExpression expression) {
       super.visitPolyadicExpression(expression);
       checkExpression(expression);
     }
 
     @Override
-    public void visitPrefixExpression(@jakarta.annotation.Nonnull PsiPrefixExpression expression) {
+    public void visitPrefixExpression(@Nonnull PsiPrefixExpression expression) {
       super.visitPrefixExpression(expression);
       checkExpression(expression);
     }
 
     @Override
-    public void visitParenthesizedExpression(@jakarta.annotation.Nonnull PsiParenthesizedExpression expression) {
+    public void visitParenthesizedExpression(@Nonnull PsiParenthesizedExpression expression) {
       super.visitParenthesizedExpression(expression);
       checkExpression(expression);
     }

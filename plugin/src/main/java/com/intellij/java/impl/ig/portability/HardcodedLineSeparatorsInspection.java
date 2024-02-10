@@ -55,7 +55,7 @@ public class HardcodedLineSeparatorsInspection extends BaseInspection {
   private static class HardcodedLineSeparatorsVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitLiteralExpression(@jakarta.annotation.Nonnull PsiLiteralExpression expression) {
+    public void visitLiteralExpression(@Nonnull PsiLiteralExpression expression) {
       super.visitLiteralExpression(expression);
       final PsiType type = expression.getType();
       if (type == null || !TypeUtils.isJavaLangString(type) && !type.equals(PsiType.CHAR)) {

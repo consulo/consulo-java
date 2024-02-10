@@ -31,7 +31,7 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class ClassImplementationsSearch implements DefinitionsScopedSearchExecutor {
   @Override
-  public boolean execute(@Nonnull DefinitionsScopedSearch.SearchParameters queryParameters, @jakarta.annotation.Nonnull Processor<? super PsiElement> consumer) {
+  public boolean execute(@Nonnull DefinitionsScopedSearch.SearchParameters queryParameters, @Nonnull Processor<? super PsiElement> consumer) {
     final PsiElement sourceElement = queryParameters.getElement();
     return !(sourceElement instanceof PsiClass) || processImplementations((PsiClass) sourceElement, consumer, queryParameters.getScope());
   }

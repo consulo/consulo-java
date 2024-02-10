@@ -86,7 +86,7 @@ public abstract class AbstractEditorTest extends LightPlatformCodeInsightTestCas
 		init(fileText, TestFileType.TEXT);
 	}
 
-	protected void init(@jakarta.annotation.Nonnull @NonNls String fileText, @Nonnull TestFileType type) throws IOException
+	protected void init(@Nonnull @NonNls String fileText, @Nonnull TestFileType type) throws IOException
 	{
 		configureFromFileText(getFileName(type), fileText);
 	}

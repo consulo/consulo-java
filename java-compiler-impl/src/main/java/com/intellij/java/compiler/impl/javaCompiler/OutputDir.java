@@ -24,7 +24,7 @@ class OutputDir {
   private final String myPath;
   private final int myKind;
 
-  OutputDir(@jakarta.annotation.Nonnull String path, int kind) {
+  OutputDir(@Nonnull String path, int kind) {
     myPath = path;
     myKind = kind;
   }

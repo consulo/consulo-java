@@ -33,13 +33,13 @@ import jakarta.annotation.Nullable;
 public interface TestFramework {
   ExtensionPointName<TestFramework> EXTENSION_NAME = ExtensionPointName.create(TestFramework.class);
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   String getName();
 
   @Nonnull
   Image getIcon();
 
-  boolean isLibraryAttached(@jakarta.annotation.Nonnull Module module);
+  boolean isLibraryAttached(@Nonnull Module module);
 
   @Nullable
   String getLibraryPath();
@@ -47,18 +47,18 @@ public interface TestFramework {
   @Nullable
   String getDefaultSuperClass();
 
-  boolean isTestClass(@jakarta.annotation.Nonnull PsiElement clazz);
+  boolean isTestClass(@Nonnull PsiElement clazz);
 
   boolean isPotentialTestClass(@Nonnull PsiElement clazz);
 
   @Nullable
-  PsiElement findSetUpMethod(@jakarta.annotation.Nonnull PsiElement clazz);
+  PsiElement findSetUpMethod(@Nonnull PsiElement clazz);
 
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiElement findTearDownMethod(@Nonnull PsiElement clazz);
 
-  @jakarta.annotation.Nullable
-  PsiElement findOrCreateSetUpMethod(@jakarta.annotation.Nonnull PsiElement clazz) throws IncorrectOperationException;
+  @Nullable
+  PsiElement findOrCreateSetUpMethod(@Nonnull PsiElement clazz) throws IncorrectOperationException;
 
   FileTemplateDescriptor getSetUpMethodFileTemplateDescriptor();
 
@@ -81,6 +81,6 @@ public interface TestFramework {
     return isTestMethod(element);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   Language getLanguage();
 }

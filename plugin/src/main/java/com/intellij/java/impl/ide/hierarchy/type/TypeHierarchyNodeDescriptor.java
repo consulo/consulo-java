@@ -64,9 +64,9 @@ public final class TypeHierarchyNodeDescriptor extends HierarchyNodeDescriptor
 
 		final PsiElement psiElement = getPsiClass();
 
-		final consulo.ide.impl.idea.openapi.roots.ui.util.CompositeAppearance oldText = myHighlightedText;
+		final CompositeAppearance oldText = myHighlightedText;
 
-		myHighlightedText = new consulo.ide.impl.idea.openapi.roots.ui.util.CompositeAppearance();
+		myHighlightedText = new CompositeAppearance();
 
 		TextAttributes classNameAttributes = null;
 		if(myColor != null)

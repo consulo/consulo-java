@@ -22,7 +22,7 @@ public interface PsiSwitchLabelStatementBase extends PsiStatement {
    * @deprecated use {@link #getCaseLabelElementList()}
    */
   @Deprecated
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiExpressionList getCaseValues();
 
   /**
@@ -44,7 +44,7 @@ public interface PsiSwitchLabelStatementBase extends PsiStatement {
    * Returns the {@code switch} block (a statement or an expression) with which the section is associated,
    * or {@code null} if the element is not valid in its current context.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiSwitchBlock getEnclosingSwitchBlock();
 
   /**
@@ -66,7 +66,7 @@ public interface PsiSwitchLabelStatementBase extends PsiStatement {
    * @return guard expression declared in this switch label; null if none is declared
    */
   default
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiExpression getGuardExpression() {
     return null;
   }

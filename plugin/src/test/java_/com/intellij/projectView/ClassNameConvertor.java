@@ -34,7 +34,7 @@ class ClassNameConvertor implements TreeStructureProvider {
         final String name = ((PsiFile)o).getName();
         ProjectViewNode viewNode = new ProjectViewNode<PsiFile>(myProject, (PsiFile)o, settings) {
           @Override
-          @jakarta.annotation.Nonnull
+          @Nonnull
           public Collection<AbstractTreeNode> getChildren() {
             return Collections.emptyList();
           }

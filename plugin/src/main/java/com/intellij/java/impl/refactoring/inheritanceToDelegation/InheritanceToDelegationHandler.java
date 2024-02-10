@@ -86,7 +86,7 @@ public class InheritanceToDelegationHandler implements RefactoringActionHandler 
     }
   }
 
-  public void invoke(@jakarta.annotation.Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+  public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
     if (elements.length != 1) return;
 
     final PsiClass aClass = (PsiClass)elements[0];

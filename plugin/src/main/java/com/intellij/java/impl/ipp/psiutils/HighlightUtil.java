@@ -49,7 +49,7 @@ public class HighlightUtil {
   }
 
   public static void highlightElements(
-    @jakarta.annotation.Nonnull final Collection<? extends PsiElement> elementCollection,
+    @Nonnull final Collection<? extends PsiElement> elementCollection,
     @Nonnull final String statusBarText) {
     if (elementCollection.isEmpty()) {
       return;
@@ -96,7 +96,7 @@ public class HighlightUtil {
   }
 
   public static void highlightElement(
-    @Nonnull PsiElement element, @jakarta.annotation.Nonnull final String statusBarText) {
+    @Nonnull PsiElement element, @Nonnull final String statusBarText) {
     final List<PsiElement> elements = Collections.singletonList(element);
     highlightElements(elements, statusBarText);
   }

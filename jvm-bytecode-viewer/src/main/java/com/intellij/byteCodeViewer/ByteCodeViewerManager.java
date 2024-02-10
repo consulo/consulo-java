@@ -156,7 +156,7 @@ public class ByteCodeViewerManager extends DockablePopupManager<ByteCodeViewerCo
     }
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static String getByteCode(@Nonnull PsiElement psiElement) {
     PsiClass containingClass = getContainingClass(psiElement);
     //todo show popup

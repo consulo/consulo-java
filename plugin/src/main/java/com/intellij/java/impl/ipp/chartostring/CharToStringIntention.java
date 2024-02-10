@@ -35,7 +35,7 @@ public class CharToStringIntention extends Intention {
   }
 
   @Override
-  public void processIntention(@jakarta.annotation.Nonnull PsiElement element)
+  public void processIntention(@Nonnull PsiElement element)
     throws IncorrectOperationException {
     final PsiLiteralExpression charLiteral =
       (PsiLiteralExpression)element;

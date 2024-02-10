@@ -41,15 +41,15 @@ public abstract class JavaSdk extends SdkType implements JavaSdkType {
    */
   public abstract int compareTo(@Nonnull String versionString, @Nonnull String versionNumber);
 
-  public abstract Sdk createJdk(@NonNls String jdkName, @jakarta.annotation.Nonnull String home, boolean isJre);
+  public abstract Sdk createJdk(@NonNls String jdkName, @Nonnull String home, boolean isJre);
 
   @Nullable
   public abstract JavaSdkVersion getVersion(@Nonnull Sdk sdk);
 
-  @jakarta.annotation.Nullable
-  public abstract JavaSdkVersion getVersion(@jakarta.annotation.Nonnull String versionString);
+  @Nullable
+  public abstract JavaSdkVersion getVersion(@Nonnull String versionString);
 
-  public abstract boolean isOfVersionOrHigher(@Nonnull Sdk sdk, @jakarta.annotation.Nonnull JavaSdkVersion version);
+  public abstract boolean isOfVersionOrHigher(@Nonnull Sdk sdk, @Nonnull JavaSdkVersion version);
 
   @NonNls
   public abstract String getBinPath(Sdk sdk);
@@ -57,5 +57,5 @@ public abstract class JavaSdk extends SdkType implements JavaSdkType {
   @NonNls
   public abstract String getToolsPath(Sdk sdk);
 
-  public abstract void setupCommandLine(@jakarta.annotation.Nonnull GeneralCommandLine generalCommandLine, @Nonnull Sdk sdk);
+  public abstract void setupCommandLine(@Nonnull GeneralCommandLine generalCommandLine, @Nonnull Sdk sdk);
 }

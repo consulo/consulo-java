@@ -32,20 +32,20 @@ import jakarta.annotation.Nonnull;
 public class MismatchedArrayReadWriteInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "MismatchedReadAndWriteOfArray";
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "mismatched.read.write.array.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final boolean written = ((Boolean)infos[0]).booleanValue();
     if (written) {
@@ -77,7 +77,7 @@ public class MismatchedArrayReadWriteInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@jakarta.annotation.Nonnull PsiField field) {
+    public void visitField(@Nonnull PsiField field) {
       super.visitField(field);
       if (!field.hasModifierProperty(PsiModifier.PRIVATE)) {
         return;
@@ -97,7 +97,7 @@ public class MismatchedArrayReadWriteInspection extends BaseInspection {
 
     @Override
     public void visitLocalVariable(
-      @jakarta.annotation.Nonnull PsiLocalVariable variable) {
+      @Nonnull PsiLocalVariable variable) {
       super.visitLocalVariable(variable);
       final PsiCodeBlock codeBlock =
         PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class);
@@ -175,14 +175,14 @@ public class MismatchedArrayReadWriteInspection extends BaseInspection {
       return false;
     }
 
-    public static boolean variableIsWritten(@jakarta.annotation.Nonnull PsiVariable variable, @jakarta.annotation.Nonnull PsiElement context) {
+    public static boolean variableIsWritten(@Nonnull PsiVariable variable, @Nonnull PsiElement context) {
       final VariableReadWriteVisitor visitor =
         new VariableReadWriteVisitor(variable, true);
       context.accept(visitor);
       return visitor.isPassed();
     }
 
-    public static boolean variableIsRead(@jakarta.annotation.Nonnull PsiVariable variable, @jakarta.annotation.Nonnull PsiElement context) {
+    public static boolean variableIsRead(@Nonnull PsiVariable variable, @Nonnull PsiElement context) {
       final VariableReadWriteVisitor visitor =
         new VariableReadWriteVisitor(variable, false);
       context.accept(visitor);
@@ -191,18 +191,18 @@ public class MismatchedArrayReadWriteInspection extends BaseInspection {
 
     static class VariableReadWriteVisitor extends JavaRecursiveElementVisitor {
 
-      @jakarta.annotation.Nonnull
+      @Nonnull
       private final PsiVariable variable;
       private final boolean write;
       private boolean passed = false;
 
-      VariableReadWriteVisitor(@jakarta.annotation.Nonnull PsiVariable variable, boolean write) {
+      VariableReadWriteVisitor(@Nonnull PsiVariable variable, boolean write) {
         this.variable = variable;
         this.write = write;
       }
 
       @Override
-      public void visitElement(@jakarta.annotation.Nonnull PsiElement element) {
+      public void visitElement(@Nonnull PsiElement element) {
         if (!passed) {
           super.visitElement(element);
         }

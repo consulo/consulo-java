@@ -33,11 +33,11 @@ public class JavaLookupElementBuilder {
   private JavaLookupElementBuilder() {
   }
 
-  public static LookupElementBuilder forField(@jakarta.annotation.Nonnull PsiField field) {
+  public static LookupElementBuilder forField(@Nonnull PsiField field) {
     return forField(field, field.getName(), null);
   }
 
-  public static LookupElementBuilder forField(@jakarta.annotation.Nonnull PsiField field,
+  public static LookupElementBuilder forField(@Nonnull PsiField field,
                                               final String lookupString,
                                               final @Nullable PsiClass qualifierClass) {
     final LookupElementBuilder builder = LookupElementBuilder.create(field, lookupString).withIcon(
@@ -45,13 +45,13 @@ public class JavaLookupElementBuilder {
     return setBoldIfInClass(field, qualifierClass, builder);
   }
 
-  public static LookupElementBuilder forMethod(@jakarta.annotation.Nonnull PsiMethod method, final PsiSubstitutor substitutor) {
+  public static LookupElementBuilder forMethod(@Nonnull PsiMethod method, final PsiSubstitutor substitutor) {
     return forMethod(method, method.getName(), substitutor, null);
   }
 
-  public static LookupElementBuilder forMethod(@jakarta.annotation.Nonnull PsiMethod method,
-                                               @jakarta.annotation.Nonnull String lookupString, final @Nonnull PsiSubstitutor substitutor,
-                                               @jakarta.annotation.Nullable PsiClass qualifierClass) {
+  public static LookupElementBuilder forMethod(@Nonnull PsiMethod method,
+                                               @Nonnull String lookupString, final @Nonnull PsiSubstitutor substitutor,
+                                               @Nullable PsiClass qualifierClass) {
     LookupElementBuilder builder = LookupElementBuilder.create(method, lookupString)
       .withIcon(IconDescriptorUpdaters.getIcon(method, Iconable.ICON_FLAG_VISIBILITY))
       .withPresentableText(method.getName())
@@ -66,23 +66,23 @@ public class JavaLookupElementBuilder {
     return builder;
   }
 
-  private static LookupElementBuilder setBoldIfInClass(@jakarta.annotation.Nonnull PsiMember member, @Nullable PsiClass psiClass, @Nonnull LookupElementBuilder builder) {
+  private static LookupElementBuilder setBoldIfInClass(@Nonnull PsiMember member, @Nullable PsiClass psiClass, @Nonnull LookupElementBuilder builder) {
     if (psiClass != null && member.getManager().areElementsEquivalent(member.getContainingClass(), psiClass)) {
       return builder.bold();
     }
     return builder;
   }
 
-  public static LookupElementBuilder forClass(@jakarta.annotation.Nonnull PsiClass psiClass) {
+  public static LookupElementBuilder forClass(@Nonnull PsiClass psiClass) {
     return forClass(psiClass, psiClass.getName());
   }
 
-  public static LookupElementBuilder forClass(@jakarta.annotation.Nonnull PsiClass psiClass,
+  public static LookupElementBuilder forClass(@Nonnull PsiClass psiClass,
                                               final String lookupString) {
     return forClass(psiClass, lookupString, false);
   }
 
-  public static LookupElementBuilder forClass(@jakarta.annotation.Nonnull PsiClass psiClass,
+  public static LookupElementBuilder forClass(@Nonnull PsiClass psiClass,
                                               final String lookupString,
                                               final boolean withLocation) {
     LookupElementBuilder builder =

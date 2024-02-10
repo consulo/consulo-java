@@ -52,7 +52,7 @@ public class JDParser {
     myCommonSettings = settings.getCommonSettings(JavaLanguage.INSTANCE);
   }
 
-  public void formatCommentText(@Nonnull PsiElement element, @jakarta.annotation.Nonnull CommentFormatter formatter) {
+  public void formatCommentText(@Nonnull PsiElement element, @Nonnull CommentFormatter formatter) {
     CommentInfo info = getElementsCommentInfo(element);
     if (info == null || !isJavadoc(info)) {
       return;
@@ -94,7 +94,7 @@ public class JDParser {
     return null;
   }
 
-  private static CommentInfo getCommentInfo(@jakarta.annotation.Nonnull PsiDocComment docComment, @jakarta.annotation.Nonnull PsiElement owner) {
+  private static CommentInfo getCommentInfo(@Nonnull PsiDocComment docComment, @Nonnull PsiElement owner) {
     String commentHeader = null;
     String commentFooter = null;
 
@@ -147,7 +147,7 @@ public class JDParser {
     return comment;
   }
 
-  private static JDComment createComment(@jakarta.annotation.Nonnull PsiElement commentOwner, @Nonnull CommentFormatter formatter) {
+  private static JDComment createComment(@Nonnull PsiElement commentOwner, @Nonnull CommentFormatter formatter) {
     if (commentOwner instanceof PsiClass) {
       return new JDClassComment(formatter);
     } else if (commentOwner instanceof PsiMethod) {
@@ -157,7 +157,7 @@ public class JDParser {
     }
   }
 
-  private void parse(@jakarta.annotation.Nullable String text, @jakarta.annotation.Nonnull JDComment comment) {
+  private void parse(@Nullable String text, @Nonnull JDComment comment) {
     if (text == null) {
       return;
     }
@@ -268,7 +268,7 @@ public class JDParser {
    * @return array of strings (lines)
    */
   @Nullable
-  private List<String> toArray(@jakarta.annotation.Nullable String s, @jakarta.annotation.Nullable List<Boolean> markers) {
+  private List<String> toArray(@Nullable String s, @Nullable List<Boolean> markers) {
     if (s == null) {
       return null;
     }
@@ -347,8 +347,8 @@ public class JDParser {
     return false;
   }
 
-  @jakarta.annotation.Nonnull
-  private static String removeWhiteSpacesFrom(@jakarta.annotation.Nonnull final String token) {
+  @Nonnull
+  private static String removeWhiteSpacesFrom(@Nonnull final String token) {
     final StringBuilder result = new StringBuilder();
     for (char c : token.toCharArray()) {
       if (c != ' ') {
@@ -367,7 +367,7 @@ public class JDParser {
    * @return array of strings (lines)
    */
   @Nullable
-  private List<String> toArrayWrapping(@jakarta.annotation.Nullable String s, int width) {
+  private List<String> toArrayWrapping(@Nullable String s, int width) {
     List<String> list = new ArrayList<>();
     List<Pair<String, Boolean>> pairs = splitToParagraphs(s);
     if (pairs == null) {
@@ -424,8 +424,8 @@ public class JDParser {
    * @param s string to process
    * @return processing result
    */
-  @jakarta.annotation.Nullable
-  private List<Pair<String, Boolean>> splitToParagraphs(@jakarta.annotation.Nullable String s) {
+  @Nullable
+  private List<Pair<String, Boolean>> splitToParagraphs(@Nullable String s) {
     if (s == null) {
       return null;
     }
@@ -472,14 +472,14 @@ public class JDParser {
     return mySettings.JD_PRESERVE_LINE_FEEDS || startsWithTag(line);
   }
 
-  private static boolean startsWithTag(@jakarta.annotation.Nonnull String line) {
+  private static boolean startsWithTag(@Nonnull String line) {
     if (line.trim().startsWith("<")) {
       return HTML_TAG_PATTERN.matcher(line).matches();
     }
     return false;
   }
 
-  private static void endParagraph(@Nonnull List<Pair<String, Boolean>> result, @jakarta.annotation.Nonnull StringBuilder sb) {
+  private static void endParagraph(@Nonnull List<Pair<String, Boolean>> result, @Nonnull StringBuilder sb) {
     if (sb.length() > 0) {
       result.add(new Pair<>(sb.toString(), false));
       sb.setLength(0);
@@ -592,7 +592,7 @@ public class JDParser {
       }
   };
 
-  private static boolean lineHasUnclosedPreTag(@jakarta.annotation.Nonnull String line) {
+  private static boolean lineHasUnclosedPreTag(@Nonnull String line) {
     return getOccurenceCount(line, PRE_TAG_START_PATTERN) > StringUtil.getOccurrenceCount(line, PRE_TAG_END);
   }
 
@@ -601,7 +601,7 @@ public class JDParser {
   }
 
   @SuppressWarnings("SameParameterValue")
-  private static int getOccurenceCount(@Nonnull String line, @jakarta.annotation.Nonnull Pattern pattern) {
+  private static int getOccurenceCount(@Nonnull String line, @Nonnull Pattern pattern) {
     Matcher matcher = pattern.matcher(line);
     int count = 0;
     while (matcher.find()) {
@@ -610,8 +610,8 @@ public class JDParser {
     return count;
   }
 
-  @jakarta.annotation.Nonnull
-  protected StringBuilder formatJDTagDescription(@jakarta.annotation.Nullable String str, @Nonnull CharSequence prefix) {
+  @Nonnull
+  protected StringBuilder formatJDTagDescription(@Nullable String str, @Nonnull CharSequence prefix) {
     return formatJDTagDescription(str, prefix, prefix);
   }
 
@@ -627,7 +627,7 @@ public class JDParser {
    * @return formatted JavaDoc tag description
    */
   @Nonnull
-  protected StringBuilder formatJDTagDescription(@jakarta.annotation.Nullable String str,
+  protected StringBuilder formatJDTagDescription(@Nullable String str,
                                                  @Nonnull CharSequence firstLinePrefix,
                                                  @Nonnull CharSequence continuationPrefix) {
     final int rightMargin = myCommonSettings.getRootSettings().getRightMargin(JavaLanguage.INSTANCE);

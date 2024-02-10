@@ -188,7 +188,7 @@ final class Solver
 	}
 
 	// substitute id -> value into pending
-	Result substitute(@jakarta.annotation.Nonnull Pending pending, @Nonnull EKey id, @jakarta.annotation.Nonnull Value value)
+	Result substitute(@Nonnull Pending pending, @Nonnull EKey id, @Nonnull Value value)
 	{
 		Component[] sum = pending.delta;
 		for(Component intIdComponent : sum)
@@ -201,7 +201,7 @@ final class Solver
 		return normalize(sum);
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	Result normalize(@Nonnull Component[] sum)
 	{
 		Value acc = lattice.bot;

@@ -21,7 +21,7 @@ public class PsiTypeTestPatternImpl extends CompositePsiElement implements PsiTy
     super(TYPE_TEST_PATTERN);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public PsiTypeElement getCheckType() {
     for (PsiElement child = getFirstChild(); child != null; child = child.getNextSibling()) {
@@ -43,7 +43,7 @@ public class PsiTypeTestPatternImpl extends CompositePsiElement implements PsiTy
 
 
   @Override
-  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitTypeTestPattern(this);
     } else {
@@ -52,7 +52,7 @@ public class PsiTypeTestPatternImpl extends CompositePsiElement implements PsiTy
   }
 
   @Override
-  public boolean processDeclarations(@jakarta.annotation.Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent,
+  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent,
                                      @Nonnull PsiElement place) {
     processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, this);
 

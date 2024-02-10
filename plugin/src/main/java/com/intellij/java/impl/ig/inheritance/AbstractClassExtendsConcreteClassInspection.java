@@ -37,7 +37,7 @@ public class AbstractClassExtendsConcreteClassInspection
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "abstract.class.extends.concrete.class.problem.descriptor");
@@ -52,7 +52,7 @@ public class AbstractClassExtendsConcreteClassInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       // no call to super, so that it doesn't drill down to inner classes
       if (aClass.isInterface() || aClass.isAnnotationType()) {
         return;

@@ -46,7 +46,7 @@ public class AnnotationsOrderRootTypeUIFactory implements OrderRootTypeUIFactory
     return JavaCoreBundle.message("sdk.configure.external.annotations.tab");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getOrderRootTypeId() {
     return "javaExternalAnnotations";

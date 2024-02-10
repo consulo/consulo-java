@@ -110,7 +110,7 @@ public class CyclicDependenciesAction extends AnAction{
     return scope != null && scope.getScopeType() != AnalysisScope.INVALID ? scope : null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static AnalysisScope getInspectionScopeImpl(DataContext dataContext) {
     //Possible scopes: package, project, module.
     Project projectContext = dataContext.getData(PlatformDataKeys.PROJECT_CONTEXT);
@@ -144,7 +144,7 @@ public class CyclicDependenciesAction extends AnAction{
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static AnalysisScope getProjectScope(DataContext dataContext) {
     final Project data = dataContext.getData(CommonDataKeys.PROJECT);
     if (data == null) {
@@ -153,7 +153,7 @@ public class CyclicDependenciesAction extends AnAction{
     return new AnalysisScope(data);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static AnalysisScope getModuleScope(DataContext dataContext) {
     final Module data = dataContext.getData(LangDataKeys.MODULE);
     if (data == null) {

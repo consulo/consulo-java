@@ -46,13 +46,13 @@ public class UnnecessaryInterfaceModifierInspection extends BaseInspection {
     new HashSet<String>(Arrays.asList(PsiModifier.PUBLIC, PsiModifier.ABSTRACT));
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("unnecessary.interface.modifier.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiModifierList modifierList = (PsiModifierList)infos[1];
     final PsiElement parent = modifierList.getParent();
@@ -176,7 +176,7 @@ public class UnnecessaryInterfaceModifierInspection extends BaseInspection {
     }
 
     @Override
-    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       // don't call super, to keep this from drilling in
       final PsiClass aClass = method.getContainingClass();
       if (aClass == null) {

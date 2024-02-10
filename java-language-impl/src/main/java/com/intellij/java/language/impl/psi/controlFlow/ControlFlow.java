@@ -24,14 +24,14 @@ public interface ControlFlow
 {
 	ControlFlow EMPTY = new ControlFlowImpl();
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	List<Instruction> getInstructions();
 
 	int getSize();
 
 	int getStartOffset(@Nonnull PsiElement element);
 
-	int getEndOffset(@jakarta.annotation.Nonnull PsiElement element);
+	int getEndOffset(@Nonnull PsiElement element);
 
 	PsiElement getElement(int offset);
 

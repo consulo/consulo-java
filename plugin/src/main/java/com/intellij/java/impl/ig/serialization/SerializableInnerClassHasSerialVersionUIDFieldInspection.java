@@ -27,7 +27,7 @@ import consulo.annotation.component.ExtensionImpl;
 public class SerializableInnerClassHasSerialVersionUIDFieldInspection
   extends SerializableInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "SerializableNonStaticInnerClassWithoutSerialVersionUID";
   }
@@ -38,7 +38,7 @@ public class SerializableInnerClassHasSerialVersionUIDFieldInspection
       "serializable.inner.class.has.serial.version.uid.field.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "serializable.inner.class.has.serial.version.uid.field.problem.descriptor");

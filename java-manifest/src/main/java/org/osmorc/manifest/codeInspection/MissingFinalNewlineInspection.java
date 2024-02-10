@@ -53,7 +53,7 @@ import jakarta.annotation.Nullable;
 @ExtensionImpl
 public class MissingFinalNewlineInspection extends LocalInspectionTool {
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getGroupDisplayName() {
     return "General";
   }
@@ -70,7 +70,7 @@ public class MissingFinalNewlineInspection extends LocalInspectionTool {
     return "Missing Final New Line";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getShortName() {
     return getClass().getSimpleName();
   }
@@ -79,13 +79,13 @@ public class MissingFinalNewlineInspection extends LocalInspectionTool {
     return true;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public HighlightDisplayLevel getDefaultLevel() {
     return HighlightDisplayLevel.ERROR;
   }
 
   @Override
-  public ProblemDescriptor[] checkFile(@jakarta.annotation.Nonnull PsiFile file, @jakarta.annotation.Nonnull InspectionManager manager, boolean isOnTheFly) {
+  public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean isOnTheFly) {
     if (file instanceof ManifestFile) {
       String text = file.getText();
       // http://ea.jetbrains.com/browser/ea_problems/22570
@@ -117,7 +117,7 @@ public class MissingFinalNewlineInspection extends LocalInspectionTool {
       return "Add newline";
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getFamilyName() {
       return "Osmorc";
     }

@@ -175,7 +175,7 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
     return showConflicts(conflicts, refUsages.get());
   }
 
-  public void findUsages(@jakarta.annotation.Nonnull List<FixableUsageInfo> usages) {
+  public void findUsages(@Nonnull List<FixableUsageInfo> usages) {
     if (myUseExistingClass && existingClass != null) {
       myExistingClassCompatibleConstructor = existingClassIsCompatible(existingClass, parameters);
     }
@@ -386,7 +386,7 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
     }
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static PsiMethod existingClassIsCompatible(PsiClass aClass, List<ParameterChunk> params) {
     if (params.size() == 1) {
       final ParameterChunk parameterChunk = params.get(0);
@@ -472,7 +472,7 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
       this.setter = setter;
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     public PsiField getField() {
       return field;
     }

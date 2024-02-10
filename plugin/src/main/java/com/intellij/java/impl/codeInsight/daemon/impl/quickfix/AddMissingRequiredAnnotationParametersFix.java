@@ -70,12 +70,12 @@ public class AddMissingRequiredAnnotationParametersFix implements SyntheticInten
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull final Project project, final Editor editor, final PsiFile file) {
+  public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
     return myAnnotation.isValid();
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull final Project project,
+  public void invoke(@Nonnull final Project project,
                      final Editor editor,
                      final PsiFile file) throws IncorrectOperationException {
     final PsiNameValuePair[] addedParameters = myAnnotation.getParameterList().getAttributes();

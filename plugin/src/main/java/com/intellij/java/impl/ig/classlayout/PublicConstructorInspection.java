@@ -50,14 +50,14 @@ public class PublicConstructorInspection extends BaseInspection
 {
 
 	@Nls
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public String getDisplayName()
 	{
 		return InspectionGadgetsBundle.message("public.constructor.display.name");
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	protected String buildErrorString(Object... infos)
 	{

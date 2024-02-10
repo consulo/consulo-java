@@ -19,6 +19,7 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiImportList;
 import com.intellij.java.language.psi.PsiJavaFile;
 import consulo.dataContext.TypeSafeDataProvider;
+import consulo.ide.impl.idea.usages.impl.rules.FileGroupingRule;
 import consulo.language.inject.InjectedLanguageManager;
 import consulo.language.editor.util.NavigationItemFileStatus;
 import consulo.dataContext.DataSink;
@@ -93,7 +94,7 @@ public class ClassGroupingRule implements UsageGroupingRule {
 
     final VirtualFile virtualFile = topLevelFile.getVirtualFile();
     if (virtualFile != null) {
-      return new consulo.ide.impl.idea.usages.impl.rules.FileGroupingRule.FileUsageGroup(topLevelFile.getProject(), virtualFile);
+      return new FileGroupingRule.FileUsageGroup(topLevelFile.getProject(), virtualFile);
     }
     return null;
   }
@@ -110,7 +111,7 @@ public class ClassGroupingRule implements UsageGroupingRule {
     private final String myQName;
     private final Image myIcon;
 
-    public ClassUsageGroup(@jakarta.annotation.Nonnull PsiClass aClass) {
+    public ClassUsageGroup(@Nonnull PsiClass aClass) {
       myQName = aClass.getQualifiedName();
       myText = createText(aClass);
       myClassPointer = SmartPointerManager.getInstance(aClass.getProject()).createSmartPsiElementPointer(aClass);

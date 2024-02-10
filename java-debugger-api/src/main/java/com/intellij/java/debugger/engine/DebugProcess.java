@@ -96,7 +96,7 @@ public interface DebugProcess extends UserDataHolder
 	/**
 	 * @return the search scope used by debugger to find sources corresponding to classes being executed
 	 */
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	GlobalSearchScope getSearchScope();
 
 	void printToConsole(String text);

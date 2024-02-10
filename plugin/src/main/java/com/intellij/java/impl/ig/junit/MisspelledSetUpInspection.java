@@ -32,7 +32,7 @@ import org.jetbrains.annotations.NonNls;
 public class MisspelledSetUpInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "misspelled.set.up.display.name");

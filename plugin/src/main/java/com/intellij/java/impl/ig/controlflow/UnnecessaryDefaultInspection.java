@@ -36,7 +36,7 @@ public class UnnecessaryDefaultInspection extends BaseInspection {
       "unnecessary.default.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "unnecessary.default.problem.descriptor");
@@ -51,7 +51,7 @@ public class UnnecessaryDefaultInspection extends BaseInspection {
 
     @Override
     public void visitSwitchStatement(
-      @jakarta.annotation.Nonnull PsiSwitchStatement statement) {
+      @Nonnull PsiSwitchStatement statement) {
       super.visitSwitchStatement(statement);
       final PsiSwitchLabelStatement defaultStatement =
         retrieveUnnecessaryDefault(statement);

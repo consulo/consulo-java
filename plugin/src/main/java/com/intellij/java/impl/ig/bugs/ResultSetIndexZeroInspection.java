@@ -32,13 +32,13 @@ import jakarta.annotation.Nonnull;
 public class ResultSetIndexZeroInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "UseOfIndexZeroInJDBCResultSet";
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("use.0index.in.jdbc.resultset.display.name");
   }

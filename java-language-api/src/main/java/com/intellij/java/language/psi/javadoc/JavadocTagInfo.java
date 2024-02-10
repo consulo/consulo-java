@@ -38,7 +38,7 @@ public interface JavadocTagInfo {
    * @param value Doc tag to check.
    * @return Returns null if correct, error message otherwise.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   String checkTagValue(PsiDocTagValue value);
 
   @Nullable

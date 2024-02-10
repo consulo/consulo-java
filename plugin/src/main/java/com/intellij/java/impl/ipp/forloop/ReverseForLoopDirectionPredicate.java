@@ -78,7 +78,7 @@ class ReverseForLoopDirectionPredicate implements PsiElementPredicate
 		return isVariableIncrementOrDecremented(variable, update);
 	}
 
-	public static boolean isVariableCompared(@jakarta.annotation.Nonnull PsiVariable variable, @Nullable PsiExpression expression)
+	public static boolean isVariableCompared(@Nonnull PsiVariable variable, @Nullable PsiExpression expression)
 	{
 		if(!(expression instanceof PsiBinaryExpression))
 		{
@@ -107,7 +107,7 @@ class ReverseForLoopDirectionPredicate implements PsiElementPredicate
 		return false;
 	}
 
-	public static boolean isVariableIncrementOrDecremented(@Nonnull PsiVariable variable, @jakarta.annotation.Nullable PsiStatement statement)
+	public static boolean isVariableIncrementOrDecremented(@Nonnull PsiVariable variable, @Nullable PsiStatement statement)
 	{
 		if(!(statement instanceof PsiExpressionStatement))
 		{

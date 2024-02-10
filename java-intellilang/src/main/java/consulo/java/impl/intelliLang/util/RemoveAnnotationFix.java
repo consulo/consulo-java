@@ -32,17 +32,17 @@ public class RemoveAnnotationFix implements LocalQuickFix {
     myTool = tool;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getName() {
     return "Remove Annotation";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getFamilyName() {
     return myTool.getGroupDisplayName();
   }
 
-  public void applyFix(@jakarta.annotation.Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
     if (FileModificationService.getInstance().preparePsiElementForWrite(descriptor.getPsiElement())) {
       try {
         descriptor.getPsiElement().delete();

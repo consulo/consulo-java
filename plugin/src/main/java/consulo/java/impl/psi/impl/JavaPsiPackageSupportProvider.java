@@ -40,7 +40,7 @@ public class JavaPsiPackageSupportProvider implements PsiPackageSupportProvider 
   }
 
   @Override
-  public boolean isValidPackageName(@jakarta.annotation.Nonnull Module module, @Nonnull String packageName) {
+  public boolean isValidPackageName(@Nonnull Module module, @Nonnull String packageName) {
     return PsiNameHelper.getInstance(module.getProject()).isQualifiedName(packageName);
   }
 
@@ -48,7 +48,7 @@ public class JavaPsiPackageSupportProvider implements PsiPackageSupportProvider 
   @Override
   public PsiPackage createPackage(
       @Nonnull PsiManager psiManager,
-      @jakarta.annotation.Nonnull PsiPackageManager packageManager,
+      @Nonnull PsiPackageManager packageManager,
       @Nonnull Class<? extends ModuleExtension> extensionClass,
       @Nonnull String packageName) {
     return new PsiPackageImpl(psiManager, packageManager, extensionClass, packageName);

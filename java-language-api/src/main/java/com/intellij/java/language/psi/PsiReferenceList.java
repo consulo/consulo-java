@@ -33,7 +33,7 @@ public interface PsiReferenceList extends PsiElement {
   /**
    * Returns the array of reference elements contained in the list.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   PsiJavaCodeReferenceElement[] getReferenceElements();
 
   /**

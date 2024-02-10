@@ -99,19 +99,19 @@ public class JavaMethodBreakpointType extends JavaLineBreakpointTypeBase<JavaMet
     return new MethodBreakpointPropertiesPanel();
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public JavaMethodBreakpointProperties createProperties() {
     return new JavaMethodBreakpointProperties();
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public JavaMethodBreakpointProperties createBreakpointProperties(@Nonnull VirtualFile file, int line) {
     return new JavaMethodBreakpointProperties();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Breakpoint createJavaBreakpoint(Project project, XBreakpoint breakpoint) {
     return new MethodBreakpoint(project, breakpoint);

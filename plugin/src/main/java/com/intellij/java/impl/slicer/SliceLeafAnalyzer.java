@@ -97,8 +97,8 @@ public class SliceLeafAnalyzer {
     return filtered;
   }
 
-  private static void groupByValues(@jakarta.annotation.Nonnull Collection<PsiElement> leaves,
-                                    @jakarta.annotation.Nonnull SliceRootNode oldRoot,
+  private static void groupByValues(@Nonnull Collection<PsiElement> leaves,
+                                    @Nonnull SliceRootNode oldRoot,
                                     @Nonnull Map<SliceNode, Collection<PsiElement>> map) {
     assert oldRoot.myCachedChildren.size() == 1;
     SliceRootNode root = createTreeGroupedByValues(leaves, oldRoot, map);
@@ -109,7 +109,7 @@ public class SliceLeafAnalyzer {
     SliceManager.getInstance(root.getProject()).createToolWindow(true, root, true, description);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static SliceRootNode createTreeGroupedByValues(Collection<PsiElement> leaves, SliceRootNode oldRoot, final Map<SliceNode, Collection<PsiElement>> map) {
     SliceNode oldRootStart = oldRoot.myCachedChildren.get(0);
     SliceRootNode root = oldRoot.copy();
@@ -143,7 +143,7 @@ public class SliceLeafAnalyzer {
     return root;
   }
 
-  public static void startAnalyzeValues(@jakarta.annotation.Nonnull final AbstractTreeStructure treeStructure, @jakarta.annotation.Nonnull final Runnable finish) {
+  public static void startAnalyzeValues(@Nonnull final AbstractTreeStructure treeStructure, @Nonnull final Runnable finish) {
     final SliceRootNode root = (SliceRootNode)treeStructure.getRootElement();
     final Ref<Collection<PsiElement>> leafExpressions = Ref.create(null);
 
@@ -194,7 +194,7 @@ public class SliceLeafAnalyzer {
     }
 
     @Override
-    public SliceNode getNextSibling(@jakarta.annotation.Nonnull SliceNode element) {
+    public SliceNode getNextSibling(@Nonnull SliceNode element) {
       AbstractTreeNode parent = (AbstractTreeNode) element.getParent();
       if (parent == null) return null;
 
@@ -202,7 +202,7 @@ public class SliceLeafAnalyzer {
     }
 
     @Override
-    public SliceNode getPrevSibling(@jakarta.annotation.Nonnull SliceNode element) {
+    public SliceNode getPrevSibling(@Nonnull SliceNode element) {
       AbstractTreeNode parent = (AbstractTreeNode) element.getParent();
       if (parent == null) return null;
       return element.getPrev((List)parent.getChildren());
@@ -215,7 +215,7 @@ public class SliceLeafAnalyzer {
     }
 
     @Override
-    public SliceNode getParent(@jakarta.annotation.Nonnull SliceNode element) {
+    public SliceNode getParent(@Nonnull SliceNode element) {
       AbstractTreeNode parent = (AbstractTreeNode) element.getParent();
       return parent instanceof SliceNode ? (SliceNode)parent : null;
     }
@@ -225,7 +225,7 @@ public class SliceLeafAnalyzer {
     return map.get(node);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static Collection<PsiElement> calcLeafExpressions(@Nonnull final SliceNode root,
                                                            @Nonnull AbstractTreeStructure treeStructure,
                                                            @Nonnull final Map<SliceNode, Collection<PsiElement>> map) {
@@ -252,7 +252,7 @@ public class SliceLeafAnalyzer {
       }
 
       @Override
-      public void elementFinished(@jakarta.annotation.Nonnull SliceNode element) {
+      public void elementFinished(@Nonnull SliceNode element) {
         SliceNode parent = guide.getParent(element);
         if (parent != null) {
           node(parent, map).addAll(node(element, map));

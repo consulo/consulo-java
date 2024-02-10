@@ -27,7 +27,7 @@ public class JavaOverridingMethodsSearcher implements OverridingMethodsSearchExe
     final SearchScope scope = p.getScope();
 
     final PsiClass parentClass = ApplicationManager.getApplication().runReadAction(new Computable<PsiClass>() {
-      @jakarta.annotation.Nullable
+      @Nullable
       @Override
       public PsiClass compute() {
         return method.getContainingClass();
@@ -51,7 +51,7 @@ public class JavaOverridingMethodsSearcher implements OverridingMethodsSearchExe
     return ClassInheritorsSearch.search(parentClass, scope, true).forEach(inheritorsProcessor);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiMethod findOverridingMethod(PsiClass inheritor, PsiMethod method, @Nonnull PsiClass methodContainingClass) {
     String name = method.getName();
     if (inheritor.findMethodsByName(name, false).length > 0) {

@@ -275,7 +275,7 @@ public class PsiAdapter {
    *
    * @param javaFile                javafile.
    * @param importStatementOnDemand name of import statement, must be with a wildcard (etc. java.util.*).
-   * @throws consulo.language.util.IncorrectOperationException is thrown if there is an error creating the import statement.
+   * @throws IncorrectOperationException is thrown if there is an error creating the import statement.
    */
   public static void addImportStatement(PsiJavaFile javaFile, String importStatementOnDemand) {
     PsiElementFactory factory = JavaPsiFacade.getInstance(javaFile.getProject()).getElementFactory();
@@ -577,7 +577,7 @@ public class PsiAdapter {
    * @param clazz the class.
    * @return the method if it exists, null if not.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiMethod findHashCodeMethod(PsiClass clazz) {
     PsiMethod[] methods = clazz.findMethodsByName("hashCode", false);
 

@@ -61,7 +61,7 @@ public class ReplaceOperatorAssignmentWithPostfixExpressionIntention
   }
 
   @Override
-  protected void processIntention(@jakarta.annotation.Nonnull PsiElement element)
+  protected void processIntention(@Nonnull PsiElement element)
     throws IncorrectOperationException {
     final PsiAssignmentExpression assignment =
       (PsiAssignmentExpression)element;

@@ -40,7 +40,7 @@ class ComplexityVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitIfStatement(@jakarta.annotation.Nonnull PsiIfStatement statement) {
+  public void visitIfStatement(@Nonnull PsiIfStatement statement) {
     super.visitIfStatement(statement);
     m_complexity++;
   }
@@ -80,7 +80,7 @@ class ComplexityVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitWhileStatement(@jakarta.annotation.Nonnull PsiWhileStatement statement) {
+  public void visitWhileStatement(@Nonnull PsiWhileStatement statement) {
     super.visitWhileStatement(statement);
     m_complexity++;
   }

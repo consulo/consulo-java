@@ -114,7 +114,7 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   public PsiClass getMainClass() {
     return getConfigurationModule().findClass(MAIN_CLASS_NAME);
   }
@@ -141,7 +141,7 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   public String suggestedName() {
     if (MAIN_CLASS_NAME == null) {
       return null;
@@ -227,13 +227,13 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   public String getRunClass() {
     return MAIN_CLASS_NAME;
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   public String getPackage() {
     return null;
   }
@@ -295,7 +295,7 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
     ShortenCommandLine.writeShortenClasspathMethod(element, myShortenCommandLine);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public ShortenCommandLine getShortenCommandLine() {
     return myShortenCommandLine;

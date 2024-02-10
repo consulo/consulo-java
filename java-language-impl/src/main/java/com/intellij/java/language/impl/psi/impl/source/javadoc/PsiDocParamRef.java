@@ -93,7 +93,7 @@ public class PsiDocParamRef extends CompositePsiElement implements PsiDocTagValu
       }
 
       @Override
-      @jakarta.annotation.Nonnull
+      @Nonnull
       public String getCanonicalText() {
         return valueToken.getText();
       }
@@ -107,7 +107,7 @@ public class PsiDocParamRef extends CompositePsiElement implements PsiDocTagValu
       }
 
       @Override
-      public PsiElement bindToElement(@jakarta.annotation.Nonnull PsiElement element) throws IncorrectOperationException {
+      public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException {
         if (isReferenceTo(element)) {
           return PsiDocParamRef.this;
         }
@@ -130,7 +130,7 @@ public class PsiDocParamRef extends CompositePsiElement implements PsiDocTagValu
       }
 
       @Override
-      @jakarta.annotation.Nonnull
+      @Nonnull
       public PsiElement[] getVariants() {
         final PsiElement firstChild = getFirstChild();
 
@@ -176,7 +176,7 @@ public class PsiDocParamRef extends CompositePsiElement implements PsiDocTagValu
       }
 
       @Override
-      public void processVariants(@jakarta.annotation.Nonnull PsiScopeProcessor processor) {
+      public void processVariants(@Nonnull PsiScopeProcessor processor) {
         for (final PsiElement element : getVariants()) {
           if (!processor.execute(element, ResolveState.initial())) {
             return;
@@ -191,7 +191,7 @@ public class PsiDocParamRef extends CompositePsiElement implements PsiDocTagValu
       }
 
       @Override
-      @jakarta.annotation.Nonnull
+      @Nonnull
       public JavaResolveResult[] multiResolve(boolean incompleteCode) {
         return resultReference == null ? JavaResolveResult.EMPTY_ARRAY : new JavaResolveResult[]{new CandidateInfo(resultReference, PsiSubstitutor.EMPTY)};
       }
@@ -199,7 +199,7 @@ public class PsiDocParamRef extends CompositePsiElement implements PsiDocTagValu
   }
 
   @Override
-  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitDocTagValue(this);
     } else {

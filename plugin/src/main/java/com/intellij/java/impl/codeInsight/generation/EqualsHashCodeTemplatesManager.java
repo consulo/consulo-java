@@ -131,7 +131,7 @@ public class EqualsHashCodeTemplatesManager extends TemplatesManager {
     return ArrayUtil.toStringArray(names);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static String getTemplateBaseName(TemplateResource resource) {
     return StringUtil.trimEnd(StringUtil.trimEnd(resource.getFileName(), EQUALS_SUFFIX), HASH_CODE_SUFFIX).trim();
   }

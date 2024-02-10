@@ -45,7 +45,7 @@ public class NestedMethodCallInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("nested.method.call.problem.descriptor");
   }

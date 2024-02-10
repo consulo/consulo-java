@@ -38,7 +38,7 @@ public class DetailExceptionsIntention extends Intention {
   }
 
   @Override
-  public void processIntention(@jakarta.annotation.Nonnull PsiElement element) throws IncorrectOperationException {
+  public void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiJavaToken token = (PsiJavaToken)element;
     PsiElement parent = token.getParent();
     if (parent instanceof PsiCatchSection) {

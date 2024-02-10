@@ -41,7 +41,7 @@ public class FinalizeNotProtectedInspection extends BaseInspection {
       "finalize.not.declared.protected.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "finalize.not.declared.protected.problem.descriptor");
@@ -57,7 +57,7 @@ public class FinalizeNotProtectedInspection extends BaseInspection {
 
   private static class ProtectedFinalizeFix extends InspectionGadgetsFix {
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("make.protected.quickfix");
     }

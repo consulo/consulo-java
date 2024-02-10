@@ -46,13 +46,13 @@ public class PsiPolyadicExpressionImpl extends ExpressionPsiElement implements P
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public IElementType getOperationTokenType() {
     return ((PsiJavaToken) findChildByRoleAsPsiElement(ChildRole.OPERATION_SIGN)).getTokenType();
   }
 
   @Override
-  public PsiJavaToken getTokenBeforeOperand(@jakarta.annotation.Nonnull PsiExpression operand) {
+  public PsiJavaToken getTokenBeforeOperand(@Nonnull PsiExpression operand) {
     PsiElement element = operand;
     while (element != null) {
       if (getChildRole(element.getNode()) == ChildRole.OPERATION_SIGN) {
@@ -139,15 +139,15 @@ public class PsiPolyadicExpressionImpl extends ExpressionPsiElement implements P
   }
 
   @Override
-  public boolean processDeclarations(@jakarta.annotation.Nonnull PsiScopeProcessor processor,
+  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
                                      @Nonnull ResolveState state,
                                      PsiElement lastParent,
-                                     @jakarta.annotation.Nonnull PsiElement place) {
+                                     @Nonnull PsiElement place) {
     return processDeclarations(this, processor, state, lastParent, place);
   }
 
-  static boolean processDeclarations(@jakarta.annotation.Nonnull PsiPolyadicExpression expression,
-                                     @jakarta.annotation.Nonnull PsiScopeProcessor processor,
+  static boolean processDeclarations(@Nonnull PsiPolyadicExpression expression,
+                                     @Nonnull PsiScopeProcessor processor,
                                      @Nonnull ResolveState state,
                                      PsiElement lastParent,
                                      @Nonnull PsiElement place) {

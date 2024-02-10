@@ -194,7 +194,7 @@ public class CreateConstructorParameterFromFieldFix implements SyntheticIntentio
     }
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private Collection<SmartPsiElementPointer<PsiField>> getFieldsToFix() {
     Map<SmartPsiElementPointer<PsiField>, Boolean> fields = myClass.getUserData(FIELDS);
     if (fields == null) {

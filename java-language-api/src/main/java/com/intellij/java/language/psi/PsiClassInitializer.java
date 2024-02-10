@@ -40,6 +40,6 @@ public interface PsiClassInitializer extends PsiMember {
    *
    * @return the code block representing the contents of the class initializer block.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   PsiCodeBlock getBody();
 }

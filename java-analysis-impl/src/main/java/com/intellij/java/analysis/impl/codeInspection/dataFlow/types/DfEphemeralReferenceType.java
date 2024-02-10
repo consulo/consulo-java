@@ -20,7 +20,7 @@ public class DfEphemeralReferenceType implements DfReferenceType {
   private final @Nonnull
   TypeConstraint myTypeConstraint;
 
-  DfEphemeralReferenceType(@jakarta.annotation.Nonnull TypeConstraint constraint) {
+  DfEphemeralReferenceType(@Nonnull TypeConstraint constraint) {
     myTypeConstraint = constraint;
   }
 
@@ -76,7 +76,7 @@ public class DfEphemeralReferenceType implements DfReferenceType {
   }
 
   @Override
-  public @jakarta.annotation.Nonnull
+  public @Nonnull
   DfType meet(@Nonnull DfType other) {
     if (other == DfTypes.TOP) return this;
     if (other == DfTypes.BOTTOM) return other;

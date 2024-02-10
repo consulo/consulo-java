@@ -43,13 +43,13 @@ public abstract class ExternalLibraryDescriptor
 		myMaxVersion = maxVersion;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public String getLibraryGroupId()
 	{
 		return myLibraryGroupId;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public String getLibraryArtifactId()
 	{
 		return myLibraryArtifactId;

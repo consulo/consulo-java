@@ -37,7 +37,7 @@ public class ThrowFromFinallyBlockInspection extends BaseInspection {
     return true;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "throw.from.finally.block.problem.descriptor");

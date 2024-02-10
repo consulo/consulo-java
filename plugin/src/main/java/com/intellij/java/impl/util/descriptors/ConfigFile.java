@@ -33,17 +33,17 @@ public interface ConfigFile extends Disposable, ModificationTracker {
  
   String getUrl();
 
-  @jakarta.annotation.Nullable
+  @Nullable
   VirtualFile getVirtualFile();
 
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiFile getPsiFile();
 
   @Nullable
   XmlFile getXmlFile();
 
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   ConfigFileMetaData getMetaData();
 
   @Nonnull

@@ -37,7 +37,7 @@ public class PublicElementsFilter implements Filter {
     }
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public ActionPresentation getPresentation() {
     return new ActionPresentationData(IdeBundle.message("action.structureview.show.non.public"), null, AllIcons.Nodes.C_private);
   }

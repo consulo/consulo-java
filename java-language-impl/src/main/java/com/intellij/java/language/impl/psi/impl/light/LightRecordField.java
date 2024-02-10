@@ -25,7 +25,7 @@ public class LightRecordField extends LightField implements LightRecordMember {
 
   public LightRecordField(@Nonnull PsiManager manager,
                           @Nonnull PsiField field,
-                          @jakarta.annotation.Nonnull PsiClass containingClass,
+                          @Nonnull PsiClass containingClass,
                           @Nonnull PsiRecordComponent component) {
     super(manager, field, containingClass);
     myRecordComponent = component;
@@ -64,7 +64,7 @@ public class LightRecordField extends LightField implements LightRecordMember {
 
   @Override
   public
-  @jakarta.annotation.Nonnull
+  @Nonnull
   PsiType getType() {
     if (DumbService.isDumb(myRecordComponent.getProject())) {
       return myRecordComponent.getType();
@@ -93,7 +93,7 @@ public class LightRecordField extends LightField implements LightRecordMember {
 
   @Override
   @Nullable
-  public PsiAnnotation getAnnotation(@jakarta.annotation.Nonnull String fqn) {
+  public PsiAnnotation getAnnotation(@Nonnull String fqn) {
     return getType().findAnnotation(fqn);
   }
 
@@ -116,7 +116,7 @@ public class LightRecordField extends LightField implements LightRecordMember {
 
   @Override
   public
-  @jakarta.annotation.Nonnull
+  @Nonnull
   SearchScope getUseScope() {
     PsiClass aClass = Objects.requireNonNull(getContainingClass());
     PsiClass containingClass = aClass.getContainingClass();

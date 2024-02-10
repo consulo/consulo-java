@@ -28,7 +28,7 @@ import com.siyeh.ig.psiutils.MethodCallUtils;
 @ExtensionImpl
 public class AbstractMethodCallInConstructorInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("abstract.method.call.in.constructor.display.name");
   }
@@ -45,7 +45,7 @@ public class AbstractMethodCallInConstructorInspection extends BaseInspection {
   private static class AbstractMethodCallInConstructorVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethodCallExpression(@jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!MethodCallUtils.isCallDuringObjectConstruction(expression)) {
         return;

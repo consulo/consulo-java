@@ -96,7 +96,7 @@ public class SocketResourceInspection extends ResourceInspection {
 
     @Override
     public void visitNewExpression(
-      @jakarta.annotation.Nonnull PsiNewExpression expression) {
+      @Nonnull PsiNewExpression expression) {
       super.visitNewExpression(expression);
       if (!isSocketResource(expression)) {
         return;

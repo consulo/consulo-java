@@ -69,7 +69,7 @@ public class NonBooleanMethodNameMayNotStartWithQuestionInspection extends BaseI
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("non.boolean.method.name.must.not.start.with.question.problem.descriptor");
   }
@@ -122,7 +122,7 @@ public class NonBooleanMethodNameMayNotStartWithQuestionInspection extends BaseI
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       super.visitMethod(method);
       final PsiType returnType = method.getReturnType();
       if (returnType == null || returnType.equals(PsiType.BOOLEAN)) {

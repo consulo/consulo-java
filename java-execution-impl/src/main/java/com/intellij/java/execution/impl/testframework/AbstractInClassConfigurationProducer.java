@@ -50,7 +50,7 @@ public abstract class AbstractInClassConfigurationProducer<T extends JavaTestCon
 	}
 
 	@Override
-	public void onFirstRun(@Nonnull final ConfigurationFromContext configuration, @jakarta.annotation.Nonnull final ConfigurationContext fromContext, @jakarta.annotation.Nonnull Runnable performRunnable)
+	public void onFirstRun(@Nonnull final ConfigurationFromContext configuration, @Nonnull final ConfigurationContext fromContext, @Nonnull Runnable performRunnable)
 	{
 		final PsiElement psiElement = configuration.getSourceElement();
 		if(psiElement instanceof PsiMethod || psiElement instanceof PsiClass)

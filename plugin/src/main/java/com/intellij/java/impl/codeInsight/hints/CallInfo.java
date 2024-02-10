@@ -16,7 +16,7 @@ class CallInfo
 	private final PsiParameter varArg;
 	private final List<PsiExpression> varArgExpressions;
 
-	CallInfo(@jakarta.annotation.Nonnull List<CallArgumentInfo> regularArgs, @Nullable PsiParameter varArg, @jakarta.annotation.Nonnull List<PsiExpression> varArgExpressions)
+	CallInfo(@Nonnull List<CallArgumentInfo> regularArgs, @Nullable PsiParameter varArg, @Nonnull List<PsiExpression> varArgExpressions)
 	{
 		this.regularArgs = regularArgs;
 		this.varArg = varArg;
@@ -29,13 +29,13 @@ class CallInfo
 		return regularArgs;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public List<PsiExpression> getVarArgExpressions()
 	{
 		return varArgExpressions;
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	public PsiParameter getVarArg()
 	{
 		return varArg;

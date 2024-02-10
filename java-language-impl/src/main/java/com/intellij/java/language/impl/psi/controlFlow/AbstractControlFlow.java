@@ -11,10 +11,10 @@ abstract class AbstractControlFlow implements ControlFlow
 {
 	// Low 4 bytes = start; high 4 bytes = end
 	final
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	Map<PsiElement, int[]> myElementToOffsetMap;
 
-	AbstractControlFlow(@jakarta.annotation.Nonnull Map<PsiElement, int[]> map)
+	AbstractControlFlow(@Nonnull Map<PsiElement, int[]> map)
 	{
 		myElementToOffsetMap = map;
 	}

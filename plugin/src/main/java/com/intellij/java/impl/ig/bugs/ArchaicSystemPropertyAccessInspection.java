@@ -75,7 +75,7 @@ public class ArchaicSystemPropertyAccessInspection extends BaseInspection {
 
   private static class ReplaceWithParseMethodFix extends InspectionGadgetsFix {
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "archaic.system.property.accessors.replace.parse.quickfix");

@@ -32,7 +32,7 @@ import jakarta.annotation.Nonnull;
 public class EqualsHashCodeCalledOnUrlInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("equals.hashcode.called.on.url.display.name");
   }

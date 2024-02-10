@@ -62,7 +62,7 @@ public class ReadableExternalAnnotationsManager extends BaseExternalAnnotationsM
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected List<VirtualFile> getExternalAnnotationsRoots(@Nonnull VirtualFile libraryFile) {
     ProjectFileIndex fileIndex = ProjectRootManager.getInstance(myPsiManager.getProject()).getFileIndex();
     Set<VirtualFile> result = new LinkedHashSet<VirtualFile>();

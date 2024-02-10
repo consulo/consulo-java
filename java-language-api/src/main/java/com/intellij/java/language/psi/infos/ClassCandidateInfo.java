@@ -30,7 +30,7 @@ import consulo.language.psi.PsiElement;
  */
 public class ClassCandidateInfo extends CandidateInfo
 {
-	public ClassCandidateInfo(@jakarta.annotation.Nonnull PsiElement candidate, @Nonnull PsiSubstitutor substitutor, boolean accessProblem, PsiElement currFileContext)
+	public ClassCandidateInfo(@Nonnull PsiElement candidate, @Nonnull PsiSubstitutor substitutor, boolean accessProblem, PsiElement currFileContext)
 	{
 		super(candidate, substitutor, accessProblem, false, currFileContext);
 	}

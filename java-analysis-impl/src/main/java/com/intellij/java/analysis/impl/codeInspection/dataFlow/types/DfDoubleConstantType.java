@@ -11,7 +11,7 @@ class DfDoubleConstantType extends DfConstantType<Double> implements DfDoubleTyp
     super(value);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public DfType join(@Nonnull DfType other) {
     if (other.isSuperType(this)) return other;
@@ -19,7 +19,7 @@ class DfDoubleConstantType extends DfConstantType<Double> implements DfDoubleTyp
     return DfTypes.TOP;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public PsiPrimitiveType getPsiType() {
     return DfDoubleType.super.getPsiType();

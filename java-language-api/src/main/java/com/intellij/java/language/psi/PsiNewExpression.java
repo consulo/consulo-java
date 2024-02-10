@@ -40,7 +40,7 @@ public interface PsiNewExpression extends PsiCallExpression, PsiConstructorCall
 	 * @return the array of expressions for the dimensions, or an empty array if the
 	 * <code>new</code> expression is not an array creation expression.
 	 */
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	PsiExpression[] getArrayDimensions();
 
 	/**

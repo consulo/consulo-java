@@ -26,7 +26,7 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class AssertStatementInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "assert.statement.display.name");

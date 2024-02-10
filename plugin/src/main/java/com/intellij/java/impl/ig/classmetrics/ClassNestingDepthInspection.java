@@ -50,7 +50,7 @@ public class ClassNestingDepthInspection
       "inner.class.too.deeply.nested.nesting.limit.option");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer nestingLevel = (Integer)infos[0];
     return InspectionGadgetsBundle.message(

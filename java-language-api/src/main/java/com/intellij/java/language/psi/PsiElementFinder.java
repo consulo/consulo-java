@@ -47,8 +47,8 @@ public abstract class PsiElementFinder {
    * @return the PSI class, or null if no class with such name is found.
    * @see JavaPsiFacade#findClass(String, GlobalSearchScope)
    */
-  @jakarta.annotation.Nullable
-  public abstract PsiClass findClass(@jakarta.annotation.Nonnull String qualifiedName, @jakarta.annotation.Nonnull GlobalSearchScope scope);
+  @Nullable
+  public abstract PsiClass findClass(@Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope);
 
   /**
    * Searches the specified scope within the project for classes with the specified full-qualified
@@ -59,8 +59,8 @@ public abstract class PsiElementFinder {
    * @return the array of found classes, or an empty array if no classes are found.
    * @see JavaPsiFacade#findClasses(String, GlobalSearchScope)
    */
-  @jakarta.annotation.Nonnull
-  public abstract PsiClass[] findClasses(@jakarta.annotation.Nonnull String qualifiedName, @jakarta.annotation.Nonnull GlobalSearchScope scope);
+  @Nonnull
+  public abstract PsiClass[] findClasses(@Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope);
 
   /**
    * Searches the project for the package with the specified full-qualified name and returns one
@@ -79,12 +79,12 @@ public abstract class PsiElementFinder {
    * Search java module for file. Can be automatic module or explicit declaration from java file
    */
   @Nullable
-  public PsiJavaModule findModule(@jakarta.annotation.Nonnull VirtualFile file) {
+  public PsiJavaModule findModule(@Nonnull VirtualFile file) {
     return null;
   }
 
-  @jakarta.annotation.Nonnull
-  public Collection<PsiJavaModule> findModules(@jakarta.annotation.Nonnull String moduleName, @jakarta.annotation.Nonnull GlobalSearchScope scope) {
+  @Nonnull
+  public Collection<PsiJavaModule> findModules(@Nonnull String moduleName, @Nonnull GlobalSearchScope scope) {
     return List.of();
   }
 
@@ -96,8 +96,8 @@ public abstract class PsiElementFinder {
    * @return the list of subpackages.
    * @see PsiJavaPackage#getSubPackages(GlobalSearchScope)
    */
-  @jakarta.annotation.Nonnull
-  public PsiJavaPackage[] getSubPackages(@jakarta.annotation.Nonnull PsiJavaPackage psiPackage, @jakarta.annotation.Nonnull GlobalSearchScope scope) {
+  @Nonnull
+  public PsiJavaPackage[] getSubPackages(@Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope) {
     return PsiJavaPackage.EMPTY_ARRAY;
   }
 
@@ -109,21 +109,21 @@ public abstract class PsiElementFinder {
    * @return the list of classes.
    * @see PsiJavaPackage#getClasses(GlobalSearchScope)
    */
-  @jakarta.annotation.Nonnull
-  public PsiClass[] getClasses(@jakarta.annotation.Nonnull PsiJavaPackage psiPackage, @jakarta.annotation.Nonnull GlobalSearchScope scope) {
+  @Nonnull
+  public PsiClass[] getClasses(@Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope) {
     return PsiClass.EMPTY_ARRAY;
   }
 
   /**
    * A method to optimize resolve (to only search classes in a package which might be there)
    */
-  @jakarta.annotation.Nonnull
-  public Set<String> getClassNames(@jakarta.annotation.Nonnull PsiJavaPackage psiPackage, @jakarta.annotation.Nonnull GlobalSearchScope scope) {
+  @Nonnull
+  public Set<String> getClassNames(@Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope) {
     return getClassNames(getClasses(psiPackage, scope));
   }
 
-  @jakarta.annotation.Nonnull
-  protected static Set<String> getClassNames(@jakarta.annotation.Nonnull PsiClass[] classes) {
+  @Nonnull
+  protected static Set<String> getClassNames(@Nonnull PsiClass[] classes) {
     if (classes.length == 0) {
       return Collections.emptySet();
     }
@@ -135,13 +135,13 @@ public abstract class PsiElementFinder {
     return names;
   }
 
-  public boolean processPackageDirectories(@jakarta.annotation.Nonnull PsiJavaPackage psiPackage, @jakarta.annotation.Nonnull GlobalSearchScope scope,
-                                           @jakarta.annotation.Nonnull Processor<PsiDirectory> consumer) {
+  public boolean processPackageDirectories(@Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope,
+                                           @Nonnull Processor<PsiDirectory> consumer) {
     return processPackageDirectories(psiPackage, scope, consumer, false);
   }
 
-  public boolean processPackageDirectories(@jakarta.annotation.Nonnull PsiJavaPackage psiPackage, @jakarta.annotation.Nonnull GlobalSearchScope scope,
-                                           @jakarta.annotation.Nonnull Processor<PsiDirectory> consumer, boolean includeLibrarySources) {
+  public boolean processPackageDirectories(@Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope,
+                                           @Nonnull Processor<PsiDirectory> consumer, boolean includeLibrarySources) {
     return true;
   }
 
@@ -154,8 +154,8 @@ public abstract class PsiElementFinder {
    * @return the list of classes.
    * @see PsiJavaPackage#getClasses(GlobalSearchScope)
    */
-  @jakarta.annotation.Nonnull
-  public PsiClass[] getClasses(@jakarta.annotation.Nullable String className, @jakarta.annotation.Nonnull PsiJavaPackage psiPackage, @jakarta.annotation.Nonnull GlobalSearchScope scope) {
+  @Nonnull
+  public PsiClass[] getClasses(@Nullable String className, @Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope) {
     PsiClass[] allClasses = getClasses(psiPackage, scope);
     if (className == null) {
       return allClasses;
@@ -163,8 +163,8 @@ public abstract class PsiElementFinder {
     return filterByName(className, allClasses);
   }
 
-  @jakarta.annotation.Nonnull
-  public static PsiClass[] filterByName(@jakarta.annotation.Nonnull String className, @jakarta.annotation.Nonnull PsiClass[] classes) {
+  @Nonnull
+  public static PsiClass[] filterByName(@Nonnull String className, @Nonnull PsiClass[] classes) {
     if (classes.length == 0) {
       return PsiClass.EMPTY_ARRAY;
     }

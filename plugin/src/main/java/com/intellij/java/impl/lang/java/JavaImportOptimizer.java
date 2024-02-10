@@ -125,7 +125,7 @@ public class JavaImportOptimizer implements ImportOptimizer {
     return file instanceof PsiJavaFile;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

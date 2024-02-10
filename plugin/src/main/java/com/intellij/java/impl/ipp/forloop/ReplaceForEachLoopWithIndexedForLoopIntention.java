@@ -263,7 +263,7 @@ public class ReplaceForEachLoopWithIndexedForLoopIntention extends Intention {
                                                       assignedExpression, true);
   }
 
-  public static String createVariableName(@jakarta.annotation.Nullable String baseName,
+  public static String createVariableName(@Nullable String baseName,
                                           @Nonnull PsiType type,
                                           @Nonnull PsiElement context) {
     final Project project = context.getProject();

@@ -52,18 +52,18 @@ import java.util.Set;
 public class RefactoringConflictsUtil {
   private RefactoringConflictsUtil() { }
 
-  public static void analyzeAccessibilityConflicts(@jakarta.annotation.Nonnull Set<PsiMember> membersToMove,
-                                                   @jakarta.annotation.Nonnull PsiClass targetClass,
-                                                   @jakarta.annotation.Nonnull MultiMap<PsiElement, String> conflicts,
-                                                   @jakarta.annotation.Nullable String newVisibility) {
+  public static void analyzeAccessibilityConflicts(@Nonnull Set<PsiMember> membersToMove,
+                                                   @Nonnull PsiClass targetClass,
+                                                   @Nonnull MultiMap<PsiElement, String> conflicts,
+                                                   @Nullable String newVisibility) {
     analyzeAccessibilityConflicts(membersToMove, targetClass, conflicts, newVisibility, targetClass, null);
   }
 
-  public static void analyzeAccessibilityConflicts(@jakarta.annotation.Nonnull Set<PsiMember> membersToMove,
+  public static void analyzeAccessibilityConflicts(@Nonnull Set<PsiMember> membersToMove,
                                                    @Nullable PsiClass targetClass,
-                                                   @jakarta.annotation.Nonnull MultiMap<PsiElement, String> conflicts,
-                                                   @jakarta.annotation.Nullable String newVisibility,
-                                                   @jakarta.annotation.Nonnull PsiElement context,
+                                                   @Nonnull MultiMap<PsiElement, String> conflicts,
+                                                   @Nullable String newVisibility,
+                                                   @Nonnull PsiElement context,
                                                    @Nullable Set<PsiMethod> abstractMethods) {
     if (VisibilityUtil.ESCALATE_VISIBILITY.equals(newVisibility)) { //Still need to check for access object
       newVisibility = PsiModifier.PUBLIC;
@@ -75,11 +75,11 @@ public class RefactoringConflictsUtil {
     }
   }
 
-  public static void checkAccessibilityConflicts(@jakarta.annotation.Nonnull PsiMember member,
-                                                 @PsiModifier.ModifierConstant @jakarta.annotation.Nullable String newVisibility,
-                                                 @jakarta.annotation.Nullable PsiClass targetClass,
+  public static void checkAccessibilityConflicts(@Nonnull PsiMember member,
+                                                 @PsiModifier.ModifierConstant @Nullable String newVisibility,
+                                                 @Nullable PsiClass targetClass,
                                                  @Nonnull Set<PsiMember> membersToMove,
-                                                 @jakarta.annotation.Nonnull MultiMap<PsiElement, String> conflicts) {
+                                                 @Nonnull MultiMap<PsiElement, String> conflicts) {
     PsiModifierList modifierListCopy = member.getModifierList();
     if (modifierListCopy != null) {
       modifierListCopy = (PsiModifierList)modifierListCopy.copy();
@@ -98,22 +98,22 @@ public class RefactoringConflictsUtil {
     checkAccessibilityConflicts(member, modifierListCopy, targetClass, membersToMove, conflicts);
   }
 
-  public static void checkAccessibilityConflicts(@jakarta.annotation.Nonnull PsiMember member,
+  public static void checkAccessibilityConflicts(@Nonnull PsiMember member,
                                                  @Nullable PsiModifierList modifierListCopy,
                                                  @Nullable PsiClass targetClass,
                                                  @Nonnull Set<PsiMember> membersToMove,
-                                                 @jakarta.annotation.Nonnull MultiMap<PsiElement, String> conflicts) {
+                                                 @Nonnull MultiMap<PsiElement, String> conflicts) {
     for (PsiReference psiReference : ReferencesSearch.search(member)) {
       checkAccessibilityConflicts(psiReference, member, modifierListCopy, targetClass, membersToMove, conflicts);
     }
   }
 
-  public static void checkAccessibilityConflicts(@jakarta.annotation.Nonnull PsiReference reference,
-                                                 @jakarta.annotation.Nonnull PsiMember member,
+  public static void checkAccessibilityConflicts(@Nonnull PsiReference reference,
+                                                 @Nonnull PsiMember member,
                                                  @Nullable PsiModifierList modifierListCopy,
-                                                 @jakarta.annotation.Nullable PsiClass targetClass,
+                                                 @Nullable PsiClass targetClass,
                                                  @Nonnull Set<PsiMember> membersToMove,
-                                                 @jakarta.annotation.Nonnull MultiMap<PsiElement, String> conflicts) {
+                                                 @Nonnull MultiMap<PsiElement, String> conflicts) {
     JavaPsiFacade manager = JavaPsiFacade.getInstance(member.getProject());
     PsiElement ref = reference.getElement();
     if (!RefactoringHierarchyUtil.willBeInTargetClass(ref, membersToMove, targetClass, false)) {
@@ -140,9 +140,9 @@ public class RefactoringConflictsUtil {
 
   public static void checkUsedElements(PsiMember member,
                                        PsiElement scope,
-                                       @jakarta.annotation.Nonnull Set<PsiMember> membersToMove,
+                                       @Nonnull Set<PsiMember> membersToMove,
                                        @Nullable Set<PsiMethod> abstractMethods,
-                                       @jakarta.annotation.Nullable PsiClass targetClass,
+                                       @Nullable PsiClass targetClass,
                                        @Nonnull PsiElement context,
                                        MultiMap<PsiElement, String> conflicts) {
     final Set<PsiMember> moving = new HashSet<PsiMember>(membersToMove);
@@ -194,8 +194,8 @@ public class RefactoringConflictsUtil {
   }
 
   public static void checkAccessibility(PsiMember refMember,
-                                        @jakarta.annotation.Nonnull PsiElement newContext,
-                                        @jakarta.annotation.Nullable PsiClass accessClass,
+                                        @Nonnull PsiElement newContext,
+                                        @Nullable PsiClass accessClass,
                                         PsiMember member,
                                         MultiMap<PsiElement, String> conflicts) {
     if (!PsiUtil.isAccessible(refMember, newContext, accessClass)) {

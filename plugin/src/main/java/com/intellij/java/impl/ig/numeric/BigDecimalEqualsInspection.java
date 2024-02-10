@@ -33,13 +33,13 @@ import jakarta.annotation.Nonnull;
 public class BigDecimalEqualsInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("big.decimal.equals.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("big.decimal.equals.problem.descriptor");
   }
@@ -50,7 +50,7 @@ public class BigDecimalEqualsInspection extends BaseInspection {
   }
 
   private static class BigDecimalEqualsFix extends InspectionGadgetsFix {
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("big.decimal.equals.replace.quickfix");
     }

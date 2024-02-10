@@ -37,10 +37,10 @@ public class LightClassReference extends LightClassReferenceBase implements PsiJ
   private LightClassReference(@Nonnull PsiManager manager,
                               @Nonnull @NonNls String text,
                               @Nullable @NonNls String className,
-                              @jakarta.annotation.Nullable PsiSubstitutor substitutor,
+                              @Nullable PsiSubstitutor substitutor,
                               @Nonnull GlobalSearchScope resolveScope,
-                              @jakarta.annotation.Nullable PsiElement context,
-                              @jakarta.annotation.Nullable PsiClass refClass) {
+                              @Nullable PsiElement context,
+                              @Nullable PsiClass refClass) {
     super(manager, text);
     myClassName = className;
     myResolveScope = resolveScope;

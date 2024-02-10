@@ -43,23 +43,23 @@ public class RemoveUnusedParameterFix extends LocalQuickFixAndIntentionActionOnP
     myName = parameter.getName();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getText() {
     return JavaQuickFixBundle.message("remove.unused.parameter.text", myName);
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("remove.unused.parameter.family");
   }
 
   @Override
   public boolean isAvailable(@Nonnull Project project,
-                             @jakarta.annotation.Nonnull PsiFile file,
+                             @Nonnull PsiFile file,
                              @Nonnull PsiElement startElement,
-                             @jakarta.annotation.Nonnull PsiElement endElement) {
+                             @Nonnull PsiElement endElement) {
     final PsiParameter myParameter = (PsiParameter)startElement;
     return
       myParameter.isValid()
@@ -68,11 +68,11 @@ public class RemoveUnusedParameterFix extends LocalQuickFixAndIntentionActionOnP
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull Project project,
-                     @jakarta.annotation.Nonnull PsiFile file,
+  public void invoke(@Nonnull Project project,
+                     @Nonnull PsiFile file,
                      @Nullable Editor editor,
-                     @jakarta.annotation.Nonnull PsiElement startElement,
-                     @jakarta.annotation.Nonnull PsiElement endElement) {
+                     @Nonnull PsiElement startElement,
+                     @Nonnull PsiElement endElement) {
     final PsiParameter myParameter = (PsiParameter)startElement;
     if (!FileModificationService.getInstance().prepareFileForWrite(myParameter.getContainingFile())) return;
     removeReferences(myParameter);

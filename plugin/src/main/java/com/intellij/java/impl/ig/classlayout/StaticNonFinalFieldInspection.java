@@ -36,7 +36,7 @@ public class StaticNonFinalFieldInspection extends BaseInspection {
       "static.non.final.field.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "static.non.final.field.problem.descriptor");

@@ -317,7 +317,7 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
     return defToInline.getParent() instanceof PsiVariable;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static PsiExpression getDefToInline(final PsiLocalVariable local,
                                               final PsiElement refExpr,
                                               final PsiCodeBlock block) {

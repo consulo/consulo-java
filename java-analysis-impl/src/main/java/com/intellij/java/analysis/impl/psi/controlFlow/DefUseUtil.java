@@ -72,7 +72,7 @@ public class DefUseUtil {
     private final List<InstructionKey> myBackwardTraces;
     private boolean myIsVisited;
 
-    public InstructionState(@jakarta.annotation.Nonnull InstructionKey instructionKey) {
+    public InstructionState(@Nonnull InstructionKey instructionKey) {
       myInstructionKey = instructionKey;
       myBackwardTraces = new ArrayList<>(2);
       myUsed = null;
@@ -124,7 +124,7 @@ public class DefUseUtil {
     }
 
     @Override
-    public int compareTo(@jakarta.annotation.Nonnull InstructionState other) {
+    public int compareTo(@Nonnull InstructionState other) {
       return myInstructionKey.compareTo(other.myInstructionKey);
     }
 
@@ -260,12 +260,12 @@ public class DefUseUtil {
     return unusedDefs;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static PsiElement[] getDefs(PsiCodeBlock body, final PsiVariable def, PsiElement ref) {
     return getDefs(body, def, ref, false);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static PsiElement[] getDefs(PsiCodeBlock body, final PsiVariable def, PsiElement ref, boolean rethrow) {
     try {
       RefsDefs refsDefs = new RefsDefs(body) {
@@ -323,7 +323,7 @@ public class DefUseUtil {
     }
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static PsiElement[] getRefs(PsiCodeBlock body, final PsiVariable def, PsiElement ref) {
     try {
       RefsDefs refsDefs = new RefsDefs(body) {
@@ -387,7 +387,7 @@ public class DefUseUtil {
 
     protected abstract boolean defs();
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     private PsiElement[] get(final PsiVariable def, PsiElement refOrDef) {
       if (body == null) {
         return PsiElement.EMPTY_ARRAY;
@@ -588,7 +588,7 @@ public class DefUseUtil {
 
   private static final ControlFlowPolicy ourPolicy = new ControlFlowPolicy() {
     @Override
-    public PsiVariable getUsedVariable(@jakarta.annotation.Nonnull PsiReferenceExpression refExpr) {
+    public PsiVariable getUsedVariable(@Nonnull PsiReferenceExpression refExpr) {
       if (refExpr.isQualified()) {
         return null;
       }
@@ -602,12 +602,12 @@ public class DefUseUtil {
     }
 
     @Override
-    public boolean isParameterAccepted(@jakarta.annotation.Nonnull PsiParameter psiParameter) {
+    public boolean isParameterAccepted(@Nonnull PsiParameter psiParameter) {
       return true;
     }
 
     @Override
-    public boolean isLocalVariableAccepted(@jakarta.annotation.Nonnull PsiLocalVariable psiVariable) {
+    public boolean isLocalVariableAccepted(@Nonnull PsiLocalVariable psiVariable) {
       return true;
     }
   };

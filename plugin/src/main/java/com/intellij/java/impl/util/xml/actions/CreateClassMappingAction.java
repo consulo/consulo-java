@@ -42,7 +42,7 @@ import java.util.Map;
  */
 public abstract class CreateClassMappingAction<T extends DomElement> extends CreateDomElementAction<T> {
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private final String myBaseClass;
   private final String myTemplate;
 
@@ -102,7 +102,7 @@ public abstract class CreateClassMappingAction<T extends DomElement> extends Cre
 
   protected abstract DomElement createElement(T context);
 
-  @jakarta.annotation.Nullable
+  @Nullable
   protected PsiClass getBaseClass(T context, Project project, String baseClass) {
     return baseClass == null ? null : JavaPsiFacade.getInstance(project).findClass(baseClass, GlobalSearchScope.allScope(project));
   }

@@ -110,7 +110,7 @@ public class JavaVisibilityPanel extends VisibilityPanelBase<String> {
   }
 
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public String getVisibility() {
     if (myRbPublic.isSelected()) {
       return PsiModifier.PUBLIC;

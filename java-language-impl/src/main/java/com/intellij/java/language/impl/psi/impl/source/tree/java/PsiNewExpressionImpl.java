@@ -58,7 +58,7 @@ public class PsiNewExpressionImpl extends ExpressionPsiElement implements PsiNew
   }
 
   @Nullable
-  private PsiType doGetType(@jakarta.annotation.Nullable PsiAnnotation stopAt) {
+  private PsiType doGetType(@Nullable PsiAnnotation stopAt) {
     PsiType type = null;
     SmartList<PsiAnnotation> annotations = new SmartList<>();
     boolean stop = false;

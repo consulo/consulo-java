@@ -41,7 +41,7 @@ class BinaryExpressionEvaluator implements Evaluator
 	private final IElementType myOpType;
 	private final String myExpectedType; // a result of PsiType.getCanonicalText()
 
-	public BinaryExpressionEvaluator(@jakarta.annotation.Nonnull Evaluator leftOperand, @Nonnull Evaluator rightOperand, @Nonnull IElementType opType, String expectedType)
+	public BinaryExpressionEvaluator(@Nonnull Evaluator leftOperand, @Nonnull Evaluator rightOperand, @Nonnull IElementType opType, String expectedType)
 	{
 		myLeftOperand = DisableGC.create(leftOperand);
 		myRightOperand = DisableGC.create(rightOperand);

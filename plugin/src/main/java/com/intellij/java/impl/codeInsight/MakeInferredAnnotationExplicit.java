@@ -58,7 +58,7 @@ public class MakeInferredAnnotationExplicit extends BaseIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull final Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull final Project project, Editor editor, PsiFile file) {
     final PsiElement leaf = file.findElementAt(editor.getCaretModel().getOffset());
     final PsiModifierListOwner owner = ExternalAnnotationsLineMarkerProvider.getAnnotationOwner(leaf);
     if (owner != null && owner.getLanguage().isKindOf(JavaLanguage.INSTANCE) && isWritable(owner) && ModuleUtilCore.findModuleForPsiElement(
@@ -131,7 +131,7 @@ public class MakeInferredAnnotationExplicit extends BaseIntentionAction {
   }
 
   @Nonnull
-  private static PsiAnnotation correctAnnotation(@jakarta.annotation.Nonnull PsiAnnotation annotation) {
+  private static PsiAnnotation correctAnnotation(@Nonnull PsiAnnotation annotation) {
     Project project = annotation.getProject();
     JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
     GlobalSearchScope allScope = GlobalSearchScope.allScope(project);

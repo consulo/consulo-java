@@ -39,9 +39,9 @@ public class JavaTestLocator implements SMTestLocator {
 
   public static final JavaTestLocator INSTANCE = new JavaTestLocator();
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
-  public List<Location> getLocation(@jakarta.annotation.Nonnull String protocol, @Nonnull String path, @Nonnull Project project, @jakarta.annotation.Nonnull GlobalSearchScope scope) {
+  public List<Location> getLocation(@Nonnull String protocol, @Nonnull String path, @Nonnull Project project, @Nonnull GlobalSearchScope scope) {
     List<Location> results = Collections.emptyList();
 
     String paramName = null;
@@ -67,7 +67,7 @@ public class JavaTestLocator implements SMTestLocator {
     return results;
   }
 
-  private static List<Location> collectMethodNavigatables(@Nonnull String path, @Nonnull Project project, @jakarta.annotation.Nonnull GlobalSearchScope scope, String paramName) {
+  private static List<Location> collectMethodNavigatables(@Nonnull String path, @Nonnull Project project, @Nonnull GlobalSearchScope scope, String paramName) {
     List<Location> results = Collections.emptyList();
     String className = StringUtil.getPackageName(path);
     if (!StringUtil.isEmpty(className)) {

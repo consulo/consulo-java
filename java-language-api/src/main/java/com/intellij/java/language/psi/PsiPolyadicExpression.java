@@ -27,7 +27,7 @@ public interface PsiPolyadicExpression extends PsiExpression {
   @Nonnull
   PsiExpression[] getOperands();
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   IElementType getOperationTokenType();
 
   @Nullable

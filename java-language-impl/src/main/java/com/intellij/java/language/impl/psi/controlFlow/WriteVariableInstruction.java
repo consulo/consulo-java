@@ -22,7 +22,7 @@ public final class WriteVariableInstruction extends SimpleInstruction {
   @Nonnull
   public final PsiVariable variable;
 
-  WriteVariableInstruction(@jakarta.annotation.Nonnull PsiVariable variable) {
+  WriteVariableInstruction(@Nonnull PsiVariable variable) {
     this.variable = variable;
   }
 
@@ -31,7 +31,7 @@ public final class WriteVariableInstruction extends SimpleInstruction {
   }
 
   @Override
-  public void accept(@jakarta.annotation.Nonnull ControlFlowInstructionVisitor visitor, int offset, int nextOffset) {
+  public void accept(@Nonnull ControlFlowInstructionVisitor visitor, int offset, int nextOffset) {
     visitor.visitWriteVariableInstruction(this, offset, nextOffset);
   }
 

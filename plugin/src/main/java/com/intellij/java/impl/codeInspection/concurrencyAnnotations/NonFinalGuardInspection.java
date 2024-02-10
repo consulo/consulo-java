@@ -33,20 +33,20 @@ import jakarta.annotation.Nonnull;
 public class NonFinalGuardInspection extends BaseJavaLocalInspectionTool {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getGroupDisplayName() {
     return GroupNames.CONCURRENCY_ANNOTATION_ISSUES;
   }
 
   @Override
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return "Non-final @GuardedBy field";
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getShortName() {
     return "NonFinalGuard";
   }
@@ -54,7 +54,7 @@ public class NonFinalGuardInspection extends BaseJavaLocalInspectionTool {
 
   @Override
   @Nonnull
-  public PsiElementVisitor buildVisitorImpl(@jakarta.annotation.Nonnull ProblemsHolder holder,
+  public PsiElementVisitor buildVisitorImpl(@Nonnull ProblemsHolder holder,
                                             boolean isOnTheFly,
                                             LocalInspectionToolSession session,
                                             Object state) {

@@ -81,7 +81,7 @@ public class DefaultSourcePositionProvider extends SourcePositionProvider {
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private SourcePosition getSourcePositionForField(@Nonnull FieldDescriptor descriptor,
                                                    @Nonnull Project project,
                                                    @Nonnull DebuggerContextImpl context,
@@ -152,7 +152,7 @@ public class DefaultSourcePositionProvider extends SourcePositionProvider {
     }
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private SourcePosition getSourcePositionForLocalVariable(String name,
                                                            @Nonnull Project project,
                                                            @Nonnull DebuggerContextImpl context,

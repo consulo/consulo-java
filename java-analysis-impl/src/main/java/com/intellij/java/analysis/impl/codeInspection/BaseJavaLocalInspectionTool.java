@@ -42,7 +42,7 @@ public abstract class BaseJavaLocalInspectionTool<State> extends AbstractBaseJav
   }
 
   @Override
-  public boolean isSuppressedFor(@jakarta.annotation.Nonnull PsiElement element) {
+  public boolean isSuppressedFor(@Nonnull PsiElement element) {
     return isSuppressedFor(element, this);
   }
 

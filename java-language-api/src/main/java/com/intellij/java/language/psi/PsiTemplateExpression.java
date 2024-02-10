@@ -36,7 +36,7 @@ public interface PsiTemplateExpression extends PsiExpression, PsiCall {
   /**
    * @return the literal expression argument when the argument type is a string literal or text block, null otherwise.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiLiteralExpression getLiteralExpression();
 
   /**

@@ -116,7 +116,7 @@ public class StringLiteralCopyPasteProcessor implements CopyPastePreProcessor {
     return textWasChanged ? buffer.toString() : null;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String unescape(String text, PsiElement token) {
     return unescapeStringCharacters(text);
   }
@@ -187,18 +187,18 @@ public class StringLiteralCopyPasteProcessor implements CopyPastePreProcessor {
     return elementAtSelectionStart;
   }
 
-  protected boolean isCharLiteral(@jakarta.annotation.Nonnull PsiElement token) {
+  protected boolean isCharLiteral(@Nonnull PsiElement token) {
     ASTNode node = token.getNode();
     return node != null && node.getElementType() == JavaTokenType.CHARACTER_LITERAL;
   }
 
-  protected boolean isStringLiteral(@jakarta.annotation.Nonnull PsiElement token) {
+  protected boolean isStringLiteral(@Nonnull PsiElement token) {
     ASTNode node = token.getNode();
     return node != null && node.getElementType() == JavaTokenType.STRING_LITERAL;
   }
 
-  @jakarta.annotation.Nonnull
-  protected String escapeCharCharacters(@Nonnull String s, @jakarta.annotation.Nonnull PsiElement token) {
+  @Nonnull
+  protected String escapeCharCharacters(@Nonnull String s, @Nonnull PsiElement token) {
     StringBuilder buffer = new StringBuilder();
     StringUtil.escapeStringCharacters(s.length(), s, isStringLiteral(token) ? "\"" : "\'", buffer);
     return buffer.toString();

@@ -15,13 +15,13 @@ import org.jetbrains.annotations.NonNls;
 public final class DfaBoxedValue extends DfaValue
 {
 	private final
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	DfaVariableValue myWrappedValue;
 	private final
-	@jakarta.annotation.Nullable
+	@Nullable
 	PsiType myType;
 
-	private DfaBoxedValue(@jakarta.annotation.Nonnull DfaVariableValue valueToWrap, @jakarta.annotation.Nonnull DfaValueFactory factory, @Nullable PsiType type)
+	private DfaBoxedValue(@Nonnull DfaVariableValue valueToWrap, @Nonnull DfaValueFactory factory, @Nullable PsiType type)
 	{
 		super(factory);
 		myWrappedValue = valueToWrap;
@@ -40,14 +40,14 @@ public final class DfaBoxedValue extends DfaValue
 		return myWrappedValue;
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	@Override
 	public PsiType getType()
 	{
 		return myType;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public DfType getDfType()
 	{
@@ -65,8 +65,8 @@ public final class DfaBoxedValue extends DfaValue
 			myFactory = factory;
 		}
 
-		@jakarta.annotation.Nullable
-		public DfaValue createBoxed(DfaValue valueToWrap, @jakarta.annotation.Nullable PsiType type)
+		@Nullable
+		public DfaValue createBoxed(DfaValue valueToWrap, @Nullable PsiType type)
 		{
 			if(valueToWrap instanceof DfaVariableValue && ((DfaVariableValue) valueToWrap).getDescriptor() == SpecialField.UNBOX)
 			{

@@ -35,7 +35,7 @@ import java.util.Set;
 public class UnnecessaryModuleDependencyInspection extends GlobalInspectionTool
 {
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public HighlightDisplayLevel getDefaultLevel()
 	{
@@ -109,14 +109,14 @@ public class UnnecessaryModuleDependencyInspection extends GlobalInspectionTool
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return InspectionsBundle.message("unnecessary.module.dependency.display.name");
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@NonNls
 	public String getShortName()
 	{
@@ -135,21 +135,21 @@ public class UnnecessaryModuleDependencyInspection extends GlobalInspectionTool
 		}
 
 		@Override
-		@jakarta.annotation.Nonnull
+		@Nonnull
 		public String getName()
 		{
 			return "Remove dependency";
 		}
 
 		@Override
-		@jakarta.annotation.Nonnull
+		@Nonnull
 		public String getFamilyName()
 		{
 			return getName();
 		}
 
 		@Override
-		public void applyFix(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull CommonProblemDescriptor descriptor)
+		public void applyFix(@Nonnull Project project, @Nonnull CommonProblemDescriptor descriptor)
 		{
 			final ModifiableRootModel model = ModuleRootManager.getInstance(myModule).getModifiableModel();
 			for(OrderEntry entry : model.getOrderEntries())

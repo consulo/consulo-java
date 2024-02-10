@@ -97,7 +97,7 @@ public class JavaQuoteHandler extends SimpleTokenSetQuoteHandler implements Java
   }
 
   @Override
-  public boolean isAppropriateElementTypeForLiteral(final @jakarta.annotation.Nonnull IElementType tokenType) {
+  public boolean isAppropriateElementTypeForLiteral(final @Nonnull IElementType tokenType) {
     return isAppropriateElementTypeForLiteralStatic(tokenType);
   }
 

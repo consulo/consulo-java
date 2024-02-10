@@ -47,7 +47,7 @@ public class SplitDeclarationAction extends PsiElementBaseIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, @jakarta.annotation.Nonnull PsiElement element) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
 
     if (element instanceof PsiCompiledElement) {
       return false;

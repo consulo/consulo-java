@@ -75,7 +75,7 @@ public class JavadocHelper
 	 * @param project  target project
 	 */
 	@SuppressWarnings("MethodMayBeStatic")
-	public void navigate(@Nonnull LogicalPosition position, @jakarta.annotation.Nonnull Editor editor, @Nonnull final Project project)
+	public void navigate(@Nonnull LogicalPosition position, @Nonnull Editor editor, @Nonnull final Project project)
 	{
 		final Document document = editor.getDocument();
 		final CaretModel caretModel = editor.getCaretModel();
@@ -108,9 +108,9 @@ public class JavadocHelper
 	 */
 	@SuppressWarnings("MethodMayBeStatic")
 	@Nonnull
-	public LogicalPosition calculateDescriptionStartPosition(@jakarta.annotation.Nonnull PsiFile psiFile,
-															 @jakarta.annotation.Nonnull Collection<JavadocParameterInfo> data,
-															 @jakarta.annotation.Nonnull JavadocHelper.JavadocParameterInfo anchor)
+	public LogicalPosition calculateDescriptionStartPosition(@Nonnull PsiFile psiFile,
+															 @Nonnull Collection<JavadocParameterInfo> data,
+															 @Nonnull JavadocHelper.JavadocParameterInfo anchor)
 	{
 		int descriptionStartColumn = -1;
 		int parameterNameEndColumn = -1;
@@ -151,7 +151,7 @@ public class JavadocHelper
 	 * adjacent lines if any
 	 */
 	@SuppressWarnings("MethodMayBeStatic")
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public Pair<JavadocParameterInfo, List<JavadocParameterInfo>> parse(@Nonnull PsiFile psiFile, @Nonnull Editor editor, int offset)
 	{
 		List<JavadocParameterInfo> result = new ArrayList<JavadocParameterInfo>();

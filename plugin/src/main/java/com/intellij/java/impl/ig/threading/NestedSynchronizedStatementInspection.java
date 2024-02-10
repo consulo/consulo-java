@@ -34,7 +34,7 @@ public class NestedSynchronizedStatementInspection extends BaseInspection {
       "nested.synchronized.statement.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "nested.synchronized.statement.problem.descriptor");
@@ -49,7 +49,7 @@ public class NestedSynchronizedStatementInspection extends BaseInspection {
 
     @Override
     public void visitSynchronizedStatement(
-      @jakarta.annotation.Nonnull PsiSynchronizedStatement statement) {
+      @Nonnull PsiSynchronizedStatement statement) {
       super.visitSynchronizedStatement(statement);
       final PsiElement containingSynchronizedStatement =
         PsiTreeUtil.getParentOfType(statement,

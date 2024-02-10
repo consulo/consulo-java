@@ -37,7 +37,7 @@ import jakarta.annotation.Nullable;
 public abstract class UseOfObsoleteAssertInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("usage.of.obsolete.assert.display.name");
   }

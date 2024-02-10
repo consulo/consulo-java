@@ -27,7 +27,7 @@ public abstract class CyclomaticComplexityInspection extends MethodMetricInspect
     return "OverlyComplexMethod";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "cyclomatic.complexity.display.name");
@@ -56,7 +56,7 @@ public abstract class CyclomaticComplexityInspection extends MethodMetricInspect
   private class MethodComplexityVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       // note: no call to super
       if (method.getNameIdentifier() == null) {
         return;

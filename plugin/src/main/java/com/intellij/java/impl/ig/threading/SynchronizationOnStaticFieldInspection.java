@@ -36,7 +36,7 @@ public class SynchronizationOnStaticFieldInspection extends BaseInspection {
       "synchronization.on.static.field.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(

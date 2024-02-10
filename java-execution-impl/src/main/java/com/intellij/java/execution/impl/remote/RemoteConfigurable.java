@@ -175,7 +175,7 @@ public class RemoteConfigurable extends SettingsEditor<RemoteConfiguration> {
     myModuleSelector.reset(configuration);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public JComponent createEditor() {
     return myPanel;
   }

@@ -64,7 +64,7 @@ public final class FieldFromParameterUtils {
   }
 
   @Nullable
-  public static PsiType getType(@jakarta.annotation.Nullable PsiParameter myParameter) {
+  public static PsiType getType(@Nullable PsiParameter myParameter) {
     if (myParameter == null) {
       return null;
     }
@@ -73,7 +73,7 @@ public final class FieldFromParameterUtils {
   }
 
   @Nullable
-  public static PsiType getSubstitutedType(@jakarta.annotation.Nullable PsiParameter parameter) {
+  public static PsiType getSubstitutedType(@Nullable PsiParameter parameter) {
     if (parameter == null) {
       return null;
     }
@@ -202,7 +202,7 @@ public final class FieldFromParameterUtils {
 
   public static void createFieldAndAddAssignment(final @Nonnull Project project,
                                                  final @Nonnull PsiClass targetClass,
-                                                 final @jakarta.annotation.Nonnull PsiMethod method,
+                                                 final @Nonnull PsiMethod method,
                                                  final @Nonnull PsiParameter parameter,
                                                  final @Nonnull PsiType fieldType, final @Nonnull String fieldName,
                                                  final boolean isStatic, final boolean isFinal) throws IncorrectOperationException {
@@ -274,7 +274,7 @@ public final class FieldFromParameterUtils {
 
   public static boolean isAvailable(@Nullable PsiParameter myParameter,
                                     @Nullable PsiType type,
-                                    @jakarta.annotation.Nullable PsiClass targetClass) {
+                                    @Nullable PsiClass targetClass) {
     return myParameter != null
         && myParameter.isValid()
         && myParameter.getManager().isInProject(myParameter)

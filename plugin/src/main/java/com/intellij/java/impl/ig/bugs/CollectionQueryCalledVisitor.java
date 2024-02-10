@@ -35,7 +35,7 @@ class CollectionQueryCalledVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitElement(@jakarta.annotation.Nonnull PsiElement element) {
+  public void visitElement(@Nonnull PsiElement element) {
     if (!queried) {
       super.visitElement(element);
     }
@@ -43,7 +43,7 @@ class CollectionQueryCalledVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitForeachStatement(
-    @jakarta.annotation.Nonnull PsiForeachStatement statement) {
+    @Nonnull PsiForeachStatement statement) {
     if (queried) {
       return;
     }

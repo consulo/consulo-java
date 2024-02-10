@@ -36,13 +36,13 @@ public class EqualsUsesNonFinalVariableInspection extends BaseInspection {
     return "NonFinalFieldReferenceInEquals";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "non.final.field.in.equals.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "non.final.field.in.equals.problem.descriptor");
@@ -62,7 +62,7 @@ public class EqualsUsesNonFinalVariableInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       if (MethodUtils.isEquals(method)) {
         method.accept(new JavaRecursiveElementVisitor() {
 

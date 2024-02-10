@@ -11,7 +11,7 @@ class Equations {
   final List<? extends DirectionResultPair> results;
   final boolean stable;
 
-  Equations(@jakarta.annotation.Nonnull List<? extends DirectionResultPair> results, boolean stable) {
+  Equations(@Nonnull List<? extends DirectionResultPair> results, boolean stable) {
     this.results = results;
     this.stable = stable;
   }
@@ -32,7 +32,7 @@ class Equations {
     return 31 * results.hashCode() + (stable ? 1 : 0);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   Equations update(@SuppressWarnings("SameParameterValue") Direction direction, Effects newResult) {
     List<DirectionResultPair> newPairs = StreamEx.of(this.results)
         .map(drp -> drp.updateForDirection(direction, newResult))

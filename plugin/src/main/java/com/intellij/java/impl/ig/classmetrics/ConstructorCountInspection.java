@@ -33,7 +33,7 @@ public abstract class ConstructorCountInspection extends ClassMetricInspection {
 
   public boolean ignoreDeprecatedConstructors = false;
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "ClassWithTooManyConstructors";
   }

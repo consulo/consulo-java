@@ -52,7 +52,7 @@ public class JModFileType extends ArchiveFileType {
     return "jar";
   }
 
-  public static boolean isRoot(@jakarta.annotation.Nonnull VirtualFile file) {
+  public static boolean isRoot(@Nonnull VirtualFile file) {
     if (file.getParent() == null) {
       VirtualFile archiveFile = ArchiveVfsUtil.getVirtualFileForArchive(file);
       return archiveFile != null && archiveFile.getFileType() == JModFileType.INSTANCE;
@@ -60,7 +60,7 @@ public class JModFileType extends ArchiveFileType {
     return false;
   }
 
-  public static boolean isModuleRoot(@jakarta.annotation.Nonnull VirtualFile file) {
+  public static boolean isModuleRoot(@Nonnull VirtualFile file) {
     VirtualFile parent = file.getParent();
     return parent != null && isRoot(parent);
   }

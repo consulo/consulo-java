@@ -221,7 +221,7 @@ final class DataFlowInstructionVisitor extends StandardInstructionVisitor {
   @Override
   protected void beforeExpressionPush(@Nonnull DfaValue value,
                                       @Nonnull PsiExpression expression,
-                                      @jakarta.annotation.Nullable TextRange range,
+                                      @Nullable TextRange range,
                                       @Nonnull DfaMemoryState memState) {
     if (!expression.isPhysical()) {
       Application application = ApplicationManager.getApplication();
@@ -269,7 +269,7 @@ final class DataFlowInstructionVisitor extends StandardInstructionVisitor {
     }
   }
 
-  private void processOfNullableResult(@Nonnull DfaValue value, @jakarta.annotation.Nonnull DfaMemoryState memState, PsiElement anchor) {
+  private void processOfNullableResult(@Nonnull DfaValue value, @Nonnull DfaMemoryState memState, PsiElement anchor) {
     DfaValueFactory factory = value.getFactory();
     DfaValue optionalValue = SpecialField.OPTIONAL_VALUE.createValue(factory, value);
     ThreeState present;

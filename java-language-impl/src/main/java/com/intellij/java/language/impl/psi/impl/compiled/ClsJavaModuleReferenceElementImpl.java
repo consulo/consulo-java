@@ -25,7 +25,7 @@ class ClsJavaModuleReferenceElementImpl extends ClsElementImpl implements PsiJav
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiElement[] getChildren() {
     return PsiElement.EMPTY_ARRAY;
   }
@@ -36,7 +36,7 @@ class ClsJavaModuleReferenceElementImpl extends ClsElementImpl implements PsiJav
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @jakarta.annotation.Nonnull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
     buffer.append(getReferenceText());
   }
 
@@ -45,7 +45,7 @@ class ClsJavaModuleReferenceElementImpl extends ClsElementImpl implements PsiJav
     setMirrorCheckingType(element, JavaElementType.MODULE_REFERENCE);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getReferenceText() {
     return myText;
@@ -67,7 +67,7 @@ class ClsJavaModuleReferenceElementImpl extends ClsElementImpl implements PsiJav
   }
 
   @Override
-  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitModuleReferenceElement(this);
     } else {

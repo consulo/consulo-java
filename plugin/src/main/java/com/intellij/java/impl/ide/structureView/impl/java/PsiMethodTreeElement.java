@@ -122,7 +122,7 @@ public class PsiMethodTreeElement extends JavaClassTreeElementBase<PsiMethod> im
     return getElement();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getAlphaSortKey() {
     final PsiMethod method = getElement();

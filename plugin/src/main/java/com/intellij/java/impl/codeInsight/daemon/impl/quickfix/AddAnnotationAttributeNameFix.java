@@ -59,18 +59,18 @@ public class AddAnnotationAttributeNameFix extends LocalQuickFixAndIntentionActi
   @Override
   public void invoke(@Nonnull Project project,
                      @Nonnull PsiFile file,
-                     @jakarta.annotation.Nullable Editor editor,
+                     @Nullable Editor editor,
                      @Nonnull PsiElement startElement,
                      @Nonnull PsiElement endElement) {
     doFix((PsiNameValuePair) startElement, myName);
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, @jakarta.annotation.Nonnull PsiFile file, @jakarta.annotation.Nonnull PsiElement startElement, @jakarta.annotation.Nonnull PsiElement endElement) {
+  public boolean isAvailable(@Nonnull Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
     return super.isAvailable(project, file, startElement, endElement) && startElement instanceof PsiNameValuePair;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static List<IntentionAction> createFixes(@Nonnull PsiNameValuePair pair) {
     final PsiAnnotationMemberValue value = pair.getValue();
     if (value == null || pair.getName() != null) {
@@ -81,7 +81,7 @@ public class AddAnnotationAttributeNameFix extends LocalQuickFixAndIntentionActi
     return ContainerUtil.map2List(methodNames, name -> new AddAnnotationAttributeNameFix(pair, name));
   }
 
-  public static void doFix(@jakarta.annotation.Nonnull PsiNameValuePair annotationParameter, @Nonnull String name) {
+  public static void doFix(@Nonnull PsiNameValuePair annotationParameter, @Nonnull String name) {
     final String text = buildReplacementText(annotationParameter, name);
     final PsiElementFactory factory = JavaPsiFacade.getElementFactory(annotationParameter.getProject());
     final PsiAnnotation newAnnotation = factory.createAnnotationFromText("@A(" + text + " )", annotationParameter);
@@ -135,7 +135,7 @@ public class AddAnnotationAttributeNameFix extends LocalQuickFixAndIntentionActi
     return Arrays.stream(parameterList.getAttributes()).map(PsiNameValuePair::getName).filter(Objects::nonNull).collect(Collectors.toSet());
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static PsiClass getAnnotationClass(@Nonnull PsiAnnotationParameterList parameterList) {
     final PsiElement parent = parameterList.getParent();
     if (parent instanceof PsiAnnotation) {

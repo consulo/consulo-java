@@ -32,14 +32,14 @@ import org.jetbrains.annotations.NonNls;
 public class MisspelledTearDownInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "misspelled.tear.down.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "misspelled.tear.down.problem.descriptor");

@@ -43,7 +43,7 @@ public class HashCodeUsesNonFinalVariableInspection
       "non.final.field.in.hashcode.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "non.final.field.in.hashcode.problem.descriptor");
@@ -63,7 +63,7 @@ public class HashCodeUsesNonFinalVariableInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       final boolean isHashCode = MethodUtils.isHashCode(method);
       if (isHashCode) {
         method.accept(new JavaRecursiveElementVisitor() {

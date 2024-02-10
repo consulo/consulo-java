@@ -28,7 +28,7 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class TransientFieldNotInitializedInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "transient.field.not.initialized.display.name");
@@ -70,7 +70,7 @@ public class TransientFieldNotInitializedInspection extends BaseInspection {
     }
 
     private static boolean isInitializedInConstructors(
-      @Nonnull PsiField field, @jakarta.annotation.Nonnull PsiClass aClass) {
+      @Nonnull PsiField field, @Nonnull PsiClass aClass) {
       final PsiMethod[] constructors = aClass.getConstructors();
       if (constructors.length == 0) {
         return false;
@@ -85,7 +85,7 @@ public class TransientFieldNotInitializedInspection extends BaseInspection {
     }
 
     private static boolean isInitializedInInitializer(
-      @Nonnull PsiField field, @jakarta.annotation.Nonnull PsiClass aClass) {
+      @Nonnull PsiField field, @Nonnull PsiClass aClass) {
       final PsiClassInitializer[] initializers = aClass.getInitializers();
       for (final PsiClassInitializer initializer : initializers) {
         if (initializer.hasModifierProperty(PsiModifier.STATIC)) {

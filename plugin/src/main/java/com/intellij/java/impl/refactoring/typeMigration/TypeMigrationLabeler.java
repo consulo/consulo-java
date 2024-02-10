@@ -90,7 +90,7 @@ public class TypeMigrationLabeler {
   /**
    * @param allowedRoots any root accepted if null
    */
-  public TypeMigrationLabeler(TypeMigrationRules rules, Function<PsiElement, PsiType> migrationRootTypeFunction, @jakarta.annotation.Nullable PsiElement[] allowedRoots, Project project) {
+  public TypeMigrationLabeler(TypeMigrationRules rules, Function<PsiElement, PsiType> migrationRootTypeFunction, @Nullable PsiElement[] allowedRoots, Project project) {
     myRules = rules;
     myMigrationRootTypeFunction = migrationRootTypeFunction;
     myAllowedRoots = allowedRoots == null ? null : Set.of(allowedRoots);
@@ -133,7 +133,7 @@ public class TypeMigrationLabeler {
     return map2Usages(myFailedConversions.keySet());
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private static UsageInfo[] map2Usages(Collection<Pair<SmartPsiElementPointer<PsiExpression>, PsiType>> usages) {
     return ContainerUtil.map2Array(usages, new UsageInfo[usages.size()], pair ->
     {
@@ -141,7 +141,7 @@ public class TypeMigrationLabeler {
       LOG.assertTrue(expr != null);
       return new UsageInfo(expr) {
         @Override
-        @jakarta.annotation.Nullable
+        @Nullable
         public String getTooltipText() {
           final PsiType type = expr.isValid() ? expr.getType() : null;
           if (type == null) {
@@ -275,7 +275,7 @@ public class TypeMigrationLabeler {
     return new MigrationProducer(conversions);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public <T> T getSettings(Class<T> aClass) {
     return myRules.getConversionSettings(aClass);
   }
@@ -283,7 +283,7 @@ public class TypeMigrationLabeler {
   class MigrationProducer {
     private final Map<UsageInfo, Object> myRemainConversions;
     private final MultiMap<PsiTypeElement, TypeMigrationUsageInfo> myVariableMigration = new MultiMap<PsiTypeElement, TypeMigrationUsageInfo>() {
-      @jakarta.annotation.Nonnull
+      @Nonnull
       @Override
       protected Map<PsiTypeElement, Collection<TypeMigrationUsageInfo>> createMap() {
         return new HashMap<>();
@@ -294,7 +294,7 @@ public class TypeMigrationLabeler {
       myRemainConversions = conversions;
     }
 
-    public void change(@jakarta.annotation.Nonnull final TypeMigrationUsageInfo usageInfo, @Nonnull Consumer<PsiNewExpression> consumer) {
+    public void change(@Nonnull final TypeMigrationUsageInfo usageInfo, @Nonnull Consumer<PsiNewExpression> consumer) {
       final PsiElement element = usageInfo.getElement();
       if (element == null) {
         return;
@@ -410,7 +410,7 @@ public class TypeMigrationLabeler {
     }
   }
 
-  void postProcessNewExpression(@jakarta.annotation.Nonnull PsiNewExpression expression) {
+  void postProcessNewExpression(@Nonnull PsiNewExpression expression) {
     TypeMigrationReplacementUtil.tryToReplaceWithDiamond(expression, null);
   }
 
@@ -428,7 +428,7 @@ public class TypeMigrationLabeler {
     return myMigratedUsages;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public Set<PsiElement> getTypeUsages(final TypeMigrationUsageInfo element, final TypeMigrationUsageInfo currentRoot) {
     return myRootUsagesTree.get(Pair.create(element, currentRoot));
   }
@@ -688,8 +688,8 @@ public class TypeMigrationLabeler {
     }
   }
 
-  @jakarta.annotation.Nonnull
-  private static Set<PsiTypeParameter> getTypeParameters(@jakarta.annotation.Nonnull PsiType type) {
+  @Nonnull
+  private static Set<PsiTypeParameter> getTypeParameters(@Nonnull PsiType type) {
     if (type instanceof PsiClassType) {
       PsiTypesUtil.TypeParameterSearcher searcher = new PsiTypesUtil.TypeParameterSearcher();
       type.accept(searcher);
@@ -738,7 +738,7 @@ public class TypeMigrationLabeler {
     return null;
   }
 
-  private boolean typeContainsTypeParameters(@Nullable PsiType type, @jakarta.annotation.Nonnull Set<PsiTypeParameter> excluded) {
+  private boolean typeContainsTypeParameters(@Nullable PsiType type, @Nonnull Set<PsiTypeParameter> excluded) {
     if (!(type instanceof PsiClassType)) {
       return false;
     }
@@ -753,7 +753,7 @@ public class TypeMigrationLabeler {
   }
 
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiType getElementType(final PsiElement resolved) {
     if (resolved instanceof PsiVariable) {
       return ((PsiVariable) resolved).getType();
@@ -1062,7 +1062,7 @@ public class TypeMigrationLabeler {
     checkInterrupted();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private PsiReference[] findReferences(PsiElement element) {
     return ReferencesSearch.search(element, myRules.getSearchScope(), false).toArray(PsiReference.EMPTY_ARRAY);
   }
@@ -1108,7 +1108,7 @@ public class TypeMigrationLabeler {
     return refs;
   }
 
-  private static boolean canBeRoot(@jakarta.annotation.Nullable PsiElement element, @jakarta.annotation.Nonnull SearchScope migrationScope) {
+  private static boolean canBeRoot(@Nullable PsiElement element, @Nonnull SearchScope migrationScope) {
     if (element == null) {
       return false;
     }

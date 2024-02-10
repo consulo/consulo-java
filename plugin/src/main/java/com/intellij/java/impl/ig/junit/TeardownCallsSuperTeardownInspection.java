@@ -48,7 +48,7 @@ public class TeardownCallsSuperTeardownInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "teardown.calls.super.teardown.problem.descriptor");
@@ -100,7 +100,7 @@ public class TeardownCallsSuperTeardownInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       //note: no call to super;
       @NonNls final String methodName = method.getName();
       if (!"tearDown".equals(methodName)) {

@@ -53,7 +53,7 @@ class CollectionUpdateCalledVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitMethodCallExpression(
-    @jakarta.annotation.Nonnull PsiMethodCallExpression call) {
+    @Nonnull PsiMethodCallExpression call) {
     super.visitMethodCallExpression(call);
     if (updated) {
       return;

@@ -97,7 +97,7 @@ public class PsiArrayAccessExpressionImpl extends ExpressionPsiElement implement
   }
 
   @Override
-  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitArrayAccessExpression(this);
     } else {

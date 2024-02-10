@@ -56,7 +56,7 @@ public class ExpandStaticImportAction extends PsiElementBaseIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     if (!PsiUtil.isLanguageLevel5OrHigher(element)) return false;
     final PsiElement parent = element.getParent();
     if (!(element instanceof PsiIdentifier) || !(parent instanceof PsiJavaCodeReferenceElement)) {
@@ -116,7 +116,7 @@ public class ExpandStaticImportAction extends PsiElementBaseIntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, @jakarta.annotation.Nonnull PsiElement element) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     invoke(project, element.getContainingFile(), editor, element);
   }
 }

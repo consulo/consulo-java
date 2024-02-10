@@ -36,7 +36,7 @@ class AddLibraryToDependenciesFix extends AddOrderEntryFix {
   private final Module myCurrentModule;
   private final String myQualifiedClassName;
 
-  public AddLibraryToDependenciesFix(@jakarta.annotation.Nonnull Module currentModule, @jakarta.annotation.Nonnull Library library, @jakarta.annotation.Nonnull PsiReference reference, @jakarta.annotation.Nullable String qualifiedClassName) {
+  public AddLibraryToDependenciesFix(@Nonnull Module currentModule, @Nonnull Library library, @Nonnull PsiReference reference, @Nullable String qualifiedClassName) {
     super(reference);
     myLibrary = library;
     myCurrentModule = currentModule;
@@ -50,18 +50,18 @@ class AddLibraryToDependenciesFix extends AddOrderEntryFix {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("orderEntry.fix.family.add.library.to.classpath");
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return !project.isDisposed() && !myCurrentModule.isDisposed() && !((Library) myLibrary).isDisposed();
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull Project project, @Nullable Editor editor, PsiFile file) {
+  public void invoke(@Nonnull Project project, @Nullable Editor editor, PsiFile file) {
     DependencyScope scope = suggestScopeByLocation(myCurrentModule, myReference.getElement());
     JavaProjectModelModificationService.getInstance(project).addDependency(myCurrentModule, myLibrary, scope);
     if (myQualifiedClassName != null && editor != null) {

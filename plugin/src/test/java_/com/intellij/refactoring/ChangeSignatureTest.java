@@ -422,9 +422,9 @@ public abstract class ChangeSignatureTest extends LightRefactoringTestCase
 		doTest(null, null, newReturnType, parameterInfos, new ThrownExceptionInfo[0], generateDelegate);
 	}
 
-	private void doTest(@PsiModifier.ModifierConstant @jakarta.annotation.Nullable String newVisibility,
-			@jakarta.annotation.Nullable String newName,
-			@jakarta.annotation.Nullable String newReturnType,
+	private void doTest(@PsiModifier.ModifierConstant @Nullable String newVisibility,
+			@Nullable String newName,
+			@Nullable String newReturnType,
 			ParameterInfoImpl[] parameterInfo,
 			ThrownExceptionInfo[] exceptionInfo,
 			final boolean generateDelegate) throws Exception
@@ -432,18 +432,18 @@ public abstract class ChangeSignatureTest extends LightRefactoringTestCase
 		doTest(newVisibility, newName, newReturnType, new SimpleParameterGen(parameterInfo), new SimpleExceptionsGen(exceptionInfo), generateDelegate);
 	}
 
-	private void doTest(@PsiModifier.ModifierConstant @jakarta.annotation.Nullable String newVisibility,
-			@jakarta.annotation.Nullable String newName,
-			@jakarta.annotation.Nullable @NonNls String newReturnType,
+	private void doTest(@PsiModifier.ModifierConstant @Nullable String newVisibility,
+			@Nullable String newName,
+			@Nullable @NonNls String newReturnType,
 			GenParams gen,
 			final boolean generateDelegate) throws Exception
 	{
 		doTest(newVisibility, newName, newReturnType, gen, new SimpleExceptionsGen(), generateDelegate);
 	}
 
-	private void doTest(@PsiModifier.ModifierConstant @jakarta.annotation.Nullable String newVisibility,
-			@jakarta.annotation.Nullable String newName,
-			@jakarta.annotation.Nullable String newReturnType,
+	private void doTest(@PsiModifier.ModifierConstant @Nullable String newVisibility,
+			@Nullable String newName,
+			@Nullable String newReturnType,
 			GenParams genParams,
 			GenExceptions genExceptions,
 			final boolean generateDelegate) throws Exception

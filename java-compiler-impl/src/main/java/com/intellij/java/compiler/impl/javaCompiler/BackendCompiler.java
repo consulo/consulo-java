@@ -42,7 +42,7 @@ public interface BackendCompiler {
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   default OutputParser createOutputParser(BackendCompilerProcessBuilder processBuilder, @Nonnull String outputDir) {
     return null;
   }

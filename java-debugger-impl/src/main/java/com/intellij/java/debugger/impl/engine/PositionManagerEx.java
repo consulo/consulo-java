@@ -27,7 +27,7 @@ import jakarta.annotation.Nullable;
 public abstract class PositionManagerEx implements PositionManager
 {
 	@Nullable
-	public abstract XStackFrame createStackFrame(@jakarta.annotation.Nonnull StackFrameProxyImpl frame, @jakarta.annotation.Nonnull DebugProcessImpl debugProcess, @jakarta.annotation.Nonnull Location location);
+	public abstract XStackFrame createStackFrame(@Nonnull StackFrameProxyImpl frame, @Nonnull DebugProcessImpl debugProcess, @Nonnull Location location);
 
-	public abstract ThreeState evaluateCondition(@jakarta.annotation.Nonnull EvaluationContext context, @Nonnull StackFrameProxyImpl frame, @jakarta.annotation.Nonnull Location location, @jakarta.annotation.Nonnull String expression);
+	public abstract ThreeState evaluateCondition(@Nonnull EvaluationContext context, @Nonnull StackFrameProxyImpl frame, @Nonnull Location location, @Nonnull String expression);
 }

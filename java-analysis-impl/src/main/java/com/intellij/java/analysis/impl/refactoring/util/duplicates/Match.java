@@ -325,7 +325,7 @@ public final class Match {
     return new TextRange(startRange.getStartOffset(), endRange.getEndOffset());
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public PsiType getChangedReturnType(final PsiMethod psiMethod) {
     final PsiType returnType = psiMethod.getReturnType();
     if (returnType != null) {

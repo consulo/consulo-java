@@ -39,7 +39,7 @@ public class UpdateJavaFileCopyright extends UpdatePsiFileCopyright<CopyrightFil
   public static final int LOCATION_BEFORE_IMPORT = 2;
   public static final int LOCATION_BEFORE_CLASS = 3;
 
-  public UpdateJavaFileCopyright(@jakarta.annotation.Nonnull PsiFile psiFile, @Nonnull CopyrightProfile copyrightProfile) {
+  public UpdateJavaFileCopyright(@Nonnull PsiFile psiFile, @Nonnull CopyrightProfile copyrightProfile) {
     super(psiFile, copyrightProfile);
   }
 
@@ -92,7 +92,7 @@ public class UpdateJavaFileCopyright extends UpdatePsiFileCopyright<CopyrightFil
     checkComments(topclass.getModifierList(), location == LOCATION_BEFORE_CLASS, comments);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   protected PsiElement[] getImportsList() {
     final PsiJavaFile javaFile = (PsiJavaFile) getFile();
     final PsiImportList importList = javaFile.getImportList();

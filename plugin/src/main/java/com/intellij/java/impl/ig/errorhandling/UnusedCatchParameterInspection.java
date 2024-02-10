@@ -69,7 +69,7 @@ public class UnusedCatchParameterInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     final boolean namedIgnoreButUsed = ((Boolean)infos[0]).booleanValue();
     if (namedIgnoreButUsed) {

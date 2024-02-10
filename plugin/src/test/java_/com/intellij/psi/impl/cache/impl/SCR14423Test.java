@@ -122,7 +122,7 @@ public abstract class SCR14423Test extends PsiTestCase {
         FileDocumentManager.getInstance().saveAllDocuments();
         PsiClass psiClass = myJavaFacade.findClass("p.A");
         final VirtualFile vFile = psiClass.getContainingFile().getVirtualFile();
-        File ioFile = consulo.ide.impl.idea.openapi.vfs.VfsUtil.virtualToIoFile(vFile);
+        File ioFile = VfsUtil.virtualToIoFile(vFile);
         ioFile.setLastModified(5);
 
         LocalFileSystem.getInstance().refresh(false);

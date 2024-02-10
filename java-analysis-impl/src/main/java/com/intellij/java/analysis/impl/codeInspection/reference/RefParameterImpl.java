@@ -168,7 +168,7 @@ public class RefParameterImpl extends RefJavaElementImpl implements RefParameter
     return result[0];
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static RefElement parameterFromExternalName(final RefManager manager, final String fqName) {
     final int idx = fqName.lastIndexOf(' ');
     if (idx > 0) {

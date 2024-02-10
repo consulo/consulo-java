@@ -68,7 +68,7 @@ public class AddMethodQualifierFix implements SyntheticIntentionAction {
 
   @Override
   @RequiredReadAction
-  public boolean isAvailable(@jakarta.annotation.Nonnull final Project project, final Editor editor, final PsiFile file) {
+  public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
     final PsiMethodCallExpression element = myMethodCall.getElement();
     if (element == null || !element.isValid()) {
       return false;
@@ -119,7 +119,7 @@ public class AddMethodQualifierFix implements SyntheticIntentionAction {
 
   @Override
   @RequiredWriteAction
-  public void invoke(@jakarta.annotation.Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementsForWrite(file)) {
       return;
     }
@@ -148,7 +148,7 @@ public class AddMethodQualifierFix implements SyntheticIntentionAction {
           return FINAL_CHOICE;
         }
 
-        @jakarta.annotation.Nonnull
+        @Nonnull
         @Override
         public String getTextFor(final PsiVariable value) {
           return value.getName();

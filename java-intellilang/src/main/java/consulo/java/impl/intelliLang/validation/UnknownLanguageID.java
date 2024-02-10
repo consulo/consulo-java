@@ -45,7 +45,7 @@ public class UnknownLanguageID extends LocalInspectionTool {
     return true;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getGroupDisplayName() {
     return PatternValidator.LANGUAGE_INJECTION;
   }
@@ -62,7 +62,7 @@ public class UnknownLanguageID extends LocalInspectionTool {
   }
 
   @Nonnull
-  public PsiElementVisitor buildVisitor(@jakarta.annotation.Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
+  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
     return new JavaElementVisitor() {
       final String annotationName = Configuration.getProjectInstance(holder.getProject()).getAdvancedConfiguration().getLanguageAnnotationClass();
 

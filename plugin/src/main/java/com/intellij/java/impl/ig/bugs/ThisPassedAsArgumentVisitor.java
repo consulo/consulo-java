@@ -34,7 +34,7 @@ class ThisPassedAsArgumentVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitMethodCallExpression(@jakarta.annotation.Nonnull PsiMethodCallExpression call) {
+  public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression call) {
     if (passed) {
       return;
     }
@@ -50,7 +50,7 @@ class ThisPassedAsArgumentVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitNewExpression(@jakarta.annotation.Nonnull PsiNewExpression newExpression) {
+  public void visitNewExpression(@Nonnull PsiNewExpression newExpression) {
     if (passed) {
       return;
     }

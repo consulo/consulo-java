@@ -91,7 +91,7 @@ class JrtHandler extends ArchiveHandler
 		return fs;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	protected Map<String, EntryInfo> createEntriesMap() throws IOException
 	{
@@ -146,9 +146,9 @@ class JrtHandler extends ArchiveHandler
 		return map;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
-	public byte[] contentsToByteArray(@jakarta.annotation.Nonnull String relativePath) throws IOException
+	public byte[] contentsToByteArray(@Nonnull String relativePath) throws IOException
 	{
 		EntryInfo entry = getEntryInfo(relativePath);
 		if(entry == null)

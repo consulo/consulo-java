@@ -37,8 +37,8 @@ import java.util.Set;
 public class LambdaHighlightingUtil {
   private static final Logger LOG = Logger.getInstance(LambdaHighlightingUtil.class);
 
-  @jakarta.annotation.Nullable
-  public static String checkInterfaceFunctional(@jakarta.annotation.Nonnull PsiClass psiClass) {
+  @Nullable
+  public static String checkInterfaceFunctional(@Nonnull PsiClass psiClass) {
     return checkInterfaceFunctional(psiClass, "Target type of a lambda conversion must be an interface");
   }
 

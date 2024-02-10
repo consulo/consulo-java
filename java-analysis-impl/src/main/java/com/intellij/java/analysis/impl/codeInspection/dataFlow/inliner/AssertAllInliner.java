@@ -27,7 +27,7 @@ public class AssertAllInliner implements CallInliner {
 
 
   @Override
-  public boolean tryInlineCall(@Nonnull CFGBuilder builder, @jakarta.annotation.Nonnull PsiMethodCallExpression call) {
+  public boolean tryInlineCall(@Nonnull CFGBuilder builder, @Nonnull PsiMethodCallExpression call) {
     if (!ASSERT_ALL.matches(call) || !MethodCallUtils.isVarArgCall(call)) {
       return false;
     }

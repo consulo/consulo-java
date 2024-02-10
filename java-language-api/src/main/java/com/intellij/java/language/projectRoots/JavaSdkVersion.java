@@ -94,8 +94,8 @@ public enum JavaSdkVersion
 	/**
 	 * See {@link JavaVersion#parse(String)} for supported formats.
 	 */
-	@jakarta.annotation.Nullable
-	public static JavaSdkVersion fromVersionString(@jakarta.annotation.Nonnull String versionString)
+	@Nullable
+	public static JavaSdkVersion fromVersionString(@Nonnull String versionString)
 	{
 		JavaVersion version = JavaVersion.tryParse(versionString);
 		return version != null ? fromJavaVersion(version) : null;

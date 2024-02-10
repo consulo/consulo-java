@@ -47,7 +47,7 @@ public class ArrangementSectionDetector {
   private final Stack<ArrangementSectionRule> myOpenedSections = new Stack<>();
 
   public ArrangementSectionDetector(
-    @Nullable Document document, @jakarta.annotation.Nonnull ArrangementSettings settings, @Nonnull Consumer<ArrangementSectionEntryTemplate> producer) {
+    @Nullable Document document, @Nonnull ArrangementSettings settings, @Nonnull Consumer<ArrangementSectionEntryTemplate> producer) {
     myDocument = document;
     mySettings = settings;
     mySectionEntryProducer = producer;
@@ -82,7 +82,7 @@ public class ArrangementSectionDetector {
     return false;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static ArrangementSectionRule isSectionStartComment(@Nonnull ArrangementSettings settings, @Nonnull String comment) {
     for (ArrangementSectionRule rule : settings.getSections()) {
       if (rule.getStartComment() != null && StringUtil.equals(comment, rule.getStartComment())) {
@@ -99,7 +99,7 @@ public class ArrangementSectionDetector {
     private String myText;
 
     public ArrangementSectionEntryTemplate(
-      @jakarta.annotation.Nonnull PsiElement element, @Nonnull ArrangementSettingsToken token, @jakarta.annotation.Nonnull TextRange range, @Nonnull String text) {
+      @Nonnull PsiElement element, @Nonnull ArrangementSettingsToken token, @Nonnull TextRange range, @Nonnull String text) {
       myElement = element;
       myToken = token;
       myTextRange = range;

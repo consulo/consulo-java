@@ -53,20 +53,20 @@ public class PsiSuperMethodImplUtil {
   private PsiSuperMethodImplUtil() {
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static PsiMethod[] findSuperMethods(@Nonnull PsiMethod method) {
     return findSuperMethods(method, null);
   }
 
-  @jakarta.annotation.Nonnull
-  public static PsiMethod[] findSuperMethods(@jakarta.annotation.Nonnull PsiMethod method, boolean checkAccess) {
+  @Nonnull
+  public static PsiMethod[] findSuperMethods(@Nonnull PsiMethod method, boolean checkAccess) {
     if (!canHaveSuperMethod(method, checkAccess, false)) {
       return PsiMethod.EMPTY_ARRAY;
     }
     return findSuperMethodsInternal(method, null);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static PsiMethod[] findSuperMethods(@Nonnull PsiMethod method, PsiClass parentClass) {
     if (!canHaveSuperMethod(method, true, false)) {
       return PsiMethod.EMPTY_ARRAY;
@@ -82,8 +82,8 @@ public class PsiSuperMethodImplUtil {
     return MethodSignatureUtil.convertMethodSignaturesToMethods(outputMethods);
   }
 
-  @jakarta.annotation.Nonnull
-  public static List<MethodSignatureBackedByPsiMethod> findSuperMethodSignaturesIncludingStatic(@jakarta.annotation.Nonnull PsiMethod method, boolean checkAccess) {
+  @Nonnull
+  public static List<MethodSignatureBackedByPsiMethod> findSuperMethodSignaturesIncludingStatic(@Nonnull PsiMethod method, boolean checkAccess) {
     if (!canHaveSuperMethod(method, checkAccess, true)) {
       return Collections.emptyList();
     }
@@ -91,11 +91,11 @@ public class PsiSuperMethodImplUtil {
   }
 
   @Nonnull
-  private static List<MethodSignatureBackedByPsiMethod> findSuperMethodSignatures(@jakarta.annotation.Nonnull PsiMethod method, PsiClass parentClass, boolean allowStaticMethod) {
+  private static List<MethodSignatureBackedByPsiMethod> findSuperMethodSignatures(@Nonnull PsiMethod method, PsiClass parentClass, boolean allowStaticMethod) {
     return new ArrayList<>(SuperMethodsSearch.search(method, parentClass, true, allowStaticMethod).findAll());
   }
 
-  private static boolean canHaveSuperMethod(@jakarta.annotation.Nonnull PsiMethod method, boolean checkAccess, boolean allowStaticMethod) {
+  private static boolean canHaveSuperMethod(@Nonnull PsiMethod method, boolean checkAccess, boolean allowStaticMethod) {
     if (method.isConstructor()) {
       return false;
     }
@@ -110,7 +110,7 @@ public class PsiSuperMethodImplUtil {
   }
 
   @Nullable
-  public static PsiMethod findDeepestSuperMethod(@jakarta.annotation.Nonnull PsiMethod method) {
+  public static PsiMethod findDeepestSuperMethod(@Nonnull PsiMethod method) {
     if (!canHaveSuperMethod(method, true, false)) {
       return null;
     }
@@ -126,10 +126,10 @@ public class PsiSuperMethodImplUtil {
     return collection.toArray(new PsiMethod[collection.size()]);
   }
 
-  @jakarta.annotation.Nonnull
-  private static Map<MethodSignature, HierarchicalMethodSignature> buildMethodHierarchy(@jakarta.annotation.Nonnull PsiClass aClass,
+  @Nonnull
+  private static Map<MethodSignature, HierarchicalMethodSignature> buildMethodHierarchy(@Nonnull PsiClass aClass,
                                                                                         @Nullable String nameHint,
-                                                                                        @jakarta.annotation.Nonnull PsiSubstitutor substitutor,
+                                                                                        @Nonnull PsiSubstitutor substitutor,
                                                                                         final boolean includePrivates,
                                                                                         @Nonnull final Set<PsiClass> visited,
                                                                                         boolean isInRawContext,
@@ -277,8 +277,8 @@ public class PsiSuperMethodImplUtil {
   }
 
   private static void putInMap(@Nonnull PsiClass aClass,
-                               @jakarta.annotation.Nonnull Map<MethodSignature, HierarchicalMethodSignature> result,
-                               @jakarta.annotation.Nonnull Map<MethodSignature, HierarchicalMethodSignatureImpl> map,
+                               @Nonnull Map<MethodSignature, HierarchicalMethodSignature> result,
+                               @Nonnull Map<MethodSignature, HierarchicalMethodSignatureImpl> map,
                                @Nonnull HierarchicalMethodSignature hierarchicalMethodSignature,
                                @Nonnull MethodSignature signature) {
     HierarchicalMethodSignatureImpl existing = map.get(signature);
@@ -301,7 +301,7 @@ public class PsiSuperMethodImplUtil {
     }
   }
 
-  private static boolean isReturnTypeIsMoreSpecificThan(@jakarta.annotation.Nonnull HierarchicalMethodSignature thisSig, @jakarta.annotation.Nonnull HierarchicalMethodSignature thatSig) {
+  private static boolean isReturnTypeIsMoreSpecificThan(@Nonnull HierarchicalMethodSignature thisSig, @Nonnull HierarchicalMethodSignature thatSig) {
     PsiType thisRet = thisSig.getSubstitutor().substitute(thisSig.getMethod().getReturnType());
     PsiType thatRet = thatSig.getSubstitutor().substitute(thatSig.getMethod().getReturnType());
     PsiSubstitutor unifyingSubstitutor = MethodSignatureUtil.isSubsignature(thatSig, thisSig) ? MethodSignatureUtil.getSuperMethodSignatureSubstitutor(thisSig, thatSig) : null;
@@ -335,8 +335,8 @@ public class PsiSuperMethodImplUtil {
   }
 
   private static boolean isSuperMethod(@Nonnull PsiClass aClass,
-                                       @jakarta.annotation.Nonnull MethodSignatureBackedByPsiMethod hierarchicalMethodSignature,
-                                       @jakarta.annotation.Nonnull MethodSignatureBackedByPsiMethod superSignatureHierarchical) {
+                                       @Nonnull MethodSignatureBackedByPsiMethod hierarchicalMethodSignature,
+                                       @Nonnull MethodSignatureBackedByPsiMethod superSignatureHierarchical) {
     PsiMethod superMethod = superSignatureHierarchical.getMethod();
     PsiClass superClass = superMethod.getContainingClass();
     PsiMethod method = hierarchicalMethodSignature.getMethod();
@@ -368,7 +368,7 @@ public class PsiSuperMethodImplUtil {
   }
 
   @Nonnull
-  private static HierarchicalMethodSignatureImpl copy(@jakarta.annotation.Nonnull HierarchicalMethodSignature hi) {
+  private static HierarchicalMethodSignatureImpl copy(@Nonnull HierarchicalMethodSignature hi) {
     HierarchicalMethodSignatureImpl hierarchicalMethodSignature = new HierarchicalMethodSignatureImpl(hi);
     for (HierarchicalMethodSignature his : hi.getSuperSignatures()) {
       hierarchicalMethodSignature.addSuperSignature(copy(his));
@@ -377,12 +377,12 @@ public class PsiSuperMethodImplUtil {
   }
 
   @Nonnull
-  public static Collection<HierarchicalMethodSignature> getVisibleSignatures(@jakarta.annotation.Nonnull PsiClass aClass) {
+  public static Collection<HierarchicalMethodSignature> getVisibleSignatures(@Nonnull PsiClass aClass) {
     Map<MethodSignature, HierarchicalMethodSignature> map = getSignaturesMap(aClass);
     return map.values();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static HierarchicalMethodSignature getHierarchicalMethodSignature(@Nonnull final PsiMethod method) {
     Project project = method.getProject();
     return CachedValuesManager.getManager(project).getParameterizedCachedValue(method, HIERARCHICAL_SIGNATURE_KEY, HIERARCHICAL_SIGNATURE_PROVIDER, false, method);
@@ -415,7 +415,7 @@ public class PsiSuperMethodImplUtil {
   }
 
   // uses hierarchy signature tree if available, traverses class structure by itself otherwise
-  public static boolean processDirectSuperMethodsSmart(@jakarta.annotation.Nonnull PsiMethod method, @Nonnull Processor<PsiMethod> superMethodProcessor) {
+  public static boolean processDirectSuperMethodsSmart(@Nonnull PsiMethod method, @Nonnull Processor<PsiMethod> superMethodProcessor) {
     //boolean old = PsiSuperMethodUtil.isSuperMethod(method, superMethod);
 
     PsiClass aClass = method.getContainingClass();
@@ -441,7 +441,7 @@ public class PsiSuperMethodImplUtil {
   }
 
   // uses hierarchy signature tree if available, traverses class structure by itself otherwise
-  public static boolean isSuperMethodSmart(@jakarta.annotation.Nonnull PsiMethod method, @Nonnull PsiMethod superMethod) {
+  public static boolean isSuperMethodSmart(@Nonnull PsiMethod method, @Nonnull PsiMethod superMethod) {
     //boolean old = PsiSuperMethodUtil.isSuperMethod(method, superMethod);
 
     if (method == superMethod) {

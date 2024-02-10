@@ -30,7 +30,7 @@ public abstract class ReplaceWithFileTemplateFix implements LocalQuickFix {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getFamilyName() {
     return getName();
   }

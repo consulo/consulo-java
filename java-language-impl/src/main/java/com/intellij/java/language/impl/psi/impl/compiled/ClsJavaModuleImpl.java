@@ -32,13 +32,13 @@ public class ClsJavaModuleImpl extends ClsRepositoryPsiElement<PsiJavaModuleStub
     myReference = new ClsJavaModuleReferenceElementImpl(this, stub.getName());
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Iterable<PsiRequiresStatement> getRequires() {
     return JBIterable.of(getStub().getChildrenByType(JavaElementType.REQUIRES_STATEMENT, PsiRequiresStatement.EMPTY_ARRAY));
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Iterable<PsiPackageAccessibilityStatement> getExports() {
     return JBIterable.of(getStub().getChildrenByType(JavaElementType.EXPORTS_STATEMENT, PsiPackageAccessibilityStatement.EMPTY_ARRAY));
@@ -63,7 +63,7 @@ public class ClsJavaModuleImpl extends ClsRepositoryPsiElement<PsiJavaModuleStub
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @jakarta.annotation.Nonnull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
     appendText(getModifierList(), indentLevel, buffer);
     buffer.append("module ").append(getName()).append(" {\n");
 
@@ -123,7 +123,7 @@ public class ClsJavaModuleImpl extends ClsRepositoryPsiElement<PsiJavaModuleStub
   }
 
   @Override
-  public PsiElement setName(@jakarta.annotation.Nonnull String name) throws IncorrectOperationException {
+  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
     throw cannotModifyException(this);
   }
 
@@ -168,7 +168,7 @@ public class ClsJavaModuleImpl extends ClsRepositoryPsiElement<PsiJavaModuleStub
   }
 
   @Override
-  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitModule(this);
     } else {

@@ -27,7 +27,7 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class SignalWithoutCorrespondingAwaitInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "signal.without.corresponding.await.display.name");

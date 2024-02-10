@@ -27,19 +27,19 @@ import jakarta.annotation.Nullable;
  */
 @ExtensionImpl
 public class SPICommenter implements Commenter {
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public String getLineCommentPrefix() {
     return "#";
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public String getBlockCommentPrefix() {
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public String getBlockCommentSuffix() {
     return null;
@@ -51,7 +51,7 @@ public class SPICommenter implements Commenter {
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public String getCommentedBlockCommentSuffix() {
     return null;

@@ -37,7 +37,7 @@ public abstract class JamAnnotatedChildrenQuery<Jam extends JamElement> extends 
   }
 
   @Nullable
-  protected abstract JamMemberMeta<?, ? extends Jam> getMemberMeta(@jakarta.annotation.Nonnull PsiModifierListOwner member);
+  protected abstract JamMemberMeta<?, ? extends Jam> getMemberMeta(@Nonnull PsiModifierListOwner member);
 
   @Override
   public JamMemberMeta<?, ? extends Jam> getMeta(@Nonnull PsiModifierListOwner member) {
@@ -51,7 +51,7 @@ public abstract class JamAnnotatedChildrenQuery<Jam extends JamElement> extends 
 
   protected abstract PsiModifierListOwner[] getAllChildren(@Nonnull PsiMember parent);
 
-  public List<Jam> findChildren(@jakarta.annotation.Nonnull PsiMember parent) {
+  public List<Jam> findChildren(@Nonnull PsiMember parent) {
     final ArrayList<Jam> list = ContainerUtil.newArrayList();
     for (final PsiModifierListOwner child : getAllChildren(parent)) {
       if (isAnnotated(child, myAnnoName)) {

@@ -41,7 +41,7 @@ import jakarta.annotation.Nullable;
 public class JavaChangeSignatureHandler implements ChangeSignatureHandler {
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
     editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
     PsiElement element = findTargetMember(file, editor);
     if (element == null) {
@@ -70,13 +70,13 @@ public class JavaChangeSignatureHandler implements ChangeSignatureHandler {
     invokeOnElement(project, editor, elements[0]);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public String getTargetNotFoundMessage() {
     return RefactoringBundle.message("error.wrong.caret.position.method.or.class.name");
   }
 
-  private static void invoke(final PsiMethod method, final Project project, @jakarta.annotation.Nullable final Editor editor) {
+  private static void invoke(final PsiMethod method, final Project project, @Nullable final Editor editor) {
     PsiMethod newMethod = SuperMethodWarningUtil.checkSuperMethod(method, RefactoringBundle.message("to.refactor"));
     if (newMethod == null) {
       return;
@@ -119,7 +119,7 @@ public class JavaChangeSignatureHandler implements ChangeSignatureHandler {
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   public PsiElement findTargetMember(PsiFile file, Editor editor) {
     PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
     return findTargetMember(element);

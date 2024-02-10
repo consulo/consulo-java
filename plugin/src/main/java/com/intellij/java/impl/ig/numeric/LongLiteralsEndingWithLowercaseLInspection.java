@@ -44,7 +44,7 @@ public class LongLiteralsEndingWithLowercaseLInspection
       "long.literals.ending.with.lowercase.l.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "long.literals.ending.with.lowercase.l.problem.descriptor");
@@ -81,7 +81,7 @@ public class LongLiteralsEndingWithLowercaseLInspection
 
     @Override
     public void visitLiteralExpression(
-      @jakarta.annotation.Nonnull PsiLiteralExpression expression) {
+      @Nonnull PsiLiteralExpression expression) {
       super.visitLiteralExpression(expression);
       final PsiType type = expression.getType();
       if (type == null) {

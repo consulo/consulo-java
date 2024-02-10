@@ -31,7 +31,7 @@ class ConcreteClassUtil {
     return typeIsConcreteClass(type, ignoreCastToAbstractClass);
   }
 
-  public static boolean typeIsConcreteClass(@jakarta.annotation.Nullable PsiType type, boolean ignoreCastToAbstractClass) {
+  public static boolean typeIsConcreteClass(@Nullable PsiType type, boolean ignoreCastToAbstractClass) {
     if (type == null) {
       return false;
     }

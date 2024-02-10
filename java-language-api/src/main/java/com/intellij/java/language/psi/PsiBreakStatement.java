@@ -35,6 +35,6 @@ public interface PsiBreakStatement extends PsiStatement {
    *
    * @return the statement instance, or null if the statement is not valid in the context where it is located.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiStatement findExitedStatement();
 }

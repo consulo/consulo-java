@@ -124,7 +124,7 @@ public class CompilingEvaluatorImpl extends CompilingEvaluator
 		return myCompiledClasses;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	private static String getSourceOption(@Nonnull LanguageLevel languageLevel)
 	{
 		return "1." + Integer.valueOf(3 + languageLevel.ordinal());
@@ -150,8 +150,8 @@ public class CompilingEvaluatorImpl extends CompilingEvaluator
 		return file;
 	} */
 
-	@jakarta.annotation.Nullable
-	public static ExpressionEvaluator create(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nullable PsiElement psiContext, @jakarta.annotation.Nonnull Function<PsiElement, PsiCodeFragment> fragmentFactory) throws EvaluateException
+	@Nullable
+	public static ExpressionEvaluator create(@Nonnull Project project, @Nullable PsiElement psiContext, @Nonnull Function<PsiElement, PsiCodeFragment> fragmentFactory) throws EvaluateException
 	{
 		/*if(DEBUGGER_COMPILING_EVALUATOR && psiContext != null)
 		{
@@ -177,7 +177,7 @@ public class CompilingEvaluatorImpl extends CompilingEvaluator
 	}
 
 	@Nonnull
-	private static PsiElement findPhysicalContext(@jakarta.annotation.Nonnull PsiElement element)
+	private static PsiElement findPhysicalContext(@Nonnull PsiElement element)
 	{
 		while(!element.isPhysical())
 		{

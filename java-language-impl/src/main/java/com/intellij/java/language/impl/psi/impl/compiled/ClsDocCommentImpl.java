@@ -36,14 +36,14 @@ class ClsDocCommentImpl extends ClsElementImpl implements PsiDocComment, JavaTok
 	private final PsiDocCommentOwner myParent;
 	private final PsiDocTag[] myTags;
 
-	ClsDocCommentImpl(@jakarta.annotation.Nonnull PsiDocCommentOwner parent)
+	ClsDocCommentImpl(@Nonnull PsiDocCommentOwner parent)
 	{
 		myParent = parent;
 		myTags = new PsiDocTag[]{new ClsDocTagImpl(this, "@deprecated")};
 	}
 
 	@Override
-	public void appendMirrorText(final int indentLevel, @jakarta.annotation.Nonnull final StringBuilder buffer)
+	public void appendMirrorText(final int indentLevel, @Nonnull final StringBuilder buffer)
 	{
 		buffer.append("/**");
 		for(PsiDocTag tag : getTags())
@@ -82,7 +82,7 @@ class ClsDocCommentImpl extends ClsElementImpl implements PsiDocComment, JavaTok
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public PsiElement[] getDescriptionElements()
 	{
 		return PsiElement.EMPTY_ARRAY;

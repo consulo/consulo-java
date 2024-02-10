@@ -33,13 +33,13 @@ public abstract class VariableTypeCalculator {
       ExtensionPointName.create(VariableTypeCalculator.class);
 
   @Nullable
-  public abstract PsiType inferVarTypeAt(@Nonnull PsiVariable var, @jakarta.annotation.Nonnull PsiElement place);
+  public abstract PsiType inferVarTypeAt(@Nonnull PsiVariable var, @Nonnull PsiElement place);
 
   /**
    * @return inferred type of variable in the context of place
    */
-  @jakarta.annotation.Nonnull
-  public static PsiType getVarTypeAt(@jakarta.annotation.Nonnull PsiVariable var, @jakarta.annotation.Nonnull PsiElement place) {
+  @Nonnull
+  public static PsiType getVarTypeAt(@Nonnull PsiVariable var, @Nonnull PsiElement place) {
     for (VariableTypeCalculator calculator : EP_NAME.getExtensionList()) {
       final PsiType type = calculator.inferVarTypeAt(var, place);
       if (type != null) return type;

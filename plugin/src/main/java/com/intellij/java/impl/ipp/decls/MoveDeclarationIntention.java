@@ -111,7 +111,7 @@ public class MoveDeclarationIntention extends Intention {
   }
 
   private static PsiDeclarationStatement moveDeclarationToReference(
-    @jakarta.annotation.Nonnull PsiElement referenceElement,
+    @Nonnull PsiElement referenceElement,
     @Nonnull PsiLocalVariable variable,
     @Nonnull PsiCodeBlock block)
     throws IncorrectOperationException {

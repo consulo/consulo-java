@@ -32,12 +32,12 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class StringEqualityInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("string.comparison.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("string.comparison.problem.descriptor");
   }

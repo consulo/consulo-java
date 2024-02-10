@@ -55,7 +55,7 @@ public class NonShortCircuitBooleanInspection extends BaseInspection {
   private static class NonShortCircuitBooleanFix
     extends InspectionGadgetsFix {
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("non.short.circuit.boolean.expression.replace.quickfix");
     }

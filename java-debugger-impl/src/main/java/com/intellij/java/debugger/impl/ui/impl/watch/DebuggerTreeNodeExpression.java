@@ -156,7 +156,7 @@ public class DebuggerTreeNodeExpression
 	}
 
 	@Nullable
-	public static PsiExpression substituteThis(@jakarta.annotation.Nullable PsiElement expressionWithThis, PsiExpression howToEvaluateThis, Value howToEvaluateThisValue) throws EvaluateException
+	public static PsiExpression substituteThis(@Nullable PsiElement expressionWithThis, PsiExpression howToEvaluateThis, Value howToEvaluateThisValue) throws EvaluateException
 	{
 		if(expressionWithThis == null)
 		{

@@ -42,7 +42,7 @@ public class RawUseOfParameterizedTypeInspection extends BaseInspection {
   @SuppressWarnings("PublicField") public boolean ignoreUncompilable = false;
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("raw.use.of.parameterized.type.display.name");
   }
@@ -79,7 +79,7 @@ public class RawUseOfParameterizedTypeInspection extends BaseInspection {
   private class RawUseOfParameterizedTypeVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitNewExpression(@jakarta.annotation.Nonnull PsiNewExpression expression) {
+    public void visitNewExpression(@Nonnull PsiNewExpression expression) {
       if (!hasNeededLanguageLevel(expression)) {
         return;
       }
@@ -92,7 +92,7 @@ public class RawUseOfParameterizedTypeInspection extends BaseInspection {
     }
 
     @Override
-    public void visitTypeElement(@jakarta.annotation.Nonnull PsiTypeElement typeElement) {
+    public void visitTypeElement(@Nonnull PsiTypeElement typeElement) {
       if (!hasNeededLanguageLevel(typeElement)) {
         return;
       }

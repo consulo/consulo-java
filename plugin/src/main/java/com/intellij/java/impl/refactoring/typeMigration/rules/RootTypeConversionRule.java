@@ -168,7 +168,7 @@ public class RootTypeConversionRule extends TypeConversionRule {
     }
 
     @Override
-    public PsiExpression replace(PsiExpression expression, @jakarta.annotation.Nonnull TypeEvaluator evaluator) throws IncorrectOperationException {
+    public PsiExpression replace(PsiExpression expression, @Nonnull TypeEvaluator evaluator) throws IncorrectOperationException {
       final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) expression;
       final PsiExpression qualifierExpression = methodCallExpression.getMethodExpression().getQualifierExpression();
       final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(expression.getProject());

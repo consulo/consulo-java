@@ -37,7 +37,7 @@ import jakarta.annotation.Nullable;
 public interface ExpressionConverter extends LanguageExtension {
   ExtensionPointCacheKey<ExpressionConverter, ByLanguageValue<ExpressionConverter>> KEY = ExtensionPointCacheKey.create("ExpressionConverter", LanguageOneToOne.build());
 
-  @jakarta.annotation.Nullable
+  @Nullable
   static ExpressionConverter forLanguage(@Nonnull Language language) {
     return Application.get().getExtensionPoint(ExpressionConverter.class).getOrBuildCache(KEY).get(language);
   }

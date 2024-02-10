@@ -187,7 +187,7 @@ public class SuspiciousMethodCallUtil {
   }
 
   @Contract(value = "null -> false", pure = true)
-  public static boolean isCollectionAcceptingMethod(@jakarta.annotation.Nullable String name) {
+  public static boolean isCollectionAcceptingMethod(@Nullable String name) {
     return "removeAll".equals(name) || "retainAll".equals(name) || "containsAll".equals(name);
   }
 
@@ -221,11 +221,11 @@ public class SuspiciousMethodCallUtil {
   }
 
   @Nullable
-  public static String getSuspiciousMethodCallMessage(@jakarta.annotation.Nonnull PsiMethodCallExpression methodCall,
+  public static String getSuspiciousMethodCallMessage(@Nonnull PsiMethodCallExpression methodCall,
                                                       PsiExpression arg,
                                                       PsiType argType,
                                                       boolean reportConvertibleMethodCalls,
-                                                      @jakarta.annotation.Nonnull List<PatternMethod> patternMethods,
+                                                      @Nonnull List<PatternMethod> patternMethods,
                                                       int idx) {
     final PsiReferenceExpression methodExpression = methodCall.getMethodExpression();
 
@@ -238,7 +238,7 @@ public class SuspiciousMethodCallUtil {
     return getSuspiciousMethodCallMessage(methodExpression, argType, reportConvertibleMethodCalls, patternMethods, idx);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static String getSuspiciousMethodCallMessage(PsiReferenceExpression methodExpression,
                                                       PsiType argType,
                                                       boolean reportConvertibleMethodCalls,

@@ -40,7 +40,7 @@ public class UsageContextDataflowToPanel extends UsageContextPanelBase {
   private final UsageViewPresentation myPresentation;
   private JComponent myPanel;
 
-  public UsageContextDataflowToPanel(@jakarta.annotation.Nonnull Project project, @Nonnull UsageViewPresentation presentation) {
+  public UsageContextDataflowToPanel(@Nonnull Project project, @Nonnull UsageViewPresentation presentation) {
     super(project, presentation);
     myPresentation = presentation;
   }
@@ -81,7 +81,7 @@ public class UsageContextDataflowToPanel extends UsageContextPanelBase {
     return true;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private static SliceAnalysisParams createParams(PsiElement element, boolean dataFlowToThis) {
     SliceAnalysisParams params = new SliceAnalysisParams();
     params.scope = new AnalysisScope(element.getProject());
@@ -90,8 +90,8 @@ public class UsageContextDataflowToPanel extends UsageContextPanelBase {
     return params;
   }
 
-  @jakarta.annotation.Nonnull
-  protected JComponent createPanel(@jakarta.annotation.Nonnull PsiElement element, final boolean dataFlowToThis) {
+  @Nonnull
+  protected JComponent createPanel(@Nonnull PsiElement element, final boolean dataFlowToThis) {
     ToolWindow toolWindow = ToolWindowManager.getInstance(myProject).getToolWindow(ToolWindowId.FIND);
     SliceAnalysisParams params = createParams(element, dataFlowToThis);
 

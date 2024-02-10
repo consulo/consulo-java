@@ -57,12 +57,12 @@ class PsiJvmConversionHelper {
   }
 
   @Nonnull
-  static PsiAnnotation[] getListAnnotations(@jakarta.annotation.Nonnull PsiModifierListOwner modifierListOwner) {
+  static PsiAnnotation[] getListAnnotations(@Nonnull PsiModifierListOwner modifierListOwner) {
     PsiModifierList list = modifierListOwner.getModifierList();
     return list == null ? PsiAnnotation.EMPTY_ARRAY : list.getAnnotations();
   }
 
-  static boolean hasListModifier(@jakarta.annotation.Nonnull PsiModifierListOwner modifierListOwner, @jakarta.annotation.Nonnull JvmModifier modifier) {
+  static boolean hasListModifier(@Nonnull PsiModifierListOwner modifierListOwner, @Nonnull JvmModifier modifier) {
     return modifierListOwner.hasModifierProperty(MODIFIERS.get(modifier));
   }
 
@@ -108,8 +108,8 @@ class PsiJvmConversionHelper {
     return extendsTypes[0];
   }
 
-  @jakarta.annotation.Nonnull
-  static JvmReferenceType[] getClassInterfaces(@jakarta.annotation.Nonnull PsiClass psiClass) {
+  @Nonnull
+  static JvmReferenceType[] getClassInterfaces(@Nonnull PsiClass psiClass) {
     if (psiClass instanceof PsiAnonymousClass) {
       PsiClassType baseClassType = ((PsiAnonymousClass) psiClass).getBaseClassType();
       PsiClass baseClass = baseClassType.resolve();
@@ -128,13 +128,13 @@ class PsiJvmConversionHelper {
   }
 
 
-  @jakarta.annotation.Nullable
-  static PsiAnnotation getListAnnotation(@jakarta.annotation.Nonnull PsiModifierListOwner modifierListOwner, @jakarta.annotation.Nonnull String fqn) {
+  @Nullable
+  static PsiAnnotation getListAnnotation(@Nonnull PsiModifierListOwner modifierListOwner, @Nonnull String fqn) {
     PsiModifierList list = modifierListOwner.getModifierList();
     return list == null ? null : list.findAnnotation(fqn);
   }
 
-  static boolean hasListAnnotation(@jakarta.annotation.Nonnull PsiModifierListOwner modifierListOwner, @jakarta.annotation.Nonnull String fqn) {
+  static boolean hasListAnnotation(@Nonnull PsiModifierListOwner modifierListOwner, @Nonnull String fqn) {
     PsiModifierList list = modifierListOwner.getModifierList();
     return list != null && list.hasAnnotation(fqn);
   }
@@ -142,16 +142,16 @@ class PsiJvmConversionHelper {
   static class PsiJvmSubstitutor implements JvmSubstitutor {
 
     private final
-    @jakarta.annotation.Nonnull
+    @Nonnull
     PsiSubstitutor mySubstitutor;
 
     PsiJvmSubstitutor(@Nonnull PsiSubstitutor substitutor) {
       mySubstitutor = substitutor;
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     @Override
-    public JvmType substitute(@jakarta.annotation.Nonnull JvmTypeParameter typeParameter) {
+    public JvmType substitute(@Nonnull JvmTypeParameter typeParameter) {
       if (!(typeParameter instanceof PsiTypeParameter)) {
         return null;
       }

@@ -53,7 +53,7 @@ public class PackageUtil
 {
 	private static final Logger LOG = Logger.getInstance(PackageUtil.class);
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	public static PsiDirectory findPossiblePackageDirectoryInModule(Module module, String packageName)
 	{
 		PsiDirectory psiDirectory = null;
@@ -209,13 +209,13 @@ public class PackageUtil
 		return psiDirectory[0];
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	public static PsiDirectory findOrCreateDirectoryForPackage(@Nonnull Module module, String packageName, @Nullable PsiDirectory baseDir, boolean askUserToCreate) throws IncorrectOperationException
 	{
 		return findOrCreateDirectoryForPackage(module, packageName, baseDir, askUserToCreate, false);
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	public static PsiDirectory findOrCreateDirectoryForPackage(@Nonnull Module module,
 															   String packageName,
 															   PsiDirectory baseDir,

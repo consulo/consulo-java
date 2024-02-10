@@ -137,7 +137,7 @@ public class AllClassesGetter {
   }
 
   public static void processJavaClasses(@Nonnull final PrefixMatcher prefixMatcher,
-                                        @jakarta.annotation.Nonnull Project project,
+                                        @Nonnull Project project,
                                         @Nonnull GlobalSearchScope scope,
                                         @Nonnull Processor<? super PsiClass> processor) {
     final Set<String> names = new HashSet<>(10000);

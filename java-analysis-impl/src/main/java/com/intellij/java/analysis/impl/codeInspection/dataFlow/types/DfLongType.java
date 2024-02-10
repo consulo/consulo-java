@@ -21,7 +21,7 @@ public interface DfLongType extends DfIntegralType {
 
   @Nonnull
   @Override
-  default DfType meet(@jakarta.annotation.Nonnull DfType other) {
+  default DfType meet(@Nonnull DfType other) {
     if (other == DfTypes.TOP) return this;
     if (!(other instanceof DfLongType)) return DfTypes.BOTTOM;
     return DfTypes.longRange(((DfLongType)other).getRange().intersect(getRange()));
@@ -33,7 +33,7 @@ public interface DfLongType extends DfIntegralType {
     return meet(DfTypes.longRange(range));
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   default PsiPrimitiveType getPsiType() {
     return PsiType.LONG;

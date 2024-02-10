@@ -15,7 +15,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 public class PsiRecordHeaderImpl extends JavaStubPsiElement<PsiRecordHeaderStub> implements PsiRecordHeader {
-  public PsiRecordHeaderImpl(@jakarta.annotation.Nonnull PsiRecordHeaderStub stub) {
+  public PsiRecordHeaderImpl(@Nonnull PsiRecordHeaderStub stub) {
     super(stub, JavaStubElementTypes.RECORD_HEADER);
   }
 

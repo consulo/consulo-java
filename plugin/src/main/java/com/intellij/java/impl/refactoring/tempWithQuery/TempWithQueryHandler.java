@@ -63,7 +63,7 @@ public class TempWithQueryHandler implements RefactoringActionHandler {
   private static final String REFACTORING_NAME = RefactoringBundle.message("replace.temp.with.query.title");
 
   @RequiredUIAccess
-  public void invoke(@jakarta.annotation.Nonnull final Project project, final Editor editor, PsiFile file, DataContext dataContext) {
+  public void invoke(@Nonnull final Project project, final Editor editor, PsiFile file, DataContext dataContext) {
     PsiElement element = TargetElementUtil.findTargetElement(editor, Set.of(TargetElementUtilExtender.ELEMENT_NAME_ACCEPTED,
         TargetElementUtilExtender.REFERENCED_ELEMENT_ACCEPTED, TargetElementUtilExtender.LOOKUP_ITEM_ACCEPTED));
     editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);

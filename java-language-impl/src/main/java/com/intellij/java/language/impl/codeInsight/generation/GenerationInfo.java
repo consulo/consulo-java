@@ -40,7 +40,7 @@ public interface GenerationInfo {
    * @return the value that will be passed to the {@link #insert(PsiClass, com.intellij.psi.PsiElement, boolean)} method later.
    */
   @Nullable
-  PsiElement findInsertionAnchor(@jakarta.annotation.Nonnull PsiClass aClass, @Nonnull PsiElement leaf);
+  PsiElement findInsertionAnchor(@Nonnull PsiClass aClass, @Nonnull PsiElement leaf);
 
   /**
    * Position caret in generated element in correct way

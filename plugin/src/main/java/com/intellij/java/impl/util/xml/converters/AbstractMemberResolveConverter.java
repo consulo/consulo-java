@@ -45,7 +45,7 @@ public abstract class AbstractMemberResolveConverter extends ResolvingConverter<
   @Nonnull
   protected abstract PropertyMemberType[] getMemberTypes(final ConvertContext context);
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected PsiType getPsiType(final ConvertContext context) {
     return PsiType.getJavaLangObject(context.getPsiManager(), (GlobalSearchScope) ProjectScopes.getAllScope(context.getPsiManager().getProject()));
   }

@@ -86,7 +86,7 @@ public class ReplaceWithObjectsEqualsFix implements LocalQuickFix
 	}
 
 	@Nullable
-	public static ReplaceWithObjectsEqualsFix createFix(@jakarta.annotation.Nonnull PsiMethodCallExpression call, @Nonnull PsiReferenceExpression methodExpression)
+	public static ReplaceWithObjectsEqualsFix createFix(@Nonnull PsiMethodCallExpression call, @Nonnull PsiReferenceExpression methodExpression)
 	{
 		if(!"equals".equals(methodExpression.getReferenceName()) || call.getArgumentList().getExpressions().length != 1 || !PsiUtil.getLanguageLevel(call).isAtLeast(LanguageLevel.JDK_1_7))
 		{

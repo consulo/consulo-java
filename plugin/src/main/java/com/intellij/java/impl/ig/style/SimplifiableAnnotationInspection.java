@@ -62,7 +62,7 @@ public class SimplifiableAnnotationInspection extends BaseInspection {
       this.replacement = replacement;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "simplifiable.annotation.quickfix");

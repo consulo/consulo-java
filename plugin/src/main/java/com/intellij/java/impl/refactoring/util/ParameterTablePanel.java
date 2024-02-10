@@ -20,6 +20,7 @@ import com.intellij.java.impl.refactoring.ui.TypeSelector;
 import com.intellij.java.impl.refactoring.ui.TypeSelectorManager;
 import com.intellij.java.impl.refactoring.ui.TypeSelectorManagerImpl;
 import com.intellij.java.language.psi.*;
+import consulo.ide.impl.idea.ui.components.JBComboBoxLabel;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 import consulo.ui.ex.awt.*;
@@ -149,7 +150,7 @@ public abstract class ParameterTablePanel extends JPanel {
 
 
     myTable.getColumnModel().getColumn(MyTableModel.PARAMETER_TYPE_COLUMN).setCellRenderer(new DefaultTableCellRenderer() {
-      private consulo.ide.impl.idea.ui.components.JBComboBoxLabel myLabel = new consulo.ide.impl.idea.ui.components.JBComboBoxLabel();
+      private JBComboBoxLabel myLabel = new JBComboBoxLabel();
 
       public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
         myLabel.setText(String.valueOf(value));

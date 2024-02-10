@@ -33,7 +33,7 @@ public class GenerateSuperMethodCallAction extends BaseCodeInsightAction {
   }
 
   @Override
-  protected boolean isValidForFile(@Nonnull Project project, @Nonnull Editor editor, @jakarta.annotation.Nonnull final PsiFile file) {
+  protected boolean isValidForFile(@Nonnull Project project, @Nonnull Editor editor, @Nonnull final PsiFile file) {
     if (!(file instanceof PsiJavaFile)) {
       return false;
     }

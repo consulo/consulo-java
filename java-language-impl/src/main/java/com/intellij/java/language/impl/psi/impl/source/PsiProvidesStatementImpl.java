@@ -34,7 +34,7 @@ public class PsiProvidesStatementImpl extends JavaStubPsiElement<PsiProvidesStat
     super(node);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public PsiJavaCodeReferenceElement getInterfaceReference() {
     return PsiTreeUtil.getChildOfType(this, PsiJavaCodeReferenceElement.class);

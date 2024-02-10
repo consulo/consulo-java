@@ -38,13 +38,13 @@ public class AssertsWithoutMessagesInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "MessageMissingOnJUnitAssertion";
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("asserts.without.messages.problem.descriptor");
   }
@@ -72,7 +72,7 @@ public class AssertsWithoutMessagesInspection extends BaseInspection {
     }
 
     @Override
-    public void visitMethodCallExpression(@jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression = expression.getMethodExpression();
       final String methodName = methodExpression.getReferenceName();

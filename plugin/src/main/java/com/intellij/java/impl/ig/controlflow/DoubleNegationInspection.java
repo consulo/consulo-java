@@ -52,7 +52,7 @@ public class DoubleNegationInspection extends BaseInspection {
     return true;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   protected InspectionGadgetsFix buildFix(Object... infos) {
     return new DoubleNegationFix();
   }

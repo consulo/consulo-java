@@ -51,7 +51,7 @@ public class IfMayBeConditionalInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "if.may.be.conditional.problem.descriptor");
@@ -70,7 +70,7 @@ public class IfMayBeConditionalInspection extends BaseInspection {
 
   private static class IfMayBeConditionalFix extends InspectionGadgetsFix {
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "if.may.be.conditional.quickfix");

@@ -50,7 +50,7 @@ public final class DfaVariableValue extends DfaValue
 			myFactory = factory;
 		}
 
-		@jakarta.annotation.Nonnull
+		@Nonnull
 		public DfaVariableValue createVariableValue(PsiVariable variable)
 		{
 			DfaVariableValue qualifier = null;
@@ -83,8 +83,8 @@ public final class DfaVariableValue extends DfaValue
 			return createVariableValue(descriptor, null);
 		}
 
-		@jakarta.annotation.Nonnull
-		DfaVariableValue createVariableValue(@jakarta.annotation.Nonnull VariableDescriptor descriptor, @Nullable DfaVariableValue qualifier)
+		@Nonnull
+		DfaVariableValue createVariableValue(@Nonnull VariableDescriptor descriptor, @Nullable DfaVariableValue qualifier)
 		{
 			Pair<VariableDescriptor, DfaVariableValue> key = Pair.create(descriptor, qualifier);
 			DfaVariableValue var = myExistingVars.get(key);
@@ -110,7 +110,7 @@ public final class DfaVariableValue extends DfaValue
 	private DfType myInherentType;
 	private final List<DfaVariableValue> myDependents = new SmartList<>();
 
-	private DfaVariableValue(@Nonnull VariableDescriptor descriptor, @jakarta.annotation.Nonnull DfaValueFactory factory, @Nullable DfaVariableValue qualifier)
+	private DfaVariableValue(@Nonnull VariableDescriptor descriptor, @Nonnull DfaValueFactory factory, @Nullable DfaVariableValue qualifier)
 	{
 		super(factory);
 		myDescriptor = descriptor;
@@ -128,7 +128,7 @@ public final class DfaVariableValue extends DfaValue
 		return myDescriptor.getPsiElement();
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public VariableDescriptor getDescriptor()
 	{
 		return myDescriptor;
@@ -150,7 +150,7 @@ public final class DfaVariableValue extends DfaValue
 	/**
 	 * @return list of all variables created within the same factory which are directly or indirectly qualified by this variable.
 	 */
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public List<DfaVariableValue> getDependentVariables()
 	{
 		return myDependents;
@@ -168,7 +168,7 @@ public final class DfaVariableValue extends DfaValue
 		return depth;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Contract(pure = true)
 	public DfaVariableValue withQualifier(DfaVariableValue newQualifier)
 	{

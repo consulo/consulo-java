@@ -15,6 +15,6 @@ public interface PsiProvidesStatement extends PsiStatement {
   @Nullable
   PsiClassType getInterfaceType();
 
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiReferenceList getImplementationList();
 }

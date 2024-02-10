@@ -31,27 +31,27 @@ public class HeaderKeyCompletionProvider extends TextFieldWithAutoCompletionList
     return list;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
-  protected Image getIcon(@jakarta.annotation.Nonnull String item) {
+  protected Image getIcon(@Nonnull String item) {
     return ManifestFileType.INSTANCE.getIcon();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
-  protected String getLookupString(@jakarta.annotation.Nonnull String item) {
+  protected String getLookupString(@Nonnull String item) {
     return item;
   }
 
   @Nullable
   @Override
-  protected String getTailText(@jakarta.annotation.Nonnull String item) {
+  protected String getTailText(@Nonnull String item) {
     return null;
   }
 
   @Nullable
   @Override
-  protected String getTypeText(@jakarta.annotation.Nonnull String item) {
+  protected String getTypeText(@Nonnull String item) {
     return null;
   }
 

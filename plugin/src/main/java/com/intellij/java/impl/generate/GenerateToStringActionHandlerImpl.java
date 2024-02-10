@@ -76,7 +76,7 @@ public class GenerateToStringActionHandlerImpl implements GenerateToStringAction
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiFile file) {
+  public void invoke(@Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiFile file) {
     PsiClass clazz = getSubjectClass(editor, file);
     assert clazz != null;
 
@@ -89,7 +89,7 @@ public class GenerateToStringActionHandlerImpl implements GenerateToStringAction
     doExecuteAction(project, clazz, null);
   }
 
-  private static void doExecuteAction(@jakarta.annotation.Nonnull final Project project, @jakarta.annotation.Nonnull final PsiClass clazz, final Editor editor) {
+  private static void doExecuteAction(@Nonnull final Project project, @Nonnull final PsiClass clazz, final Editor editor) {
     logger.debug("+++ doExecuteAction - START +++");
 
     if (logger.isDebugEnabled()) {
@@ -164,7 +164,7 @@ public class GenerateToStringActionHandlerImpl implements GenerateToStringAction
     return GenerationUtil.combineToClassMemberList(filteredFields, filteredMethods);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static PsiClass getSubjectClass(Editor editor, final PsiFile file) {
     if (file == null) {
       return null;

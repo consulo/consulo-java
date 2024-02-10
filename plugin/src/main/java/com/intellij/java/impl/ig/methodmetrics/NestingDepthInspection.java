@@ -30,7 +30,7 @@ public class NestingDepthInspection extends MethodMetricInspection {
     return "OverlyNestedMethod";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("nesting.depth.display.name");
   }
@@ -43,7 +43,7 @@ public class NestingDepthInspection extends MethodMetricInspection {
     return InspectionGadgetsBundle.message("nesting.depth.limit.option");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer nestingDepth = (Integer)infos[0];
     return InspectionGadgetsBundle.message(

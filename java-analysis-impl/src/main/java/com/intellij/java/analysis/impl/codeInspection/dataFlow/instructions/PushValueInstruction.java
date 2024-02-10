@@ -29,16 +29,16 @@ import jakarta.annotation.Nonnull;
 public class PushValueInstruction extends EvalInstruction
 {
 	private final
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	DfType myValue;
 
-	public PushValueInstruction(@jakarta.annotation.Nonnull DfType value, PsiExpression place)
+	public PushValueInstruction(@Nonnull DfType value, PsiExpression place)
 	{
 		super(place, 0);
 		myValue = value;
 	}
 
-	public PushValueInstruction(@jakarta.annotation.Nonnull DfType value)
+	public PushValueInstruction(@Nonnull DfType value)
 	{
 		this(value, null);
 	}
@@ -52,8 +52,8 @@ public class PushValueInstruction extends EvalInstruction
 
 	@Override
 	public
-	@jakarta.annotation.Nonnull
-	DfaValue eval(@jakarta.annotation.Nonnull DfaValueFactory factory, @Nonnull DfaMemoryState state, @jakarta.annotation.Nonnull DfaValue... arguments)
+	@Nonnull
+	DfaValue eval(@Nonnull DfaValueFactory factory, @Nonnull DfaMemoryState state, @Nonnull DfaValue... arguments)
 	{
 		return factory.fromDfType(myValue);
 	}

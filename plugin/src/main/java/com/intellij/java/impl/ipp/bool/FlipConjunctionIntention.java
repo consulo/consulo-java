@@ -46,7 +46,7 @@ public class FlipConjunctionIntention extends MutablyNamedIntention {
                                             sign.getText());
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new ConjunctionPredicate();
   }

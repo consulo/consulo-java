@@ -27,7 +27,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 @ExtensionImpl
 public class ReturnThisInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "ReturnOfThis";
   }

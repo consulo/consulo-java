@@ -50,7 +50,7 @@ public class NonNlsUtils {
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiModifierListOwner getAnnotatableQualifier(
     PsiReferenceExpression expression) {
     final PsiExpression qualifierExpression =
@@ -67,7 +67,7 @@ public class NonNlsUtils {
   }
 
   public static boolean isNonNlsAnnotated(
-    @jakarta.annotation.Nullable PsiExpression expression) {
+    @Nullable PsiExpression expression) {
     if (isReferenceToNonNlsAnnotatedElement(expression)) {
       return true;
     }
@@ -95,7 +95,7 @@ public class NonNlsUtils {
   }
 
   public static boolean isNonNlsAnnotatedUse(
-    @jakarta.annotation.Nullable PsiExpression expression) {
+    @Nullable PsiExpression expression) {
     if (expression == null) {
       return false;
     }
@@ -143,7 +143,7 @@ public class NonNlsUtils {
     }
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static <T> T getCachedValue(PsiExpression expression, Key<T> key) {
     final T data = expression.getUserData(key);
     if (!(expression instanceof PsiBinaryExpression)) {
@@ -175,7 +175,7 @@ public class NonNlsUtils {
   }
 
   private static boolean isReferenceToNonNlsAnnotatedElement(
-    @jakarta.annotation.Nullable PsiExpression expression) {
+    @Nullable PsiExpression expression) {
     if (!(expression instanceof PsiReferenceExpression)) {
       return false;
     }
@@ -284,7 +284,7 @@ public class NonNlsUtils {
   }
 
   private static boolean isNonNlsAnnotatedModifierListOwner(
-    @jakarta.annotation.Nullable PsiElement element) {
+    @Nullable PsiElement element) {
     if (!(element instanceof PsiModifierListOwner)) {
       return false;
     }

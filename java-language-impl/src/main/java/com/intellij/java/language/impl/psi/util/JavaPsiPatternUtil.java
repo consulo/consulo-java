@@ -166,8 +166,8 @@ public final class JavaPsiPatternUtil {
    * under some other parent (e.g. under PsiIfStatement).
    */
   @Contract(pure = true)
-  @jakarta.annotation.Nonnull
-  public static List<PsiPatternVariable> getExposedPatternVariablesIgnoreParent(@jakarta.annotation.Nonnull PsiExpression expression) {
+  @Nonnull
+  public static List<PsiPatternVariable> getExposedPatternVariablesIgnoreParent(@Nonnull PsiExpression expression) {
     List<PsiPatternVariable> list = new ArrayList<>();
     collectPatternVariableCandidates(expression, expression, list, true);
     return list;

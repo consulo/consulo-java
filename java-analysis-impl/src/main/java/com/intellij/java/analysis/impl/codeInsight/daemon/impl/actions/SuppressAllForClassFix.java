@@ -66,7 +66,7 @@ public class SuppressAllForClassFix extends SuppressFix {
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, @jakarta.annotation.Nonnull final PsiElement element) throws IncorrectOperationException {
+  public void invoke(@Nonnull final Project project, @Nonnull final PsiElement element) throws IncorrectOperationException {
     final PsiDocCommentOwner container = getContainer(element);
     LOG.assertTrue(container != null);
     if (!FileModificationService.getInstance().preparePsiElementForWrite(container)) return;

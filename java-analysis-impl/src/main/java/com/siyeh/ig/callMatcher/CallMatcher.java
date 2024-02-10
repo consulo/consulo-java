@@ -48,7 +48,7 @@ public interface CallMatcher extends Predicate<PsiMethodCallExpression> {
    * @return true if the supplied expression matches this matcher
    */
   @Contract(value = "null -> false", pure = true)
-  default boolean matches(@jakarta.annotation.Nullable PsiExpression expression) {
+  default boolean matches(@Nullable PsiExpression expression) {
     expression = PsiUtil.skipParenthesizedExprDown(expression);
     return expression instanceof PsiMethodCallExpression && test((PsiMethodCallExpression) expression);
   }
@@ -123,7 +123,7 @@ public interface CallMatcher extends Predicate<PsiMethodCallExpression> {
    * @return a new matcher
    */
   @Contract(pure = true)
-  static Simple exactInstanceCall(@jakarta.annotation.Nonnull String className, String... methodNames) {
+  static Simple exactInstanceCall(@Nonnull String className, String... methodNames) {
     return new Simple(className, Set.of(methodNames), null, CallType.EXACT_INSTANCE);
   }
 
@@ -135,7 +135,7 @@ public interface CallMatcher extends Predicate<PsiMethodCallExpression> {
    * @return a new matcher
    */
   @Contract(pure = true)
-  static Simple staticCall(@jakarta.annotation.Nonnull String className, String... methodNames) {
+  static Simple staticCall(@Nonnull String className, String... methodNames) {
     return new Simple(className, Set.of(methodNames), null, CallType.STATIC);
   }
 
@@ -169,7 +169,7 @@ public interface CallMatcher extends Predicate<PsiMethodCallExpression> {
    * @return call matcher with additional check before actual call matching
    */
   @Contract(pure = true)
-  default CallMatcher withContextFilter(@jakarta.annotation.Nonnull Predicate<? super PsiElement> filter) {
+  default CallMatcher withContextFilter(@Nonnull Predicate<? super PsiElement> filter) {
     return new CallMatcher() {
       @Override
       public Stream<String> names() {
@@ -211,7 +211,7 @@ public interface CallMatcher extends Predicate<PsiMethodCallExpression> {
    * @return call matcher, that matches element for file with given language level or higher
    */
   @Contract(pure = true)
-  default CallMatcher withLanguageLevelAtLeast(@jakarta.annotation.Nonnull LanguageLevel level) {
+  default CallMatcher withLanguageLevelAtLeast(@Nonnull LanguageLevel level) {
     return withContextFilter(element -> PsiUtil.getLanguageLevel(element).isAtLeast(level));
   }
 
@@ -230,7 +230,7 @@ public interface CallMatcher extends Predicate<PsiMethodCallExpression> {
     String[] myParameters;
     private final CallType myCallType;
 
-    private Simple(@jakarta.annotation.Nonnull String className, @Nonnull Set<String> names, @Nullable String[] parameters, CallType callType) {
+    private Simple(@Nonnull String className, @Nonnull Set<String> names, @Nullable String[] parameters, CallType callType) {
       myClassName = className;
       myNames = names;
       myParameters = parameters;
@@ -328,7 +328,7 @@ public interface CallMatcher extends Predicate<PsiMethodCallExpression> {
       return methodMatches(method);
     }
 
-    private boolean parametersMatch(@jakarta.annotation.Nonnull PsiParameterList parameterList) {
+    private boolean parametersMatch(@Nonnull PsiParameterList parameterList) {
       if (myParameters == null) {
         return true;
       }

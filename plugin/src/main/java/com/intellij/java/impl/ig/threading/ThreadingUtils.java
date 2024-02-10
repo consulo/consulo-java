@@ -27,7 +27,7 @@ class ThreadingUtils {
   }
 
   public static boolean isWaitCall(
-    @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+    @Nonnull PsiMethodCallExpression expression) {
     final PsiReferenceExpression methodExpression =
       expression.getMethodExpression();
     @NonNls final String methodName = methodExpression.getReferenceName();
@@ -98,7 +98,7 @@ class ThreadingUtils {
   }
 
   public static boolean isAwaitCall(
-    @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+    @Nonnull PsiMethodCallExpression expression) {
     final PsiReferenceExpression methodExpression =
       expression.getMethodExpression();
     @NonNls final String methodName = methodExpression.getReferenceName();

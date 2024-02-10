@@ -32,7 +32,7 @@ import jakarta.annotation.Nonnull;
 @IntentionMetaData(ignoreId = "java.ConvertJUnit3TestCaseToJUnit4Intention", fileExtensions = "java", categories = {"Java", "JUnit"})
 public class ConvertJUnit3TestCaseToJUnit4Intention extends Intention {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected PsiElementPredicate getElementPredicate() {
     return new ConvertJUnit3TestCaseToJUnit4Predicate();
@@ -109,7 +109,7 @@ public class ConvertJUnit3TestCaseToJUnit4Intention extends Intention {
     @Nonnull
 	private final String myLifeCycleMethodName;
 
-    private SuperLifeCycleCallRemover(@jakarta.annotation.Nonnull String lifeCycleMethodName) {
+    private SuperLifeCycleCallRemover(@Nonnull String lifeCycleMethodName) {
       myLifeCycleMethodName = lifeCycleMethodName;
     }
 

@@ -52,7 +52,7 @@ public class ClsProvidesStatementImpl extends ClsRepositoryPsiElement<PsiProvide
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @jakarta.annotation.Nonnull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
     StringUtil.repeatSymbol(buffer, ' ', indentLevel);
     buffer.append("provides ").append(myClassReference.getCanonicalText()).append(' ');
     appendText(getImplementationList(), indentLevel, buffer);

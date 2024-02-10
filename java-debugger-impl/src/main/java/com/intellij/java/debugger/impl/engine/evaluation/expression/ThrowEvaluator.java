@@ -26,7 +26,7 @@ import jakarta.annotation.Nonnull;
  */
 public class ThrowEvaluator implements Evaluator
 {
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	private final Evaluator myExceptionEvaluator;
 
 	public ThrowEvaluator(@Nonnull Evaluator exceptionEvaluator)

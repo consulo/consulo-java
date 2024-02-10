@@ -114,7 +114,7 @@ public class GenerateEqualsHandler extends GenerateMembersHandlerBase {
   }
 
   @Override
-  protected boolean hasMembers(@jakarta.annotation.Nonnull PsiClass aClass) {
+  protected boolean hasMembers(@Nonnull PsiClass aClass) {
     return hasNonStaticFields(aClass);
   }
 

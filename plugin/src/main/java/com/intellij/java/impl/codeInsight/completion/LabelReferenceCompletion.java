@@ -48,7 +48,7 @@ class LabelReferenceCompletion implements CompletionProvider {
 
   @RequiredReadAction
   @Override
-  public void addCompletions(@jakarta.annotation.Nonnull CompletionParameters parameters, ProcessingContext context, @Nonnull CompletionResultSet result) {
+  public void addCompletions(@Nonnull CompletionParameters parameters, ProcessingContext context, @Nonnull CompletionResultSet result) {
     PsiReference ref = parameters.getPosition().getContainingFile().findReferenceAt(parameters.getOffset());
     if (ref instanceof PsiLabelReference) {
       result.addAllElements(processLabelReference((PsiLabelReference) ref));

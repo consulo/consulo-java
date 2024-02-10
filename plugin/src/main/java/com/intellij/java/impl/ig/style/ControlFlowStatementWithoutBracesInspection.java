@@ -33,7 +33,7 @@ public class ControlFlowStatementWithoutBracesInspection
   extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "control.flow.statement.without.braces.display.name");
@@ -53,7 +53,7 @@ public class ControlFlowStatementWithoutBracesInspection
 
   private static class ControlFlowStatementFix extends InspectionGadgetsFix {
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "control.flow.statement.without.braces.add.quickfix");

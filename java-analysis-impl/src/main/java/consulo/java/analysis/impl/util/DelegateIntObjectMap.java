@@ -49,7 +49,7 @@ public class DelegateIntObjectMap<V> implements IntObjectMap<V>
 	}
 
 	@Override
-	@jakarta.annotation.Nullable
+	@Nullable
 	public V get(int i)
 	{
 		return myDelegate.get(i);

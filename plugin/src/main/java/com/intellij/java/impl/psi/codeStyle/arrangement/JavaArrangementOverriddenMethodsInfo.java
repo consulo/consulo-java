@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class JavaArrangementOverriddenMethodsInfo {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private final List<JavaElementArrangementEntry> myMethodEntries = new ArrayList<JavaElementArrangementEntry>();
   @Nonnull
   private final String myName;
@@ -35,11 +35,11 @@ public class JavaArrangementOverriddenMethodsInfo {
     myName = name;
   }
 
-  public void addMethodEntry(@jakarta.annotation.Nonnull JavaElementArrangementEntry entry) {
+  public void addMethodEntry(@Nonnull JavaElementArrangementEntry entry) {
     myMethodEntries.add(entry);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getName() {
     return myName;
   }

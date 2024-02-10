@@ -40,7 +40,7 @@ public abstract class JamClassAttributeMeta<JamType> extends JamAttributeMeta<Ja
       super(attrName);
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public List<JamClassAttributeElement> getJam(PsiElementRef<PsiAnnotation> anno) {
       return getCollectionJam(anno, new Function<PsiAnnotationMemberValue, JamClassAttributeElement>() {
         public JamClassAttributeElement apply(PsiAnnotationMemberValue psiAnnotationMemberValue) {

@@ -53,7 +53,7 @@ public class FlipExpressionIntention extends MutablyNamedIntention {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new ExpressionPredicate();
   }
@@ -86,7 +86,7 @@ public class FlipExpressionIntention extends MutablyNamedIntention {
   }
 
   @Override
-  protected void processIntention(Editor editor, @jakarta.annotation.Nonnull PsiElement element) {
+  protected void processIntention(Editor editor, @Nonnull PsiElement element) {
     final CaretModel caretModel = editor.getCaretModel();
     final int offset = caretModel.getOffset();
     super.processIntention(editor, element);

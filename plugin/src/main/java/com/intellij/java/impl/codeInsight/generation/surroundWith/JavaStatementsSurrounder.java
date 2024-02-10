@@ -36,7 +36,7 @@ abstract class JavaStatementsSurrounder implements Surrounder {
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   public TextRange surroundElements(@Nonnull Project project,
                                     @Nonnull Editor editor,
                                     @Nonnull PsiElement[] elements) throws IncorrectOperationException {

@@ -29,7 +29,7 @@ import jakarta.annotation.Nonnull;
 public class SimpleDateFormatWithoutLocaleInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("instantiating.simpledateformat.without.locale.display.name");
   }
@@ -48,7 +48,7 @@ public class SimpleDateFormatWithoutLocaleInspection extends BaseInspection {
   private static class SimpleDateFormatWithoutLocaleVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitNewExpression(@jakarta.annotation.Nonnull PsiNewExpression expression) {
+    public void visitNewExpression(@Nonnull PsiNewExpression expression) {
       super.visitNewExpression(expression);
       if (!ExpressionUtils.hasType(expression, "java.text.SimpleDateFormat")) {
         return;

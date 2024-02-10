@@ -77,7 +77,7 @@ public class PsiImportStatementStubImpl extends StubBase<PsiImportStatementBase>
 	}
 
 	@Override
-	@jakarta.annotation.Nullable
+	@Nullable
 	public PsiJavaCodeReferenceElement getReference()
 	{
 		PsiJavaCodeReferenceElement ref = SoftReference.dereference(myReference);
@@ -103,7 +103,7 @@ public class PsiImportStatementStubImpl extends StubBase<PsiImportStatementBase>
 		return flags;
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	private PsiJavaCodeReferenceElement getStaticReference()
 	{
 		final PsiJavaCodeReferenceElement refElement = createReference();
@@ -132,7 +132,7 @@ public class PsiImportStatementStubImpl extends StubBase<PsiImportStatementBase>
 		return refElement;
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	private PsiJavaCodeReferenceElement createReference()
 	{
 		final String refText = getImportReferenceText();

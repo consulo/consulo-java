@@ -49,7 +49,7 @@ import java.util.Set;
 public class UnusedMessageFormatParameterInspection extends BaseLocalInspectionTool {
   public static final String REGEXP = "regexp";
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public Language getLanguage() {
     return PropertiesLanguage.INSTANCE;
@@ -67,7 +67,7 @@ public class UnusedMessageFormatParameterInspection extends BaseLocalInspectionT
   }
 
   @Nullable
-  public ProblemDescriptor[] checkFile(@jakarta.annotation.Nonnull PsiFile file, @jakarta.annotation.Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
+  public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
     if (!(file instanceof PropertiesFile)) return null;
     PropertiesFile propertiesFile = (PropertiesFile) file;
     final List<IProperty> properties = propertiesFile.getProperties();

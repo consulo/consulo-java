@@ -50,7 +50,7 @@ public class JavaTypeParameterElementType extends JavaStubElementType<PsiTypePar
   }
 
   @Override
-  public PsiTypeParameter createPsi(@jakarta.annotation.Nonnull final PsiTypeParameterStub stub) {
+  public PsiTypeParameter createPsi(@Nonnull final PsiTypeParameterStub stub) {
     return getPsiFactory(stub).createTypeParameter(stub);
   }
 
@@ -67,7 +67,7 @@ public class JavaTypeParameterElementType extends JavaStubElementType<PsiTypePar
   }
 
   @Override
-  public void serialize(@jakarta.annotation.Nonnull final PsiTypeParameterStub stub, @Nonnull final StubOutputStream dataStream) throws IOException {
+  public void serialize(@Nonnull final PsiTypeParameterStub stub, @Nonnull final StubOutputStream dataStream) throws IOException {
     String name = stub.getName();
     dataStream.writeName(name);
   }
@@ -80,6 +80,6 @@ public class JavaTypeParameterElementType extends JavaStubElementType<PsiTypePar
   }
 
   @Override
-  public void indexStub(@Nonnull final PsiTypeParameterStub stub, @jakarta.annotation.Nonnull final IndexSink sink) {
+  public void indexStub(@Nonnull final PsiTypeParameterStub stub, @Nonnull final IndexSink sink) {
   }
 }

@@ -39,14 +39,14 @@ public class ListIndexOfReplaceableByContainsInspection
   extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "indexof.replaceable.by.contains.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiBinaryExpression expression = (PsiBinaryExpression)infos[0];
     final PsiExpression lhs = expression.getLOperand();
@@ -111,7 +111,7 @@ public class ListIndexOfReplaceableByContainsInspection
   }
 
   static String createContainsExpressionText(
-    @jakarta.annotation.Nonnull PsiMethodCallExpression call,
+    @Nonnull PsiMethodCallExpression call,
     boolean flipped, IElementType tokenType) {
     final PsiReferenceExpression methodExpression =
       call.getMethodExpression();
@@ -221,7 +221,7 @@ public class ListIndexOfReplaceableByContainsInspection
     }
 
     private static boolean isIndexOfCall(
-      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
       final String methodName = methodExpression.getReferenceName();

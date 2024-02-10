@@ -38,13 +38,13 @@ import java.util.List;
 public class AbstractMethodWithMissingImplementationsInspection
   extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "abstract.method.with.missing.implementations.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "abstract.method.with.missing.implementations.problem.descriptor");
@@ -85,8 +85,8 @@ public class AbstractMethodWithMissingImplementationsInspection
     }
 
     private static boolean hasMatchingImplementation(
-      @jakarta.annotation.Nonnull PsiClass aClass,
-      @jakarta.annotation.Nonnull PsiMethod method) {
+      @Nonnull PsiClass aClass,
+      @Nonnull PsiMethod method) {
       final PsiMethod overridingMethod =
         findOverridingMethod(aClass, method);
       if (overridingMethod == null ||

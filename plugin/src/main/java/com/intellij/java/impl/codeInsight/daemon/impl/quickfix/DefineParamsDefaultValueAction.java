@@ -76,7 +76,7 @@ public class DefineParamsDefaultValueAction extends PsiElementBaseIntentionActio
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, @jakarta.annotation.Nonnull PsiElement element) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     if (!JavaLanguage.INSTANCE.equals(element.getLanguage())) {
       return false;
     }
@@ -98,7 +98,7 @@ public class DefineParamsDefaultValueAction extends PsiElementBaseIntentionActio
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, final Editor editor, @jakarta.annotation.Nonnull PsiElement element) throws IncorrectOperationException {
+  public void invoke(@Nonnull final Project project, final Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiParameter[] parameters = getParams(element);
     if (parameters == null || parameters.length == 0) {
       return;

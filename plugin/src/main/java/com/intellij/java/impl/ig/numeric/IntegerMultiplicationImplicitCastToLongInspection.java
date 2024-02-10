@@ -54,7 +54,7 @@ public class IntegerMultiplicationImplicitCastToLongInspection extends
   public boolean ignoreNonOverflowingCompileTimeConstants = true;
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "integer.multiplication.implicit.cast.to.long.display.name");

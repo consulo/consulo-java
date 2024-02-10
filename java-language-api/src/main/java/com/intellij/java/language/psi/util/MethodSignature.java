@@ -27,10 +27,10 @@ import com.intellij.java.language.psi.PsiTypeParameter;
 public interface MethodSignature {
   MethodSignature[] EMPTY_ARRAY = new MethodSignature[0];
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   PsiSubstitutor getSubstitutor();
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   String getName();
 
   /**
@@ -39,7 +39,7 @@ public interface MethodSignature {
   @Nonnull
   PsiType[] getParameterTypes();
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   PsiTypeParameter[] getTypeParameters();
 
   boolean isRaw();

@@ -66,7 +66,7 @@ public class InnerClassReferenceVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitThisExpression(
-    @jakarta.annotation.Nonnull PsiThisExpression expression) {
+    @Nonnull PsiThisExpression expression) {
     if (!referencesStaticallyAccessible) {
       return;
     }

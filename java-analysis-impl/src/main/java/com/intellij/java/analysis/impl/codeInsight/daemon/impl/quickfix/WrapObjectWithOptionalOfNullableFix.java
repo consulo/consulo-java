@@ -45,8 +45,8 @@ public class WrapObjectWithOptionalOfNullableFix extends MethodArgumentFix imple
 
   protected WrapObjectWithOptionalOfNullableFix(final @Nonnull PsiExpressionList list,
                                                 final int i,
-                                                final @jakarta.annotation.Nonnull PsiType toType,
-                                                final @jakarta.annotation.Nonnull ArgumentFixerActionFactory fixerActionFactory) {
+                                                final @Nonnull PsiType toType,
+                                                final @Nonnull ArgumentFixerActionFactory fixerActionFactory) {
     super(list, i, toType, fixerActionFactory);
   }
 
@@ -61,42 +61,42 @@ public class WrapObjectWithOptionalOfNullableFix extends MethodArgumentFix imple
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return PsiUtil.isLanguageLevel8OrHigher(file) && super.isAvailable(project, editor, file);
   }
 
-  public static IntentionAction createFix(@jakarta.annotation.Nullable PsiType type, @Nonnull PsiExpression expression) {
+  public static IntentionAction createFix(@Nullable PsiType type, @Nonnull PsiExpression expression) {
     class MyFix extends LocalQuickFixAndIntentionActionOnPsiElement implements HighPriorityAction {
-      protected MyFix(@jakarta.annotation.Nullable PsiElement element) {
+      protected MyFix(@Nullable PsiElement element) {
         super(element);
       }
 
       @Nls
-      @jakarta.annotation.Nonnull
+      @Nonnull
       @Override
       public String getFamilyName() {
         return JavaQuickFixBundle.message("wrap.with.optional.single.parameter.text");
       }
 
       @Override
-      public void invoke(@jakarta.annotation.Nonnull Project project,
-                         @jakarta.annotation.Nonnull PsiFile file,
-                         @jakarta.annotation.Nullable Editor editor,
+      public void invoke(@Nonnull Project project,
+                         @Nonnull PsiFile file,
+                         @Nullable Editor editor,
                          @Nonnull PsiElement startElement,
-                         @jakarta.annotation.Nonnull PsiElement endElement) {
+                         @Nonnull PsiElement endElement) {
         startElement.replace(getModifiedExpression((PsiExpression) getStartElement()));
       }
 
       @Override
-      public boolean isAvailable(@jakarta.annotation.Nonnull Project project,
+      public boolean isAvailable(@Nonnull Project project,
                                  @Nonnull PsiFile file,
-                                 @jakarta.annotation.Nonnull PsiElement startElement,
-                                 @jakarta.annotation.Nonnull PsiElement endElement) {
+                                 @Nonnull PsiElement startElement,
+                                 @Nonnull PsiElement endElement) {
         return BaseIntentionAction.canModify(startElement) &&
             PsiUtil.isLanguageLevel8OrHigher(startElement) && areConvertible(((PsiExpression) startElement).getType(), type);
       }
 
-      @jakarta.annotation.Nonnull
+      @Nonnull
       @Override
       public String getText() {
         return getFamilyName();
@@ -107,14 +107,14 @@ public class WrapObjectWithOptionalOfNullableFix extends MethodArgumentFix imple
 
   public static class MyFixerActionFactory extends ArgumentFixerActionFactory {
 
-    @jakarta.annotation.Nullable
+    @Nullable
     @Override
     protected PsiExpression getModifiedArgument(final PsiExpression expression, final PsiType toType) throws IncorrectOperationException {
       return getModifiedExpression(expression);
     }
 
     @Override
-    public boolean areTypesConvertible(@jakarta.annotation.Nonnull final PsiType exprType, @jakarta.annotation.Nonnull final PsiType parameterType, @jakarta.annotation.Nonnull final PsiElement context) {
+    public boolean areTypesConvertible(@Nonnull final PsiType exprType, @Nonnull final PsiType parameterType, @Nonnull final PsiElement context) {
       return parameterType.isConvertibleFrom(exprType) || areConvertible(exprType, parameterType);
     }
 
@@ -124,7 +124,7 @@ public class WrapObjectWithOptionalOfNullableFix extends MethodArgumentFix imple
     }
   }
 
-  private static boolean areConvertible(@jakarta.annotation.Nullable PsiType exprType, @Nullable PsiType parameterType) {
+  private static boolean areConvertible(@Nullable PsiType exprType, @Nullable PsiType parameterType) {
     if (exprType == null ||
         !exprType.isValid() ||
         !(parameterType instanceof PsiClassType) ||
@@ -151,7 +151,7 @@ public class WrapObjectWithOptionalOfNullableFix extends MethodArgumentFix imple
     return TypeConversionUtil.isAssignable(optionalTypeParameter, exprType);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private static PsiExpression getModifiedExpression(PsiExpression expression) {
     final Project project = expression.getProject();
     final Nullability nullability = NullabilityUtil.getExpressionNullability(expression, true);

@@ -57,7 +57,7 @@ public abstract class AbstractExcludeFromRunAction<T extends ModuleBasedConfigur
 
   @RequiredUIAccess
   @Override
-  public void update(@jakarta.annotation.Nonnull AnActionEvent e) {
+  public void update(@Nonnull AnActionEvent e) {
     final Presentation presentation = e.getPresentation();
     presentation.setVisible(false);
     final Project project = e.getData(CommonDataKeys.PROJECT);

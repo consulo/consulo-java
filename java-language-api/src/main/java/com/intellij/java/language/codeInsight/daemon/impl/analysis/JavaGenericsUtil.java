@@ -98,7 +98,7 @@ public class JavaGenericsUtil
 		return false;
 	}
 
-	public static boolean isUncheckedWarning(@jakarta.annotation.Nonnull PsiJavaCodeReferenceElement expression, @jakarta.annotation.Nonnull JavaResolveResult resolveResult, @Nonnull LanguageLevel languageLevel)
+	public static boolean isUncheckedWarning(@Nonnull PsiJavaCodeReferenceElement expression, @Nonnull JavaResolveResult resolveResult, @Nonnull LanguageLevel languageLevel)
 	{
 		final PsiElement resolve = resolveResult.getElement();
 		if(!(resolve instanceof PsiMethod))
@@ -362,14 +362,14 @@ public class JavaGenericsUtil
 		return false;
 	}
 
-	@jakarta.annotation.Nullable
-	public static PsiType getCollectionItemType(@jakarta.annotation.Nonnull PsiExpression expression)
+	@Nullable
+	public static PsiType getCollectionItemType(@Nonnull PsiExpression expression)
 	{
 		return getCollectionItemType(expression.getType(), expression.getResolveScope());
 	}
 
 	@Nullable
-	public static PsiType getCollectionItemType(@jakarta.annotation.Nullable PsiType type, @jakarta.annotation.Nonnull GlobalSearchScope scope)
+	public static PsiType getCollectionItemType(@Nullable PsiType type, @Nonnull GlobalSearchScope scope)
 	{
 		if(type instanceof PsiArrayType)
 		{
@@ -442,7 +442,7 @@ public class JavaGenericsUtil
 		return null;
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	private static PsiTypeParameter getIterableTypeParameter(final JavaPsiFacade facade, final PsiClass context)
 	{
 		PsiClass iterable = facade.findClass("java.lang.Iterable", context.getResolveScope());

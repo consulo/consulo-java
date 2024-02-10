@@ -98,7 +98,7 @@ public class JamMemberMeta<Psi extends PsiModifierListOwner, Jam extends JamElem
     return this;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public final Jam getJamElement(@Nonnull Psi member) {
     return SemService.getSemService(member.getProject()).getSemElement(myJamKey, member);
   }

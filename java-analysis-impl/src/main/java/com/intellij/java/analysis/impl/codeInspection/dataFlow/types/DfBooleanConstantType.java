@@ -23,7 +23,7 @@ class DfBooleanConstantType extends DfConstantType<Boolean> implements DfBoolean
     return DfBooleanType.super.getPsiType();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public DfType tryNegate() {
     return getValue() ? DfTypes.FALSE : DfTypes.TRUE;

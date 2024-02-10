@@ -46,12 +46,12 @@ public class ClsModifierListImpl extends ClsRepositoryPsiElement<PsiModifierList
   }
 
   @Override
-  public boolean hasExplicitModifier(@jakarta.annotation.Nonnull String name) {
+  public boolean hasExplicitModifier(@Nonnull String name) {
     return hasModifierProperty(name);
   }
 
   @Override
-  public void setModifierProperty(@jakarta.annotation.Nonnull String name, boolean value) throws IncorrectOperationException {
+  public void setModifierProperty(@Nonnull String name, boolean value) throws IncorrectOperationException {
     throw cannotModifyException(this);
   }
 
@@ -61,7 +61,7 @@ public class ClsModifierListImpl extends ClsRepositoryPsiElement<PsiModifierList
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiAnnotation[] getAnnotations() {
     return getStub().getChildrenByType(JavaStubElementTypes.ANNOTATION, PsiAnnotation.ARRAY_FACTORY);
   }
@@ -148,7 +148,7 @@ public class ClsModifierListImpl extends ClsRepositoryPsiElement<PsiModifierList
   }
 
   @Override
-  public void setMirror(@jakarta.annotation.Nonnull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, JavaElementType.MODIFIER_LIST);
     setMirrors(getAnnotations(), SourceTreeToPsiMap.<PsiModifierList>treeToPsiNotNull(element).getAnnotations());
   }

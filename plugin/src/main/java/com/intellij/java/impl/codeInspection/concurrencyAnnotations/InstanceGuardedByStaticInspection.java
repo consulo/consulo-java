@@ -40,19 +40,19 @@ public class InstanceGuardedByStaticInspection extends BaseJavaLocalInspectionTo
 
   @Override
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return "Instance member guarded by static field";
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getShortName() {
     return "InstanceGuardedByStatic";
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiElementVisitor buildVisitorImpl(@Nonnull ProblemsHolder holder,
                                             boolean isOnTheFly,
                                             LocalInspectionToolSession session,

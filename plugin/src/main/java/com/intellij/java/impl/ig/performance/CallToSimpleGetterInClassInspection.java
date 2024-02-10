@@ -51,7 +51,7 @@ public class CallToSimpleGetterInClassInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("call.to.simple.getter.in.class.display.name");
   }

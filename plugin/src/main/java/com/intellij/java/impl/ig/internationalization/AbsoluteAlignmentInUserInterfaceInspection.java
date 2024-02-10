@@ -68,7 +68,7 @@ public abstract class AbsoluteAlignmentInUserInterfaceInspection extends BaseIns
   }
 
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("absolute.alignment.in.user.interface.display.name");
@@ -97,7 +97,7 @@ public abstract class AbsoluteAlignmentInUserInterfaceInspection extends BaseIns
       myReplacement = replacement;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public String getName() {
       final String shortClassName = myClassName.substring(myClassName.lastIndexOf('.') + 1);

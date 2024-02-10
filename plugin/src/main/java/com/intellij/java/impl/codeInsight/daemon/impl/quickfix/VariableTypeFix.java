@@ -71,18 +71,18 @@ public class VariableTypeFix extends LocalQuickFixAndIntentionActionOnPsiElement
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull PsiFile file, @jakarta.annotation.Nonnull PsiElement startElement, @jakarta.annotation.Nonnull PsiElement endElement) {
+  public boolean isAvailable(@Nonnull Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
     final PsiVariable myVariable = (PsiVariable) startElement;
     return myVariable.isValid() && myVariable.getTypeElement() != null && myVariable.getManager().isInProject(myVariable) && getReturnType() != null && getReturnType().isValid() &&
         !TypeConversionUtil.isNullType(getReturnType()) && !TypeConversionUtil.isVoidType(getReturnType());
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull final Project project,
-                     @jakarta.annotation.Nonnull final PsiFile file,
+  public void invoke(@Nonnull final Project project,
+                     @Nonnull final PsiFile file,
                      @Nullable Editor editor,
-                     @jakarta.annotation.Nonnull PsiElement startElement,
-                     @jakarta.annotation.Nonnull PsiElement endElement) {
+                     @Nonnull PsiElement startElement,
+                     @Nonnull PsiElement endElement) {
     final PsiVariable myVariable = (PsiVariable) startElement;
     if (changeMethodSignatureIfNeeded(myVariable)) {
       return;

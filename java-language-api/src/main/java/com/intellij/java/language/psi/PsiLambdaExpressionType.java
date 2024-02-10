@@ -30,7 +30,7 @@ public class PsiLambdaExpressionType extends PsiType {
     myExpression = expression;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getPresentableText() {
     return getCanonicalText();
@@ -62,7 +62,7 @@ public class PsiLambdaExpressionType extends PsiType {
     return null;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public PsiType[] getSuperTypes() {
     return PsiType.EMPTY_ARRAY;

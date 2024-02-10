@@ -49,18 +49,18 @@ public class InstanceofExpressionPostfixTemplate extends PostfixTemplate {
   }
 
   @Override
-  public boolean isApplicable(@Nonnull PsiElement context, @jakarta.annotation.Nonnull Document copyDocument, int newOffset) {
+  public boolean isApplicable(@Nonnull PsiElement context, @Nonnull Document copyDocument, int newOffset) {
     return JavaPostfixTemplatesUtils.isNotPrimitiveTypeExpression(JavaPostfixTemplatesUtils.getTopmostExpression(context));
   }
 
   @Override
-  public void expand(@jakarta.annotation.Nonnull PsiElement context, @jakarta.annotation.Nonnull Editor editor) {
+  public void expand(@Nonnull PsiElement context, @Nonnull Editor editor) {
     PsiExpression expression = JavaPostfixTemplatesUtils.getTopmostExpression(context);
     if (!JavaPostfixTemplatesUtils.isNotPrimitiveTypeExpression(expression)) return;
     surroundExpression(context.getProject(), editor, expression);
   }
 
-  private static void surroundExpression(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull Editor editor, @jakarta.annotation.Nonnull PsiExpression expr)
+  private static void surroundExpression(@Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiExpression expr)
     throws IncorrectOperationException {
     assert expr.isValid();
     PsiType[] types = GuessManager.getInstance(project).guessTypeToCast(expr);

@@ -58,13 +58,13 @@ public abstract class TooBroadScopeInspection extends BaseInspection {
   public boolean m_onlyLookAtBlocks = false;
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("too.broad.scope.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "TooBroadScope";
   }
@@ -98,7 +98,7 @@ public abstract class TooBroadScopeInspection extends BaseInspection {
       this.variableName = variableName;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("too.broad.scope.narrow.quickfix", variableName);
     }
@@ -171,7 +171,7 @@ public abstract class TooBroadScopeInspection extends BaseInspection {
       }
     }
 
-    private PsiDeclarationStatement createNewDeclaration(@jakarta.annotation.Nonnull PsiVariable variable, @jakarta.annotation.Nullable PsiExpression initializer)
+    private PsiDeclarationStatement createNewDeclaration(@Nonnull PsiVariable variable, @Nullable PsiExpression initializer)
       throws IncorrectOperationException {
       final Project project = variable.getProject();
       final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
@@ -223,7 +223,7 @@ public abstract class TooBroadScopeInspection extends BaseInspection {
       return lastChild.getText();
     }
 
-    private PsiDeclarationStatement moveDeclarationToLocation(@Nonnull PsiVariable variable, @jakarta.annotation.Nonnull PsiElement location)
+    private PsiDeclarationStatement moveDeclarationToLocation(@Nonnull PsiVariable variable, @Nonnull PsiElement location)
       throws IncorrectOperationException {
       PsiStatement statement = PsiTreeUtil.getParentOfType(location, PsiStatement.class, false);
       assert statement != null;

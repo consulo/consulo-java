@@ -49,7 +49,7 @@ public class AnonymousToInnerAction extends BaseRefactoringAction {
     return newExpression != null && newExpression.getAnonymousClass() != null;
   }
 
-  public RefactoringActionHandler getHandler(@jakarta.annotation.Nonnull DataContext dataContext) {
+  public RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
     return new AnonymousToInnerHandler();
   }
 }

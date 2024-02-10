@@ -16,7 +16,7 @@ import jakarta.annotation.Nullable;
 public class AnonymousCanBeMethodReferenceInspectionState implements InspectionToolState<AnonymousCanBeMethodReferenceInspectionState> {
   public boolean reportNotAnnotatedInterfaces = true;
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public AnonymousCanBeMethodReferenceInspectionState getState() {
     return this;

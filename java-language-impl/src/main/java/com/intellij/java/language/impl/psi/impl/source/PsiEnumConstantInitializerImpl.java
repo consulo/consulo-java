@@ -85,7 +85,7 @@ public class PsiEnumConstantInitializerImpl extends PsiClassImpl implements PsiE
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiClassType getBaseClassType() {
     if (myCachedBaseType == null) {
       myCachedBaseType = JavaPsiFacade.getInstance(getProject()).getElementFactory().createType(getBaseClass());
@@ -109,7 +109,7 @@ public class PsiEnumConstantInitializerImpl extends PsiClassImpl implements PsiE
   }
 
   @Override
-  public boolean hasModifierProperty(@jakarta.annotation.Nonnull String name) {
+  public boolean hasModifierProperty(@Nonnull String name) {
     return false;
   }
 

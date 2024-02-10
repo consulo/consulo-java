@@ -34,13 +34,13 @@ public interface CommonModelElement {
 
   PsiManager getPsiManager();
 
-  @jakarta.annotation.Nullable
+  @Nullable
   Module getModule();
 
   @Nullable
   PsiElement getIdentifyingPsiElement();
 
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiFile getContainingFile();
 
   abstract class PsiBase implements CommonModelElement {
@@ -51,7 +51,7 @@ public interface CommonModelElement {
       return getPsiElement().isValid();
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     public XmlTag getXmlTag() {
       return null;
     }
@@ -75,14 +75,14 @@ public interface CommonModelElement {
 
   abstract class ModuleBase implements CommonModelElement{
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public abstract Module getModule();
 
     public boolean isValid() {
       return !getModule().isDisposed();
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     public XmlTag getXmlTag() {
       return null;
     }

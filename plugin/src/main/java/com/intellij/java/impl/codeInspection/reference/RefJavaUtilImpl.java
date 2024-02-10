@@ -290,7 +290,7 @@ public class RefJavaUtilImpl extends RefJavaUtil {
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   public RefClass getOwnerClass(RefManager refManager, PsiElement psiElement) {
     while (psiElement != null && !(psiElement instanceof PsiClass)) {
       psiElement = psiElement.getParent();

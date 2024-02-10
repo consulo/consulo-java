@@ -29,7 +29,7 @@ import jakarta.annotation.Nonnull;
 public class AnonymousClassVariableHidesContainingMethodVariableInspection
   extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "anonymous.class.variable.hides.containing.method.variable.display.name");

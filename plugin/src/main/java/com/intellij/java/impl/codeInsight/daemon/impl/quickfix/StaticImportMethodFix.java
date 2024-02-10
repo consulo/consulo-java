@@ -37,17 +37,17 @@ import java.util.List;
 public class StaticImportMethodFix extends StaticImportMemberFix<PsiMethod> {
   private final SmartPsiElementPointer<PsiMethodCallExpression> myMethodCall;
 
-  public StaticImportMethodFix(@jakarta.annotation.Nonnull PsiMethodCallExpression methodCallExpression) {
+  public StaticImportMethodFix(@Nonnull PsiMethodCallExpression methodCallExpression) {
     myMethodCall = SmartPointerManager.getInstance(methodCallExpression.getProject()).createSmartPsiElementPointer(methodCallExpression);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected String getBaseText() {
     return JavaQuickFixBundle.message("static.import.method.text");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected String getMemberPresentableText(PsiMethod method) {
     return PsiFormatUtil.formatMethod(method, PsiSubstitutor.EMPTY, PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_CONTAINING_CLASS | PsiFormatUtilBase.SHOW_FQ_NAME, 0);
@@ -69,18 +69,18 @@ public class StaticImportMethodFix extends StaticImportMemberFix<PsiMethod> {
     return processor.getMembersToImport(applicableOnly);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected StaticImportMethodQuestionAction<PsiMethod> createQuestionAction(List<PsiMethod> methodsToImport, @Nonnull Project project, Editor editor) {
     return new StaticImportMethodQuestionAction<>(project, editor, methodsToImport, myMethodCall);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   protected PsiElement getElement() {
     return myMethodCall.getElement();
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   protected PsiElement getQualifierExpression() {
     final PsiMethodCallExpression element = myMethodCall.getElement();

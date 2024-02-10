@@ -44,7 +44,7 @@ public class ConfigFileMetaDataRegistryImpl implements ConfigFileMetaDataRegistr
     }
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public ConfigFileMetaData[] getMetaData() {
     if (myCachedMetaData == null) {
       myCachedMetaData = myMetaData.toArray(new ConfigFileMetaData[myMetaData.size()]);

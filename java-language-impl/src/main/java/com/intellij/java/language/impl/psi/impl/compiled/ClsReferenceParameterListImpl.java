@@ -40,8 +40,8 @@ public class ClsReferenceParameterListImpl extends ClsElementImpl implements Psi
 	private volatile PsiType[] myTypeParametersCachedTypes;
 
 	public ClsReferenceParameterListImpl(PsiElement parent,
-										 @jakarta.annotation.Nonnull String[] classParameters,
-										 @jakarta.annotation.Nonnull TypeAnnotationContainer annotations)
+										 @Nonnull String[] classParameters,
+										 @Nonnull TypeAnnotationContainer annotations)
 	{
 		myParent = parent;
 
@@ -78,17 +78,17 @@ public class ClsReferenceParameterListImpl extends ClsElementImpl implements Psi
 	}
 
 	@Override
-	public void appendMirrorText(int indentLevel, @jakarta.annotation.Nonnull StringBuilder buffer)
+	public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer)
 	{
 	}
 
 	@Override
-	public void setMirror(@jakarta.annotation.Nonnull TreeElement element) throws InvalidMirrorException
+	public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException
 	{
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public PsiTypeElement[] getTypeParameterElements()
 	{
 		return myTypeParameters;
@@ -112,7 +112,7 @@ public class ClsReferenceParameterListImpl extends ClsElementImpl implements Psi
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public PsiElement[] getChildren()
 	{
 		return myTypeParameters;

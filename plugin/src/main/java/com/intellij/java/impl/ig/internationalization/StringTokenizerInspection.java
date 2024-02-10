@@ -27,7 +27,7 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class StringTokenizerInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "UseOfStringTokenizer";
   }

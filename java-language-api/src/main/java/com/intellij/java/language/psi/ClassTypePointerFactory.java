@@ -31,5 +31,5 @@ public interface ClassTypePointerFactory {
   ExtensionPointName<ClassTypePointerFactory> EP_NAME = ExtensionPointName.create(ClassTypePointerFactory.class);
 
   @Nullable
-  SmartTypePointer createClassTypePointer(@jakarta.annotation.Nonnull PsiClassType classType, @Nonnull Project project);
+  SmartTypePointer createClassTypePointer(@Nonnull PsiClassType classType, @Nonnull Project project);
 }

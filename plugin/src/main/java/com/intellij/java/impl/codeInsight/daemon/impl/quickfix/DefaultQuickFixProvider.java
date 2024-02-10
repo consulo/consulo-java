@@ -42,7 +42,7 @@ import java.util.Map;
 @ExtensionImpl
 public class DefaultQuickFixProvider extends UnresolvedReferenceQuickFixProvider<PsiJavaCodeReferenceElement> {
   @Override
-  public void registerFixes(@Nonnull PsiJavaCodeReferenceElement ref, @jakarta.annotation.Nonnull QuickFixActionRegistrar registrar) {
+  public void registerFixes(@Nonnull PsiJavaCodeReferenceElement ref, @Nonnull QuickFixActionRegistrar registrar) {
     if (PsiUtil.isModuleFile(ref.getContainingFile())) {
       List<LocalQuickFix> fixes = OrderEntryFix.registerFixes(ref);
       if (fixes != null) {
@@ -97,9 +97,9 @@ public class DefaultQuickFixProvider extends UnresolvedReferenceQuickFixProvider
     }
   }
 
-  private static void registerPriorityActions(@jakarta.annotation.Nonnull QuickFixActionRegistrar registrar,
+  private static void registerPriorityActions(@Nonnull QuickFixActionRegistrar registrar,
                                               @Nonnull TextRange fixRange,
-                                              @jakarta.annotation.Nonnull PsiReferenceExpression refExpr) {
+                                              @Nonnull PsiReferenceExpression refExpr) {
     final JavaCodeStyleManager styleManager = JavaCodeStyleManager.getInstance(refExpr.getProject());
 
     final Map<VariableKind, IntentionAction> map = new EnumMap<>(VariableKind.class);

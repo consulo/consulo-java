@@ -28,6 +28,7 @@ import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.ui.ExternalizableStringSet;
 import consulo.annotation.component.ExtensionImpl;
 
+import consulo.deadCodeNotWorking.impl.CheckBox;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -65,7 +66,7 @@ public class PublicFieldInspection extends BaseInspection {
     final JPanel annotationsListControl = SpecialAnnotationsUtil.createSpecialAnnotationsListControl(
       ignorableAnnotations, InspectionGadgetsBundle.message("ignore.if.annotated.by"));
     panel.add(annotationsListControl, BorderLayout.CENTER);
-    final consulo.deadCodeNotWorking.impl.CheckBox checkBox = new consulo.deadCodeNotWorking.impl.CheckBox(InspectionGadgetsBundle.message(
+    final CheckBox checkBox = new CheckBox(InspectionGadgetsBundle.message(
       "public.field.ignore.enum.type.fields.option"), this, "ignoreEnums");
     panel.add(checkBox, BorderLayout.SOUTH);
     return panel;
@@ -94,7 +95,7 @@ public class PublicFieldInspection extends BaseInspection {
   private class PublicFieldVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@jakarta.annotation.Nonnull PsiField field) {
+    public void visitField(@Nonnull PsiField field) {
       if (!field.hasModifierProperty(PsiModifier.PUBLIC)) {
         return;
       }

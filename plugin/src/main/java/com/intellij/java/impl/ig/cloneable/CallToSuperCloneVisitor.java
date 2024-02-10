@@ -34,7 +34,7 @@ class CallToSuperCloneVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitMethodCallExpression(
-    @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+    @Nonnull PsiMethodCallExpression expression) {
     if (callToSuperCloneFound) {
       return;
     }

@@ -34,7 +34,7 @@ public interface CommonJavaRunConfigurationParameters extends CommonProgramRunCo
 
   void setAlternativeJrePath(String path);
 
-  @jakarta.annotation.Nullable
+  @Nullable
   String getRunClass();
 
   @Nullable

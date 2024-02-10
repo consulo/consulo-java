@@ -83,7 +83,7 @@ public class KindSorter implements Sorter
 	};
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public Comparator getComparator()
 	{
 		return COMPARATOR;

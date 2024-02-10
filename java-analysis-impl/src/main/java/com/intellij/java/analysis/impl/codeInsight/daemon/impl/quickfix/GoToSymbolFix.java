@@ -31,7 +31,7 @@ public class GoToSymbolFix implements SyntheticIntentionAction {
   private final SmartPsiElementPointer<NavigatablePsiElement> myPointer;
   private final String myMessage;
 
-  public GoToSymbolFix(@jakarta.annotation.Nonnull NavigatablePsiElement symbol, @Nonnull @Nls String message) {
+  public GoToSymbolFix(@Nonnull NavigatablePsiElement symbol, @Nonnull @Nls String message) {
     myPointer = SmartPointerManager.getInstance(symbol.getProject()).createSmartPsiElementPointer(symbol);
     myMessage = message;
   }

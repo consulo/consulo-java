@@ -27,7 +27,7 @@ public interface InstancesTrackerListener extends EventListener
 	{
 	}
 
-	default void classRemoved(@jakarta.annotation.Nonnull String name)
+	default void classRemoved(@Nonnull String name)
 	{
 	}
 

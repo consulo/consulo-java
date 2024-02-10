@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NonNls;
 @ExtensionImpl
 public class RecordStoreResourceInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "RecordStoreOpenedButNotSafelyClosed";
   }
@@ -125,7 +125,7 @@ public class RecordStoreResourceInspection extends BaseInspection {
     }
 
     private static boolean isRecordStoreFactoryMethod(
-      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
       final String methodName = methodExpression.getReferenceName();
@@ -159,7 +159,7 @@ public class RecordStoreResourceInspection extends BaseInspection {
     }
 
     @Override
-    public void visitElement(@jakarta.annotation.Nonnull PsiElement element) {
+    public void visitElement(@Nonnull PsiElement element) {
       if (!containsClose) {
         super.visitElement(element);
       }

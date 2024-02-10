@@ -25,6 +25,7 @@ import consulo.process.ExecutionException;
 import consulo.process.ProcessHandler;
 import consulo.process.cmd.GeneralCommandLine;
 import consulo.process.cmd.ParametersList;
+import consulo.process.cmd.SimpleJavaParameters;
 import consulo.process.cmd.SimpleProgramParameters;
 import consulo.process.local.ProcessHandlerFactory;
 import consulo.project.Project;
@@ -38,7 +39,7 @@ import java.nio.charset.Charset;
 /**
  * @author Gregory.Shrago
  *
- * Replacement of {@link consulo.process.cmd.SimpleJavaParameters} without dependency to platform code
+ * Replacement of {@link SimpleJavaParameters} without dependency to platform code
  */
 public class OwnSimpleJavaParameters extends SimpleProgramParameters
 {
@@ -105,7 +106,7 @@ public class OwnSimpleJavaParameters extends SimpleProgramParameters
 		return myVmParameters;
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	public Charset getCharset()
 	{
 		return myCharset;
@@ -227,7 +228,7 @@ public class OwnSimpleJavaParameters extends SimpleProgramParameters
 		return OwnJdkUtil.setupJVMCommandLine(this);
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public ProcessHandler createOSProcessHandler() throws ExecutionException
 	{
 		ProcessHandler processHandler = ProcessHandlerFactory.getInstance().createProcessHandler(toCommandLine());

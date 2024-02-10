@@ -98,7 +98,7 @@ public class PsiUtilEx {
     return JavaClassNames.JAVA_LANG_STRING.equals(type.getCanonicalText());
   }
 
-  public static boolean isStringOrStringArray(@jakarta.annotation.Nonnull PsiType type) {
+  public static boolean isStringOrStringArray(@Nonnull PsiType type) {
     if (type instanceof PsiArrayType) {
       return isString(((PsiArrayType)type).getComponentType());
     }

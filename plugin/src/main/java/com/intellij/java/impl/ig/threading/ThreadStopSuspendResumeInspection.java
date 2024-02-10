@@ -30,12 +30,12 @@ import org.jetbrains.annotations.NonNls;
 @ExtensionImpl
 public class ThreadStopSuspendResumeInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "CallToThreadStopSuspendOrResumeManager";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "thread.stop.suspend.resume.display.name");
@@ -56,7 +56,7 @@ public class ThreadStopSuspendResumeInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!isStopSuspendOrResume(expression)) {
         return;

@@ -64,7 +64,7 @@ public class RedundantFieldInitializationInspection extends BaseInspection {
   private static class RedundantFieldInitializationFix extends InspectionGadgetsFix {
 
     @Override
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("redundant.field.initialization.remove.quickfix");
     }
@@ -83,7 +83,7 @@ public class RedundantFieldInitializationInspection extends BaseInspection {
   private class RedundantFieldInitializationVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@jakarta.annotation.Nonnull PsiField field) {
+    public void visitField(@Nonnull PsiField field) {
       super.visitField(field);
       if (!field.hasInitializer() || field.hasModifierProperty(PsiModifier.FINAL)) {
         return;

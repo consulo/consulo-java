@@ -26,7 +26,7 @@ public final class JavaPsiBundle extends AbstractBundle {
     return INSTANCE.getMessage(key, params);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static Supplier<String> messagePointer(@Nonnull @PropertyKey(resourceBundle = BUNDLE) String key, Object... params) {
     return () -> INSTANCE.getMessage(key, params);
   }
@@ -37,8 +37,8 @@ public final class JavaPsiBundle extends AbstractBundle {
    * Note that it's not localized in the usual sense: modifiers returned from this method are kept in English,
    * regardless of the active language pack. It's believed that this way it's more clear.
    */
-  @jakarta.annotation.Nonnull
-  public static String visibilityPresentation(@jakarta.annotation.Nonnull @PsiModifier.ModifierConstant String modifier) {
+  @Nonnull
+  public static String visibilityPresentation(@Nonnull @PsiModifier.ModifierConstant String modifier) {
     return modifier.equals(PsiModifier.PACKAGE_LOCAL) ? "package-private" : modifier;
   }
 }

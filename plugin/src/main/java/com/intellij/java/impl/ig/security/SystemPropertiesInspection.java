@@ -38,7 +38,7 @@ public class SystemPropertiesInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "system.properties.display.name");

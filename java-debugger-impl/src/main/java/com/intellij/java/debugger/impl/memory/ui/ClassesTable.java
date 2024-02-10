@@ -144,7 +144,7 @@ public class ClassesTable extends JBTable implements DataProvider, Disposable
 			}
 
 			@Override
-			public int getNewInstancesCount(@jakarta.annotation.Nonnull ReferenceType ref)
+			public int getNewInstancesCount(@Nonnull ReferenceType ref)
 			{
 				TrackerForNewInstances strategy = myParent.getStrategy(ref);
 				return strategy == null || !strategy.isReady() ? -1 : strategy.getCount();
@@ -162,7 +162,7 @@ public class ClassesTable extends JBTable implements DataProvider, Disposable
 		int getNewInstancesCount(@Nonnull ReferenceType ref);
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	ReferenceType getSelectedClass()
 	{
 		int selectedRow = getSelectedRow();
@@ -175,7 +175,7 @@ public class ClassesTable extends JBTable implements DataProvider, Disposable
 		return null;
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	ReferenceType getClassByName(@Nonnull String name)
 	{
 		for(ReferenceType ref : myItems)
@@ -235,7 +235,7 @@ public class ClassesTable extends JBTable implements DataProvider, Disposable
 		}
 	}
 
-	public void updateClassesOnly(@jakarta.annotation.Nonnull List<ReferenceType> classes)
+	public void updateClassesOnly(@Nonnull List<ReferenceType> classes)
 	{
 		myIsShowCounts = false;
 		final LinkedHashMap<ReferenceType, Long> class2Count = new LinkedHashMap<>();
@@ -291,7 +291,7 @@ public class ClassesTable extends JBTable implements DataProvider, Disposable
 		fireTableDataChanged();
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	@Override
 	public Object getData(@NonNls Key dataId)
 	{
@@ -336,7 +336,7 @@ public class ClassesTable extends JBTable implements DataProvider, Disposable
 		ApplicationManager.getApplication().invokeLater(this::clean);
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	private TrackingType getTrackingType(int row)
 	{
 		ReferenceType ref = (ReferenceType) getValueAt(row, convertColumnIndexToView(DiffViewTableModel.CLASSNAME_COLUMN_INDEX));
@@ -489,7 +489,7 @@ public class ClassesTable extends JBTable implements DataProvider, Disposable
 		}
 
 		@Override
-		public int compareTo(@jakarta.annotation.Nonnull DiffValue o)
+		public int compareTo(@Nonnull DiffValue o)
 		{
 			return Long.compare(diff(), o.diff());
 		}
@@ -512,7 +512,7 @@ public class ClassesTable extends JBTable implements DataProvider, Disposable
 			}
 		}
 
-		protected abstract void addText(@jakarta.annotation.Nonnull Object value, boolean isSelected, int row);
+		protected abstract void addText(@Nonnull Object value, boolean isSelected, int row);
 	}
 
 	private class MyClassColumnRenderer extends MyTableCellRenderer

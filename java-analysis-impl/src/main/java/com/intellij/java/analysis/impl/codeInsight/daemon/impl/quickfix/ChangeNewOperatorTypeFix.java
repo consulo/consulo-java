@@ -55,7 +55,7 @@ public class ChangeNewOperatorTypeFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return myType.isValid()
         && myExpression.isValid()
         && myExpression.getManager().isInProject(myExpression)

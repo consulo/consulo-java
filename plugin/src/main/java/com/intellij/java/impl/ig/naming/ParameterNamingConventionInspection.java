@@ -51,7 +51,7 @@ public class ParameterNamingConventionInspection extends ConventionInspection {
     return true;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final String parametername = (String)infos[0];
     if (parametername.length() < getMinLength()) {
@@ -88,7 +88,7 @@ public class ParameterNamingConventionInspection extends ConventionInspection {
   private class NamingConventionsVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitParameter(@jakarta.annotation.Nonnull PsiParameter variable) {
+    public void visitParameter(@Nonnull PsiParameter variable) {
       final PsiElement scope = variable.getDeclarationScope();
       if (scope instanceof PsiCatchSection ||
           scope instanceof PsiForeachStatement) {

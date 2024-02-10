@@ -38,13 +38,13 @@ public class EmptyInitializerInspection extends BaseInspection {
     return "EmptyClassInitializer";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "empty.class.initializer.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "empty.class.initializer.problem.descriptor");
@@ -56,7 +56,7 @@ public class EmptyInitializerInspection extends BaseInspection {
 
   private static class EmptyInitializerFix extends InspectionGadgetsFix {
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "empty.class.initializer.delete.quickfix");
@@ -81,7 +81,7 @@ public class EmptyInitializerInspection extends BaseInspection {
 
     @Override
     public void visitClassInitializer(
-      @jakarta.annotation.Nonnull PsiClassInitializer initializer) {
+      @Nonnull PsiClassInitializer initializer) {
       super.visitClassInitializer(initializer);
       final PsiCodeBlock body = initializer.getBody();
       if (!codeBlockIsEmpty(body)) {

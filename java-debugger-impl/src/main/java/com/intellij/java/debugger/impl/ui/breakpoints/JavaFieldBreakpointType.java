@@ -49,7 +49,7 @@ import javax.swing.*;
  */
 @ExtensionImpl
 public class JavaFieldBreakpointType extends JavaLineBreakpointTypeBase<JavaFieldBreakpointProperties> implements JavaBreakpointType {
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static JavaFieldBreakpointType getInstance() {
     return EXTENSION_POINT_NAME.findExtension(JavaFieldBreakpointType.class);
   }
@@ -63,13 +63,13 @@ public class JavaFieldBreakpointType extends JavaLineBreakpointTypeBase<JavaFiel
     return true;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Image getEnabledIcon() {
     return AllIcons.Debugger.Db_field_breakpoint;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Image getDisabledIcon() {
     return AllIcons.Debugger.Db_disabled_field_breakpoint;
@@ -100,7 +100,7 @@ public class JavaFieldBreakpointType extends JavaLineBreakpointTypeBase<JavaFiel
     return className != null && !className.isEmpty() ? className + "." + properties.myFieldName : properties.myFieldName;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public XBreakpointCustomPropertiesPanel<XLineBreakpoint<JavaFieldBreakpointProperties>> createCustomPropertiesPanel() {
     return new FieldBreakpointPropertiesPanel();
@@ -112,13 +112,13 @@ public class JavaFieldBreakpointType extends JavaLineBreakpointTypeBase<JavaFiel
     return new JavaFieldBreakpointProperties();
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public JavaFieldBreakpointProperties createBreakpointProperties(@Nonnull VirtualFile file, int line) {
     return new JavaFieldBreakpointProperties();
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public XLineBreakpoint<JavaFieldBreakpointProperties> addBreakpoint(final Project project, JComponent parentComponent) {
     final Ref<XLineBreakpoint> result = Ref.create(null);

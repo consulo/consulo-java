@@ -40,7 +40,7 @@ public class ReplaceConcatenationWithFormatStringIntention extends Intention {
   }
 
   @Override
-  protected void processIntention(@jakarta.annotation.Nonnull PsiElement element) throws IncorrectOperationException {
+  protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
     PsiPolyadicExpression expression = (PsiPolyadicExpression)element;
     PsiElement parent = expression.getParent();
     while (ConcatenationUtils.isConcatenation(parent)) {

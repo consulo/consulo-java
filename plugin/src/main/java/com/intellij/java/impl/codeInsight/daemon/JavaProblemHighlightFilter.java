@@ -32,7 +32,7 @@ public class JavaProblemHighlightFilter extends ProblemHighlightFilter {
   }
 
   @Override
-  public boolean shouldProcessInBatch(@jakarta.annotation.Nonnull PsiFile psiFile) {
+  public boolean shouldProcessInBatch(@Nonnull PsiFile psiFile) {
     final boolean shouldHighlight = shouldHighlightFile(psiFile);
     if (shouldHighlight) {
       if (psiFile.getFileType() == JavaFileType.INSTANCE) {

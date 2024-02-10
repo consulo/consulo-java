@@ -34,7 +34,7 @@ public class ReplaceDoWhileLoopWithWhileLoopIntention extends Intention {
     return new DoWhileLoopPredicate();
   }
 
-  protected void processIntention(@jakarta.annotation.Nonnull PsiElement element)
+  protected void processIntention(@Nonnull PsiElement element)
     throws IncorrectOperationException {
     final PsiDoWhileStatement doWhileStatement =
       (PsiDoWhileStatement)element.getParent();

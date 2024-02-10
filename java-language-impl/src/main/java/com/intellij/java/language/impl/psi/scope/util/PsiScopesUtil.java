@@ -50,15 +50,15 @@ public class PsiScopesUtil {
   }
 
   public static boolean treeWalkUp(@Nonnull PsiScopeProcessor processor,
-                                   @jakarta.annotation.Nonnull PsiElement entrance,
+                                   @Nonnull PsiElement entrance,
                                    @Nullable PsiElement maxScope) {
     return treeWalkUp(processor, entrance, maxScope, ResolveState.initial());
   }
 
-  public static boolean treeWalkUp(@jakarta.annotation.Nonnull final PsiScopeProcessor processor,
+  public static boolean treeWalkUp(@Nonnull final PsiScopeProcessor processor,
                                    @Nonnull final PsiElement entrance,
                                    @Nullable final PsiElement maxScope,
-                                   @jakarta.annotation.Nonnull final ResolveState state) {
+                                   @Nonnull final ResolveState state) {
     if (!entrance.isValid()) {
       LOG.error(new PsiInvalidElementAccessException(entrance));
     }
@@ -150,14 +150,14 @@ public class PsiScopesUtil {
   }
 
   public static boolean resolveAndWalk(@Nonnull PsiScopeProcessor processor,
-                                       @jakarta.annotation.Nonnull PsiJavaCodeReferenceElement ref,
-                                       @jakarta.annotation.Nullable PsiElement maxScope) {
+                                       @Nonnull PsiJavaCodeReferenceElement ref,
+                                       @Nullable PsiElement maxScope) {
     return resolveAndWalk(processor, ref, maxScope, false);
   }
 
-  public static boolean resolveAndWalk(@jakarta.annotation.Nonnull PsiScopeProcessor processor,
-                                       @jakarta.annotation.Nonnull PsiJavaCodeReferenceElement ref,
-                                       @jakarta.annotation.Nullable PsiElement maxScope,
+  public static boolean resolveAndWalk(@Nonnull PsiScopeProcessor processor,
+                                       @Nonnull PsiJavaCodeReferenceElement ref,
+                                       @Nullable PsiElement maxScope,
                                        boolean incompleteCode) {
     final PsiElement qualifier = ref.getQualifier();
     final PsiElement classNameElement = ref.getReferenceNameElement();
@@ -225,7 +225,7 @@ public class PsiScopesUtil {
   }
 
   public static void setupAndRunProcessor(@Nonnull MethodsProcessor processor,
-                                          @jakarta.annotation.Nonnull PsiCallExpression call,
+                                          @Nonnull PsiCallExpression call,
                                           boolean dummyImplicitConstructor)
       throws MethodProcessorSetupFailedException {
     if (call instanceof PsiMethodCallExpression) {
@@ -471,9 +471,9 @@ public class PsiScopesUtil {
     return true;
   }
 
-  private static boolean processQualifierResult(@jakarta.annotation.Nonnull JavaResolveResult qualifierResult,
+  private static boolean processQualifierResult(@Nonnull JavaResolveResult qualifierResult,
                                                 @Nonnull MethodsProcessor processor,
-                                                @jakarta.annotation.Nonnull PsiMethodCallExpression methodCall) throws MethodProcessorSetupFailedException {
+                                                @Nonnull PsiMethodCallExpression methodCall) throws MethodProcessorSetupFailedException {
     PsiElement resolve = qualifierResult.getElement();
 
     if (resolve == null) {

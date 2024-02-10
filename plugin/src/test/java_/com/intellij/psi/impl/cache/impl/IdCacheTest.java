@@ -158,7 +158,7 @@ public abstract class IdCacheTest extends CodeInsightTestCase{
 
     checkCache(cache, todocache);
 
-    consulo.ide.impl.idea.openapi.vfs.VfsUtil.saveText(child, "xxx");
+    VfsUtil.saveText(child, "xxx");
     PsiDocumentManager.getInstance(myProject).commitAllDocuments();
 
     final GlobalSearchScope scope = GlobalSearchScope.projectScope(myProject);
@@ -202,7 +202,7 @@ public abstract class IdCacheTest extends CodeInsightTestCase{
     checkCache(cache, todocache);
 
     VirtualFile child = myRootDir.createChildData(null, "4.java");
-    consulo.ide.impl.idea.openapi.vfs.VfsUtil.saveText(child, "xxx //todo");
+    VfsUtil.saveText(child, "xxx //todo");
     PsiDocumentManager.getInstance(myProject).commitAllDocuments();
 
     final GlobalSearchScope scope = GlobalSearchScope.projectScope(myProject);

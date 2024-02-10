@@ -31,7 +31,7 @@ import jakarta.annotation.Nonnull;
 public class PsiNameHelperImpl extends PsiNameHelper {
 
   @Override
-  public boolean isIdentifier(@jakarta.annotation.Nullable String text) {
+  public boolean isIdentifier(@Nullable String text) {
     return isIdentifier(text, getLanguageLevel());
   }
 
@@ -40,7 +40,7 @@ public class PsiNameHelperImpl extends PsiNameHelper {
   }
 
   @Override
-  public boolean isIdentifier(@jakarta.annotation.Nullable String text, @Nonnull LanguageLevel languageLevel) {
+  public boolean isIdentifier(@Nullable String text, @Nonnull LanguageLevel languageLevel) {
     return text != null && StringUtil.isJavaIdentifier(text) && !JavaLexer.isKeyword(text, languageLevel);
   }
 
@@ -50,7 +50,7 @@ public class PsiNameHelperImpl extends PsiNameHelper {
   }
 
   @Override
-  public boolean isQualifiedName(@jakarta.annotation.Nullable String text) {
+  public boolean isQualifiedName(@Nullable String text) {
     if (text == null) return false;
     int index = 0;
     while (true) {

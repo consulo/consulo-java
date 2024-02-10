@@ -259,7 +259,7 @@ public final class ThreadReferenceProxyImpl extends ObjectReferenceProxyImpl imp
 	 * this is useful when you need all frames but do not plan to invoke anything
 	 * as only one request is sent
 	 */
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public List<StackFrameProxyImpl> forceFrames() throws EvaluateException
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();

@@ -30,19 +30,19 @@ import org.jetbrains.annotations.NonNls;
 public class OctalLiteralInspection extends BaseInspection {
   @Pattern(VALID_ID_PATTERN)
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "OctalInteger";
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("octal.literal.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "octal.literal.problem.descriptor");

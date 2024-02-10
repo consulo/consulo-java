@@ -172,7 +172,7 @@ public class InputVariables {
     return name;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private PsiType checkTopLevelInstanceOf(final PsiType currentType) {
     final PsiElement[] scope = myScope.getScope();
     if (scope.length == 1 && scope[0] instanceof PsiIfStatement) {

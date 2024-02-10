@@ -48,7 +48,7 @@ public class LightMemberReference extends LightElement implements PsiJavaCodeRef
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public JavaResolveResult advancedResolve(boolean incompleteCode) {
     final PsiElement resolved = resolve();
     PsiSubstitutor substitutor = mySubstitutor;
@@ -112,7 +112,7 @@ public class LightMemberReference extends LightElement implements PsiJavaCodeRef
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getCanonicalText() {
     String name = getQualifiedName();
     if (name == null) return null;
@@ -149,7 +149,7 @@ public class LightMemberReference extends LightElement implements PsiJavaCodeRef
   }
 
   @Override
-  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitReferenceElement(this);
     } else {
@@ -167,7 +167,7 @@ public class LightMemberReference extends LightElement implements PsiJavaCodeRef
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public Object[] getVariants() {
     throw new RuntimeException("Variants are not available for light references");
   }
@@ -195,7 +195,7 @@ public class LightMemberReference extends LightElement implements PsiJavaCodeRef
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiType[] getTypeParameters() {
     PsiReferenceParameterList parameterList = getParameterList();
     return parameterList == null ? PsiType.EMPTY_ARRAY : parameterList.getTypeArguments();

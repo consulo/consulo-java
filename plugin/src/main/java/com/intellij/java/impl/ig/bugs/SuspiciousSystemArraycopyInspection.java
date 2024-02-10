@@ -28,7 +28,7 @@ import org.jetbrains.annotations.NonNls;
 public class SuspiciousSystemArraycopyInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "suspicious.system.arraycopy.display.name");
@@ -55,7 +55,7 @@ public class SuspiciousSystemArraycopyInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
@@ -140,7 +140,7 @@ public class SuspiciousSystemArraycopyInspection extends BaseInspection {
     }
 
     private static boolean isNegativeArgument(
-      @jakarta.annotation.Nonnull PsiExpression argument) {
+      @Nonnull PsiExpression argument) {
       final Object constant =
         ExpressionUtils.computeConstantExpression(argument);
       if (!(constant instanceof Integer)) {

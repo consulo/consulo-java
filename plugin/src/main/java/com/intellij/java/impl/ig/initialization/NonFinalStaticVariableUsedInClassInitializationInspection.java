@@ -31,7 +31,7 @@ import jakarta.annotation.Nullable;
 public class NonFinalStaticVariableUsedInClassInitializationInspection
   extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "non.final.static.variable.initialization.display.name");

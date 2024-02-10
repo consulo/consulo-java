@@ -63,7 +63,7 @@ public class SimplifiableEqualsExpressionInspection extends BaseInspection {
       myMethodName = methodName;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public String getName() {
       return InspectionGadgetsBundle.message("simplifiable.equals.expression.quickfix", myMethodName);

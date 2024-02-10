@@ -55,7 +55,7 @@ public class HighlightExceptionsHandlerFactory implements HighlightUsagesHandler
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static HighlightUsagesHandlerBase createHighlightTryHandler(final Editor editor,
                                                                       final PsiFile file,
                                                                       final PsiElement target,
@@ -68,7 +68,7 @@ public class HighlightExceptionsHandlerFactory implements HighlightUsagesHandler
     return new HighlightExceptionsHandler(editor, file, target, psiClassTypes.toArray(new PsiClassType[psiClassTypes.size()]), tryBlock, Condition.TRUE);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static HighlightUsagesHandlerBase createHighlightCatchHandler(final Editor editor,
                                                                         final PsiFile file,
                                                                         final PsiElement target,

@@ -106,7 +106,7 @@ public class PsiWhileStatementImpl extends CompositePsiElement implements PsiWhi
   }
 
   @Override
-  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitWhileStatement(this);
     } else {
@@ -115,10 +115,10 @@ public class PsiWhileStatementImpl extends CompositePsiElement implements PsiWhi
   }
 
   @Override
-  public boolean processDeclarations(@jakarta.annotation.Nonnull PsiScopeProcessor processor,
-                                     @jakarta.annotation.Nonnull ResolveState state,
+  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
+                                     @Nonnull ResolveState state,
                                      PsiElement lastParent,
-                                     @jakarta.annotation.Nonnull PsiElement place) {
+                                     @Nonnull PsiElement place) {
     ElementClassHint elementClassHint = processor.getHint(ElementClassHint.KEY);
     if (elementClassHint != null && !elementClassHint.shouldProcess(ElementClassHint.DeclarationKind.VARIABLE)) return true;
     if (lastParent == null) {
@@ -131,10 +131,10 @@ public class PsiWhileStatementImpl extends CompositePsiElement implements PsiWhi
     return true;
   }
 
-  static boolean processDeclarationsInLoopCondition(@jakarta.annotation.Nonnull PsiScopeProcessor processor,
+  static boolean processDeclarationsInLoopCondition(@Nonnull PsiScopeProcessor processor,
                                                     @Nonnull ResolveState state,
                                                     @Nonnull PsiElement place,
-                                                    @jakarta.annotation.Nonnull PsiConditionalLoopStatement loop) {
+                                                    @Nonnull PsiConditionalLoopStatement loop) {
     PsiExpression condition = loop.getCondition();
     if (condition == null) return true;
     PsiScopeProcessor conditionProcessor = (element, s) -> {

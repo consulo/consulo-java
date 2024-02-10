@@ -93,13 +93,13 @@ public class HeaderValueCompletionProvider extends TextFieldWithAutoCompletionLi
     return item.toString();
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   protected String getTailText(@Nonnull Object item) {
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   protected String getTypeText(@Nonnull Object item) {
     return null;

@@ -10,7 +10,7 @@ import jakarta.annotation.Nullable;
 
 public class BoxingInstruction extends Instruction
 {
-	@jakarta.annotation.Nullable
+	@Nullable
 	private final PsiType myTargetType;
 
 	public BoxingInstruction(@Nullable PsiType targetType)

@@ -38,19 +38,19 @@ import jakarta.annotation.Nonnull;
 public class CloneDeclaresCloneNotSupportedInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "CloneDoesntDeclareCloneNotSupportedException";
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("clone.doesnt.declare.clonenotsupportedexception.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("clone.doesnt.declare.clonenotsupportedexception.problem.descriptor");
   }
@@ -89,7 +89,7 @@ public class CloneDeclaresCloneNotSupportedInspection extends BaseInspection {
   private static class CloneDeclaresCloneNotSupportedExceptionVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       if (!CloneUtils.isClone(method)) {
         return;
       }

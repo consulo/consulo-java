@@ -67,7 +67,7 @@ public class PsiImportStaticStatementImpl extends PsiImportStatementBaseImpl imp
     }
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private PsiImportStaticReferenceElement getMemberReference() {
     if (isOnDemand()) {
       return null;

@@ -28,6 +28,7 @@ import consulo.execution.debug.XDebuggerManager;
 import consulo.ide.impl.idea.openapi.options.TabbedConfigurable;
 import consulo.ide.impl.idea.openapi.options.ex.SingleConfigurableEditor;
 import consulo.ide.impl.idea.xdebugger.impl.ui.tree.actions.XDebuggerTreeActionBase;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 import consulo.language.editor.CommonDataKeys;
 import consulo.project.Project;
 import consulo.ui.ex.action.ActionsBundle;
@@ -45,7 +46,7 @@ public class CustomizeContextViewAction extends XDebuggerTreeActionBase {
   }
 
   @Override
-  protected void perform(consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl node, @Nonnull String nodeName, AnActionEvent e) {
+  protected void perform(XValueNodeImpl node, @Nonnull String nodeName, AnActionEvent e) {
     final Project project = e.getData(CommonDataKeys.PROJECT);
     Disposable disposable = Disposable.newDisposable();
     SingleConfigurableEditor editor = new SingleConfigurableEditor(project, new TabbedConfigurable(disposable) {

@@ -59,7 +59,7 @@ public class ClassNamePrefixedWithPackageNameInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       // no call to super, so it doesn't drill down into inner classes
       final String className = aClass.getName();
       if (className == null) {

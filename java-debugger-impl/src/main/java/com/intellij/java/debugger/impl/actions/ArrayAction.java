@@ -41,7 +41,7 @@ import java.util.List;
 public abstract class ArrayAction extends DebuggerAction {
   @RequiredUIAccess
   @Override
-  public void actionPerformed(@jakarta.annotation.Nonnull AnActionEvent e) {
+  public void actionPerformed(@Nonnull AnActionEvent e) {
     DebuggerContextImpl debuggerContext = DebuggerAction.getDebuggerContext(e.getDataContext());
 
     DebugProcessImpl debugProcess = debuggerContext.getDebugProcess();
@@ -68,7 +68,7 @@ public abstract class ArrayAction extends DebuggerAction {
     createNewRenderer(node, renderer, debuggerContext, node.getName()).doWhenDone(newRenderer -> setArrayRenderer(newRenderer, node, debuggerContext));
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected abstract AsyncResult<ArrayRenderer> createNewRenderer(XValueNodeImpl node, ArrayRenderer original, @Nonnull DebuggerContextImpl debuggerContext, String title);
 
   @RequiredUIAccess
@@ -103,7 +103,7 @@ public abstract class ArrayAction extends DebuggerAction {
     return null;
   }
 
-  public static void setArrayRenderer(ArrayRenderer newRenderer, @jakarta.annotation.Nonnull XValueNodeImpl node, @jakarta.annotation.Nonnull DebuggerContextImpl debuggerContext) {
+  public static void setArrayRenderer(ArrayRenderer newRenderer, @Nonnull XValueNodeImpl node, @Nonnull DebuggerContextImpl debuggerContext) {
     XValue container = node.getValueContainer();
 
     ArrayRenderer renderer = getArrayRenderer(container);
@@ -117,7 +117,7 @@ public abstract class ArrayAction extends DebuggerAction {
     if (debugProcess != null) {
       debugProcess.getManagerThread().schedule(new SuspendContextCommandImpl(debuggerContext.getSuspendContext()) {
         @Override
-        public void contextAction(@jakarta.annotation.Nonnull SuspendContextImpl suspendContext) throws Exception {
+        public void contextAction(@Nonnull SuspendContextImpl suspendContext) throws Exception {
           final Renderer lastRenderer = descriptor.getLastRenderer();
           if (lastRenderer instanceof ArrayRenderer) {
             ((JavaValue) container).setRenderer(newRenderer, node);
@@ -169,7 +169,7 @@ public abstract class ArrayAction extends DebuggerAction {
   }
 
   public static class AdjustArrayRangeAction extends ArrayAction {
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     @RequiredUIAccess
     protected AsyncResult<ArrayRenderer> createNewRenderer(XValueNodeImpl node, ArrayRenderer original, @Nonnull DebuggerContextImpl debuggerContext, String title) {
@@ -184,9 +184,9 @@ public abstract class ArrayAction extends DebuggerAction {
   }
 
   public static class FilterArrayAction extends ArrayAction {
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
-    protected AsyncResult<ArrayRenderer> createNewRenderer(XValueNodeImpl node, ArrayRenderer original, @jakarta.annotation.Nonnull DebuggerContextImpl debuggerContext, String title) {
+    protected AsyncResult<ArrayRenderer> createNewRenderer(XValueNodeImpl node, ArrayRenderer original, @Nonnull DebuggerContextImpl debuggerContext, String title) {
       //TODO [VISTALL] ArrayFilterInplaceEditor.editParent(node);
       return AsyncResult.rejected();
     }

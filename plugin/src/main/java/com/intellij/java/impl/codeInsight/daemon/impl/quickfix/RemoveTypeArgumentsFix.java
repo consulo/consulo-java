@@ -36,36 +36,36 @@ import jakarta.annotation.Nullable;
 public class RemoveTypeArgumentsFix extends LocalQuickFixAndIntentionActionOnPsiElement implements HighPriorityAction {
   private static final Logger LOGGER = Logger.getInstance(RemoveTypeArgumentsFix.class);
 
-  public RemoveTypeArgumentsFix(@jakarta.annotation.Nullable PsiElement element) {
+  public RemoveTypeArgumentsFix(@Nullable PsiElement element) {
     super(element);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getText() {
     return "Remove type arguments";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getFamilyName() {
     return getText();
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project,
+  public boolean isAvailable(@Nonnull Project project,
                              @Nonnull PsiFile file,
-                             @jakarta.annotation.Nonnull PsiElement startElement,
-                             @jakarta.annotation.Nonnull PsiElement endElement) {
+                             @Nonnull PsiElement startElement,
+                             @Nonnull PsiElement endElement) {
     return startElement instanceof PsiVariable && startElement.isValid() && ((PsiVariable)startElement).getTypeElement() != null;
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull Project project,
-                     @jakarta.annotation.Nonnull PsiFile file,
+  public void invoke(@Nonnull Project project,
+                     @Nonnull PsiFile file,
                      @Nullable Editor editor,
-                     @jakarta.annotation.Nonnull PsiElement startElement,
-                     @jakarta.annotation.Nonnull PsiElement endElement) {
+                     @Nonnull PsiElement startElement,
+                     @Nonnull PsiElement endElement) {
     final PsiVariable psiVariable = (PsiVariable)startElement;
     final PsiTypeElement typeElement = psiVariable.getTypeElement();
     LOGGER.assertTrue(typeElement != null);

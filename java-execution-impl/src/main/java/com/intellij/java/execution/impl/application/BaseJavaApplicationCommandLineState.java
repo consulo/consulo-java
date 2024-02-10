@@ -53,7 +53,7 @@ public abstract class BaseJavaApplicationCommandLineState<T extends RunConfigura
   }
 
   @Override
-  protected void buildProcessHandler(@jakarta.annotation.Nonnull ProcessHandlerBuilder builder) throws ExecutionException {
+  protected void buildProcessHandler(@Nonnull ProcessHandlerBuilder builder) throws ExecutionException {
     builder.colored().killable().silentReader();
   }
 

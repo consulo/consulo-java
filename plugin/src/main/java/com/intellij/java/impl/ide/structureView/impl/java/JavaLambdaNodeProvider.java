@@ -25,7 +25,7 @@ public class JavaLambdaNodeProvider implements FileStructureNodeProvider<JavaLam
   public static final String ID = "SHOW_LAMBDA";
   public static final String JAVA_LAMBDA_PROPERTY_NAME = "java.lambda.provider";
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public List<JavaLambdaTreeElement> provideNodes(@Nonnull TreeElement node) {
     if (!(node instanceof PsiTreeElementBase)) {
@@ -40,13 +40,13 @@ public class JavaLambdaNodeProvider implements FileStructureNodeProvider<JavaLam
         .toList();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getCheckBoxText() {
     return JavaCodeInsightBundle.message("file.structure.toggle.show.collapse.show.lambdas");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Shortcut[] getShortcut() {
     return new Shortcut[]{KeyboardShortcut.fromString(SystemInfo.isMac ? "meta L" : "control L")};
@@ -64,7 +64,7 @@ public class JavaLambdaNodeProvider implements FileStructureNodeProvider<JavaLam
     return ID;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getSerializePropertyName() {
     return JAVA_LAMBDA_PROPERTY_NAME;

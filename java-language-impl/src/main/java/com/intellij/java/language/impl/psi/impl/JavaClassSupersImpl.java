@@ -85,11 +85,11 @@ public class JavaClassSupersImpl extends JavaClassSupers
 				derivedSubstitutor);
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	private static PsiSubstitutor getSuperSubstitutorWithCaching(@Nonnull PsiClass superClass,
 																 @Nonnull PsiClass derivedClass,
 																 @Nonnull GlobalSearchScope resolveScope,
-																 @jakarta.annotation.Nonnull PsiSubstitutor derivedSubstitutor)
+																 @Nonnull PsiSubstitutor derivedSubstitutor)
 	{
 		PsiSubstitutor substitutor = ScopedClassHierarchy.getSuperClassSubstitutor(derivedClass, resolveScope, superClass);
 		if(substitutor == null)

@@ -33,5 +33,5 @@ public interface ExceptionFilterFactory {
   ExtensionPointName<ExceptionFilterFactory> EP_NAME = ExtensionPointName.create(ExceptionFilterFactory.class);
 
   @Nonnull
-  Filter create(@jakarta.annotation.Nonnull GlobalSearchScope searchScope);
+  Filter create(@Nonnull GlobalSearchScope searchScope);
 }

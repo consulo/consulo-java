@@ -33,7 +33,7 @@ public class InstantiatingObjectToGetClassObjectInspection
   extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "instantiating.object.to.get.class.object.display.name");
@@ -115,7 +115,7 @@ public class InstantiatingObjectToGetClassObjectInspection
 
     @Override
     public void visitMethodCallExpression(
-      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();

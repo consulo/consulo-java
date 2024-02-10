@@ -29,7 +29,7 @@ import consulo.annotation.component.ExtensionImpl;
 @ExtensionImpl
 public class NotifyCalledOnConditionInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "notify.called.on.condition.display.name");
@@ -50,7 +50,7 @@ public class NotifyCalledOnConditionInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!MethodCallUtils.isCallToMethod(expression,
                                           "java.util.concurrent.locks.Condition", PsiType.VOID,

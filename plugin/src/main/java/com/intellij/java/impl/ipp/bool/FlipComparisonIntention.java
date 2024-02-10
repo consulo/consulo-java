@@ -59,7 +59,7 @@ public class FlipComparisonIntention extends MutablyNamedIntention
 		}
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public PsiElementPredicate getElementPredicate()
 	{
 		return new ComparisonPredicate();

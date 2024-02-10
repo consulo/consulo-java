@@ -38,7 +38,7 @@ import java.util.function.Consumer;
 
 public class ClassLiteralGetter {
 
-  public static void addCompletions(@jakarta.annotation.Nonnull final JavaSmartCompletionParameters parameters,
+  public static void addCompletions(@Nonnull final JavaSmartCompletionParameters parameters,
                                     @Nonnull Consumer<LookupElement> result, final PrefixMatcher matcher) {
     PsiType expectedType = parameters.getExpectedType();
     if (!InheritanceUtil.isInheritor(expectedType, JavaClassNames.JAVA_LANG_CLASS)) {

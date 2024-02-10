@@ -39,7 +39,7 @@ public class NotExpressionPostfixTemplate extends ExpressionPostfixTemplateWithC
   }
 
   @Override
-  protected void doIt(@jakarta.annotation.Nonnull Editor editor, @jakarta.annotation.Nonnull PsiExpression expression) {
+  protected void doIt(@Nonnull Editor editor, @Nonnull PsiExpression expression) {
     expression.replace(CodeInsightServicesUtil.invertCondition(expression));
   }
 

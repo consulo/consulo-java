@@ -60,13 +60,13 @@ public class MethodThrowsFix extends LocalQuickFixAndIntentionActionOnPsiElement
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("fix.throws.list.family");
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project,
+  public boolean isAvailable(@Nonnull Project project,
                              @Nonnull PsiFile file,
                              @Nonnull PsiElement startElement,
                              @Nonnull PsiElement endElement) {
@@ -76,11 +76,11 @@ public class MethodThrowsFix extends LocalQuickFixAndIntentionActionOnPsiElement
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull Project project,
+  public void invoke(@Nonnull Project project,
                      @Nonnull PsiFile file,
                      @Nullable Editor editor,
                      @Nonnull PsiElement startElement,
-                     @jakarta.annotation.Nonnull PsiElement endElement) {
+                     @Nonnull PsiElement endElement) {
     final PsiMethod myMethod = (PsiMethod)startElement;
     if (!FileModificationService.getInstance().prepareFileForWrite(myMethod.getContainingFile())) return;
     PsiJavaCodeReferenceElement[] referenceElements = myMethod.getThrowsList().getReferenceElements();

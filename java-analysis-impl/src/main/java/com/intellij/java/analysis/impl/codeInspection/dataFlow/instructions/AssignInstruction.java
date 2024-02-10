@@ -32,14 +32,14 @@ import jakarta.annotation.Nullable;
 public class AssignInstruction extends ExpressionPushingInstruction<PsiAssignmentExpression> {
   private final PsiExpression myRExpression;
   private final PsiExpression myLExpression;
-  @jakarta.annotation.Nullable
+  @Nullable
   private final DfaValue myAssignedValue;
 
   public AssignInstruction(PsiExpression rExpression, @Nullable DfaValue assignedValue) {
     this(getLeftHandOfAssignment(rExpression), rExpression, assignedValue);
   }
 
-  public AssignInstruction(PsiExpression lExpression, PsiExpression rExpression, @jakarta.annotation.Nullable DfaValue assignedValue) {
+  public AssignInstruction(PsiExpression lExpression, PsiExpression rExpression, @Nullable DfaValue assignedValue) {
     super(rExpression == null ? null : ObjectUtil.tryCast(rExpression.getParent(), PsiAssignmentExpression.class));
     myLExpression = lExpression;
     myRExpression = rExpression;
@@ -75,7 +75,7 @@ public class AssignInstruction extends ExpressionPushingInstruction<PsiAssignmen
   }
 
   @Contract("null -> null")
-  @jakarta.annotation.Nullable
+  @Nullable
   private static PsiExpression getLeftHandOfAssignment(PsiExpression rExpression) {
     if (rExpression == null) {
       return null;

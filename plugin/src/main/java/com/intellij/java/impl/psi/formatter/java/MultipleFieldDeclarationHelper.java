@@ -34,7 +34,7 @@ public class MultipleFieldDeclarationHelper
 	/**
 	 * @return {@code true} if given node is a non-first part of composite field definition; {@code false} otherwise
 	 */
-	public static boolean compoundFieldPart(@jakarta.annotation.Nonnull ASTNode node)
+	public static boolean compoundFieldPart(@Nonnull ASTNode node)
 	{
 		if(node.getElementType() != JavaElementType.FIELD)
 		{

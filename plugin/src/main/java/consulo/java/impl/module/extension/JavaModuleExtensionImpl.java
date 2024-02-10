@@ -82,7 +82,7 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkBase<JavaModu
     return myLanguageLevel.isNull() ? myLanguageLevelValue.getValue() : myLanguageLevel.get();
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public LanguageLevel getLanguageLevelNoDefault() {
     return myLanguageLevel.get();
@@ -100,7 +100,7 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkBase<JavaModu
     return getSdk();
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public String getBytecodeVersion() {
     return myBytecodeVersion;

@@ -32,7 +32,7 @@ import jakarta.annotation.Nonnull;
 public class AddArrayCreationExpressionIntention extends MutablyNamedIntention {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected PsiElementPredicate getElementPredicate() {
     return new ArrayCreationExpressionPredicate();
   }

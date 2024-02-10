@@ -41,7 +41,7 @@ import java.util.List;
 public class CharUsedInArithmeticContextInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("char.used.in.arithmetic.context.display.name");
   }
@@ -82,7 +82,7 @@ public class CharUsedInArithmeticContextInspection extends BaseInspection {
 
   private static class CharUsedInArithmeticContentFix extends InspectionGadgetsFix {
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("char.used.in.arithmetic.context.quickfix");
     }
@@ -111,7 +111,7 @@ public class CharUsedInArithmeticContextInspection extends BaseInspection {
       this.typeText = typeText;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("char.used.in.arithmetic.context.cast.quickfix", typeText);
     }

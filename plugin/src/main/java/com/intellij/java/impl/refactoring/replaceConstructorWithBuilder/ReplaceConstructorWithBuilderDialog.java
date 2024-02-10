@@ -69,7 +69,7 @@ public class ReplaceConstructorWithBuilderDialog extends RefactoringDialog {
   private static final Logger LOG = Logger.getInstance(ReplaceConstructorWithBuilderDialog.class);
   private final LinkedHashMap<String, ParameterData> myParametersMap;
   private MyTableModel myTableModel;
-  private consulo.ide.impl.idea.util.ui.Table myTable;
+  private Table myTable;
   private static final String RECENT_KEYS = "ReplaceConstructorWithBuilder.RECENT_KEYS";
 
 

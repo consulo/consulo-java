@@ -93,7 +93,7 @@ public class CreateModuleInfoAction extends CreateFromTemplateActionBase {
   }
 
   @Override
-  protected Map<String, String> getLiveTemplateDefaults(@jakarta.annotation.Nonnull DataContext ctx, @Nonnull PsiFile file) {
+  protected Map<String, String> getLiveTemplateDefaults(@Nonnull DataContext ctx, @Nonnull PsiFile file) {
     Module module = ctx.getData(LangDataKeys.MODULE);
     return Collections.singletonMap("MODULE_NAME", module != null ? AutomaticJavaModule.moduleName(module.getName()) : "module_name");
   }

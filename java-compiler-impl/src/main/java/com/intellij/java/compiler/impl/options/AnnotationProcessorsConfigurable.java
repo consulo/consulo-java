@@ -61,7 +61,7 @@ public class AnnotationProcessorsConfigurable implements ProjectConfigurable, Se
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getId() {
     return "project.propCompiler.java.annotation.processors";
   }

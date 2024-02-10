@@ -25,7 +25,7 @@ import com.intellij.java.language.psi.PsiVariable;
 class VariableUsedVisitor extends JavaRecursiveElementVisitor {
 
   private boolean used = false;
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private final PsiVariable variable;
 
   public VariableUsedVisitor(@Nonnull PsiVariable variable) {
@@ -33,7 +33,7 @@ class VariableUsedVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitElement(@jakarta.annotation.Nonnull PsiElement element) {
+  public void visitElement(@Nonnull PsiElement element) {
     if (used) {
       return;
     }
@@ -42,7 +42,7 @@ class VariableUsedVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitReferenceExpression(
-    @jakarta.annotation.Nonnull PsiReferenceExpression referenceExpression) {
+    @Nonnull PsiReferenceExpression referenceExpression) {
     if (used) {
       return;
     }

@@ -40,13 +40,13 @@ public class AddVariableInitializerFix implements SyntheticIntentionAction {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getText() {
     return CodeInsightBundle.message("quickfix.add.variable.text", myVariable.getName());
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return myVariable != null
         && myVariable.isValid()
         && myVariable.getManager().isInProject(myVariable)

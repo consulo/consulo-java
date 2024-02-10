@@ -31,21 +31,21 @@ public class MoveFileFix implements SyntheticIntentionAction {
   private final VirtualFile myTarget;
   private final String myMessage;
 
-  public MoveFileFix(@jakarta.annotation.Nonnull VirtualFile file, @jakarta.annotation.Nonnull VirtualFile target, @jakarta.annotation.Nonnull @Nls String message) {
+  public MoveFileFix(@Nonnull VirtualFile file, @Nonnull VirtualFile target, @Nonnull @Nls String message) {
     myFile = file;
     myTarget = target;
     myMessage = message;
   }
 
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getText() {
     return myMessage;
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return true;
   }
 

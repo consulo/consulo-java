@@ -40,13 +40,13 @@ public class ConstantOnLHSOfComparisonInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("constant.on.lhs.of.comparison.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("constant.on.lhs.of.comparison.problem.descriptor");
   }
@@ -63,7 +63,7 @@ public class ConstantOnLHSOfComparisonInspection extends BaseInspection {
 
   private static class SwapComparisonFix extends InspectionGadgetsFix {
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("flip.comparison.quickfix");
     }
@@ -89,7 +89,7 @@ public class ConstantOnLHSOfComparisonInspection extends BaseInspection {
   private static class ConstantOnLHSOfComparisonVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitBinaryExpression(@jakarta.annotation.Nonnull PsiBinaryExpression expression) {
+    public void visitBinaryExpression(@Nonnull PsiBinaryExpression expression) {
       super.visitBinaryExpression(expression);
       if (!ComparisonUtils.isComparison(expression)) {
         return;

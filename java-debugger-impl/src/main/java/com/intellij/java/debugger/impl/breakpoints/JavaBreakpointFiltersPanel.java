@@ -128,7 +128,7 @@ public class JavaBreakpointFiltersPanel<T extends JavaBreakpointProperties, B ex
 		insert(myInstanceFiltersFieldPanel, myInstanceFiltersField);
 		insert(myClassFiltersFieldPanel, myClassFiltersField);
 
-		consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil.focusEditorOnCheck(myPassCountCheckbox, myPassCountField);
+		DebuggerUIUtil.focusEditorOnCheck(myPassCountCheckbox, myPassCountField);
 		DebuggerUIUtil.focusEditorOnCheck(myInstanceFiltersCheckBox, myInstanceFiltersField.getTextField());
 		DebuggerUIUtil.focusEditorOnCheck(myClassFiltersCheckBox, myClassFiltersField.getTextField());
 	}
@@ -200,7 +200,7 @@ public class JavaBreakpointFiltersPanel<T extends JavaBreakpointProperties, B ex
 	}
 
 	@Override
-	public void loadFrom(@jakarta.annotation.Nonnull B breakpoint)
+	public void loadFrom(@Nonnull B breakpoint)
 	{
 		JavaBreakpointProperties properties = breakpoint.getProperties();
 		if(properties != null)

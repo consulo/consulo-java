@@ -112,7 +112,7 @@ public final class LiveVariablesAnalyzer {
         instruction instanceof ControlTransferInstruction;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private Map<FinishElementInstruction, BitSet> findLiveVars() {
     final Map<FinishElementInstruction, BitSet> result = new HashMap<>();
 

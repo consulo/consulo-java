@@ -59,40 +59,40 @@ public class NullableNotNullManagerImpl extends NullableNotNullManager implement
   }
 
   @Override
-  public void setNotNulls(@jakarta.annotation.Nonnull String... annotations) {
+  public void setNotNulls(@Nonnull String... annotations) {
     myNotNulls.clear();
     Collections.addAll(myNotNulls, annotations);
     normalizeDefaults();
   }
 
   @Override
-  public void setNullables(@jakarta.annotation.Nonnull String... annotations) {
+  public void setNullables(@Nonnull String... annotations) {
     myNullables.clear();
     Collections.addAll(myNullables, annotations);
     normalizeDefaults();
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDefaultNullable() {
     return myDefaultNullable;
   }
 
   @Override
-  public void setDefaultNullable(@jakarta.annotation.Nonnull String defaultNullable) {
+  public void setDefaultNullable(@Nonnull String defaultNullable) {
     LOG.assertTrue(getNullables().contains(defaultNullable));
     myDefaultNullable = defaultNullable;
     myTracker.incModificationCount();
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDefaultNotNull() {
     return myDefaultNotNull;
   }
 
   @Override
-  public void setDefaultNotNull(@jakarta.annotation.Nonnull String defaultNotNull) {
+  public void setDefaultNotNull(@Nonnull String defaultNotNull) {
     LOG.assertTrue(getNotNulls().contains(defaultNotNull));
     myDefaultNotNull = defaultNotNull;
     myTracker.incModificationCount();
@@ -117,13 +117,13 @@ public class NullableNotNullManagerImpl extends NullableNotNullManager implement
   }
 
   @Override
-  public void setInstrumentedNotNulls(@jakarta.annotation.Nonnull List<String> names) {
+  public void setInstrumentedNotNulls(@Nonnull List<String> names) {
     myInstrumentedNotNulls = ContainerUtil.sorted(names);
     myTracker.incModificationCount();
   }
 
   @Override
-  protected boolean hasHardcodedContracts(@jakarta.annotation.Nonnull PsiElement element) {
+  protected boolean hasHardcodedContracts(@Nonnull PsiElement element) {
     return HardcodedContracts.hasHardcodedContracts(element);
   }
 
@@ -187,7 +187,7 @@ public class NullableNotNullManagerImpl extends NullableNotNullManager implement
     myTracker.incModificationCount();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private List<PsiClass> getAllNullabilityNickNames() {
     if (!getNotNulls().contains(JAKARTA_ANNOTATION_NONNULL)) {
       return Collections.emptyList();
@@ -228,8 +228,8 @@ public class NullableNotNullManagerImpl extends NullableNotNullManager implement
   }
 
   @Nullable
-  protected NullabilityAnnotationInfo isJsr305Default(@jakarta.annotation.Nonnull PsiAnnotation annotation,
-                                                      @jakarta.annotation.Nonnull PsiAnnotation.TargetType[] placeTargetTypes) {
+  protected NullabilityAnnotationInfo isJsr305Default(@Nonnull PsiAnnotation annotation,
+                                                      @Nonnull PsiAnnotation.TargetType[] placeTargetTypes) {
     PsiClass declaration = resolveAnnotationType(annotation);
     PsiModifierList modList = declaration == null ? null : declaration.getModifierList();
     if (modList == null) {
@@ -256,8 +256,8 @@ public class NullableNotNullManagerImpl extends NullableNotNullManager implement
   }
 
   @Override
-  @jakarta.annotation.Nullable
-  protected NullabilityAnnotationInfo getNullityDefault(@jakarta.annotation.Nonnull PsiModifierListOwner container,
+  @Nullable
+  protected NullabilityAnnotationInfo getNullityDefault(@Nonnull PsiModifierListOwner container,
                                                         @Nonnull PsiAnnotation.TargetType[] placeTargetTypes,
                                                         PsiElement context, boolean superPackage) {
     PsiModifierList modifierList = container.getModifierList();
@@ -286,14 +286,14 @@ public class NullableNotNullManagerImpl extends NullableNotNullManager implement
   }
 
   @Nullable
-  private NullabilityAnnotationInfo checkNullityDefault(@jakarta.annotation.Nonnull PsiAnnotation annotation,
+  private NullabilityAnnotationInfo checkNullityDefault(@Nonnull PsiAnnotation annotation,
                                                         @Nonnull PsiAnnotation.TargetType[] placeTargetTypes,
                                                         boolean superPackage) {
     NullabilityAnnotationInfo jsr = superPackage ? null : isJsr305Default(annotation, placeTargetTypes);
     return jsr != null ? jsr : CheckerFrameworkNullityUtil.isCheckerDefault(annotation, placeTargetTypes);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static PsiClass resolveAnnotationType(@Nonnull PsiAnnotation annotation) {
     PsiJavaCodeReferenceElement element = annotation.getNameReferenceElement();
     PsiElement declaration = element == null ? null : element.resolve();
@@ -327,8 +327,8 @@ public class NullableNotNullManagerImpl extends NullableNotNullManager implement
     return getNickNamedNullability(candidate) != Nullability.UNKNOWN;
   }
 
-  @jakarta.annotation.Nonnull
-  private static Nullability getNickNamedNullability(@jakarta.annotation.Nonnull PsiClass psiClass) {
+  @Nonnull
+  private static Nullability getNickNamedNullability(@Nonnull PsiClass psiClass) {
     if (AnnotationUtil.findAnnotation(psiClass, TYPE_QUALIFIER_NICKNAME) == null) {
       return Nullability.UNKNOWN;
     }
@@ -337,8 +337,8 @@ public class NullableNotNullManagerImpl extends NullableNotNullManager implement
     return nonNull != null ? extractNullityFromWhenValue(nonNull) : Nullability.UNKNOWN;
   }
 
-  @jakarta.annotation.Nonnull
-  private static Nullability extractNullityFromWhenValue(@jakarta.annotation.Nonnull PsiAnnotation nonNull) {
+  @Nonnull
+  private static Nullability extractNullityFromWhenValue(@Nonnull PsiAnnotation nonNull) {
     PsiAnnotationMemberValue when = nonNull.findAttributeValue("when");
     if (when instanceof PsiReferenceExpression) {
       String refName = ((PsiReferenceExpression)when).getReferenceName();

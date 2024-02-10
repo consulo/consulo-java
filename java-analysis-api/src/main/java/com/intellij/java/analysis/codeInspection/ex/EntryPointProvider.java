@@ -15,21 +15,21 @@ import jakarta.annotation.Nullable;
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface EntryPointProvider<State extends EntryPointState>
 {
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	String getId();
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	LocalizeValue getDisplayName();
 
 	@Nonnull
 	State createState();
 
-	default boolean isEntryPoint(RefElement refElement, PsiElement psiElement, @jakarta.annotation.Nonnull State state)
+	default boolean isEntryPoint(RefElement refElement, PsiElement psiElement, @Nonnull State state)
 	{
 		return isEntryPoint(psiElement, state);
 	}
 
-	boolean isEntryPoint(PsiElement psiElement, @jakarta.annotation.Nonnull State state);
+	boolean isEntryPoint(PsiElement psiElement, @Nonnull State state);
 
 	@Nullable
 	default String[] getIgnoreAnnotations()

@@ -52,13 +52,13 @@ public class TryFinallyCanBeTryWithResourcesInspection extends BaseInspection {
   }
 
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("try.finally.can.be.try.with.resources.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("try.finally.can.be.try.with.resources.problem.descriptor");
@@ -73,7 +73,7 @@ public class TryFinallyCanBeTryWithResourcesInspection extends BaseInspection {
 
     public TryFinallyCanBeTryWithResourcesFix() {}
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("try.finally.can.be.try.with.resources.quickfix");
     }

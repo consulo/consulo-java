@@ -28,5 +28,5 @@ public interface MultiRequestPositionManager extends PositionManager
 	 * @see PositionManager#createPrepareRequest
 	 */
 	@Nonnull
-	List<ClassPrepareRequest> createPrepareRequests(@jakarta.annotation.Nonnull ClassPrepareRequestor requestor, @Nonnull SourcePosition position) throws NoDataException;
+	List<ClassPrepareRequest> createPrepareRequests(@Nonnull ClassPrepareRequestor requestor, @Nonnull SourcePosition position) throws NoDataException;
 }

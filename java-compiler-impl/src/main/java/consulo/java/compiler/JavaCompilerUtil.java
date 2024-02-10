@@ -200,7 +200,7 @@ public class JavaCompilerUtil
 		return getSdkForCompilation(chunk.getModule());
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public static Set<VirtualFile> getCompilationClasspath(@Nonnull CompileContext compileContext, final ModuleChunk moduleChunk)
 	{
 		JavaModuleExtension<?> extension = ModuleUtilCore.getExtension(moduleChunk.getModule(), JavaModuleExtension.class);

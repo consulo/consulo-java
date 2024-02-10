@@ -26,7 +26,7 @@ public class DeleteSwitchLabelFix implements LocalQuickFix {
   private final String myName;
   private final boolean myBranch;
 
-  public DeleteSwitchLabelFix(@jakarta.annotation.Nonnull PsiExpression label) {
+  public DeleteSwitchLabelFix(@Nonnull PsiExpression label) {
     myName = label.getText();
     PsiSwitchLabelStatementBase labelStatement = Objects.requireNonNull(PsiImplUtil.getSwitchLabel(label));
     PsiExpressionList values = labelStatement.getCaseValues();
@@ -47,7 +47,7 @@ public class DeleteSwitchLabelFix implements LocalQuickFix {
   }
 
   @Nls(capitalization = Nls.Capitalization.Sentence)
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getName() {
     return myBranch ?
@@ -56,14 +56,14 @@ public class DeleteSwitchLabelFix implements LocalQuickFix {
   }
 
   @Nls(capitalization = Nls.Capitalization.Sentence)
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getFamilyName() {
     return "Remove switch label";
   }
 
   @Override
-  public void applyFix(@jakarta.annotation.Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
     PsiExpression expression = ObjectUtil.tryCast(descriptor.getStartElement(), PsiExpression.class);
     if (expression == null) {
       return;

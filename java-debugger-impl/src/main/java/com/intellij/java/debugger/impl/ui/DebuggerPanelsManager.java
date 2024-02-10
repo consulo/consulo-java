@@ -53,7 +53,7 @@ public class DebuggerPanelsManager {
 
     myProject.getMessageBus().connect(myProject).subscribe(RunContentWithExecutorListener.class, new RunContentWithExecutorListener() {
       @Override
-      public void contentSelected(@jakarta.annotation.Nullable RunContentDescriptor descriptor, @Nonnull Executor executor) {
+      public void contentSelected(@Nullable RunContentDescriptor descriptor, @Nonnull Executor executor) {
         if (executor == DefaultDebugExecutor.getDebugExecutorInstance()) {
           DebuggerSession session = descriptor == null ? null : getSession(myProject, descriptor);
           if (session != null) {
@@ -69,7 +69,7 @@ public class DebuggerPanelsManager {
       }
 
       @Override
-      public void contentRemoved(@jakarta.annotation.Nullable RunContentDescriptor descriptor, @Nonnull Executor executor) {
+      public void contentRemoved(@Nullable RunContentDescriptor descriptor, @Nonnull Executor executor) {
       }
     });
   }
@@ -86,7 +86,7 @@ public class DebuggerPanelsManager {
     return attachVirtualMachine(new DefaultDebugUIEnvironment(environment, state, remoteConnection, pollConnection));
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public RunContentDescriptor attachVirtualMachine(DebugUIEnvironment environment) throws ExecutionException {
     final DebugEnvironment modelEnvironment = environment.getEnvironment();
     final DebuggerSession debuggerSession = DebuggerManagerEx.getInstanceEx(myProject).attachVirtualMachine(modelEnvironment);

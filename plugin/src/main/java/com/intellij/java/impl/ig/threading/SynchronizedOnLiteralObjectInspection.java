@@ -42,7 +42,7 @@ public class SynchronizedOnLiteralObjectInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     final String typeText = ((PsiType)infos[0]).getPresentableText();
     final int message = ((Integer)infos[1]).intValue();
@@ -73,7 +73,7 @@ public class SynchronizedOnLiteralObjectInspection extends BaseInspection {
   private class SynchronizeOnLiteralVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitSynchronizedStatement(@jakarta.annotation.Nonnull PsiSynchronizedStatement statement) {
+    public void visitSynchronizedStatement(@Nonnull PsiSynchronizedStatement statement) {
       super.visitSynchronizedStatement(statement);
       final PsiExpression lockExpression = statement.getLockExpression();
       if (lockExpression == null) {

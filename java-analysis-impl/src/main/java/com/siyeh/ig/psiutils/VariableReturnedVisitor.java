@@ -31,7 +31,7 @@ class VariableReturnedVisitor extends JavaRecursiveElementVisitor {
 
   private boolean returned = false;
 
-  public VariableReturnedVisitor(@jakarta.annotation.Nonnull PsiVariable variable, boolean builderPattern) {
+  public VariableReturnedVisitor(@Nonnull PsiVariable variable, boolean builderPattern) {
     this.variable = variable;
     myBuilderPattern = builderPattern;
   }
@@ -45,7 +45,7 @@ class VariableReturnedVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitReturnStatement(@jakarta.annotation.Nonnull PsiReturnStatement returnStatement) {
+  public void visitReturnStatement(@Nonnull PsiReturnStatement returnStatement) {
     if (returned) {
       return;
     }

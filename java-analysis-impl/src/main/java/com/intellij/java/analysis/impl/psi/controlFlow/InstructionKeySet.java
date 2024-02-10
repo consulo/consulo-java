@@ -36,7 +36,7 @@ import java.util.Arrays;
 class InstructionKeySet
 {
 	private final
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	Node myRoot;
 
 	InstructionKeySet(int initialCapacity)
@@ -44,12 +44,12 @@ class InstructionKeySet
 		this.myRoot = new Node(initialCapacity);
 	}
 
-	void add(@jakarta.annotation.Nonnull InstructionKey key)
+	void add(@Nonnull InstructionKey key)
 	{
 		myRoot.add(key.getOffset(), key.getCallStack(), 0);
 	}
 
-	boolean contains(@jakarta.annotation.Nonnull InstructionKey key)
+	boolean contains(@Nonnull InstructionKey key)
 	{
 		return myRoot.contains(key.getOffset(), key.getCallStack(), 0);
 	}
@@ -92,7 +92,7 @@ class InstructionKeySet
 			}
 		}
 
-		private boolean contains(int offset, @jakarta.annotation.Nonnull int[] stack, int level)
+		private boolean contains(int offset, @Nonnull int[] stack, int level)
 		{
 			if(level < stack.length)
 			{

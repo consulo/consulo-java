@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NonNls;
 @ExtensionImpl
 public class UseOfSunClassesInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("use.sun.classes.display.name");
   }
@@ -45,7 +45,7 @@ public class UseOfSunClassesInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitVariable(@jakarta.annotation.Nonnull PsiVariable variable) {
+    public void visitVariable(@Nonnull PsiVariable variable) {
       super.visitVariable(variable);
       final PsiType type = variable.getType();
       final PsiType deepComponentType = type.getDeepComponentType();
@@ -66,7 +66,7 @@ public class UseOfSunClassesInspection extends BaseInspection {
 
     @Override
     public void visitNewExpression(
-      @jakarta.annotation.Nonnull PsiNewExpression newExpression) {
+      @Nonnull PsiNewExpression newExpression) {
       super.visitNewExpression(newExpression);
       final PsiType type = newExpression.getType();
       if (type == null) {

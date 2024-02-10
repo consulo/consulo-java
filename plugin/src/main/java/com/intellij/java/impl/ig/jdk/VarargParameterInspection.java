@@ -42,7 +42,7 @@ import java.util.Collection;
 public class VarargParameterInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "VariableArgumentMethod";
   }
@@ -54,7 +54,7 @@ public class VarargParameterInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("variable.argument.method.problem.descriptor");
   }

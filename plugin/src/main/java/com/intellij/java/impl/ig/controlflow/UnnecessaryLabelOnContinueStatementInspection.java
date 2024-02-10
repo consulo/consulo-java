@@ -56,7 +56,7 @@ public class UnnecessaryLabelOnContinueStatementInspection
   private static class UnnecessaryLabelOnContinueStatementFix
     extends InspectionGadgetsFix {
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "unnecessary.label.remove.quickfix");

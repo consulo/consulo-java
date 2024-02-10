@@ -87,7 +87,7 @@ public class MetaAnnotationUtil {
     return map.get(pair(annotationName, includeTests));
   }
 
-  public static Set<PsiClass> getChildren(@jakarta.annotation.Nonnull PsiClass psiClass, @Nonnull GlobalSearchScope scope) {
+  public static Set<PsiClass> getChildren(@Nonnull PsiClass psiClass, @Nonnull GlobalSearchScope scope) {
     if (AnnotationTargetUtil.findAnnotationTarget(psiClass, PsiAnnotation.TargetType.ANNOTATION_TYPE, PsiAnnotation.TargetType.TYPE) == null) {
       return Collections.emptySet();
     }
@@ -110,7 +110,7 @@ public class MetaAnnotationUtil {
     return result;
   }
 
-  public static Collection<PsiClass> getAnnotatedTypes(@Nonnull Module module, @jakarta.annotation.Nonnull Key<CachedValue<Collection<PsiClass>>> key, @jakarta.annotation.Nonnull String annotationName) {
+  public static Collection<PsiClass> getAnnotatedTypes(@Nonnull Module module, @Nonnull Key<CachedValue<Collection<PsiClass>>> key, @Nonnull String annotationName) {
     return CachedValuesManager.getManager(module.getProject()).getCachedValue(module, key, () ->
     {
       GlobalSearchScope scope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module, false);
@@ -164,7 +164,7 @@ public class MetaAnnotationUtil {
   /**
    * Checks if listOwner is annotated with annotations or listOwner's annotations contain given annotations.
    */
-  public static boolean isMetaAnnotated(@Nonnull PsiModifierListOwner listOwner, @jakarta.annotation.Nonnull Collection<String> annotations) {
+  public static boolean isMetaAnnotated(@Nonnull PsiModifierListOwner listOwner, @Nonnull Collection<String> annotations) {
     if (AnnotationUtil.isAnnotated(listOwner, annotations, 0)) {
       return true;
     }
@@ -181,7 +181,7 @@ public class MetaAnnotationUtil {
     return false;
   }
 
-  public static boolean isMetaAnnotatedInHierarchy(@jakarta.annotation.Nonnull PsiModifierListOwner listOwner, @Nonnull Collection<String> annotations) {
+  public static boolean isMetaAnnotatedInHierarchy(@Nonnull PsiModifierListOwner listOwner, @Nonnull Collection<String> annotations) {
     return isMetaAnnotatedInHierarchy(listOwner, annotations, new HashSet<>());
   }
 
@@ -214,7 +214,7 @@ public class MetaAnnotationUtil {
     }).get(annotationToFind);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static PsiAnnotation findMetaAnnotation(PsiClass aClass, String annotation, Set<PsiClass> visited) {
     PsiAnnotation directAnnotation = AnnotationUtil.findAnnotation(aClass, annotation);
     if (directAnnotation != null) {
@@ -235,7 +235,7 @@ public class MetaAnnotationUtil {
   }
 
   @Nonnull
-  public static Stream<PsiAnnotation> findMetaAnnotations(@Nonnull PsiModifierListOwner listOwner, @jakarta.annotation.Nonnull Collection<String> annotations) {
+  public static Stream<PsiAnnotation> findMetaAnnotations(@Nonnull PsiModifierListOwner listOwner, @Nonnull Collection<String> annotations) {
     Stream<PsiAnnotation> directAnnotations = Stream.of(AnnotationUtil.findAnnotations(listOwner, annotations));
 
     Stream<PsiClass> lazyResolvedAnnotations = Stream.generate(() -> getResolvedClassesInAnnotationsList(listOwner)).limit(1).flatMap(it -> it.stream());

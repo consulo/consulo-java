@@ -274,7 +274,7 @@ public abstract class PsiEventsTest extends PsiTestCase {
     final EventsTestListener listener = new EventsTestListener();
     myPsiManager.addPsiTreeChangeListener(listener,getTestRootDisposable());
 
-    consulo.ide.impl.idea.util.io.ReadOnlyAttributeUtil.setReadOnlyAttribute(file, true);
+    ReadOnlyAttributeUtil.setReadOnlyAttribute(file, true);
 
     String string = listener.getEventsString();
     final String expected =
@@ -426,7 +426,7 @@ public abstract class PsiEventsTest extends PsiTestCase {
   public void testChangeFile() throws Exception {
     FileManager fileManager = myPsiManager.getFileManager();
     VirtualFile file = myPrjDir1.createChildData(null, "a.txt");
-    consulo.ide.impl.idea.openapi.vfs.VfsUtil.saveText(file, "aaa");
+    VfsUtil.saveText(file, "aaa");
     PsiFile psiFile = fileManager.findFile(file);
     psiFile.getText();
 
@@ -536,7 +536,7 @@ public abstract class PsiEventsTest extends PsiTestCase {
       }
 
       @Override
-      public void beforeChildMovement(@jakarta.annotation.Nonnull PsiTreeChangeEvent event) {
+      public void beforeChildMovement(@Nonnull PsiTreeChangeEvent event) {
         logEvent(event);
       }
 
@@ -563,7 +563,7 @@ public abstract class PsiEventsTest extends PsiTestCase {
       }
 
       @Override
-      public void childReplaced(@jakarta.annotation.Nonnull PsiTreeChangeEvent event) {
+      public void childReplaced(@Nonnull PsiTreeChangeEvent event) {
         logEvent(event);
         assertBeforeEventFired(event);
       }
@@ -575,13 +575,13 @@ public abstract class PsiEventsTest extends PsiTestCase {
       }
 
       @Override
-      public void childMoved(@jakarta.annotation.Nonnull PsiTreeChangeEvent event) {
+      public void childMoved(@Nonnull PsiTreeChangeEvent event) {
         logEvent(event);
         assertBeforeEventFired(event);
       }
 
       @Override
-      public void propertyChanged(@jakarta.annotation.Nonnull PsiTreeChangeEvent event) {
+      public void propertyChanged(@Nonnull PsiTreeChangeEvent event) {
         logEvent(event);
         assertBeforeEventFired(event);
       }

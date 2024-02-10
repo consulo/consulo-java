@@ -42,7 +42,7 @@ public class LabeledJavaBlock extends AbstractJavaBlock
 							Indent indent,
 							CommonCodeStyleSettings settings,
 							JavaCodeStyleSettings javaSettings,
-							@jakarta.annotation.Nonnull FormattingMode formattingMode)
+							@Nonnull FormattingMode formattingMode)
 	{
 		super(node, wrap, alignment, indent, settings, javaSettings, formattingMode);
 	}

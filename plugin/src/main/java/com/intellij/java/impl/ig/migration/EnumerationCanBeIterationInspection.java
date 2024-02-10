@@ -74,7 +74,7 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "enumeration.can.be.iteration.problem.descriptor", infos[0]);
@@ -89,7 +89,7 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
   private static class EnumerationCanBeIterationFix
     extends InspectionGadgetsFix {
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "enumeration.can.be.iteration.quickfix");
@@ -460,7 +460,7 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
     }
 
     private static boolean isEnumerationMethodCalled(
-      @jakarta.annotation.Nonnull PsiVariable variable, @jakarta.annotation.Nonnull PsiElement context) {
+      @Nonnull PsiVariable variable, @Nonnull PsiElement context) {
       final EnumerationMethodCalledVisitor visitor =
         new EnumerationMethodCalledVisitor(variable);
       context.accept(visitor);
@@ -473,7 +473,7 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
       private final PsiVariable variable;
       private boolean enumerationMethodCalled = false;
 
-      EnumerationMethodCalledVisitor(@jakarta.annotation.Nonnull PsiVariable variable) {
+      EnumerationMethodCalledVisitor(@Nonnull PsiVariable variable) {
         this.variable = variable;
       }
 

@@ -37,7 +37,7 @@ public class MagicCharacterInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "magic.character.problem.descriptor");
@@ -63,7 +63,7 @@ public class MagicCharacterInspection extends BaseInspection {
 
     @Override
     public void visitLiteralExpression(
-      @jakarta.annotation.Nonnull PsiLiteralExpression expression) {
+      @Nonnull PsiLiteralExpression expression) {
       super.visitLiteralExpression(expression);
       final PsiType type = expression.getType();
       if (type == null) {

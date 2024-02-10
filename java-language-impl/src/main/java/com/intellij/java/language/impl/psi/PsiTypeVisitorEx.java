@@ -23,7 +23,7 @@ import jakarta.annotation.Nullable;
  * @author ven
  */
 public class PsiTypeVisitorEx<A> extends PsiTypeVisitor<A> {
-  @jakarta.annotation.Nullable
+  @Nullable
   public A visitTypeVariable(PsiTypeVariable var) {
     return visitType(var);
   }

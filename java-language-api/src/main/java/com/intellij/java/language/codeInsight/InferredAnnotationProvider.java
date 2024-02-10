@@ -24,7 +24,7 @@ public interface InferredAnnotationProvider {
    * different instances of {@link PsiAnnotation}, which are not guaranteed to be equal.
    */
   @Nullable
-  PsiAnnotation findInferredAnnotation(@Nonnull PsiModifierListOwner listOwner, @jakarta.annotation.Nonnull String annotationFQN);
+  PsiAnnotation findInferredAnnotation(@Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN);
 
   /**
    * When annotation name is known, prefer {@link #findInferredAnnotation(PsiModifierListOwner, String)} as
@@ -32,7 +32,7 @@ public interface InferredAnnotationProvider {
    *
    * @return all inferred annotations for the given element.
    */
-  @jakarta.annotation.Nonnull
-  List<PsiAnnotation> findInferredAnnotations(@jakarta.annotation.Nonnull PsiModifierListOwner listOwner);
+  @Nonnull
+  List<PsiAnnotation> findInferredAnnotations(@Nonnull PsiModifierListOwner listOwner);
 
 }

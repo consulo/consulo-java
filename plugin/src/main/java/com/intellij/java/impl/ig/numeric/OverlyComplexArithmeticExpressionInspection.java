@@ -60,7 +60,7 @@ public abstract class OverlyComplexArithmeticExpressionInspection
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "overly.complex.arithmetic.expression.problem.descriptor");

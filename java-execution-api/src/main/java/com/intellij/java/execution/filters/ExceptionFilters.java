@@ -32,7 +32,7 @@ public class ExceptionFilters {
   private ExceptionFilters() {
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static List<Filter> getFilters(@Nonnull GlobalSearchScope searchScope) {
     ExceptionFilterFactory[] extensions = ExceptionFilterFactory.EP_NAME.getExtensions();
     List<Filter> filters = new ArrayList<Filter>(extensions.length);

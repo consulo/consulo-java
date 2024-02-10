@@ -79,7 +79,7 @@ public abstract class AbstractAddToTestsPatternAction<T extends JavaTestConfigur
           return configuration.getIcon();
         }
 
-        @jakarta.annotation.Nonnull
+        @Nonnull
         @Override
         public String getTextFor(T value) {
           return value.getName();

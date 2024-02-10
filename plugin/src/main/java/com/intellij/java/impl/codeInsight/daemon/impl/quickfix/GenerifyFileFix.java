@@ -36,25 +36,25 @@ public class GenerifyFileFix implements SyntheticIntentionAction, LocalQuickFix 
   private String myFileName;
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getText() {
     return JavaQuickFixBundle.message("generify.text", myFileName);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getName() {
     return getText();
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("generify.family");
   }
 
   @Override
-  public void applyFix(@jakarta.annotation.Nonnull final Project project, @jakarta.annotation.Nonnull final ProblemDescriptor descriptor) {
+  public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor) {
     final PsiElement element = descriptor.getPsiElement();
     if (element == null) return;
     final PsiFile file = element.getContainingFile();
@@ -70,7 +70,7 @@ public class GenerifyFileFix implements SyntheticIntentionAction, LocalQuickFix 
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (file != null && file.isValid()) {
       myFileName = file.getName();
       return PsiManager.getInstance(project).isInProject(file);

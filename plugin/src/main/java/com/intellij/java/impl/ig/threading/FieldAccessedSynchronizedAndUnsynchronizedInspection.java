@@ -42,7 +42,7 @@ public class FieldAccessedSynchronizedAndUnsynchronizedInspection
   public boolean countGettersAndSetters = false;
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "field.accessed.synchronized.and.unsynchronized.display.name");

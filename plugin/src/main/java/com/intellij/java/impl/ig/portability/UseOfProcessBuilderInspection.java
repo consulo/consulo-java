@@ -36,7 +36,7 @@ public class UseOfProcessBuilderInspection extends BaseInspection {
       "use.processbuilder.class.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "use.processbuilder.class.problem.descriptor");
@@ -65,7 +65,7 @@ public class UseOfProcessBuilderInspection extends BaseInspection {
 
     @Override
     public void visitNewExpression(
-      @jakarta.annotation.Nonnull PsiNewExpression newExpression) {
+      @Nonnull PsiNewExpression newExpression) {
       super.visitNewExpression(newExpression);
       final PsiType type = newExpression.getType();
       if (type == null) {

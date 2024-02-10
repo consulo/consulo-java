@@ -29,7 +29,7 @@ import java.util.List;
 public class SliceTreeStructure extends AbstractTreeStructureBase {
   private final SliceNode myRoot;
 
-  public SliceTreeStructure(@jakarta.annotation.Nonnull Project project, @Nonnull SliceNode rootNode) {
+  public SliceTreeStructure(@Nonnull Project project, @Nonnull SliceNode rootNode) {
     super(project);
     myRoot = rootNode;
   }

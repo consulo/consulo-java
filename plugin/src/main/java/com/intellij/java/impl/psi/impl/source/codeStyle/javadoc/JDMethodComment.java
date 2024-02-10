@@ -38,7 +38,7 @@ public class JDMethodComment extends JDParamListOwnerComment
 	}
 
 	@Override
-	protected void generateSpecial(@jakarta.annotation.Nonnull String prefix, @jakarta.annotation.Nonnull StringBuilder sb)
+	protected void generateSpecial(@Nonnull String prefix, @Nonnull StringBuilder sb)
 	{
 		super.generateSpecial(prefix, sb);
 
@@ -70,7 +70,7 @@ public class JDMethodComment extends JDParamListOwnerComment
 		}
 	}
 
-	public void setReturnTag(@jakarta.annotation.Nonnull String returnTag)
+	public void setReturnTag(@Nonnull String returnTag)
 	{
 		this.myReturnTag = returnTag;
 	}

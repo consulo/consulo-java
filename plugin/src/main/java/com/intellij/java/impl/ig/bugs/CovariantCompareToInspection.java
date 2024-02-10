@@ -34,13 +34,13 @@ import consulo.java.language.module.util.JavaClassNames;
 public class CovariantCompareToInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("covariant.compareto.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("covariant.compareto.problem.descriptor");
   }

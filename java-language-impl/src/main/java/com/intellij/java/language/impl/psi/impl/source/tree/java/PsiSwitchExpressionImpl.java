@@ -109,7 +109,7 @@ public class PsiSwitchExpressionImpl extends PsiSwitchBlockImpl implements PsiSw
   }
 
   @Override
-  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitSwitchExpression(this);
     } else {
@@ -118,7 +118,7 @@ public class PsiSwitchExpressionImpl extends PsiSwitchBlockImpl implements PsiSw
   }
 
   @Override
-  public void replaceChildInternal(@Nonnull ASTNode child, @jakarta.annotation.Nonnull TreeElement newElement) {
+  public void replaceChildInternal(@Nonnull ASTNode child, @Nonnull TreeElement newElement) {
     super.replaceChildInternal(child, JavaSourceUtil.addParenthToReplacedChild(child, newElement, getManager()));
   }
 

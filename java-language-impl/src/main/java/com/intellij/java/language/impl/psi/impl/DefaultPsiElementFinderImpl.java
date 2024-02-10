@@ -38,12 +38,12 @@ public class DefaultPsiElementFinderImpl extends PsiElementFinder implements Dum
   }
 
   @Override
-  public PsiClass findClass(@jakarta.annotation.Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope) {
+  public PsiClass findClass(@Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope) {
     return JavaFileManager.getInstance(myProject).findClass(qualifiedName, scope);
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiClass[] findClasses(@Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope) {
     return JavaFileManager.getInstance(myProject).findClasses(qualifiedName, scope);
   }
@@ -55,7 +55,7 @@ public class DefaultPsiElementFinderImpl extends PsiElementFinder implements Dum
 
   @Override
   @Nonnull
-  public PsiJavaPackage[] getSubPackages(@Nonnull PsiJavaPackage psiPackage, @jakarta.annotation.Nonnull GlobalSearchScope scope) {
+  public PsiJavaPackage[] getSubPackages(@Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope) {
     final Map<String, PsiJavaPackage> packagesMap = new HashMap<>();
     final String qualifiedName = psiPackage.getQualifiedName();
     for (PsiDirectory dir : psiPackage.getDirectories(scope)) {
@@ -83,7 +83,7 @@ public class DefaultPsiElementFinderImpl extends PsiElementFinder implements Dum
 
   @Override
   @Nonnull
-  public PsiClass[] getClasses(@Nullable String shortName, @jakarta.annotation.Nonnull PsiJavaPackage psiPackage, @jakarta.annotation.Nonnull final GlobalSearchScope scope) {
+  public PsiClass[] getClasses(@Nullable String shortName, @Nonnull PsiJavaPackage psiPackage, @Nonnull final GlobalSearchScope scope) {
     List<PsiClass> list = null;
     String packageName = psiPackage.getQualifiedName();
     for (PsiDirectory dir : psiPackage.getDirectories(scope)) {
@@ -125,9 +125,9 @@ public class DefaultPsiElementFinderImpl extends PsiElementFinder implements Dum
     return list.toArray(new PsiClass[list.size()]);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
-  public Set<String> getClassNames(@jakarta.annotation.Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope) {
+  public Set<String> getClassNames(@Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope) {
     Set<String> names = null;
     FileIndexFacade facade = FileIndexFacade.getInstance(myProject);
     for (PsiDirectory dir : psiPackage.getDirectories(scope)) {
@@ -160,8 +160,8 @@ public class DefaultPsiElementFinderImpl extends PsiElementFinder implements Dum
 
 
   @Override
-  public boolean processPackageDirectories(@jakarta.annotation.Nonnull PsiJavaPackage psiPackage,
-                                           @jakarta.annotation.Nonnull final GlobalSearchScope scope,
+  public boolean processPackageDirectories(@Nonnull PsiJavaPackage psiPackage,
+                                           @Nonnull final GlobalSearchScope scope,
                                            @Nonnull final Processor<PsiDirectory> consumer) {
     final PsiManager psiManager = PsiManager.getInstance(myProject);
     return DirectoryIndex.getInstance(myProject)

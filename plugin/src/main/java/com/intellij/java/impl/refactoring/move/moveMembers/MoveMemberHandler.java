@@ -43,28 +43,28 @@ public interface MoveMemberHandler extends LanguageExtension {
   ExtensionPointCacheKey<MoveMemberHandler, ByLanguageValue<MoveMemberHandler>> KEY = ExtensionPointCacheKey.create("MoveMemberHandler", LanguageOneToOne.build());
 
   @Nullable
-  static MoveMemberHandler forLanguage(@jakarta.annotation.Nonnull Language language) {
+  static MoveMemberHandler forLanguage(@Nonnull Language language) {
     return Application.get().getExtensionPoint(MoveMemberHandler.class).getOrBuildCache(KEY).get(language);
   }
 
-  @jakarta.annotation.Nullable
-  MoveMembersProcessor.MoveMembersUsageInfo getUsage(@jakarta.annotation.Nonnull PsiMember member, @Nonnull PsiReference ref, @jakarta.annotation.Nonnull Set<PsiMember> membersToMove,
-                                                     @jakarta.annotation.Nonnull PsiClass targetClass);
+  @Nullable
+  MoveMembersProcessor.MoveMembersUsageInfo getUsage(@Nonnull PsiMember member, @Nonnull PsiReference ref, @Nonnull Set<PsiMember> membersToMove,
+                                                     @Nonnull PsiClass targetClass);
 
-  void checkConflictsOnUsage(@jakarta.annotation.Nonnull MoveMembersProcessor.MoveMembersUsageInfo usageInfo, @jakarta.annotation.Nullable String newVisibility,
-                             @jakarta.annotation.Nullable PsiModifierList modifierListCopy, @jakarta.annotation.Nonnull PsiClass targetClass, @jakarta.annotation.Nonnull Set<PsiMember> membersToMove,
-                             @jakarta.annotation.Nonnull MultiMap<PsiElement, String> conflicts);
+  void checkConflictsOnUsage(@Nonnull MoveMembersProcessor.MoveMembersUsageInfo usageInfo, @Nullable String newVisibility,
+                             @Nullable PsiModifierList modifierListCopy, @Nonnull PsiClass targetClass, @Nonnull Set<PsiMember> membersToMove,
+                             @Nonnull MultiMap<PsiElement, String> conflicts);
 
-  void checkConflictsOnMember(@jakarta.annotation.Nonnull PsiMember member, @jakarta.annotation.Nullable String newVisibility, @jakarta.annotation.Nullable PsiModifierList modifierListCopy,
-                              @jakarta.annotation.Nonnull PsiClass targetClass, @jakarta.annotation.Nonnull Set<PsiMember> membersToMove, @jakarta.annotation.Nonnull MultiMap<PsiElement, String> conflicts);
+  void checkConflictsOnMember(@Nonnull PsiMember member, @Nullable String newVisibility, @Nullable PsiModifierList modifierListCopy,
+                              @Nonnull PsiClass targetClass, @Nonnull Set<PsiMember> membersToMove, @Nonnull MultiMap<PsiElement, String> conflicts);
 
-  @jakarta.annotation.Nullable
-  PsiElement getAnchor(@jakarta.annotation.Nonnull PsiMember member, @jakarta.annotation.Nonnull PsiClass targetClass, Set<PsiMember> membersToMove);
+  @Nullable
+  PsiElement getAnchor(@Nonnull PsiMember member, @Nonnull PsiClass targetClass, Set<PsiMember> membersToMove);
 
-  boolean changeExternalUsage(@Nonnull MoveMembersOptions options, @jakarta.annotation.Nonnull MoveMembersProcessor.MoveMembersUsageInfo usage);
+  boolean changeExternalUsage(@Nonnull MoveMembersOptions options, @Nonnull MoveMembersProcessor.MoveMembersUsageInfo usage);
 
-  @jakarta.annotation.Nonnull
-  PsiMember doMove(@jakarta.annotation.Nonnull MoveMembersOptions options, @jakarta.annotation.Nonnull PsiMember member, @jakarta.annotation.Nullable PsiElement anchor, @jakarta.annotation.Nonnull PsiClass targetClass);
+  @Nonnull
+  PsiMember doMove(@Nonnull MoveMembersOptions options, @Nonnull PsiMember member, @Nullable PsiElement anchor, @Nonnull PsiClass targetClass);
 
-  void decodeContextInfo(@jakarta.annotation.Nonnull PsiElement scope);
+  void decodeContextInfo(@Nonnull PsiElement scope);
 }

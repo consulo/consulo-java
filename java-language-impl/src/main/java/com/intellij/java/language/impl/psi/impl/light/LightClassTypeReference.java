@@ -31,12 +31,12 @@ public class LightClassTypeReference extends LightClassReferenceBase implements 
   private final
   PsiClassType myType;
 
-  private LightClassTypeReference(@Nonnull PsiManager manager, @Nonnull String text, @jakarta.annotation.Nonnull PsiClassType type) {
+  private LightClassTypeReference(@Nonnull PsiManager manager, @Nonnull String text, @Nonnull PsiClassType type) {
     super(manager, text);
     myType = type;
   }
 
-  public LightClassTypeReference(@Nonnull PsiManager manager, @jakarta.annotation.Nonnull PsiClassType type) {
+  public LightClassTypeReference(@Nonnull PsiManager manager, @Nonnull PsiClassType type) {
     this(manager, type.getCanonicalText(true), type);
   }
 
@@ -46,13 +46,13 @@ public class LightClassTypeReference extends LightClassReferenceBase implements 
     return myType.resolve();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public JavaResolveResult advancedResolve(boolean incompleteCode) {
     return myType.resolveGenerics();
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public String getReferenceName() {
     return myType.getClassName();
@@ -68,12 +68,12 @@ public class LightClassTypeReference extends LightClassReferenceBase implements 
     return myType.isValid();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiClassType getType() {
     return myType;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public GlobalSearchScope getResolveScope() {
     return myType.getResolveScope();

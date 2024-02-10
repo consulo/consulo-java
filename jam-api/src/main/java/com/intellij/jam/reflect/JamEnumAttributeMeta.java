@@ -60,7 +60,7 @@ public abstract class JamEnumAttributeMeta<T extends Enum<T>, JamType> extends J
       super(attrName, modelEnum);
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public List<JamEnumAttributeElement<T>> getJam(PsiElementRef<PsiAnnotation> anno) {
       return getCollectionJam(anno, new Function<PsiAnnotationMemberValue, JamEnumAttributeElement<T>>() {
         public JamEnumAttributeElement<T> apply(PsiAnnotationMemberValue psiAnnotationMemberValue) {

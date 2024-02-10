@@ -97,7 +97,7 @@ public class CreateTestDialog extends DialogWrapper {
   private JRadioButton myDefaultLibraryButton;
 
   public CreateTestDialog(@Nonnull Project project,
-                          @jakarta.annotation.Nonnull String title,
+                          @Nonnull String title,
                           PsiClass targetClass,
                           PsiJavaPackage targetPackage,
                           Module targetModule) {
@@ -260,7 +260,7 @@ public class CreateTestDialog extends DialogWrapper {
     return getClass().getName();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected Action[] createActions() {
     return new Action[]{
         getOKAction(),

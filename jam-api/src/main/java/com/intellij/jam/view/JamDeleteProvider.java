@@ -51,7 +51,7 @@ public class JamDeleteProvider implements DeleteProvider {
     this(response, Collections.singletonList(element));
   }
 
-  public void deleteElement(@jakarta.annotation.Nonnull DataContext dataContext) {
+  public void deleteElement(@Nonnull DataContext dataContext) {
     CommonModelManager.getInstance().deleteModelElements(myElements, myResponse);
   }
 

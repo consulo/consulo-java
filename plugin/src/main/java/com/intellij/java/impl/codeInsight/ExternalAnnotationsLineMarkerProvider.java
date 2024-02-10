@@ -69,9 +69,9 @@ public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDes
   };
 
   @RequiredReadAction
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
-  public LineMarkerInfo getLineMarkerInfo(@jakarta.annotation.Nonnull final PsiElement element) {
+  public LineMarkerInfo getLineMarkerInfo(@Nonnull final PsiElement element) {
     PsiModifierListOwner owner = getAnnotationOwner(element);
     if (owner == null) {
       return null;
@@ -87,7 +87,7 @@ public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDes
         .RIGHT);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   static PsiModifierListOwner getAnnotationOwner(@Nullable PsiElement element) {
     if (element == null) {
       return null;
@@ -110,7 +110,7 @@ public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDes
   }
 
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getName() {
     return "External annotations";
@@ -156,7 +156,7 @@ public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDes
       }
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     protected JBPopup createActionGroupPopup(PsiFile file, Project project, Editor editor) {
       final DefaultActionGroup group = new DefaultActionGroup();
       for (final IntentionAction action : IntentionManager.getInstance().getAvailableIntentionActions()) {

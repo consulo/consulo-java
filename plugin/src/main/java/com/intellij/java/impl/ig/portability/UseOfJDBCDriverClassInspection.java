@@ -28,14 +28,14 @@ import consulo.annotation.component.ExtensionImpl;
 public class UseOfJDBCDriverClassInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "use.of.concrete.jdbc.driver.class.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "use.of.concrete.jdbc.driver.class.problem.descriptor");
@@ -84,7 +84,7 @@ public class UseOfJDBCDriverClassInspection extends BaseInspection {
 
     @Override
     public void visitNewExpression(
-      @jakarta.annotation.Nonnull PsiNewExpression newExpression) {
+      @Nonnull PsiNewExpression newExpression) {
       super.visitNewExpression(newExpression);
       final PsiType type = newExpression.getType();
       if (type == null) {

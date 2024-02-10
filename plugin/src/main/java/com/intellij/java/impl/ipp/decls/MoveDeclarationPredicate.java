@@ -77,7 +77,7 @@ class MoveDeclarationPredicate implements PsiElementPredicate {
 
   @Nullable
   public static PsiElement getChildWhichContainsElement(
-    @jakarta.annotation.Nonnull PsiCodeBlock ancestor, @Nonnull PsiElement descendant) {
+    @Nonnull PsiCodeBlock ancestor, @Nonnull PsiElement descendant) {
     PsiElement element = descendant;
     while (!element.equals(ancestor)) {
       descendant = element;
@@ -89,9 +89,9 @@ class MoveDeclarationPredicate implements PsiElementPredicate {
     return descendant;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiCodeBlock getTightestBlock(
-    @jakarta.annotation.Nonnull PsiReference[] references) {
+    @Nonnull PsiReference[] references) {
     PsiCodeBlock commonParentBlock = null;
     for (PsiReference reference : references) {
       final PsiElement referenceElement = reference.getElement();

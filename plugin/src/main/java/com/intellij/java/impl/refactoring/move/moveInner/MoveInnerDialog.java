@@ -108,7 +108,7 @@ public class MoveInnerDialog extends RefactoringDialog {
     return myClassNameField.getText().trim();
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public String getParameterName() {
     if (myParameterField != null) {
       return myParameterField.getEnteredName();
@@ -192,7 +192,7 @@ public class MoveInnerDialog extends RefactoringDialog {
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private PsiElement getTargetContainer() {
     if (myTargetContainer instanceof PsiDirectory) {
       final PsiDirectory psiDirectory = (PsiDirectory)myTargetContainer;

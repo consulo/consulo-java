@@ -42,7 +42,7 @@ public class NonFinalFieldInEnumInspection extends BaseInspection {
     return InspectionGadgetsBundle.message("non.final.field.in.enum.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     final PsiClass enumClass = (PsiClass)infos[0];

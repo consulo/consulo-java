@@ -538,7 +538,7 @@ public class CyclicDependenciesPanel extends JPanel implements Disposable, DataP
       return null;
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     public PackageDependenciesNode getSelectedNode() {
       TreePath[] paths = getSelectionPaths();
       if (paths == null || paths.length != 1) return null;

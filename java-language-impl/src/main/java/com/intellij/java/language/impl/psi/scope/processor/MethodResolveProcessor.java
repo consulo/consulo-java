@@ -58,7 +58,7 @@ public class MethodResolveProcessor implements PsiScopeProcessor, ElementClassHi
     return true;
   }
 
-  public <T> T getHint(@jakarta.annotation.Nonnull Key<T> hintKey) {
+  public <T> T getHint(@Nonnull Key<T> hintKey) {
     if (hintKey == ElementClassHint.KEY) {
       return (T)this;
     }

@@ -38,7 +38,7 @@ public class LawOfDemeterInspection extends BaseInspection {
   private static final Key<Integer> key =
     Key.create("LawOfDemeterInspection");
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("law.of.demeter.display.name");
   }

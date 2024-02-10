@@ -28,7 +28,7 @@ import jakarta.annotation.Nonnull;
 import java.io.IOException;
 
 public class JavaDocLexer extends MergingLexerAdapter {
-  public JavaDocLexer(@jakarta.annotation.Nonnull LanguageLevel level) {
+  public JavaDocLexer(@Nonnull LanguageLevel level) {
     this(JavaDocTokenTypes.INSTANCE, level.isAtLeast(LanguageLevel.JDK_1_5));
   }
 

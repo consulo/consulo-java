@@ -27,7 +27,7 @@ public class ReturnInstruction extends ControlTransferInstruction
 {
 	private final PsiElement myAnchor;
 
-	public ReturnInstruction(@Nonnull DfaControlTransferValue transfer, @jakarta.annotation.Nullable PsiElement anchor)
+	public ReturnInstruction(@Nonnull DfaControlTransferValue transfer, @Nullable PsiElement anchor)
 	{
 		super(transfer);
 		myAnchor = anchor;

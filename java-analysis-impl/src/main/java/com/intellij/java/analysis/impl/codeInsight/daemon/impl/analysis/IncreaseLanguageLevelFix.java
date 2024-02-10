@@ -66,7 +66,7 @@ public class IncreaseLanguageLevelFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull final Project project, final Editor editor, final PsiFile file) {
+  public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
     final VirtualFile virtualFile = file.getVirtualFile();
     if (virtualFile == null) {
       return false;

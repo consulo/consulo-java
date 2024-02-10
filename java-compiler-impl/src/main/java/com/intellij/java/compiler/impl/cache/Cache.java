@@ -41,7 +41,7 @@ import java.util.*;
  */
 public class Cache {
   private static class MyMapIndexStorage extends MapIndexStorage<Integer, ClassInfo> {
-    protected MyMapIndexStorage(@Nonnull File storageFile, @jakarta.annotation.Nonnull KeyDescriptor<Integer> keyDescriptor, int cacheSize) throws IOException {
+    protected MyMapIndexStorage(@Nonnull File storageFile, @Nonnull KeyDescriptor<Integer> keyDescriptor, int cacheSize) throws IOException {
       super(storageFile, keyDescriptor, MyDataExternalizer.INSTANCE, cacheSize, true);
     }
 
@@ -324,7 +324,7 @@ public class Cache {
     return classInfo != null ? classInfo.getMethods() : MethodInfo.EMPTY_ARRAY;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public MethodInfo findMethod(final int classQName, final int name, final int descriptor) throws CacheCorruptedException {
     try {
       for (MethodInfo methodInfo : getMethods(classQName)) {
@@ -352,7 +352,7 @@ public class Cache {
     }
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public MethodInfo findMethodsBySignature(final int classDeclarationId, final String signature, SymbolTable symbolTable) throws CacheCorruptedException {
     try {
       for (MethodInfo methodInfo : getMethods(classDeclarationId)) {

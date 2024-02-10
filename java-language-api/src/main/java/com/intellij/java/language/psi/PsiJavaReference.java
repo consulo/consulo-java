@@ -40,7 +40,7 @@ public interface PsiJavaReference extends PsiPolyVariantReference {
    * result.
    * @return the result of the resolve.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   JavaResolveResult advancedResolve(boolean incompleteCode);
   
   @Override

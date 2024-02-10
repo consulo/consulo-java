@@ -77,7 +77,7 @@ public class DeleteSideEffectsAwareFix extends LocalQuickFixAndIntentionActionOn
 	}
 
 	@Nls
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public String getText()
 	{
@@ -85,7 +85,7 @@ public class DeleteSideEffectsAwareFix extends LocalQuickFixAndIntentionActionOn
 	}
 
 	@Nls
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -94,9 +94,9 @@ public class DeleteSideEffectsAwareFix extends LocalQuickFixAndIntentionActionOn
 
 	@Override
 	public boolean isAvailable(@Nonnull Project project,
-							   @jakarta.annotation.Nonnull PsiFile file,
+							   @Nonnull PsiFile file,
 							   @Nonnull PsiElement startElement,
-							   @jakarta.annotation.Nonnull PsiElement endElement)
+							   @Nonnull PsiElement endElement)
 	{
 		return myIsAvailable;
 	}
@@ -105,7 +105,7 @@ public class DeleteSideEffectsAwareFix extends LocalQuickFixAndIntentionActionOn
 	public void invoke(@Nonnull Project project,
 					   @Nonnull PsiFile file,
 					   @Nullable Editor editor,
-					   @jakarta.annotation.Nonnull PsiElement startElement,
+					   @Nonnull PsiElement startElement,
 					   @Nonnull PsiElement endElement)
 	{
 		PsiStatement statement = myStatementPtr.getElement();

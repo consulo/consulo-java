@@ -31,7 +31,7 @@ public abstract class BranchingInstruction extends InstructionBase
 		END
 	}
 
-	public BranchingInstruction(int offset, @jakarta.annotation.Nonnull Role role)
+	public BranchingInstruction(int offset, @Nonnull Role role)
 	{
 		this.offset = offset;
 		this.role = role;

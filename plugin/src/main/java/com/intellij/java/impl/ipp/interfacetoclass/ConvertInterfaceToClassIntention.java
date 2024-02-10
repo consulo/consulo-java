@@ -162,7 +162,7 @@ public class ConvertInterfaceToClassIntention extends Intention {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected PsiElementPredicate getElementPredicate() {
     return new ConvertInterfaceToClassPredicate();
   }
@@ -201,8 +201,8 @@ public class ConvertInterfaceToClassIntention extends Intention {
     return true;
   }
 
-  private static void moveReference(@jakarta.annotation.Nonnull PsiReferenceList source, @Nullable PsiReferenceList target,
-                                    @jakarta.annotation.Nonnull PsiJavaCodeReferenceElement reference) throws IncorrectOperationException {
+  private static void moveReference(@Nonnull PsiReferenceList source, @Nullable PsiReferenceList target,
+                                    @Nonnull PsiJavaCodeReferenceElement reference) throws IncorrectOperationException {
     final PsiJavaCodeReferenceElement[] implementsReferences = source.getReferenceElements();
     final String qualifiedName = reference.getQualifiedName();
     for (PsiJavaCodeReferenceElement implementsReference : implementsReferences) {

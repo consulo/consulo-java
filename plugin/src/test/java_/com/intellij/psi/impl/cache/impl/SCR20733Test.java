@@ -53,7 +53,7 @@ public abstract class SCR20733Test extends PsiTestCase
 
 					myPackDir = mySrcDir1.createChildDirectory(null, "p");
 					VirtualFile file1 = myPackDir.createChildData(null, "A.java");
-					consulo.ide.impl.idea.openapi.vfs.VfsUtil.saveText(file1, "package p; public class A{ public void foo(); }");
+					VfsUtil.saveText(file1, "package p; public class A{ public void foo(); }");
 
 					PsiTestUtil.addContentRoot(myModule, myPrjDir1);
 					PsiTestUtil.addSourceRoot(myModule, mySrcDir1);

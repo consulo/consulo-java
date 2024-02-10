@@ -64,7 +64,7 @@ public class ExtractMethodHandler implements RefactoringActionHandler {
   public static final String REFACTORING_NAME = RefactoringBundle.message("extract.method.title");
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+  public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
     if (dataContext != null) {
       final PsiFile file = dataContext.getData(CommonDataKeys.PSI_FILE);
       final Editor editor = dataContext.getData(CommonDataKeys.EDITOR);
@@ -75,7 +75,7 @@ public class ExtractMethodHandler implements RefactoringActionHandler {
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull final Project project, final Editor editor, final PsiFile file, DataContext dataContext) {
+  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file, DataContext dataContext) {
     final Consumer<PsiElement[]> callback = new Consumer<PsiElement[]>() {
       @Override
       public void accept(final PsiElement[] selectedValue) {
@@ -85,7 +85,7 @@ public class ExtractMethodHandler implements RefactoringActionHandler {
     selectAndPass(project, editor, file, callback);
   }
 
-  public static void selectAndPass(@jakarta.annotation.Nonnull final Project project, @jakarta.annotation.Nonnull final Editor editor, @Nonnull final PsiFile file, @Nonnull final Consumer<PsiElement[]> callback) {
+  public static void selectAndPass(@Nonnull final Project project, @Nonnull final Editor editor, @Nonnull final PsiFile file, @Nonnull final Consumer<PsiElement[]> callback) {
     editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
     if (!editor.getSelectionModel().hasSelection()) {
       final int offset = editor.getCaretModel().getOffset();
@@ -139,7 +139,7 @@ public class ExtractMethodHandler implements RefactoringActionHandler {
     });
   }
 
-  private static boolean invokeOnElements(final Project project, final Editor editor, @jakarta.annotation.Nonnull final ExtractMethodProcessor processor, final boolean directTypes) {
+  private static boolean invokeOnElements(final Project project, final Editor editor, @Nonnull final ExtractMethodProcessor processor, final boolean directTypes) {
     if (!CommonRefactoringUtil.checkReadOnlyStatus(project, processor.getTargetClass().getContainingFile())) {
       return false;
     }
@@ -169,13 +169,13 @@ public class ExtractMethodHandler implements RefactoringActionHandler {
     }, REFACTORING_NAME, null);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static ExtractMethodProcessor getProcessor(final PsiElement[] elements,
                                                      final Project project,
                                                      final PsiFile file,
                                                      final Editor editor,
                                                      final boolean showErrorMessages,
-                                                     final @jakarta.annotation.Nullable Consumer<ExtractMethodProcessor> pass) {
+                                                     final @Nullable Consumer<ExtractMethodProcessor> pass) {
     if (elements == null || elements.length == 0) {
       if (showErrorMessages) {
         String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("selected.block.should.represent.a.set.of.statements.or.an.expression"));
@@ -223,12 +223,12 @@ public class ExtractMethodHandler implements RefactoringActionHandler {
     }
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static ExtractMethodProcessor getProcessor(final Project project, final PsiElement[] elements, final PsiFile file, final boolean openEditor) {
     return getProcessor(elements, project, file, openEditor ? openEditor(project, file) : null, false, null);
   }
 
-  public static boolean invokeOnElements(final Project project, @jakarta.annotation.Nonnull final ExtractMethodProcessor processor, final PsiFile file, final boolean directTypes) {
+  public static boolean invokeOnElements(final Project project, @Nonnull final ExtractMethodProcessor processor, final PsiFile file, final boolean directTypes) {
     return invokeOnElements(project, openEditor(project, file), processor, directTypes);
   }
 

@@ -34,7 +34,7 @@ public class JarFileSystemImpl implements ArchiveFileSystemProvider {
 
   @Nonnull
   @Override
-  public ArchiveFile createArchiveFile(@jakarta.annotation.Nonnull String filePath) throws IOException {
+  public ArchiveFile createArchiveFile(@Nonnull String filePath) throws IOException {
     return new JarArchiveFile(filePath);
   }
 }

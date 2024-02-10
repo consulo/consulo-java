@@ -49,7 +49,7 @@ public class JavaTypeProvider extends ExpressionTypeProvider<PsiExpression> {
 
   @Nonnull
   @Override
-  public List<PsiExpression> getExpressionsAt(@jakarta.annotation.Nonnull PsiElement elementAt) {
+  public List<PsiExpression> getExpressionsAt(@Nonnull PsiElement elementAt) {
     return SyntaxTraverser.psiApi().parents(elementAt).filter(PsiExpression.class).toList();
   }
 

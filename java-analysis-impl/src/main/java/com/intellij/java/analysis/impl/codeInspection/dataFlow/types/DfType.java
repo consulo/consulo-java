@@ -31,7 +31,7 @@ public interface DfType
 	 * @return the result of the join operation
 	 */
 	@Nonnull
-	DfType join(@jakarta.annotation.Nonnull DfType other);
+	DfType join(@Nonnull DfType other);
 
 	/**
 	 * Returns the least specific type that contains all values that belong both to this type and to other type.
@@ -40,7 +40,7 @@ public interface DfType
 	 * @return the result of the meet operation.
 	 */
 	@Nonnull
-	DfType meet(@jakarta.annotation.Nonnull DfType other);
+	DfType meet(@Nonnull DfType other);
 
 	/**
 	 * @return a type that contains all the values of the corresponding JVM type except the values of given type;

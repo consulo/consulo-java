@@ -15,97 +15,81 @@
  */
 package com.intellij.java.language.impl.psi.impl.light;
 
-import jakarta.annotation.Nonnull;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.java.language.psi.PsiAnnotation;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiElementVisitor;
 import com.intellij.java.language.psi.PsiTypeParameter;
 import com.intellij.java.language.psi.PsiTypeParameterListOwner;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
-public class LightTypeParameter extends LightClass implements PsiTypeParameter
-{
-	public LightTypeParameter(final PsiTypeParameter delegate)
-	{
-		super(delegate);
-	}
+public class LightTypeParameter extends LightClass implements PsiTypeParameter {
+  public LightTypeParameter(final PsiTypeParameter delegate) {
+    super(delegate);
+  }
 
-	@jakarta.annotation.Nonnull
-	@Override
-	public PsiTypeParameter getDelegate()
-	{
-		return (PsiTypeParameter) super.getDelegate();
-	}
+  @Nonnull
+  @Override
+  public PsiTypeParameter getDelegate() {
+    return (PsiTypeParameter)super.getDelegate();
+  }
 
-	@jakarta.annotation.Nonnull
-	@Override
-	public PsiElement copy()
-	{
-		return new LightTypeParameter(getDelegate());
-	}
+  @Nonnull
+  @Override
+  public PsiElement copy() {
+    return new LightTypeParameter(getDelegate());
+  }
 
-	@Override
-	public void accept(@Nonnull final PsiElementVisitor visitor)
-	{
-		if(visitor instanceof JavaElementVisitor)
-		{
-			((JavaElementVisitor) visitor).visitTypeParameter(this);
-		}
-		else
-		{
-			super.accept(visitor);
-		}
-	}
+  @Override
+  public void accept(@Nonnull final PsiElementVisitor visitor) {
+    if (visitor instanceof JavaElementVisitor) {
+      ((JavaElementVisitor)visitor).visitTypeParameter(this);
+    }
+    else {
+      super.accept(visitor);
+    }
+  }
 
-	@Override
-	public PsiTypeParameterListOwner getOwner()
-	{
-		return getDelegate().getOwner();
-	}
+  @Override
+  public PsiTypeParameterListOwner getOwner() {
+    return getDelegate().getOwner();
+  }
 
-	@Override
-	public int getIndex()
-	{
-		return getDelegate().getIndex();
-	}
+  @Override
+  public int getIndex() {
+    return getDelegate().getIndex();
+  }
 
-	@Nonnull
-	@Override
-	public PsiAnnotation[] getAnnotations()
-	{
-		return getDelegate().getAnnotations();
-	}
+  @Nonnull
+  @Override
+  public PsiAnnotation[] getAnnotations() {
+    return getDelegate().getAnnotations();
+  }
 
-	@Nonnull
-	@Override
-	public PsiAnnotation[] getApplicableAnnotations()
-	{
-		return getDelegate().getApplicableAnnotations();
-	}
+  @Nonnull
+  @Override
+  public PsiAnnotation[] getApplicableAnnotations() {
+    return getDelegate().getApplicableAnnotations();
+  }
 
-	@Override
-	public PsiAnnotation findAnnotation(@Nonnull @NonNls final String qualifiedName)
-	{
-		return getDelegate().findAnnotation(qualifiedName);
-	}
+  @Override
+  public PsiAnnotation findAnnotation(@Nonnull @NonNls final String qualifiedName) {
+    return getDelegate().findAnnotation(qualifiedName);
+  }
 
-	@jakarta.annotation.Nonnull
-	@Override
-	public PsiAnnotation addAnnotation(@jakarta.annotation.Nonnull @NonNls final String qualifiedName)
-	{
-		return getDelegate().addAnnotation(qualifiedName);
-	}
+  @Nonnull
+  @Override
+  public PsiAnnotation addAnnotation(@Nonnull @NonNls final String qualifiedName) {
+    return getDelegate().addAnnotation(qualifiedName);
+  }
 
-	public boolean useDelegateToSubstitute()
-	{
-		return true;
-	}
+  public boolean useDelegateToSubstitute() {
+    return true;
+  }
 
-	@Override
-	public String toString()
-	{
-		return "PsiTypeParameter:" + getName();
-	}
+  @Override
+  public String toString() {
+    return "PsiTypeParameter:" + getName();
+  }
 }

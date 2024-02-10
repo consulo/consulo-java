@@ -115,7 +115,7 @@ public class HardcodedFileSeparatorsInspection extends BaseInspection {
    */
   public boolean m_recognizeExampleMediaType = false;
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "HardcodedFileSeparator";
   }
@@ -148,7 +148,7 @@ public class HardcodedFileSeparatorsInspection extends BaseInspection {
 
     @Override
     public void visitLiteralExpression(
-        @jakarta.annotation.Nonnull PsiLiteralExpression expression) {
+        @Nonnull PsiLiteralExpression expression) {
       super.visitLiteralExpression(expression);
       final PsiType type = expression.getType();
       if (TypeUtils.isJavaLangString(type)) {

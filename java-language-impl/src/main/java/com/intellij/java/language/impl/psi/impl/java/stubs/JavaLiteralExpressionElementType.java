@@ -55,30 +55,30 @@ public class JavaLiteralExpressionElementType extends JavaStubElementType<PsiLit
 	}
 
 	@Override
-	public PsiLiteralExpression createPsi(@jakarta.annotation.Nonnull PsiLiteralStub stub)
+	public PsiLiteralExpression createPsi(@Nonnull PsiLiteralStub stub)
 	{
 		return new PsiLiteralExpressionImpl(stub);
 	}
 
 	@Override
-	public void serialize(@Nonnull PsiLiteralStub stub, @jakarta.annotation.Nonnull StubOutputStream dataStream) throws IOException
+	public void serialize(@Nonnull PsiLiteralStub stub, @Nonnull StubOutputStream dataStream) throws IOException
 	{
 		dataStream.writeUTFFast(stub.getLiteralText());
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
-	public PsiLiteralStub deserialize(@jakarta.annotation.Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException
+	public PsiLiteralStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException
 	{
 		return new PsiLiteralStub(parentStub, dataStream.readUTFFast());
 	}
 
 	@Override
-	public void indexStub(@jakarta.annotation.Nonnull PsiLiteralStub stub, @jakarta.annotation.Nonnull IndexSink sink)
+	public void indexStub(@Nonnull PsiLiteralStub stub, @Nonnull IndexSink sink)
 	{
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public ASTNode createCompositeNode()
 	{

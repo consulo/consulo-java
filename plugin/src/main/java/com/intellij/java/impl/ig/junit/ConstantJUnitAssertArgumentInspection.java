@@ -44,7 +44,7 @@ public class ConstantJUnitAssertArgumentInspection extends BaseInspection {
 
   @Override
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "constant.junit.assert.argument.display.name");

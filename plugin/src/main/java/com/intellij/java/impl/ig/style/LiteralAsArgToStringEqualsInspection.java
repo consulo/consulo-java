@@ -60,7 +60,7 @@ public class LiteralAsArgToStringEqualsInspection
 
   private static class SwapEqualsFix extends InspectionGadgetsFix {
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "literal.as.arg.to.string.equals.flip.quickfix");

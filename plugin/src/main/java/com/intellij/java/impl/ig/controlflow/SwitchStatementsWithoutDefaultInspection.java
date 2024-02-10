@@ -31,7 +31,7 @@ public class SwitchStatementsWithoutDefaultInspection extends BaseInspection {
   @SuppressWarnings("PublicField")
   public boolean m_ignoreFullyCoveredEnums = true;
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("switch.statements.without.default.display.name");
   }

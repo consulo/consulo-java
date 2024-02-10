@@ -53,7 +53,7 @@ public interface PsiTryStatement extends PsiStatement {
    * @return the array of <code>catch</code> sections, or an empty array if the statement
    * has no catch sections.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   PsiCatchSection[] getCatchSections();
 
   /**

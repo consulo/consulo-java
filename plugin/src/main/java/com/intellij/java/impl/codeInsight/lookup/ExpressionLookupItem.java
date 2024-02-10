@@ -44,7 +44,7 @@ public class ExpressionLookupItem extends LookupElement implements TypedLookupIt
     this(expression, getExpressionIcon(expression), expression.getText(), expression.getText());
   }
 
-  public ExpressionLookupItem(final PsiExpression expression, @jakarta.annotation.Nullable Image icon, String presentableText, String... lookupStrings) {
+  public ExpressionLookupItem(final PsiExpression expression, @Nullable Image icon, String presentableText, String... lookupStrings) {
     myExpression = expression;
     myPresentableText = presentableText;
     myIcon = icon;

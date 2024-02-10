@@ -67,7 +67,7 @@ public class PointlessBooleanExpressionInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("pointless.boolean.expression.display.name");
   }
@@ -277,7 +277,7 @@ public class PointlessBooleanExpressionInspection extends BaseInspection {
 
   private class PointlessBooleanExpressionFix extends InspectionGadgetsFix {
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("constant.conditional.expression.simplify.quickfix");
     }

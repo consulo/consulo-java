@@ -45,7 +45,7 @@ import java.util.List;
 public abstract class SourcePosition implements Navigatable {
   private static final Logger LOG = Logger.getInstance(SourcePosition.class);
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public abstract PsiFile getFile();
 
   public abstract PsiElement getElementAt();

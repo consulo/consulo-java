@@ -54,14 +54,14 @@ public class TypeMayBeWeakenedInspection extends BaseInspection {
   public boolean onlyWeakentoInterface = true;
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "type.may.be.weakened.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     final Iterable<PsiClass> weakerClasses = (Iterable<PsiClass>)infos[1];
     @NonNls final StringBuilder builder = new StringBuilder();
@@ -104,7 +104,7 @@ public class TypeMayBeWeakenedInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     final Iterable<PsiClass> weakerClasses = (Iterable<PsiClass>)infos[1];
     final Collection<InspectionGadgetsFix> fixes = new ArrayList();
@@ -126,7 +126,7 @@ public class TypeMayBeWeakenedInspection extends BaseInspection {
       this.fqClassName = fqClassName;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("type.may.be.weakened.quickfix", fqClassName);
     }

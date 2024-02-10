@@ -34,6 +34,6 @@ public interface PsiTypeCastExpression extends PsiExpression {
    *
    * @return the operand of the type cast expression.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiExpression getOperand();
 }

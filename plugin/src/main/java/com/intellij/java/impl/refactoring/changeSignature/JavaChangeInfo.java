@@ -36,13 +36,13 @@ public interface JavaChangeInfo extends ChangeInfo {
 
   CanonicalTypes.Type getNewReturnType();
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   JavaParameterInfo[] getNewParameters();
 
   @PsiModifier.ModifierConstant
   String getNewVisibility();
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   String[] getOldParameterNames();
 
   @Nonnull

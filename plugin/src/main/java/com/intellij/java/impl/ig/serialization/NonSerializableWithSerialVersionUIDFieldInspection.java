@@ -38,20 +38,20 @@ public class NonSerializableWithSerialVersionUIDFieldInspection
   extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "NonSerializableClassWithSerialVersionUID";
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "non.serializable.with.serialversionuid.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiClass aClass = (PsiClass)infos[0];
     if (aClass.isAnnotationType()) {
@@ -86,7 +86,7 @@ public class NonSerializableWithSerialVersionUIDFieldInspection
 
   private static class RemoveSerialVersionUIDFix extends InspectionGadgetsFix {
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "non.serializable.with.serialversionuid.remove.quickfix");

@@ -71,7 +71,7 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner {
   public static final String DEFAULT_JAVA_RUNNER_ID = "Run";
 
   @Override
-  public boolean canRun(@jakarta.annotation.Nonnull final String executorId, @jakarta.annotation.Nonnull final RunProfile profile) {
+  public boolean canRun(@Nonnull final String executorId, @Nonnull final RunProfile profile) {
     return executorId.equals(DefaultRunExecutor.EXECUTOR_ID) && profile instanceof ModuleRunProfile && !(profile instanceof RunConfigurationWithSuppressedDefaultRunAction);
   }
 
@@ -80,7 +80,7 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner {
     runCustomPatchers(javaParameters, DefaultRunExecutor.getRunExecutorInstance(), runProfile);
   }
 
-  protected RunContentDescriptor doExecute(@jakarta.annotation.Nonnull RunProfileState state, @jakarta.annotation.Nonnull ExecutionEnvironment env) throws ExecutionException {
+  protected RunContentDescriptor doExecute(@Nonnull RunProfileState state, @Nonnull ExecutionEnvironment env) throws ExecutionException {
     FileDocumentManager.getInstance().saveAllDocuments();
 
     ExecutionResult executionResult;
@@ -97,7 +97,7 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner {
           proxy.attach(handler);
           handler.addProcessListener(new ProcessAdapter() {
             @Override
-            public void processTerminated(@jakarta.annotation.Nonnull ProcessEvent event) {
+            public void processTerminated(@Nonnull ProcessEvent event) {
               proxy.destroy();
             }
           });
@@ -126,7 +126,7 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner {
     return contentBuilder.showRunContent(env.getContentToReuse());
   }
 
-  private static void addDefaultActions(@Nonnull RunContentBuilder contentBuilder, @jakarta.annotation.Nonnull ExecutionResult executionResult) {
+  private static void addDefaultActions(@Nonnull RunContentBuilder contentBuilder, @Nonnull ExecutionResult executionResult) {
     final ExecutionConsole executionConsole = executionResult.getExecutionConsole();
     final JComponent consoleComponent = executionConsole != null ? executionConsole.getComponent() : null;
     final ControlBreakAction controlBreakAction = new ControlBreakAction(executionResult.getProcessHandler());
@@ -136,7 +136,7 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner {
       assert processHandler != null : executionResult;
       processHandler.addProcessListener(new ProcessAdapter() {
         @Override
-        public void processTerminated(@jakarta.annotation.Nonnull final ProcessEvent event) {
+        public void processTerminated(@Nonnull final ProcessEvent event) {
           processHandler.removeProcessListener(this);
           controlBreakAction.unregisterCustomShortcutSet(consoleComponent);
         }
@@ -157,7 +157,7 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner {
 
     @RequiredUIAccess
     @Override
-    public final void update(@jakarta.annotation.Nonnull AnActionEvent event) {
+    public final void update(@Nonnull AnActionEvent event) {
       ProcessProxy proxy = ProcessProxyFactory.getInstance().getAttachedProxy(myProcessHandler);
       boolean available = proxy != null && available(proxy);
       Presentation presentation = event.getPresentation();
@@ -282,7 +282,7 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getRunnerId() {
     return DEFAULT_JAVA_RUNNER_ID;
   }

@@ -127,7 +127,7 @@ public class MoveInnerToUpperOrMembersHandler extends MoveHandlerDelegate {
       return panel;
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     public MoveHandlerDelegate getRefactoringHandler() {
       if (myRbMoveInner.isSelected()) {
         return new MoveInnerToUpperHandler();

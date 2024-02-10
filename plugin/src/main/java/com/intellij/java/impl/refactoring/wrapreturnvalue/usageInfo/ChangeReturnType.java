@@ -24,9 +24,9 @@ import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
 import consulo.language.util.IncorrectOperationException;
 
 public class ChangeReturnType extends FixableUsageInfo {
-    @jakarta.annotation.Nonnull
+    @Nonnull
     private final PsiMethod method;
-    @jakarta.annotation.Nonnull
+    @Nonnull
     private final String type;
 
     public ChangeReturnType(@Nonnull PsiMethod method, @Nonnull String type) {

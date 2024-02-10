@@ -36,7 +36,7 @@ public class JavaSourceModuleNameIndex extends ScalarIndexExtension<String> {
   private final FileType myManifestFileType = FileTypeRegistry.getInstance().getFileTypeByExtension("MF");
   private final FileBasedIndex.InputFilter myFilter = new DefaultFileTypeSpecificInputFilter(myManifestFileType) {
     @Override
-    public boolean acceptInput(@Nullable Project project, @jakarta.annotation.Nonnull VirtualFile f) {
+    public boolean acceptInput(@Nullable Project project, @Nonnull VirtualFile f) {
       return f.isInLocalFileSystem();
     }
   };
@@ -52,7 +52,7 @@ public class JavaSourceModuleNameIndex extends ScalarIndexExtension<String> {
     return emptyMap();
   };
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public ID<String, Void> getName() {
     return NAME;
@@ -63,7 +63,7 @@ public class JavaSourceModuleNameIndex extends ScalarIndexExtension<String> {
     return 2;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public KeyDescriptor<String> getKeyDescriptor() {
     return EnumeratorStringDescriptor.INSTANCE;
@@ -74,31 +74,31 @@ public class JavaSourceModuleNameIndex extends ScalarIndexExtension<String> {
     return true;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public FileBasedIndex.InputFilter getInputFilter() {
     return myFilter;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public DataIndexer<String, Void, FileContent> getIndexer() {
     return myIndexer;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Collection<FileType> getFileTypesWithSizeLimitNotApplicable() {
     return Collections.singleton(JavaClassFileType.INSTANCE);
   }
 
-  @jakarta.annotation.Nonnull
-  public static Collection<VirtualFile> getFilesByKey(@jakarta.annotation.Nonnull String moduleName, @jakarta.annotation.Nonnull GlobalSearchScope scope) {
+  @Nonnull
+  public static Collection<VirtualFile> getFilesByKey(@Nonnull String moduleName, @Nonnull GlobalSearchScope scope) {
     return FileBasedIndex.getInstance().getContainingFiles(NAME, moduleName, new JavaAutoModuleFilterScope(scope));
   }
 
   @Nonnull
-  public static Collection<String> getAllKeys(@jakarta.annotation.Nonnull Project project) {
+  public static Collection<String> getAllKeys(@Nonnull Project project) {
     return FileBasedIndex.getInstance().getAllKeys(NAME, project);
   }
 }

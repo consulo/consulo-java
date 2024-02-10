@@ -115,7 +115,7 @@ public class VariableArrayTypeFix extends LocalQuickFixOnPsiElement {
     return newExpressionLocal;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static PsiVariable getFromAssignment(final PsiAssignmentExpression assignment) {
     final PsiExpression reference = assignment.getLExpression();
     final PsiElement referencedElement = reference instanceof PsiReferenceExpression ? ((PsiReferenceExpression) reference).resolve() : null;

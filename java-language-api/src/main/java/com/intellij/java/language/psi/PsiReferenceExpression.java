@@ -45,5 +45,5 @@ public interface PsiReferenceExpression extends PsiExpression, PsiJavaCodeRefere
    */
   PsiElement bindToElementViaStaticImport(@Nonnull PsiClass qualifierClass) throws IncorrectOperationException ;
 
-  void setQualifierExpression(@jakarta.annotation.Nullable PsiExpression newQualifier) throws IncorrectOperationException;
+  void setQualifierExpression(@Nullable PsiExpression newQualifier) throws IncorrectOperationException;
 }

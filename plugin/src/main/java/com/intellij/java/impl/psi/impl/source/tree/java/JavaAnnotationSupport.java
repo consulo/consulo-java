@@ -29,11 +29,11 @@ import jakarta.annotation.Nonnull;
 public class JavaAnnotationSupport implements PsiAnnotationSupport {
   @Override
   @Nonnull
-  public PsiLiteral createLiteralValue(@jakarta.annotation.Nonnull String value, @jakarta.annotation.Nonnull PsiElement context) {
+  public PsiLiteral createLiteralValue(@Nonnull String value, @Nonnull PsiElement context) {
     return (PsiLiteral)JavaPsiFacade.getInstance(context.getProject()).getElementFactory().createExpressionFromText("\"" + StringUtil.escapeStringCharacters(value) + "\"", null);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

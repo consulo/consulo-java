@@ -48,7 +48,7 @@ public class PsiLambdaParameterType extends PsiType {
   }
 
   @Override
-  public boolean equalsToText(@jakarta.annotation.Nonnull String text) {
+  public boolean equalsToText(@Nonnull String text) {
     return false;
   }
 
@@ -62,7 +62,7 @@ public class PsiLambdaParameterType extends PsiType {
     return null;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public PsiType[] getSuperTypes() {
     return PsiType.EMPTY_ARRAY;

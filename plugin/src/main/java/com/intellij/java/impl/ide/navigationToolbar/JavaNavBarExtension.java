@@ -34,7 +34,7 @@ import static com.intellij.java.language.psi.util.PsiFormatUtilBase.*;
 public class JavaNavBarExtension extends StructureAwareNavBarModelExtension {
   private final List<NodeProvider<?>> myNodeProviders = List.of(new JavaLambdaNodeProvider(), new JavaAnonymousClassesNodeProvider());
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   @RequiredReadAction
   public String getPresentableText(Object object) {
@@ -75,7 +75,7 @@ public class JavaNavBarExtension extends StructureAwareNavBarModelExtension {
     return super.getParent(psiElement);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public PsiElement adjustElement(@Nonnull final PsiElement psiElement) {
     final ProjectFileIndex index = ProjectRootManager.getInstance(psiElement.getProject()).getFileIndex();

@@ -39,7 +39,7 @@ public class AssignmentToMethodParameterInspection
   public boolean ignoreTransformationOfOriginalParameter = false;
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "assignment.to.method.parameter.display.name");
@@ -75,7 +75,7 @@ public class AssignmentToMethodParameterInspection
 
     @Override
     public void visitAssignmentExpression(
-      @jakarta.annotation.Nonnull PsiAssignmentExpression expression) {
+      @Nonnull PsiAssignmentExpression expression) {
       super.visitAssignmentExpression(expression);
       final PsiExpression lhs = expression.getLExpression();
       final PsiParameter parameter = getMethodParameter(lhs);
@@ -108,7 +108,7 @@ public class AssignmentToMethodParameterInspection
 
     @Override
     public void visitPrefixExpression(
-      @jakarta.annotation.Nonnull PsiPrefixExpression expression) {
+      @Nonnull PsiPrefixExpression expression) {
       if (ignoreTransformationOfOriginalParameter) {
         return;
       }
@@ -131,7 +131,7 @@ public class AssignmentToMethodParameterInspection
 
     @Override
     public void visitPostfixExpression(
-      @jakarta.annotation.Nonnull PsiPostfixExpression expression) {
+      @Nonnull PsiPostfixExpression expression) {
       if (ignoreTransformationOfOriginalParameter) {
         return;
       }
@@ -149,7 +149,7 @@ public class AssignmentToMethodParameterInspection
       registerError(operand);
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     private PsiParameter getMethodParameter(PsiExpression expression) {
       if (!(expression instanceof PsiReferenceExpression)) {
         return null;

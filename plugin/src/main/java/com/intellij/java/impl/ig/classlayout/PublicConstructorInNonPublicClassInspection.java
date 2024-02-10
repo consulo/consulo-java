@@ -40,7 +40,7 @@ public class PublicConstructorInNonPublicClassInspection extends BaseInspection 
     return InspectionGadgetsBundle.message("public.constructor.in.non.public.class.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiMethod method = (PsiMethod)infos[0];
     return InspectionGadgetsBundle.message("public.constructor.in.non.public.class.problem.descriptor",
@@ -51,7 +51,7 @@ public class PublicConstructorInNonPublicClassInspection extends BaseInspection 
     return new PublicConstructorInNonPublicClassVisitor();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public InspectionGadgetsFix[] buildFixes(Object... infos) {
     final List<InspectionGadgetsFix> fixes = new ArrayList();
     final PsiMethod constructor = (PsiMethod)infos[0];

@@ -38,7 +38,7 @@ public abstract class BaseBracesIntention extends MutablyNamedIntention {
     return IntentionPowerPackBundle.message(getMessageKey(), getKeyword(body.getParent(), body));
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected abstract String getMessageKey();
 
   @Nonnull

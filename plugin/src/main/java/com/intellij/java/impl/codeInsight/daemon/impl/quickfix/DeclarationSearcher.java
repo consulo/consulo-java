@@ -56,7 +56,7 @@ public class DeclarationSearcher {
   }
 
   @Nullable
-  private PsiVariable getLocalDeclaration(@jakarta.annotation.Nonnull PsiElement endPositionElement) {
+  private PsiVariable getLocalDeclaration(@Nonnull PsiElement endPositionElement) {
     final PsiElement parent = endPositionElement.getParent();
 
     // reuse of cache is possible IF requests are done up-to-down. otherwise - not first declaration can be returned

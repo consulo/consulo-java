@@ -35,7 +35,7 @@ public abstract class ImportSearcher {
   @Nullable
   public abstract PsiElement findImport(PsiElement element, boolean onlyNonStatic);
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiElement getImport(PsiElement element, boolean onlyNonStatic) {
     for (ImportSearcher searcher : EP_NAME.getExtensions()) {
       PsiElement anImport = searcher.findImport(element, onlyNonStatic);

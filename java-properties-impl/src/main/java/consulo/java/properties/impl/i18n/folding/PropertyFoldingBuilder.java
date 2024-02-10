@@ -57,7 +57,7 @@ public class PropertyFoldingBuilder extends FoldingBuilderEx {
   @RequiredReadAction
   @Override
   @Nonnull
-  public FoldingDescriptor[] buildFoldRegions(@jakarta.annotation.Nonnull PsiElement element, @jakarta.annotation.Nonnull Document document, boolean quick) {
+  public FoldingDescriptor[] buildFoldRegions(@Nonnull PsiElement element, @Nonnull Document document, boolean quick) {
     if (!(element instanceof PsiJavaFile) || quick || !isFoldingsOn()) {
       return FoldingDescriptor.EMPTY;
     }
@@ -129,7 +129,7 @@ public class PropertyFoldingBuilder extends FoldingBuilderEx {
 
 
   @Override
-  public String getPlaceholderText(@jakarta.annotation.Nonnull ASTNode node) {
+  public String getPlaceholderText(@Nonnull ASTNode node) {
     final PsiElement element = SourceTreeToPsiMap.treeElementToPsi(node);
     if (element instanceof PsiLiteralExpression) {
       return getI18nMessage(element.getProject(), (PsiLiteralExpression) element);
@@ -170,7 +170,7 @@ public class PropertyFoldingBuilder extends FoldingBuilderEx {
     return methodCallExpression.getText();
   }
 
-  private static String getI18nMessage(@jakarta.annotation.Nonnull Project project, PsiLiteralExpression literal) {
+  private static String getI18nMessage(@Nonnull Project project, PsiLiteralExpression literal) {
     final IProperty property = getI18nProperty(project, literal);
     return property == null ? literal.getText() : formatI18nProperty(literal, property);
   }

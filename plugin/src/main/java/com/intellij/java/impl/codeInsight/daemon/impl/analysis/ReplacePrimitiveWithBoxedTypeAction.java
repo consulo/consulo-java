@@ -60,7 +60,7 @@ class ReplacePrimitiveWithBoxedTypeAction extends LocalQuickFixAndIntentionActio
   @Override
   public boolean isAvailable(@Nonnull Project project,
                              @Nonnull PsiFile file,
-                             @jakarta.annotation.Nonnull PsiElement startElement,
+                             @Nonnull PsiElement startElement,
                              @Nonnull PsiElement endElement) {
     if (startElement instanceof PsiTypeElement) {
       PsiType type = ((PsiTypeElement)startElement).getType();
@@ -75,10 +75,10 @@ class ReplacePrimitiveWithBoxedTypeAction extends LocalQuickFixAndIntentionActio
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull Project project,
+  public void invoke(@Nonnull Project project,
                      @Nonnull PsiFile file,
-                     @jakarta.annotation.Nullable Editor editor,
-                     @jakarta.annotation.Nonnull PsiElement startElement,
+                     @Nullable Editor editor,
+                     @Nonnull PsiElement startElement,
                      @Nonnull PsiElement endElement) {
     final PsiType type = ((PsiTypeElement)startElement).getType();
     PsiType boxedType;

@@ -96,7 +96,7 @@ public class RenamePsiDirectoryProcessor extends RenamePsiElementProcessor {
     return newName;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Collection<PsiReference> findReferences(PsiElement element) {
     if (!RefactoringSettings.getInstance().RENAME_SEARCH_FOR_REFERENCES_FOR_DIRECTORY) {

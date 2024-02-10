@@ -60,7 +60,7 @@ public class ConstantSubexpressionIntention extends MutablyNamedIntention {
   }
 
   @Override
-  public void processIntention(@jakarta.annotation.Nonnull PsiElement element) throws IncorrectOperationException {
+  public void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiJavaToken token;
     if (element instanceof PsiJavaToken) {
       token = (PsiJavaToken)element;

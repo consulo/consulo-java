@@ -66,7 +66,7 @@ public abstract class MethodBrowser extends BrowseModuleValueActionListener {
   public void installCompletion(EditorTextField field) {
     new TextFieldCompletionProvider() {
       @Override
-      public void addCompletionVariants(@Nonnull String text, int offset, @jakarta.annotation.Nonnull String prefix, @jakarta.annotation.Nonnull CompletionResultSet result) {
+      public void addCompletionVariants(@Nonnull String text, int offset, @Nonnull String prefix, @Nonnull CompletionResultSet result) {
         final String className = getClassName();
         if (className.trim().length() == 0) {
           return;

@@ -34,7 +34,7 @@ public class HibernateResourceInspection extends ResourceInspection {
   public boolean insideTryAllowed = false;
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "HibernateResourceOpenedButNotSafelyClosed";
   }
@@ -47,7 +47,7 @@ public class HibernateResourceInspection extends ResourceInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiExpression expression = (PsiExpression)infos[0];
     final PsiType type = expression.getType();
@@ -74,7 +74,7 @@ public class HibernateResourceInspection extends ResourceInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!isHibernateFactoryMethod(expression)) {
         return;

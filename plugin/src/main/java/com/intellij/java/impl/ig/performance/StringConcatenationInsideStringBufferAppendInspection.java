@@ -38,7 +38,7 @@ import org.jetbrains.annotations.NonNls;
 public class StringConcatenationInsideStringBufferAppendInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("string.concatenation.inside.string.buffer.append.display.name");
   }
@@ -68,7 +68,7 @@ public class StringConcatenationInsideStringBufferAppendInspection extends BaseI
 
   private static class ReplaceWithChainedAppendFix extends InspectionGadgetsFix {
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "string.concatenation.inside.string.buffer.append.replace.quickfix");

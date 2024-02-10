@@ -36,11 +36,11 @@ import java.util.List;
 @ExtensionImpl
 public class JavaReferenceImporter implements ReferenceImporter {
   @Override
-  public boolean autoImportReferenceAtCursor(@Nonnull final Editor editor, @jakarta.annotation.Nonnull final PsiFile file) {
+  public boolean autoImportReferenceAtCursor(@Nonnull final Editor editor, @Nonnull final PsiFile file) {
     return autoImportReferenceAtCursor(editor, file, false);
   }
 
-  public static boolean autoImportReferenceAtCursor(@Nonnull Editor editor, @jakarta.annotation.Nonnull PsiFile file, final boolean allowCaretNearRef) {
+  public static boolean autoImportReferenceAtCursor(@Nonnull Editor editor, @Nonnull PsiFile file, final boolean allowCaretNearRef) {
     if (!file.getViewProvider().getLanguages().contains(JavaLanguage.INSTANCE)) {
       return false;
     }
@@ -66,7 +66,7 @@ public class JavaReferenceImporter implements ReferenceImporter {
   }
 
   @Override
-  public boolean autoImportReferenceAt(@Nonnull Editor editor, @jakarta.annotation.Nonnull PsiFile file, int offset) {
+  public boolean autoImportReferenceAt(@Nonnull Editor editor, @Nonnull PsiFile file, int offset) {
     if (!file.getViewProvider().getLanguages().contains(JavaLanguage.INSTANCE)) {
       return false;
     }

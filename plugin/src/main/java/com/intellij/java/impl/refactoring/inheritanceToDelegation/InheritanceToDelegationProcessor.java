@@ -153,7 +153,7 @@ public class InheritanceToDelegationProcessor extends BaseRefactoringProcessor {
     return new InheritanceToDelegationViewDescriptor(myClass);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected UsageInfo[] findUsages() {
     ArrayList<UsageInfo> usages = new ArrayList<UsageInfo>();
     final PsiClass[] inheritors = ClassInheritorsSearch.search(myClass, true).toArray(PsiClass.EMPTY_ARRAY);

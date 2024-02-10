@@ -43,7 +43,7 @@ public class SetInspectionOptionFix<I extends AbstractBaseJavaLocalInspectionToo
   }
 
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getFamilyName() {
     return "Set inspection option";
@@ -56,7 +56,7 @@ public class SetInspectionOptionFix<I extends AbstractBaseJavaLocalInspectionToo
 
   @Override
   @RequiredReadAction
-  public void applyFix(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull ProblemDescriptor descriptor) {
+  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
     VirtualFile vFile = descriptor.getPsiElement().getContainingFile().getVirtualFile();
     setOption(project, vFile, myValue);
     ProjectUndoManager.getInstance(project).undoableActionPerformed(new BasicUndoableAction(vFile) {
@@ -73,7 +73,7 @@ public class SetInspectionOptionFix<I extends AbstractBaseJavaLocalInspectionToo
   }
 
   @RequiredReadAction
-  private void setOption(@Nonnull Project project, @jakarta.annotation.Nonnull VirtualFile vFile, boolean value) {
+  private void setOption(@Nonnull Project project, @Nonnull VirtualFile vFile, boolean value) {
     PsiFile file = PsiManager.getInstance(project).findFile(vFile);
     if (file == null) {
       return;

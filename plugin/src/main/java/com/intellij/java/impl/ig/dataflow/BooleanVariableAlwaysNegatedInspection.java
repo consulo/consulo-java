@@ -36,14 +36,14 @@ import com.siyeh.ig.InspectionGadgetsFix;
 public class BooleanVariableAlwaysNegatedInspection extends BaseInspection {
 
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "boolean.variable.always.inverted.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     final PsiVariable variable = (PsiVariable)infos[0];

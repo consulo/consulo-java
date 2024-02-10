@@ -27,12 +27,12 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class InstanceofThisInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("instanceof.check.for.this.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("instanceof.check.for.this.problem.descriptor");
   }

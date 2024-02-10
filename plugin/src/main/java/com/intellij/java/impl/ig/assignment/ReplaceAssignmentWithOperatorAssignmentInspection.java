@@ -62,7 +62,7 @@ public class ReplaceAssignmentWithOperatorAssignmentInspection extends BaseInspe
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiExpression lhs = (PsiExpression)infos[0];
     final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)infos[1];
@@ -146,7 +146,7 @@ public class ReplaceAssignmentWithOperatorAssignmentInspection extends BaseInspe
     }
 
     @Override
-    public void doFix(@jakarta.annotation.Nonnull Project project, ProblemDescriptor descriptor)
+    public void doFix(@Nonnull Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
       final PsiElement element = descriptor.getPsiElement();
       if (!(element instanceof PsiAssignmentExpression)) {
@@ -180,7 +180,7 @@ public class ReplaceAssignmentWithOperatorAssignmentInspection extends BaseInspe
   private class ReplaceAssignmentWithOperatorAssignmentVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitAssignmentExpression(@jakarta.annotation.Nonnull PsiAssignmentExpression assignment) {
+    public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression assignment) {
       super.visitAssignmentExpression(assignment);
       final IElementType assignmentTokenType = assignment.getOperationTokenType();
       if (!assignmentTokenType.equals(JavaTokenType.EQ)) {

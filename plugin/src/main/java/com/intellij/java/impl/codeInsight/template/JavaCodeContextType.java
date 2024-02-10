@@ -39,12 +39,12 @@ import static consulo.language.pattern.StandardPatterns.instanceOf;
 
 public abstract class JavaCodeContextType extends TemplateContextType {
 
-  protected JavaCodeContextType(@Nonnull @NonNls String id, @jakarta.annotation.Nonnull String presentableName, @Nullable Class<? extends TemplateContextType> baseContextType) {
+  protected JavaCodeContextType(@Nonnull @NonNls String id, @Nonnull String presentableName, @Nullable Class<? extends TemplateContextType> baseContextType) {
     super(id, presentableName, baseContextType);
   }
 
   @Override
-  public boolean isInContext(@jakarta.annotation.Nonnull final PsiFile file, final int offset) {
+  public boolean isInContext(@Nonnull final PsiFile file, final int offset) {
     if (PsiUtilCore.getLanguageAtOffset(file, offset).isKindOf(JavaLanguage.INSTANCE)) {
       PsiElement element = file.findElementAt(offset);
       if (element instanceof PsiWhiteSpace) {
@@ -56,9 +56,9 @@ public abstract class JavaCodeContextType extends TemplateContextType {
     return false;
   }
 
-  protected abstract boolean isInContext(@jakarta.annotation.Nonnull PsiElement element);
+  protected abstract boolean isInContext(@Nonnull PsiElement element);
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public SyntaxHighlighter createHighlighter() {
     return new JavaFileHighlighter();

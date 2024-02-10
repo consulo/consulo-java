@@ -36,13 +36,13 @@ public abstract class ZeroLengthArrayInitializationInspectionBase extends BaseIn
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("array.allocation.zero.length.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("array.allocation.zero.length.problem.descriptor");
   }
@@ -60,7 +60,7 @@ public abstract class ZeroLengthArrayInitializationInspectionBase extends BaseIn
   private static class ZeroLengthArrayInitializationVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitNewExpression(@jakarta.annotation.Nonnull PsiNewExpression expression) {
+    public void visitNewExpression(@Nonnull PsiNewExpression expression) {
       super.visitNewExpression(expression);
       if (!ConstructionUtils.isEmptyArrayInitializer(expression)) {
         return;

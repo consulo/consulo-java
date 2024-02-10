@@ -32,7 +32,7 @@ import java.util.Set;
  */
 public abstract class ExpectedTypeBasedCompletionProvider implements CompletionProvider {
   @Override
-  public void addCompletions(@Nonnull final CompletionParameters params, final ProcessingContext matchingContext, @jakarta.annotation.Nonnull final CompletionResultSet result) {
+  public void addCompletions(@Nonnull final CompletionParameters params, final ProcessingContext matchingContext, @Nonnull final CompletionResultSet result) {
     final PsiElement position = params.getPosition();
     if (position.getParent() instanceof PsiLiteralExpression) return;
 

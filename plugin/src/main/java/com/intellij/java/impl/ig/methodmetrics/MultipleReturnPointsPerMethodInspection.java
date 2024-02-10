@@ -25,6 +25,7 @@ import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
 import consulo.annotation.component.ExtensionImpl;
 
+import consulo.deadCodeNotWorking.impl.CheckBox;
 import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
@@ -77,12 +78,12 @@ public class MultipleReturnPointsPerMethodInspection
     final JLabel label = new JLabel(InspectionGadgetsBundle.message(
       "return.point.limit.option"));
     final JFormattedTextField termLimitTextField = prepareNumberEditor(() -> m_limit, i -> m_limit = i);
-    final consulo.deadCodeNotWorking.impl.CheckBox ignoreGuardClausesCheckBox =
-      new consulo.deadCodeNotWorking.impl.CheckBox(InspectionGadgetsBundle.message(
+    final CheckBox ignoreGuardClausesCheckBox =
+      new CheckBox(InspectionGadgetsBundle.message(
         "ignore.guard.clauses.option"),
                    this, "ignoreGuardClauses");
-    final consulo.deadCodeNotWorking.impl.CheckBox ignoreEqualsMethodCheckBox =
-      new consulo.deadCodeNotWorking.impl.CheckBox(InspectionGadgetsBundle.message(
+    final CheckBox ignoreEqualsMethodCheckBox =
+      new CheckBox(InspectionGadgetsBundle.message(
         "ignore.for.equals.methods.option"),
                    this, "ignoreEqualsMethod");
 

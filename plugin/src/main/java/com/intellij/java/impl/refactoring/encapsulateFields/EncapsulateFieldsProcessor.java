@@ -59,7 +59,7 @@ public class EncapsulateFieldsProcessor extends BaseRefactoringProcessor {
   private HashMap<String,PsiMethod> myNameToGetter;
   private HashMap<String,PsiMethod> myNameToSetter;
 
-  public EncapsulateFieldsProcessor(Project project, @jakarta.annotation.Nonnull EncapsulateFieldsDescriptor descriptor) {
+  public EncapsulateFieldsProcessor(Project project, @Nonnull EncapsulateFieldsDescriptor descriptor) {
     super(project);
     myDescriptor = descriptor;
     myFieldDescriptors = descriptor.getSelectedFields();
@@ -78,7 +78,7 @@ public class EncapsulateFieldsProcessor extends BaseRefactoringProcessor {
     }
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
     FieldDescriptor[] fields = new FieldDescriptor[myFieldDescriptors.length];
     System.arraycopy(myFieldDescriptors, 0, fields, 0, myFieldDescriptors.length);

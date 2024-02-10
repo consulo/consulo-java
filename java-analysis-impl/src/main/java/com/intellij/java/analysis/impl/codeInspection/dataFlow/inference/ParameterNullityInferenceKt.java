@@ -159,7 +159,7 @@ class ParameterNullityInferenceKt {
       CommonClassNames.JAVA_LANG_THROWABLE, CommonClassNames.JAVA_LANG_EXCEPTION,
       CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION, CommonClassNames.JAVA_LANG_NULL_POINTER_EXCEPTION);
 
-  private static boolean canCatchNpe(LighterAST tree, @jakarta.annotation.Nullable LighterASTNode type) {
+  private static boolean canCatchNpe(LighterAST tree, @Nullable LighterASTNode type) {
     if (type == null) {
       return false;
     }

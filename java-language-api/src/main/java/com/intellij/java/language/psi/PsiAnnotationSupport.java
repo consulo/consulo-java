@@ -39,6 +39,6 @@ public interface PsiAnnotationSupport extends LanguageExtension {
     return Application.get().getExtensionPoint(PsiAnnotationSupport.class).getOrBuildCache(CACHE_KEY).get(language);
   }
 
-  @jakarta.annotation.Nonnull
-  PsiLiteral createLiteralValue(@jakarta.annotation.Nonnull String value, @Nonnull PsiElement context);
+  @Nonnull
+  PsiLiteral createLiteralValue(@Nonnull String value, @Nonnull PsiElement context);
 }

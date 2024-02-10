@@ -153,14 +153,14 @@ public abstract class SwitchStatementWithTooFewBranchesInspection extends BaseIn
     }
 
     @Nls(capitalization = Nls.Capitalization.Sentence)
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public String getName() {
       return myBranchCount == 0 ? getFamilyName() : JavaQuickFixBundle.message("fix.replace.x.with.y", PsiKeyword.SWITCH, PsiKeyword.IF);
     }
 
     @Nls(capitalization = Nls.Capitalization.Sentence)
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public String getFamilyName() {
       return JavaQuickFixBundle.message("fix.unwrap", PsiKeyword.SWITCH);

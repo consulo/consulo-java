@@ -36,7 +36,7 @@ import java.util.*;
 
 @ExtensionImpl(id = "java")
 public class JavaNameSuggestionProvider implements NameSuggestionProvider {
-  @jakarta.annotation.Nullable
+  @Nullable
   public SuggestedNameInfo getSuggestedNames(final PsiElement element, final PsiElement nameSuggestionContext, Set<String> result) {
     String initialName = UsageViewUtil.getShortName(element);
     SuggestedNameInfo info = suggestNamesForElement(element, nameSuggestionContext);
@@ -83,7 +83,7 @@ public class JavaNameSuggestionProvider implements NameSuggestionProvider {
     return info;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static String getSuperMethodName(final PsiParameter psiParameter, final PsiMethod method) {
     final int index = method.getParameterList().getParameterIndex(psiParameter);
     final PsiMethod[] superMethods = method.findSuperMethods();
@@ -143,7 +143,7 @@ public class JavaNameSuggestionProvider implements NameSuggestionProvider {
     return buffer.toString();
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static SuggestedNameInfo suggestNamesForElement(final PsiElement element, PsiElement nameSuggestionContext) {
     PsiVariable var = null;
     if (element instanceof PsiVariable) {

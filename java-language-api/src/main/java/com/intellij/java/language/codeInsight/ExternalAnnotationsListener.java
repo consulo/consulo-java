@@ -36,7 +36,7 @@ public interface ExternalAnnotationsListener extends EventListener {
    * @param annotationFQName annotation class FQ name
    * @param successful if annotation modification was successful
    */
-  void afterExternalAnnotationChanging(@jakarta.annotation.Nonnull PsiModifierListOwner owner, @Nonnull String annotationFQName, boolean successful);
+  void afterExternalAnnotationChanging(@Nonnull PsiModifierListOwner owner, @Nonnull String annotationFQName, boolean successful);
 
   /**
    * Invoked when external annotations files were modified
@@ -45,7 +45,7 @@ public interface ExternalAnnotationsListener extends EventListener {
 
   abstract class Adapter implements ExternalAnnotationsListener {
     @Override
-    public void afterExternalAnnotationChanging(@jakarta.annotation.Nonnull PsiModifierListOwner owner, @jakarta.annotation.Nonnull String annotationFQName, boolean successful) {
+    public void afterExternalAnnotationChanging(@Nonnull PsiModifierListOwner owner, @Nonnull String annotationFQName, boolean successful) {
     }
 
     @Override

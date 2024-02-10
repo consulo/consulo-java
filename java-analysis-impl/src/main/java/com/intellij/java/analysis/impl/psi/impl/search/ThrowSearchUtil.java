@@ -67,7 +67,7 @@ public class ThrowSearchUtil {
    * @param root
    * @return true, if we should continue processing
    */
-  private static boolean processExn(@Nonnull PsiParameter aCatch, @jakarta.annotation.Nonnull Processor<UsageInfo> processor, @Nonnull Root root) {
+  private static boolean processExn(@Nonnull PsiParameter aCatch, @Nonnull Processor<UsageInfo> processor, @Nonnull Root root) {
     final PsiType type = aCatch.getType();
     if (type.isAssignableFrom(root.myType)) {
       processor.process(new UsageInfo(aCatch));

@@ -111,7 +111,7 @@ public class PsiSuperMethodUtil
 		return false;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public static PsiSubstitutor obtainFinalSubstitutor(@Nonnull PsiClass superClass, @Nonnull PsiSubstitutor superSubstitutor, @Nonnull PsiSubstitutor derivedSubstitutor, boolean inRawContext)
 	{
 		if(inRawContext)
@@ -135,8 +135,8 @@ public class PsiSuperMethodUtil
 		return map == null ? PsiSubstitutor.EMPTY : JavaPsiFacade.getInstance(superClass.getProject()).getElementFactory().createSubstitutor(map);
 	}
 
-	@jakarta.annotation.Nonnull
-	public static Map<MethodSignature, Set<PsiMethod>> collectOverrideEquivalents(@jakarta.annotation.Nonnull PsiClass aClass)
+	@Nonnull
+	public static Map<MethodSignature, Set<PsiMethod>> collectOverrideEquivalents(@Nonnull PsiClass aClass)
 	{
 		final Map<MethodSignature, Set<PsiMethod>> overrideEquivalent = Maps.newHashMap(MethodSignatureUtil.METHOD_PARAMETERS_ERASURE_EQUALITY);
 		final GlobalSearchScope resolveScope = aClass.getResolveScope();

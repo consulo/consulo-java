@@ -347,7 +347,7 @@ public final class JavaSpacePropertyProcessor extends JavaElementVisitor {
 
   private Spacing getSpaceBeforeLBrace(@Nonnull ASTNode lBraceBlock,
                                        boolean spaceBeforeLbrace,
-                                       @jakarta.annotation.Nullable TextRange nextLineIfWrappedOptionRange) {
+                                       @Nullable TextRange nextLineIfWrappedOptionRange) {
     int space = spaceBeforeLbrace ? 1 : 0;
 
     if (mySettings.BRACE_STYLE == END_OF_LINE) {
@@ -1067,7 +1067,7 @@ public final class JavaSpacePropertyProcessor extends JavaElementVisitor {
     }
   }
 
-  private Spacing createNonLFSpace(int spaces, @jakarta.annotation.Nullable TextRange dependantRange) {
+  private Spacing createNonLFSpace(int spaces, @Nullable TextRange dependantRange) {
     ASTNode prev = getPrevElementType(myChild2);
     if (prev != null && prev.getElementType() == JavaTokenType.END_OF_LINE_COMMENT) {
       return Spacing.createSpacing(0, Integer.MAX_VALUE, 1, false, mySettings.KEEP_BLANK_LINES_IN_CODE);
@@ -1081,7 +1081,7 @@ public final class JavaSpacePropertyProcessor extends JavaElementVisitor {
   }
 
   private static
-  @jakarta.annotation.Nullable
+  @Nullable
   ASTNode getPrevElementType(ASTNode child) {
     return FormatterUtil.getPreviousNonWhitespaceLeaf(child);
   }
@@ -1582,7 +1582,7 @@ public final class JavaSpacePropertyProcessor extends JavaElementVisitor {
   }
 
   private static
-  @jakarta.annotation.Nullable
+  @Nullable
   ASTNode findFrom(ASTNode current, IElementType expected, boolean forward) {
     for (ASTNode node = current; node != null; node = forward ? node.getTreeNext() : node.getTreePrev()) {
       if (node.getElementType() == expected) return node;

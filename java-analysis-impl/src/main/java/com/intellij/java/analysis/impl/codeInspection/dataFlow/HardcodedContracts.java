@@ -149,7 +149,7 @@ public final class HardcodedContracts {
       .register(staticCall("java.lang.System", "arraycopy"), expression -> getArraycopyContract());
 
   private static
-  @jakarta.annotation.Nonnull
+  @Nonnull
   ContractProvider getArraycopyContract() {
     ContractValue src = ContractValue.argument(0);
     ContractValue srcPos = ContractValue.argument(1);
@@ -234,7 +234,7 @@ public final class HardcodedContracts {
   }
 
   private static
-  @jakarta.annotation.Nonnull
+  @Nonnull
   List<MethodContract> getSubstringContracts(boolean endLimited) {
     List<MethodContract> contracts = new ArrayList<>(3);
     contracts.add(specialFieldRangeContract(0, RelationType.LE, SpecialField.STRING_LENGTH));
@@ -422,7 +422,7 @@ public final class HardcodedContracts {
   }
 
   private static
-  @jakarta.annotation.Nonnull
+  @Nonnull
   List<MethodContract> handleAssertThat(int paramCount, @Nonnull PsiMethodCallExpression call) {
     PsiExpression[] args = call.getArgumentList().getExpressions();
     if (args.length == paramCount) {
@@ -498,7 +498,7 @@ public final class HardcodedContracts {
   }
 
   private static
-  @jakarta.annotation.Nonnull
+  @Nonnull
   List<MethodContract> failIfNull(int argIndex, int argCount, boolean returnArg) {
     ValueConstraint[] constraints = createConstraintArray(argCount);
     constraints[argIndex] = NULL_VALUE;

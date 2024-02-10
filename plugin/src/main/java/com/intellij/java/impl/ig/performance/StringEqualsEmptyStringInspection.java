@@ -68,7 +68,7 @@ public class StringEqualsEmptyStringInspection extends BaseInspection {
       this.useIsEmpty = useIsEmpty;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       if (useIsEmpty) {
         return InspectionGadgetsBundle.message("string.equals.empty.string.isempty.quickfix");

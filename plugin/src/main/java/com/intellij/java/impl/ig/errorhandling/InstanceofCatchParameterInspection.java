@@ -28,7 +28,7 @@ import com.siyeh.ig.psiutils.ControlFlowUtils;
 @ExtensionImpl
 public class InstanceofCatchParameterInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "instanceof.catch.parameter.display.name");
@@ -49,7 +49,7 @@ public class InstanceofCatchParameterInspection extends BaseInspection {
 
     @Override
     public void visitInstanceOfExpression(
-      @jakarta.annotation.Nonnull PsiInstanceOfExpression exp) {
+      @Nonnull PsiInstanceOfExpression exp) {
       super.visitInstanceOfExpression(exp);
       if (!ControlFlowUtils.isInCatchBlock(exp)) {
         return;

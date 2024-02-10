@@ -32,16 +32,16 @@ import java.awt.*;
  * User: cdr
  */
 public class SliceTooComplexDFAUsage extends SliceUsage {
-  public SliceTooComplexDFAUsage(@Nonnull PsiElement element, @Nonnull SliceUsage parent, @jakarta.annotation.Nonnull PsiSubstitutor substitutor) {
+  public SliceTooComplexDFAUsage(@Nonnull PsiElement element, @Nonnull SliceUsage parent, @Nonnull PsiSubstitutor substitutor) {
     super(element, parent, substitutor, 0, "");
   }
 
   @Override
-  public void processChildren(@jakarta.annotation.Nonnull Processor<SliceUsage> processor) {
+  public void processChildren(@Nonnull Processor<SliceUsage> processor) {
     // no children
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public UsagePresentation getPresentation() {
     final UsagePresentation presentation = super.getPresentation();

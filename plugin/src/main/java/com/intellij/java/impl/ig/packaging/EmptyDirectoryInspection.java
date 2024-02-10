@@ -144,21 +144,21 @@ public abstract class EmptyDirectoryInspection extends BaseGlobalInspection {
       this.name = name;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public String getName() {
       return InspectionGadgetsBundle.message(
         "empty.directories.delete.quickfix", name);
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public String getFamilyName() {
       return getName();
     }
 
     @Override
-    public void applyFix(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull CommonProblemDescriptor descriptor) {
+    public void applyFix(@Nonnull Project project, @Nonnull CommonProblemDescriptor descriptor) {
       final VirtualFile file = VirtualFileManager.getInstance().findFileByUrl(url);
       if (file == null) {
         return;

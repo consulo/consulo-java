@@ -29,9 +29,9 @@ import jakarta.annotation.Nullable;
  */
 public class PsiNameValuePairStubImpl extends StubBase<PsiNameValuePair> implements PsiNameValuePairStub {
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private final StringRef myName;
-  @jakarta.annotation.Nullable
+  @Nullable
   private final StringRef myValue;
 
   public PsiNameValuePairStubImpl(StubElement parent, @Nullable StringRef name, @Nullable StringRef value) {

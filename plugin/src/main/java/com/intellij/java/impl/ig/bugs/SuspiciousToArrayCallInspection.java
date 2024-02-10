@@ -31,7 +31,7 @@ import org.jetbrains.annotations.NonNls;
 public class SuspiciousToArrayCallInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "suspicious.to.array.call.display.name");
@@ -98,7 +98,7 @@ public class SuspiciousToArrayCallInspection extends BaseInspection {
     private void checkCollectionAndArrayTypes(
       @Nonnull PsiClassType collectionType,
       @Nonnull PsiExpression argument,
-      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       final PsiType argumentType = argument.getType();
       if (!(argumentType instanceof PsiArrayType)) {
         return;

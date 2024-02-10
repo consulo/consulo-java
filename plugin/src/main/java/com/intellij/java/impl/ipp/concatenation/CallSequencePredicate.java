@@ -44,7 +44,7 @@ class CallSequencePredicate implements PsiElementPredicate {
     return variable1.equals(variable2);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static PsiVariable getVariable(PsiStatement statement) {
     if (!(statement instanceof PsiExpressionStatement)) {
       return null;

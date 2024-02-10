@@ -33,7 +33,7 @@ public class ClsUsesStatementImpl extends ClsRepositoryPsiElement<PsiUsesStateme
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @jakarta.annotation.Nonnull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
     StringUtil.repeatSymbol(buffer, ' ', indentLevel);
     buffer.append("uses ").append(myClassReference.getCanonicalText()).append(";\n");
   }

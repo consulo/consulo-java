@@ -35,14 +35,14 @@ public class MultipleDeclarationInspection extends BaseInspection {
   public boolean ignoreForLoopDeclarations = true;
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "multiple.declaration.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "MultipleVariablesInDeclaration";
   }
@@ -101,7 +101,7 @@ public class MultipleDeclarationInspection extends BaseInspection {
     }
 
     @Override
-    public void visitField(@jakarta.annotation.Nonnull PsiField field) {
+    public void visitField(@Nonnull PsiField field) {
       super.visitField(field);
       if (childrenContainTypeElement(field)) {
         return;

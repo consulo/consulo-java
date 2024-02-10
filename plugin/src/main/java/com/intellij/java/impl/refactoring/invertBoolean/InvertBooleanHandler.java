@@ -73,7 +73,7 @@ public class InvertBooleanHandler implements RefactoringActionHandler {
     new InvertBooleanDialog(var).show();
   }
 
-  public void invoke(@Nonnull Project project, @jakarta.annotation.Nonnull PsiElement[] elements, @jakarta.annotation.Nonnull DataContext dataContext) {
+  public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, @Nonnull DataContext dataContext) {
     if (elements.length == 1 && elements[0] instanceof PsiMethod) {
       invoke((PsiMethod)elements[0], project, null);
     }

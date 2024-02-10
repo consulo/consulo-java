@@ -31,7 +31,7 @@ public class JavaMoveLeftRightHandler implements MoveElementLeftRightHandler {
   @RequiredReadAction
   @Nonnull
   @Override
-  public PsiElement[] getMovableSubElements(@jakarta.annotation.Nonnull PsiElement element) {
+  public PsiElement[] getMovableSubElements(@Nonnull PsiElement element) {
     if (element instanceof PsiParameterList) {
       return ((PsiParameterList) element).getParameters();
     } else if (element instanceof PsiExpressionList) {

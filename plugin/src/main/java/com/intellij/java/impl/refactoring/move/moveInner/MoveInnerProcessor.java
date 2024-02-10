@@ -97,7 +97,7 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
     return RefactoringBundle.message("move.inner.class.command", myDescriptiveName);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
     return new MoveInnerViewDescriptor(myInnerClass);
   }
@@ -416,7 +416,7 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
                     final String parameterName,
                     boolean searchInComments,
                     boolean searchInNonJava,
-                    @jakarta.annotation.Nonnull final PsiElement targetContainer) {
+                    @Nonnull final PsiElement targetContainer) {
     myNewClassName = className;
     myInnerClass = innerClass;
     myDescriptiveName = DescriptiveNameUtil.getDescriptiveName(myInnerClass);

@@ -127,7 +127,7 @@ public class SubstitutedExpressionEvaluationHelper {
     });
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private Object calcSubstituted(final PsiModifierListOwner owner) {
     final PsiAnnotation annotation = AnnotationUtil.findAnnotation(owner, myConfiguration.getAdvancedConfiguration().getSubstAnnotationPair().second);
     if (annotation != null) {

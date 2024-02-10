@@ -60,13 +60,13 @@ public class IdeaProjectModelModifier extends JavaProjectModelModifier {
   }
 
   @Override
-  public AsyncResult<Void> addModuleDependency(@jakarta.annotation.Nonnull Module from, @jakarta.annotation.Nonnull Module to, @jakarta.annotation.Nonnull DependencyScope scope) {
+  public AsyncResult<Void> addModuleDependency(@Nonnull Module from, @Nonnull Module to, @Nonnull DependencyScope scope) {
     ModuleRootModificationUtil.addDependency(from, to, scope, false);
     return AsyncResult.done(null);
   }
 
   @Override
-  public AsyncResult<Void> addExternalLibraryDependency(@jakarta.annotation.Nonnull final Collection<Module> modules, @jakarta.annotation.Nonnull final ExternalLibraryDescriptor descriptor, @jakarta.annotation.Nonnull final DependencyScope scope) {
+  public AsyncResult<Void> addExternalLibraryDependency(@Nonnull final Collection<Module> modules, @Nonnull final ExternalLibraryDescriptor descriptor, @Nonnull final DependencyScope scope) {
     List<String> defaultRoots = descriptor.getLibraryClassesRoots();
     Module firstModule = ContainerUtil.getFirstItem(modules);
     LOG.assertTrue(firstModule != null);
@@ -96,14 +96,14 @@ public class IdeaProjectModelModifier extends JavaProjectModelModifier {
   }
 
   @Override
-  public AsyncResult<Void> addLibraryDependency(@Nonnull Module from, @jakarta.annotation.Nonnull Library library, @jakarta.annotation.Nonnull DependencyScope scope) {
+  public AsyncResult<Void> addLibraryDependency(@Nonnull Module from, @Nonnull Library library, @Nonnull DependencyScope scope) {
     OrderEntryUtil.addLibraryToRoots(from, library);
     return AsyncResult.done(null);
   }
 
   @Override
   @RequiredReadAction
-  public AsyncResult<Void> changeLanguageLevel(@jakarta.annotation.Nonnull Module module, @jakarta.annotation.Nonnull LanguageLevel level) {
+  public AsyncResult<Void> changeLanguageLevel(@Nonnull Module module, @Nonnull LanguageLevel level) {
     if (JavaSdkUtil.isLanguageLevelAcceptable(myProject, module, level)) {
       final ModifiableRootModel rootModel = ModuleRootManager.getInstance(module).getModifiableModel();
       rootModel.getExtension(JavaMutableModuleExtension.class).getInheritableLanguageLevel().set(null, level);

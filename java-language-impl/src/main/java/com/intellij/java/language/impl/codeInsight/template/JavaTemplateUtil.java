@@ -66,14 +66,14 @@ public class JavaTemplateUtil {
   private JavaTemplateUtil() {
   }
 
-  public static void setClassAndMethodNameProperties(@jakarta.annotation.Nonnull Properties properties, @Nonnull PsiClass aClass, @jakarta.annotation.Nonnull PsiMethod method) {
+  public static void setClassAndMethodNameProperties(@Nonnull Properties properties, @Nonnull PsiClass aClass, @Nonnull PsiMethod method) {
     properties.setProperty(FileTemplate.ATTRIBUTE_CLASS_NAME, notNull(aClass.getQualifiedName(), ""));
     properties.setProperty(FileTemplate.ATTRIBUTE_SIMPLE_CLASS_NAME, notNull(aClass.getName(), ""));
     properties.setProperty(FileTemplate.ATTRIBUTE_METHOD_NAME, method.getName());
   }
 
-  @jakarta.annotation.Nonnull
-  public static String getPackageName(@jakarta.annotation.Nonnull PsiDirectory directory) {
+  @Nonnull
+  public static String getPackageName(@Nonnull PsiDirectory directory) {
     PsiPackage aPackage = JavaDirectoryService.getInstance().getPackage(directory);
     return aPackage != null ? aPackage.getQualifiedName() : "";
   }

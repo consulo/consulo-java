@@ -29,7 +29,7 @@ public class EnterInJavadocParamDescriptionHandler extends EnterHandlerDelegateA
   private final JavadocHelper myHelper = JavadocHelper.getInstance();
 
   @Override
-  public Result postProcessEnter(@Nonnull final PsiFile file, @Nonnull Editor editor, @jakarta.annotation.Nonnull DataContext dataContext) {
+  public Result postProcessEnter(@Nonnull final PsiFile file, @Nonnull Editor editor, @Nonnull DataContext dataContext) {
     if (!CodeInsightSettings.getInstance().SMART_INDENT_ON_ENTER
         || !CodeStyleSettingsManager.getSettings(file.getProject()).JD_ALIGN_PARAM_COMMENTS)
     {

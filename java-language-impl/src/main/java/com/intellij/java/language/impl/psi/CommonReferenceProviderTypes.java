@@ -45,6 +45,6 @@ public abstract class CommonReferenceProviderTypes {
   @Nonnull
   public abstract JavaClassPsiReferenceProvider getClassReferenceProvider();
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public abstract JavaClassPsiReferenceProvider getSoftClassReferenceProvider();
 }

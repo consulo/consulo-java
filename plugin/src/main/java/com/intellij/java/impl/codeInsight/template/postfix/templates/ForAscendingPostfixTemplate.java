@@ -27,20 +27,20 @@ public class ForAscendingPostfixTemplate extends ForIndexedPostfixTemplate {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String getOperator() {
     return "++";
   }
 
   @Nonnull
   @Override
-  protected String getComparativeSign(@jakarta.annotation.Nonnull PsiExpression expr) {
+  protected String getComparativeSign(@Nonnull PsiExpression expr) {
     return "<";
   }
 
   @Nullable
   @Override
-  protected Pair<String, String> calculateBounds(@jakarta.annotation.Nonnull PsiExpression expression) {
+  protected Pair<String, String> calculateBounds(@Nonnull PsiExpression expression) {
     String bound = getExpressionBound(expression);
     return bound != null ? Pair.create("0", bound) : null;
   }

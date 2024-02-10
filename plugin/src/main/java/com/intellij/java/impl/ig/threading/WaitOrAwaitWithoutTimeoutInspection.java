@@ -25,7 +25,7 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class WaitOrAwaitWithoutTimeoutInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "wait.or.await.without.timeout.display.name");

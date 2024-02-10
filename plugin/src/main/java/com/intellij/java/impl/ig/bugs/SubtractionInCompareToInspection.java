@@ -38,7 +38,7 @@ public class SubtractionInCompareToInspection extends BaseInspection {
       "subtraction.in.compareto.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "subtraction.in.compareto.problem.descriptor");

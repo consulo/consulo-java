@@ -36,7 +36,7 @@ import java.awt.event.ItemListener;
  * Date: 4/8/11
  */
 public class IntroduceFieldPopupPanel extends IntroduceFieldCentralPanel {
-  private @jakarta.annotation.Nullable
+  private @Nullable
   JComboBox myInitializerCombo;
   private JComboBox myVisibilityCombo;
   private DefaultComboBoxModel myInitialisersPlaceModel;

@@ -51,7 +51,7 @@ public class TypeAnnotationContainer {
    * @return type annotation container for array element
    * (assuming that this type annotation container is used for the array type)
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public TypeAnnotationContainer forArrayElement() {
     if (isEmpty()) {
       return this;
@@ -64,7 +64,7 @@ public class TypeAnnotationContainer {
    * @return type annotation container for enclosing class
    * (assuming that this type annotation container is used for the inner class)
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public TypeAnnotationContainer forEnclosingClass() {
     if (isEmpty()) {
       return this;
@@ -77,7 +77,7 @@ public class TypeAnnotationContainer {
    * @return type annotation container for wildcard bound
    * (assuming that this type annotation container is used for the bounded wildcard type)
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public TypeAnnotationContainer forBound() {
     if (isEmpty()) {
       return this;
@@ -91,7 +91,7 @@ public class TypeAnnotationContainer {
    * @return type annotation container for given type argument
    * (assuming that this type annotation container is used for class type with type arguments)
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public TypeAnnotationContainer forTypeArgument(int index) {
     if (isEmpty()) {
       return this;
@@ -117,7 +117,7 @@ public class TypeAnnotationContainer {
     }
     return new TypeAnnotationProvider() {
       @Override
-      @jakarta.annotation.Nonnull
+      @Nonnull
       public PsiAnnotation[] getAnnotations() {
         List<PsiAnnotation> result = new ArrayList<>();
         for (TypeAnnotationEntry entry : myList) {
@@ -172,7 +172,7 @@ public class TypeAnnotationContainer {
    * @param container  a container to serialize
    * @throws IOException if the stream throws
    */
-  public static void writeTypeAnnotations(@jakarta.annotation.Nonnull StubOutputStream dataStream, @jakarta.annotation.Nonnull TypeAnnotationContainer container)
+  public static void writeTypeAnnotations(@Nonnull StubOutputStream dataStream, @Nonnull TypeAnnotationContainer container)
       throws IOException {
     dataStream.writeShort(container.myList.size());
     for (TypeAnnotationEntry entry : container.myList) {
@@ -190,8 +190,8 @@ public class TypeAnnotationContainer {
    * @throws IOException if the stream throws
    */
   public static
-  @jakarta.annotation.Nonnull
-  TypeAnnotationContainer readTypeAnnotations(@jakarta.annotation.Nonnull StubInputStream dataStream) throws IOException {
+  @Nonnull
+  TypeAnnotationContainer readTypeAnnotations(@Nonnull StubInputStream dataStream) throws IOException {
     short count = dataStream.readShort();
     TypeAnnotationEntry[] entries = new TypeAnnotationEntry[count];
     for (int i = 0; i < count; i++) {
@@ -216,17 +216,17 @@ public class TypeAnnotationContainer {
     public static final byte TYPE_ARGUMENT = 3;
 
     private final
-    @jakarta.annotation.Nonnull
+    @Nonnull
     ArrayList<TypeAnnotationEntry> myList = new ArrayList<>();
     protected final
-    @jakarta.annotation.Nonnull
+    @Nonnull
     TypeInfo myTypeInfo;
 
-    public Collector(@jakarta.annotation.Nonnull TypeInfo info) {
+    public Collector(@Nonnull TypeInfo info) {
       myTypeInfo = info;
     }
 
-    public void add(@jakarta.annotation.Nonnull byte[] path, @jakarta.annotation.Nonnull String text) {
+    public void add(@Nonnull byte[] path, @Nonnull String text) {
       myList.add(new TypeAnnotationEntry(path, text));
     }
 
@@ -251,7 +251,7 @@ public class TypeAnnotationContainer {
     @Nonnull
     String myText;
 
-    private TypeAnnotationEntry(@jakarta.annotation.Nonnull byte[] path, @jakarta.annotation.Nonnull String text) {
+    private TypeAnnotationEntry(@Nonnull byte[] path, @Nonnull String text) {
       myPath = path;
       myText = text;
     }
@@ -325,45 +325,45 @@ public class TypeAnnotationContainer {
     }
 
     @Override
-    @jakarta.annotation.Nullable
+    @Nullable
     public String getQualifiedName() {
       return getNameReferenceElement().getCanonicalText();
     }
 
     @Override
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public PsiJavaCodeReferenceElement getNameReferenceElement() {
       return myReferenceElement.getValue();
     }
 
     @Override
     public
-    @jakarta.annotation.Nullable
+    @Nullable
     PsiAnnotationMemberValue findAttributeValue(@Nullable String attributeName) {
       return PsiImplUtil.findAttributeValue(this, attributeName);
     }
 
     @Override
     public
-    @jakarta.annotation.Nullable
-    PsiAnnotationMemberValue findDeclaredAttributeValue(@jakarta.annotation.Nullable String attributeName) {
+    @Nullable
+    PsiAnnotationMemberValue findDeclaredAttributeValue(@Nullable String attributeName) {
       return PsiImplUtil.findDeclaredAttributeValue(this, attributeName);
     }
 
     @Override
-    public <T extends PsiAnnotationMemberValue> T setDeclaredAttributeValue(@jakarta.annotation.Nullable String attributeName, @jakarta.annotation.Nullable T value) {
+    public <T extends PsiAnnotationMemberValue> T setDeclaredAttributeValue(@Nullable String attributeName, @Nullable T value) {
       throw new UnsupportedOperationException();
     }
 
     @Override
     public
-    @jakarta.annotation.Nullable
+    @Nullable
     PsiAnnotationOwner getOwner() {
       return ObjectUtil.tryCast(myParent, PsiAnnotationOwner.class);
     }
 
     @Override
-    public void appendMirrorText(int indentLevel, @jakarta.annotation.Nonnull StringBuilder buffer) {
+    public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
       buffer.append(myText);
     }
 
@@ -373,7 +373,7 @@ public class TypeAnnotationContainer {
     }
 
     @Override
-    public void setMirror(@jakarta.annotation.Nonnull TreeElement element) throws InvalidMirrorException {
+    public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
       setMirrorCheckingType(element, null);
       PsiAnnotation mirror = SourceTreeToPsiMap.treeToPsiNotNull(element);
       setMirror(getNameReferenceElement(), mirror.getNameReferenceElement());
@@ -395,7 +395,7 @@ public class TypeAnnotationContainer {
     }
 
     @Override
-    public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
+    public void accept(@Nonnull PsiElementVisitor visitor) {
       if (visitor instanceof JavaElementVisitor) {
         ((JavaElementVisitor) visitor).visitAnnotation(this);
       } else {
@@ -403,7 +403,7 @@ public class TypeAnnotationContainer {
       }
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     @Override
     public PsiMetaData getMetaData() {
       return MetaDataService.getInstance().getMeta(this);

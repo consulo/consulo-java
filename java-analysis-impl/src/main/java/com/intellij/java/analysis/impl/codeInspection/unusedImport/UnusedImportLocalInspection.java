@@ -47,7 +47,7 @@ public class UnusedImportLocalInspection extends BaseJavaLocalInspectionTool imp
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @NonNls
   public String getShortName() {
     return SHORT_NAME;

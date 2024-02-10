@@ -201,7 +201,7 @@ public class StreamChainInliner implements CallInliner {
       }
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     Nullability getNullability() {
       return DfaPsiUtil.getElementNullability(myCall.getType(), myCall.resolveMethod());
     }
@@ -233,7 +233,7 @@ public class StreamChainInliner implements CallInliner {
       builder.pop().flushFields();
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     Nullability getNullability() {
       return myNotNullResult ? Nullability.NOT_NULL : super.getNullability();
@@ -243,7 +243,7 @@ public class StreamChainInliner implements CallInliner {
   static abstract class TerminalStep extends Step {
     DfaVariableValue myResult;
 
-    TerminalStep(@jakarta.annotation.Nonnull PsiMethodCallExpression call, PsiExpression function) {
+    TerminalStep(@Nonnull PsiMethodCallExpression call, PsiExpression function) {
       super(call, null, function);
     }
 
@@ -266,7 +266,7 @@ public class StreamChainInliner implements CallInliner {
   }
 
   static class LambdaTerminalStep extends Step {
-    LambdaTerminalStep(@jakarta.annotation.Nonnull PsiMethodCallExpression call) {
+    LambdaTerminalStep(@Nonnull PsiMethodCallExpression call) {
       super(call, null, call.getArgumentList().getExpressions()[0]);
     }
 
@@ -336,7 +336,7 @@ public class StreamChainInliner implements CallInliner {
 
   static class Collect3TerminalStep extends TerminalStep {
     private final
-    @jakarta.annotation.Nonnull
+    @Nonnull
     PsiExpression mySupplier;
     private final
     @Nonnull
@@ -555,7 +555,7 @@ public class StreamChainInliner implements CallInliner {
   }
 
   static class PeekStep extends Step {
-    PeekStep(@jakarta.annotation.Nonnull PsiMethodCallExpression call, Step next) {
+    PeekStep(@Nonnull PsiMethodCallExpression call, Step next) {
       super(call, next, call.getArgumentList().getExpressions()[0]);
     }
 
@@ -575,7 +575,7 @@ public class StreamChainInliner implements CallInliner {
   }
 
   static class StateFilterStep extends Step {
-    StateFilterStep(@jakarta.annotation.Nonnull PsiMethodCallExpression call, Step next) {
+    StateFilterStep(@Nonnull PsiMethodCallExpression call, Step next) {
       super(call, next, null);
     }
 
@@ -602,7 +602,7 @@ public class StreamChainInliner implements CallInliner {
   static class SortedStep extends Step {
     private final ComparatorModel myComparatorModel;
 
-    SortedStep(@jakarta.annotation.Nonnull PsiMethodCallExpression call, Step next) {
+    SortedStep(@Nonnull PsiMethodCallExpression call, Step next) {
       super(call, next, null);
       myComparatorModel = ComparatorModel.from(ArrayUtil.getFirstElement(myCall.getArgumentList().getExpressions()));
     }
@@ -645,7 +645,7 @@ public class StreamChainInliner implements CallInliner {
   abstract static class AbstractCollectionStep extends TerminalStep {
     final boolean myImmutable;
 
-    AbstractCollectionStep(@Nonnull PsiMethodCallExpression call, @jakarta.annotation.Nullable PsiExpression supplier, boolean immutable) {
+    AbstractCollectionStep(@Nonnull PsiMethodCallExpression call, @Nullable PsiExpression supplier, boolean immutable) {
       super(call, supplier);
       myImmutable = immutable;
     }
@@ -667,7 +667,7 @@ public class StreamChainInliner implements CallInliner {
   }
 
   static class ToCollectionStep extends AbstractCollectionStep {
-    ToCollectionStep(@Nonnull PsiMethodCallExpression call, @jakarta.annotation.Nullable PsiExpression supplier, boolean immutable) {
+    ToCollectionStep(@Nonnull PsiMethodCallExpression call, @Nullable PsiExpression supplier, boolean immutable) {
       super(call, supplier, immutable);
     }
 
@@ -690,7 +690,7 @@ public class StreamChainInliner implements CallInliner {
   }
 
   static class ToArrayStep extends ToCollectionStep {
-    ToArrayStep(@jakarta.annotation.Nonnull PsiMethodCallExpression call) {
+    ToArrayStep(@Nonnull PsiMethodCallExpression call) {
       super(call, ArrayUtil.getFirstElement(call.getArgumentList().getExpressions()), false);
     }
 
@@ -706,7 +706,7 @@ public class StreamChainInliner implements CallInliner {
 
   static class ToMapStep extends AbstractCollectionStep {
     private final
-    @jakarta.annotation.Nonnull
+    @Nonnull
     PsiExpression myKeyExtractor;
     private final
     @Nonnull
@@ -715,11 +715,11 @@ public class StreamChainInliner implements CallInliner {
     @Nullable
     PsiExpression myMerger;
 
-    ToMapStep(@jakarta.annotation.Nonnull PsiMethodCallExpression call,
-              @jakarta.annotation.Nonnull PsiExpression keyExtractor,
+    ToMapStep(@Nonnull PsiMethodCallExpression call,
+              @Nonnull PsiExpression keyExtractor,
               @Nonnull PsiExpression valueExtractor,
               @Nullable PsiExpression merger,
-              @jakarta.annotation.Nullable PsiExpression supplier,
+              @Nullable PsiExpression supplier,
               boolean immutable) {
       super(call, supplier, immutable);
       myKeyExtractor = keyExtractor;
@@ -760,7 +760,7 @@ public class StreamChainInliner implements CallInliner {
   }
 
   @Override
-  public boolean tryInlineCall(@jakarta.annotation.Nonnull CFGBuilder builder, @jakarta.annotation.Nonnull PsiMethodCallExpression call) {
+  public boolean tryInlineCall(@Nonnull CFGBuilder builder, @Nonnull PsiMethodCallExpression call) {
     if (TERMINAL_CALL.test(call)) {
       return inlineCompleteStream(builder, call);
     } else {
@@ -785,7 +785,7 @@ public class StreamChainInliner implements CallInliner {
     return true;
   }
 
-  private static boolean inlineCompleteStream(@jakarta.annotation.Nonnull CFGBuilder builder, @jakarta.annotation.Nonnull PsiMethodCallExpression call) {
+  private static boolean inlineCompleteStream(@Nonnull CFGBuilder builder, @Nonnull PsiMethodCallExpression call) {
     PsiMethodCallExpression qualifierCall = MethodCallUtils.getQualifierMethodCall(call);
     Step terminalStep = createTerminalStep(call);
     Step firstStep = buildChain(qualifierCall, terminalStep);
@@ -939,7 +939,7 @@ public class StreamChainInliner implements CallInliner {
   }
 
   @Override
-  public boolean mayInferPreciseType(@jakarta.annotation.Nonnull PsiExpression expression) {
+  public boolean mayInferPreciseType(@Nonnull PsiExpression expression) {
     return InlinerUtil.isLambdaChainParameterReference(expression, type -> InheritanceUtil.isInheritor(type, JAVA_UTIL_STREAM_STREAM));
   }
 }

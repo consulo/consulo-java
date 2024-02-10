@@ -28,13 +28,13 @@ import jakarta.annotation.Nonnull;
 public class TeardownIsPublicVoidNoArgInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "TearDownWithIncorrectSignature";
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "teardown.is.public.void.no.arg.display.name");
@@ -56,7 +56,7 @@ public class TeardownIsPublicVoidNoArgInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       //note: no call to super;
       @NonNls final String methodName = method.getName();
       if (!"tearDown".equals(methodName)) {

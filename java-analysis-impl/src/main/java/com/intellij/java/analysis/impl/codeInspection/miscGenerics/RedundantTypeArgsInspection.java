@@ -53,13 +53,13 @@ public class RedundantTypeArgsInspection extends GenericsInspectionToolBase {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getGroupDisplayName() {
     return GroupNames.VERBOSE_GROUP_NAME;
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionsBundle.message("inspection.redundant.type.display.name");
   }
@@ -72,7 +72,7 @@ public class RedundantTypeArgsInspection extends GenericsInspectionToolBase {
 
 
   @Override
-  public ProblemDescriptor[] checkMethod(@jakarta.annotation.Nonnull PsiMethod psiMethod, @jakarta.annotation.Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
+  public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod psiMethod, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
     final PsiCodeBlock body = psiMethod.getBody();
     if (body != null) {
       return getDescriptions(body, manager, isOnTheFly, state);
@@ -155,13 +155,13 @@ public class RedundantTypeArgsInspection extends GenericsInspectionToolBase {
 
   private static class MyQuickFixAction implements LocalQuickFix {
     @Override
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionsBundle.message("inspection.redundant.type.remove.quickfix");
     }
 
     @Override
-    public void applyFix(@Nonnull Project project, @jakarta.annotation.Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
       final PsiReferenceParameterList typeArgumentList = (PsiReferenceParameterList) descriptor.getPsiElement();
       try {
         final PsiMethodCallExpression expr =
@@ -173,7 +173,7 @@ public class RedundantTypeArgsInspection extends GenericsInspectionToolBase {
     }
 
     @Override
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getFamilyName() {
       return getName();
     }

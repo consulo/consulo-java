@@ -59,7 +59,7 @@ public class LeakingParameters
 		return new LeakingParameters(frames, notNullParameters, nullableParameters);
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public static LeakingParameters buildFast(String className, MethodNode methodNode, boolean jsr) throws AnalyzerException
 	{
 		IParametersUsage parametersUsage = new IParametersUsage(methodNode);

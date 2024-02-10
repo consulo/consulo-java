@@ -85,7 +85,7 @@ public abstract class MembersGetter {
     return true;
   }
 
-  public void processMembers(final Consumer<LookupElement> results, @jakarta.annotation.Nullable final PsiClass where, final boolean acceptMethods, final boolean searchInheritors) {
+  public void processMembers(final Consumer<LookupElement> results, @Nullable final PsiClass where, final boolean acceptMethods, final boolean searchInheritors) {
     if (where == null || isPrimitiveClass(where)) {
       return;
     }
@@ -159,9 +159,9 @@ public abstract class MembersGetter {
     }
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   protected abstract LookupElement createFieldElement(PsiField field);
 
-  @jakarta.annotation.Nullable
+  @Nullable
   protected abstract LookupElement createMethodElement(PsiMethod method);
 }

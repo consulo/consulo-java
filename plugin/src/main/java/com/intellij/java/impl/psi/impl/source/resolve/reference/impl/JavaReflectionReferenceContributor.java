@@ -55,11 +55,11 @@ public class JavaReflectionReferenceContributor extends PsiReferenceContributor 
       (JAVA_LANG_INVOKE_METHOD_HANDLES_LOOKUP));
 
   @Override
-  public void registerReferenceProviders(@jakarta.annotation.Nonnull PsiReferenceRegistrar registrar) {
+  public void registerReferenceProviders(@Nonnull PsiReferenceRegistrar registrar) {
     registrar.registerReferenceProvider(PATTERN, new JavaReflectionReferenceProvider() {
       @Nullable
       @Override
-      protected PsiReference[] getReferencesByMethod(@Nonnull PsiLiteralExpression literalArgument, @jakarta.annotation.Nonnull PsiReferenceExpression methodReference, @Nonnull ProcessingContext context) {
+      protected PsiReference[] getReferencesByMethod(@Nonnull PsiLiteralExpression literalArgument, @Nonnull PsiReferenceExpression methodReference, @Nonnull ProcessingContext context) {
 
         final PsiExpression qualifier = methodReference.getQualifierExpression();
         return qualifier != null ? new PsiReference[]{new JavaLangClassMemberReference(literalArgument, qualifier)} : null;
@@ -67,9 +67,9 @@ public class JavaReflectionReferenceContributor extends PsiReferenceContributor 
     });
 
     registrar.registerReferenceProvider(CLASS_PATTERN, new JavaReflectionReferenceProvider() {
-      @jakarta.annotation.Nullable
+      @Nullable
       @Override
-      protected PsiReference[] getReferencesByMethod(@jakarta.annotation.Nonnull PsiLiteralExpression literalArgument, @Nonnull PsiReferenceExpression methodReference, @jakarta.annotation.Nonnull ProcessingContext context) {
+      protected PsiReference[] getReferencesByMethod(@Nonnull PsiLiteralExpression literalArgument, @Nonnull PsiReferenceExpression methodReference, @Nonnull ProcessingContext context) {
 
         final String referenceName = methodReference.getReferenceName();
         if (FOR_NAME.equals(referenceName) || LOAD_CLASS.equals(referenceName)) {
@@ -82,7 +82,7 @@ public class JavaReflectionReferenceContributor extends PsiReferenceContributor 
     registrar.registerReferenceProvider(METHOD_HANDLE_PATTERN, new JavaLangInvokeHandleReference.JavaLangInvokeHandleReferenceProvider());
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

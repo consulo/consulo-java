@@ -54,8 +54,8 @@ public class StatementParser {
     myParser = javaParser;
   }
 
-  @jakarta.annotation.Nullable
-  public PsiBuilder.Marker parseCodeBlock(@jakarta.annotation.Nonnull PsiBuilder builder) {
+  @Nullable
+  public PsiBuilder.Marker parseCodeBlock(@Nonnull PsiBuilder builder) {
     return parseCodeBlock(builder, false);
   }
 
@@ -164,7 +164,7 @@ public class StatementParser {
     }
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public PsiBuilder.Marker parseStatement(@Nonnull PsiBuilder builder) {
     IElementType tokenType = builder.getTokenType();
     if (tokenType == JavaTokenType.IF_KEYWORD) {
@@ -710,7 +710,7 @@ public class StatementParser {
     return statement;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private PsiBuilder.Marker parseReturnStatement(PsiBuilder builder) {
     PsiBuilder.Marker statement = builder.mark();
     builder.advanceLexer();

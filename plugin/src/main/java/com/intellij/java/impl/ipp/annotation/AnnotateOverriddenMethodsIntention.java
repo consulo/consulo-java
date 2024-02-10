@@ -39,7 +39,7 @@ import java.util.Collection;
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.AnnotateOverriddenMethodsIntention", fileExtensions = "java", categories = {"Java", "Annotations"})
 public class AnnotateOverriddenMethodsIntention extends MutablyNamedIntention {
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected PsiElementPredicate getElementPredicate() {
     return new AnnotateOverriddenMethodsPredicate();

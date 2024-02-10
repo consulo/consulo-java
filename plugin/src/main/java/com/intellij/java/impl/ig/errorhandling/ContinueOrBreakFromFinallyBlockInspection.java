@@ -30,7 +30,7 @@ import consulo.annotation.component.ExtensionImpl;
 public class ContinueOrBreakFromFinallyBlockInspection
   extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "continue.or.break.from.finally.block.display.name");
@@ -55,7 +55,7 @@ public class ContinueOrBreakFromFinallyBlockInspection
 
     @Override
     public void visitContinueStatement(
-      @jakarta.annotation.Nonnull PsiContinueStatement statement) {
+      @Nonnull PsiContinueStatement statement) {
       super.visitContinueStatement(statement);
       if (!ControlFlowUtils.isInFinallyBlock(statement)) {
         return;

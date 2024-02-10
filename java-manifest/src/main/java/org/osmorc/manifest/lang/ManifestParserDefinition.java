@@ -46,13 +46,13 @@ import org.osmorc.manifest.lang.psi.impl.ManifestFileImpl;
 @ExtensionImpl
 public class ManifestParserDefinition extends LanguageVersionableParserDefinition
 {
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Language getLanguage() {
     return ManifestLanguage.INSTANCE;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public IFileElementType getFileNodeType() {
     return ManifestStubElementTypes.FILE;

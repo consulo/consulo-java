@@ -35,14 +35,14 @@ public class JavaDummyElement extends FileElement {
   private final boolean myConsumeAll;
   private Throwable myParserError = null;
 
-  public JavaDummyElement(@jakarta.annotation.Nullable final CharSequence text,
-                          @jakarta.annotation.Nonnull final JavaParserUtil.ParserWrapper parser,
-                          @jakarta.annotation.Nonnull final LanguageLevel level) {
+  public JavaDummyElement(@Nullable final CharSequence text,
+                          @Nonnull final JavaParserUtil.ParserWrapper parser,
+                          @Nonnull final LanguageLevel level) {
     this(text, parser, level, false);
   }
 
-  public JavaDummyElement(@jakarta.annotation.Nullable final CharSequence text,
-                          @jakarta.annotation.Nonnull final JavaParserUtil.ParserWrapper parser,
+  public JavaDummyElement(@Nullable final CharSequence text,
+                          @Nonnull final JavaParserUtil.ParserWrapper parser,
                           @Nonnull final LanguageLevel level,
                           final boolean consumeAll) {
     super(JavaElementType.DUMMY_ELEMENT, text);
@@ -51,7 +51,7 @@ public class JavaDummyElement extends FileElement {
     myConsumeAll = consumeAll;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public JavaParserUtil.ParserWrapper getParser() {
     return myParser;
   }
@@ -60,7 +60,7 @@ public class JavaDummyElement extends FileElement {
     return myConsumeAll;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public LanguageLevel getLanguageLevel() {
     return myLanguageLevel;
   }

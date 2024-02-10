@@ -65,7 +65,7 @@ public class ChangeMethodSignatureFromUsageFix implements SyntheticIntentionActi
   public ChangeMethodSignatureFromUsageFix(@Nonnull PsiMethod targetMethod,
                                            @Nonnull PsiExpression[] expressions,
                                            @Nonnull PsiSubstitutor substitutor,
-                                           @jakarta.annotation.Nonnull PsiElement context,
+                                           @Nonnull PsiElement context,
                                            boolean changeAllUsages, int minUsagesNumberToShowDialog) {
     myTargetMethod = targetMethod;
     myExpressions = expressions;
@@ -137,7 +137,7 @@ public class ChangeMethodSignatureFromUsageFix implements SyntheticIntentionActi
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!myTargetMethod.isValid() || myTargetMethod.getContainingClass() == null) {
       return false;
     }
@@ -196,12 +196,12 @@ public class ChangeMethodSignatureFromUsageFix implements SyntheticIntentionActi
   static List<ParameterInfoImpl> performChange(@Nonnull Project project,
                                                final Editor editor,
                                                final PsiFile file,
-                                               @jakarta.annotation.Nonnull PsiMethod method,
+                                               @Nonnull PsiMethod method,
                                                final int minUsagesNumber,
                                                final ParameterInfoImpl[] newParametersInfo,
                                                final boolean changeAllUsages,
                                                final boolean allowDelegation,
-                                               @jakarta.annotation.Nullable final Consumer<? super List<ParameterInfoImpl>> callback) {
+                                               @Nullable final Consumer<? super List<ParameterInfoImpl>> callback) {
     if (!FileModificationService.getInstance().prepareFileForWrite(method.getContainingFile())) {
       return null;
     }
@@ -401,8 +401,8 @@ public class ChangeMethodSignatureFromUsageFix implements SyntheticIntentionActi
     return result.toArray(new ParameterInfoImpl[0]);
   }
 
-  @jakarta.annotation.Nonnull
-  protected static String escapePresentableType(@jakarta.annotation.Nonnull PsiType exprType) {
+  @Nonnull
+  protected static String escapePresentableType(@Nonnull PsiType exprType) {
     return StringUtil.escapeXmlEntities(exprType.getPresentableText());
   }
 

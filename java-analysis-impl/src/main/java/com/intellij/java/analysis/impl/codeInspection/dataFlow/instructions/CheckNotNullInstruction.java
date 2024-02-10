@@ -28,18 +28,18 @@ public class CheckNotNullInstruction extends Instruction {
   @Nullable
   DfaControlTransferValue myTransferValue;
 
-  public CheckNotNullInstruction(@jakarta.annotation.Nonnull NullabilityProblemKind.NullabilityProblem<?> problem,
+  public CheckNotNullInstruction(@Nonnull NullabilityProblemKind.NullabilityProblem<?> problem,
                                  @Nullable DfaControlTransferValue transferValue) {
     myProblem = problem;
     myTransferValue = transferValue;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public DfaControlTransferValue getOnNullTransfer() {
     return myTransferValue;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public NullabilityProblemKind.NullabilityProblem<?> getProblem() {
     return myProblem;
   }

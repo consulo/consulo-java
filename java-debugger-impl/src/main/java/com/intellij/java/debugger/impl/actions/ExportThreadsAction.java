@@ -44,7 +44,7 @@ import jakarta.annotation.Nonnull;
 public class ExportThreadsAction extends AnAction implements AnAction.TransparentUpdate
 {
 	@Override
-	public void actionPerformed(@jakarta.annotation.Nonnull AnActionEvent e)
+	public void actionPerformed(@Nonnull AnActionEvent e)
 	{
 		Project project = e.getData(CommonDataKeys.PROJECT);
 		if(project == null)

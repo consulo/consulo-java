@@ -30,7 +30,7 @@ import jakarta.annotation.Nonnull;
 public class AssignmentToCatchBlockParameterInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
         "assignment.to.catch.block.parameter.display.name");
@@ -58,7 +58,7 @@ public class AssignmentToCatchBlockParameterInspection extends BaseInspection {
 
     @Override
     public void visitAssignmentExpression(
-        @jakarta.annotation.Nonnull PsiAssignmentExpression expression) {
+        @Nonnull PsiAssignmentExpression expression) {
       super.visitAssignmentExpression(expression);
       if (!WellFormednessUtils.isWellFormed(expression)) {
         return;

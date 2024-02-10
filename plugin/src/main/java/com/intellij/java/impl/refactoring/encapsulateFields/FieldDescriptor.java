@@ -39,5 +39,5 @@ public interface FieldDescriptor {
   @Nullable
   PsiMethod getSetterPrototype();
 
-  void refreshField(@jakarta.annotation.Nonnull PsiField newField);
+  void refreshField(@Nonnull PsiField newField);
 }

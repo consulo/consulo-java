@@ -29,14 +29,14 @@ import jakarta.annotation.Nonnull;
  * @since 24-Dec-2008
  */
 public class JavaRerunFailedTestsAction extends AbstractRerunFailedTestsAction {
-  public JavaRerunFailedTestsAction(@jakarta.annotation.Nonnull ComponentContainer componentContainer, @jakarta.annotation.Nonnull TestConsoleProperties consoleProperties) {
+  public JavaRerunFailedTestsAction(@Nonnull ComponentContainer componentContainer, @Nonnull TestConsoleProperties consoleProperties) {
     super(componentContainer);
     init(consoleProperties);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
-  protected Filter getFilter(@jakarta.annotation.Nonnull Project project, @Nonnull GlobalSearchScope searchScope) {
+  protected Filter getFilter(@Nonnull Project project, @Nonnull GlobalSearchScope searchScope) {
     return super.getFilter(project, searchScope).and(JavaAwareFilter.METHOD(project, searchScope));
   }
 }

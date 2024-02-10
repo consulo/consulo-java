@@ -43,13 +43,13 @@ public class ClsClassObjectAccessExpressionImpl extends ClsElementImpl implement
   }
 
   @Override
-  public void setMirror(@jakarta.annotation.Nonnull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, null);
     setMirror(getOperand(), SourceTreeToPsiMap.<PsiClassObjectAccessExpression>treeToPsiNotNull(element).getOperand());
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiElement[] getChildren() {
     return new PsiElement[]{myTypeElement};
   }
@@ -60,7 +60,7 @@ public class ClsClassObjectAccessExpressionImpl extends ClsElementImpl implement
   }
 
   @Override
-  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitClassObjectAccessExpression(this);
     }

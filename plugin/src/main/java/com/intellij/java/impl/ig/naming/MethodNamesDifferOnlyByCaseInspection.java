@@ -37,7 +37,7 @@ public class MethodNamesDifferOnlyByCaseInspection extends BaseInspection {
   public boolean ignoreIfMethodIsOverride = true;
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "MethodNamesDifferingOnlyByCase";
   }
@@ -49,7 +49,7 @@ public class MethodNamesDifferOnlyByCaseInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("method.names.differ.only.by.case.problem.descriptor", infos[0]);
   }
@@ -78,7 +78,7 @@ public class MethodNamesDifferOnlyByCaseInspection extends BaseInspection {
   private class MethodNamesDifferOnlyByCaseVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       if (method.isConstructor()) {
         return;
       }

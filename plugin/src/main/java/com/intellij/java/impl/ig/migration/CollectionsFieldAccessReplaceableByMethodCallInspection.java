@@ -38,7 +38,7 @@ public abstract class CollectionsFieldAccessReplaceableByMethodCallInspection ex
 
   @Override
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
         "collections.field.access.replaceable.by.method.call.display.name");

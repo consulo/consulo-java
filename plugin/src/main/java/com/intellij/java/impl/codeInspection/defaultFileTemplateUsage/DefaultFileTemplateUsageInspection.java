@@ -47,19 +47,19 @@ public class DefaultFileTemplateUsageInspection extends BaseJavaLocalInspectionT
   public boolean CHECK_METHOD_BODY = true;
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getGroupDisplayName() {
     return "General";
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionsBundle.message("default.file.template.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @NonNls
   public String getShortName() {
     return "DefaultFileTemplate";
@@ -67,7 +67,7 @@ public class DefaultFileTemplateUsageInspection extends BaseJavaLocalInspectionT
 
   @Override
   @Nullable
-  public ProblemDescriptor[] checkFile(@jakarta.annotation.Nonnull PsiFile file, @jakarta.annotation.Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
+  public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
     ProblemDescriptor descriptor = FileHeaderChecker.checkFileHeader(file, manager, isOnTheFly);
     return descriptor == null ? null : new ProblemDescriptor[]{descriptor};
   }

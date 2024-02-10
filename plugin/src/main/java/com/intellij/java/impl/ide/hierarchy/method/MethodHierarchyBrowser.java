@@ -76,7 +76,7 @@ public class MethodHierarchyBrowser extends MethodHierarchyBrowserBase {
     return psiElement instanceof PsiMethod;
   }
 
-  protected HierarchyTreeStructure createHierarchyTreeStructure(@jakarta.annotation.Nonnull final String typeName, @Nonnull final PsiElement psiElement) {
+  protected HierarchyTreeStructure createHierarchyTreeStructure(@Nonnull final String typeName, @Nonnull final PsiElement psiElement) {
     if (!METHOD_TYPE.equals(typeName)) {
       LOG.error("unexpected type: " + typeName);
       return null;

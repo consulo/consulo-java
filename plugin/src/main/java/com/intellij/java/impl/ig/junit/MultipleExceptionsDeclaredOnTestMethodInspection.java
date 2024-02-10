@@ -51,7 +51,7 @@ public class MultipleExceptionsDeclaredOnTestMethodInspection
       "multiple.exceptions.declared.on.test.method.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(

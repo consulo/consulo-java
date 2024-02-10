@@ -54,7 +54,7 @@ import java.util.Locale;
 @ServiceImpl
 public class ProjectIconsAccessor implements Disposable
 {
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public static ProjectIconsAccessor getInstance(@Nonnull Project project)
 	{
 		return ServiceManager.getService(project, ProjectIconsAccessor.class);
@@ -138,7 +138,7 @@ public class ProjectIconsAccessor implements Disposable
 	}
 
 	@Nullable
-	public Image getIcon(@jakarta.annotation.Nonnull VirtualFile file, @Nullable PsiElement element)
+	public Image getIcon(@Nonnull VirtualFile file, @Nullable PsiElement element)
 	{
 		final String path = file.getPath();
 		final long stamp = file.getModificationStamp();

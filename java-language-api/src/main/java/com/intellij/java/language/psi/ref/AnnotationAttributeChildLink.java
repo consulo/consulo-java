@@ -30,11 +30,11 @@ import jakarta.annotation.Nullable;
 public class AnnotationAttributeChildLink extends PsiChildLink<PsiAnnotation, PsiAnnotationMemberValue> {
   private final String myAttributeName;
 
-  public AnnotationAttributeChildLink(@jakarta.annotation.Nonnull @NonNls String attributeName) {
+  public AnnotationAttributeChildLink(@Nonnull @NonNls String attributeName) {
     myAttributeName = attributeName;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getAttributeName() {
     return myAttributeName;
   }
@@ -49,7 +49,7 @@ public class AnnotationAttributeChildLink extends PsiChildLink<PsiAnnotation, Ps
 
   @Override
   @Nonnull
-  public PsiAnnotationMemberValue createChild(@jakarta.annotation.Nonnull PsiAnnotation psiAnnotation) throws IncorrectOperationException {
+  public PsiAnnotationMemberValue createChild(@Nonnull PsiAnnotation psiAnnotation) throws IncorrectOperationException {
     psiAnnotation.getText();
     final PsiExpression nullValue = JavaPsiFacade.getElementFactory(psiAnnotation.getProject()).createExpressionFromText(PsiKeyword.NULL, null);
     psiAnnotation.setDeclaredAttributeValue(myAttributeName, nullValue);

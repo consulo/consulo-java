@@ -55,7 +55,7 @@ public class SetReplaceableByEnumSetInspection extends BaseInspection {
 
     @Override
     public void visitNewExpression(
-      @jakarta.annotation.Nonnull PsiNewExpression expression) {
+      @Nonnull PsiNewExpression expression) {
       super.visitNewExpression(expression);
       final PsiType type = expression.getType();
       if (!(type instanceof PsiClassType)) {

@@ -43,13 +43,13 @@ public class ExtendsListFix extends LocalQuickFixAndIntentionActionOnPsiElement 
     this(aClass, typeToExtendFrom.resolve(), typeToExtendFrom, toAdd);
   }
 
-  public ExtendsListFix(@jakarta.annotation.Nonnull PsiClass aClass, @Nonnull PsiClass classToExtendFrom, boolean toAdd) {
+  public ExtendsListFix(@Nonnull PsiClass aClass, @Nonnull PsiClass classToExtendFrom, boolean toAdd) {
     this(aClass, classToExtendFrom, JavaPsiFacade.getInstance(aClass.getProject()).getElementFactory().createType(classToExtendFrom), toAdd);
   }
 
   private ExtendsListFix(@Nonnull PsiClass aClass,
                          PsiClass classToExtendFrom,
-                         @jakarta.annotation.Nonnull PsiClassType typeToExtendFrom,
+                         @Nonnull PsiClassType typeToExtendFrom,
                          boolean toAdd) {
     super(aClass);
     myClassToExtendFrom = classToExtendFrom;
@@ -76,7 +76,7 @@ public class ExtendsListFix extends LocalQuickFixAndIntentionActionOnPsiElement 
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("change.extends.list.family");
   }
@@ -85,7 +85,7 @@ public class ExtendsListFix extends LocalQuickFixAndIntentionActionOnPsiElement 
   public boolean isAvailable(@Nonnull Project project,
                              @Nonnull PsiFile file,
                              @Nonnull PsiElement startElement,
-                             @jakarta.annotation.Nonnull PsiElement endElement) {
+                             @Nonnull PsiElement endElement) {
     final PsiClass myClass = (PsiClass)startElement;
     return
       myClass.isValid()

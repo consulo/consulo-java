@@ -36,13 +36,13 @@ import java.util.List;
 public class StringEqualsInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "CallToStringEquals";
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
         "string.equals.call.display.name");
@@ -56,7 +56,7 @@ public class StringEqualsInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     final PsiMethodCallExpression methodCallExpression =
         (PsiMethodCallExpression) infos[0];
@@ -93,7 +93,7 @@ public class StringEqualsInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-        @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+        @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!MethodCallUtils.isEqualsCall(expression)) {
         return;

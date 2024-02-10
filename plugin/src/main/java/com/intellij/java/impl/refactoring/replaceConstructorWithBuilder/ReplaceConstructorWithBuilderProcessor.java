@@ -89,7 +89,7 @@ public class ReplaceConstructorWithBuilderProcessor extends FixableUsagesRefacto
     return new ReplaceConstructorWithBuilderViewDescriptor();
   }
 
-  protected void findUsages(@jakarta.annotation.Nonnull final List<FixableUsageInfo> usages) {
+  protected void findUsages(@Nonnull final List<FixableUsageInfo> usages) {
     final String builderQualifiedName = StringUtil.getQualifiedName(myPackageName, myClassName);
     final PsiClass builderClass =
         JavaPsiFacade.getInstance(myProject).findClass(builderQualifiedName, GlobalSearchScope.projectScope(myProject));
@@ -260,7 +260,7 @@ public class ReplaceConstructorWithBuilderProcessor extends FixableUsagesRefacto
     return constructor;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private PsiMethod getMostCommonConstructor() {
     if (myConstructors.length == 1) return myConstructors[0];
     PsiMethod commonConstructor = null;

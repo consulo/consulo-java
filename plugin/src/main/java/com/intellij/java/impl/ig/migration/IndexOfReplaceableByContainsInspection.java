@@ -54,7 +54,7 @@ public class IndexOfReplaceableByContainsInspection
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiBinaryExpression expression = (PsiBinaryExpression)infos[0];
     final PsiExpression lhs = expression.getLOperand();
@@ -117,7 +117,7 @@ public class IndexOfReplaceableByContainsInspection
       replaceExpression(expression, newExpressionText);
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "replace.indexof.with.contains.quickfix");
@@ -125,7 +125,7 @@ public class IndexOfReplaceableByContainsInspection
   }
 
   static String createContainsExpressionText(
-    @jakarta.annotation.Nonnull PsiMethodCallExpression call,
+    @Nonnull PsiMethodCallExpression call,
     boolean flipped, IElementType tokenType) {
     final PsiReferenceExpression methodExpression =
       call.getMethodExpression();
@@ -238,7 +238,7 @@ public class IndexOfReplaceableByContainsInspection
     }
 
     private static boolean isIndexOfCall(
-      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
       final String methodName = methodExpression.getReferenceName();

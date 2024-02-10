@@ -78,7 +78,7 @@ public class CaughtExceptionImmediatelyRethrownInspection extends BaseInspection
       this.removeTryCatch = removeTryCatch;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       if (removeTryCatch) {
         return InspectionGadgetsBundle.message("remove.try.catch.quickfix");

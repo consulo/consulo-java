@@ -33,14 +33,14 @@ public class SurroundWithRequireNonNullFix implements LocalQuickFix
 	private final String myText;
 	private final SmartPsiElementPointer<PsiExpression> myQualifierPointer;
 
-	public SurroundWithRequireNonNullFix(@jakarta.annotation.Nonnull PsiExpression expressionToSurround)
+	public SurroundWithRequireNonNullFix(@Nonnull PsiExpression expressionToSurround)
 	{
 		myText = expressionToSurround.getText();
 		myQualifierPointer = SmartPointerManager.getInstance(expressionToSurround.getProject()).createSmartPsiElementPointer(expressionToSurround);
 	}
 
 	@Nls
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public String getName()
 	{
@@ -48,7 +48,7 @@ public class SurroundWithRequireNonNullFix implements LocalQuickFix
 	}
 
 	@Nls
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -56,7 +56,7 @@ public class SurroundWithRequireNonNullFix implements LocalQuickFix
 	}
 
 	@Override
-	public void applyFix(@Nonnull Project project, @jakarta.annotation.Nonnull ProblemDescriptor descriptor)
+	public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 	{
 		PsiExpression qualifier = myQualifierPointer.getElement();
 		if(qualifier == null)

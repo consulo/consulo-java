@@ -48,12 +48,12 @@ import consulo.internal.com.sun.jdi.event.LocatableEvent;
 public class StepIntoBreakpoint extends RunToCursorBreakpoint
 {
 	private static final Logger LOG = Logger.getInstance(StepIntoBreakpoint.class);
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	private final BreakpointStepMethodFilter myFilter;
-	@jakarta.annotation.Nullable
+	@Nullable
 	private RequestHint myHint;
 
-	protected StepIntoBreakpoint(@Nonnull Project project, @Nonnull SourcePosition pos, @jakarta.annotation.Nonnull BreakpointStepMethodFilter filter)
+	protected StepIntoBreakpoint(@Nonnull Project project, @Nonnull SourcePosition pos, @Nonnull BreakpointStepMethodFilter filter)
 	{
 		super(project, pos, false);
 		myFilter = filter;
@@ -155,7 +155,7 @@ public class StepIntoBreakpoint extends RunToCursorBreakpoint
 	}
 
 	@Nullable
-	protected static StepIntoBreakpoint create(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull BreakpointStepMethodFilter filter)
+	protected static StepIntoBreakpoint create(@Nonnull Project project, @Nonnull BreakpointStepMethodFilter filter)
 	{
 		final SourcePosition pos = filter.getBreakpointPosition();
 		if(pos != null)

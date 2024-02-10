@@ -75,12 +75,12 @@ public class NodeDescriptorFactoryImpl implements NodeDescriptorFactory {
     return descriptor;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   protected <T extends NodeDescriptor> T findDisplayDescriptor(NodeDescriptor parent, T descriptor, DisplayKey<T> key) {
     return myDisplayDescriptorSearcher.search(parent, descriptor, key);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   protected <T extends NodeDescriptor> T findDescriptor(NodeDescriptor parent, T descriptor, DescriptorData<T> key) {
     return myDescriptorSearcher.search(parent, descriptor, key);
   }
@@ -136,7 +136,7 @@ public class NodeDescriptorFactoryImpl implements NodeDescriptorFactory {
     return getDescriptor(parent, new ArrayItemData(array, index));
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public FieldDescriptorImpl getFieldDescriptor(NodeDescriptor parent, ObjectReference objRef, Field field) {
     final DescriptorData<FieldDescriptorImpl> descriptorData;
@@ -160,7 +160,7 @@ public class NodeDescriptorFactoryImpl implements NodeDescriptorFactory {
     return getDescriptor(parent, new ArgValueData(variable, value));
   }
 
-  public StackFrameDescriptorImpl getStackFrameDescriptor(@jakarta.annotation.Nullable NodeDescriptorImpl parent, @jakarta.annotation.Nonnull StackFrameProxyImpl frameProxy) {
+  public StackFrameDescriptorImpl getStackFrameDescriptor(@Nullable NodeDescriptorImpl parent, @Nonnull StackFrameProxyImpl frameProxy) {
     return getDescriptor(parent, new StackFrameData(frameProxy));
   }
 
@@ -206,7 +206,7 @@ public class NodeDescriptorFactoryImpl implements NodeDescriptorFactory {
       myDescriptorTree = descriptorTree;
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     public <T extends NodeDescriptor> T search(NodeDescriptor parent, T descriptor, DescriptorKey<T> key) {
       final T result;
       if (parent == null) {

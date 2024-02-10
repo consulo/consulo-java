@@ -68,7 +68,7 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
    * @return the parameter list instance.
    */
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   PsiParameterList getParameterList();
 
   /**
@@ -76,7 +76,7 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
    *
    * @return the list of thrown exceptions instance.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   PsiReferenceList getThrowsList();
 
   /**
@@ -85,7 +85,7 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
    * @return the method body, or null if the method belongs to a compiled class.
    */
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiCodeBlock getBody();
 
   /**
@@ -109,8 +109,8 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
    * @param substitutor the substitutor.
    * @return the method signature instance.
    */
-  @jakarta.annotation.Nonnull
-  MethodSignature getSignature(@jakarta.annotation.Nonnull PsiSubstitutor substitutor);
+  @Nonnull
+  MethodSignature getSignature(@Nonnull PsiSubstitutor substitutor);
 
   /**
    * Returns the name identifier for the method.
@@ -145,7 +145,7 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
    *                    is private. If true, an empty result list is returned for private methods.
    * @return the array of super methods, or an empty array if no methods are found.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   PsiMethod[] findSuperMethods(boolean checkAccess);
 
   /**
@@ -157,7 +157,7 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
    * @param parentClass the class to search for super methods.
    * @return the array of super methods, or an empty array if no methods are found.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   PsiMethod[] findSuperMethods(PsiClass parentClass);
 
   /**
@@ -171,7 +171,7 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
    *                    is private. If true, an empty result list is returned for private methods.
    * @return the array of matching method signatures, or an empty array if no methods are found.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   List<MethodSignatureBackedByPsiMethod> findSuperMethodSignaturesIncludingStatic(boolean checkAccess);
 
   /**
@@ -182,34 +182,34 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
    * or implement any other method.
    * @deprecated use {@link #findDeepestSuperMethods()} instead
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiMethod findDeepestSuperMethod();
 
   @Nonnull
   PsiMethod[] findDeepestSuperMethods();
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   PsiModifierList getModifierList();
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @NonNls
   String getName();
 
   @Override
-  PsiElement setName(@NonNls @jakarta.annotation.Nonnull String name) throws IncorrectOperationException;
+  PsiElement setName(@NonNls @Nonnull String name) throws IncorrectOperationException;
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   HierarchicalMethodSignature getHierarchicalMethodSignature();
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   default JvmParameter[] getParameters() {
     return getParameterList().getParameters();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   default JvmReferenceType[] getThrowsTypes() {
     return getThrowsList().getReferencedTypes();

@@ -30,6 +30,7 @@ import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.application.HelpManager;
+import consulo.ide.impl.psi.statistics.StatisticsManager;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
 import consulo.language.psi.PsiElement;
@@ -112,7 +113,7 @@ public class PullUpDialog extends PullUpDialogBase<MemberInfoStorage, MemberInfo
     PsiClass preselection = RefactoringHierarchyUtil.getNearestBaseClass(myClass, false);
 
     final String statKey = PULL_UP_STATISTICS_KEY + myClass.getQualifiedName();
-    for (StatisticsInfo info : consulo.ide.impl.psi.statistics.StatisticsManager.getInstance().getAllValues(statKey)) {
+    for (StatisticsInfo info : StatisticsManager.getInstance().getAllValues(statKey)) {
       final String superClassName = info.getValue();
       PsiClass superClass = null;
       for (PsiClass aClass : mySuperClasses) {
@@ -121,7 +122,7 @@ public class PullUpDialog extends PullUpDialogBase<MemberInfoStorage, MemberInfo
           break;
         }
       }
-      if (superClass != null && consulo.ide.impl.psi.statistics.StatisticsManager.getInstance().getUseCount(info) > 0) {
+      if (superClass != null && StatisticsManager.getInstance().getUseCount(info) > 0) {
         preselection = superClass;
         break;
       }
@@ -141,7 +142,7 @@ public class PullUpDialog extends PullUpDialogBase<MemberInfoStorage, MemberInfo
     final PsiClass superClass = getSuperClass();
     String name = superClass.getQualifiedName();
     if (name != null) {
-      consulo.ide.impl.psi.statistics.StatisticsManager.getInstance().incUseCount(new consulo.ide.impl.psi.statistics.StatisticsInfo(PULL_UP_STATISTICS_KEY + myClass
+      StatisticsManager.getInstance().incUseCount(new StatisticsInfo(PULL_UP_STATISTICS_KEY + myClass
           .getQualifiedName(), name));
     }
 

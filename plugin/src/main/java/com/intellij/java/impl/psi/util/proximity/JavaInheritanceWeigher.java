@@ -58,7 +58,7 @@ public class JavaInheritanceWeigher extends ProximityWeigher {
   });
 
   @Override
-  public Comparable weigh(@jakarta.annotation.Nonnull final PsiElement element, @Nonnull final ProximityLocation location) {
+  public Comparable weigh(@Nonnull final PsiElement element, @Nonnull final ProximityLocation location) {
     if (location.getPosition() == null || !(element instanceof PsiClass)) {
       return null;
     }
@@ -88,7 +88,7 @@ public class JavaInheritanceWeigher extends ProximityWeigher {
     return false;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static PsiClass findPlaceClass(PsiElement element, PsiElement position) {
     if (position.getParent() instanceof PsiReferenceExpression) {
       final PsiExpression qualifierExpression = ((PsiReferenceExpression) position.getParent()).getQualifierExpression();

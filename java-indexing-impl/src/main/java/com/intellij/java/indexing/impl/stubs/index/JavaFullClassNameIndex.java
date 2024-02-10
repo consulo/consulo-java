@@ -40,14 +40,14 @@ public class JavaFullClassNameIndex extends IntStubIndexExtension<PsiClass> {
     return ourInstance;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public StubIndexKey<Integer, PsiClass> getKey() {
     return JavaStubIndexKeys.CLASS_FQN;
   }
 
   @Override
-  public Collection<PsiClass> get(@jakarta.annotation.Nonnull final Integer integer, @jakarta.annotation.Nonnull final Project project, @Nonnull final ProjectAwareSearchScope scope) {
+  public Collection<PsiClass> get(@Nonnull final Integer integer, @Nonnull final Project project, @Nonnull final ProjectAwareSearchScope scope) {
     return StubIndex.getElements(getKey(), integer, project, new JavaSourceFilterScope(scope), PsiClass.class);
   }
 }

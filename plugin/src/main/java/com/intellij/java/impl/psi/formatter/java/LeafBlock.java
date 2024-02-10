@@ -62,7 +62,7 @@ public class LeafBlock implements ASTBlock, ExtraRangesProvider
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public TextRange getTextRange()
 	{
 		if(myStartOffset != -1)
@@ -73,7 +73,7 @@ public class LeafBlock implements ASTBlock, ExtraRangesProvider
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public List<Block> getSubBlocks()
 	{
 		return EMPTY_SUB_BLOCKS;
@@ -98,7 +98,7 @@ public class LeafBlock implements ASTBlock, ExtraRangesProvider
 	}
 
 	@Override
-	public Spacing getSpacing(Block child1, @jakarta.annotation.Nonnull Block child2)
+	public Spacing getSpacing(Block child1, @Nonnull Block child2)
 	{
 		return null;
 	}
@@ -109,7 +109,7 @@ public class LeafBlock implements ASTBlock, ExtraRangesProvider
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public ChildAttributes getChildAttributes(final int newChildIndex)
 	{
 		return new ChildAttributes(getIndent(), null);

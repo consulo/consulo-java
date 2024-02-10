@@ -48,11 +48,11 @@ public abstract class AbstractHeaderParserImpl implements HeaderParser {
     return true;
   }
 
-  public PsiReference[] getReferences(@jakarta.annotation.Nonnull HeaderValuePart headerValuePart) {
+  public PsiReference[] getReferences(@Nonnull HeaderValuePart headerValuePart) {
     return PsiReference.EMPTY_ARRAY;
   }
 
-  public void annotate(@Nonnull HeaderValuePart headerValue, @jakarta.annotation.Nonnull AnnotationHolder holder) {
+  public void annotate(@Nonnull HeaderValuePart headerValue, @Nonnull AnnotationHolder holder) {
 
   }
 }

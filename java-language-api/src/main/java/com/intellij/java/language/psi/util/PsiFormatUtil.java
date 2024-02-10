@@ -30,7 +30,7 @@ public class PsiFormatUtil extends PsiFormatUtilBase {
   @MagicConstant(flags = {SHOW_TYPE_PARAMETER_EXTENDS})
   public @interface FormatTypeParameterOptions {}
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static String formatTypeParameters(PsiTypeParameterListOwner owner, @FormatTypeParameterOptions int options){
     StringBuilder builder = new StringBuilder();
     formatTypeParameters(owner.getTypeParameters(), builder, options);
@@ -84,7 +84,7 @@ public class PsiFormatUtil extends PsiFormatUtilBase {
   private static void formatVariable(PsiVariable variable,
                                      @FormatVariableOptions int options,
                                      PsiSubstitutor substitutor,
-                                     @jakarta.annotation.Nonnull StringBuilder buffer){
+                                     @Nonnull StringBuilder buffer){
     if ((options & SHOW_MODIFIERS) != 0 && (options & MODIFIERS_AFTER) == 0){
       formatModifiers(variable, options,buffer);
     }
@@ -252,8 +252,8 @@ public class PsiFormatUtil extends PsiFormatUtilBase {
   @MagicConstant(flags = {SHOW_MODIFIERS, SHOW_NAME, SHOW_ANONYMOUS_CLASS_VERBOSE, SHOW_FQ_NAME, MODIFIERS_AFTER, SHOW_EXTENDS_IMPLEMENTS, SHOW_REDUNDANT_MODIFIERS, JAVADOC_MODIFIERS_ONLY, SHOW_TYPE_PARAMETERS, SHOW_TYPE_PARAMETER_EXTENDS})
   public @interface FormatClassOptions {}
 
-  @jakarta.annotation.Nonnull
-  public static String formatClass(@jakarta.annotation.Nonnull PsiClass aClass, @FormatClassOptions int options){
+  @Nonnull
+  public static String formatClass(@Nonnull PsiClass aClass, @FormatClassOptions int options){
     StringBuilder buffer = new StringBuilder();
     if ((options & SHOW_MODIFIERS) != 0 && (options & MODIFIERS_AFTER) == 0){
       formatModifiers(aClass, options,buffer);
@@ -432,12 +432,12 @@ public class PsiFormatUtil extends PsiFormatUtilBase {
     return getExternalName(owner, true);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static String getExternalName(PsiModifierListOwner owner, final boolean showParamName) {
     return getExternalName(owner, showParamName, MAX_PARAMS_TO_SHOW);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static String getExternalName(PsiModifierListOwner owner, final boolean showParamName, int maxParamsToShow) {
     final StringBuilder builder = new StringBuilder();
     if (owner instanceof PsiClass) {
@@ -482,7 +482,7 @@ public class PsiFormatUtil extends PsiFormatUtilBase {
     return builder.toString();
   }
 
-  public static String getPackageDisplayName(@jakarta.annotation.Nonnull final PsiClass psiClass) {
+  public static String getPackageDisplayName(@Nonnull final PsiClass psiClass) {
     if (psiClass instanceof PsiTypeParameter) {
       PsiTypeParameterListOwner owner = ((PsiTypeParameter)psiClass).getOwner();
       String ownerName = null;

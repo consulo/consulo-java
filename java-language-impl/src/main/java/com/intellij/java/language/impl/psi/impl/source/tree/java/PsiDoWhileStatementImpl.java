@@ -120,7 +120,7 @@ public class PsiDoWhileStatementImpl extends CompositePsiElement implements PsiD
   }
 
   @Override
-  public boolean processDeclarations(@jakarta.annotation.Nonnull PsiScopeProcessor processor,
+  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
                                      @Nonnull ResolveState state,
                                      PsiElement lastParent,
                                      @Nonnull PsiElement place) {

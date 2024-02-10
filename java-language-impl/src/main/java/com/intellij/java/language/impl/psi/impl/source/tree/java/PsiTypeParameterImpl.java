@@ -87,13 +87,13 @@ public class PsiTypeParameterImpl extends JavaStubPsiElement<PsiTypeParameterStu
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiField[] getFields() {
     return PsiField.EMPTY_ARRAY;
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiMethod[] getMethods() {
     return PsiMethod.EMPTY_ARRAY;
   }
@@ -104,7 +104,7 @@ public class PsiTypeParameterImpl extends JavaStubPsiElement<PsiTypeParameterStu
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiMethod[] findMethodsBySignature(PsiMethod patternMethod, boolean checkBases) {
     return PsiClassImplUtil.findMethodsBySignature(this, patternMethod, checkBases);
   }
@@ -115,19 +115,19 @@ public class PsiTypeParameterImpl extends JavaStubPsiElement<PsiTypeParameterStu
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiMethod[] findMethodsByName(String name, boolean checkBases) {
     return PsiClassImplUtil.findMethodsByName(this, name, checkBases);
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public List<Pair<PsiMethod, PsiSubstitutor>> findMethodsAndTheirSubstitutorsByName(String name, boolean checkBases) {
     return PsiClassImplUtil.findMethodsAndTheirSubstitutorsByName(this, name, checkBases);
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public List<Pair<PsiMethod, PsiSubstitutor>> getAllMethodsAndTheirSubstitutors() {
     return PsiClassImplUtil.getAllWithSubstitutorsByMap(this, PsiClassImplUtil.MemberType.METHOD);
   }
@@ -159,7 +159,7 @@ public class PsiTypeParameterImpl extends JavaStubPsiElement<PsiTypeParameterStu
   }
 
   @Override
-  public boolean isInheritor(@jakarta.annotation.Nonnull PsiClass baseClass, boolean checkDeep) {
+  public boolean isInheritor(@Nonnull PsiClass baseClass, boolean checkDeep) {
     return InheritanceImplUtil.isInheritor(this, baseClass, checkDeep);
   }
 
@@ -221,7 +221,7 @@ public class PsiTypeParameterImpl extends JavaStubPsiElement<PsiTypeParameterStu
   }
 
   @Override
-  public PsiElement setName(@jakarta.annotation.Nonnull String name) throws IncorrectOperationException {
+  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
     PsiImplUtil.setName(getNameIdentifier(), name);
     return this;
   }
@@ -243,7 +243,7 @@ public class PsiTypeParameterImpl extends JavaStubPsiElement<PsiTypeParameterStu
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiReferenceList getExtendsList() {
     return getRequiredStubOrPsiChild(JavaStubElementTypes.EXTENDS_BOUND_LIST);
   }
@@ -260,7 +260,7 @@ public class PsiTypeParameterImpl extends JavaStubPsiElement<PsiTypeParameterStu
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiClassType[] getImplementsListTypes() {
     return PsiClassType.EMPTY_ARRAY;
   }
@@ -284,7 +284,7 @@ public class PsiTypeParameterImpl extends JavaStubPsiElement<PsiTypeParameterStu
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiClass[] getAllInnerClasses() {
     return PsiClass.EMPTY_ARRAY;
   }
@@ -296,7 +296,7 @@ public class PsiTypeParameterImpl extends JavaStubPsiElement<PsiTypeParameterStu
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiTypeParameter[] getTypeParameters() {
     return PsiTypeParameter.EMPTY_ARRAY;
   }
@@ -329,7 +329,7 @@ public class PsiTypeParameterImpl extends JavaStubPsiElement<PsiTypeParameterStu
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public Collection<HierarchicalMethodSignature> getVisibleSignatures() {
     return PsiSuperMethodImplUtil.getVisibleSignatures(this);
   }
@@ -340,7 +340,7 @@ public class PsiTypeParameterImpl extends JavaStubPsiElement<PsiTypeParameterStu
   }
 
   @Override
-  public boolean hasModifierProperty(@jakarta.annotation.Nonnull String name) {
+  public boolean hasModifierProperty(@Nonnull String name) {
     return false;
   }
 
@@ -355,7 +355,7 @@ public class PsiTypeParameterImpl extends JavaStubPsiElement<PsiTypeParameterStu
   }
 
   @Override
-  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitTypeParameter(this);
     } else {
@@ -378,7 +378,7 @@ public class PsiTypeParameterImpl extends JavaStubPsiElement<PsiTypeParameterStu
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public SearchScope getUseScope() {
     return PsiClassImplUtil.getClassUseScope(this);
   }
@@ -396,12 +396,12 @@ public class PsiTypeParameterImpl extends JavaStubPsiElement<PsiTypeParameterStu
 
   @Override
   @Nonnull
-  public PsiAnnotation addAnnotation(@jakarta.annotation.Nonnull @NonNls String qualifiedName) {
+  public PsiAnnotation addAnnotation(@Nonnull @NonNls String qualifiedName) {
     throw new IncorrectOperationException();
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiAnnotation[] getApplicableAnnotations() {
     return getAnnotations();
   }

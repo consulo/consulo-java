@@ -225,7 +225,7 @@ public class MethodReferenceResolver implements ResolveCache.PolyVariantContextR
       return conflict.isVarargs() ? MethodCandidateInfo.ApplicabilityLevel.VARARGS : MethodCandidateInfo.ApplicabilityLevel.FIXED_ARITY;
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     @Override
     protected CandidateInfo guardedOverloadResolution(@Nonnull List<CandidateInfo> conflicts) {
       if (mySignature == null) {

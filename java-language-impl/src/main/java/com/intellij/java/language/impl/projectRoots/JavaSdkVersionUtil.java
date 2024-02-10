@@ -31,7 +31,7 @@ import jakarta.annotation.Nullable;
  * Date: 3/28/12
  */
 public class JavaSdkVersionUtil {
-  public static boolean isAtLeast(@jakarta.annotation.Nonnull PsiElement element, @Nonnull JavaSdkVersion minVersion) {
+  public static boolean isAtLeast(@Nonnull PsiElement element, @Nonnull JavaSdkVersion minVersion) {
     JavaSdkVersion version = getJavaSdkVersion(element);
     return version == null || version.isAtLeast(minVersion);
   }

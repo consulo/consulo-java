@@ -52,7 +52,7 @@ public class IncrementDecrementUsedAsExpressionInspection
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final Object info = infos[0];
     if (info instanceof PsiPostfixExpression) {

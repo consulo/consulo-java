@@ -33,7 +33,7 @@ public class HighlightVisitorFactoryImpl implements HighlightVisitorFactory
 		return file instanceof PsiImportHolder && !InjectedLanguageManager.getInstance(file.getProject()).isInjectedFragment(file);
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public HighlightVisitor createVisitor()
 	{

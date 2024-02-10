@@ -9,11 +9,11 @@ import jakarta.annotation.Nonnull;
  * Represents an integral primitive (int or long)
  */
 public interface DfIntegralType extends DfPrimitiveType {
-  @jakarta.annotation.Nonnull
+  @Nonnull
   LongRangeSet getRange();
 
-  @jakarta.annotation.Nonnull
-  default DfType meetRelation(@Nonnull RelationType relation, @jakarta.annotation.Nonnull DfType other) {
+  @Nonnull
+  default DfType meetRelation(@Nonnull RelationType relation, @Nonnull DfType other) {
     if (other == DfTypes.TOP) return this;
     if (other instanceof DfIntegralType) {
       return meetRange(((DfIntegralType)other).getRange().fromRelation(relation));
@@ -21,6 +21,6 @@ public interface DfIntegralType extends DfPrimitiveType {
     return DfTypes.BOTTOM;
   }
 
-  @jakarta.annotation.Nonnull
-  DfType meetRange(@jakarta.annotation.Nonnull LongRangeSet range);
+  @Nonnull
+  DfType meetRange(@Nonnull LongRangeSet range);
 }

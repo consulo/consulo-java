@@ -68,7 +68,7 @@ public class LocalVariableOfConcreteClassInspection
 
     @Override
     public void visitLocalVariable(
-      @jakarta.annotation.Nonnull PsiLocalVariable variable) {
+      @Nonnull PsiLocalVariable variable) {
       super.visitLocalVariable(variable);
       final PsiTypeElement typeElement = variable.getTypeElement();
       if (!ConcreteClassUtil.typeIsConcreteClass(typeElement,

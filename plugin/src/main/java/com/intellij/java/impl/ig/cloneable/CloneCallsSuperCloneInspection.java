@@ -34,13 +34,13 @@ public class CloneCallsSuperCloneInspection extends BaseInspection {
     return "CloneDoesntCallSuperClone";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "clone.doesnt.call.super.clone.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "clone.doesnt.call.super.clone.problem.descriptor");

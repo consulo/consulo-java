@@ -19,6 +19,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.List;
 
+import consulo.deadCodeNotWorking.impl.CheckBox;
 import jakarta.annotation.Nonnull;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -114,15 +115,15 @@ public class BadExceptionDeclaredInspection extends BaseInspection {
     constraints.fill = GridBagConstraints.BOTH;
     panel.add(tablePanel, constraints);
 
-    final consulo.deadCodeNotWorking.impl.CheckBox checkBox1 =
-      new consulo.deadCodeNotWorking.impl.CheckBox(InspectionGadgetsBundle.message("ignore.exceptions.declared.in.tests.option"), this,
+    final CheckBox checkBox1 =
+      new CheckBox(InspectionGadgetsBundle.message("ignore.exceptions.declared.in.tests.option"), this,
                    "ignoreTestCases");
     constraints.gridy = 1;
     constraints.weighty = 0.0;
     panel.add(checkBox1, constraints);
 
-    final consulo.deadCodeNotWorking.impl.CheckBox checkBox2 =
-      new consulo.deadCodeNotWorking.impl.CheckBox(InspectionGadgetsBundle.message("ignore.exceptions.declared.on.library.override.option"), this,
+    final CheckBox checkBox2 =
+      new CheckBox(InspectionGadgetsBundle.message("ignore.exceptions.declared.on.library.override.option"), this,
                    "ignoreLibraryOverrides");
     constraints.gridy = 2;
     panel.add(checkBox2, constraints);

@@ -57,7 +57,7 @@ class TypeArgumentCompletionProvider implements CompletionProvider {
   @Nullable
   private final JavaCompletionSession mySession;
 
-  TypeArgumentCompletionProvider(boolean smart, @jakarta.annotation.Nullable JavaCompletionSession session) {
+  TypeArgumentCompletionProvider(boolean smart, @Nullable JavaCompletionSession session) {
     mySmart = smart;
     mySession = session;
   }
@@ -178,7 +178,7 @@ class TypeArgumentCompletionProvider implements CompletionProvider {
     return last ? new CharTailType('>') : CommaTailType.INSTANCE;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   static Pair<PsiTypeParameterListOwner, Integer> getTypeParameterInfo(PsiElement context) {
     final PsiReferenceParameterList parameterList = PsiTreeUtil.getContextOfType(context, PsiReferenceParameterList.class, true);
     if (parameterList == null) {
@@ -242,7 +242,7 @@ class TypeArgumentCompletionProvider implements CompletionProvider {
       return myTypeItems.get(0).getObject();
     }
 
-    public void registerSingleClass(@jakarta.annotation.Nullable JavaCompletionSession inheritors) {
+    public void registerSingleClass(@Nullable JavaCompletionSession inheritors) {
       if (inheritors != null && myTypeItems.size() == 1) {
         PsiType type = myTypeItems.get(0).getType();
         PsiClass aClass = PsiUtil.resolveClassInClassTypeOnly(type);

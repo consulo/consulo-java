@@ -32,7 +32,7 @@ import java.util.List;
 public class ShowInstancesByClassAction extends DebuggerTreeAction
 {
 	@Override
-	protected boolean isEnabled(@Nonnull consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl node, @Nonnull AnActionEvent e)
+	protected boolean isEnabled(@Nonnull XValueNodeImpl node, @Nonnull AnActionEvent e)
 	{
 		final ObjectReference ref = getObjectReference(node);
 		final boolean enabled = ref != null && ref.virtualMachine().canGetInstanceInfo();

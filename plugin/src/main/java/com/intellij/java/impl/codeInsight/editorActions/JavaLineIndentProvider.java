@@ -70,9 +70,9 @@ public class JavaLineIndentProvider extends JavaLikeLangLineIndentProvider
 		SYNTAX_MAP.put(JavaTokenType.TRY_KEYWORD, TryKeyword);
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	@Override
-	protected SemanticEditorPosition.SyntaxElement mapType(@jakarta.annotation.Nonnull IElementType tokenType)
+	protected SemanticEditorPosition.SyntaxElement mapType(@Nonnull IElementType tokenType)
 	{
 		return SYNTAX_MAP.get(tokenType);
 	}
@@ -85,10 +85,10 @@ public class JavaLineIndentProvider extends JavaLikeLangLineIndentProvider
 
 	@Nullable
 	@Override
-	protected Indent getIndentInBlock(@jakarta.annotation.Nonnull Project project,
-									  @jakarta.annotation.Nonnull Document document,
-									  @jakarta.annotation.Nullable Language language,
-									  @jakarta.annotation.Nonnull SemanticEditorPosition blockStartPosition)
+	protected Indent getIndentInBlock(@Nonnull Project project,
+									  @Nonnull Document document,
+									  @Nullable Language language,
+									  @Nonnull SemanticEditorPosition blockStartPosition)
 	{
 		SemanticEditorPosition beforeStart = blockStartPosition.before().beforeOptional(Whitespace);
 		if(beforeStart.isAt(JavaTokenType.EQ) ||
@@ -109,7 +109,7 @@ public class JavaLineIndentProvider extends JavaLikeLangLineIndentProvider
 	}
 
 	@Override
-	protected boolean isInArray(@jakarta.annotation.Nonnull SemanticEditorPositionFactory factory, int offset)
+	protected boolean isInArray(@Nonnull SemanticEditorPositionFactory factory, int offset)
 	{
 		SemanticEditorPosition position = getPosition(factory, offset);
 		position.moveBefore();
@@ -124,7 +124,7 @@ public class JavaLineIndentProvider extends JavaLikeLangLineIndentProvider
 	}
 
 	@Override
-	protected boolean isIndentProvider(@jakarta.annotation.Nonnull SemanticEditorPosition position, boolean ignoreLabels)
+	protected boolean isIndentProvider(@Nonnull SemanticEditorPosition position, boolean ignoreLabels)
 	{
 		return !(position.afterOptionalMix(Whitespace, BlockComment).after().isAt(Colon)
 				&& position.isAt(JavaTokenType.IDENTIFIER));

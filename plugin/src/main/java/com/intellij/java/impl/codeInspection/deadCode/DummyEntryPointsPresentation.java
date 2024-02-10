@@ -35,7 +35,7 @@ public class DummyEntryPointsPresentation extends UnusedDeclarationPresentation 
   private static final RefEntryPointFilter myFilter = new RefEntryPointFilter();
   private QuickFixAction[] myQuickFixActions;
 
-  public DummyEntryPointsPresentation(@jakarta.annotation.Nonnull InspectionToolWrapper toolWrapper,
+  public DummyEntryPointsPresentation(@Nonnull InspectionToolWrapper toolWrapper,
                                       @Nonnull GlobalInspectionContextImpl context) {
     super(toolWrapper, context);
   }
@@ -59,13 +59,13 @@ public class DummyEntryPointsPresentation extends UnusedDeclarationPresentation 
   }
 
   private class MoveEntriesToSuspicious extends QuickFixAction {
-    private MoveEntriesToSuspicious(@jakarta.annotation.Nonnull InspectionToolWrapper toolWrapper) {
+    private MoveEntriesToSuspicious(@Nonnull InspectionToolWrapper toolWrapper) {
       super(InspectionsBundle.message("inspection.dead.code.remove.from.entry.point.quickfix"), null, null,
           toolWrapper);
     }
 
     @Override
-    protected boolean applyFix(@jakarta.annotation.Nonnull RefEntity[] refElements) {
+    protected boolean applyFix(@Nonnull RefEntity[] refElements) {
       final EntryPointsManager entryPointsManager = getContext().getExtension(GlobalJavaInspectionContext
           .CONTEXT).getEntryPointsManager(getContext().getRefManager());
       for (RefEntity refElement : refElements) {
@@ -78,18 +78,18 @@ public class DummyEntryPointsPresentation extends UnusedDeclarationPresentation 
     }
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
-  public InspectionNode createToolNode(@jakarta.annotation.Nonnull GlobalInspectionContextImpl context,
-                                       @jakarta.annotation.Nonnull InspectionNode node,
-                                       @jakarta.annotation.Nonnull InspectionRVContentProvider provider,
-                                       @jakarta.annotation.Nonnull InspectionTreeNode parentNode,
+  public InspectionNode createToolNode(@Nonnull GlobalInspectionContextImpl context,
+                                       @Nonnull InspectionNode node,
+                                       @Nonnull InspectionRVContentProvider provider,
+                                       @Nonnull InspectionTreeNode parentNode,
                                        boolean showStructure) {
     return node;
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public HTMLComposerImpl getComposer() {
     return new DeadHTMLComposer(this);
   }

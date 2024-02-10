@@ -87,7 +87,7 @@ public class MethodOrClassSelectioner extends BasicSelectioner {
     return result;
   }
 
-  private static Collection<TextRange> selectWithTypeParameters(@jakarta.annotation.Nonnull PsiClass psiClass) {
+  private static Collection<TextRange> selectWithTypeParameters(@Nonnull PsiClass psiClass) {
     final PsiIdentifier identifier = psiClass.getNameIdentifier();
     final PsiTypeParameterList list = psiClass.getTypeParameterList();
     if (identifier != null && list != null) {
@@ -96,7 +96,7 @@ public class MethodOrClassSelectioner extends BasicSelectioner {
     return Collections.emptyList();
   }
 
-  private static Collection<TextRange> selectBetweenBracesLines(@jakarta.annotation.Nonnull PsiElement[] children,
+  private static Collection<TextRange> selectBetweenBracesLines(@Nonnull PsiElement[] children,
                                                                 @Nonnull CharSequence editorText) {
     int start = CodeBlockOrInitializerSelectioner.findOpeningBrace(children);
     // in non-Java PsiClasses, there can be no opening brace

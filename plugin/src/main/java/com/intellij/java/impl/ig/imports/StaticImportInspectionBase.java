@@ -52,13 +52,13 @@ public class StaticImportInspectionBase extends BaseInspection {
   public Set<String> allowedClasses = new LinkedHashSet<>();
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("static.import.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("static.import.problem.descriptor");
   }
@@ -81,7 +81,7 @@ public class StaticImportInspectionBase extends BaseInspection {
   private static class StaticImportFix extends InspectionGadgetsFix {
 
     @Override
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getFamilyName() {
       return InspectionGadgetsBundle.message("static.import.replace.quickfix");
     }
@@ -148,7 +148,7 @@ public class StaticImportInspectionBase extends BaseInspection {
       private final boolean onDemand;
       private final List<PsiJavaCodeReferenceElement> references = new ArrayList<>();
 
-      StaticImportReferenceCollector(@jakarta.annotation.Nonnull JavaResolveResult[] importTargets, boolean onDemand) {
+      StaticImportReferenceCollector(@Nonnull JavaResolveResult[] importTargets, boolean onDemand) {
         this.importTargets = importTargets;
         this.onDemand = onDemand;
       }

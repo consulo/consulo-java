@@ -30,7 +30,7 @@ public class AnnotationNamingConventionInspection extends ConventionInspection {
   private static final int DEFAULT_MIN_LENGTH = 8;
   private static final int DEFAULT_MAX_LENGTH = 64;
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "annotation.naming.convention.display.name");

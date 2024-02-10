@@ -30,7 +30,7 @@ public abstract class ProcessProxyFactory {
     return ServiceManager.getService(ProcessProxyFactory.class);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public abstract ProcessProxy createCommandLineProxy(JavaCommandLine javaCmdLine) throws ExecutionException;
 
   @Nullable

@@ -53,14 +53,14 @@ public class PsiJavaFileStubImpl extends PsiFileStubImpl<PsiJavaFile> implements
 		myFactory = compiled ? ClsStubPsiFactory.INSTANCE : SourceStubPsiFactory.INSTANCE;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public IStubFileElementType getType()
 	{
 		return JavaStubElementTypes.JAVA_FILE;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public PsiClass[] getClasses()
 	{

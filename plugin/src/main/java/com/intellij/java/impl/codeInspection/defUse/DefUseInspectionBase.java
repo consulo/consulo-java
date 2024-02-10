@@ -42,8 +42,8 @@ public abstract class DefUseInspectionBase extends BaseJavaBatchLocalInspectionT
   public static final String SHORT_NAME = "UnusedAssignment";
 
   @Override
-  @jakarta.annotation.Nonnull
-  public PsiElementVisitor buildVisitorImpl(@jakarta.annotation.Nonnull final ProblemsHolder holder,
+  @Nonnull
+  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
                                             final boolean isOnTheFly,
                                             LocalInspectionToolSession session,
                                             Object state) {
@@ -219,13 +219,13 @@ public abstract class DefUseInspectionBase extends BaseJavaBatchLocalInspectionT
 
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return DISPLAY_NAME;
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getGroupDisplayName() {
     return GroupNames.BUGS_GROUP_NAME;
   }

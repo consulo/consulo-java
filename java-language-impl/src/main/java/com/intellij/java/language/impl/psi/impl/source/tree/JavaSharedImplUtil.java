@@ -48,11 +48,11 @@ public class JavaSharedImplUtil {
   private JavaSharedImplUtil() {
   }
 
-  public static PsiType getType(@jakarta.annotation.Nonnull PsiTypeElement typeElement, @jakarta.annotation.Nonnull PsiElement anchor) {
+  public static PsiType getType(@Nonnull PsiTypeElement typeElement, @Nonnull PsiElement anchor) {
     return getType(typeElement, anchor, null);
   }
 
-  public static PsiType getType(@jakarta.annotation.Nonnull PsiTypeElement typeElement, @jakarta.annotation.Nonnull PsiElement anchor, @Nullable PsiAnnotation stopAt) {
+  public static PsiType getType(@Nonnull PsiTypeElement typeElement, @Nonnull PsiElement anchor, @Nullable PsiAnnotation stopAt) {
     PsiType type = typeElement.getType();
 
     List<PsiAnnotation[]> allAnnotations = collectAnnotations(anchor, stopAt);
@@ -103,8 +103,8 @@ public class JavaSharedImplUtil {
     return !found || stop ? null : annotations;
   }
 
-  @jakarta.annotation.Nonnull
-  public static PsiType applyAnnotations(@jakarta.annotation.Nonnull PsiType type, @jakarta.annotation.Nullable PsiModifierList modifierList) {
+  @Nonnull
+  public static PsiType applyAnnotations(@Nonnull PsiType type, @Nullable PsiModifierList modifierList) {
     if (modifierList != null) {
       PsiAnnotation[] annotations = modifierList.getAnnotations();
       if (annotations.length > 0) {
@@ -217,8 +217,8 @@ public class JavaSharedImplUtil {
     variable.addAfter(initializer, eq.getPsi());
   }
 
-  @jakarta.annotation.Nonnull
-  public static PsiType createTypeFromStub(@jakarta.annotation.Nonnull PsiModifierListOwner owner, @Nonnull TypeInfo typeInfo) {
+  @Nonnull
+  public static PsiType createTypeFromStub(@Nonnull PsiModifierListOwner owner, @Nonnull TypeInfo typeInfo) {
     String typeText = TypeInfo.createTypeText(typeInfo);
     assert typeText != null : owner;
     PsiType type = JavaPsiFacade.getInstance(owner.getProject()).getParserFacade().createTypeFromText(typeText, owner);
@@ -226,7 +226,7 @@ public class JavaSharedImplUtil {
     return typeInfo.getTypeAnnotations().applyTo(type, owner);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static PsiElement getPatternVariableDeclarationScope(@Nonnull PsiPatternVariable variable) {
     PsiElement parent = variable.getPattern().getParent();
     if (!(parent instanceof PsiInstanceOfExpression) && !(parent instanceof PsiCaseLabelElementList) && !(parent instanceof PsiPattern)
@@ -236,8 +236,8 @@ public class JavaSharedImplUtil {
     return getInstanceOfPartDeclarationScope(parent);
   }
 
-  @jakarta.annotation.Nullable
-  public static PsiElement getPatternVariableDeclarationScope(@jakarta.annotation.Nonnull PsiInstanceOfExpression instanceOfExpression) {
+  @Nullable
+  public static PsiElement getPatternVariableDeclarationScope(@Nonnull PsiInstanceOfExpression instanceOfExpression) {
     return getInstanceOfPartDeclarationScope(instanceOfExpression);
   }
 

@@ -42,7 +42,7 @@ public class NoExplicitFinalizeCallsInspection extends BaseInspection {
       "finalize.called.explicitly.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "finalize.called.explicitly.problem.descriptor");
@@ -61,7 +61,7 @@ public class NoExplicitFinalizeCallsInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!MethodCallUtils.isCallToMethod(expression, null, PsiType.VOID,
                                           HardcodedMethodConstants.FINALIZE)) {

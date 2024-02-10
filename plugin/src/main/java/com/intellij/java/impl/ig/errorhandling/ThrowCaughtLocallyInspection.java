@@ -43,7 +43,7 @@ public class ThrowCaughtLocallyInspection extends BaseInspection {
       "throw.caught.locally.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "throw.caught.locally.problem.descriptor");

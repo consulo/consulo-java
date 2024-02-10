@@ -72,7 +72,7 @@ public class TestMethodWithoutAssertionInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("test.method.without.assertion.display.name");
   }

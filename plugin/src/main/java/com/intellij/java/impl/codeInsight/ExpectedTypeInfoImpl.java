@@ -27,9 +27,9 @@ import java.util.function.Supplier;
 
 public class ExpectedTypeInfoImpl implements ExpectedTypeInfo {
   public static final Supplier<String> NULL = () -> null;
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private final PsiType type;
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private final PsiType defaultType;
   private final int kind;
   @Nonnull
@@ -51,7 +51,7 @@ public class ExpectedTypeInfoImpl implements ExpectedTypeInfo {
 
   public ExpectedTypeInfoImpl(@Nonnull PsiType type,
                               @Type int kind,
-                              @jakarta.annotation.Nonnull PsiType defaultType,
+                              @Nonnull PsiType defaultType,
                               @Nonnull TailType myTailType,
                               PsiMethod calledMethod,
                               @Nonnull Supplier<String> expectedName) {

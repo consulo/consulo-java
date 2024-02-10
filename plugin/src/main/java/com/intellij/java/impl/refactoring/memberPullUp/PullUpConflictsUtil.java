@@ -60,15 +60,15 @@ public class PullUpConflictsUtil {
   public static MultiMap<PsiElement, String> checkConflicts(final MemberInfo[] infos,
                                         PsiClass subclass,
                                         @Nullable PsiClass superClass,
-                                        @jakarta.annotation.Nonnull PsiJavaPackage targetPackage,
+                                        @Nonnull PsiJavaPackage targetPackage,
                                         @Nonnull PsiDirectory targetDirectory,
                                         final InterfaceContainmentVerifier interfaceContainmentVerifier) {
     return checkConflicts(infos, subclass, superClass, targetPackage, targetDirectory, interfaceContainmentVerifier, true);
   }
 
   public static MultiMap<PsiElement, String> checkConflicts(final MemberInfo[] infos,
-                                                            @jakarta.annotation.Nonnull final PsiClass subclass,
-                                                            @jakarta.annotation.Nullable PsiClass superClass,
+                                                            @Nonnull final PsiClass subclass,
+                                                            @Nullable PsiClass superClass,
                                                             @Nonnull final PsiJavaPackage targetPackage,
                                                             @Nonnull PsiDirectory targetDirectory,
                                                             final InterfaceContainmentVerifier interfaceContainmentVerifier,

@@ -38,11 +38,11 @@ import java.util.Set;
 public class PackageReferenceSet extends ReferenceSetBase<PsiPackageReference> {
   private final GlobalSearchScope mySearchScope;
 
-  public PackageReferenceSet(@jakarta.annotation.Nonnull final String str, @jakarta.annotation.Nonnull final PsiElement element, final int startInElement) {
+  public PackageReferenceSet(@Nonnull final String str, @Nonnull final PsiElement element, final int startInElement) {
     this(str, element, startInElement, element.getResolveScope());
   }
 
-  public PackageReferenceSet(@jakarta.annotation.Nonnull final String str, @jakarta.annotation.Nonnull final PsiElement element, final int startInElement, @jakarta.annotation.Nonnull GlobalSearchScope scope) {
+  public PackageReferenceSet(@Nonnull final String str, @Nonnull final PsiElement element, final int startInElement, @Nonnull GlobalSearchScope scope) {
     super(str, element, startInElement, DOT_SEPARATOR);
     mySearchScope = scope;
   }
@@ -65,7 +65,7 @@ public class PackageReferenceSet extends ReferenceSetBase<PsiPackageReference> {
     return Collections.emptyList();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected GlobalSearchScope getResolveScope() {
     return mySearchScope;
   }

@@ -42,7 +42,7 @@ class InstrumentationItem implements FileProcessingCompiler.ProcessingItem
 		return VfsUtilCore.virtualToIoFile(myClassFile);
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public VirtualFile getClassFile()
 	{
 		return myClassFile;

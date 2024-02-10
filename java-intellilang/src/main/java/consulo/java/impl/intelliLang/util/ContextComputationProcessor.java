@@ -41,7 +41,7 @@ public class ContextComputationProcessor {
     myEvaluationHelper = new SubstitutedExpressionEvaluationHelper(project);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static List<Object> collectOperands(@Nonnull final String prefix, final String suffix, final Ref<Boolean> unparsable, final PsiElement[] operands) {
     final ArrayList<Object> result = new ArrayList<Object>();
     final ContextComputationProcessor processor = new ContextComputationProcessor(operands[0].getProject());
@@ -111,7 +111,7 @@ public class ContextComputationProcessor {
   }
 
   @Nonnull
-  public static PsiElement getTopLevelInjectionTarget(@jakarta.annotation.Nonnull final PsiElement host) {
+  public static PsiElement getTopLevelInjectionTarget(@Nonnull final PsiElement host) {
     PsiElement target = host;
     PsiElement parent = target.getParent();
     for (; parent != null; target = parent, parent = target.getParent()) {

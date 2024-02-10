@@ -67,7 +67,7 @@ public class PsiTypeLookupItem extends LookupItem implements TypedLookupItem {
   private String myLocationString = "";
   private final String myForcedPresentableName;
 
-  private PsiTypeLookupItem(Object o, @Nonnull @NonNls String lookupString, boolean diamond, int bracketsCount, InsertHandler<PsiTypeLookupItem> fixer, @jakarta.annotation.Nonnull PsiSubstitutor substitutor) {
+  private PsiTypeLookupItem(Object o, @Nonnull @NonNls String lookupString, boolean diamond, int bracketsCount, InsertHandler<PsiTypeLookupItem> fixer, @Nonnull PsiSubstitutor substitutor) {
     super(o, lookupString);
     myDiamond = diamond;
     myBracketsCount = bracketsCount;
@@ -152,7 +152,7 @@ public class PsiTypeLookupItem extends LookupItem implements TypedLookupItem {
     }
   }
 
-  public String calcGenerics(@jakarta.annotation.Nonnull PsiElement context, InsertionContext insertionContext) {
+  public String calcGenerics(@Nonnull PsiElement context, InsertionContext insertionContext) {
     if (insertionContext.getCompletionChar() == '<') {
       return "";
     }
@@ -195,12 +195,12 @@ public class PsiTypeLookupItem extends LookupItem implements TypedLookupItem {
     return myBracketsCount;
   }
 
-  public static PsiTypeLookupItem createLookupItem(@Nonnull PsiType type, @jakarta.annotation.Nullable PsiElement context) {
+  public static PsiTypeLookupItem createLookupItem(@Nonnull PsiType type, @Nullable PsiElement context) {
     final boolean diamond = isDiamond(type);
     return createLookupItem(type, context, diamond);
   }
 
-  public static PsiTypeLookupItem createLookupItem(@Nonnull PsiType type, @jakarta.annotation.Nullable PsiElement context, boolean isDiamond) {
+  public static PsiTypeLookupItem createLookupItem(@Nonnull PsiType type, @Nullable PsiElement context, boolean isDiamond) {
     return createLookupItem(type, context, isDiamond, DEFAULT_IMPORT_FIXER);
   }
 
@@ -255,7 +255,7 @@ public class PsiTypeLookupItem extends LookupItem implements TypedLookupItem {
     return diamond;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private PsiSubstitutor getSubstitutor() {
     return mySubstitutor;
   }

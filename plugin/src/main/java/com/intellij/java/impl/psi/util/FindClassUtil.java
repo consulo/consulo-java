@@ -40,8 +40,8 @@ public class FindClassUtil {
    * @param qualifiedName the full-qualified name of the class to find.
    * @return the modules that contain the given class in dependencies or libraries.
    */
-  @jakarta.annotation.Nonnull
-  public static Collection<Module> findModulesWithClass(@Nonnull Project project, @NonNls @jakarta.annotation.Nonnull String qualifiedName) {
+  @Nonnull
+  public static Collection<Module> findModulesWithClass(@Nonnull Project project, @NonNls @Nonnull String qualifiedName) {
     GlobalSearchScope allScope = GlobalSearchScope.allScope(project);
     JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
     PsiClass[] possibleClasses = facade.findClasses(qualifiedName, allScope);

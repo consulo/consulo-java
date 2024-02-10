@@ -83,8 +83,8 @@ public class JavaI18nizeQuickFixDialog extends I18nizeQuickFixDialog {
   public static final String PROPERTY_VALUE_ATTR = "PROPERTY_VALUE";
 
   public JavaI18nizeQuickFixDialog(@Nonnull Project project,
-                                   @jakarta.annotation.Nonnull final PsiFile context,
-                                   @jakarta.annotation.Nullable final PsiLiteralExpression literalExpression,
+                                   @Nonnull final PsiFile context,
+                                   @Nullable final PsiLiteralExpression literalExpression,
                                    String defaultPropertyValue,
                                    DialogCustomization customization,
                                    final boolean showJavaCodeInfo,

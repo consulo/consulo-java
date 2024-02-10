@@ -19,6 +19,7 @@ package com.intellij.java.impl.util.descriptors.impl;
 import com.intellij.java.impl.util.descriptors.*;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
 import consulo.project.Project;
 import consulo.proxy.EventDispatcher;
 import consulo.util.collection.MultiValuesMap;
@@ -75,7 +76,7 @@ public class ConfigFileContainerImpl implements ConfigFileContainer {
   private void fileChanged(final VirtualFile file) {
     for (ConfigFile descriptor : myConfigFiles.values()) {
       final VirtualFile virtualFile = descriptor.getVirtualFile();
-      if (virtualFile != null && consulo.ide.impl.idea.openapi.vfs.VfsUtil.isAncestor(file, virtualFile, false)) {
+      if (virtualFile != null && VfsUtil.isAncestor(file, virtualFile, false)) {
         myConfiguration.updateConfigFile(descriptor);
         fireDescriptorChanged(descriptor);
       }

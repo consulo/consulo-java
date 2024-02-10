@@ -50,7 +50,7 @@ public class ImportsFormatter extends XmlRecursiveElementVisitor {
 
   private final PostFormatProcessorHelper myPostProcessor;
 
-  public ImportsFormatter(@jakarta.annotation.Nonnull CodeStyleSettings settings, @Nonnull PsiFile file) {
+  public ImportsFormatter(@Nonnull CodeStyleSettings settings, @Nonnull PsiFile file) {
     myPostProcessor = new PostFormatProcessorHelper(settings);
     myDocumentModel = FormattingDocumentModelImpl.createOn(file);
     myIndentOptions = settings.getIndentOptions(file.getFileType());

@@ -37,7 +37,7 @@ import jakarta.annotation.Nullable;
 public class JavaClsStructureViewBuilderProvider implements StructureViewBuilderProvider {
   @Override
   @Nullable
-  public StructureViewBuilder getStructureViewBuilder(@Nonnull FileType fileType, @jakarta.annotation.Nonnull VirtualFile file, @Nonnull Project project) {
+  public StructureViewBuilder getStructureViewBuilder(@Nonnull FileType fileType, @Nonnull VirtualFile file, @Nonnull Project project) {
     if (fileType == JavaClassFileType.INSTANCE) {
       PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
 

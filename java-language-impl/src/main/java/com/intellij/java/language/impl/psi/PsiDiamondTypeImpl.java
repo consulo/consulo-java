@@ -65,19 +65,19 @@ public class PsiDiamondTypeImpl extends PsiDiamondType {
     myTypeElement = psiTypeElement;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getPresentableText() {
     return "";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getCanonicalText() {
     return "";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getInternalCanonicalText() {
     return "Diamond Type";
@@ -89,12 +89,12 @@ public class PsiDiamondTypeImpl extends PsiDiamondType {
   }
 
   @Override
-  public boolean equalsToText(@jakarta.annotation.Nonnull @NonNls String text) {
+  public boolean equalsToText(@Nonnull @NonNls String text) {
     return text.isEmpty();
   }
 
   @Override
-  public <A> A accept(@jakarta.annotation.Nonnull PsiTypeVisitor<A> visitor) {
+  public <A> A accept(@Nonnull PsiTypeVisitor<A> visitor) {
     return visitor.visitDiamondType(this);
   }
 
@@ -165,7 +165,7 @@ public class PsiDiamondTypeImpl extends PsiDiamondType {
 
   private static JavaResolveResult getStaticFactory(final PsiNewExpression newExpression, final PsiElement context) {
     return context == newExpression ? LanguageCachedValueUtil.getCachedValue(newExpression, new CachedValueProvider<JavaResolveResult>() {
-      @jakarta.annotation.Nullable
+      @Nullable
       @Override
       public Result<JavaResolveResult> compute() {
         return new Result<JavaResolveResult>(getStaticFactoryCandidateInfo(newExpression, newExpression), PsiModificationTracker.MODIFICATION_COUNT);
@@ -437,7 +437,7 @@ public class PsiDiamondTypeImpl extends PsiDiamondType {
   }
 
 
-  private static MethodCandidateInfo createMethodCandidate(@jakarta.annotation.Nonnull final PsiMethod staticFactoryMethod, final PsiElement parent, final boolean varargs, final PsiExpressionList argumentList) {
+  private static MethodCandidateInfo createMethodCandidate(@Nonnull final PsiMethod staticFactoryMethod, final PsiElement parent, final boolean varargs, final PsiExpressionList argumentList) {
     return new MethodCandidateInfo(staticFactoryMethod, PsiSubstitutor.EMPTY, false, false, argumentList, parent, null, null) {
       private PsiType[] myExpressionTypes;
 
@@ -470,7 +470,7 @@ public class PsiDiamondTypeImpl extends PsiDiamondType {
     };
   }
 
-  public static boolean hasDefaultConstructor(@jakarta.annotation.Nonnull final PsiClass psiClass) {
+  public static boolean hasDefaultConstructor(@Nonnull final PsiClass psiClass) {
     final PsiMethod[] constructors = psiClass.getConstructors();
     for (PsiMethod method : constructors) {
       if (method.getParameterList().getParametersCount() == 0) {
@@ -480,7 +480,7 @@ public class PsiDiamondTypeImpl extends PsiDiamondType {
     return constructors.length == 0;
   }
 
-  public static boolean haveConstructorsGenericsParameters(@jakarta.annotation.Nonnull final PsiClass psiClass) {
+  public static boolean haveConstructorsGenericsParameters(@Nonnull final PsiClass psiClass) {
     for (final PsiMethod method : psiClass.getConstructors()) {
       for (PsiParameter parameter : method.getParameterList().getParameters()) {
         final PsiType type = parameter.getType();
@@ -538,13 +538,13 @@ public class PsiDiamondTypeImpl extends PsiDiamondType {
       myExpression = expression;
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     @Override
     public Boolean visitType(PsiType type) {
       return true;
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     @Override
     public Boolean visitCapturedWildcardType(PsiCapturedWildcardType capturedWildcardType) {
       return false;
@@ -556,7 +556,7 @@ public class PsiDiamondTypeImpl extends PsiDiamondType {
       return false;
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     @Override
     public Boolean visitClassType(PsiClassType classType) {
       final PsiClassType.ClassResolveResult resolveResult = classType.resolveGenerics();

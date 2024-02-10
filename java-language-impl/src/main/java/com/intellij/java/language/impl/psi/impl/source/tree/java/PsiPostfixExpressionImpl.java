@@ -34,19 +34,19 @@ public class PsiPostfixExpressionImpl extends ExpressionPsiElement implements Ps
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiExpression getOperand() {
     return (PsiExpression) findChildByRoleAsPsiElement(ChildRole.OPERAND);
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiJavaToken getOperationSign() {
     return (PsiJavaToken) findChildByRoleAsPsiElement(ChildRole.OPERATION_SIGN);
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public IElementType getOperationTokenType() {
     return getOperationSign().getTokenType();
   }

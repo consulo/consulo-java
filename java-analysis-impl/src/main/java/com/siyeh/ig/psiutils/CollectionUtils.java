@@ -165,7 +165,7 @@ public class CollectionUtils {
   }
 
   @Contract("null -> false")
-  public static boolean isConcreteCollectionClass(@jakarta.annotation.Nullable PsiType type) {
+  public static boolean isConcreteCollectionClass(@Nullable PsiType type) {
     if (!(type instanceof PsiClassType)) {
       return false;
     }
@@ -237,7 +237,7 @@ public class CollectionUtils {
     return "java.util.WeakHashMap".equals(typeText);
   }
 
-  public static boolean isConstantEmptyArray(@jakarta.annotation.Nonnull PsiField field) {
+  public static boolean isConstantEmptyArray(@Nonnull PsiField field) {
     if (!field.hasModifierProperty(PsiModifier.STATIC) || !field.hasModifierProperty(PsiModifier.FINAL)) {
       return false;
     }

@@ -34,13 +34,13 @@ public class DriverManagerGetConnectionInspection extends BaseInspection {
     return "CallToDriverManagerGetConnection";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "drivermanager.call.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "drivermanager.call.problem.descriptor");
@@ -55,7 +55,7 @@ public class DriverManagerGetConnectionInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!isDriverManagerGetConnection(expression)) {
         return;

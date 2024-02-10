@@ -34,7 +34,7 @@ import java.util.List;
  */
 @ExtensionImpl
 public class AnnotationOrderRootType extends OrderRootType {
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static OrderRootType getInstance() {
     return getOrderRootType(AnnotationOrderRootType.class);
   }

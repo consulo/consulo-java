@@ -80,7 +80,7 @@ public class InlineSuperClassRefactoringProcessor extends FixableUsagesRefactori
     myMemberInfos = members.toArray(new MemberInfo[members.size()]);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(final UsageInfo[] usages) {
     return new InlineSuperClassUsageViewDescriptor(mySuperClass);
   }

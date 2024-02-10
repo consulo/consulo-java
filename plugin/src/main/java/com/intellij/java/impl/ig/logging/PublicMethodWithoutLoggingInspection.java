@@ -46,14 +46,14 @@ public class PublicMethodWithoutLoggingInspection extends BaseInspection {
   private final List<String> loggerClassNames = new ArrayList();
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "public.method.without.logging.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("public.method.without.logging.problem.descriptor");
   }
@@ -66,13 +66,13 @@ public class PublicMethodWithoutLoggingInspection extends BaseInspection {
   }
 
   @Override
-  public void readSettings(@jakarta.annotation.Nonnull Element element) throws InvalidDataException {
+  public void readSettings(@Nonnull Element element) throws InvalidDataException {
     super.readSettings(element);
     parseString(loggerClassName, loggerClassNames);
   }
 
   @Override
-  public void writeSettings(@jakarta.annotation.Nonnull Element element) throws WriteExternalException {
+  public void writeSettings(@Nonnull Element element) throws WriteExternalException {
     loggerClassName = formatString(loggerClassNames);
     super.writeSettings(element);
   }
@@ -121,7 +121,7 @@ public class PublicMethodWithoutLoggingInspection extends BaseInspection {
     private boolean containsLoggingCall = false;
 
     @Override
-    public void visitElement(@jakarta.annotation.Nonnull PsiElement element) {
+    public void visitElement(@Nonnull PsiElement element) {
       if (containsLoggingCall) {
         return;
       }
@@ -129,7 +129,7 @@ public class PublicMethodWithoutLoggingInspection extends BaseInspection {
     }
 
     @Override
-    public void visitMethodCallExpression(@jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
       if (containsLoggingCall) {
         return;
       }

@@ -63,7 +63,7 @@ public class ReturnInstruction extends GoToInstruction {
     return myCallInstruction.procEnd;
   }
 
-  void setCallInstruction(@jakarta.annotation.Nonnull CallInstruction callInstruction) {
+  void setCallInstruction(@Nonnull CallInstruction callInstruction) {
     myCallInstruction = callInstruction;
   }
 

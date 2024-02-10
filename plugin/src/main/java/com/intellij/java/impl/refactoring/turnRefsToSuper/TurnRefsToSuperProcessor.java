@@ -44,8 +44,8 @@ public class TurnRefsToSuperProcessor extends TurnRefsToSuperProcessorBase {
 
   private PsiClass mySuper;
   public TurnRefsToSuperProcessor(Project project,
-                                  @jakarta.annotation.Nonnull PsiClass aClass,
-                                  @jakarta.annotation.Nonnull PsiClass aSuper,
+                                  @Nonnull PsiClass aClass,
+                                  @Nonnull PsiClass aSuper,
                                   boolean replaceInstanceOf) {
     super(project, replaceInstanceOf, aSuper.getName());
     myClass = aClass;
@@ -57,17 +57,17 @@ public class TurnRefsToSuperProcessor extends TurnRefsToSuperProcessorBase {
                                      DescriptiveNameUtil.getDescriptiveName(myClass), DescriptiveNameUtil.getDescriptiveName(mySuper));
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
     return new RefsToSuperViewDescriptor(myClass, mySuper);
   }
 
-  private void setClasses(@jakarta.annotation.Nonnull final PsiClass aClass, @Nonnull final PsiClass aSuper) {
+  private void setClasses(@Nonnull final PsiClass aClass, @Nonnull final PsiClass aSuper) {
     myClass = aClass;
     mySuper = aSuper;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected UsageInfo[] findUsages() {
     final PsiReference[] refs = ReferencesSearch.search(myClass, GlobalSearchScope.projectScope(myProject), false).toArray(new PsiReference[0]);
 
@@ -82,7 +82,7 @@ public class TurnRefsToSuperProcessor extends TurnRefsToSuperProcessorBase {
     setClasses ((PsiClass) elements[0], (PsiClass) elements[1]);
   }
 
-  protected boolean preprocessUsages(@jakarta.annotation.Nonnull Ref<UsageInfo[]> refUsages) {
+  protected boolean preprocessUsages(@Nonnull Ref<UsageInfo[]> refUsages) {
     if (!ApplicationManager.getApplication().isUnitTestMode() && refUsages.get().length == 0) {
       String message = RefactoringBundle.message("no.usages.can.be.replaced", myClass.getQualifiedName(), mySuper.getQualifiedName());
       Messages.showInfoMessage(myProject, message, TurnRefsToSuperHandler.REFACTORING_NAME);
@@ -143,8 +143,8 @@ public class TurnRefsToSuperProcessor extends TurnRefsToSuperProcessorBase {
     return myReplaceInstanceOf;
   }
 
-  @jakarta.annotation.Nonnull
-  protected Collection<? extends PsiElement> getElementsToWrite(@jakarta.annotation.Nonnull final UsageViewDescriptor descriptor) {
+  @Nonnull
+  protected Collection<? extends PsiElement> getElementsToWrite(@Nonnull final UsageViewDescriptor descriptor) {
     return Collections.emptyList(); // neither myClass nor mySuper are subject to change, it's just references that are going to change
   }
 }

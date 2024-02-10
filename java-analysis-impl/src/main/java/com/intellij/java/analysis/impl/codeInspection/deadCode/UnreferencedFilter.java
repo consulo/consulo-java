@@ -31,7 +31,7 @@ import consulo.language.editor.inspection.GlobalInspectionTool;
 import jakarta.annotation.Nonnull;
 
 public class UnreferencedFilter extends RefUnreachableFilter {
-  public UnreferencedFilter(@jakarta.annotation.Nonnull GlobalInspectionTool tool, @jakarta.annotation.Nonnull GlobalInspectionContext context) {
+  public UnreferencedFilter(@Nonnull GlobalInspectionTool tool, @Nonnull GlobalInspectionContext context) {
     super(tool, context);
   }
 

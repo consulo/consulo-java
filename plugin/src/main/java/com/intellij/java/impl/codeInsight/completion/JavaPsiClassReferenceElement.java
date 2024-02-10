@@ -170,8 +170,8 @@ public class JavaPsiClassReferenceElement extends LookupItem<Object> implements 
 			LookupElement item,
 			PsiClass psiClass,
 			boolean diamond,
-			@jakarta.annotation.Nonnull String locationString,
-			@jakarta.annotation.Nonnull PsiSubstitutor substitutor)
+			@Nonnull String locationString,
+			@Nonnull PsiSubstitutor substitutor)
 	{
 		if(!(psiClass instanceof PsiTypeParameter))
 		{
@@ -232,7 +232,7 @@ public class JavaPsiClassReferenceElement extends LookupItem<Object> implements 
 		return StringUtil.notNullize(name);
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	private static String formatTypeParameters(@Nonnull final PsiSubstitutor substitutor, final PsiTypeParameter[] params)
 	{
 		final boolean space = showSpaceAfterComma(params[0]);

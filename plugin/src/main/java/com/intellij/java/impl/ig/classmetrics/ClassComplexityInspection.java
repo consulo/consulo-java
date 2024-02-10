@@ -50,7 +50,7 @@ public class ClassComplexityInspection
       "cyclomatic.complexity.limit.option");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer totalComplexity = (Integer)infos[0];
     return InspectionGadgetsBundle.message(

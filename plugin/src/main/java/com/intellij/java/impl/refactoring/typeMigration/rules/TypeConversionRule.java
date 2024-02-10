@@ -42,7 +42,7 @@ public abstract class TypeConversionRule {
                                                               final TypeMigrationLabeler labeler);
 
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public Pair<PsiType, PsiType> bindTypeParameters(PsiType from,
                                                    PsiType to,
                                                    final PsiMethod method,

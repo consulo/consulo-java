@@ -230,7 +230,7 @@ public class ClassRenderer extends NodeRendererImpl
 		builder.setChildren(children);
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	protected FieldDescriptor createFieldDescriptor(ValueDescriptorImpl parentDescriptor,
 			NodeDescriptorFactory nodeDescriptorFactory,
 			ObjectReference objRef,
@@ -240,7 +240,7 @@ public class ClassRenderer extends NodeRendererImpl
 		return nodeDescriptorFactory.getFieldDescriptor(parentDescriptor, objRef, field);
 	}
 
-	protected boolean shouldDisplay(EvaluationContext context, @Nonnull ObjectReference objInstance, @jakarta.annotation.Nonnull Field field)
+	protected boolean shouldDisplay(EvaluationContext context, @Nonnull ObjectReference objInstance, @Nonnull Field field)
 	{
 		final boolean isSynthetic = DebuggerUtils.isSynthetic(field);
 		if(!SHOW_SYNTHETICS && isSynthetic)

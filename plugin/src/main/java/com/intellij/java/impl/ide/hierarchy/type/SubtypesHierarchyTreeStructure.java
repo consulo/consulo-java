@@ -52,7 +52,7 @@ public class SubtypesHierarchyTreeStructure extends HierarchyTreeStructure
 
 	@Override
 	@Nonnull
-	protected final Object[] buildChildren(@jakarta.annotation.Nonnull final HierarchyNodeDescriptor descriptor)
+	protected final Object[] buildChildren(@Nonnull final HierarchyNodeDescriptor descriptor)
 	{
 		final Object element = ((TypeHierarchyNodeDescriptor) descriptor).getPsiClass();
 		if(!(element instanceof PsiClass))

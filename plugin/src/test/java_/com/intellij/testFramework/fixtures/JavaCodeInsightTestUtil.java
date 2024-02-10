@@ -47,7 +47,7 @@ public class JavaCodeInsightTestUtil
 	{
 	}
 
-	public static void doInlineLocalTest(@Nonnull final CodeInsightTestFixture fixture, @jakarta.annotation.Nonnull final String before, @jakarta.annotation.Nonnull final String after)
+	public static void doInlineLocalTest(@Nonnull final CodeInsightTestFixture fixture, @Nonnull final String before, @Nonnull final String after)
 	{
 		fixture.configureByFile(before);
 		new WriteCommandAction(fixture.getProject())
@@ -64,7 +64,7 @@ public class JavaCodeInsightTestUtil
 		fixture.checkResultByFile(after, false);
 	}
 
-	public static void doInlineParameterTest(@jakarta.annotation.Nonnull final CodeInsightTestFixture fixture, @Nonnull final String before, @jakarta.annotation.Nonnull final String after)
+	public static void doInlineParameterTest(@Nonnull final CodeInsightTestFixture fixture, @Nonnull final String before, @Nonnull final String after)
 	{
 		fixture.configureByFile(before);
 		new WriteCommandAction(fixture.getProject())
@@ -81,7 +81,7 @@ public class JavaCodeInsightTestUtil
 		fixture.checkResultByFile(after, false);
 	}
 
-	public static void doInlineMethodTest(@Nonnull final CodeInsightTestFixture fixture, @jakarta.annotation.Nonnull final String before, @jakarta.annotation.Nonnull final String after)
+	public static void doInlineMethodTest(@Nonnull final CodeInsightTestFixture fixture, @Nonnull final String before, @Nonnull final String after)
 	{
 		fixture.configureByFile(before);
 		new WriteCommandAction(fixture.getProject())
@@ -104,7 +104,7 @@ public class JavaCodeInsightTestUtil
 		fixture.checkResultByFile(after, false);
 	}
 
-	public static void doInlineConstantTest(@jakarta.annotation.Nonnull final CodeInsightTestFixture fixture, @Nonnull final String before, @jakarta.annotation.Nonnull final String after)
+	public static void doInlineConstantTest(@Nonnull final CodeInsightTestFixture fixture, @Nonnull final String before, @Nonnull final String after)
 	{
 		fixture.configureByFile(before);
 		new WriteCommandAction(fixture.getProject())

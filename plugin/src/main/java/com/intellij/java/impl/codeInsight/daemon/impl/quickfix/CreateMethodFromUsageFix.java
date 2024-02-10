@@ -57,7 +57,7 @@ public class CreateMethodFromUsageFix extends CreateFromUsageBaseFix {
 
   private final SmartPsiElementPointer myMethodCall;
 
-  public CreateMethodFromUsageFix(@jakarta.annotation.Nonnull PsiMethodCallExpression methodCall) {
+  public CreateMethodFromUsageFix(@Nonnull PsiMethodCallExpression methodCall) {
     myMethodCall = SmartPointerManager.getInstance(methodCall.getProject()).createSmartPsiElementPointer(methodCall);
   }
 
@@ -215,7 +215,7 @@ public class CreateMethodFromUsageFix extends CreateFromUsageBaseFix {
   }
 
   public static void doCreate(PsiClass targetClass, PsiMethod method, List<Pair<PsiExpression, PsiType>> arguments, PsiSubstitutor substitutor,
-                              ExpectedTypeInfo[] expectedTypes, @jakarta.annotation.Nullable PsiElement context) {
+                              ExpectedTypeInfo[] expectedTypes, @Nullable PsiElement context) {
     doCreate(targetClass, method, shouldBeAbstractImpl(null, targetClass), arguments, substitutor, expectedTypes, context);
   }
 
@@ -360,7 +360,7 @@ public class CreateMethodFromUsageFix extends CreateFromUsageBaseFix {
   }
 
 
-  @jakarta.annotation.Nullable
+  @Nullable
   protected PsiMethodCallExpression getMethodCall() {
     return (PsiMethodCallExpression)myMethodCall.getElement();
   }

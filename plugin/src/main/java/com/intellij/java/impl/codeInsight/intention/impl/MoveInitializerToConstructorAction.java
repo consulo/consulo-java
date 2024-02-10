@@ -52,7 +52,7 @@ public class MoveInitializerToConstructorAction extends BaseMoveInitializerToMet
 
   @Nonnull
   @Override
-  protected Collection<PsiMethod> getOrCreateMethods(@Nonnull Project project, @Nonnull Editor editor, PsiFile file, @jakarta.annotation.Nonnull PsiClass aClass) {
+  protected Collection<PsiMethod> getOrCreateMethods(@Nonnull Project project, @Nonnull Editor editor, PsiFile file, @Nonnull PsiClass aClass) {
     final Collection<PsiMethod> constructors = Arrays.asList(aClass.getConstructors());
     if (constructors.isEmpty()) {
       return createConstructor(project, editor, file, aClass);
@@ -62,7 +62,7 @@ public class MoveInitializerToConstructorAction extends BaseMoveInitializerToMet
   }
 
   @Nonnull
-  private static Collection<PsiMethod> removeChainedConstructors(@jakarta.annotation.Nonnull Collection<PsiMethod> constructors) {
+  private static Collection<PsiMethod> removeChainedConstructors(@Nonnull Collection<PsiMethod> constructors) {
     constructors.removeIf(constructor -> !JavaHighlightUtil.getChainedConstructors(constructor).isEmpty());
     return constructors;
   }

@@ -38,13 +38,13 @@ public class DeleteThrowsFix implements LocalQuickFix {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getName() {
     return myQuickFix.getText();
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("fix.throws.list.family");
   }

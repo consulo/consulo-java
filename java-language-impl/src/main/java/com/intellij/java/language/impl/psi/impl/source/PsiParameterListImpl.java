@@ -39,13 +39,13 @@ public class PsiParameterListImpl extends JavaStubPsiElement<PsiParameterListStu
 		super(stub, JavaStubElementTypes.PARAMETER_LIST);
 	}
 
-	public PsiParameterListImpl(@jakarta.annotation.Nonnull ASTNode node)
+	public PsiParameterListImpl(@Nonnull ASTNode node)
 	{
 		super(node);
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public PsiParameter[] getParameters()
 	{
 		return getStubOrPsiChildren(JavaStubElementTypes.PARAMETER, PsiParameter.ARRAY_FACTORY);
@@ -59,7 +59,7 @@ public class PsiParameterListImpl extends JavaStubPsiElement<PsiParameterListStu
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public CompositeElement getNode()
 	{
 		return (CompositeElement) super.getNode();

@@ -39,13 +39,13 @@ public class CommentFormatter {
    * @deprecated Use {@link ##CommentFormatter(PsiFile)} instead.
    */
   @Deprecated
-  public CommentFormatter(@jakarta.annotation.Nonnull Project project) {
+  public CommentFormatter(@Nonnull Project project) {
     mySettings = CodeStyle.getSettings(project);
     myParser = new JDParser(mySettings);
     myProject = project;
   }
 
-  public CommentFormatter(@jakarta.annotation.Nonnull PsiFile file) {
+  public CommentFormatter(@Nonnull PsiFile file) {
     mySettings = CodeStyle.getSettings(file);
     myParser = new JDParser(mySettings);
     myProject = file.getProject();

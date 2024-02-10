@@ -31,7 +31,7 @@ public class ContinueStatementInspection extends BaseInspection {
       "continue.statement.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "statement.problem.descriptor");

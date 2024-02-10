@@ -42,9 +42,9 @@ class AddExternalLibraryToDependenciesQuickFix extends AddOrderEntryFix
 	private final ExternalLibraryDescriptor myLibraryDescriptor;
 	private final String myQualifiedClassName;
 
-	public AddExternalLibraryToDependenciesQuickFix(@jakarta.annotation.Nonnull Module currentModule,
+	public AddExternalLibraryToDependenciesQuickFix(@Nonnull Module currentModule,
 													@Nonnull ExternalLibraryDescriptor libraryDescriptor,
-													@jakarta.annotation.Nonnull PsiReference reference,
+													@Nonnull PsiReference reference,
 													@Nullable String qualifiedClassName)
 	{
 		super(reference);
@@ -62,7 +62,7 @@ class AddExternalLibraryToDependenciesQuickFix extends AddOrderEntryFix
 	}
 
 	@Nls
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -70,7 +70,7 @@ class AddExternalLibraryToDependenciesQuickFix extends AddOrderEntryFix
 	}
 
 	@Override
-	public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file)
+	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
 	{
 		return !project.isDisposed() && !myCurrentModule.isDisposed();
 	}

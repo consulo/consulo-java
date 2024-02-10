@@ -39,7 +39,7 @@ public class LoadLibraryWithNonConstantStringInspection
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "load.library.with.non.constant.string.problem.descriptor");
@@ -54,7 +54,7 @@ public class LoadLibraryWithNonConstantStringInspection
 
     @Override
     public void visitMethodCallExpression(
-      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();

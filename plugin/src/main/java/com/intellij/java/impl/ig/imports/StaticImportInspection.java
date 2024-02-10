@@ -23,6 +23,7 @@ import com.intellij.java.language.psi.PsiImportStaticStatement;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.SmartList;
 import jakarta.annotation.Nonnull;
@@ -64,11 +65,11 @@ public class StaticImportInspection extends StaticImportInspectionBase {
 
     constraints.gridy = 1;
     constraints.weighty = 0.0;
-    final consulo.deadCodeNotWorking.impl.CheckBox checkBox1 = new consulo.deadCodeNotWorking.impl.CheckBox(InspectionGadgetsBundle.message("ignore.single.field.static.imports.option"), this, "ignoreSingleFieldImports");
+    final CheckBox checkBox1 = new CheckBox(InspectionGadgetsBundle.message("ignore.single.field.static.imports.option"), this, "ignoreSingleFieldImports");
     panel.add(checkBox1, constraints);
 
     constraints.gridy = 2;
-    final consulo.deadCodeNotWorking.impl.CheckBox checkBox2 = new consulo.deadCodeNotWorking.impl.CheckBox(InspectionGadgetsBundle.message("ignore.single.method.static.imports.option"), this, "ignoreSingeMethodImports");
+    final CheckBox checkBox2 = new CheckBox(InspectionGadgetsBundle.message("ignore.single.method.static.imports.option"), this, "ignoreSingeMethodImports");
     panel.add(checkBox2, constraints);
 
     return panel;

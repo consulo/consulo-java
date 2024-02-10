@@ -72,7 +72,7 @@ public class GenerateDelegateHandler implements DelegateMethodHandler {
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull final Project project, @Nonnull final Editor editor, @jakarta.annotation.Nonnull final PsiFile file) {
+  public void invoke(@Nonnull final Project project, @Nonnull final Editor editor, @Nonnull final PsiFile file) {
     if (!CodeInsightUtilBase.prepareEditorForWrite(editor)) {
       return;
     }
@@ -238,7 +238,7 @@ public class GenerateDelegateHandler implements DelegateMethodHandler {
     }
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private PsiMethodMember[] chooseMethods(PsiElementClassMember targetMember, PsiFile file, Editor editor, Project project) {
     PsiClassType.ClassResolveResult resolveResult = null;
     final PsiDocCommentOwner target = targetMember.getElement();
@@ -352,7 +352,7 @@ public class GenerateDelegateHandler implements DelegateMethodHandler {
     return targetElements != null && targetElements.length > 0;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static PsiElementClassMember chooseTarget(PsiFile file, Editor editor, Project project) {
     final PsiElementClassMember[] targetElements = getTargetElements(file, editor);
     if (targetElements == null || targetElements.length == 0) {
@@ -462,7 +462,7 @@ public class GenerateDelegateHandler implements DelegateMethodHandler {
     }
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

@@ -45,7 +45,7 @@ public abstract class DebuggerContextCommandImpl extends SuspendContextCommandIm
 		myCustomThread = customThread;
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	@Override
 	public SuspendContextImpl getSuspendContext()
 	{
@@ -72,7 +72,7 @@ public abstract class DebuggerContextCommandImpl extends SuspendContextCommandIm
 	}
 
 	@Override
-	public final void contextAction(@jakarta.annotation.Nonnull SuspendContextImpl suspendContext) throws Exception
+	public final void contextAction(@Nonnull SuspendContextImpl suspendContext) throws Exception
 	{
 		SuspendManager suspendManager = myDebuggerContext.getDebugProcess().getSuspendManager();
 		boolean isSuspendedByContext;

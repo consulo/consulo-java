@@ -30,7 +30,7 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class InstantiationOfUtilityClassInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "instantiation.utility.class.display.name");
@@ -50,7 +50,7 @@ public class InstantiationOfUtilityClassInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitNewExpression(@jakarta.annotation.Nonnull PsiNewExpression expression) {
+    public void visitNewExpression(@Nonnull PsiNewExpression expression) {
       final PsiType type = expression.getType();
       if (!(type instanceof PsiClassType)) {
         return;

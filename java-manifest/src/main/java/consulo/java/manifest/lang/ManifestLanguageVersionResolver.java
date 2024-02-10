@@ -35,7 +35,7 @@ public class ManifestLanguageVersionResolver implements LanguageVersionResolver 
   }
 
   @RequiredReadAction
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public LanguageVersion getLanguageVersion(@Nonnull Language language, @Nullable Project project, @Nullable VirtualFile virtualFile) {
     if (virtualFile == null) {

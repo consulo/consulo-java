@@ -299,7 +299,7 @@ public abstract class SmartPsiElementPointersTest extends CodeInsightTestCase {
 
   public void testCreatePointerDoesNotLoadPsiTree() throws IOException {
     VirtualFile vfile = myRoot.createChildData(this, "X.java");
-    consulo.ide.impl.idea.openapi.vfs.VfsUtil.saveText(vfile, "public class X { public int X; }");
+    VfsUtil.saveText(vfile, "public class X { public int X; }");
 
     PsiClass aClass = myJavaFacade.findClass("X", GlobalSearchScope.allScope(getProject()));
     assertNotNull(aClass);

@@ -37,7 +37,7 @@ public class ManifestFileConfiguration {
     myManifestFilePath = configuration.getManifestFilePath();
   }
 
-  public ManifestFileConfiguration(@Nonnull String manifestFilePath, @Nullable List<String> classpath, @jakarta.annotation.Nullable String mainClass,
+  public ManifestFileConfiguration(@Nonnull String manifestFilePath, @Nullable List<String> classpath, @Nullable String mainClass,
                                    boolean isWritable) {
     myWritable = isWritable;
     if (classpath != null) {

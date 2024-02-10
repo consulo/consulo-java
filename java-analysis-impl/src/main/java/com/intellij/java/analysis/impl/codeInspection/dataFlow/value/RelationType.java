@@ -38,7 +38,7 @@ public enum RelationType
 	 * @return result of meet operation: the relation that is a sub-relation of both this and other;
 	 * null if result is bottom
 	 */
-	@jakarta.annotation.Nullable
+	@Nullable
 	public RelationType meet(@Nonnull RelationType other)
 	{
 		if(isSubRelation(other))

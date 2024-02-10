@@ -59,7 +59,7 @@ public class AddClarifyingParenthesesIntention extends Intention {
     replaceExpression(newExpression.toString(), expression);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static PsiExpression getTopLevelExpression(PsiElement element) {
     if (!(element instanceof PsiExpression)) {
       return null;

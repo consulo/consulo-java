@@ -36,7 +36,7 @@ public interface PsiNameValuePair extends PsiElement {
   PsiNameValuePair[] EMPTY_ARRAY = new PsiNameValuePair[0];
 
   ArrayFactory<PsiNameValuePair> ARRAY_FACTORY = new ArrayFactory<PsiNameValuePair>() {
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public PsiNameValuePair[] create(final int count) {
       return count == 0 ? EMPTY_ARRAY : new PsiNameValuePair[count];
@@ -71,6 +71,6 @@ public interface PsiNameValuePair extends PsiElement {
   @Nullable
   PsiAnnotationMemberValue getValue();
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   PsiAnnotationMemberValue setValue(@Nonnull PsiAnnotationMemberValue newValue);
 }

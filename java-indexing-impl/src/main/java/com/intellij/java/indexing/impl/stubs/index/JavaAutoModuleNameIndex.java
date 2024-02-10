@@ -68,7 +68,7 @@ public class JavaAutoModuleNameIndex extends ScalarIndexExtension<String> {
   }
 
   @Nonnull
-  public static Collection<VirtualFile> getFilesByKey(@jakarta.annotation.Nonnull String moduleName, @Nonnull GlobalSearchScope scope) {
+  public static Collection<VirtualFile> getFilesByKey(@Nonnull String moduleName, @Nonnull GlobalSearchScope scope) {
     return FileBasedIndex.getInstance().getContainingFiles(NAME, moduleName, scope);
   }
 

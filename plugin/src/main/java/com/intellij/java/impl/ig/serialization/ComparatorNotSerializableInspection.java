@@ -40,7 +40,7 @@ public class ComparatorNotSerializableInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "comparator.not.serializable.problem.descriptor");

@@ -36,7 +36,7 @@ public interface PsiClassReferenceListStub extends StubElement<PsiReferenceList>
 	/**
 	 * @return type names
 	 */
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	String[] getReferencedNames();
 
 	/**
@@ -45,6 +45,6 @@ public interface PsiClassReferenceListStub extends StubElement<PsiReferenceList>
 	@Nonnull
 	TypeInfo[] getTypes();
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	PsiReferenceList.Role getRole();
 }

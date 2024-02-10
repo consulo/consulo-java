@@ -31,7 +31,7 @@ import java.util.List;
 public class SuspiciousCollectionsMethodCallsInspection extends AbstractBaseJavaLocalInspectionTool {
   public boolean REPORT_CONVERTIBLE_METHOD_CALLS = true;
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionsBundle.message("inspection.suspicious.collections.method.calls.display.name");
@@ -49,7 +49,7 @@ public class SuspiciousCollectionsMethodCallsInspection extends AbstractBaseJava
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
                                             final boolean isOnTheFly,
                                             LocalInspectionToolSession session,

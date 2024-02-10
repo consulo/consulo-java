@@ -127,7 +127,7 @@ public class MissortedModifiersInspection extends BaseInspection {
       new ModifierComparator();
 
     @Override
-    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       super.visitClass(aClass);
       checkForMissortedModifiers(aClass);
     }
@@ -140,7 +140,7 @@ public class MissortedModifiersInspection extends BaseInspection {
     }
 
     @Override
-    public void visitLocalVariable(@jakarta.annotation.Nonnull PsiLocalVariable variable) {
+    public void visitLocalVariable(@Nonnull PsiLocalVariable variable) {
       super.visitLocalVariable(variable);
       checkForMissortedModifiers(variable);
     }

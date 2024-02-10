@@ -20,7 +20,7 @@ public final class ExpressionVariableDescriptor implements VariableDescriptor
 	public static final HashingStrategy<PsiExpression> EXPRESSION_HASHING_STRATEGY = new PsiExpressionStrategy();
 
 	private final
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	PsiExpression myExpression;
 
 	public ExpressionVariableDescriptor(@Nonnull PsiExpression expression)
@@ -44,7 +44,7 @@ public final class ExpressionVariableDescriptor implements VariableDescriptor
 	@Override
 	public
 	@Nullable
-	PsiType getType(@jakarta.annotation.Nullable DfaVariableValue qualifier)
+	PsiType getType(@Nullable DfaVariableValue qualifier)
 	{
 		return myExpression.getType();
 	}

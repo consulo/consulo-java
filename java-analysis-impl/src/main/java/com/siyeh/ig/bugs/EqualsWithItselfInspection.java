@@ -38,7 +38,7 @@ public abstract class EqualsWithItselfInspection extends BaseInspection {
     return InspectionGadgetsBundle.message("equals.with.itself.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("equals.with.itself.problem.descriptor");

@@ -58,8 +58,8 @@ public class SmartTypePointerManagerImpl extends SmartTypePointerManager {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
-  public SmartTypePointer createSmartTypePointer(@jakarta.annotation.Nonnull PsiType type) {
+  @Nonnull
+  public SmartTypePointer createSmartTypePointer(@Nonnull PsiType type) {
     final SmartTypePointer pointer = type.accept(new SmartTypeCreatingVisitor());
     return pointer != null ? pointer : NULL_POINTER;
   }
@@ -67,7 +67,7 @@ public class SmartTypePointerManagerImpl extends SmartTypePointerManager {
   private static class SimpleTypePointer implements SmartTypePointer {
     private final PsiType myType;
 
-    private SimpleTypePointer(@jakarta.annotation.Nonnull PsiType type) {
+    private SimpleTypePointer(@Nonnull PsiType type) {
       myType = type;
     }
 
@@ -80,7 +80,7 @@ public class SmartTypePointerManagerImpl extends SmartTypePointerManager {
   private static class ArrayTypePointer extends TypePointerBase<PsiArrayType> {
     private final SmartTypePointer myComponentTypePointer;
 
-    public ArrayTypePointer(@Nonnull PsiArrayType type, @jakarta.annotation.Nonnull SmartTypePointer componentTypePointer) {
+    public ArrayTypePointer(@Nonnull PsiArrayType type, @Nonnull SmartTypePointer componentTypePointer) {
       super(type);
       myComponentTypePointer = componentTypePointer;
     }
@@ -98,7 +98,7 @@ public class SmartTypePointerManagerImpl extends SmartTypePointerManager {
     private final SmartTypePointer myBoundPointer;
     private final boolean myIsExtending;
 
-    public WildcardTypePointer(@Nonnull PsiWildcardType type, @jakarta.annotation.Nullable SmartTypePointer boundPointer) {
+    public WildcardTypePointer(@Nonnull PsiWildcardType type, @Nullable SmartTypePointer boundPointer) {
       super(type);
       myManager = type.getManager();
       myBoundPointer = boundPointer;
@@ -127,10 +127,10 @@ public class SmartTypePointerManagerImpl extends SmartTypePointerManager {
     private final SmartPsiElementPointer<?>[] myAnnotations;
 
     ClassTypePointer(@Nonnull PsiClassType type,
-                     @jakarta.annotation.Nonnull SmartPsiElementPointer<?> aClass,
+                     @Nonnull SmartPsiElementPointer<?> aClass,
                      @Nonnull LanguageLevel languageLevel,
                      @Nonnull Map<SmartPsiElementPointer<PsiTypeParameter>, SmartTypePointer> map,
-                     @jakarta.annotation.Nonnull SmartPsiElementPointer<?>[] annotations) {
+                     @Nonnull SmartPsiElementPointer<?>[] annotations) {
       super(type);
       myClass = aClass;
       myLevel = languageLevel;

@@ -43,20 +43,20 @@ class ChangeNullableDefaultsFix implements LocalQuickFix {
     myNullableName = nullable;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getName() {
     return "Make \"" + (myNotNullName != null ? myNotNullName : myNullableName) + "\" default annotation";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getFamilyName() {
     return getName();
   }
 
   @Override
-  public void applyFix(@Nonnull Project project, @jakarta.annotation.Nonnull ProblemDescriptor descriptor) {
+  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
     if (myNotNullName != null) {
       myManager.setDefaultNotNull(myNotNullName);
     } else {

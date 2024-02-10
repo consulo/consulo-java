@@ -37,7 +37,7 @@ public interface JvmClass extends JvmTypeParametersOwner, JvmTypeDeclaration
 	 * @return the qualified name, of {@code null} if the class is anonymous or local
 	 * @see Class#getCanonicalName
 	 */
-	@jakarta.annotation.Nullable
+	@Nullable
 	@NonNls
 	String getQualifiedName();
 
@@ -50,7 +50,7 @@ public interface JvmClass extends JvmTypeParametersOwner, JvmTypeDeclaration
 	 * @see Class#getGenericSuperclass
 	 * @see Class#getAnnotatedSuperclass
 	 */
-	@jakarta.annotation.Nullable
+	@Nullable
 	JvmReferenceType getSuperClassType();
 
 	/**
@@ -76,7 +76,7 @@ public interface JvmClass extends JvmTypeParametersOwner, JvmTypeDeclaration
 	 * @return all (static, private, etc) fields declared by this class but excluding inherited ones
 	 * @see Class#getDeclaredFields
 	 */
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	JvmField[] getFields();
 
 	/**

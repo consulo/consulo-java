@@ -32,10 +32,12 @@ import consulo.document.FileDocumentManager;
 import consulo.document.util.TextRange;
 import consulo.execution.ui.console.Filter;
 import consulo.execution.ui.console.FilterMixin;
+import consulo.ide.impl.idea.openapi.diff.DiffColors;
 import consulo.ide.impl.idea.openapi.localVcs.UpToDateLineNumberProvider;
 import consulo.ide.impl.idea.openapi.vcs.contentAnnotation.VcsContentAnnotation;
 import consulo.ide.impl.idea.openapi.vcs.contentAnnotation.VcsContentAnnotationImpl;
 import consulo.ide.impl.idea.openapi.vcs.contentAnnotation.VcsContentAnnotationSettings;
+import consulo.ide.impl.idea.openapi.vcs.impl.UpToDateLineNumberProviderImpl;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.logging.Logger;
@@ -77,11 +79,11 @@ public class VcsContentAnnotationExceptionFilter implements Filter, FilterMixin 
       super(start, end);
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
-    public TextAttributes getTextAttributes(@jakarta.annotation.Nullable TextAttributes source) {
+    public TextAttributes getTextAttributes(@Nullable TextAttributes source) {
       EditorColorsScheme globalScheme = EditorColorsManager.getInstance().getGlobalScheme();
-      final TextAttributes changedColor = globalScheme.getAttributes(consulo.ide.impl.idea.openapi.diff.DiffColors.DIFF_MODIFIED);
+      final TextAttributes changedColor = globalScheme.getAttributes(DiffColors.DIFF_MODIFIED);
       if (source == null) {
         TextAttributes attrs = globalScheme.getAttributes(DefaultLanguageHighlighterColors.CLASS_NAME).clone();
         attrs.setBackgroundColor(changedColor.getBackgroundColor());
@@ -99,7 +101,7 @@ public class VcsContentAnnotationExceptionFilter implements Filter, FilterMixin 
   }
 
   @Override
-  public void applyHeavyFilter(@jakarta.annotation.Nonnull final Document copiedFragment, int startOffset, int startLineNumber, @jakarta.annotation.Nonnull Consumer<? super AdditionalHighlight> consumer) {
+  public void applyHeavyFilter(@Nonnull final Document copiedFragment, int startOffset, int startLineNumber, @Nonnull Consumer<? super AdditionalHighlight> consumer) {
     VcsContentAnnotation vcsContentAnnotation = VcsContentAnnotationImpl.getInstance(myProject);
     final LocalChangesCorrector localChangesCorrector = new LocalChangesCorrector(myProject);
     Trinity<PsiClass, PsiFile, String> previousLineResult = null;
@@ -221,7 +223,7 @@ public class VcsContentAnnotationExceptionFilter implements Filter, FilterMixin 
     private UpToDateLineNumberProvider getProvider(VirtualFile vf, Document document) {
       UpToDateLineNumberProvider provider = myRecentlyChanged.get(vf);
       if (provider == null) {
-        provider = new consulo.ide.impl.idea.openapi.vcs.impl.UpToDateLineNumberProviderImpl(document, myProject);
+        provider = new UpToDateLineNumberProviderImpl(document, myProject);
         myRecentlyChanged.put(vf, provider);
       }
       return provider;

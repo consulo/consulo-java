@@ -10,7 +10,7 @@ import jakarta.annotation.Nonnull;
 
 public class LightRecordCanonicalConstructor extends LightMethod implements SyntheticElement {
   public LightRecordCanonicalConstructor(@Nonnull PsiMethod method,
-                                         @jakarta.annotation.Nonnull PsiClass containingClass) {
+                                         @Nonnull PsiClass containingClass) {
     super(method.getManager(), method, containingClass);
   }
 

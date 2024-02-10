@@ -31,7 +31,7 @@ class ClsTypeAnnotationCollector extends TypeAnnotationContainer.Collector {
     }
   }
 
-  AnnotationVisitor collect(@jakarta.annotation.Nullable TypePath path, @Nullable String desc) {
+  AnnotationVisitor collect(@Nullable TypePath path, @Nullable String desc) {
     return new AnnotationTextCollector(desc, myFirstPassData, text -> add(path, text));
   }
 
@@ -45,7 +45,7 @@ class ClsTypeAnnotationCollector extends TypeAnnotationContainer.Collector {
    * @param path TypePath
    * @return translated path in the form of byte array
    */
-  private byte[] translatePath(@jakarta.annotation.Nullable TypePath path) {
+  private byte[] translatePath(@Nullable TypePath path) {
     String typeText = myTypeInfo.text;
     int arrayLevel = myTypeInfo.arrayCount + (myTypeInfo.isEllipsis ? 1 : 0);
     String qualifiedName = PsiNameHelper.getQualifiedClassName(typeText, false);

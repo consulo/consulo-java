@@ -70,7 +70,7 @@ public interface PsiAnnotation extends PsiAnnotationMemberValue, PsiMetaOwner, J
    *
    * @return the parameter list instance.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   PsiAnnotationParameterList getParameterList();
 
   /**
@@ -78,7 +78,7 @@ public interface PsiAnnotation extends PsiAnnotationMemberValue, PsiMetaOwner, J
    *
    * @return the class name, or null if the annotation is unresolved.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   @NonNls
   String getQualifiedName();
 
@@ -87,7 +87,7 @@ public interface PsiAnnotation extends PsiAnnotationMemberValue, PsiMetaOwner, J
    *
    * @return the annotation name element.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiJavaCodeReferenceElement getNameReferenceElement();
 
   /**
@@ -98,8 +98,8 @@ public interface PsiAnnotation extends PsiAnnotationMemberValue, PsiMetaOwner, J
    * @return the element value, or null if the annotation does not contain a value for
    * the element and the element has no default value.
    */
-  @jakarta.annotation.Nullable
-  PsiAnnotationMemberValue findAttributeValue(@jakarta.annotation.Nullable @NonNls String attributeName);
+  @Nullable
+  PsiAnnotationMemberValue findAttributeValue(@Nullable @NonNls String attributeName);
 
   /**
    * Returns the value of the annotation element with the specified name.
@@ -108,8 +108,8 @@ public interface PsiAnnotation extends PsiAnnotationMemberValue, PsiMetaOwner, J
    * @return the element value, or null if the annotation does not contain a value for
    * the element.
    */
-  @jakarta.annotation.Nullable
-  PsiAnnotationMemberValue findDeclaredAttributeValue(@jakarta.annotation.Nullable @NonNls String attributeName);
+  @Nullable
+  PsiAnnotationMemberValue findDeclaredAttributeValue(@Nullable @NonNls String attributeName);
 
   /**
    * Set annotation attribute value. Adds new name-value pair or uses an existing one, expands unnamed 'value' attribute name if needed.
@@ -118,21 +118,21 @@ public interface PsiAnnotation extends PsiAnnotationMemberValue, PsiMetaOwner, J
    * @param value         new value template element
    * @return new declared attribute value
    */
-  <T extends PsiAnnotationMemberValue> T setDeclaredAttributeValue(@Nullable @NonNls String attributeName, @jakarta.annotation.Nullable T value);
+  <T extends PsiAnnotationMemberValue> T setDeclaredAttributeValue(@Nullable @NonNls String attributeName, @Nullable T value);
 
   /**
    * Returns an owner of the annotation - usually a parent, but for type annotations the owner might be a type element.
    *
    * @return annotation owner
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiAnnotationOwner getOwner();
 
   /**
    * @return whether the annotation has the given qualified name. Specific languages may provide efficient implementation
    * that doesn't always create/resolve annotation reference.
    */
-  default boolean hasQualifiedName(@jakarta.annotation.Nonnull String qualifiedName) {
+  default boolean hasQualifiedName(@Nonnull String qualifiedName) {
     return qualifiedName.equals(getQualifiedName());
   }
 
@@ -159,7 +159,7 @@ public interface PsiAnnotation extends PsiAnnotationMemberValue, PsiMetaOwner, J
   /**
    * @return the target of {@link #getNameReferenceElement()}, if it's an {@code @interface}, otherwise null
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   @RequiredReadAction
   default PsiClass resolveAnnotationType() {
     PsiJavaCodeReferenceElement element = getNameReferenceElement();

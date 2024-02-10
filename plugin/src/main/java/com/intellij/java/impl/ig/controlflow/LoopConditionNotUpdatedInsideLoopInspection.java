@@ -47,13 +47,13 @@ public class LoopConditionNotUpdatedInsideLoopInspection
       "loop.condition.not.updated.inside.loop.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "loop.condition.not.updated.inside.loop.problem.descriptor");
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public JComponent createOptionsPanel() {
     return new SingleCheckboxOptionsPanel(
       InspectionGadgetsBundle.message("ignore.iterator.loop.variables"),
@@ -111,7 +111,7 @@ public class LoopConditionNotUpdatedInsideLoopInspection
     }
 
     private boolean checkCondition(@Nullable PsiExpression condition,
-                                   @jakarta.annotation.Nonnull PsiStatement context,
+                                   @Nonnull PsiStatement context,
                                    List<PsiExpression> notUpdated) {
       if (condition == null) {
         return false;

@@ -35,12 +35,12 @@ public class MethodResolverProcessor extends MethodCandidatesProcessor
 {
 	private boolean myStopAcceptingCandidates;
 
-	public MethodResolverProcessor(@jakarta.annotation.Nonnull PsiMethodCallExpression place, @Nonnull PsiFile placeFile)
+	public MethodResolverProcessor(@Nonnull PsiMethodCallExpression place, @Nonnull PsiFile placeFile)
 	{
 		this(place, place.getArgumentList(), placeFile);
 	}
 
-	public MethodResolverProcessor(@jakarta.annotation.Nonnull PsiCallExpression place, @jakarta.annotation.Nonnull PsiExpressionList argumentList, @Nonnull PsiFile placeFile)
+	public MethodResolverProcessor(@Nonnull PsiCallExpression place, @Nonnull PsiExpressionList argumentList, @Nonnull PsiFile placeFile)
 	{
 		this(place, placeFile, new PsiConflictResolver[]{new JavaMethodsConflictResolver(argumentList, PsiUtil.getLanguageLevel(placeFile))});
 		setArgumentList(argumentList);
@@ -57,7 +57,7 @@ public class MethodResolverProcessor extends MethodCandidatesProcessor
 		setArgumentList(argumentList);
 	}
 
-	public MethodResolverProcessor(@jakarta.annotation.Nonnull PsiElement place, @Nonnull PsiFile placeFile, @Nonnull PsiConflictResolver[] resolvers)
+	public MethodResolverProcessor(@Nonnull PsiElement place, @Nonnull PsiFile placeFile, @Nonnull PsiConflictResolver[] resolvers)
 	{
 		super(place, placeFile, resolvers, new SmartList<CandidateInfo>());
 	}
@@ -76,7 +76,7 @@ public class MethodResolverProcessor extends MethodCandidatesProcessor
 	}
 
 	@Override
-	public boolean execute(@jakarta.annotation.Nonnull PsiElement element, @jakarta.annotation.Nonnull ResolveState state)
+	public boolean execute(@Nonnull PsiElement element, @Nonnull ResolveState state)
 	{
 		return !myStopAcceptingCandidates && super.execute(element, state);
 	}

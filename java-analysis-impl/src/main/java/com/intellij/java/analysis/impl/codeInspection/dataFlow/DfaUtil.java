@@ -35,7 +35,7 @@ public final class DfaUtil {
 
   public static
   @Nonnull
-  Collection<PsiExpression> getVariableValues(@Nullable PsiVariable variable, @jakarta.annotation.Nullable PsiElement context) {
+  Collection<PsiExpression> getVariableValues(@Nullable PsiVariable variable, @Nullable PsiElement context) {
     if (variable == null || context == null) {
       return Collections.emptyList();
     }
@@ -135,7 +135,7 @@ public final class DfaUtil {
   //@ApiStatus.ScheduledForRemoval(inVersion = "2020.2")
   @Deprecated(forRemoval = true)
   @Nonnull
-  public static Nullability checkNullability(final @jakarta.annotation.Nullable PsiVariable variable, final @Nullable PsiElement context) {
+  public static Nullability checkNullability(final @Nullable PsiVariable variable, final @Nullable PsiElement context) {
     if (context instanceof PsiExpression) {
       return NullabilityUtil.getExpressionNullability((PsiExpression) context, true);
     }
@@ -214,7 +214,7 @@ public final class DfaUtil {
 
       @Override
       protected void checkReturnValue(@Nonnull DfaValue value,
-                                      @jakarta.annotation.Nonnull PsiExpression expression,
+                                      @Nonnull PsiExpression expression,
                                       @Nonnull PsiParameterListOwner context,
                                       @Nonnull DfaMemoryState state) {
         if (context == owner) {
@@ -243,7 +243,7 @@ public final class DfaUtil {
     return Nullability.UNKNOWN;
   }
 
-  static DfaValue getPossiblyNonInitializedValue(@Nonnull DfaValueFactory factory, @jakarta.annotation.Nonnull PsiField target, @Nonnull PsiElement context) {
+  static DfaValue getPossiblyNonInitializedValue(@Nonnull DfaValueFactory factory, @Nonnull PsiField target, @Nonnull PsiElement context) {
     if (target.getType() instanceof PsiPrimitiveType) {
       return null;
     }
@@ -341,7 +341,7 @@ public final class DfaUtil {
     return Integer.MAX_VALUE; // accessed after initialization or at unknown moment
   }
 
-  public static boolean hasInitializationHacks(@jakarta.annotation.Nonnull PsiField field) {
+  public static boolean hasInitializationHacks(@Nonnull PsiField field) {
     PsiClass containingClass = field.getContainingClass();
     return containingClass != null && System.class.getName().equals(containingClass.getQualifiedName());
   }
@@ -382,7 +382,7 @@ public final class DfaUtil {
    * @return a dataflow context; null if no applicable context found.
    */
   static
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiElement getDataflowContext(PsiExpression expression) {
     PsiMember member = PsiTreeUtil.getParentOfType(expression, PsiMember.class);
     while (member instanceof PsiAnonymousClass && PsiTreeUtil.isAncestor(((PsiAnonymousClass) member).getArgumentList(), expression, true)) {
@@ -414,7 +414,7 @@ public final class DfaUtil {
     return tryCast(ContainerUtil.getOnlyItem(result.getExpressionValues(condition)), Boolean.class);
   }
 
-  public static DfaValue boxUnbox(DfaValue value, @jakarta.annotation.Nullable PsiType type) {
+  public static DfaValue boxUnbox(DfaValue value, @Nullable PsiType type) {
     if (TypeConversionUtil.isPrimitiveWrapper(type)) {
       if (TypeConversionUtil.isPrimitiveAndNotNull(value.getType())) {
         DfaValue boxed = value.getFactory().getBoxedFactory().createBoxed(value, type);
@@ -434,8 +434,8 @@ public final class DfaUtil {
 
   public static
   @Nonnull
-  List<? extends MethodContract> addRangeContracts(@jakarta.annotation.Nullable PsiMethod method,
-                                                   @jakarta.annotation.Nonnull List<? extends MethodContract> contracts) {
+  List<? extends MethodContract> addRangeContracts(@Nullable PsiMethod method,
+                                                   @Nonnull List<? extends MethodContract> contracts) {
     if (method == null) {
       return contracts;
     }
@@ -464,7 +464,7 @@ public final class DfaUtil {
     return ContainerUtil.concat(rangeContracts, contracts);
   }
 
-  public static boolean isEmptyCollectionConstantField(@jakarta.annotation.Nullable PsiVariable var) {
+  public static boolean isEmptyCollectionConstantField(@Nullable PsiVariable var) {
     if (!(var instanceof PsiField)) {
       return false;
     }

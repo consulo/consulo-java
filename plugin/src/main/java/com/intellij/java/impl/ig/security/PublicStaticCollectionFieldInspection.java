@@ -49,7 +49,7 @@ public class PublicStaticCollectionFieldInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@jakarta.annotation.Nonnull PsiField field) {
+    public void visitField(@Nonnull PsiField field) {
       super.visitField(field);
       if (!field.hasModifierProperty(PsiModifier.PUBLIC)) {
         return;

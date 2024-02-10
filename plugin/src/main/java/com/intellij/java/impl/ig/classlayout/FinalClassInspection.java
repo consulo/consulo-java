@@ -56,7 +56,7 @@ public class FinalClassInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       //no call to super, so we don't drill into inner classes
       if (!aClass.hasModifierProperty(PsiModifier.FINAL)) {
         return;

@@ -67,7 +67,7 @@ public class LightReferenceListBuilder extends LightElement implements PsiRefere
     myRefs.add(ref);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public PsiJavaCodeReferenceElement[] getReferenceElements() {
     if (myCachedRefs == null) {

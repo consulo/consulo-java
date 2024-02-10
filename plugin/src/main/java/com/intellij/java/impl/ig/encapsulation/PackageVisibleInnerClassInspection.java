@@ -41,14 +41,14 @@ public class PackageVisibleInnerClassInspection extends BaseInspection {
   public boolean ignoreInterfaces = false;
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "package.visible.inner.class.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "package.visible.inner.class.problem.descriptor");

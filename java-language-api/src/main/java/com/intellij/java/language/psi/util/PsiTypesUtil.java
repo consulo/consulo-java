@@ -176,8 +176,8 @@ public class PsiTypesUtil {
     return JavaPsiFacade.getElementFactory(psiClass.getProject()).createType(psiClass);
   }
 
-  @jakarta.annotation.Nullable
-  public static PsiClassType getLowestUpperBoundClassType(@jakarta.annotation.Nonnull final PsiDisjunctionType type) {
+  @Nullable
+  public static PsiClassType getLowestUpperBoundClassType(@Nonnull final PsiDisjunctionType type) {
     final PsiType lub = type.getLeastUpperBound();
     if (lub instanceof PsiClassType) {
       return (PsiClassType) lub;
@@ -194,7 +194,7 @@ public class PsiTypesUtil {
     return null;
   }
 
-  public static PsiType patchMethodGetClassReturnType(@jakarta.annotation.Nonnull PsiMethodReferenceExpression methodExpression, @Nonnull PsiMethod method) {
+  public static PsiType patchMethodGetClassReturnType(@Nonnull PsiMethodReferenceExpression methodExpression, @Nonnull PsiMethod method) {
     if (isGetClass(method)) {
       final PsiType qualifierType = PsiMethodReferenceUtil.getQualifierType(methodExpression);
       return qualifierType != null ? createJavaLangClassType(methodExpression, qualifierType, true) : null;
@@ -202,11 +202,11 @@ public class PsiTypesUtil {
     return null;
   }
 
-  public static PsiType patchMethodGetClassReturnType(@jakarta.annotation.Nonnull PsiExpression call,
+  public static PsiType patchMethodGetClassReturnType(@Nonnull PsiExpression call,
                                                       @Nonnull PsiReferenceExpression methodExpression,
-                                                      @jakarta.annotation.Nonnull PsiMethod method,
+                                                      @Nonnull PsiMethod method,
                                                       @Nullable Condition<IElementType> condition,
-                                                      @jakarta.annotation.Nonnull LanguageLevel languageLevel) {
+                                                      @Nonnull LanguageLevel languageLevel) {
     //JLS3 15.8.2
     if (languageLevel.isAtLeast(LanguageLevel.JDK_1_5) && isGetClass(method)) {
       PsiExpression qualifier = methodExpression.getQualifierExpression();
@@ -237,7 +237,7 @@ public class PsiTypesUtil {
   }
 
   @Nullable
-  public static PsiType createJavaLangClassType(@jakarta.annotation.Nonnull PsiElement context, @Nullable PsiType qualifierType, boolean captureTopLevelWildcards) {
+  public static PsiType createJavaLangClassType(@Nonnull PsiElement context, @Nullable PsiType qualifierType, boolean captureTopLevelWildcards) {
     if (qualifierType != null) {
       PsiUtil.ensureValidType(qualifierType);
       JavaPsiFacade facade = JavaPsiFacade.getInstance(context.getProject());
@@ -256,7 +256,7 @@ public class PsiTypesUtil {
    * Return type explicitly declared in parent
    */
   @Nullable
-  public static PsiType getExpectedTypeByParent(@jakarta.annotation.Nonnull PsiElement element) {
+  public static PsiType getExpectedTypeByParent(@Nonnull PsiElement element) {
     final PsiElement parent = PsiUtil.skipParenthesizedExprUp(element.getParent());
     if (parent instanceof PsiVariable) {
       if (PsiUtil.checkSameExpression(element, ((PsiVariable) parent).getInitializer())) {
@@ -305,7 +305,7 @@ public class PsiTypesUtil {
    * @param element element inside method or lambda to determine the return type of
    * @return the return type or null if cannot be determined
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiType getMethodReturnType(PsiElement element) {
     final PsiElement methodOrLambda = PsiTreeUtil.getParentOfType(element, PsiMethod.class, PsiLambdaExpression.class);
     return methodOrLambda instanceof PsiMethod ? ((PsiMethod) methodOrLambda).getReturnType() : methodOrLambda instanceof PsiLambdaExpression ? LambdaUtil.getFunctionalInterfaceReturnType(
@@ -401,7 +401,7 @@ public class PsiTypesUtil {
   }
 
   @Nonnull
-  public static PsiTypeParameter[] filterUnusedTypeParameters(@jakarta.annotation.Nonnull PsiTypeParameter[] typeParameters, final PsiType... types) {
+  public static PsiTypeParameter[] filterUnusedTypeParameters(@Nonnull PsiTypeParameter[] typeParameters, final PsiType... types) {
     if (typeParameters.length == 0) {
       return PsiTypeParameter.EMPTY_ARRAY;
     }
@@ -414,7 +414,7 @@ public class PsiTypesUtil {
   }
 
   @Nonnull
-  public static PsiTypeParameter[] filterUnusedTypeParameters(final PsiType superReturnTypeInBaseClassType, @jakarta.annotation.Nonnull PsiTypeParameter[] typeParameters) {
+  public static PsiTypeParameter[] filterUnusedTypeParameters(final PsiType superReturnTypeInBaseClassType, @Nonnull PsiTypeParameter[] typeParameters) {
     return filterUnusedTypeParameters(typeParameters, superReturnTypeInBaseClassType);
   }
 
@@ -436,7 +436,7 @@ public class PsiTypesUtil {
     return parameters.stream().allMatch(parameter -> isAccessibleAt(parameter, context));
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static PsiType createArrayType(@Nonnull PsiType newType, int arrayDim) {
     for (int i = 0; i < arrayDim; i++) {
       newType = newType.createArrayType();

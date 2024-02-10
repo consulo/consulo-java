@@ -31,7 +31,7 @@ import java.util.List;
 public class ReplaceArmWithTryFinallyIntention
   extends Intention {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected PsiElementPredicate getElementPredicate() {
     return new AutomaticResourceManagementPredicate();

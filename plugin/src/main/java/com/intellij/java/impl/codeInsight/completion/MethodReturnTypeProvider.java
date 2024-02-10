@@ -48,7 +48,7 @@ class MethodReturnTypeProvider implements CompletionProvider {
 
   @RequiredReadAction
   @Override
-  public void addCompletions(@jakarta.annotation.Nonnull CompletionParameters parameters, ProcessingContext context, @Nonnull final CompletionResultSet result) {
+  public void addCompletions(@Nonnull CompletionParameters parameters, ProcessingContext context, @Nonnull final CompletionResultSet result) {
     addProbableReturnTypes(parameters, result);
   }
 

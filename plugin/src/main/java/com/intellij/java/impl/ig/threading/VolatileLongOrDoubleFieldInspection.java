@@ -34,7 +34,7 @@ public class VolatileLongOrDoubleFieldInspection extends BaseInspection {
       "volatile.long.or.double.field.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiType type = (PsiType)infos[0];
     final String typeString = type.getPresentableText();
@@ -50,7 +50,7 @@ public class VolatileLongOrDoubleFieldInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@jakarta.annotation.Nonnull PsiField field) {
+    public void visitField(@Nonnull PsiField field) {
       super.visitField(field);
       if (!field.hasModifierProperty(PsiModifier.VOLATILE)) {
         return;

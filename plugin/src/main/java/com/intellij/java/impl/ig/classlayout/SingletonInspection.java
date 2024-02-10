@@ -28,7 +28,7 @@ import consulo.annotation.component.ExtensionImpl;
 public class SingletonInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("singleton.display.name");
   }

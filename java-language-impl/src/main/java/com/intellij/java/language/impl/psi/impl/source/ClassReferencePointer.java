@@ -10,14 +10,14 @@ interface ClassReferencePointer
 	@Nullable
 	PsiJavaCodeReferenceElement retrieveReference();
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	PsiJavaCodeReferenceElement retrieveNonNullReference();
 
-	static ClassReferencePointer constant(@jakarta.annotation.Nonnull PsiJavaCodeReferenceElement ref)
+	static ClassReferencePointer constant(@Nonnull PsiJavaCodeReferenceElement ref)
 	{
 		return new ClassReferencePointer()
 		{
-			@jakarta.annotation.Nonnull
+			@Nonnull
 			@Override
 			public PsiJavaCodeReferenceElement retrieveReference()
 			{

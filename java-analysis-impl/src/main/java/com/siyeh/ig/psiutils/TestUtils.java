@@ -57,12 +57,12 @@ public class TestUtils {
     return virtualFile != null && ProjectRootManager.getInstance(file.getProject()).getFileIndex().isInTestSourceContent(virtualFile);
   }
 
-  public static boolean isPartOfJUnitTestMethod(@jakarta.annotation.Nonnull PsiElement element) {
+  public static boolean isPartOfJUnitTestMethod(@Nonnull PsiElement element) {
     final PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class, false);
     return method != null && isJUnitTestMethod(method);
   }
 
-  public static boolean isJUnit4BeforeOrAfterMethod(@jakarta.annotation.Nonnull PsiMethod method) {
+  public static boolean isJUnit4BeforeOrAfterMethod(@Nonnull PsiMethod method) {
     return AnnotationUtil.isAnnotated(method, "org.junit.Before", CHECK_HIERARCHY) || AnnotationUtil.isAnnotated(method, "org.junit.After", CHECK_HIERARCHY);
   }
 
@@ -93,7 +93,7 @@ public class TestUtils {
     return parameterList.getParametersCount() == 0;
   }
 
-  public static boolean isJUnit3TestMethod(@jakarta.annotation.Nullable PsiMethod method) {
+  public static boolean isJUnit3TestMethod(@Nullable PsiMethod method) {
     if (method == null) {
       return false;
     }

@@ -232,7 +232,7 @@ public class ParameterInfoImpl implements JavaParameterInfo
 	 * @return an array of ParameterInfoImpl entries
 	 */
 	@Nonnull
-	public static ParameterInfoImpl[] fromMethod(@jakarta.annotation.Nonnull PsiMethod method)
+	public static ParameterInfoImpl[] fromMethod(@Nonnull PsiMethod method)
 	{
 		List<ParameterInfoImpl> result = new ArrayList<>();
 		final PsiParameter[] parameters = method.getParameterList().getParameters();

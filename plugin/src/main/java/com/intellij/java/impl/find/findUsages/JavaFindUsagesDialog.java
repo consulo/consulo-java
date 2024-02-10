@@ -35,9 +35,9 @@ public abstract class JavaFindUsagesDialog<T extends JavaFindUsagesOptions> exte
   private StateRestoringCheckBox myCbIncludeOverloadedMethods;
   private boolean myIncludeOverloadedMethodsAvailable;
 
-  protected JavaFindUsagesDialog(@jakarta.annotation.Nonnull PsiElement element,
+  protected JavaFindUsagesDialog(@Nonnull PsiElement element,
                                  @Nonnull Project project,
-                                 @jakarta.annotation.Nonnull FindUsagesOptions findUsagesOptions,
+                                 @Nonnull FindUsagesOptions findUsagesOptions,
                                  boolean toShowInNewTab,
                                  boolean mustOpenInNewTab,
                                  boolean isSingleFile,

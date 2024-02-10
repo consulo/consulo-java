@@ -63,7 +63,7 @@ public class EventQueue<E> {
     return true;
   }
 
-  public boolean put(@jakarta.annotation.Nonnull E event, int priority) {
+  public boolean put(@Nonnull E event, int priority) {
     if (LOG.isDebugEnabled()) {
       LOG.debug("put event " + event);
     }
@@ -132,7 +132,7 @@ public class EventQueue<E> {
     return myCurrentEvent;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public List<E> clearQueue() {
     final List<E> allEvents = new ArrayList<E>();
     for (int i = 0; i < myEvents.length; i++) {

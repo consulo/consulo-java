@@ -122,7 +122,7 @@ public class JavaDocUtil {
     }
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static PsiElement findReferencedMember(PsiClass aClass, String memberRefText, PsiElement context) {
     int parenthIndex = memberRefText.indexOf('(');
     if (parenthIndex < 0) {
@@ -203,7 +203,7 @@ public class JavaDocUtil {
     }
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static String getReferenceText(Project project, PsiElement element) {
     if (element instanceof PsiJavaPackage) {
       return ((PsiJavaPackage) element).getQualifiedName();
@@ -395,7 +395,7 @@ public class JavaDocUtil {
     return list == null ? PsiClassType.EMPTY_ARRAY : list.getReferencedTypes();
   }
 
-  public static boolean isInsidePackageInfo(@jakarta.annotation.Nullable PsiDocComment containingComment) {
+  public static boolean isInsidePackageInfo(@Nullable PsiDocComment containingComment) {
     return containingComment != null && containingComment.getOwner() == null && containingComment.getParent()
         instanceof PsiJavaFile;
   }

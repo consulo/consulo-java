@@ -93,7 +93,7 @@ public class RequestManagerImpl extends DebugProcessAdapterImpl implements Reque
 		return myFilterThread;
 	}
 
-	public void setFilterThread(@jakarta.annotation.Nullable final ThreadReference filterThread)
+	public void setFilterThread(@Nullable final ThreadReference filterThread)
 	{
 		myFilterThread = filterThread;
 	}
@@ -477,7 +477,7 @@ public class RequestManagerImpl extends DebugProcessAdapterImpl implements Reque
 	}
 
 	public
-	@jakarta.annotation.Nullable
+	@Nullable
 	String getWarning(Requestor requestor)
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();

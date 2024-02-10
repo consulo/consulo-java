@@ -44,7 +44,7 @@ public class SerializableClassInSecureContextInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("serializable.class.in.secure.context.problem.descriptor");
   }

@@ -296,7 +296,7 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
     return super.getContext();
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private StubElement getContextStub() {
     PsiClassStub<?> stub = getStub();
     if (stub == null) {

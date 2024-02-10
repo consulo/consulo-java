@@ -127,20 +127,20 @@ public class OwnJdkVersionDetectorImpl extends OwnJdkVersionDetector {
 
     private final List<String> myLines;
 
-    VersionOutputReader(@jakarta.annotation.Nonnull InputStream stream) {
+    VersionOutputReader(@Nonnull InputStream stream) {
       super(stream, CharsetToolkit.getDefaultSystemCharset(), OPTIONS);
       myLines = new CopyOnWriteArrayList<>();
       start("java -version");
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
-    protected Future<?> executeOnPooledThread(@jakarta.annotation.Nonnull Runnable runnable) {
+    protected Future<?> executeOnPooledThread(@Nonnull Runnable runnable) {
       return Application.get().executeOnPooledThread(runnable);
     }
 
     @Override
-    protected void onTextAvailable(@jakarta.annotation.Nonnull String text) {
+    protected void onTextAvailable(@Nonnull String text) {
       myLines.add(text);
       LOG.trace("text: " + text);
     }

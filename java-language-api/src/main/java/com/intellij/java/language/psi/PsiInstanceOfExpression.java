@@ -43,6 +43,6 @@ public interface PsiInstanceOfExpression extends PsiExpression
 	/**
 	 * @return pattern against which operand will be matched
 	 */
-	@jakarta.annotation.Nullable
+	@Nullable
 	PsiPattern getPattern();
 }

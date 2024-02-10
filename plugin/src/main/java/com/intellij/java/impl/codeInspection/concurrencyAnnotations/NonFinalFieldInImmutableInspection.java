@@ -41,7 +41,7 @@ public class NonFinalFieldInImmutableInspection extends BaseJavaLocalInspectionT
 
   @Override
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return "Non-final field in @Immutable class";
   }
@@ -55,7 +55,7 @@ public class NonFinalFieldInImmutableInspection extends BaseJavaLocalInspectionT
 
   @Override
   @Nonnull
-  public PsiElementVisitor buildVisitorImpl(@jakarta.annotation.Nonnull final ProblemsHolder holder,
+  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
                                             boolean isOnTheFly,
                                             LocalInspectionToolSession session,
                                             Object state) {

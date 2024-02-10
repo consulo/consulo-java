@@ -32,13 +32,13 @@ public class SuperMethodsSearch extends ExtensibleQueryFactory<MethodSignatureBa
   public static class SearchParameters {
     private final PsiMethod myMethod;
     //null means any class would be matched
-    @jakarta.annotation.Nullable
+    @Nullable
     private final PsiClass myClass;
     private final boolean myCheckBases;
     private final boolean myAllowStaticMethod;
 
     public SearchParameters(final PsiMethod method,
-                            @jakarta.annotation.Nullable final PsiClass aClass,
+                            @Nullable final PsiClass aClass,
                             final boolean checkBases,
                             final boolean allowStaticMethod) {
       myCheckBases = checkBases;
@@ -55,7 +55,7 @@ public class SuperMethodsSearch extends ExtensibleQueryFactory<MethodSignatureBa
       return myMethod;
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     public final PsiClass getPsiClass() {
       return myClass;
     }

@@ -49,7 +49,7 @@ public class LightTypeElement extends LightElement implements PsiTypeElement {
   }
 
   @Override
-  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitTypeElement(this);
     } else {
@@ -63,7 +63,7 @@ public class LightTypeElement extends LightElement implements PsiTypeElement {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiType getType() {
     return myType;
   }
@@ -96,7 +96,7 @@ public class LightTypeElement extends LightElement implements PsiTypeElement {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiAnnotation[] getApplicableAnnotations() {
     return getAnnotations();
   }

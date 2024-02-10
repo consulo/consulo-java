@@ -20,29 +20,29 @@ public abstract class ManifestEditorProvider implements FileEditorProvider {
   public static final String EDITOR_ID = ManifestEditorProvider.class.getName();
 
   @Override
-  public boolean accept(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull VirtualFile file) {
+  public boolean accept(@Nonnull Project project, @Nonnull VirtualFile file) {
     return file.getFileType() instanceof ManifestFileType;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
-  public FileEditor createEditor(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull VirtualFile file) {
+  public FileEditor createEditor(@Nonnull Project project, @Nonnull VirtualFile file) {
     return new ManifestEditor(project, file);
   }
 
   @Override
-  public void disposeEditor(@jakarta.annotation.Nonnull FileEditor editor) {
+  public void disposeEditor(@Nonnull FileEditor editor) {
     Disposer.dispose(editor);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
-  public FileEditorState readState(@jakarta.annotation.Nonnull Element sourceElement, @jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull VirtualFile file) {
+  public FileEditorState readState(@Nonnull Element sourceElement, @Nonnull Project project, @Nonnull VirtualFile file) {
     return FileEditorState.INSTANCE;
   }
 
   @Override
-  public void writeState(@jakarta.annotation.Nonnull FileEditorState state, @Nonnull Project project, @jakarta.annotation.Nonnull Element targetElement) {
+  public void writeState(@Nonnull FileEditorState state, @Nonnull Project project, @Nonnull Element targetElement) {
   }
 
   @Nonnull

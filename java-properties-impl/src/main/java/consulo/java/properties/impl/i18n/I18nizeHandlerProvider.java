@@ -34,5 +34,5 @@ public abstract class I18nizeHandlerProvider {
   public static final ExtensionPointName<I18nizeHandlerProvider> EP_NAME = ExtensionPointName.create(I18nizeHandlerProvider.class);
 
   @Nullable
-  public abstract I18nQuickFixHandler getHandler(@Nonnull final PsiFile psiFile, @jakarta.annotation.Nonnull final Editor editor, @Nonnull TextRange range);
+  public abstract I18nQuickFixHandler getHandler(@Nonnull final PsiFile psiFile, @Nonnull final Editor editor, @Nonnull TextRange range);
 }

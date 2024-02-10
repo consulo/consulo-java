@@ -45,7 +45,7 @@ public class CreateGetterOrSetterFix implements SyntheticIntentionAction, LowPri
   private final PsiField myField;
   private final String myPropertyName;
 
-  public CreateGetterOrSetterFix(boolean createGetter, boolean createSetter, @jakarta.annotation.Nonnull PsiField field) {
+  public CreateGetterOrSetterFix(boolean createGetter, boolean createSetter, @Nonnull PsiField field) {
     myCreateGetter = createGetter;
     myCreateSetter = createSetter;
     myField = field;
@@ -73,7 +73,7 @@ public class CreateGetterOrSetterFix implements SyntheticIntentionAction, LowPri
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!myField.isValid()) {
       return false;
     }

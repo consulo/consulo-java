@@ -39,7 +39,7 @@ public class AssertEqualsBetweenInconvertibleTypesInspection extends BaseInspect
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiType comparedType = (PsiType)infos[0];
     final PsiType comparisonType = (PsiType)infos[1];
@@ -63,7 +63,7 @@ public class AssertEqualsBetweenInconvertibleTypesInspection extends BaseInspect
   private static class AssertEqualsBetweenInconvertibleTypesVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethodCallExpression(@jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression = expression.getMethodExpression();
       @NonNls final String methodName = methodExpression.getReferenceName();

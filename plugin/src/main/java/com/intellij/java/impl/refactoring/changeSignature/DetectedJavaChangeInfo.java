@@ -50,7 +50,7 @@ class DetectedJavaChangeInfo extends JavaChangeInfoImpl {
   DetectedJavaChangeInfo(@PsiModifier.ModifierConstant String newVisibility,
                          PsiMethod method,
                          CanonicalTypes.Type newType,
-                         @jakarta.annotation.Nonnull ParameterInfoImpl[] newParms,
+                         @Nonnull ParameterInfoImpl[] newParms,
                          ThrownExceptionInfo[] newExceptions,
                          String newName,
                          String oldName,

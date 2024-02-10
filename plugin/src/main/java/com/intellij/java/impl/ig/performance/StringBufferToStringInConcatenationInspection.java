@@ -43,7 +43,7 @@ public class StringBufferToStringInConcatenationInspection
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "string.buffer.to.string.in.concatenation.problem.descriptor");

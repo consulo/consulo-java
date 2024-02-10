@@ -36,9 +36,9 @@ public class FindThrowUsagesDialog extends JavaFindUsagesDialog<JavaThrowFindUsa
 	private boolean myHasFindWhatPanel;
 	private ThrowSearchUtil.Root[] myRoots;
 
-	public FindThrowUsagesDialog(@jakarta.annotation.Nonnull PsiElement element,
+	public FindThrowUsagesDialog(@Nonnull PsiElement element,
 			@Nonnull Project project,
-			@jakarta.annotation.Nonnull JavaThrowFindUsagesOptions findUsagesOptions,
+			@Nonnull JavaThrowFindUsagesOptions findUsagesOptions,
 			boolean toShowInNewTab,
 			boolean mustOpenInNewTab,
 			boolean isSingleFile,

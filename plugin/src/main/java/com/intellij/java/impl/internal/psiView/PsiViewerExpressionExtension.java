@@ -16,6 +16,7 @@
 package com.intellij.java.impl.internal.psiView;
 
 import consulo.annotation.component.ExtensionImpl;
+import consulo.ide.impl.idea.util.PlatformIcons;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 
@@ -32,7 +33,7 @@ public class PsiViewerExpressionExtension extends JavaPsiViewerExtension {
   }
 
   public Icon getIcon() {
-    return consulo.ide.impl.idea.util.PlatformIcons.CLASS_INITIALIZER;
+    return PlatformIcons.CLASS_INITIALIZER;
   }
 
   public PsiElement createElement(Project project, String text) {

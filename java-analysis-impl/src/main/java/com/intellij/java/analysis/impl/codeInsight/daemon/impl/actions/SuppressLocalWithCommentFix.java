@@ -43,12 +43,12 @@ public class SuppressLocalWithCommentFix extends SuppressByJavaCommentFix {
   }
 
   @Override
-  protected void createSuppression(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull PsiElement element, @Nonnull PsiElement container)
+  protected void createSuppression(@Nonnull Project project, @Nonnull PsiElement element, @Nonnull PsiElement container)
     throws IncorrectOperationException {
     suppressWithComment(project, element, container);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getText() {
     return "Suppress for statement with comment";

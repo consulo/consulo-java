@@ -32,15 +32,15 @@ public class ReplaceInaccessibleFieldWithGetterSetterFix extends LocalQuickFixAn
   private final String myMethodName;
   private final boolean myIsSetter;
 
-  public ReplaceInaccessibleFieldWithGetterSetterFix(@jakarta.annotation.Nonnull PsiElement element, @Nonnull PsiMethod getter, boolean isSetter) {
+  public ReplaceInaccessibleFieldWithGetterSetterFix(@Nonnull PsiElement element, @Nonnull PsiMethod getter, boolean isSetter) {
     super(element);
     myMethodName = getter.getName();
     myIsSetter = isSetter;
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull Project project,
-                     @jakarta.annotation.Nonnull PsiFile file,
+  public void invoke(@Nonnull Project project,
+                     @Nonnull PsiFile file,
                      @Nullable Editor editor,
                      @Nonnull PsiElement startElement,
                      @Nonnull PsiElement endElement) {
@@ -70,13 +70,13 @@ public class ReplaceInaccessibleFieldWithGetterSetterFix extends LocalQuickFixAn
     }
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getText() {
     return myIsSetter ? "Replace with setter" : "Replace with getter";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getFamilyName() {
     return "Replace with getter/setter";

@@ -23,12 +23,12 @@ import jakarta.annotation.Nullable;
  */
 public class TagDescription
 {
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public final String name;
-	@jakarta.annotation.Nullable
+	@Nullable
 	public final String desc;
 
-	public TagDescription(@jakarta.annotation.Nonnull String name, @Nullable String desc)
+	public TagDescription(@Nonnull String name, @Nullable String desc)
 	{
 		this.name = name;
 		this.desc = desc;

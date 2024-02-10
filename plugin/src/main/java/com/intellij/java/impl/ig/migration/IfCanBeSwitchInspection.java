@@ -75,7 +75,7 @@ public class IfCanBeSwitchInspection extends BaseInspection {
     return InspectionGadgetsBundle.message("if.can.be.switch.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("if.can.be.switch.problem.descriptor");
@@ -253,9 +253,9 @@ public class IfCanBeSwitchInspection extends BaseInspection {
       }
     }
 
-    @jakarta.annotation.Nullable
-    public static <T extends PsiElement> T getPrevSiblingOfType(@Nullable PsiElement element, @jakarta.annotation.Nonnull Class<T> aClass,
-                                                                @jakarta.annotation.Nonnull Class<? extends PsiElement>... stopAt) {
+    @Nullable
+    public static <T extends PsiElement> T getPrevSiblingOfType(@Nullable PsiElement element, @Nonnull Class<T> aClass,
+                                                                @Nonnull Class<? extends PsiElement>... stopAt) {
       if (element == null) {
         return null;
       }

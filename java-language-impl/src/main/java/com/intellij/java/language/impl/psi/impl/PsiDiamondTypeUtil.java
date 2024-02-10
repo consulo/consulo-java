@@ -42,7 +42,7 @@ public class PsiDiamondTypeUtil {
 
   public static boolean canCollapseToDiamond(final PsiNewExpression expression,
                                              final PsiNewExpression context,
-                                             @jakarta.annotation.Nullable final PsiType expectedType) {
+                                             @Nullable final PsiType expectedType) {
     return canCollapseToDiamond(expression, context, expectedType, false);
   }
 
@@ -183,7 +183,7 @@ public class PsiDiamondTypeUtil {
   public static boolean areTypeArgumentsRedundant(PsiType[] typeArguments,
                                                   PsiExpression context,
                                                   boolean constructorRef,
-                                                  @jakarta.annotation.Nullable PsiMethod method,
+                                                  @Nullable PsiMethod method,
                                                   PsiTypeParameter[] typeParameters) {
     try {
       final PsiElement copy;

@@ -34,11 +34,11 @@ import java.util.Iterator;
 public class MethodLocation extends Location<PsiMethod> {
   private static final Logger LOG = Logger.getInstance(MethodLocation.class);
   private final Project myProject;
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private final PsiMethod myMethod;
   private final Location<PsiClass> myClassLocation;
 
-  public MethodLocation(@Nonnull final Project project, @jakarta.annotation.Nonnull final PsiMethod method, @jakarta.annotation.Nonnull final Location<PsiClass> classLocation) {
+  public MethodLocation(@Nonnull final Project project, @Nonnull final PsiMethod method, @Nonnull final Location<PsiClass> classLocation) {
     myProject = project;
     myMethod = method;
     myClassLocation = classLocation;
@@ -49,12 +49,12 @@ public class MethodLocation extends Location<PsiMethod> {
     return new MethodLocation(classLocation.getProject(), psiElement, classLocation);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiMethod getPsiElement() {
     return myMethod;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public Project getProject() {
     return myProject;
   }
@@ -69,7 +69,7 @@ public class MethodLocation extends Location<PsiMethod> {
     return myClassLocation.getPsiElement();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public <T extends PsiElement> Iterator<Location<T>> getAncestors(final Class<T> ancestorClass, final boolean strict) {
     final Iterator<Location<T>> fromClass = myClassLocation.getAncestors(ancestorClass, false);
     if (strict) return fromClass;

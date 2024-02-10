@@ -29,7 +29,7 @@ public class JavaAnonymousClassesNodeProvider implements FileStructureNodeProvid
   public static final String ID = "SHOW_ANONYMOUS";
   public static final String JAVA_ANONYMOUS_PROPERTY_NAME = "java.anonymous.provider";
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Collection<JavaAnonymousClassTreeElement> provideNodes(@Nonnull TreeElement node) {
     if (node instanceof PsiMethodTreeElement || node instanceof PsiFieldTreeElement || node instanceof ClassInitializerTreeElement) {

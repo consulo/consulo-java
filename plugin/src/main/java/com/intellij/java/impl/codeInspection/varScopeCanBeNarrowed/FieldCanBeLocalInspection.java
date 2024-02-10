@@ -78,7 +78,7 @@ public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getGroupDisplayName() {
     return GroupNames.CLASS_LAYOUT_GROUP_NAME;
   }
@@ -287,14 +287,14 @@ public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
     }
 
     @Override
-    protected void beforeDelete(@Nonnull Project project, @jakarta.annotation.Nonnull PsiField variable, @Nonnull PsiElement newDeclaration) {
+    protected void beforeDelete(@Nonnull Project project, @Nonnull PsiField variable, @Nonnull PsiElement newDeclaration) {
       final PsiDocComment docComment = variable.getDocComment();
       if (docComment != null) moveDocCommentToDeclaration(project, docComment, newDeclaration);
     }
 
     @Nonnull
     @Override
-    protected String suggestLocalName(@Nonnull Project project, @jakarta.annotation.Nonnull PsiField field, @Nonnull PsiCodeBlock scope) {
+    protected String suggestLocalName(@Nonnull Project project, @Nonnull PsiField field, @Nonnull PsiCodeBlock scope) {
       final JavaCodeStyleManager styleManager = JavaCodeStyleManager.getInstance(project);
 
       final String propertyName = styleManager.variableNameToPropertyName(field.getName(), VariableKind.FIELD);

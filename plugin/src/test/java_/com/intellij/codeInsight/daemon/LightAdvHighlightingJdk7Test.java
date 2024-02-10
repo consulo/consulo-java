@@ -60,7 +60,7 @@ public abstract class LightAdvHighlightingJdk7Test extends LightDaemonAnalyzerTe
     doTest(BASE_PATH + "/" + getTestName(false) + ".java", checkWarnings, checkWeakWarnings, checkInfos);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{

@@ -25,7 +25,7 @@ class CallToSuperSetupVisitor extends JavaRecursiveElementVisitor {
   private boolean callToSuperSetupFound = false;
 
   @Override
-  public void visitElement(@jakarta.annotation.Nonnull PsiElement element) {
+  public void visitElement(@Nonnull PsiElement element) {
     if (!callToSuperSetupFound) {
       super.visitElement(element);
     }

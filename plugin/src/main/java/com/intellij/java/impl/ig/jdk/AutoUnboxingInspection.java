@@ -70,7 +70,7 @@ public class AutoUnboxingInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("auto.unboxing.display.name");
   }

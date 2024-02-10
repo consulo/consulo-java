@@ -35,14 +35,14 @@ import com.intellij.java.impl.ig.fixes.RenameFix;
 public class MethodNameSameAsClassNameInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "method.name.same.as.class.name.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "method.name.same.as.class.name.problem.descriptor");
@@ -71,7 +71,7 @@ public class MethodNameSameAsClassNameInspection extends BaseInspection {
   private static class MethodNameSameAsClassNameFix
     extends InspectionGadgetsFix {
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("make.method.ctr.quickfix");
     }

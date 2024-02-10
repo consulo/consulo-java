@@ -23,7 +23,7 @@ public enum TrackingType
 
 	private final String myDescription;
 
-	TrackingType(@SuppressWarnings("SameParameterValue") @jakarta.annotation.Nonnull String description)
+	TrackingType(@SuppressWarnings("SameParameterValue") @Nonnull String description)
 	{
 		myDescription = description;
 	}

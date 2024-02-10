@@ -35,7 +35,7 @@ import jakarta.annotation.Nonnull;
 public class ConstantIfStatementInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "constant.if.statement.display.name");
@@ -47,7 +47,7 @@ public class ConstantIfStatementInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "constant.if.statement.problem.descriptor");

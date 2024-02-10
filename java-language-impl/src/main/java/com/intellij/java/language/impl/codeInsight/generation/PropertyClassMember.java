@@ -37,6 +37,6 @@ public interface PropertyClassMember extends EncapsulatableClassMember
 	 * @param aClass
 	 * @return PsiElement or TemplateGenerationInfo
 	 */
-	@jakarta.annotation.Nullable
+	@Nullable
 	GenerationInfo[] generateSetters(PsiClass aClass) throws IncorrectOperationException;
 }

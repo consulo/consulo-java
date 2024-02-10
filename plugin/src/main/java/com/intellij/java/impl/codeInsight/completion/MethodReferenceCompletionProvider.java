@@ -38,7 +38,7 @@ public class MethodReferenceCompletionProvider implements CompletionProvider {
   private static final Logger LOG = Logger.getInstance(MethodReferenceCompletionProvider.class);
 
   @Override
-  public void addCompletions(@jakarta.annotation.Nonnull CompletionParameters parameters, ProcessingContext context, @Nonnull final CompletionResultSet result) {
+  public void addCompletions(@Nonnull CompletionParameters parameters, ProcessingContext context, @Nonnull final CompletionResultSet result) {
     if (!PsiUtil.isLanguageLevel8OrHigher(parameters.getOriginalFile())) {
       return;
     }

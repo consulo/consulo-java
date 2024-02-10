@@ -61,7 +61,7 @@ public class AllClassesSearchExecutor implements com.intellij.java.indexing.sear
     return true;
   }
 
-  private static boolean processAllClassesInGlobalScope(@jakarta.annotation.Nonnull final GlobalSearchScope scope, @Nonnull final AllClassesSearch.SearchParameters parameters, @Nonnull Processor<? super PsiClass> processor) {
+  private static boolean processAllClassesInGlobalScope(@Nonnull final GlobalSearchScope scope, @Nonnull final AllClassesSearch.SearchParameters parameters, @Nonnull Processor<? super PsiClass> processor) {
     final Set<String> names = new HashSet<String>(10000);
     processClassNames(parameters.getProject(), scope, s -> {
       if (parameters.nameMatches(s)) {
@@ -123,7 +123,7 @@ public class AllClassesSearchExecutor implements com.intellij.java.indexing.sear
     return project;
   }
 
-  private static boolean processScopeRootForAllClasses(@jakarta.annotation.Nonnull final PsiElement scopeRoot, @Nonnull final Processor<? super PsiClass> processor) {
+  private static boolean processScopeRootForAllClasses(@Nonnull final PsiElement scopeRoot, @Nonnull final Processor<? super PsiClass> processor) {
     final boolean[] stopped = {false};
 
     final JavaElementVisitor visitor = scopeRoot instanceof PsiCompiledElement ? new JavaRecursiveElementVisitor() {

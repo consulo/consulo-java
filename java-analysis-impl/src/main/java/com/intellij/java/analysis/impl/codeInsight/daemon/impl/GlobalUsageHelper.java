@@ -29,7 +29,7 @@ import java.util.Map;
 public abstract class GlobalUsageHelper {
   final Map<PsiClass, Boolean> unusedClassCache = new HashMap<PsiClass, Boolean>();
 
-  public abstract boolean shouldCheckUsages(@jakarta.annotation.Nonnull PsiMember member);
+  public abstract boolean shouldCheckUsages(@Nonnull PsiMember member);
 
   public abstract boolean isLocallyUsed(@Nonnull PsiNamedElement member);
 

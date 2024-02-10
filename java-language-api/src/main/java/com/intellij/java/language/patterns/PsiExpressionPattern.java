@@ -56,7 +56,7 @@ public class PsiExpressionPattern<T extends PsiExpression, Self extends PsiExpre
   public Self skipParentheses(final ElementPattern<? extends PsiExpression> expressionPattern) {
     return with(new PatternCondition<T>("skipParentheses") {
       @Override
-      public boolean accepts(@jakarta.annotation.Nonnull T t, ProcessingContext context) {
+      public boolean accepts(@Nonnull T t, ProcessingContext context) {
         PsiExpression expression = t;
         while (expression instanceof PsiParenthesizedExpression) {
           expression = ((PsiParenthesizedExpression)expression).getExpression();

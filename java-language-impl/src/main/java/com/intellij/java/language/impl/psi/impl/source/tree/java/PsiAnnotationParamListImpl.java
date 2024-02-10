@@ -32,7 +32,7 @@ import com.intellij.java.language.impl.psi.impl.source.JavaStubPsiElement;
  */
 public class PsiAnnotationParamListImpl extends JavaStubPsiElement<PsiAnnotationParameterListStub> implements PsiAnnotationParameterList
 {
-	public PsiAnnotationParamListImpl(@jakarta.annotation.Nonnull PsiAnnotationParameterListStub stub)
+	public PsiAnnotationParamListImpl(@Nonnull PsiAnnotationParameterListStub stub)
 	{
 		super(stub, JavaStubElementTypes.ANNOTATION_PARAMETER_LIST);
 	}
@@ -50,7 +50,7 @@ public class PsiAnnotationParamListImpl extends JavaStubPsiElement<PsiAnnotation
 	}
 
 	@Override
-	public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor)
+	public void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{

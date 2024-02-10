@@ -31,7 +31,7 @@ import consulo.annotation.component.ExtensionImpl;
 @ExtensionImpl
 public class BeforeOrAfterIsPublicVoidNoArgInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "BeforeOrAfterWithIncorrectSignature";
   }
@@ -44,7 +44,7 @@ public class BeforeOrAfterIsPublicVoidNoArgInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "before.or.after.is.public.void.no.arg.problem.descriptor");
@@ -59,7 +59,7 @@ public class BeforeOrAfterIsPublicVoidNoArgInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       //note: no call to super;
       if (!TestUtils.isJUnit4BeforeOrAfterMethod(method)) {
         return;

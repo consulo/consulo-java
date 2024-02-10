@@ -13,7 +13,7 @@ class DfLongRangeType implements DfLongType {
     myRange = range;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public LongRangeSet getRange() {
     return myRange;

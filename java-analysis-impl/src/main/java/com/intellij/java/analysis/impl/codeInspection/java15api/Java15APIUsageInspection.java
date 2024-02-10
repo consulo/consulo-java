@@ -151,7 +151,7 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
   }
 
   @Nullable
-  private static Set<String> getForbiddenApi(@jakarta.annotation.Nonnull LanguageLevel languageLevel) {
+  private static Set<String> getForbiddenApi(@Nonnull LanguageLevel languageLevel) {
     if (!ourPresentableShortMessage.containsKey(languageLevel)) {
       return null;
     }
@@ -180,32 +180,32 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getGroupDisplayName() {
     return GroupNames.LANGUAGE_LEVEL_SPECIFIC_GROUP_NAME;
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionsBundle.message("inspection.1.5.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getShortName() {
     return SHORT_NAME;
   }
 
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public HighlightDisplayLevel getDefaultLevel() {
     return HighlightDisplayLevel.ERROR;
   }
 
   @Override
-  public void readSettings(@jakarta.annotation.Nonnull Element node) throws InvalidDataException {
+  public void readSettings(@Nonnull Element node) throws InvalidDataException {
     final Element element = node.getChild(EFFECTIVE_LL);
     if (element != null) {
       myEffectiveLanguageLevel = LanguageLevel.valueOf(element.getAttributeValue("value"));
@@ -213,7 +213,7 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
   }
 
   @Override
-  public void writeSettings(@jakarta.annotation.Nonnull Element node) throws WriteExternalException {
+  public void writeSettings(@Nonnull Element node) throws WriteExternalException {
     if (myEffectiveLanguageLevel != null) {
       final Element llElement = new Element(EFFECTIVE_LL);
       llElement.setAttribute("value", myEffectiveLanguageLevel.toString());
@@ -223,7 +223,7 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
 
   @Override
   @Nonnull
-  public PsiElementVisitor buildVisitorImpl(@jakarta.annotation.Nonnull ProblemsHolder holder,
+  public PsiElementVisitor buildVisitorImpl(@Nonnull ProblemsHolder holder,
                                             boolean isOnTheFly,
                                             LocalInspectionToolSession session,
                                             Object state) {
@@ -441,7 +441,7 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
     return presentableText.substring(0, presentableText.indexOf(' '));
   }
 
-  public static LanguageLevel getLastIncompatibleLanguageLevel(@jakarta.annotation.Nonnull PsiMember member, @jakarta.annotation.Nonnull LanguageLevel languageLevel) {
+  public static LanguageLevel getLastIncompatibleLanguageLevel(@Nonnull PsiMember member, @Nonnull LanguageLevel languageLevel) {
     if (member instanceof PsiAnonymousClass) {
       return null;
     }
@@ -465,7 +465,7 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
 
   }
 
-  private static LanguageLevel getLastIncompatibleLanguageLevelForSignature(@jakarta.annotation.Nonnull String signature, @Nonnull LanguageLevel languageLevel, @Nonnull Set<String> forbiddenApi) {
+  private static LanguageLevel getLastIncompatibleLanguageLevelForSignature(@Nonnull String signature, @Nonnull LanguageLevel languageLevel, @Nonnull Set<String> forbiddenApi) {
     if (forbiddenApi.contains(signature)) {
       return languageLevel;
     }
@@ -480,8 +480,8 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
   /**
    * please leave public for JavaAPIUsagesInspectionTest#testCollectSinceApiUsages
    */
-  @jakarta.annotation.Nullable
-  public static String getSignature(@jakarta.annotation.Nullable PsiMember member) {
+  @Nullable
+  public static String getSignature(@Nullable PsiMember member) {
     if (member instanceof PsiClass) {
       return ((PsiClass) member).getQualifiedName();
     }

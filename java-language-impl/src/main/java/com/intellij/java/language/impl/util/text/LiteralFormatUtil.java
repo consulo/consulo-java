@@ -30,14 +30,14 @@ public class LiteralFormatUtil
 	{
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public static String removeUnderscores(@Nonnull final String text)
 	{
 		return StringUtil.strip(text, UNDERSCORES_FILTER);
 	}
 
-	@jakarta.annotation.Nonnull
-	public static String format(@jakarta.annotation.Nonnull final String original, @Nullable final PsiType type)
+	@Nonnull
+	public static String format(@Nonnull final String original, @Nullable final PsiType type)
 	{
 		final boolean isFP = PsiType.FLOAT.equals(type) || PsiType.DOUBLE.equals(type);
 

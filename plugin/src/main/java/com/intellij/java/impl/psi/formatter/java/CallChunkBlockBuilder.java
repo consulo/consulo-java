@@ -53,7 +53,7 @@ public class CallChunkBlockBuilder {
   @Nonnull
   public Block create(@Nonnull final List<? extends ASTNode> subNodes,
                       final Wrap wrap,
-                      @jakarta.annotation.Nullable final Alignment alignment,
+                      @Nullable final Alignment alignment,
                       int relativeIndentSize) {
     final ArrayList<Block> subBlocks = new ArrayList<>();
     final ASTNode firstNode = subNodes.get(0);
@@ -75,7 +75,7 @@ public class CallChunkBlockBuilder {
 
   private Block createSyntheticBlock(@Nonnull List<Block> subBlocks,
                                      @Nonnull Indent chainedBlockIndent,
-                                     @jakarta.annotation.Nullable Alignment alignment,
+                                     @Nullable Alignment alignment,
                                      @Nullable Wrap wrap,
                                      @Nonnull final String debugName) {
     return new SyntheticCodeBlock(subBlocks, alignment, mySettings, myJavaSettings, chainedBlockIndent, wrap) {

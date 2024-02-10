@@ -33,7 +33,7 @@ public class WaitNotInLoopInspection extends BaseInspection {
     return InspectionGadgetsBundle.message("wait.not.in.loop.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "wait.not.in.loop.problem.descriptor");

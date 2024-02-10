@@ -41,7 +41,7 @@ public class JavaWildcardMethodBreakpointType extends JavaBreakpointTypeBase<Jav
     super("java-wildcard-method", DebuggerBundle.message("method.breakpoints.tab.title"));
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Image getEnabledIcon() {
     return AllIcons.Debugger.Db_method_breakpoint;
@@ -68,7 +68,7 @@ public class JavaWildcardMethodBreakpointType extends JavaBreakpointTypeBase<Jav
     return JavaMethodBreakpointType.getText(breakpoint);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public XBreakpointCustomPropertiesPanel<XBreakpoint<JavaMethodBreakpointProperties>> createCustomPropertiesPanel() {
     return new MethodBreakpointPropertiesPanel();
@@ -79,7 +79,7 @@ public class JavaWildcardMethodBreakpointType extends JavaBreakpointTypeBase<Jav
   //  return MethodBreakpoint.CATEGORY;
   //}
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public JavaMethodBreakpointProperties createProperties() {
     return new JavaMethodBreakpointProperties();

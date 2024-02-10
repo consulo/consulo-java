@@ -93,14 +93,14 @@ public class ControlFlowSubRange implements ControlFlow
 	}
 
 	@Override
-	public int getStartOffset(@jakarta.annotation.Nonnull PsiElement element)
+	public int getStartOffset(@Nonnull PsiElement element)
 	{
 		return patchOffset(myControlFlow.getStartOffset(element));
 		//return (myControlFlow.getStartOffset(element));
 	}
 
 	@Override
-	public int getEndOffset(@jakarta.annotation.Nonnull PsiElement element)
+	public int getEndOffset(@Nonnull PsiElement element)
 	{
 		return patchOffset(myControlFlow.getEndOffset(element));
 		//return myControlFlow.getEndOffset(element);

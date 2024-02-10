@@ -46,7 +46,7 @@ public class NonProtectedConstructorInAbstractClassInspection
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "ConstructorNotProtectedInAbstractClass";
   }

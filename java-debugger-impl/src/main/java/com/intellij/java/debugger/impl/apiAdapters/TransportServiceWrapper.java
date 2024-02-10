@@ -84,7 +84,7 @@ public class TransportServiceWrapper
 		myDelegateObject.stopListening(listenKey);
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public String transportId()
 	{
 		if(myDelegateClass == TransportClassDelegates.getSharedMemoryTransportServiceClass())

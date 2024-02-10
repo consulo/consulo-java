@@ -39,7 +39,7 @@ class NegationCountVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitAnonymousClass(@jakarta.annotation.Nonnull PsiAnonymousClass aClass) {
+  public void visitAnonymousClass(@Nonnull PsiAnonymousClass aClass) {
     // no call to super, to keep it from drilling into anonymous classes
   }
 

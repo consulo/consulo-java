@@ -38,7 +38,7 @@ public class LanguageLevelUsagesCollector extends AbstractApplicationUsagesColle
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public Set<UsageDescriptor> getProjectUsages(@Nonnull Project project) {
     final Set<String> languageLevels = new HashSet<String>();
     for (Module module : ModuleManager.getInstance(project).getModules()) {

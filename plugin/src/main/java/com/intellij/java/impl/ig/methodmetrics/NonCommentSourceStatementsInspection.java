@@ -27,12 +27,12 @@ public class NonCommentSourceStatementsInspection
 
   private static final int DEFAULT_LIMIT = 30;
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "OverlyLongMethod";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "non.comment.source.statements.display.name");
@@ -63,7 +63,7 @@ public class NonCommentSourceStatementsInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       // note: no call to super
       if (method.getNameIdentifier() == null) {
         return;

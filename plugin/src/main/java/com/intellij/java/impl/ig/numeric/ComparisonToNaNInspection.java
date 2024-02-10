@@ -41,7 +41,7 @@ public class ComparisonToNaNInspection extends BaseInspection {
     return InspectionGadgetsBundle.message("comparison.to.nan.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiBinaryExpression comparison = (PsiBinaryExpression)infos[0];
     final IElementType tokenType = comparison.getOperationTokenType();
@@ -63,7 +63,7 @@ public class ComparisonToNaNInspection extends BaseInspection {
 
   private static class ComparisonToNaNFix extends InspectionGadgetsFix {
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("comparison.to.nan.replace.quickfix");
     }
@@ -108,7 +108,7 @@ public class ComparisonToNaNInspection extends BaseInspection {
   private static class ComparisonToNaNVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitBinaryExpression(@jakarta.annotation.Nonnull PsiBinaryExpression expression) {
+    public void visitBinaryExpression(@Nonnull PsiBinaryExpression expression) {
       super.visitBinaryExpression(expression);
       if (!ComparisonUtils.isEqualityComparison(expression)) {
         return;

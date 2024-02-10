@@ -39,14 +39,14 @@ public class OctalAndDecimalIntegersMixedInspection
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "octal.and.decimal.integers.in.same.array.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "octal.and.decimal.integers.in.same.array.problem.descriptor");

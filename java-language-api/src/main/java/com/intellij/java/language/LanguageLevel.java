@@ -80,7 +80,7 @@ public enum LanguageLevel implements Named, NamedPointer<LanguageLevel> {
   /**
    * String representation of the level, suitable to pass as a value of compiler's "-source" and "-target" options
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getCompilerComplianceDefaultOption() {
     return myMajor <= 8 ? "1." + myMajor : String.valueOf(myMajor);
   }
@@ -89,7 +89,7 @@ public enum LanguageLevel implements Named, NamedPointer<LanguageLevel> {
     return myPreview;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public JavaLanguageVersion toLangVersion() {
     return myLangVersion;
   }
@@ -107,13 +107,13 @@ public enum LanguageLevel implements Named, NamedPointer<LanguageLevel> {
     return this;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getName() {
     return name();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static Set<String> getAllCompilerOptions() {
     Set<String> options = new LinkedHashSet<>();
     for (LanguageLevel level : values()) {
@@ -130,7 +130,7 @@ public enum LanguageLevel implements Named, NamedPointer<LanguageLevel> {
     return ContainerUtil.find(values(), level -> Objects.equals(level.getCompilerComplianceDefaultOption(), compilerComplianceOption));
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getShortText() {
     return myShortText;
   }

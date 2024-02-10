@@ -30,13 +30,13 @@ import consulo.annotation.component.ExtensionImpl;
 @ExtensionImpl
 public class AnonymousInnerClassInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "anonymous.inner.class.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "anonymous.inner.class.problem.descriptor");

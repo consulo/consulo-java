@@ -26,7 +26,7 @@ class EventsTestListener implements PsiTreeChangeListener {
   }
 
   @Override
-  public void beforeChildReplacement(@jakarta.annotation.Nonnull PsiTreeChangeEvent event) {
+  public void beforeChildReplacement(@Nonnull PsiTreeChangeEvent event) {
     myBuffer.append("beforeChildReplacement\n");
   }
 

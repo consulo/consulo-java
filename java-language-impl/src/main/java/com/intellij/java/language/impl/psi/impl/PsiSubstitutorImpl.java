@@ -52,7 +52,7 @@ public final class PsiSubstitutorImpl implements PsiSubstitutor {
 
   private PsiSubstitutorImpl(@Nonnull UnmodifiableHashMap<PsiTypeParameter, PsiType> map,
                              @Nonnull PsiTypeParameter additionalKey,
-                             @jakarta.annotation.Nullable PsiType additionalValue) {
+                             @Nullable PsiType additionalValue) {
     mySubstitutionMap = map.with(additionalKey, additionalValue);
   }
 
@@ -338,7 +338,7 @@ public final class PsiSubstitutorImpl implements PsiSubstitutor {
 
   @Nonnull
   @Override
-  public PsiSubstitutor putAll(@jakarta.annotation.Nonnull Map<? extends PsiTypeParameter, ? extends PsiType> map) {
+  public PsiSubstitutor putAll(@Nonnull Map<? extends PsiTypeParameter, ? extends PsiType> map) {
     if (map.isEmpty()) {
       return this;
     }

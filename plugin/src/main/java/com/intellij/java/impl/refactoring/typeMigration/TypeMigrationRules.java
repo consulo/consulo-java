@@ -97,7 +97,7 @@ public class TypeMigrationRules
 		return !isCovariantPosition && TypeConversionUtil.isAssignable(from, to) ? new TypeConversionDescriptorBase() : null;
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	public TypeConversionDescriptorBase findConversion(final PsiType from, final PsiType to, final PsiMember member, final PsiExpression context, final TypeMigrationLabeler labeler)
 	{
 		for(TypeConversionRule descriptor : myConversionRules)

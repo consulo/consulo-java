@@ -42,7 +42,7 @@ public class FinalMethodInFinalClassInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "final.method.in.final.class.problem.descriptor");
@@ -57,7 +57,7 @@ public class FinalMethodInFinalClassInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       if (!method.hasModifierProperty(PsiModifier.FINAL)) {
         return;
       }

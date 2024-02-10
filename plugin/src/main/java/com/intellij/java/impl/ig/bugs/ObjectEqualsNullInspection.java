@@ -54,7 +54,7 @@ public class ObjectEqualsNullInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @jakarta.annotation.Nonnull PsiMethodCallExpression call) {
+      @Nonnull PsiMethodCallExpression call) {
       super.visitMethodCallExpression(call);
       if (!MethodCallUtils.isEqualsCall(call)) {
         return;

@@ -38,7 +38,7 @@ import jakarta.annotation.Nullable;
 public class ImplicitArrayToStringInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "implicit.array.to.string.display.name");
@@ -91,7 +91,7 @@ public class ImplicitArrayToStringInspection extends BaseInspection {
       this.removeToString = removeToString;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       @NonNls final String expressionText;
       if (deepString) {

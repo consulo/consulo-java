@@ -38,7 +38,7 @@ public class PsiCompositeModifierList extends LightModifierList {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiAnnotation[] getAnnotations() {
     List<PsiAnnotation> annotations = new ArrayList<PsiAnnotation>();
     for (PsiModifierList list : mySublists) {
@@ -48,7 +48,7 @@ public class PsiCompositeModifierList extends LightModifierList {
   }
 
   @Override
-  public PsiAnnotation findAnnotation(@jakarta.annotation.Nonnull final String qualifiedName) {
+  public PsiAnnotation findAnnotation(@Nonnull final String qualifiedName) {
     for (PsiModifierList sublist : mySublists) {
       final PsiAnnotation annotation = sublist.findAnnotation(qualifiedName);
       if (annotation != null) return annotation;
@@ -66,7 +66,7 @@ public class PsiCompositeModifierList extends LightModifierList {
   }
 
   @Override
-  public boolean hasExplicitModifier(@jakarta.annotation.Nonnull final String name) {
+  public boolean hasExplicitModifier(@Nonnull final String name) {
     for (PsiModifierList sublist : mySublists) {
       if (sublist.hasExplicitModifier(name)) return true;
     }

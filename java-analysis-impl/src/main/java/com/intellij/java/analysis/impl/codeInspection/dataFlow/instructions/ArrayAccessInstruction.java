@@ -25,15 +25,15 @@ import java.util.Objects;
 
 public class ArrayAccessInstruction extends ExpressionPushingInstruction<PsiArrayAccessExpression> {
   private final
-  @jakarta.annotation.Nonnull
+  @Nonnull
   DfaValue myValue;
   private final
   @Nullable
   DfaControlTransferValue myTransferValue;
 
-  public ArrayAccessInstruction(@jakarta.annotation.Nonnull DfaValue value,
-                                @jakarta.annotation.Nonnull PsiArrayAccessExpression expression,
-                                @jakarta.annotation.Nullable DfaControlTransferValue transferValue) {
+  public ArrayAccessInstruction(@Nonnull DfaValue value,
+                                @Nonnull PsiArrayAccessExpression expression,
+                                @Nullable DfaControlTransferValue transferValue) {
     super(expression);
     myValue = value;
     myTransferValue = transferValue;

@@ -31,7 +31,7 @@ import java.util.List;
  */
 public interface JavaMutableModuleExtension<T extends JavaModuleExtension<T>> extends MutableModuleExtensionWithSdk<T>, JavaModuleExtension<T>
 {
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	MutableModuleInheritableNamedPointer<LanguageLevel> getInheritableLanguageLevel();
 
 	void setSpecialDirLocation(@Nonnull SpecialDirLocation location);

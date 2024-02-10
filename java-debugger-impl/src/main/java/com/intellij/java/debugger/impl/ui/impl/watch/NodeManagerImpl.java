@@ -111,7 +111,7 @@ public class NodeManagerImpl extends NodeDescriptorFactoryImpl implements NodeMa
 	}
 
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	public String getContextKey(final StackFrameProxyImpl frame)
 	{
 		return getContextKeyForFrame(frame);

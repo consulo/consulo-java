@@ -34,7 +34,7 @@ public interface TypeAnnotationProvider {
     }
   };
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   PsiAnnotation[] getAnnotations();
 
 
@@ -45,14 +45,14 @@ public interface TypeAnnotationProvider {
       myAnnotations = annotations;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public PsiAnnotation[] getAnnotations() {
       return myAnnotations;
     }
 
     @Nonnull
-    public static TypeAnnotationProvider create(@jakarta.annotation.Nonnull PsiAnnotation[] annotations) {
+    public static TypeAnnotationProvider create(@Nonnull PsiAnnotation[] annotations) {
       return annotations.length == 0 ? EMPTY : new Static(annotations);
     }
   }

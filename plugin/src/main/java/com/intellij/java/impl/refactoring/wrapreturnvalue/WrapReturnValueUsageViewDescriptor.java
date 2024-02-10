@@ -28,7 +28,7 @@ class WrapReturnValueUsageViewDescriptor implements UsageViewDescriptor {
     @Nonnull
     private final PsiMethod method;
 
-    WrapReturnValueUsageViewDescriptor(@jakarta.annotation.Nonnull PsiMethod method,
+    WrapReturnValueUsageViewDescriptor(@Nonnull PsiMethod method,
                                        UsageInfo[] usages){
         super();
         this.method = method;

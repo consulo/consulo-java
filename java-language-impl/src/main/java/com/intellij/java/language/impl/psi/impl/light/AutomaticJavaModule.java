@@ -31,7 +31,7 @@ import java.util.regex.Pattern;
 public final class AutomaticJavaModule extends LightJavaModuleBase {
   private final VirtualFile myRoot;
 
-  private AutomaticJavaModule(@jakarta.annotation.Nonnull PsiManager manager, @jakarta.annotation.Nonnull VirtualFile root, @Nonnull String name) {
+  private AutomaticJavaModule(@Nonnull PsiManager manager, @Nonnull VirtualFile root, @Nonnull String name) {
     super(manager, name);
     myRoot = root;
   }
@@ -71,7 +71,7 @@ public final class AutomaticJavaModule extends LightJavaModuleBase {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiElement getNavigationElement() {
     return ObjectUtil.notNull(myManager.findDirectory(myRoot), super.getNavigationElement());
   }
@@ -85,8 +85,8 @@ public final class AutomaticJavaModule extends LightJavaModuleBase {
    * @deprecated method scope was extended, use {@link #findModule} instead
    */
   @Deprecated
-  @jakarta.annotation.Nonnull
-  public static AutomaticJavaModule getModule(@jakarta.annotation.Nonnull PsiManager manager, @jakarta.annotation.Nonnull VirtualFile root) {
+  @Nonnull
+  public static AutomaticJavaModule getModule(@Nonnull PsiManager manager, @Nonnull VirtualFile root) {
     AutomaticJavaModule module = findModule(manager, root);
     assert module != null : root;
     return module;
@@ -97,7 +97,7 @@ public final class AutomaticJavaModule extends LightJavaModuleBase {
    */
   @Nullable
   @RequiredReadAction
-  public static AutomaticJavaModule findModule(@Nonnull PsiManager manager, @jakarta.annotation.Nonnull VirtualFile root) {
+  public static AutomaticJavaModule findModule(@Nonnull PsiManager manager, @Nonnull VirtualFile root) {
     PsiElement directory = manager.findDirectory(root);
     if (directory == null) {
       return null;
@@ -124,8 +124,8 @@ public final class AutomaticJavaModule extends LightJavaModuleBase {
     }
   }
 
-  @jakarta.annotation.Nonnull
-  public static String moduleName(@jakarta.annotation.Nonnull VirtualFile jarRoot) {
+  @Nonnull
+  public static String moduleName(@Nonnull VirtualFile jarRoot) {
     VirtualFile manifest = jarRoot.findFileByRelativePath(JarFile.MANIFEST_NAME);
     if (manifest != null) {
       String claimed = claimedModuleName(manifest);
@@ -138,7 +138,7 @@ public final class AutomaticJavaModule extends LightJavaModuleBase {
   }
 
   @Nullable
-  public static String claimedModuleName(@jakarta.annotation.Nonnull VirtualFile manifest) {
+  public static String claimedModuleName(@Nonnull VirtualFile manifest) {
     try (InputStream stream = manifest.getInputStream()) {
       return new Manifest(stream).getMainAttributes().getValue(PsiJavaModule.AUTO_MODULE_NAME);
     }
@@ -157,8 +157,8 @@ public final class AutomaticJavaModule extends LightJavaModuleBase {
    * @param name a .jar file name without extension
    * @see <a href="http://docs.oracle.com/javase/9/docs/api/java/lang/module/ModuleFinder.html#of-java.nio.file.Path...-">ModuleFinder.of(Path...)</a>
    */
-  @jakarta.annotation.Nonnull
-  public static String moduleName(@jakarta.annotation.Nonnull String name) {
+  @Nonnull
+  public static String moduleName(@Nonnull String name) {
     // If the name matches the regular expression "-(\\d+(\\.|$))" then the module name will be derived from the sub-sequence
     // preceding the hyphen of the first occurrence.
     Matcher m = Patterns.VERSION.matcher(name);

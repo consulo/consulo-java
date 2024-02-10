@@ -39,7 +39,7 @@ public class RedundantImportInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("redundant.import.problem.descriptor");
   }

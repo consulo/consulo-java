@@ -87,7 +87,7 @@ public class InferenceVariable extends LightTypeParameter {
     }
   }
 
-  public boolean addBound(PsiType classType, InferenceBound inferenceBound, @jakarta.annotation.Nullable InferenceIncorporationPhase incorporationPhase) {
+  public boolean addBound(PsiType classType, InferenceBound inferenceBound, @Nullable InferenceIncorporationPhase incorporationPhase) {
     if (inferenceBound == InferenceBound.EQ && PsiUtil.resolveClassInClassTypeOnly(classType) == this) {
       return false;
     }

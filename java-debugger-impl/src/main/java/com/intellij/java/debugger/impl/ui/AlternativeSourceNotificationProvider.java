@@ -73,7 +73,7 @@ public class AlternativeSourceNotificationProvider implements EditorNotification
     myProject = project;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getId() {
     return "java-debugger-alternative-source";
@@ -82,7 +82,7 @@ public class AlternativeSourceNotificationProvider implements EditorNotification
   @RequiredReadAction
   @Nullable
   @Override
-  public EditorNotificationBuilder buildNotification(@jakarta.annotation.Nonnull VirtualFile file, @jakarta.annotation.Nonnull FileEditor fileEditor, @jakarta.annotation.Nonnull Supplier<EditorNotificationBuilder> builderFactory) {
+  public EditorNotificationBuilder buildNotification(@Nonnull VirtualFile file, @Nonnull FileEditor fileEditor, @Nonnull Supplier<EditorNotificationBuilder> builderFactory) {
     if (!DebuggerSettings.getInstance().SHOW_ALTERNATIVE_SOURCE) {
       return null;
     }

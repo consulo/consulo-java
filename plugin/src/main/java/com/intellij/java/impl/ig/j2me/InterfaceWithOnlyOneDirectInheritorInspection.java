@@ -26,12 +26,12 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class InterfaceWithOnlyOneDirectInheritorInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("interface.one.inheritor.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("interface.one.inheritor.problem.descriptor");
   }

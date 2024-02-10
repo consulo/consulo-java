@@ -35,7 +35,7 @@ import java.util.Set;
 public class MethodOverridesPackageLocalMethodInspection
   extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "MethodOverridesPrivateMethodOfSuperclass";
   }
@@ -46,7 +46,7 @@ public class MethodOverridesPackageLocalMethodInspection
       "method.overrides.package.local.method.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "method.overrides.package.local.method.problem.descriptor");
@@ -68,7 +68,7 @@ public class MethodOverridesPackageLocalMethodInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       final PsiClass aClass = method.getContainingClass();
       if (aClass == null) {
         return;

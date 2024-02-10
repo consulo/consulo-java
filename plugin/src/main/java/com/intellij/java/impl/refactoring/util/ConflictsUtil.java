@@ -59,7 +59,7 @@ public class ConflictsUtil {
     }
   }
 
-  public static void checkMethodConflicts(@jakarta.annotation.Nullable PsiClass aClass,
+  public static void checkMethodConflicts(@Nullable PsiClass aClass,
                                           PsiMethod refactoredMethod,
                                           final PsiMethod prototype,
                                           final MultiMap<PsiElement,String> conflicts) {

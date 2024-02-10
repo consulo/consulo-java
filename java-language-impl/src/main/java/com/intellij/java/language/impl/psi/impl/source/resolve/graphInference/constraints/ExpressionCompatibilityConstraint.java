@@ -35,7 +35,7 @@ public class ExpressionCompatibilityConstraint extends InputOutputConstraintForm
 	private final PsiExpression myExpression;
 	private PsiType myT;
 
-	public ExpressionCompatibilityConstraint(@jakarta.annotation.Nonnull PsiExpression expression, @Nonnull PsiType type)
+	public ExpressionCompatibilityConstraint(@Nonnull PsiExpression expression, @Nonnull PsiType type)
 	{
 		myExpression = expression;
 		myT = type;

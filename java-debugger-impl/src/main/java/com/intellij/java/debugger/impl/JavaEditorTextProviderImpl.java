@@ -139,8 +139,8 @@ public class JavaEditorTextProviderImpl implements EditorTextProvider {
     return null;
   }
 
-  @jakarta.annotation.Nullable
-  private static String qualifyEnumConstant(PsiElement resolved, @jakarta.annotation.Nullable String def) {
+  @Nullable
+  private static String qualifyEnumConstant(PsiElement resolved, @Nullable String def) {
     if (resolved instanceof PsiEnumConstant) {
       final PsiEnumConstant enumConstant = (PsiEnumConstant)resolved;
       final PsiClass enumClass = enumConstant.getContainingClass();

@@ -69,21 +69,21 @@ public class ReadonlyWhitespaceBlock implements Block
 	}
 
 	@Override
-	@jakarta.annotation.Nullable
+	@Nullable
 	public Indent getIndent()
 	{
 		return myIndent;
 	}
 
 	@Override
-	@jakarta.annotation.Nullable
+	@Nullable
 	public Alignment getAlignment()
 	{
 		return myAlignment;
 	}
 
 	@Override
-	@jakarta.annotation.Nullable
+	@Nullable
 	public Spacing getSpacing(Block child1, @Nonnull Block child2)
 	{
 		return null;

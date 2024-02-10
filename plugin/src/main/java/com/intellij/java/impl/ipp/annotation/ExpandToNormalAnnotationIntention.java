@@ -62,7 +62,7 @@ public class ExpandToNormalAnnotationIntention extends MutablyNamedIntention {
   }
 
   @Override
-  protected void processIntention(@jakarta.annotation.Nonnull PsiElement element) throws IncorrectOperationException {
+  protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiNameValuePair attribute = (PsiNameValuePair)element;
     final int textOffset = attribute.getTextOffset();
     final Project project = attribute.getProject();

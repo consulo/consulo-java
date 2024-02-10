@@ -31,7 +31,7 @@ import java.util.Arrays;
 import java.util.Set;
 
 public class JavaVarTypeUtil {
-  public static PsiType getUpwardProjection(@jakarta.annotation.Nonnull PsiType t) {
+  public static PsiType getUpwardProjection(@Nonnull PsiType t) {
     return t.accept(new UpwardProjectionTypeVisitor());
   }
 
@@ -71,7 +71,7 @@ public class JavaVarTypeUtil {
       return componentType.accept(this).createArrayType();
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     @Override
     public PsiType visitLambdaExpressionType(PsiLambdaExpressionType lambdaExpressionType) {
       return lambdaExpressionType;

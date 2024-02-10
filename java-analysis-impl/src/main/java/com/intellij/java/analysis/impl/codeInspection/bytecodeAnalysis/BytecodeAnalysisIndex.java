@@ -34,13 +34,13 @@ import static com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis.Pr
 public class BytecodeAnalysisIndex extends ScalarIndexExtension<HMember> {
   static final ID<HMember, Void> NAME = ID.create("bytecodeAnalysis");
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public ID<HMember, Void> getName() {
     return NAME;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public DataIndexer<HMember, Void, FileContent> getIndexer() {
     return inputData -> {
@@ -92,7 +92,7 @@ public class BytecodeAnalysisIndex extends ScalarIndexExtension<HMember> {
     return true;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public FileBasedIndex.InputFilter getInputFilter() {
     return new DefaultFileTypeSpecificInputFilter(JavaClassFileType.INSTANCE);
@@ -115,7 +115,7 @@ public class BytecodeAnalysisIndex extends ScalarIndexExtension<HMember> {
     static final HKeyDescriptor INSTANCE = new HKeyDescriptor();
 
     @Override
-    public void save(@jakarta.annotation.Nonnull DataOutput out, HMember value) throws IOException {
+    public void save(@Nonnull DataOutput out, HMember value) throws IOException {
       out.write(value.asBytes());
     }
 
@@ -140,12 +140,12 @@ public class BytecodeAnalysisIndex extends ScalarIndexExtension<HMember> {
     }
 
     @Override
-    public Map<HMember, Equations> read(@jakarta.annotation.Nonnull DataInput in) throws IOException {
+    public Map<HMember, Equations> read(@Nonnull DataInput in) throws IOException {
       return StreamEx.of(DataInputOutputUtil.readSeq(in, () -> Pair.create(HKeyDescriptor.INSTANCE.read(in), readEquations(in)))).
           toMap(p -> p.getFirst(), p -> p.getSecond(), ClassDataIndexer.MERGER);
     }
 
-    private static void saveEquations(@jakarta.annotation.Nonnull DataOutput out, Equations eqs) throws IOException {
+    private static void saveEquations(@Nonnull DataOutput out, Equations eqs) throws IOException {
       out.writeBoolean(eqs.stable);
       MessageDigest md = BytecodeAnalysisConverter.getMessageDigest();
       DataInputOutputUtil.writeINT(out, eqs.results.size());
@@ -180,7 +180,7 @@ public class BytecodeAnalysisIndex extends ScalarIndexExtension<HMember> {
       }
     }
 
-    private static Equations readEquations(@jakarta.annotation.Nonnull DataInput in) throws IOException {
+    private static Equations readEquations(@Nonnull DataInput in) throws IOException {
       boolean stable = in.readBoolean();
       int size = DataInputOutputUtil.readINT(in);
       ArrayList<DirectionResultPair> results = new ArrayList<>(size);
@@ -223,21 +223,21 @@ public class BytecodeAnalysisIndex extends ScalarIndexExtension<HMember> {
     }
 
     @Nonnull
-    private static EKey readKey(@jakarta.annotation.Nonnull DataInput in) throws IOException {
+    private static EKey readKey(@Nonnull DataInput in) throws IOException {
       byte[] bytes = new byte[HMember.HASH_SIZE];
       in.readFully(bytes);
       int rawDirKey = DataInputOutputUtil.readINT(in);
       return new EKey(new HMember(bytes), Direction.fromInt(Math.abs(rawDirKey)), in.readBoolean(), rawDirKey < 0);
     }
 
-    private static void writeKey(@jakarta.annotation.Nonnull DataOutput out, EKey key, MessageDigest md) throws IOException {
+    private static void writeKey(@Nonnull DataOutput out, EKey key, MessageDigest md) throws IOException {
       out.write(key.member.hashed(md).asBytes());
       int rawDirKey = key.negated ? -key.dirKey : key.dirKey;
       DataInputOutputUtil.writeINT(out, rawDirKey);
       out.writeBoolean(key.stable);
     }
 
-    private static void writeEffect(@jakarta.annotation.Nonnull DataOutput out, EffectQuantum effect, MessageDigest md) throws IOException {
+    private static void writeEffect(@Nonnull DataOutput out, EffectQuantum effect, MessageDigest md) throws IOException {
       if (effect == EffectQuantum.TopEffectQuantum) {
         DataInputOutputUtil.writeINT(out, -1);
       } else if (effect == EffectQuantum.ThisChangeQuantum) {
@@ -287,7 +287,7 @@ public class BytecodeAnalysisIndex extends ScalarIndexExtension<HMember> {
       }
     }
 
-    private static void writeDataValue(@jakarta.annotation.Nonnull DataOutput out, DataValue dataValue, MessageDigest md) throws IOException {
+    private static void writeDataValue(@Nonnull DataOutput out, DataValue dataValue, MessageDigest md) throws IOException {
       if (dataValue == DataValue.ThisDataValue) {
         DataInputOutputUtil.writeINT(out, -1);
       } else if (dataValue == DataValue.LocalDataValue) {
@@ -306,7 +306,7 @@ public class BytecodeAnalysisIndex extends ScalarIndexExtension<HMember> {
       }
     }
 
-    private static DataValue readDataValue(@jakarta.annotation.Nonnull DataInput in) throws IOException {
+    private static DataValue readDataValue(@Nonnull DataInput in) throws IOException {
       int dataI = DataInputOutputUtil.readINT(in);
       switch (dataI) {
         case -1:

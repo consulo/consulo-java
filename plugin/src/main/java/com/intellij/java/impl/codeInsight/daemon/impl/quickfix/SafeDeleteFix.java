@@ -30,28 +30,28 @@ import consulo.language.editor.refactoring.safeDelete.SafeDeleteHandler;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 
 public class SafeDeleteFix extends LocalQuickFixAndIntentionActionOnPsiElement {
-  public SafeDeleteFix(@jakarta.annotation.Nonnull PsiElement element) {
+  public SafeDeleteFix(@Nonnull PsiElement element) {
     super(element);
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getText() {
     PsiElement startElement = getStartElement();
     return JavaQuickFixBundle.message("safe.delete.text", startElement == null ? "" : HighlightMessageUtil.getSymbolName(startElement, PsiSubstitutor.EMPTY));
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("safe.delete.family");
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull Project project,
+  public void invoke(@Nonnull Project project,
                      @Nonnull PsiFile file,
                      @Nullable Editor editor,
-                     @jakarta.annotation.Nonnull PsiElement startElement,
+                     @Nonnull PsiElement startElement,
                      @Nonnull PsiElement endElement) {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
     SafeDeleteHandler.invoke(project, new PsiElement[]{startElement}, false);

@@ -34,7 +34,7 @@ public class NonSerializableObjectBoundToHttpSessionInspection
   extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "non.serializable.object.bound.to.http.session.display.name");

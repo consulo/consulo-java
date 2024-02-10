@@ -65,13 +65,13 @@ public class RemoveSuppressWarningAction implements LocalQuickFix {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("remove.suppression.action.family");
   }
 
   @Override
-  public void applyFix(@jakarta.annotation.Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
     PsiElement element = descriptor.getPsiElement();
     try {
       if (element instanceof PsiIdentifier) {
@@ -112,7 +112,7 @@ public class RemoveSuppressWarningAction implements LocalQuickFix {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getName() {
     return JavaQuickFixBundle.message("remove.suppression.action.name", myID);
   }

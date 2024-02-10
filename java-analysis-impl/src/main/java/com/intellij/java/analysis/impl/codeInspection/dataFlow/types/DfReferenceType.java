@@ -27,7 +27,7 @@ public interface DfReferenceType extends DfType {
   /**
    * @return mutability of all the objects referred by this type
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   default Mutability getMutability() {
     return Mutability.UNKNOWN;
   }
@@ -58,7 +58,7 @@ public interface DfReferenceType extends DfType {
   /**
    * @return this type without type constraint, or simply this type if it's a constant
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   default DfReferenceType dropTypeConstraint() {
     return this;
   }
@@ -74,7 +74,7 @@ public interface DfReferenceType extends DfType {
   /**
    * @return this type without nullability knowledge, or simply this type if it's a constant
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   DfReferenceType dropNullability();
 
   /**
@@ -106,7 +106,7 @@ public interface DfReferenceType extends DfType {
    * @return this type dropping any relation to the supplied type
    */
   @Nonnull
-  default DfType withoutType(@jakarta.annotation.Nonnull TypeConstraint type) {
+  default DfType withoutType(@Nonnull TypeConstraint type) {
     TypeConstraint constraint = getConstraint();
     if (constraint.equals(type)) {
       return dropTypeConstraint();

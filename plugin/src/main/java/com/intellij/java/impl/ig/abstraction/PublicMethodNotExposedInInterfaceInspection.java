@@ -30,6 +30,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TestUtils;
 import com.siyeh.ig.ui.ExternalizableStringSet;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.java.language.module.util.JavaClassNames;
 
 import jakarta.annotation.Nonnull;
@@ -61,7 +62,7 @@ public class PublicMethodNotExposedInInterfaceInspection
       "public.method.not.in.interface.problem.descriptor");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     return AddToIgnoreIfAnnotatedByListQuickFix.build((PsiModifierListOwner)infos[0], ignorableAnnotations);
@@ -80,7 +81,7 @@ public class PublicMethodNotExposedInInterfaceInspection
     constraints.anchor = GridBagConstraints.CENTER;
     constraints.fill = GridBagConstraints.BOTH;
     panel.add(annotationsListControl, constraints);
-    final consulo.deadCodeNotWorking.impl.CheckBox checkBox = new consulo.deadCodeNotWorking.impl.CheckBox(InspectionGadgetsBundle.message(
+    final CheckBox checkBox = new CheckBox(InspectionGadgetsBundle.message(
       "public.method.not.in.interface.option"), this, "onlyWarnIfContainingClassImplementsAnInterface");
     constraints.gridy = 1;
     constraints.weighty = 0.0;

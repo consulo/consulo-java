@@ -41,8 +41,8 @@ public class ExceptionUtils {
     s_genericExceptionTypes.add(JavaClassNames.JAVA_LANG_ERROR);
   }
 
-  @jakarta.annotation.Nonnull
-  public static Set<PsiClassType> calculateExceptionsThrown(@jakarta.annotation.Nonnull PsiElement element) {
+  @Nonnull
+  public static Set<PsiClassType> calculateExceptionsThrown(@Nonnull PsiElement element) {
     final ExceptionsThrownVisitor visitor = new ExceptionsThrownVisitor();
     element.accept(visitor);
     return visitor.getExceptionsThrown();
@@ -104,7 +104,7 @@ public class ExceptionUtils {
     }
   }
 
-  public static boolean blockThrowsException(@jakarta.annotation.Nullable PsiCodeBlock block) {
+  public static boolean blockThrowsException(@Nullable PsiCodeBlock block) {
     if (block == null) {
       return false;
     }
@@ -172,14 +172,14 @@ public class ExceptionUtils {
     private final Set<PsiClassType> m_exceptionsThrown = new HashSet(4);
 
     @Override
-    public void visitMethodCallExpression(@jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiMethod method = expression.resolveMethod();
       collectExceptionsThrown(method, m_exceptionsThrown);
     }
 
     @Override
-    public void visitNewExpression(@jakarta.annotation.Nonnull PsiNewExpression expression) {
+    public void visitNewExpression(@Nonnull PsiNewExpression expression) {
       super.visitNewExpression(expression);
       final PsiMethod method = expression.resolveMethod();
       collectExceptionsThrown(method, m_exceptionsThrown);
@@ -260,7 +260,7 @@ public class ExceptionUtils {
       return false;
     }
 
-    private static Set<PsiType> getExceptionTypesHandled(@jakarta.annotation.Nonnull PsiTryStatement statement) {
+    private static Set<PsiType> getExceptionTypesHandled(@Nonnull PsiTryStatement statement) {
       final Set<PsiType> out = new HashSet<PsiType>(5);
       final PsiParameter[] parameters = statement.getCatchBlockParameters();
       for (PsiParameter parameter : parameters) {
@@ -270,7 +270,7 @@ public class ExceptionUtils {
       return out;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public Set<PsiClassType> getExceptionsThrown() {
       return m_exceptionsThrown;
     }

@@ -211,7 +211,7 @@ public class CreateFromUsageUtils {
           final String lineIndent = styleManager.getLineIndent(containingFile, Math.min(start, end));
           PsiDocumentManager manager = PsiDocumentManager.getInstance(method.getProject());
           manager.doPostponedOperationsAndUnblockDocument(manager.getDocument(containingFile));
-          consulo.ide.impl.idea.openapi.editor.EditorModificationUtil.insertStringAtCaret(newEditor, lineIndent);
+          EditorModificationUtil.insertStringAtCaret(newEditor, lineIndent);
           EditorModificationUtil.insertStringAtCaret(newEditor, "\n", false, false);
         }
         else {
@@ -531,7 +531,7 @@ public class CreateFromUsageUtils {
     final List<PsiVariable> list = new ArrayList<PsiVariable>();
     VariablesProcessor varproc = new VariablesProcessor("", true, list){
       @Override
-      public boolean execute(@jakarta.annotation.Nonnull PsiElement element, ResolveState state) {
+      public boolean execute(@Nonnull PsiElement element, ResolveState state) {
         if(!(element instanceof PsiField) ||
            JavaPsiFacade.getInstance(element.getProject()).getResolveHelper().isAccessible((PsiField)element, expression, null)) {
           return super.execute(element, state);
@@ -968,7 +968,7 @@ public class CreateFromUsageUtils {
   @Nullable
   private static String getQualifiedName(final PsiClass aClass) {
     return ApplicationManager.getApplication().runReadAction(new Computable<String>() {
-      @jakarta.annotation.Nullable
+      @Nullable
       @Override
       public String compute() {
         return aClass.getQualifiedName();

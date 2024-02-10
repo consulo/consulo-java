@@ -33,13 +33,13 @@ public interface PsiPackageAccessibilityStatement extends PsiStatement {
     OPENS
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   Role getRole();
 
   @Nullable
   PsiJavaCodeReferenceElement getPackageReference();
 
-  @jakarta.annotation.Nullable
+  @Nullable
   String getPackageName();
 
   @Nonnull

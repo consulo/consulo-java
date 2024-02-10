@@ -26,12 +26,12 @@ public class LibraryUtil {
     super();
   }
 
-  public static boolean classIsInLibrary(@jakarta.annotation.Nullable PsiClass aClass) {
+  public static boolean classIsInLibrary(@Nullable PsiClass aClass) {
     return aClass instanceof PsiCompiledElement;
   }
 
   public static boolean callOnLibraryMethod(
-    @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+    @Nonnull PsiMethodCallExpression expression) {
     final PsiMethod method = expression.resolveMethod();
     return method instanceof PsiCompiledElement;
   }

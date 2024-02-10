@@ -30,12 +30,12 @@ public class JavaCommandLineStateUtil {
   private JavaCommandLineStateUtil() {
   }
 
-  @jakarta.annotation.Nonnull
-  public static ProcessHandler startProcess(@jakarta.annotation.Nonnull final GeneralCommandLine commandLine) throws ExecutionException {
+  @Nonnull
+  public static ProcessHandler startProcess(@Nonnull final GeneralCommandLine commandLine) throws ExecutionException {
     return startProcess(commandLine, false);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static ProcessHandler startProcess(@Nonnull final GeneralCommandLine commandLine, final boolean ansiColoring) throws ExecutionException {
     ProcessHandler processHandler = ansiColoring ? ProcessHandlerFactory.getInstance().createColoredProcessHandler(commandLine) : ProcessHandlerFactory.getInstance().createProcessHandler(commandLine);
     ProcessTerminatedListener.attach(processHandler);

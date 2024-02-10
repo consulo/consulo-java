@@ -45,7 +45,7 @@ public class ExtendsObjectInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "extends.object.problem.descriptor");
@@ -70,7 +70,7 @@ public class ExtendsObjectInspection extends BaseInspection {
     }
 
     @Override
-    public void doFix(@jakarta.annotation.Nonnull Project project, ProblemDescriptor descriptor)
+    public void doFix(@Nonnull Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
       final PsiElement extendClassIdentifier = descriptor.getPsiElement();
       final PsiClass element =
@@ -99,7 +99,7 @@ public class ExtendsObjectInspection extends BaseInspection {
   private static class ExtendsObjectVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       if (aClass.isInterface() || aClass.isAnnotationType()) {
         return;
       }

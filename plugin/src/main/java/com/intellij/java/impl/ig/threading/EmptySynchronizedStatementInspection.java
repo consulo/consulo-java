@@ -33,7 +33,7 @@ public class EmptySynchronizedStatementInspection extends BaseInspection {
       "empty.synchronized.statement.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "empty.synchronized.statement.problem.descriptor");
@@ -48,7 +48,7 @@ public class EmptySynchronizedStatementInspection extends BaseInspection {
 
     @Override
     public void visitSynchronizedStatement(
-      @jakarta.annotation.Nonnull PsiSynchronizedStatement statement) {
+      @Nonnull PsiSynchronizedStatement statement) {
       super.visitSynchronizedStatement(statement);
      /* if (JspPsiUtil.isInJspFile(statement.getContainingFile())) {
         return;

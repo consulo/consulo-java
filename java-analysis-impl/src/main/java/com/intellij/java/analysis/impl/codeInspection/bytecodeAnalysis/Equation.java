@@ -20,9 +20,9 @@ import jakarta.annotation.Nonnull;
 
 final class Equation
 {
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	final EKey key;
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	final Result result;
 
 	Equation(@Nonnull EKey key, @Nonnull Result result)

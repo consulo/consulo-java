@@ -27,6 +27,7 @@ import consulo.ide.impl.idea.openapi.progress.impl.BackgroundableProcessIndicato
 import consulo.ide.impl.idea.openapi.progress.util.ProgressWindow;
 import consulo.project.Project;
 import consulo.project.ui.notification.NotificationGroup;
+import consulo.project.ui.notification.NotificationType;
 import consulo.project.ui.wm.ToolWindowId;
 import consulo.ui.ex.MessageCategory;
 import consulo.util.collection.primitive.ints.IntMaps;
@@ -82,12 +83,12 @@ public class HotSwapProgressImpl extends HotSwapProgress
 		if(!errors.isEmpty())
 		{
 			NOTIFICATION_GROUP.createNotification(DebuggerBundle.message("status.hot.swap.completed.with.errors"), buildMessage(errors),
-					consulo.project.ui.notification.NotificationType.ERROR, null).notify(getProject());
+					NotificationType.ERROR, null).notify(getProject());
 		}
 		else if(!warnings.isEmpty())
 		{
 			NOTIFICATION_GROUP.createNotification(DebuggerBundle.message("status.hot.swap.completed.with.warnings"), buildMessage(warnings),
-					consulo.project.ui.notification.NotificationType.WARNING, null).notify(getProject());
+					NotificationType.WARNING, null).notify(getProject());
 		}
 		else if(!myMessages.isEmpty())
 		{
@@ -96,7 +97,7 @@ public class HotSwapProgressImpl extends HotSwapProgress
 			{
 				messages.addAll(getMessages(category));
 			}
-			NOTIFICATION_GROUP.createNotification(buildMessage(messages), consulo.project.ui.notification.NotificationType.INFORMATION).notify(getProject());
+			NOTIFICATION_GROUP.createNotification(buildMessage(messages), NotificationType.INFORMATION).notify(getProject());
 		}
 	}
 

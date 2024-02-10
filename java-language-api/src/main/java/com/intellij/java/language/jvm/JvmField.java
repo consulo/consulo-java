@@ -30,7 +30,7 @@ public interface JvmField extends JvmMember {
   /**
    * @see Field#getName
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   String getName();
 

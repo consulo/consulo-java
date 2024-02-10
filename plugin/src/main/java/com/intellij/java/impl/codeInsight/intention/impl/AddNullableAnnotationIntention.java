@@ -35,14 +35,14 @@ import java.util.List;
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.AddNullableAnnotationIntention", categories = {"Java", "Control Flow"}, fileExtensions = "java")
 public class AddNullableAnnotationIntention extends AddAnnotationIntention {
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Pair<String, String[]> getAnnotations(@Nonnull Project project) {
     return new Pair<String, String[]>(NullableNotNullManager.getInstance(project).getDefaultNullable(), getNotNulls(project));
   }
 
-  @jakarta.annotation.Nonnull
-  private static String[] getNotNulls(@jakarta.annotation.Nonnull Project project) {
+  @Nonnull
+  private static String[] getNotNulls(@Nonnull Project project) {
     final List<String> notnulls = NullableNotNullManager.getInstance(project).getNotNulls();
     return ArrayUtil.toStringArray(notnulls);
   }

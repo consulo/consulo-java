@@ -34,24 +34,24 @@ import static consulo.util.lang.ObjectUtil.tryCast;
 public class CountingLoop
 {
 	final
-	@jakarta.annotation.Nonnull
+	@Nonnull
   PsiLocalVariable myCounter;
 	final
-	@jakarta.annotation.Nonnull
+	@Nonnull
   PsiLoopStatement myLoop;
 	final
 	@Nonnull
 	PsiExpression myInitializer;
 	final
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	PsiExpression myBound;
 	final boolean myIncluding;
 	final boolean myDescending;
 
 	private CountingLoop(@Nonnull PsiLoopStatement loop,
-						 @jakarta.annotation.Nonnull PsiLocalVariable counter,
-						 @jakarta.annotation.Nonnull PsiExpression initializer,
-						 @jakarta.annotation.Nonnull PsiExpression bound,
+						 @Nonnull PsiLocalVariable counter,
+						 @Nonnull PsiExpression initializer,
+						 @Nonnull PsiExpression bound,
 						 boolean including,
 						 boolean descending)
 	{
@@ -66,7 +66,7 @@ public class CountingLoop
 	/**
 	 * @return loop counter variable
 	 */
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public PsiLocalVariable getCounter()
 	{
 		return myCounter;
@@ -75,7 +75,7 @@ public class CountingLoop
 	/**
 	 * @return loop statement
 	 */
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public PsiLoopStatement getLoop()
 	{
 		return myLoop;
@@ -93,7 +93,7 @@ public class CountingLoop
 	/**
 	 * @return loop bound
 	 */
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public PsiExpression getBound()
 	{
 		return myBound;

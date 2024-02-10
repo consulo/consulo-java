@@ -51,7 +51,7 @@ import java.util.function.Function;
 public class ReplaceMethodRefWithLambdaIntention extends Intention {
   private static final Logger LOG = Logger.getInstance(ReplaceMethodRefWithLambdaIntention.class);
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected PsiElementPredicate getElementPredicate() {
     return new MethodRefPredicate();
@@ -62,7 +62,7 @@ public class ReplaceMethodRefWithLambdaIntention extends Intention {
   }
 
   @Override
-  protected void processIntention(final Editor editor, @jakarta.annotation.Nonnull PsiElement element) {
+  protected void processIntention(final Editor editor, @Nonnull PsiElement element) {
     final PsiMethodReferenceExpression referenceExpression = PsiTreeUtil.getParentOfType(element,
         PsiMethodReferenceExpression.class);
     LOG.assertTrue(referenceExpression != null);

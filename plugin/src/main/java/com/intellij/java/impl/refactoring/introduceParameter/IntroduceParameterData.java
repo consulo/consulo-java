@@ -33,7 +33,7 @@ public interface IntroduceParameterData {
 
   PsiMethod getMethodToReplaceIn();
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   PsiMethod getMethodToSearchFor();
 
   ExpressionWrapper getParameterInitializer();
@@ -61,7 +61,7 @@ public interface IntroduceParameterData {
     @Nullable
     PsiType getType();
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     RealExpression getExpression();
 
   }

@@ -65,7 +65,7 @@ public class JavaNullMethodArgumentUtil {
     }
   }
 
-  private static void processCallsWithNullArguments(@jakarta.annotation.Nonnull PsiMethod method, int argumentIdx, @Nonnull Processor<PsiExpression> nullArgumentProcessor, Collection<VirtualFile> candidateFiles) {
+  private static void processCallsWithNullArguments(@Nonnull PsiMethod method, int argumentIdx, @Nonnull Processor<PsiExpression> nullArgumentProcessor, Collection<VirtualFile> candidateFiles) {
     if (candidateFiles.isEmpty()) {
       return;
     }
@@ -99,7 +99,7 @@ public class JavaNullMethodArgumentUtil {
     return null;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private static Collection<VirtualFile> getFilesWithPotentialNullPassingCalls(@Nonnull PsiMethod method, int parameterIndex) {
     final FileBasedIndex fileBasedIndex = FileBasedIndex.getInstance();
     final CommonProcessors.CollectProcessor<VirtualFile> collector = new CommonProcessors.CollectProcessor<>(new ArrayList<>());

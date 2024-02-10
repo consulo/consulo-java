@@ -71,19 +71,19 @@ public class ReferenceExpressionCompletionContributor {
       definedInClass(JavaClassNames.JAVA_LANG_OBJECT);
   private static final PrefixMatcher TRUE_MATCHER = new PrefixMatcher("") {
     @Override
-    public boolean prefixMatches(@jakarta.annotation.Nonnull String name) {
+    public boolean prefixMatches(@Nonnull String name) {
       return true;
     }
 
     @Nonnull
     @Override
-    public PrefixMatcher cloneWithPrefix(@jakarta.annotation.Nonnull String prefix) {
+    public PrefixMatcher cloneWithPrefix(@Nonnull String prefix) {
       return this;
     }
   };
   public static final ElementPattern<PsiElement> IN_SWITCH_LABEL = psiElement().withSuperParent(2, psiElement(PsiSwitchLabelStatement.class).withSuperParent(2, PsiSwitchStatement.class));
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private static ElementFilter getReferenceFilter(PsiElement element, boolean allowRecursion) {
     //throw foo
     if (psiElement().withParent(psiElement(PsiReferenceExpression.class).withParent(PsiThrowStatement.class)).accepts(element)) {
@@ -98,7 +98,7 @@ public class ReferenceExpressionCompletionContributor {
     if (foreach != null && !PsiTreeUtil.isAncestor(foreach.getBody(), element, false)) {
       return new ElementExtractorFilter(new ElementFilter() {
         @Override
-        public boolean isAcceptable(Object element, @jakarta.annotation.Nullable PsiElement context) {
+        public boolean isAcceptable(Object element, @Nullable PsiElement context) {
           return element != foreach.getIterationParameter();
         }
 
@@ -119,7 +119,7 @@ public class ReferenceExpressionCompletionContributor {
     return TrueFilter.INSTANCE;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static Runnable fillCompletionVariants(final JavaSmartCompletionParameters parameters, final Consumer<LookupElement> result) {
     final PsiElement element = parameters.getPosition();
     if (JavaSmartCompletionContributor.INSIDE_TYPECAST_EXPRESSION.accepts(element)) {
@@ -216,8 +216,8 @@ public class ReferenceExpressionCompletionContributor {
     return elements;
   }
 
-  @jakarta.annotation.Nonnull
-  public static Set<PsiField> findConstantsUsedInSwitch(@jakarta.annotation.Nullable PsiElement position) {
+  @Nonnull
+  public static Set<PsiField> findConstantsUsedInSwitch(@Nullable PsiElement position) {
     if (IN_SWITCH_LABEL.accepts(position)) {
       Set<PsiField> used = new LinkedHashSet<>();
       PsiSwitchStatement sw = PsiTreeUtil.getParentOfType(position, PsiSwitchStatement.class);
@@ -240,7 +240,7 @@ public class ReferenceExpressionCompletionContributor {
     return Collections.emptySet();
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static ExpressionLookupItem getSingleArrayElementAccess(PsiElement element, LookupElement item) {
     if (item.getObject() instanceof PsiLocalVariable) {
       final PsiLocalVariable variable = (PsiLocalVariable) item.getObject();
@@ -343,7 +343,7 @@ public class ReferenceExpressionCompletionContributor {
                                             final String prefix,
                                             final PsiType itemType,
                                             final Consumer<LookupElement> result,
-                                            @jakarta.annotation.Nullable PsiElement qualifier,
+                                            @Nullable PsiElement qualifier,
                                             final PsiType expectedType) throws IncorrectOperationException {
     final String methodName = getArraysConversionMethod(itemType, expectedType);
     if (methodName == null) {
@@ -376,7 +376,7 @@ public class ReferenceExpressionCompletionContributor {
     });
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static String getArraysConversionMethod(PsiType itemType, PsiType expectedType) {
     String methodName = "asList";
     PsiType componentType = PsiUtil.extractIterableTypeParameter(expectedType, true);
@@ -454,7 +454,7 @@ public class ReferenceExpressionCompletionContributor {
     }
   }
 
-  private static String getQualifierText(@jakarta.annotation.Nullable final PsiElement qualifier) {
+  private static String getQualifierText(@Nullable final PsiElement qualifier) {
     return qualifier == null ? "" : qualifier.getText() + ".";
   }
 
@@ -483,8 +483,8 @@ public class ReferenceExpressionCompletionContributor {
     }
   }
 
-  @jakarta.annotation.Nullable
-  public static PsiReferenceExpression createMockReference(final PsiElement place, @jakarta.annotation.Nonnull PsiType qualifierType, LookupElement qualifierItem) {
+  @Nullable
+  public static PsiReferenceExpression createMockReference(final PsiElement place, @Nonnull PsiType qualifierType, LookupElement qualifierItem) {
     PsiElementFactory factory = JavaPsiFacade.getElementFactory(place.getProject());
     if (qualifierItem.getObject() instanceof PsiClass) {
       final String qname = ((PsiClass) qualifierItem.getObject()).getQualifiedName();
@@ -589,7 +589,7 @@ public class ReferenceExpressionCompletionContributor {
     });
   }
 
-  private static boolean isEmptyArrayInitializer(@jakarta.annotation.Nullable PsiElement element) {
+  private static boolean isEmptyArrayInitializer(@Nullable PsiElement element) {
     if (element instanceof PsiNewExpression) {
       final PsiNewExpression expression = (PsiNewExpression) element;
       final PsiExpression[] dimensions = expression.getArrayDimensions();
@@ -608,7 +608,7 @@ public class ReferenceExpressionCompletionContributor {
     return false;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static String getItemText(Object o) {
     if (o instanceof PsiMethod) {
       final PsiMethod method = (PsiMethod) o;

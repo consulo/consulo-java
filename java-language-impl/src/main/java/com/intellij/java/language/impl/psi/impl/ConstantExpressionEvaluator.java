@@ -45,5 +45,5 @@ public interface ConstantExpressionEvaluator extends LanguageExtension {
 
   Object computeExpression(PsiElement expression,
                            boolean throwExceptionOnOverflow,
-                           @jakarta.annotation.Nullable PsiConstantEvaluationHelper.AuxEvaluator auxEvaluator);
+                           @Nullable PsiConstantEvaluationHelper.AuxEvaluator auxEvaluator);
 }

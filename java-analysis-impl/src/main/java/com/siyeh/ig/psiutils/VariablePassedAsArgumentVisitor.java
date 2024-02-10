@@ -60,7 +60,7 @@ class VariablePassedAsArgumentVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitNewExpression(@jakarta.annotation.Nonnull PsiNewExpression newExpression) {
+  public void visitNewExpression(@Nonnull PsiNewExpression newExpression) {
     if (passed) {
       return;
     }

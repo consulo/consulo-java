@@ -32,7 +32,7 @@ public abstract class ExtendsConcreteCollectionInspectionBase extends BaseInspec
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("extends.concrete.collection.display.name");
   }

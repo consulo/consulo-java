@@ -36,7 +36,7 @@ public class AddNotNullAnnotationFix extends AddNullableNotNullAnnotationFix {
           getNullables(owner));
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private static String[] getNullables(@Nonnull PsiModifierListOwner owner) {
     final List<String> nullables = NullableNotNullManager.getInstance(owner.getProject()).getNullables();
     return ArrayUtil.toStringArray(nullables);

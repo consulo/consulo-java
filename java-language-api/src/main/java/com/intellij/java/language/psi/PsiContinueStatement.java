@@ -26,7 +26,7 @@ public interface PsiContinueStatement extends PsiStatement {
    *
    * @return the identifier for the label, or null if the statement has no label.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiIdentifier getLabelIdentifier();
 
   /**

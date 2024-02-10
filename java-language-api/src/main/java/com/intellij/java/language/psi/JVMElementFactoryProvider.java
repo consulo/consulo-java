@@ -36,12 +36,12 @@ public interface JVMElementFactoryProvider extends LanguageExtension {
   ExtensionPointCacheKey<JVMElementFactoryProvider, Map<Language, JVMElementFactoryProvider>> CACHE_KEY = ExtensionPointCacheKey.groupBy("JVMElementFactoryProvider", JVMElementFactoryProvider::getLanguage);
 
   @Nonnull
-  static JVMElementFactory forLanguageRequired(@Nonnull Project project, @jakarta.annotation.Nonnull Language language) {
+  static JVMElementFactory forLanguageRequired(@Nonnull Project project, @Nonnull Language language) {
     return Objects.requireNonNull(forLanguage(project, language), () -> "JVMElementFactoryProvider impl is not registered for language: " + language);
   }
 
   @Nullable
-  static JVMElementFactory forLanguage(@Nonnull Project project, @jakarta.annotation.Nonnull Language language) {
+  static JVMElementFactory forLanguage(@Nonnull Project project, @Nonnull Language language) {
     ExtensionPoint<JVMElementFactoryProvider> point = project.getExtensionPoint(JVMElementFactoryProvider.class);
     Map<Language, JVMElementFactoryProvider> map = point.getOrBuildCache(CACHE_KEY);
     JVMElementFactoryProvider provider = map.get(language);
@@ -51,6 +51,6 @@ public interface JVMElementFactoryProvider extends LanguageExtension {
     return provider.getFactory(project);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   JVMElementFactory getFactory(Project project);
 }

@@ -18,6 +18,7 @@ import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.codeInsight.ExternalAnnotationsListener;
 import com.intellij.java.language.codeInsight.ExternalAnnotationsManager;
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
 import consulo.virtualFileSystem.LocalFileSystem;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
@@ -99,7 +100,7 @@ public abstract class AddAnnotationFixTest extends UsefulTestCase {
     addLibrary("/content/anno");
   }
 
-  private void addLibrary(final @jakarta.annotation.Nonnull String... annotationsDirs) {
+  private void addLibrary(final @Nonnull String... annotationsDirs) {
     ApplicationManager.getApplication().runWriteAction(new Runnable() {
       @Override
       public void run() {
@@ -108,9 +109,9 @@ public abstract class AddAnnotationFixTest extends UsefulTestCase {
         final Library library = libraryTable.createLibrary("test");
 
         final Library.ModifiableModel libraryModel = library.getModifiableModel();
-        libraryModel.addRoot(consulo.ide.impl.idea.openapi.vfs.VfsUtil.pathToUrl(myFixture.getTempDirPath() + "/lib"), OrderRootType.SOURCES);
+        libraryModel.addRoot(VfsUtil.pathToUrl(myFixture.getTempDirPath() + "/lib"), OrderRootType.SOURCES);
         for (String annotationsDir : annotationsDirs) {
-          libraryModel.addRoot(consulo.ide.impl.idea.openapi.vfs.VfsUtil.pathToUrl(myFixture.getTempDirPath() + annotationsDir), AnnotationOrderRootType.getInstance());
+          libraryModel.addRoot(VfsUtil.pathToUrl(myFixture.getTempDirPath() + annotationsDir), AnnotationOrderRootType.getInstance());
         }
         libraryModel.commit();
         model.commit();
@@ -129,13 +130,13 @@ public abstract class AddAnnotationFixTest extends UsefulTestCase {
     return container;
   }
 
-  private void startListening(@jakarta.annotation.Nonnull final List<Trinity<PsiModifierListOwner, String, Boolean>> expectedSequence) {
+  private void startListening(@Nonnull final List<Trinity<PsiModifierListOwner, String, Boolean>> expectedSequence) {
     myBusConnection = myProject.getMessageBus().connect();
     myBusConnection.subscribe(ExternalAnnotationsManager.TOPIC, new DefaultAnnotationsListener() {
       private int index = 0;
 
       @Override
-      public void afterExternalAnnotationChanging(@jakarta.annotation.Nonnull PsiModifierListOwner owner, @jakarta.annotation.Nonnull String annotationFQName,
+      public void afterExternalAnnotationChanging(@Nonnull PsiModifierListOwner owner, @Nonnull String annotationFQName,
                                                   boolean successful) {
         if (index < expectedSequence.size() && expectedSequence.get(index).first == owner
             && expectedSequence.get(index).second.equals(annotationFQName) && expectedSequence.get(index).third == successful) {
@@ -149,7 +150,7 @@ public abstract class AddAnnotationFixTest extends UsefulTestCase {
     });
   }
 
-  private void startListening(@jakarta.annotation.Nonnull final PsiModifierListOwner expectedOwner, @jakarta.annotation.Nonnull final String expectedAnnotationFQName,
+  private void startListening(@Nonnull final PsiModifierListOwner expectedOwner, @Nonnull final String expectedAnnotationFQName,
                               final boolean expectedSuccessful) {
     startListening(Arrays.asList(Trinity.create(expectedOwner, expectedAnnotationFQName, expectedSuccessful)));
   }
@@ -411,7 +412,7 @@ public abstract class AddAnnotationFixTest extends UsefulTestCase {
         VirtualFile file = LocalFileSystem.getInstance().findFileByPath(myFixture.getTempDirPath() + "/content/anno/p/annotations.xml");
         assert file != null;
         String newText = "  " + StreamUtil.readText(file.getInputStream()) + "      "; // adding newspace to the beginning and end of file
-        FileUtil.writeToFile(consulo.ide.impl.idea.openapi.vfs.VfsUtil.virtualToIoFile(file), newText); // writing using java.io.File to make this change external
+        FileUtil.writeToFile(VfsUtil.virtualToIoFile(file), newText); // writing using java.io.File to make this change external
         file.refresh(false, false);
       }
     }.execute();
@@ -420,7 +421,7 @@ public abstract class AddAnnotationFixTest extends UsefulTestCase {
 
   private class DefaultAnnotationsListener extends ExternalAnnotationsListener.Adapter {
     @Override
-    public void afterExternalAnnotationChanging(@jakarta.annotation.Nonnull PsiModifierListOwner owner, @Nonnull String annotationFQName,
+    public void afterExternalAnnotationChanging(@Nonnull PsiModifierListOwner owner, @Nonnull String annotationFQName,
                                                 boolean successful) {
       System.err.println("Unexpected ExternalAnnotationsListener.afterExternalAnnotationChanging event produced");
       System.err.println("owner = [" + owner + "], annotationFQName = [" + annotationFQName + "], successful = [" + successful + "]");

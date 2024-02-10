@@ -39,14 +39,14 @@ public class SliceUsage extends UsageInfo2UsageAdapter
 	public final SliceAnalysisParams params;
 	private final PsiSubstitutor mySubstitutor;
 	protected final int indexNesting; // 0 means bare expression 'x', 1 means x[?], 2 means x[?][?] etc
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	protected final String syntheticField; // "" means no field, otherwise it's a name of fake field of container, e.g. "keys" for Map
 
 	public SliceUsage(@Nonnull PsiElement element,
 			@Nonnull SliceUsage parent,
-			@jakarta.annotation.Nonnull PsiSubstitutor substitutor,
+			@Nonnull PsiSubstitutor substitutor,
 			int indexNesting,
-			@jakarta.annotation.Nonnull String syntheticField)
+			@Nonnull String syntheticField)
 	{
 		super(new UsageInfo(element));
 		myParent = parent;
@@ -58,7 +58,7 @@ public class SliceUsage extends UsageInfo2UsageAdapter
 	}
 
 	// root usage
-	private SliceUsage(@jakarta.annotation.Nonnull PsiElement element, @jakarta.annotation.Nonnull SliceAnalysisParams params)
+	private SliceUsage(@Nonnull PsiElement element, @Nonnull SliceAnalysisParams params)
 	{
 		super(new UsageInfo(element));
 		myParent = null;
@@ -68,13 +68,13 @@ public class SliceUsage extends UsageInfo2UsageAdapter
 		syntheticField = "";
 	}
 
-	@jakarta.annotation.Nonnull
-	public static SliceUsage createRootUsage(@jakarta.annotation.Nonnull PsiElement element, @jakarta.annotation.Nonnull SliceAnalysisParams params)
+	@Nonnull
+	public static SliceUsage createRootUsage(@Nonnull PsiElement element, @Nonnull SliceAnalysisParams params)
 	{
 		return new SliceUsage(element, params);
 	}
 
-	public void processChildren(@jakarta.annotation.Nonnull Processor<SliceUsage> processor)
+	public void processChildren(@Nonnull Processor<SliceUsage> processor)
 	{
 		final PsiElement element = ApplicationManager.getApplication().runReadAction(new Computable<PsiElement>()
 		{
@@ -124,13 +124,13 @@ public class SliceUsage extends UsageInfo2UsageAdapter
 		return myParent;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public AnalysisScope getScope()
 	{
 		return params.scope;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	SliceUsage copy()
 	{
 		PsiElement element = getUsageInfo().getElement();

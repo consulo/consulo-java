@@ -35,15 +35,15 @@ import java.util.List;
 
 @ExtensionImpl
 public class DefaultConsoleFiltersProvider implements ConsoleFilterProviderEx {
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
-  public Filter[] getDefaultFilters(@jakarta.annotation.Nonnull Project project) {
+  public Filter[] getDefaultFilters(@Nonnull Project project) {
     return getDefaultFilters(project, GlobalSearchScope.allScope(project));
   }
 
   @Override
-  @jakarta.annotation.Nonnull
-  public Filter[] getDefaultFilters(@Nonnull Project project, @jakarta.annotation.Nonnull SearchScope scope) {
+  @Nonnull
+  public Filter[] getDefaultFilters(@Nonnull Project project, @Nonnull SearchScope scope) {
     if (!ModuleExtensionHelper.getInstance(project).hasModuleExtension(JavaModuleExtension.class)) {
       return Filter.EMPTY_ARRAY;
     }

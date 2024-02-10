@@ -60,7 +60,7 @@ public class VirtualMachineProxyImpl implements JdiTimer, VirtualMachineProxy
 	private final boolean myVersionHigher_15;
 	private final boolean myVersionHigher_14;
 
-	public VirtualMachineProxyImpl(DebugProcessImpl debugProcess, @jakarta.annotation.Nonnull VirtualMachine virtualMachine)
+	public VirtualMachineProxyImpl(DebugProcessImpl debugProcess, @Nonnull VirtualMachine virtualMachine)
 	{
 		myVirtualMachine = virtualMachine;
 		myDebugProcess = debugProcess;
@@ -95,7 +95,7 @@ public class VirtualMachineProxyImpl implements JdiTimer, VirtualMachineProxy
 		}
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public VirtualMachine getVirtualMachine()
 	{
 		return myVirtualMachine;
@@ -754,7 +754,7 @@ public class VirtualMachineProxyImpl implements JdiTimer, VirtualMachineProxy
 		myVirtualMachine.setDebugTraceMode(i);
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	@Contract("null -> null; !null -> !null")
 	public ThreadReferenceProxyImpl getThreadReferenceProxy(@Nullable ThreadReference thread)
 	{

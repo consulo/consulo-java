@@ -550,7 +550,7 @@ public class NodeRendererSettings implements PersistentStateComponent<Element> {
 
   private static class DescriptorUpdater implements DescriptorLabelListener {
     private final ValueDescriptor myTargetDescriptor;
-    @jakarta.annotation.Nullable
+    @Nullable
     private ValueDescriptorImpl myKeyDescriptor;
     @Nullable
     private ValueDescriptorImpl myValueDescriptor;

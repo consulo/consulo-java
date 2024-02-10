@@ -40,7 +40,7 @@ public abstract class AbstractManifestStubElementType<StubT extends StubElement,
   private static final String ETERNAL_ID_PREFIX = "manifest.";
   private final String externalId;
 
-  public AbstractManifestStubElementType(@jakarta.annotation.Nonnull final String debugName) {
+  public AbstractManifestStubElementType(@Nonnull final String debugName) {
     super(debugName, ManifestLanguage.INSTANCE);
     externalId = ETERNAL_ID_PREFIX + debugName;
   }

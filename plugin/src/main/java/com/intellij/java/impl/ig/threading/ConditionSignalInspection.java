@@ -33,7 +33,7 @@ import org.jetbrains.annotations.NonNls;
 public class ConditionSignalInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "CallToSignalInsteadOfSignalAll";
   }
@@ -63,7 +63,7 @@ public class ConditionSignalInspection extends BaseInspection {
 
   private static class ConditionSignalFix extends InspectionGadgetsFix {
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "condition.signal.replace.quickfix");
@@ -94,7 +94,7 @@ public class ConditionSignalInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();

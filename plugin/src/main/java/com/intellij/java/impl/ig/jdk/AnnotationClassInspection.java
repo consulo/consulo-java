@@ -26,7 +26,7 @@ import consulo.annotation.component.ExtensionImpl;
 @ExtensionImpl
 public class AnnotationClassInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "annotation.class.display.name");
@@ -45,7 +45,7 @@ public class AnnotationClassInspection extends BaseInspection {
   private static class AnnotationClassVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       if (!aClass.isAnnotationType()) {
         return;
       }

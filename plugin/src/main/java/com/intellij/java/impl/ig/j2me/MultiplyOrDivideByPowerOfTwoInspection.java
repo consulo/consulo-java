@@ -57,7 +57,7 @@ public class MultiplyOrDivideByPowerOfTwoInspection
                                           "checkDivision");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "expression.can.be.replaced.problem.descriptor",

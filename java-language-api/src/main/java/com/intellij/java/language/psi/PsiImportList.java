@@ -30,7 +30,7 @@ import jakarta.annotation.Nullable;
 public interface PsiImportList extends PsiElement {
   PsiImportList[] EMPTY_ARRAY = new PsiImportList[0];
   ArrayFactory<PsiImportList> ARRAY_FACTORY = new ArrayFactory<PsiImportList>() {
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public PsiImportList[] create(int count) {
       return count == 0 ? EMPTY_ARRAY : new PsiImportList[count];
@@ -42,7 +42,7 @@ public interface PsiImportList extends PsiElement {
    *
    * @return the array of non-static import statements.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   PsiImportStatement[] getImportStatements();
 
   /**
@@ -50,7 +50,7 @@ public interface PsiImportList extends PsiElement {
    *
    * @return the array of static import statements.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   PsiImportStaticStatement[] getImportStaticStatements();
 
   /**
@@ -67,7 +67,7 @@ public interface PsiImportList extends PsiElement {
    * @param qName the full-qualified name of the imported class.
    * @return the import statement, or null if one was not found.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiImportStatement findSingleClassImportStatement(String qName);
 
   /**
@@ -76,7 +76,7 @@ public interface PsiImportList extends PsiElement {
    * @param packageName the name of the imported package.
    * @return the import statement, or null if one was not found.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiImportStatement findOnDemandImportStatement(@NonNls String packageName);
 
   /**

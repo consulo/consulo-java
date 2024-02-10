@@ -46,12 +46,12 @@ public class SliceNode extends AbstractTreeNode<SliceUsage> implements Duplicate
   protected boolean changed;
   private int index; // my index in parent's mycachedchildren
 
-  protected SliceNode(@jakarta.annotation.Nonnull Project project, SliceUsage sliceUsage, @jakarta.annotation.Nonnull DuplicateMap targetEqualUsages) {
+  protected SliceNode(@Nonnull Project project, SliceUsage sliceUsage, @Nonnull DuplicateMap targetEqualUsages) {
     super(project, sliceUsage);
     this.targetEqualUsages = targetEqualUsages;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   SliceNode copy() {
     SliceUsage newUsage = getValue().copy();
     SliceNode newNode = new SliceNode(getProject(), newUsage, targetEqualUsages);
@@ -61,7 +61,7 @@ public class SliceNode extends AbstractTreeNode<SliceUsage> implements Duplicate
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public Collection<? extends AbstractTreeNode<?>> getChildren() {
     ProgressIndicator current = ProgressManager.getInstance().getProgressIndicator();
     ProgressIndicator indicator = current == null ? new EmptyProgressIndicator() : current;
@@ -89,8 +89,8 @@ public class SliceNode extends AbstractTreeNode<SliceUsage> implements Duplicate
     return index == 0 ? null : (SliceNode)parentChildren.get(index - 1);
   }
 
-  @jakarta.annotation.Nonnull
-  protected List<? extends AbstractTreeNode> getChildrenUnderProgress(@jakarta.annotation.Nonnull final ProgressIndicator progress) {
+  @Nonnull
+  protected List<? extends AbstractTreeNode> getChildrenUnderProgress(@Nonnull final ProgressIndicator progress) {
     if (isUpToDate()) {
       return myCachedChildren == null ? Collections.<AbstractTreeNode>emptyList() : myCachedChildren;
     }
@@ -144,11 +144,11 @@ public class SliceNode extends AbstractTreeNode<SliceUsage> implements Duplicate
     return false;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected PresentationData createPresentation() {
     return new PresentationData() {
-      @jakarta.annotation.Nonnull
+      @Nonnull
       @Override
       public Object[] getEqualityObjects() {
         return ArrayUtil.append(super.getEqualityObjects(), changed);
@@ -210,7 +210,7 @@ public class SliceNode extends AbstractTreeNode<SliceUsage> implements Duplicate
 
   @Override
   public void customizeCellRenderer(@Nonnull SliceUsageCellRenderer renderer,
-                                    @jakarta.annotation.Nonnull JTree tree,
+                                    @Nonnull JTree tree,
                                     Object value,
                                     boolean selected,
                                     boolean expanded,

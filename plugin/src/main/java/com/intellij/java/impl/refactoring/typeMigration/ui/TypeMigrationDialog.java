@@ -58,7 +58,7 @@ public abstract class TypeMigrationDialog extends RefactoringDialog {
   private TypeMigrationRules myRules;
   private final ScopeChooserCombo myScopeChooserCombo;
 
-  public TypeMigrationDialog(@jakarta.annotation.Nonnull Project project, @Nonnull PsiElement[] roots, @jakarta.annotation.Nullable TypeMigrationRules rules) {
+  public TypeMigrationDialog(@Nonnull Project project, @Nonnull PsiElement[] roots, @Nullable TypeMigrationRules rules) {
     super(project, false);
     myRoots = roots;
     myRules = rules;
@@ -114,7 +114,7 @@ public abstract class TypeMigrationDialog extends RefactoringDialog {
   public static class MultipleElements extends TypeMigrationDialog {
     private final Function<PsiElement, PsiType> myMigrationTypeFunction;
 
-    public MultipleElements(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull PsiElement[] roots, @Nonnull Function<PsiElement, PsiType> migrationTypeFunction, @jakarta.annotation.Nonnull TypeMigrationRules rules) {
+    public MultipleElements(@Nonnull Project project, @Nonnull PsiElement[] roots, @Nonnull Function<PsiElement, PsiType> migrationTypeFunction, @Nonnull TypeMigrationRules rules) {
       super(project, roots, rules);
       myMigrationTypeFunction = migrationTypeFunction;
       init();
@@ -131,7 +131,7 @@ public abstract class TypeMigrationDialog extends RefactoringDialog {
     private final PsiTypeCodeFragment myTypeCodeFragment;
     private final EditorComboBox myToTypeEditor;
 
-    public SingleElement(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull PsiElement[] roots) {
+    public SingleElement(@Nonnull Project project, @Nonnull PsiElement[] roots) {
       super(project, roots, null);
       LOG.assertTrue(roots.length > 0);
       final PsiType rootType = getRootType();
@@ -235,7 +235,7 @@ public abstract class TypeMigrationDialog extends RefactoringDialog {
       super.doAction();
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     protected Function<PsiElement, PsiType> getMigrationTypeFunction() {
       return Functions.constant(getMigrationType());

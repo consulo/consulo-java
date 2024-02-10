@@ -57,8 +57,8 @@ public class AddSingleMemberStaticImportAction extends PsiElementBaseIntentionAc
    * @param element     target element that is static import candidate
    * @return            not-null qualified name of the class which method may be statically imported if any; <code>null</code> otherwise
    */
-  @jakarta.annotation.Nullable
-  public static String getStaticImportClass(@jakarta.annotation.Nonnull PsiElement element) {
+  @Nullable
+  public static String getStaticImportClass(@Nonnull PsiElement element) {
     if (!PsiUtil.isLanguageLevel5OrHigher(element)) return null;
     if (element instanceof PsiIdentifier) {
       final PsiElement parent = element.getParent();
@@ -129,7 +129,7 @@ public class AddSingleMemberStaticImportAction extends PsiElementBaseIntentionAc
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, @jakarta.annotation.Nonnull PsiElement element) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     String classQName = getStaticImportClass(element);
     if (classQName != null) {
       setText(CodeInsightBundle.message("intention.add.single.member.static.import.text", classQName));
@@ -236,7 +236,7 @@ public class AddSingleMemberStaticImportAction extends PsiElementBaseIntentionAc
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     invoke(element.getContainingFile(), element);
   }
 }

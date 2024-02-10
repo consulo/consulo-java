@@ -27,7 +27,7 @@ public class CloneUtils {
 
   private CloneUtils() {}
 
-  public static boolean isCloneable(@jakarta.annotation.Nonnull PsiClass aClass) {
+  public static boolean isCloneable(@Nonnull PsiClass aClass) {
     return InheritanceUtil.isInheritor(aClass,
                                        JavaClassNames.JAVA_LANG_CLONEABLE);
   }
@@ -46,7 +46,7 @@ public class CloneUtils {
     return false;
   }
 
-  public static boolean isClone(@jakarta.annotation.Nonnull PsiMethod method) {
+  public static boolean isClone(@Nonnull PsiMethod method) {
     final PsiClassType javaLangObject;
     if (!PsiUtil.isLanguageLevel5OrHigher(method)) {
       javaLangObject = TypeUtils.getObjectType(method);
@@ -60,7 +60,7 @@ public class CloneUtils {
   }
 
   public static boolean onlyThrowsCloneNotSupportedException(
-    @jakarta.annotation.Nonnull PsiMethod method) {
+    @Nonnull PsiMethod method) {
     final PsiCodeBlock body = method.getBody();
     if (body == null) {
       return false;

@@ -164,7 +164,7 @@ public class JavaRefactoringSupportProvider extends RefactoringSupportProvider {
     return PsiTreeUtil.isAncestor(containingFile, scopeElements[0], false);
   }
 
-  public static boolean isDisableRefactoringForLightElement(@jakarta.annotation.Nullable PsiElement element) {
+  public static boolean isDisableRefactoringForLightElement(@Nullable PsiElement element) {
     if (element instanceof LightMethodBuilder) {
       return true;
     }

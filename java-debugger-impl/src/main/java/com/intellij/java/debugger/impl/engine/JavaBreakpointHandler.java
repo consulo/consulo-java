@@ -50,7 +50,7 @@ public class JavaBreakpointHandler extends XBreakpointHandler
 	}
 
 	@Override
-	public void registerBreakpoint(@jakarta.annotation.Nonnull XBreakpoint breakpoint)
+	public void registerBreakpoint(@Nonnull XBreakpoint breakpoint)
 	{
 		Breakpoint javaBreakpoint = BreakpointManager.getJavaBreakpoint(breakpoint);
 		if(javaBreakpoint == null)
@@ -81,7 +81,7 @@ public class JavaBreakpointHandler extends XBreakpointHandler
 	}
 
 	@Override
-	public void unregisterBreakpoint(@jakarta.annotation.Nonnull final XBreakpoint breakpoint, boolean temporary)
+	public void unregisterBreakpoint(@Nonnull final XBreakpoint breakpoint, boolean temporary)
 	{
 		final Breakpoint javaBreakpoint = BreakpointManager.getJavaBreakpoint(breakpoint);
 		if(javaBreakpoint != null)

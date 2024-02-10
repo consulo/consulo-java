@@ -64,7 +64,7 @@ public class MagicCompletionContributor extends CompletionContributor {
 
   @RequiredReadAction
   @Override
-  public void fillCompletionVariants(@Nonnull final CompletionParameters parameters, @jakarta.annotation.Nonnull final CompletionResultSet result) {
+  public void fillCompletionVariants(@Nonnull final CompletionParameters parameters, @Nonnull final CompletionResultSet result) {
     //if (parameters.getCompletionType() != CompletionType.SMART) return;
     PsiElement pos = parameters.getPosition();
     if (JavaKeywordCompletion.AFTER_DOT.accepts(pos)) {
@@ -79,7 +79,7 @@ public class MagicCompletionContributor extends CompletionContributor {
     addCompletionVariants(parameters, result, pos, allowedValues);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static MagicConstantInspection.AllowedValues getAllowedValues(@Nonnull PsiElement pos) {
     MagicConstantInspection.AllowedValues allowedValues = null;
     for (Pair<PsiModifierListOwner, PsiType> pair : getMembersWithAllowedValues(pos)) {
@@ -98,7 +98,7 @@ public class MagicCompletionContributor extends CompletionContributor {
     return allowedValues;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static PsiModifierListOwner resolveExpression(@Nullable PsiExpression expression) {
     expression = PsiUtil.skipParenthesizedExprDown(expression);
     if (expression instanceof PsiMethodCallExpression) {
@@ -194,8 +194,8 @@ public class MagicCompletionContributor extends CompletionContributor {
     return result;
   }
 
-  private static void addCompletionVariants(@jakarta.annotation.Nonnull final CompletionParameters parameters,
-                                            @jakarta.annotation.Nonnull final CompletionResultSet result,
+  private static void addCompletionVariants(@Nonnull final CompletionParameters parameters,
+                                            @Nonnull final CompletionResultSet result,
                                             PsiElement pos,
                                             MagicConstantInspection.AllowedValues allowedValues) {
     final Set<PsiElement> allowed = Sets.newHashSet(new HashingStrategy<PsiElement>() {
@@ -261,7 +261,7 @@ public class MagicCompletionContributor extends CompletionContributor {
     return element;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

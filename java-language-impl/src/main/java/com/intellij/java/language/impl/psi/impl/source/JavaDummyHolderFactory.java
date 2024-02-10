@@ -32,12 +32,12 @@ import jakarta.annotation.Nonnull;
 
 public class JavaDummyHolderFactory implements HolderFactory {
   @Override
-  public DummyHolder createHolder(@jakarta.annotation.Nonnull final PsiManager manager, final TreeElement contentElement, final PsiElement context) {
+  public DummyHolder createHolder(@Nonnull final PsiManager manager, final TreeElement contentElement, final PsiElement context) {
     return new JavaDummyHolder(manager, contentElement, context);
   }
 
   @Override
-  public DummyHolder createHolder(@jakarta.annotation.Nonnull final PsiManager manager,
+  public DummyHolder createHolder(@Nonnull final PsiManager manager,
                                   final TreeElement contentElement, final PsiElement context, final CharTable table) {
     return new JavaDummyHolder(manager, contentElement, context, table);
   }
@@ -53,17 +53,17 @@ public class JavaDummyHolderFactory implements HolderFactory {
   }
 
   @Override
-  public DummyHolder createHolder(@jakarta.annotation.Nonnull final PsiManager manager, final PsiElement context, final CharTable table) {
+  public DummyHolder createHolder(@Nonnull final PsiManager manager, final PsiElement context, final CharTable table) {
     return new JavaDummyHolder(manager, context, table);
   }
 
   @Override
-  public DummyHolder createHolder(@jakarta.annotation.Nonnull final PsiManager manager, final CharTable table, final Language language) {
+  public DummyHolder createHolder(@Nonnull final PsiManager manager, final CharTable table, final Language language) {
     return new JavaDummyHolder(manager, table);
   }
 
   @Override
-  public DummyHolder createHolder(@jakarta.annotation.Nonnull final PsiManager manager, final CharTable table, final boolean validity) {
+  public DummyHolder createHolder(@Nonnull final PsiManager manager, final CharTable table, final boolean validity) {
     return new JavaDummyHolder(manager, table, validity);
   }
 }

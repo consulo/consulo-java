@@ -24,7 +24,7 @@ import consulo.module.Module;
 import jakarta.annotation.Nonnull;
 
 public class EffectiveLanguageLevelUtil {
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @RequiredReadAction
   public static LanguageLevel getEffectiveLanguageLevel(@Nonnull final Module module) {
     ApplicationManager.getApplication().assertReadAccessAllowed();

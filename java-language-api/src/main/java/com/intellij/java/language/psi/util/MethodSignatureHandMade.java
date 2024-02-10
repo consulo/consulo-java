@@ -27,17 +27,17 @@ public class MethodSignatureHandMade extends MethodSignatureBase {
   MethodSignatureHandMade(@Nonnull String name,
                           @Nullable PsiParameterList parameterList,
                           @Nullable PsiTypeParameterList typeParameterList,
-                          @jakarta.annotation.Nonnull PsiSubstitutor substitutor,
+                          @Nonnull PsiSubstitutor substitutor,
                           boolean isConstructor) {
     super(substitutor, parameterList, typeParameterList);
     myName = name;
     myIsConstructor = isConstructor;
   }
 
-  MethodSignatureHandMade(@jakarta.annotation.Nonnull String name,
-                          @jakarta.annotation.Nonnull PsiType[] parameterTypes,
-                          @jakarta.annotation.Nonnull PsiTypeParameter[] typeParameters,
-                          @jakarta.annotation.Nonnull PsiSubstitutor substitutor,
+  MethodSignatureHandMade(@Nonnull String name,
+                          @Nonnull PsiType[] parameterTypes,
+                          @Nonnull PsiTypeParameter[] typeParameters,
+                          @Nonnull PsiSubstitutor substitutor,
                           boolean isConstructor) {
     super(substitutor, parameterTypes, typeParameters);
     myName = name;
@@ -45,7 +45,7 @@ public class MethodSignatureHandMade extends MethodSignatureBase {
   }
 
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getName() {
     return myName;

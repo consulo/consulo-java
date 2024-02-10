@@ -40,7 +40,7 @@ public class MergeNestedTryStatementsIntention extends Intention {
   }
 
   @Override
-  protected void processIntention(@jakarta.annotation.Nonnull PsiElement element) throws IncorrectOperationException {
+  protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiTryStatement tryStatement1 = (PsiTryStatement)element.getParent();
     final StringBuilder newTryStatement = new StringBuilder("try ");
     final PsiResourceList list1 = tryStatement1.getResourceList();

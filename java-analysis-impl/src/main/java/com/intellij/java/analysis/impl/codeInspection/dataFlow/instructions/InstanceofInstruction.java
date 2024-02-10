@@ -33,10 +33,10 @@ public class InstanceofInstruction extends BinopInstruction
 {
 	@Nullable
 	private final PsiExpression myLeft;
-	@jakarta.annotation.Nullable
+	@Nullable
 	private final PsiType myCastType;
 
-	public InstanceofInstruction(PsiExpression psiAnchor, @jakarta.annotation.Nullable PsiExpression left, @Nonnull PsiType castType)
+	public InstanceofInstruction(PsiExpression psiAnchor, @Nullable PsiExpression left, @Nonnull PsiType castType)
 	{
 		super(JavaTokenType.INSTANCEOF_KEYWORD, psiAnchor, PsiType.BOOLEAN);
 		myLeft = left;
@@ -65,13 +65,13 @@ public class InstanceofInstruction extends BinopInstruction
 	 * @return instanceof operand or null if it's not applicable
 	 * (e.g. instruction is emitted when inlining Xyz.class::isInstance method reference)
 	 */
-	@jakarta.annotation.Nullable
+	@Nullable
 	public PsiExpression getLeft()
 	{
 		return myLeft;
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	public PsiType getCastType()
 	{
 		return myCastType;

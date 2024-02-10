@@ -56,7 +56,7 @@ public class LoopStatementsThatDontLoopInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitForStatement(@jakarta.annotation.Nonnull PsiForStatement statement) {
+    public void visitForStatement(@Nonnull PsiForStatement statement) {
       super.visitForStatement(statement);
       final PsiStatement body = statement.getBody();
       if (body == null) {

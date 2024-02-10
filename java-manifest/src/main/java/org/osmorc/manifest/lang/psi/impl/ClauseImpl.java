@@ -52,7 +52,7 @@ public class ClauseImpl extends ManifestElementBase<ClauseStub> implements Claus
     return findChildByClass(HeaderValuePart.class);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Directive[] getDirectives() {
     return findChildrenByClass(Directive.class);

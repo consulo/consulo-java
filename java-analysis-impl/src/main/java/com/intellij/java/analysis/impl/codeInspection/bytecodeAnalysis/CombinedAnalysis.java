@@ -207,7 +207,7 @@ final class CombinedAnalysis
 		return new Equation(key, result);
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	final Equation failEquation(boolean stable)
 	{
 		final EKey key = new EKey(method, Throw, stable);
@@ -229,7 +229,7 @@ final class CombinedAnalysis
 		return new Equation(key, result);
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	final Equation failEquation(int i, Value inValue, boolean stable)
 	{
 		final InThrow direction = new InThrow(i, inValue);
@@ -256,7 +256,7 @@ final class CombinedAnalysis
 		return new Equation(key, result);
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	final Equation outContractEquation(boolean stable)
 	{
 		return outEquation(exception, method, returnValue, stable);
@@ -271,7 +271,7 @@ final class CombinedAnalysis
 				.toList();
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	private static Equation outEquation(boolean exception, Member member, BasicValue returnValue, boolean stable)
 	{
 		final EKey key = new EKey(member, Out, stable);

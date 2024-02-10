@@ -104,7 +104,7 @@ public class JavaSafeDeleteProcessor extends SafeDeleteProcessorDelegateBase {
   @Nullable
   @Override
   public Collection<? extends PsiElement> getElementsToSearch(PsiElement element,
-                                                              @jakarta.annotation.Nullable Module module,
+                                                              @Nullable Module module,
                                                               Collection<PsiElement> allElementsToDelete) {
     Project project = element.getProject();
     if (element instanceof PsiPackage && module != null) {

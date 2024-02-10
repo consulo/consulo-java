@@ -24,7 +24,7 @@ import jakarta.annotation.Nullable;
  */
 public class PsiTypeVisitor<A>
 {
-	@jakarta.annotation.Nullable
+	@Nullable
 	public A visitType(PsiType type)
 	{
 		return null;
@@ -48,7 +48,7 @@ public class PsiTypeVisitor<A>
 		return visitType(classType);
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	public A visitCapturedWildcardType(PsiCapturedWildcardType capturedWildcardType)
 	{
 		return visitWildcardType(capturedWildcardType.getWildcard());

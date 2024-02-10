@@ -22,7 +22,7 @@ public class ManifestSyntaxHighlighterFactory extends LanguageVersionableSyntaxH
     return ManifestLanguage.INSTANCE;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public SyntaxHighlighter getSyntaxHighlighter(@Nonnull LanguageVersion languageVersion) {
     return new ManifestSyntaxHighlighter((ManifestLanguageVersion) languageVersion);

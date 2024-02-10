@@ -35,7 +35,7 @@ public class FileObject
 	private byte[] myContent;
 	private int myClassId = -1;
 
-	public FileObject(@Nonnull File file, @jakarta.annotation.Nonnull byte[] content)
+	public FileObject(@Nonnull File file, @Nonnull byte[] content)
 	{
 		myFile = file;
 		myContent = content;

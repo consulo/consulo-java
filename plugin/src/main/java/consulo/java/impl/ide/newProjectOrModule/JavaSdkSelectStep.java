@@ -42,7 +42,7 @@ public class JavaSdkSelectStep extends UnifiedProjectOrModuleNameStep<JavaNewMod
 
   @RequiredUIAccess
   @Override
-  protected void extend(@jakarta.annotation.Nonnull FormBuilder builder, @jakarta.annotation.Nonnull Disposable uiDisposable) {
+  protected void extend(@Nonnull FormBuilder builder, @Nonnull Disposable uiDisposable) {
     super.extend(builder, uiDisposable);
 
     BundleBoxBuilder boxBuilder = BundleBoxBuilder.create(uiDisposable);
@@ -57,7 +57,7 @@ public class JavaSdkSelectStep extends UnifiedProjectOrModuleNameStep<JavaNewMod
   }
 
   @Override
-  public void onStepLeave(@jakarta.annotation.Nonnull JavaNewModuleWizardContext context) {
+  public void onStepLeave(@Nonnull JavaNewModuleWizardContext context) {
     super.onStepLeave(context);
 
     String selectedBundleName = myBundleBox.getSelectedBundleName();

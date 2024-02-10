@@ -85,7 +85,7 @@ public class MoveInstanceMethodProcessor extends BaseRefactoringProcessor {
     myNewVisibility = newVisibility;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
     return new MoveInstanceMethodViewDescriptor(myMethod, myTargetVariable, myTargetClass);
   }
@@ -523,7 +523,7 @@ public class MoveInstanceMethodProcessor extends BaseRefactoringProcessor {
     }
   }
 
-  private String getParameterNameToCreate(@jakarta.annotation.Nonnull PsiClass aClass) {
+  private String getParameterNameToCreate(@Nonnull PsiClass aClass) {
     return myOldClassParameterNames.get(aClass);
   }
 }

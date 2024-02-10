@@ -54,24 +54,24 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
   @Nonnull
   public abstract PsiClass getDelegate();
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public abstract PsiElement copy();
 
   @Override
   @NonNls
-  @jakarta.annotation.Nullable
+  @Nullable
   public String getName() {
     return getDelegate().getName();
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   public PsiModifierList getModifierList() {
     return getDelegate().getModifierList();
   }
 
   @Override
-  public boolean hasModifierProperty(@NonNls @jakarta.annotation.Nonnull String name) {
+  public boolean hasModifierProperty(@NonNls @Nonnull String name) {
     return getDelegate().hasModifierProperty(name);
   }
 
@@ -92,7 +92,7 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   public PsiTypeParameterList getTypeParameterList() {
     return getDelegate().getTypeParameterList();
   }
@@ -132,19 +132,19 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   public PsiReferenceList getImplementsList() {
     return getDelegate().getImplementsList();
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiClassType[] getExtendsListTypes() {
     return PsiClassImplUtil.getExtendsListTypes(this);
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiClassType[] getImplementsListTypes() {
     return PsiClassImplUtil.getImplementsListTypes(this);
   }
@@ -160,32 +160,32 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
     return getDelegate().getInterfaces();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public PsiElement getNavigationElement() {
     return getDelegate().getNavigationElement();
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiClass[] getSupers() {
     return getDelegate().getSupers();
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiClassType[] getSuperTypes() {
     return getDelegate().getSuperTypes();
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiField[] getFields() {
     return getDelegate().getFields();
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiMethod[] getMethods() {
     return getDelegate().getMethods();
   }
@@ -197,27 +197,27 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiClass[] getInnerClasses() {
     return getDelegate().getInnerClasses();
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiClassInitializer[] getInitializers() {
     return getDelegate().getInitializers();
   }
 
   @Override
-  public boolean processDeclarations(@jakarta.annotation.Nonnull PsiScopeProcessor processor,
-                                     @jakarta.annotation.Nonnull ResolveState state,
+  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
+                                     @Nonnull ResolveState state,
                                      PsiElement lastParent,
-                                     @jakarta.annotation.Nonnull PsiElement place) {
+                                     @Nonnull PsiElement place) {
     return PsiClassImplUtil.processDeclarationsInClass(this, processor, state, null, lastParent, place, PsiUtil.getLanguageLevel(place), false);
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiField[] getAllFields() {
     return getDelegate().getAllFields();
   }
@@ -229,7 +229,7 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiClass[] getAllInnerClasses() {
     return getDelegate().getAllInnerClasses();
   }
@@ -247,25 +247,25 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiMethod[] findMethodsBySignature(PsiMethod patternMethod, boolean checkBases) {
     return PsiClassImplUtil.findMethodsBySignature(this, patternMethod, checkBases);
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiMethod[] findMethodsByName(@NonNls String name, boolean checkBases) {
     return PsiClassImplUtil.findMethodsByName(this, name, checkBases);
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public List<Pair<PsiMethod, PsiSubstitutor>> findMethodsAndTheirSubstitutorsByName(@NonNls String name, boolean checkBases) {
     return PsiClassImplUtil.findMethodsAndTheirSubstitutorsByName(this, name, checkBases);
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public List<Pair<PsiMethod, PsiSubstitutor>> getAllMethodsAndTheirSubstitutors() {
     return PsiClassImplUtil.getAllWithSubstitutorsByMap(this, PsiClassImplUtil.MemberType.METHOD);
   }
@@ -277,7 +277,7 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   public PsiElement getLBrace() {
     return getDelegate().getLBrace();
   }
@@ -289,7 +289,7 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   public PsiIdentifier getNameIdentifier() {
     return getDelegate().getNameIdentifier();
   }
@@ -300,7 +300,7 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
   }
 
   @Override
-  public boolean isInheritor(@jakarta.annotation.Nonnull PsiClass baseClass, boolean checkDeep) {
+  public boolean isInheritor(@Nonnull PsiClass baseClass, boolean checkDeep) {
     return getDelegate().isInheritor(baseClass, checkDeep);
   }
 
@@ -316,13 +316,13 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public Collection<HierarchicalMethodSignature> getVisibleSignatures() {
     return getDelegate().getVisibleSignatures();
   }
 
   @Override
-  public PsiElement setName(@NonNls @jakarta.annotation.Nonnull String name) throws IncorrectOperationException {
+  public PsiElement setName(@NonNls @Nonnull String name) throws IncorrectOperationException {
     return getDelegate().setName(name);
   }
 

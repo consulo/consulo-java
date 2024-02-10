@@ -33,10 +33,10 @@ import jakarta.annotation.Nullable;
 public class WrapArrayToArraysAsListFix extends MethodArgumentFix {
   public static final ArgumentFixerActionFactory REGISTAR = new MyFixerActionFactory();
 
-  protected WrapArrayToArraysAsListFix(final @jakarta.annotation.Nonnull PsiExpressionList list,
+  protected WrapArrayToArraysAsListFix(final @Nonnull PsiExpressionList list,
                                        final int i,
                                        final @Nonnull PsiType toType,
-                                       final @jakarta.annotation.Nonnull ArgumentFixerActionFactory fixerActionFactory) {
+                                       final @Nonnull ArgumentFixerActionFactory fixerActionFactory) {
     super(list, i, toType, fixerActionFactory);
   }
 
@@ -52,7 +52,7 @@ public class WrapArrayToArraysAsListFix extends MethodArgumentFix {
 
   public static class MyFixerActionFactory extends ArgumentFixerActionFactory {
 
-    @jakarta.annotation.Nullable
+    @Nullable
     @Override
     protected PsiExpression getModifiedArgument(final PsiExpression expression,
                                                 final PsiType toType) throws IncorrectOperationException {

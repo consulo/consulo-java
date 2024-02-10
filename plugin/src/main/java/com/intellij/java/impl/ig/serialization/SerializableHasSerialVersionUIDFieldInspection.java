@@ -31,20 +31,20 @@ public class SerializableHasSerialVersionUIDFieldInspection extends Serializable
 
   @Pattern("[a-zA-Z_0-9.-]+")
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "serial";
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "serializable.class.without.serialversionuid.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "serializable.class.without.serialversionuid.problem.descriptor");

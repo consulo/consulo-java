@@ -84,12 +84,12 @@ public class CreateClassDialog extends DialogWrapper {
   @NonNls private static final String RECENTS_KEY = "CreateClassDialog.RecentsKey";
 
   public CreateClassDialog(@Nonnull Project project,
-                           @jakarta.annotation.Nonnull String title,
+                           @Nonnull String title,
                            @Nonnull String targetClassName,
-                           @jakarta.annotation.Nonnull String targetPackageName,
-                           @jakarta.annotation.Nonnull ClassKind kind,
+                           @Nonnull String targetPackageName,
+                           @Nonnull ClassKind kind,
                            boolean classNameEditable,
-                           @jakarta.annotation.Nullable Module defaultModule) {
+                           @Nullable Module defaultModule) {
     super(project, true);
     myClassNameEditable = classNameEditable;
     myModule = defaultModule;
@@ -120,7 +120,7 @@ public class CreateClassDialog extends DialogWrapper {
     return false;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected Action[] createActions() {
     return new Action[]{getOKAction(), getCancelAction()};
@@ -272,7 +272,7 @@ public class CreateClassDialog extends DialogWrapper {
     return myModule == null? null : PackageUtil.findPossiblePackageDirectoryInModule(myModule, packageName);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getClassName() {
     if (myClassNameEditable) {
       return myTfClassName.getText();

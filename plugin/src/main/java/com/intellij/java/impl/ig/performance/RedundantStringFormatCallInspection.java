@@ -36,7 +36,7 @@ public class RedundantStringFormatCallInspection extends BaseInspection {
 
   @Override
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("redundant.string.format.call.display.name");
   }

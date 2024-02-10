@@ -142,7 +142,7 @@ public abstract class StaticMemberProcessor {
   }
 
   @Nonnull
-  protected abstract LookupElement createLookupElement(@jakarta.annotation.Nonnull PsiMember member, @Nonnull PsiClass containingClass, boolean shouldImport);
+  protected abstract LookupElement createLookupElement(@Nonnull PsiMember member, @Nonnull PsiClass containingClass, boolean shouldImport);
 
   protected abstract LookupElement createLookupElement(@Nonnull List<PsiMethod> overloads, @Nonnull PsiClass containingClass, boolean shouldImport);
 }

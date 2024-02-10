@@ -69,7 +69,7 @@ class ScopedClassHierarchy {
     myResolveScope = resolveScope;
   }
 
-  private void visitType(@jakarta.annotation.Nonnull PsiClassType type, Map<PsiClass, PsiClassType.ClassResolveResult> map) {
+  private void visitType(@Nonnull PsiClassType type, Map<PsiClass, PsiClassType.ClassResolveResult> map) {
     PsiClassType.ClassResolveResult resolveResult = type.resolveGenerics();
     PsiClass psiClass = resolveResult.getElement();
     if (psiClass == null || InheritanceImplUtil.hasObjectQualifiedName(psiClass) || map.containsKey(psiClass)) {
@@ -87,7 +87,7 @@ class ScopedClassHierarchy {
     }
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private static List<PsiType> getSuperTypes(PsiClass psiClass) {
     List<PsiType> superTypes = ContainerUtil.newArrayList();
     if (psiClass instanceof PsiAnonymousClass) {
@@ -98,10 +98,10 @@ class ScopedClassHierarchy {
     return superTypes;
   }
 
-  @jakarta.annotation.Nonnull
-  static ScopedClassHierarchy getHierarchy(@jakarta.annotation.Nonnull final PsiClass psiClass, @jakarta.annotation.Nonnull final GlobalSearchScope resolveScope) {
+  @Nonnull
+  static ScopedClassHierarchy getHierarchy(@Nonnull final PsiClass psiClass, @Nonnull final GlobalSearchScope resolveScope) {
     return LanguageCachedValueUtil.getCachedValue(psiClass, new CachedValueProvider<Map<GlobalSearchScope, ScopedClassHierarchy>>() {
-      @jakarta.annotation.Nullable
+      @Nullable
       @Override
       public Result<Map<GlobalSearchScope, ScopedClassHierarchy>> compute() {
         Map<GlobalSearchScope, ScopedClassHierarchy> result = ConcurrentFactoryMap.createMap(it -> new ScopedClassHierarchy(psiClass, it));
@@ -111,7 +111,7 @@ class ScopedClassHierarchy {
   }
 
   @Nullable
-  static PsiSubstitutor getSuperClassSubstitutor(@jakarta.annotation.Nonnull PsiClass derivedClass, @jakarta.annotation.Nonnull GlobalSearchScope scope, @jakarta.annotation.Nonnull PsiClass superClass) {
+  static PsiSubstitutor getSuperClassSubstitutor(@Nonnull PsiClass derivedClass, @Nonnull GlobalSearchScope scope, @Nonnull PsiClass superClass) {
     ScopedClassHierarchy hierarchy = getHierarchy(derivedClass, scope);
     Map<PsiClass, PsiClassType.ClassResolveResult> map = hierarchy.mySupersWithSubstitutors;
     if (map == null) {
@@ -133,7 +133,7 @@ class ScopedClassHierarchy {
   }
 
   @Nonnull
-  private static PsiSubstitutor mirrorSubstitutor(@jakarta.annotation.Nonnull PsiClass from, @jakarta.annotation.Nonnull final PsiClass to, @jakarta.annotation.Nonnull PsiSubstitutor substitutor) {
+  private static PsiSubstitutor mirrorSubstitutor(@Nonnull PsiClass from, @Nonnull final PsiClass to, @Nonnull PsiSubstitutor substitutor) {
     Iterator<PsiTypeParameter> baseParams = PsiUtil.typeParametersIterator(to);
     Iterator<PsiTypeParameter> candidateParams = PsiUtil.typeParametersIterator(from);
 
@@ -149,7 +149,7 @@ class ScopedClassHierarchy {
     return answer;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   List<PsiClassType.ClassResolveResult> getImmediateSupersWithCapturing() {
     List<PsiClassType.ClassResolveResult> list = myImmediateSupersWithCapturing;
     if (list == null) {
@@ -170,7 +170,7 @@ class ScopedClassHierarchy {
     return list;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private List<PsiClassType.ClassResolveResult> calcImmediateSupersWithCapturing() {
     List<PsiClassType.ClassResolveResult> list;
     list = ContainerUtil.newArrayList();
@@ -191,7 +191,7 @@ class ScopedClassHierarchy {
     return list;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private Map<PsiClass, PsiSubstitutor> calcAllMemberSupers(final LanguageLevel level) {
     final Map<PsiClass, PsiSubstitutor> map = new HashMap<>();
     final PsiElementFactory factory = JavaPsiFacade.getElementFactory(myPlaceClass.getProject());
@@ -208,8 +208,8 @@ class ScopedClassHierarchy {
     return map;
   }
 
-  @jakarta.annotation.Nullable
-  PsiSubstitutor getSuperMembersSubstitutor(@jakarta.annotation.Nonnull PsiClass superClass, @jakarta.annotation.Nonnull LanguageLevel level) {
+  @Nullable
+  PsiSubstitutor getSuperMembersSubstitutor(@Nonnull PsiClass superClass, @Nonnull LanguageLevel level) {
     return myAllSupersWithCapturing.get(level).get(superClass);
   }
 }

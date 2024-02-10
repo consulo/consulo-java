@@ -85,7 +85,7 @@ public class JavaBraceMatcher implements PairedBraceMatcher {
     return openingBraceOffset;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

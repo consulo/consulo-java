@@ -37,7 +37,7 @@ public interface PsiJavaParserFacade {
    * @return the created tag.
    * @throws IncorrectOperationException if the text of the tag is not valid.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   PsiDocTag createDocTagFromText(@Nonnull String docTagText) throws IncorrectOperationException;
 
   /**
@@ -60,7 +60,7 @@ public interface PsiJavaParserFacade {
    * @throws IncorrectOperationException if the text of the comment is not valid.
    */
   @Nonnull
-  PsiDocComment createDocCommentFromText(@Nonnull String docCommentText, @jakarta.annotation.Nullable PsiElement context) throws IncorrectOperationException;
+  PsiDocComment createDocCommentFromText(@Nonnull String docCommentText, @Nullable PsiElement context) throws IncorrectOperationException;
 
   /**
    * Creates a Java class from the specified text.
@@ -72,7 +72,7 @@ public interface PsiJavaParserFacade {
    * @throws IncorrectOperationException if the text is not a valid class body.
    */
   @Nonnull
-  PsiClass createClassFromText(@jakarta.annotation.Nonnull @NonNls String text, @Nullable PsiElement context) throws IncorrectOperationException;
+  PsiClass createClassFromText(@Nonnull @NonNls String text, @Nullable PsiElement context) throws IncorrectOperationException;
 
   /**
    * Creates a Java field from the specified text.
@@ -116,8 +116,8 @@ public interface PsiJavaParserFacade {
    * @return the created parameter instance.
    * @throws IncorrectOperationException if the text is not a valid parameter body.
    */
-  @jakarta.annotation.Nonnull
-  PsiParameter createParameterFromText(@jakarta.annotation.Nonnull @NonNls String text, @Nullable PsiElement context) throws IncorrectOperationException;
+  @Nonnull
+  PsiParameter createParameterFromText(@Nonnull @NonNls String text, @Nullable PsiElement context) throws IncorrectOperationException;
 
   /**
    * Creates a Java try-resource from the specified text.
@@ -151,7 +151,7 @@ public interface PsiJavaParserFacade {
    * @return the created type element.
    * @throws IncorrectOperationException if the text does not specify a valid type.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   PsiTypeElement createTypeElementFromText(@Nonnull @NonNls String text, @Nullable PsiElement context) throws IncorrectOperationException;
 
   /**
@@ -164,7 +164,7 @@ public interface PsiJavaParserFacade {
    * @throws IncorrectOperationException if the text does not specify a valid type.
    */
   @Nonnull
-  PsiJavaCodeReferenceElement createReferenceFromText(@Nonnull @NonNls String text, @jakarta.annotation.Nullable PsiElement context) throws IncorrectOperationException;
+  PsiJavaCodeReferenceElement createReferenceFromText(@Nonnull @NonNls String text, @Nullable PsiElement context) throws IncorrectOperationException;
 
   /**
    * Creates a Java code block from the specified text.
@@ -229,8 +229,8 @@ public interface PsiJavaParserFacade {
    * @return the created annotation instance.
    * @throws IncorrectOperationException if the text does not specify a valid annotation.
    */
-  @jakarta.annotation.Nonnull
-  PsiAnnotation createAnnotationFromText(@Nonnull @NonNls String annotationText, @jakarta.annotation.Nullable PsiElement context) throws IncorrectOperationException;
+  @Nonnull
+  PsiAnnotation createAnnotationFromText(@Nonnull @NonNls String annotationText, @Nullable PsiElement context) throws IncorrectOperationException;
 
   @Nonnull
   PsiEnumConstant createEnumConstantFromText(@Nonnull String text, @Nullable PsiElement context) throws IncorrectOperationException;
@@ -243,14 +243,14 @@ public interface PsiJavaParserFacade {
    * @return the created type instance.
    * @throws IncorrectOperationException if some of the parameters are not valid.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   PsiType createPrimitiveType(@Nonnull String text, @Nonnull PsiAnnotation[] annotations) throws IncorrectOperationException;
 
   /**
    * @deprecated use {@link #createModuleFromText(String, PsiElement)}
    */
   @Deprecated
-  default PsiJavaModule createModuleFromText(@jakarta.annotation.Nonnull @NonNls String text) throws IncorrectOperationException {
+  default PsiJavaModule createModuleFromText(@Nonnull @NonNls String text) throws IncorrectOperationException {
     return createModuleFromText(text, null);
   }
 
@@ -270,5 +270,5 @@ public interface PsiJavaParserFacade {
    * Creates a Java module reference element from the specified text.
    */
   @Nonnull
-  PsiJavaModuleReferenceElement createModuleReferenceFromText(@Nonnull @NonNls String text, @jakarta.annotation.Nullable PsiElement context) throws IncorrectOperationException;
+  PsiJavaModuleReferenceElement createModuleReferenceFromText(@Nonnull @NonNls String text, @Nullable PsiElement context) throws IncorrectOperationException;
 }

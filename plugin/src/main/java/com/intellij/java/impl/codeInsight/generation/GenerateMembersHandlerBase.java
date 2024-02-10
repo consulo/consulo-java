@@ -68,7 +68,7 @@ public abstract class GenerateMembersHandlerBase implements CodeInsightActionHan
   }
 
   @Override
-  public boolean isAvailableForQuickList(@Nonnull Editor editor, @jakarta.annotation.Nonnull PsiFile file, @Nonnull DataContext dataContext) {
+  public boolean isAvailableForQuickList(@Nonnull Editor editor, @Nonnull PsiFile file, @Nonnull DataContext dataContext) {
     final PsiClass aClass = OverrideImplementUtil.getContextClass(file.getProject(), editor, file, false);
     return aClass != null && hasMembers(aClass);
   }
@@ -269,7 +269,7 @@ public abstract class GenerateMembersHandlerBase implements CodeInsightActionHan
 
   protected MemberChooser<ClassMember> createMembersChooser(ClassMember[] members, boolean allowEmptySelection, boolean copyJavadocCheckbox, Project project) {
     MemberChooser<ClassMember> chooser = new MemberChooser<ClassMember>(members, allowEmptySelection, true, project, false, getHeaderPanel(project)) {
-      @jakarta.annotation.Nullable
+      @Nullable
       @Override
       protected String getHelpId() {
         return GenerateMembersHandlerBase.this.getHelpId();
@@ -280,7 +280,7 @@ public abstract class GenerateMembersHandlerBase implements CodeInsightActionHan
     return chooser;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   protected JComponent getHeaderPanel(Project project) {
     return null;
   }

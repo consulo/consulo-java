@@ -42,7 +42,7 @@ public class FallthruInSwitchStatementInspection extends BaseInspection {
     return InspectionGadgetsBundle.message("fallthru.in.switch.statement.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "fallthrough";
   }

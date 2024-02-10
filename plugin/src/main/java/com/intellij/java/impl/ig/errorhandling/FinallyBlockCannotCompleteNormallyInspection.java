@@ -60,7 +60,7 @@ public class FinallyBlockCannotCompleteNormallyInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitTryStatement(@jakarta.annotation.Nonnull PsiTryStatement statement) {
+    public void visitTryStatement(@Nonnull PsiTryStatement statement) {
       super.visitTryStatement(statement);
       final PsiCodeBlock finallyBlock = statement.getFinallyBlock();
       if (finallyBlock == null) {

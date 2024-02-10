@@ -49,15 +49,15 @@ public abstract class RunConfigurationExtension extends RunConfigurationExtensio
   protected void patchCommandLine(@Nonnull RunConfigurationBase configuration,
                                   RunnerSettings runnerSettings,
                                   @Nonnull GeneralCommandLine cmdLine,
-                                  @jakarta.annotation.Nonnull String runnerId)  throws ExecutionException {}
+                                  @Nonnull String runnerId)  throws ExecutionException {}
 
   @Override
-  protected boolean isEnabledFor(@jakarta.annotation.Nonnull RunConfigurationBase applicableConfiguration, @Nullable RunnerSettings runnerSettings) {
+  protected boolean isEnabledFor(@Nonnull RunConfigurationBase applicableConfiguration, @Nullable RunnerSettings runnerSettings) {
     return true;
   }
 
   @Override
-  protected void extendTemplateConfiguration(@jakarta.annotation.Nonnull RunConfigurationBase configuration) {
+  protected void extendTemplateConfiguration(@Nonnull RunConfigurationBase configuration) {
   }
 
   public void cleanUserData(RunConfigurationBase runConfigurationBase) {}

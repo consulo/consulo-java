@@ -124,7 +124,7 @@ public class CreateSwitchBranchesUtil {
    * @param block       parent switch block
    * @param addedLabels list of created labels (returned from {@link #createMissingBranches(PsiSwitchBlock, List, Collection, Function)}).
    */
-  public static void createTemplate(@jakarta.annotation.Nonnull PsiSwitchBlock block, List<PsiSwitchLabelStatementBase> addedLabels) {
+  public static void createTemplate(@Nonnull PsiSwitchBlock block, List<PsiSwitchLabelStatementBase> addedLabels) {
     if (!(block instanceof PsiSwitchExpression))
       return;
     Editor editor = prepareForTemplateAndObtainEditor(block);

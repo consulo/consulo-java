@@ -72,7 +72,7 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
 
 	private JavaExecutionStack myActiveExecutionStack;
 
-	SuspendContextImpl(@jakarta.annotation.Nonnull DebugProcessImpl debugProcess, @MagicConstant(flagsFromClass = EventRequest.class) int suspendPolicy, int eventVotes, EventSet set)
+	SuspendContextImpl(@Nonnull DebugProcessImpl debugProcess, @MagicConstant(flagsFromClass = EventRequest.class) int suspendPolicy, int eventVotes, EventSet set)
 	{
 		myDebugProcess = debugProcess;
 		mySuspendPolicy = suspendPolicy;
@@ -131,7 +131,7 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
 	}
 
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	public EventSet getEventSet()
 	{
 		return myEventSet;
@@ -178,7 +178,7 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
 		myVotesToVote = 1000000000;
 	}
 
-	public boolean isExplicitlyResumed(@jakarta.annotation.Nullable ThreadReferenceProxyImpl thread)
+	public boolean isExplicitlyResumed(@Nullable ThreadReferenceProxyImpl thread)
 	{
 		return myResumedThreads != null && myResumedThreads.contains(thread);
 	}
@@ -263,7 +263,7 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
 		return myPostponedCommands.poll();
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	@Override
 	public JavaExecutionStack getActiveExecutionStack()
 	{

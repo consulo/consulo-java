@@ -16,7 +16,7 @@ import static com.intellij.java.language.impl.psi.impl.source.tree.JavaElementTy
  * from kotlin
  */
 class InferenceVisitor extends RecursiveLighterASTNodeWalkingVisitor {
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private final LighterAST tree;
 
   private Map<Integer, MethodData> result = new HashMap<>();
@@ -29,7 +29,7 @@ class InferenceVisitor extends RecursiveLighterASTNodeWalkingVisitor {
   }
 
   @Override
-  public void visitNode(@jakarta.annotation.Nonnull LighterASTNode element) {
+  public void visitNode(@Nonnull LighterASTNode element) {
     IElementType tokenType = element.getTokenType();
     if (tokenType == CLASS || tokenType == ANONYMOUS_CLASS) {
       classData.put(element, calcClassData(element));
@@ -144,7 +144,7 @@ class InferenceVisitor extends RecursiveLighterASTNodeWalkingVisitor {
   private void walkMethodBody(LighterASTNode root, Consumer<LighterASTNode> processor) {
     new RecursiveLighterASTNodeWalkingVisitor(tree) {
       @Override
-      public void visitNode(@jakarta.annotation.Nonnull LighterASTNode element) {
+      public void visitNode(@Nonnull LighterASTNode element) {
         IElementType type = element.getTokenType();
         if (type == CLASS || type == FIELD || type == METHOD || type == ANNOTATION_METHOD || type == LAMBDA_EXPRESSION) {
           return;
@@ -157,7 +157,7 @@ class InferenceVisitor extends RecursiveLighterASTNodeWalkingVisitor {
     }.visitNode(root);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public Map<Integer, MethodData> getResult() {
     return result;
   }

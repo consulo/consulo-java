@@ -49,7 +49,7 @@ public class JavaCodeFoldingConfigurable extends SimpleConfigurableByProperties 
     myJavaCodeFoldingSettingsProvider = javaCodeFoldingSettingsProvider;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getId() {
     return "editor.preferences.folding.java";
@@ -70,7 +70,7 @@ public class JavaCodeFoldingConfigurable extends SimpleConfigurableByProperties 
   @RequiredUIAccess
   @Nonnull
   @Override
-  protected Component createLayout(@jakarta.annotation.Nonnull PropertyBuilder propertyBuilder, @jakarta.annotation.Nonnull Disposable uiDisposable) {
+  protected Component createLayout(@Nonnull PropertyBuilder propertyBuilder, @Nonnull Disposable uiDisposable) {
     VerticalLayout layout = VerticalLayout.create();
 
     JavaCodeFoldingSettings settings = myJavaCodeFoldingSettingsProvider.get();
@@ -140,9 +140,9 @@ public class JavaCodeFoldingConfigurable extends SimpleConfigurableByProperties 
   @RequiredUIAccess
   private void checkBox(String text,
                         VerticalLayout layout,
-                        @jakarta.annotation.Nonnull PropertyBuilder builder,
-                        @jakarta.annotation.Nonnull Supplier<Boolean> getter,
-                        @jakarta.annotation.Nonnull Consumer<Boolean> setter) {
+                        @Nonnull PropertyBuilder builder,
+                        @Nonnull Supplier<Boolean> getter,
+                        @Nonnull Consumer<Boolean> setter) {
     CheckBox checkBox = CheckBox.create(text);
     builder.add(checkBox, getter, setter);
     layout.add(checkBox);

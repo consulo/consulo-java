@@ -32,7 +32,7 @@ import jakarta.annotation.Nonnull;
 public class ErrorRethrownInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "ErrorNotRethrown";
   }

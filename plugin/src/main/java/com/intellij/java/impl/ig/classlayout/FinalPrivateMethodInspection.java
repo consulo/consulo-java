@@ -31,14 +31,14 @@ import consulo.annotation.component.ExtensionImpl;
 public class FinalPrivateMethodInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "final.private.method.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "final.private.method.problem.descriptor");

@@ -38,7 +38,7 @@ public class LambdaMethodFilter implements BreakpointStepMethodFilter
 {
 	public static final String LAMBDA_METHOD_PREFIX = "lambda$";
 	private final int myLambdaOrdinal;
-	@jakarta.annotation.Nullable
+	@Nullable
 	private final SourcePosition myFirstStatementPosition;
 	private final int myLastStatementLine;
 	private final Range<Integer> myCallingExpressionLines;
@@ -79,7 +79,7 @@ public class LambdaMethodFilter implements BreakpointStepMethodFilter
 	}
 
 	@Override
-	@jakarta.annotation.Nullable
+	@Nullable
 	public SourcePosition getBreakpointPosition()
 	{
 		return myFirstStatementPosition;
@@ -106,7 +106,7 @@ public class LambdaMethodFilter implements BreakpointStepMethodFilter
 		return myCallingExpressionLines;
 	}
 
-	public static boolean isLambdaName(@jakarta.annotation.Nullable String name)
+	public static boolean isLambdaName(@Nullable String name)
 	{
 		return !StringUtil.isEmpty(name) && name.startsWith(LAMBDA_METHOD_PREFIX);
 	}

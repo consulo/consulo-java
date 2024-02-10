@@ -33,23 +33,23 @@ public interface PsiInferenceHelper {
    * inferred type otherwise
    */
   PsiType inferTypeForMethodTypeParameter(@Nonnull PsiTypeParameter typeParameter,
-                                          @jakarta.annotation.Nonnull PsiParameter[] parameters,
-                                          @jakarta.annotation.Nonnull PsiExpression[] arguments,
-                                          @jakarta.annotation.Nonnull PsiSubstitutor partialSubstitutor,
+                                          @Nonnull PsiParameter[] parameters,
+                                          @Nonnull PsiExpression[] arguments,
+                                          @Nonnull PsiSubstitutor partialSubstitutor,
                                           @Nullable PsiElement parent,
-                                          @jakarta.annotation.Nonnull ParameterTypeInferencePolicy policy);
+                                          @Nonnull ParameterTypeInferencePolicy policy);
 
   @Nonnull
-  PsiSubstitutor inferTypeArguments(@jakarta.annotation.Nonnull PsiTypeParameter[] typeParameters,
+  PsiSubstitutor inferTypeArguments(@Nonnull PsiTypeParameter[] typeParameters,
                                     @Nonnull PsiParameter[] parameters,
-                                    @jakarta.annotation.Nonnull PsiExpression[] arguments,
+                                    @Nonnull PsiExpression[] arguments,
                                     @Nonnull PsiSubstitutor partialSubstitutor,
-                                    @jakarta.annotation.Nonnull PsiElement parent,
-                                    @jakarta.annotation.Nonnull ParameterTypeInferencePolicy policy,
-                                    @jakarta.annotation.Nonnull LanguageLevel languageLevel);
+                                    @Nonnull PsiElement parent,
+                                    @Nonnull ParameterTypeInferencePolicy policy,
+                                    @Nonnull LanguageLevel languageLevel);
 
-  @jakarta.annotation.Nonnull
-  PsiSubstitutor inferTypeArguments(@jakarta.annotation.Nonnull PsiTypeParameter[] typeParameters, @jakarta.annotation.Nonnull PsiType[] leftTypes, @jakarta.annotation.Nonnull PsiType[] rightTypes, @Nonnull LanguageLevel languageLevel);
+  @Nonnull
+  PsiSubstitutor inferTypeArguments(@Nonnull PsiTypeParameter[] typeParameters, @Nonnull PsiType[] leftTypes, @Nonnull PsiType[] rightTypes, @Nonnull LanguageLevel languageLevel);
 
   PsiType getSubstitutionForTypeParameter(PsiTypeParameter typeParam, PsiType param, PsiType arg, boolean isContraVariantPosition, LanguageLevel languageLevel);
 }

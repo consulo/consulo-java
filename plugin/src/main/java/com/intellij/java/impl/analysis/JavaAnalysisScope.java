@@ -56,7 +56,7 @@ public class JavaAnalysisScope extends AnalysisScope {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public AnalysisScope getNarrowedComplementaryScope(@Nonnull Project defaultProject) {
     final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(defaultProject).getFileIndex();
     final HashSet<Module> modules = new HashSet<Module>();
@@ -89,7 +89,7 @@ public class JavaAnalysisScope extends AnalysisScope {
   }
 
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getShortenName() {
     if (myType == PACKAGE) {
@@ -98,7 +98,7 @@ public class JavaAnalysisScope extends AnalysisScope {
     return super.getShortenName();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getDisplayName() {
     if (myType == PACKAGE) {
@@ -118,7 +118,7 @@ public class JavaAnalysisScope extends AnalysisScope {
   }
 
   @Override
-  public boolean accept(@jakarta.annotation.Nonnull Processor<VirtualFile> processor) {
+  public boolean accept(@Nonnull Processor<VirtualFile> processor) {
     if (myElement instanceof PsiJavaPackage) {
       final PsiJavaPackage pack = (PsiJavaPackage) myElement;
       final Set<PsiDirectory> dirs = new HashSet<PsiDirectory>();
@@ -139,7 +139,7 @@ public class JavaAnalysisScope extends AnalysisScope {
     return super.accept(processor);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public SearchScope toSearchScope() {
     if (myType == PACKAGE) {

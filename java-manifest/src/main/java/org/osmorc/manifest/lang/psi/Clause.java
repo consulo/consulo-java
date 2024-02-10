@@ -43,7 +43,7 @@ public interface Clause extends PsiElement, StubBasedPsiElement<ClauseStub> {
    *
    * @return the value of this clause
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   HeaderValuePart getValue();
 
   /**

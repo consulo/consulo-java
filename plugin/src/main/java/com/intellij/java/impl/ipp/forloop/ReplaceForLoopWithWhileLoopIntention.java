@@ -36,7 +36,7 @@ public class ReplaceForLoopWithWhileLoopIntention extends Intention {
   }
 
   @Override
-  protected void processIntention(@jakarta.annotation.Nonnull PsiElement element)
+  protected void processIntention(@Nonnull PsiElement element)
     throws IncorrectOperationException {
     final PsiForStatement forStatement =
       (PsiForStatement)element.getParent();

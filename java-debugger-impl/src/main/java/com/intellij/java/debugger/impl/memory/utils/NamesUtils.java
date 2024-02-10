@@ -25,7 +25,7 @@ import consulo.internal.com.sun.jdi.ObjectReference;
 
 class NamesUtils
 {
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	static String getUniqueName(@Nonnull ObjectReference ref)
 	{
 		String shortName = StringUtil.getShortName(ref.referenceType().name());

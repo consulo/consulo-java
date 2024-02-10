@@ -40,7 +40,7 @@ public class NonSerializableObjectPassedToObjectStreamInspection
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "non.serializable.object.passed.to.object.stream.problem.descriptor");

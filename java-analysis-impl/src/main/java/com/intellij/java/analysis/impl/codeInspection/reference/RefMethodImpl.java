@@ -312,7 +312,7 @@ public class RefMethodImpl extends RefJavaElementImpl implements RefMethod {
     getRefManager().fireBuildReferences(this);
   }
 
-  private void collectUncaughtExceptions(@jakarta.annotation.Nonnull PsiMethod method) {
+  private void collectUncaughtExceptions(@Nonnull PsiMethod method) {
     if (isExternalOverride()) {
       return;
     }
@@ -501,7 +501,7 @@ public class RefMethodImpl extends RefJavaElementImpl implements RefMethod {
     return result[0];
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static RefMethod methodFromExternalName(RefManager manager, String externalName) {
     return (RefMethod) manager.getReference(findPsiMethod(PsiManager.getInstance(manager.getProject()), externalName));
   }
@@ -673,7 +673,7 @@ public class RefMethodImpl extends RefJavaElementImpl implements RefMethod {
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   public PsiClass[] getUnThrownExceptions() {
     if (myUnThrownExceptions == null) {
       return null;

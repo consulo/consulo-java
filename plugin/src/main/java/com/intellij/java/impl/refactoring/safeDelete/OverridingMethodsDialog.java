@@ -60,7 +60,7 @@ class OverridingMethodsDialog extends DialogWrapper {
   private final boolean[] myChecked;
 
   private static final int CHECK_COLUMN = 0;
-  private consulo.ide.impl.idea.util.ui.Table myTable;
+  private Table myTable;
   private final UsagePreviewPanel myUsagePreviewPanel;
 
   public OverridingMethodsDialog(Project project, List<UsageInfo> overridingMethods) {

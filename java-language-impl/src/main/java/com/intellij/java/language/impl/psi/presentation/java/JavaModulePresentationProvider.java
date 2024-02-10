@@ -35,7 +35,7 @@ import java.util.regex.Pattern;
 public class JavaModulePresentationProvider implements ItemPresentationProvider<PsiJavaModule> {
   private static final Pattern JAR_NAME = Pattern.compile(".+/([^/]+\\.jar)!/.*");
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Class<PsiJavaModule> getItemClass() {
     return PsiJavaModule.class;
@@ -44,7 +44,7 @@ public class JavaModulePresentationProvider implements ItemPresentationProvider<
   @Override
   public ItemPresentation getPresentation(@Nonnull final PsiJavaModule item) {
     return new ItemPresentation() {
-      @jakarta.annotation.Nullable
+      @Nullable
       @Override
       public String getPresentableText() {
         return item.getName();
@@ -69,7 +69,7 @@ public class JavaModulePresentationProvider implements ItemPresentationProvider<
         return null;
       }
 
-      @jakarta.annotation.Nullable
+      @Nullable
       @Override
       public Image getIcon() {
         return JavaIcons.Nodes.JavaModule;

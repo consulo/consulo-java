@@ -33,14 +33,14 @@ public class BndFileType extends ManifestFileType
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public LocalizeValue getDescription()
 	{
 		return LocalizeValue.localizeTODO("Bnd files");
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@NonNls
 	public String getDefaultExtension()
 	{

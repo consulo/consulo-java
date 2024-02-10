@@ -51,7 +51,7 @@ public class StaticVariableInitializationInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "static.variable.may.not.be.initialized.problem.descriptor");

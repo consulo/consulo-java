@@ -38,7 +38,7 @@ public class OverrideImplementExploreUtil {
     return getMapToOverrideImplement(aClass, false).keySet();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static Map<MethodSignature, CandidateInfo> getMapToOverrideImplement(PsiClass aClass, boolean toImplement) {
     return getMapToOverrideImplement(aClass, toImplement, true);
   }

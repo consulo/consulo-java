@@ -38,7 +38,7 @@ public class ClassInheritanceDepthInspection
 
   private static final int CLASS_INHERITANCE_LIMIT = 2;
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("class.too.deep.display.name");
   }
@@ -66,7 +66,7 @@ public class ClassInheritanceDepthInspection
   private class ClassNestingLevel extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       // note: no call to super
       if (aClass.isEnum()) {
         return;

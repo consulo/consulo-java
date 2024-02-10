@@ -149,7 +149,7 @@ public class PsiPrecedenceUtil {
     return -1;
   }
 
-  public static int getPrecedenceForOperator(@jakarta.annotation.Nonnull IElementType operator) {
+  public static int getPrecedenceForOperator(@Nonnull IElementType operator) {
     final Integer precedence = s_binaryOperatorPrecedence.get(operator);
     if (precedence == null) {
       throw new IllegalArgumentException("unknown operator: " + operator);

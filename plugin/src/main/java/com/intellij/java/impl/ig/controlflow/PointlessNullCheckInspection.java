@@ -78,7 +78,7 @@ public class PointlessNullCheckInspection extends BaseInspection {
     }
 
     @Override
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("pointless.nullcheck.simplify.quickfix", myExpressionText);
     }

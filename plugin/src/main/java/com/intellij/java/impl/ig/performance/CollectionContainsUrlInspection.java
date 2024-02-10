@@ -34,7 +34,7 @@ import java.util.Set;
 public class CollectionContainsUrlInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "collection.contains.url.display.name");
@@ -115,7 +115,7 @@ public class CollectionContainsUrlInspection extends BaseInspection {
     }
 
     private static ClassType isMapOrSet(
-      @jakarta.annotation.Nullable PsiClass aClass, Set<PsiClass> visitedClasses) {
+      @Nullable PsiClass aClass, Set<PsiClass> visitedClasses) {
       if (aClass == null) {
         return ClassType.OTHER;
       }

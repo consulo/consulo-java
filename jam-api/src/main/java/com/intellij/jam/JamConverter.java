@@ -27,7 +27,7 @@ public abstract class JamConverter<T> {
 
   public static final JamConverter<String> DUMMY_CONVERTER = new JamConverter<String>() {
     @Override
-    public String fromString(@jakarta.annotation.Nullable String s, JamStringAttributeElement<String> context) {
+    public String fromString(@Nullable String s, JamStringAttributeElement<String> context) {
       return s;
     }
 
@@ -37,10 +37,10 @@ public abstract class JamConverter<T> {
     }
   };
 
-  @jakarta.annotation.Nullable
-  public abstract T fromString(@jakarta.annotation.Nullable String s, JamStringAttributeElement<T> context);
+  @Nullable
+  public abstract T fromString(@Nullable String s, JamStringAttributeElement<T> context);
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public String toString(@Nullable T s, JamElement context) {
     throw new UnsupportedOperationException("toString() not supported for " + getClass());
   }

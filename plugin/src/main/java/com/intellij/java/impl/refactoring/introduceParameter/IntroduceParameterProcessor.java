@@ -92,9 +92,9 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
 	/**
 	 * if expressionToSearch is null, search for localVariable
 	 */
-	public IntroduceParameterProcessor(@jakarta.annotation.Nonnull Project project,
+	public IntroduceParameterProcessor(@Nonnull Project project,
 									   PsiMethod methodToReplaceIn,
-									   @jakarta.annotation.Nonnull PsiMethod methodToSearchFor,
+									   @Nonnull PsiMethod methodToSearchFor,
 									   PsiExpression parameterInitializer,
 									   PsiExpression expressionToSearch,
 									   PsiLocalVariable localVariable,
@@ -105,7 +105,7 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
 									   boolean declareFinal,
 									   boolean generateDelegate,
 									   PsiType forcedType,
-									   @jakarta.annotation.Nonnull IntList parametersToRemove)
+									   @Nonnull IntList parametersToRemove)
 	{
 		super(project);
 
@@ -135,7 +135,7 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
 		return new IntroduceParameterViewDescriptor(myMethodToSearchFor);
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public PsiType getForcedType()
 	{
 		return myForcedType;
@@ -729,13 +729,13 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
 		return myGenerateDelegate;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public IntList getParametersToRemove()
 	{
 		return myParametersToRemove;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public Project getProject()
 	{
 		return myProject;

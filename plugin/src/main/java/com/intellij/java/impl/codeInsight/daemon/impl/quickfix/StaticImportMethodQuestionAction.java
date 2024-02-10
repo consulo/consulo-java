@@ -63,7 +63,7 @@ public class StaticImportMethodQuestionAction<T extends PsiMember> implements Qu
 		myRef = ref;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	protected String getPopupTitle()
 	{
 		return JavaQuickFixBundle.message("method.to.import.chooser.title");

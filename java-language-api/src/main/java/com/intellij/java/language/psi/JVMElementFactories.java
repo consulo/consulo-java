@@ -27,12 +27,12 @@ import jakarta.annotation.Nullable;
 @Deprecated
 public class JVMElementFactories {
   @Nullable
-  public static JVMElementFactory getFactory(@jakarta.annotation.Nonnull Language language, @Nonnull Project project) {
+  public static JVMElementFactory getFactory(@Nonnull Language language, @Nonnull Project project) {
     return JVMElementFactoryProvider.forLanguage(project, language);
   }
 
-  @jakarta.annotation.Nonnull
-  public static JVMElementFactory requireFactory(@Nonnull Language language, @jakarta.annotation.Nonnull Project project) {
+  @Nonnull
+  public static JVMElementFactory requireFactory(@Nonnull Language language, @Nonnull Project project) {
     return JVMElementFactoryProvider.forLanguageRequired(project, language);
   }
 }

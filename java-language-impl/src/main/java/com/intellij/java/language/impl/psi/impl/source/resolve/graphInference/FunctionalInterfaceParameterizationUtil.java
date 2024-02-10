@@ -48,18 +48,18 @@ public class FunctionalInterfaceParameterizationUtil {
     return false;
   }
 
-  @jakarta.annotation.Nullable
-  public static PsiType getGroundTargetType(@jakarta.annotation.Nullable PsiType psiClassType) {
+  @Nullable
+  public static PsiType getGroundTargetType(@Nullable PsiType psiClassType) {
     return getGroundTargetType(psiClassType, null);
   }
 
   @Nullable
-  public static PsiType getGroundTargetType(@jakarta.annotation.Nullable PsiType psiClassType, @Nullable PsiLambdaExpression expr) {
+  public static PsiType getGroundTargetType(@Nullable PsiType psiClassType, @Nullable PsiLambdaExpression expr) {
     return getGroundTargetType(psiClassType, expr, true);
   }
 
   @Nullable
-  public static PsiType getGroundTargetType(@jakarta.annotation.Nullable PsiType psiClassType, @jakarta.annotation.Nullable PsiLambdaExpression expr, boolean performFinalCheck) {
+  public static PsiType getGroundTargetType(@Nullable PsiType psiClassType, @Nullable PsiLambdaExpression expr, boolean performFinalCheck) {
     if (!isWildcardParameterized(psiClassType)) {
       return psiClassType;
     }

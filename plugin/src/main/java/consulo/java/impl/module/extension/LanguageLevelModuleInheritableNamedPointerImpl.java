@@ -47,7 +47,7 @@ public class LanguageLevelModuleInheritableNamedPointerImpl extends ModuleInheri
   }
 
   @Override
-  public LanguageLevel getItemFromModule(@jakarta.annotation.Nonnull Module module) {
+  public LanguageLevel getItemFromModule(@Nonnull Module module) {
     final JavaModuleExtension extension = (JavaModuleExtension) ModuleUtilCore.getExtension(module, myExtensionId);
     if (extension != null) {
       return extension.getLanguageLevel();
@@ -57,7 +57,7 @@ public class LanguageLevelModuleInheritableNamedPointerImpl extends ModuleInheri
 
   @Nonnull
   @Override
-  public NamedPointer<LanguageLevel> getPointer(@Nonnull ModuleRootLayer layer, @jakarta.annotation.Nonnull String name) {
+  public NamedPointer<LanguageLevel> getPointer(@Nonnull ModuleRootLayer layer, @Nonnull String name) {
     return LanguageLevel.valueOf(name);
   }
 }

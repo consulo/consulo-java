@@ -46,11 +46,11 @@ public abstract class BeanPropertyRenameHandler implements RenameHandler {
     return getProperty(dataContext) != null;
   }
 
-  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
     performInvoke(editor, dataContext);
   }
 
-  public void invoke(@Nonnull Project project, @jakarta.annotation.Nonnull PsiElement[] elements, DataContext dataContext) {
+  public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
     performInvoke(null, dataContext);
   }
 

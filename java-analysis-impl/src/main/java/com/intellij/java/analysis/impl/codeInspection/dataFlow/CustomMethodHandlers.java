@@ -267,7 +267,7 @@ final class CustomMethodHandlers {
   }
 
   private static
-  @jakarta.annotation.Nonnull
+  @Nonnull
   DfType indexOf(DfaValue qualifier,
                  DfaMemoryState memState,
                  DfaValueFactory factory,

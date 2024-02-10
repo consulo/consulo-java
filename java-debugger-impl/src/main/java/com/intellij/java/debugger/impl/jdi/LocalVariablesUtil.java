@@ -359,7 +359,7 @@ public class LocalVariablesUtil
 	}
 
 	@Nonnull
-	private static MultiMap<Integer, String> calcNames(@jakarta.annotation.Nonnull final StackFrameContext context, final int firstLocalsSlot)
+	private static MultiMap<Integer, String> calcNames(@Nonnull final StackFrameContext context, final int firstLocalsSlot)
 	{
 		SourcePosition position = ContextUtil.getSourcePosition(context);
 		if(position != null)

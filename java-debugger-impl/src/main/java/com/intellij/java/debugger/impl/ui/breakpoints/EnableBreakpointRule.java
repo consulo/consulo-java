@@ -27,11 +27,11 @@ public class EnableBreakpointRule {
   private final Breakpoint myMasterBreakpoint;
   private final Breakpoint mySlaveBreakpoint;
 
-  public EnableBreakpointRule(@jakarta.annotation.Nonnull BreakpointManager manager, @Nonnull Breakpoint masterBreakpoint, @Nonnull Breakpoint slaveBreakpoint) {
+  public EnableBreakpointRule(@Nonnull BreakpointManager manager, @Nonnull Breakpoint masterBreakpoint, @Nonnull Breakpoint slaveBreakpoint) {
     this(manager,masterBreakpoint, slaveBreakpoint, false);
   }
 
-  public EnableBreakpointRule(@Nonnull BreakpointManager manager, @Nonnull Breakpoint masterBreakpoint, @jakarta.annotation.Nonnull Breakpoint slaveBreakpoint, boolean leaveEnabled) {
+  public EnableBreakpointRule(@Nonnull BreakpointManager manager, @Nonnull Breakpoint masterBreakpoint, @Nonnull Breakpoint slaveBreakpoint, boolean leaveEnabled) {
     myMasterBreakpoint = masterBreakpoint;
     mySlaveBreakpoint = slaveBreakpoint;
     myManager = manager;

@@ -13,22 +13,22 @@ import jakarta.annotation.Nullable;
 public interface ClsCustomNavigationPolicy {
   ExtensionPointName<ClsCustomNavigationPolicy> EP_NAME = ExtensionPointName.create(ClsCustomNavigationPolicy.class);
 
-  @jakarta.annotation.Nullable
+  @Nullable
   default PsiElement getNavigationElement(@SuppressWarnings("unused") @Nonnull ClsFileImpl clsFile) {
     return null;
   }
 
   @Nullable
-  default PsiElement getNavigationElement(@SuppressWarnings("unused") @jakarta.annotation.Nonnull ClsClassImpl clsClass) {
+  default PsiElement getNavigationElement(@SuppressWarnings("unused") @Nonnull ClsClassImpl clsClass) {
     return null;
   }
 
-  @jakarta.annotation.Nullable
-  default PsiElement getNavigationElement(@SuppressWarnings("unused") @jakarta.annotation.Nonnull ClsMethodImpl clsMethod) {
+  @Nullable
+  default PsiElement getNavigationElement(@SuppressWarnings("unused") @Nonnull ClsMethodImpl clsMethod) {
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   default PsiElement getNavigationElement(@SuppressWarnings("unused") @Nonnull ClsFieldImpl clsField) {
     return null;
   }

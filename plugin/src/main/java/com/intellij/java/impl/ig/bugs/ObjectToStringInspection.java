@@ -39,7 +39,7 @@ public class ObjectToStringInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("default.tostring.call.problem.descriptor");
   }
@@ -64,7 +64,7 @@ public class ObjectToStringInspection extends BaseInspection {
     }
 
     @Override
-    public void visitAssignmentExpression(@jakarta.annotation.Nonnull PsiAssignmentExpression expression) {
+    public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression expression) {
       super.visitAssignmentExpression(expression);
       final IElementType tokenType = expression.getOperationTokenType();
       if (!tokenType.equals(JavaTokenType.PLUSEQ)) {

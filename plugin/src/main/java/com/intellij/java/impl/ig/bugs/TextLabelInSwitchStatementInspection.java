@@ -26,13 +26,13 @@ import consulo.annotation.component.ExtensionImpl;
 @ExtensionImpl
 public class TextLabelInSwitchStatementInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "text.label.in.switch.statement.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "text.label.in.switch.statement.problem.descriptor");

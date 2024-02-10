@@ -27,13 +27,13 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class NotifyWithoutCorrespondingWaitInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "notify.without.corresponding.wait.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "notify.without.corresponding.wait.problem.descriptor");

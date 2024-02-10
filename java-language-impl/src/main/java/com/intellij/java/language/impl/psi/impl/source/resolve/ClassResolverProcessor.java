@@ -44,7 +44,7 @@ public class ClassResolverProcessor extends BaseScopeProcessor implements NameHi
   private static final String[] DEFAULT_PACKAGES = {JavaClassNames.DEFAULT_PACKAGE};
 
   private final String myClassName;
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private final PsiFile myContainingFile;
   private final PsiElement myPlace;
   private final PsiResolveHelper myResolveHelper;
@@ -55,7 +55,7 @@ public class ClassResolverProcessor extends BaseScopeProcessor implements NameHi
   private JavaResolveResult[] myResult = JavaResolveResult.EMPTY_ARRAY;
   private PsiElement myCurrentFileContext;
 
-  public ClassResolverProcessor(@Nonnull String className, @jakarta.annotation.Nonnull PsiElement startPlace, @Nonnull PsiFile containingFile) {
+  public ClassResolverProcessor(@Nonnull String className, @Nonnull PsiElement startPlace, @Nonnull PsiFile containingFile) {
     myClassName = className;
     myContainingFile = containingFile;
     PsiElement place = containingFile instanceof JavaCodeFragment && ((JavaCodeFragment) containingFile).getVisibilityChecker() != null ? null : startPlace;
@@ -146,7 +146,7 @@ public class ClassResolverProcessor extends BaseScopeProcessor implements NameHi
     return file instanceof PsiJavaFile && ((PsiJavaFile) file).getPackageName().equals(packageName);
   }
 
-  private Domination dominates(@jakarta.annotation.Nonnull PsiClass aClass, boolean accessible, @Nonnull String fqName, @Nonnull ClassCandidateInfo info) {
+  private Domination dominates(@Nonnull PsiClass aClass, boolean accessible, @Nonnull String fqName, @Nonnull ClassCandidateInfo info) {
     final PsiClass otherClass = info.getElement();
     String otherQName = otherClass.getQualifiedName();
     if (fqName.equals(otherQName)) {
@@ -282,7 +282,7 @@ public class ClassResolverProcessor extends BaseScopeProcessor implements NameHi
   }
 
   @Override
-  public <T> T getHint(@jakarta.annotation.Nonnull Key<T> hintKey) {
+  public <T> T getHint(@Nonnull Key<T> hintKey) {
     if (hintKey == ElementClassHint.KEY || hintKey == NameHint.KEY) {
       @SuppressWarnings("unchecked") T t = (T) this;
       return t;

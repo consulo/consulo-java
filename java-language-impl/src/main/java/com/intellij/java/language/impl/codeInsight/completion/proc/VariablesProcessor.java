@@ -67,7 +67,7 @@ public class VariablesProcessor
 
   /** Always return true since we wanna get all vars in scope */
   @Override
-  public boolean execute(@jakarta.annotation.Nonnull PsiElement pe, ResolveState state){
+  public boolean execute(@Nonnull PsiElement pe, ResolveState state){
     if(pe instanceof PsiVariable){
       final PsiVariable pvar = (PsiVariable)pe;
       final String pvar_name = pvar.getName();

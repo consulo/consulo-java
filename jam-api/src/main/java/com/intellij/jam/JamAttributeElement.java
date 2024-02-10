@@ -31,7 +31,7 @@ import jakarta.annotation.Nullable;
  */
 public abstract class JamAttributeElement<T> implements JamElement, GenericValue<T> {
   private final PsiElementRef<PsiAnnotation> myParent;
-  @jakarta.annotation.Nullable
+  @Nullable
   private final AnnotationAttributeChildLink myAttributeLink;
   @Nullable
   private final PsiAnnotationMemberValue myExactValue;
@@ -83,7 +83,7 @@ public abstract class JamAttributeElement<T> implements JamElement, GenericValue
     return myParent.isValid();
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public PsiAnnotationMemberValue getPsiElement() {
     if (myExactValue == null) {
       assert myAttributeLink != null;

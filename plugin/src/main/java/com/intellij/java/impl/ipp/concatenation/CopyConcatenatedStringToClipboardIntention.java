@@ -44,7 +44,7 @@ public class CopyConcatenatedStringToClipboardIntention extends Intention {
   }
 
   @Override
-  protected void processIntention(@jakarta.annotation.Nonnull PsiElement element) throws IncorrectOperationException {
+  protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
     if (!(element instanceof PsiPolyadicExpression)) {
       return;
     }

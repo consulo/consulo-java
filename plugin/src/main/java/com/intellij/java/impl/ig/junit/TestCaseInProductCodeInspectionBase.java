@@ -64,7 +64,7 @@ public class TestCaseInProductCodeInspectionBase extends BaseInspection
 	{
 
 		@Override
-		public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass)
+		public void visitClass(@Nonnull PsiClass aClass)
 		{
 			if(TestUtils.isInTestSourceContent(aClass) || !TestUtils.isJUnitTestClass(aClass))
 			{

@@ -47,13 +47,13 @@ public class ExceptionFromCatchWhichDoesntWrapInspection extends BaseInspection 
   public boolean ignoreCantWrap = false;
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "ThrowInsideCatchBlockWhichIgnoresCaughtException";
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("exception.from.catch.which.doesnt.wrap.display.name");
   }

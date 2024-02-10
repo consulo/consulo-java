@@ -61,7 +61,7 @@ public class InnerClassMayBeStaticInspection extends BaseInspection {
 
   private static class InnerClassMayBeStaticFix extends InspectionGadgetsFix {
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("make.static.quickfix");
     }

@@ -55,7 +55,7 @@ public class ChangeVariableTypeToRhsTypeIntention extends MutablyNamedIntention 
   }
 
   @Override
-  protected void processIntention(@jakarta.annotation.Nonnull PsiElement element) throws IncorrectOperationException {
+  protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiElement parent = element.getParent();
     if (!(parent instanceof PsiVariable)) {
       return;

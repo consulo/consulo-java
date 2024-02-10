@@ -60,7 +60,7 @@ public abstract class InconsistentLanguageLevelInspection extends GlobalInspecti
 	public void runInspection(@Nonnull AnalysisScope scope,
 							  @Nonnull InspectionManager manager,
 							  @Nonnull GlobalInspectionContext globalContext,
-							  @jakarta.annotation.Nonnull ProblemDescriptionsProcessor problemProcessor,
+							  @Nonnull ProblemDescriptionsProcessor problemProcessor,
 							  Object state)
 	{
 		final Set<Module> modules = new HashSet<Module>();
@@ -121,7 +121,7 @@ public abstract class InconsistentLanguageLevelInspection extends GlobalInspecti
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return "Inconsistent language level settings";
@@ -145,7 +145,7 @@ public abstract class InconsistentLanguageLevelInspection extends GlobalInspecti
 		}
 
 		@Override
-		@jakarta.annotation.Nonnull
+		@Nonnull
 		public String getName()
 		{
 			return "Open module " + myModule.getName() + " settings";

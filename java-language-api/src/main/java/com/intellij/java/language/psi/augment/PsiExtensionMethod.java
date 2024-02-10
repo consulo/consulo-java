@@ -30,6 +30,6 @@ public interface PsiExtensionMethod extends PsiMethod
 	 * @return a target method parameter that corresponds to the parameter of this extension method having the specified index;
 	 * null if the specified parameter does not correspond to any parameter of the target method.
 	 */
-	@jakarta.annotation.Nullable
+	@Nullable
 	PsiParameter getTargetParameter(int index);
 }

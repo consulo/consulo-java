@@ -29,13 +29,13 @@ import jakarta.annotation.Nonnull;
 public class FlushVariableInstruction extends Instruction
 {
 	private final
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	DfaVariableValue myVariable;
 
 	/**
 	 * @param variable variable to flush
 	 */
-	public FlushVariableInstruction(@jakarta.annotation.Nonnull DfaVariableValue variable)
+	public FlushVariableInstruction(@Nonnull DfaVariableValue variable)
 	{
 		myVariable = variable;
 	}

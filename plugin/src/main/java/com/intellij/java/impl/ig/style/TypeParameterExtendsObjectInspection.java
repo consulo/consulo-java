@@ -35,14 +35,14 @@ import consulo.java.language.module.util.JavaClassNames;
 public class TypeParameterExtendsObjectInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "type.parameter.extends.object.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "TypeParameterExplicitlyExtendsObject";
   }
@@ -80,7 +80,7 @@ public class TypeParameterExtendsObjectInspection extends BaseInspection {
     }
 
     @Override
-    public void doFix(@jakarta.annotation.Nonnull Project project,
+    public void doFix(@Nonnull Project project,
                       ProblemDescriptor descriptor)
       throws IncorrectOperationException {
       final PsiElement identifier = descriptor.getPsiElement();

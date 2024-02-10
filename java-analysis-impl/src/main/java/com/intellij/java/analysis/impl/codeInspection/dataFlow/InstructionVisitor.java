@@ -48,7 +48,7 @@ public abstract class InstructionVisitor {
   protected void beforeExpressionPush(@Nonnull DfaValue value,
                                       @Nonnull PsiExpression expression,
                                       @Nullable TextRange range,
-                                      @jakarta.annotation.Nonnull DfaMemoryState state) {
+                                      @Nonnull DfaMemoryState state) {
 
   }
 
@@ -78,7 +78,7 @@ public abstract class InstructionVisitor {
    */
   protected void checkReturnValue(@Nonnull DfaValue value,
                                   @Nonnull PsiExpression expression,
-                                  @jakarta.annotation.Nonnull PsiParameterListOwner context,
+                                  @Nonnull PsiParameterListOwner context,
                                   @Nonnull DfaMemoryState state) {
 
   }
@@ -100,7 +100,7 @@ public abstract class InstructionVisitor {
     state.push(value);
   }
 
-  private static boolean isExpressionPush(@jakarta.annotation.Nonnull ExpressionPushingInstruction<?> instruction, PsiExpression anchor) {
+  private static boolean isExpressionPush(@Nonnull ExpressionPushingInstruction<?> instruction, PsiExpression anchor) {
     if (anchor == null) {
       return false;
     }
@@ -120,7 +120,7 @@ public abstract class InstructionVisitor {
 
   private void callBeforeExpressionPush(@Nonnull DfaValue value,
                                         @Nonnull ExpressionPushingInstruction<?> instruction,
-                                        @jakarta.annotation.Nonnull DfaMemoryState state, PsiExpression anchor) {
+                                        @Nonnull DfaMemoryState state, PsiExpression anchor) {
     beforeExpressionPush(value, anchor, instruction.getExpressionRange(), state);
     PsiElement parent = PsiUtil.skipParenthesizedExprUp(anchor.getParent());
     if (parent instanceof PsiLambdaExpression) {
@@ -191,7 +191,7 @@ public abstract class InstructionVisitor {
 
   @Nonnull
   public DfaInstructionState[] visitControlTransfer(@Nonnull ControlTransferInstruction controlTransferInstruction,
-                                                    @jakarta.annotation.Nonnull DataFlowRunner runner, @jakarta.annotation.Nonnull DfaMemoryState state) {
+                                                    @Nonnull DataFlowRunner runner, @Nonnull DfaMemoryState state) {
     return controlTransferInstruction.getTransfer().dispatch(state, runner).toArray(DfaInstructionState.EMPTY_ARRAY);
   }
 

@@ -53,7 +53,7 @@ public class RecursiveCallLineMarkerProvider extends LineMarkerProviderDescripto
 
   @RequiredReadAction
   @Override
-  public void collectSlowLineMarkers(@jakarta.annotation.Nonnull List<PsiElement> elements, @Nonnull Collection<LineMarkerInfo> result) {
+  public void collectSlowLineMarkers(@Nonnull List<PsiElement> elements, @Nonnull Collection<LineMarkerInfo> result) {
     final Set<PsiStatement> statements = new HashSet<>();
 
     for (PsiElement element : elements) {

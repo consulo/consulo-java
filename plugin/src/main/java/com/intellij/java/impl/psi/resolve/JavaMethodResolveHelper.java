@@ -47,9 +47,9 @@ public class JavaMethodResolveHelper {
   @Nullable
   private final PsiType[] myArgumentTypes;
 
-  public JavaMethodResolveHelper(@jakarta.annotation.Nonnull final PsiElement argumentList,
+  public JavaMethodResolveHelper(@Nonnull final PsiElement argumentList,
                                  PsiFile containingFile,
-                                 @jakarta.annotation.Nullable final PsiType[] argumentTypes) {
+                                 @Nullable final PsiType[] argumentTypes) {
     myArgumentTypes = argumentTypes;
     final LanguageLevel languageLevel = PsiUtil.getLanguageLevel(argumentList);
     final PsiConflictResolver resolver = argumentTypes == null ? DuplicateConflictResolver.INSTANCE : new

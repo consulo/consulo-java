@@ -50,7 +50,7 @@ public abstract class InferredAnnotationsManager {
    * different instances of {@link PsiAnnotation}, which are not guaranteed to be equal.
    */
   @Nullable
-  public abstract PsiAnnotation findInferredAnnotation(@jakarta.annotation.Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN);
+  public abstract PsiAnnotation findInferredAnnotation(@Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN);
 
   /**
    * When annotation name is known, prefer {@link #findInferredAnnotation(PsiModifierListOwner, String)} as
@@ -59,11 +59,11 @@ public abstract class InferredAnnotationsManager {
    * @return all inferred annotations for the given element
    */
   @Nonnull
-  public abstract PsiAnnotation[] findInferredAnnotations(@jakarta.annotation.Nonnull PsiModifierListOwner listOwner);
+  public abstract PsiAnnotation[] findInferredAnnotations(@Nonnull PsiModifierListOwner listOwner);
 
   /**
    * @return whether the given annotation was inferred by this service.
    * @see AnnotationUtil#isInferredAnnotation(PsiAnnotation)
    */
-  public abstract boolean isInferredAnnotation(@jakarta.annotation.Nonnull PsiAnnotation annotation);
+  public abstract boolean isInferredAnnotation(@Nonnull PsiAnnotation annotation);
 }

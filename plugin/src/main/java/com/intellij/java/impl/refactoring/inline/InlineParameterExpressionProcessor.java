@@ -307,12 +307,12 @@ public class InlineParameterExpressionProcessor extends BaseRefactoringProcessor
       myReplacement = replacement;
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     public PsiElement getReplacement() {
       return myReplacement.isValid() ? myReplacement : null;
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     public PsiVariable getVariable() {
       return myVariable != null && myVariable.isValid() ? myVariable : null;
     }

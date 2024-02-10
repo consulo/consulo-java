@@ -41,7 +41,7 @@ public class ClassNameDiffersFromFileNameInspection extends BaseInspection
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	protected String buildErrorString(Object... infos)
 	{
 		return InspectionGadgetsBundle.message("class.name.differs.from.file.name.problem.descriptor");

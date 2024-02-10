@@ -32,10 +32,10 @@ public class TryEvaluator implements Evaluator
 	@Nonnull
 	private final Evaluator myBodyEvaluator;
 	private final List<CatchEvaluator> myCatchBlockEvaluators;
-	@jakarta.annotation.Nullable
+	@Nullable
 	private final Evaluator myFinallyEvaluator;
 
-	public TryEvaluator(@jakarta.annotation.Nonnull Evaluator bodyEvaluator, List<CatchEvaluator> catchBlockEvaluators, @Nullable Evaluator finallyEvaluator)
+	public TryEvaluator(@Nonnull Evaluator bodyEvaluator, List<CatchEvaluator> catchBlockEvaluators, @Nullable Evaluator finallyEvaluator)
 	{
 		myBodyEvaluator = bodyEvaluator;
 		myCatchBlockEvaluators = catchBlockEvaluators;

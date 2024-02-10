@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Contract;
  */
 public class ArrayUtil2 {
   @Contract(pure = true)
-  public static int max(@jakarta.annotation.Nonnull int[] values) {
+  public static int max(@Nonnull int[] values) {
     int max = Integer.MIN_VALUE;
     for (int value : values) {
       if (value > max)

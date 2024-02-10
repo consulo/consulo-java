@@ -51,7 +51,7 @@ public abstract class IfStatementWithTooManyBranchesInspection
       this, "m_limit");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     final Integer branchCount = (Integer)infos[0];
     return InspectionGadgetsBundle.message(
@@ -67,7 +67,7 @@ public abstract class IfStatementWithTooManyBranchesInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitIfStatement(@jakarta.annotation.Nonnull PsiIfStatement statement) {
+    public void visitIfStatement(@Nonnull PsiIfStatement statement) {
       super.visitIfStatement(statement);
       final PsiElement parent = statement.getParent();
       if (parent instanceof PsiIfStatement) {

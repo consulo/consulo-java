@@ -99,7 +99,7 @@ public class CompletionMemory {
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @RequiredReadAction
   public static PsiMethod getChosenMethod(PsiCall call) {
     TextRange range = getAnchorRange(call);

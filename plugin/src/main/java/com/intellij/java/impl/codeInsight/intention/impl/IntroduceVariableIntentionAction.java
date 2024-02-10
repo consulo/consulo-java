@@ -46,7 +46,7 @@ public class IntroduceVariableIntentionAction extends BaseRefactoringIntentionAc
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, @jakarta.annotation.Nonnull PsiElement element) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     if (element instanceof SyntheticElement){
       return false;
     }

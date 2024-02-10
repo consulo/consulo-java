@@ -40,7 +40,7 @@ public class JavaImportListElementType extends JavaStubElementType<PsiImportList
 		super("IMPORT_LIST");
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public ASTNode createCompositeNode()
 	{
@@ -48,13 +48,13 @@ public class JavaImportListElementType extends JavaStubElementType<PsiImportList
 	}
 
 	@Override
-	public PsiImportList createPsi(@jakarta.annotation.Nonnull final PsiImportListStub stub)
+	public PsiImportList createPsi(@Nonnull final PsiImportListStub stub)
 	{
 		return getPsiFactory(stub).createImportList(stub);
 	}
 
 	@Override
-	public PsiImportList createPsi(@jakarta.annotation.Nonnull final ASTNode node)
+	public PsiImportList createPsi(@Nonnull final ASTNode node)
 	{
 		return new PsiImportListImpl(node);
 	}
@@ -66,19 +66,19 @@ public class JavaImportListElementType extends JavaStubElementType<PsiImportList
 	}
 
 	@Override
-	public void serialize(@Nonnull final PsiImportListStub stub, @jakarta.annotation.Nonnull final StubOutputStream dataStream) throws IOException
+	public void serialize(@Nonnull final PsiImportListStub stub, @Nonnull final StubOutputStream dataStream) throws IOException
 	{
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
-	public PsiImportListStub deserialize(@jakarta.annotation.Nonnull final StubInputStream dataStream, final StubElement parentStub) throws IOException
+	public PsiImportListStub deserialize(@Nonnull final StubInputStream dataStream, final StubElement parentStub) throws IOException
 	{
 		return new PsiImportListStubImpl(parentStub);
 	}
 
 	@Override
-	public void indexStub(@jakarta.annotation.Nonnull final PsiImportListStub stub, @jakarta.annotation.Nonnull final IndexSink sink)
+	public void indexStub(@Nonnull final PsiImportListStub stub, @Nonnull final IndexSink sink)
 	{
 	}
 }

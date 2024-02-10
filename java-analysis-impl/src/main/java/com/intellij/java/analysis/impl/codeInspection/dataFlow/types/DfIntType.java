@@ -9,7 +9,7 @@ import jakarta.annotation.Nullable;
 
 public interface DfIntType extends DfIntegralType {
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   LongRangeSet getRange();
   
   @Nonnull
@@ -21,19 +21,19 @@ public interface DfIntType extends DfIntegralType {
 
   @Nonnull
   @Override
-  default DfType meet(@jakarta.annotation.Nonnull DfType other) {
+  default DfType meet(@Nonnull DfType other) {
     if (other == DfTypes.TOP) return this;
     if (!(other instanceof DfIntType)) return DfTypes.BOTTOM;
     return DfTypes.intRange(((DfIntType)other).getRange().intersect(getRange()));
   }
   
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
-  default DfType meetRange(@jakarta.annotation.Nonnull LongRangeSet range) {
+  default DfType meetRange(@Nonnull LongRangeSet range) {
     return meet(DfTypes.intRangeClamped(range));
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   default PsiPrimitiveType getPsiType() {
     return PsiType.INT;
@@ -47,7 +47,7 @@ public interface DfIntType extends DfIntegralType {
     return res.intersects(range) ? null : DfTypes.intRange(res);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   static LongRangeSet extractRange(@Nonnull DfType type) {
     return type instanceof DfIntegralType ? ((DfIntegralType)type).getRange().intersect(DfIntRangeType.FULL_RANGE) :
            DfIntRangeType.FULL_RANGE;

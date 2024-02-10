@@ -318,7 +318,7 @@ public class MoveClassesOrPackagesDialog extends RefactoringDialog {
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private PsiClass findTargetClass() {
     String name = myInnerClassChooser.getText().trim();
     return JavaPsiFacade.getInstance(myManager.getProject()).findClass(name, (GlobalSearchScope) ProjectScopes.getProjectScope(myProject));
@@ -411,7 +411,7 @@ public class MoveClassesOrPackagesDialog extends RefactoringDialog {
     refactoringSettings.MOVE_PREVIEW_USAGES = isPreviewUsages();
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private String verifyInnerClassDestination() {
     PsiClass targetClass = findTargetClass();
     if (targetClass == null) return null;

@@ -23,6 +23,7 @@ import com.intellij.java.language.psi.*;
 import consulo.application.ApplicationManager;
 import consulo.application.util.function.Computable;
 import consulo.document.util.TextRange;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
 import consulo.ide.util.DirectoryChooserUtil;
 import consulo.language.editor.refactoring.move.fileOrDirectory.MoveFilesOrDirectoriesUtil;
 import consulo.language.editor.refactoring.util.TextOccurrencesUtil;
@@ -155,7 +156,7 @@ public class MoveClassesOrPackagesUtil {
     }
     final PsiDirectory subdirectoryInDest;
     final boolean isSourceRoot = RefactoringUtil.isSourceRoot(dir);
-    if (consulo.ide.impl.idea.openapi.vfs.VfsUtil.isAncestor(sourceVFile, destVFile, false) || isSourceRoot) {
+    if (VfsUtil.isAncestor(sourceVFile, destVFile, false) || isSourceRoot) {
       PsiDirectory exitsingSubdir = destination.findSubdirectory(targetName);
       if (exitsingSubdir == null) {
         subdirectoryInDest = destination.createSubdirectory(targetName);
@@ -266,7 +267,7 @@ public class MoveClassesOrPackagesUtil {
   }
 
   @Nullable
-  public static PsiDirectory chooseDestinationPackage(Project project, String packageName, @jakarta.annotation.Nullable PsiDirectory baseDir) {
+  public static PsiDirectory chooseDestinationPackage(Project project, String packageName, @Nullable PsiDirectory baseDir) {
     final PsiManager psiManager = PsiManager.getInstance(project);
     final PackageWrapper packageWrapper = new PackageWrapper(psiManager, packageName);
     final PsiJavaPackage aPackage = JavaPsiFacade.getInstance(project).findPackage(packageName);
@@ -335,7 +336,7 @@ public class MoveClassesOrPackagesUtil {
     for (VirtualFile root : contentSourceRoots) {
       final PsiDirectory[] directories = aPackage.getDirectories();
       for (PsiDirectory directory : directories) {
-        if (consulo.ide.impl.idea.openapi.vfs.VfsUtil.isAncestor(root, directory.getVirtualFile(), false)) {
+        if (VfsUtil.isAncestor(root, directory.getVirtualFile(), false)) {
           targetDirectories.add(directory);
           continue sourceRoots;
         }

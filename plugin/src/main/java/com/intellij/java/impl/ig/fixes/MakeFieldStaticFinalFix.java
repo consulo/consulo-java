@@ -40,7 +40,7 @@ public class MakeFieldStaticFinalFix extends InspectionGadgetsFix {
 
   @Nonnull
   public static InspectionGadgetsFix buildFixUnconditional(
-    @jakarta.annotation.Nonnull PsiField field) {
+    @Nonnull PsiField field) {
     return new MakeFieldStaticFinalFix(field.getName());
   }
 

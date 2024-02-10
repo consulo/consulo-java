@@ -37,14 +37,14 @@ public class ReplaceConstructorWithBuilderAction extends BaseRefactoringAction {
   }
 
   @Override
-  protected boolean isAvailableOnElementInEditorAndFile(@jakarta.annotation.Nonnull PsiElement element, @jakarta.annotation.Nonnull Editor editor, @jakarta.annotation.Nonnull PsiFile file, @Nonnull DataContext context) {
+  protected boolean isAvailableOnElementInEditorAndFile(@Nonnull PsiElement element, @Nonnull Editor editor, @Nonnull PsiFile file, @Nonnull DataContext context) {
     final int offset = editor.getCaretModel().getOffset();
     final PsiElement elementAt = file.findElementAt(offset);
     final PsiClass psiClass = ReplaceConstructorWithBuilderHandler.getParentNamedClass(elementAt);
     return psiClass != null && psiClass.getConstructors().length > 0;
   }
 
-  protected boolean isEnabledOnElements(@jakarta.annotation.Nonnull final PsiElement[] elements) {
+  protected boolean isEnabledOnElements(@Nonnull final PsiElement[] elements) {
     return false;
   }
 

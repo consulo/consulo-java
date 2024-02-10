@@ -47,7 +47,7 @@ public class DirectiveElementType extends AbstractManifestStubElementType<Direct
   }
 
   @Override
-  public Directive createPsi(@jakarta.annotation.Nonnull DirectiveStub stub) {
+  public Directive createPsi(@Nonnull DirectiveStub stub) {
     return new DirectiveImpl(stub, this);
   }
 
@@ -61,16 +61,16 @@ public class DirectiveElementType extends AbstractManifestStubElementType<Direct
     return new DirectiveStubImpl(parentStub, psi.getName(), psi.getValue());
   }
 
-  public void serialize(@jakarta.annotation.Nonnull DirectiveStub stub, @jakarta.annotation.Nonnull StubOutputStream dataStream) throws IOException {
+  public void serialize(@Nonnull DirectiveStub stub, @Nonnull StubOutputStream dataStream) throws IOException {
     dataStream.writeName(stub.getName());
     dataStream.writeUTFFast(stub.getValue());
   }
 
   @Nonnull
-  public DirectiveStub deserialize(@jakarta.annotation.Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
+  public DirectiveStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
     return new DirectiveStubImpl(parentStub, dataStream.readName().toString(), dataStream.readUTFFast());
   }
 
-  public void indexStub(@jakarta.annotation.Nonnull DirectiveStub stub, @jakarta.annotation.Nonnull IndexSink sink) {
+  public void indexStub(@Nonnull DirectiveStub stub, @Nonnull IndexSink sink) {
   }
 }

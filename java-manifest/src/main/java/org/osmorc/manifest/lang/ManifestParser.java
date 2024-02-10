@@ -49,7 +49,7 @@ public class ManifestParser implements PsiParser {
   private IElementType assignmentMarkerType;
 
   @Nonnull
-  public ASTNode parse(@jakarta.annotation.Nonnull IElementType root, @jakarta.annotation.Nonnull PsiBuilder builder, @Nonnull LanguageVersion languageVersion) {
+  public ASTNode parse(@Nonnull IElementType root, @Nonnull PsiBuilder builder, @Nonnull LanguageVersion languageVersion) {
     builder.setDebugMode(ApplicationProperties.isInSandbox());
     final PsiBuilder.Marker rootMarker = builder.mark();
 

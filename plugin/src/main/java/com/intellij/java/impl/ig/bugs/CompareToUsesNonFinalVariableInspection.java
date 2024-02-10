@@ -32,13 +32,13 @@ import jakarta.annotation.Nullable;
 public class CompareToUsesNonFinalVariableInspection
   extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "non.final.field.compareto.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "non.final.field.compareto.problem.descriptor");
@@ -58,7 +58,7 @@ public class CompareToUsesNonFinalVariableInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       final boolean isCompareTo = MethodUtils.isCompareTo(method);
       if (isCompareTo) {
         method.accept(new JavaRecursiveElementVisitor() {

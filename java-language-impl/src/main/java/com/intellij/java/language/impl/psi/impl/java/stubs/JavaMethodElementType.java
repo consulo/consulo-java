@@ -52,7 +52,7 @@ abstract class JavaMethodElementType extends JavaStubElementType<PsiMethodStub, 
   }
 
   @Override
-  public PsiMethod createPsi(@jakarta.annotation.Nonnull final PsiMethodStub stub) {
+  public PsiMethod createPsi(@Nonnull final PsiMethodStub stub) {
     return getPsiFactory(stub).createMethod(stub);
   }
 
@@ -66,7 +66,7 @@ abstract class JavaMethodElementType extends JavaStubElementType<PsiMethodStub, 
 
   @Nonnull
   @Override
-  public PsiMethodStub createStub(@Nonnull final LighterAST tree, @jakarta.annotation.Nonnull final LighterASTNode node, @Nonnull final StubElement parentStub) {
+  public PsiMethodStub createStub(@Nonnull final LighterAST tree, @Nonnull final LighterASTNode node, @Nonnull final StubElement parentStub) {
     String name = null;
     boolean isConstructor = true;
     boolean isVarArgs = false;
@@ -112,7 +112,7 @@ abstract class JavaMethodElementType extends JavaStubElementType<PsiMethodStub, 
   }
 
   @Override
-  public void serialize(@jakarta.annotation.Nonnull final PsiMethodStub stub, @jakarta.annotation.Nonnull final StubOutputStream dataStream) throws IOException {
+  public void serialize(@Nonnull final PsiMethodStub stub, @Nonnull final StubOutputStream dataStream) throws IOException {
     dataStream.writeName(stub.getName());
     TypeInfo.writeTYPE(dataStream, stub.getReturnTypeText());
     dataStream.writeByte(((PsiMethodStubImpl) stub).getFlags());
@@ -121,9 +121,9 @@ abstract class JavaMethodElementType extends JavaStubElementType<PsiMethodStub, 
     }
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
-  public PsiMethodStub deserialize(@jakarta.annotation.Nonnull final StubInputStream dataStream, final StubElement parentStub) throws IOException {
+  public PsiMethodStub deserialize(@Nonnull final StubInputStream dataStream, final StubElement parentStub) throws IOException {
     String name = dataStream.readNameString();
     final TypeInfo type = TypeInfo.readTYPE(dataStream);
     byte flags = dataStream.readByte();
@@ -161,8 +161,8 @@ abstract class JavaMethodElementType extends JavaStubElementType<PsiMethodStub, 
     }
   }
 
-  @jakarta.annotation.Nonnull
-  private static Set<String> getVisibleTypeParameters(@jakarta.annotation.Nonnull StubElement<?> stub) {
+  @Nonnull
+  private static Set<String> getVisibleTypeParameters(@Nonnull StubElement<?> stub) {
     Set<String> result = null;
     while (stub != null) {
       Set<String> names = getOwnTypeParameterNames(stub);

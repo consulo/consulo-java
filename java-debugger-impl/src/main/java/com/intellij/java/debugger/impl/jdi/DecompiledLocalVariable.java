@@ -35,7 +35,7 @@ public class DecompiledLocalVariable
 	private final boolean myIsParam;
 	private final Collection<String> myMatchedNames;
 
-	public DecompiledLocalVariable(int slot, boolean isParam, @Nullable String signature, @jakarta.annotation.Nonnull Collection<String> names)
+	public DecompiledLocalVariable(int slot, boolean isParam, @Nullable String signature, @Nonnull Collection<String> names)
 	{
 		mySlot = slot;
 		myIsParam = isParam;
@@ -59,7 +59,7 @@ public class DecompiledLocalVariable
 		return myIsParam;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public String getDefaultName()
 	{
 		return (myIsParam ? PARAM_PREFIX : SLOT_PREFIX) + mySlot;

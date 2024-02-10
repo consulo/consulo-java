@@ -46,7 +46,7 @@ public class PsiMethodUtil {
     return findMainMethod(mainMethods);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static PsiMethod findMainMethod(final PsiMethod[] mainMethods) {
     for (final PsiMethod mainMethod : mainMethods) {
       if (isMainMethod(mainMethod)) return mainMethod;
@@ -76,7 +76,7 @@ public class PsiMethodUtil {
     return findMainMethod(psiClass.findMethodsByName("main", true)) != null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiMethod findMainInClass(final PsiClass aClass) {
     if (!MAIN_CLASS.test(aClass)) return null;
     for (JavaMainMethodProvider provider : JavaMainMethodProvider.EP_NAME.getExtensionList()) {

@@ -36,7 +36,7 @@ public class TestMethodInProductCodeInspection extends BaseInspection
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public String getID()
 	{
 		return "JUnitTestMethodInProductSource";

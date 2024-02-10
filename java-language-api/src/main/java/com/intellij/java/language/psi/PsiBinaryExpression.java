@@ -51,7 +51,7 @@ public interface PsiBinaryExpression extends PsiPolyadicExpression
 	 *
 	 * @return the operation token.
 	 */
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	PsiJavaToken getOperationSign();
 
 	/**
@@ -60,6 +60,6 @@ public interface PsiBinaryExpression extends PsiPolyadicExpression
 	 * @return the token type.
 	 */
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	IElementType getOperationTokenType();
 }

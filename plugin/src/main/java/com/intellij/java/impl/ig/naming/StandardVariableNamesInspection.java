@@ -87,7 +87,7 @@ public class StandardVariableNamesInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiVariable variable = (PsiVariable)infos[0];
     final String name = variable.getName();
@@ -121,7 +121,7 @@ public class StandardVariableNamesInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitVariable(@jakarta.annotation.Nonnull PsiVariable variable) {
+    public void visitVariable(@Nonnull PsiVariable variable) {
       super.visitVariable(variable);
       final String variableName = variable.getName();
       final String expectedType = s_expectedTypes.get(variableName);

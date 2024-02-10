@@ -19,7 +19,7 @@ public class DeprecationInspectionState implements InspectionToolState<Deprecati
   public boolean IGNORE_ABSTRACT_DEPRECATED_OVERRIDES = true;
   public boolean IGNORE_METHODS_OF_DEPRECATED = true;
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public UnnamedConfigurable createConfigurable() {
     ConfigurableBuilder<ConfigurableBuilderState> builder = ConfigurableBuilder.newBuilder();

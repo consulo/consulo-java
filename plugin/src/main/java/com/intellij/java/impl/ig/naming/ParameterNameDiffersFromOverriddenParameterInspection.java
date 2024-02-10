@@ -88,7 +88,7 @@ public class ParameterNameDiffersFromOverriddenParameterInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       final PsiParameterList parameterList = method.getParameterList();
       if (parameterList.getParametersCount() == 0) {
         return;

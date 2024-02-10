@@ -55,7 +55,7 @@ public class MethodInfo extends MemberInfo
 	private final boolean myIsConstructor;
 	private final AnnotationConstantValue[][] myRuntimeVisibleParameterAnnotations;
 	private final AnnotationConstantValue[][] myRuntimeInvisibleParameterAnnotations;
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	private final ConstantValue myAnnotationDefault;
 
 	public MethodInfo(int name, int descriptor, boolean isConstructor)

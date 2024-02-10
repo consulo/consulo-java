@@ -62,13 +62,13 @@ public class ExpressionUtils {
   private ExpressionUtils() {
   }
 
-  @jakarta.annotation.Nullable
-  public static Object computeConstantExpression(@jakarta.annotation.Nullable PsiExpression expression) {
+  @Nullable
+  public static Object computeConstantExpression(@Nullable PsiExpression expression) {
     return computeConstantExpression(expression, false);
   }
 
-  @jakarta.annotation.Nullable
-  public static Object computeConstantExpression(@jakarta.annotation.Nullable PsiExpression expression, boolean throwConstantEvaluationOverflowException) {
+  @Nullable
+  public static Object computeConstantExpression(@Nullable PsiExpression expression, boolean throwConstantEvaluationOverflowException) {
     if (expression == null) {
       return null;
     }
@@ -93,13 +93,13 @@ public class ExpressionUtils {
     return ControlFlowUtils.hasChildrenOfTypeCount(expressionList, count, PsiExpression.class);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiExpression getFirstExpressionInList(@Nullable PsiExpressionList expressionList) {
     return PsiTreeUtil.getChildOfType(expressionList, PsiExpression.class);
   }
 
-  @jakarta.annotation.Nullable
-  public static PsiExpression getOnlyExpressionInList(@jakarta.annotation.Nullable PsiExpressionList expressionList) {
+  @Nullable
+  public static PsiExpression getOnlyExpressionInList(@Nullable PsiExpressionList expressionList) {
     return ControlFlowUtils.getOnlyChildOfType(expressionList, PsiExpression.class);
   }
 
@@ -125,7 +125,7 @@ public class ExpressionUtils {
   }
 
   @Contract("null -> false")
-  public static boolean isEvaluatedAtCompileTime(@jakarta.annotation.Nullable PsiExpression expression) {
+  public static boolean isEvaluatedAtCompileTime(@Nullable PsiExpression expression) {
     if (expression instanceof PsiLiteralExpression) {
       return true;
     }
@@ -189,8 +189,8 @@ public class ExpressionUtils {
     return false;
   }
 
-  @jakarta.annotation.Nullable
-  public static String getLiteralString(@jakarta.annotation.Nullable PsiExpression expression) {
+  @Nullable
+  public static String getLiteralString(@Nullable PsiExpression expression) {
     final PsiLiteralExpression literal = getLiteral(expression);
     if (literal == null) {
       return null;
@@ -202,8 +202,8 @@ public class ExpressionUtils {
     return value.toString();
   }
 
-  @jakarta.annotation.Nullable
-  public static PsiLiteralExpression getLiteral(@jakarta.annotation.Nullable PsiExpression expression) {
+  @Nullable
+  public static PsiLiteralExpression getLiteral(@Nullable PsiExpression expression) {
     expression = ParenthesesUtils.stripParentheses(expression);
     if (expression instanceof PsiLiteralExpression) {
       return (PsiLiteralExpression) expression;
@@ -219,11 +219,11 @@ public class ExpressionUtils {
     return (PsiLiteralExpression) operand;
   }
 
-  public static boolean isLiteral(@jakarta.annotation.Nullable PsiExpression expression) {
+  public static boolean isLiteral(@Nullable PsiExpression expression) {
     return getLiteral(expression) != null;
   }
 
-  public static boolean isEmptyStringLiteral(@jakarta.annotation.Nullable PsiExpression expression) {
+  public static boolean isEmptyStringLiteral(@Nullable PsiExpression expression) {
     expression = ParenthesesUtils.stripParentheses(expression);
     if (!(expression instanceof PsiLiteralExpression)) {
       return false;
@@ -233,7 +233,7 @@ public class ExpressionUtils {
   }
 
   @Contract("null -> false")
-  public static boolean isNullLiteral(@jakarta.annotation.Nullable PsiExpression expression) {
+  public static boolean isNullLiteral(@Nullable PsiExpression expression) {
     expression = PsiUtil.deparenthesizeExpression(expression);
     return expression != null && PsiType.NULL.equals(expression.getType());
   }
@@ -274,7 +274,7 @@ public class ExpressionUtils {
     });
   }
 
-  public static boolean isZero(@jakarta.annotation.Nullable PsiExpression expression) {
+  public static boolean isZero(@Nullable PsiExpression expression) {
     if (expression == null) {
       return false;
     }
@@ -304,7 +304,7 @@ public class ExpressionUtils {
     return value instanceof Byte && ((Byte) value).byteValue() == 0;
   }
 
-  public static boolean isOne(@jakarta.annotation.Nullable PsiExpression expression) {
+  public static boolean isOne(@Nullable PsiExpression expression) {
     if (expression == null) {
       return false;
     }
@@ -334,7 +334,7 @@ public class ExpressionUtils {
     return value instanceof Byte && ((Byte) value).byteValue() == 1;
   }
 
-  public static boolean isNegation(@jakarta.annotation.Nullable PsiExpression condition, boolean ignoreNegatedNullComparison, boolean ignoreNegatedZeroComparison) {
+  public static boolean isNegation(@Nullable PsiExpression condition, boolean ignoreNegatedNullComparison, boolean ignoreNegatedZeroComparison) {
     condition = ParenthesesUtils.stripParentheses(condition);
     if (condition instanceof PsiPrefixExpression) {
       final PsiPrefixExpression prefixExpression = (PsiPrefixExpression) condition;
@@ -380,7 +380,7 @@ public class ExpressionUtils {
     return false;
   }
 
-  public static boolean isOffsetArrayAccess(@jakarta.annotation.Nullable PsiExpression expression, @Nonnull PsiVariable variable) {
+  public static boolean isOffsetArrayAccess(@Nullable PsiExpression expression, @Nonnull PsiVariable variable) {
     final PsiExpression strippedExpression = ParenthesesUtils.stripParentheses(expression);
     if (!(strippedExpression instanceof PsiArrayAccessExpression)) {
       return false;
@@ -397,7 +397,7 @@ public class ExpressionUtils {
     return expressionIsOffsetVariableLookup(index, variable);
   }
 
-  private static boolean expressionIsOffsetVariableLookup(@jakarta.annotation.Nullable PsiExpression expression, @Nonnull PsiVariable variable) {
+  private static boolean expressionIsOffsetVariableLookup(@Nullable PsiExpression expression, @Nonnull PsiVariable variable) {
     if (VariableAccessUtils.evaluatesToVariable(expression, variable)) {
       return true;
     }
@@ -418,7 +418,7 @@ public class ExpressionUtils {
     return expressionIsOffsetVariableLookup(rhs, variable) && !JavaTokenType.MINUS.equals(tokenType);
   }
 
-  public static boolean isVariableLessThanComparison(@jakarta.annotation.Nullable PsiExpression expression, @Nonnull PsiVariable variable) {
+  public static boolean isVariableLessThanComparison(@Nullable PsiExpression expression, @Nonnull PsiVariable variable) {
     expression = ParenthesesUtils.stripParentheses(expression);
     if (!(expression instanceof PsiBinaryExpression)) {
       return false;
@@ -435,7 +435,7 @@ public class ExpressionUtils {
     return false;
   }
 
-  public static boolean isVariableGreaterThanComparison(@jakarta.annotation.Nullable PsiExpression expression, @Nonnull PsiVariable variable) {
+  public static boolean isVariableGreaterThanComparison(@Nullable PsiExpression expression, @Nonnull PsiVariable variable) {
     expression = ParenthesesUtils.stripParentheses(expression);
     if (!(expression instanceof PsiBinaryExpression)) {
       return false;
@@ -490,7 +490,7 @@ public class ExpressionUtils {
     return PsiKeyword.THIS.equals(callName) || PsiKeyword.SUPER.equals(callName);
   }
 
-  public static boolean hasType(@jakarta.annotation.Nullable PsiExpression expression, @NonNls @Nonnull String typeName) {
+  public static boolean hasType(@Nullable PsiExpression expression, @NonNls @Nonnull String typeName) {
     if (expression == null) {
       return false;
     }
@@ -498,7 +498,7 @@ public class ExpressionUtils {
     return TypeUtils.typeEquals(typeName, type);
   }
 
-  public static boolean hasStringType(@jakarta.annotation.Nullable PsiExpression expression) {
+  public static boolean hasStringType(@Nullable PsiExpression expression) {
     return hasType(expression, JavaClassNames.JAVA_LANG_STRING);
   }
 
@@ -606,7 +606,7 @@ public class ExpressionUtils {
   }
 
   @Contract("null, _ -> null")
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiVariable getVariableFromNullComparison(PsiExpression expression, boolean equals) {
     final PsiReferenceExpression referenceExpression = getReferenceExpressionFromNullComparison(expression, equals);
     final PsiElement target = referenceExpression != null ? referenceExpression.resolve() : null;
@@ -614,7 +614,7 @@ public class ExpressionUtils {
   }
 
   @Contract("null, _ -> null")
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiReferenceExpression getReferenceExpressionFromNullComparison(PsiExpression expression, boolean equals) {
     expression = ParenthesesUtils.stripParentheses(expression);
     if (!(expression instanceof PsiPolyadicExpression)) {
@@ -653,7 +653,7 @@ public class ExpressionUtils {
    * @param binOp binary expression to extract the value compared with null from
    * @return value compared with null
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiExpression getValueComparedWithNull(@Nonnull PsiBinaryExpression binOp) {
     final IElementType tokenType = binOp.getOperationTokenType();
     if (!tokenType.equals(JavaTokenType.EQEQ) && !tokenType.equals(JavaTokenType.NE)) {
@@ -715,7 +715,7 @@ public class ExpressionUtils {
    * @return true if the supplied expression is simple
    */
   @Contract("null -> false")
-  public static boolean isSimpleExpression(@jakarta.annotation.Nullable PsiExpression expression) {
+  public static boolean isSimpleExpression(@Nullable PsiExpression expression) {
     expression = PsiUtil.skipParenthesizedExprDown(expression);
     if (expression instanceof PsiLiteralExpression || expression instanceof PsiThisExpression || expression instanceof PsiClassObjectAccessExpression || isEvaluatedAtCompileTime(expression)) {
       return true;
@@ -743,7 +743,7 @@ public class ExpressionUtils {
    * @return extracted assignment or null if assignment is not found or assignment is compound
    */
   @Contract("null -> null")
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiAssignmentExpression getAssignment(PsiElement element) {
     if (element instanceof PsiExpressionStatement) {
       element = ((PsiExpressionStatement) element).getExpression();
@@ -842,7 +842,7 @@ public class ExpressionUtils {
    * @return operand or null
    */
   @Contract("null, _ -> null; !null, null -> null")
-  public static PsiExpression getOtherOperand(@jakarta.annotation.Nullable PsiBinaryExpression binOp, @jakarta.annotation.Nullable PsiVariable variable) {
+  public static PsiExpression getOtherOperand(@Nullable PsiBinaryExpression binOp, @Nullable PsiVariable variable) {
     if (binOp == null || variable == null) {
       return null;
     }
@@ -894,7 +894,7 @@ public class ExpressionUtils {
    * @param expression expression to extract an array expression from
    * @return an array expression or null if supplied expression is not array length retrieval
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiExpression getArrayFromLengthExpression(PsiExpression expression) {
     expression = ParenthesesUtils.stripParentheses(expression);
     if (!(expression instanceof PsiReferenceExpression)) {
@@ -988,8 +988,8 @@ public class ExpressionUtils {
    * @return a resolved expression or expression itself
    */
   @Contract("null -> null")
-  @jakarta.annotation.Nullable
-  public static PsiExpression resolveExpression(@jakarta.annotation.Nullable PsiExpression expression) {
+  @Nullable
+  public static PsiExpression resolveExpression(@Nullable PsiExpression expression) {
     expression = PsiUtil.skipParenthesizedExprDown(expression);
     if (expression instanceof PsiReferenceExpression) {
       PsiReferenceExpression reference = (PsiReferenceExpression) expression;
@@ -1005,7 +1005,7 @@ public class ExpressionUtils {
   }
 
   @Contract(value = "null -> null")
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiLocalVariable resolveLocalVariable(@Nullable PsiExpression expression) {
     PsiReferenceExpression referenceExpression = tryCast(expression, PsiReferenceExpression.class);
     if (referenceExpression == null) {
@@ -1032,7 +1032,7 @@ public class ExpressionUtils {
   }
 
   @Contract("null, _ -> false")
-  public static boolean isMatchingChildAlwaysExecuted(@jakarta.annotation.Nullable PsiExpression root, @Nonnull Predicate<PsiExpression> matcher) {
+  public static boolean isMatchingChildAlwaysExecuted(@Nullable PsiExpression root, @Nonnull Predicate<PsiExpression> matcher) {
     if (root == null) {
       return false;
     }
@@ -1087,7 +1087,7 @@ public class ExpressionUtils {
    * in the program.
    */
   @Contract("null -> false")
-  public static boolean isNewObject(@jakarta.annotation.Nullable PsiExpression expression) {
+  public static boolean isNewObject(@Nullable PsiExpression expression) {
     return expression != null && nonStructuralChildren(expression).allMatch(PsiNewExpression.class::isInstance);
   }
 
@@ -1127,7 +1127,7 @@ public class ExpressionUtils {
    * @return a qualifier or created (non-physical) {@link PsiThisExpression}.
    * May return null if reference points to local or member of anonymous class referred from inner class
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiExpression getEffectiveQualifier(@Nonnull PsiReferenceExpression ref) {
     PsiExpression qualifier = ref.getQualifierExpression();
     if (qualifier != null) {
@@ -1178,7 +1178,7 @@ public class ExpressionUtils {
    * @param index an element index
    * @return an expression or null if index is out of bounds or array could be modified after initialization
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiExpression getConstantArrayElement(PsiVariable array, int index) {
     if (index < 0)
       return null;
@@ -1196,7 +1196,7 @@ public class ExpressionUtils {
    * @return an array or null if array could be modified after initialization
    * (empty array means that the initializer is known to be an empty array).
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiExpression[] getConstantArrayElements(PsiVariable array) {
     PsiExpression initializer = array.getInitializer();
     if (initializer instanceof PsiNewExpression) {
@@ -1252,7 +1252,7 @@ public class ExpressionUtils {
    * @param to         end offset of substring in the String value of the expression
    * @return found range or null if cannot be found
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   @Contract(value = "null, _, _ -> null", pure = true)
   public static TextRange findStringLiteralRange(PsiExpression expression, int from, int to) {
     if (to < 0 || from > to) {
@@ -1308,8 +1308,8 @@ public class ExpressionUtils {
    * @return the range which represents the corresponding substring inside source representation,
    * or null if from/to values are out of bounds.
    */
-  @jakarta.annotation.Nullable
-  public static TextRange mapBackStringRange(@jakarta.annotation.Nonnull String text, int from, int to) {
+  @Nullable
+  public static TextRange mapBackStringRange(@Nonnull String text, int from, int to) {
     if (from > to || to < 0)
       return null;
     if (text.startsWith("`")) {

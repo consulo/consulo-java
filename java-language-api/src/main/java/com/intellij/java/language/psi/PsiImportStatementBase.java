@@ -52,7 +52,7 @@ public interface PsiImportStatementBase extends PsiElement {
    * @return the import reference element.
    * @see PsiImportStaticReferenceElement
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiJavaCodeReferenceElement getImportReference();
 
   /**

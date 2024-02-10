@@ -38,7 +38,7 @@ public interface RefMethod extends RefJavaElement {
    * @see PsiMethod#findSuperMethods()
    * @see #hasSuperMethods
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   Collection<RefMethod> getSuperMethods();
 
   /**
@@ -47,7 +47,7 @@ public interface RefMethod extends RefJavaElement {
    *
    * @return the collection of overriding methods.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   Collection<RefMethod> getDerivedMethods();
 
   /**
@@ -130,7 +130,7 @@ public interface RefMethod extends RefJavaElement {
    *
    * @return the method return value or null if it's different or impossible to determine.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   String getReturnValueIfSame();
 
   /**

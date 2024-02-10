@@ -15,6 +15,7 @@
  */
 package com.intellij.codeInsight.daemon;
 
+import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.impl.codeInspection.accessStaticViaInstance.AccessStaticViaInstance;
@@ -278,7 +279,7 @@ public abstract class LightAdvHighlightingTest extends LightDaemonAnalyzerTestCa
         VirtualFile vFile = txt.getVirtualFile();
         assertNotNull(txt.toString(), vFile);
         try {
-          consulo.ide.impl.idea.openapi.vfs.VfsUtil.saveText(vFile, "XXX");
+          VfsUtil.saveText(vFile, "XXX");
         }
         catch (IOException e) {
           throw new RuntimeException(e);
@@ -301,7 +302,7 @@ public abstract class LightAdvHighlightingTest extends LightDaemonAnalyzerTestCa
 
   public static class MyAnnotator implements Annotator {
     @Override
-    public void annotate(@jakarta.annotation.Nonnull PsiElement psiElement, @Nonnull final AnnotationHolder holder) {
+    public void annotate(@Nonnull PsiElement psiElement, @Nonnull final AnnotationHolder holder) {
       psiElement.accept(new XmlElementVisitor() {
         @Override public void visitXmlTag(XmlTag tag) {
           XmlAttribute attribute = tag.getAttribute("aaa", "");

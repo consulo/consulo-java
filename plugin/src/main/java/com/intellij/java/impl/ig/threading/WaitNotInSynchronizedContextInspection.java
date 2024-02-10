@@ -33,20 +33,20 @@ public class WaitNotInSynchronizedContextInspection
   extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "WaitWhileNotSynced";
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "wait.not.in.synchronized.context.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     @NonNls final String text;
     if (infos.length > 0) {
@@ -70,7 +70,7 @@ public class WaitNotInSynchronizedContextInspection
 
     @Override
     public void visitMethodCallExpression(
-      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
@@ -138,7 +138,7 @@ public class WaitNotInSynchronizedContextInspection
     }
 
     private static boolean isSynchronizedOnThis(
-      @jakarta.annotation.Nonnull PsiElement element) {
+      @Nonnull PsiElement element) {
       final PsiElement context =
         PsiTreeUtil.getParentOfType(element, PsiMethod.class,
                                     PsiSynchronizedStatement.class);

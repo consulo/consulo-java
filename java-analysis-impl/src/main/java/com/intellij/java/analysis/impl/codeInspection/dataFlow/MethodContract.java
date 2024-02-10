@@ -73,7 +73,7 @@ public abstract class MethodContract {
     };
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static MethodContract singleConditionContract(ContractValue left,
                                                        RelationType relationType,
                                                        ContractValue right,

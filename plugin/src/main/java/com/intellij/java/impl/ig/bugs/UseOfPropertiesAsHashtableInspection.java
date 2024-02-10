@@ -37,7 +37,7 @@ import org.jetbrains.annotations.NonNls;
 public class UseOfPropertiesAsHashtableInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "properties.object.as.hashtable.display.name");
@@ -149,7 +149,7 @@ public class UseOfPropertiesAsHashtableInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();

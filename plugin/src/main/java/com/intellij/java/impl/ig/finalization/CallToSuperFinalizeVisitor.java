@@ -45,7 +45,7 @@ class CallToSuperFinalizeVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitMethodCallExpression(
-    @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+    @Nonnull PsiMethodCallExpression expression) {
     if (callToSuperFinalizeFound) {
       return;
     }

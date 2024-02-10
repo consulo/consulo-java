@@ -108,7 +108,7 @@ public class PsiCatchSectionImpl extends CompositePsiElement implements PsiCatch
     }
   }
 
-  private List<PsiType> computePreciseCatchTypes(@jakarta.annotation.Nullable final PsiParameter parameter) {
+  private List<PsiType> computePreciseCatchTypes(@Nullable final PsiParameter parameter) {
     if (parameter == null) {
       return List.of();
     }
@@ -164,7 +164,7 @@ public class PsiCatchSectionImpl extends CompositePsiElement implements PsiCatch
   }
 
   // do not use control flow here to avoid dead loop
-  private static boolean isCatchParameterEffectivelyFinal(final PsiParameter parameter, @jakarta.annotation.Nullable final PsiCodeBlock catchBlock) {
+  private static boolean isCatchParameterEffectivelyFinal(final PsiParameter parameter, @Nullable final PsiCodeBlock catchBlock) {
     final boolean[] result = {true};
     if (catchBlock != null) {
       catchBlock.accept(new JavaRecursiveElementWalkingVisitor() {
@@ -182,7 +182,7 @@ public class PsiCatchSectionImpl extends CompositePsiElement implements PsiCatch
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiTryStatement getTryStatement() {
     return (PsiTryStatement) getParent();
   }
@@ -194,7 +194,7 @@ public class PsiCatchSectionImpl extends CompositePsiElement implements PsiCatch
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   public PsiJavaToken getRParenth() {
     return (PsiJavaToken) findChildByRole(ChildRole.CATCH_BLOCK_PARAMETER_RPARENTH);
   }

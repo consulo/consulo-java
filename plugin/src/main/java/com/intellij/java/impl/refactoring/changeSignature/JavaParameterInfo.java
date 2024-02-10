@@ -31,8 +31,8 @@ import jakarta.annotation.Nullable;
  * @author Maxim.Medvedev
  */
 public interface JavaParameterInfo extends ParameterInfo {
-  @jakarta.annotation.Nullable
-  PsiType createType(@jakarta.annotation.Nullable PsiElement context, final PsiManager manager) throws IncorrectOperationException;
+  @Nullable
+  PsiType createType(@Nullable PsiElement context, final PsiManager manager) throws IncorrectOperationException;
 
   @Nullable
   default PsiType createType(@Nonnull PsiElement context) {

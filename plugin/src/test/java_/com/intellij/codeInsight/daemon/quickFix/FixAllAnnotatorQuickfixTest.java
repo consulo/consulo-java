@@ -69,7 +69,7 @@ public abstract class FixAllAnnotatorQuickfixTest extends LightQuickFixTestCase 
 
   public static class MyAnnotator implements Annotator {
     @Override
-    public void annotate(@Nonnull PsiElement element, @jakarta.annotation.Nonnull AnnotationHolder holder) {
+    public void annotate(@Nonnull PsiElement element, @Nonnull AnnotationHolder holder) {
       if (element instanceof PsiMethod) {
         Annotation annotation = holder.createErrorAnnotation(((PsiMethod)element).getNameIdentifier(), null);
         annotation.registerUniversalFix(new MyFix(), null, null);
@@ -79,26 +79,26 @@ public abstract class FixAllAnnotatorQuickfixTest extends LightQuickFixTestCase 
 
     static class MyFix implements IntentionAction, LocalQuickFix {
 
-      @jakarta.annotation.Nonnull
+      @Nonnull
       @Override
       public String getText() {
         return getName();
       }
 
-      @jakarta.annotation.Nonnull
+      @Nonnull
       @Override
       public String getName() {
         return "MyFix";
       }
 
-      @jakarta.annotation.Nonnull
+      @Nonnull
       @Override
       public String getFamilyName() {
         return getName();
       }
 
       @Override
-      public void applyFix(@Nonnull Project project, @jakarta.annotation.Nonnull ProblemDescriptor descriptor) {
+      public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
         final PsiElement element = descriptor.getPsiElement();
         if (element != null) {
           final PsiElement parent = element.getParent();
@@ -114,7 +114,7 @@ public abstract class FixAllAnnotatorQuickfixTest extends LightQuickFixTestCase 
       }
 
       @Override
-      public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+      public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
         fail();
       }
 

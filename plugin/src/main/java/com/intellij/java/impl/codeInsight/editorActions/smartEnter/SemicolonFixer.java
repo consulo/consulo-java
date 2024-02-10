@@ -43,7 +43,7 @@ public class SemicolonFixer implements Fixer
 		@SuppressWarnings("unused") boolean b = fixReturn(editor, psiElement) || fixForUpdate(editor, psiElement) || fixAfterLastValidElement(editor, psiElement);
 	}
 
-	private static boolean fixReturn(@jakarta.annotation.Nonnull Editor editor, @Nullable PsiElement psiElement)
+	private static boolean fixReturn(@Nonnull Editor editor, @Nullable PsiElement psiElement)
 	{
 		if(psiElement instanceof PsiReturnStatement)
 		{
@@ -62,7 +62,7 @@ public class SemicolonFixer implements Fixer
 		return false;
 	}
 
-	private static boolean fixForUpdate(@jakarta.annotation.Nonnull Editor editor, @Nullable PsiElement psiElement)
+	private static boolean fixForUpdate(@Nonnull Editor editor, @Nullable PsiElement psiElement)
 	{
 		if(!(psiElement instanceof PsiForStatement))
 		{

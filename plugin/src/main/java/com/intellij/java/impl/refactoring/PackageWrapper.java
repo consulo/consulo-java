@@ -32,7 +32,7 @@ public class PackageWrapper {
   @Nonnull
   private final String myQualifiedName;
 
-  public PackageWrapper(PsiManager manager, @jakarta.annotation.Nonnull String qualifiedName) {
+  public PackageWrapper(PsiManager manager, @Nonnull String qualifiedName) {
     myManager = manager;
     myQualifiedName = qualifiedName;
   }
@@ -61,7 +61,7 @@ public class PackageWrapper {
     return JavaPsiFacade.getInstance(myManager.getProject()).findPackage(myQualifiedName) != null;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getQualifiedName() {
     return myQualifiedName;
   }

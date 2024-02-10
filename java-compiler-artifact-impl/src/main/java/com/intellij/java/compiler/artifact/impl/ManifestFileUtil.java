@@ -78,12 +78,12 @@ public class ManifestFileUtil {
   }
 
   @Nullable
-  public static VirtualFile findManifestFile(@jakarta.annotation.Nonnull CompositePackagingElement<?> root, PackagingElementResolvingContext context, ArtifactType artifactType) {
+  public static VirtualFile findManifestFile(@Nonnull CompositePackagingElement<?> root, PackagingElementResolvingContext context, ArtifactType artifactType) {
     return ArtifactUtil.findSourceFileByOutputPath(root, MANIFEST_PATH, context, artifactType);
   }
 
-  @jakarta.annotation.Nullable
-  public static VirtualFile suggestManifestFileDirectory(@jakarta.annotation.Nonnull CompositePackagingElement<?> root, PackagingElementResolvingContext context, ArtifactType artifactType) {
+  @Nullable
+  public static VirtualFile suggestManifestFileDirectory(@Nonnull CompositePackagingElement<?> root, PackagingElementResolvingContext context, ArtifactType artifactType) {
     final VirtualFile metaInfDir = ArtifactUtil.findSourceFileByOutputPath(root, MANIFEST_DIR_NAME, context, artifactType);
     if (metaInfDir != null) {
       return metaInfDir;
@@ -93,7 +93,7 @@ public class ManifestFileUtil {
     final Ref<VirtualFile> sourceFile = Ref.create(null);
     ArtifactUtil.processElementsWithSubstitutions(root.getChildren(), context, artifactType, PackagingElementPath.EMPTY, new PackagingElementProcessor<PackagingElement<?>>() {
       @Override
-      public boolean process(@jakarta.annotation.Nonnull PackagingElement<?> element, @Nonnull PackagingElementPath path) {
+      public boolean process(@Nonnull PackagingElement<?> element, @Nonnull PackagingElementPath path) {
         if (element instanceof FileCopyPackagingElement) {
           final VirtualFile file = ((FileCopyPackagingElement) element).findFile();
           if (file != null) {
@@ -120,7 +120,7 @@ public class ManifestFileUtil {
   }
 
   @Nullable
-  public static VirtualFile suggestManifestFileDirectory(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nullable Module module) {
+  public static VirtualFile suggestManifestFileDirectory(@Nonnull Project project, @Nullable Module module) {
     OrderEnumerator enumerator = module != null ? OrderEnumerator.orderEntries(module) : OrderEnumerator.orderEntries(project);
     final VirtualFile[] files = enumerator.withoutDepModules().withoutLibraries().withoutSdk().productionOnly().sources().getRoots();
     if (files.length > 0) {
@@ -130,8 +130,8 @@ public class ManifestFileUtil {
   }
 
 
-  @jakarta.annotation.Nullable
-  private static VirtualFile suggestBaseDir(@jakarta.annotation.Nonnull Project project, final @jakarta.annotation.Nullable VirtualFile file) {
+  @Nullable
+  private static VirtualFile suggestBaseDir(@Nonnull Project project, final @Nullable VirtualFile file) {
     final VirtualFile[] contentRoots = ProjectRootManager.getInstance(project).getContentRoots();
     if (file == null && contentRoots.length > 0) {
       return contentRoots[0];
@@ -148,7 +148,7 @@ public class ManifestFileUtil {
     return project.getBaseDir();
   }
 
-  public static Manifest readManifest(@jakarta.annotation.Nonnull VirtualFile manifestFile) {
+  public static Manifest readManifest(@Nonnull VirtualFile manifestFile) {
     try {
       final InputStream inputStream = manifestFile.getInputStream();
       final Manifest manifest;
@@ -163,7 +163,7 @@ public class ManifestFileUtil {
     }
   }
 
-  public static void updateManifest(@jakarta.annotation.Nonnull VirtualFile file,
+  public static void updateManifest(@Nonnull VirtualFile file,
                                     final @Nullable String mainClass,
                                     final @Nullable List<String> classpath,
                                     final boolean replaceValues) {
@@ -211,7 +211,7 @@ public class ManifestFileUtil {
     }
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static ManifestFileConfiguration createManifestFileConfiguration(@Nonnull VirtualFile manifestFile) {
     final String path = manifestFile.getPath();
     Manifest manifest = readManifest(manifestFile);
@@ -228,7 +228,7 @@ public class ManifestFileUtil {
     final List<String> classpath = new ArrayList<String>();
     final PackagingElementProcessor<PackagingElement<?>> processor = new PackagingElementProcessor<PackagingElement<?>>() {
       @Override
-      public boolean process(@jakarta.annotation.Nonnull PackagingElement<?> element, @jakarta.annotation.Nonnull PackagingElementPath path) {
+      public boolean process(@Nonnull PackagingElement<?> element, @Nonnull PackagingElementPath path) {
         if (element instanceof FileCopyPackagingElement) {
           final String fileName = ((FileCopyPackagingElement) element).getOutputFileName();
           classpath.add(ArtifactUtil.appendToPath(path.getPathString(), fileName));
@@ -247,7 +247,7 @@ public class ManifestFileUtil {
     return classpath;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static VirtualFile showDialogAndCreateManifest(final ArtifactEditorContext context, final CompositePackagingElement<?> element) {
     FileChooserDescriptor descriptor = createDescriptorForManifestDirectory();
     final VirtualFile directory = suggestManifestFileDirectory(element, context, context.getArtifactType());
@@ -259,8 +259,8 @@ public class ManifestFileUtil {
     return createManifestFile(file, context.getProject());
   }
 
-  @jakarta.annotation.Nullable
-  public static VirtualFile createManifestFile(final @jakarta.annotation.Nonnull VirtualFile directory, final @jakarta.annotation.Nonnull Project project) {
+  @Nullable
+  public static VirtualFile createManifestFile(final @Nonnull VirtualFile directory, final @Nonnull Project project) {
     ApplicationManager.getApplication().assertIsDispatchThread();
     final Ref<IOException> exc = Ref.create(null);
     final VirtualFile file = WriteAction.compute(() -> {
@@ -297,7 +297,7 @@ public class ManifestFileUtil {
     return descriptor;
   }
 
-  public static void addManifestFileToLayout(final @jakarta.annotation.Nonnull String path, final @jakarta.annotation.Nonnull ArtifactEditorContext context, final @jakarta.annotation.Nonnull CompositePackagingElement<?> element) {
+  public static void addManifestFileToLayout(final @Nonnull String path, final @Nonnull ArtifactEditorContext context, final @Nonnull CompositePackagingElement<?> element) {
     context.editLayout(context.getArtifact(), new Runnable() {
       public void run() {
         final VirtualFile file = findManifestFile(element, context, context.getArtifactType());

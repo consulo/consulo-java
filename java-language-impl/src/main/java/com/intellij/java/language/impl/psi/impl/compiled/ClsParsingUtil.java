@@ -54,7 +54,7 @@ public class ClsParsingUtil {
   private ClsParsingUtil() {
   }
 
-  public static PsiExpression createExpressionFromText(@Nonnull String exprText, @jakarta.annotation.Nonnull PsiManager manager, @Nonnull ClsElementImpl parent) {
+  public static PsiExpression createExpressionFromText(@Nonnull String exprText, @Nonnull PsiManager manager, @Nonnull ClsElementImpl parent) {
     PsiJavaParserFacade parserFacade = JavaPsiFacade.getInstance(manager.getProject()).getParserFacade();
     try {
       PsiExpression expr = parserFacade.createExpressionFromText(exprText, null);
@@ -65,7 +65,7 @@ public class ClsParsingUtil {
     }
   }
 
-  public static PsiAnnotationMemberValue createMemberValueFromText(@jakarta.annotation.Nonnull String text, @Nonnull PsiManager manager, @jakarta.annotation.Nonnull ClsElementImpl parent) {
+  public static PsiAnnotationMemberValue createMemberValueFromText(@Nonnull String text, @Nonnull PsiManager manager, @Nonnull ClsElementImpl parent) {
     LanguageLevel level = PsiUtil.getLanguageLevel(parent);
     DummyHolder holder = DummyHolderFactory.createHolder(manager, new JavaDummyElement(text, ANNOTATION_VALUE, level), null);
     PsiElement element = SourceTreeToPsiMap.treeElementToPsi(holder.getTreeElement().getFirstChildNode());
@@ -76,7 +76,7 @@ public class ClsParsingUtil {
     return getMemberValue(element, parent);
   }
 
-  public static PsiAnnotationMemberValue getMemberValue(@jakarta.annotation.Nonnull PsiElement element, @Nonnull ClsElementImpl parent) {
+  public static PsiAnnotationMemberValue getMemberValue(@Nonnull PsiElement element, @Nonnull ClsElementImpl parent) {
     if (element instanceof PsiExpression) {
       return psiToClsExpression((PsiExpression) element, parent);
     } else if (element instanceof PsiArrayInitializerMemberValue) {
@@ -170,7 +170,7 @@ public class ClsParsingUtil {
     return null;
   }
 
-  public static boolean isJavaIdentifier(@Nonnull String identifier, @jakarta.annotation.Nonnull LanguageLevel level) {
+  public static boolean isJavaIdentifier(@Nonnull String identifier, @Nonnull LanguageLevel level) {
     return StringUtil.isJavaIdentifier(identifier) && !JavaLexer.isKeyword(identifier, level);
   }
 

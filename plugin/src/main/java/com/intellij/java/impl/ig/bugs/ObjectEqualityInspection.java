@@ -59,7 +59,7 @@ public class ObjectEqualityInspection extends BaseInspection {
   public boolean m_ignorePrivateConstructors = false;
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("object.comparison.display.name");
   }
@@ -94,7 +94,7 @@ public class ObjectEqualityInspection extends BaseInspection {
   private class ObjectEqualityVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitBinaryExpression(@jakarta.annotation.Nonnull PsiBinaryExpression expression) {
+    public void visitBinaryExpression(@Nonnull PsiBinaryExpression expression) {
       super.visitBinaryExpression(expression);
       if (!ComparisonUtils.isEqualityComparison(expression)) {
         return;
@@ -181,7 +181,7 @@ public class ObjectEqualityInspection extends BaseInspection {
       return true;
     }
 
-    private boolean isClass(@jakarta.annotation.Nullable PsiExpression expression) {
+    private boolean isClass(@Nullable PsiExpression expression) {
       if (expression == null) {
         return false;
       }
@@ -197,7 +197,7 @@ public class ObjectEqualityInspection extends BaseInspection {
       return rawType.equalsToText(JavaClassNames.JAVA_LANG_CLASS);
     }
 
-    private boolean isEnumType(@jakarta.annotation.Nullable PsiExpression expression) {
+    private boolean isEnumType(@Nullable PsiExpression expression) {
       return expression != null && TypeUtils.expressionHasTypeOrSubtype(expression, JavaClassNames.JAVA_LANG_ENUM);
     }
 

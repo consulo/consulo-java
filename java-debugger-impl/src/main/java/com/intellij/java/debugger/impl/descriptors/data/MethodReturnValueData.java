@@ -24,12 +24,12 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 public final class MethodReturnValueData extends DescriptorData<MethodReturnValueDescriptorImpl>{
-  private final @jakarta.annotation.Nullable
+  private final @Nullable
   Value myReturnValue;
-  private final @jakarta.annotation.Nonnull
+  private final @Nonnull
   Method myMethod;
 
-  public MethodReturnValueData(@jakarta.annotation.Nonnull Method method, @jakarta.annotation.Nullable Value returnValue) {
+  public MethodReturnValueData(@Nonnull Method method, @Nullable Value returnValue) {
     super();
     myMethod = method;
     myReturnValue = returnValue;
@@ -40,7 +40,7 @@ public final class MethodReturnValueData extends DescriptorData<MethodReturnValu
     return myReturnValue;
   }
 
-  public @jakarta.annotation.Nonnull
+  public @Nonnull
   Method getMethod() {
     return myMethod;
   }

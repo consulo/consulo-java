@@ -67,7 +67,7 @@ public class JavadocTypedHandler extends TypedHandlerDelegate {
    * @param file      current file
    * @return          <code>true</code> if closing tag is inserted; <code>false</code> otherwise
    */
-  private static boolean insertClosingTagIfNecessary(char c, @Nonnull Project project, @jakarta.annotation.Nonnull Editor editor, @Nonnull PsiFile file) {
+  private static boolean insertClosingTagIfNecessary(char c, @Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiFile file) {
     if (c != CLOSE_TAG_SYMBOL || !JavaSmartKeysSettings.getInstance().JAVADOC_GENERATE_CLOSING_TAG) {
       return false;
     }

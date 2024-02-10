@@ -69,7 +69,7 @@ public class BundleActivatorParser extends AbstractHeaderParserImpl{
   }
 
   @Override
-  public boolean isAcceptable(@jakarta.annotation.Nonnull Object o) {
+  public boolean isAcceptable(@Nonnull Object o) {
     return o instanceof PsiClass;
   }
 }

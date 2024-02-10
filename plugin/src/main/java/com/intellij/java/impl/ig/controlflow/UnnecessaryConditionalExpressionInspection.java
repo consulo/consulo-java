@@ -33,7 +33,7 @@ import com.siyeh.ig.psiutils.BoolUtils;
 public class UnnecessaryConditionalExpressionInspection
   extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "RedundantConditionalExpression";
   }

@@ -63,7 +63,7 @@ public class JavaCompletionSession {
     myResult.addElement(AutoCompletionPolicy.NEVER_AUTOCOMPLETE.applyPolicy(lookupElement));
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
 	PrefixMatcher getMatcher() {
     return myResult.getPrefixMatcher();
   }
@@ -80,17 +80,17 @@ public class JavaCompletionSession {
     return null;
   }
 
-  public void registerClass(@jakarta.annotation.Nonnull PsiClass psiClass) {
+  public void registerClass(@Nonnull PsiClass psiClass) {
     ContainerUtil.addIfNotNull(myAddedClasses, getClassName(psiClass));
   }
 
   @Nullable
-  private static String getClassName(@jakarta.annotation.Nonnull PsiClass psiClass) {
+  private static String getClassName(@Nonnull PsiClass psiClass) {
     String name = psiClass.getQualifiedName();
     return name == null ? psiClass.getName() : name;
   }
 
-  public boolean alreadyProcessed(@jakarta.annotation.Nonnull LookupElement element) {
+  public boolean alreadyProcessed(@Nonnull LookupElement element) {
     final PsiClass psiClass = extractClass(element);
     return psiClass != null && alreadyProcessed(psiClass);
   }
@@ -100,7 +100,7 @@ public class JavaCompletionSession {
     return name == null || myAddedClasses.contains(name);
   }
 
-  public boolean isKeywordAlreadyProcessed(@jakarta.annotation.Nonnull String keyword) {
+  public boolean isKeywordAlreadyProcessed(@Nonnull String keyword) {
     return myKeywords.contains(keyword);
   }
 

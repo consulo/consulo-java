@@ -39,7 +39,7 @@ public class AddAssertStatementFix implements LocalQuickFix {
   private static final Logger LOG = Logger.getInstance(AddAssertStatementFix.class);
   private final String myText;
 
-  public AddAssertStatementFix(@jakarta.annotation.Nonnull String text) {
+  public AddAssertStatementFix(@Nonnull String text) {
     myText = text;
   }
 

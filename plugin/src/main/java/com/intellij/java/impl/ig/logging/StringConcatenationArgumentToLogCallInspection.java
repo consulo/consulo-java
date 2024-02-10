@@ -82,7 +82,7 @@ public class StringConcatenationArgumentToLogCallInspection extends BaseInspecti
 
     public StringConcatenationArgumentToLogCallFix() {}
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public String getName() {
       return InspectionGadgetsBundle.message("string.concatenation.in.format.call.quickfix");
@@ -276,7 +276,7 @@ public class StringConcatenationArgumentToLogCallInspection extends BaseInspecti
       registerMethodCallError(expression, argument);
     }
 
-    private static boolean containsNonConstantConcatenation(@jakarta.annotation.Nullable PsiExpression expression) {
+    private static boolean containsNonConstantConcatenation(@Nullable PsiExpression expression) {
       if (expression instanceof PsiParenthesizedExpression) {
         final PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression)expression;
         return containsNonConstantConcatenation(parenthesizedExpression.getExpression());

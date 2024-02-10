@@ -208,7 +208,7 @@ public class PackageChooserDialog extends PackageChooser {
       }, ModalityState.stateForComponent(getRootPane()));*/
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private PsiJavaPackage getTreeSelection() {
     if (myTree == null) return null;
     TreePath path = myTree.getSelectionPath();

@@ -13,7 +13,7 @@ import jakarta.annotation.Nonnull;
 public class JavaDependencyCacheFactory implements DependencyCacheFactory {
   @Nonnull
   @Override
-  public DependencyCache create(@jakarta.annotation.Nonnull String cacheDir) {
+  public DependencyCache create(@Nonnull String cacheDir) {
     return new JavaDependencyCache(cacheDir);
   }
 }

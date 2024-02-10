@@ -378,7 +378,7 @@ public class SerialVersionUIDBuilder extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitMethodCallExpression(
-    @jakarta.annotation.Nonnull PsiMethodCallExpression methodCallExpression) {
+    @Nonnull PsiMethodCallExpression methodCallExpression) {
     // for navigating the psi tree in the order javac navigates its AST
     final PsiExpressionList argumentList =
       methodCallExpression.getArgumentList();

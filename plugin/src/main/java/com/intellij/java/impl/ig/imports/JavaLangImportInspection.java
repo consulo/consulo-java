@@ -31,7 +31,7 @@ import consulo.annotation.component.ExtensionImpl;
 public class JavaLangImportInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "java.lang.import.display.name");

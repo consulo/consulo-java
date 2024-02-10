@@ -30,7 +30,7 @@ import org.jetbrains.annotations.TestOnly;
 public abstract class JavaPsiFacadeEx extends JavaPsiFacade
 {
 	@TestOnly
-	public static JavaPsiFacadeEx getInstanceEx(@jakarta.annotation.Nonnull Project project)
+	public static JavaPsiFacadeEx getInstanceEx(@Nonnull Project project)
 	{
 		return (JavaPsiFacadeEx) getInstance(project);
 	}

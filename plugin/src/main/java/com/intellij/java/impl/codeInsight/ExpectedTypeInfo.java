@@ -52,7 +52,7 @@ public interface ExpectedTypeInfo {
 
   String toString();
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   ExpectedTypeInfo[] intersect(@Nonnull ExpectedTypeInfo info);
 
   @Nonnull

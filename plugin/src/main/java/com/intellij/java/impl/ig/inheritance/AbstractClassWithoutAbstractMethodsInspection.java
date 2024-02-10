@@ -38,7 +38,7 @@ public class AbstractClassWithoutAbstractMethodsInspection
       "abstract.class.without.abstract.methods.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "abstract.class.without.abstract.methods.problem.descriptor");

@@ -251,7 +251,7 @@ public class InlineToAnonymousClassHandler extends JavaInlineActionHandler
 	}
 
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	public static PsiCall findCallToInline(final Editor editor)
 	{
 		PsiCall callToInline = null;
@@ -267,7 +267,7 @@ public class InlineToAnonymousClassHandler extends JavaInlineActionHandler
 		return callToInline;
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	public static String getCannotInlineMessage(final PsiClass psiClass)
 	{
 		if(psiClass instanceof PsiTypeParameter)

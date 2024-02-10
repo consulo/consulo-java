@@ -64,13 +64,13 @@ public class JUnitRuleInspection extends BaseInspection {
     return panel;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return (String)infos[0];
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {
     return infos.length > 1 ? new MakePublicStaticFix((String)infos[1], (String)infos[2]) : null;
@@ -146,7 +146,7 @@ public class JUnitRuleInspection extends BaseInspection {
       }
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public String getName() {
       return myName;

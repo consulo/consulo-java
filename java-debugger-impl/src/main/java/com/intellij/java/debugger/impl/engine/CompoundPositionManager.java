@@ -169,15 +169,15 @@ public class CompoundPositionManager extends PositionManagerEx implements MultiR
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
-	public List<ReferenceType> getAllClasses(@jakarta.annotation.Nonnull final SourcePosition classPosition)
+	@Nonnull
+	public List<ReferenceType> getAllClasses(@Nonnull final SourcePosition classPosition)
 	{
 		return iterate(positionManager -> positionManager.getAllClasses(classPosition), Collections.emptyList(), classPosition);
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
-	public List<Location> locationsOfLine(@Nonnull final ReferenceType type, @jakarta.annotation.Nonnull SourcePosition position)
+	@Nonnull
+	public List<Location> locationsOfLine(@Nonnull final ReferenceType type, @Nonnull SourcePosition position)
 	{
 		VirtualFile file = position.getFile().getVirtualFile();
 		if(file != null)
@@ -198,12 +198,12 @@ public class CompoundPositionManager extends PositionManagerEx implements MultiR
 	}
 
 	@Override
-	public ClassPrepareRequest createPrepareRequest(@Nonnull final ClassPrepareRequestor requestor, @jakarta.annotation.Nonnull final SourcePosition position)
+	public ClassPrepareRequest createPrepareRequest(@Nonnull final ClassPrepareRequestor requestor, @Nonnull final SourcePosition position)
 	{
 		return iterate(positionManager -> positionManager.createPrepareRequest(requestor, position), null, position);
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public List<ClassPrepareRequest> createPrepareRequests(@Nonnull final ClassPrepareRequestor requestor, @Nonnull final SourcePosition position)
 	{
@@ -225,9 +225,9 @@ public class CompoundPositionManager extends PositionManagerEx implements MultiR
 		}, Collections.emptyList(), position);
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	@Override
-	public XStackFrame createStackFrame(@Nonnull StackFrameProxyImpl frame, @jakarta.annotation.Nonnull DebugProcessImpl debugProcess, @Nonnull Location location)
+	public XStackFrame createStackFrame(@Nonnull StackFrameProxyImpl frame, @Nonnull DebugProcessImpl debugProcess, @Nonnull Location location)
 	{
 		for(PositionManager positionManager : myPositionManagers)
 		{
@@ -255,7 +255,7 @@ public class CompoundPositionManager extends PositionManagerEx implements MultiR
 	}
 
 	@Override
-	public ThreeState evaluateCondition(@Nonnull EvaluationContext context, @Nonnull StackFrameProxyImpl frame, @Nonnull Location location, @jakarta.annotation.Nonnull String expression)
+	public ThreeState evaluateCondition(@Nonnull EvaluationContext context, @Nonnull StackFrameProxyImpl frame, @Nonnull Location location, @Nonnull String expression)
 	{
 		for(PositionManager positionManager : myPositionManagers)
 		{

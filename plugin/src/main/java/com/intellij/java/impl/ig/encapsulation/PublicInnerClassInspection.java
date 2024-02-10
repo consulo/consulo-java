@@ -80,7 +80,7 @@ public class PublicInnerClassInspection extends BaseInspection {
   private class PublicInnerClassVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       if (!aClass.hasModifierProperty(PsiModifier.PUBLIC)) {
         return;
       }

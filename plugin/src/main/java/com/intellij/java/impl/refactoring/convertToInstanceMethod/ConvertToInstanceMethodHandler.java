@@ -41,7 +41,7 @@ public class ConvertToInstanceMethodHandler implements RefactoringActionHandler 
   private static final Logger LOG = Logger.getInstance(ConvertToInstanceMethodHandler.class);
   static final String REFACTORING_NAME = RefactoringBundle.message("convert.to.instance.method.title");
 
-  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
     PsiElement element = dataContext.getData(LangDataKeys.PSI_ELEMENT);
     editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
     if (element == null) {
@@ -62,7 +62,7 @@ public class ConvertToInstanceMethodHandler implements RefactoringActionHandler 
     invoke(project, new PsiElement[]{element}, dataContext);
   }
 
-  public void invoke(@Nonnull Project project, @jakarta.annotation.Nonnull PsiElement[] elements, DataContext dataContext) {
+  public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
     if (elements.length != 1 || !(elements[0] instanceof PsiMethod)) return;
     final PsiMethod method = (PsiMethod)elements[0];
     if (!method.hasModifierProperty(PsiModifier.STATIC)) {

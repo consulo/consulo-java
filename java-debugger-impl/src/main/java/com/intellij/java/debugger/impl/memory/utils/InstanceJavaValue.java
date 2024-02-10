@@ -26,7 +26,7 @@ import consulo.internal.com.sun.jdi.ObjectReference;
 
 public class InstanceJavaValue extends JavaValue
 {
-	public InstanceJavaValue(@jakarta.annotation.Nonnull ValueDescriptorImpl valueDescriptor, @Nonnull EvaluationContextImpl evaluationContext, NodeManagerImpl nodeManager)
+	public InstanceJavaValue(@Nonnull ValueDescriptorImpl valueDescriptor, @Nonnull EvaluationContextImpl evaluationContext, NodeManagerImpl nodeManager)
 	{
 		super(null, valueDescriptor, evaluationContext, nodeManager, false);
 	}

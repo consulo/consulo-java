@@ -32,7 +32,7 @@ import java.util.Set;
 	final DfaValue myQualifier;
 	final DfaValue[] myArguments;
 	final
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	MutationSignature myMutation;
 
 	DfaCallArguments(DfaValue qualifier, DfaValue[] arguments, @Nonnull MutationSignature mutation)

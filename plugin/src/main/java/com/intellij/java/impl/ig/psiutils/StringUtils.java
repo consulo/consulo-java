@@ -89,8 +89,8 @@ public class StringUtils {
   }
 
   @SuppressWarnings({"HardCodedStringLiteral"})
-  @jakarta.annotation.Nonnull
-  public static String createSingularFromName(@jakarta.annotation.Nonnull String name) {
+  @Nonnull
+  public static String createSingularFromName(@Nonnull String name) {
     final int nameLength = name.length();
     final String singularName;
     if (name.endsWith("ies")) {

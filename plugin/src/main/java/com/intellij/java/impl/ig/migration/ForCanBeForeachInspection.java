@@ -85,7 +85,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel panel =
       new MultipleCheckboxOptionsPanel(this);
@@ -131,7 +131,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
       replaceStatementAndShortenClassNames(forStatement, newExpression);
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     private String createListIterationText(
       @Nonnull PsiForStatement forStatement) {
       final PsiBinaryExpression condition =
@@ -270,7 +270,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
       return out.toString();
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     private PsiType extractContentTypeFromType(
       PsiType collectionType) {
       if (!(collectionType instanceof PsiClassType)) {
@@ -352,7 +352,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
       return types[0];
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     private String createCollectionIterationText(
       @Nonnull PsiForStatement forStatement)
       throws IncorrectOperationException {
@@ -482,7 +482,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
       return out.toString();
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     private String createArrayIterationText(@Nonnull PsiForStatement forStatement) {
       final PsiExpression condition = forStatement.getCondition();
       final PsiBinaryExpression strippedCondition = (PsiBinaryExpression)ParenthesesUtils.stripParentheses(condition);
@@ -1289,7 +1289,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
     return iterator.equals(target);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static PsiReferenceExpression getVariableReferenceFromCondition(PsiExpression condition,
                                                                           PsiVariable variable,
                                                                           PsiElement secondDeclaredElement) {
@@ -1363,7 +1363,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
     }
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static Holder getCollectionFromSizeComparison(PsiExpression condition, PsiVariable variable, PsiElement secondDeclaredElement) {
     condition = ParenthesesUtils.stripParentheses(condition);
     if (!(condition instanceof PsiBinaryExpression)) {

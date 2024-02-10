@@ -57,13 +57,13 @@ public class I18nizeConcatenationQuickFix extends I18nizeQuickFix{
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getName() {
     return CodeInsightBundle.message("quickfix.i18n.concatentation");
   }
 
   @Override
-  protected PsiElement doReplacementInJava(@jakarta.annotation.Nonnull final PsiFile psiFile,
+  protected PsiElement doReplacementInJava(@Nonnull final PsiFile psiFile,
                                            @Nonnull final Editor editor,
                                            @Nullable PsiLiteralExpression literalExpression,
                                            String i18nizedText) throws IncorrectOperationException {

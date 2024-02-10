@@ -72,7 +72,7 @@ public class JavaKeywordCompletion {
       false), new ClassFilter(PsiJavaCodeReferenceCodeFragment.class, false), new ClassFilter(PsiTypeCodeFragment.class, false))), new StartElementFilter());
 
   static final NotNullLazyValue<ElementFilter> END_OF_BLOCK = new AtomicNotNullLazyValue<ElementFilter>() {
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     protected ElementFilter compute() {
       return new OrFilter(new AndFilter(new LeftNeighbour(new OrFilter(new AndFilter(new TextFilter("{", "}", ";", ":", "else"), new NotFilter(new SuperParentFilter(new ClassFilter
@@ -132,7 +132,7 @@ public class JavaKeywordCompletion {
   private final PsiElement myPosition;
   private final String myPrefix;
   private final List<LookupElement> myResults = new ArrayList<>();
-  @jakarta.annotation.Nullable
+  @Nullable
   private PsiElement myPrevLeaf;
 
   JavaKeywordCompletion(CompletionParameters parameters, JavaCompletionSession session) {

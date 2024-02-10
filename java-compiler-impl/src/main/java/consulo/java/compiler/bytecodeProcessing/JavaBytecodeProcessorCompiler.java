@@ -72,7 +72,7 @@ public class JavaBytecodeProcessorCompiler implements ClassInstrumentingCompiler
       myValidityState = new TimestampValidityState(myFile.lastModified());
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public File getFile() {
       return myFile;
@@ -85,7 +85,7 @@ public class JavaBytecodeProcessorCompiler implements ClassInstrumentingCompiler
     }
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public ProcessingItem[] getProcessingItems(CompileContext compileContext) {
     List<ProcessingItem> list = new LinkedList<>();
@@ -183,7 +183,7 @@ public class JavaBytecodeProcessorCompiler implements ClassInstrumentingCompiler
   }
 
   @Nonnull
-  public static InstrumentationClassFinder createClassFinder(@jakarta.annotation.Nonnull CompileContext context, @jakarta.annotation.Nonnull final Module module) {
+  public static InstrumentationClassFinder createClassFinder(@Nonnull CompileContext context, @Nonnull final Module module) {
     ModuleChunk moduleChunk =
       new ModuleChunk((CompileContextEx)context, new Chunk<>(module), Collections.<Module, List<VirtualFile>>emptyMap());
 

@@ -23,6 +23,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ClassUtils;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.ui.ex.awt.UIUtil;
 
 import jakarta.annotation.Nonnull;
@@ -79,12 +80,12 @@ public class FieldCountInspection extends ClassMetricInspection {
     final JLabel label = new JLabel(configurationLabel);
     final JFormattedTextField valueField = prepareNumberEditor(() -> m_limit, i -> m_limit = i);
 
-    final consulo.deadCodeNotWorking.impl.CheckBox includeCheckBox =
-      new consulo.deadCodeNotWorking.impl.CheckBox(InspectionGadgetsBundle.message(
+    final CheckBox includeCheckBox =
+      new CheckBox(InspectionGadgetsBundle.message(
         "field.count.inspection.include.constant.fields.in.count.checkbox"),
                    this, "m_countConstantFields");
-    final consulo.deadCodeNotWorking.impl.CheckBox considerCheckBox =
-      new consulo.deadCodeNotWorking.impl.CheckBox(InspectionGadgetsBundle.message(
+    final CheckBox considerCheckBox =
+      new CheckBox(InspectionGadgetsBundle.message(
         "field.count.inspection.static.final.fields.count.as.constant.checkbox"),
                    this, "m_considerStaticFinalFieldsConstant");
 

@@ -30,7 +30,7 @@ public class TodoCommentInspection extends BaseInspection {
     return InspectionGadgetsBundle.message("todo.comment.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("todo.comment.problem.descriptor");
   }

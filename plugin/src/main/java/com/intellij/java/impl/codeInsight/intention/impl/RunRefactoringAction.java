@@ -52,7 +52,7 @@ public class RunRefactoringAction extends BaseRefactoringIntentionAction impleme
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, @jakarta.annotation.Nonnull PsiElement element) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     myHandler.invoke(project, editor, element.getContainingFile(), null);
   }
 

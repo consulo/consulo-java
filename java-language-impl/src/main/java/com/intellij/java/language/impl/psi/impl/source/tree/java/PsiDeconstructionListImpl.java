@@ -48,7 +48,7 @@ public class PsiDeconstructionListImpl extends CompositePsiElement implements Ps
   }
 
   @Override
-  public TreeElement addInternal(TreeElement first, ASTNode last, @Nullable ASTNode anchor, @jakarta.annotation.Nullable Boolean before) {
+  public TreeElement addInternal(TreeElement first, ASTNode last, @Nullable ASTNode anchor, @Nullable Boolean before) {
     if (anchor == null) {
       if (before == null || before.booleanValue()) {
         anchor = findChildByType(JavaTokenType.RPARENTH);

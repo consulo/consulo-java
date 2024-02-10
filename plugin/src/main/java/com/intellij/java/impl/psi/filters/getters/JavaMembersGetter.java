@@ -105,7 +105,7 @@ public class JavaMembersGetter extends MembersGetter {
   }
 
   @Nullable
-  private static PsiClass getCalledClass(@jakarta.annotation.Nullable PsiElement call) {
+  private static PsiClass getCalledClass(@Nullable PsiElement call) {
     if (call instanceof PsiMethodCallExpression) {
       for (final JavaResolveResult result : ((PsiMethodCallExpression)call).getMethodExpression().multiResolve(true)) {
         final PsiElement element = result.getElement();
@@ -132,7 +132,7 @@ public class JavaMembersGetter extends MembersGetter {
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   protected LookupElement createFieldElement(PsiField field) {
     if (!myExpectedType.isAssignableFrom(field.getType())) {
       return null;
@@ -142,7 +142,7 @@ public class JavaMembersGetter extends MembersGetter {
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   protected LookupElement createMethodElement(PsiMethod method) {
     PsiSubstitutor substitutor = SmartCompletionDecorator.calculateMethodReturnTypeSubstitutor(method, myExpectedType);
     PsiType type = substitutor.substitute(method.getReturnType());

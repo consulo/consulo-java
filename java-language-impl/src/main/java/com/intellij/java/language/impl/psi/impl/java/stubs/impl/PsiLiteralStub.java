@@ -29,7 +29,7 @@ import jakarta.annotation.Nonnull;
  */
 public class PsiLiteralStub extends StubBase<PsiLiteralExpressionImpl>
 {
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	private final String myLiteralText;
 	private volatile IElementType myLiteralType;
 
@@ -39,13 +39,13 @@ public class PsiLiteralStub extends StubBase<PsiLiteralExpressionImpl>
 		myLiteralText = literalText;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public String getLiteralText()
 	{
 		return myLiteralText;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public IElementType getLiteralType()
 	{
 		IElementType type = myLiteralType;

@@ -68,7 +68,7 @@ public class NumericOverflowInspection extends BaseJavaBatchLocalInspectionTool 
     return "NumericOverflow";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
                                             boolean isOnTheFly,

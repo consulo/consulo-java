@@ -43,7 +43,7 @@ public class UnnecessaryQualifierForThisInspection
       "unnecessary.qualifier.for.this.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "unnecessary.qualifier.for.this.problem.descriptor");

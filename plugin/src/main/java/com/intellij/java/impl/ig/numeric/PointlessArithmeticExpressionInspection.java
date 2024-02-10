@@ -68,7 +68,7 @@ public class PointlessArithmeticExpressionInspection
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "pointless.arithmetic.expression.display.name");
@@ -80,7 +80,7 @@ public class PointlessArithmeticExpressionInspection
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "expression.can.be.replaced.problem.descriptor",
@@ -143,7 +143,7 @@ public class PointlessArithmeticExpressionInspection
 
   private class PointlessArithmeticFix extends InspectionGadgetsFix {
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "constant.conditional.expression.simplify.quickfix");

@@ -42,7 +42,7 @@ import jakarta.annotation.Nullable;
 public class ManualArrayToCollectionCopyInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "manual.array.to.collection.copy.display.name");
@@ -68,7 +68,7 @@ public class ManualArrayToCollectionCopyInspection extends BaseInspection {
   private static class ManualArrayToCollectionCopyFix
     extends InspectionGadgetsFix {
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "manual.array.to.collection.copy.replace.quickfix");
@@ -145,7 +145,7 @@ public class ManualArrayToCollectionCopyInspection extends BaseInspection {
       return buffer.toString();
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     private static String getCollectionsAddAllText(
       PsiForStatement forStatement)
       throws IncorrectOperationException {

@@ -28,7 +28,7 @@ import java.util.Collections;
 
 public class JavaDebuggerEditorsProvider extends XDebuggerEditorsProviderBase
 {
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public FileType getFileType()
 	{
@@ -41,9 +41,9 @@ public class JavaDebuggerEditorsProvider extends XDebuggerEditorsProviderBase
 		return JavaCodeFragmentFactory.getInstance(project).createExpressionCodeFragment(text, context, null, isPhysical);
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
-	public Collection<Language> getSupportedLanguages(@Nonnull Project project, @jakarta.annotation.Nullable XSourcePosition sourcePosition)
+	public Collection<Language> getSupportedLanguages(@Nonnull Project project, @Nullable XSourcePosition sourcePosition)
 	{
 		if(sourcePosition != null)
 		{
@@ -58,9 +58,9 @@ public class JavaDebuggerEditorsProvider extends XDebuggerEditorsProviderBase
 		return Collections.emptyList();
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
-	public XExpression createExpression(@Nonnull Project project, @Nonnull Document document, @jakarta.annotation.Nullable Language language, @jakarta.annotation.Nonnull EvaluationMode mode)
+	public XExpression createExpression(@Nonnull Project project, @Nonnull Document document, @Nullable Language language, @Nonnull EvaluationMode mode)
 	{
 		PsiDocumentManager.getInstance(project).commitDocument(document);
 		PsiFile psiFile = PsiDocumentManager.getInstance(project).getPsiFile(document);
@@ -72,7 +72,7 @@ public class JavaDebuggerEditorsProvider extends XDebuggerEditorsProviderBase
 	}
 
 	@Override
-	protected PsiFile createExpressionCodeFragment(@Nonnull Project project, @jakarta.annotation.Nonnull XExpression expression, @Nullable PsiElement context, boolean isPhysical)
+	protected PsiFile createExpressionCodeFragment(@Nonnull Project project, @Nonnull XExpression expression, @Nullable PsiElement context, boolean isPhysical)
 	{
 		TextWithImports text = TextWithImportsImpl.fromXExpression(expression);
 		if(text != null && context != null)

@@ -50,7 +50,7 @@ public class NestedSwitchStatementInspection extends BaseInspection {
 
     @Override
     public void visitSwitchStatement(
-      @jakarta.annotation.Nonnull PsiSwitchStatement statement) {
+      @Nonnull PsiSwitchStatement statement) {
       super.visitSwitchStatement(statement);
       final PsiElement containingSwitchStatement =
         PsiTreeUtil.getParentOfType(statement,

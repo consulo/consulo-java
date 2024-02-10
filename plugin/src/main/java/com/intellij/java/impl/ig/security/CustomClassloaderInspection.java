@@ -35,7 +35,7 @@ public class CustomClassloaderInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "custom.classloader.problem.descriptor");

@@ -45,7 +45,7 @@ public class WrapSwitchRuleStatementsIntoBlockFix extends BaseIntentionAction im
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!myRuleStatement.isValid()) {
       return;
     }

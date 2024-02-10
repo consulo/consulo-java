@@ -51,7 +51,7 @@ public class ClsPackageAccessibilityStatementImpl extends ClsRepositoryPsiElemen
     });
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Role getRole() {
     return JavaPackageAccessibilityStatementElementType.typeToRole(getStub().getStubType());
@@ -67,7 +67,7 @@ public class ClsPackageAccessibilityStatementImpl extends ClsRepositoryPsiElemen
     return nullize(getStub().getPackageName());
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Iterable<PsiJavaModuleReferenceElement> getModuleReferences() {
     return myModuleReferences.get();

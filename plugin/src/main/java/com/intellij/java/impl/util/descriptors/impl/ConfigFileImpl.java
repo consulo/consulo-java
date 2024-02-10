@@ -30,7 +30,7 @@ public class ConfigFileImpl implements ConfigFile {
   private final Project myProject;
   private long myModificationCount;
 
-  public ConfigFileImpl(@jakarta.annotation.Nonnull final ConfigFileContainerImpl container, @Nonnull final ConfigFileInfo configuration) {
+  public ConfigFileImpl(@Nonnull final ConfigFileContainerImpl container, @Nonnull final ConfigFileInfo configuration) {
     myContainer = container;
     myInfo = configuration;
     final VirtualFilePointerManager pointerManager = VirtualFilePointerManager.getInstance();

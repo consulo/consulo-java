@@ -33,7 +33,7 @@ public interface ValueDescriptor extends NodeDescriptor
 
 	Value getValue();
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	default Type getType()
 	{
 		Value value = getValue();

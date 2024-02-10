@@ -19,7 +19,7 @@ import jakarta.annotation.Nonnull;
 public class JavaModuleIconDescriptorUpdater implements IconDescriptorUpdater {
   @RequiredReadAction
   @Override
-  public void updateIcon(@Nonnull IconDescriptor iconDescriptor, @jakarta.annotation.Nonnull PsiElement psiElement, int i) {
+  public void updateIcon(@Nonnull IconDescriptor iconDescriptor, @Nonnull PsiElement psiElement, int i) {
 //		if(psiElement instanceof PsiDirectory && isModuleDirectory((PsiDirectory) psiElement))
     //		{
     //			iconDescriptor.setMainIcon(AllIcons.Nodes.Module);

@@ -52,7 +52,7 @@ public class ConditionalExpressionWithIdenticalBranchesInspection extends BaseIn
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return InspectionGadgetsBundle.message("conditional.expression.with.identical.branches.display.name");

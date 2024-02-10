@@ -60,9 +60,9 @@ public class JavaI18nUtil {
     return psiElement.getTextRange();
   }
 
-  public static boolean mustBePropertyKey(@jakarta.annotation.Nonnull Project project,
+  public static boolean mustBePropertyKey(@Nonnull Project project,
                                           @Nonnull PsiLiteralExpression expression,
-                                          @jakarta.annotation.Nonnull Map<String, Object> annotationAttributeValues) {
+                                          @Nonnull Map<String, Object> annotationAttributeValues) {
     final PsiElement parent = expression.getParent();
     if (parent instanceof PsiVariable) {
       final PsiAnnotation annotation = AnnotationUtil.findAnnotation((PsiVariable)parent, AnnotationUtil.PROPERTY_KEY);
@@ -74,10 +74,10 @@ public class JavaI18nUtil {
   }
 
   public static boolean isPassedToAnnotatedParam(@Nonnull Project project,
-                                                 @jakarta.annotation.Nonnull PsiExpression expression,
+                                                 @Nonnull PsiExpression expression,
                                                  final String annFqn,
-                                                 @jakarta.annotation.Nullable Map<String, Object> annotationAttributeValues,
-                                                 @jakarta.annotation.Nullable final Set<PsiModifierListOwner> nonNlsTargets) {
+                                                 @Nullable Map<String, Object> annotationAttributeValues,
+                                                 @Nullable final Set<PsiModifierListOwner> nonNlsTargets) {
     expression = getToplevelExpression(project, expression);
     final PsiElement parent = expression.getParent();
 
@@ -130,8 +130,8 @@ public class JavaI18nUtil {
       }
     };
 
-  @jakarta.annotation.Nonnull
-  public static PsiExpression getToplevelExpression(@jakarta.annotation.Nonnull final Project project, @jakarta.annotation.Nonnull final PsiExpression expression) {
+  @Nonnull
+  public static PsiExpression getToplevelExpression(@Nonnull final Project project, @Nonnull final PsiExpression expression) {
     if (expression instanceof PsiBinaryExpression || expression.getParent() instanceof PsiBinaryExpression) {  //can be large, cache
       return CachedValuesManager.getManager(project).getParameterizedCachedValue(expression, TOP_LEVEL_EXPRESSION, TOP_LEVEL_PROVIDER, true,
                                                                                  Pair.create(project, expression));
@@ -139,8 +139,8 @@ public class JavaI18nUtil {
     return getTopLevel(project, expression);
   }
 
-  @jakarta.annotation.Nonnull
-  private static PsiExpression getTopLevel(Project project, @jakarta.annotation.Nonnull PsiExpression expression) {
+  @Nonnull
+  private static PsiExpression getTopLevel(Project project, @Nonnull PsiExpression expression) {
     int i = 0;
     while (expression.getParent() instanceof PsiExpression) {
       i++;
@@ -161,10 +161,10 @@ public class JavaI18nUtil {
 
   public static boolean isMethodParameterAnnotatedWith(final PsiMethod method,
                                                        final int idx,
-                                                       @jakarta.annotation.Nullable Collection<PsiMethod> processed,
+                                                       @Nullable Collection<PsiMethod> processed,
                                                        final String annFqn,
-                                                       @jakarta.annotation.Nullable Map<String, Object> annotationAttributeValues,
-                                                       @jakarta.annotation.Nullable final Set<PsiModifierListOwner> nonNlsTargets) {
+                                                       @Nullable Map<String, Object> annotationAttributeValues,
+                                                       @Nullable final Set<PsiModifierListOwner> nonNlsTargets) {
     if (processed != null) {
       if (processed.contains(method)) return false;
     }
@@ -207,8 +207,8 @@ public class JavaI18nUtil {
     return false;
   }
 
-  private static boolean processAnnotationAttributes(@jakarta.annotation.Nullable Map<String, Object> annotationAttributeValues,
-                                                     @jakarta.annotation.Nonnull PsiAnnotation annotation) {
+  private static boolean processAnnotationAttributes(@Nullable Map<String, Object> annotationAttributeValues,
+                                                     @Nonnull PsiAnnotation annotation) {
     if (annotationAttributeValues != null) {
       final PsiAnnotationParameterList parameterList = annotation.getParameterList();
       final PsiNameValuePair[] attributes = parameterList.getAttributes();

@@ -12,7 +12,7 @@ import jakarta.annotation.Nullable;
  */
 public interface PsiImplicitClass extends PsiClass {
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   String getQualifiedName();
 
   @Contract("-> null")
@@ -27,7 +27,7 @@ public interface PsiImplicitClass extends PsiClass {
 
   @Contract("-> null")
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiElement getLBrace();
 
   @Contract("-> null")

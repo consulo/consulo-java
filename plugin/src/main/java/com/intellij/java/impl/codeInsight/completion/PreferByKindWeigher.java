@@ -79,7 +79,7 @@ public class PreferByKindWeigher extends LookupElementWeigher {
     myExpectedTypes = expectedTypes;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private static Condition<PsiClass> createSuitabilityCondition(final PsiElement position) {
     if (IN_CATCH_TYPE.accepts(position) || IN_MULTI_CATCH_TYPE.accepts(position)) {
       PsiTryStatement tryStatement = PsiTreeUtil.getParentOfType(position, PsiTryStatement.class);
@@ -141,7 +141,7 @@ public class PreferByKindWeigher extends LookupElementWeigher {
     improbableKeyword,
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public MyResult weigh(@Nonnull LookupElement item) {
     final Object object = item.getObject();
@@ -235,7 +235,7 @@ public class PreferByKindWeigher extends LookupElementWeigher {
     return MyResult.normal;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private ThreeState isProbableKeyword(String keyword) {
     if (PsiKeyword.RETURN.equals(keyword)) {
       PsiStatement parentStatement = PsiTreeUtil.getParentOfType(myPosition, PsiStatement.class);

@@ -129,7 +129,7 @@ public class JavaDocExternalFilter extends AbstractExternalFilter {
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   public String getExternalDocInfoForElement(final String docURL, final PsiElement element) throws Exception {
     String externalDoc = super.getExternalDocInfoForElement(docURL, element);
     if (externalDoc != null) {
@@ -137,7 +137,7 @@ public class JavaDocExternalFilter extends AbstractExternalFilter {
         final String className = ApplicationManager.getApplication().runReadAction(new
                                                                                        Supplier<String>() {
                                                                                          @Override
-                                                                                         @jakarta.annotation.Nullable
+                                                                                         @Nullable
                                                                                          public String get() {
                                                                                            PsiClass aClass = ((PsiMethod) element).getContainingClass();
                                                                                            return aClass == null ? null : aClass.getQualifiedName();

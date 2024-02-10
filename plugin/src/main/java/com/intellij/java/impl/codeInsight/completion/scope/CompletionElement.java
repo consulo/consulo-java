@@ -105,7 +105,7 @@ public class CompletionElement {
     return myEqualityObject != null ? myEqualityObject.hashCode() : 0;
   }
 
-  public boolean isMoreSpecificThan(@jakarta.annotation.Nonnull CompletionElement prev) {
+  public boolean isMoreSpecificThan(@Nonnull CompletionElement prev) {
     Object prevElement = prev.getElement();
     if (!(prevElement instanceof PsiMethod && myElement instanceof PsiMethod)) {
       return false;

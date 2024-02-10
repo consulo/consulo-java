@@ -131,7 +131,7 @@ public class PsiResolveHelperImpl implements PsiResolveHelper {
 
   @Override
   public boolean isAccessible(@Nonnull PsiMember member,
-                              @jakarta.annotation.Nullable PsiModifierList modifierList,
+                              @Nullable PsiModifierList modifierList,
                               @Nonnull PsiElement place,
                               @Nullable PsiClass accessObjectClass,
                               @Nullable PsiElement currentFileResolveScope) {
@@ -168,7 +168,7 @@ public class PsiResolveHelperImpl implements PsiResolveHelper {
                                                  @Nonnull PsiParameter[] parameters,
                                                  @Nonnull PsiExpression[] arguments,
                                                  @Nonnull PsiSubstitutor partialSubstitutor,
-                                                 @jakarta.annotation.Nullable PsiElement parent,
+                                                 @Nullable PsiElement parent,
                                                  @Nonnull ParameterTypeInferencePolicy policy) {
     return getInferenceHelper(PsiUtil.getLanguageLevel(parent != null ? parent : typeParameter)).inferTypeForMethodTypeParameter(typeParameter, parameters, arguments, partialSubstitutor, parent,
         policy);

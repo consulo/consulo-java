@@ -40,7 +40,7 @@ public interface JvmReferenceType extends JvmType
 
 	JvmReferenceType[] EMPTY_ARRAY = new JvmReferenceType[0];
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	String getName();
 
 	/**

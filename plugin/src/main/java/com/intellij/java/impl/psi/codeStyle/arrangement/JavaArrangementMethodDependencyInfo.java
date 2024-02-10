@@ -33,11 +33,11 @@ public class JavaArrangementMethodDependencyInfo {
   @Nonnull
   private final JavaElementArrangementEntry myAnchorMethod;
 
-  public JavaArrangementMethodDependencyInfo(@jakarta.annotation.Nonnull JavaElementArrangementEntry method) {
+  public JavaArrangementMethodDependencyInfo(@Nonnull JavaElementArrangementEntry method) {
     myAnchorMethod = method;
   }
 
-  public void addDependentMethodInfo(@jakarta.annotation.Nonnull JavaArrangementMethodDependencyInfo info) {
+  public void addDependentMethodInfo(@Nonnull JavaArrangementMethodDependencyInfo info) {
     myDependentMethods.add(info);
   }
   
@@ -46,7 +46,7 @@ public class JavaArrangementMethodDependencyInfo {
     return myDependentMethods;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public JavaElementArrangementEntry getAnchorMethod() {
     return myAnchorMethod;
   }

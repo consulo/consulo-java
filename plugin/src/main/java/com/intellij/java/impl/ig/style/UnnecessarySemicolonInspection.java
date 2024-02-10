@@ -181,7 +181,7 @@ public class UnnecessarySemicolonInspection extends BaseInspection {
       }
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     private static PsiElement skipForwardWhiteSpacesAndComments(
       PsiElement element) {
       return PsiTreeUtil.skipSiblingsForward(element,

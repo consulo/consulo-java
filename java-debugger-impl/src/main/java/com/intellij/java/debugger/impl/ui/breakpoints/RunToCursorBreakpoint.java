@@ -37,12 +37,12 @@ import jakarta.annotation.Nullable;
 public class RunToCursorBreakpoint extends LineBreakpoint<JavaLineBreakpointProperties>
 {
 	private final boolean myRestoreBreakpoints;
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	protected final SourcePosition myCustomPosition;
 	private String mySuspendPolicy;
 	private final JavaLineBreakpointProperties myProperties = new JavaLineBreakpointProperties();
 
-	protected RunToCursorBreakpoint(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull SourcePosition pos, boolean restoreBreakpoints)
+	protected RunToCursorBreakpoint(@Nonnull Project project, @Nonnull SourcePosition pos, boolean restoreBreakpoints)
 	{
 		super(project, null);
 		myCustomPosition = pos;
@@ -135,7 +135,7 @@ public class RunToCursorBreakpoint extends LineBreakpoint<JavaLineBreakpointProp
 		return true;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	protected JavaLineBreakpointProperties getProperties()
 	{
@@ -174,8 +174,8 @@ public class RunToCursorBreakpoint extends LineBreakpoint<JavaLineBreakpointProp
 		return null;
 	}
 
-	@jakarta.annotation.Nullable
-	protected static RunToCursorBreakpoint create(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull XSourcePosition position, boolean restoreBreakpoints)
+	@Nullable
+	protected static RunToCursorBreakpoint create(@Nonnull Project project, @Nonnull XSourcePosition position, boolean restoreBreakpoints)
 	{
 		PsiFile psiFile = PsiManager.getInstance(project).findFile(position.getFile());
 		if(psiFile == null)

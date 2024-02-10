@@ -50,7 +50,7 @@ public class RedundantArrayForVarargsCallInspection extends GenericsInspectionTo
 
   private static class MyQuickFix implements LocalQuickFix {
     @Override
-    public void applyFix(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
       PsiNewExpression arrayCreation = (PsiNewExpression) descriptor.getPsiElement();
       if (arrayCreation == null || !arrayCreation.isValid()) return;
       if (!FileModificationService.getInstance().prepareFileForWrite(arrayCreation.getContainingFile())) return;
@@ -197,7 +197,7 @@ public class RedundantArrayForVarargsCallInspection extends GenericsInspectionTo
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getGroupDisplayName() {
     return GroupNames.VERBOSE_GROUP_NAME;
   }

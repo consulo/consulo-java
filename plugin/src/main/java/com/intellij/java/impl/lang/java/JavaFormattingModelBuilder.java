@@ -66,7 +66,7 @@ public class JavaFormattingModelBuilder implements FormattingModelBuilderEx {
     return doGetRangeAffectingIndent(elementAtOffset);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static TextRange doGetRangeAffectingIndent(final ASTNode elementAtOffset) {
     ASTNode current = elementAtOffset;
     current = findNearestExpressionParent(current);
@@ -117,7 +117,7 @@ public class JavaFormattingModelBuilder implements FormattingModelBuilderEx {
     }
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static ASTNode findNearestExpressionParent(final ASTNode current) {
     ASTNode result = current;
     while (result != null) {
@@ -130,7 +130,7 @@ public class JavaFormattingModelBuilder implements FormattingModelBuilderEx {
     return result;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

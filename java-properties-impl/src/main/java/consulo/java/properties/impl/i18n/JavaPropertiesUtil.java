@@ -91,8 +91,8 @@ public class JavaPropertiesUtil {
 
 
   public static boolean isValidPropertyReference(@Nonnull Project project,
-                                                 @jakarta.annotation.Nonnull PsiLiteralExpression expression,
-                                                 @jakarta.annotation.Nonnull String key,
+                                                 @Nonnull PsiLiteralExpression expression,
+                                                 @Nonnull String key,
                                                  @Nonnull Ref<String> outResourceBundle) {
     final HashMap<String, Object> annotationAttributeValues = new HashMap<String, Object>();
     annotationAttributeValues.put(AnnotationUtil.PROPERTY_KEY_RESOURCE_BUNDLE_PARAMETER, null);

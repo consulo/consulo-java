@@ -37,7 +37,7 @@ public abstract class UnpredictableBigDecimalConstructorCallInspection
   public boolean ignoreReferences = true;
   public boolean ignoreComplexLiterals = false;
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "unpredictable.big.decimal.constructor.call.display.name");

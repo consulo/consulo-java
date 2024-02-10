@@ -38,7 +38,7 @@ import jakarta.annotation.Nullable;
 @ExtensionImpl(id = "javaClassReference", order = "before legacy")
 public class JavaClassReferenceCompletionContributor extends CompletionContributor {
   @Override
-  public void duringCompletion(@jakarta.annotation.Nonnull CompletionInitializationContext context) {
+  public void duringCompletion(@Nonnull CompletionInitializationContext context) {
     JavaClassReference reference = findJavaClassReference(context.getFile(), context.getStartOffset());
     if (reference != null && reference.getExtendClassNames() != null) {
       JavaClassReferenceSet set = reference.getJavaClassReferenceSet();

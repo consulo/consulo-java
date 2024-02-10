@@ -188,7 +188,7 @@ public class JavacCompiler implements BackendCompiler {
 
   @Override
   public OutputParser createErrorParser(BackendCompilerProcessBuilder processBuilder,
-                                        @jakarta.annotation.Nonnull final String outputDir,
+                                        @Nonnull final String outputDir,
                                         ProcessHandler process) {
     if (processBuilder instanceof NewBackendCompilerProcessBuilder) {
       return null;
@@ -209,7 +209,7 @@ public class JavacCompiler implements BackendCompiler {
   @Override
   public BackendCompilerProcessBuilder prepareProcess(@Nonnull ModuleChunk chunk,
                                                       @Nonnull String outputDir,
-                                                      @jakarta.annotation.Nonnull CompileContext compileContext) throws IOException {
+                                                      @Nonnull CompileContext compileContext) throws IOException {
     JpsJavaCompilerOptions javaCompilerOptions = JavacCompilerConfiguration.getInstance(myProject);
     JavaCompilerConfiguration javaCompilerConfiguration = JavaCompilerConfiguration.getInstance(myProject);
 
@@ -481,7 +481,7 @@ public class JavacCompiler implements BackendCompiler {
   }
 
   @Nullable
-  public static String findModuleName(@jakarta.annotation.Nonnull Module module) {
+  public static String findModuleName(@Nonnull Module module) {
     VirtualFile[] folders =
       AccessRule.read(() -> ModuleRootManager.getInstance(module).getContentFolderFiles(LanguageContentFolderScopes.onlyProduction()));
     assert folders != null;
@@ -500,8 +500,8 @@ public class JavacCompiler implements BackendCompiler {
     return null;
   }
 
-  @jakarta.annotation.Nullable
-  private static String findModuleName(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull VirtualFile moduleInfo) {
+  @Nullable
+  private static String findModuleName(@Nonnull Project project, @Nonnull VirtualFile moduleInfo) {
     PsiFile file = AccessRule.read(() -> PsiManager.getInstance(project).findFile(moduleInfo));
     if (file instanceof PsiJavaFile) {
       PsiJavaModule moduleDeclaration = AccessRule.read(((PsiJavaFile)file)::getModuleDeclaration);
@@ -512,11 +512,11 @@ public class JavacCompiler implements BackendCompiler {
     return null;
   }
 
-  private static boolean isAtLeast(@jakarta.annotation.Nonnull JavaSdkVersion version, @Nullable LanguageLevel languageLevel, @jakarta.annotation.Nonnull JavaSdkVersion target) {
+  private static boolean isAtLeast(@Nonnull JavaSdkVersion version, @Nullable LanguageLevel languageLevel, @Nonnull JavaSdkVersion target) {
     return version.isAtLeast(target) && (languageLevel == null || languageLevel.isAtLeast(target.getMaxLanguageLevel()));
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private static Set<VirtualFile> filterModFiles(Set<VirtualFile> files) {
     Set<VirtualFile> newFiles = new LinkedHashSet<>(files.size());
     for (VirtualFile file : files) {
@@ -529,7 +529,7 @@ public class JavacCompiler implements BackendCompiler {
     return newFiles;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private static List<String> toStringList(Set<VirtualFile> files) {
     PathsList pathsList = new PathsList();
     pathsList.addVirtualFiles(files);

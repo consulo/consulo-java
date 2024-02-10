@@ -62,14 +62,14 @@ public class JavaRearranger implements Rearranger<JavaElementArrangementEntry>, 
     ArrangementStandardSettingsAware, ArrangementColorsAware {
 
   // Type
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private static final Set<ArrangementSettingsToken> SUPPORTED_TYPES = ContainerUtilRt.newLinkedHashSet(FIELD, CONSTRUCTOR, METHOD, CLASS,
       INTERFACE, ENUM);
   // Modifier
   @Nonnull
   private static final Set<ArrangementSettingsToken> SUPPORTED_MODIFIERS = ContainerUtilRt.newLinkedHashSet(PUBLIC, PROTECTED, PACKAGE_PRIVATE,
       PRIVATE, STATIC, FINAL, ABSTRACT, SYNCHRONIZED, TRANSIENT, VOLATILE);
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private static final List<ArrangementSettingsToken> SUPPORTED_ORDERS = ContainerUtilRt.newArrayList(KEEP, BY_NAME);
   @Nonnull
   private static final ArrangementSettingsToken NO_TYPE = new ArrangementSettingsToken("NO_TYPE", "NO_TYPE");
@@ -140,13 +140,13 @@ public class JavaRearranger implements Rearranger<JavaElementArrangementEntry>, 
   private static final DefaultArrangementSettingsSerializer SETTINGS_SERIALIZER = new DefaultArrangementSettingsSerializer(DEFAULT_SETTINGS);
 
   @Nonnull
-  private static Set<ArrangementSettingsToken> concat(@jakarta.annotation.Nonnull Set<ArrangementSettingsToken> base, ArrangementSettingsToken... modifiers) {
+  private static Set<ArrangementSettingsToken> concat(@Nonnull Set<ArrangementSettingsToken> base, ArrangementSettingsToken... modifiers) {
     Set<ArrangementSettingsToken> result = ContainerUtilRt.newHashSet(base);
     Collections.addAll(result, modifiers);
     return result;
   }
 
-  private static void setupGettersAndSetters(@jakarta.annotation.Nonnull JavaArrangementParseInfo info) {
+  private static void setupGettersAndSetters(@Nonnull JavaArrangementParseInfo info) {
     Collection<JavaArrangementPropertyInfo> properties = info.getProperties();
     for (JavaArrangementPropertyInfo propertyInfo : properties) {
       JavaElementArrangementEntry getter = propertyInfo.getGetter();
@@ -157,7 +157,7 @@ public class JavaRearranger implements Rearranger<JavaElementArrangementEntry>, 
     }
   }
 
-  private static void setupUtilityMethods(@jakarta.annotation.Nonnull JavaArrangementParseInfo info, @jakarta.annotation.Nonnull ArrangementSettingsToken orderType) {
+  private static void setupUtilityMethods(@Nonnull JavaArrangementParseInfo info, @Nonnull ArrangementSettingsToken orderType) {
     if (DEPTH_FIRST.equals(orderType)) {
       for (ArrangementEntryDependencyInfo rootInfo : info.getMethodDependencyRoots()) {
         setupDepthFirstDependency(rootInfo);
@@ -171,7 +171,7 @@ public class JavaRearranger implements Rearranger<JavaElementArrangementEntry>, 
     }
   }
 
-  private static void setupDepthFirstDependency(@jakarta.annotation.Nonnull ArrangementEntryDependencyInfo info) {
+  private static void setupDepthFirstDependency(@Nonnull ArrangementEntryDependencyInfo info) {
     for (ArrangementEntryDependencyInfo dependencyInfo : info.getDependentEntriesInfos()) {
       setupDepthFirstDependency(dependencyInfo);
       JavaElementArrangementEntry dependentEntry = dependencyInfo.getAnchorEntry();
@@ -214,10 +214,10 @@ public class JavaRearranger implements Rearranger<JavaElementArrangementEntry>, 
   @Override
   public Pair<JavaElementArrangementEntry, List<JavaElementArrangementEntry>> parseWithNew(
       @Nonnull PsiElement root,
-      @jakarta.annotation.Nullable Document document,
-      @jakarta.annotation.Nonnull Collection<TextRange> ranges,
+      @Nullable Document document,
+      @Nonnull Collection<TextRange> ranges,
       @Nonnull PsiElement element,
-      @jakarta.annotation.Nonnull ArrangementSettings settings) {
+      @Nonnull ArrangementSettings settings) {
     JavaArrangementParseInfo existingEntriesInfo = new JavaArrangementParseInfo();
     root.accept(new JavaArrangementVisitor(existingEntriesInfo, document, ranges, settings));
 
@@ -229,13 +229,13 @@ public class JavaRearranger implements Rearranger<JavaElementArrangementEntry>, 
     return Pair.create(newEntryInfo.getEntries().get(0), existingEntriesInfo.getEntries());
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public List<JavaElementArrangementEntry> parse(
-      @jakarta.annotation.Nonnull PsiElement root,
+      @Nonnull PsiElement root,
       @Nullable Document document,
       @Nonnull Collection<TextRange> ranges,
-      @jakarta.annotation.Nonnull ArrangementSettings settings) {
+      @Nonnull ArrangementSettings settings) {
     // Following entries are subject to arrangement: class, interface, field, method.
     JavaArrangementParseInfo parseInfo = new JavaArrangementParseInfo();
     root.accept(new JavaArrangementVisitor(parseInfo, document, ranges, settings));
@@ -253,7 +253,7 @@ public class JavaRearranger implements Rearranger<JavaElementArrangementEntry>, 
   }
 
 
-  public void setupFieldInitializationDependencies(@jakarta.annotation.Nonnull List<ArrangementEntryDependencyInfo> list) {
+  public void setupFieldInitializationDependencies(@Nonnull List<ArrangementEntryDependencyInfo> list) {
     for (ArrangementEntryDependencyInfo info : list) {
       JavaElementArrangementEntry anchorField = info.getAnchorEntry();
       for (ArrangementEntryDependencyInfo fieldUsedInInitialization : info.getDependentEntriesInfos()) {
@@ -265,7 +265,7 @@ public class JavaRearranger implements Rearranger<JavaElementArrangementEntry>, 
 
   @Override
   public int getBlankLines(
-      @jakarta.annotation.Nonnull CodeStyleSettings settings,
+      @Nonnull CodeStyleSettings settings,
       @Nullable JavaElementArrangementEntry parent,
       @Nullable JavaElementArrangementEntry previous,
       @Nonnull JavaElementArrangementEntry target) {
@@ -293,13 +293,13 @@ public class JavaRearranger implements Rearranger<JavaElementArrangementEntry>, 
     }
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public ArrangementSettingsSerializer getSerializer() {
     return SETTINGS_SERIALIZER;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public StdArrangementSettings getDefaultSettings() {
     return DEFAULT_SETTINGS;
@@ -322,7 +322,7 @@ public class JavaRearranger implements Rearranger<JavaElementArrangementEntry>, 
   }
 
   @Override
-  public boolean isEnabled(@jakarta.annotation.Nonnull ArrangementSettingsToken token, @jakarta.annotation.Nullable ArrangementMatchCondition current) {
+  public boolean isEnabled(@Nonnull ArrangementSettingsToken token, @Nullable ArrangementMatchCondition current) {
     if (SUPPORTED_TYPES.contains(token) || SUPPORTED_ORDERS.contains(token) || StdArrangementTokens.Regexp.NAME.equals(token)) {
       return true;
     }
@@ -343,7 +343,7 @@ public class JavaRearranger implements Rearranger<JavaElementArrangementEntry>, 
     throw new IllegalArgumentException("Can't build a matcher for condition " + condition);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Collection<Set<ArrangementSettingsToken>> getMutexes() {
     return MUTEXES;
@@ -363,9 +363,9 @@ public class JavaRearranger implements Rearranger<JavaElementArrangementEntry>, 
     matchRules.add(new StdArrangementMatchRule(new StdArrangementEntryMatcher(composite)));
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
-  public TextAttributes getTextAttributes(@Nonnull EditorColorsScheme scheme, @jakarta.annotation.Nonnull ArrangementSettingsToken token, boolean selected) {
+  public TextAttributes getTextAttributes(@Nonnull EditorColorsScheme scheme, @Nonnull ArrangementSettingsToken token, boolean selected) {
     if (selected) {
       TextAttributes attributes = new TextAttributes();
       attributes.setForegroundColor(scheme.getColor(EditorColors.SELECTION_FOREGROUND_COLOR));
@@ -379,8 +379,8 @@ public class JavaRearranger implements Rearranger<JavaElementArrangementEntry>, 
     return null;
   }
 
-  @jakarta.annotation.Nullable
-  private static TextAttributes getAttributes(@jakarta.annotation.Nonnull EditorColorsScheme scheme, @jakarta.annotation.Nonnull TextAttributesKey... keys) {
+  @Nullable
+  private static TextAttributes getAttributes(@Nonnull EditorColorsScheme scheme, @Nonnull TextAttributesKey... keys) {
     TextAttributes result = null;
     for (TextAttributesKey key : keys) {
       TextAttributes attributes = scheme.getAttributes(key);
@@ -417,7 +417,7 @@ public class JavaRearranger implements Rearranger<JavaElementArrangementEntry>, 
     return result;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public Color getBorderColor(@Nonnull EditorColorsScheme scheme, boolean selected) {
     return null;

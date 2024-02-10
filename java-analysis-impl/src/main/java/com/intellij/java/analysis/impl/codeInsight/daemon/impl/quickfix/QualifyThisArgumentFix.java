@@ -48,14 +48,14 @@ public class QualifyThisArgumentFix extends PsiElementBaseIntentionAction {
   private final PsiClass myPsiClass;
 
 
-  public QualifyThisArgumentFix(@jakarta.annotation.Nonnull PsiThisExpression expression, @jakarta.annotation.Nonnull PsiClass psiClass) {
+  public QualifyThisArgumentFix(@Nonnull PsiThisExpression expression, @Nonnull PsiClass psiClass) {
     myExpression = expression;
     myPsiClass = psiClass;
   }
 
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     if (!myExpression.isValid()) return false;
     if (!myPsiClass.isValid()) return false;
     setText("Qualify this expression with \'" + myPsiClass.getQualifiedName() + "\'");
@@ -63,7 +63,7 @@ public class QualifyThisArgumentFix extends PsiElementBaseIntentionAction {
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, @jakarta.annotation.Nonnull PsiElement element) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     myExpression.replace(RefactoringChangeUtil.createThisExpression(PsiManager.getInstance(project), myPsiClass));
   }
 

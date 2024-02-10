@@ -32,7 +32,7 @@ class ArrayContentsAccessedVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitForeachStatement(
-    @jakarta.annotation.Nonnull PsiForeachStatement statement) {
+    @Nonnull PsiForeachStatement statement) {
     if (accessed) {
       return;
     }

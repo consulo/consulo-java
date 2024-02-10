@@ -28,7 +28,7 @@ class InstructionKey implements Comparable<InstructionKey>
 	private final int myOffset;
 	private final int[] myCallStack; // shared between instructions on the same stack level
 
-	private InstructionKey(int offset, @jakarta.annotation.Nonnull int[] callStack)
+	private InstructionKey(int offset, @Nonnull int[] callStack)
 	{
 		myOffset = offset;
 		myCallStack = callStack;
@@ -68,7 +68,7 @@ class InstructionKey implements Comparable<InstructionKey>
 		return myOffset;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	int[] getCallStack()
 	{
 		return myCallStack;
@@ -116,7 +116,7 @@ class InstructionKey implements Comparable<InstructionKey>
 	}
 
 	@Override
-	public int compareTo(@jakarta.annotation.Nonnull InstructionKey key)
+	public int compareTo(@Nonnull InstructionKey key)
 	{
 		int c = myOffset - key.myOffset;
 		if(c != 0)

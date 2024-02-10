@@ -35,11 +35,11 @@ public abstract class ExternalLibraryResolver {
 
   @Nullable
   public abstract ExternalClassResolveResult resolveClass(@Nonnull String shortClassName,
-                                                          @jakarta.annotation.Nonnull ThreeState isAnnotation,
+                                                          @Nonnull ThreeState isAnnotation,
                                                           @Nonnull Module contextModule);
 
-  @jakarta.annotation.Nullable
-  public ExternalLibraryDescriptor resolvePackage(@jakarta.annotation.Nonnull String packageName) {
+  @Nullable
+  public ExternalLibraryDescriptor resolvePackage(@Nonnull String packageName) {
     return null;
   }
 

@@ -80,7 +80,7 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
     return ArrayUtil.toStringArray(result);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String[] getFilteredClassNames() {
     if (myFilters == null) return ArrayUtil.EMPTY_STRING_ARRAY;
     List<String> result = new ArrayList<String>();
@@ -126,7 +126,7 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
     element.setAttribute(COVERAGE_RUNNER, coverageRunner != null ? coverageRunner.getId() : "emma");
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public ProjectData getCoverageData(final CoverageDataManager coverageDataManager) {
     final ProjectData data = getCoverageData();
     if (data != null) return data;
@@ -155,12 +155,12 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
     return map;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public CoverageEngine getCoverageEngine() {
     return myCoverageEngine;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public String getSuiteToMerge() {
     return mySuiteToMerge;
   }
@@ -224,7 +224,7 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
     return false;
   }
 
-  public @jakarta.annotation.Nonnull
+  public @Nonnull
   List<PsiClass> getCurrentSuiteClasses(final Project project) {
     final List<PsiClass> classes = new ArrayList<PsiClass>();
     final PsiManager psiManager = PsiManager.getInstance(project);

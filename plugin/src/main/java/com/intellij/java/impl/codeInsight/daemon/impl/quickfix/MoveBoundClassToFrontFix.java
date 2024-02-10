@@ -77,9 +77,9 @@ public class MoveBoundClassToFrontFix extends ExtendsListFix {
 
   @Override
   public boolean isAvailable(@Nonnull Project project,
-                             @jakarta.annotation.Nonnull PsiFile file,
+                             @Nonnull PsiFile file,
                              @Nonnull PsiElement startElement,
-                             @jakarta.annotation.Nonnull PsiElement endElement) {
+                             @Nonnull PsiElement endElement) {
     final PsiClass myClass = (PsiClass)startElement;
     return
       myClass.isValid()

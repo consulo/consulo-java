@@ -30,7 +30,7 @@ public class PsiUsesStatementImpl extends JavaStubPsiElement<PsiUsesStatementStu
     super(stub, JavaStubElementTypes.USES_STATEMENT);
   }
 
-  public PsiUsesStatementImpl(@jakarta.annotation.Nonnull ASTNode node) {
+  public PsiUsesStatementImpl(@Nonnull ASTNode node) {
     super(node);
   }
 
@@ -50,7 +50,7 @@ public class PsiUsesStatementImpl extends JavaStubPsiElement<PsiUsesStatementStu
   }
 
   @Override
-  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitUsesStatement(this);
     } else {

@@ -61,7 +61,7 @@ public class PsiTypeControl extends EditorTextFieldControl<PsiTypePanel> {
 
   public void setValue(String value) {
     final PsiType type = JvmPsiTypeConverterImpl.convertFromString(value, new AbstractConvertContext() {
-      @jakarta.annotation.Nonnull
+      @Nonnull
       public DomElement getInvocationElement() {
         return getDomElement();
       }
@@ -76,7 +76,7 @@ public class PsiTypeControl extends EditorTextFieldControl<PsiTypePanel> {
     super.setValue(value);
   }
 
-  protected EditorTextField getEditorTextField(@jakarta.annotation.Nonnull final PsiTypePanel component) {
+  protected EditorTextField getEditorTextField(@Nonnull final PsiTypePanel component) {
     return ((ReferenceEditorWithBrowseButton) component.getComponent(0)).getEditorTextField();
   }
 

@@ -46,14 +46,14 @@ public class StatementMover extends LineMover {
   private PsiElement statementToSurroundWithCodeBlock;
 
   @Override
-  public void beforeMove(@jakarta.annotation.Nonnull final Editor editor, @jakarta.annotation.Nonnull final MoveInfo info, final boolean down) {
+  public void beforeMove(@Nonnull final Editor editor, @Nonnull final MoveInfo info, final boolean down) {
     super.beforeMove(editor, info, down);
     if (statementToSurroundWithCodeBlock != null) {
       surroundWithCodeBlock(info, down);
     }
   }
 
-  private void surroundWithCodeBlock(@jakarta.annotation.Nonnull final MoveInfo info, final boolean down) {
+  private void surroundWithCodeBlock(@Nonnull final MoveInfo info, final boolean down) {
     try {
       final Document document = PsiDocumentManager.getInstance(statementToSurroundWithCodeBlock.getProject()).getDocument(statementToSurroundWithCodeBlock.getContainingFile());
       int startOffset = document.getLineStartOffset(info.toMove.startLine);
@@ -89,7 +89,7 @@ public class StatementMover extends LineMover {
   }
 
   @Override
-  public boolean checkAvailable(@jakarta.annotation.Nonnull final Editor editor, @Nonnull final PsiFile file, @Nonnull final MoveInfo info, final boolean down) {
+  public boolean checkAvailable(@Nonnull final Editor editor, @Nonnull final PsiFile file, @Nonnull final MoveInfo info, final boolean down) {
     //if (!(file instanceof PsiJavaFile)) return false;
     final boolean available = super.checkAvailable(editor, file, info, down);
     if (!available) return false;
@@ -142,7 +142,7 @@ public class StatementMover extends LineMover {
 
     return destLine;
   }
-  private boolean calcInsertOffset(@Nonnull PsiFile file, @jakarta.annotation.Nonnull Editor editor, @jakarta.annotation.Nonnull LineRange range, @Nonnull final MoveInfo info, final boolean down) {
+  private boolean calcInsertOffset(@Nonnull PsiFile file, @Nonnull Editor editor, @Nonnull LineRange range, @Nonnull final MoveInfo info, final boolean down) {
     int destLine = getDestLineForAnon(file, editor, range, info, down);
 
     int startLine = down ? range.endLine : range.startLine - 1;

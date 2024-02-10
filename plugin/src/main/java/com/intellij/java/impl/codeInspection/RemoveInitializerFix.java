@@ -38,14 +38,14 @@ public class RemoveInitializerFix implements LocalQuickFix
 	private static final Logger LOG = Logger.getInstance(RemoveInitializerFix.class);
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public String getName()
 	{
 		return InspectionsBundle.message("inspection.unused.assignment.remove.quickfix");
 	}
 
 	@Override
-	public void applyFix(@Nonnull Project project, @jakarta.annotation.Nonnull ProblemDescriptor descriptor)
+	public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 	{
 		final PsiElement psiInitializer = descriptor.getPsiElement();
 		if(!(psiInitializer instanceof PsiExpression))

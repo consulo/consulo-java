@@ -162,7 +162,7 @@ public final class MutationSignature {
    * @return a parsed mutation signature
    * @throws IllegalArgumentException if signature is invalid
    */
-  public static MutationSignature parse(@jakarta.annotation.Nonnull String signature) {
+  public static MutationSignature parse(@Nonnull String signature) {
     if (signature.trim().isEmpty()) {
       return UNKNOWN;
     }
@@ -202,7 +202,7 @@ public final class MutationSignature {
    * @return error message or null if signature is valid
    */
   @Nullable
-  public static String checkSignature(@jakarta.annotation.Nonnull String signature, @Nonnull PsiMethod method) {
+  public static String checkSignature(@Nonnull String signature, @Nonnull PsiMethod method) {
     try {
       MutationSignature ms = parse(signature);
       if (ms.myThis && method.hasModifierProperty(PsiModifier.STATIC)) {
@@ -227,7 +227,7 @@ public final class MutationSignature {
   }
 
   public static
-  @jakarta.annotation.Nonnull
+  @Nonnull
   MutationSignature fromMethod(@Nullable PsiMethod method) {
     if (method == null) {
       return UNKNOWN;
@@ -236,7 +236,7 @@ public final class MutationSignature {
   }
 
   public static
-  @jakarta.annotation.Nonnull
+  @Nonnull
   MutationSignature fromCall(@Nullable PsiCall call) {
     if (call == null) {
       return UNKNOWN;
@@ -301,7 +301,7 @@ public final class MutationSignature {
   /**
    * @return a signature of the unknown method, which may mutate anything
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static MutationSignature unknown() {
     return UNKNOWN;
   }

@@ -36,11 +36,11 @@ import java.util.List;
 @ExtensionImpl
 public class JavaCompletionStatistician extends CompletionStatistician {
   @Override
-  public consulo.ide.impl.psi.statistics.StatisticsInfo serialize(final LookupElement element, final CompletionLocation location) {
+  public StatisticsInfo serialize(final LookupElement element, final CompletionLocation location) {
     Object o = element.getObject();
 
     if (o instanceof PsiLocalVariable || o instanceof PsiParameter || o instanceof PsiThisExpression || o instanceof PsiKeyword) {
-      return consulo.ide.impl.psi.statistics.StatisticsInfo.EMPTY;
+      return StatisticsInfo.EMPTY;
     }
 
     LookupItem item = element.as(LookupItem.CLASS_CONDITION_KEY);
@@ -56,7 +56,7 @@ public class JavaCompletionStatistician extends CompletionStatistician {
       String key2 = JavaStatisticsManager.getMemberUseKey2((PsiMember) o);
       if (o instanceof PsiClass) {
         PsiType expectedType = firstInfo != null ? firstInfo.getDefaultType() : null;
-        return new consulo.ide.impl.psi.statistics.StatisticsInfo(JavaStatisticsManager.getAfterNewKey(expectedType), key2);
+        return new StatisticsInfo(JavaStatisticsManager.getAfterNewKey(expectedType), key2);
       }
 
       PsiClass containingClass = ((PsiMember) o).getContainingClass();
@@ -68,19 +68,19 @@ public class JavaCompletionStatistician extends CompletionStatistician {
         if (o instanceof PsiMethod) {
           String memberValue = JavaStatisticsManager.getMemberUseKey2(RecursionWeigher.findDeepestSuper((PsiMethod) o));
 
-          List<consulo.ide.impl.psi.statistics.StatisticsInfo> superMethodInfos = ContainerUtil.newArrayList(new consulo.ide.impl.psi.statistics.StatisticsInfo(contextPrefix + context, memberValue));
+          List<StatisticsInfo> superMethodInfos = ContainerUtil.newArrayList(new StatisticsInfo(contextPrefix + context, memberValue));
           for (PsiClass superClass : InheritanceUtil.getSuperClasses(containingClass)) {
             superMethodInfos.add(new StatisticsInfo(contextPrefix + JavaStatisticsManager.getMemberUseKey2(superClass), memberValue));
           }
-          return consulo.ide.impl.psi.statistics.StatisticsInfo.createComposite(superMethodInfos);
+          return StatisticsInfo.createComposite(superMethodInfos);
         }
 
-        return new consulo.ide.impl.psi.statistics.StatisticsInfo(context, key2);
+        return new StatisticsInfo(context, key2);
       }
     }
 
     if (qualifierType != null) {
-      return consulo.ide.impl.psi.statistics.StatisticsInfo.EMPTY;
+      return StatisticsInfo.EMPTY;
     }
 
     return null;

@@ -211,7 +211,7 @@ public class RecursionUtils {
     return endsInImplicitReturn;
   }
 
-  public static boolean methodMayRecurse(@jakarta.annotation.Nonnull PsiMethod method) {
+  public static boolean methodMayRecurse(@Nonnull PsiMethod method) {
     final RecursionVisitor recursionVisitor = new RecursionVisitor(method);
     method.accept(recursionVisitor);
     return recursionVisitor.isRecursive();

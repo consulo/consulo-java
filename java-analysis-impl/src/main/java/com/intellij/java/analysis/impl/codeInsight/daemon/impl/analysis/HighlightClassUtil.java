@@ -62,7 +62,7 @@ public class HighlightClassUtil {
   /**
    * new ref(...) or new ref(..) { ... } where ref is abstract class
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   public static HighlightInfo checkAbstractInstantiation(@Nonnull PsiJavaCodeReferenceElement ref) {
     PsiElement parent = ref.getParent();
     HighlightInfo highlightInfo = null;
@@ -332,7 +332,7 @@ public class HighlightClassUtil {
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static HighlightInfo checkStaticFieldDeclarationInInnerClass(@Nonnull PsiKeyword keyword) {
     if (getEnclosingStaticClass(keyword, PsiField.class) == null) {
       return null;
@@ -564,9 +564,9 @@ public class HighlightClassUtil {
     return checkCannotInheritFromFinal(baseClass, aClass.getBaseClassReference());
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static String checkDefaultConstructorThrowsException(PsiMethod constructor,
-                                                               @jakarta.annotation.Nonnull PsiClassType[] handledExceptions) {
+                                                               @Nonnull PsiClassType[] handledExceptions) {
     PsiClassType[] referencedTypes = constructor.getThrowsList().getReferencedTypes();
     List<PsiClassType> exceptions = new ArrayList<PsiClassType>();
     for (PsiClassType referencedType : referencedTypes) {
@@ -600,7 +600,7 @@ public class HighlightClassUtil {
 
   public static HighlightInfo checkBaseClassDefaultConstructorProblem(@Nonnull PsiClass aClass,
                                                                       RefCountHolder refCountHolder,
-                                                                      @jakarta.annotation.Nonnull PsiResolveHelper resolveHelper,
+                                                                      @Nonnull PsiResolveHelper resolveHelper,
                                                                       @Nonnull TextRange range,
                                                                       @Nonnull PsiClassType[] handledExceptions) {
     if (aClass instanceof PsiAnonymousClass) {

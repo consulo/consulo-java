@@ -64,7 +64,7 @@ public class ConfusingMainMethodInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod aMethod) {
+    public void visitMethod(@Nonnull PsiMethod aMethod) {
       // no call to super, so it doesn't drill down into inner classes
       final String methodName = aMethod.getName();
       if (!HardcodedMethodConstants.MAIN.equals(methodName)) {

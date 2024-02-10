@@ -37,7 +37,7 @@ public abstract class GuessManager {
   @Nonnull
   public abstract PsiType[] guessContainerElementType(PsiExpression containerExpr, TextRange rangeToIgnore);
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public abstract PsiType[] guessTypeToCast(PsiExpression expr);
 
   @Nonnull

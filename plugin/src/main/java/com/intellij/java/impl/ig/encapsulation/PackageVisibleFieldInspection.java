@@ -63,7 +63,7 @@ public class PackageVisibleFieldInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@jakarta.annotation.Nonnull PsiField field) {
+    public void visitField(@Nonnull PsiField field) {
       if (field.hasModifierProperty(PsiModifier.PROTECTED) ||
           field.hasModifierProperty(PsiModifier.PUBLIC) ||
           field.hasModifierProperty(PsiModifier.PRIVATE)) {

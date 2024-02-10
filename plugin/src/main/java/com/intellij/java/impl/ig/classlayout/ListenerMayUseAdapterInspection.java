@@ -40,14 +40,14 @@ public class ListenerMayUseAdapterInspection extends BaseInspection {
 
   @Override
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "listener.may.use.adapter.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     final PsiClass aClass = (PsiClass)infos[0];
     final String className = aClass.getName();
@@ -75,11 +75,11 @@ public class ListenerMayUseAdapterInspection extends BaseInspection {
 
     private final PsiClass adapterClass;
 
-    ListenerMayUseAdapterFix(@jakarta.annotation.Nonnull PsiClass adapterClass) {
+    ListenerMayUseAdapterFix(@Nonnull PsiClass adapterClass) {
       this.adapterClass = adapterClass;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "listener.may.use.adapter.quickfix",
@@ -165,7 +165,7 @@ public class ListenerMayUseAdapterInspection extends BaseInspection {
 
     private void checkReference(
       @Nonnull PsiClass aClass,
-      @jakarta.annotation.Nonnull PsiJavaCodeReferenceElement implementsReference) {
+      @Nonnull PsiJavaCodeReferenceElement implementsReference) {
       final PsiElement target = implementsReference.resolve();
       if (!(target instanceof PsiClass)) {
         return;

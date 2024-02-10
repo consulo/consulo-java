@@ -124,7 +124,7 @@ public class JavaResolveCache {
               AttachmentFactory.get().create(file.getName(), file.getText()));
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public Object computeConstantValueWithCaching(@Nonnull PsiVariable variable,
                                                 @Nonnull ConstValueComputer computer,
                                                 Set<PsiVariable> visitedVars) {

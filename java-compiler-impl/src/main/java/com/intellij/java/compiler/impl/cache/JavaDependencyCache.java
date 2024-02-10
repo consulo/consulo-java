@@ -69,7 +69,7 @@ public class JavaDependencyCache implements DependencyCache {
   @NonNls
   private static final String SYMBOLTABLE_FILE_NAME = "java-symboltable.dat";
 
-  public JavaDependencyCache(@jakarta.annotation.Nonnull String cacheDir) {
+  public JavaDependencyCache(@Nonnull String cacheDir) {
     myStoreDirectoryPath = cacheDir + File.separator + ".java-dependency-info";
     mySymbolTableFilePath = myStoreDirectoryPath + "/" + SYMBOLTABLE_FILE_NAME;
   }

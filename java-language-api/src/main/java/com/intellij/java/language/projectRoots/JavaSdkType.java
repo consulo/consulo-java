@@ -37,5 +37,5 @@ public interface JavaSdkType {
   @NonNls
   String getToolsPath(Sdk sdk);
 
-  void setupCommandLine(@jakarta.annotation.Nonnull GeneralCommandLine commandLine, @Nonnull Sdk sdk);
+  void setupCommandLine(@Nonnull GeneralCommandLine commandLine, @Nonnull Sdk sdk);
 }

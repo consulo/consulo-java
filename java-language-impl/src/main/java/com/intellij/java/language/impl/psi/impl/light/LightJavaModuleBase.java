@@ -32,7 +32,7 @@ public abstract class LightJavaModuleBase extends LightElement implements PsiJav
   public abstract VirtualFile getRootVirtualFile();
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   public final PsiDocComment getDocComment() {
     return null;
   }
@@ -72,7 +72,7 @@ public abstract class LightJavaModuleBase extends LightElement implements PsiJav
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public final PsiJavaModuleReferenceElement getNameIdentifier() {
     return myRefElement;
   }
@@ -122,7 +122,7 @@ public abstract class LightJavaModuleBase extends LightElement implements PsiJav
     }
 
     @Override
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getReferenceText() {
       return myText;
     }
@@ -176,7 +176,7 @@ public abstract class LightJavaModuleBase extends LightElement implements PsiJav
 
     @Override
     public
-    @jakarta.annotation.Nonnull
+    @Nonnull
     List<String> getModuleNames() {
       return Collections.emptyList();
     }

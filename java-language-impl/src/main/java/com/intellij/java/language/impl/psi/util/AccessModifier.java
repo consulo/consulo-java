@@ -27,7 +27,7 @@ public enum AccessModifier {
   private static final List<AccessModifier> PUBLIC_PACKAGE = List.of(PUBLIC, PACKAGE_LOCAL);
   private static final List<AccessModifier> PUBLIC_PRIVATE = List.of(PUBLIC, PRIVATE);
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @PsiModifier.ModifierConstant
   private final String myModifier;
 
@@ -38,7 +38,7 @@ public enum AccessModifier {
   /**
    * @return a {@link PsiModifier} string constant which corresponds to this access modifier.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @PsiModifier.ModifierConstant
   public String toPsiModifier() {
     return myModifier;
@@ -50,7 +50,7 @@ public enum AccessModifier {
    * @param owner element to check (e.g. class member)
    * @return true if it has current modifier
    */
-  public boolean hasModifier(@jakarta.annotation.Nonnull PsiModifierListOwner owner) {
+  public boolean hasModifier(@Nonnull PsiModifierListOwner owner) {
     return owner.hasModifierProperty(toPsiModifier());
   }
 
@@ -94,7 +94,7 @@ public enum AccessModifier {
     }
   }
 
-  public static AccessModifier fromModifierList(@jakarta.annotation.Nonnull PsiModifierList modifierList) {
+  public static AccessModifier fromModifierList(@Nonnull PsiModifierList modifierList) {
     if (modifierList.hasModifierProperty(PsiModifier.PRIVATE)) {
       return PRIVATE;
     }
@@ -107,7 +107,7 @@ public enum AccessModifier {
     return PUBLIC;
   }
 
-  public boolean isWeaker(@jakarta.annotation.Nonnull AccessModifier other) {
+  public boolean isWeaker(@Nonnull AccessModifier other) {
     return compareTo(other) < 0;
   }
 

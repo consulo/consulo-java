@@ -72,7 +72,7 @@ public class PsiCodeFragmentImpl extends PsiFileImpl implements JavaCodeFragment
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public Language getLanguage()
 	{
 		return getContentElementType().getLanguage();
@@ -105,7 +105,7 @@ public class PsiCodeFragmentImpl extends PsiFileImpl implements JavaCodeFragment
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public FileType getFileType()
 	{
 		return JavaFileType.INSTANCE;
@@ -191,7 +191,7 @@ public class PsiCodeFragmentImpl extends PsiFileImpl implements JavaCodeFragment
 	}
 
 	@Override
-	public boolean processDeclarations(@jakarta.annotation.Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place)
+	public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place)
 	{
 		final ElementClassHint classHint = processor.getHint(ElementClassHint.KEY);
 

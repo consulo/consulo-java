@@ -37,13 +37,13 @@ import com.intellij.java.language.psi.PsiType;
 
 public class AddNullableNotNullAnnotationFix extends AddAnnotationPsiFix
 {
-	public AddNullableNotNullAnnotationFix(@jakarta.annotation.Nonnull String fqn, @Nonnull PsiModifierListOwner owner, @Nonnull String... annotationToRemove)
+	public AddNullableNotNullAnnotationFix(@Nonnull String fqn, @Nonnull PsiModifierListOwner owner, @Nonnull String... annotationToRemove)
 	{
 		super(fqn, owner, PsiNameValuePair.EMPTY_ARRAY, annotationToRemove);
 	}
 
 	@Override
-	public boolean isAvailable(@Nonnull Project project, @jakarta.annotation.Nonnull PsiFile file, @jakarta.annotation.Nonnull PsiElement startElement, @Nonnull PsiElement endElement)
+	public boolean isAvailable(@Nonnull Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement)
 	{
 		if(!super.isAvailable(project, file, startElement, endElement))
 		{

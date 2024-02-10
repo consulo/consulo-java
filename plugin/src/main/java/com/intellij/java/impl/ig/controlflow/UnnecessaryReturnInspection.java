@@ -36,7 +36,7 @@ public class UnnecessaryReturnInspection extends BaseInspection {
   public boolean ignoreInThenBranch = false;
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "UnnecessaryReturnStatement";
   }
@@ -48,7 +48,7 @@ public class UnnecessaryReturnInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     if (((Boolean)infos[0]).booleanValue()) {
       return InspectionGadgetsBundle.message("unnecessary.return.constructor.problem.descriptor");

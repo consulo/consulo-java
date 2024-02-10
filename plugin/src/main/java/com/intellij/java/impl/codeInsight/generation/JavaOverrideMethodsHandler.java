@@ -44,7 +44,7 @@ public class JavaOverrideMethodsHandler implements OverrideMethodHandler {
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull final Project project, @jakarta.annotation.Nonnull final Editor editor, @jakarta.annotation.Nonnull final PsiFile file) {
+  public void invoke(@Nonnull final Project project, @Nonnull final Editor editor, @Nonnull final PsiFile file) {
     PsiClass aClass = OverrideImplementUtil.getContextClass(project, editor, file, true);
     if (aClass == null) return;
 

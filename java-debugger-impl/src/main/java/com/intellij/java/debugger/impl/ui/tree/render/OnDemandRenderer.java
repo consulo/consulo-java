@@ -26,6 +26,7 @@ import com.intellij.java.debugger.impl.ui.tree.actions.ForceOnDemandRenderersAct
 import consulo.execution.debug.frame.HeadlessValueEvaluationCallback;
 import consulo.execution.debug.frame.XFullValueEvaluator;
 import consulo.execution.debug.frame.XValuePlace;
+import consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl;
 import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 import consulo.util.dataholder.Key;
 import jakarta.annotation.Nonnull;
@@ -81,6 +82,6 @@ public interface OnDemandRenderer extends FullValueEvaluatorProvider {
   }
 
   static boolean isOnDemandForced(EvaluationContext evaluationContext) {
-    return ForceOnDemandRenderersAction.isForcedOnDemand((consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl) ((DebugProcessImpl) evaluationContext.getDebugProcess()).getXdebugProcess().getSession());
+    return ForceOnDemandRenderersAction.isForcedOnDemand((XDebugSessionImpl) ((DebugProcessImpl) evaluationContext.getDebugProcess()).getXdebugProcess().getSession());
   }
 }

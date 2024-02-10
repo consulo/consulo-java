@@ -64,13 +64,13 @@ public class SyntheticCodeBlock implements Block, JavaBlock {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public TextRange getTextRange() {
     return myTextRange;
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public List<Block> getSubBlocks() {
     return mySubBlocks;
   }
@@ -91,7 +91,7 @@ public class SyntheticCodeBlock implements Block, JavaBlock {
   }
 
   @Override
-  public Spacing getSpacing(Block child1, @jakarta.annotation.Nonnull Block child2) {
+  public Spacing getSpacing(Block child1, @Nonnull Block child2) {
     return JavaSpacePropertyProcessor.getSpacing(child2, mySettings, myJavaSettings);
   }
 
@@ -163,7 +163,7 @@ public class SyntheticCodeBlock implements Block, JavaBlock {
     return false;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private Alignment getDotAlignment() {
     if (mySubBlocks.size() > 1) {
       Block block = mySubBlocks.get(1);

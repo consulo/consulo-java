@@ -36,7 +36,7 @@ public class SimplifiableConditionalExpressionInspection
   extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "simplifiable.conditional.expression.display.name");
@@ -65,7 +65,7 @@ public class SimplifiableConditionalExpressionInspection
   private static class SimplifiableConditionalFix
     extends InspectionGadgetsFix {
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "constant.conditional.expression.simplify.quickfix");

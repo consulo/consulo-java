@@ -110,7 +110,7 @@ public class JavaFormatterUtil {
    * @param node     The node to check.
    * @return True for call chunk start.
    */
-  static boolean isStartOfCallChunk(@jakarta.annotation.Nonnull CommonCodeStyleSettings settings, @jakarta.annotation.Nonnull ASTNode node) {
+  static boolean isStartOfCallChunk(@Nonnull CommonCodeStyleSettings settings, @Nonnull ASTNode node) {
     if (node.getElementType() == JavaTokenType.DOT) {
       if (settings.KEEP_LINE_BREAKS) {
         ASTNode next = node.getTreeNext();
@@ -174,7 +174,7 @@ public class JavaFormatterUtil {
   }
 
   /**
-   * Tries to define the wrap to use for the {@link consulo.language.codeStyle.Block block} for the given {@code 'child'} node. It's assumed that
+   * Tries to define the wrap to use for the {@link Block block} for the given {@code 'child'} node. It's assumed that
    * given {@code 'child'} node is descendant (direct or indirect) of the given {@code 'parent'} node.
    * I.e. {@code 'parent'} node defines usage context for the {@code 'child'} node.
    *
@@ -410,7 +410,7 @@ public class JavaFormatterUtil {
     return false;
   }
 
-  private static boolean isAfterNonBlockStatement(@jakarta.annotation.Nonnull ASTNode node) {
+  private static boolean isAfterNonBlockStatement(@Nonnull ASTNode node) {
     ASTNode prev = node.getTreePrev();
     if (prev instanceof PsiWhiteSpace) prev = prev.getTreePrev();
     return prev != null && prev.getElementType() != JavaElementType.BLOCK_STATEMENT;
@@ -473,14 +473,14 @@ public class JavaFormatterUtil {
     return CommonCodeStyleSettings.DO_NOT_WRAP;
   }
 
-  private static void putPreferredWrapInParentBlock(@jakarta.annotation.Nonnull AbstractJavaBlock block, @Nonnull Wrap preferredWrap) {
+  private static void putPreferredWrapInParentBlock(@Nonnull AbstractJavaBlock block, @Nonnull Wrap preferredWrap) {
     AbstractJavaBlock parentBlock = block.getParentBlock();
     if (parentBlock != null) {
       parentBlock.setReservedWrap(preferredWrap, JavaElementType.MODIFIER_LIST);
     }
   }
 
-  private static boolean isModifierListWithSingleAnnotation(@jakarta.annotation.Nonnull ASTNode elem, IElementType parentElementType) {
+  private static boolean isModifierListWithSingleAnnotation(@Nonnull ASTNode elem, IElementType parentElementType) {
     ASTNode parent = elem.getTreeParent();
     if (parent != null && parent.getElementType() == parentElementType) {
       return isModifierListWithSingleAnnotation(elem);
@@ -488,7 +488,7 @@ public class JavaFormatterUtil {
     return false;
   }
 
-  private static boolean isModifierListWithSingleAnnotation(@jakarta.annotation.Nonnull ASTNode elem) {
+  private static boolean isModifierListWithSingleAnnotation(@Nonnull ASTNode elem) {
     if (elem.getPsi() instanceof PsiModifierList) {
       if (((PsiModifierList)elem.getPsi()).getAnnotations().length == 1) {
         return true;

@@ -32,7 +32,7 @@ import jakarta.annotation.Nonnull;
 public class VcsContentAnnotationExceptionFilterFactory implements ExceptionFilterFactory {
   @Nonnull
   @Override
-  public Filter create(@jakarta.annotation.Nonnull GlobalSearchScope searchScope) {
+  public Filter create(@Nonnull GlobalSearchScope searchScope) {
     return new VcsContentAnnotationExceptionFilter(searchScope);
   }
 }

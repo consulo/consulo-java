@@ -41,7 +41,7 @@ public class MoveAnonymousToInnerClassFix extends InspectionGadgetsFix {
       "move.anonymous.to.inner.quickfix");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getName() {
     return name;
   }

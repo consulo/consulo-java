@@ -36,7 +36,7 @@ public class ConvertCollectionToArrayFix implements SyntheticIntentionAction {
   private final PsiExpression myCollectionExpression;
   private final String myNewArrayText;
 
-  public ConvertCollectionToArrayFix(@Nonnull PsiExpression collectionExpression, @jakarta.annotation.Nonnull PsiArrayType arrayType) {
+  public ConvertCollectionToArrayFix(@Nonnull PsiExpression collectionExpression, @Nonnull PsiArrayType arrayType) {
     myCollectionExpression = collectionExpression;
 
     PsiType componentType = arrayType.getComponentType();
@@ -44,19 +44,19 @@ public class ConvertCollectionToArrayFix implements SyntheticIntentionAction {
   }
 
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getText() {
     return JavaQuickFixBundle.message("collection.to.array.text", myNewArrayText);
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return myCollectionExpression.isValid() && PsiManager.getInstance(project).isInProject(myCollectionExpression);
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
     String replacement =
       ParenthesesUtils.getText(myCollectionExpression, ParenthesesUtils.POSTFIX_PRECEDENCE) + ".toArray(" + myNewArrayText + ")";
@@ -68,7 +68,7 @@ public class ConvertCollectionToArrayFix implements SyntheticIntentionAction {
     return true;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private static String getArrayTypeText(PsiType componentType) {
     if (componentType instanceof PsiArrayType) {
       return getArrayTypeText(((PsiArrayType)componentType).getComponentType()) + "[]";

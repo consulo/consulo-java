@@ -35,7 +35,7 @@ import java.util.Set;
 public class NonClasspathDirectoriesScope extends GlobalSearchScope {
   private final Set<VirtualFile> myRoots;
 
-  public NonClasspathDirectoriesScope(@jakarta.annotation.Nonnull Collection<VirtualFile> roots) {
+  public NonClasspathDirectoriesScope(@Nonnull Collection<VirtualFile> roots) {
     myRoots = new HashSet<>(roots);
   }
 
@@ -65,7 +65,7 @@ public class NonClasspathDirectoriesScope extends GlobalSearchScope {
   }
 
   @Override
-  public boolean isSearchInModuleContent(@jakarta.annotation.Nonnull Module aModule) {
+  public boolean isSearchInModuleContent(@Nonnull Module aModule) {
     return false;
   }
 

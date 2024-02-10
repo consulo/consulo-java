@@ -62,7 +62,7 @@ public class ModifierFix extends LocalQuickFixAndIntentionActionOnPsiElement {
     myVariable = null;
   }
 
-  public ModifierFix(@Nonnull PsiModifierListOwner owner, @PsiModifier.ModifierConstant @jakarta.annotation.Nonnull String modifier, boolean shouldHave, boolean showContainingClass) {
+  public ModifierFix(@Nonnull PsiModifierListOwner owner, @PsiModifier.ModifierConstant @Nonnull String modifier, boolean shouldHave, boolean showContainingClass) {
     super(owner.getModifierList());
     myModifier = modifier;
     myShouldHave = shouldHave;
@@ -117,7 +117,7 @@ public class ModifierFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   @Override
   public boolean isAvailable(@Nonnull Project project,
                              @Nonnull PsiFile file,
-                             @jakarta.annotation.Nonnull PsiElement startElement,
+                             @Nonnull PsiElement startElement,
                              @Nonnull PsiElement endElement) {
     final PsiModifierList myModifierList = (PsiModifierList)startElement;
     PsiVariable variable = myVariable == null ? null : myVariable.getElement();

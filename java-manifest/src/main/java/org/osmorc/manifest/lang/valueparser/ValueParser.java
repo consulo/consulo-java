@@ -33,9 +33,9 @@ import org.osmorc.manifest.lang.psi.HeaderValuePart;
  * @author Robert F. Beeger (robert@beeger.net)
  */
 public interface ValueParser<T> {
-  T parseValue(@jakarta.annotation.Nonnull HeaderValuePart headerValuePart, @Nullable AnnotationHolder annotationHolder);
+  T parseValue(@Nonnull HeaderValuePart headerValuePart, @Nullable AnnotationHolder annotationHolder);
 
   T parseValue(@Nonnull HeaderValuePart headerValuePart, int start, int end, @Nullable AnnotationHolder annotationHolder);
 
-  T parseValue(@jakarta.annotation.Nonnull String text, int start, int end);
+  T parseValue(@Nonnull String text, int start, int end);
 }

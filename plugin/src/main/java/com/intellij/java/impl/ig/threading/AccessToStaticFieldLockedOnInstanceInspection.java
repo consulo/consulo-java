@@ -43,7 +43,7 @@ public class AccessToStaticFieldLockedOnInstanceInspection extends BaseInspectio
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("access.to.static.field.locked.on.instance.problem.descriptor");
   }
@@ -62,7 +62,7 @@ public class AccessToStaticFieldLockedOnInstanceInspection extends BaseInspectio
   private class AccessToStaticFieldLockedOnInstanceVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitReferenceExpression(@jakarta.annotation.Nonnull PsiReferenceExpression expression) {
+    public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
       super.visitReferenceExpression(expression);
       boolean isLockedOnInstance = false;
       boolean isLockedOnClass = false;

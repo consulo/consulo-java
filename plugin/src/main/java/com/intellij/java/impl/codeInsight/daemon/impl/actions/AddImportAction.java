@@ -12,6 +12,7 @@ import consulo.document.Document;
 import consulo.ide.impl.idea.codeInsight.actions.OptimizeImportsProcessor;
 import consulo.ide.impl.idea.ui.popup.list.ListPopupImpl;
 import consulo.ide.impl.idea.ui.popup.list.PopupListElementRenderer;
+import consulo.ide.impl.psi.statistics.StatisticsManager;
 import consulo.ide.setting.ShowSettingsUtil;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.CodeInsightSettings;
@@ -51,7 +52,7 @@ public class AddImportAction implements QuestionAction {
   public AddImportAction(@Nonnull Project project,
                          @Nonnull PsiReference ref,
                          @Nonnull Editor editor,
-                         @jakarta.annotation.Nonnull PsiClass... targetClasses) {
+                         @Nonnull PsiClass... targetClasses) {
     myProject = project;
     myReference = ref;
     myTargetClasses = targetClasses;
@@ -158,7 +159,7 @@ public class AddImportAction implements QuestionAction {
     List<String> toExclude = getAllExcludableStrings(qname);
 
     return new BaseListPopupStep<String>(null, toExclude) {
-      @jakarta.annotation.Nonnull
+      @Nonnull
       @Override
       public String getTextFor(String value) {
         return "Exclude '" + value + "' from auto-import";
@@ -186,7 +187,7 @@ public class AddImportAction implements QuestionAction {
     });
   }
 
-  public static List<String> getAllExcludableStrings(@jakarta.annotation.Nonnull String qname) {
+  public static List<String> getAllExcludableStrings(@Nonnull String qname) {
     List<String> toExclude = new ArrayList<>();
     while (true) {
       toExclude.add(qname);
@@ -205,7 +206,7 @@ public class AddImportAction implements QuestionAction {
         return;
       }
 
-      consulo.ide.impl.psi.statistics.StatisticsManager.getInstance().incUseCount(JavaStatisticsManager.createInfo(null, targetClass));
+      StatisticsManager.getInstance().incUseCount(JavaStatisticsManager.createInfo(null, targetClass));
       WriteCommandAction.runWriteCommandAction(myProject, JavaQuickFixBundle.message("add.import"), null,
           () -> _addImport(ref, targetClass),
           ref.getElement().getContainingFile());

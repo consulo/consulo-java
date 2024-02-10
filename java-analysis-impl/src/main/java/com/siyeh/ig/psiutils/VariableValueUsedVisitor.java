@@ -23,12 +23,12 @@ import jakarta.annotation.Nonnull;
 
 class VariableValueUsedVisitor extends JavaRecursiveElementVisitor {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private final PsiVariable variable;
   private boolean read = false;
   private boolean written = false;
 
-  VariableValueUsedVisitor(@jakarta.annotation.Nonnull PsiVariable variable) {
+  VariableValueUsedVisitor(@Nonnull PsiVariable variable) {
     this.variable = variable;
   }
 
@@ -42,7 +42,7 @@ class VariableValueUsedVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitAssignmentExpression(
-      @jakarta.annotation.Nonnull PsiAssignmentExpression assignment) {
+      @Nonnull PsiAssignmentExpression assignment) {
     if (read || written) {
       return;
     }
@@ -69,7 +69,7 @@ class VariableValueUsedVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitPrefixExpression(
-      @jakarta.annotation.Nonnull PsiPrefixExpression prefixExpression) {
+      @Nonnull PsiPrefixExpression prefixExpression) {
     if (read || written) {
       return;
     }
@@ -135,7 +135,7 @@ class VariableValueUsedVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitMethodCallExpression(
-      @jakarta.annotation.Nonnull PsiMethodCallExpression call) {
+      @Nonnull PsiMethodCallExpression call) {
     if (read || written) {
       return;
     }
@@ -209,7 +209,7 @@ class VariableValueUsedVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitReturnStatement(
-      @jakarta.annotation.Nonnull PsiReturnStatement returnStatement) {
+      @Nonnull PsiReturnStatement returnStatement) {
     if (read || written) {
       return;
     }

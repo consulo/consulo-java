@@ -51,7 +51,7 @@ public class ExternalizableWithoutPublicNoArgConstructorInspection extends BaseI
     return InspectionGadgetsBundle.message("externalizable.without.public.no.arg.constructor.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("externalizable.without.public.no.arg.constructor.problem.descriptor");
@@ -88,7 +88,7 @@ public class ExternalizableWithoutPublicNoArgConstructorInspection extends BaseI
   private static class MakeConstructorPublicFix extends InspectionGadgetsFix {
 
     @Override
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("make.constructor.public");
     }

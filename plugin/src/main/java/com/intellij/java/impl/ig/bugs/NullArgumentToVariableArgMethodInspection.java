@@ -28,13 +28,13 @@ import jakarta.annotation.Nonnull;
 public class NullArgumentToVariableArgMethodInspection
   extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "null.argument.to.var.arg.method.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "null.argument.to.var.arg.method.problem.descriptor");

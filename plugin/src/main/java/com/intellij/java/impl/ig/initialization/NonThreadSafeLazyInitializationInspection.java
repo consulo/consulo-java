@@ -40,7 +40,7 @@ import java.util.Collection;
 public class NonThreadSafeLazyInitializationInspection
   extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "non.thread.safe.lazy.initialization.display.name");

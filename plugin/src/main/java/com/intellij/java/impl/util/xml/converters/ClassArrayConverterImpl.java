@@ -88,7 +88,7 @@ public class ClassArrayConverterImpl extends ClassArrayConverter {
     }
   }
 
-  public PsiClass fromString(@jakarta.annotation.Nullable @NonNls String s, final ConvertContext context) {
+  public PsiClass fromString(@Nullable @NonNls String s, final ConvertContext context) {
     if (s == null) return null;
     final Module module = context.getModule();
     final PsiFile psiFile = context.getFile();

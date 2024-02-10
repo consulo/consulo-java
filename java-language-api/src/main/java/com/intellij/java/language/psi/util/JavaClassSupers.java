@@ -44,9 +44,9 @@ public abstract class JavaClassSupers {
    * @see InheritanceUtil#isInheritorOrSelf(PsiClass, PsiClass, boolean)
    */
   @Nullable
-  public abstract PsiSubstitutor getSuperClassSubstitutor(@jakarta.annotation.Nonnull PsiClass superClass,
-                                                          @jakarta.annotation.Nonnull PsiClass derivedClass,
+  public abstract PsiSubstitutor getSuperClassSubstitutor(@Nonnull PsiClass superClass,
+                                                          @Nonnull PsiClass derivedClass,
                                                           @Nonnull GlobalSearchScope resolveScope,
-                                                          @jakarta.annotation.Nonnull PsiSubstitutor derivedSubstitutor);
+                                                          @Nonnull PsiSubstitutor derivedSubstitutor);
 
 }

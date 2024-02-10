@@ -66,14 +66,14 @@ public class SPIFileType extends LanguageFileType implements FileTypeIdentifiabl
 		return "JAVA-SPI";
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public LocalizeValue getDescription()
 	{
 		return LocalizeValue.localizeTODO("Service Provider Interface");
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public Image getIcon()
 	{

@@ -41,26 +41,26 @@ public interface JavaModuleExtension<T extends JavaModuleExtension<T>> extends M
   /**
    * @return user set language version. If version is not set return null
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   default LanguageLevel getLanguageLevelNoDefault() {
     return getLanguageLevel();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   SpecialDirLocation getSpecialDirLocation();
 
-  @jakarta.annotation.Nullable
+  @Nullable
   Sdk getSdkForCompilation();
 
-  @jakarta.annotation.Nonnull
-  Set<VirtualFile> getCompilationClasspath(@Nonnull CompileContext compileContext, @jakarta.annotation.Nonnull ModuleChunk moduleChunk);
+  @Nonnull
+  Set<VirtualFile> getCompilationClasspath(@Nonnull CompileContext compileContext, @Nonnull ModuleChunk moduleChunk);
 
-  @jakarta.annotation.Nonnull
-  Set<VirtualFile> getCompilationBootClasspath(@jakarta.annotation.Nonnull CompileContext compileContext, @Nonnull ModuleChunk moduleChunk);
+  @Nonnull
+  Set<VirtualFile> getCompilationBootClasspath(@Nonnull CompileContext compileContext, @Nonnull ModuleChunk moduleChunk);
 
   @Nullable
   String getBytecodeVersion();
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   List<String> getCompilerArguments();
 }

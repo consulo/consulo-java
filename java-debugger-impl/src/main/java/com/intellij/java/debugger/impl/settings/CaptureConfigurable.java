@@ -29,6 +29,7 @@ import consulo.fileChooser.FileChooserDescriptor;
 import consulo.fileChooser.FileChooserFactory;
 import consulo.fileChooser.FileSaverDescriptor;
 import consulo.fileChooser.IdeaFileChooser;
+import consulo.ide.impl.idea.ui.DumbAwareActionButton;
 import consulo.java.debugger.impl.JavaRegistry;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.localize.LocalizeValue;
@@ -125,7 +126,7 @@ public class CaptureConfigurable implements SearchableConfigurable
 			}
 		});
 
-		decorator.addExtraAction(new consulo.ide.impl.idea.ui.DumbAwareActionButton(LocalizeValue.of("Duplicate"), LocalizeValue.of("Duplicate"), AllIcons.Actions.Copy)
+		decorator.addExtraAction(new DumbAwareActionButton(LocalizeValue.of("Duplicate"), LocalizeValue.of("Duplicate"), AllIcons.Actions.Copy)
 		{
 			@Override
 			public boolean isEnabled()
@@ -134,7 +135,7 @@ public class CaptureConfigurable implements SearchableConfigurable
 			}
 
 			@Override
-			public void actionPerformed(@jakarta.annotation.Nonnull AnActionEvent e)
+			public void actionPerformed(@Nonnull AnActionEvent e)
 			{
 				selectedCapturePoints(table).forEach(c ->
 				{
@@ -151,7 +152,7 @@ public class CaptureConfigurable implements SearchableConfigurable
 			}
 		});
 
-		decorator.addExtraAction(new consulo.ide.impl.idea.ui.DumbAwareActionButton(LocalizeValue.of("Enable Selected"), LocalizeValue.of("Enable Selected"), AllIcons.Actions.Selectall)
+		decorator.addExtraAction(new DumbAwareActionButton(LocalizeValue.of("Enable Selected"), LocalizeValue.of("Enable Selected"), AllIcons.Actions.Selectall)
 		{
 			@Override
 			public boolean isEnabled()
@@ -160,13 +161,13 @@ public class CaptureConfigurable implements SearchableConfigurable
 			}
 
 			@Override
-			public void actionPerformed(@jakarta.annotation.Nonnull AnActionEvent e)
+			public void actionPerformed(@Nonnull AnActionEvent e)
 			{
 				selectedCapturePoints(table).forEach(c -> c.myEnabled = true);
 				table.repaint();
 			}
 		});
-		decorator.addExtraAction(new consulo.ide.impl.idea.ui.DumbAwareActionButton(LocalizeValue.of("Disable Selected"), LocalizeValue.of("Disable Selected"), AllIcons.Actions.Unselectall)
+		decorator.addExtraAction(new DumbAwareActionButton(LocalizeValue.of("Disable Selected"), LocalizeValue.of("Disable Selected"), AllIcons.Actions.Unselectall)
 		{
 			@Override
 			public boolean isEnabled()
@@ -175,7 +176,7 @@ public class CaptureConfigurable implements SearchableConfigurable
 			}
 
 			@Override
-			public void actionPerformed(@jakarta.annotation.Nonnull AnActionEvent e)
+			public void actionPerformed(@Nonnull AnActionEvent e)
 			{
 				selectedCapturePoints(table).forEach(c -> c.myEnabled = false);
 				table.repaint();
@@ -185,23 +186,23 @@ public class CaptureConfigurable implements SearchableConfigurable
 		new DumbAwareAction("Toggle")
 		{
 			@Override
-			public void update(@jakarta.annotation.Nonnull AnActionEvent e)
+			public void update(@Nonnull AnActionEvent e)
 			{
 				e.getPresentation().setEnabled(table.getSelectedRowCount() == 1);
 			}
 
 			@Override
-			public void actionPerformed(@jakarta.annotation.Nonnull final AnActionEvent e)
+			public void actionPerformed(@Nonnull final AnActionEvent e)
 			{
 				selectedCapturePoints(table).forEach(c -> c.myEnabled = !c.myEnabled);
 				table.repaint();
 			}
 		}.registerCustomShortcutSet(new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0)), table);
 
-		decorator.addExtraAction(new consulo.ide.impl.idea.ui.DumbAwareActionButton(LocalizeValue.of("Import"), LocalizeValue.of("Import"), AllIcons.Actions.Install)
+		decorator.addExtraAction(new DumbAwareActionButton(LocalizeValue.of("Import"), LocalizeValue.of("Import"), AllIcons.Actions.Install)
 		{
 			@Override
-			public void actionPerformed(@jakarta.annotation.Nonnull final AnActionEvent e)
+			public void actionPerformed(@Nonnull final AnActionEvent e)
 			{
 				FileChooserDescriptor descriptor = new FileChooserDescriptor(true, false, true, false, true, true)
 				{
@@ -248,7 +249,7 @@ public class CaptureConfigurable implements SearchableConfigurable
 				}
 			}
 		});
-		decorator.addExtraAction(new consulo.ide.impl.idea.ui.DumbAwareActionButton(LocalizeValue.of("Export"), LocalizeValue.of("Export"), AllIcons.Actions.Export)
+		decorator.addExtraAction(new DumbAwareActionButton(LocalizeValue.of("Export"), LocalizeValue.of("Export"), AllIcons.Actions.Export)
 		{
 			@Override
 			public void actionPerformed(@Nonnull final AnActionEvent e)

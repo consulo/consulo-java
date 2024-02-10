@@ -32,7 +32,7 @@ public class NonCodeAnnotationGenerator {
   private final PsiModifierListOwner myOwner;
   private final StringBuilder myOutput;
 
-  NonCodeAnnotationGenerator(@jakarta.annotation.Nonnull PsiModifierListOwner owner, StringBuilder output) {
+  NonCodeAnnotationGenerator(@Nonnull PsiModifierListOwner owner, StringBuilder output) {
     myOwner = owner;
     myOutput = output;
   }
@@ -88,7 +88,7 @@ public class NonCodeAnnotationGenerator {
     return allOwners;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static String getNonCodeHeader(Collection<? extends AnnotationDocGenerator> values) {
     boolean hasExternal = values.stream().anyMatch(AnnotationDocGenerator::isExternal);
     boolean hasInferred = values.stream().anyMatch(AnnotationDocGenerator::isInferred);

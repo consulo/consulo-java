@@ -47,14 +47,14 @@ public class AccessStaticViaInstanceFix extends LocalQuickFixAndIntentionActionO
   private final boolean myOnTheFly;
   private final String myText;
 
-  public AccessStaticViaInstanceFix(@jakarta.annotation.Nonnull PsiReferenceExpression expression, @Nonnull JavaResolveResult result, boolean onTheFly) {
+  public AccessStaticViaInstanceFix(@Nonnull PsiReferenceExpression expression, @Nonnull JavaResolveResult result, boolean onTheFly) {
     super(expression);
     myOnTheFly = onTheFly;
     PsiMember member = (PsiMember)result.getElement();
     myText = calcText(member, result.getSubstitutor());
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getText() {
     return myText;
@@ -70,17 +70,17 @@ public class AccessStaticViaInstanceFix extends LocalQuickFixAndIntentionActionO
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("access.static.via.class.reference.family");
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull Project project,
-                     @jakarta.annotation.Nonnull PsiFile file,
+  public void invoke(@Nonnull Project project,
+                     @Nonnull PsiFile file,
                      @Nullable Editor editor,
-                     @jakarta.annotation.Nonnull PsiElement startElement,
-                     @jakarta.annotation.Nonnull PsiElement endElement) {
+                     @Nonnull PsiElement startElement,
+                     @Nonnull PsiElement endElement) {
     final PsiReferenceExpression myExpression = (PsiReferenceExpression)startElement;
 
     if (!myExpression.isValid()) return;

@@ -69,7 +69,7 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 	private String myValueText;
 	private boolean myFullValue = false;
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	private Image myValueIcon;
 
 	protected boolean myIsNew = true;
@@ -509,7 +509,7 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 	}
 
 	//returns expression that evaluates tree to this descriptor
-	@jakarta.annotation.Nullable
+	@Nullable
 	public PsiElement getTreeEvaluation(JavaValue value, DebuggerContextImpl context) throws EvaluateException
 	{
 		JavaValue parent = value.getParent();
@@ -686,7 +686,7 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 	}
 
 	@Override
-	public void setMarkup(final DebugProcess debugProcess, @jakarta.annotation.Nullable final ValueMarkup markup)
+	public void setMarkup(final DebugProcess debugProcess, @Nullable final ValueMarkup markup)
 	{
 		final Value value = getValue();
 		if(value instanceof ObjectReference)

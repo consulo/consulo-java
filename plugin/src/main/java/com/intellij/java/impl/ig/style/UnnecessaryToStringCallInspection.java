@@ -72,7 +72,7 @@ public class UnnecessaryToStringCallInspection extends BaseInspection {
       this.replacementText = replacementText;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("unnecessary.call.to.string.valueof.quickfix", replacementText);
     }

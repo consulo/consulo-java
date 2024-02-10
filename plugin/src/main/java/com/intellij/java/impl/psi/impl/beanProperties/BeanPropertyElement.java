@@ -51,7 +51,7 @@ public class BeanPropertyElement extends FakePsiElement implements PsiMetaOwner,
     return PropertyUtil.getPropertyType(myMethod);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiMethod getMethod() {
     return myMethod;
   }
@@ -105,7 +105,7 @@ public class BeanPropertyElement extends FakePsiElement implements PsiMetaOwner,
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   public PsiMetaData getMetaData() {
     return this;
   }

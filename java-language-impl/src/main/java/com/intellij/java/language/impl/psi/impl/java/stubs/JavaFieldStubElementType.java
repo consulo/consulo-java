@@ -29,17 +29,17 @@ import java.io.IOException;
 public abstract class JavaFieldStubElementType extends JavaStubElementType<PsiFieldStub, PsiField> {
   private static final int INITIALIZER_LENGTH_LIMIT = 1000;
 
-  public JavaFieldStubElementType(@jakarta.annotation.Nonnull String id) {
+  public JavaFieldStubElementType(@Nonnull String id) {
     super(id);
   }
 
   @Override
-  public PsiField createPsi(@jakarta.annotation.Nonnull final PsiFieldStub stub) {
+  public PsiField createPsi(@Nonnull final PsiFieldStub stub) {
     return getPsiFactory(stub).createField(stub);
   }
 
   @Override
-  public PsiField createPsi(@jakarta.annotation.Nonnull final ASTNode node) {
+  public PsiField createPsi(@Nonnull final ASTNode node) {
     if (node instanceof EnumConstantElement) {
       return new PsiEnumConstantImpl(node);
     } else {
@@ -47,9 +47,9 @@ public abstract class JavaFieldStubElementType extends JavaStubElementType<PsiFi
     }
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
-  public PsiFieldStub createStub(@jakarta.annotation.Nonnull final LighterAST tree, @jakarta.annotation.Nonnull final LighterASTNode node, @jakarta.annotation.Nonnull final StubElement parentStub) {
+  public PsiFieldStub createStub(@Nonnull final LighterAST tree, @Nonnull final LighterASTNode node, @Nonnull final StubElement parentStub) {
     final TypeInfo typeInfo = TypeInfo.create(tree, node, parentStub);
 
     boolean isDeprecatedByComment = false;
@@ -96,7 +96,7 @@ public abstract class JavaFieldStubElementType extends JavaStubElementType<PsiFi
   }
 
   @Override
-  public void serialize(@jakarta.annotation.Nonnull PsiFieldStub stub, @Nonnull StubOutputStream dataStream) throws IOException {
+  public void serialize(@Nonnull PsiFieldStub stub, @Nonnull StubOutputStream dataStream) throws IOException {
     dataStream.writeName(stub.getName());
     TypeInfo.writeTYPE(dataStream, stub.getType());
     dataStream.writeName(stub.getInitializerText());
@@ -105,7 +105,7 @@ public abstract class JavaFieldStubElementType extends JavaStubElementType<PsiFi
 
   @Nonnull
   @Override
-  public PsiFieldStub deserialize(@jakarta.annotation.Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
+  public PsiFieldStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
     String name = dataStream.readNameString();
     TypeInfo type = TypeInfo.readTYPE(dataStream);
     String initializerText = dataStream.readNameString();
@@ -114,7 +114,7 @@ public abstract class JavaFieldStubElementType extends JavaStubElementType<PsiFi
   }
 
   @Override
-  public void indexStub(@jakarta.annotation.Nonnull PsiFieldStub stub, @jakarta.annotation.Nonnull IndexSink sink) {
+  public void indexStub(@Nonnull PsiFieldStub stub, @Nonnull IndexSink sink) {
     String name = stub.getName();
     if (name != null) {
       sink.occurrence(JavaStubIndexKeys.FIELDS, name);

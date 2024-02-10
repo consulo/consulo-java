@@ -37,7 +37,7 @@ public class DeclarationSearchUtils {
   private DeclarationSearchUtils() {
   }
 
-  public static boolean variableNameResolvesToTarget(@Nonnull String variableName, @jakarta.annotation.Nonnull PsiVariable target, @Nonnull PsiElement context) {
+  public static boolean variableNameResolvesToTarget(@Nonnull String variableName, @Nonnull PsiVariable target, @Nonnull PsiElement context) {
 
     final Project project = context.getProject();
     final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);

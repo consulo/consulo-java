@@ -77,7 +77,7 @@ public class TestFrameworksImpl extends TestFrameworks {
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   public PsiMethod findSetUpMethod(final PsiClass psiClass) {
     ExtensionPoint<TestFramework> point = myApplication.getExtensionPoint(TestFramework.class);
 
@@ -94,7 +94,7 @@ public class TestFrameworksImpl extends TestFrameworks {
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   public PsiMethod findTearDownMethod(final PsiClass psiClass) {
     ExtensionPoint<TestFramework> point = myApplication.getExtensionPoint(TestFramework.class);
 

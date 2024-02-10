@@ -50,7 +50,7 @@ public class EditContractIntention extends BaseIntentionAction implements LowPri
     setText("Edit method contract");
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static PsiMethod getTargetMethod(Editor editor, PsiFile file) {
     final PsiModifierListOwner owner = AddAnnotationPsiFix.getContainer(file, editor.getCaretModel().getOffset(), true);
     if (owner instanceof PsiMethod && ExternalAnnotationsManagerImpl.areExternalAnnotationsApplicable(owner)) {
@@ -197,7 +197,7 @@ public class EditContractIntention extends BaseIntentionAction implements LowPri
     return StringUtil.isEmpty(mutates) ? null : MutationSignature.checkSignature(mutates, method);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static String getContractErrorMessage(String contract, PsiMethod method) {
     if (StringUtil.isEmpty(contract)) {
       return null;

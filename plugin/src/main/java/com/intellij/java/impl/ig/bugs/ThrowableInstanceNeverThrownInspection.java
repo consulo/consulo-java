@@ -36,7 +36,7 @@ public class ThrowableInstanceNeverThrownInspection extends BaseInspection {
 
   @Override
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("throwable.instance.never.thrown.display.name");
   }

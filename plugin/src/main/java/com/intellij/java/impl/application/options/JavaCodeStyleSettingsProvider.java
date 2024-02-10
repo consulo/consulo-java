@@ -55,7 +55,7 @@ public class JavaCodeStyleSettingsProvider extends CodeStyleSettingsProvider {
     return "Java";
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

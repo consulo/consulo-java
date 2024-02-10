@@ -34,7 +34,7 @@ public class ArrayLengthInLoopConditionInspection extends BaseInspection {
       "array.length.in.loop.condition.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "array.length.in.loop.condition.problem.descriptor");
@@ -48,7 +48,7 @@ public class ArrayLengthInLoopConditionInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitForStatement(@jakarta.annotation.Nonnull PsiForStatement statement) {
+    public void visitForStatement(@Nonnull PsiForStatement statement) {
       super.visitForStatement(statement);
       final PsiExpression condition = statement.getCondition();
       if (condition == null) {
@@ -58,7 +58,7 @@ public class ArrayLengthInLoopConditionInspection extends BaseInspection {
     }
 
     @Override
-    public void visitWhileStatement(@jakarta.annotation.Nonnull PsiWhileStatement statement) {
+    public void visitWhileStatement(@Nonnull PsiWhileStatement statement) {
       super.visitWhileStatement(statement);
       final PsiExpression condition = statement.getCondition();
       if (condition == null) {

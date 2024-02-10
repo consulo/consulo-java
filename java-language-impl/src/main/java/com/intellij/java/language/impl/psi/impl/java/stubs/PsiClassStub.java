@@ -26,7 +26,7 @@ import jakarta.annotation.Nullable;
 
 public interface PsiClassStub<T extends PsiClass> extends PsiMemberStub<T>
 {
-	@jakarta.annotation.Nullable
+	@Nullable
 	String getQualifiedName();
 
 	@Nullable

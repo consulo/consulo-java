@@ -82,7 +82,7 @@ class CatchTypeProvider implements CompletionProvider
 		});
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	private static LookupElement createCatchTypeVariant(PsiCodeBlock tryBlock, PsiClassType type)
 	{
 		return TailTypeDecorator.withTail(PsiTypeLookupItem.createLookupItem(type, tryBlock), TailType.HUMBLE_SPACE_BEFORE_WORD);

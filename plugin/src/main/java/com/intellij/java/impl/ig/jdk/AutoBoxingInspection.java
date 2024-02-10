@@ -293,7 +293,7 @@ public class AutoBoxingInspection extends BaseInspection {
       checkExpression(expression);
     }
 
-    private void checkExpression(@jakarta.annotation.Nonnull PsiExpression expression) {
+    private void checkExpression(@Nonnull PsiExpression expression) {
       if (expression.getParent() instanceof PsiParenthesizedExpression) {
         return;
       }

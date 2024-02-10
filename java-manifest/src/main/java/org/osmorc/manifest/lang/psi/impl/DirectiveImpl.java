@@ -39,7 +39,7 @@ public class DirectiveImpl extends AbstractAssignmentExpression implements Direc
     super(stub, nodeType);
   }
 
-  public DirectiveImpl(@jakarta.annotation.Nonnull ASTNode node) {
+  public DirectiveImpl(@Nonnull ASTNode node) {
     super(node);
   }
 }

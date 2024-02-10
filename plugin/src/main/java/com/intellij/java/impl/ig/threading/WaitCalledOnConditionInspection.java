@@ -34,7 +34,7 @@ public class WaitCalledOnConditionInspection extends BaseInspection {
       "wait.called.on.condition.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "wait.called.on.condition.problem.descriptor");

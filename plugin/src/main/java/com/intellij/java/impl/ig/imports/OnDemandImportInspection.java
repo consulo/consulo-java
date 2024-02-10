@@ -30,7 +30,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 @ExtensionImpl
 public class OnDemandImportInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("import.display.name");
   }
@@ -47,7 +47,7 @@ public class OnDemandImportInspection extends BaseInspection {
   private static class PackageImportVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       // no call to super, so it doesn't drill down
       final PsiElement parent = aClass.getParent();
       if (!(parent instanceof PsiJavaFile)) {

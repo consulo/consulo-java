@@ -197,7 +197,7 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
 			}
 
 			@Override
-			public void breakpointChanged(@jakarta.annotation.Nonnull XBreakpoint b)
+			public void breakpointChanged(@Nonnull XBreakpoint b)
 			{
 				changed(b);
 			}
@@ -427,14 +427,14 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	protected Image getVerifiedIcon(boolean isMuted)
 	{
 		return isMuted ? AllIcons.Debugger.Db_muted_verified_method_breakpoint : AllIcons.Debugger.Db_verified_method_breakpoint;
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	protected Image getVerifiedWarningsIcon(boolean isMuted)
 	{
 		return isMuted ? AllIcons.Debugger.Db_muted_method_warning_breakpoint : AllIcons.Debugger.Db_method_warning_breakpoint;
@@ -478,7 +478,7 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
 		return super.evaluateCondition(context, event);
 	}
 
-	public boolean matchesEvent(@jakarta.annotation.Nonnull final LocatableEvent event, final DebugProcessImpl process) throws EvaluateException
+	public boolean matchesEvent(@Nonnull final LocatableEvent event, final DebugProcessImpl process) throws EvaluateException
 	{
 		if(isEmulated())
 		{
@@ -508,7 +508,7 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
 	 * finds FQ method's class name and method's signature
 	 */
 	@Nullable
-	private static MethodDescriptor getMethodDescriptor(@jakarta.annotation.Nonnull final Project project, @Nonnull final PsiFile psiJavaFile, @Nonnull final SourcePosition sourcePosition)
+	private static MethodDescriptor getMethodDescriptor(@Nonnull final Project project, @Nonnull final PsiFile psiJavaFile, @Nonnull final SourcePosition sourcePosition)
 	{
 		final PsiDocumentManager docManager = PsiDocumentManager.getInstance(project);
 		final Document document = docManager.getDocument(psiJavaFile);

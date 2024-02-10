@@ -46,7 +46,7 @@ public class JDBCPrepareStatementWithNonConstantStringInspection
 
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "jdbc.prepare.statement.with.non.constant.string.display.name");
@@ -68,7 +68,7 @@ public class JDBCPrepareStatementWithNonConstantStringInspection
 
     @Override
     public void visitMethodCallExpression(
-      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();

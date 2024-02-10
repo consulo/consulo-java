@@ -149,7 +149,7 @@ public class SliceNullnessAnalyzer {
   }
 
   @Nonnull
-  public static NullAnalysisResult calcNullableLeaves(@jakarta.annotation.Nonnull final SliceNode root, @jakarta.annotation.Nonnull AbstractTreeStructure treeStructure,
+  public static NullAnalysisResult calcNullableLeaves(@Nonnull final SliceNode root, @Nonnull AbstractTreeStructure treeStructure,
                                                       final Map<SliceNode, NullAnalysisResult> map) {
     final SliceLeafAnalyzer.SliceNodeGuide guide = new SliceLeafAnalyzer.SliceNodeGuide(treeStructure);
     WalkingState<SliceNode> walkingState = new WalkingState<>(guide) {
@@ -190,7 +190,7 @@ public class SliceNullnessAnalyzer {
     return node(root, map);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private static Nullability checkNullability(PsiElement element) {
     if (element instanceof PsiExpression) {
       return NullabilityUtil.getExpressionNullability((PsiExpression) element, true);

@@ -306,7 +306,7 @@ public class MoveClassesOrPackagesImpl {
     return initialTargetDirectory;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiDirectory getContainerDirectory(final PsiElement psiElement) {
     if (psiElement instanceof PsiJavaPackage) {
       final PsiDirectory[] directories = ((PsiJavaPackage)psiElement).getDirectories();

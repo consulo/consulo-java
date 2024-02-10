@@ -198,7 +198,7 @@ public class ConvertSwitchToIfIntention implements SyntheticIntentionAction {
     }
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private static List<SwitchStatementBranch> extractBranches(CommentTracker commentTracker,
                                                              PsiCodeBlock body,
                                                              Set<PsiSwitchLabelStatementBase> fallThroughTargets) {

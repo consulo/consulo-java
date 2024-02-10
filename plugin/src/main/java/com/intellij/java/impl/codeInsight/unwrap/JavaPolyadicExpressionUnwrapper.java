@@ -66,7 +66,7 @@ public class JavaPolyadicExpressionUnwrapper extends JavaUnwrapper {
   }
 
   @Nullable
-  private static PsiExpression findOperand(@Nonnull PsiElement e, @jakarta.annotation.Nonnull PsiPolyadicExpression expression) {
+  private static PsiExpression findOperand(@Nonnull PsiElement e, @Nonnull PsiPolyadicExpression expression) {
     final TextRange elementTextRange = e.getTextRange();
 
     for (PsiExpression operand : expression.getOperands()) {

@@ -29,7 +29,7 @@ import com.intellij.java.language.psi.util.PsiUtil;
 
 public class CreateAbstractMethodFromUsageFix extends CreateMethodFromUsageFix
 {
-	public CreateAbstractMethodFromUsageFix(@jakarta.annotation.Nonnull PsiMethodCallExpression methodCall)
+	public CreateAbstractMethodFromUsageFix(@Nonnull PsiMethodCallExpression methodCall)
 	{
 		super(methodCall);
 	}

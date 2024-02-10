@@ -25,10 +25,10 @@ import static com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTy
  */
 public class PrimitiveConversionInstruction extends EvalInstruction
 {
-	@jakarta.annotation.Nullable
+	@Nullable
 	private final PsiPrimitiveType myTargetType;
 
-	public PrimitiveConversionInstruction(@jakarta.annotation.Nullable PsiPrimitiveType targetType, @Nullable PsiExpression expression)
+	public PrimitiveConversionInstruction(@Nullable PsiPrimitiveType targetType, @Nullable PsiExpression expression)
 	{
 		super(expression, 1);
 		myTargetType = targetType;
@@ -36,8 +36,8 @@ public class PrimitiveConversionInstruction extends EvalInstruction
 
 	@Override
 	public
-	@jakarta.annotation.Nonnull
-	DfaValue eval(@jakarta.annotation.Nonnull DfaValueFactory factory,
+	@Nonnull
+	DfaValue eval(@Nonnull DfaValueFactory factory,
 				  @Nonnull DfaMemoryState state,
 				  @Nonnull DfaValue... arguments)
 	{

@@ -59,7 +59,7 @@ public abstract class DocumentationDelegateProvider {
   @Nullable
   public abstract PsiDocCommentOwner computeDocumentationDelegate(@Nonnull PsiMember member);
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiDocCommentOwner findDocumentationDelegate(@Nonnull PsiMember method) {
     for (DocumentationDelegateProvider delegator : EP_NAME.getExtensionList()) {
       PsiDocCommentOwner type = delegator.computeDocumentationDelegate(method);

@@ -120,7 +120,7 @@ public class RenameJavaClassProcessor extends RenamePsiElementProcessor {
     }
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public Pair<String, String> getTextOccurrenceSearchStrings(@Nonnull final PsiElement element, @Nonnull final String newName) {
     if (element instanceof PsiClass) {
       final PsiClass aClass = (PsiClass) element;
@@ -315,7 +315,7 @@ public class RenameJavaClassProcessor extends RenamePsiElementProcessor {
     }
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @NonNls
   public String getHelpID(final PsiElement element) {
     return HelpID.RENAME_CLASS;

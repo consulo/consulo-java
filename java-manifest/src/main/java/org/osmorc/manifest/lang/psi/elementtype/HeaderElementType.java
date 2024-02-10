@@ -48,7 +48,7 @@ public class HeaderElementType extends AbstractManifestStubElementType<HeaderStu
 
 
   @Override
-  public Header createPsi(@jakarta.annotation.Nonnull HeaderStub stub) {
+  public Header createPsi(@Nonnull HeaderStub stub) {
     return new HeaderImpl(stub, this);
   }
 
@@ -62,15 +62,15 @@ public class HeaderElementType extends AbstractManifestStubElementType<HeaderStu
     return new HeaderStubImpl(parentStub, psi.getName());
   }
 
-  public void serialize(@jakarta.annotation.Nonnull HeaderStub stub, @jakarta.annotation.Nonnull StubOutputStream dataStream) throws IOException {
+  public void serialize(@Nonnull HeaderStub stub, @Nonnull StubOutputStream dataStream) throws IOException {
     dataStream.writeName(stub.getName());
   }
 
   @Nonnull
-  public HeaderStub deserialize(@jakarta.annotation.Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
+  public HeaderStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
     return new HeaderStubImpl(parentStub, dataStream.readName().toString());
   }
 
-  public void indexStub(@jakarta.annotation.Nonnull HeaderStub stub, @jakarta.annotation.Nonnull IndexSink sink) {
+  public void indexStub(@Nonnull HeaderStub stub, @Nonnull IndexSink sink) {
   }
 }

@@ -108,19 +108,19 @@ public class JavaCreateFromTemplateHandler implements CreateFromTemplateHandler 
   }
 
   @Override
-  public boolean handlesTemplate(@jakarta.annotation.Nonnull FileTemplate template) {
+  public boolean handlesTemplate(@Nonnull FileTemplate template) {
     FileType fileType = FileTypeManager.getInstance().getFileTypeByExtension(template.getExtension());
     return fileType.equals(JavaFileType.INSTANCE) && !ArrayUtil.contains(template.getName(), JavaTemplateUtil.INTERNAL_FILE_TEMPLATES);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public PsiElement createFromTemplate(Project project,
                                        PsiDirectory directory,
                                        String fileName,
                                        FileTemplate template,
                                        String templateText,
-                                       @jakarta.annotation.Nonnull Map<String, Object> props) throws IncorrectOperationException {
+                                       @Nonnull Map<String, Object> props) throws IncorrectOperationException {
     String extension = template.getExtension();
     PsiElement result = createClassOrInterface(project, directory, templateText, template.isReformatCode(), extension);
     hackAwayEmptyPackage((PsiJavaFile) result.getContainingFile(), template, props);
@@ -157,7 +157,7 @@ public class JavaCreateFromTemplateHandler implements CreateFromTemplateHandler 
 
   @Nonnull
   @Override
-  public String commandName(@jakarta.annotation.Nonnull FileTemplate template) {
+  public String commandName(@Nonnull FileTemplate template) {
     return IdeBundle.message("command.create.class.from.template");
   }
 

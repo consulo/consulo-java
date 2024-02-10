@@ -48,15 +48,15 @@ public class JamAnnotationMeta extends JamAnnotationArchetype implements SemElem
   private final AnnotationChildLink myAnnotationChildLink;
   private final SemKey<JamAnnotationMeta> myMetaKey;
 
-  public JamAnnotationMeta(@jakarta.annotation.Nonnull @NonNls String annoName) {
+  public JamAnnotationMeta(@Nonnull @NonNls String annoName) {
     this(annoName, null);
   }
 
-  public JamAnnotationMeta(@jakarta.annotation.Nonnull @NonNls String annoName, @jakarta.annotation.Nullable JamAnnotationArchetype archetype) {
+  public JamAnnotationMeta(@Nonnull @NonNls String annoName, @Nullable JamAnnotationArchetype archetype) {
     this(annoName, archetype, JamService.ANNO_META_KEY.subKey("AnnoMeta:" + annoName));
   }
 
-  public JamAnnotationMeta(@jakarta.annotation.Nonnull @NonNls String annoName, @jakarta.annotation.Nullable JamAnnotationArchetype archetype,
+  public JamAnnotationMeta(@Nonnull @NonNls String annoName, @Nullable JamAnnotationArchetype archetype,
                            final SemKey<JamAnnotationMeta> metaKey) {
     super(archetype);
     myAnnotationChildLink = new AnnotationChildLink(annoName);
@@ -77,12 +77,12 @@ public class JamAnnotationMeta extends JamAnnotationArchetype implements SemElem
     return myAnnotationChildLink.getAnnotationQualifiedName();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public <T> T getAttribute(PsiModifierListOwner member, JamAttributeMeta<T> meta) {
     return getAttribute(PsiElementRef.real(member), meta);
   }
   
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public <T> T getAttribute(PsiElementRef<? extends PsiModifierListOwner> member, JamAttributeMeta<T> meta) {
     return meta.getJam(getAnnotationRef(member));
   }
@@ -113,7 +113,7 @@ public class JamAnnotationMeta extends JamAnnotationArchetype implements SemElem
       psiAnnotation().qName(myAnnotationChildLink.getAnnotationQualifiedName()).withSuperParent(
         2, isPackage ? PsiJavaPatterns.psiJavaElement(PsiPackageStatement.class).with(new PatternCondition<PsiPackageStatement>("package") {
         @Override
-        public boolean accepts(@jakarta.annotation.Nonnull PsiPackageStatement psiPackageStatement, ProcessingContext context) {
+        public boolean accepts(@Nonnull PsiPackageStatement psiPackageStatement, ProcessingContext context) {
           return parentPattern.accepts(psiPackageStatement.getPackageReference().resolve(), context);
         }
       }) : parentPattern);

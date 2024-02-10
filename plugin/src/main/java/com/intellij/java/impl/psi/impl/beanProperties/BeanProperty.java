@@ -36,7 +36,7 @@ public class BeanProperty {
 
   private final PsiMethod myMethod;
 
-  protected BeanProperty(@jakarta.annotation.Nonnull PsiMethod method) {
+  protected BeanProperty(@Nonnull PsiMethod method) {
     myMethod = method;
   }
 
@@ -62,12 +62,12 @@ public class BeanProperty {
     return type;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiMethod getMethod() {
     return myMethod;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public PsiMethod getGetter() {
     if (PropertyUtil.isSimplePropertyGetter(myMethod)) {
       return myMethod;
@@ -75,7 +75,7 @@ public class BeanProperty {
     return PropertyUtil.findPropertyGetter(myMethod.getContainingClass(), getName(), false, true);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public PsiMethod getSetter() {
     if (PropertyUtil.isSimplePropertySetter(myMethod)) {
       return myMethod;
@@ -101,7 +101,7 @@ public class BeanProperty {
     return AllIcons.Nodes.Property;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static BeanProperty createBeanProperty(@Nonnull PsiMethod method) {
     return PropertyUtil.isSimplePropertyAccessor(method) ? new BeanProperty(method) : null;
   }

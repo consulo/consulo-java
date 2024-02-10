@@ -53,7 +53,7 @@ abstract class ModifierIntention extends Intention implements LowPriorityAction 
   }
 
   @Override
-  protected final void processIntention(@jakarta.annotation.Nonnull PsiElement element) throws IncorrectOperationException {
+  protected final void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiMember member = (PsiMember)element.getParent();
     final PsiModifierList modifierList = member.getModifierList();
     if (modifierList == null) {
@@ -84,7 +84,7 @@ abstract class ModifierIntention extends Intention implements LowPriorityAction 
     }
   }
 
-  private MultiMap<PsiElement, String> checkForConflicts(@jakarta.annotation.Nonnull final PsiMember member) {
+  private MultiMap<PsiElement, String> checkForConflicts(@Nonnull final PsiMember member) {
     if (member instanceof PsiClass && getModifier().equals(PsiModifier.PUBLIC)) {
       final PsiClass aClass = (PsiClass)member;
       final PsiElement parent = aClass.getParent();

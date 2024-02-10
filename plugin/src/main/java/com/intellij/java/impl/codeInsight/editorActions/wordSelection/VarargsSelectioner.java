@@ -65,7 +65,7 @@ public class VarargsSelectioner extends BasicSelectioner {
 
   @Nonnull
   private static PsiExpression[] getVarargArgs(@Nonnull PsiParameterList parameterList,
-                                               @jakarta.annotation.Nonnull PsiExpressionList expressionList) {
+                                               @Nonnull PsiExpressionList expressionList) {
     final PsiParameter[] parameters = parameterList.getParameters();
     final PsiExpression[] expressions = expressionList.getExpressions();
 

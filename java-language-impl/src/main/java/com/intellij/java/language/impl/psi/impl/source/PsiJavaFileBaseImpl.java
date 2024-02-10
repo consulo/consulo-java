@@ -149,7 +149,7 @@ public abstract class PsiJavaFileBaseImpl extends PsiFileImpl implements PsiJava
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   public PsiImportList getImportList() {
     StubElement<?> stub = getGreenStub();
     if (stub != null) {

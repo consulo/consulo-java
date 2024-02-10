@@ -249,7 +249,7 @@ public class MethodReturnValueWatcher
 		return myEntryRequest;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	private MethodExitRequest createExitRequest()
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread(); // to ensure EventRequestManager synchronization

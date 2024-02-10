@@ -39,7 +39,7 @@ import jakarta.annotation.Nonnull;
  */
 public abstract class JavaBreakpointTypeBase<T extends JavaBreakpointProperties> extends XBreakpointType<XBreakpoint<T>, T>
 {
-	protected JavaBreakpointTypeBase(@jakarta.annotation.Nonnull String id, @Nls @jakarta.annotation.Nonnull String title)
+	protected JavaBreakpointTypeBase(@Nonnull String id, @Nls @Nonnull String title)
 	{
 		super(id, title, true);
 	}
@@ -50,16 +50,16 @@ public abstract class JavaBreakpointTypeBase<T extends JavaBreakpointProperties>
 		return true;
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	@Override
 	public final XBreakpointCustomPropertiesPanel<XBreakpoint<T>> createCustomRightPropertiesPanel(@Nonnull Project project)
 	{
 		return new JavaBreakpointFiltersPanel<T, XBreakpoint<T>>(project);
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	@Override
-	public final XDebuggerEditorsProvider getEditorsProvider(@Nonnull XBreakpoint<T> breakpoint, @jakarta.annotation.Nonnull Project project)
+	public final XDebuggerEditorsProvider getEditorsProvider(@Nonnull XBreakpoint<T> breakpoint, @Nonnull Project project)
 	{
 		return new JavaDebuggerEditorsProvider();
 	}

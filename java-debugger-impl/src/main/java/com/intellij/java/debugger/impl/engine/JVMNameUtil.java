@@ -348,8 +348,8 @@ public class JVMNameUtil
 		}
 	}
 
-	@jakarta.annotation.Nullable
-	public static JVMName getContextClassJVMQualifiedName(@jakarta.annotation.Nullable SourcePosition pos)
+	@Nullable
+	public static JVMName getContextClassJVMQualifiedName(@Nullable SourcePosition pos)
 	{
 		final PsiClass psiClass = getClassAt(pos);
 		if(psiClass == null)
@@ -364,7 +364,7 @@ public class JVMNameUtil
 		return new JVMClassAt(pos);
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	public static String getNonAnonymousClassName(PsiClass aClass)
 	{
 		if(PsiUtil.isLocalOrAnonymousClass(aClass))
@@ -389,12 +389,12 @@ public class JVMNameUtil
 		return DebuggerManager.getInstance(aClass.getProject()).getVMClassQualifiedName(aClass);
 	}
 
-	public static JVMName getJVMConstructorSignature(@jakarta.annotation.Nullable PsiMethod method, @jakarta.annotation.Nullable PsiClass declaringClass)
+	public static JVMName getJVMConstructorSignature(@Nullable PsiMethod method, @Nullable PsiClass declaringClass)
 	{
 		return getJVMSignature(method, true, declaringClass);
 	}
 
-	public static JVMName getJVMSignature(@jakarta.annotation.Nonnull PsiMethod method)
+	public static JVMName getJVMSignature(@Nonnull PsiMethod method)
 	{
 		return getJVMSignature(method, method.isConstructor(), method.getContainingClass());
 	}
@@ -406,7 +406,7 @@ public class JVMNameUtil
 	}
 
 	@SuppressWarnings({"HardCodedStringLiteral"})
-	private static JVMName getJVMSignature(@jakarta.annotation.Nullable PsiMethod method, boolean constructor, @jakarta.annotation.Nullable PsiClass declaringClass)
+	private static JVMName getJVMSignature(@Nullable PsiMethod method, boolean constructor, @Nullable PsiClass declaringClass)
 	{
 		JVMNameBuffer signature = new JVMNameBuffer();
 		signature.append("(");
@@ -445,8 +445,8 @@ public class JVMNameUtil
 		return signature.toName();
 	}
 
-	@jakarta.annotation.Nullable
-	public static PsiClass getClassAt(@jakarta.annotation.Nullable SourcePosition position)
+	@Nullable
+	public static PsiClass getClassAt(@Nullable SourcePosition position)
 	{
 		if(position == null)
 		{
@@ -456,8 +456,8 @@ public class JVMNameUtil
 		return (element != null) ? PsiTreeUtil.getParentOfType(element, PsiClass.class, false) : null;
 	}
 
-	@jakarta.annotation.Nullable
-	public static String getSourcePositionClassDisplayName(DebugProcessImpl debugProcess, @jakarta.annotation.Nullable SourcePosition position)
+	@Nullable
+	public static String getSourcePositionClassDisplayName(DebugProcessImpl debugProcess, @Nullable SourcePosition position)
 	{
 		if(position == null)
 		{
@@ -540,7 +540,7 @@ public class JVMNameUtil
 		return calcClassDisplayName(parent) + "$" + classIndex.get();
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	public static String getSourcePositionPackageDisplayName(DebugProcessImpl debugProcess, @Nullable SourcePosition position)
 	{
 		if(position == null)
@@ -606,8 +606,8 @@ public class JVMNameUtil
 		return psiClass;
 	}
 
-	@jakarta.annotation.Nullable
-	public static String getClassVMName(@jakarta.annotation.Nullable PsiClass containingClass)
+	@Nullable
+	public static String getClassVMName(@Nullable PsiClass containingClass)
 	{
 		// no support for local classes for now
 		if(containingClass == null || PsiUtil.isLocalClass(containingClass))

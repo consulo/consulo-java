@@ -29,12 +29,12 @@ import jakarta.annotation.Nonnull;
 
 public class RemoveMiddlemanAction extends BaseRefactoringAction {
 
-  protected RefactoringActionHandler getHandler(@jakarta.annotation.Nonnull DataContext context) {
+  protected RefactoringActionHandler getHandler(@Nonnull DataContext context) {
     return new RemoveMiddlemanHandler();
   }
 
   @Override
-  protected boolean isAvailableOnElementInEditorAndFile(@jakarta.annotation.Nonnull PsiElement element, @Nonnull Editor editor, @jakarta.annotation.Nonnull PsiFile file, @Nonnull DataContext context) {
+  protected boolean isAvailableOnElementInEditorAndFile(@Nonnull PsiElement element, @Nonnull Editor editor, @Nonnull PsiFile file, @Nonnull DataContext context) {
     return element instanceof PsiField;
   }
 
@@ -42,7 +42,7 @@ public class RemoveMiddlemanAction extends BaseRefactoringAction {
     return false;
   }
 
-  public boolean isEnabledOnElements(@jakarta.annotation.Nonnull PsiElement[] elements) {
+  public boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
     return elements.length == 1 && PsiTreeUtil.getParentOfType(elements[0], PsiField.class, false) != null;
   }
 }

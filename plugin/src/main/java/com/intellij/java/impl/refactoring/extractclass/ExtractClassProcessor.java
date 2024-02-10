@@ -248,7 +248,7 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
     return RefactorJBundle.message("extracted.class.command.name", newClassName);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usageInfos) {
     return new ExtractClassUsageViewDescriptor(sourceClass);
   }

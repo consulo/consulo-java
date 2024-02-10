@@ -38,5 +38,5 @@ public interface MoveInnerHandler extends LanguageExtension {
   }
 
   @Nonnull
-  PsiClass copyClass(@jakarta.annotation.Nonnull MoveInnerOptions options);
+  PsiClass copyClass(@Nonnull MoveInnerOptions options);
 }

@@ -71,7 +71,7 @@ public class InferenceSessionContainer {
                               @Nonnull PsiParameter[] parameters,
                               @Nonnull PsiExpression[] arguments,
                               @Nonnull PsiSubstitutor partialSubstitutor,
-                              @jakarta.annotation.Nonnull final PsiElement parent,
+                              @Nonnull final PsiElement parent,
                               @Nonnull final ParameterTypeInferencePolicy policy) {
     if (parent instanceof PsiCall) {
       final PsiExpressionList argumentList = ((PsiCall) parent).getArgumentList();
@@ -98,7 +98,7 @@ public class InferenceSessionContainer {
             session = startTopLevelInference(topLevelCall, policy);
           } else {
             session = LanguageCachedValueUtil.getCachedValue(topLevelCall, new CachedValueProvider<InferenceSession>() {
-              @jakarta.annotation.Nullable
+              @Nullable
               @Override
               public Result<InferenceSession> compute() {
                 return new Result<InferenceSession>(startTopLevelInference(topLevelCall, policy), PsiModificationTracker.MODIFICATION_COUNT);
@@ -140,8 +140,8 @@ public class InferenceSessionContainer {
   }
 
   private static PsiSubstitutor inferNested(final PsiTypeParameter[] typeParameters,
-                                            @jakarta.annotation.Nonnull final PsiParameter[] parameters,
-                                            @jakarta.annotation.Nonnull final PsiExpression[] arguments,
+                                            @Nonnull final PsiParameter[] parameters,
+                                            @Nonnull final PsiExpression[] arguments,
                                             final PsiSubstitutor partialSubstitutor,
                                             @Nonnull final PsiCall parent,
                                             @Nonnull final ParameterTypeInferencePolicy policy,
@@ -187,7 +187,7 @@ public class InferenceSessionContainer {
                 final PsiType parameterTypeInTermsOfSession = initialInferenceState.getInferenceSubstitutor().substitute(parameterType);
                 final PsiType lambdaTargetType = compoundInitialState.getInitialSubstitutor().substitute(parameterTypeInTermsOfSession);
                 return LambdaUtil.performWithLambdaTargetType((PsiLambdaExpression) gParent, lambdaTargetType, new Supplier<PsiSubstitutor>() {
-                  @jakarta.annotation.Nullable
+                  @Nullable
                   @Override
                   public PsiSubstitutor get() {
                     if (call.equals(PsiTreeUtil.getParentOfType(parent, PsiCall.class, true))) {
@@ -222,7 +222,7 @@ public class InferenceSessionContainer {
 
     final InferenceSessionContainer copy = new InferenceSessionContainer() {
       @Override
-      public PsiSubstitutor findNestedSubstitutor(PsiElement arg, @jakarta.annotation.Nullable PsiSubstitutor defaultSession) {
+      public PsiSubstitutor findNestedSubstitutor(PsiElement arg, @Nullable PsiSubstitutor defaultSession) {
         //for the case foo(bar(a -> m())): top level inference won't touch lambda "a -> m()"
         //for the case foo(a -> bar(b -> m())): top level inference would go till nested lambda "b -> m()" and the state from top level could be found here by "bar(b -> m())"
         //but proceeding with additional constraints from saved point would produce new expression constraints with different inference variables (could be found in myNestedSessions)
@@ -258,7 +258,7 @@ public class InferenceSessionContainer {
     return new CompoundInitialState(substitutor, nestedStates);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static InferenceSession startTopLevelInference(final PsiCall topLevelCall, final ParameterTypeInferencePolicy policy) {
     final JavaResolveResult result = topLevelCall.resolveMethodGenerics();
     if (result instanceof MethodCandidateInfo) {
@@ -281,7 +281,7 @@ public class InferenceSessionContainer {
     return null;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private static PsiSubstitutor replaceVariables(Collection<InferenceVariable> inferenceVariables) {
     final List<InferenceVariable> targetVars = new ArrayList<InferenceVariable>();
     PsiSubstitutor substitutor = PsiSubstitutor.EMPTY;

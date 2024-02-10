@@ -34,5 +34,5 @@ public interface OverrideImplementsAnnotationsHandler {
   String[] getAnnotations(Project project);
 
   @Nonnull
-  String[] annotationsToRemove(Project project, @jakarta.annotation.Nonnull String fqName);
+  String[] annotationsToRemove(Project project, @Nonnull String fqName);
 }

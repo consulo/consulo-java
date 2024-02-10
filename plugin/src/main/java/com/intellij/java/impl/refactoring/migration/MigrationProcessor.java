@@ -94,13 +94,13 @@ public class MigrationProcessor extends BaseRefactoringProcessor
 	}
 
 	@Override
-	protected void refreshElements(@jakarta.annotation.Nonnull PsiElement[] elements)
+	protected void refreshElements(@Nonnull PsiElement[] elements)
 	{
 		myPsiMigration = startMigration(myProject);
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	protected UsageInfo[] findUsages()
 	{
 		ArrayList<UsageInfo> usagesVector = new ArrayList<>();
@@ -160,7 +160,7 @@ public class MigrationProcessor extends BaseRefactoringProcessor
 	}
 
 	@Override
-	protected void performRefactoring(@jakarta.annotation.Nonnull UsageInfo[] usages)
+	protected void performRefactoring(@Nonnull UsageInfo[] usages)
 	{
 		finishFindMigration();
 		final PsiMigration psiMigration = PsiMigrationManager.getInstance(myProject).startMigration();
@@ -210,7 +210,7 @@ public class MigrationProcessor extends BaseRefactoringProcessor
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	protected String getCommandName()
 	{
 		return REFACTORING_NAME;

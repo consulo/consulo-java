@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NonNls;
 @ExtensionImpl
 public class IgnoredJUnitTestInspection extends BaseInspection {
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(

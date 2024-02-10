@@ -32,7 +32,7 @@ import jakarta.annotation.Nonnull;
 public class ExceptionBaseFilterFactory implements ExceptionFilterFactory {
   @Nonnull
   @Override
-  public Filter create(@jakarta.annotation.Nonnull GlobalSearchScope searchScope) {
+  public Filter create(@Nonnull GlobalSearchScope searchScope) {
     return new ExceptionFilter(searchScope);
   }
 }

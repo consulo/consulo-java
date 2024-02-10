@@ -69,7 +69,7 @@ public class SliceManager implements PersistentStateComponent<SliceManager.Store
     public AnalysisUIOptions analysisUIOptions = new AnalysisUIOptions();
   }
 
-  public static SliceManager getInstance(@jakarta.annotation.Nonnull Project project) {
+  public static SliceManager getInstance(@Nonnull Project project) {
     return ServiceManager.getService(project, SliceManager.class);
   }
 
@@ -78,22 +78,22 @@ public class SliceManager implements PersistentStateComponent<SliceManager.Store
     myProject = project;
   }
 
-  @jakarta.annotation.Nonnull
-  private Disposable addPsiListener(@jakarta.annotation.Nonnull final ProgressIndicator indicator) {
+  @Nonnull
+  private Disposable addPsiListener(@Nonnull final ProgressIndicator indicator) {
     Disposable disposable = Disposable.newDisposable();
     PsiManager.getInstance(myProject).addPsiTreeChangeListener(new PsiTreeChangeAdapter() {
       @Override
-      public void beforeChildAddition(@jakarta.annotation.Nonnull PsiTreeChangeEvent event) {
+      public void beforeChildAddition(@Nonnull PsiTreeChangeEvent event) {
         indicator.cancel();
       }
 
       @Override
-      public void beforeChildRemoval(@jakarta.annotation.Nonnull PsiTreeChangeEvent event) {
+      public void beforeChildRemoval(@Nonnull PsiTreeChangeEvent event) {
         indicator.cancel();
       }
 
       @Override
-      public void beforeChildReplacement(@jakarta.annotation.Nonnull PsiTreeChangeEvent event) {
+      public void beforeChildReplacement(@Nonnull PsiTreeChangeEvent event) {
         indicator.cancel();
       }
 
@@ -135,7 +135,7 @@ public class SliceManager implements PersistentStateComponent<SliceManager.Store
     return myForthContentManager;
   }
 
-  public void slice(@jakarta.annotation.Nonnull PsiElement element, boolean dataFlowToThis, @jakarta.annotation.Nonnull SliceHandler handler) {
+  public void slice(@Nonnull PsiElement element, boolean dataFlowToThis, @Nonnull SliceHandler handler) {
     String dialogTitle = getElementDescription((dataFlowToThis ? BACK_TOOLWINDOW_ID : FORTH_TOOLWINDOW_ID) + " ", element, null);
 
     dialogTitle = Pattern.compile("(<style>.*</style>)|<[^<>]*>").matcher(dialogTitle).replaceAll("");
@@ -150,9 +150,9 @@ public class SliceManager implements PersistentStateComponent<SliceManager.Store
   }
 
   public void createToolWindow(boolean dataFlowToThis,
-                               @jakarta.annotation.Nonnull SliceRootNode rootNode,
+                               @Nonnull SliceRootNode rootNode,
                                boolean splitByLeafExpressions,
-                               @jakarta.annotation.Nonnull String displayName) {
+                               @Nonnull String displayName) {
     final SliceToolwindowSettings sliceToolwindowSettings = SliceToolwindowSettings.getInstance(myProject);
     final ContentManager contentManager = getContentManager(dataFlowToThis);
     final Content[] myContent = new Content[1];
@@ -215,9 +215,9 @@ public class SliceManager implements PersistentStateComponent<SliceManager.Store
     return f.deriveFont(f.getStyle(), Math.max(11, f.getSize() - 2));
   }
 
-  public void runInterruptibly(@jakarta.annotation.Nonnull ProgressIndicator progress,
-                               @jakarta.annotation.Nonnull Runnable onCancel,
-                               @jakarta.annotation.Nonnull Runnable runnable) throws ProcessCanceledException {
+  public void runInterruptibly(@Nonnull ProgressIndicator progress,
+                               @Nonnull Runnable onCancel,
+                               @Nonnull Runnable runnable) throws ProcessCanceledException {
     Disposable disposable = addPsiListener(progress);
     try {
       progress.checkCanceled();

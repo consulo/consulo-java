@@ -144,7 +144,7 @@ public final class NullabilityUtil {
    * @return expression nullability. UNKNOWN if unable to determine;
    * NULLABLE if known to possibly have null value; NOT_NULL if definitely never null.
    */
-  public static Nullability getExpressionNullability(@jakarta.annotation.Nullable PsiExpression expression, boolean useDataflow) {
+  public static Nullability getExpressionNullability(@Nullable PsiExpression expression, boolean useDataflow) {
     expression = PsiUtil.skipParenthesizedExprDown(expression);
     if (expression == null) {
       return Nullability.UNKNOWN;

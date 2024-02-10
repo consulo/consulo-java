@@ -22,7 +22,7 @@ public class JreSearchUtil {
   public static final String USE_JAVA_HOME = "#JAVA_HOME";
 
   @Nullable
-  private Sdk getSdkForRun(@Nonnull SdkTable sdkTable, @jakarta.annotation.Nullable String jreHome, @Nonnull LanguageLevel languageLevel) throws ExecutionException {
+  private Sdk getSdkForRun(@Nonnull SdkTable sdkTable, @Nullable String jreHome, @Nonnull LanguageLevel languageLevel) throws ExecutionException {
     if (USE_JAVA_HOME.equals(jreHome)) {
       final String javaHome = Platform.current().os().getEnvironmentVariable("JAVA_HOME");
       if (StringUtil.isEmptyOrSpaces(javaHome)) {
@@ -42,8 +42,8 @@ public class JreSearchUtil {
     return findSdkOfLevel(sdkTable, languageLevel, null);
   }
 
-  @jakarta.annotation.Nullable
-  public static Sdk findSdkOfLevel(@Nonnull SdkTable sdkTable, @Nonnull LanguageLevel languageLevel, @jakarta.annotation.Nullable String runtimeJdkName) {
+  @Nullable
+  public static Sdk findSdkOfLevel(@Nonnull SdkTable sdkTable, @Nonnull LanguageLevel languageLevel, @Nullable String runtimeJdkName) {
     JavaSdk javaSdk = JavaSdk.getInstance();
     if (runtimeJdkName != null) {
       Sdk sdk = sdkTable.findSdk(runtimeJdkName);

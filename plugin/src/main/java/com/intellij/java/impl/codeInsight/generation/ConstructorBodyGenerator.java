@@ -37,15 +37,15 @@ public interface ConstructorBodyGenerator extends LanguageExtension {
   ExtensionPointCacheKey<ConstructorBodyGenerator, ByLanguageValue<ConstructorBodyGenerator>> KEY = ExtensionPointCacheKey.create("ConstructorBodyGenerator", LanguageOneToOne.build());
 
   @Nullable
-  static ConstructorBodyGenerator forLanguage(@jakarta.annotation.Nonnull Language language) {
+  static ConstructorBodyGenerator forLanguage(@Nonnull Language language) {
     return Application.get().getExtensionPoint(ConstructorBodyGenerator.class).getOrBuildCache(KEY).get(language);
   }
 
-  void generateFieldInitialization(@jakarta.annotation.Nonnull StringBuilder buffer, @jakarta.annotation.Nonnull PsiField[] fields, @jakarta.annotation.Nonnull PsiParameter[] parameters);
+  void generateFieldInitialization(@Nonnull StringBuilder buffer, @Nonnull PsiField[] fields, @Nonnull PsiParameter[] parameters);
 
-  void generateSuperCallIfNeeded(@jakarta.annotation.Nonnull StringBuilder buffer, @jakarta.annotation.Nonnull PsiParameter[] parameters);
+  void generateSuperCallIfNeeded(@Nonnull StringBuilder buffer, @Nonnull PsiParameter[] parameters);
 
-  StringBuilder start(StringBuilder buffer, @Nonnull String name, @jakarta.annotation.Nonnull PsiParameter[] parameters);
+  StringBuilder start(StringBuilder buffer, @Nonnull String name, @Nonnull PsiParameter[] parameters);
 
   void finish(StringBuilder builder);
 }

@@ -58,7 +58,7 @@ public class JavaParser {
     return myStatementParser;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public ExpressionParser getExpressionParser() {
     return myExpressionParser;
   }

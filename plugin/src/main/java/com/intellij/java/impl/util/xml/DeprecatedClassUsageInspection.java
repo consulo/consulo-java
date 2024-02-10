@@ -52,7 +52,7 @@ public class DeprecatedClassUsageInspection extends XmlSuppressableInspectionToo
 		return XMLLanguage.INSTANCE;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public HighlightDisplayLevel getDefaultLevel()
 	{

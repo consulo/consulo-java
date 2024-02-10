@@ -31,7 +31,7 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl(id = "javaReflection")
 public class JavaReflectionCompletionConfidence extends CompletionConfidence {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public ThreeState shouldSkipAutopopup(@Nonnull PsiElement contextElement, @Nonnull PsiFile psiFile, int offset) {
     final PsiElement literal = contextElement.getParent();

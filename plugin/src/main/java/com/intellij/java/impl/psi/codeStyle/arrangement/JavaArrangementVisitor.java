@@ -70,20 +70,20 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor {
   @Nonnull
   private final Map<PsiElement, JavaElementArrangementEntry> myEntries = new HashMap<PsiElement, JavaElementArrangementEntry>();
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private final JavaArrangementParseInfo myInfo;
   @Nonnull
   private final Collection<TextRange> myRanges;
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private final Set<ArrangementSettingsToken> myGroupingRules;
   @Nonnull
   private final MethodBodyProcessor myMethodBodyProcessor;
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private final ArrangementSectionDetector mySectionDetector;
-  @jakarta.annotation.Nullable
+  @Nullable
   private final Document myDocument;
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private HashMap<PsiClass, Set<PsiField>> myCachedClassFields = new HashMap<>();
 
   @Nonnull
@@ -91,7 +91,7 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor {
 
   public JavaArrangementVisitor(
       @Nonnull JavaArrangementParseInfo infoHolder,
-      @jakarta.annotation.Nullable Document document,
+      @Nullable Document document,
       @Nonnull Collection<TextRange> ranges,
       @Nonnull ArrangementSettings settings) {
     myInfo = infoHolder;
@@ -118,7 +118,7 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor {
     mySectionDetector.processComment(comment);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private static Set<ArrangementSettingsToken> getGroupingRules(@Nonnull ArrangementSettings settings) {
     Set<ArrangementSettingsToken> groupingRules = ContainerUtilRt.newHashSet();
     for (ArrangementGroupingRule rule : settings.getGroupings()) {
@@ -266,7 +266,7 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Nonnull
-  private List<PsiField> getReferencedFields(@jakarta.annotation.Nonnull PsiField field) {
+  private List<PsiField> getReferencedFields(@Nonnull PsiField field) {
     final List<PsiField> referencedElements = new ArrayList<PsiField>();
 
     PsiExpression fieldInitializer = field.getInitializer();
@@ -297,8 +297,8 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor {
   }
 
 
-  @jakarta.annotation.Nullable
-  private static PsiElement getPreviousNonWsComment(@jakarta.annotation.Nullable PsiElement element, int minOffset) {
+  @Nullable
+  private static PsiElement getPreviousNonWsComment(@Nullable PsiElement element, int minOffset) {
     if (element == null) {
       return null;
     }
@@ -311,7 +311,7 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor {
     return null;
   }
 
-  private int expandToCommentIfPossible(@jakarta.annotation.Nonnull PsiElement element) {
+  private int expandToCommentIfPossible(@Nonnull PsiElement element) {
     if (myDocument == null) {
       return element.getTextRange().getEndOffset();
     }
@@ -333,7 +333,7 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor {
     return element.getTextRange().getEndOffset();
   }
 
-  private static boolean hasLineBreak(@Nonnull CharSequence text, @jakarta.annotation.Nonnull TextRange range) {
+  private static boolean hasLineBreak(@Nonnull CharSequence text, @Nonnull TextRange range) {
     for (int i = range.getStartOffset(), end = range.getEndOffset(); i < end; i++) {
       if (text.charAt(i) == '\n') {
         return true;
@@ -342,7 +342,7 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor {
     return false;
   }
 
-  private static boolean isSemicolon(@jakarta.annotation.Nullable PsiElement e) {
+  private static boolean isSemicolon(@Nullable PsiElement e) {
     return e instanceof PsiJavaToken && ((PsiJavaToken) e).getTokenType() == JavaTokenType.SEMICOLON;
   }
 
@@ -483,7 +483,7 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor {
   }
 
   private void processEntry(
-    @jakarta.annotation.Nullable JavaElementArrangementEntry entry, @Nullable PsiModifierListOwner modifier, @jakarta.annotation.Nullable final PsiElement nextPsiRoot) {
+    @Nullable JavaElementArrangementEntry entry, @Nullable PsiModifierListOwner modifier, @Nullable final PsiElement nextPsiRoot) {
     if (entry == null) {
       return;
     }
@@ -501,7 +501,7 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor {
     });
   }
 
-  private void processChildrenWithinEntryScope(@Nonnull JavaElementArrangementEntry entry, @jakarta.annotation.Nonnull Runnable childrenProcessing) {
+  private void processChildrenWithinEntryScope(@Nonnull JavaElementArrangementEntry entry, @Nonnull Runnable childrenProcessing) {
     myStack.push(entry);
     try {
       childrenProcessing.run();
@@ -520,9 +520,9 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor {
     }
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private JavaElementArrangementEntry createNewEntry(
-    @jakarta.annotation.Nonnull PsiElement element, @Nonnull TextRange range, @jakarta.annotation.Nonnull ArrangementSettingsToken type, @jakarta.annotation.Nullable String name, boolean canArrange) {
+    @Nonnull PsiElement element, @Nonnull TextRange range, @Nonnull ArrangementSettingsToken type, @Nullable String name, boolean canArrange) {
     if (!isWithinBounds(range)) {
       return null;
     }
@@ -539,7 +539,7 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor {
     return entry;
   }
 
-  private boolean isWithinBounds(@jakarta.annotation.Nonnull TextRange range) {
+  private boolean isWithinBounds(@Nonnull TextRange range) {
     for (TextRange textRange : myRanges) {
       if (textRange.intersects(range)) {
         return true;
@@ -548,7 +548,7 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor {
     return false;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private DefaultArrangementEntry getCurrent() {
     return myStack.isEmpty() ? null : myStack.peek();
   }
@@ -575,7 +575,7 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor {
 
     @Nonnull
     private final JavaArrangementParseInfo myInfo;
-    @jakarta.annotation.Nullable
+    @Nullable
     private PsiMethod myBaseMethod;
 
     MethodBodyProcessor(@Nonnull JavaArrangementParseInfo info) {

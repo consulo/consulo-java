@@ -69,7 +69,7 @@ public abstract class UnnecessaryParenthesesInspection extends BaseInspection {
 
   private class UnnecessaryParenthesesFix extends InspectionGadgetsFix {
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("unnecessary.parentheses.remove.quickfix");
     }

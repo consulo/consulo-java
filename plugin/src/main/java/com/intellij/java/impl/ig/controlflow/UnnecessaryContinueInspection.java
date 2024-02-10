@@ -40,7 +40,7 @@ public class UnnecessaryContinueInspection extends BaseInspection {
     return InspectionGadgetsBundle.message("unnecessary.continue.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("unnecessary.continue.problem.descriptor");
   }
@@ -65,7 +65,7 @@ public class UnnecessaryContinueInspection extends BaseInspection {
   private class UnnecessaryContinueVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitContinueStatement(@jakarta.annotation.Nonnull PsiContinueStatement statement) {
+    public void visitContinueStatement(@Nonnull PsiContinueStatement statement) {
       /*if (JspPsiUtil.isInJspFile(statement.getContainingFile())) {
         return;
       }   */

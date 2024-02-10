@@ -65,7 +65,7 @@ public class ReplaceOperatorAssignmentWithAssignmentIntention extends MutablyNam
   }
 
   @Override
-  protected void processIntention(@jakarta.annotation.Nonnull PsiElement element) {
+  protected void processIntention(@Nonnull PsiElement element) {
     final PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression)element;
     final PsiJavaToken sign = assignmentExpression.getOperationSign();
     final PsiExpression lhs = assignmentExpression.getLExpression();

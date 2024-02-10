@@ -10,7 +10,7 @@ class DfLongConstantType extends DfConstantType<Long> implements DfLongType {
     super(value);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public PsiPrimitiveType getPsiType() {
     return DfLongType.super.getPsiType();

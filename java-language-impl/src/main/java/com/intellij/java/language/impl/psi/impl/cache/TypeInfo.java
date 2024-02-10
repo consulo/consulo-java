@@ -93,7 +93,7 @@ public class TypeInfo {
   /**
    * @param typeAnnotations set type annotations. Could be called only once.
    */
-  public void setTypeAnnotations(@jakarta.annotation.Nonnull TypeAnnotationContainer typeAnnotations) {
+  public void setTypeAnnotations(@Nonnull TypeAnnotationContainer typeAnnotations) {
     if (myTypeAnnotations != null) {
       throw new IllegalStateException();
     }
@@ -214,7 +214,7 @@ public class TypeInfo {
   }
 
   @Nonnull
-  public static TypeInfo fromString(@jakarta.annotation.Nonnull String typeText, boolean isEllipsis) {
+  public static TypeInfo fromString(@Nonnull String typeText, boolean isEllipsis) {
     assert !typeText.endsWith("...") : typeText;
 
     byte arrayCount = 0;
@@ -226,7 +226,7 @@ public class TypeInfo {
     return new TypeInfo(typeText, arrayCount, isEllipsis);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static TypeInfo fromString(@Nonnull String typeText) {
     boolean isEllipsis = false;
     if (typeText.endsWith("...")) {

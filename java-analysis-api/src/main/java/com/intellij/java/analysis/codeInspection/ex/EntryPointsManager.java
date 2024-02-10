@@ -37,9 +37,9 @@ public abstract class EntryPointsManager implements Disposable {
     return project.getInstance(EntryPointsManager.class);
   }
 
-  public abstract void resolveEntryPoints(@jakarta.annotation.Nonnull RefManager manager);
+  public abstract void resolveEntryPoints(@Nonnull RefManager manager);
 
-  public abstract void addEntryPoint(@jakarta.annotation.Nonnull RefElement newEntryPoint, boolean isPersistent);
+  public abstract void addEntryPoint(@Nonnull RefElement newEntryPoint, boolean isPersistent);
 
   public abstract void removeEntryPoint(@Nonnull RefElement anEntryPoint);
 
@@ -54,5 +54,5 @@ public abstract class EntryPointsManager implements Disposable {
 
   public abstract Button createConfigureAnnotationsBtn();
 
-  public abstract boolean isEntryPoint(@jakarta.annotation.Nonnull PsiElement element);
+  public abstract boolean isEntryPoint(@Nonnull PsiElement element);
 }

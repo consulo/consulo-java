@@ -57,8 +57,8 @@ class RecursionWeigher extends LookupElementWeigher {
 
   public RecursionWeigher(PsiElement position,
                           CompletionType completionType,
-                          @jakarta.annotation.Nonnull PsiReferenceExpression reference,
-                          @jakarta.annotation.Nullable PsiMethodCallExpression expression,
+                          @Nonnull PsiReferenceExpression reference,
+                          @Nullable PsiMethodCallExpression expression,
                           ExpectedTypeInfo[] expectedInfos) {
     super("recursion");
     myCompletionType = completionType;
@@ -112,7 +112,7 @@ class RecursionWeigher extends LookupElementWeigher {
 
   @Nonnull
   @Override
-  public Result weigh(@jakarta.annotation.Nonnull LookupElement element) {
+  public Result weigh(@Nonnull LookupElement element) {
     final Object object = element.getObject();
     if (!(object instanceof PsiMethod || object instanceof PsiVariable || object instanceof PsiExpression)) {
       return Result.normal;
@@ -166,8 +166,8 @@ class RecursionWeigher extends LookupElementWeigher {
     return Result.normal;
   }
 
-  @jakarta.annotation.Nullable
-  private String getSetterPropertyName(@jakarta.annotation.Nullable PsiMethod calledMethod) {
+  @Nullable
+  private String getSetterPropertyName(@Nullable PsiMethod calledMethod) {
     if (PropertyUtil.isSimplePropertySetter(calledMethod)) {
       assert calledMethod != null;
       return PropertyUtil.getPropertyName(calledMethod);
@@ -204,8 +204,8 @@ class RecursionWeigher extends LookupElementWeigher {
     return myCallQualifier instanceof PsiReferenceExpression && object.equals(((PsiReferenceExpression) myCallQualifier).advancedResolve(true).getElement());
   }
 
-  @jakarta.annotation.Nonnull
-  public static PsiMethod findDeepestSuper(@jakarta.annotation.Nonnull final PsiMethod method) {
+  @Nonnull
+  public static PsiMethod findDeepestSuper(@Nonnull final PsiMethod method) {
     CommonProcessors.FindFirstProcessor<PsiMethod> processor = new CommonProcessors.FindFirstProcessor<>();
     MethodDeepestSuperSearcher.processDeepestSuperMethods(method, processor);
     final PsiMethod first = processor.getFoundValue();

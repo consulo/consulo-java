@@ -86,7 +86,7 @@ public abstract class JamStringAttributeMeta<T, JamType> extends JamAttributeMet
       super(attrName, converter);
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public JamStringAttributeElement<T> getJam(PsiElementRef<PsiAnnotation> anno, @Nonnull final Supplier<T> defaultValue) {
       return new JamStringAttributeElement<T>(anno, getAttributeLink().getAttributeName(), myConverter) {
         @Override

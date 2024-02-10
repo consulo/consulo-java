@@ -42,13 +42,13 @@ public class TestMethodIsPublicVoidNoArgInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "TestMethodWithIncorrectSignature";
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final boolean isStatic = ((Boolean)infos[1]).booleanValue();
     if (isStatic) {
@@ -75,7 +75,7 @@ public class TestMethodIsPublicVoidNoArgInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       //note: no call to super;
       @NonNls final String methodName = method.getName();
       if (!methodName.startsWith("test") &&

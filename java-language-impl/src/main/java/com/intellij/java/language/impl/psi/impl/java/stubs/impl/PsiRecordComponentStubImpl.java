@@ -22,7 +22,7 @@ public class PsiRecordComponentStubImpl extends StubBase<PsiRecordComponent> imp
 	private final byte myFlags;
 
 
-	public PsiRecordComponentStubImpl(StubElement parent, @jakarta.annotation.Nullable String name, @Nonnull TypeInfo type, byte flags)
+	public PsiRecordComponentStubImpl(StubElement parent, @Nullable String name, @Nonnull TypeInfo type, byte flags)
 	{
 		super(parent, JavaStubElementTypes.RECORD_COMPONENT);
 		myName = name;

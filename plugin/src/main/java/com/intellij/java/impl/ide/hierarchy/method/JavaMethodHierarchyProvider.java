@@ -45,7 +45,7 @@ import jakarta.annotation.Nullable;
  */
 @ExtensionImpl
 public class JavaMethodHierarchyProvider implements MethodHierarchyProvider {
-  public PsiElement getTarget(@jakarta.annotation.Nonnull final DataContext dataContext) {
+  public PsiElement getTarget(@Nonnull final DataContext dataContext) {
     final PsiMethod method = getMethodImpl(dataContext);
     if (method != null && method.getContainingClass() != null && !method.hasModifierProperty(PsiModifier.PRIVATE) && !method.hasModifierProperty(PsiModifier.STATIC)) {
       return method;
@@ -98,7 +98,7 @@ public class JavaMethodHierarchyProvider implements MethodHierarchyProvider {
     return PsiTreeUtil.getParentOfType(element, PsiMethod.class, false);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public HierarchyBrowser createHierarchyBrowser(final PsiElement target) {
     return new MethodHierarchyBrowser(target.getProject(), (PsiMethod) target);
   }
@@ -107,7 +107,7 @@ public class JavaMethodHierarchyProvider implements MethodHierarchyProvider {
     ((MethodHierarchyBrowser) hierarchyBrowser).changeView(MethodHierarchyBrowserBase.METHOD_TYPE);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

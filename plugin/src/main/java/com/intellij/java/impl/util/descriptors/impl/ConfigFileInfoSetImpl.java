@@ -87,7 +87,7 @@ public class ConfigFileInfoSetImpl implements ConfigFileInfoSet {
     onChange();
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public ConfigFileInfo getConfigFileInfo(ConfigFileMetaData metaData) {
     final Collection<ConfigFileInfo> descriptors = myConfigFiles.get(metaData);
     if (descriptors == null || descriptors.isEmpty()) {

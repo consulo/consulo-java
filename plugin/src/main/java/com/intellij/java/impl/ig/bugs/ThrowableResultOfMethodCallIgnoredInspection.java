@@ -34,7 +34,7 @@ public class ThrowableResultOfMethodCallIgnoredInspection
   extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "throwable.result.of.method.call.ignored.display.name");

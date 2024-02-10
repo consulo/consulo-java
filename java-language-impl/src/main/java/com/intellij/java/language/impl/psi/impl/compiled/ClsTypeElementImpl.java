@@ -30,14 +30,14 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
 
   private final PsiElement myParent;
   private final
-  @jakarta.annotation.Nonnull
+  @Nonnull
   String myTypeText;
   private final char myVariance;
   private final
   @Nonnull
   TypeAnnotationContainer myAnnotations;
   private final
-  @jakarta.annotation.Nonnull
+  @Nonnull
   NullableLazyValue<ClsElementImpl> myChild;
   private final
   @Nonnull
@@ -49,14 +49,14 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
     this(parent, typeText, variance, TypeAnnotationContainer.EMPTY);
   }
 
-  ClsTypeElementImpl(@Nullable PsiElement parent, @jakarta.annotation.Nonnull TypeInfo typeInfo) {
+  ClsTypeElementImpl(@Nullable PsiElement parent, @Nonnull TypeInfo typeInfo) {
     this(parent, Objects.requireNonNull(TypeInfo.createTypeText(typeInfo)), VARIANCE_NONE, typeInfo.getTypeAnnotations());
   }
 
   ClsTypeElementImpl(@Nullable PsiElement parent,
-                     @jakarta.annotation.Nonnull String typeText,
+                     @Nonnull String typeText,
                      char variance,
-                     @jakarta.annotation.Nonnull TypeAnnotationContainer annotations) {
+                     @Nonnull TypeAnnotationContainer annotations) {
     myParent = parent;
     myTypeText = TypeInfo.internFrequentType(typeText);
     myVariance = variance;
@@ -71,7 +71,7 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiElement[] getChildren() {
     ClsElementImpl child = myChild.getValue();
     return child != null ? new PsiElement[]{child} : PsiElement.EMPTY_ARRAY;
@@ -109,7 +109,7 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @jakarta.annotation.Nonnull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
     buffer.append(getType().getCanonicalText(true));
   }
 
@@ -132,7 +132,7 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiType getType() {
     return myCachedType.getValue();
   }
@@ -185,7 +185,7 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
   }
 
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private PsiType createArrayType(PsiTypeElement deepestChild) {
     int depth = getArrayDepth();
     List<TypeAnnotationContainer> containers =
@@ -202,12 +202,12 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
     return type;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private PsiType calculateType() {
     return calculateBaseType().annotate(myAnnotations.getProvider(this));
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private PsiType calculateBaseType() {
     PsiType result = PsiJavaParserFacadeImpl.getPrimitiveType(myTypeText);
     if (result != null) {
@@ -254,7 +254,7 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
   }
 
   @Override
-  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitTypeElement(this);
     } else {
@@ -269,7 +269,7 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
   }
 
   @Override
-  public PsiAnnotation findAnnotation(@jakarta.annotation.Nonnull String qualifiedName) {
+  public PsiAnnotation findAnnotation(@Nonnull String qualifiedName) {
     return PsiImplUtil.findAnnotation(this, qualifiedName);
   }
 
@@ -280,7 +280,7 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiAnnotation[] getApplicableAnnotations() {
     return getType().getAnnotations();
   }

@@ -33,7 +33,7 @@ public class PathListReferenceProvider extends PsiReferenceProvider {
 
   @Override
   @Nonnull
-  public PsiReference[] getReferencesByElement(@jakarta.annotation.Nonnull PsiElement element, @Nonnull final ProcessingContext context) {
+  public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull final ProcessingContext context) {
     return getReferencesByElement(element);
   }
 

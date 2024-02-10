@@ -46,7 +46,7 @@ public class TryWithResourcesPostfixTemplate extends PostfixTemplate {
   }
 
   @Override
-  public boolean isApplicable(@jakarta.annotation.Nonnull PsiElement element, @Nonnull Document copyDocument, int newOffset) {
+  public boolean isApplicable(@Nonnull PsiElement element, @Nonnull Document copyDocument, int newOffset) {
     if (!PsiUtil.isLanguageLevel7OrHigher(element)) return false;
 
     PsiExpression initializer = JavaPostfixTemplatesUtils.getTopmostExpression(element);
@@ -65,7 +65,7 @@ public class TryWithResourcesPostfixTemplate extends PostfixTemplate {
   }
 
   @Override
-  public void expand(@jakarta.annotation.Nonnull PsiElement context, @Nonnull Editor editor) {
+  public void expand(@Nonnull PsiElement context, @Nonnull Editor editor) {
     PsiExpression expression = JavaPostfixTemplatesUtils.getTopmostExpression(context);
     assert expression != null;
 
@@ -102,7 +102,7 @@ public class TryWithResourcesPostfixTemplate extends PostfixTemplate {
   }
 
   @Nonnull
-  private static Collection<PsiClassType> getUnhandled(@jakarta.annotation.Nonnull PsiExpression expression) {
+  private static Collection<PsiClassType> getUnhandled(@Nonnull PsiExpression expression) {
     assert expression.getType() != null;
     PsiMethod methodCloser = PsiUtil.getResourceCloserMethodForType((PsiClassType)expression.getType());
     PsiSubstitutor substitutor = PsiUtil.resolveGenericsClassInType(expression.getType()).getSubstitutor();

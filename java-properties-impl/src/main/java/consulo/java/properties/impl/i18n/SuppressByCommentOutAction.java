@@ -46,7 +46,7 @@ class SuppressByCommentOutAction extends SuppressIntentionAction implements Synt
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, @jakarta.annotation.Nonnull PsiElement element) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(element)) return;
     element = findJavaCodeUpThere(element);
     PsiFile file = element.getContainingFile();
@@ -77,7 +77,7 @@ class SuppressByCommentOutAction extends SuppressIntentionAction implements Synt
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, @jakarta.annotation.Nonnull PsiElement element) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     if (!element.isValid()) {
       return false;
     }
@@ -93,7 +93,7 @@ class SuppressByCommentOutAction extends SuppressIntentionAction implements Synt
     return null;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getText() {
     return "Suppress with '" + nonNlsCommentPattern + "' comment";

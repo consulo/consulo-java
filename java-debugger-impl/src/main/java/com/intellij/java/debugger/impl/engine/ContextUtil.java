@@ -44,8 +44,8 @@ public class ContextUtil
 	public static final Key<Boolean> IS_JSP_IMPLICIT = new Key<>("JspImplicit");
 	private static final Logger LOG = Logger.getInstance("#com.intellij.java.debugger.impl.PositionUtil");
 
-	@jakarta.annotation.Nullable
-	public static SourcePosition getSourcePosition(@jakarta.annotation.Nullable final StackFrameContext context)
+	@Nullable
+	public static SourcePosition getSourcePosition(@Nullable final StackFrameContext context)
 	{
 		if(context == null)
 		{
@@ -77,13 +77,13 @@ public class ContextUtil
 		return debugProcess.getPositionManager().getSourcePosition(location);
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	public static PsiElement getContextElement(final StackFrameContext context)
 	{
 		return getContextElement(context, getSourcePosition(context));
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	public static PsiElement getContextElement(final StackFrameContext context, final SourcePosition position)
 	{
 		if(LOG.isDebugEnabled())
@@ -164,7 +164,7 @@ public class ContextUtil
 		});
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	public static PsiElement getContextElement(@Nullable SourcePosition position)
 	{
 		return position == null ? null : position.getElementAt();

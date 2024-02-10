@@ -222,7 +222,7 @@ public interface JavaElementType {
      * @param rightBrace - right brace element type
      * @return true if `text` passes the checks
      */
-    public static boolean hasProperBraceBalance(@jakarta.annotation.Nonnull CharSequence text,
+    public static boolean hasProperBraceBalance(@Nonnull CharSequence text,
                                                 @Nonnull Lexer lexer,
                                                 @Nonnull IElementType leftBrace,
                                                 @Nonnull IElementType rightBrace) {
@@ -265,7 +265,7 @@ public interface JavaElementType {
   IElementType STATEMENTS = new ICodeFragmentElementType("STATEMENTS", JavaLanguage.INSTANCE) {
     private final JavaParserUtil.ParserWrapper myParser = JavaParser.INSTANCE.getStatementParser()::parseStatements;
 
-    @jakarta.annotation.Nullable
+    @Nullable
     @Override
     public ASTNode parseContents(final ASTNode chameleon) {
       return JavaParserUtil.parseFragment(chameleon, myParser);
@@ -275,7 +275,7 @@ public interface JavaElementType {
   IElementType EXPRESSION_TEXT = new ICodeFragmentElementType("EXPRESSION_TEXT", JavaLanguage.INSTANCE) {
     private final JavaParserUtil.ParserWrapper myParser = JavaParser.INSTANCE.getExpressionParser()::parse;
 
-    @jakarta.annotation.Nullable
+    @Nullable
     @Override
     public ASTNode parseContents(final ASTNode chameleon) {
       return JavaParserUtil.parseFragment(chameleon, myParser);
@@ -286,7 +286,7 @@ public interface JavaElementType {
     private final JavaParserUtil.ParserWrapper myParser =
       builder -> JavaParser.INSTANCE.getReferenceParser().parseJavaCodeReference(builder, false, true, false, false);
 
-    @jakarta.annotation.Nullable
+    @Nullable
     @Override
     public ASTNode parseContents(final ASTNode chameleon) {
       return JavaParserUtil.parseFragment(chameleon, myParser);
@@ -331,7 +331,7 @@ public interface JavaElementType {
       };
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     @Override
     public ASTNode parseContents(final ASTNode chameleon) {
       assert chameleon instanceof JavaDummyElement : chameleon;

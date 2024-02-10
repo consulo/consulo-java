@@ -130,7 +130,7 @@ class CompoundRendererConfigurable extends JPanel
 		myClassNameField = new ClassNameEditorWithBrowseButton(new ActionListener()
 		{
 			@Override
-			public void actionPerformed(@jakarta.annotation.Nonnull ActionEvent e)
+			public void actionPerformed(@Nonnull ActionEvent e)
 			{
 				PsiClass psiClass = DebuggerUtils.getInstance().chooseClassDialog(DebuggerBundle.message("title.compound.renderer.configurable.choose.renderer.reference.type"), myProject);
 				if(psiClass != null)
@@ -144,7 +144,7 @@ class CompoundRendererConfigurable extends JPanel
 		myClassNameField.getEditorTextField().addFocusListener(new FocusAdapter()
 		{
 			@Override
-			public void focusLost(@jakarta.annotation.Nonnull FocusEvent e)
+			public void focusLost(@Nonnull FocusEvent e)
 			{
 				updateContext(myClassNameField.getText());
 			}

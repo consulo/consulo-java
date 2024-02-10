@@ -44,7 +44,7 @@ public final class EvaluationContextImpl implements EvaluationContext
 		mySuspendContext = suspendContext;
 	}
 
-	public EvaluationContextImpl(@jakarta.annotation.Nonnull SuspendContextImpl suspendContext, @Nonnull StackFrameProxyImpl frameProxy)
+	public EvaluationContextImpl(@Nonnull SuspendContextImpl suspendContext, @Nonnull StackFrameProxyImpl frameProxy)
 	{
 		myThisObject = NullableLazyValue.of(() ->
 		{
@@ -68,7 +68,7 @@ public final class EvaluationContextImpl implements EvaluationContext
 		return myThisObject.getValue();
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public SuspendContextImpl getSuspendContext()
 	{
@@ -81,7 +81,7 @@ public final class EvaluationContextImpl implements EvaluationContext
 		return myFrameProxy;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public DebugProcessImpl getDebugProcess()
 	{

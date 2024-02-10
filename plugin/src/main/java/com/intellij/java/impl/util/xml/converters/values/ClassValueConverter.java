@@ -46,7 +46,7 @@ public abstract class ClassValueConverter extends Converter<PsiClass> implements
     return ServiceManager.getService(ClassValueConverter.class);
   }
 
-  public PsiClass fromString(@jakarta.annotation.Nullable @NonNls String s, final ConvertContext context) {
+  public PsiClass fromString(@Nullable @NonNls String s, final ConvertContext context) {
     if (s == null) return null;
     final Module module = context.getModule();
     final PsiFile psiFile = context.getFile();
@@ -54,14 +54,14 @@ public abstract class ClassValueConverter extends Converter<PsiClass> implements
     return DomJavaUtil.findClass(s, context.getFile(), context.getModule(), getScope(project, module, psiFile));
   }
 
-  public String toString(@jakarta.annotation.Nullable PsiClass psiClass, final ConvertContext context) {
+  public String toString(@Nullable PsiClass psiClass, final ConvertContext context) {
     return psiClass == null ? null : psiClass.getQualifiedName();
   }
 
   @Nonnull
   public abstract PsiReference[] createReferences(GenericDomValue genericDomValue, PsiElement element, ConvertContext context);
 
-  public static GlobalSearchScope getScope(Project project, @jakarta.annotation.Nullable Module module, @Nullable PsiFile psiFile) {
+  public static GlobalSearchScope getScope(Project project, @Nullable Module module, @Nullable PsiFile psiFile) {
     if (module == null || psiFile == null) {
       return (GlobalSearchScope) ProjectScopes.getAllScope(project);
     }

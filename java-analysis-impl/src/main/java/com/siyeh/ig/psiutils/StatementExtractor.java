@@ -141,7 +141,7 @@ public class StatementExtractor {
     Node myElseBranch;
     private final int myLimit;
 
-    private Cond(@Nonnull PsiExpression anchor, @Nonnull PsiExpression condition, int limit, @Nonnull Node thenBranch, @jakarta.annotation.Nonnull Node elseBranch) {
+    private Cond(@Nonnull PsiExpression anchor, @Nonnull PsiExpression condition, int limit, @Nonnull Node thenBranch, @Nonnull Node elseBranch) {
       super(anchor);
       myCondition = condition;
       myLimit = limit;

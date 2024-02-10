@@ -61,11 +61,11 @@ public class JavaFindUsagesHandler extends FindUsagesHandler {
   private final PsiElement[] myElementsToSearch;
   private final JavaFindUsagesHandlerFactory myFactory;
 
-  public JavaFindUsagesHandler(@Nonnull PsiElement psiElement, @jakarta.annotation.Nonnull JavaFindUsagesHandlerFactory factory) {
+  public JavaFindUsagesHandler(@Nonnull PsiElement psiElement, @Nonnull JavaFindUsagesHandlerFactory factory) {
     this(psiElement, PsiElement.EMPTY_ARRAY, factory);
   }
 
-  public JavaFindUsagesHandler(@jakarta.annotation.Nonnull PsiElement psiElement,
+  public JavaFindUsagesHandler(@Nonnull PsiElement psiElement,
                                @Nonnull PsiElement[] elementsToSearch,
                                @Nonnull JavaFindUsagesHandlerFactory factory) {
     super(psiElement);
@@ -110,8 +110,8 @@ public class JavaFindUsagesHandler extends FindUsagesHandler {
         Messages.getQuestionIcon()) == Messages.OK;
   }
 
-  @jakarta.annotation.Nonnull
-  private static PsiElement[] getParameterElementsToSearch(@jakarta.annotation.Nonnull PsiParameter parameter,
+  @Nonnull
+  private static PsiElement[] getParameterElementsToSearch(@Nonnull PsiParameter parameter,
                                                            @Nonnull PsiMethod method) {
     PsiMethod[] overrides = OverridingMethodsSearch.search(method, true).toArray(PsiMethod.EMPTY_ARRAY);
     for (int i = 0; i < overrides.length; i++) {
@@ -157,7 +157,7 @@ public class JavaFindUsagesHandler extends FindUsagesHandler {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiElement[] getSecondaryElements() {
     PsiElement element = getPsiElement();
     if (ApplicationManager.getApplication().isUnitTestMode()) {
@@ -231,7 +231,7 @@ public class JavaFindUsagesHandler extends FindUsagesHandler {
   }
 
   @Override
-  protected Set<String> getStringsToSearch(@jakarta.annotation.Nonnull final PsiElement element) {
+  protected Set<String> getStringsToSearch(@Nonnull final PsiElement element) {
     return JavaFindUsagesHelper.getElementNames(element);
   }
 
@@ -248,9 +248,9 @@ public class JavaFindUsagesHandler extends FindUsagesHandler {
         NonCodeSearchDescriptionLocation.NON_JAVA) != null;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
-  public Collection<PsiReference> findReferencesToHighlight(@jakarta.annotation.Nonnull final PsiElement target,
+  public Collection<PsiReference> findReferencesToHighlight(@Nonnull final PsiElement target,
                                                             @Nonnull final SearchScope searchScope) {
     if (target instanceof PsiMethod) {
       final PsiMethod[] superMethods = ((PsiMethod) target).findDeepestSuperMethods();

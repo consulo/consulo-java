@@ -51,7 +51,7 @@ class ControlTransferHandler
 		this.traps = transferValue.getTraps();
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public List<DfaInstructionState> dispatch()
 	{
 		Trap head = traps.getHead();
@@ -134,7 +134,7 @@ class ControlTransferHandler
 		return ContainerUtil.concat(result, dispatch());
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	private List<TypeConstraint> allCaughtTypes(PsiParameter param)
 	{
 		PsiType type = param.getType();

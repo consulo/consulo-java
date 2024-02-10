@@ -23,7 +23,7 @@ class NCSSVisitor extends JavaRecursiveElementVisitor {
   private int m_statementCount = 0;
 
   @Override
-  public void visitAnonymousClass(@jakarta.annotation.Nonnull PsiAnonymousClass aClass) {
+  public void visitAnonymousClass(@Nonnull PsiAnonymousClass aClass) {
     // to call to super, to keep this from drilling down
   }
 

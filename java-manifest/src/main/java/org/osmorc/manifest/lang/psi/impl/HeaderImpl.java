@@ -41,11 +41,11 @@ import org.osmorc.manifest.lang.psi.stub.HeaderStub;
  * @author Robert F. Beeger (robert@beeger.net)
  */
 public class HeaderImpl extends ManifestElementBase<HeaderStub> implements Header {
-  public HeaderImpl(HeaderStub stub, @jakarta.annotation.Nonnull IStubElementType nodeType) {
+  public HeaderImpl(HeaderStub stub, @Nonnull IStubElementType nodeType) {
     super(stub, nodeType);
   }
 
-  public HeaderImpl(@jakarta.annotation.Nonnull ASTNode node) {
+  public HeaderImpl(@Nonnull ASTNode node) {
     super(node);
   }
 
@@ -80,7 +80,7 @@ public class HeaderImpl extends ManifestElementBase<HeaderStub> implements Heade
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public Clause[] getClauses() {
     return findChildrenByClass(Clause.class);
   }

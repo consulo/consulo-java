@@ -29,7 +29,7 @@ import jakarta.annotation.Nonnull;
 
 public class EnableOptimizeImportsOnTheFlyFix implements SyntheticIntentionAction, LowPriorityAction{
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getText() {
     return JavaQuickFixBundle.message("enable.optimize.imports.on.the.fly");
   }

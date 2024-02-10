@@ -41,7 +41,7 @@ public abstract class AbstractToStringInspection extends LocalInspectionTool {
     return JavaLanguage.INSTANCE;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public HighlightDisplayLevel getDefaultLevel() {
     return HighlightDisplayLevel.WARNING;

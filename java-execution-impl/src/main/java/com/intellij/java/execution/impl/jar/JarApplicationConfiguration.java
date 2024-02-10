@@ -143,7 +143,7 @@ public class JarApplicationConfiguration extends LocatableConfigurationBase impl
     myBean.ALTERNATIVE_JRE_PATH_ENABLED = enabled;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public String getAlternativeJrePath() {
     return myBean.ALTERNATIVE_JRE_PATH;

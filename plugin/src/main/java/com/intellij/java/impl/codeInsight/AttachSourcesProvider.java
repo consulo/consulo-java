@@ -37,7 +37,7 @@ public interface AttachSourcesProvider {
 
     String getBusyText();
 
-    AsyncResult<Void> perform(@jakarta.annotation.Nonnull List<LibraryOrderEntry> orderEntriesContainingFile, @Nonnull UIEvent<Component> e);
+    AsyncResult<Void> perform(@Nonnull List<LibraryOrderEntry> orderEntriesContainingFile, @Nonnull UIEvent<Component> e);
   }
 
   /**

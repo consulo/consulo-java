@@ -27,6 +27,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.MethodUtils;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
 import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
 import consulo.java.language.module.util.JavaClassNames;
@@ -66,7 +67,7 @@ public class BooleanMethodNameMustStartWithQuestionInspection extends BaseInspec
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("boolean.method.name.must.start.with.question.display.name");
   }
@@ -78,7 +79,7 @@ public class BooleanMethodNameMustStartWithQuestionInspection extends BaseInspec
   }
 
   @Override
-  public void readSettings(@jakarta.annotation.Nonnull Element element) throws InvalidDataException {
+  public void readSettings(@Nonnull Element element) throws InvalidDataException {
     super.readSettings(element);
     parseString(questionString, questionList);
   }
@@ -104,19 +105,19 @@ public class BooleanMethodNameMustStartWithQuestionInspection extends BaseInspec
     constraints.fill = GridBagConstraints.BOTH;
     panel.add(tablePanel, constraints);
 
-    final consulo.deadCodeNotWorking.impl.CheckBox checkBox1 =
-        new consulo.deadCodeNotWorking.impl.CheckBox(InspectionGadgetsBundle.message("ignore.methods.with.boolean.return.type.option"), this, "ignoreBooleanMethods");
+    final CheckBox checkBox1 =
+        new CheckBox(InspectionGadgetsBundle.message("ignore.methods.with.boolean.return.type.option"), this, "ignoreBooleanMethods");
     constraints.gridy = 1;
     constraints.weighty = 0.0;
     panel.add(checkBox1, constraints);
 
-    final consulo.deadCodeNotWorking.impl.CheckBox checkBox2 =
-        new consulo.deadCodeNotWorking.impl.CheckBox(InspectionGadgetsBundle.message("ignore.boolean.methods.in.an.interface.option"), this, "ignoreInAnnotationInterface");
+    final CheckBox checkBox2 =
+        new CheckBox(InspectionGadgetsBundle.message("ignore.boolean.methods.in.an.interface.option"), this, "ignoreInAnnotationInterface");
     constraints.gridy = 2;
     panel.add(checkBox2, constraints);
 
-    final consulo.deadCodeNotWorking.impl.CheckBox checkBox3 =
-        new consulo.deadCodeNotWorking.impl.CheckBox(InspectionGadgetsBundle.message("ignore.methods.overriding.super.method"), this, "onlyWarnOnBaseMethods");
+    final CheckBox checkBox3 =
+        new CheckBox(InspectionGadgetsBundle.message("ignore.methods.overriding.super.method"), this, "onlyWarnOnBaseMethods");
     constraints.gridy = 3;
     panel.add(checkBox3, constraints);
     return panel;
@@ -140,7 +141,7 @@ public class BooleanMethodNameMustStartWithQuestionInspection extends BaseInspec
   private class BooleanMethodNameMustStartWithQuestionVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       final PsiType returnType = method.getReturnType();
       if (returnType == null) {
         return;

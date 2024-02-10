@@ -114,7 +114,7 @@ public class MakeExternalAnnotationExplicit extends BaseIntentionAction {
   }
 
   @Nonnull
-  private PsiAnnotation[] getAnnotations(@jakarta.annotation.Nonnull Project project, PsiModifierListOwner owner) {
+  private PsiAnnotation[] getAnnotations(@Nonnull Project project, PsiModifierListOwner owner) {
     PsiAnnotation[] annotations = ExternalAnnotationsManager.getInstance(project).findExternalAnnotations(owner);
     if (annotations == null) {
       return PsiAnnotation.EMPTY_ARRAY;

@@ -28,7 +28,7 @@ import jakarta.annotation.Nonnull;
  * User: cdr
  */
 public class SliceDereferenceUsage extends SliceUsage {
-  public SliceDereferenceUsage(@jakarta.annotation.Nonnull PsiElement element, @Nonnull SliceUsage parent, @Nonnull PsiSubstitutor substitutor) {
+  public SliceDereferenceUsage(@Nonnull PsiElement element, @Nonnull SliceUsage parent, @Nonnull PsiSubstitutor substitutor) {
     super(element, parent, substitutor, 0, "");
   }
 
@@ -37,7 +37,7 @@ public class SliceDereferenceUsage extends SliceUsage {
     // no children
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public UsagePresentation getPresentation() {
     final UsagePresentation presentation = super.getPresentation();

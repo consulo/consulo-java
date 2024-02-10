@@ -28,7 +28,7 @@ import jakarta.annotation.Nonnull;
  */
 public class ClosureInstruction extends Instruction
 {
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	private final PsiElement myClosure;
 
 	public ClosureInstruction(@Nonnull PsiElement closure)
@@ -36,7 +36,7 @@ public class ClosureInstruction extends Instruction
 		myClosure = closure;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public PsiElement getClosureElement()
 	{
 		return myClosure;

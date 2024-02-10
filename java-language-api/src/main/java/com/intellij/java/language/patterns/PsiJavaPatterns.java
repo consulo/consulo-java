@@ -108,7 +108,7 @@ public class PsiJavaPatterns extends StandardPatterns {
     });
   }
 
-  public static PsiJavaElementPattern.Capture<PsiLiteralExpression> literalExpression(@jakarta.annotation.Nullable final ElementPattern value) {
+  public static PsiJavaElementPattern.Capture<PsiLiteralExpression> literalExpression(@Nullable final ElementPattern value) {
     return new PsiJavaElementPattern.Capture<PsiLiteralExpression>(new InitialPatternConditionPlus<PsiLiteralExpression>(PsiLiteralExpression.class) {
       public boolean accepts(@Nullable final Object o, final ProcessingContext context) {
         return o instanceof PsiLiteralExpression && (value == null || value.accepts(((PsiLiteralExpression)o).getValue(), context));
@@ -136,7 +136,7 @@ public class PsiJavaPatterns extends StandardPatterns {
   public static PsiModifierListOwnerPattern.Capture<PsiModifierListOwner> psiModifierListOwner() {
     return new PsiModifierListOwnerPattern.Capture<PsiModifierListOwner>(new InitialPatternCondition<PsiModifierListOwner>(PsiModifierListOwner.class) {
       @Override
-      public boolean accepts(@jakarta.annotation.Nullable Object o, ProcessingContext context) {
+      public boolean accepts(@Nullable Object o, ProcessingContext context) {
         return o instanceof PsiModifierListOwner;
       }
     });

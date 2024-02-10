@@ -41,7 +41,7 @@ public class SystemSetSecurityManagerInspection extends BaseInspection {
       "system.set.security.manager.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "system.set.security.manager.problem.descriptor");
@@ -56,7 +56,7 @@ public class SystemSetSecurityManagerInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!isSetSecurityManager(expression)) {
         return;

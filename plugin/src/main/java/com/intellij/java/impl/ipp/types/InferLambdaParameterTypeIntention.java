@@ -35,13 +35,13 @@ public class InferLambdaParameterTypeIntention extends Intention {
   private static final Logger LOG = Logger.getInstance(InferLambdaParameterTypeIntention.class);
   private String myInferredTypesText;
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected PsiElementPredicate getElementPredicate() {
     return new LambdaParametersPredicate();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getText() {
     return "Expand lambda to " + myInferredTypesText + " -> {...}";

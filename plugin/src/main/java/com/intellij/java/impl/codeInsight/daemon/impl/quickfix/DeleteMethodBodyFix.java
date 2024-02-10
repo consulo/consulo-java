@@ -37,13 +37,13 @@ public class DeleteMethodBodyFix implements SyntheticIntentionAction {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getText() {
     return JavaQuickFixBundle.message("delete.body.text");
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return myMethod.isValid() && myMethod.getManager().isInProject(myMethod) && myMethod.getBody() != null;
   }
 

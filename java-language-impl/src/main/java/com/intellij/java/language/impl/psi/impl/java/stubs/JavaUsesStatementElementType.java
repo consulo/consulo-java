@@ -42,7 +42,7 @@ public class JavaUsesStatementElementType extends JavaStubElementType<PsiUsesSta
 		super("USES_STATEMENT");
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public ASTNode createCompositeNode()
 	{

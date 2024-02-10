@@ -17,10 +17,10 @@ import java.util.Map;
 public class DfaTypeValue extends DfaValue
 {
 	private final
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	DfType myType;
 
-	DfaTypeValue(@jakarta.annotation.Nonnull DfaValueFactory factory, @jakarta.annotation.Nonnull DfType type)
+	DfaTypeValue(@Nonnull DfaValueFactory factory, @Nonnull DfType type)
 	{
 		super(factory);
 		myType = type;
@@ -73,8 +73,8 @@ public class DfaTypeValue extends DfaValue
 			myFactory = factory;
 		}
 
-		@jakarta.annotation.Nonnull
-		DfaTypeValue create(@jakarta.annotation.Nonnull DfType type)
+		@Nonnull
+		DfaTypeValue create(@Nonnull DfType type)
 		{
 			return myValues.computeIfAbsent(type, t -> new DfaTypeValue(myFactory, t));
 		}

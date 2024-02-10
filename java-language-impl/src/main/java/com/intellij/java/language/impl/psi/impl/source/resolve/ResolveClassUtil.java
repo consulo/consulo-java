@@ -30,7 +30,7 @@ public class ResolveClassUtil {
   private static final Logger LOG = Logger.getInstance(ResolveClassUtil.class);
 
   @Nullable
-  public static PsiClass resolveClass(@jakarta.annotation.Nonnull PsiJavaCodeReferenceElement ref, @Nonnull PsiFile containingFile) {
+  public static PsiClass resolveClass(@Nonnull PsiJavaCodeReferenceElement ref, @Nonnull PsiFile containingFile) {
     if (ref instanceof PsiJavaCodeReferenceElementImpl && ((PsiJavaCodeReferenceElementImpl) ref).getKindEnum(containingFile) == PsiJavaCodeReferenceElementImpl.Kind.CLASS_IN_QUALIFIED_NEW_KIND) {
       PsiElement parent = ref.getParent();
       if (parent instanceof PsiAnonymousClass) {

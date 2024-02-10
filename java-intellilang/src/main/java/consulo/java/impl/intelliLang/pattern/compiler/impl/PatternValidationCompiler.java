@@ -100,7 +100,7 @@ public class PatternValidationCompiler extends AnnotationBasedInstrumentingCompi
     return "Inserting @Pattern assertions";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDescription() {
     return "Pattern Validation";
   }

@@ -89,11 +89,11 @@ public class ClsFileImpl extends PsiBinaryFileImpl implements PsiJavaFile, PsiFi
   private volatile Reference<TreeElement> myMirrorFileElement;
   private volatile ClsPackageStatementImpl myPackageStatement;
 
-  public ClsFileImpl(@jakarta.annotation.Nonnull FileViewProvider viewProvider) {
+  public ClsFileImpl(@Nonnull FileViewProvider viewProvider) {
     this(viewProvider, false);
   }
 
-  private ClsFileImpl(@jakarta.annotation.Nonnull FileViewProvider viewProvider, boolean forDecompiling) {
+  private ClsFileImpl(@Nonnull FileViewProvider viewProvider, boolean forDecompiling) {
     super(viewProvider.getManager(), viewProvider);
     myIsForDecompiling = forDecompiling;
     //noinspection ResultOfMethodCallIgnored
@@ -119,21 +119,21 @@ public class ClsFileImpl extends PsiBinaryFileImpl implements PsiJavaFile, PsiFi
 
   @RequiredReadAction
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;
   }
 
   @RequiredReadAction
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiElement[] getChildren() {
     PsiJavaModule module = getModuleDeclaration();
     return module != null ? new PsiElement[]{module} : getClasses();
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiClass[] getClasses() {
     return getStub().getClasses();
   }
@@ -195,7 +195,7 @@ public class ClsFileImpl extends PsiBinaryFileImpl implements PsiJavaFile, PsiFi
   }
 
   @Override
-  public boolean importClass(@jakarta.annotation.Nonnull PsiClass aClass) {
+  public boolean importClass(@Nonnull PsiClass aClass) {
     throw new UnsupportedOperationException("Cannot add imports to compiled classes");
   }
 
@@ -206,7 +206,7 @@ public class ClsFileImpl extends PsiBinaryFileImpl implements PsiJavaFile, PsiFi
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiClass[] getSingleClassImports(boolean checkIncludes) {
     return PsiClass.EMPTY_ARRAY;
   }
@@ -234,7 +234,7 @@ public class ClsFileImpl extends PsiBinaryFileImpl implements PsiJavaFile, PsiFi
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public LanguageLevel getLanguageLevel() {
     PsiClassHolderFileStub<?> stub = getStub();
     if (stub instanceof PsiJavaFileStub) {
@@ -256,7 +256,7 @@ public class ClsFileImpl extends PsiBinaryFileImpl implements PsiJavaFile, PsiFi
 
   @RequiredWriteAction
   @Override
-  public PsiElement setName(@jakarta.annotation.Nonnull String name) throws IncorrectOperationException {
+  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
     throw ClsElementImpl.cannotModifyException(this);
   }
 
@@ -269,11 +269,11 @@ public class ClsFileImpl extends PsiBinaryFileImpl implements PsiJavaFile, PsiFi
    * Shouldn't be called from outside or overridden
    */
   @Deprecated
-  public void appendMirrorText(@SuppressWarnings("unused") int indentLevel, @jakarta.annotation.Nonnull StringBuilder buffer) {
+  public void appendMirrorText(@SuppressWarnings("unused") int indentLevel, @Nonnull StringBuilder buffer) {
     appendMirrorText(buffer);
   }
 
-  private void appendMirrorText(@jakarta.annotation.Nonnull StringBuilder buffer) {
+  private void appendMirrorText(@Nonnull StringBuilder buffer) {
     buffer.append(BANNER);
 
     PsiJavaModule module = getModuleDeclaration();
@@ -293,11 +293,11 @@ public class ClsFileImpl extends PsiBinaryFileImpl implements PsiJavaFile, PsiFi
    * Shouldn't be called from outside or overridden
    */
   @Deprecated
-  public void setMirror(@jakarta.annotation.Nonnull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
     setFileMirror(element);
   }
 
-  private void setFileMirror(@jakarta.annotation.Nonnull TreeElement element) {
+  private void setFileMirror(@Nonnull TreeElement element) {
     PsiElement mirrorElement = SourceTreeToPsiMap.treeToPsiNotNull(element);
     if (!(mirrorElement instanceof PsiJavaFile)) {
       throw new InvalidMirrorException("Unexpected mirror file: " + mirrorElement);
@@ -314,7 +314,7 @@ public class ClsFileImpl extends PsiBinaryFileImpl implements PsiJavaFile, PsiFi
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiElement getNavigationElement() {
     for (ClsCustomNavigationPolicy navigationPolicy : ClsCustomNavigationPolicy.EP_NAME.getExtensionList()) {
       try {
@@ -336,7 +336,7 @@ public class ClsFileImpl extends PsiBinaryFileImpl implements PsiJavaFile, PsiFi
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiElement getMirror() {
     TreeElement mirrorTreeElement = SoftReference.dereference(myMirrorFileElement);
     if (mirrorTreeElement == null) {
@@ -413,7 +413,7 @@ public class ClsFileImpl extends PsiBinaryFileImpl implements PsiJavaFile, PsiFi
   }
 
   @Override
-  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitJavaFile(this);
     } else {
@@ -463,13 +463,13 @@ public class ClsFileImpl extends PsiBinaryFileImpl implements PsiJavaFile, PsiFi
     return getMirror().textToCharArray();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiClassHolderFileStub<?> getStub() {
     return (PsiClassHolderFileStub) getStubTree().getRoot();
   }
 
   @Override
-  public boolean processDeclarations(@jakarta.annotation.Nonnull PsiScopeProcessor processor, @jakarta.annotation.Nonnull ResolveState state, PsiElement lastParent, @jakarta.annotation.Nonnull PsiElement place) {
+  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place) {
     processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, this);
     final ElementClassHint classHint = processor.getHint(ElementClassHint.KEY);
     if (classHint == null || classHint.shouldProcess(ElementClassHint.DeclarationKind.CLASS)) {
@@ -520,7 +520,7 @@ public class ClsFileImpl extends PsiBinaryFileImpl implements PsiJavaFile, PsiFi
     return stubTree;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public StubbedSpine getStubbedSpine() {
     return getStubTree().getSpine();
@@ -558,8 +558,8 @@ public class ClsFileImpl extends PsiBinaryFileImpl implements PsiJavaFile, PsiFi
 
   // default decompiler implementation
 
-  @jakarta.annotation.Nonnull
-  public static CharSequence decompile(@jakarta.annotation.Nonnull VirtualFile file) {
+  @Nonnull
+  public static CharSequence decompile(@Nonnull VirtualFile file) {
     PsiManager manager = PsiManager.getInstance(ProjectManager.getInstance().getDefaultProject());
     final ClsFileImpl clsFile = new ClsFileImpl(new ClassFileViewProvider(manager, file), true);
     final StringBuilder buffer = new StringBuilder();
@@ -567,8 +567,8 @@ public class ClsFileImpl extends PsiBinaryFileImpl implements PsiJavaFile, PsiFi
     return buffer;
   }
 
-  @jakarta.annotation.Nullable
-  public static PsiJavaFileStub buildFileStub(@jakarta.annotation.Nonnull VirtualFile file, @jakarta.annotation.Nonnull byte[] bytes) throws ClsFormatException {
+  @Nullable
+  public static PsiJavaFileStub buildFileStub(@Nonnull VirtualFile file, @Nonnull byte[] bytes) throws ClsFormatException {
     try {
       if (ClassFileViewProvider.isInnerClass(file, bytes)) {
         return null;
@@ -616,11 +616,11 @@ public class ClsFileImpl extends PsiBinaryFileImpl implements PsiJavaFile, PsiFi
   }
 
   static class FileContentPair extends Pair<VirtualFile, byte[]> {
-    FileContentPair(@Nonnull VirtualFile file, @jakarta.annotation.Nonnull byte[] content) {
+    FileContentPair(@Nonnull VirtualFile file, @Nonnull byte[] content) {
       super(file, content);
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public byte[] getContent() {
       return second;
     }

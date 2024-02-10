@@ -83,7 +83,7 @@ public class AssignmentToForLoopParameterInspection
 
     @Override
     public void visitAssignmentExpression(
-      @jakarta.annotation.Nonnull PsiAssignmentExpression expression) {
+      @Nonnull PsiAssignmentExpression expression) {
       super.visitAssignmentExpression(expression);
       if (!WellFormednessUtils.isWellFormed(expression)) {
         return;
@@ -95,7 +95,7 @@ public class AssignmentToForLoopParameterInspection
 
     @Override
     public void visitPrefixExpression(
-      @jakarta.annotation.Nonnull PsiPrefixExpression expression) {
+      @Nonnull PsiPrefixExpression expression) {
       super.visitPrefixExpression(expression);
       final IElementType tokenType = expression.getOperationTokenType();
       if (!tokenType.equals(JavaTokenType.PLUSPLUS) &&
@@ -112,7 +112,7 @@ public class AssignmentToForLoopParameterInspection
 
     @Override
     public void visitPostfixExpression(
-      @jakarta.annotation.Nonnull PsiPostfixExpression expression) {
+      @Nonnull PsiPostfixExpression expression) {
       super.visitPostfixExpression(expression);
       final IElementType tokenType = expression.getOperationTokenType();
       if (!tokenType.equals(JavaTokenType.PLUSPLUS) &&

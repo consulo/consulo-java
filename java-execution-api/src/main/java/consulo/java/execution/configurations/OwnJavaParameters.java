@@ -120,7 +120,7 @@ public class OwnJavaParameters extends OwnSimpleJavaParameters {
     return getValidJdkToRunModule(module, false);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static Sdk getValidJdkToRunModule(final Module module, boolean productionOnly) throws CantRunException {
     Sdk jdk = getJdkToRunModule(module, productionOnly);
     if (jdk == null) {
@@ -133,7 +133,7 @@ public class OwnJavaParameters extends OwnSimpleJavaParameters {
     return jdk;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static Sdk getJdkToRunModule(Module module, boolean productionOnly) {
     final Sdk moduleSdk = ModuleUtilCore.getSdk(module, JavaModuleExtension.class);
     if (moduleSdk == null) {
@@ -157,7 +157,7 @@ public class OwnJavaParameters extends OwnSimpleJavaParameters {
   }
 
   @Nonnull
-  private static Sdk findLatestVersion(@jakarta.annotation.Nonnull Sdk mainSdk, @jakarta.annotation.Nonnull Set<Sdk> sdks) {
+  private static Sdk findLatestVersion(@Nonnull Sdk mainSdk, @Nonnull Set<Sdk> sdks) {
     Sdk result = mainSdk;
     for (Sdk sdk : sdks) {
       if (VersionComparatorUtil.compare(result.getVersionString(), sdk.getVersionString()) < 0) {

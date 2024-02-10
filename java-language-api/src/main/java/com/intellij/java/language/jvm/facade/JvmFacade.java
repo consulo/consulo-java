@@ -33,7 +33,7 @@ import consulo.application.progress.ProgressManager;
 public interface JvmFacade
 {
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	static JvmFacade getInstance(@Nonnull Project project)
 	{
 		return ServiceManager.getService(project, JvmFacade.class);
@@ -48,7 +48,7 @@ public interface JvmFacade
 	 * @return the PSI class, or null if no class with such name is found.
 	 */
 	@Nullable
-	default JvmClass findClass(@NonNls @jakarta.annotation.Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope)
+	default JvmClass findClass(@NonNls @Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope)
 	{
 		ProgressManager.checkCanceled();
 		return getFirstItem(findClasses(qualifiedName, scope));
@@ -62,6 +62,6 @@ public interface JvmFacade
 	 * @param scope         the scope to search.
 	 * @return the array of found classes, or an empty array if no classes are found.
 	 */
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	List<? extends JvmClass> findClasses(@NonNls @Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope);
 }

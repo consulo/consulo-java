@@ -35,7 +35,7 @@ import jakarta.annotation.Nullable;
  */
 public class SuppressByJavaCommentFix extends SuppressByCommentFix
 {
-  public SuppressByJavaCommentFix(@jakarta.annotation.Nonnull HighlightDisplayKey key) {
+  public SuppressByJavaCommentFix(@Nonnull HighlightDisplayKey key) {
     super(key, PsiStatement.class);
   }
 
@@ -58,7 +58,7 @@ public class SuppressByJavaCommentFix extends SuppressByCommentFix
   @Override
   protected void createSuppression(@Nonnull final Project project,
                                    @Nonnull final PsiElement element,
-                                   @jakarta.annotation.Nonnull final PsiElement container) throws IncorrectOperationException {
+                                   @Nonnull final PsiElement container) throws IncorrectOperationException {
     PsiElement declaredElement = JavaSuppressionUtil.getElementToAnnotate(element, container);
     if (declaredElement == null) {
       suppressWithComment(project, element, container);

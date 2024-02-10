@@ -34,7 +34,7 @@ public class NonSynchronizedMethodOverridesSynchronizedMethodInspection
       "non.synchronized.method.overrides.synchronized.method.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "non.synchronized.method.overrides.synchronized.method.problem.descriptor");

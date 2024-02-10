@@ -40,6 +40,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.psi.util.SymbolPresentationUtil;
 import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
+import consulo.ui.ex.awt.FormBuilder;
 import consulo.ui.ex.awt.JBLabelDecorator;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
@@ -197,7 +198,7 @@ class ExtractClassDialog extends RefactoringDialog implements MemberInfoChangeLi
     }
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getPackageName() {
     return packageTextField.getText().trim();
   }
@@ -249,7 +250,7 @@ class ExtractClassDialog extends RefactoringDialog implements MemberInfoChangeLi
   }
 
   protected JComponent createNorthPanel() {
-    consulo.ui.ex.awt.FormBuilder builder = consulo.ui.ex.awt.FormBuilder.createFormBuilder()
+    FormBuilder builder = FormBuilder.createFormBuilder()
       .addComponent(
         JBLabelDecorator.createJBLabelDecorator(RefactorJBundle.message("extract.class.from.label", sourceClass.getQualifiedName()))
           .setBold(true))

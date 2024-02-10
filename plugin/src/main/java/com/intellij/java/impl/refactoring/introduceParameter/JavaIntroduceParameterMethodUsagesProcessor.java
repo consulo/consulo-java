@@ -244,7 +244,7 @@ public class JavaIntroduceParameterMethodUsagesProcessor implements IntroducePar
     return false;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiParameter getAnchorParameter(PsiMethod methodToReplaceIn) {
     PsiParameterList parameterList = methodToReplaceIn.getParameterList();
     final PsiParameter anchorParameter;

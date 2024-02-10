@@ -104,7 +104,7 @@ public class TrackingDfaMemoryState extends DfaMemoryStateImpl {
     myHistory = MemoryStateChange.create(myHistory, instruction, result, value);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private Map<DfaVariableValue, Change> getChangeMap(TrackingDfaMemoryState previous) {
     Map<DfaVariableValue, Change> changeMap = new HashMap<>();
     Set<DfaVariableValue> varsToCheck = new HashSet<>();
@@ -188,13 +188,13 @@ public class TrackingDfaMemoryState extends DfaMemoryStateImpl {
 
   static class Relation {
     final
-    @jakarta.annotation.Nonnull
+    @Nonnull
     RelationType myRelationType;
     final
-    @jakarta.annotation.Nonnull
+    @Nonnull
     DfaValue myCounterpart;
 
-    Relation(@jakarta.annotation.Nonnull RelationType type, @jakarta.annotation.Nonnull DfaValue counterpart) {
+    Relation(@Nonnull RelationType type, @Nonnull DfaValue counterpart) {
       myRelationType = type;
       myCounterpart = counterpart;
     }
@@ -225,26 +225,26 @@ public class TrackingDfaMemoryState extends DfaMemoryStateImpl {
 
   static final class Change {
     final
-    @jakarta.annotation.Nonnull
+    @Nonnull
     Set<Relation> myRemovedRelations;
     final
     @Nonnull
     Set<Relation> myAddedRelations;
     final
-    @jakarta.annotation.Nonnull
+    @Nonnull
     DfType myOldType;
     final
     @Nonnull
     DfType myNewType;
 
-    private Change(@Nonnull Set<Relation> removedRelations, @jakarta.annotation.Nonnull Set<Relation> addedRelations, @Nonnull DfType oldType, @Nonnull DfType newType) {
+    private Change(@Nonnull Set<Relation> removedRelations, @Nonnull Set<Relation> addedRelations, @Nonnull DfType oldType, @Nonnull DfType newType) {
       myRemovedRelations = removedRelations.isEmpty() ? Collections.emptySet() : removedRelations;
       myAddedRelations = addedRelations.isEmpty() ? Collections.emptySet() : addedRelations;
       myOldType = oldType;
       myNewType = newType;
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     static Change create(Set<Relation> removedRelations, Set<Relation> addedRelations, DfType oldType, DfType newType) {
       if (removedRelations.isEmpty() && addedRelations.isEmpty() && oldType == DfTypes.BOTTOM && newType == DfTypes.BOTTOM) {
         return null;
@@ -258,7 +258,7 @@ public class TrackingDfaMemoryState extends DfaMemoryStateImpl {
      * @param other other change to unite with
      * @return new change or null if this and other change has nothing in common
      */
-    @jakarta.annotation.Nullable
+    @Nullable
     Change unite(Change other) {
       Set<Relation> added = new HashSet<>(ContainerUtil.intersection(myAddedRelations, other.myAddedRelations));
       Set<Relation> removed = new HashSet<>(ContainerUtil.intersection(myRemovedRelations, other.myRemovedRelations));
@@ -282,26 +282,26 @@ public class TrackingDfaMemoryState extends DfaMemoryStateImpl {
 
   static final class MemoryStateChange {
     private final
-    @jakarta.annotation.Nonnull
+    @Nonnull
     List<MemoryStateChange> myPrevious;
     final
-    @jakarta.annotation.Nonnull
+    @Nonnull
     Instruction myInstruction;
     final
-    @jakarta.annotation.Nonnull
+    @Nonnull
     Map<DfaVariableValue, Change> myChanges;
     final
-    @jakarta.annotation.Nonnull
+    @Nonnull
     DfaValue myTopOfStack;
     final
-    @jakarta.annotation.Nonnull
+    @Nonnull
     Map<DfaVariableValue, Change> myBridgeChanges;
     int myCursor = 0;
 
-    private MemoryStateChange(@jakarta.annotation.Nonnull List<MemoryStateChange> previous,
+    private MemoryStateChange(@Nonnull List<MemoryStateChange> previous,
                               @Nonnull Instruction instruction,
-                              @jakarta.annotation.Nonnull Map<DfaVariableValue, Change> changes,
-                              @jakarta.annotation.Nonnull DfaValue topOfStack,
+                              @Nonnull Map<DfaVariableValue, Change> changes,
+                              @Nonnull DfaValue topOfStack,
                               @Nonnull Map<DfaVariableValue, Change> bridgeChanges) {
       myPrevious = previous;
       myInstruction = instruction;
@@ -329,7 +329,7 @@ public class TrackingDfaMemoryState extends DfaMemoryStateImpl {
 
     @Contract("null -> null")
     @Nullable
-    MemoryStateChange findExpressionPush(@jakarta.annotation.Nullable PsiExpression expression) {
+    MemoryStateChange findExpressionPush(@Nullable PsiExpression expression) {
       if (expression == null) {
         return null;
       }
@@ -338,7 +338,7 @@ public class TrackingDfaMemoryState extends DfaMemoryStateImpl {
 
     @Contract("null -> null")
     @Nullable
-    MemoryStateChange findSubExpressionPush(@jakarta.annotation.Nullable PsiExpression expression) {
+    MemoryStateChange findSubExpressionPush(@Nullable PsiExpression expression) {
       if (expression == null) {
         return null;
       }
@@ -354,7 +354,7 @@ public class TrackingDfaMemoryState extends DfaMemoryStateImpl {
       }, false);
     }
 
-    MemoryStateChange findRelation(DfaVariableValue value, @jakarta.annotation.Nonnull Predicate<Relation> relationPredicate, boolean startFromSelf) {
+    MemoryStateChange findRelation(DfaVariableValue value, @Nonnull Predicate<Relation> relationPredicate, boolean startFromSelf) {
       return findChange(change -> {
         if (change.myInstruction instanceof AssignInstruction && change.myTopOfStack == value) {
           return true;
@@ -368,7 +368,7 @@ public class TrackingDfaMemoryState extends DfaMemoryStateImpl {
       }, startFromSelf);
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     <T> FactDefinition<T> findFact(DfaValue value, FactExtractor<T> extractor) {
       if (value instanceof DfaVariableValue) {
         for (MemoryStateChange change = this; change != null; change = change.getPrevious()) {
@@ -402,7 +402,7 @@ public class TrackingDfaMemoryState extends DfaMemoryStateImpl {
       return new FactDefinition<>(null, extractor.extract(value.getDfType()));
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     MemoryStateChange getPrevious() {
       return myCursor == myPrevious.size() ? null : myPrevious.get(myCursor);
     }
@@ -413,7 +413,7 @@ public class TrackingDfaMemoryState extends DfaMemoryStateImpl {
       return change;
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     private static <T> FactDefinition<T> factFromChange(FactExtractor<T> extractor, MemoryStateChange change, Change varChange) {
       if (varChange != null) {
         T newFact = extractor.extract(varChange.myNewType);
@@ -426,7 +426,7 @@ public class TrackingDfaMemoryState extends DfaMemoryStateImpl {
     }
 
     @Nullable
-    private MemoryStateChange findChange(@jakarta.annotation.Nonnull Predicate<MemoryStateChange> predicate, boolean startFromSelf) {
+    private MemoryStateChange findChange(@Nonnull Predicate<MemoryStateChange> predicate, boolean startFromSelf) {
       for (MemoryStateChange change = startFromSelf ? this : getPrevious(); change != null; change = change.getPrevious()) {
         if (predicate.test(change)) {
           return change;
@@ -447,7 +447,7 @@ public class TrackingDfaMemoryState extends DfaMemoryStateImpl {
       return null;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public MemoryStateChange merge(MemoryStateChange change) {
       if (change == this) {
         return this;
@@ -470,7 +470,7 @@ public class TrackingDfaMemoryState extends DfaMemoryStateImpl {
           Collections.emptyMap());
     }
 
-    MemoryStateChange withBridge(@Nonnull Instruction instruction, @jakarta.annotation.Nonnull Map<DfaVariableValue, Change> bridge) {
+    MemoryStateChange withBridge(@Nonnull Instruction instruction, @Nonnull Map<DfaVariableValue, Change> bridge) {
       if (myInstruction != instruction) {
         if (instruction instanceof ConditionalGotoInstruction &&
             getExpression() == ((ConditionalGotoInstruction) instruction).getPsiAnchor()) {
@@ -484,11 +484,11 @@ public class TrackingDfaMemoryState extends DfaMemoryStateImpl {
       return new MemoryStateChange(myPrevious, instruction, myChanges, myTopOfStack, bridge);
     }
 
-    @jakarta.annotation.Nullable
-    static MemoryStateChange create(@jakarta.annotation.Nullable MemoryStateChange previous,
+    @Nullable
+    static MemoryStateChange create(@Nullable MemoryStateChange previous,
                                     @Nonnull Instruction instruction,
                                     @Nonnull Map<DfaVariableValue, Change> result,
-                                    @jakarta.annotation.Nonnull DfaValue value) {
+                                    @Nonnull DfaValue value) {
       if (result.isEmpty() && DfaTypeValue.isUnknown(value)) {
         return previous;
       }
@@ -529,13 +529,13 @@ public class TrackingDfaMemoryState extends DfaMemoryStateImpl {
 
   static class FactDefinition<T> {
     final
-    @jakarta.annotation.Nullable
+    @Nullable
     MemoryStateChange myChange;
     final
     @Nonnull
     T myFact;
 
-    FactDefinition(@jakarta.annotation.Nullable MemoryStateChange change, @jakarta.annotation.Nonnull T fact) {
+    FactDefinition(@Nullable MemoryStateChange change, @Nonnull T fact) {
       myChange = change;
       myFact = fact;
     }

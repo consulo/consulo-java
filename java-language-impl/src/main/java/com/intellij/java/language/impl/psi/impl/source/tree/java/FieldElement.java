@@ -40,7 +40,7 @@ public class FieldElement extends CompositeElement {
     super(Constants.FIELD);
   }
 
-  protected FieldElement(@jakarta.annotation.Nonnull IElementType type) {
+  protected FieldElement(@Nonnull IElementType type) {
     super(type);
   }
 

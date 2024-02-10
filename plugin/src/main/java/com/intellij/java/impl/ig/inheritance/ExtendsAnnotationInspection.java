@@ -35,7 +35,7 @@ public class ExtendsAnnotationInspection extends BaseInspection {
     return "ClassExplicitlyAnnotation";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "extends.annotation.display.name");

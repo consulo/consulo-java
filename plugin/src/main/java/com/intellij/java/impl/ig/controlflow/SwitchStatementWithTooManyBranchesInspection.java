@@ -36,7 +36,7 @@ public abstract class SwitchStatementWithTooManyBranchesInspection extends BaseI
    */
   public int m_limit = DEFAULT_BRANCH_LIMIT;
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "switch.statement.with.too.many.branches.display.name");
@@ -49,7 +49,7 @@ public abstract class SwitchStatementWithTooManyBranchesInspection extends BaseI
       this, "m_limit");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     final Integer branchCount = (Integer)infos[0];
     return InspectionGadgetsBundle.message(

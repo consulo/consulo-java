@@ -68,7 +68,7 @@ public class GenericsUtil {
     return getLeastUpperBound(type1, type2, new LinkedHashSet<>(), manager);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private static PsiType getLeastUpperBound(PsiType type1, PsiType type2, Set<Couple<PsiType>> compared, PsiManager manager) {
     if (type1 instanceof PsiCapturedWildcardType) {
       return getLeastUpperBound(((PsiCapturedWildcardType) type1).getUpperBound(), type2, compared, manager);
@@ -206,7 +206,7 @@ public class GenericsUtil {
     return PsiWildcardType.createExtends(manager, getLeastUpperBound(type1, type2, compared, manager));
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static PsiClass[] getLeastUpperClasses(PsiClass aClass, PsiClass bClass) {
     if (InheritanceUtil.isInheritorOrSelf(aClass, bClass, true)) {
       return new PsiClass[]{bClass};
@@ -565,7 +565,7 @@ public class GenericsUtil {
     return false;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static PsiClassType getExpectedGenericType(PsiElement context,
                                                     PsiClass aClass,
                                                     PsiClassType expectedType) {

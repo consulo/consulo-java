@@ -74,7 +74,7 @@ public class DuplicateStringLiteralInspection extends BaseLocalInspectionTool {
 
   @Override
   @Nonnull
-  public PsiElementVisitor buildVisitorImpl(@jakarta.annotation.Nonnull final ProblemsHolder holder,
+  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
                                             final boolean isOnTheFly,
                                             LocalInspectionToolSession session,
                                             Object state) {
@@ -98,18 +98,18 @@ public class DuplicateStringLiteralInspection extends BaseLocalInspectionTool {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getGroupDisplayName() {
     return GroupNames.INTERNATIONALIZATION_GROUP_NAME;
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getShortName() {
     return "DuplicateStringLiteralInspection";
   }
 
-  private void checkStringLiteralExpression(@jakarta.annotation.Nonnull final PsiLiteralExpression originalExpression,
+  private void checkStringLiteralExpression(@Nonnull final PsiLiteralExpression originalExpression,
                                             @Nonnull ProblemsHolder holder,
                                             final boolean isOnTheFly) {
     Object value = originalExpression.getValue();
@@ -246,7 +246,7 @@ public class DuplicateStringLiteralInspection extends BaseLocalInspectionTool {
     holder.registerProblem(originalExpression, msg, ProblemHighlightType.GENERIC_ERROR_OR_WARNING, array);
   }
 
-  private boolean shouldCheck(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull PsiLiteralExpression expression) {
+  private boolean shouldCheck(@Nonnull Project project, @Nonnull PsiLiteralExpression expression) {
     if (IGNORE_PROPERTY_KEYS && JavaI18nUtil.mustBePropertyKey(project, expression, new HashMap<String, Object>())) {
       return false;
     }
@@ -430,7 +430,7 @@ public class DuplicateStringLiteralInspection extends BaseLocalInspectionTool {
       myConst = SmartPointerManager.getInstance(constant.getProject()).createSmartPsiElementPointer(constant);
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public String getText() {
       return myText;
@@ -439,9 +439,9 @@ public class DuplicateStringLiteralInspection extends BaseLocalInspectionTool {
     @Override
     public void invoke(@Nonnull Project project,
                        @Nonnull PsiFile file,
-                       @jakarta.annotation.Nullable Editor editor,
-                       @jakarta.annotation.Nonnull PsiElement startElement,
-                       @jakarta.annotation.Nonnull PsiElement endElement) {
+                       @Nullable Editor editor,
+                       @Nonnull PsiElement startElement,
+                       @Nonnull PsiElement endElement) {
       final PsiLiteralExpression myOriginalExpression = (PsiLiteralExpression) startElement;
       final PsiField myConstant = myConst.getElement();
       if (myConstant == null) {

@@ -79,7 +79,7 @@ public class ClassUtil {
     return checkPackageLocalInSuperClass(aClass);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static PsiMethod checkPackageLocalInSuperClass(@Nonnull PsiClass aClass) {
     // super class can have package local abstract methods not accessible for overriding
     PsiClass superClass = aClass.getSuperClass();

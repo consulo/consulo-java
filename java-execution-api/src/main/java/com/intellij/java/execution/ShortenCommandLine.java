@@ -69,7 +69,7 @@ public enum ShortenCommandLine {
     return null;
   }
 
-  public static void writeShortenClasspathMethod(@jakarta.annotation.Nonnull Element element, ShortenCommandLine shortenCommandLine) {
+  public static void writeShortenClasspathMethod(@Nonnull Element element, ShortenCommandLine shortenCommandLine) {
     if (shortenCommandLine != null) {
       element.addContent(new Element("shortenClasspath").setAttribute("name", shortenCommandLine.name()));
     }

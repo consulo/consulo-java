@@ -42,7 +42,7 @@ public class JavadocCompletionConfidence extends CompletionConfidence {
 
   @Nonnull
   @Override
-  public ThreeState shouldSkipAutopopup(@jakarta.annotation.Nonnull PsiElement contextElement, @Nonnull PsiFile psiFile, int offset) {
+  public ThreeState shouldSkipAutopopup(@Nonnull PsiElement contextElement, @Nonnull PsiFile psiFile, int offset) {
     if (psiElement().inside(PsiDocTag.class).accepts(contextElement)) {
       if (findJavaReference(psiFile, offset - 1) != null) {
         return ThreeState.NO;
@@ -70,7 +70,7 @@ public class JavadocCompletionConfidence extends CompletionConfidence {
     return reference instanceof PsiJavaReference ? (PsiJavaReference) reference : null;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

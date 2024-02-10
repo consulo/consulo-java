@@ -57,7 +57,7 @@ public class JamMemberArchetype<Psi extends PsiModifierListOwner, Jam extends Ja
   }
 
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public JamAnnotationMeta findAnnotationMeta(@Nonnull PsiAnnotation annotation) {
     final String qname = annotation.getQualifiedName();
     for (final JamAnnotationMeta anno : myAnnos) {
@@ -112,7 +112,7 @@ public class JamMemberArchetype<Psi extends PsiModifierListOwner, Jam extends Ja
     return list;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public JamMemberMeta findChildMeta(@Nonnull PsiModifierListOwner member) {
     for (final JamChildrenQuery<?> child : myChildren) {
       final JamMemberMeta meta = ((JamChildrenQuery)child).getMeta(member);

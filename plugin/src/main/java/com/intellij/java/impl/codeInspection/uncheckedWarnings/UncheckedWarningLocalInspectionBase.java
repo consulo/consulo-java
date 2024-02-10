@@ -63,7 +63,7 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
   public boolean IGNORE_UNCHECKED_CAST;
   public boolean IGNORE_UNCHECKED_OVERRIDING;
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   static JCheckBox createSetting(@Nonnull String cbText, final boolean option, @Nonnull Consumer<JCheckBox> pass) {
     final JCheckBox uncheckedCb = new JCheckBox(cbText, option);
     uncheckedCb.addActionListener(e -> pass.accept(uncheckedCb));
@@ -71,7 +71,7 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
   }
 
   @Nonnull
-  private static LocalQuickFix[] getChangeVariableTypeFixes(@jakarta.annotation.Nonnull PsiVariable parameter, @jakarta.annotation.Nullable PsiType itemType, LocalQuickFix[] generifyFixes) {
+  private static LocalQuickFix[] getChangeVariableTypeFixes(@Nonnull PsiVariable parameter, @Nullable PsiType itemType, LocalQuickFix[] generifyFixes) {
     if (itemType instanceof PsiMethodReferenceType) {
       return generifyFixes;
     }
@@ -94,19 +94,19 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getGroupDisplayName() {
     return "";
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return DISPLAY_NAME;
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @NonNls
   public String getShortName() {
     return SHORT_NAME;
@@ -114,7 +114,7 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
 
   @Override
   @Pattern(VALID_ID_PATTERN)
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @NonNls
   public String getID() {
     return ID;
@@ -132,9 +132,9 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
     }
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
-  public PsiElementVisitor buildVisitorImpl(@jakarta.annotation.Nonnull final ProblemsHolder holder, boolean isOnTheFly, @jakarta.annotation.Nonnull LocalInspectionToolSession session, Object state) {
+  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder, boolean isOnTheFly, @Nonnull LocalInspectionToolSession session, Object state) {
     LanguageLevel languageLevel = PsiUtil.getLanguageLevel(session.getFile());
     if (!languageLevel.isAtLeast(LanguageLevel.JDK_1_5)) {
       return super.buildVisitorImpl(holder, isOnTheFly, session, state);
@@ -142,7 +142,7 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
 
     return new UncheckedWarningsVisitor(isOnTheFly, languageLevel) {
       @Override
-      protected void registerProblem(@jakarta.annotation.Nonnull String message, @Nullable PsiElement callExpression, @Nonnull PsiElement psiElement, @jakarta.annotation.Nonnull LocalQuickFix[] quickFixes) {
+      protected void registerProblem(@Nonnull String message, @Nullable PsiElement callExpression, @Nonnull PsiElement psiElement, @Nonnull LocalQuickFix[] quickFixes) {
         final String rawExpression = isMethodCalledOnRawType(callExpression);
         if (rawExpression != null) {
           final String referenceName = ((PsiMethodCallExpression) callExpression).getMethodExpression().getReferenceName();
@@ -153,7 +153,7 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
     };
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected LocalQuickFix[] createFixes() {
     return LocalQuickFix.EMPTY_ARRAY;
   }
@@ -175,17 +175,17 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
 
   private abstract class UncheckedWarningsVisitor extends JavaElementVisitor {
     private final boolean myOnTheFly;
-    @jakarta.annotation.Nonnull
+    @Nonnull
     private final LanguageLevel myLanguageLevel;
     private final LocalQuickFix[] myGenerifyFixes;
 
-    UncheckedWarningsVisitor(boolean onTheFly, @jakarta.annotation.Nonnull LanguageLevel level) {
+    UncheckedWarningsVisitor(boolean onTheFly, @Nonnull LanguageLevel level) {
       myOnTheFly = onTheFly;
       myLanguageLevel = level;
       myGenerifyFixes = onTheFly ? createFixes() : LocalQuickFix.EMPTY_ARRAY;
     }
 
-    protected abstract void registerProblem(@Nonnull String message, PsiElement callExpression, @jakarta.annotation.Nonnull PsiElement psiElement, @jakarta.annotation.Nonnull LocalQuickFix[] quickFixes);
+    protected abstract void registerProblem(@Nonnull String message, PsiElement callExpression, @Nonnull PsiElement psiElement, @Nonnull LocalQuickFix[] quickFixes);
 
 
     @Override
@@ -398,7 +398,7 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
                                               PsiType parameterType,
                                               PsiType itemType,
                                               boolean checkAssignability,
-                                              @jakarta.annotation.Nonnull LocalQuickFix[] quickFixes) {
+                                              @Nonnull LocalQuickFix[] quickFixes) {
       if (parameterType == null || itemType == null) {
         return;
       }
@@ -488,7 +488,7 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
       }
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     private String getUncheckedCallDescription(PsiElement place, JavaResolveResult resolveResult) {
       final PsiElement element = resolveResult.getElement();
       if (!(element instanceof PsiMethod)) {

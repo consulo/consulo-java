@@ -35,7 +35,7 @@ public class ClassReferencesSubclassInspection extends BaseInspection {
       "class.references.subclass.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiNamedElement element = (PsiNamedElement)infos[0];
     final String containingClassName = element.getName();
@@ -71,7 +71,7 @@ public class ClassReferencesSubclassInspection extends BaseInspection {
 
     @Override
     public void visitInstanceOfExpression(
-      @jakarta.annotation.Nonnull PsiInstanceOfExpression expression) {
+      @Nonnull PsiInstanceOfExpression expression) {
       final PsiTypeElement typeElement = expression.getCheckType();
       checkTypeElement(typeElement);
     }
@@ -85,7 +85,7 @@ public class ClassReferencesSubclassInspection extends BaseInspection {
 
     @Override
     public void visitClassObjectAccessExpression(
-      @jakarta.annotation.Nonnull PsiClassObjectAccessExpression expression) {
+      @Nonnull PsiClassObjectAccessExpression expression) {
       final PsiTypeElement typeElement = expression.getOperand();
       checkTypeElement(typeElement);
     }
@@ -113,7 +113,7 @@ public class ClassReferencesSubclassInspection extends BaseInspection {
     }
 
     private static boolean isSubclass(@Nullable PsiClass childClass,
-                                      @jakarta.annotation.Nullable PsiClass parent) {
+                                      @Nullable PsiClass parent) {
       if (childClass == null) {
         return false;
       }

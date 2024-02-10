@@ -17,6 +17,7 @@ package com.intellij.java.impl.usages.impl.rules;
 
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.ServerPageFile;
+import consulo.ide.impl.idea.usages.impl.rules.FileGroupingRule;
 import consulo.project.Project;
 import consulo.language.psi.PsiFile;
 import consulo.usage.Usage;
@@ -26,7 +27,7 @@ import consulo.usage.UsageTarget;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-public class NonJavaFileGroupingRule extends consulo.ide.impl.idea.usages.impl.rules.FileGroupingRule {
+public class NonJavaFileGroupingRule extends FileGroupingRule {
   public NonJavaFileGroupingRule(Project project) {
     super(project);
   }

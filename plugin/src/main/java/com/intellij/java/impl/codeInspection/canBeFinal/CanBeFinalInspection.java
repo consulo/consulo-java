@@ -163,7 +163,7 @@ public class CanBeFinalInspection extends GlobalJavaInspectionTool implements Ol
 
 
 	@Override
-	@jakarta.annotation.Nullable
+	@Nullable
 	public CommonProblemDescriptor[] checkElement(final RefEntity refEntity,
 												  final AnalysisScope scope,
 												  final InspectionManager manager,
@@ -263,7 +263,7 @@ public class CanBeFinalInspection extends GlobalJavaInspectionTool implements Ol
 		manager.iterate(new RefJavaVisitor()
 		{
 			@Override
-			public void visitElement(@jakarta.annotation.Nonnull RefEntity refEntity)
+			public void visitElement(@Nonnull RefEntity refEntity)
 			{
 				if(problemsProcessor.getDescriptions(refEntity) == null)
 				{
@@ -272,7 +272,7 @@ public class CanBeFinalInspection extends GlobalJavaInspectionTool implements Ol
 				refEntity.accept(new RefJavaVisitor()
 				{
 					@Override
-					public void visitMethod(@jakarta.annotation.Nonnull final RefMethod refMethod)
+					public void visitMethod(@Nonnull final RefMethod refMethod)
 					{
 						if(!refMethod.isStatic() && !PsiModifier.PRIVATE.equals(refMethod.getAccessModifier()) &&
 								!(refMethod instanceof RefImplicitConstructor))
@@ -291,7 +291,7 @@ public class CanBeFinalInspection extends GlobalJavaInspectionTool implements Ol
 					}
 
 					@Override
-					public void visitClass(@jakarta.annotation.Nonnull final RefClass refClass)
+					public void visitClass(@Nonnull final RefClass refClass)
 					{
 						if(!refClass.isAnonymous())
 						{

@@ -42,13 +42,13 @@ public class ChainedMethodCallInspection extends BaseInspection {
   public boolean m_ignoreThisSuperCalls = true;
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("chained.method.call.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("chained.method.call.problem.descriptor");
   }

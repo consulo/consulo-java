@@ -20,6 +20,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import consulo.annotation.component.ExtensionImpl;
 
+import consulo.deadCodeNotWorking.impl.CheckBox;
 import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
@@ -43,7 +44,7 @@ public class MethodCouplingInspection extends MethodMetricInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("method.coupling.display.name");
   }
@@ -88,11 +89,11 @@ public class MethodCouplingInspection extends MethodMetricInspection {
     constraints.fill = GridBagConstraints.NONE;
     panel.add(valueField, constraints);
 
-    final consulo.deadCodeNotWorking.impl.CheckBox arrayCheckBox = new consulo.deadCodeNotWorking.impl.CheckBox(
+    final CheckBox arrayCheckBox = new CheckBox(
       InspectionGadgetsBundle.message(
         "include.java.system.classes.option"),
       this, "m_includeJavaClasses");
-    final consulo.deadCodeNotWorking.impl.CheckBox objectCheckBox = new consulo.deadCodeNotWorking.impl.CheckBox(
+    final CheckBox objectCheckBox = new CheckBox(
       InspectionGadgetsBundle.message(
         "include.library.classes.option"),
       this, "m_includeLibraryClasses");

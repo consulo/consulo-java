@@ -34,7 +34,7 @@ public class ThreadYieldInspection extends BaseInspection {
     return "CallToThreadYield";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("thread.yield.display.name");
   }

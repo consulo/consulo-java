@@ -26,7 +26,7 @@ public abstract class ManifestLanguageVersion extends LanguageVersion implements
 			return new ManifestLexer();
 		}
 
-		@jakarta.annotation.Nonnull
+		@Nonnull
 		@Override
 		public TokenSet getCommentTokens()
 		{
@@ -43,7 +43,7 @@ public abstract class ManifestLanguageVersion extends LanguageVersion implements
 			return new BndLexer();
 		}
 
-		@jakarta.annotation.Nonnull
+		@Nonnull
 		@Override
 		public TokenSet getCommentTokens()
 		{

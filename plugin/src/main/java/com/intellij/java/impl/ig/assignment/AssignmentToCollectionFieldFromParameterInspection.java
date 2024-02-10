@@ -39,12 +39,12 @@ public class AssignmentToCollectionFieldFromParameterInspection
    */
   public boolean ignorePrivateMethods = true;
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "AssignmentToCollectionOrArrayFieldFromParameter";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "assignment.collection.array.field.from.parameter.display.name");

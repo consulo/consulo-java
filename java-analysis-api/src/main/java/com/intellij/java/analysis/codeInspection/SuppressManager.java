@@ -46,7 +46,7 @@ public abstract class SuppressManager {
     return annotation != null && BatchSuppressManager.SUPPRESS_INSPECTIONS_ANNOTATION_NAME.equals(annotation.getQualifiedName());
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public SuppressQuickFix[] createBatchSuppressActions(@Nonnull HighlightDisplayKey key) {
     return BatchSuppressManager.getInstance().createBatchSuppressActions(key);
   }

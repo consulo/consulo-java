@@ -90,7 +90,7 @@ public final class CommentTracker {
    * @return the passed argument
    */
   @Contract("_ -> param1")
-  public <T extends PsiElement> T markUnchanged(@jakarta.annotation.Nullable T element) {
+  public <T extends PsiElement> T markUnchanged(@Nullable T element) {
     checkState();
     if (element != null)
       addIgnored(element);
@@ -320,7 +320,7 @@ public final class CommentTracker {
    */
   public
   @Nonnull
-  PsiElement replaceAndRestoreComments(@Nonnull PsiElement element, @jakarta.annotation.Nonnull PsiElement replacement) {
+  PsiElement replaceAndRestoreComments(@Nonnull PsiElement element, @Nonnull PsiElement replacement) {
     List<PsiElement> suffix = grabSuffixComments(element);
     PsiElement result = replace(element, replacement);
     PsiElement anchor = PsiTreeUtil
@@ -440,7 +440,7 @@ public final class CommentTracker {
    */
   public
   @Nonnull
-  PsiElement replaceAndRestoreComments(@Nonnull PsiElement element, @jakarta.annotation.Nonnull String text) {
+  PsiElement replaceAndRestoreComments(@Nonnull PsiElement element, @Nonnull String text) {
     PsiElement replacement = createElement(element, text);
     return replaceAndRestoreComments(element, replacement);
   }
@@ -544,7 +544,7 @@ public final class CommentTracker {
       PsiComment.class
   };
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Contract("null -> null")
   @Deprecated
   public static PsiElement skipWhitespacesAndCommentsForward(@Nullable PsiElement element) {

@@ -66,13 +66,13 @@ public class AnonymousToInnerHandler implements RefactoringActionHandler {
   protected boolean myMakeStatic;
   private final Set<PsiTypeParameter> myTypeParametersToCreate = new LinkedHashSet<PsiTypeParameter>();
 
-  public void invoke(@Nonnull Project project, @jakarta.annotation.Nonnull PsiElement[] elements, DataContext dataContext) {
+  public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
     if (elements.length == 1 && elements[0] instanceof PsiAnonymousClass) {
       invoke(project, dataContext.getData(PlatformDataKeys.EDITOR), (PsiAnonymousClass)elements[0]);
     }
   }
 
-  public void invoke(@jakarta.annotation.Nonnull final Project project, Editor editor, final PsiFile file, DataContext dataContext) {
+  public void invoke(@Nonnull final Project project, Editor editor, final PsiFile file, DataContext dataContext) {
     if (!CommonRefactoringUtil.checkReadOnlyStatus(project, file)) return;
 
     final int offset = editor.getCaretModel().getOffset();

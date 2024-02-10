@@ -39,7 +39,7 @@ public class AddMethodBodyFix implements SyntheticIntentionAction {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getText() {
     return JavaQuickFixBundle.message("add.method.body.text");
   }
@@ -54,7 +54,7 @@ public class AddMethodBodyFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(myMethod.getContainingFile())) return;
 
     try {

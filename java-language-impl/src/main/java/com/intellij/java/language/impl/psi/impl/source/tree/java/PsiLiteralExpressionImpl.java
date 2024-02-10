@@ -31,7 +31,7 @@ public class PsiLiteralExpressionImpl
 
   private static final TokenSet NUMERIC_LITERALS = TokenSet.orSet(ElementType.INTEGER_LITERALS, ElementType.REAL_LITERALS);
 
-  public PsiLiteralExpressionImpl(@jakarta.annotation.Nonnull PsiLiteralStub stub) {
+  public PsiLiteralExpressionImpl(@Nonnull PsiLiteralStub stub) {
     super(stub, JavaStubElementTypes.LITERAL_EXPRESSION);
   }
 
@@ -40,7 +40,7 @@ public class PsiLiteralExpressionImpl
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiElement[] getChildren() {
     return ((CompositeElement) getNode()).getChildrenAsPsiElements((TokenSet) null, PsiElement.ARRAY_FACTORY);
   }
@@ -156,7 +156,7 @@ public class PsiLiteralExpressionImpl
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static String internedParseStringCharacters(final String chars) {
     if (chars == null) {
       return null;
@@ -165,12 +165,12 @@ public class PsiLiteralExpressionImpl
     return outChars == null ? null : outChars.toString();
   }
 
-  public static boolean parseStringCharacters(@jakarta.annotation.Nonnull String chars, @jakarta.annotation.Nonnull StringBuilder outChars, @Nullable int[] sourceOffsets) {
+  public static boolean parseStringCharacters(@Nonnull String chars, @Nonnull StringBuilder outChars, @Nullable int[] sourceOffsets) {
     return CodeInsightUtilCore.parseStringCharacters(chars, outChars, sourceOffsets);
   }
 
   @Override
-  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitLiteralExpression(this);
     } else {
@@ -189,7 +189,7 @@ public class PsiLiteralExpressionImpl
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiReference[] getReferences() {
     IElementType type = getLiteralElementType();
     return ElementType.STRING_LITERALS.contains(type) || type == JavaTokenType.INTEGER_LITERAL  // int literals could refer to SQL parameters
@@ -198,14 +198,14 @@ public class PsiLiteralExpressionImpl
   }
 
   @Override
-  public PsiLanguageInjectionHost updateText(@jakarta.annotation.Nonnull final String text) {
+  public PsiLanguageInjectionHost updateText(@Nonnull final String text) {
     ASTNode valueNode = getNode().getFirstChildNode();
     assert valueNode instanceof LeafElement;
     ((LeafElement) valueNode).replaceWithText(text);
     return this;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public LiteralTextEscaper<PsiLiteralExpressionImpl> createLiteralTextEscaper() {
     return new StringLiteralEscaper<>(this);

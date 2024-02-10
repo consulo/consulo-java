@@ -32,7 +32,7 @@ public class ResultOfObjectAllocationIgnoredInspection extends BaseInspection {
     return InspectionGadgetsBundle.message("result.of.object.allocation.ignored.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("result.of.object.allocation.ignored.problem.descriptor");
   }

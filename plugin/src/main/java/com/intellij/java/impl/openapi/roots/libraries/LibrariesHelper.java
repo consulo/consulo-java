@@ -38,7 +38,7 @@ public abstract class LibrariesHelper {
 
   public abstract boolean isClassAvailable(@NonNls String[] urls, @NonNls String fqn);
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public abstract VirtualFile findJarByClass(final Library library, @NonNls String fqn);
 
   @Nullable

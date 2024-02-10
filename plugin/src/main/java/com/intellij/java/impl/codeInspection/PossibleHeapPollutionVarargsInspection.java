@@ -80,7 +80,7 @@ public class PossibleHeapPollutionVarargsInspection extends BaseJavaBatchLocalIn
 
   @Nonnull
   @Override
-  public PsiElementVisitor buildVisitorImpl(@jakarta.annotation.Nonnull final ProblemsHolder holder,
+  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
                                             boolean isOnTheFly,
                                             LocalInspectionToolSession session,
                                             Object state) {
@@ -119,7 +119,7 @@ public class PossibleHeapPollutionVarargsInspection extends BaseJavaBatchLocalIn
     }
 
     @Override
-    public void applyFix(@jakarta.annotation.Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
       final PsiElement psiElement = descriptor.getPsiElement();
       if (psiElement instanceof PsiIdentifier) {
         final PsiMethod psiMethod = (PsiMethod) psiElement.getParent();

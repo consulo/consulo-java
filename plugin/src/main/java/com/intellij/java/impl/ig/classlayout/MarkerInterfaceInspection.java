@@ -47,7 +47,7 @@ public class MarkerInterfaceInspection extends BaseInspection {
   private static class MarkerInterfaceVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       if (!aClass.isInterface() || aClass.isAnnotationType()) {
         return;
       }

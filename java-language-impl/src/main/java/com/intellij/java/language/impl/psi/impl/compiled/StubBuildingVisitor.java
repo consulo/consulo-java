@@ -141,7 +141,7 @@ public class StubBuildingVisitor<T> extends ClassVisitor {
     }
   }
 
-  private String getFqn(@Nonnull String internalName, @Nullable String shortName, @jakarta.annotation.Nullable String parentName) {
+  private String getFqn(@Nonnull String internalName, @Nullable String shortName, @Nullable String parentName) {
     if (shortName == null || !internalName.endsWith(shortName)) {
       return myFirstPassData.mapJvmClassNameToJava(internalName);
     }
@@ -179,7 +179,7 @@ public class StubBuildingVisitor<T> extends ClassVisitor {
     return result;
   }
 
-  private static void newReferenceList(@Nonnull JavaClassReferenceListElementType type, StubElement<?> parent, @jakarta.annotation.Nullable List<TypeInfo> types) {
+  private static void newReferenceList(@Nonnull JavaClassReferenceListElementType type, StubElement<?> parent, @Nullable List<TypeInfo> types) {
     new PsiClassReferenceListStubImpl(type, parent, types == null ? TypeInfo.EMPTY_ARRAY : types.toArray(TypeInfo.EMPTY_ARRAY));
   }
 
@@ -584,7 +584,7 @@ public class StubBuildingVisitor<T> extends ClassVisitor {
 
   private static final class RecordComponentAnnotationCollectingVisitor extends RecordComponentVisitor {
     private final
-    @jakarta.annotation.Nonnull
+    @Nonnull
     PsiModifierListStub myModList;
     private final
     @Nonnull
@@ -646,7 +646,7 @@ public class StubBuildingVisitor<T> extends ClassVisitor {
                                               PsiParameterStubImpl[] paramStubs,
                                               int paramIgnoreCount,
                                               int localVarIgnoreCount,
-                                              @jakarta.annotation.Nonnull FirstPassData firstPassData) {
+                                              @Nonnull FirstPassData firstPassData) {
       super(Opcodes.API_VERSION);
       myOwner = owner;
       myMethodInfo = methodInfo;
@@ -750,8 +750,8 @@ public class StubBuildingVisitor<T> extends ClassVisitor {
     }
   }
 
-  @jakarta.annotation.Nullable
-  static String constToString(@jakarta.annotation.Nullable Object value, @jakarta.annotation.Nullable String type, boolean anno, Function<? super String, String> mapping) {
+  @Nullable
+  static String constToString(@Nullable Object value, @Nullable String type, boolean anno, Function<? super String, String> mapping) {
     if (value == null)
       return null;
 
@@ -827,7 +827,7 @@ public class StubBuildingVisitor<T> extends ClassVisitor {
     return null;
   }
 
-  static String toJavaType(Type type, @jakarta.annotation.Nonnull Function<? super String, String> mapping) {
+  static String toJavaType(Type type, @Nonnull Function<? super String, String> mapping) {
     int dimensions = 0;
     if (type.getSort() == Type.ARRAY) {
       dimensions = type.getDimensions();

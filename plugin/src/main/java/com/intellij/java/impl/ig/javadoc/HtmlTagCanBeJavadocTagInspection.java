@@ -40,7 +40,7 @@ import org.jetbrains.annotations.NonNls;
 public class HtmlTagCanBeJavadocTagInspection extends BaseInspection {
 
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("html.tag.can.be.javadoc.tag.display.name");
@@ -67,7 +67,7 @@ public class HtmlTagCanBeJavadocTagInspection extends BaseInspection {
     }
 
     @Override
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "html.tag.can.be.javadoc.tag.quickfix");

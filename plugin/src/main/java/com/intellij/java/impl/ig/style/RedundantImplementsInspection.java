@@ -42,20 +42,20 @@ public class RedundantImplementsInspection extends BaseInspection {
   public boolean ignoreCloneable = false;
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "RedundantInterfaceDeclaration";
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "redundant.implements.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "redundant.implements.problem.descriptor");

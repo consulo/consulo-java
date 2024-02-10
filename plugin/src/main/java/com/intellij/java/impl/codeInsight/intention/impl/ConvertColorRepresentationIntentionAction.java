@@ -125,7 +125,7 @@ public class ConvertColorRepresentationIntentionAction extends BaseColorIntentio
 
   @Nullable
   private static String[] createArguments(@Nonnull PsiParameter[] parameters,
-                                          @jakarta.annotation.Nonnull PsiExpression[] arguments) {
+                                          @Nonnull PsiExpression[] arguments) {
     if (parameters.length != arguments.length) {
       return null;
     }
@@ -144,12 +144,12 @@ public class ConvertColorRepresentationIntentionAction extends BaseColorIntentio
     }
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static String[] createArguments(@Nonnull PsiExpression rgbExpression) {
     return createArguments(rgbExpression, 3);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static String[] createArguments(@Nonnull PsiExpression rgbExpression,
                                           @Nonnull PsiExpression hasAlphaExpression) {
     final Boolean hasAlpha = computeBoolean(hasAlphaExpression);
@@ -159,7 +159,7 @@ public class ConvertColorRepresentationIntentionAction extends BaseColorIntentio
     return hasAlpha ? createArguments(rgbExpression, 4) : createArguments(rgbExpression);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static String[] createArguments(@Nonnull PsiExpression rExpression,
                                           @Nonnull PsiExpression gExpression,
                                           @Nonnull PsiExpression bExpression) {
@@ -168,7 +168,7 @@ public class ConvertColorRepresentationIntentionAction extends BaseColorIntentio
   }
 
   @Nullable
-  private static String[] createArguments(@jakarta.annotation.Nonnull PsiExpression rExpression,
+  private static String[] createArguments(@Nonnull PsiExpression rExpression,
                                           @Nonnull PsiExpression gExpression,
                                           @Nonnull PsiExpression bExpression,
                                           @Nonnull PsiExpression aExpression) {
@@ -210,8 +210,8 @@ public class ConvertColorRepresentationIntentionAction extends BaseColorIntentio
     return result;
   }
 
-  @jakarta.annotation.Nullable
-  public static Integer computeInteger(@jakarta.annotation.Nonnull PsiExpression expr) {
+  @Nullable
+  public static Integer computeInteger(@Nonnull PsiExpression expr) {
     final Object result = compute(expr);
     return result instanceof Integer ? (Integer)result : null;
   }

@@ -53,14 +53,14 @@ public class UnnecessaryJavaDocLinkInspection extends BaseInspection {
   public boolean ignoreInlineLinkToSuper = false;
 
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "unnecessary.javadoc.link.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     final int n = ((Integer)infos[1]).intValue();

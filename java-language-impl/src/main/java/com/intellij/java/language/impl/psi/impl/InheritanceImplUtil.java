@@ -139,7 +139,7 @@ public class InheritanceImplUtil {
     return false;
   }
 
-  private static boolean isInheritorWithoutCaching(@Nonnull PsiManager manager, @Nonnull PsiClass aClass, @Nonnull PsiClass baseClass, @jakarta.annotation.Nullable Set<PsiClass> checkedClasses) {
+  private static boolean isInheritorWithoutCaching(@Nonnull PsiManager manager, @Nonnull PsiClass aClass, @Nonnull PsiClass baseClass, @Nullable Set<PsiClass> checkedClasses) {
     if (manager.areElementsEquivalent(aClass, baseClass)) {
       return false;
     }
@@ -166,7 +166,7 @@ public class InheritanceImplUtil {
     return false;
   }
 
-  private static boolean checkInheritor(@Nonnull PsiManager manager, @Nonnull PsiClass aClass, @Nonnull PsiClass baseClass, @jakarta.annotation.Nonnull Set<PsiClass> checkedClasses) {
+  private static boolean checkInheritor(@Nonnull PsiManager manager, @Nonnull PsiClass aClass, @Nonnull PsiClass baseClass, @Nonnull Set<PsiClass> checkedClasses) {
     ProgressIndicatorProvider.checkCanceled();
     if (manager.areElementsEquivalent(baseClass, aClass)) {
       return true;
@@ -177,7 +177,7 @@ public class InheritanceImplUtil {
     return isInheritor(manager, aClass, baseClass, true, checkedClasses);
   }
 
-  public static boolean isInheritorDeep(@Nonnull PsiClass candidateClass, @Nonnull PsiClass baseClass, @jakarta.annotation.Nullable final PsiClass classToByPass) {
+  public static boolean isInheritorDeep(@Nonnull PsiClass candidateClass, @Nonnull PsiClass baseClass, @Nullable final PsiClass classToByPass) {
     if (baseClass instanceof PsiAnonymousClass) {
       return false;
     }

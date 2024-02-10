@@ -141,7 +141,7 @@ public class ConcatenationToMessageFormatAction implements IntentionAction {
     return file.findElementAt(editor.getCaretModel().getOffset());
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static PsiPolyadicExpression getEnclosingLiteralConcatenation(final PsiElement element) {
     PsiPolyadicExpression binaryExpression = PsiTreeUtil.getParentOfType(element, PsiPolyadicExpression.class, false, PsiMember.class);
     if (binaryExpression == null) return null;

@@ -54,7 +54,7 @@ public class InnerClassOnInterfaceInspection extends BaseInspection {
                                           this, "m_ignoreInnerInterfaces");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiClass parentInterface = (PsiClass)infos[0];
     final String interfaceName = parentInterface.getName();

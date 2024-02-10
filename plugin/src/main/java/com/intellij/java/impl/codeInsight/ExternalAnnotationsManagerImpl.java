@@ -118,7 +118,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
   private final MessageBus myBus;
 
   @Inject
-  public ExternalAnnotationsManagerImpl(@jakarta.annotation.Nonnull final Project project, final PsiManager psiManager) {
+  public ExternalAnnotationsManagerImpl(@Nonnull final Project project, final PsiManager psiManager) {
     super(psiManager);
     myBus = project.getMessageBus();
     final MessageBusConnection connection = myBus.connect(project);
@@ -134,7 +134,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
     Disposer.register(myPsiManager.getProject(), () -> VirtualFileManager.getInstance().removeVirtualFileListener(fileListener));
   }
 
-  public static boolean areExternalAnnotationsApplicable(@jakarta.annotation.Nonnull PsiModifierListOwner owner) {
+  public static boolean areExternalAnnotationsApplicable(@Nonnull PsiModifierListOwner owner) {
     if (!owner.isPhysical()) {
       return false;
     }
@@ -144,7 +144,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
     return CodeStyleSettingsManager.getSettings(owner.getProject()).USE_EXTERNAL_ANNOTATIONS;
   }
 
-  private void notifyAfterAnnotationChanging(@jakarta.annotation.Nonnull PsiModifierListOwner owner, @Nonnull String annotationFQName, boolean successful) {
+  private void notifyAfterAnnotationChanging(@Nonnull PsiModifierListOwner owner, @Nonnull String annotationFQName, boolean successful) {
     myBus.syncPublisher(TOPIC).afterExternalAnnotationChanging(owner, annotationFQName, successful);
     myPsiManager.getModificationTracker().incCounter();
   }
@@ -156,9 +156,9 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 
   @Override
   public void annotateExternally(@Nonnull final PsiModifierListOwner listOwner,
-                                 @jakarta.annotation.Nonnull final String annotationFQName,
-                                 @jakarta.annotation.Nonnull final PsiFile fromFile,
-                                 @jakarta.annotation.Nullable final PsiNameValuePair[] value) {
+                                 @Nonnull final String annotationFQName,
+                                 @Nonnull final PsiFile fromFile,
+                                 @Nullable final PsiNameValuePair[] value) {
     Application application = ApplicationManager.getApplication();
     application.assertIsDispatchThread();
     LOG.assertTrue(!application.isWriteAccessAllowed());
@@ -219,12 +219,12 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
   }
 
   private boolean setupRootAndAnnotateExternally(@Nonnull final OrderEntry entry,
-                                                 @jakarta.annotation.Nonnull final Project project,
+                                                 @Nonnull final Project project,
                                                  @Nonnull final PsiModifierListOwner listOwner,
                                                  @Nonnull final String annotationFQName,
                                                  @Nonnull final PsiFile fromFile,
                                                  @Nonnull final String packageName,
-                                                 @jakarta.annotation.Nullable final PsiNameValuePair[] value) {
+                                                 @Nullable final PsiNameValuePair[] value) {
     final FileChooserDescriptor descriptor = FileChooserDescriptorFactory.createSingleFolderDescriptor();
     descriptor.setTitle(ProjectBundle.message("external.annotations.root.chooser.title", entry.getPresentableName()));
     descriptor.setDescription(ProjectBundle.message("external.annotations.root.chooser.description"));
@@ -258,7 +258,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
   }
 
   @Nullable
-  private static XmlFile findXmlFileInRoot(@jakarta.annotation.Nullable List<XmlFile> xmlFiles, @jakarta.annotation.Nonnull VirtualFile root) {
+  private static XmlFile findXmlFileInRoot(@Nullable List<XmlFile> xmlFiles, @Nonnull VirtualFile root) {
     if (xmlFiles != null) {
       for (XmlFile xmlFile : xmlFiles) {
         VirtualFile vf = xmlFile.getVirtualFile();
@@ -274,11 +274,11 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 
   private void chooseRootAndAnnotateExternally(@Nonnull final PsiModifierListOwner listOwner,
                                                @Nonnull final String annotationFQName,
-                                               @jakarta.annotation.Nonnull final PsiFile fromFile,
+                                               @Nonnull final PsiFile fromFile,
                                                @Nonnull final Project project,
-                                               @jakarta.annotation.Nonnull final String packageName,
+                                               @Nonnull final String packageName,
                                                @Nonnull VirtualFile[] roots,
-                                               @jakarta.annotation.Nullable final PsiNameValuePair[] value) {
+                                               @Nullable final PsiNameValuePair[] value) {
     if (roots.length > 1) {
       JBPopupFactory.getInstance().createListPopup(new BaseListPopupStep<VirtualFile>("Annotation Roots", roots) {
         @Override
@@ -309,17 +309,17 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
   }
 
   @Nonnull
-  private static VirtualFile[] filterByReadOnliness(@jakarta.annotation.Nonnull VirtualFile[] files) {
+  private static VirtualFile[] filterByReadOnliness(@Nonnull VirtualFile[] files) {
     List<VirtualFile> result = ContainerUtil.filter(files, file -> file.isInLocalFileSystem());
     return VfsUtilCore.toVirtualFileArray(result);
   }
 
-  private void annotateExternally(@jakarta.annotation.Nonnull final VirtualFile root,
-                                  @jakarta.annotation.Nonnull final PsiModifierListOwner listOwner,
+  private void annotateExternally(@Nonnull final VirtualFile root,
+                                  @Nonnull final PsiModifierListOwner listOwner,
                                   @Nonnull final Project project,
                                   @Nonnull final String packageName,
                                   @Nonnull final String annotationFQName,
-                                  @jakarta.annotation.Nonnull final PsiFile fromFile,
+                                  @Nonnull final PsiFile fromFile,
                                   @Nullable final PsiNameValuePair[] value) {
     List<XmlFile> xmlFiles = findExternalAnnotationsXmlFiles(listOwner);
 
@@ -333,7 +333,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 
     new WriteCommandAction(project) {
       @Override
-      protected void run(@jakarta.annotation.Nonnull final Result result) throws Throwable {
+      protected void run(@Nonnull final Result result) throws Throwable {
         if (existingXml != null) {
           annotateExternally(listOwner, annotationFQName, existingXml, fromFile, value);
         } else {
@@ -381,7 +381,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
   }
 
   @Override
-  public boolean editExternalAnnotation(@Nonnull PsiModifierListOwner listOwner, @jakarta.annotation.Nonnull final String annotationFQN, @jakarta.annotation.Nullable final PsiNameValuePair[] value) {
+  public boolean editExternalAnnotation(@Nonnull PsiModifierListOwner listOwner, @Nonnull final String annotationFQN, @Nullable final PsiNameValuePair[] value) {
     ApplicationManager.getApplication().assertIsDispatchThread();
     return processExistingExternalAnnotations(listOwner, annotationFQN, annotationTag ->
     {
@@ -390,7 +390,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
     });
   }
 
-  private boolean processExistingExternalAnnotations(@Nonnull final PsiModifierListOwner listOwner, @jakarta.annotation.Nonnull final String annotationFQN, @jakarta.annotation.Nonnull final Processor<XmlTag> annotationTagProcessor) {
+  private boolean processExistingExternalAnnotations(@Nonnull final PsiModifierListOwner listOwner, @Nonnull final String annotationFQN, @Nonnull final Processor<XmlTag> annotationTagProcessor) {
     try {
       final List<XmlFile> files = findExternalAnnotationsXmlFiles(listOwner);
       if (files == null) {
@@ -455,7 +455,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 
   @Override
   @Nonnull
-  public AnnotationPlace chooseAnnotationsPlace(@jakarta.annotation.Nonnull final PsiElement element) {
+  public AnnotationPlace chooseAnnotationsPlace(@Nonnull final PsiElement element) {
     ApplicationManager.getApplication().assertIsDispatchThread();
     return chooseAnnotationsPlace(element, () -> confirmNewExternalAnnotationRoot(element));
   }
@@ -508,7 +508,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
     return AnnotationPlace.IN_CODE;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private AnnotationPlace chooseAnnotationsPlace(@Nonnull PsiElement element,
                                                  @Nonnull Supplier<? extends AnnotationPlace> confirmNewExternalAnnotationRoot) {
     if (!element.isPhysical() && !(element.getOriginalElement() instanceof PsiCompiledElement)) {
@@ -548,7 +548,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
     return chooseAnnotationsPlace(element, () -> AnnotationPlace.NEED_ASK_USER);
   }
 
-  private void appendChosenAnnotationsRoot(@jakarta.annotation.Nonnull final OrderEntry entry, @Nonnull final VirtualFile vFile) {
+  private void appendChosenAnnotationsRoot(@Nonnull final OrderEntry entry, @Nonnull final VirtualFile vFile) {
     if (entry instanceof LibraryOrderEntry) {
       Library library = ((LibraryOrderEntry) entry).getLibrary();
       LOG.assertTrue(library != null);
@@ -567,9 +567,9 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 
   private void annotateExternally(@Nonnull final PsiModifierListOwner listOwner,
                                   @Nonnull final String annotationFQName,
-                                  @jakarta.annotation.Nullable final XmlFile xmlFile,
-                                  @jakarta.annotation.Nonnull final PsiFile codeUsageFile,
-                                  @jakarta.annotation.Nullable final PsiNameValuePair[] values) {
+                                  @Nullable final XmlFile xmlFile,
+                                  @Nonnull final PsiFile codeUsageFile,
+                                  @Nullable final PsiNameValuePair[] values) {
     if (xmlFile == null) {
       notifyAfterAnnotationChanging(listOwner, annotationFQName, false);
       return;
@@ -628,7 +628,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
     }
   }
 
-  private static void sortItems(@jakarta.annotation.Nonnull XmlFile xmlFile) {
+  private static void sortItems(@Nonnull XmlFile xmlFile) {
     XmlDocument document = xmlFile.getDocument();
     if (document == null) {
       return;
@@ -673,8 +673,8 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
   }
 
   @NonNls
-  @jakarta.annotation.Nonnull
-  private static String createAnnotationTag(@jakarta.annotation.Nonnull String annotationFQName, @Nullable PsiNameValuePair[] values) {
+  @Nonnull
+  private static String createAnnotationTag(@Nonnull String annotationFQName, @Nullable PsiNameValuePair[] values) {
     @NonNls String text;
     if (values != null && values.length != 0) {
       text = "  <annotation name=\'" + annotationFQName + "\'>\n";
@@ -687,8 +687,8 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
     return text;
   }
 
-  @jakarta.annotation.Nullable
-  private XmlFile createAnnotationsXml(@Nonnull VirtualFile root, @NonNls @jakarta.annotation.Nonnull String packageName) {
+  @Nullable
+  private XmlFile createAnnotationsXml(@Nonnull VirtualFile root, @NonNls @Nonnull String packageName) {
     final String[] dirs = packageName.split("[\\.]");
     for (String dir : dirs) {
       if (dir.isEmpty()) {

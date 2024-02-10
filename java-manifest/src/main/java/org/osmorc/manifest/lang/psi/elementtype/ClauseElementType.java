@@ -47,7 +47,7 @@ public class ClauseElementType extends AbstractManifestStubElementType<ClauseStu
   }
 
   @Override
-  public Clause createPsi(@jakarta.annotation.Nonnull ClauseStub stub) {
+  public Clause createPsi(@Nonnull ClauseStub stub) {
     return new ClauseImpl(stub, this);
   }
 
@@ -57,18 +57,18 @@ public class ClauseElementType extends AbstractManifestStubElementType<ClauseStu
   }
 
   @Override
-  public ClauseStub createStub(@jakarta.annotation.Nonnull Clause psi, StubElement parentStub) {
+  public ClauseStub createStub(@Nonnull Clause psi, StubElement parentStub) {
     return new ClauseStubImpl(parentStub);
   }
 
   public void serialize(@Nonnull ClauseStub stub, @Nonnull StubOutputStream dataStream) throws IOException {
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public ClauseStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
     return new ClauseStubImpl(parentStub);
   }
 
-  public void indexStub(@jakarta.annotation.Nonnull ClauseStub stub, @jakarta.annotation.Nonnull IndexSink sink) {
+  public void indexStub(@Nonnull ClauseStub stub, @Nonnull IndexSink sink) {
   }
 }

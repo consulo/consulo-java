@@ -33,7 +33,7 @@ public interface DfaMemoryState
 	@Nonnull
 	DfaMemoryState createCopy();
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	DfaMemoryState createClosureState();
 
 	/**
@@ -51,7 +51,7 @@ public interface DfaMemoryState
 	 * @return top of stack value
 	 * @throws EmptyStackException if stack is empty
 	 */
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	DfaValue peek();
 
 	/**
@@ -61,7 +61,7 @@ public interface DfaMemoryState
 	 * @return stack value; null if stack does not deep enough
 	 * @throws IndexOutOfBoundsException if offset is negative
 	 */
-	@jakarta.annotation.Nullable
+	@Nullable
 	DfaValue getStackValue(int offset);
 
 	/**
@@ -69,7 +69,7 @@ public interface DfaMemoryState
 	 *
 	 * @param value to push
 	 */
-	void push(@jakarta.annotation.Nonnull DfaValue value);
+	void push(@Nonnull DfaValue value);
 
 	void emptyStack();
 
@@ -82,7 +82,7 @@ public interface DfaMemoryState
 	 * @param right second value
 	 * @return a relation (EQ, NE, GT, LT), or null if not known.
 	 */
-	@jakarta.annotation.Nullable
+	@Nullable
 	RelationType getRelation(DfaValue left, DfaValue right);
 
 	boolean applyCondition(DfaCondition dfaCond);
@@ -106,7 +106,7 @@ public interface DfaMemoryState
 	 * @param dfType wanted type
 	 * @return true if update was successful. If false was returned the memory state may be in inconsistent state.
 	 */
-	boolean meetDfType(@jakarta.annotation.Nonnull DfaValue value, @Nonnull DfType dfType);
+	boolean meetDfType(@Nonnull DfaValue value, @Nonnull DfType dfType);
 
 	/**
 	 * Forcibly sets the supplied dfType to given value if given value state can be memoized.
@@ -122,22 +122,22 @@ public interface DfaMemoryState
 	 * @param value value to get the type of
 	 * @return the DfType of the value within this memory state
 	 */
-	@jakarta.annotation.Nonnull
-	DfType getDfType(@jakarta.annotation.Nonnull DfaValue value);
+	@Nonnull
+	DfType getDfType(@Nonnull DfaValue value);
 
 	/**
 	 * @param value value to get the type of; if value is a primitive wrapper, it will be unboxed before fetching the DfType
 	 * @return the DfType of the value within this memory state
 	 */
-	@jakarta.annotation.Nonnull
-	DfType getUnboxedDfType(@jakarta.annotation.Nonnull DfaValue value);
+	@Nonnull
+	DfType getUnboxedDfType(@Nonnull DfaValue value);
 
 	/**
 	 * @param value value to get the type of
 	 * @return the PsiType of given value, could be more precise than the declared type. May return null if not known.
 	 */
 	@Nullable
-	PsiType getPsiType(@jakarta.annotation.Nonnull DfaValue value);
+	PsiType getPsiType(@Nonnull DfaValue value);
 
 	void flushFieldsQualifiedBy(@Nonnull Set<DfaValue> qualifiers);
 

@@ -32,12 +32,12 @@ import jakarta.annotation.Nonnull;
 @ServiceImpl
 public class JavaVersionServiceImpl extends JavaVersionService {
   @Override
-  public boolean isAtLeast(@jakarta.annotation.Nonnull PsiElement element, @Nonnull JavaSdkVersion version) {
+  public boolean isAtLeast(@Nonnull PsiElement element, @Nonnull JavaSdkVersion version) {
     return JavaSdkVersionUtil.isAtLeast(element, version);
   }
 
   @Override
-  public JavaSdkVersion getJavaSdkVersion(@jakarta.annotation.Nonnull PsiElement element) {
+  public JavaSdkVersion getJavaSdkVersion(@Nonnull PsiElement element) {
     return JavaSdkVersionUtil.getJavaSdkVersion(element);
   }
 }

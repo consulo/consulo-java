@@ -168,13 +168,13 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor {
     return null;
   }
 
-  @jakarta.annotation.Nonnull
-  private static LineMarkerInfo createSuperMethodLineMarkerInfo(@Nonnull PsiElement name, @jakarta.annotation.Nonnull Image icon) {
+  @Nonnull
+  private static LineMarkerInfo createSuperMethodLineMarkerInfo(@Nonnull PsiElement name, @Nonnull Image icon) {
     ArrowUpLineMarkerInfo info = new ArrowUpLineMarkerInfo(name, icon, MarkerType.OVERRIDING_METHOD);
     return NavigateAction.setNavigateAction(info, "Go to super method", IdeActions.ACTION_GOTO_SUPER);
   }
 
-  private static int getCategory(@Nonnull PsiElement element, @jakarta.annotation.Nonnull CharSequence documentChars) {
+  private static int getCategory(@Nonnull PsiElement element, @Nonnull CharSequence documentChars) {
     if (element instanceof PsiField || element instanceof PsiTypeParameter) {
       return 1;
     }
@@ -195,7 +195,7 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor {
   }
 
   @Override
-  public void collectSlowLineMarkers(@jakarta.annotation.Nonnull final List<PsiElement> elements, @Nonnull final Collection<LineMarkerInfo> result) {
+  public void collectSlowLineMarkers(@Nonnull final List<PsiElement> elements, @Nonnull final Collection<LineMarkerInfo> result) {
     ApplicationManager.getApplication().assertReadAccessAllowed();
 
     List<Computable<List<LineMarkerInfo<PsiElement>>>> tasks = new ArrayList<>();
@@ -258,7 +258,7 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor {
     }
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private static List<LineMarkerInfo<PsiElement>> collectSiblingInheritedMethods(@Nonnull final Collection<? extends PsiMethod> methods) {
     Map<PsiMethod, FindSuperElementsHelper.SiblingInfo> map = FindSuperElementsHelper.getSiblingInheritanceInfos(methods);
     return ContainerUtil.map(map.keySet(), method -> {
@@ -391,14 +391,14 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor {
     };
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;
   }
 
   private static class ArrowUpLineMarkerInfo extends MergeableLineMarkerInfo<PsiElement> {
-    private ArrowUpLineMarkerInfo(@jakarta.annotation.Nonnull PsiElement element, @Nonnull Image icon, @jakarta.annotation.Nonnull MarkerType markerType) {
+    private ArrowUpLineMarkerInfo(@Nonnull PsiElement element, @Nonnull Image icon, @Nonnull MarkerType markerType) {
       super(element, element.getTextRange(), icon, Pass.LINE_MARKERS, markerType.getTooltip(), markerType.getNavigationHandler(), GutterIconRenderer.Alignment.LEFT);
     }
 
@@ -414,13 +414,13 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor {
 
     @Nonnull
     @Override
-    public Image getCommonIcon(@jakarta.annotation.Nonnull List<MergeableLineMarkerInfo> infos) {
+    public Image getCommonIcon(@Nonnull List<MergeableLineMarkerInfo> infos) {
       return myIcon;
     }
 
     @Nonnull
     @Override
-    public Function<? super PsiElement, String> getCommonTooltip(@jakarta.annotation.Nonnull List<MergeableLineMarkerInfo> infos) {
+    public Function<? super PsiElement, String> getCommonTooltip(@Nonnull List<MergeableLineMarkerInfo> infos) {
       return element -> "Multiple method overrides";
     }
 

@@ -44,14 +44,14 @@ public class DoubleCheckedLockingInspection extends BaseInspection {
   public boolean ignoreOnVolatileVariables = false;
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "double.checked.locking.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "double.checked.locking.problem.descriptor");
@@ -110,7 +110,7 @@ public class DoubleCheckedLockingInspection extends BaseInspection {
 
     @Override
     public void visitIfStatement(
-      @jakarta.annotation.Nonnull PsiIfStatement statement) {
+      @Nonnull PsiIfStatement statement) {
       super.visitIfStatement(statement);
       final PsiExpression outerCondition = statement.getCondition();
       if (outerCondition == null) {

@@ -31,7 +31,7 @@ public abstract class ResourceInspection extends BaseInspection {
 
   @Nullable
   protected static PsiVariable getVariable(
-    @jakarta.annotation.Nonnull PsiElement element) {
+    @Nonnull PsiElement element) {
     if (element instanceof PsiAssignmentExpression) {
       final PsiAssignmentExpression assignment =
         (PsiAssignmentExpression)element;
@@ -64,7 +64,7 @@ public abstract class ResourceInspection extends BaseInspection {
     return parent;
   }
 
-  protected static boolean isSafelyClosed(@jakarta.annotation.Nullable PsiVariable variable, PsiElement context, boolean insideTryAllowed) {
+  protected static boolean isSafelyClosed(@Nullable PsiVariable variable, PsiElement context, boolean insideTryAllowed) {
     if (variable == null) {
       return false;
     }
@@ -109,7 +109,7 @@ public abstract class ResourceInspection extends BaseInspection {
 
   protected static boolean isResourceClosedInFinally(
     @Nonnull PsiTryStatement tryStatement,
-    @jakarta.annotation.Nonnull PsiVariable variable) {
+    @Nonnull PsiVariable variable) {
     final PsiCodeBlock finallyBlock = tryStatement.getFinallyBlock();
     if (finallyBlock == null) {
       return false;
@@ -261,7 +261,7 @@ public abstract class ResourceInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @jakarta.annotation.Nonnull PsiMethodCallExpression call) {
+      @Nonnull PsiMethodCallExpression call) {
       if (containsClose) {
         return;
       }

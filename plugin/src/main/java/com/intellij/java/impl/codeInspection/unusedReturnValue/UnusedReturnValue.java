@@ -57,7 +57,7 @@ public class UnusedReturnValue extends GlobalJavaInspectionTool implements OldSt
 	public boolean IGNORE_BUILDER_PATTERN = false;
 
 	@Override
-	@jakarta.annotation.Nullable
+	@Nullable
 	public CommonProblemDescriptor[] checkElement(RefEntity refEntity,
 												  AnalysisScope scope,
 												  InspectionManager manager,
@@ -129,7 +129,7 @@ public class UnusedReturnValue extends GlobalJavaInspectionTool implements OldSt
 					refEntity.accept(new RefJavaVisitor()
 					{
 						@Override
-						public void visitMethod(@jakarta.annotation.Nonnull final RefMethod refMethod)
+						public void visitMethod(@Nonnull final RefMethod refMethod)
 						{
 							globalContext.enqueueMethodUsagesProcessor(refMethod, new GlobalJavaInspectionContext.UsagesProcessor()
 							{
@@ -157,7 +157,7 @@ public class UnusedReturnValue extends GlobalJavaInspectionTool implements OldSt
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public String getGroupDisplayName()
 	{
 		return GroupNames.DECLARATION_REDUNDANCY;
@@ -228,7 +228,7 @@ public class UnusedReturnValue extends GlobalJavaInspectionTool implements OldSt
 		}
 
 		@Override
-		@jakarta.annotation.Nonnull
+		@Nonnull
 		public String getFamilyName()
 		{
 			return getName();

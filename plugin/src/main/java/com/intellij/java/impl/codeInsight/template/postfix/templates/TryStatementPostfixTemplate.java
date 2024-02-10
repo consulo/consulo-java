@@ -39,12 +39,12 @@ public class TryStatementPostfixTemplate extends PostfixTemplate {
   }
 
   @Override
-  public boolean isApplicable(@jakarta.annotation.Nonnull PsiElement context, @Nonnull Document copyDocument, int newOffset) {
+  public boolean isApplicable(@Nonnull PsiElement context, @Nonnull Document copyDocument, int newOffset) {
     return null != PsiTreeUtil.getNonStrictParentOfType(context, PsiStatement.class);
   }
 
   @Override
-  public void expand(@jakarta.annotation.Nonnull PsiElement context, @Nonnull Editor editor) {
+  public void expand(@Nonnull PsiElement context, @Nonnull Editor editor) {
     PsiStatement statement = PsiTreeUtil.getNonStrictParentOfType(context, PsiStatement.class);
     assert statement != null;
 

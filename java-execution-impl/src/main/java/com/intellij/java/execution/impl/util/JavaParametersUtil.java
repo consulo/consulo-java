@@ -108,8 +108,8 @@ public class JavaParametersUtil {
   /**
    * @return null if class not found
    */
-  @jakarta.annotation.Nullable
-  public static Boolean isClassInProductionSources(@Nonnull String mainClassName, @jakarta.annotation.Nonnull Module module) {
+  @Nullable
+  public static Boolean isClassInProductionSources(@Nonnull String mainClassName, @Nonnull Module module) {
     final PsiClass psiClass = JavaExecutionUtil.findMainClass(module, mainClassName);
     if (psiClass == null) {
       return null;
@@ -142,7 +142,7 @@ public class JavaParametersUtil {
   public static void configureModule(final RunConfigurationModule runConfigurationModule,
                                      final OwnJavaParameters parameters,
                                      @MagicConstant(valuesFromClass = OwnJavaParameters.class) final int classPathType,
-                                     @jakarta.annotation.Nullable String alternativeJreName) throws CantRunException {
+                                     @Nullable String alternativeJreName) throws CantRunException {
     Module module = runConfigurationModule.getModule();
     if (module == null) {
       throw CantRunException.noModuleConfigured(runConfigurationModule.getModuleName());
@@ -153,22 +153,22 @@ public class JavaParametersUtil {
   public static void configureModule(@Nonnull Module module,
                                      @Nonnull OwnJavaParameters parameters,
                                      @MagicConstant(valuesFromClass = OwnJavaParameters.class) int classPathType,
-                                     @jakarta.annotation.Nullable String alternativeJreName) throws CantRunException {
+                                     @Nullable String alternativeJreName) throws CantRunException {
     parameters.configureByModule(module, classPathType, createModuleJdk(module, (classPathType & OwnJavaParameters.TESTS_ONLY) == 0, alternativeJreName));
   }
 
   public static void configureProject(Project project,
                                       final OwnJavaParameters parameters,
                                       @MagicConstant(valuesFromClass = OwnJavaParameters.class) final int classPathType,
-                                      @jakarta.annotation.Nullable String alternativeJreName) throws CantRunException {
+                                      @Nullable String alternativeJreName) throws CantRunException {
     parameters.configureByProject(project, classPathType, createProjectJdk(project, alternativeJreName));
   }
 
-  public static Sdk createModuleJdk(final Module module, boolean productionOnly, @jakarta.annotation.Nullable String jreHome) throws CantRunException {
+  public static Sdk createModuleJdk(final Module module, boolean productionOnly, @Nullable String jreHome) throws CantRunException {
     return jreHome == null ? OwnJavaParameters.getValidJdkToRunModule(module, productionOnly) : createAlternativeJdk(jreHome);
   }
 
-  public static Sdk createProjectJdk(final Project project, @jakarta.annotation.Nullable String jreHome) throws CantRunException {
+  public static Sdk createProjectJdk(final Project project, @Nullable String jreHome) throws CantRunException {
     return jreHome == null ? createProjectJdk(project) : createAlternativeJdk(jreHome);
   }
 

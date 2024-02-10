@@ -45,7 +45,9 @@ import consulo.execution.debug.frame.XValueMarkers;
 import consulo.execution.debug.ui.ValueMarkup;
 import consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl;
 import consulo.ide.impl.idea.xdebugger.impl.actions.XDebuggerActionBase;
+import consulo.ide.impl.idea.xdebugger.impl.ui.XDebuggerExpressionEditor;
 import consulo.ide.impl.idea.xdebugger.impl.ui.tree.XDebuggerTreeState;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.actions.XDebuggerTreeActionBase;
 import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.logging.Logger;
@@ -84,7 +86,7 @@ public class InstancesWindow extends DialogWrapper
 	private final String myClassName;
 	private final MyInstancesView myInstancesView;
 
-	public InstancesWindow(@Nonnull XDebugSession session, @jakarta.annotation.Nonnull InstancesProvider provider, @Nonnull String className)
+	public InstancesWindow(@Nonnull XDebugSession session, @Nonnull InstancesProvider provider, @Nonnull String className)
 	{
 		super(session.getProject(), false);
 
@@ -125,7 +127,7 @@ public class InstancesWindow extends DialogWrapper
 		return "#org.jetbrains.debugger.memory.view.InstancesWindow";
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	@Override
 	protected JComponent createCenterPanel()
 	{
@@ -161,7 +163,7 @@ public class InstancesWindow extends DialogWrapper
 		private static final int FILTERING_PROGRESS_UPDATING_MIN_DELAY_MILLIS = 17; // ~ 60 fps
 
 		private final InstancesTree myInstancesTree;
-		private final consulo.ide.impl.idea.xdebugger.impl.ui.XDebuggerExpressionEditor myFilterConditionEditor;
+		private final XDebuggerExpressionEditor myFilterConditionEditor;
 		private final XDebugSessionListener myDebugSessionListener = new MySessionListener();
 
 		private final MyNodeManager myNodeManager = new MyNodeManager(myProject);
@@ -175,7 +177,7 @@ public class InstancesWindow extends DialogWrapper
 
 		private volatile MyFilteringWorker myFilteringTask = null;
 
-		MyInstancesView(@jakarta.annotation.Nonnull XDebugSession session)
+		MyInstancesView(@Nonnull XDebugSession session)
 		{
 			super(new BorderLayout(0, JBUI.scale(BORDER_LAYOUT_DEFAULT_GAP)));
 
@@ -314,7 +316,7 @@ public class InstancesWindow extends DialogWrapper
 
 		private class MySessionListener implements XDebugSessionListener
 		{
-			private volatile consulo.ide.impl.idea.xdebugger.impl.ui.tree.XDebuggerTreeState myTreeState = null;
+			private volatile XDebuggerTreeState myTreeState = null;
 
 			@Override
 			public void sessionResumed()
@@ -353,7 +355,7 @@ public class InstancesWindow extends DialogWrapper
 			{
 				if(dataContext.getData(UIExAWTDataKey.CONTEXT_COMPONENT) == myInstancesTree && (isAddToWatchesAction(action) || isEvaluateExpressionAction(action)))
 				{
-					XValueNodeImpl selectedNode = consulo.ide.impl.idea.xdebugger.impl.ui.tree.actions.XDebuggerTreeActionBase.getSelectedNode(dataContext);
+					XValueNodeImpl selectedNode = XDebuggerTreeActionBase.getSelectedNode(dataContext);
 
 					if(selectedNode != null)
 					{
@@ -363,7 +365,7 @@ public class InstancesWindow extends DialogWrapper
 							currentNode = currentNode.getParent();
 						}
 
-						final XValue valueContainer = ((consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl) currentNode).getValueContainer();
+						final XValue valueContainer = ((XValueNodeImpl) currentNode).getValueContainer();
 
 						final String expression = valueContainer.getEvaluationExpression();
 						if(expression != null)
@@ -379,7 +381,7 @@ public class InstancesWindow extends DialogWrapper
 			private boolean isAddToWatchesAction(AnAction action)
 			{
 				final String className = action.getClass().getSimpleName();
-				return action instanceof consulo.ide.impl.idea.xdebugger.impl.ui.tree.actions.XDebuggerTreeActionBase && className.equals("XAddToWatchesAction");
+				return action instanceof XDebuggerTreeActionBase && className.equals("XAddToWatchesAction");
 			}
 
 			private boolean isEvaluateExpressionAction(AnAction action)
@@ -421,7 +423,7 @@ public class InstancesWindow extends DialogWrapper
 
 			@Nonnull
 			@Override
-			public Action matched(@jakarta.annotation.Nonnull ObjectReference ref)
+			public Action matched(@Nonnull ObjectReference ref)
 			{
 				final JavaValue val = new InstanceJavaValue(new InstanceValueDescriptor(myProject, ref), myEvaluationContext, myNodeManager);
 				myMatchedCount++;
@@ -443,7 +445,7 @@ public class InstancesWindow extends DialogWrapper
 				return Action.CONTINUE;
 			}
 
-			@jakarta.annotation.Nonnull
+			@Nonnull
 			@Override
 			public Action error(@Nonnull ObjectReference ref, @Nonnull String description)
 			{
@@ -456,7 +458,7 @@ public class InstancesWindow extends DialogWrapper
 			}
 
 			@Override
-			public void completed(@jakarta.annotation.Nonnull FilteringResult reason)
+			public void completed(@Nonnull FilteringResult reason)
 			{
 				if(!myErrorsGroup.isEmpty())
 				{
@@ -510,7 +512,7 @@ public class InstancesWindow extends DialogWrapper
 		{
 			private final FilteringTask myTask;
 
-			MyFilteringWorker(@Nonnull List<ObjectReference> refs, @Nonnull XExpression expression, @jakarta.annotation.Nonnull EvaluationContextImpl evaluationContext)
+			MyFilteringWorker(@Nonnull List<ObjectReference> refs, @Nonnull XExpression expression, @Nonnull EvaluationContextImpl evaluationContext)
 			{
 				myTask = new FilteringTask(myClassName, myDebugProcess, expression, refs, new MyFilteringCallback(evaluationContext));
 			}

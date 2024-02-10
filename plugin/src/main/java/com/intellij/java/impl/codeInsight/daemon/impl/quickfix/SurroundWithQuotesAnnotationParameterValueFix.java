@@ -50,7 +50,7 @@ public class SurroundWithQuotesAnnotationParameterValueFix implements SyntheticI
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     String newText = myValue.getText();
     newText = StringUtil.stripQuotesAroundValue(newText);
     newText = "\"" + newText + "\"";

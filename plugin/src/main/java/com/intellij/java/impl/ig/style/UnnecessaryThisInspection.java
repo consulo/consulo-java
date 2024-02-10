@@ -49,7 +49,7 @@ public class UnnecessaryThisInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("unnecessary.this.problem.descriptor");
   }
@@ -68,7 +68,7 @@ public class UnnecessaryThisInspection extends BaseInspection {
 
   private static class UnnecessaryThisFix extends InspectionGadgetsFix {
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("unnecessary.this.remove.quickfix");
     }
@@ -95,7 +95,7 @@ public class UnnecessaryThisInspection extends BaseInspection {
   private class UnnecessaryThisVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitReferenceExpression(@jakarta.annotation.Nonnull PsiReferenceExpression expression) {
+    public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
       super.visitReferenceExpression(expression);
       final PsiReferenceParameterList parameterList = expression.getParameterList();
       if (parameterList == null) {

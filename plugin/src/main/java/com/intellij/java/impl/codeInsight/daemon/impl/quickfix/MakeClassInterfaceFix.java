@@ -69,7 +69,7 @@ public class MakeClassInterfaceFix extends LocalQuickFixAndIntentionActionOnPsiE
   public void invoke(@Nonnull Project project,
                      @Nonnull PsiFile file,
                      @Nullable Editor editor,
-                     @jakarta.annotation.Nonnull PsiElement startElement,
+                     @Nonnull PsiElement startElement,
                      @Nonnull PsiElement endElement) {
     final PsiClass myClass = (PsiClass)startElement;
     if (!FileModificationService.getInstance().preparePsiElementForWrite(myClass)) return;

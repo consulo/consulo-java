@@ -76,7 +76,7 @@ public class FindSuperElementsHelper {
    * @return (super method, sub class) or null if can't find any siblings
    */
   @Nullable
-  public static SiblingInfo getSiblingInfoInheritedViaSubClass(@jakarta.annotation.Nonnull final PsiMethod method) {
+  public static SiblingInfo getSiblingInfoInheritedViaSubClass(@Nonnull final PsiMethod method) {
     return getSiblingInheritanceInfos(Collections.singletonList(method)).get(method);
   }
 
@@ -115,7 +115,7 @@ public class FindSuperElementsHelper {
     @Nonnull
     public final PsiClass subClass;
 
-    private SiblingInfo(@Nonnull PsiMethod superMethod, @jakarta.annotation.Nonnull PsiClass subClass) {
+    private SiblingInfo(@Nonnull PsiMethod superMethod, @Nonnull PsiClass subClass) {
       this.superMethod = superMethod;
       this.subClass = subClass;
     }

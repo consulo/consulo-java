@@ -56,8 +56,8 @@ public class JavaProjectModelModificationServiceImpl extends JavaProjectModelMod
   }
 
   @Override
-  public AsyncResult<Void> addDependency(@jakarta.annotation.Nonnull Collection<Module> from,
-                                         @jakarta.annotation.Nonnull ExternalLibraryDescriptor libraryDescriptor,
+  public AsyncResult<Void> addDependency(@Nonnull Collection<Module> from,
+                                         @Nonnull ExternalLibraryDescriptor libraryDescriptor,
                                          @Nonnull DependencyScope scope) {
     for (JavaProjectModelModifier modifier : getModelModifiers()) {
       AsyncResult<Void> asyncResult = modifier.addExternalLibraryDependency(from, libraryDescriptor, scope);
@@ -80,7 +80,7 @@ public class JavaProjectModelModificationServiceImpl extends JavaProjectModelMod
   }
 
   @Override
-  public AsyncResult<Void> changeLanguageLevel(@Nonnull Module module, @jakarta.annotation.Nonnull LanguageLevel languageLevel) {
+  public AsyncResult<Void> changeLanguageLevel(@Nonnull Module module, @Nonnull LanguageLevel languageLevel) {
     for (JavaProjectModelModifier modifier : getModelModifiers()) {
       AsyncResult<Void> asyncResult = modifier.changeLanguageLevel(module, languageLevel);
       if (asyncResult != null) {
@@ -90,7 +90,7 @@ public class JavaProjectModelModificationServiceImpl extends JavaProjectModelMod
     return AsyncResult.rejected();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private JavaProjectModelModifier[] getModelModifiers() {
     return JavaProjectModelModifier.EP_NAME.getExtensions(myProject);
   }

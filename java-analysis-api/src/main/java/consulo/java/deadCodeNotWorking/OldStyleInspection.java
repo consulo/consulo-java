@@ -19,7 +19,7 @@ public interface OldStyleInspection
 		throw new Error();
 	}
 
-	default void readSettings(@jakarta.annotation.Nonnull Element node) throws InvalidDataException
+	default void readSettings(@Nonnull Element node) throws InvalidDataException
 	{
 		throw new Error();
 	}

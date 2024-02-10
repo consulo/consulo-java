@@ -26,7 +26,7 @@ class NestingDepthVisitor extends JavaRecursiveElementVisitor {
 
 
   @Override
-  public void visitAnonymousClass(@jakarta.annotation.Nonnull PsiAnonymousClass aClass) {
+  public void visitAnonymousClass(@Nonnull PsiAnonymousClass aClass) {
     // to call to super, to keep this from drilling down
   }
 
@@ -48,7 +48,7 @@ class NestingDepthVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitDoWhileStatement(@jakarta.annotation.Nonnull PsiDoWhileStatement statement) {
+  public void visitDoWhileStatement(@Nonnull PsiDoWhileStatement statement) {
     enterScope();
     super.visitDoWhileStatement(statement);
     exitScope();
@@ -82,28 +82,28 @@ class NestingDepthVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitSynchronizedStatement(@jakarta.annotation.Nonnull PsiSynchronizedStatement statement) {
+  public void visitSynchronizedStatement(@Nonnull PsiSynchronizedStatement statement) {
     enterScope();
     super.visitSynchronizedStatement(statement);
     exitScope();
   }
 
   @Override
-  public void visitTryStatement(@jakarta.annotation.Nonnull PsiTryStatement statement) {
+  public void visitTryStatement(@Nonnull PsiTryStatement statement) {
     enterScope();
     super.visitTryStatement(statement);
     exitScope();
   }
 
   @Override
-  public void visitSwitchStatement(@jakarta.annotation.Nonnull PsiSwitchStatement statement) {
+  public void visitSwitchStatement(@Nonnull PsiSwitchStatement statement) {
     enterScope();
     super.visitSwitchStatement(statement);
     exitScope();
   }
 
   @Override
-  public void visitWhileStatement(@jakarta.annotation.Nonnull PsiWhileStatement statement) {
+  public void visitWhileStatement(@Nonnull PsiWhileStatement statement) {
     enterScope();
     super.visitWhileStatement(statement);
     exitScope();

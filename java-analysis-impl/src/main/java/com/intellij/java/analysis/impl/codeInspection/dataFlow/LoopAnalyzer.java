@@ -22,7 +22,7 @@ class LoopAnalyzer {
     private final Instruction[] myInstructions;
     private final IntObjectMap<int[]> myIns = IntMaps.newIntObjectHashMap();
 
-    private MyGraph(@jakarta.annotation.Nonnull ControlFlow flow) {
+    private MyGraph(@Nonnull ControlFlow flow) {
       myFlow = flow;
       myInstructions = flow.getInstructions();
       for (Instruction instruction : myInstructions) {
@@ -46,14 +46,14 @@ class LoopAnalyzer {
       return Arrays.asList(myFlow.getInstructions());
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public Iterator<Instruction> getIn(Instruction n) {
       int[] ins = myIns.get(n.getIndex());
       return indicesToInstructions(ins);
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public Iterator<Instruction> getOut(Instruction instruction) {
       int fromIndex = instruction.getIndex();
@@ -99,7 +99,7 @@ class LoopAnalyzer {
     return loop;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   static int[] getSuccessorIndices(int i, Instruction[] myInstructions) {
     Instruction instruction = myInstructions[i];
     if (instruction instanceof GotoInstruction) {

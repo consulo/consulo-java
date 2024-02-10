@@ -22,8 +22,8 @@ public interface ClassFileDecompiler {
    * attribute to avoid interfering with other decompilers.</p>
    */
   public abstract static class Light implements ClassFileDecompiler {
-    @jakarta.annotation.Nonnull
-    public abstract CharSequence getText(@jakarta.annotation.Nonnull VirtualFile file);
+    @Nonnull
+    public abstract CharSequence getText(@Nonnull VirtualFile file);
   }
 
 
@@ -33,7 +33,7 @@ public interface ClassFileDecompiler {
    * in return they have an ability to represent decompiled file in a way natural for original language.</p>
    */
   public abstract static class Full implements ClassFileDecompiler {
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public abstract ClsStubBuilder getStubBuilder();
 
     /**
@@ -49,8 +49,8 @@ public interface ClassFileDecompiler {
      * A standard practice is to hide such files by returning {@code null} from
      * {@link FileViewProvider#getPsi(Language)}.</p>
      */
-    @jakarta.annotation.Nonnull
-    public abstract FileViewProvider createFileViewProvider(@jakarta.annotation.Nonnull VirtualFile file, @jakarta.annotation.Nonnull PsiManager manager, boolean physical);
+    @Nonnull
+    public abstract FileViewProvider createFileViewProvider(@Nonnull VirtualFile file, @Nonnull PsiManager manager, boolean physical);
   }
 
   boolean accepts(@Nonnull VirtualFile file);

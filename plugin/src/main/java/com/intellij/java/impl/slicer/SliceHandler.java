@@ -47,7 +47,7 @@ public class SliceHandler implements CodeInsightActionHandler {
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull final Project project, @jakarta.annotation.Nonnull final Editor editor, @Nonnull final PsiFile file) {
+  public void invoke(@Nonnull final Project project, @Nonnull final Editor editor, @Nonnull final PsiFile file) {
     PsiDocumentManager.getInstance(project).commitAllDocuments(); // prevents problems with smart pointers creation
     PsiElement expression = getExpressionAtCaret(editor, file);
     if (expression == null) {

@@ -57,14 +57,14 @@ public class PointlessBitwiseExpressionInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "pointless.bitwise.expression.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiPolyadicExpression polyadicExpression =
       (PsiPolyadicExpression)infos[0];

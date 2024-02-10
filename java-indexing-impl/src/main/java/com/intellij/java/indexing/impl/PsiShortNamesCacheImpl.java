@@ -117,7 +117,7 @@ public class PsiShortNamesCacheImpl implements PsiShortNameProvider {
   }
 
   @Override
-  public void getAllClassNames(@jakarta.annotation.Nonnull HashSet<String> set) {
+  public void getAllClassNames(@Nonnull HashSet<String> set) {
     processAllClassNames(new CommonProcessors.CollectProcessor<String>(set));
   }
 
@@ -143,7 +143,7 @@ public class PsiShortNamesCacheImpl implements PsiShortNameProvider {
 
   @Override
   @Nonnull
-  public PsiMethod[] getMethodsByName(@jakarta.annotation.Nonnull String name, @Nonnull final GlobalSearchScope scope) {
+  public PsiMethod[] getMethodsByName(@Nonnull String name, @Nonnull final GlobalSearchScope scope) {
     Collection<PsiMethod> methods = StubIndex.getElements(JavaStubIndexKeys.METHODS, name, myProject,
         new JavaSourceFilterScope(scope), PsiMethod.class);
     if (methods.isEmpty()) {
@@ -227,12 +227,12 @@ public class PsiShortNamesCacheImpl implements PsiShortNameProvider {
   }
 
   @Override
-  public void getAllFieldNames(@jakarta.annotation.Nonnull HashSet<String> set) {
+  public void getAllFieldNames(@Nonnull HashSet<String> set) {
     JavaFieldNameIndex.getInstance().processAllKeys(myProject, new CommonProcessors.CollectProcessor<String>(set));
   }
 
   @Override
-  public boolean processFieldsWithName(@Nonnull String name, @Nonnull Processor<? super PsiField> processor, @Nonnull GlobalSearchScope scope, @jakarta.annotation.Nullable IdFilter filter) {
+  public boolean processFieldsWithName(@Nonnull String name, @Nonnull Processor<? super PsiField> processor, @Nonnull GlobalSearchScope scope, @Nullable IdFilter filter) {
     return StubIndex.getInstance().processElements(JavaStubIndexKeys.FIELDS, name, myProject, new JavaSourceFilterScope(scope), filter, PsiField.class, processor);
   }
 
@@ -242,8 +242,8 @@ public class PsiShortNamesCacheImpl implements PsiShortNameProvider {
   }
 
   @Override
-  public boolean processClassesWithName(@jakarta.annotation.Nonnull String name, @jakarta.annotation.Nonnull Processor<? super PsiClass> processor, @Nonnull GlobalSearchScope scope,
-                                        @jakarta.annotation.Nullable IdFilter filter) {
+  public boolean processClassesWithName(@Nonnull String name, @Nonnull Processor<? super PsiClass> processor, @Nonnull GlobalSearchScope scope,
+                                        @Nullable IdFilter filter) {
     return StubIndex.getInstance().processElements(JavaStubIndexKeys.CLASS_SHORT_NAMES, name, myProject, new JavaSourceFilterScope(scope), filter, PsiClass.class, processor);
   }
 

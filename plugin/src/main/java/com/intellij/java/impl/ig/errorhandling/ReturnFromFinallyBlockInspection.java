@@ -26,12 +26,12 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class ReturnFromFinallyBlockInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "ReturnInsideFinallyBlock";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("return.from.finally.block.display.name");
   }
@@ -52,7 +52,7 @@ public class ReturnFromFinallyBlockInspection extends BaseInspection {
   private static class ReturnFromFinallyBlockVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitReturnStatement(@jakarta.annotation.Nonnull PsiReturnStatement statement) {
+    public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
       super.visitReturnStatement(statement);
       if (!ControlFlowUtils.isInFinallyBlock(statement)) {
         return;

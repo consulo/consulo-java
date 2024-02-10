@@ -50,7 +50,7 @@ public class JvmSmartStepIntoActionHandler extends XSmartStepIntoHandler<JvmSmar
 	}
 
 	@Override
-	public void startStepInto(@jakarta.annotation.Nonnull JvmSmartStepIntoVariant variant, @Nullable XSuspendContext context)
+	public void startStepInto(@Nonnull JvmSmartStepIntoVariant variant, @Nullable XSuspendContext context)
 	{
 		mySession.stepInto(true, variant.myHandler.createMethodFilter(variant.myTarget));
 	}
@@ -72,14 +72,14 @@ public class JvmSmartStepIntoActionHandler extends XSmartStepIntoHandler<JvmSmar
 			return myTarget.getPresentation();
 		}
 
-		@jakarta.annotation.Nullable
+		@Nullable
 		@Override
 		public Image getIcon()
 		{
 			return myTarget.getIcon();
 		}
 
-		@jakarta.annotation.Nullable
+		@Nullable
 		//@Override
 		public TextRange getHighlightRange()
 		{

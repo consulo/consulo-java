@@ -181,7 +181,7 @@ public class PsiMethodReferenceUtil {
     return false;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static QualifierResolveResult getQualifierResolveResult(@Nonnull PsiMethodReferenceExpression methodReferenceExpression) {
     PsiClass containingClass = null;
     PsiSubstitutor substitutor = PsiSubstitutor.EMPTY;

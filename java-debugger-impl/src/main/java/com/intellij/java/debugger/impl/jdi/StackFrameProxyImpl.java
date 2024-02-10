@@ -46,7 +46,7 @@ public class StackFrameProxyImpl extends JdiProxy implements StackFrameProxy
 	private Boolean myIsObsolete = null;
 	private Map<LocalVariable, Value> myAllValues;
 
-	public StackFrameProxyImpl(ThreadReferenceProxyImpl threadProxy, @jakarta.annotation.Nonnull StackFrame frame, int fromBottomIndex /* 1-based */)
+	public StackFrameProxyImpl(ThreadReferenceProxyImpl threadProxy, @Nonnull StackFrame frame, int fromBottomIndex /* 1-based */)
 	{
 		super(threadProxy.getVirtualMachine());
 		myThreadProxy = threadProxy;
@@ -181,7 +181,7 @@ public class StackFrameProxyImpl extends JdiProxy implements StackFrameProxy
 		return (VirtualMachineProxyImpl) myTimer;
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	@Override
 	public Location location() throws EvaluateException
 	{
@@ -227,7 +227,7 @@ public class StackFrameProxyImpl extends JdiProxy implements StackFrameProxy
 		}
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	public ObjectReference thisObject() throws EvaluateException
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();

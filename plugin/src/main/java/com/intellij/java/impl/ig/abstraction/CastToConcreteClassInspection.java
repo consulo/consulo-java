@@ -45,7 +45,7 @@ public class CastToConcreteClassInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     final PsiType type= (PsiType)infos[0];
     return InspectionGadgetsBundle.message("cast.to.concrete.class.problem.descriptor", type.getPresentableText());
@@ -67,7 +67,7 @@ public class CastToConcreteClassInspection extends BaseInspection {
   private class CastToConcreteClassVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitTypeCastExpression(@jakarta.annotation.Nonnull PsiTypeCastExpression expression) {
+    public void visitTypeCastExpression(@Nonnull PsiTypeCastExpression expression) {
       super.visitTypeCastExpression(expression);
       final PsiTypeElement typeElement = expression.getCastType();
       if (typeElement == null) {

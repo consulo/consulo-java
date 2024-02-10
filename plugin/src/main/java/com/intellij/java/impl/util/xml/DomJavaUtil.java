@@ -69,7 +69,7 @@ public class DomJavaUtil {
   }
 
   @Nullable
-  public static PsiClass findClass(@jakarta.annotation.Nullable String name, @jakarta.annotation.Nonnull DomElement element) {
+  public static PsiClass findClass(@Nullable String name, @Nonnull DomElement element) {
     assert element.isValid();
     XmlElement xmlElement = element.getXmlElement();
     if (xmlElement != null) {

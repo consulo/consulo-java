@@ -23,21 +23,21 @@ import jakarta.annotation.Nullable;
  */
 public class JavaArrangementPropertyInfo {
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private JavaElementArrangementEntry myGetter;
-  @jakarta.annotation.Nullable
+  @Nullable
   private JavaElementArrangementEntry mySetter;
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public JavaElementArrangementEntry getGetter() {
     return myGetter;
   }
 
-  public void setGetter(@jakarta.annotation.Nullable JavaElementArrangementEntry getter) {
+  public void setGetter(@Nullable JavaElementArrangementEntry getter) {
     myGetter = getter;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public JavaElementArrangementEntry getSetter() {
     return mySetter;
   }

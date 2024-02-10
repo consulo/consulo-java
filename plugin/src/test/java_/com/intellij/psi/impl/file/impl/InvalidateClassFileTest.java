@@ -69,7 +69,7 @@ public abstract class InvalidateClassFileTest extends PsiTestCase {
       }
 
       @Override
-      public void childrenChanged(@jakarta.annotation.Nonnull PsiTreeChangeEvent event) {
+      public void childrenChanged(@Nonnull PsiTreeChangeEvent event) {
         notified[0] = true;
       }
     };

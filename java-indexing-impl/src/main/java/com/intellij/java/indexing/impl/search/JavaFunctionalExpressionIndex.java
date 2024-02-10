@@ -57,9 +57,9 @@ public class JavaFunctionalExpressionIndex extends FileBasedIndexExtension<Strin
   @Override
   public DataIndexer<String, Collection<IndexHolder>, FileContent> getIndexer() {
     return new DataIndexer<String, Collection<IndexHolder>, FileContent>() {
-      @jakarta.annotation.Nonnull
+      @Nonnull
       @Override
-      public Map<String, Collection<IndexHolder>> map(@jakarta.annotation.Nonnull FileContent inputData) {
+      public Map<String, Collection<IndexHolder>> map(@Nonnull FileContent inputData) {
         if (!JavaStubElementTypes.JAVA_FILE.shouldBuildStubFor(inputData.getFile())) {
           return Collections.emptyMap();
         }

@@ -74,9 +74,9 @@ public abstract class RemoveRedundantUncheckedSuppressionTest extends LightQuick
           return inspection.getShortName();
         }
 
-        @jakarta.annotation.Nonnull
+        @Nonnull
         @Override
-        public PsiElementVisitor buildVisitor(@jakarta.annotation.Nonnull final ProblemsHolder holder,
+        public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder,
                                               boolean isOnTheFly,
                                               @Nonnull LocalInspectionToolSession session) {
           return new JavaElementVisitor() {

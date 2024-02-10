@@ -111,7 +111,7 @@ class PurityInferenceVisitor
 				type == METHOD_CALL_EXPRESSION;
 	}
 
-	private boolean isMutatingOperation(@jakarta.annotation.Nonnull LighterASTNode element)
+	private boolean isMutatingOperation(@Nonnull LighterASTNode element)
 	{
 		return LightTreeUtil.firstChildOfType(tree, element, JavaTokenType.PLUSPLUS) != null ||
 				LightTreeUtil.firstChildOfType(tree, element, JavaTokenType.MINUSMINUS) != null;

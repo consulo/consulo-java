@@ -57,6 +57,7 @@ import consulo.execution.debug.breakpoint.XBreakpoint;
 import consulo.execution.debug.breakpoint.XExpression;
 import consulo.execution.debug.breakpoint.XLineBreakpoint;
 import consulo.ide.impl.idea.ui.AppUIUtil;
+import consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl;
 import consulo.ide.impl.idea.xdebugger.impl.XDebuggerHistoryManager;
 import consulo.ide.impl.idea.xdebugger.impl.breakpoints.XBreakpointBase;
 import consulo.ide.impl.idea.xdebugger.impl.breakpoints.ui.XBreakpointActionsPanel;
@@ -99,13 +100,13 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		myXBreakpoint = xBreakpoint;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public Project getProject()
 	{
 		return myProject;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	protected P getProperties()
 	{
 		return myXBreakpoint.getProperties();
@@ -116,7 +117,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		return myXBreakpoint;
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	public abstract PsiClass getPsiClass();
 
 	/**
@@ -131,7 +132,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		return ReadAction.compute(() ->
 		{
 			JavaDebugProcess process = debugProcess.getXdebugProcess();
-			return process != null && debugProcess.isAttached() && (xBreakpoint == null || ((consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl) process.getSession()).isBreakpointActive(xBreakpoint)) && (forPreparedClass ||
+			return process != null && debugProcess.isAttached() && (xBreakpoint == null || ((XDebugSessionImpl) process.getSession()).isBreakpointActive(xBreakpoint)) && (forPreparedClass ||
 					debugProcess.getRequestsManager().findRequests(requestor).isEmpty());
 		});
 	}
@@ -161,7 +162,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		return getDisplayName();
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	public String getClassName()
 	{
 		return null;
@@ -198,7 +199,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		return dotIndex >= 0 && dotIndex + 1 < className.length() ? className.substring(dotIndex + 1) : className;
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	public String getPackageName()
 	{
 		return null;
@@ -230,7 +231,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		debugProcess.getVirtualMachineProxy().classesByName(classToBeLoaded).stream().filter(ReferenceType::isPrepared).forEach(aList -> processClassPrepare(debugProcess, aList));
 	}
 
-	protected void createOrWaitPrepare(final DebugProcessImpl debugProcess, @jakarta.annotation.Nonnull final SourcePosition classPosition)
+	protected void createOrWaitPrepare(final DebugProcessImpl debugProcess, @Nonnull final SourcePosition classPosition)
 	{
 		debugProcess.getRequestsManager().callbackOnPrepareClasses(this, classPosition);
 
@@ -447,7 +448,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 			myEvaluator = evaluator;
 		}
 
-		@jakarta.annotation.Nullable
+		@Nullable
 		static ExpressionEvaluator cacheOrGet(String propertyName,
 				EventRequest request,
 				PsiElement context,
@@ -506,7 +507,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		return event.location().declaringType().name();
 	}
 
-	protected static boolean typeMatchesClassFilters(@jakarta.annotation.Nullable String typeName, ClassFilter[] includeFilters, ClassFilter[] exludeFilters)
+	protected static boolean typeMatchesClassFilters(@Nullable String typeName, ClassFilter[] includeFilters, ClassFilter[] exludeFilters)
 	{
 		if(typeName == null)
 		{
@@ -806,7 +807,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		return !getCondition().isEmpty();
 	}
 
-	public void setCondition(@jakarta.annotation.Nullable TextWithImports condition)
+	public void setCondition(@Nullable TextWithImports condition)
 	{
 		myXBreakpoint.setConditionExpression(TextWithImportsImpl.toXExpression(condition));
 	}
@@ -818,6 +819,6 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 
 	protected void fireBreakpointChanged()
 	{
-		((consulo.ide.impl.idea.xdebugger.impl.breakpoints.XBreakpointBase) myXBreakpoint).fireBreakpointChanged();
+		((XBreakpointBase) myXBreakpoint).fireBreakpointChanged();
 	}
 }

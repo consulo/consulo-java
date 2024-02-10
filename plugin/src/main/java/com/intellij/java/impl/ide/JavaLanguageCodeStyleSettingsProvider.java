@@ -68,20 +68,20 @@ public class JavaLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSett
     };
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public CustomCodeStyleSettings createCustomSettings(CodeStyleSettings settings) {
     return new JavaCodeStyleSettings(settings);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;
   }
 
   @Override
-  public String getCodeSample(@jakarta.annotation.Nonnull SettingsType settingsType) {
+  public String getCodeSample(@Nonnull SettingsType settingsType) {
     if (settingsType == SettingsType.SPACING_SETTINGS) {
       return SPACING_SAMPLE;
     }
@@ -96,7 +96,7 @@ public class JavaLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSett
   }
 
   @Override
-  public int getRightMargin(@jakarta.annotation.Nonnull SettingsType settingsType) {
+  public int getRightMargin(@Nonnull SettingsType settingsType) {
     if (settingsType == SettingsType.WRAPPING_AND_BRACES_SETTINGS) {
       return 37;
     }
@@ -104,7 +104,7 @@ public class JavaLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSett
   }
 
   @Override
-  public void customizeSettings(@jakarta.annotation.Nonnull CodeStyleSettingsCustomizable consumer, @jakarta.annotation.Nonnull SettingsType settingsType) {
+  public void customizeSettings(@Nonnull CodeStyleSettingsCustomizable consumer, @Nonnull SettingsType settingsType) {
     if (settingsType == SettingsType.SPACING_SETTINGS) {
       consumer.showAllStandardOptions();
       consumer.showCustomOption(JavaCodeStyleSettings.class, "SPACES_WITHIN_ANGLE_BRACKETS", "Angle brackets", CodeStyleSettingsCustomizable.SPACES_WITHIN);
@@ -316,7 +316,7 @@ public class JavaLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSett
 
   @Override
   @Nonnull
-  public DocCommentSettings getDocCommentSettings(@jakarta.annotation.Nonnull CodeStyleSettings rootSettings) {
+  public DocCommentSettings getDocCommentSettings(@Nonnull CodeStyleSettings rootSettings) {
     return new DocCommentSettings() {
       private final JavaCodeStyleSettings mySettings =
           rootSettings.getCustomSettings(JavaCodeStyleSettings.class);

@@ -55,6 +55,6 @@ public interface JvmWildcardType extends JvmType
 	 * @return a lower bound
 	 * @see WildcardType#getLowerBounds()
 	 */
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	JvmType lowerBound();
 }

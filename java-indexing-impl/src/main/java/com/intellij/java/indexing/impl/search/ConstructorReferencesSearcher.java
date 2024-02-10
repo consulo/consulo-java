@@ -21,7 +21,7 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class ConstructorReferencesSearcher extends QueryExecutorBase<PsiReference, ReferencesSearch.SearchParameters> implements ReferencesSearchQueryExecutor {
   @Override
-  public void processQuery(@Nonnull final ReferencesSearch.SearchParameters p, @jakarta.annotation.Nonnull Processor<? super PsiReference> consumer) {
+  public void processQuery(@Nonnull final ReferencesSearch.SearchParameters p, @Nonnull Processor<? super PsiReference> consumer) {
     final PsiElement element = p.getElementToSearch();
     if (!(element instanceof PsiMethod)) {
       return;

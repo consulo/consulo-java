@@ -26,7 +26,7 @@ import jakarta.annotation.Nonnull;
 
 @ExtensionImpl(id = "java")
 public class MoveJavaInnerHandler implements MoveInnerHandler {
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public PsiClass copyClass(@Nonnull final MoveInnerOptions options) {
     PsiClass innerClass = options.getInnerClass();

@@ -18,7 +18,7 @@ import jakarta.annotation.Nullable;
 public class JavaSyntaxHighlighterProvider implements SyntaxHighlighterProvider {
   @Nullable
   @Override
-  public SyntaxHighlighter create(FileType fileType, @jakarta.annotation.Nullable Project project, @jakarta.annotation.Nullable VirtualFile virtualFile) {
+  public SyntaxHighlighter create(FileType fileType, @Nullable Project project, @Nullable VirtualFile virtualFile) {
     if (fileType == JavaFileType.INSTANCE || fileType == JavaClassFileType.INSTANCE) {
       return new JavaFileHighlighter();
     }

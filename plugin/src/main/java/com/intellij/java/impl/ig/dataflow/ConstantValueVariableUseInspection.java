@@ -37,7 +37,7 @@ import jakarta.annotation.Nullable;
 public class ConstantValueVariableUseInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "constant.value.variable.use.display.name");
@@ -68,7 +68,7 @@ public class ConstantValueVariableUseInspection extends BaseInspection {
     }
 
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "replace.reference.with.expression.quickfix",
@@ -152,9 +152,9 @@ public class ConstantValueVariableUseInspection extends BaseInspection {
     }
 
     private boolean checkConstantValueVariableUse(
-      @jakarta.annotation.Nullable PsiExpression expression,
-      @jakarta.annotation.Nonnull PsiExpression constantExpression,
-      @jakarta.annotation.Nonnull PsiElement body) {
+      @Nullable PsiExpression expression,
+      @Nonnull PsiExpression constantExpression,
+      @Nonnull PsiElement body) {
       final PsiType constantType = constantExpression.getType();
       if (PsiType.DOUBLE.equals(constantType)) {
         final Object result = ExpressionUtils.computeConstantExpression(
@@ -202,7 +202,7 @@ public class ConstantValueVariableUseInspection extends BaseInspection {
     }
 
     @Override
-    public void visitElement(@jakarta.annotation.Nonnull PsiElement element) {
+    public void visitElement(@Nonnull PsiElement element) {
       if (read || written) {
         return;
       }
@@ -264,7 +264,7 @@ public class ConstantValueVariableUseInspection extends BaseInspection {
 
     @Override
     public void visitPostfixExpression(
-      @jakarta.annotation.Nonnull PsiPostfixExpression postfixExpression) {
+      @Nonnull PsiPostfixExpression postfixExpression) {
       if (read || written) {
         return;
       }
@@ -288,7 +288,7 @@ public class ConstantValueVariableUseInspection extends BaseInspection {
     }
 
     @Override
-    public void visitVariable(@jakarta.annotation.Nonnull PsiVariable variable) {
+    public void visitVariable(@Nonnull PsiVariable variable) {
       if (read || written) {
         return;
       }
@@ -327,7 +327,7 @@ public class ConstantValueVariableUseInspection extends BaseInspection {
 
     @Override
     public void visitNewExpression(
-      @jakarta.annotation.Nonnull PsiNewExpression newExpression) {
+      @Nonnull PsiNewExpression newExpression) {
       if (read || written) {
         return;
       }
@@ -434,7 +434,7 @@ public class ConstantValueVariableUseInspection extends BaseInspection {
 
     @Override
     public void visitReferenceExpression(
-      @jakarta.annotation.Nonnull PsiReferenceExpression expression) {
+      @Nonnull PsiReferenceExpression expression) {
       if (used) {
         return;
       }

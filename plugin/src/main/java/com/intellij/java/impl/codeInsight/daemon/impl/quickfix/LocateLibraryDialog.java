@@ -86,7 +86,7 @@ public class LocateLibraryDialog extends DialogWrapper {
     init();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public List<String> showAndGetResult() {
     if (ApplicationManager.getApplication().isHeadlessEnvironment()) {
       Disposer.dispose(myDisposable);

@@ -102,7 +102,7 @@ public class ForStatementFixer implements Fixer
 	 * @param lastValidForPart last valid element of the target 'for' loop
 	 * @param forStatement     PSI element for the target 'for' loop
 	 */
-	private static void registerErrorOffset(@jakarta.annotation.Nonnull Editor editor, @Nonnull JavaSmartEnterProcessor processor, @Nonnull PsiElement lastValidForPart, @jakarta.annotation.Nonnull PsiForStatement forStatement)
+	private static void registerErrorOffset(@Nonnull Editor editor, @Nonnull JavaSmartEnterProcessor processor, @Nonnull PsiElement lastValidForPart, @Nonnull PsiForStatement forStatement)
 	{
 		final Project project = editor.getProject();
 		int offset = lastValidForPart.getTextRange().getEndOffset();

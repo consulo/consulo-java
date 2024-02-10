@@ -73,7 +73,7 @@ public class ParameterCanBeLocalInspection extends BaseJavaLocalInspectionTool {
   }
 
   @Override
-  public ProblemDescriptor[] checkMethod(@jakarta.annotation.Nonnull PsiMethod method, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
+  public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod method, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
     final Collection<PsiParameter> parameters = filterFinal(method.getParameterList().getParameters());
     final PsiCodeBlock body = method.getBody();
     if (body == null || parameters.isEmpty() || isOverrides(method)) {
@@ -102,7 +102,7 @@ public class ParameterCanBeLocalInspection extends BaseJavaLocalInspectionTool {
   }
 
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private static ProblemDescriptor createProblem(@Nonnull InspectionManager manager,
                                                  @Nonnull PsiIdentifier identifier,
                                                  boolean isOnTheFly) {
@@ -149,7 +149,7 @@ public class ParameterCanBeLocalInspection extends BaseJavaLocalInspectionTool {
     return SuperMethodsSearch.search(method, null, true, false).findFirst() != null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static ControlFlow getControlFlow(final PsiElement context) {
     try {
       return ControlFlowFactory.getInstance(context.getProject())
@@ -202,7 +202,7 @@ public class ParameterCanBeLocalInspection extends BaseJavaLocalInspectionTool {
 
     @Nonnull
     @Override
-    protected String suggestLocalName(@Nonnull Project project, @jakarta.annotation.Nonnull PsiParameter parameter, @jakarta.annotation.Nonnull PsiCodeBlock scope) {
+    protected String suggestLocalName(@Nonnull Project project, @Nonnull PsiParameter parameter, @Nonnull PsiCodeBlock scope) {
       return parameter.getName();
     }
   }

@@ -31,12 +31,12 @@ import jakarta.annotation.Nonnull;
 public class DeleteCatchFix implements SyntheticIntentionAction {
   private final PsiParameter myCatchParameter;
 
-  public DeleteCatchFix(@jakarta.annotation.Nonnull PsiParameter myCatchParameter) {
+  public DeleteCatchFix(@Nonnull PsiParameter myCatchParameter) {
     this.myCatchParameter = myCatchParameter;
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getText() {
     return JavaQuickFixBundle.message("delete.catch.text", JavaHighlightUtil.formatType(myCatchParameter.getType()));
   }
@@ -47,7 +47,7 @@ public class DeleteCatchFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(myCatchParameter.getContainingFile())) return;
 
     final PsiTryStatement tryStatement = ((PsiCatchSection)myCatchParameter.getDeclarationScope()).getTryStatement();

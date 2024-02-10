@@ -69,7 +69,7 @@ public class CreateRendererAction extends AnAction {
           final UserRenderersConfigurable ui = new UserRenderersConfigurable();
           IdeaConfigurableBase<UserRenderersConfigurable, NodeRendererSettings> configurable = new IdeaConfigurableBase<UserRenderersConfigurable, NodeRendererSettings>("reference.idesettings" +
               ".debugger.typerenderers", DebuggerBundle.message("user.renderers.configurable.display.name"), "reference.idesettings.debugger.typerenderers") {
-            @jakarta.annotation.Nonnull
+            @Nonnull
             @Override
             protected NodeRendererSettings getSettings() {
               return NodeRendererSettings.getInstance();

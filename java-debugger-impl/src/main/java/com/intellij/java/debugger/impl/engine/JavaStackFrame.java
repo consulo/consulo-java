@@ -84,17 +84,17 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
                               XDebuggerUIConstants.INFORMATION_MESSAGE_ICON);
 
   private final DebugProcessImpl myDebugProcess;
-  @jakarta.annotation.Nullable
+  @Nullable
   private final XSourcePosition myXSourcePosition;
   private final NodeManagerImpl myNodeManager;
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private final StackFrameDescriptorImpl myDescriptor;
   private static final JavaFramesListRenderer FRAME_RENDERER = new JavaFramesListRenderer();
   private JavaDebuggerEvaluator myEvaluator = null;
   private final String myEqualityObject;
   private CapturePoint myInsertCapturePoint;
 
-  public JavaStackFrame(@jakarta.annotation.Nonnull StackFrameDescriptorImpl descriptor, boolean update) {
+  public JavaStackFrame(@Nonnull StackFrameDescriptorImpl descriptor, boolean update) {
     myDescriptor = descriptor;
     if (update) {
       myDescriptor.setContext(null);
@@ -106,7 +106,7 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
     myXSourcePosition = DebuggerUtilsEx.toXSourcePosition(myDescriptor.getSourcePosition());
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public StackFrameDescriptorImpl getDescriptor() {
     return myDescriptor;
   }
@@ -120,14 +120,14 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
     return myEvaluator;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public XSourcePosition getSourcePosition() {
     return myXSourcePosition;
   }
 
   @Override
-  public void customizePresentation(@jakarta.annotation.Nonnull ColoredTextContainer component) {
+  public void customizePresentation(@Nonnull ColoredTextContainer component) {
     StackFrameDescriptorImpl selectedDescriptor = null;
     DebuggerSession session = myDebugProcess.getSession();
     if (session != null) {
@@ -281,7 +281,7 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
   // copied from FrameVariablesTree
   private void buildVariables(DebuggerContextImpl debuggerContext,
                               final EvaluationContextImpl evaluationContext,
-                              @jakarta.annotation.Nonnull DebugProcessImpl debugProcess,
+                              @Nonnull DebugProcessImpl debugProcess,
                               XValueChildrenList children,
                               ObjectReference thisObjectReference,
                               Location location) throws EvaluateException {
@@ -370,8 +370,8 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
   }
 
   private static Set<TextWithImports> computeExtraVars(Pair<Set<String>, Set<TextWithImports>> usedVars,
-                                                       @jakarta.annotation.Nonnull SourcePosition sourcePosition,
-                                                       @jakarta.annotation.Nonnull EvaluationContextImpl evalContext) {
+                                                       @Nonnull SourcePosition sourcePosition,
+                                                       @Nonnull EvaluationContextImpl evalContext) {
     Set<String> alreadyCollected = new HashSet<>(usedVars.first);
     usedVars.second.stream().map(TextWithImports::getText).forEach(alreadyCollected::add);
     Set<TextWithImports> extra = new HashSet<>();
@@ -405,16 +405,16 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
     }
 
     @Override
-    public void computePresentation(@jakarta.annotation.Nonnull XValueNode node, @jakarta.annotation.Nonnull XValuePlace place) {
+    public void computePresentation(@Nonnull XValueNode node, @Nonnull XValuePlace place) {
       node.setPresentation(myIcon, new XValuePresentation() {
-        @jakarta.annotation.Nonnull
+        @Nonnull
         @Override
         public String getSeparator() {
           return "";
         }
 
         @Override
-        public void renderValue(@jakarta.annotation.Nonnull XValueTextRenderer renderer) {
+        public void renderValue(@Nonnull XValueTextRenderer renderer) {
           renderer.renderValue(myMessage);
         }
       }, false);
@@ -432,7 +432,7 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
     }
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public StackFrameProxyImpl getStackFrameProxy() {
     return myDescriptor.getFrameProxy();
   }

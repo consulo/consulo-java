@@ -77,7 +77,7 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
     return convertToTopLevelClasses(elements, fromUpdate, null, null) != null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static Map<PsiFile, PsiClass[]> convertToTopLevelClasses(final PsiElement[] elements,
                                                                    final boolean fromUpdate,
                                                                    String relativePath,
@@ -125,7 +125,7 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
     }
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static String normalizeRelativeMap(Map<PsiFile, String> relativeMap) {
     String vector = null;
     for (String relativePath : relativeMap.values()) {
@@ -313,7 +313,7 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
     }
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiElement doCopyClasses(final Map<PsiFile, PsiClass[]> fileToClasses,
                                          final String copyClassName,
                                          final PsiDirectory targetDirectory,
@@ -321,7 +321,7 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
     return doCopyClasses(fileToClasses, null, copyClassName, targetDirectory, project);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiElement doCopyClasses(final Map<PsiFile, PsiClass[]> fileToClasses,
                                          @Nullable HashMap<PsiFile, String> map, final String copyClassName,
                                          final PsiDirectory targetDirectory,
@@ -427,9 +427,9 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
     return file.getName();
   }
 
-  @jakarta.annotation.Nonnull
-  private static MoveDirectoryWithClassesProcessor.TargetDirectoryWrapper buildRelativeDir(final @jakarta.annotation.Nonnull PsiDirectory directory,
-                                                                                           final @jakarta.annotation.Nonnull String relativePath) {
+  @Nonnull
+  private static MoveDirectoryWithClassesProcessor.TargetDirectoryWrapper buildRelativeDir(final @Nonnull PsiDirectory directory,
+                                                                                           final @Nonnull String relativePath) {
     MoveDirectoryWithClassesProcessor.TargetDirectoryWrapper current = null;
     for (String pathElement : relativePath.split("/")) {
       if (current == null) {
@@ -451,7 +451,7 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
     return classCopy;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static PsiClass findByName(PsiClass[] classes, String name) {
     if (name != null) {
       for (PsiClass aClass : classes) {
@@ -476,7 +476,7 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
   }
 
 
-  private static void decodeRefs(@jakarta.annotation.Nonnull PsiElement element, final Map<PsiClass, PsiElement> oldToNewMap, final Set<PsiElement> rebindExpressions) {
+  private static void decodeRefs(@Nonnull PsiElement element, final Map<PsiClass, PsiElement> oldToNewMap, final Set<PsiElement> rebindExpressions) {
     element.accept(new JavaRecursiveElementVisitor() {
       @Override
       public void visitReferenceExpression(PsiReferenceExpression expression) {

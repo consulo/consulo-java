@@ -36,7 +36,7 @@ public class PsiClassPattern extends PsiMemberPattern<PsiClass, PsiClassPattern>
 
   public PsiClassPattern inheritorOf(final boolean strict, final PsiClassPattern pattern) {
     return with(new PatternCondition<PsiClass>("inheritorOf") {
-      public boolean accepts(@jakarta.annotation.Nonnull PsiClass psiClass, final ProcessingContext context) {
+      public boolean accepts(@Nonnull PsiClass psiClass, final ProcessingContext context) {
         return isInheritor(psiClass, pattern, context, !strict);
       }
     });
@@ -108,12 +108,12 @@ public class PsiClassPattern extends PsiMemberPattern<PsiClass, PsiClassPattern>
 
   public PsiClassPattern withQualifiedName(@NonNls @Nonnull final String qname) {
     return with(new PatternCondition<PsiClass>("withQualifiedName") {
-      public boolean accepts(@jakarta.annotation.Nonnull final PsiClass psiClass, final ProcessingContext context) {
+      public boolean accepts(@Nonnull final PsiClass psiClass, final ProcessingContext context) {
         return qname.equals(psiClass.getQualifiedName());
       }
     });
   }
-  public PsiClassPattern withQualifiedName(@NonNls @jakarta.annotation.Nonnull final ElementPattern<String> qname) {
+  public PsiClassPattern withQualifiedName(@NonNls @Nonnull final ElementPattern<String> qname) {
     return with(new PatternCondition<PsiClass>("withQualifiedName") {
       public boolean accepts(@Nonnull final PsiClass psiClass, final ProcessingContext context) {
         return qname.accepts(psiClass.getQualifiedName(), context);

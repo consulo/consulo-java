@@ -61,7 +61,7 @@ public class DeannotateIntentionAction implements IntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     PsiModifierListOwner listOwner = getContainer(editor, file);
     if (listOwner != null) {
       final ExternalAnnotationsManager externalAnnotationsManager = ExternalAnnotationsManager.getInstance(project);
@@ -150,7 +150,7 @@ public class DeannotateIntentionAction implements IntentionAction {
       }
 
       @Override
-      @jakarta.annotation.Nonnull
+      @Nonnull
       public String getTextFor(final PsiAnnotation value) {
         final String qualifiedName = value.getQualifiedName();
         LOG.assertTrue(qualifiedName != null);

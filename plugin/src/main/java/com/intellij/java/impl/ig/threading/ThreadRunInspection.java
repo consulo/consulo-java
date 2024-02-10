@@ -41,7 +41,7 @@ public class ThreadRunInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "CallToThreadRun";
   }
@@ -66,7 +66,7 @@ public class ThreadRunInspection extends BaseInspection {
     }
 
     @Override
-    public void doFix(@jakarta.annotation.Nonnull Project project, ProblemDescriptor descriptor)
+    public void doFix(@Nonnull Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
       final PsiElement methodNameIdentifier = descriptor.getPsiElement();
       final PsiReferenceExpression methodExpression =
@@ -92,7 +92,7 @@ public class ThreadRunInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();

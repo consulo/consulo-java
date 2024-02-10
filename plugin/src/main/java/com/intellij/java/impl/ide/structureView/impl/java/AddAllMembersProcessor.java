@@ -26,7 +26,7 @@ class AddAllMembersProcessor implements PsiScopeProcessor {
   private final PsiClass myPsiClass;
   private final Map<MethodSignature, PsiMethod> myMethodsBySignature = new HashMap<>();
 
-  AddAllMembersProcessor(@jakarta.annotation.Nonnull Collection<PsiElement> allMembers, @Nonnull PsiClass psiClass) {
+  AddAllMembersProcessor(@Nonnull Collection<PsiElement> allMembers, @Nonnull PsiClass psiClass) {
     for (PsiElement psiElement : allMembers) {
       if (psiElement instanceof PsiMethod) {
         mapMethodBySignature((PsiMethod) psiElement);
@@ -61,7 +61,7 @@ class AddAllMembersProcessor implements PsiScopeProcessor {
 
   @Nullable
   @Override
-  public <T> T getHint(@jakarta.annotation.Nonnull Key<T> hintKey) {
+  public <T> T getHint(@Nonnull Key<T> hintKey) {
     return null;
   }
 
@@ -116,7 +116,7 @@ class AddAllMembersProcessor implements PsiScopeProcessor {
     return method.hasModifierProperty(PsiModifier.STATIC);
   }
 
-  private boolean isVisible(@jakarta.annotation.Nonnull PsiMember element, PsiClass psiClass) {
+  private boolean isVisible(@Nonnull PsiMember element, PsiClass psiClass) {
     return !isInheritedConstructor(element, psiClass) && PsiUtil.isAccessible(element, psiClass, null);
   }
 

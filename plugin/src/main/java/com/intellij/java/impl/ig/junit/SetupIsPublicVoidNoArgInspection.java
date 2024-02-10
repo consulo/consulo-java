@@ -29,13 +29,13 @@ import org.jetbrains.annotations.NonNls;
 public class SetupIsPublicVoidNoArgInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "SetUpWithIncorrectSignature";
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "setup.is.public.void.no.arg.display.name");
@@ -57,7 +57,7 @@ public class SetupIsPublicVoidNoArgInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       //note: no call to super;
       @NonNls final String methodName = method.getName();
       if (!"setUp".equals(methodName)) {

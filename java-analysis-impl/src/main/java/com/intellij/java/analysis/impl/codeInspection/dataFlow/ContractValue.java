@@ -39,7 +39,7 @@ public abstract class ContractValue {
 
   abstract DfaValue makeDfaValue(DfaValueFactory factory, DfaCallArguments arguments);
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   DfaCondition makeCondition(DfaValueFactory factory, DfaCallArguments arguments) {
     return DfaCondition.getUnknown();
   }
@@ -83,8 +83,8 @@ public abstract class ContractValue {
     return OptionalInt.empty();
   }
 
-  @jakarta.annotation.Nonnull
-  DfaCallArguments fixArgument(@Nonnull DfaCallArguments arguments, @jakarta.annotation.Nonnull UnaryOperator<DfType> converter) {
+  @Nonnull
+  DfaCallArguments fixArgument(@Nonnull DfaCallArguments arguments, @Nonnull UnaryOperator<DfType> converter) {
     return arguments;
   }
 
@@ -112,7 +112,7 @@ public abstract class ContractValue {
     return new Spec(this, field);
   }
 
-  public static ContractValue constant(Object value, @jakarta.annotation.Nonnull PsiType type) {
+  public static ContractValue constant(Object value, @Nonnull PsiType type) {
     return new IndependentValue(String.valueOf(value), factory -> factory.getConstant(TypeConversionUtil.computeCastTo(value, type), type)
     );
   }
@@ -150,8 +150,8 @@ public abstract class ContractValue {
     }
 
     @Override
-    @jakarta.annotation.Nonnull
-    DfaCallArguments fixArgument(@Nonnull DfaCallArguments arguments, @jakarta.annotation.Nonnull UnaryOperator<DfType> converter) {
+    @Nonnull
+    DfaCallArguments fixArgument(@Nonnull DfaCallArguments arguments, @Nonnull UnaryOperator<DfType> converter) {
       if (arguments.myQualifier instanceof DfaTypeValue) {
         DfType type = arguments.myQualifier.getDfType();
         DfType newType = converter.apply(type);
@@ -212,8 +212,8 @@ public abstract class ContractValue {
     }
 
     @Override
-    @jakarta.annotation.Nonnull
-    DfaCallArguments fixArgument(@jakarta.annotation.Nonnull DfaCallArguments arguments, @jakarta.annotation.Nonnull UnaryOperator<DfType> converter) {
+    @Nonnull
+    DfaCallArguments fixArgument(@Nonnull DfaCallArguments arguments, @Nonnull UnaryOperator<DfType> converter) {
       if (arguments.myArguments != null && arguments.myArguments.length > myIndex) {
         DfaValue value = arguments.myArguments[myIndex];
         if (value instanceof DfaTypeValue) {
@@ -277,13 +277,13 @@ public abstract class ContractValue {
 
   private static final class Spec extends ContractValue {
     private final
-    @jakarta.annotation.Nonnull
+    @Nonnull
     ContractValue myQualifier;
     private final
-    @jakarta.annotation.Nonnull
+    @Nonnull
     SpecialField myField;
 
-    Spec(@jakarta.annotation.Nonnull ContractValue qualifier, @Nonnull SpecialField field) {
+    Spec(@Nonnull ContractValue qualifier, @Nonnull SpecialField field) {
       myQualifier = qualifier;
       myField = field;
     }
@@ -306,8 +306,8 @@ public abstract class ContractValue {
     }
 
     @Override
-    @jakarta.annotation.Nonnull
-    DfaCallArguments fixArgument(@jakarta.annotation.Nonnull DfaCallArguments arguments, @Nonnull UnaryOperator<DfType> converter) {
+    @Nonnull
+    DfaCallArguments fixArgument(@Nonnull DfaCallArguments arguments, @Nonnull UnaryOperator<DfType> converter) {
       return myQualifier.fixArgument(arguments, t -> {
         if (!(t instanceof DfReferenceType)) {
           return t;
@@ -427,7 +427,7 @@ public abstract class ContractValue {
       return factory.getUnknown();
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     DfaCondition makeCondition(DfaValueFactory factory, DfaCallArguments arguments) {
       DfaValue left = myLeft.makeDfaValue(factory, arguments);
@@ -453,7 +453,7 @@ public abstract class ContractValue {
      * @return condition relation type
      */
     public
-    @jakarta.annotation.Nonnull
+    @Nonnull
     RelationType getRelationType() {
       return myRelationType;
     }

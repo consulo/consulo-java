@@ -40,14 +40,14 @@ import java.util.List;
 public abstract class StaticImportMemberFix<T extends PsiMember> implements SyntheticIntentionAction, HintAction {
   private List<T> candidates;
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected abstract String getBaseText();
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected abstract String getMemberPresentableText(T t);
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getText() {
     String text = getBaseText();
     if (candidates != null && candidates.size() == 1) {
@@ -59,7 +59,7 @@ public abstract class StaticImportMemberFix<T extends PsiMember> implements Synt
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return PsiUtil.isLanguageLevel5OrHigher(file) && file instanceof PsiJavaFile && getElement() != null && getElement().isValid() && getQualifierExpression() == null && resolveRef() == null &&
         file.getManager().isInProject(file) && !(candidates == null ? candidates = getMembersToImport(false) : candidates).isEmpty();
   }
@@ -77,7 +77,7 @@ public abstract class StaticImportMemberFix<T extends PsiMember> implements Synt
   }
 
   @Nonnull
-  protected abstract QuestionAction createQuestionAction(List<T> methodsToImport, @jakarta.annotation.Nonnull Project project, Editor editor);
+  protected abstract QuestionAction createQuestionAction(List<T> methodsToImport, @Nonnull Project project, Editor editor);
 
   @Nullable
   protected abstract PsiElement getElement();
@@ -85,11 +85,11 @@ public abstract class StaticImportMemberFix<T extends PsiMember> implements Synt
   @Nullable
   protected abstract PsiElement getQualifierExpression();
 
-  @jakarta.annotation.Nullable
+  @Nullable
   protected abstract PsiElement resolveRef();
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull final Project project, final Editor editor, PsiFile file) {
+  public void invoke(@Nonnull final Project project, final Editor editor, PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
       return;
     }
@@ -142,7 +142,7 @@ public abstract class StaticImportMemberFix<T extends PsiMember> implements Synt
   }
 
   @Override
-  public boolean showHint(@jakarta.annotation.Nonnull Editor editor) {
+  public boolean showHint(@Nonnull Editor editor) {
     final PsiElement callExpression = getElement();
     if (callExpression == null || getQualifierExpression() != null) {
       return false;

@@ -44,13 +44,13 @@ public abstract class TestFrameworks {
 
   public abstract boolean isPotentialTestClass(PsiClass psiClass);
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public abstract PsiMethod findOrCreateSetUpMethod(PsiClass psiClass);
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public abstract PsiMethod findSetUpMethod(PsiClass psiClass);
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public abstract PsiMethod findTearDownMethod(PsiClass psiClass);
 
   protected abstract boolean hasConfigMethods(PsiClass psiClass);
@@ -61,13 +61,13 @@ public abstract class TestFrameworks {
     return isTestClass(psiClass) || hasConfigMethods(psiClass);
   }
 
-  @jakarta.annotation.Nullable
-  public static TestFramework detectFramework(@jakarta.annotation.Nonnull final PsiClass psiClass) {
+  @Nullable
+  public static TestFramework detectFramework(@Nonnull final PsiClass psiClass) {
     return LanguageCachedValueUtil.getCachedValue(psiClass, () -> CachedValueProvider.Result.create(computeFramework(psiClass), PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT));
   }
 
   @Nonnull
-  public static Set<TestFramework> detectApplicableFrameworks(@jakarta.annotation.Nonnull final PsiClass psiClass) {
+  public static Set<TestFramework> detectApplicableFrameworks(@Nonnull final PsiClass psiClass) {
     return LanguageCachedValueUtil.getCachedValue(psiClass, () -> CachedValueProvider.Result.create(computeFrameworks(psiClass), PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT));
   }
 

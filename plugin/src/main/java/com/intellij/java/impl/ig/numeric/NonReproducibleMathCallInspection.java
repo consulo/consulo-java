@@ -59,7 +59,7 @@ public class NonReproducibleMathCallInspection extends BaseInspection {
   }
 
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "non.reproducible.math.call.display.name");
@@ -77,7 +77,7 @@ public class NonReproducibleMathCallInspection extends BaseInspection {
 
   private static class MakeStrictFix extends InspectionGadgetsFix {
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "non.reproducible.math.call.replace.quickfix");
@@ -103,7 +103,7 @@ public class NonReproducibleMathCallInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();

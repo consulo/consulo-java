@@ -54,12 +54,12 @@ public class ReplaceIteratorForEachLoopWithIteratorForLoopFix implements Synthet
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return myStatement.isValid() && myStatement.getManager().isInProject(myStatement);
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     final PsiExpression iteratedValue = myStatement.getIteratedValue();
     if (iteratedValue == null) {
       return;

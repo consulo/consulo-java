@@ -46,8 +46,8 @@ public class JavaVfsSourceRootDetectionUtil {
    * @param progressIndicator
    * @return a list of found source roots within directory. If no source roots are found, a empty list is returned.
    */
-  @jakarta.annotation.Nonnull
-  public static List<VirtualFile> suggestRoots(@jakarta.annotation.Nonnull VirtualFile dir, @jakarta.annotation.Nonnull final ProgressIndicator progressIndicator) {
+  @Nonnull
+  public static List<VirtualFile> suggestRoots(@Nonnull VirtualFile dir, @Nonnull final ProgressIndicator progressIndicator) {
     if (!dir.isDirectory()) {
       return List.of();
     }
@@ -58,7 +58,7 @@ public class JavaVfsSourceRootDetectionUtil {
       VfsUtilCore.visitChildrenRecursively(dir, new VirtualFileVisitor() {
         @Nonnull
         @Override
-        public Result visitFileEx(@jakarta.annotation.Nonnull VirtualFile file) {
+        public Result visitFileEx(@Nonnull VirtualFile file) {
           progressIndicator.checkCanceled();
 
           if (file.isDirectory()) {

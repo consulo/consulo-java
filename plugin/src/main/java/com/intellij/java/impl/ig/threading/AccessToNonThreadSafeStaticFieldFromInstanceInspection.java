@@ -58,7 +58,7 @@ public class AccessToNonThreadSafeStaticFieldFromInstanceInspection
     }
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getID() {
     return "AccessToNonThreadSafeStaticField";
@@ -73,7 +73,7 @@ public class AccessToNonThreadSafeStaticFieldFromInstanceInspection
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "access.to.non.thread.safe.static.field.from.instance.field.problem.descriptor",

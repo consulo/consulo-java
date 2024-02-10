@@ -76,8 +76,8 @@ public abstract class JvmSmartStepIntoHandler {
           }
         });
         ListPopupImpl popup = new ListPopupImpl(popupStep);
-        consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil.registerExtraHandleShortcuts(popup, XDebuggerActions.STEP_INTO);
-        consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil.registerExtraHandleShortcuts(popup, XDebuggerActions.SMART_STEP_INTO);
+        DebuggerUIUtil.registerExtraHandleShortcuts(popup, XDebuggerActions.STEP_INTO);
+        DebuggerUIUtil.registerExtraHandleShortcuts(popup, XDebuggerActions.SMART_STEP_INTO);
         popup.addListSelectionListener(new ListSelectionListener() {
           public void valueChanged(ListSelectionEvent e) {
             popupStep.getScopeHighlighter().dropHighlight();

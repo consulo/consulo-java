@@ -33,11 +33,11 @@ public class JavaVersionService {
     return ServiceManager.getService(JavaVersionService.class);
   }
 
-  public boolean isAtLeast(@Nonnull PsiElement element, @jakarta.annotation.Nonnull JavaSdkVersion version) {
+  public boolean isAtLeast(@Nonnull PsiElement element, @Nonnull JavaSdkVersion version) {
     return PsiUtil.getLanguageLevel(element).isAtLeast(version.getMaxLanguageLevel());
   }
 
-  public JavaSdkVersion getJavaSdkVersion(@jakarta.annotation.Nonnull PsiElement element) {
+  public JavaSdkVersion getJavaSdkVersion(@Nonnull PsiElement element) {
     return JavaSdkVersion.fromLanguageLevel(PsiUtil.getLanguageLevel(element));
   }
 }

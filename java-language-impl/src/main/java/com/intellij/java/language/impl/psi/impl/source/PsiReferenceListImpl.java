@@ -33,18 +33,18 @@ import jakarta.annotation.Nonnull;
  */
 public class PsiReferenceListImpl extends JavaStubPsiElement<PsiClassReferenceListStub> implements PsiReferenceList
 {
-	public PsiReferenceListImpl(@jakarta.annotation.Nonnull PsiClassReferenceListStub stub)
+	public PsiReferenceListImpl(@Nonnull PsiClassReferenceListStub stub)
 	{
 		super(stub, stub.getStubType());
 	}
 
-	public PsiReferenceListImpl(@jakarta.annotation.Nonnull ASTNode node)
+	public PsiReferenceListImpl(@Nonnull ASTNode node)
 	{
 		super(node);
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public PsiJavaCodeReferenceElement[] getReferenceElements()
 	{
 		return calcTreeElement().getChildrenAsPsiElements(JavaElementType.JAVA_CODE_REFERENCE, PsiJavaCodeReferenceElement.ARRAY_FACTORY);
@@ -78,7 +78,7 @@ public class PsiReferenceListImpl extends JavaStubPsiElement<PsiClassReferenceLi
 	}
 
 	@Override
-	public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor)
+	public void accept(@Nonnull PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{

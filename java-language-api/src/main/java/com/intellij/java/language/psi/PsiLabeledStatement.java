@@ -41,6 +41,6 @@ public interface PsiLabeledStatement extends PsiStatement, PsiNameIdentifierOwne
   PsiStatement getStatement();
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   String getName();
 }

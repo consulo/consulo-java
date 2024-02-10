@@ -33,7 +33,7 @@ public class StringBufferMustHaveInitialCapacityInspection
   extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "StringBufferWithoutInitialCapacity";
   }
@@ -62,7 +62,7 @@ public class StringBufferMustHaveInitialCapacityInspection
 
     @Override
     public void visitNewExpression(
-      @jakarta.annotation.Nonnull PsiNewExpression expression) {
+      @Nonnull PsiNewExpression expression) {
       super.visitNewExpression(expression);
       final PsiType type = expression.getType();
 

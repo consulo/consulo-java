@@ -45,7 +45,7 @@ public class JavaGlobalMemberLookupElement extends LookupElement implements Stat
     myImportInsertion = importInsertion;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public PsiMember getObject() {
     return myHelper.getMember();
@@ -56,7 +56,7 @@ public class JavaGlobalMemberLookupElement extends LookupElement implements Stat
     return assertNotNull(myHelper.getContainingClass());
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getLookupString() {
     return assertNotNull(getObject().getName());

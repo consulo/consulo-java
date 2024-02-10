@@ -45,7 +45,7 @@ public abstract class UnnecessaryLocalVariableInspection extends BaseInspection 
   public boolean m_ignoreAnnotatedVariables = false;
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("redundant.local.variable.display.name");
   }
@@ -66,7 +66,7 @@ public abstract class UnnecessaryLocalVariableInspection extends BaseInspection 
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("unnecessary.local.variable.problem.descriptor");
   }

@@ -99,7 +99,7 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil {
    * @param toCopyJavaDoc true if copy JavaDoc from method declaration
    * @return list of method prototypes
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static List<PsiMethod> overrideOrImplementMethod(PsiClass aClass, PsiMethod method, boolean toCopyJavaDoc) throws IncorrectOperationException {
     final PsiClass containingClass = method.getContainingClass();
     LOG.assertTrue(containingClass != null);
@@ -272,7 +272,7 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil {
     }
   }
 
-  public static void annotate(@jakarta.annotation.Nonnull PsiMethod result, String fqn, String... annosToRemove) throws IncorrectOperationException {
+  public static void annotate(@Nonnull PsiMethod result, String fqn, String... annosToRemove) throws IncorrectOperationException {
     Project project = result.getProject();
     AddAnnotationFix fix = new AddAnnotationFix(fqn, result, annosToRemove);
     if (fix.isAvailable(project, null, result.getContainingFile())) {
@@ -280,7 +280,7 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil {
     }
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static List<PsiGenerationInfo<PsiMethod>> overrideOrImplementMethods(PsiClass aClass,
                                                                               Collection<PsiMethodMember> candidates,
                                                                               boolean toCopyJavaDoc,
@@ -295,7 +295,7 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil {
     return convert2GenerationInfos(methods);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static List<PsiMethod> overrideOrImplementMethodCandidates(PsiClass aClass,
                                                                     Collection<CandidateInfo> candidates,
                                                                     boolean toCopyJavaDoc,
@@ -331,7 +331,7 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil {
     return new PsiGenerationInfo<PsiMethod>(s);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static String callSuper(PsiMethod superMethod, PsiMethod overriding) {
     @NonNls StringBuilder buffer = new StringBuilder();
     if (!superMethod.isConstructor() && !PsiType.VOID.equals(superMethod.getReturnType())) {
@@ -431,7 +431,7 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil {
   }
 
   public static void chooseAndImplementMethods(Project project, Editor editor, PsiClass aClass) {
-    FeatureUsageTracker.getInstance().triggerFeatureUsed(consulo.ide.impl.idea.featureStatistics.ProductivityFeatureNames.CODEASSISTS_OVERRIDE_IMPLEMENT);
+    FeatureUsageTracker.getInstance().triggerFeatureUsed(ProductivityFeatureNames.CODEASSISTS_OVERRIDE_IMPLEMENT);
     chooseAndOverrideOrImplementMethods(project, editor, aClass, true);
   }
 
@@ -568,7 +568,7 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil {
     }
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiElement getDefaultAnchorToOverrideOrImplement(PsiClass aClass, PsiMethod baseMethod, PsiSubstitutor substitutor) {
     PsiMethod prevBaseMethod = PsiTreeUtil.getPrevSiblingOfType(baseMethod, PsiMethod.class);
     while (prevBaseMethod != null) {

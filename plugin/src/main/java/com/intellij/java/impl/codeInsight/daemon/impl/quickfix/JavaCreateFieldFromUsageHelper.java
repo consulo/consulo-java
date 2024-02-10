@@ -70,7 +70,7 @@ public class JavaCreateFieldFromUsageHelper implements CreateFieldFromUsageHelpe
   }
 
   @Override
-  public PsiField insertFieldImpl(@jakarta.annotation.Nonnull PsiClass targetClass, @Nonnull PsiField field, @jakarta.annotation.Nonnull PsiElement place) {
+  public PsiField insertFieldImpl(@Nonnull PsiClass targetClass, @Nonnull PsiField field, @Nonnull PsiElement place) {
     PsiMember enclosingContext = null;
     PsiClass parentClass;
     do {
@@ -82,7 +82,7 @@ public class JavaCreateFieldFromUsageHelper implements CreateFieldFromUsageHelpe
     return BaseExpressionToFieldHandler.ConvertToFieldRunnable.appendField(targetClass, field, enclosingContext, null);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

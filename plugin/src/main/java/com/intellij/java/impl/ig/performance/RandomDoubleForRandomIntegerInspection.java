@@ -36,7 +36,7 @@ public class RandomDoubleForRandomIntegerInspection
   extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "UsingRandomNextDoubleForRandomInteger";
   }
@@ -49,7 +49,7 @@ public class RandomDoubleForRandomIntegerInspection
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "random.double.for.random.integer.problem.descriptor");
@@ -63,7 +63,7 @@ public class RandomDoubleForRandomIntegerInspection
   private static class RandomDoubleForRandomIntegerFix
     extends InspectionGadgetsFix {
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "random.double.for.random.integer.replace.quickfix");
@@ -122,7 +122,7 @@ public class RandomDoubleForRandomIntegerInspection
 
     @Override
     public void visitMethodCallExpression(
-      @jakarta.annotation.Nonnull PsiMethodCallExpression call) {
+      @Nonnull PsiMethodCallExpression call) {
       super.visitMethodCallExpression(call);
       final PsiReferenceExpression methodExpression =
         call.getMethodExpression();

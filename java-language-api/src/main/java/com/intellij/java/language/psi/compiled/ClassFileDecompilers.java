@@ -31,12 +31,12 @@ public class ClassFileDecompilers {
 
   @Nullable
   @Deprecated
-  public static ClassFileDecompiler find(@jakarta.annotation.Nonnull VirtualFile file) {
+  public static ClassFileDecompiler find(@Nonnull VirtualFile file) {
     return find(Application.get(), file);
   }
 
-  @jakarta.annotation.Nullable
-  public static ClassFileDecompiler find(@jakarta.annotation.Nonnull Application application, @Nonnull VirtualFile file) {
+  @Nullable
+  public static ClassFileDecompiler find(@Nonnull Application application, @Nonnull VirtualFile file) {
     for (ClassFileDecompiler decompiler : application.getExtensionList(ClassFileDecompiler.class)) {
       if ((decompiler instanceof ClassFileDecompiler.Light || decompiler instanceof ClassFileDecompiler.Full) && decompiler.accepts(file)) {
         return decompiler;

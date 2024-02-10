@@ -170,7 +170,7 @@ public class PsiDocMethodOrFieldRef extends CompositePsiElement implements PsiDo
     return sharp != null ? SourceTreeToPsiMap.treeToPsiNotNull(sharp).getNextSibling() : null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public String[] getSignature() {
     PsiElement element = getNameElement();
     if (element == null) return null;
@@ -252,7 +252,7 @@ public class PsiDocMethodOrFieldRef extends CompositePsiElement implements PsiDo
     }
 
     @Override
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public JavaResolveResult[] multiResolve(boolean incompleteCode) {
       return myReferredElement == null ? JavaResolveResult.EMPTY_ARRAY
                                   : new JavaResolveResult[]{new CandidateInfo(myReferredElement, PsiSubstitutor.EMPTY)};

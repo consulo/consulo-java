@@ -38,7 +38,7 @@ public class JavaValueMarker extends XValueMarkerProvider<JavaValue, Long>
 	}
 
 	@Override
-	public Long getMarker(@jakarta.annotation.Nonnull JavaValue value)
+	public Long getMarker(@Nonnull JavaValue value)
 	{
 		Value obj = value.getDescriptor().getValue();
 		if(obj instanceof ObjectReference)

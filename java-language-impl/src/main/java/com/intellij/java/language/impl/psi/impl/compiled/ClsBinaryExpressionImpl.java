@@ -39,12 +39,12 @@ class ClsBinaryExpressionImpl extends ClsElementImpl implements PsiBinaryExpress
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @jakarta.annotation.Nonnull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
     buffer.append(getText());
   }
 
   @Override
-  public void setMirror(@jakarta.annotation.Nonnull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, JavaElementType.BINARY_EXPRESSION);
   }
 
@@ -54,7 +54,7 @@ class ClsBinaryExpressionImpl extends ClsElementImpl implements PsiBinaryExpress
     return myLOperand.getText() + " " + myOperator.getText() + " " + myROperand.getText();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public PsiElement[] getChildren() {
     return new PsiElement[]{
@@ -70,7 +70,7 @@ class ClsBinaryExpressionImpl extends ClsElementImpl implements PsiBinaryExpress
   }
 
   @Override
-  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitBinaryExpression(this);
     } else {
@@ -84,7 +84,7 @@ class ClsBinaryExpressionImpl extends ClsElementImpl implements PsiBinaryExpress
     return myLOperand;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public PsiExpression getROperand() {
     return myROperand;
@@ -96,14 +96,14 @@ class ClsBinaryExpressionImpl extends ClsElementImpl implements PsiBinaryExpress
     return myOperator;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public IElementType getOperationTokenType() {
     return myOperator.getTokenType();
   }
 
   @Override
-  public PsiJavaToken getTokenBeforeOperand(@jakarta.annotation.Nonnull PsiExpression operand) {
+  public PsiJavaToken getTokenBeforeOperand(@Nonnull PsiExpression operand) {
     return getOperationSign();
   }
 
@@ -112,7 +112,7 @@ class ClsBinaryExpressionImpl extends ClsElementImpl implements PsiBinaryExpress
     return myLOperand.getType();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public PsiExpression[] getOperands() {
     return new PsiExpression[]{

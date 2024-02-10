@@ -45,7 +45,7 @@ class CheckInitialized implements ElementFilter
 		myInsideConstructorCall = isInsideConstructorCall(position);
 	}
 
-	static boolean isInsideConstructorCall(@jakarta.annotation.Nonnull PsiElement position)
+	static boolean isInsideConstructorCall(@Nonnull PsiElement position)
 	{
 		return ExpressionUtils.isConstructorInvocation(PsiTreeUtil.getParentOfType(position, PsiMethodCallExpression.class)) && !JavaKeywordCompletion.AFTER_DOT.accepts(position);
 	}

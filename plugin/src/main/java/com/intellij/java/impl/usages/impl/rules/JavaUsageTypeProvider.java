@@ -59,7 +59,7 @@ public class JavaUsageTypeProvider implements UsageTypeProviderEx {
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static UsageType getMethodUsageType(PsiElement element) {
     if (element instanceof PsiReferenceExpression) {
       final PsiMethod containerMethod = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
@@ -111,7 +111,7 @@ public class JavaUsageTypeProvider implements UsageTypeProviderEx {
     return true;
   }
 
-  private static boolean haveCommonSuperMethod(@Nonnull PsiMethod m1, @jakarta.annotation.Nonnull PsiMethod m2) {
+  private static boolean haveCommonSuperMethod(@Nonnull PsiMethod m1, @Nonnull PsiMethod m2) {
     final Queue<PsiMethod> supers1Q = new ArrayDeque<PsiMethod>();
     supers1Q.add(m1);
     final Queue<PsiMethod> supers2Q = new ArrayDeque<PsiMethod>();
@@ -160,7 +160,7 @@ public class JavaUsageTypeProvider implements UsageTypeProviderEx {
   }
 
   @Nullable
-  private static UsageType getClassUsageType(@Nonnull PsiElement element, @jakarta.annotation.Nonnull UsageTarget[] targets) {
+  private static UsageType getClassUsageType(@Nonnull PsiElement element, @Nonnull UsageTarget[] targets) {
     final PsiJavaCodeReferenceElement codeReference = PsiTreeUtil.getParentOfType(element, PsiJavaCodeReferenceElement.class);
     if (codeReference != null && isNestedClassOf(codeReference, targets)) {
       return UsageType.CLASS_NESTED_CLASS_ACCESS;
@@ -246,11 +246,11 @@ public class JavaUsageTypeProvider implements UsageTypeProviderEx {
     return null;
   }
 
-  private static boolean isNewArrayCreation(@jakarta.annotation.Nonnull PsiNewExpression expression) {
+  private static boolean isNewArrayCreation(@Nonnull PsiNewExpression expression) {
     return expression.getArrayDimensions().length > 0 || expression.getArrayInitializer() != null;
   }
 
-  private static boolean isAnonymousClassOf(@jakarta.annotation.Nullable PsiAnonymousClass anonymousClass, @jakarta.annotation.Nonnull UsageTarget[] targets) {
+  private static boolean isAnonymousClassOf(@Nullable PsiAnonymousClass anonymousClass, @Nonnull UsageTarget[] targets) {
     if (anonymousClass == null) {
       return false;
     }
@@ -258,7 +258,7 @@ public class JavaUsageTypeProvider implements UsageTypeProviderEx {
     return qualifiesToTargetClasses(anonymousClass.getBaseClassReference(), targets);
   }
 
-  private static boolean isNestedClassOf(PsiJavaCodeReferenceElement classReference, @jakarta.annotation.Nonnull UsageTarget[] targets) {
+  private static boolean isNestedClassOf(PsiJavaCodeReferenceElement classReference, @Nonnull UsageTarget[] targets) {
     final PsiElement qualifier = classReference.getQualifier();
     if (qualifier instanceof PsiJavaCodeReferenceElement) {
       return qualifiesToTargetClasses((PsiJavaCodeReferenceElement) qualifier, targets);
@@ -266,7 +266,7 @@ public class JavaUsageTypeProvider implements UsageTypeProviderEx {
     return false;
   }
 
-  private static boolean qualifiesToTargetClasses(@jakarta.annotation.Nonnull PsiJavaCodeReferenceElement qualifier, @jakarta.annotation.Nonnull UsageTarget[] targets) {
+  private static boolean qualifiesToTargetClasses(@Nonnull PsiJavaCodeReferenceElement qualifier, @Nonnull UsageTarget[] targets) {
     for (UsageTarget target : targets) {
       if (target instanceof PsiElementUsageTarget) {
         PsiElement element = ((PsiElementUsageTarget) target).getElement();

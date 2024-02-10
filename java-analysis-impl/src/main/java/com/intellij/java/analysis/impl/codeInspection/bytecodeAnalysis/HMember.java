@@ -42,7 +42,7 @@ public final class HMember implements MemberDescriptor
 		myMethod = ByteBuffer.wrap(sigDigest).getInt();
 	}
 
-	public HMember(@jakarta.annotation.Nonnull byte[] bytes)
+	public HMember(@Nonnull byte[] bytes)
 	{
 		ByteBuffer buffer = ByteBuffer.wrap(bytes);
 		myClassHi = buffer.getLong();
@@ -50,7 +50,7 @@ public final class HMember implements MemberDescriptor
 		myMethod = buffer.getInt();
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	byte[] asBytes()
 	{
 		ByteBuffer bytes = ByteBuffer.allocate(HASH_SIZE);

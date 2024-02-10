@@ -31,7 +31,7 @@ public class JavaRecordHeaderElementType extends JavaStubElementType<PsiRecordHe
 	}
 
 	@Override
-	public void serialize(@jakarta.annotation.Nonnull PsiRecordHeaderStub stub, @jakarta.annotation.Nonnull StubOutputStream dataStream) throws IOException
+	public void serialize(@Nonnull PsiRecordHeaderStub stub, @Nonnull StubOutputStream dataStream) throws IOException
 	{
 	}
 
@@ -43,13 +43,13 @@ public class JavaRecordHeaderElementType extends JavaStubElementType<PsiRecordHe
 	}
 
 	@Override
-	public void indexStub(@jakarta.annotation.Nonnull PsiRecordHeaderStub stub, @Nonnull IndexSink sink)
+	public void indexStub(@Nonnull PsiRecordHeaderStub stub, @Nonnull IndexSink sink)
 	{
 
 	}
 
 	@Override
-	public PsiRecordHeader createPsi(@jakarta.annotation.Nonnull PsiRecordHeaderStub stub)
+	public PsiRecordHeader createPsi(@Nonnull PsiRecordHeaderStub stub)
 	{
 		return getPsiFactory(stub).createRecordHeader(stub);
 	}
@@ -63,7 +63,7 @@ public class JavaRecordHeaderElementType extends JavaStubElementType<PsiRecordHe
 
 	@Nonnull
 	@Override
-	public PsiRecordHeaderStub createStub(@jakarta.annotation.Nonnull LighterAST tree, @jakarta.annotation.Nonnull LighterASTNode node, @Nonnull StubElement parentStub)
+	public PsiRecordHeaderStub createStub(@Nonnull LighterAST tree, @Nonnull LighterASTNode node, @Nonnull StubElement parentStub)
 	{
 		return new PsiRecordHeaderStubImpl(parentStub);
 	}

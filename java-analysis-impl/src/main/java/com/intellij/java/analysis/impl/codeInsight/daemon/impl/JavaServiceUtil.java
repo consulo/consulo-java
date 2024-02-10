@@ -43,11 +43,11 @@ public final class JavaServiceUtil {
   }
 
   @Nonnull
-  public static List<LineMarkerInfo<PsiElement>> collectServiceImplementationClass(@jakarta.annotation.Nonnull PsiClass psiClass) {
+  public static List<LineMarkerInfo<PsiElement>> collectServiceImplementationClass(@Nonnull PsiClass psiClass) {
     return createJavaServiceLineMarkerInfo(psiClass.getNameIdentifier(), psiClass, psiClass);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private static List<LineMarkerInfo<PsiElement>> createJavaServiceLineMarkerInfo(@Nullable PsiIdentifier identifier,
                                                                                   @Nullable PsiClass implementerClass,
                                                                                   @Nullable PsiClass resultClass) {
@@ -87,7 +87,7 @@ public final class JavaServiceUtil {
   }
 
   public static List<LineMarkerInfo<PsiElement>> collectServiceLoaderLoadCall(@Nonnull PsiIdentifier identifier,
-                                                                              @jakarta.annotation.Nonnull PsiMethodCallExpression methodCall) {
+                                                                              @Nonnull PsiMethodCallExpression methodCall) {
     if (PsiUtil.isLanguageLevel9OrHigher(methodCall)) {
       PsiExpression[] arguments = methodCall.getArgumentList().getExpressions();
 

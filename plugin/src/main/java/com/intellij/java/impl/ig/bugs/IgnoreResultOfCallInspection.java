@@ -23,6 +23,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
 import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
 import consulo.language.psi.PsiUtilCore;
@@ -71,7 +72,7 @@ public class IgnoreResultOfCallInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "ResultOfMethodCallIgnored";
   }
@@ -83,7 +84,7 @@ public class IgnoreResultOfCallInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiClass containingClass = (PsiClass)infos[0];
     final String className = containingClass.getName();
@@ -91,13 +92,13 @@ public class IgnoreResultOfCallInspection extends BaseInspection {
   }
 
   @Override
-  public void readSettings(@jakarta.annotation.Nonnull Element element) throws InvalidDataException {
+  public void readSettings(@Nonnull Element element) throws InvalidDataException {
     super.readSettings(element);
     parseString(callCheckString, classNames, methodNamePatterns);
   }
 
   @Override
-  public void writeSettings(@jakarta.annotation.Nonnull Element element) throws WriteExternalException {
+  public void writeSettings(@Nonnull Element element) throws WriteExternalException {
     callCheckString = formatString(classNames, methodNamePatterns);
     super.writeSettings(element);
   }
@@ -109,8 +110,8 @@ public class IgnoreResultOfCallInspection extends BaseInspection {
       Arrays.asList(classNames, methodNamePatterns), InspectionGadgetsBundle.message("result.of.method.call.ignored.class.column.title"),
       InspectionGadgetsBundle.message("result.of.method.call.ignored.method.column.title")));
     final JPanel tablePanel = UiUtils.createAddRemovePanel(table);
-    final consulo.deadCodeNotWorking.impl.CheckBox checkBox =
-      new consulo.deadCodeNotWorking.impl.CheckBox(InspectionGadgetsBundle.message("result.of.method.call.ignored.non.library.option"), this, "m_reportAllNonLibraryCalls");
+    final CheckBox checkBox =
+      new CheckBox(InspectionGadgetsBundle.message("result.of.method.call.ignored.non.library.option"), this, "m_reportAllNonLibraryCalls");
     panel.add(tablePanel, BorderLayout.CENTER);
     panel.add(checkBox, BorderLayout.SOUTH);
     return panel;
@@ -129,7 +130,7 @@ public class IgnoreResultOfCallInspection extends BaseInspection {
   private class IgnoreResultOfCallVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitExpressionStatement(@jakarta.annotation.Nonnull PsiExpressionStatement statement) {
+    public void visitExpressionStatement(@Nonnull PsiExpressionStatement statement) {
       super.visitExpressionStatement(statement);
       final PsiExpression expression = statement.getExpression();
       if (!(expression instanceof PsiMethodCallExpression)) {

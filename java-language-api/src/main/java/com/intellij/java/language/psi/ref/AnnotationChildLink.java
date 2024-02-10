@@ -39,7 +39,7 @@ public class AnnotationChildLink extends PsiChildLink<PsiModifierListOwner, PsiA
     return myAnnoFqn;
   }
 
-  public static PsiElementRef<PsiAnnotation> createRef(@jakarta.annotation.Nonnull PsiModifierListOwner parent, @NonNls String fqn) {
+  public static PsiElementRef<PsiAnnotation> createRef(@Nonnull PsiModifierListOwner parent, @NonNls String fqn) {
     return new AnnotationChildLink(fqn).createChildRef(parent);
   }
 
@@ -53,7 +53,7 @@ public class AnnotationChildLink extends PsiChildLink<PsiModifierListOwner, PsiA
 
   @Override
   @Nonnull
-  public PsiAnnotation createChild(@jakarta.annotation.Nonnull PsiModifierListOwner member) throws IncorrectOperationException {
+  public PsiAnnotation createChild(@Nonnull PsiModifierListOwner member) throws IncorrectOperationException {
     final PsiModifierList modifierList = member.getModifierList();
     assert modifierList != null;
     return modifierList.addAnnotation(myAnnoFqn);

@@ -59,7 +59,7 @@ public class JavaCoverageAnnotator extends BaseCoverageAnnotator {
   @Nullable
   public String getDirCoverageInformationString(@Nonnull final PsiDirectory directory,
                                                 @Nonnull final CoverageSuitesBundle currentSuite,
-                                                @jakarta.annotation.Nonnull final CoverageDataManager coverageDataManager) {
+                                                @Nonnull final CoverageDataManager coverageDataManager) {
     final PsiJavaPackage psiPackage = JavaDirectoryService.getInstance().getPackage(directory);
     if (psiPackage == null) return null;
 
@@ -77,7 +77,7 @@ public class JavaCoverageAnnotator extends BaseCoverageAnnotator {
 
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public String getFileCoverageInformationString(@Nonnull PsiFile file,
                                                  @Nonnull CoverageSuitesBundle currentSuite,
                                                  @Nonnull CoverageDataManager manager) {
@@ -95,7 +95,7 @@ public class JavaCoverageAnnotator extends BaseCoverageAnnotator {
     myClassCoverageInfos.clear();
   }
 
-  protected Runnable createRenewRequest(@Nonnull final CoverageSuitesBundle suite, @jakarta.annotation.Nonnull final CoverageDataManager dataManager) {
+  protected Runnable createRenewRequest(@Nonnull final CoverageSuitesBundle suite, @Nonnull final CoverageDataManager dataManager) {
 
 
     final Project project = getProject();
@@ -185,7 +185,7 @@ public class JavaCoverageAnnotator extends BaseCoverageAnnotator {
   @Nullable
   public String getPackageCoverageInformationString(final PsiPackage psiPackage,
                                                     @Nullable final Module module,
-                                                    @jakarta.annotation.Nonnull final CoverageDataManager coverageDataManager) {
+                                                    @Nonnull final CoverageDataManager coverageDataManager) {
     return getPackageCoverageInformationString(psiPackage, module, coverageDataManager, false);
   }
 
@@ -225,7 +225,7 @@ public class JavaCoverageAnnotator extends BaseCoverageAnnotator {
     return flattenPackages ? myFlattenPackageCoverageInfos.get(qualifiedName) : myPackageCoverageInfos.get(qualifiedName);
   }
 
-  public String getPackageClassPercentage(@jakarta.annotation.Nonnull final PsiPackage psiPackage, boolean flatten) {
+  public String getPackageClassPercentage(@Nonnull final PsiPackage psiPackage, boolean flatten) {
     final PackageAnnotator.PackageCoverageInfo packageCoverageInfo = getPackageCoverageInfo(psiPackage, flatten);
     if (packageCoverageInfo == null) return null;
     return getPercentage(packageCoverageInfo.coveredClassCount, packageCoverageInfo.totalClassCount);

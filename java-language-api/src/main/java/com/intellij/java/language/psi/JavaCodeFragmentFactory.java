@@ -43,7 +43,7 @@ public abstract class JavaCodeFragmentFactory {
    * @return the created code fragment.
    */
   @Nonnull
-  public abstract PsiExpressionCodeFragment createExpressionCodeFragment(@jakarta.annotation.Nonnull String text, @jakarta.annotation.Nullable PsiElement context, @jakarta.annotation.Nullable final PsiType expectedType, boolean isPhysical);
+  public abstract PsiExpressionCodeFragment createExpressionCodeFragment(@Nonnull String text, @Nullable PsiElement context, @Nullable final PsiType expectedType, boolean isPhysical);
 
   /**
    * Creates a Java code fragment from the text of a Java code block.
@@ -54,7 +54,7 @@ public abstract class JavaCodeFragmentFactory {
    *                   (see {@link PsiElement#isPhysical()}).
    * @return the created code fragment.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public abstract JavaCodeFragment createCodeBlockCodeFragment(@Nonnull String text, @Nullable PsiElement context, boolean isPhysical);
 
   /**
@@ -85,8 +85,8 @@ public abstract class JavaCodeFragmentFactory {
    *                   (see {@link PsiElement#isPhysical()}).
    * @return the created code fragment.
    */
-  @jakarta.annotation.Nonnull
-  public abstract PsiTypeCodeFragment createTypeCodeFragment(@jakarta.annotation.Nonnull String text, @Nullable PsiElement context, boolean isPhysical);
+  @Nonnull
+  public abstract PsiTypeCodeFragment createTypeCodeFragment(@Nonnull String text, @Nullable PsiElement context, boolean isPhysical);
 
   /**
    * Creates a Java type code fragment from the text of the name of a Java type (the name
@@ -100,9 +100,9 @@ public abstract class JavaCodeFragmentFactory {
    * @param flags      types allowed to present in text.
    * @return the created code fragment.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public abstract PsiTypeCodeFragment createTypeCodeFragment(@Nonnull String text,
-                                                             @jakarta.annotation.Nullable PsiElement context,
+                                                             @Nullable PsiElement context,
                                                              boolean isPhysical,
                                                              @MagicConstant(flags = {
                                                                  ALLOW_VOID,

@@ -38,7 +38,7 @@ import org.jetbrains.java.generate.GenerateToStringUtils;
 @ExtensionImpl
 public class ClassHasNoToStringMethodInspection extends AbstractToStringInspection {
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return "Class does not override 'toString()' method";
   }
@@ -49,7 +49,7 @@ public class ClassHasNoToStringMethodInspection extends AbstractToStringInspecti
     return "ClassHasNoToStringMethod";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder,
                                         boolean isOnTheFly,

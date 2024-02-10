@@ -30,11 +30,11 @@ public class FieldDescriptorImpl implements FieldDescriptor {
   private final PsiMethod myGetterPrototype;
   private final PsiMethod mySetterPrototype;
 
-  public FieldDescriptorImpl(@jakarta.annotation.Nonnull PsiField field,
+  public FieldDescriptorImpl(@Nonnull PsiField field,
                              @Nonnull String getterName,
-                             @jakarta.annotation.Nonnull String setterName,
-                             @jakarta.annotation.Nullable PsiMethod getterPrototype,
-                             @jakarta.annotation.Nullable PsiMethod setterPrototype) {
+                             @Nonnull String setterName,
+                             @Nullable PsiMethod getterPrototype,
+                             @Nullable PsiMethod setterPrototype) {
     myField = field;
     myGetterName = getterName;
     mySetterName = setterName;
@@ -42,7 +42,7 @@ public class FieldDescriptorImpl implements FieldDescriptor {
     mySetterPrototype = setterPrototype;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public PsiField getField() {
     return myField;
@@ -54,13 +54,13 @@ public class FieldDescriptorImpl implements FieldDescriptor {
     return myGetterName;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getSetterName() {
     return mySetterName;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public PsiMethod getGetterPrototype() {
     return myGetterPrototype;
@@ -73,7 +73,7 @@ public class FieldDescriptorImpl implements FieldDescriptor {
   }
 
   @Override
-  public void refreshField(@jakarta.annotation.Nonnull PsiField newField) {
+  public void refreshField(@Nonnull PsiField newField) {
     myField = newField;
   }
 }

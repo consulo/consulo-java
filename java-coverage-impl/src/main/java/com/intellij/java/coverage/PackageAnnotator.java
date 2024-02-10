@@ -153,7 +153,7 @@ public class PackageAnnotator {
 
       if (suite.isTrackTestFolders()) {
         final VirtualFile testPackageRoot = myCoverageManager.doInReadActionIfProjectOpen(new Computable<VirtualFile>() {
-          @jakarta.annotation.Nullable
+          @Nullable
           public VirtualFile compute() {
             return ModuleCompilerPathsManager.getInstance(module).getCompilerOutput(TestContentFolderTypeProvider.getInstance());
           }

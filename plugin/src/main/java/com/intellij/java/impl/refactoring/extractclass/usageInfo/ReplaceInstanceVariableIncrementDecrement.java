@@ -27,7 +27,7 @@ public class ReplaceInstanceVariableIncrementDecrement extends FixableUsageInfo 
   private final PsiExpression reference;
   private final @Nullable
   String setterName;
-  private final @jakarta.annotation.Nullable
+  private final @Nullable
   String getterName;
   private final String delegateName;
   private final String fieldName;

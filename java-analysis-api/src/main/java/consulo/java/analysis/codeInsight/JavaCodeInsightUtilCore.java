@@ -73,8 +73,8 @@ public class JavaCodeInsightUtilCore {
     return CodeInsightUtilCore.findElementInRange(file, startOffset, endOffset, klass, JavaLanguage.INSTANCE);
   }
 
-  @jakarta.annotation.Nonnull
-  public static PsiElement[] findStatementsInRange(@jakarta.annotation.Nonnull PsiFile file, int startOffset, int endOffset) {
+  @Nonnull
+  public static PsiElement[] findStatementsInRange(@Nonnull PsiFile file, int startOffset, int endOffset) {
     Language language = findJavaOrLikeLanguage(file);
     if (language == null) {
       return PsiElement.EMPTY_ARRAY;
@@ -173,7 +173,7 @@ public class JavaCodeInsightUtilCore {
     return PsiUtilCore.toPsiElementArray(array);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static Language findJavaOrLikeLanguage(@Nonnull final PsiFile file) {
     final Set<Language> languages = file.getViewProvider().getLanguages();
     for (final Language language : languages) {

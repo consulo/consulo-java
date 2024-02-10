@@ -68,7 +68,7 @@ public class ImplicitNumericConversionInspection extends BaseInspection {
   public boolean ignoreConstantConversions = false;
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("implicit.numeric.conversion.display.name");
   }
@@ -148,7 +148,7 @@ public class ImplicitNumericConversionInspection extends BaseInspection {
       }
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     @NonNls
     private static String convertExpression(PsiExpression expression, PsiType expectedType) {
       final PsiType expressionType = expression.getType();
@@ -229,7 +229,7 @@ public class ImplicitNumericConversionInspection extends BaseInspection {
       return PsiType.INT.equals(expressionType) || PsiType.LONG.equals(expressionType);
     }
 
-    private static boolean isFloatingPoint(@jakarta.annotation.Nullable PsiType expressionType) {
+    private static boolean isFloatingPoint(@Nullable PsiType expressionType) {
       return PsiType.FLOAT.equals(expressionType) || PsiType.DOUBLE.equals(expressionType);
     }
   }

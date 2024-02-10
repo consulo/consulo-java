@@ -90,7 +90,7 @@ public class RemoteConfiguration extends ModuleBasedConfiguration<JavaRunConfigu
 	}
 
 	@Override
-	public RunProfileState getState(@Nonnull final Executor executor, @jakarta.annotation.Nonnull final ExecutionEnvironment env) throws ExecutionException
+	public RunProfileState getState(@Nonnull final Executor executor, @Nonnull final ExecutionEnvironment env) throws ExecutionException
 	{
 		GenericDebuggerRunnerSettings debuggerSettings = (GenericDebuggerRunnerSettings) env.getRunnerSettings();
 		debuggerSettings.LOCAL = false;
@@ -100,7 +100,7 @@ public class RemoteConfiguration extends ModuleBasedConfiguration<JavaRunConfigu
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public SettingsEditor<? extends RunConfiguration> getConfigurationEditor()
 	{
 		SettingsEditorGroup<RemoteConfiguration> group = new SettingsEditorGroup<RemoteConfiguration>();

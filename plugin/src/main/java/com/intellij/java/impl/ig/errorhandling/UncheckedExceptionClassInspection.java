@@ -51,7 +51,7 @@ public class UncheckedExceptionClassInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       if (!InheritanceUtil.isInheritor(aClass,
                                        JavaClassNames.JAVA_LANG_THROWABLE)) {
         return;

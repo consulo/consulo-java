@@ -48,20 +48,20 @@ public class AddRequiredModuleFix extends LocalQuickFixAndIntentionActionOnPsiEl
   }
 
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getFamilyName() {
     return JavaQuickFixBundle.message("module.info.add.requires.family.name");
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull PsiFile file, @jakarta.annotation.Nonnull PsiElement startElement, @jakarta.annotation.Nonnull PsiElement endElement) {
+  public boolean isAvailable(@Nonnull Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
     return PsiUtil.isLanguageLevel9OrHigher(file) && startElement instanceof PsiJavaModule && startElement.getManager().isInProject(startElement) && getLBrace((PsiJavaModule) startElement) !=
         null;
   }
 
   @Override
-  public void invoke(@Nonnull Project project, @Nonnull PsiFile file, @jakarta.annotation.Nullable Editor editor, @Nonnull PsiElement startElement, @jakarta.annotation.Nonnull PsiElement endElement) {
+  public void invoke(@Nonnull Project project, @Nonnull PsiFile file, @Nullable Editor editor, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
     PsiJavaModule module = (PsiJavaModule) startElement;
 
     PsiJavaParserFacade parserFacade = JavaPsiFacade.getInstance(project).getParserFacade();
@@ -80,8 +80,8 @@ public class AddRequiredModuleFix extends LocalQuickFixAndIntentionActionOnPsiEl
     return true;
   }
 
-  @jakarta.annotation.Nullable
-  private static PsiElement findAddingPlace(@jakarta.annotation.Nonnull PsiJavaModule module) {
+  @Nullable
+  private static PsiElement findAddingPlace(@Nonnull PsiJavaModule module) {
     PsiElement addingPlace = ContainerUtil.iterateAndGetLastItem(module.getRequires());
     return addingPlace != null ? addingPlace : getLBrace(module);
   }

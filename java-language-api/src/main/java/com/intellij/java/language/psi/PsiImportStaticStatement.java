@@ -34,7 +34,7 @@ public interface PsiImportStaticStatement extends PsiImportStatementBase {
    * @return the class from which members are imported, or null if the reference resolve failed
    * or the resolve target is not a class.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiClass resolveTargetClass();
 
   /**

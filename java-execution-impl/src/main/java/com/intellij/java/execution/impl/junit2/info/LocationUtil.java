@@ -29,7 +29,7 @@ import jakarta.annotation.Nonnull;
 @UsedInPlugin
 public class LocationUtil
 {
-	public static boolean isJarAttached(@jakarta.annotation.Nonnull Location location, @jakarta.annotation.Nonnull final PsiJavaPackage aPackage, final String... fqn)
+	public static boolean isJarAttached(@Nonnull Location location, @Nonnull final PsiJavaPackage aPackage, final String... fqn)
 	{
 		return isJarAttached(location, aPackage.getDirectories(), fqn);
 	}

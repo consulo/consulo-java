@@ -45,7 +45,7 @@ public abstract class GlobalJavaBatchInspectionTool extends GlobalInspectionTool
 		return queryExternalUsagesRequests(globalContext.getRefManager(), globalContext.getExtension(GlobalJavaInspectionContext.CONTEXT), problemDescriptionsProcessor);
 	}
 
-	protected boolean queryExternalUsagesRequests(@Nonnull RefManager manager, @Nonnull GlobalJavaInspectionContext globalContext, @jakarta.annotation.Nonnull ProblemDescriptionsProcessor processor)
+	protected boolean queryExternalUsagesRequests(@Nonnull RefManager manager, @Nonnull GlobalJavaInspectionContext globalContext, @Nonnull ProblemDescriptionsProcessor processor)
 	{
 		return false;
 	}

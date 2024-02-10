@@ -32,7 +32,7 @@ public class OptimizeImportsFix implements SyntheticIntentionAction {
   private static final Logger LOG = Logger.getInstance(OptimizeImportsFix.class);
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getText() {
     return JavaQuickFixBundle.message("optimize.imports.fix");
   }

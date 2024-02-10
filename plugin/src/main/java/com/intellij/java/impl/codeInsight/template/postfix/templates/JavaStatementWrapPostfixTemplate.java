@@ -34,7 +34,7 @@ public abstract class JavaStatementWrapPostfixTemplate extends StatementWrapPost
   }
 
   @Override
-  protected void afterExpand(@jakarta.annotation.Nonnull PsiElement newElement, @Nonnull Editor editor) {
+  protected void afterExpand(@Nonnull PsiElement newElement, @Nonnull Editor editor) {
     super.afterExpand(newElement, editor);
     JavaPostfixTemplateProvider.doNotDeleteSemicolon(newElement.getContainingFile());
   }

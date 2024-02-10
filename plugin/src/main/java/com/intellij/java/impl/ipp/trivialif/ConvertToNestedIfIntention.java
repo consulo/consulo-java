@@ -40,7 +40,7 @@ import jakarta.annotation.Nullable;
 public class ConvertToNestedIfIntention extends Intention {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new PsiElementPredicate() {
 

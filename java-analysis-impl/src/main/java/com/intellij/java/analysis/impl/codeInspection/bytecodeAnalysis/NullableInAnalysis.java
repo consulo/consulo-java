@@ -72,7 +72,7 @@ class NullableInAnalysis extends Analysis<PResult>
 	private boolean top;
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	protected Equation analyze() throws AnalyzerException
 	{
 		pendingPush(createStartState());

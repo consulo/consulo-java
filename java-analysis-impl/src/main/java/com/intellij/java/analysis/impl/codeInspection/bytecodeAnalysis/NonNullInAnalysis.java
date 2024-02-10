@@ -88,7 +88,7 @@ class NonNullInAnalysis extends Analysis<PResult>
 	private PResult subResult;
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	protected Equation analyze() throws AnalyzerException
 	{
 		pendingPush(new ProceedState(createStartState()));

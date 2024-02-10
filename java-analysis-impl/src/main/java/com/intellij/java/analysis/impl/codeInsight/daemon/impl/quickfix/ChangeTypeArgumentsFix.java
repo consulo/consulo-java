@@ -52,8 +52,8 @@ public class ChangeTypeArgumentsFix implements SyntheticIntentionAction, HighPri
 
   ChangeTypeArgumentsFix(@Nonnull PsiMethod targetMethod,
                          PsiClass psiClass,
-                         @jakarta.annotation.Nonnull PsiExpression[] expressions,
-                         @jakarta.annotation.Nonnull PsiElement context) {
+                         @Nonnull PsiExpression[] expressions,
+                         @Nonnull PsiElement context) {
     myTargetMethod = targetMethod;
     myPsiClass = psiClass;
     myExpressions = expressions;
@@ -61,7 +61,7 @@ public class ChangeTypeArgumentsFix implements SyntheticIntentionAction, HighPri
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getText() {
     final PsiSubstitutor substitutor = inferTypeArguments();
     return "Change type arguments to <" + StringUtil.join(myPsiClass.getTypeParameters(), typeParameter -> {
@@ -71,7 +71,7 @@ public class ChangeTypeArgumentsFix implements SyntheticIntentionAction, HighPri
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     final PsiTypeParameter[] typeParameters = myPsiClass.getTypeParameters();
     if (typeParameters.length > 0) {
       if (myNewExpression != null && myNewExpression.isValid() && myNewExpression.getArgumentList() != null) {
@@ -102,7 +102,7 @@ public class ChangeTypeArgumentsFix implements SyntheticIntentionAction, HighPri
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull final Project project, Editor editor, final PsiFile file) {
+  public void invoke(@Nonnull final Project project, Editor editor, final PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
 
     final PsiTypeParameter[] typeParameters = myPsiClass.getTypeParameters();
@@ -133,8 +133,8 @@ public class ChangeTypeArgumentsFix implements SyntheticIntentionAction, HighPri
   }
 
 
-  public static void registerIntentions(@jakarta.annotation.Nonnull JavaResolveResult[] candidates,
-                                        @jakarta.annotation.Nonnull PsiExpressionList list,
+  public static void registerIntentions(@Nonnull JavaResolveResult[] candidates,
+                                        @Nonnull PsiExpressionList list,
                                         @Nullable HighlightInfo highlightInfo,
                                         PsiClass psiClass) {
     if (candidates.length == 0) return;
@@ -144,11 +144,11 @@ public class ChangeTypeArgumentsFix implements SyntheticIntentionAction, HighPri
     }
   }
 
-  private static void registerIntention(@jakarta.annotation.Nonnull PsiExpression[] expressions,
+  private static void registerIntention(@Nonnull PsiExpression[] expressions,
                                         @Nullable HighlightInfo highlightInfo,
                                         PsiClass psiClass,
-                                        @jakarta.annotation.Nonnull JavaResolveResult candidate,
-                                        @jakarta.annotation.Nonnull PsiElement context) {
+                                        @Nonnull JavaResolveResult candidate,
+                                        @Nonnull PsiElement context) {
     if (!candidate.isStaticsScopeCorrect()) return;
     PsiMethod method = (PsiMethod) candidate.getElement();
     if (method != null && context.getManager().isInProject(method)) {

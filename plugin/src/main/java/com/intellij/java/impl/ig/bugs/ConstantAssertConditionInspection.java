@@ -32,7 +32,7 @@ public class ConstantAssertConditionInspection extends BaseInspection {
 
   @Override
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "constant.assert.condition.display.name");

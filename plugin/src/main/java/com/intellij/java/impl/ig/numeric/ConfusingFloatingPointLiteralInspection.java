@@ -42,7 +42,7 @@ public class ConfusingFloatingPointLiteralInspection
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "confusing.floating.point.literal.problem.descriptor");
@@ -133,7 +133,7 @@ public class ConfusingFloatingPointLiteralInspection
 
     @Override
     public void visitLiteralExpression(
-      @jakarta.annotation.Nonnull PsiLiteralExpression literal) {
+      @Nonnull PsiLiteralExpression literal) {
       super.visitLiteralExpression(literal);
       final PsiType type = literal.getType();
       if (type == null) {

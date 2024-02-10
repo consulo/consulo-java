@@ -63,7 +63,7 @@ public class RefusedBequestInspection extends BaseInspection {
   private class RefusedBequestVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       super.visitMethod(method);
       final PsiCodeBlock body = method.getBody();
       if (body == null) {

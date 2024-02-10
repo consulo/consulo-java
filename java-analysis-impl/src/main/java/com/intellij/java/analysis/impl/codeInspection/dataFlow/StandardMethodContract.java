@@ -26,7 +26,7 @@ import java.util.stream.Stream;
  * @author peter
  */
 public final class StandardMethodContract extends MethodContract {
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private final ValueConstraint[] myParameters;
 
   public StandardMethodContract(@Nonnull ValueConstraint[] parameters, @Nonnull ContractReturnValue returnValue) {
@@ -52,7 +52,7 @@ public final class StandardMethodContract extends MethodContract {
     return returnValue.equals(getReturnValue()) ? this : new StandardMethodContract(myParameters, returnValue);
   }
 
-  public static StandardMethodContract trivialContract(int paramCount, @jakarta.annotation.Nonnull ContractReturnValue returnValue) {
+  public static StandardMethodContract trivialContract(int paramCount, @Nonnull ContractReturnValue returnValue) {
     return new StandardMethodContract(createConstraintArray(paramCount), returnValue);
   }
 
@@ -95,7 +95,7 @@ public final class StandardMethodContract extends MethodContract {
    * @param contract contract to exclude
    * @return a stream of exclusion contracts (could be empty)
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public Stream<StandardMethodContract> excludeContract(StandardMethodContract contract) {
     assert contract.getParameterCount() == myParameters.length;
     List<ValueConstraint> constraints = contract.getConstraints();
@@ -176,7 +176,7 @@ public final class StandardMethodContract extends MethodContract {
     return result;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static ValueConstraint[] createConstraintArray(int paramCount) {
     ValueConstraint[] args = new ValueConstraint[paramCount];
     Arrays.fill(args, ValueConstraint.ANY_VALUE);
@@ -240,7 +240,7 @@ public final class StandardMethodContract extends MethodContract {
    * @see HardcodedContracts
    */
   static
-  @jakarta.annotation.Nonnull
+  @Nonnull
   StandardMethodContract fromText(@Nonnull String clause) {
     try {
       return fromText(clause, 0, clause);
@@ -250,8 +250,8 @@ public final class StandardMethodContract extends MethodContract {
   }
 
   private static
-  @jakarta.annotation.Nonnull
-  StandardMethodContract fromText(@Nonnull String text, int clauseIndex, @jakarta.annotation.Nonnull String clause)
+  @Nonnull
+  StandardMethodContract fromText(@Nonnull String text, int clauseIndex, @Nonnull String clause)
       throws ParseException {
     String arrow = "->";
     int arrowIndex = clause.indexOf(arrow);
@@ -383,14 +383,14 @@ public final class StandardMethodContract extends MethodContract {
 
   public static class ParseException extends Exception {
     private final
-    @jakarta.annotation.Nullable
+    @Nullable
     TextRange myRange;
 
     ParseException(String message) {
       this(message, null);
     }
 
-    ParseException(String message, @jakarta.annotation.Nullable TextRange range) {
+    ParseException(String message, @Nullable TextRange range) {
       super(message);
       myRange = range != null && range.isEmpty() ? null : range;
     }

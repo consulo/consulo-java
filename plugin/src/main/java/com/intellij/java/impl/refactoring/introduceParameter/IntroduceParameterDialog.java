@@ -75,14 +75,14 @@ public class IntroduceParameterDialog extends RefactoringDialog {
   private boolean myHasWriteAccess = false;
 
   IntroduceParameterDialog(@Nonnull Project project,
-                           @jakarta.annotation.Nonnull List<UsageInfo> classMembersList,
+                           @Nonnull List<UsageInfo> classMembersList,
                            PsiExpression[] occurences,
                            PsiLocalVariable onLocalVariable,
                            PsiExpression onExpression,
                            @Nonnull NameSuggestionsGenerator generator,
-                           @jakarta.annotation.Nonnull TypeSelectorManager typeSelectorManager,
-                           @jakarta.annotation.Nonnull PsiMethod methodToSearchFor,
-                           @jakarta.annotation.Nonnull PsiMethod methodToReplaceIn,
+                           @Nonnull TypeSelectorManager typeSelectorManager,
+                           @Nonnull PsiMethod methodToSearchFor,
+                           @Nonnull PsiMethod methodToReplaceIn,
                            @Nonnull IntList parametersToRemove,
                            final boolean mustBeFinal) {
     super(project, true);

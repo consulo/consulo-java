@@ -50,9 +50,9 @@ public class JamReferenceContributor extends PsiReferenceContributor {
 
   public void registerReferenceProviders(PsiReferenceRegistrar registrar) {
     registrar.registerReferenceProvider(STRING_IN_ANNO, new PsiReferenceProvider() {
-      @jakarta.annotation.Nonnull
+      @Nonnull
       @Override
-      public PsiReference[] getReferencesByElement(@jakarta.annotation.Nonnull PsiElement element, @jakarta.annotation.Nonnull ProcessingContext context) {
+      public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull ProcessingContext context) {
         final PsiNameValuePair pair = PsiTreeUtil.getParentOfType(element, PsiNameValuePair.class);
         final PsiAnnotation anno = (PsiAnnotation)pair.getParent().getParent();
         final PsiAnnotation originalAnno = anno == null ? null :  CompletionUtilCore.getOriginalElement(anno);

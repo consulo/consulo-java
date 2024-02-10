@@ -158,7 +158,7 @@ public abstract class DestinationFolderComboBox extends ComboboxWithBrowseButton
     });
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public MoveDestination selectDirectory(final PackageWrapper targetPackage, final boolean showChooserWhenDefault) {
     final DirectoryChooser.ItemWrapper selectedItem = (DirectoryChooser.ItemWrapper) getComboBox().getSelectedItem();
     if (selectedItem == null || selectedItem == NULL_WRAPPER) {

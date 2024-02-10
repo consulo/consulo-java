@@ -40,7 +40,7 @@ public class ChangeTypeSignatureAction extends BaseRefactoringAction
 	}
 
 	@Override
-	public boolean isEnabledOnElements(@jakarta.annotation.Nonnull PsiElement[] elements)
+	public boolean isEnabledOnElements(@Nonnull PsiElement[] elements)
 	{
 		if(elements.length > 1)
 		{
@@ -59,7 +59,7 @@ public class ChangeTypeSignatureAction extends BaseRefactoringAction
 	}
 
 	@Override
-	protected boolean isAvailableOnElementInEditorAndFile(@jakarta.annotation.Nonnull final PsiElement element, @jakarta.annotation.Nonnull final Editor editor, @jakarta.annotation.Nonnull PsiFile file, @jakarta.annotation.Nonnull DataContext context)
+	protected boolean isAvailableOnElementInEditorAndFile(@Nonnull final PsiElement element, @Nonnull final Editor editor, @Nonnull PsiFile file, @Nonnull DataContext context)
 	{
 		final int offset = TargetElementUtil.adjustOffset(file, editor.getDocument(), editor.getCaretModel().getOffset());
 		final PsiElement psiElement = file.findElementAt(offset);

@@ -71,9 +71,9 @@ public class LambdaExpressionElementType extends FunctionalExpressionElementType
     };
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
-  protected String getPresentableText(@jakarta.annotation.Nonnull LighterAST tree, @Nonnull LighterASTNode funExpr) {
+  protected String getPresentableText(@Nonnull LighterAST tree, @Nonnull LighterASTNode funExpr) {
     LighterASTNode parameterList = ObjectUtil.notNull(LightTreeUtil.firstChildOfType(tree, funExpr, JavaStubElementTypes.PARAMETER_LIST));
     return getLambdaPresentableText(tree, parameterList);
   }

@@ -37,17 +37,17 @@ import java.util.stream.Collectors;
  */
 public abstract class MergeModuleStatementsFix<T extends PsiElement> extends LocalQuickFixAndIntentionActionOnPsiElement {
 
-  protected MergeModuleStatementsFix(@jakarta.annotation.Nonnull PsiJavaModule javaModule) {
+  protected MergeModuleStatementsFix(@Nonnull PsiJavaModule javaModule) {
     super(javaModule);
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull PsiFile file, @jakarta.annotation.Nonnull PsiElement startElement, @jakarta.annotation.Nonnull PsiElement endElement) {
+  public boolean isAvailable(@Nonnull Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
     return PsiUtil.isLanguageLevel9OrHigher(file);
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull PsiFile file, @jakarta.annotation.Nullable Editor editor, @Nonnull PsiElement startElement, @jakarta.annotation.Nonnull PsiElement endElement) {
+  public void invoke(@Nonnull Project project, @Nonnull PsiFile file, @Nullable Editor editor, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
     if (startElement instanceof PsiJavaModule) {
       final PsiJavaModule javaModule = (PsiJavaModule) startElement;
       final List<T> statementsToMerge = getStatementsToMerge(javaModule);
@@ -78,19 +78,19 @@ public abstract class MergeModuleStatementsFix<T extends PsiElement> extends Loc
     }
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected abstract String getReplacementText(List<T> statementsToMerge);
 
   @Nonnull
-  protected abstract List<T> getStatementsToMerge(@jakarta.annotation.Nonnull PsiJavaModule javaModule);
+  protected abstract List<T> getStatementsToMerge(@Nonnull PsiJavaModule javaModule);
 
-  @jakarta.annotation.Nonnull
-  protected static String joinUniqueNames(@jakarta.annotation.Nonnull List<String> names) {
+  @Nonnull
+  protected static String joinUniqueNames(@Nonnull List<String> names) {
     final Set<String> unique = new HashSet<>();
     return names.stream().filter(name -> unique.add(name)).collect(Collectors.joining(","));
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static MergeModuleStatementsFix createFix(@Nullable PsiElement statement) {
     if (statement instanceof PsiPackageAccessibilityStatement) {
       return MergePackageAccessibilityStatementsFix.createFix((PsiPackageAccessibilityStatement) statement);

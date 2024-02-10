@@ -124,7 +124,7 @@ public class PostHighlightingVisitor {
     }
   }
 
-  public PostHighlightingVisitor(@jakarta.annotation.Nonnull PsiFile file,
+  public PostHighlightingVisitor(@Nonnull PsiFile file,
                                  @Nonnull Document document,
                                  @Nonnull RefCountHolder refCountHolder) throws ProcessCanceledException {
     myProject = file.getProject();
@@ -229,7 +229,7 @@ public class PostHighlightingVisitor {
   }
 
   @Nullable
-  private HighlightInfo processIdentifier(@jakarta.annotation.Nonnull PsiIdentifier identifier,
+  private HighlightInfo processIdentifier(@Nonnull PsiIdentifier identifier,
                                           @Nonnull ProgressIndicator progress,
                                           @Nonnull GlobalUsageHelper helper) {
     PsiElement parent = identifier.getParent();
@@ -288,9 +288,9 @@ public class PostHighlightingVisitor {
     return false;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private HighlightInfo processLocalVariable(@Nonnull PsiLocalVariable variable,
-                                             @jakarta.annotation.Nonnull PsiIdentifier identifier,
+                                             @Nonnull PsiIdentifier identifier,
                                              @Nonnull ProgressIndicator progress) {
     if (variable instanceof PsiResourceVariable && PsiUtil.isIgnoredName(variable.getName())) {
       return null;
@@ -335,12 +335,12 @@ public class PostHighlightingVisitor {
     return null;
   }
 
-  @jakarta.annotation.Nullable
-  private HighlightInfo processField(@jakarta.annotation.Nonnull final Project project,
+  @Nullable
+  private HighlightInfo processField(@Nonnull final Project project,
                                      @Nonnull final PsiField field,
                                      @Nonnull PsiIdentifier identifier,
-                                     @jakarta.annotation.Nonnull ProgressIndicator progress,
-                                     @jakarta.annotation.Nonnull GlobalUsageHelper helper) {
+                                     @Nonnull ProgressIndicator progress,
+                                     @Nonnull GlobalUsageHelper helper) {
     if (HighlightUtil.isSerializationImplicitlyUsedField(field)) {
       return null;
     }
@@ -403,7 +403,7 @@ public class PostHighlightingVisitor {
     return null;
   }
 
-  private HighlightInfo suggestionsToMakeFieldUsed(@jakarta.annotation.Nonnull PsiField field, @Nonnull PsiIdentifier identifier, @Nonnull String message) {
+  private HighlightInfo suggestionsToMakeFieldUsed(@Nonnull PsiField field, @Nonnull PsiIdentifier identifier, @Nonnull String message) {
     HighlightInfo highlightInfo = UnusedSymbolUtil.createUnusedSymbolInfo(identifier, message, myDeadCodeInfoType);
     QuickFixAction.registerQuickFixAction(highlightInfo, QuickFixFactory.getInstance().createRemoveUnusedVariableFix(field), myDeadCodeKey);
     QuickFixAction.registerQuickFixAction(highlightInfo,
@@ -435,11 +435,11 @@ public class PostHighlightingVisitor {
     return isOverriddenOrOverrides.get(method);
   }
 
-  @jakarta.annotation.Nullable
-  private HighlightInfo processParameter(@jakarta.annotation.Nonnull Project project,
-                                         @jakarta.annotation.Nonnull PsiParameter parameter,
+  @Nullable
+  private HighlightInfo processParameter(@Nonnull Project project,
+                                         @Nonnull PsiParameter parameter,
                                          @Nonnull PsiIdentifier identifier,
-                                         @jakarta.annotation.Nonnull ProgressIndicator progress) {
+                                         @Nonnull ProgressIndicator progress) {
     PsiElement declarationScope = parameter.getDeclarationScope();
     if (declarationScope instanceof PsiMethod) {
       PsiMethod method = (PsiMethod)declarationScope;
@@ -475,8 +475,8 @@ public class PostHighlightingVisitor {
     return null;
   }
 
-  @jakarta.annotation.Nullable
-  private HighlightInfo checkUnusedParameter(@jakarta.annotation.Nonnull PsiParameter parameter,
+  @Nullable
+  private HighlightInfo checkUnusedParameter(@Nonnull PsiParameter parameter,
                                              @Nonnull PsiIdentifier identifier,
                                              @Nonnull ProgressIndicator progress) {
     if (!myRefCountHolder.isReferenced(parameter) && !UnusedSymbolUtil.isImplicitUsage(myProject, parameter, progress)) {
@@ -486,7 +486,7 @@ public class PostHighlightingVisitor {
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private HighlightInfo processMethod(@Nonnull final Project project,
                                       @Nonnull final PsiMethod method,
                                       @Nonnull PsiIdentifier identifier,
@@ -515,12 +515,12 @@ public class PostHighlightingVisitor {
     return highlightInfo;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private HighlightInfo processClass(@Nonnull Project project,
                                      @Nonnull PsiClass aClass,
                                      @Nonnull PsiIdentifier identifier,
                                      @Nonnull ProgressIndicator progress,
-                                     @jakarta.annotation.Nonnull GlobalUsageHelper helper) {
+                                     @Nonnull GlobalUsageHelper helper) {
     if (UnusedSymbolUtil.isClassUsed(project, myFile, aClass, progress, helper)) {
       return null;
     }
@@ -544,11 +544,11 @@ public class PostHighlightingVisitor {
 
   private static HighlightInfo formatUnusedSymbolHighlightInfo(@Nonnull final Project project,
                                                                @Nonnull @PropertyKey(resourceBundle = JavaErrorBundle.BUNDLE) String pattern,
-                                                               @jakarta.annotation.Nonnull final PsiNameIdentifierOwner aClass,
-                                                               @jakarta.annotation.Nonnull final String element,
+                                                               @Nonnull final PsiNameIdentifierOwner aClass,
+                                                               @Nonnull final String element,
                                                                HighlightDisplayKey highlightDisplayKey,
                                                                @Nonnull HighlightInfoType highlightInfoType,
-                                                               @jakarta.annotation.Nonnull PsiElement identifier) {
+                                                               @Nonnull PsiElement identifier) {
     String symbolName = aClass.getName();
     String message = JavaErrorBundle.message(pattern, symbolName);
     final HighlightInfo highlightInfo = UnusedSymbolUtil.createUnusedSymbolInfo(identifier, message, highlightInfoType);
@@ -563,8 +563,8 @@ public class PostHighlightingVisitor {
     return highlightInfo;
   }
 
-  @jakarta.annotation.Nullable
-  private HighlightInfo processImport(@Nonnull PsiImportStatementBase importStatement, @jakarta.annotation.Nonnull HighlightDisplayKey unusedImportKey) {
+  @Nullable
+  private HighlightInfo processImport(@Nonnull PsiImportStatementBase importStatement, @Nonnull HighlightDisplayKey unusedImportKey) {
     // jsp include directive hack
     if (importStatement.isForeignFileImport()) {
       return null;

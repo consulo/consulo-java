@@ -40,7 +40,7 @@ public class NegationBroadScopeFix implements SyntheticIntentionAction {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getText() {
     String text = myPrefixExpression.getOperand().getText();
     text += " ";
@@ -78,7 +78,7 @@ public class NegationBroadScopeFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(myPrefixExpression)) return;
     PsiExpression operand = myPrefixExpression.getOperand();
     PsiElement unnegated = myPrefixExpression.replace(operand);

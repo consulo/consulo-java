@@ -36,7 +36,7 @@ import java.util.List;
 public class NullityAnnotationModifier extends TypeAnnotationModifier {
   @Nullable
   @Override
-  public TypeAnnotationProvider modifyAnnotations(@Nonnull PsiType inferenceVariableType, @jakarta.annotation.Nonnull PsiClassType boundType) {
+  public TypeAnnotationProvider modifyAnnotations(@Nonnull PsiType inferenceVariableType, @Nonnull PsiClassType boundType) {
     PsiAnnotation[] annotations = inferenceVariableType.getAnnotations();
     for (PsiAnnotation annotation : annotations) {
       String qName = annotation.getQualifiedName();
@@ -60,7 +60,7 @@ public class NullityAnnotationModifier extends TypeAnnotationModifier {
     return () -> array;
   }
 
-  private static boolean isMatchingAnnotation(@jakarta.annotation.Nonnull PsiClassType boundType, PsiAnnotation annotation, String qName) {
+  private static boolean isMatchingAnnotation(@Nonnull PsiClassType boundType, PsiAnnotation annotation, String qName) {
     NullableNotNullManager manager = NullableNotNullManager.getInstance(annotation.getProject());
     return (manager.getNullables().contains(qName) || manager.getNotNulls().contains(qName)) && boundType.findAnnotation(qName) != null;
   }

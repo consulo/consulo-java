@@ -99,7 +99,7 @@ public abstract class DfaValue
 	 * @return resulting condition between this value and other operand
 	 */
 	@Nonnull
-	public final DfaCondition cond(@Nonnull RelationType relationType, @jakarta.annotation.Nonnull DfaValue other)
+	public final DfaCondition cond(@Nonnull RelationType relationType, @Nonnull DfaValue other)
 	{
 		return DfaCondition.createCondition(this, relationType, other);
 	}

@@ -27,7 +27,7 @@ import jakarta.annotation.Nonnull;
  */
 public final class DfaRelation extends DfaCondition
 {
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public DfaRelation negate()
 	{
@@ -44,26 +44,26 @@ public final class DfaRelation extends DfaCondition
 	@Nonnull
 	final RelationType myRelation;
 
-	private DfaRelation(@jakarta.annotation.Nonnull DfaValue leftOperand, @jakarta.annotation.Nonnull DfaValue rightOperand, @jakarta.annotation.Nonnull RelationType relationType)
+	private DfaRelation(@Nonnull DfaValue leftOperand, @Nonnull DfaValue rightOperand, @Nonnull RelationType relationType)
 	{
 		myLeftOperand = leftOperand;
 		myRightOperand = rightOperand;
 		myRelation = relationType;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public DfaValue getLeftOperand()
 	{
 		return myLeftOperand;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public DfaValue getRightOperand()
 	{
 		return myRightOperand;
 	}
 
-	public static DfaRelation createRelation(@jakarta.annotation.Nonnull DfaValue dfaLeft, @Nonnull RelationType relationType, @jakarta.annotation.Nonnull DfaValue dfaRight)
+	public static DfaRelation createRelation(@Nonnull DfaValue dfaLeft, @Nonnull RelationType relationType, @Nonnull DfaValue dfaRight)
 	{
 		if((relationType == RelationType.IS || relationType == RelationType.IS_NOT) &&
 				dfaRight instanceof DfaTypeValue && !(dfaLeft instanceof DfaTypeValue))
@@ -92,7 +92,7 @@ public final class DfaRelation extends DfaCondition
 		return null;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	private static DfaRelation createConstBasedRelation(DfaTypeValue dfaLeft, RelationType relationType, DfaValue dfaRight)
 	{
 		if(dfaRight.getDfType() == DfTypes.NULL && DfaNullability.fromDfType(dfaLeft.getDfType()) == DfaNullability.NULLABLE)
@@ -112,7 +112,7 @@ public final class DfaRelation extends DfaCondition
 		return myRelation == RelationType.NE || myRelation == RelationType.GT || myRelation == RelationType.LT;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public RelationType getRelation()
 	{
 		return myRelation;

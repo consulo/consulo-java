@@ -188,7 +188,7 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 		return getSetIcon(muted);
 	}
 
-	protected BreakpointWithHighlighter(@jakarta.annotation.Nonnull Project project, XBreakpoint xBreakpoint)
+	protected BreakpointWithHighlighter(@Nonnull Project project, XBreakpoint xBreakpoint)
 	{
 		//for persistency
 		super(project, xBreakpoint);
@@ -259,7 +259,7 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 		}
 	}
 
-	static void createLocationBreakpointRequest(@jakarta.annotation.Nonnull FilteredRequestor requestor, @Nullable Location location, @jakarta.annotation.Nonnull DebugProcessImpl debugProcess)
+	static void createLocationBreakpointRequest(@Nonnull FilteredRequestor requestor, @Nullable Location location, @Nonnull DebugProcessImpl debugProcess)
 	{
 		if(location != null)
 		{
@@ -364,7 +364,7 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 		}
 	}
 
-	public boolean isAt(@jakarta.annotation.Nonnull Document document, int offset)
+	public boolean isAt(@Nonnull Document document, int offset)
 	{
 		final VirtualFile file = FileDocumentManager.getInstance().getFile(document);
 		int line = document.getLineNumber(offset);

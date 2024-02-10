@@ -45,7 +45,7 @@ import java.awt.datatransfer.Transferable;
  */
 @ExtensionImpl
 public class JavaFilePasteProvider implements FilePasteProvider {
-  public void performPaste(@jakarta.annotation.Nonnull final DataContext dataContext) {
+  public void performPaste(@Nonnull final DataContext dataContext) {
     final Project project = dataContext.getData(CommonDataKeys.PROJECT);
     final IdeView ideView = dataContext.getData(IdeView.KEY);
     if (project == null || ideView == null) return;

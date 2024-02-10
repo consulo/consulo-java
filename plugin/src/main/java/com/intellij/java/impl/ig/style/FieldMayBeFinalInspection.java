@@ -32,7 +32,7 @@ import jakarta.annotation.Nonnull;
 public class FieldMayBeFinalInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "field.may.be.final.display.name");

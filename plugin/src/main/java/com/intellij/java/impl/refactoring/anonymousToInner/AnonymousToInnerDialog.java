@@ -190,7 +190,7 @@ class AnonymousToInnerDialog extends DialogWrapper{
   protected JComponent createNorthPanel() {
     myNameField = new NameSuggestionsField(myProject);
 
-    FormBuilder formBuilder = consulo.ui.ex.awt.FormBuilder.createFormBuilder()
+    FormBuilder formBuilder = FormBuilder.createFormBuilder()
       .addLabeledComponent(RefactoringBundle.message("anonymousToInner.class.name.label.text"), myNameField);
 
     if(!myShowCanBeStatic) {

@@ -41,7 +41,7 @@ public class JavaEnumAugmentProvider extends PsiAugmentProvider {
   public static final String VALUES_METHOD_NAME = "values";
   public static final String VALUE_OF_METHOD_NAME = "valueOf";
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   @SuppressWarnings("unchecked")
   public <Psi extends PsiElement> List<Psi> getAugments(@Nonnull PsiElement element, @Nonnull Class<Psi> type) {

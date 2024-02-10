@@ -35,7 +35,7 @@ import jakarta.annotation.Nonnull;
 import java.util.List;
 
 public class ImportClassFix extends ImportClassFixBase<PsiJavaCodeReferenceElement, PsiJavaCodeReferenceElement> implements SyntheticIntentionAction {
-  public ImportClassFix(@jakarta.annotation.Nonnull PsiJavaCodeReferenceElement element) {
+  public ImportClassFix(@Nonnull PsiJavaCodeReferenceElement element) {
     super(element, element);
   }
 
@@ -45,7 +45,7 @@ public class ImportClassFix extends ImportClassFixBase<PsiJavaCodeReferenceEleme
   }
 
   @Override
-  protected PsiElement getReferenceNameElement(@jakarta.annotation.Nonnull PsiJavaCodeReferenceElement reference) {
+  protected PsiElement getReferenceNameElement(@Nonnull PsiJavaCodeReferenceElement reference) {
     return reference.getReferenceNameElement();
   }
 
@@ -60,7 +60,7 @@ public class ImportClassFix extends ImportClassFixBase<PsiJavaCodeReferenceEleme
   }
 
   @Override
-  protected boolean hasTypeParameters(@jakarta.annotation.Nonnull PsiJavaCodeReferenceElement reference) {
+  protected boolean hasTypeParameters(@Nonnull PsiJavaCodeReferenceElement reference) {
     final PsiReferenceParameterList refParameters = reference.getParameterList();
     return refParameters != null && refParameters.getTypeParameterElements().length > 0;
   }

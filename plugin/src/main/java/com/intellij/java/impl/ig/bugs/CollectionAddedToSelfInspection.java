@@ -32,7 +32,7 @@ import consulo.java.language.module.util.JavaClassNames;
 public class CollectionAddedToSelfInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "collection.added.to.self.display.name");

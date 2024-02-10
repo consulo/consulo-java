@@ -28,13 +28,13 @@ public class TypeCastInstruction extends ExpressionPushingInstruction<PsiTypeCas
   private final PsiExpression myCasted;
   private final PsiType myCastTo;
   private final
-  @jakarta.annotation.Nullable
+  @Nullable
   DfaControlTransferValue myTransferValue;
 
   public TypeCastInstruction(PsiTypeCastExpression castExpression,
                              PsiExpression casted,
                              PsiType castTo,
-                             @jakarta.annotation.Nullable DfaControlTransferValue value) {
+                             @Nullable DfaControlTransferValue value) {
     super(castExpression);
     assert !(castTo instanceof PsiPrimitiveType);
     myCasted = casted;

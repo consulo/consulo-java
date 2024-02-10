@@ -52,7 +52,7 @@ public class FilePathReferenceProvider extends PsiReferenceProvider {
     return getReferencesByElement(element, text, offset, soft, Module.EMPTY_ARRAY);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiReference[] getReferencesByElement(PsiElement element, String text, int offset, final boolean soft,
                                                final @Nonnull Module... forModules) {
     return new FileReferenceSet(text, element, offset, this, true, myEndingSlashNotAllowed) {
@@ -122,8 +122,8 @@ public class FilePathReferenceProvider extends PsiReferenceProvider {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
-  public PsiReference[] getReferencesByElement(@jakarta.annotation.Nonnull PsiElement element, @Nonnull final ProcessingContext context) {
+  @Nonnull
+  public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull final ProcessingContext context) {
     String text = null;
     if (element instanceof PsiLiteralExpression) {
       Object value = ((PsiLiteralExpression) element).getValue();
@@ -140,7 +140,7 @@ public class FilePathReferenceProvider extends PsiReferenceProvider {
     return getReferencesByElement(element, text, 1, true);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static Collection<PsiFileSystemItem> getRoots(final Module thisModule, boolean includingClasses) {
     if (thisModule == null) {
       return Collections.emptyList();

@@ -39,7 +39,7 @@ public class MergeCallSequenceToChainIntention extends Intention {
   }
 
   @Override
-  protected void processIntention(@jakarta.annotation.Nonnull PsiElement element) throws IncorrectOperationException {
+  protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
     if (!(element instanceof PsiExpressionStatement)) {
       return;
     }

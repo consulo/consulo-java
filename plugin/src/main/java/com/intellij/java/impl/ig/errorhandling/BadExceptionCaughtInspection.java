@@ -63,7 +63,7 @@ public class BadExceptionCaughtInspection extends BaseInspection {
     }
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "ProhibitedExceptionCaught";
   }
@@ -75,7 +75,7 @@ public class BadExceptionCaughtInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("bad.exception.caught.problem.descriptor");
   }

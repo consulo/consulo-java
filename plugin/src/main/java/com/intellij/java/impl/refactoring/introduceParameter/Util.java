@@ -82,7 +82,7 @@ public class Util {
   }
 
   @Nonnull
-  private static PsiElement getPhysical(@jakarta.annotation.Nonnull PsiElement expr) {
+  private static PsiElement getPhysical(@Nonnull PsiElement expr) {
     PsiElement physicalElement = expr.getUserData(ElementToWorkOn.PARENT);
     if (physicalElement != null) expr = physicalElement;
     return expr;
@@ -116,9 +116,9 @@ public class Util {
   }
 
   // returns parameters that are used solely in specified expression
-  @jakarta.annotation.Nonnull
-  public static IntList findParametersToRemove(@jakarta.annotation.Nonnull PsiMethod method,
-											   @jakarta.annotation.Nonnull final PsiExpression expr,
+  @Nonnull
+  public static IntList findParametersToRemove(@Nonnull PsiMethod method,
+											   @Nonnull final PsiExpression expr,
 											   @Nullable final PsiExpression[] occurences) {
     final PsiParameter[] parameters = method.getParameterList().getParameters();
     if (parameters.length == 0) return IntLists.newArrayList();

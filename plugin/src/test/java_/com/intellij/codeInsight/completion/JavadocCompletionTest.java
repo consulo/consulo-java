@@ -213,7 +213,7 @@ public abstract class JavadocCompletionTest extends LightFixtureCompletionTestCa
     PsiReferenceProvider provider = new PsiReferenceProvider() {
       @Override
       @Nonnull
-      public PsiReference[] getReferencesByElement(@jakarta.annotation.Nonnull final PsiElement element, @jakarta.annotation.Nonnull final ProcessingContext context) {
+      public PsiReference[] getReferencesByElement(@Nonnull final PsiElement element, @Nonnull final ProcessingContext context) {
         return new PsiReference[]{new PsiReferenceBase<PsiElement>(element) {
 
           @Override
@@ -222,7 +222,7 @@ public abstract class JavadocCompletionTest extends LightFixtureCompletionTestCa
           }
 
           @Override
-          @jakarta.annotation.Nonnull
+          @Nonnull
           public Object[] getVariants() {
             return new Object[]{"1", "2", "3"};
           }

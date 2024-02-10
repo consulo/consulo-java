@@ -37,7 +37,7 @@ class VariablePassedAsArgumentExcludedVisitor extends JavaRecursiveElementVisito
 
   private boolean passed = false;
 
-  public VariablePassedAsArgumentExcludedVisitor(@Nonnull PsiVariable variable, @jakarta.annotation.Nonnull Set<String> excludes, boolean builderPattern) {
+  public VariablePassedAsArgumentExcludedVisitor(@Nonnull PsiVariable variable, @Nonnull Set<String> excludes, boolean builderPattern) {
     this.variable = variable;
     this.excludes = excludes;
     myBuilderPattern = builderPattern;

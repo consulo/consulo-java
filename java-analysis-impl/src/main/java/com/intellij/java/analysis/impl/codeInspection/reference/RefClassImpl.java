@@ -291,7 +291,7 @@ public class RefClassImpl extends RefJavaElementImpl implements RefClass {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public Set<RefClass> getBaseClasses() {
     if (myBases == null) {
       return EMPTY_CLASS_SET;
@@ -312,7 +312,7 @@ public class RefClassImpl extends RefJavaElementImpl implements RefClass {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public Set<RefClass> getSubClasses() {
     if (mySubClasses == null) {
       return EMPTY_CLASS_SET;
@@ -320,7 +320,7 @@ public class RefClassImpl extends RefJavaElementImpl implements RefClass {
     return mySubClasses;
   }
 
-  private void addSubClass(@jakarta.annotation.Nonnull RefClass refClass) {
+  private void addSubClass(@Nonnull RefClass refClass) {
     if (mySubClasses == null) {
       mySubClasses = Collections.singleton(refClass);
       return;
@@ -373,7 +373,7 @@ public class RefClassImpl extends RefJavaElementImpl implements RefClass {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public Set<RefElement> getInstanceReferences() {
     if (myInstanceReferences == null) {
       return EMPTY_SET;
@@ -408,7 +408,7 @@ public class RefClassImpl extends RefJavaElementImpl implements RefClass {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public List<RefMethod> getLibraryMethods() {
     if (myOverridingMethods == null) {
       return EMPTY_METHOD_LIST;

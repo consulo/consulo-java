@@ -66,13 +66,13 @@ public class JavaModuleFinderImpl extends PsiElementFinder {
 
   @Nullable
   @Override
-  public PsiClass findClass(@Nonnull String qualifiedName, @jakarta.annotation.Nonnull GlobalSearchScope scope) {
+  public PsiClass findClass(@Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope) {
     return null;
   }
 
   @Nonnull
   @Override
-  public PsiClass[] findClasses(@jakarta.annotation.Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope) {
+  public PsiClass[] findClasses(@Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope) {
     return PsiClass.EMPTY_ARRAY;
   }
 }

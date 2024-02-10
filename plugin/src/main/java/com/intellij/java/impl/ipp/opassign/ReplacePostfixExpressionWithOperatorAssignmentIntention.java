@@ -53,7 +53,7 @@ public class ReplacePostfixExpressionWithOperatorAssignmentIntention
       signText, replacementText);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected PsiElementPredicate getElementPredicate() {
     return new ReplacePostfixExpressionWithOperatorAssignmentPredicate();

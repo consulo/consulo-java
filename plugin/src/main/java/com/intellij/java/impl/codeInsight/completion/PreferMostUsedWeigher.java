@@ -52,9 +52,9 @@ class PreferMostUsedWeigher extends LookupElementWeigher
 		return null;
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	@Override
-	public Integer weigh(@jakarta.annotation.Nonnull LookupElement element)
+	public Integer weigh(@Nonnull LookupElement element)
 	{
 		throw new UnsupportedOperationException();
 		/*final PsiElement psi = ObjectUtils.tryCast(element.getObject(), PsiElement.class);
@@ -79,7 +79,7 @@ class PreferMostUsedWeigher extends LookupElementWeigher
 	}
 
 	//Objects.requireNonNull is an example
-	private static boolean looksLikeHelperMethodOrConst(@jakarta.annotation.Nonnull PsiElement element)
+	private static boolean looksLikeHelperMethodOrConst(@Nonnull PsiElement element)
 	{
 		if(!(element instanceof PsiMethod))
 		{
@@ -110,7 +110,7 @@ class PreferMostUsedWeigher extends LookupElementWeigher
 		return false;
 	}
 
-	private static boolean isRawDeepTypeEqualToObject(@jakarta.annotation.Nullable PsiType type)
+	private static boolean isRawDeepTypeEqualToObject(@Nullable PsiType type)
 	{
 		if(type == null)
 		{

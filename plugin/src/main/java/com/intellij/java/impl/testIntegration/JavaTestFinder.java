@@ -43,7 +43,7 @@ public class JavaTestFinder implements TestFinder {
     return TestIntegrationUtils.findOuterClass(element);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public Collection<PsiElement> findClassesForTest(@Nonnull PsiElement element) {
     PsiClass klass = findSourceElement(element);
     if (klass == null) {
@@ -80,7 +80,7 @@ public class JavaTestFinder implements TestFinder {
   }
 
   @Nonnull
-  public Collection<PsiElement> findTestsForClass(@jakarta.annotation.Nonnull PsiElement element) {
+  public Collection<PsiElement> findTestsForClass(@Nonnull PsiElement element) {
     PsiClass klass = findSourceElement(element);
     if (klass == null) {
       return Collections.emptySet();

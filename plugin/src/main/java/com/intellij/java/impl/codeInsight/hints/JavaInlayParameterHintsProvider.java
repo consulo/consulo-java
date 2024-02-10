@@ -53,7 +53,7 @@ public class JavaInlayParameterHintsProvider implements InlayParameterHintsProvi
       "org.slf4j.Logger.*"
   };
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public List<InlayInfo> getParameterHints(@Nonnull PsiElement element) {
     if (element instanceof PsiCallExpression) {

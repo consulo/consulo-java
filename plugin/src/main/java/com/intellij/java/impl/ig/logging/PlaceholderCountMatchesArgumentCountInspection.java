@@ -39,7 +39,7 @@ public class PlaceholderCountMatchesArgumentCountInspection extends BaseInspecti
   private static final Set<String> loggingMethodNames = ContainerUtilRt.newHashSet("trace", "debug", "info", "warn", "error");
 
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("placeholder.count.matches.argument.count.display.name");

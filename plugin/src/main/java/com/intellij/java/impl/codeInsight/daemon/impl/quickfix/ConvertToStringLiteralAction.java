@@ -42,13 +42,13 @@ public class ConvertToStringLiteralAction implements IntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull final Project project, final Editor editor, final PsiFile file) {
+  public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
     final PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
     return PsiUtil.isJavaToken(element, JavaTokenType.CHARACTER_LITERAL);
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
     final PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
     if (element != null && PsiUtil.isJavaToken(element, JavaTokenType.CHARACTER_LITERAL)) {
       final String text = StringUtil.unescapeStringCharacters(element.getText());

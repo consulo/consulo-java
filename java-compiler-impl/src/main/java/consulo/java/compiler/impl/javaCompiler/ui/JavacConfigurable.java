@@ -46,16 +46,16 @@ public class JavacConfigurable extends SimpleConfigurableByProperties implements
     return "project.propCompiler.java.java";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return "Javac";
   }
 
   @RequiredUIAccess
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
-  protected Component createLayout(@jakarta.annotation.Nonnull PropertyBuilder propertyBuilder, @jakarta.annotation.Nonnull Disposable disposable) {
+  protected Component createLayout(@Nonnull PropertyBuilder propertyBuilder, @Nonnull Disposable disposable) {
     JavacCompilerConfiguration configuration = myJavacCompilerConfigurationProvider.get();
 
     JpsJavaCompilerOptions state = configuration.getState();

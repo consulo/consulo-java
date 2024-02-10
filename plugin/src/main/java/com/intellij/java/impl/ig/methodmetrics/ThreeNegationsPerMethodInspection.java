@@ -38,13 +38,13 @@ public class ThreeNegationsPerMethodInspection extends BaseInspection {
   public boolean ignoreInAssert = false;
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "MethodWithMoreThanThreeNegations";
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "three.negations.per.method.display.name");
@@ -74,7 +74,7 @@ public class ThreeNegationsPerMethodInspection extends BaseInspection {
   private class ThreeNegationsPerMethodVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       // note: no call to super
       if (method.getNameIdentifier() == null) {
         return;

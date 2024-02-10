@@ -49,8 +49,8 @@ public class MethodReferencesSearch extends ExtensibleQueryFactory<PsiReference,
     private final SearchRequestCollector myOptimizer;
     private final boolean isSharedOptimizer;
 
-    public SearchParameters(@jakarta.annotation.Nonnull PsiMethod method,
-                            @jakarta.annotation.Nonnull SearchScope scope,
+    public SearchParameters(@Nonnull PsiMethod method,
+                            @Nonnull SearchScope scope,
                             boolean strictSignatureSearch,
                             @Nullable SearchRequestCollector optimizer) {
       myMethod = method;
@@ -61,11 +61,11 @@ public class MethodReferencesSearch extends ExtensibleQueryFactory<PsiReference,
       myProject = PsiUtilCore.getProjectInReadAction(method);
     }
 
-    public SearchParameters(@Nonnull PsiMethod method, @jakarta.annotation.Nonnull SearchScope scope, final boolean strict) {
+    public SearchParameters(@Nonnull PsiMethod method, @Nonnull SearchScope scope, final boolean strict) {
       this(method, scope, strict, null);
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public Project getProject() {
       return myProject;
     }
@@ -97,12 +97,12 @@ public class MethodReferencesSearch extends ExtensibleQueryFactory<PsiReference,
      * #getEffectiveSearchScope()}.
      */
     @Deprecated
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public SearchScope getScope() {
       return getScopeDeterminedByUser();
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public SearchScope getEffectiveSearchScope() {
       SearchScope accessScope = PsiSearchHelper.getInstance(myMethod.getProject()).getUseScope(myMethod);
       return myScope.intersectWith(accessScope);
@@ -113,7 +113,7 @@ public class MethodReferencesSearch extends ExtensibleQueryFactory<PsiReference,
     super(MethodReferencesSearchExecutor.class);
   }
 
-  public static Query<PsiReference> search(@jakarta.annotation.Nonnull PsiMethod method,
+  public static Query<PsiReference> search(@Nonnull PsiMethod method,
                                            SearchScope scope,
                                            final boolean strictSignatureSearch) {
     return search(new SearchParameters(method, scope, strictSignatureSearch));

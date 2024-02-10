@@ -68,10 +68,10 @@ public abstract class JamNodeDescriptor<P> extends SimpleNode implements DataPro
     return myElement;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   protected abstract String getNewNodeText();
 
-  @jakarta.annotation.Nullable
+  @Nullable
   protected Image getNewIcon() {
     return getIcon();
   }
@@ -84,7 +84,7 @@ public abstract class JamNodeDescriptor<P> extends SimpleNode implements DataPro
     return EMPTY_ARRAY;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public Object getData(String dataId) {
     return null;
   }
@@ -102,7 +102,7 @@ public abstract class JamNodeDescriptor<P> extends SimpleNode implements DataPro
     return 0;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   protected DeleteProvider getDeleteProvider() {
     return null;
   }
@@ -111,7 +111,7 @@ public abstract class JamNodeDescriptor<P> extends SimpleNode implements DataPro
     return myParameters;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public final Object getDataForElement(Key<?> dataId) {
     if (PlatformDataKeys.DELETE_ELEMENT_PROVIDER == dataId) {
       return getDeleteProvider();
@@ -123,7 +123,7 @@ public abstract class JamNodeDescriptor<P> extends SimpleNode implements DataPro
     return myElement;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public String getComment() {
     return null;
   }

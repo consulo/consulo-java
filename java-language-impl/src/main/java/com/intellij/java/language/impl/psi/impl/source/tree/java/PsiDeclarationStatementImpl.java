@@ -55,7 +55,7 @@ public class PsiDeclarationStatementImpl extends CompositePsiElement implements 
   }
 
   @Override
-  public void deleteChildInternal(@jakarta.annotation.Nonnull ASTNode child) {
+  public void deleteChildInternal(@Nonnull ASTNode child) {
     if (DECLARED_ELEMENT_BIT_SET.contains(child.getElementType())) {
       PsiElement[] declaredElements = getDeclaredElements();
       int length = declaredElements.length;
@@ -95,7 +95,7 @@ public class PsiDeclarationStatementImpl extends CompositePsiElement implements 
   }
 
   @Override
-  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitDeclarationStatement(this);
     }
@@ -109,7 +109,7 @@ public class PsiDeclarationStatementImpl extends CompositePsiElement implements 
   }
 
   @Override
-  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @jakarta.annotation.Nonnull PsiElement place) {
+  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place) {
     processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, this);
     PsiElement[] decls = getDeclaredElements();
     for (PsiElement decl : decls) {

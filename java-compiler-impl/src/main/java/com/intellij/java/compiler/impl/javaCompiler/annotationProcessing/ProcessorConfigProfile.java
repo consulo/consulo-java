@@ -36,11 +36,11 @@ public interface ProcessorConfigProfile extends AnnotationProcessingConfiguratio
 
   void setEnabled(boolean enabled);
 
-  void setProcessorPath(@jakarta.annotation.Nullable String processorPath);
+  void setProcessorPath(@Nullable String processorPath);
 
   void setObtainProcessorsFromClasspath(boolean value);
 
-  void setGeneratedSourcesDirectoryName(@jakarta.annotation.Nullable String generatedSourcesDirectoryName, boolean forTests);
+  void setGeneratedSourcesDirectoryName(@Nullable String generatedSourcesDirectoryName, boolean forTests);
 
   @Nonnull
   Set<String> getModuleNames();

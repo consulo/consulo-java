@@ -31,17 +31,17 @@ public abstract class SourcePositionProvider {
   public static final ExtensionPointName<SourcePositionProvider> EP_NAME =
     ExtensionPointName.create(SourcePositionProvider.class);
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static SourcePosition getSourcePosition(@Nonnull NodeDescriptor descriptor,
-                                                 @jakarta.annotation.Nonnull Project project,
-                                                 @jakarta.annotation.Nonnull DebuggerContextImpl context) {
+                                                 @Nonnull Project project,
+                                                 @Nonnull DebuggerContextImpl context) {
     return getSourcePosition(descriptor, project, context, false);
   }
 
-  @jakarta.annotation.Nullable
-  public static SourcePosition getSourcePosition(@jakarta.annotation.Nonnull NodeDescriptor descriptor,
-                                                 @jakarta.annotation.Nonnull Project project,
-                                                 @jakarta.annotation.Nonnull DebuggerContextImpl context,
+  @Nullable
+  public static SourcePosition getSourcePosition(@Nonnull NodeDescriptor descriptor,
+                                                 @Nonnull Project project,
+                                                 @Nonnull DebuggerContextImpl context,
                                                  boolean nearest) {
     for (SourcePositionProvider provider : EP_NAME.getExtensions()) {
       SourcePosition sourcePosition = provider.computeSourcePosition(descriptor, project, context, nearest);
@@ -54,7 +54,7 @@ public abstract class SourcePositionProvider {
 
   @Nullable
   protected abstract SourcePosition computeSourcePosition(@Nonnull NodeDescriptor descriptor,
-                                                          @jakarta.annotation.Nonnull Project project,
+                                                          @Nonnull Project project,
                                                           @Nonnull DebuggerContextImpl context,
                                                           boolean nearest);
 }

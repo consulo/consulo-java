@@ -52,7 +52,7 @@ public class JavaCompilerConfigurable implements ProjectConfigurable {
   }
 
   @RequiredUIAccess
-	@jakarta.annotation.Nullable
+	@Nullable
   @Override
   public JComponent createComponent() {
     JPanel panel = new JPanel(new VerticalFlowLayout());

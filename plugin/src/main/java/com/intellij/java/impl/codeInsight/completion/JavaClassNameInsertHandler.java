@@ -127,7 +127,7 @@ class JavaClassNameInsertHandler implements InsertHandler<JavaPsiClassReferenceE
     }
   }
 
-  private static boolean shouldInsertFqnInJavadoc(@jakarta.annotation.Nonnull JavaPsiClassReferenceElement item, @Nonnull PsiFile file, @Nonnull Project project) {
+  private static boolean shouldInsertFqnInJavadoc(@Nonnull JavaPsiClassReferenceElement item, @Nonnull PsiFile file, @Nonnull Project project) {
     CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(project);
     JavaCodeStyleSettings javaSettings = settings.getCustomSettings(JavaCodeStyleSettings.class);
 

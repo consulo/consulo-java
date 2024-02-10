@@ -56,7 +56,7 @@ public interface ManifestFile extends PsiFile {
   @Nullable
   Object getValueByKey(@Nonnull String key);
 
-  @jakarta.annotation.Nullable
+  @Nullable
   String getStringValueByKey(@Nonnull String key);
 
   @Nonnull

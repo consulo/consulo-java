@@ -43,7 +43,7 @@ public interface BatchSuppressManager {
     }
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   SuppressQuickFix[] createBatchSuppressActions(@Nonnull HighlightDisplayKey key);
 
   boolean isSuppressedFor(@Nonnull PsiElement element, String toolId);
@@ -51,10 +51,10 @@ public interface BatchSuppressManager {
   PsiElement getElementMemberSuppressedIn(@Nonnull PsiDocCommentOwner owner, String inspectionToolID);
 
   @Nullable
-  PsiElement getAnnotationMemberSuppressedIn(@jakarta.annotation.Nonnull PsiModifierListOwner owner, String inspectionToolID);
+  PsiElement getAnnotationMemberSuppressedIn(@Nonnull PsiModifierListOwner owner, String inspectionToolID);
 
   @Nullable
-  PsiElement getDocCommentToolSuppressedIn(@jakarta.annotation.Nonnull PsiDocCommentOwner owner, String inspectionToolID);
+  PsiElement getDocCommentToolSuppressedIn(@Nonnull PsiDocCommentOwner owner, String inspectionToolID);
 
   @Nonnull
   Collection<String> getInspectionIdsSuppressedInAnnotation(@Nonnull PsiModifierListOwner owner);

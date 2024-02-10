@@ -58,9 +58,9 @@ public interface MoveDestination {
 
   @Nullable
   String verify(PsiFile source);
-  @jakarta.annotation.Nullable
+  @Nullable
   String verify(PsiDirectory source);
-  @jakarta.annotation.Nullable
+  @Nullable
   String verify(PsiJavaPackage source);
 
   void analyzeModuleConflicts(final Collection<PsiElement> elements, MultiMap<PsiElement,String> conflicts, final UsageInfo[] usages);

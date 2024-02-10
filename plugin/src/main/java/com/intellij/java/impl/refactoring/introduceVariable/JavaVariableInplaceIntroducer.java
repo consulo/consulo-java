@@ -113,7 +113,7 @@ public class JavaVariableInplaceIntroducer extends InplaceVariableIntroducer<Psi
     myConflictResolver = resolveSnapshotProvider != null ? resolveSnapshotProvider.createSnapshot(myScope) : null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   protected PsiVariable getVariable() {
     final PsiDeclarationStatement declarationStatement = myPointer.getElement();
     if (declarationStatement != null) {

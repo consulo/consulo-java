@@ -275,13 +275,13 @@ public class ManifestEditor extends UserDataHolderBase implements FileEditor {
     }
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public JComponent getComponent() {
     return myRoot;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public JComponent getPreferredFocusedComponent() {
     return myRoot;
@@ -300,7 +300,7 @@ public class ManifestEditor extends UserDataHolderBase implements FileEditor {
   }
 
   @Override
-  public void setState(@jakarta.annotation.Nonnull FileEditorState state) {
+  public void setState(@Nonnull FileEditorState state) {
   }
 
   @Override
@@ -329,25 +329,25 @@ public class ManifestEditor extends UserDataHolderBase implements FileEditor {
   public void removePropertyChangeListener(@Nonnull PropertyChangeListener listener) {
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public BackgroundEditorHighlighter getBackgroundHighlighter() {
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public FileEditorLocation getCurrentLocation() {
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public StructureViewBuilder getStructureViewBuilder() {
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public VirtualFile getFile() {
     return myVirtualFile;

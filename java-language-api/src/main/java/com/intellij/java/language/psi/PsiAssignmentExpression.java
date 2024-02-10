@@ -28,7 +28,7 @@ public interface PsiAssignmentExpression extends PsiExpression {
    *
    * @return the left side expression.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   PsiExpression getLExpression();
 
   /**
@@ -46,7 +46,7 @@ public interface PsiAssignmentExpression extends PsiExpression {
    *
    * @return the assignment operation token.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   PsiJavaToken getOperationSign();
 
   /**

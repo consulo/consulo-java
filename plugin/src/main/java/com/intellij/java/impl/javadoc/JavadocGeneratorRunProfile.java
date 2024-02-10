@@ -37,6 +37,7 @@ import consulo.execution.runner.ExecutionEnvironment;
 import consulo.execution.ui.console.RegexpFilter;
 import consulo.ide.impl.idea.ide.BrowserUtil;
 import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
@@ -82,12 +83,12 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
     myConfiguration = configuration;
   }
 
-  public static Sdk getSdk(@jakarta.annotation.Nonnull Project project) {
+  public static Sdk getSdk(@Nonnull Project project) {
     return PathUtilEx.getAnyJdk(project);
   }
 
   @Override
-  public RunProfileState getState(@jakarta.annotation.Nonnull final Executor executor, @Nonnull final ExecutionEnvironment env) throws ExecutionException {
+  public RunProfileState getState(@Nonnull final Executor executor, @Nonnull final ExecutionEnvironment env) throws ExecutionException {
     return new MyJavaCommandLineState(myConfiguration, myProject, myGenerationScope, env);
   }
 
@@ -102,7 +103,7 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public Module[] getModules() {
     return Module.EMPTY_ARRAY;
   }
@@ -268,7 +269,7 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
         VirtualFile[] docUrls = jdk.getRootProvider().getFiles(SourcesOrderRootType.getInstance());
         for (VirtualFile docUrl : docUrls) {
           parameters.add("-link");
-          parameters.add(consulo.ide.impl.idea.openapi.vfs.VfsUtil.toUri(docUrl).toString());
+          parameters.add(VfsUtil.toUri(docUrl).toString());
         }
       }
 
@@ -293,7 +294,7 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
     }
 
     @Override
-    @jakarta.annotation.Nonnull
+    @Nonnull
     protected ProcessHandler startProcess() throws ExecutionException {
       final ProcessHandler handler = JavaCommandLineStateUtil.startProcess(createCommandLine());
       ProcessTerminatedListener.attach(handler, myProject, JavadocBundle.message("javadoc.generate.exited"));

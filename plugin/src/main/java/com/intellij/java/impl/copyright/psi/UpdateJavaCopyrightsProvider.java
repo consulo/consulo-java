@@ -22,25 +22,25 @@ public class UpdateJavaCopyrightsProvider extends UpdateCopyrightsProvider<Copyr
     return JavaFileType.INSTANCE;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
-  public UpdatePsiFileCopyright<CopyrightFileConfig> createInstance(@Nonnull PsiFile file, @jakarta.annotation.Nonnull CopyrightProfile copyrightProfile) {
+  public UpdatePsiFileCopyright<CopyrightFileConfig> createInstance(@Nonnull PsiFile file, @Nonnull CopyrightProfile copyrightProfile) {
     return new UpdateJavaFileCopyright(file, copyrightProfile);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public CopyrightFileConfig createDefaultOptions() {
     return new CopyrightFileConfig();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
-  public TemplateCommentPanel createConfigurable(@Nonnull Project project, @jakarta.annotation.Nonnull TemplateCommentPanel parentPane,
-                                                 @jakarta.annotation.Nonnull FileType fileType) {
+  public TemplateCommentPanel createConfigurable(@Nonnull Project project, @Nonnull TemplateCommentPanel parentPane,
+                                                 @Nonnull FileType fileType) {
     return new TemplateCommentPanel(fileType, parentPane, project) {
       @Override
-      public void addAdditionalComponents(@jakarta.annotation.Nonnull JPanel additionalPanel) {
+      public void addAdditionalComponents(@Nonnull JPanel additionalPanel) {
         addLocationInFile(new String[]{
             "Before Package",
             "Before Imports",

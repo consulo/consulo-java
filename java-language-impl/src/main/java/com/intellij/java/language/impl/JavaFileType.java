@@ -41,7 +41,7 @@ public class JavaFileType extends LanguageFileType {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public LocalizeValue getDescription() {
     return IdeLocalize.filetypeDescriptionJava();
   }

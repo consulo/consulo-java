@@ -56,7 +56,7 @@ public class JavaExceptionBreakpointType extends JavaBreakpointTypeBase<JavaExce
     return AllIcons.Debugger.Db_exception_breakpoint;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Image getDisabledIcon() {
     return AllIcons.Debugger.Db_disabled_exception_breakpoint;
@@ -83,7 +83,7 @@ public class JavaExceptionBreakpointType extends JavaBreakpointTypeBase<JavaExce
     }
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public JavaExceptionBreakpointProperties createProperties() {
     return new JavaExceptionBreakpointProperties();
@@ -95,7 +95,7 @@ public class JavaExceptionBreakpointType extends JavaBreakpointTypeBase<JavaExce
     return new ExceptionBreakpointPropertiesPanel();
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public XBreakpoint<JavaExceptionBreakpointProperties> createDefaultBreakpoint(@Nonnull XBreakpointCreator<JavaExceptionBreakpointProperties>
                                                                                   creator) {

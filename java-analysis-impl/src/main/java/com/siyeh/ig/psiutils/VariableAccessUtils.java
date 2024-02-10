@@ -32,7 +32,7 @@ public class VariableAccessUtils {
   private VariableAccessUtils() {
   }
 
-  public static boolean variableIsAssignedFrom(@jakarta.annotation.Nonnull PsiVariable variable, @Nullable PsiElement context) {
+  public static boolean variableIsAssignedFrom(@Nonnull PsiVariable variable, @Nullable PsiElement context) {
     if (context == null) {
       return false;
     }
@@ -41,7 +41,7 @@ public class VariableAccessUtils {
     return visitor.isAssignedFrom();
   }
 
-  public static boolean variableIsPassedAsMethodArgument(@jakarta.annotation.Nonnull PsiVariable variable, @Nullable PsiElement context) {
+  public static boolean variableIsPassedAsMethodArgument(@Nonnull PsiVariable variable, @Nullable PsiElement context) {
     if (context == null) {
       return false;
     }
@@ -50,11 +50,11 @@ public class VariableAccessUtils {
     return visitor.isPassed();
   }
 
-  public static boolean variableIsPassedAsMethodArgument(@jakarta.annotation.Nonnull PsiVariable variable, Set<String> excludes, @Nullable PsiElement context) {
+  public static boolean variableIsPassedAsMethodArgument(@Nonnull PsiVariable variable, Set<String> excludes, @Nullable PsiElement context) {
     return variableIsPassedAsMethodArgument(variable, excludes, context, false);
   }
 
-  public static boolean variableIsPassedAsMethodArgument(@jakarta.annotation.Nonnull PsiVariable variable, Set<String> excludes, @Nullable PsiElement context,
+  public static boolean variableIsPassedAsMethodArgument(@Nonnull PsiVariable variable, Set<String> excludes, @Nullable PsiElement context,
                                                          boolean builderPattern) {
     if (context == null) {
       return false;
@@ -64,7 +64,7 @@ public class VariableAccessUtils {
     return visitor.isPassed();
   }
 
-  public static boolean variableIsUsedInArrayInitializer(@jakarta.annotation.Nonnull PsiVariable variable, @Nullable PsiElement context) {
+  public static boolean variableIsUsedInArrayInitializer(@Nonnull PsiVariable variable, @Nullable PsiElement context) {
     if (context == null) {
       return false;
     }
@@ -73,7 +73,7 @@ public class VariableAccessUtils {
     return visitor.isPassed();
   }
 
-  public static boolean variableIsAssigned(@jakarta.annotation.Nonnull PsiVariable variable, @Nullable PsiElement context) {
+  public static boolean variableIsAssigned(@Nonnull PsiVariable variable, @Nullable PsiElement context) {
     if (context == null) {
       return false;
     }
@@ -89,7 +89,7 @@ public class VariableAccessUtils {
    * @param variable the variable to check assignments for
    * @return true, if the variable is assigned or too expensive to search. False otherwise.
    */
-  public static boolean variableIsAssigned(@jakarta.annotation.Nonnull PsiVariable variable) {
+  public static boolean variableIsAssigned(@Nonnull PsiVariable variable) {
     if (variable instanceof PsiField) {
       if (variable.hasModifierProperty(PsiModifier.PRIVATE)) {
         final PsiClass aClass = PsiUtil.getTopLevelClass(variable);
@@ -106,7 +106,7 @@ public class VariableAccessUtils {
     return variableIsAssigned(variable, context);
   }
 
-  public static boolean variableIsAssigned(@jakarta.annotation.Nonnull PsiVariable variable, @Nullable PsiElement context, boolean recurseIntoClasses) {
+  public static boolean variableIsAssigned(@Nonnull PsiVariable variable, @Nullable PsiElement context, boolean recurseIntoClasses) {
     if (context == null) {
       return false;
     }
@@ -115,11 +115,11 @@ public class VariableAccessUtils {
     return visitor.isAssigned();
   }
 
-  public static boolean variableIsReturned(@jakarta.annotation.Nonnull PsiVariable variable, @Nullable PsiElement context) {
+  public static boolean variableIsReturned(@Nonnull PsiVariable variable, @Nullable PsiElement context) {
     return variableIsReturned(variable, context, false);
   }
 
-  public static boolean variableIsReturned(@jakarta.annotation.Nonnull PsiVariable variable, @Nullable PsiElement context, boolean builderPattern) {
+  public static boolean variableIsReturned(@Nonnull PsiVariable variable, @Nullable PsiElement context, boolean builderPattern) {
     if (context == null) {
       return false;
     }
@@ -128,7 +128,7 @@ public class VariableAccessUtils {
     return visitor.isReturned();
   }
 
-  public static boolean variableValueIsUsed(@jakarta.annotation.Nonnull PsiVariable variable, @Nullable PsiElement context) {
+  public static boolean variableValueIsUsed(@Nonnull PsiVariable variable, @Nullable PsiElement context) {
     if (context == null) {
       return false;
     }
@@ -137,7 +137,7 @@ public class VariableAccessUtils {
     return visitor.isVariableValueUsed();
   }
 
-  public static boolean arrayContentsAreAccessed(@jakarta.annotation.Nonnull PsiVariable variable, @Nullable PsiElement context) {
+  public static boolean arrayContentsAreAccessed(@Nonnull PsiVariable variable, @Nullable PsiElement context) {
     if (context == null) {
       return false;
     }
@@ -146,7 +146,7 @@ public class VariableAccessUtils {
     return visitor.isAccessed();
   }
 
-  public static boolean arrayContentsAreAssigned(@jakarta.annotation.Nonnull PsiVariable variable, @Nullable PsiElement context) {
+  public static boolean arrayContentsAreAssigned(@Nonnull PsiVariable variable, @Nullable PsiElement context) {
     if (context == null) {
       return false;
     }
@@ -155,7 +155,7 @@ public class VariableAccessUtils {
     return visitor.isAssigned();
   }
 
-  public static boolean variableIsUsedInInnerClass(@jakarta.annotation.Nonnull PsiVariable variable, @Nullable PsiElement context) {
+  public static boolean variableIsUsedInInnerClass(@Nonnull PsiVariable variable, @Nullable PsiElement context) {
     if (context == null) {
       return false;
     }
@@ -164,11 +164,11 @@ public class VariableAccessUtils {
     return visitor.isUsedInInnerClass();
   }
 
-  public static boolean mayEvaluateToVariable(@Nullable PsiExpression expression, @jakarta.annotation.Nonnull PsiVariable variable) {
+  public static boolean mayEvaluateToVariable(@Nullable PsiExpression expression, @Nonnull PsiVariable variable) {
     return mayEvaluateToVariable(expression, variable, false);
   }
 
-  public static List<PsiReferenceExpression> getVariableReferences(@jakarta.annotation.Nonnull PsiVariable variable, @Nullable PsiElement context) {
+  public static List<PsiReferenceExpression> getVariableReferences(@Nonnull PsiVariable variable, @Nullable PsiElement context) {
     if (context == null)
       return Collections.emptyList();
     List<PsiReferenceExpression> result = new ArrayList<>();
@@ -181,7 +181,7 @@ public class VariableAccessUtils {
     return result;
   }
 
-  public static boolean mayEvaluateToVariable(@Nullable PsiExpression expression, @jakarta.annotation.Nonnull PsiVariable variable, boolean builderPattern) {
+  public static boolean mayEvaluateToVariable(@Nullable PsiExpression expression, @Nonnull PsiVariable variable, boolean builderPattern) {
     if (expression == null) {
       return false;
     }
@@ -254,7 +254,7 @@ public class VariableAccessUtils {
     return variable.equals(target);
   }
 
-  public static boolean variableIsUsed(@jakarta.annotation.Nonnull PsiVariable variable, @Nullable PsiElement context) {
+  public static boolean variableIsUsed(@Nonnull PsiVariable variable, @Nullable PsiElement context) {
     if (context == null) {
       return false;
     }
@@ -263,7 +263,7 @@ public class VariableAccessUtils {
     return visitor.isUsed();
   }
 
-  public static boolean variableIsDecremented(@jakarta.annotation.Nonnull PsiVariable variable, @Nullable PsiStatement statement) {
+  public static boolean variableIsDecremented(@Nonnull PsiVariable variable, @Nullable PsiStatement statement) {
     if (!(statement instanceof PsiExpressionStatement)) {
       return false;
     }
@@ -324,7 +324,7 @@ public class VariableAccessUtils {
     return false;
   }
 
-  public static boolean variableIsIncremented(@jakarta.annotation.Nonnull PsiVariable variable, @Nullable PsiStatement statement) {
+  public static boolean variableIsIncremented(@Nonnull PsiVariable variable, @Nullable PsiStatement statement) {
     if (!(statement instanceof PsiExpressionStatement)) {
       return false;
     }
@@ -385,7 +385,7 @@ public class VariableAccessUtils {
     return false;
   }
 
-  public static boolean variableIsAssignedBeforeReference(@jakarta.annotation.Nonnull PsiReferenceExpression referenceExpression, @Nullable PsiElement context) {
+  public static boolean variableIsAssignedBeforeReference(@Nonnull PsiReferenceExpression referenceExpression, @Nullable PsiElement context) {
     if (context == null) {
       return false;
     }
@@ -397,7 +397,7 @@ public class VariableAccessUtils {
     return variableIsAssignedAtPoint(variable, context, referenceExpression);
   }
 
-  public static boolean variableIsAssignedAtPoint(@jakarta.annotation.Nonnull PsiVariable variable, @Nullable PsiElement context, @jakarta.annotation.Nonnull PsiElement point) {
+  public static boolean variableIsAssignedAtPoint(@Nonnull PsiVariable variable, @Nullable PsiElement context, @Nonnull PsiElement point) {
     if (context == null) {
       return false;
     }
@@ -418,7 +418,7 @@ public class VariableAccessUtils {
   }
 
   @Nullable
-  private static PsiElement getDirectChildWhichContainsElement(@jakarta.annotation.Nonnull PsiElement ancestor, @jakarta.annotation.Nonnull PsiElement descendant) {
+  private static PsiElement getDirectChildWhichContainsElement(@Nonnull PsiElement ancestor, @Nonnull PsiElement descendant) {
     if (ancestor == descendant) {
       return null;
     }
@@ -443,7 +443,7 @@ public class VariableAccessUtils {
     return visitor.getUsedVariables();
   }
 
-  public static boolean isAnyVariableAssigned(@jakarta.annotation.Nonnull Collection<PsiVariable> variables, @Nullable PsiElement context) {
+  public static boolean isAnyVariableAssigned(@Nonnull Collection<PsiVariable> variables, @Nullable PsiElement context) {
     if (context == null) {
       return false;
     }

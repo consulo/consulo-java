@@ -22,7 +22,7 @@ public interface PsiSubstitutor {
    * <b>Example:</b> consider class {@code List<E>}. {@code this}
    * inside class {@code List} has type List with EMPTY substitutor.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   PsiSubstitutor EMPTY = EmptySubstitutor.getInstance();
 
   Key<PsiSubstitutor> KEY = KeyWithDefaultValue.create("SUBSTITUTOR", EMPTY);
@@ -37,9 +37,9 @@ public interface PsiSubstitutor {
    * @param typeParameter the parameter to return the mapping for.
    * @return the mapping for the type parameter, or {@code null} for a raw type.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   @Contract(pure = true)
-  PsiType substitute(@jakarta.annotation.Nonnull PsiTypeParameter typeParameter);
+  PsiType substitute(@Nonnull PsiTypeParameter typeParameter);
 
   /**
    * Substitutes type parameters occurring in {@code type} with their values.
@@ -54,7 +54,7 @@ public interface PsiSubstitutor {
   //Should be used with great care, be sure to prevent infinite recursion that could arise
   // from the use of recursively bounded type parameters
   @Contract(pure = true)
-  PsiType substituteWithBoundsPromotion(@jakarta.annotation.Nonnull PsiTypeParameter typeParameter);
+  PsiType substituteWithBoundsPromotion(@Nonnull PsiTypeParameter typeParameter);
 
   /**
    * Creates a substitutor instance which provides the specified parameter to type mapping in addition
@@ -64,9 +64,9 @@ public interface PsiSubstitutor {
    * @param mapping        the type to which the parameter is mapped.
    * @return the new substitutor instance.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Contract(pure = true)
-  PsiSubstitutor put(@jakarta.annotation.Nonnull PsiTypeParameter classParameter, PsiType mapping);
+  PsiSubstitutor put(@Nonnull PsiTypeParameter classParameter, PsiType mapping);
 
   /**
    * Creates a substitutor instance which maps the type parameters of the specified class to the
@@ -76,7 +76,7 @@ public interface PsiSubstitutor {
    * @param mappings    the types to which the parameters are mapped.
    * @return the new substitutor instance.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Contract(pure = true)
   PsiSubstitutor putAll(@Nonnull PsiClass parentClass, PsiType[] mappings);
 
@@ -87,9 +87,9 @@ public interface PsiSubstitutor {
    * @param another the substitutor to get the mappings from.
    * @return the new substitutor instance.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Contract(pure = true)
-  PsiSubstitutor putAll(@jakarta.annotation.Nonnull PsiSubstitutor another);
+  PsiSubstitutor putAll(@Nonnull PsiSubstitutor another);
 
   /**
    * Creates a substitutor instance containing all mappings from this substitutor and the
@@ -98,9 +98,9 @@ public interface PsiSubstitutor {
    * @param map a map which contains additional mappings
    * @return the new substitutor instance.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Contract(pure = true)
-  default PsiSubstitutor putAll(@jakarta.annotation.Nonnull Map<? extends PsiTypeParameter, ? extends PsiType> map) {
+  default PsiSubstitutor putAll(@Nonnull Map<? extends PsiTypeParameter, ? extends PsiType> map) {
     return putAll(createSubstitutor(map));
   }
 
@@ -109,7 +109,7 @@ public interface PsiSubstitutor {
    *
    * @return the substitution map instance.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Contract(pure = true)
   Map<PsiTypeParameter, PsiType> getSubstitutionMap();
 
@@ -119,8 +119,8 @@ public interface PsiSubstitutor {
    * @param map a map to create a substitutor from
    * @return a substitutor backed by the supplied map
    */
-  @jakarta.annotation.Nonnull
-  static PsiSubstitutor createSubstitutor(@jakarta.annotation.Nullable Map<? extends PsiTypeParameter, ? extends PsiType> map) {
+  @Nonnull
+  static PsiSubstitutor createSubstitutor(@Nullable Map<? extends PsiTypeParameter, ? extends PsiType> map) {
     if (map == null || map.isEmpty()) {
       return EMPTY;
     }

@@ -29,7 +29,7 @@ import com.siyeh.ig.psiutils.MethodCallUtils;
 @ExtensionImpl
 public class ThreadDumpStackInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "CallToThreadDumpStack";
   }
@@ -53,7 +53,7 @@ public class ThreadDumpStackInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final String methodName = MethodCallUtils.getMethodName(expression);
       if (!HardcodedMethodConstants.DUMP_STACKTRACE.equals(methodName)) {

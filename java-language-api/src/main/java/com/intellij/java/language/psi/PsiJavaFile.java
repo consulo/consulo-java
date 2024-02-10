@@ -99,16 +99,16 @@ public interface PsiJavaFile extends PsiImportHolder, PsiClassOwner {
    * @param aClass the class to return the import statement for.
    * @return the Java code reference under the import statement, or null if there is no such statement.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiJavaCodeReferenceElement findImportReferenceTo(PsiClass aClass);
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   LanguageLevel getLanguageLevel();
 
   /**
    * Returns a Java module declaration element, or {@code null} if the file is not a module-info one.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   @RequiredReadAction
   PsiJavaModule getModuleDeclaration();
 }

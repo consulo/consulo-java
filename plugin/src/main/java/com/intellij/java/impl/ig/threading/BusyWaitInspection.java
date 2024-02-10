@@ -47,7 +47,7 @@ public class BusyWaitInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!MethodCallUtils.isCallToMethod(expression, "java.lang.Thread",
                                           PsiType.VOID, "sleep", PsiType.LONG) &&

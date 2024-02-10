@@ -51,13 +51,13 @@ public class MethodOnlyUsedFromInnerClassInspection extends BaseInspection {
   public boolean onlyReportStaticMethods = false;
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("method.only.used.from.inner.class.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     final PsiNamedElement element = (PsiNamedElement)infos[0];
     final String name = element.getName();

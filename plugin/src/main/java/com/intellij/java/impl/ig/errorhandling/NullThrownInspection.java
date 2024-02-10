@@ -40,7 +40,7 @@ public class NullThrownInspection extends BaseInspection {
     return InspectionGadgetsBundle.message("null.thrown.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(

@@ -27,23 +27,23 @@ public final class DfTypes {
    */
   public static final DfType TOP = new DfType() {
     @Override
-    public boolean isSuperType(@jakarta.annotation.Nonnull DfType other) {
+    public boolean isSuperType(@Nonnull DfType other) {
       return true;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
-    public DfType join(@jakarta.annotation.Nonnull DfType other) {
+    public DfType join(@Nonnull DfType other) {
       return this;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
-    public DfType meet(@jakarta.annotation.Nonnull DfType other) {
+    public DfType meet(@Nonnull DfType other) {
       return other;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public DfType tryNegate() {
       return BOTTOM;
@@ -65,23 +65,23 @@ public final class DfTypes {
    */
   public static final DfType BOTTOM = new DfType() {
     @Override
-    public boolean isSuperType(@jakarta.annotation.Nonnull DfType other) {
+    public boolean isSuperType(@Nonnull DfType other) {
       return other == this;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
-    public DfType join(@jakarta.annotation.Nonnull DfType other) {
+    public DfType join(@Nonnull DfType other) {
       return other;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public DfType meet(@Nonnull DfType other) {
       return this;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public DfType tryNegate() {
       return TOP;
@@ -103,21 +103,21 @@ public final class DfTypes {
    * with exception handling). This value is like a constant but it's type doesn't correspond to any JVM type.
    */
   public static final DfType FAIL = new DfConstantType<>(ObjectUtil.sentinel("FAIL")) {
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public PsiType getPsiType() {
       return PsiType.VOID;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
-    public DfType join(@jakarta.annotation.Nonnull DfType other) {
+    public DfType join(@Nonnull DfType other) {
       return other == this ? this : TOP;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
-    public DfType meet(@jakarta.annotation.Nonnull DfType other) {
+    public DfType meet(@Nonnull DfType other) {
       return other == this ? this : BOTTOM;
     }
 
@@ -132,26 +132,26 @@ public final class DfTypes {
    */
   public static final DfBooleanType BOOLEAN = new DfBooleanType() {
     @Override
-    public boolean isSuperType(@jakarta.annotation.Nonnull DfType other) {
+    public boolean isSuperType(@Nonnull DfType other) {
       return other == BOTTOM || other instanceof DfBooleanType;
     }
 
     @Nonnull
     @Override
-    public DfType join(@jakarta.annotation.Nonnull DfType other) {
+    public DfType join(@Nonnull DfType other) {
       if (other instanceof DfBooleanType) return this;
       return TOP;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
-    public DfType meet(@jakarta.annotation.Nonnull DfType other) {
+    public DfType meet(@Nonnull DfType other) {
       if (other == TOP) return this;
       if (other instanceof DfBooleanType) return other;
       return BOTTOM;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public DfType tryNegate() {
       return BOTTOM;
@@ -209,7 +209,7 @@ public final class DfTypes {
    * @return resulting type. Might be {@link #BOTTOM} if range is empty.
    * @throws IllegalArgumentException if range contains values not representable in the JVM int type.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static DfType intRange(LongRangeSet range) {
     if (range.equals(DfIntRangeType.FULL_RANGE)) return INT;
     if (range.isEmpty()) return BOTTOM;
@@ -224,7 +224,7 @@ public final class DfTypes {
    * @param value int value
    * @return a int constant type that contains a given value
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static DfIntConstantType intValue(int value) {
     return new DfIntConstantType(value);
   }
@@ -240,7 +240,7 @@ public final class DfTypes {
    * @param range range of values.
    * @return resulting type. Might be {@link #BOTTOM} if range is empty.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static DfType longRange(LongRangeSet range) {
     if (range.equals(LongRangeSet.all())) return LONG;
     if (range.isEmpty()) return BOTTOM;
@@ -255,7 +255,7 @@ public final class DfTypes {
    * @param value long value
    * @return a long constant type that contains a given value
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static DfLongConstantType longValue(long value) {
     return new DfLongConstantType(value);
   }
@@ -267,7 +267,7 @@ public final class DfTypes {
    * @param isLong whether int or long type should be created
    * @return resulting type.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static DfType rangeClamped(LongRangeSet range, boolean isLong) {
     return isLong ? longRange(range) : intRangeClamped(range);
   }
@@ -277,26 +277,26 @@ public final class DfTypes {
    */
   public static final DfFloatType FLOAT = new DfFloatType() {
     @Override
-    public boolean isSuperType(@jakarta.annotation.Nonnull DfType other) {
+    public boolean isSuperType(@Nonnull DfType other) {
       return other == BOTTOM || other instanceof DfFloatType;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
-    public DfType join(@jakarta.annotation.Nonnull DfType other) {
+    public DfType join(@Nonnull DfType other) {
       if (other instanceof DfFloatType) return this;
       return TOP;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
-    public DfType meet(@jakarta.annotation.Nonnull DfType other) {
+    public DfType meet(@Nonnull DfType other) {
       if (other == TOP) return this;
       if (other instanceof DfFloatType) return other;
       return BOTTOM;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public DfType tryNegate() {
       return BOTTOM;
@@ -330,22 +330,22 @@ public final class DfTypes {
       return other == BOTTOM || other instanceof DfDoubleType;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public DfType join(@Nonnull DfType other) {
       if (other instanceof DfDoubleType) return this;
       return TOP;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
-    public DfType meet(@jakarta.annotation.Nonnull DfType other) {
+    public DfType meet(@Nonnull DfType other) {
       if (other == TOP) return this;
       if (other instanceof DfDoubleType) return other;
       return BOTTOM;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public DfType tryNegate() {
       return BOTTOM;
@@ -401,8 +401,8 @@ public final class DfTypes {
    * @param type     value type
    * @return a constant type that contains only given constant
    */
-  @jakarta.annotation.Nonnull
-  public static DfConstantType<?> constant(@jakarta.annotation.Nullable Object constant, @Nonnull PsiType type) {
+  @Nonnull
+  public static DfConstantType<?> constant(@Nullable Object constant, @Nonnull PsiType type) {
     if (constant == null) {
       return NULL;
     }
@@ -431,7 +431,7 @@ public final class DfTypes {
    * @param type PsiType to get default value of
    * @return a constant that represents a JVM default value of given type (0 for int, false for boolean, etc)
    */
-  public static DfConstantType<?> defaultValue(@jakarta.annotation.Nonnull PsiType type) {
+  public static DfConstantType<?> defaultValue(@Nonnull PsiType type) {
     if (type instanceof PsiPrimitiveType) {
       switch (type.getCanonicalText()) {
         case "boolean":
@@ -457,8 +457,8 @@ public final class DfTypes {
    * @param nullability nullability
    * @return a type that references given objects of given type (or it subtypes) and has given nullability
    */
-  @jakarta.annotation.Nonnull
-  public static DfType typedObject(@jakarta.annotation.Nullable PsiType type, @Nonnull Nullability nullability) {
+  @Nonnull
+  public static DfType typedObject(@Nullable PsiType type, @Nonnull Nullability nullability) {
     if (type == null) return TOP;
     if (type instanceof PsiPrimitiveType) {
       if (type.equals(PsiType.VOID)) return TOP;
@@ -499,9 +499,9 @@ public final class DfTypes {
    */
   public static DfReferenceType customObject(@Nonnull TypeConstraint constraint,
                                              @Nonnull DfaNullability nullability,
-                                             @jakarta.annotation.Nonnull Mutability mutability,
+                                             @Nonnull Mutability mutability,
                                              @Nullable SpecialField specialField,
-                                             @jakarta.annotation.Nonnull DfType sfType) {
+                                             @Nonnull DfType sfType) {
     if (nullability == DfaNullability.NULL) {
       throw new IllegalArgumentException();
     }

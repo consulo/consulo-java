@@ -44,8 +44,8 @@ class ExpressionEditorWithHistory extends XDebuggerExpressionEditor
 {
 	private static final String HISTORY_ID_PREFIX = "filtering";
 
-	ExpressionEditorWithHistory(final @jakarta.annotation.Nonnull Project project,
-			final @jakarta.annotation.Nonnull String className,
+	ExpressionEditorWithHistory(final @Nonnull Project project,
+			final @Nonnull String className,
 			final @Nonnull XDebuggerEditorsProvider debuggerEditorsProvider,
 			final @Nullable Disposable parentDisposable)
 	{
@@ -103,7 +103,7 @@ class ExpressionEditorWithHistory extends XDebuggerExpressionEditor
 					return new ColoredListCellRenderer<XExpression>()
 					{
 						@Override
-						protected void customizeCellRenderer(@jakarta.annotation.Nonnull JList list, XExpression value, int index, boolean selected, boolean hasFocus)
+						protected void customizeCellRenderer(@Nonnull JList list, XExpression value, int index, boolean selected, boolean hasFocus)
 						{
 							append(value.getExpression(), SimpleTextAttributes.REGULAR_ATTRIBUTES);
 						}

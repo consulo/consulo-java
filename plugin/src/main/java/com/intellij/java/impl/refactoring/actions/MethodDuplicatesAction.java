@@ -34,7 +34,7 @@ public class MethodDuplicatesAction extends BaseRefactoringAction {
     return false;
   }
 
-  protected RefactoringActionHandler getHandler(@jakarta.annotation.Nonnull DataContext dataContext) {
+  protected RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
     return new MethodDuplicatesHandler();
   }
 }

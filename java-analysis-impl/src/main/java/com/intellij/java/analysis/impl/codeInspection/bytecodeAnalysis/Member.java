@@ -20,7 +20,7 @@ public final class Member implements MemberDescriptor
 	 * @param methodName        method name
 	 * @param methodDesc        method descriptor in asm format
 	 */
-	public Member(@Nonnull String internalClassName, @jakarta.annotation.Nonnull String methodName, @Nonnull String methodDesc)
+	public Member(@Nonnull String internalClassName, @Nonnull String methodName, @Nonnull String methodDesc)
 	{
 		this.internalClassName = internalClassName;
 		this.methodName = methodName;
@@ -59,7 +59,7 @@ public final class Member implements MemberDescriptor
 		return result;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public HMember hashed(@Nullable MessageDigest md)
 	{

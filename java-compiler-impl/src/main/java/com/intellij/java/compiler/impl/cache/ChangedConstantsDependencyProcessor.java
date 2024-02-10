@@ -140,7 +140,7 @@ public class ChangedConstantsDependencyProcessor {
     final Ref<CacheCorruptedException> exRef = new Ref<CacheCorruptedException>(null);
     processIdentifiers(psiSearchHelper, new PsiElementProcessor<PsiIdentifier>() {
       @Override
-      public synchronized boolean execute(@jakarta.annotation.Nonnull PsiIdentifier identifier) {
+      public synchronized boolean execute(@Nonnull PsiIdentifier identifier) {
         try {
           final PsiElement parent = identifier.getParent();
           if (parent instanceof PsiReferenceExpression) {
@@ -179,8 +179,8 @@ public class ChangedConstantsDependencyProcessor {
 
   private static boolean processIdentifiers(PsiSearchHelper helper,
                                             @Nonnull final PsiElementProcessor<PsiIdentifier> processor,
-                                            @jakarta.annotation.Nonnull final String identifier,
-                                            @jakarta.annotation.Nonnull SearchScope searchScope,
+                                            @Nonnull final String identifier,
+                                            @Nonnull SearchScope searchScope,
                                             short searchContext) {
     TextOccurenceProcessor processor1 = new TextOccurenceProcessor() {
       public boolean execute(PsiElement element, int offsetInElement) {
@@ -286,7 +286,7 @@ public class ChangedConstantsDependencyProcessor {
   }
   */
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static PsiField getOwnerField(PsiElement element) {
     while (!(element instanceof PsiFile)) {
       if (element instanceof PsiClass) {
@@ -311,7 +311,7 @@ public class ChangedConstantsDependencyProcessor {
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static PsiClass getOwnerClass(PsiElement element) {
     while (!(element instanceof PsiFile)) {
       if (element instanceof PsiClass && element.getParent() instanceof PsiJavaFile) { // top-level class

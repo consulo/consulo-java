@@ -28,7 +28,7 @@ import jakarta.annotation.Nonnull;
 public class EqualsBetweenInconvertibleTypesInspection
   extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "equals.between.inconvertible.types.display.name");
@@ -57,7 +57,7 @@ public class EqualsBetweenInconvertibleTypesInspection
 
     @Override
     public void visitMethodCallExpression(
-      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!MethodCallUtils.isEqualsCall(expression)) {
         return;

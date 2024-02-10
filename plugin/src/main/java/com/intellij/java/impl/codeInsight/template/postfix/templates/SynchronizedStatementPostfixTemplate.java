@@ -34,7 +34,7 @@ public class SynchronizedStatementPostfixTemplate extends JavaStatementWrapPostf
     JavaPostfixTemplatesUtils.formatPsiCodeBlock(newStatement, editor);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected String getHead() {
     return "synchronized (";

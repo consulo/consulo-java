@@ -33,13 +33,13 @@ public class HierarchicalMethodSignatureImpl extends HierarchicalMethodSignature
     super(signature);
   }
 
-  public void addSuperSignature(@jakarta.annotation.Nonnull HierarchicalMethodSignature superSignatureHierarchical) {
+  public void addSuperSignature(@Nonnull HierarchicalMethodSignature superSignatureHierarchical) {
     if (mySupers == null) mySupers = new SmartList<HierarchicalMethodSignature>();
     mySupers.add(superSignatureHierarchical);
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public List<HierarchicalMethodSignature> getSuperSignatures() {
     return mySupers == null ? Collections.<HierarchicalMethodSignature>emptyList() : mySupers;
   }

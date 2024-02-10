@@ -92,7 +92,7 @@ public class I18nizeAction extends AnAction {
   }
 
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiLiteralExpression getEnclosingStringLiteral(final PsiFile psiFile, final Editor editor) {
     PsiElement psiElement = psiFile.findElementAt(editor.getCaretModel().getOffset());
     if (psiElement == null) return null;
@@ -105,10 +105,10 @@ public class I18nizeAction extends AnAction {
     return e.getData(PlatformDataKeys.EDITOR);
   }
 
-  public static void doI18nSelectedString(final @jakarta.annotation.Nonnull Project project,
+  public static void doI18nSelectedString(final @Nonnull Project project,
                                           final @Nonnull Editor editor,
-                                          final @jakarta.annotation.Nonnull PsiFile psiFile,
-                                          final @jakarta.annotation.Nonnull I18nQuickFixHandler handler) {
+                                          final @Nonnull PsiFile psiFile,
+                                          final @Nonnull I18nQuickFixHandler handler) {
     try {
       handler.checkApplicability(psiFile, editor);
     }

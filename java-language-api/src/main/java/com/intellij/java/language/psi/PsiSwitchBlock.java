@@ -20,12 +20,12 @@ public interface PsiSwitchBlock extends PsiElement {
   /**
    * Returns the body of the switch statement, or {@code null} if the statement is incomplete.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiCodeBlock getBody();
 
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiJavaToken getLParenth();
 
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiJavaToken getRParenth();
 }

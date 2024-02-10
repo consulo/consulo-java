@@ -36,13 +36,13 @@ import jakarta.annotation.Nonnull;
 public class BooleanConstructorInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "BooleanConstructorCall";
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("boolean.constructor.display.name");
   }
@@ -53,7 +53,7 @@ public class BooleanConstructorInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("boolean.constructor.problem.descriptor");
   }
@@ -74,7 +74,7 @@ public class BooleanConstructorInspection extends BaseInspection {
     private static final String FALSE = '\"' + PsiKeyword.FALSE + '\"';
 
     @Override
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("boolean.constructor.simplify.quickfix");
     }

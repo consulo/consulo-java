@@ -67,7 +67,7 @@ public class PsiDisjunctionType extends PsiType.Stub {
     return myLubCache.getValue();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public List<PsiType> getDisjunctions() {
     return myTypes;
   }

@@ -16,7 +16,7 @@ class DfIntConstantType extends DfConstantType<Integer> implements DfIntType {
     return DfIntType.super.getPsiType();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public LongRangeSet getRange() {
     return LongRangeSet.point(getValue());

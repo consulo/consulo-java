@@ -39,7 +39,7 @@ public class InitializationUtils {
   }
 
   public static boolean expressionAssignsVariableOrFails(
-    @jakarta.annotation.Nullable PsiExpression expression, @Nonnull PsiVariable variable) {
+    @Nullable PsiExpression expression, @Nonnull PsiVariable variable) {
     return expressionAssignsVariableOrFails(expression, variable,
         new HashSet(), true);
   }
@@ -61,14 +61,14 @@ public class InitializationUtils {
   }
 
   public static boolean blockAssignsVariableOrFails(
-    @jakarta.annotation.Nullable PsiCodeBlock block, @jakarta.annotation.Nonnull PsiVariable variable,
+    @Nullable PsiCodeBlock block, @Nonnull PsiVariable variable,
     boolean strict) {
     return blockAssignsVariableOrFails(block, variable,
         new HashSet<MethodSignature>(), strict);
   }
 
   private static boolean blockAssignsVariableOrFails(
-    @jakarta.annotation.Nullable PsiCodeBlock block, @jakarta.annotation.Nonnull PsiVariable variable,
+    @Nullable PsiCodeBlock block, @Nonnull PsiVariable variable,
     @Nonnull Set<MethodSignature> checkedMethods, boolean strict) {
     if (block == null) {
       return false;
@@ -199,7 +199,7 @@ public class InitializationUtils {
 
   public static boolean switchStatementAssignsVariableOrFails(
       @Nonnull PsiSwitchStatement switchStatement,
-      @jakarta.annotation.Nonnull PsiVariable variable,
+      @Nonnull PsiVariable variable,
       boolean strict) {
     return switchStatementAssignsVariableOrFails(switchStatement, variable,
         new HashSet(), strict);
@@ -207,8 +207,8 @@ public class InitializationUtils {
 
   private static boolean switchStatementAssignsVariableOrFails(
     @Nonnull PsiSwitchStatement switchStatement,
-    @jakarta.annotation.Nonnull PsiVariable variable,
-    @jakarta.annotation.Nonnull Set<MethodSignature> checkedMethods, boolean strict) {
+    @Nonnull PsiVariable variable,
+    @Nonnull Set<MethodSignature> checkedMethods, boolean strict) {
     final PsiExpression expression = switchStatement.getExpression();
     if (expressionAssignsVariableOrFails(expression, variable,
         checkedMethods, strict)) {
@@ -273,7 +273,7 @@ public class InitializationUtils {
     return false;
   }
 
-  private static boolean tryStatementAssignsVariableOrFails(@jakarta.annotation.Nonnull PsiTryStatement tryStatement, PsiVariable variable,
+  private static boolean tryStatementAssignsVariableOrFails(@Nonnull PsiTryStatement tryStatement, PsiVariable variable,
                                                             @Nonnull Set<MethodSignature> checkedMethods, boolean strict) {
     final PsiResourceList resourceList = tryStatement.getResourceList();
     if (resourceList != null) {
@@ -303,9 +303,9 @@ public class InitializationUtils {
   }
 
   private static boolean ifStatementAssignsVariableOrFails(
-      @jakarta.annotation.Nonnull PsiIfStatement ifStatement,
+      @Nonnull PsiIfStatement ifStatement,
       PsiVariable variable,
-      @jakarta.annotation.Nonnull Set<MethodSignature> checkedMethods,
+      @Nonnull Set<MethodSignature> checkedMethods,
       boolean strict) {
     final PsiExpression condition = ifStatement.getCondition();
     if (expressionAssignsVariableOrFails(condition, variable,
@@ -391,7 +391,7 @@ public class InitializationUtils {
     return false;
   }
 
-  private static boolean expressionAssignsVariableOrFails(@jakarta.annotation.Nullable PsiExpression expression, PsiVariable variable,
+  private static boolean expressionAssignsVariableOrFails(@Nullable PsiExpression expression, PsiVariable variable,
                                                           @Nonnull Set<MethodSignature> checkedMethods, boolean strict) {
     if (expression == null) {
       return false;

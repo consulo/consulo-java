@@ -54,7 +54,7 @@ public class ReplaceWithTrivialLambdaFix implements LocalQuickFix {
   }
 
   @Override
-  public void applyFix(@jakarta.annotation.Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
     PsiMethodReferenceExpression methodRef = ObjectUtil.tryCast(descriptor.getStartElement(), PsiMethodReferenceExpression.class);
     if (methodRef == null) {
       return;

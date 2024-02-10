@@ -36,7 +36,7 @@ public abstract class ResolveTestCase extends PsiTestCase {
     return configureByFile(filePath, null);
   }
   
-  protected PsiReference configureByFile(@TestDataFile @NonNls String filePath, @jakarta.annotation.Nullable VirtualFile parentDir) throws Exception{
+  protected PsiReference configureByFile(@TestDataFile @NonNls String filePath, @Nullable VirtualFile parentDir) throws Exception{
     final String fullPath = getTestDataPath() + filePath;
     final VirtualFile vFile = LocalFileSystem.getInstance().findFileByPath(fullPath.replace(File.separatorChar, '/'));
     assertNotNull("file " + filePath + " not found", vFile);

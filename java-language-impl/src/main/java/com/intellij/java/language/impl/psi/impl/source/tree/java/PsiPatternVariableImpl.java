@@ -31,7 +31,7 @@ public class PsiPatternVariableImpl extends CompositePsiElement implements PsiPa
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiIdentifier getNameIdentifier() {
     return Objects.requireNonNull(PsiTreeUtil.getChildOfType(this, PsiIdentifier.class));
   }
@@ -122,7 +122,7 @@ public class PsiPatternVariableImpl extends CompositePsiElement implements PsiPa
     return Objects.requireNonNull(PsiTreeUtil.getChildOfType(this, PsiTypeElement.class));
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public PsiExpression getInitializer() {
     return null;

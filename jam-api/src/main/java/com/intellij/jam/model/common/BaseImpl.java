@@ -50,7 +50,7 @@ public abstract class BaseImpl implements CommonDomModelElement {
     return DomUtil.getFile(this);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   protected final PsiClass findPsiClass(String className) {
     if (className == null) return null;
     final Module module = getModule();
@@ -60,7 +60,7 @@ public abstract class BaseImpl implements CommonDomModelElement {
     return JavaPsiFacade.getInstance(getManager().getProject()).findClass(className, scope);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public Module getModule() {
     if (!isValid()) {
       return null;

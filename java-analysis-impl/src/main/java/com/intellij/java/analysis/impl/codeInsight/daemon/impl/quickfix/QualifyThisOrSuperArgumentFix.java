@@ -41,7 +41,7 @@ public abstract class QualifyThisOrSuperArgumentFix implements SyntheticIntentio
   private String myText;
 
 
-  public QualifyThisOrSuperArgumentFix(@jakarta.annotation.Nonnull PsiExpression expression, @jakarta.annotation.Nonnull PsiClass psiClass) {
+  public QualifyThisOrSuperArgumentFix(@Nonnull PsiExpression expression, @Nonnull PsiClass psiClass) {
     myExpression = expression;
     myPsiClass = psiClass;
   }
@@ -51,7 +51,7 @@ public abstract class QualifyThisOrSuperArgumentFix implements SyntheticIntentio
     return true;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getText() {
     return myText;
@@ -62,7 +62,7 @@ public abstract class QualifyThisOrSuperArgumentFix implements SyntheticIntentio
   protected abstract PsiExpression getQualifier(PsiManager manager);
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!myExpression.isValid()) {
       return false;
     }

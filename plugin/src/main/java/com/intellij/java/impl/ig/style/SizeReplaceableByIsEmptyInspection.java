@@ -26,6 +26,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
 import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
 import consulo.language.ast.IElementType;
@@ -52,26 +53,26 @@ public class SizeReplaceableByIsEmptyInspection extends BaseInspection {
   public OrderedSet<String> ignoredTypes = new OrderedSet<>();
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("size.replaceable.by.isempty.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("expression.can.be.replaced.problem.descriptor", infos[0]);
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   public JComponent createOptionsPanel() {
     final JComponent panel = new JPanel(new BorderLayout());
     final ListTable table =
         new ListTable(new ListWrappingTableModel(ignoredTypes, InspectionGadgetsBundle.message("ignored.classes.table")));
     JPanel tablePanel =
         UiUtils.createAddRemoveTreeClassChooserPanel(table, InspectionGadgetsBundle.message("choose.class.type.to.ignore"));
-    final consulo.deadCodeNotWorking.impl.CheckBox checkBox = new consulo.deadCodeNotWorking.impl.CheckBox(InspectionGadgetsBundle.message(
+    final CheckBox checkBox = new CheckBox(InspectionGadgetsBundle.message(
         "size.replaceable.by.isempty.negation.ignore.option"), this, "ignoreNegations");
     panel.add(tablePanel, BorderLayout.CENTER);
     panel.add(checkBox, BorderLayout.SOUTH);
@@ -149,7 +150,7 @@ public class SizeReplaceableByIsEmptyInspection extends BaseInspection {
       }
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     private String getReplacementIsEmptyCall(PsiExpression lhs, PsiExpression rhs, boolean flipped, IElementType tokenType) {
       final PsiMethodCallExpression callExpression = (PsiMethodCallExpression) lhs;
       final String isEmptyCall = getIsEmptyCall(callExpression);
@@ -183,7 +184,7 @@ public class SizeReplaceableByIsEmptyInspection extends BaseInspection {
       return null;
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     private String getIsEmptyCall(PsiMethodCallExpression callExpression) {
       final PsiReferenceExpression methodExpression = callExpression.getMethodExpression();
       final String referenceName = methodExpression.getReferenceName();

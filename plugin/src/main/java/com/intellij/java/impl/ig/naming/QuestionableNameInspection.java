@@ -65,14 +65,14 @@ public class QuestionableNameInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "questionable.name.problem.descriptor");
   }
 
   @Override
-  public void readSettings(@jakarta.annotation.Nonnull Element element) throws InvalidDataException {
+  public void readSettings(@Nonnull Element element) throws InvalidDataException {
     super.readSettings(element);
     parseString(nameString, nameList);
   }
@@ -118,7 +118,7 @@ public class QuestionableNameInspection extends BaseInspection {
     }
 
     @Override
-    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       final String name = method.getName();
       if (nameSet.contains(name)) {
         registerMethodError(method);

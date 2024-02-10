@@ -73,7 +73,7 @@ public class JavaFileElement extends FileElement
 	}
 
 	@Override
-	public int getChildRole(@jakarta.annotation.Nonnull ASTNode child)
+	public int getChildRole(@Nonnull ASTNode child)
 	{
 		LOG.assertTrue(child.getTreeParent() == this);
 		IElementType i = child.getElementType();

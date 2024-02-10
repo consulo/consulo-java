@@ -27,7 +27,7 @@ public interface PsiPostfixExpression extends PsiUnaryExpression
 	 *
 	 * @return the operand expression.
 	 */
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	PsiExpression getOperand();
 
 	/**

@@ -21,9 +21,9 @@ class DfDoubleNotValueType extends DfAntiConstantType<Double> implements DfDoubl
     return false;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
-  public DfType join(@jakarta.annotation.Nonnull DfType other) {
+  public DfType join(@Nonnull DfType other) {
     if (isSuperType(other)) return this;
     if (other.isSuperType(this)) return other;
     if (other instanceof DfDoubleNotValueType) {
@@ -34,7 +34,7 @@ class DfDoubleNotValueType extends DfAntiConstantType<Double> implements DfDoubl
     return DfTypes.TOP;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public DfType meet(@Nonnull DfType other) {
     if (isSuperType(other)) return other;

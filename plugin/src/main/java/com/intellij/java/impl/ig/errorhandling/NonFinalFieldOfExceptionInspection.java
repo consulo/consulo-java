@@ -40,7 +40,7 @@ public class NonFinalFieldOfExceptionInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "non.final.field.of.exception.problem.descriptor");

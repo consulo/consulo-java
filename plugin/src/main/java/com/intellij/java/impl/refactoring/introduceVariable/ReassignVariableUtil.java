@@ -104,7 +104,7 @@ public class ReassignVariableUtil {
     return false;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   static PsiType getVariableType(@Nullable PsiDeclarationStatement declaration) {
     if (declaration != null) {
       final PsiElement[] declaredElements = declaration.getDeclaredElements();

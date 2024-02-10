@@ -56,7 +56,7 @@ public abstract class ConditionalBranchingInstruction extends BranchingInstructi
 	}
 
 	@Override
-	public void accept(@jakarta.annotation.Nonnull ControlFlowInstructionVisitor visitor, int offset, int nextOffset)
+	public void accept(@Nonnull ControlFlowInstructionVisitor visitor, int offset, int nextOffset)
 	{
 		visitor.visitConditionalBranchingInstruction(this, offset, nextOffset);
 	}

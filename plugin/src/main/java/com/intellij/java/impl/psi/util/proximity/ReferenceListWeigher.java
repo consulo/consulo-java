@@ -87,15 +87,15 @@ public class ReferenceListWeigher extends ProximityWeigher {
   }
 
   @Override
-  public ReferenceListApplicability weigh(@Nonnull PsiElement element, @jakarta.annotation.Nonnull ProximityLocation location) {
+  public ReferenceListApplicability weigh(@Nonnull PsiElement element, @Nonnull ProximityLocation location) {
     if (element instanceof PsiClass && location.getPosition() != null) {
       return getApplicability((PsiClass) element, location.getPosition());
     }
     return unknown;
   }
 
-  @jakarta.annotation.Nonnull
-  public ReferenceListApplicability getApplicability(@jakarta.annotation.Nonnull PsiClass aClass, @Nonnull PsiElement position) {
+  @Nonnull
+  public ReferenceListApplicability getApplicability(@Nonnull PsiClass aClass, @Nonnull PsiElement position) {
     Preference condition = getPreferredCondition(position);
     if (condition == Preference.Interfaces) {
       return aClass.isInterface() ? applicableByKind : inapplicable;

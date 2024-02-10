@@ -36,7 +36,7 @@ import jakarta.annotation.Nullable;
 public interface TestGenerator extends LanguageExtension {
   ExtensionPointCacheKey<TestGenerator, ByLanguageValue<TestGenerator>> KEY = ExtensionPointCacheKey.create("TestGenerator", LanguageOneToOne.build());
 
-  @jakarta.annotation.Nullable
+  @Nullable
   static TestGenerator forLanguage(@Nonnull Language language) {
     return Application.get().getExtensionPoint(TestGenerator.class).getOrBuildCache(KEY).get(language);
   }

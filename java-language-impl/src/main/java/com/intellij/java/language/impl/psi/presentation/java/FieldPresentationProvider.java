@@ -26,7 +26,7 @@ import jakarta.annotation.Nonnull;
  */
 @ExtensionImpl
 public class FieldPresentationProvider implements ItemPresentationProvider<PsiField> {
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Class<PsiField> getItemClass() {
     return PsiField.class;

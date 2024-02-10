@@ -64,7 +64,7 @@ public class DefaultSymbolNavigationContributor implements GotoSymbolContributor
   }
 
   @Override
-  public void processNames(@Nonnull Processor<String> processor, @jakarta.annotation.Nonnull SearchScope scope, @Nullable IdFilter filter) {
+  public void processNames(@Nonnull Processor<String> processor, @Nonnull SearchScope scope, @Nullable IdFilter filter) {
     PsiShortNamesCache cache = PsiShortNamesCache.getInstance(((ProjectAwareSearchScope) scope).getProject());
     cache.processAllClassNames(processor, (GlobalSearchScope) scope, filter);
     cache.processAllFieldNames(processor, (GlobalSearchScope) scope, filter);
@@ -72,8 +72,8 @@ public class DefaultSymbolNavigationContributor implements GotoSymbolContributor
   }
 
   @Override
-  public void processElementsWithName(@jakarta.annotation.Nonnull String name, @Nonnull final Processor<NavigationItem> processor,
-                                      @jakarta.annotation.Nonnull FindSymbolParameters parameters) {
+  public void processElementsWithName(@Nonnull String name, @Nonnull final Processor<NavigationItem> processor,
+                                      @Nonnull FindSymbolParameters parameters) {
 
     GlobalSearchScope scope = (GlobalSearchScope) parameters.getSearchScope();
     IdFilter filter = parameters.getIdFilter();

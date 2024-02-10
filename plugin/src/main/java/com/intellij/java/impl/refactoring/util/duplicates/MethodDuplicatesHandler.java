@@ -68,13 +68,13 @@ public class MethodDuplicatesHandler implements RefactoringActionHandler, Contex
   private static final Logger LOG = Logger.getInstance(MethodDuplicatesHandler.class);
 
   @Override
-  public boolean isAvailableForQuickList(@jakarta.annotation.Nonnull Editor editor, @jakarta.annotation.Nonnull PsiFile file, @Nonnull DataContext dataContext) {
+  public boolean isAvailableForQuickList(@Nonnull Editor editor, @Nonnull PsiFile file, @Nonnull DataContext dataContext) {
     final PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
     return getCannotRefactorMessage(PsiTreeUtil.getParentOfType(element, PsiMember.class)) == null;
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull final Project project, final Editor editor, PsiFile file, DataContext dataContext) {
+  public void invoke(@Nonnull final Project project, final Editor editor, PsiFile file, DataContext dataContext) {
     final int offset = editor.getCaretModel().getOffset();
     final PsiElement element = file.findElementAt(offset);
     final PsiMember member = PsiTreeUtil.getParentOfType(element, PsiMember.class);
@@ -285,7 +285,7 @@ public class MethodDuplicatesHandler implements RefactoringActionHandler, Contex
     return duplicatesFinder.findDuplicates(file);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static DuplicatesFinder createDuplicatesFinder(PsiMember member) {
     PsiElement[] pattern;
     ReturnValue matchedReturnValue = null;
@@ -333,7 +333,7 @@ public class MethodDuplicatesHandler implements RefactoringActionHandler, Contex
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull PsiElement[] elements, DataContext dataContext) {
+  public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
     throw new UnsupportedOperationException();
   }
 }

@@ -15,7 +15,7 @@ public abstract class ImportFilter {
   public static final ExtensionPointName<ImportFilter> EP_NAME = ExtensionPointName.create(ImportFilter.class);
 
   public abstract boolean shouldUseFullyQualifiedName(@Nonnull PsiFile targetFile,
-                                                      @jakarta.annotation.Nonnull String classQualifiedName);
+                                                      @Nonnull String classQualifiedName);
 
   public static boolean shouldImport(@Nonnull PsiFile targetFile, @Nonnull String classQualifiedName) {
     for (ImportFilter filter : EP_NAME.getExtensionList()) {

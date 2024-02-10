@@ -113,7 +113,7 @@ public class CreatePackageInfoAction extends CreateFromTemplateActionBase implem
     return false;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public AttributesDefaults getAttributesDefaults(DataContext dataContext) {
     return new AttributesDefaults(INTERNAL_PACKAGE_INFO_TEMPLATE_NAME).withFixedName(true);

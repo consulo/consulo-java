@@ -46,7 +46,7 @@ public class StreamFilterNotNullFix implements LocalQuickFix, HighPriorityAction
   }
 
   @Override
-  public void applyFix(@jakarta.annotation.Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
     PsiFunctionalExpression function = findFunction(descriptor.getStartElement());
     if (function == null) {
       return;
@@ -66,7 +66,7 @@ public class StreamFilterNotNullFix implements LocalQuickFix, HighPriorityAction
     LambdaCanBeMethodReferenceInspection.replaceAllLambdasWithMethodReferences(result.getArgumentList());
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private static String suggestVariableName(@Nonnull PsiFunctionalExpression function, @Nonnull PsiExpression qualifier) {
     String name = null;
     if (function instanceof PsiLambdaExpression) {

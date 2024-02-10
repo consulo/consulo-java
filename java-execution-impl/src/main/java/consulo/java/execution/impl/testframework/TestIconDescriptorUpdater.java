@@ -33,7 +33,7 @@ import jakarta.annotation.Nonnull;
 public class TestIconDescriptorUpdater implements IconDescriptorUpdater {
   @RequiredReadAction
   @Override
-  public void updateIcon(@jakarta.annotation.Nonnull IconDescriptor iconDescriptor, @Nonnull PsiElement element, int flags) {
+  public void updateIcon(@Nonnull IconDescriptor iconDescriptor, @Nonnull PsiElement element, int flags) {
     for (TestFramework framework : TestFramework.EXTENSION_NAME.getExtensionList()) {
       if (framework.isIgnoredMethod(element)) {
         iconDescriptor.setMainIcon(AllIcons.RunConfigurations.IgnoredTest);

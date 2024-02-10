@@ -55,7 +55,7 @@ public class PsiTryStatementImpl extends CompositePsiElement implements PsiTrySt
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiCodeBlock[] getCatchBlocks() {
     ASTNode tryBlock = SourceTreeToPsiMap.psiElementToTree(getTryBlock());
     if (tryBlock != null) {
@@ -91,7 +91,7 @@ public class PsiTryStatementImpl extends CompositePsiElement implements PsiTrySt
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiCatchSection[] getCatchSections() {
     return getChildrenAsPsiElements(CATCH_SECTION_BIT_SET, PsiCatchSection.ARRAY_FACTORY);
   }
@@ -162,7 +162,7 @@ public class PsiTryStatementImpl extends CompositePsiElement implements PsiTrySt
   }
 
   @Override
-  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitTryStatement(this);
     }
@@ -172,10 +172,10 @@ public class PsiTryStatementImpl extends CompositePsiElement implements PsiTrySt
   }
 
   @Override
-  public boolean processDeclarations(@jakarta.annotation.Nonnull final PsiScopeProcessor processor,
-                                     @jakarta.annotation.Nonnull final ResolveState state,
+  public boolean processDeclarations(@Nonnull final PsiScopeProcessor processor,
+                                     @Nonnull final ResolveState state,
                                      final PsiElement lastParent,
-                                     @jakarta.annotation.Nonnull final PsiElement place) {
+                                     @Nonnull final PsiElement place) {
     final PsiResourceList resourceList = getResourceList();
     if (resourceList != null && lastParent instanceof PsiCodeBlock && lastParent == getTryBlock()) {
       return PsiImplUtil.processDeclarationsInResourceList(resourceList, processor, state, lastParent);

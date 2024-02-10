@@ -42,7 +42,7 @@ public class JDComment
 	private String myFirstLine = "/**";
 	private String myEndLine = "*/";
 
-	public JDComment(@jakarta.annotation.Nonnull CommentFormatter formatter)
+	public JDComment(@Nonnull CommentFormatter formatter)
 	{
 		myFormatter = formatter;
 	}
@@ -62,7 +62,7 @@ public class JDComment
 		myMultiLineComment = value;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	protected String javadocContinuationIndent()
 	{
 		if(!myFormatter.getSettings().JD_INDENT_ON_CONTINUATION)
@@ -72,7 +72,7 @@ public class JDComment
 		return continuationIndent();
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	protected String continuationIndent()
 	{
 		CodeStyleSettings settings = myFormatter.getSettings().getContainer();
@@ -80,8 +80,8 @@ public class JDComment
 		return new IndentInfo(0, indentOptions.CONTINUATION_INDENT_SIZE, 0).generateNewWhiteSpace(indentOptions);
 	}
 
-	@jakarta.annotation.Nullable
-	public String generate(@jakarta.annotation.Nonnull String indent)
+	@Nullable
+	public String generate(@Nonnull String indent)
 	{
 		final String prefix;
 
@@ -181,21 +181,21 @@ public class JDComment
 		return sb.toString();
 	}
 
-	protected void generateSpecial(@Nonnull String prefix, @jakarta.annotation.Nonnull StringBuilder sb)
+	protected void generateSpecial(@Nonnull String prefix, @Nonnull StringBuilder sb)
 	{
 	}
 
-	public void setFirstCommentLine(@jakarta.annotation.Nonnull String firstCommentLine)
+	public void setFirstCommentLine(@Nonnull String firstCommentLine)
 	{
 		myFirstLine = firstCommentLine;
 	}
 
-	public void setLastCommentLine(@jakarta.annotation.Nonnull String lastCommentLine)
+	public void setLastCommentLine(@Nonnull String lastCommentLine)
 	{
 		myEndLine = lastCommentLine;
 	}
 
-	public void addSeeAlso(@jakarta.annotation.Nonnull String seeAlso)
+	public void addSeeAlso(@Nonnull String seeAlso)
 	{
 		if(mySeeAlsoList == null)
 		{
@@ -222,12 +222,12 @@ public class JDComment
 		mySinceList.add(since);
 	}
 
-	public void setDeprecated(@jakarta.annotation.Nullable String deprecated)
+	public void setDeprecated(@Nullable String deprecated)
 	{
 		this.myDeprecated = deprecated;
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	public String getDescription()
 	{
 		return myDescription;

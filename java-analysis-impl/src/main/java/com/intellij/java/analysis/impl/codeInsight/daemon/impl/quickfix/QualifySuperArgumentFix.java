@@ -33,7 +33,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import jakarta.annotation.Nonnull;
 
 public class QualifySuperArgumentFix extends QualifyThisOrSuperArgumentFix {
-  public QualifySuperArgumentFix(@Nonnull PsiExpression expression, @jakarta.annotation.Nonnull PsiClass psiClass) {
+  public QualifySuperArgumentFix(@Nonnull PsiExpression expression, @Nonnull PsiClass psiClass) {
     super(expression, psiClass);
   }
 

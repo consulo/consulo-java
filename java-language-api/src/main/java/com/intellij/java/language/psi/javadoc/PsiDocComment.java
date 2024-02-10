@@ -32,7 +32,7 @@ public interface PsiDocComment extends PsiDocCommentBase
 	 * Returns the class, method or field described by the comment.
 	 */
 	@Override
-	@jakarta.annotation.Nullable
+	@Nullable
 	PsiJavaDocumentedElement getOwner();
 
 	/**
@@ -45,7 +45,7 @@ public interface PsiDocComment extends PsiDocCommentBase
 	/**
 	 * Returns the list of JavaDoc tags in the comment.
 	 */
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	PsiDocTag[] getTags();
 
 	/**
@@ -62,6 +62,6 @@ public interface PsiDocComment extends PsiDocCommentBase
 	 *
 	 * @param name The name of the tags to find (not including the leading @ character).
 	 */
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	PsiDocTag[] findTagsByName(@NonNls String name);
 }

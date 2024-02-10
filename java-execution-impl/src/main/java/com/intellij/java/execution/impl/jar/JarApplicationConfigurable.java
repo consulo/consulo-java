@@ -60,14 +60,14 @@ public class JarApplicationConfigurable extends SettingsEditor<JarApplicationCon
     configuration.setModule(myModuleComponent.getComponent().getSelectedModule());
   }
 
-  public void resetEditorFrom(@jakarta.annotation.Nonnull final JarApplicationConfiguration configuration) {
+  public void resetEditorFrom(@Nonnull final JarApplicationConfiguration configuration) {
     myCommonProgramParameters.reset(configuration);
     myJarPathComponent.getComponent().setText(FileUtil.toSystemDependentName(configuration.getJarPath()));
     myJrePathEditor.setPathOrName(configuration.getAlternativeJrePath(), configuration.isAlternativeJrePathEnabled());
     myModuleComponent.getComponent().setSelectedModule(configuration.getModule());
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public JComponent createEditor() {
     return myWholePanel;
   }

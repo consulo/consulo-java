@@ -40,7 +40,7 @@ public enum JDTag
 	@Nonnull
 	private final String myTag;
 
-	JDTag(@jakarta.annotation.Nonnull String tag)
+	JDTag(@Nonnull String tag)
 	{
 		this.myTag = tag;
 	}
@@ -51,7 +51,7 @@ public enum JDTag
 		return prefix + StringUtil.repeatSymbol(' ', getWithEndWhitespace().length());
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public String getWithEndWhitespace()
 	{
 		return "@" + myTag + " ";

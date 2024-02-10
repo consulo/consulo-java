@@ -10,14 +10,14 @@ import jakarta.annotation.Nonnull;
 public class NullabilityAnnotationInfo
 {
 	private final
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	PsiAnnotation myAnnotation;
 	private final
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	Nullability myNullability;
 	private final boolean myContainer;
 
-	public NullabilityAnnotationInfo(@jakarta.annotation.Nonnull PsiAnnotation annotation, @jakarta.annotation.Nonnull Nullability nullability, boolean container)
+	public NullabilityAnnotationInfo(@Nonnull PsiAnnotation annotation, @Nonnull Nullability nullability, boolean container)
 	{
 		myAnnotation = annotation;
 		myNullability = nullability;
@@ -27,7 +27,7 @@ public class NullabilityAnnotationInfo
 	/**
 	 * @return annotation object (might be synthetic)
 	 */
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public PsiAnnotation getAnnotation()
 	{
 		return myAnnotation;

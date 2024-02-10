@@ -46,7 +46,7 @@ public class SwitchStatementInspection extends BaseInspection {
 
     @Override
     public void visitSwitchStatement(
-      @jakarta.annotation.Nonnull PsiSwitchStatement statement) {
+      @Nonnull PsiSwitchStatement statement) {
       super.visitSwitchStatement(statement);
       registerStatementError(statement);
     }

@@ -34,7 +34,7 @@ public class DisableGC implements Evaluator
 		myDelegate = delegate;
 	}
 
-	public static Evaluator create(@jakarta.annotation.Nonnull Evaluator delegate)
+	public static Evaluator create(@Nonnull Evaluator delegate)
 	{
 		if(!(delegate instanceof DisableGC))
 		{

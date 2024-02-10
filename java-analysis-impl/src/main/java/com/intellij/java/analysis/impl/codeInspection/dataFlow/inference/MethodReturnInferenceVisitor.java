@@ -72,7 +72,7 @@ class MethodReturnInferenceVisitor
 		}
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	private ReturnValue getExpressionValue(@Nullable LighterASTNode expr)
 	{
 		expr = skipParenthesesCastsDown(tree, expr);
@@ -233,7 +233,7 @@ class MethodReturnInferenceVisitor
 		return ReturnValue.UNKNOWN;
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	private ReturnValue findValueInStatement(LighterASTNode statement, LighterASTNode target)
 	{
 		if(statement == null)
@@ -346,7 +346,7 @@ class MethodReturnInferenceVisitor
 		return ReturnValue.merge(thenValue, elseValue);
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	private ReturnValue findValueInExpression(LighterASTNode expression, LighterASTNode target)
 	{
 		if(expression == null)

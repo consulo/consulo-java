@@ -344,7 +344,7 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
     }
   }
 
-  private static ProblemDescriptor createDescriptor(@jakarta.annotation.Nonnull PsiElement element, String template, InspectionManager manager,
+  private static ProblemDescriptor createDescriptor(@Nonnull PsiElement element, String template, InspectionManager manager,
                                                     boolean onTheFly) {
     return manager.createProblemDescriptor(element, template, onTheFly, (LocalQuickFix [])null, ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
   }
@@ -373,7 +373,7 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
     }
 
     @Override
-    public void applyFix(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
       final PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
       try {
         final PsiDocCommentOwner owner = PsiTreeUtil.getParentOfType(descriptor.getEndElement(), PsiDocCommentOwner.class);
@@ -425,7 +425,7 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
   }
   @Override
   @Nullable
-  public ProblemDescriptor[] checkClass(@Nonnull PsiClass psiClass, @jakarta.annotation.Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
+  public ProblemDescriptor[] checkClass(@Nonnull PsiClass psiClass, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
     if (psiClass instanceof PsiAnonymousClass) return null;
    // if (psiClass instanceof JspClass) return null;
     if (psiClass instanceof PsiTypeParameter) return null;
@@ -557,7 +557,7 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod psiMethod, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
     //if (psiMethod instanceof JspHolderMethod) return null;
     if (IGNORE_DEPRECATED && (psiMethod.isDeprecated() || psiMethod.getContainingClass().isDeprecated())) {
@@ -821,7 +821,7 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
     }
 
     @Override
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionsBundle.message("inspection.javadoc.problem.add.param.tag", myName);
     }

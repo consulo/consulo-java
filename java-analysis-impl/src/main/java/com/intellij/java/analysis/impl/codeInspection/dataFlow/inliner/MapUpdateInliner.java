@@ -25,7 +25,7 @@ public class MapUpdateInliner implements CallInliner
 			CommonClassNames.JAVA_UTIL_MAP, "merge").parameterCount(3);
 
 	@Override
-	public boolean tryInlineCall(@jakarta.annotation.Nonnull CFGBuilder builder, @Nonnull PsiMethodCallExpression call)
+	public boolean tryInlineCall(@Nonnull CFGBuilder builder, @Nonnull PsiMethodCallExpression call)
 	{
 		if(MAP_COMPUTE.test(call))
 		{
@@ -105,7 +105,7 @@ public class MapUpdateInliner implements CallInliner
 		builder.swap().unwrap(SpecialField.COLLECTION_SIZE).pushUnknown().assign().pop();
 	}
 
-	private static void inlineComputeIfAbsent(@jakarta.annotation.Nonnull CFGBuilder builder,
+	private static void inlineComputeIfAbsent(@Nonnull CFGBuilder builder,
 											  PsiExpression function,
 											  PsiType type)
 	{
@@ -136,7 +136,7 @@ public class MapUpdateInliner implements CallInliner
 				.end();
 	}
 
-	private static void inlineCompute(@jakarta.annotation.Nonnull CFGBuilder builder,
+	private static void inlineCompute(@Nonnull CFGBuilder builder,
 									  PsiExpression function,
 									  PsiType type)
 	{

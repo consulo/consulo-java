@@ -39,7 +39,7 @@ import jakarta.annotation.Nonnull;
 public class UnknownGuardInspection extends BaseJavaLocalInspectionTool {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getGroupDisplayName() {
     return GroupNames.CONCURRENCY_ANNOTATION_ISSUES;
   }
@@ -52,7 +52,7 @@ public class UnknownGuardInspection extends BaseJavaLocalInspectionTool {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getShortName() {
     return "UnknownGuard";
   }

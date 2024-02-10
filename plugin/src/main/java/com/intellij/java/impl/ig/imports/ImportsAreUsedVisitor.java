@@ -45,7 +45,7 @@ class ImportsAreUsedVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitReferenceElement(@jakarta.annotation.Nonnull PsiJavaCodeReferenceElement reference) {
+  public void visitReferenceElement(@Nonnull PsiJavaCodeReferenceElement reference) {
     followReferenceToImport(reference);
     super.visitReferenceElement(reference);
   }

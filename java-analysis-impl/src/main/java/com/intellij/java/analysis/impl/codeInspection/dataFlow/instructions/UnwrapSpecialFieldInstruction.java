@@ -15,15 +15,15 @@ public class UnwrapSpecialFieldInstruction extends EvalInstruction
 	@Nonnull
 	private final SpecialField mySpecialField;
 
-	public UnwrapSpecialFieldInstruction(@jakarta.annotation.Nonnull SpecialField specialField)
+	public UnwrapSpecialFieldInstruction(@Nonnull SpecialField specialField)
 	{
 		super(null, 1);
 		mySpecialField = specialField;
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
-	public DfaValue eval(@jakarta.annotation.Nonnull DfaValueFactory factory, @jakarta.annotation.Nonnull DfaMemoryState state, @Nonnull DfaValue  ... arguments)
+	@Nonnull
+	public DfaValue eval(@Nonnull DfaValueFactory factory, @Nonnull DfaMemoryState state, @Nonnull DfaValue  ... arguments)
 	{
 		return mySpecialField.createValue(factory, arguments[0]);
 	}

@@ -49,7 +49,7 @@ public class SuggestIndexNameMacro extends Macro {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDefaultValue() {
     return "a";
   }

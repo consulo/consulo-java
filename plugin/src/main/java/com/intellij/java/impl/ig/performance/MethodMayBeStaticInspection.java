@@ -81,7 +81,7 @@ public class MethodMayBeStaticInspection extends BaseInspection {
   private class MethodCanBeStaticVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       super.visitMethod(method);
       if (method.hasModifierProperty(PsiModifier.STATIC) ||
           method.hasModifierProperty(PsiModifier.ABSTRACT) ||

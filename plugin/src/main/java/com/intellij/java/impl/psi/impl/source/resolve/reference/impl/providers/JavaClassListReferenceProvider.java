@@ -61,7 +61,7 @@ public class JavaClassListReferenceProvider extends JavaClassReferenceProvider {
     }
 
     NotNullLazyValue<Set<String>> topLevelPackages = new NotNullLazyValue<Set<String>>() {
-      @jakarta.annotation.Nonnull
+      @Nonnull
       @Override
       protected Set<String> compute() {
         final Set<String> knownTopLevelPackages = new HashSet<String>();

@@ -94,7 +94,7 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
 
   public InlineMethodProcessor(@Nonnull Project project,
                                @Nonnull PsiMethod method,
-                               @jakarta.annotation.Nullable PsiJavaCodeReferenceElement reference,
+                               @Nullable PsiJavaCodeReferenceElement reference,
                                Editor editor,
                                boolean isInlineThisOnly) {
     this(project, method, reference, editor, isInlineThisOnly, false, false);
@@ -102,7 +102,7 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
 
   public InlineMethodProcessor(@Nonnull Project project,
                                @Nonnull PsiMethod method,
-                               @jakarta.annotation.Nullable PsiJavaCodeReferenceElement reference,
+                               @Nullable PsiJavaCodeReferenceElement reference,
                                Editor editor,
                                boolean isInlineThisOnly,
                                boolean searchInComments,
@@ -126,7 +126,7 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
     return RefactoringBundle.message("inline.method.command", myDescriptiveName);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
     return new InlineViewDescriptor(myMethod);
   }

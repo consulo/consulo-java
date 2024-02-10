@@ -68,7 +68,7 @@ public class SliceTreeBuilder extends AbstractTreeBuilder {
   public SliceTreeBuilder(@Nonnull JTree tree,
                           @Nonnull Project project,
                           boolean dataFlowToThis,
-                          @jakarta.annotation.Nonnull SliceNode rootNode,
+                          @Nonnull SliceNode rootNode,
                           boolean splitByLeafExpressions) {
     super(tree, (DefaultTreeModel)tree.getModel(), new SliceTreeStructure(project, rootNode), SLICE_NODE_COMPARATOR, false);
     this.dataFlowToThis = dataFlowToThis;

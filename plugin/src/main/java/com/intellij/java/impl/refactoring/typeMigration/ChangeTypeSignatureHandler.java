@@ -61,7 +61,7 @@ public class ChangeTypeSignatureHandler implements RefactoringActionHandler
 	}
 
 	@Override
-	public void invoke(@jakarta.annotation.Nonnull final Project project, @Nonnull final PsiElement[] elements, final DataContext dataContext)
+	public void invoke(@Nonnull final Project project, @Nonnull final PsiElement[] elements, final DataContext dataContext)
 	{
 		LOG.assertTrue(elements.length == 1);
 		final PsiElement element = elements[0];
@@ -95,7 +95,7 @@ public class ChangeTypeSignatureHandler implements RefactoringActionHandler
 		return false;
 	}
 
-	private static void invoke(@jakarta.annotation.Nonnull Project project, @Nonnull PsiElement[] roots, @Nullable Editor editor)
+	private static void invoke(@Nonnull Project project, @Nonnull PsiElement[] roots, @Nullable Editor editor)
 	{
 		if(Util.canBeMigrated(roots))
 		{
@@ -109,7 +109,7 @@ public class ChangeTypeSignatureHandler implements RefactoringActionHandler
 	}
 
 	@Nonnull
-	private static PsiElement[] extractReferencedVariables(@jakarta.annotation.Nonnull PsiTypeElement typeElement)
+	private static PsiElement[] extractReferencedVariables(@Nonnull PsiTypeElement typeElement)
 	{
 		final PsiElement parent = typeElement.getParent();
 		if(parent instanceof PsiVariable)

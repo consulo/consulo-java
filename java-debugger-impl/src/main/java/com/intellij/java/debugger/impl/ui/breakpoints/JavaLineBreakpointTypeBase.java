@@ -36,7 +36,7 @@ import consulo.execution.debug.breakpoint.XLineBreakpointType;
  */
 public abstract class JavaLineBreakpointTypeBase<P extends JavaBreakpointProperties> extends XLineBreakpointType<P>
 {
-	public JavaLineBreakpointTypeBase(@NonNls @jakarta.annotation.Nonnull String id, @Nls @jakarta.annotation.Nonnull String title)
+	public JavaLineBreakpointTypeBase(@NonNls @Nonnull String id, @Nls @Nonnull String title)
 	{
 		super(id, title);
 	}
@@ -55,14 +55,14 @@ public abstract class JavaLineBreakpointTypeBase<P extends JavaBreakpointPropert
 
 	@Nullable
 	@Override
-	public final XBreakpointCustomPropertiesPanel<XLineBreakpoint<P>> createCustomRightPropertiesPanel(@jakarta.annotation.Nonnull Project project)
+	public final XBreakpointCustomPropertiesPanel<XLineBreakpoint<P>> createCustomRightPropertiesPanel(@Nonnull Project project)
 	{
 		return new JavaBreakpointFiltersPanel<P, XLineBreakpoint<P>>(project);
 	}
 
 	@Nullable
 	@Override
-	public final XDebuggerEditorsProvider getEditorsProvider(@jakarta.annotation.Nonnull XLineBreakpoint<P> breakpoint, @Nonnull Project project)
+	public final XDebuggerEditorsProvider getEditorsProvider(@Nonnull XLineBreakpoint<P> breakpoint, @Nonnull Project project)
 	{
 		return new JavaDebuggerEditorsProvider();
 	}

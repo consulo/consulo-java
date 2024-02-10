@@ -29,7 +29,7 @@ import java.util.function.Consumer;
  * @author peter
  */
 public class JamMethodMeta<Jam extends JamElement> extends JamMemberMeta<PsiMethod, Jam>{
-  public JamMethodMeta(@jakarta.annotation.Nullable JamMemberArchetype<? super PsiMethod, ? super Jam> parent, Class<Jam> jamClass) {
+  public JamMethodMeta(@Nullable JamMemberArchetype<? super PsiMethod, ? super Jam> parent, Class<Jam> jamClass) {
     super(parent, jamClass);
   }
 

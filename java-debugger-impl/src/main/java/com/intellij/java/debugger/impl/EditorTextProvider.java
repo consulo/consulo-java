@@ -44,7 +44,7 @@ public interface EditorTextProvider extends LanguageExtension {
     return Application.get().getExtensionPoint(EditorTextProvider.class).getOrBuildCache(KEY).get(language);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   TextWithImports getEditorText(PsiElement elementAtCaret);
 
   @Nullable

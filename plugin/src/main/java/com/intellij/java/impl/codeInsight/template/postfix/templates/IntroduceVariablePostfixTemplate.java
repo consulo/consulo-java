@@ -35,13 +35,13 @@ public class IntroduceVariablePostfixTemplate extends ExpressionPostfixTemplateW
   }
 
   @Override
-  protected void doIt(@jakarta.annotation.Nonnull Editor editor, @Nonnull PsiExpression expression) {
+  protected void doIt(@Nonnull Editor editor, @Nonnull PsiExpression expression) {
     // for advanced stuff use ((PsiJavaCodeReferenceElement)expression).advancedResolve(true).getElement();
     IntroduceVariableHandler handler = ApplicationManager.getApplication().isUnitTestMode() ? getMockHandler() : new IntroduceVariableHandler();
     handler.invoke(expression.getProject(), editor, expression);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private static IntroduceVariableHandler getMockHandler() {
     return new IntroduceVariableHandler() {
       // mock default settings

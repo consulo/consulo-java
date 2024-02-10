@@ -42,7 +42,7 @@ public interface PsiTypeParameter extends PsiClass, PsiAnnotationOwner, JvmTypeP
 	 * @return the extends list. For this particular kind of classes it never returns null.
 	 */
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	PsiReferenceList getExtendsList();
 
 	/**
@@ -74,7 +74,7 @@ public interface PsiTypeParameter extends PsiClass, PsiAnnotationOwner, JvmTypeP
 		return PsiClass.super.hasAnnotation(fqn);
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	default JvmReferenceType[] getBounds()
 	{

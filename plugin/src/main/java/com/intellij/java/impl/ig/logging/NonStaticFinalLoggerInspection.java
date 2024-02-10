@@ -46,19 +46,19 @@ public class NonStaticFinalLoggerInspection extends BaseInspection {
   private final List<String> loggerClassNames = new ArrayList();
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "NonConstantLogger";
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("non.constant.logger.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("non.constant.logger.problem.descriptor");
   }

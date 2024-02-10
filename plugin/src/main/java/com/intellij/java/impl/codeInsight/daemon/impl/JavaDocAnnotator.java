@@ -31,7 +31,7 @@ import jakarta.annotation.Nonnull;
  */
 public class JavaDocAnnotator implements Annotator {
   @Override
-  public void annotate(@Nonnull PsiElement element, @jakarta.annotation.Nonnull AnnotationHolder holder) {
+  public void annotate(@Nonnull PsiElement element, @Nonnull AnnotationHolder holder) {
     if (element instanceof PsiDocTag) {
       String name = ((PsiDocTag)element).getName();
       if ("param".equals(name)) {

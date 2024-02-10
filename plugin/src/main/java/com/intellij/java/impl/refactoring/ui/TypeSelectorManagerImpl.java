@@ -23,6 +23,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.ide.impl.psi.statistics.StatisticsInfo;
+import consulo.ide.impl.psi.statistics.StatisticsManager;
 import consulo.language.editor.completion.lookup.TailType;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -298,9 +299,9 @@ public class TypeSelectorManagerImpl implements TypeSelectorManager {
       map.put(serialize(type), type);
     }
 
-    for (StatisticsInfo info : consulo.ide.impl.psi.statistics.StatisticsManager.getInstance().getAllValues(getStatsKey())) {
+    for (StatisticsInfo info : StatisticsManager.getInstance().getAllValues(getStatsKey())) {
       final PsiType candidate = map.get(info.getValue());
-      if (candidate != null && consulo.ide.impl.psi.statistics.StatisticsManager.getInstance().getUseCount(info) > 0) {
+      if (candidate != null && StatisticsManager.getInstance().getUseCount(info) > 0) {
         myTypeSelector.selectType(candidate);
         return;
       }
@@ -329,11 +330,11 @@ public class TypeSelectorManagerImpl implements TypeSelectorManager {
     typeSelected(type, getDefaultType());
   }
 
-  public static void typeSelected(@jakarta.annotation.Nonnull final PsiType type, @Nullable final PsiType defaultType) {
+  public static void typeSelected(@Nonnull final PsiType type, @Nullable final PsiType defaultType) {
     if (defaultType == null) {
       return;
     }
-    consulo.ide.impl.psi.statistics.StatisticsManager.getInstance().incUseCount(new StatisticsInfo(getStatsKey(defaultType), serialize(type)));
+    StatisticsManager.getInstance().incUseCount(new StatisticsInfo(getStatsKey(defaultType), serialize(type)));
   }
 
   private String getStatsKey() {
@@ -348,7 +349,7 @@ public class TypeSelectorManagerImpl implements TypeSelectorManager {
     return "IntroduceVariable##" + serialize(defaultType);
   }
 
-  private static String serialize(@jakarta.annotation.Nonnull PsiType type) {
+  private static String serialize(@Nonnull PsiType type) {
     if (PsiUtil.resolveClassInType(type) instanceof PsiTypeParameter) {
       return type.getCanonicalText();
     }

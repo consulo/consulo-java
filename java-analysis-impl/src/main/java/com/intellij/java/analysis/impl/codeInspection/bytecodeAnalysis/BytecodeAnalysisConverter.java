@@ -43,8 +43,8 @@ public class BytecodeAnalysisConverter {
    * Creates a stable non-negated EKey for given PsiMethod and direction
    * Returns null if conversion is impossible (something is not resolvable).
    */
-  @jakarta.annotation.Nullable
-  public static EKey psiKey(@jakarta.annotation.Nonnull PsiMember psiMethod, @Nonnull Direction direction) {
+  @Nullable
+  public static EKey psiKey(@Nonnull PsiMember psiMethod, @Nonnull Direction direction) {
     PsiClass psiClass = psiMethod.getContainingClass();
     if (psiClass != null) {
       String className = descriptor(psiClass, 0, false);
@@ -67,8 +67,8 @@ public class BytecodeAnalysisConverter {
     return null;
   }
 
-  @jakarta.annotation.Nullable
-  private static String methodSignature(@jakarta.annotation.Nonnull PsiMethod psiMethod, @jakarta.annotation.Nonnull PsiClass psiClass) {
+  @Nullable
+  private static String methodSignature(@Nonnull PsiMethod psiMethod, @Nonnull PsiClass psiClass) {
     StringBuilder sb = new StringBuilder();
 
     sb.append('(');
@@ -105,7 +105,7 @@ public class BytecodeAnalysisConverter {
     return sb.toString();
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static String descriptor(@Nonnull PsiClass psiClass, int dimensions, boolean full) {
     PsiFile containingFile = psiClass.getContainingFile();
     if (!(containingFile instanceof PsiClassOwner)) {
@@ -143,7 +143,7 @@ public class BytecodeAnalysisConverter {
   }
 
   @Nullable
-  private static String descriptor(@jakarta.annotation.Nonnull PsiType psiType) {
+  private static String descriptor(@Nonnull PsiType psiType) {
     int dimensions = 0;
     psiType = TypeConversionUtil.erasure(psiType);
     if (psiType instanceof PsiArrayType) {

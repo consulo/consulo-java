@@ -43,7 +43,7 @@ public class SplitDeclarationAndInitializationIntention extends Intention {
   }
 
   @Override
-  public void processIntention(@jakarta.annotation.Nonnull PsiElement element)
+  public void processIntention(@Nonnull PsiElement element)
     throws IncorrectOperationException {
     final PsiField field = (PsiField)element.getParent();
     field.normalizeDeclaration();

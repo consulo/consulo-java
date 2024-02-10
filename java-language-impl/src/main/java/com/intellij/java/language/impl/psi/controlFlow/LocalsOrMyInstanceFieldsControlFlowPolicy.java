@@ -22,12 +22,12 @@ public final class LocalsOrMyInstanceFieldsControlFlowPolicy implements ControlF
   }
 
   @Override
-  public boolean isParameterAccepted(@jakarta.annotation.Nonnull PsiParameter psiParameter) {
+  public boolean isParameterAccepted(@Nonnull PsiParameter psiParameter) {
     return true;
   }
 
   @Override
-  public boolean isLocalVariableAccepted(@jakarta.annotation.Nonnull PsiLocalVariable psiVariable) {
+  public boolean isLocalVariableAccepted(@Nonnull PsiLocalVariable psiVariable) {
     return true;
   }
 

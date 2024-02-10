@@ -40,7 +40,7 @@ public class ObsoleteCollectionInspection extends BaseInspection {
   public boolean ignoreRequiredObsoleteCollectionTypes = false;
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "UseOfObsoleteCollectionType";
   }

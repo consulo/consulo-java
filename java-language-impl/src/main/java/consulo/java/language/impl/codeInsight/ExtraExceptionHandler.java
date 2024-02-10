@@ -30,5 +30,5 @@ import jakarta.annotation.Nonnull;
 public interface ExtraExceptionHandler {
   ExtensionPointName<ExtraExceptionHandler> EP_NAME = ExtensionPointName.create(ExtraExceptionHandler.class);
 
-  boolean isHandled(@Nonnull PsiClassType type, @jakarta.annotation.Nonnull PsiElement element);
+  boolean isHandled(@Nonnull PsiClassType type, @Nonnull PsiElement element);
 }

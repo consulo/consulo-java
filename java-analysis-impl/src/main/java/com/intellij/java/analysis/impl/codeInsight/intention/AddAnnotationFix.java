@@ -35,20 +35,20 @@ public class AddAnnotationFix extends AddAnnotationPsiFix implements SyntheticIn
     this(fqn, modifierListOwner, PsiNameValuePair.EMPTY_ARRAY, annotationsToRemove);
   }
 
-  public AddAnnotationFix(@jakarta.annotation.Nonnull String fqn,
+  public AddAnnotationFix(@Nonnull String fqn,
                           @Nonnull PsiModifierListOwner modifierListOwner,
                           @Nonnull PsiNameValuePair[] values,
-                          @jakarta.annotation.Nonnull String... annotationsToRemove) {
+                          @Nonnull String... annotationsToRemove) {
     super(fqn, modifierListOwner, values, annotationsToRemove);
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return isAvailable();
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     applyFix();
   }
 

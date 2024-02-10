@@ -153,7 +153,7 @@ class ParameterClassCheckVisitor extends JavaRecursiveElementWalkingVisitor
 	}
 
 	@Override
-	public void visitInstanceOfExpression(@jakarta.annotation.Nonnull PsiInstanceOfExpression expression)
+	public void visitInstanceOfExpression(@Nonnull PsiInstanceOfExpression expression)
 	{
 		if(checked)
 		{

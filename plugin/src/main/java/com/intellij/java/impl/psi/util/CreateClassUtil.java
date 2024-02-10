@@ -61,8 +61,8 @@ public class CreateClassUtil {
   private CreateClassUtil() {}
 
   @Nullable
-  private static PsiClass createClassFromTemplate(@Nonnull final Properties attributes, @jakarta.annotation.Nullable final String templateName,
-                                                  @jakarta.annotation.Nonnull final PsiDirectory directoryRoot,
+  private static PsiClass createClassFromTemplate(@Nonnull final Properties attributes, @Nullable final String templateName,
+                                                  @Nonnull final PsiDirectory directoryRoot,
                                                   @Nonnull final String className) throws IncorrectOperationException {
     if (templateName == null) return null;
     if (templateName.equals(DO_NOT_CREATE_CLASS_TEMPLATE)) return null;
@@ -104,7 +104,7 @@ public class CreateClassUtil {
   }
 
   @Nonnull
-  private static PsiDirectory createParentDirectories(@jakarta.annotation.Nonnull PsiDirectory directoryRoot, @jakarta.annotation.Nonnull String className) throws IncorrectOperationException {
+  private static PsiDirectory createParentDirectories(@Nonnull PsiDirectory directoryRoot, @Nonnull String className) throws IncorrectOperationException {
     final PsiJavaPackage currentPackage = JavaDirectoryService.getInstance().getPackage(directoryRoot);
     final String packagePrefix = currentPackage == null? null : currentPackage.getQualifiedName() + ".";
     final String packageName = extractPackage(packagePrefix != null && className.startsWith(packagePrefix)?
@@ -153,7 +153,7 @@ public class CreateClassUtil {
   }
 
   @Nullable
-  public static PsiClass createClassNamed(String newClassName, String templateName, @jakarta.annotation.Nonnull PsiDirectory directory) throws IncorrectOperationException {
+  public static PsiClass createClassNamed(String newClassName, String templateName, @Nonnull PsiDirectory directory) throws IncorrectOperationException {
     return createClassNamed(newClassName, FileTemplateManager.getInstance(directory.getProject()).getDefaultProperties(), templateName, directory);
   }
 
@@ -169,9 +169,9 @@ public class CreateClassUtil {
 
   @Nullable
   private static PsiClass createClassNamed(@Nullable String newClassName,
-                                           @jakarta.annotation.Nonnull Properties properties,
+                                           @Nonnull Properties properties,
                                            String templateName,
-                                           @jakarta.annotation.Nonnull PsiDirectory directory) throws IncorrectOperationException {
+                                           @Nonnull PsiDirectory directory) throws IncorrectOperationException {
     if (newClassName == null) {
       return null;
     }
@@ -182,8 +182,8 @@ public class CreateClassUtil {
     return createClassFromTemplate(properties, templateName, directory, newClassName);
   }
 
-  @jakarta.annotation.Nullable
-  public static PsiClass createClassFromCustomTemplate(@jakarta.annotation.Nullable PsiDirectory classDirectory,
+  @Nullable
+  public static PsiClass createClassFromCustomTemplate(@Nullable PsiDirectory classDirectory,
                                                        @Nullable final Module module,
                                                        final String className,
                                                        final String templateName) {

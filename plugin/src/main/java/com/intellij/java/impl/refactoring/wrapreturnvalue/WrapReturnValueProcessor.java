@@ -123,7 +123,7 @@ public class WrapReturnValueProcessor extends FixableUsagesRefactoringProcessor 
     return new WrapReturnValueUsageViewDescriptor(method, usageInfos);
   }
 
-  public void findUsages(@jakarta.annotation.Nonnull List<FixableUsageInfo> usages) {
+  public void findUsages(@Nonnull List<FixableUsageInfo> usages) {
     findUsagesForMethod(method, usages);
     for (PsiMethod overridingMethod : OverridingMethodsSearch.search(method)) {
       findUsagesForMethod(overridingMethod, usages);

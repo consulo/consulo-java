@@ -92,7 +92,7 @@ public class PsiParenthesizedExpressionImpl extends ExpressionPsiElement impleme
   }
 
   @Override
-  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitParenthesizedExpression(this);
     }
@@ -103,9 +103,9 @@ public class PsiParenthesizedExpressionImpl extends ExpressionPsiElement impleme
 
   @Override
   public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
-                                     @jakarta.annotation.Nonnull ResolveState state,
+                                     @Nonnull ResolveState state,
                                      PsiElement lastParent,
-                                     @jakarta.annotation.Nonnull PsiElement place) {
+                                     @Nonnull PsiElement place) {
     if (lastParent != null) return true;
     ElementClassHint elementClassHint = processor.getHint(ElementClassHint.KEY);
     if (elementClassHint != null && !elementClassHint.shouldProcess(ElementClassHint.DeclarationKind.VARIABLE)) return true;

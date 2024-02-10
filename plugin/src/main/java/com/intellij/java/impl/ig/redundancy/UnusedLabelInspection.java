@@ -31,7 +31,7 @@ import jakarta.annotation.Nonnull;
 public class UnusedLabelInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("unused.label.display.name");
   }
@@ -115,7 +115,7 @@ public class UnusedLabelInspection extends BaseInspection {
     }
 
     @Override
-    public void visitElement(@jakarta.annotation.Nonnull PsiElement element) {
+    public void visitElement(@Nonnull PsiElement element) {
       if (found) {
         return;
       }
@@ -124,7 +124,7 @@ public class UnusedLabelInspection extends BaseInspection {
 
     @Override
     public void visitContinueStatement(
-      @jakarta.annotation.Nonnull PsiContinueStatement continueStatement) {
+      @Nonnull PsiContinueStatement continueStatement) {
       if (found) {
         return;
       }
@@ -138,7 +138,7 @@ public class UnusedLabelInspection extends BaseInspection {
 
     @Override
     public void visitBreakStatement(
-      @jakarta.annotation.Nonnull PsiBreakStatement breakStatement) {
+      @Nonnull PsiBreakStatement breakStatement) {
       if (found) {
         return;
       }

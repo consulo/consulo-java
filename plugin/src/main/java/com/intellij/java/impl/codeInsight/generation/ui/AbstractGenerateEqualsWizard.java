@@ -21,7 +21,7 @@ import java.util.List;
  * Nikolay.Tropin
  * 8/20/13
  */
-public abstract class AbstractGenerateEqualsWizard<C extends PsiElement, M extends PsiElement, I extends MemberInfoBase<M>> extends AbstractWizard<consulo.ide.impl.idea.ide.wizard.Step>
+public abstract class AbstractGenerateEqualsWizard<C extends PsiElement, M extends PsiElement, I extends MemberInfoBase<M>> extends AbstractWizard<Step>
 {
 
 	protected final C myClass;

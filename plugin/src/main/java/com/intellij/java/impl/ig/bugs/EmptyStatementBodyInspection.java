@@ -39,7 +39,7 @@ public class EmptyStatementBodyInspection extends BaseInspection {
     return "StatementWithEmptyBody";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("statement.with.empty.body.display.name");
   }
@@ -65,7 +65,7 @@ public class EmptyStatementBodyInspection extends BaseInspection {
   private class EmptyStatementVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitDoWhileStatement(@jakarta.annotation.Nonnull PsiDoWhileStatement statement) {
+    public void visitDoWhileStatement(@Nonnull PsiDoWhileStatement statement) {
       super.visitDoWhileStatement(statement);
       checkLoopStatement(statement);
     }
@@ -83,7 +83,7 @@ public class EmptyStatementBodyInspection extends BaseInspection {
     }
 
     @Override
-    public void visitForeachStatement(@jakarta.annotation.Nonnull PsiForeachStatement statement) {
+    public void visitForeachStatement(@Nonnull PsiForeachStatement statement) {
       super.visitForeachStatement(statement);
       checkLoopStatement(statement);
     }

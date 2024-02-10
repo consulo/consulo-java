@@ -37,11 +37,11 @@ import static com.intellij.java.language.impl.psi.impl.source.tree.JavaElementTy
 public class FileLocalResolver {
   private final LighterAST myTree;
 
-  public FileLocalResolver(@jakarta.annotation.Nonnull LighterAST tree) {
+  public FileLocalResolver(@Nonnull LighterAST tree) {
     myTree = tree;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public LighterAST getLightTree() {
     return myTree;
   }
@@ -51,7 +51,7 @@ public class FileLocalResolver {
    * @return a resolve result corresponding to a local variable, parameter or field that the given reference resolves to.
    */
   @Nonnull
-  public LightResolveResult resolveLocally(@jakarta.annotation.Nonnull LighterASTNode ref) {
+  public LightResolveResult resolveLocally(@Nonnull LighterASTNode ref) {
     final String refName = JavaLightTreeUtil.getNameIdentifierText(myTree, ref);
     if (refName == null) {
       return LightResolveResult.UNKNOWN;
@@ -83,16 +83,16 @@ public class FileLocalResolver {
     }
   }
 
-  private boolean canResolveToLocalVariable(@jakarta.annotation.Nonnull LighterAST tree, @jakarta.annotation.Nonnull LighterASTNode ref) {
+  private boolean canResolveToLocalVariable(@Nonnull LighterAST tree, @Nonnull LighterASTNode ref) {
     LighterASTNode parent = tree.getParent(ref);
     return parent != null && parent.getTokenType() != METHOD_CALL_EXPRESSION && !hasQualifier(ref);
   }
 
-  private boolean hasQualifier(@jakarta.annotation.Nonnull LighterASTNode ref) {
+  private boolean hasQualifier(@Nonnull LighterASTNode ref) {
     return LightTreeUtil.firstChildOfType(myTree, ref, ElementType.EXPRESSION_BIT_SET) != null;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private Iterable<LighterASTNode> getDeclarations(LighterASTNode scope, @Nullable LighterASTNode lastParent) {
     IElementType type = scope.getTokenType();
     if (type == CODE_BLOCK) {
@@ -128,7 +128,7 @@ public class FileLocalResolver {
     return children.flatMap(child -> getDeclarations(child, null));
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private static JBIterable<LighterASTNode> before(List<LighterASTNode> children, @Nullable final LighterASTNode lastParent) {
     return JBIterable.from(children).filter(node -> lastParent == null || node.getStartOffset() < lastParent.getStartOffset());
   }
@@ -157,7 +157,7 @@ public class FileLocalResolver {
    * the type is generic
    */
   @Nullable
-  public String getShortClassTypeName(@jakarta.annotation.Nonnull LighterASTNode var, int arrayDepth) {
+  public String getShortClassTypeName(@Nonnull LighterASTNode var, int arrayDepth) {
     LighterASTNode typeNode = LightTreeUtil.firstChildOfType(myTree, var, TYPE);
     while (arrayDepth > 0) {
       LighterASTNode bracket = LightTreeUtil.firstChildOfType(myTree, typeNode, JavaTokenType.LBRACKET);
@@ -226,8 +226,8 @@ public class FileLocalResolver {
      */
     public static final LightResolveResult NON_LOCAL = new LightResolveResult();
 
-    @jakarta.annotation.Nonnull
-    static LightResolveResult resolved(@jakarta.annotation.Nonnull final LighterASTNode target) {
+    @Nonnull
+    static LightResolveResult resolved(@Nonnull final LighterASTNode target) {
       return new LightResolveResult() {
         @Override
         public LighterASTNode getTarget() {

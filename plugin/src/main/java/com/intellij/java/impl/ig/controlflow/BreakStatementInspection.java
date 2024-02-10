@@ -30,7 +30,7 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class BreakStatementInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("break.statement.display.name");
   }

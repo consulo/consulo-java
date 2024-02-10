@@ -92,13 +92,13 @@ public class DefaultClassNavigationContributor implements GotoClassOrTypeContrib
   }
 
   @Override
-  public void processNames(@jakarta.annotation.Nonnull Processor<String> processor, @jakarta.annotation.Nonnull SearchScope scope, @Nullable IdFilter filter) {
+  public void processNames(@Nonnull Processor<String> processor, @Nonnull SearchScope scope, @Nullable IdFilter filter) {
     PsiShortNamesCache.getInstance(((ProjectAwareSearchScope) scope).getProject()).processAllClassNames(processor, (GlobalSearchScope) scope, filter);
   }
 
   @Override
   public void processElementsWithName(@Nonnull String name,
-                                      @jakarta.annotation.Nonnull Processor<NavigationItem> processor,
+                                      @Nonnull Processor<NavigationItem> processor,
                                       @Nonnull FindSymbolParameters parameters) {
     PsiShortNamesCache.getInstance(parameters.getProject()).processClassesWithName(name, processor, (GlobalSearchScope) parameters.getSearchScope(), parameters.getIdFilter());
   }

@@ -110,7 +110,7 @@ public interface JavaDocElementType {
   ILazyParseableElementType DOC_REFERENCE_HOLDER = new JavaDocLazyElementType("DOC_REFERENCE_HOLDER") {
     private final JavaParserUtil.ParserWrapper myParser = JavadocParser::parseJavadocReference;
 
-    @jakarta.annotation.Nullable
+    @Nullable
     @Override
     public ASTNode parseContents(final ASTNode chameleon) {
       return JavaParserUtil.parseFragment(chameleon, myParser, false, LanguageLevel.JDK_1_3);
@@ -120,7 +120,7 @@ public interface JavaDocElementType {
   ILazyParseableElementType DOC_TYPE_HOLDER = new JavaDocLazyElementType("DOC_TYPE_HOLDER") {
     private final JavaParserUtil.ParserWrapper myParser = JavadocParser::parseJavadocType;
 
-    @jakarta.annotation.Nullable
+    @Nullable
     @Override
     public ASTNode parseContents(final ASTNode chameleon) {
       return JavaParserUtil.parseFragment(chameleon, myParser, false, LanguageLevel.JDK_1_3);
@@ -142,8 +142,8 @@ public interface JavaDocElementType {
     }
 
     @Override
-    public boolean isParsable(@jakarta.annotation.Nullable ASTNode parent,
-                              @jakarta.annotation.Nonnull CharSequence buffer,
+    public boolean isParsable(@Nullable ASTNode parent,
+                              @Nonnull CharSequence buffer,
                               @Nonnull Language fileLanguage,
                               @Nonnull Project project) {
       if (!StringUtil.startsWith(buffer, "/**") || !StringUtil.endsWith(buffer, "*/")) {

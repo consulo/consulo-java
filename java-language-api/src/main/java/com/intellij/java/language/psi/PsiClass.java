@@ -55,7 +55,7 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
    *
    * @return the qualified name of the class, or null for anonymous and local classes, and for type parameters
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   String getQualifiedName();
 
   /**
@@ -93,7 +93,7 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
    *
    * @return the extends list, or null for anonymous classes.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiReferenceList getExtendsList();
 
   /**
@@ -101,7 +101,7 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
    *
    * @return the implements list, or null for anonymous classes
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiReferenceList getImplementsList();
 
   /**
@@ -127,7 +127,7 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
    * @return the base class. May return null when jdk is not configured, so no java.lang.Object is found,
    * or for java.lang.Object itself
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiClass getSuperClass();
 
   /**
@@ -211,7 +211,7 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
    *
    * @return the list of methods.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   PsiMethod[] getAllMethods();
 
   /**
@@ -229,7 +229,7 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
    * @param checkBases if true, the field is also searched in the base classes of the class.
    * @return the field instance, or null if the field cannot be found.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiField findFieldByName(@NonNls String name, boolean checkBases);
 
   /**
@@ -240,7 +240,7 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
    * @param checkBases    if true, the method is also searched in the base classes of the class.
    * @return the method instance, or null if the method cannot be found.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiMethod findMethodBySignature(PsiMethod patternMethod, boolean checkBases);
 
   /**
@@ -292,7 +292,7 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
    * @param checkBases if true, the inner class is also searched in the base classes of the class.
    * @return the inner class instance, or null if the inner class cannot be found.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiClass findInnerClassByName(@NonNls String name, boolean checkBases);
 
   /**
@@ -300,7 +300,7 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
    *
    * @return the token instance, or null if the token is missing in the source code file.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiElement getLBrace();
 
   /**
@@ -317,7 +317,7 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
    * @return the name identifier, or null if the class is anonymous or synthetic jsp class
    */
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiIdentifier getNameIdentifier();
 
   /**
@@ -362,7 +362,7 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
    * @return the containing class, or null if the class is not an inner class.
    */
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiClass getContainingClass();
 
   /**
@@ -384,7 +384,7 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
     return getJvmClassKind(this);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   default JvmReferenceType getSuperClassType() {
     return getClassSuperType(this);
@@ -401,7 +401,7 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
     return PsiRecordComponent.EMPTY_ARRAY;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   default PsiRecordHeader getRecordHeader() {
     return null;
   }

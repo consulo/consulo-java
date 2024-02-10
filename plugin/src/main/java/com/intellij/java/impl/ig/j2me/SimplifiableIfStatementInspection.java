@@ -65,7 +65,7 @@ public class SimplifiableIfStatementInspection extends BaseInspection {
                                            StringUtil.escapeXml(calculateReplacementStatement(statement)));
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @NonNls
   static String calculateReplacementStatement(PsiIfStatement statement) {
     final PsiStatement thenBranch = ControlFlowUtils.stripBraces(statement.getThenBranch());
@@ -274,7 +274,7 @@ public class SimplifiableIfStatementInspection extends BaseInspection {
   private static class SimplifiableIfStatementFix extends InspectionGadgetsFix {
 
     @Override
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("constant.conditional.expression.simplify.quickfix");
     }
@@ -398,7 +398,7 @@ public class SimplifiableIfStatementInspection extends BaseInspection {
       return EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalent(thenLhs, elseLhs);
     }
 
-    public static boolean isAssignment(@jakarta.annotation.Nullable PsiStatement statement) {
+    public static boolean isAssignment(@Nullable PsiStatement statement) {
       if (!(statement instanceof PsiExpressionStatement)) {
         return false;
       }

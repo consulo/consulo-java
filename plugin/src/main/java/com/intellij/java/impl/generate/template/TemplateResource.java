@@ -128,7 +128,7 @@ public class TemplateResource implements Serializable
 	 *
 	 * @return the javadoc, null if no javadoc.
 	 */
-	@jakarta.annotation.Nullable
+	@Nullable
 	public String getJavaDoc()
 	{
 		int i = template.indexOf("*/");

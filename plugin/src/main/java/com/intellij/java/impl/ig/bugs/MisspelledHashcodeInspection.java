@@ -30,7 +30,7 @@ import org.jetbrains.annotations.NonNls;
 @ExtensionImpl
 public class MisspelledHashcodeInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "misspelled.hashcode.display.name");
@@ -54,7 +54,7 @@ public class MisspelledHashcodeInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       //note: no call to super
       @NonNls final String methodName = method.getName();
       if (!"hashcode".equals(methodName)) {

@@ -40,7 +40,7 @@ import java.util.function.IntConsumer;
 import java.util.function.IntSupplier;
 
 public abstract class BaseInspection extends BaseJavaBatchLocalInspectionTool {
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public HighlightDisplayLevel getDefaultLevel() {
     return HighlightDisplayLevel.WARNING;
@@ -58,7 +58,7 @@ public abstract class BaseInspection extends BaseJavaBatchLocalInspectionTool {
     return GroupDisplayNameUtil.getGroupDisplayName(getClass());
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected abstract String buildErrorString(Object... infos);
 
   protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {
@@ -78,7 +78,7 @@ public abstract class BaseInspection extends BaseJavaBatchLocalInspectionTool {
   public abstract BaseInspectionVisitor buildVisitor();
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public final PsiElementVisitor buildVisitorImpl(@Nonnull ProblemsHolder holder,
                                                   boolean isOnTheFly,
                                                   LocalInspectionToolSession session,

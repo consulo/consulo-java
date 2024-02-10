@@ -26,7 +26,7 @@ public interface PsiWhileStatement extends PsiConditionalLoopStatement {
    *
    * @return the expression, or null if the statement is incomplete.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiExpression getCondition();
 
   /**
@@ -34,7 +34,7 @@ public interface PsiWhileStatement extends PsiConditionalLoopStatement {
    *
    * @return the opening parenthesis, or null if the statement is incomplete.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiJavaToken getLParenth();
 
   /**

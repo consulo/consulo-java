@@ -54,5 +54,5 @@ abstract class JavaReflectionReferenceProvider extends PsiReferenceProvider {
   }
 
   @Nullable
-  protected abstract PsiReference[] getReferencesByMethod(@Nonnull PsiLiteralExpression literalArgument, @jakarta.annotation.Nonnull PsiReferenceExpression methodReference, @Nonnull ProcessingContext context);
+  protected abstract PsiReference[] getReferencesByMethod(@Nonnull PsiLiteralExpression literalArgument, @Nonnull PsiReferenceExpression methodReference, @Nonnull ProcessingContext context);
 }

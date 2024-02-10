@@ -36,7 +36,7 @@ public class ReplaceMethodWithMethodObjectAction extends BaseRefactoringAction {
     return false;
   }
 
-  protected RefactoringActionHandler getHandler(@jakarta.annotation.Nonnull final DataContext dataContext) {
+  protected RefactoringActionHandler getHandler(@Nonnull final DataContext dataContext) {
     return new ExtractMethodObjectHandler();
   }
 }

@@ -17,13 +17,13 @@ public class DfNullConstantType extends DfConstantType<Object> implements DfRefe
     super(null);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public DfaNullability getNullability() {
     return DfaNullability.NULL;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public TypeConstraint getConstraint() {
     return TypeConstraints.TOP;
@@ -40,13 +40,13 @@ public class DfNullConstantType extends DfConstantType<Object> implements DfRefe
     return PsiType.NULL;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public DfReferenceType dropNullability() {
     return DfTypes.OBJECT_OR_NULL;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public DfType join(@Nonnull DfType other) {
     if (isSuperType(other)) return this;

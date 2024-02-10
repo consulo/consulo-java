@@ -9,7 +9,7 @@ import jakarta.annotation.Nonnull;
 import java.util.Objects;
 
 class DfIntRangeType implements DfIntType {
-  static final @jakarta.annotation.Nonnull
+  static final @Nonnull
   LongRangeSet FULL_RANGE = Objects.requireNonNull(LongRangeSet.fromType(PsiType.INT));
   private final LongRangeSet myRange;
 

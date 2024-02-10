@@ -33,9 +33,9 @@ public class DummyEntryPointsTool extends UnusedDeclarationInspection {
   }
 
   @Override
-  public void runInspection(@jakarta.annotation.Nonnull AnalysisScope scope,
-                            @jakarta.annotation.Nonnull InspectionManager manager,
-                            @jakarta.annotation.Nonnull GlobalInspectionContext globalContext,
+  public void runInspection(@Nonnull AnalysisScope scope,
+                            @Nonnull InspectionManager manager,
+                            @Nonnull GlobalInspectionContext globalContext,
                             @Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor,
                             Object state) {
   }
@@ -47,19 +47,19 @@ public class DummyEntryPointsTool extends UnusedDeclarationInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionsBundle.message("inspection.dead.code.entry.points.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getGroupDisplayName() {
     return "";
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getShortName() {
     //noinspection InspectionDescriptionNotFoundInspection
     return "";

@@ -29,13 +29,13 @@ import org.jetbrains.annotations.NonNls;
 public class RuntimeExecWithNonConstantStringInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "CallToRuntimeExecWithNonConstantString";
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("runtime.exec.with.non.constant.string.display.name");
   }
@@ -54,7 +54,7 @@ public class RuntimeExecWithNonConstantStringInspection extends BaseInspection {
   private static class RuntimeExecVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethodCallExpression(@jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression = expression.getMethodExpression();
       @NonNls final String methodName = methodExpression.getReferenceName();

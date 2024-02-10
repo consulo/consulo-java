@@ -13,10 +13,10 @@ public abstract class PsiSubstitutorFactory {
   @Nonnull
   protected abstract PsiSubstitutor createSubstitutor(@Nonnull PsiTypeParameter typeParameter, PsiType mapping);
 
-  @jakarta.annotation.Nonnull
-  protected abstract PsiSubstitutor createSubstitutor(@jakarta.annotation.Nonnull PsiClass aClass, PsiType[] mappings);
+  @Nonnull
+  protected abstract PsiSubstitutor createSubstitutor(@Nonnull PsiClass aClass, PsiType[] mappings);
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected abstract PsiSubstitutor createSubstitutor(@Nonnull Map<? extends PsiTypeParameter, ? extends PsiType> map);
 
   static PsiSubstitutorFactory getInstance() {

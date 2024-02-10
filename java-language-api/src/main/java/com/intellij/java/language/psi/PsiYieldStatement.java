@@ -11,7 +11,7 @@ public interface PsiYieldStatement extends PsiStatement
 	/**
 	 * Returns the value expression of the statement, if present.
 	 */
-	@jakarta.annotation.Nullable
+	@Nullable
 	PsiExpression getExpression();
 
 	/**

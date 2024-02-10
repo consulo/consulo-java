@@ -151,7 +151,7 @@ public class InplaceIntroduceParameterPopup extends AbstractJavaInplaceIntroduce
   }
 
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private PsiParameter getParameter() {
     if (!myMethod.isValid()) {
       return null;
@@ -241,7 +241,7 @@ public class InplaceIntroduceParameterPopup extends AbstractJavaInplaceIntroduce
   }
 
   @Override
-  protected void updateTitle(@jakarta.annotation.Nullable PsiVariable variable) {
+  protected void updateTitle(@Nullable PsiVariable variable) {
     if (variable == null) {
       return;
     }

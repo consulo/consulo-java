@@ -53,7 +53,7 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class FieldInColumnsPreFormatProcessor implements PreFormatProcessor {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public TextRange process(@Nonnull ASTNode element, @Nonnull TextRange range) {
     //region Checking that everything is ready to expand the range for the 'fields in columns'.

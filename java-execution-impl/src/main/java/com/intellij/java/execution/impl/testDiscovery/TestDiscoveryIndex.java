@@ -60,7 +60,7 @@ public class TestDiscoveryIndex implements Disposable {
     this(project, TestDiscoveryExtension.baseTestDiscoveryPathForProject(project));
   }
 
-  public TestDiscoveryIndex(final Project project, @jakarta.annotation.Nonnull Path basePath) {
+  public TestDiscoveryIndex(final Project project, @Nonnull Path basePath) {
     if (project.isDefault()) {
       return;
     }
@@ -101,7 +101,7 @@ public class TestDiscoveryIndex implements Disposable {
     return result == Boolean.TRUE;
   }
 
-  public void removeTestTrace(@jakarta.annotation.Nonnull String testName) throws IOException {
+  public void removeTestTrace(@Nonnull String testName) throws IOException {
     myLocalTestRunDataController.withTestDataHolder(localHolder ->
                                                     {
                                                       final int testNameId =
@@ -117,7 +117,7 @@ public class TestDiscoveryIndex implements Disposable {
                                                     });
   }
 
-  public void setRemoteTestRunDataPath(@jakarta.annotation.Nonnull Path path) {
+  public void setRemoteTestRunDataPath(@Nonnull Path path) {
     if (!TestInfoHolder.isValidPath(path)) {
       path = null;
     }
@@ -125,7 +125,7 @@ public class TestDiscoveryIndex implements Disposable {
     // todo: should we remove our local run data ?
   }
 
-  public Collection<String> getTestsByMethodName(@jakarta.annotation.Nonnull String classFQName, @jakarta.annotation.Nonnull String methodName) throws IOException {
+  public Collection<String> getTestsByMethodName(@Nonnull String classFQName, @Nonnull String methodName) throws IOException {
     return myLocalTestRunDataController.withTestDataHolder(new ThrowableFunction<TestInfoHolder, Collection<String>, IOException>() {
       @Override
       public Collection<String> apply(TestInfoHolder localHolder) throws IOException {
@@ -182,7 +182,7 @@ public class TestDiscoveryIndex implements Disposable {
   }
 
 
-  public Collection<String> getTestModulesByMethodName(@jakarta.annotation.Nonnull String classFQName,
+  public Collection<String> getTestModulesByMethodName(@Nonnull String classFQName,
                                                        @Nonnull String methodName,
                                                        String prefix) throws IOException {
     return myLocalTestRunDataController.withTestDataHolder(new ThrowableFunction<TestInfoHolder, Collection<String>, IOException>() {
@@ -262,7 +262,7 @@ public class TestDiscoveryIndex implements Disposable {
       }
     }
 
-    private void thingsWentWrongLetsReinitialize(@jakarta.annotation.Nullable TestInfoHolder holder, Throwable throwable) throws IOException {
+    private void thingsWentWrongLetsReinitialize(@Nullable TestInfoHolder holder, Throwable throwable) throws IOException {
       LOG.error("Unexpected problem", throwable);
       if (holder != null) {
         holder.dispose();
@@ -314,13 +314,13 @@ public class TestDiscoveryIndex implements Disposable {
 
   public void updateFromTestTrace(@Nonnull File file,
                                   @Nullable final String moduleName,
-                                  @jakarta.annotation.Nonnull final String frameworkPrefix) throws IOException {
+                                  @Nonnull final String frameworkPrefix) throws IOException {
     int fileNameDotIndex = file.getName().lastIndexOf('.');
     final String testName = fileNameDotIndex != -1 ? file.getName().substring(0, fileNameDotIndex) : file.getName();
     doUpdateFromTestTrace(file, testName, moduleName != null ? frameworkPrefix + moduleName : null);
   }
 
-  private void doUpdateFromTestTrace(File file, final String testName, @jakarta.annotation.Nullable final String moduleName) throws IOException {
+  private void doUpdateFromTestTrace(File file, final String testName, @Nullable final String moduleName) throws IOException {
     myLocalTestRunDataController.withTestDataHolder(localHolder ->
                                                     {
                                                       final int testNameId = localHolder.myTestNameEnumerator.enumerate(testName);
@@ -382,7 +382,7 @@ public class TestDiscoveryIndex implements Disposable {
                                                     });
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private static IntObjectMap<IntList> loadClassAndMethodsMap(File file, TestInfoHolder holder) throws IOException {
     DataInputStream inputStream = new DataInputStream(new BufferedInputStream(new FileInputStream(file), 64 * 1024));
     byte[] buffer = IOUtil.allocReadWriteUTFBuffer();

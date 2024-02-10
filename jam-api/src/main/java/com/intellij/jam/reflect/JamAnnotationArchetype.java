@@ -46,12 +46,12 @@ public class JamAnnotationArchetype {
     return myAttributes;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public JamAnnotationArchetype getArchetype() {
     return myArchetype;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public JamAttributeMeta<?> findAttribute(@Nullable @NonNls String name) {
     if (name == null) name = "value";
     for (final JamAttributeMeta<?> attribute : myAttributes) {

@@ -19,6 +19,7 @@ import com.intellij.java.language.psi.PsiClass;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.ui.ex.awt.UIUtil;
 
 import jakarta.annotation.Nonnull;
@@ -40,13 +41,13 @@ public class ClassCouplingInspection
   public boolean m_includeLibraryClasses = false;
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "OverlyCoupledClass";
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "overly.coupled.class.display.name");
@@ -94,11 +95,11 @@ public class ClassCouplingInspection
     constraints.fill = GridBagConstraints.NONE;
     panel.add(valueField, constraints);
 
-    final consulo.deadCodeNotWorking.impl.CheckBox arrayCheckBox = new consulo.deadCodeNotWorking.impl.CheckBox(
+    final CheckBox arrayCheckBox = new CheckBox(
       InspectionGadgetsBundle.message(
         "include.java.system.classes.option"), this,
       "m_includeJavaClasses");
-    final consulo.deadCodeNotWorking.impl.CheckBox objectCheckBox = new consulo.deadCodeNotWorking.impl.CheckBox(
+    final CheckBox objectCheckBox = new CheckBox(
       InspectionGadgetsBundle.message(
         "include.library.classes.option"), this,
       "m_includeLibraryClasses");

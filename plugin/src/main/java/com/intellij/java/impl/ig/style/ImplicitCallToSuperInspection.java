@@ -105,7 +105,7 @@ public class ImplicitCallToSuperInspection extends BaseInspection {
   private class ImplicitCallToSuperVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       super.visitMethod(method);
       if (!method.isConstructor()) {
         return;

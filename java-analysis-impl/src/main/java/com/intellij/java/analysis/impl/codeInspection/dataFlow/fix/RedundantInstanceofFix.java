@@ -39,7 +39,7 @@ public class RedundantInstanceofFix implements LocalQuickFix
 	}
 
 	@Override
-	public void applyFix(@jakarta.annotation.Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
+	public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 	{
 		final PsiElement psiElement = descriptor.getPsiElement();
 		if(psiElement instanceof PsiInstanceOfExpression)

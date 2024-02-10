@@ -105,7 +105,7 @@ public class OriginsAnalysis
 	 * @return array, array[i] == true means that the result of a method execution may originate at an i-th instruction
 	 * @throws AnalyzerException
 	 */
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public static boolean[] resultOrigins(Frame<? extends Value>[] frames, InsnList instructions, ControlFlowGraph graph)
 			throws AnalyzerException
 	{

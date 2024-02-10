@@ -61,7 +61,7 @@ abstract class ContractAnalysis extends Analysis<Result>
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	protected Equation analyze() throws AnalyzerException
 	{
 		pendingPush(createStartState());

@@ -58,7 +58,7 @@ public class PsiGenerationInfo<T extends PsiMember> extends GenerationInfoBase i
 	}
 
 	@Override
-	public void insert(@jakarta.annotation.Nonnull final PsiClass aClass, @Nullable PsiElement anchor, boolean before) throws IncorrectOperationException
+	public void insert(@Nonnull final PsiClass aClass, @Nullable PsiElement anchor, boolean before) throws IncorrectOperationException
 	{
 		final PsiMember existingMember;
 		if(myMember instanceof PsiField)

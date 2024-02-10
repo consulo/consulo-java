@@ -53,7 +53,7 @@ public class EmptyClassInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     final Object element = infos[0];
     if (element instanceof PsiAnonymousClass) {
@@ -90,7 +90,7 @@ public class EmptyClassInspection extends BaseInspection {
     return panel;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     final Object info = infos[0];

@@ -61,7 +61,7 @@ public class MethodCallInLoopConditionInspection extends BaseInspection {
   private static class MethodCallInLoopConditionVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitForStatement(@jakarta.annotation.Nonnull PsiForStatement statement) {
+    public void visitForStatement(@Nonnull PsiForStatement statement) {
       super.visitForStatement(statement);
       final PsiExpression condition = statement.getCondition();
       if (condition == null) {
@@ -71,7 +71,7 @@ public class MethodCallInLoopConditionInspection extends BaseInspection {
     }
 
     @Override
-    public void visitWhileStatement(@jakarta.annotation.Nonnull PsiWhileStatement statement) {
+    public void visitWhileStatement(@Nonnull PsiWhileStatement statement) {
       super.visitWhileStatement(statement);
       final PsiExpression condition = statement.getCondition();
       if (condition == null) {

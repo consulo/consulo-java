@@ -66,7 +66,7 @@ public class UnusedSymbolLocalInspectionBase extends BaseJavaLocalInspectionTool
   }
 
   @PsiModifier.ModifierConstant
-  @jakarta.annotation.Nullable
+  @Nullable
   public String getFieldVisibility() {
     if (!FIELD) {
       return null;
@@ -84,7 +84,7 @@ public class UnusedSymbolLocalInspectionBase extends BaseJavaLocalInspectionTool
   }
 
   @PsiModifier.ModifierConstant
-  @jakarta.annotation.Nullable
+  @Nullable
   public String getParameterVisibility() {
     if (!PARAMETER) {
       return null;
@@ -93,7 +93,7 @@ public class UnusedSymbolLocalInspectionBase extends BaseJavaLocalInspectionTool
   }
 
   @PsiModifier.ModifierConstant
-  @jakarta.annotation.Nullable
+  @Nullable
   public String getInnerClassVisibility() {
     if (!INNER_CLASS) {
       return null;
@@ -132,13 +132,13 @@ public class UnusedSymbolLocalInspectionBase extends BaseJavaLocalInspectionTool
 
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getGroupDisplayName() {
     return GroupNames.DECLARATION_REDUNDANCY;
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return DISPLAY_NAME;
   }
@@ -175,7 +175,7 @@ public class UnusedSymbolLocalInspectionBase extends BaseJavaLocalInspectionTool
   }
 
   @Override
-  public void writeSettings(@jakarta.annotation.Nonnull Element node) throws WriteExternalException {
+  public void writeSettings(@Nonnull Element node) throws WriteExternalException {
     writeVisibility(node, myClassVisibility, "klass");
     writeVisibility(node, myInnerClassVisibility, "inner_class");
     writeVisibility(node, myFieldVisibility, "field");

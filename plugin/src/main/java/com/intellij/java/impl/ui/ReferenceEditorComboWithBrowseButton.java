@@ -40,7 +40,7 @@ import java.util.List;
 public class ReferenceEditorComboWithBrowseButton extends ComponentWithBrowseButton<EditorComboBox> implements TextAccessor {
   public ReferenceEditorComboWithBrowseButton(final ActionListener browseActionListener,
                                               final String text,
-                                              @jakarta.annotation.Nonnull final Project project,
+                                              @Nonnull final Project project,
                                               boolean toAcceptClasses, final String recentsKey) {
     this(browseActionListener, text, project, toAcceptClasses, JavaCodeFragment.VisibilityChecker.EVERYTHING_VISIBLE, recentsKey);
   }

@@ -31,7 +31,7 @@ public class JavaSectionArrangementEntry extends JavaElementArrangementEntry imp
       @Nullable ArrangementEntry parent,
       @Nonnull ArrangementSettingsToken type,
       @Nonnull TextRange range,
-      @jakarta.annotation.Nonnull String text,
+      @Nonnull String text,
       boolean canBeMatched) {
     super(parent, range.getStartOffset(), range.getEndOffset(), type, "SECTION", canBeMatched);
     myText = text;

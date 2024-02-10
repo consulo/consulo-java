@@ -53,19 +53,19 @@ import jakarta.annotation.Nullable;
 public class WhileCanBeForeachInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "WhileLoopReplaceableByForEach";
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("while.can.be.foreach.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("while.can.be.foreach.problem.descriptor");
   }
@@ -82,7 +82,7 @@ public class WhileCanBeForeachInspection extends BaseInspection {
 
   private static class WhileCanBeForeachFix extends InspectionGadgetsFix {
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("foreach.replace.quickfix");
     }
@@ -94,7 +94,7 @@ public class WhileCanBeForeachInspection extends BaseInspection {
       replaceWhileWithForEach(whileStatement);
     }
 
-    private static void replaceWhileWithForEach(@jakarta.annotation.Nonnull PsiWhileStatement whileStatement) {
+    private static void replaceWhileWithForEach(@Nonnull PsiWhileStatement whileStatement) {
       final PsiStatement body = whileStatement.getBody();
       if (body == null) {
         return;
@@ -220,7 +220,7 @@ public class WhileCanBeForeachInspection extends BaseInspection {
       return TypeUtils.getObjectType(context);
     }
 
-    private static void replaceIteratorNext(@jakarta.annotation.Nonnull PsiElement element, String contentVariableName, PsiVariable iterator,
+    private static void replaceIteratorNext(@Nonnull PsiElement element, String contentVariableName, PsiVariable iterator,
                                             PsiType contentType, PsiElement childToSkip, StringBuilder out) {
       if (isIteratorNext(element, iterator, contentType)) {
         out.append(contentVariableName);
@@ -314,7 +314,7 @@ public class WhileCanBeForeachInspection extends BaseInspection {
       return iterator.equals(target);
     }
 
-    private static String createNewVariableName(@jakarta.annotation.Nonnull PsiWhileStatement scope, PsiType type, String containerName) {
+    private static String createNewVariableName(@Nonnull PsiWhileStatement scope, PsiType type, String containerName) {
       final Project project = scope.getProject();
       final JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(project);
       @NonNls String baseName;
@@ -337,7 +337,7 @@ public class WhileCanBeForeachInspection extends BaseInspection {
       return codeStyleManager.suggestUniqueVariableName(baseName, scope, true);
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     private static PsiStatement getFirstStatement(@Nonnull PsiStatement body) {
       if (body instanceof PsiBlockStatement) {
         final PsiBlockStatement block = (PsiBlockStatement)body;
@@ -358,7 +358,7 @@ public class WhileCanBeForeachInspection extends BaseInspection {
   private static class WhileCanBeForeachVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitWhileStatement(@jakarta.annotation.Nonnull PsiWhileStatement whileStatement) {
+    public void visitWhileStatement(@Nonnull PsiWhileStatement whileStatement) {
       super.visitWhileStatement(whileStatement);
       if (!PsiUtil.isLanguageLevel5OrHigher(whileStatement)) {
         return;
@@ -501,7 +501,7 @@ public class WhileCanBeForeachInspection extends BaseInspection {
     }
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiStatement getPreviousStatement(PsiElement context) {
     final PsiElement prevStatement = PsiTreeUtil.skipSiblingsBackward(context, PsiWhiteSpace.class, PsiComment.class);
     if (!(prevStatement instanceof PsiStatement)) {
@@ -520,7 +520,7 @@ public class WhileCanBeForeachInspection extends BaseInspection {
     }
 
     @Override
-    public void visitMethodCallExpression(@jakarta.annotation.Nonnull PsiMethodCallExpression callExpression) {
+    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression callExpression) {
       super.visitMethodCallExpression(callExpression);
       final PsiReferenceExpression methodExpression = callExpression.getMethodExpression();
       @NonNls final String methodName = methodExpression.getReferenceName();
@@ -554,14 +554,14 @@ public class WhileCanBeForeachInspection extends BaseInspection {
     }
 
     @Override
-    public void visitElement(@jakarta.annotation.Nonnull PsiElement element) {
+    public void visitElement(@Nonnull PsiElement element) {
       if (!methodCalled) {
         super.visitElement(element);
       }
     }
 
     @Override
-    public void visitMethodCallExpression(@jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
       if (methodCalled) {
         return;
       }
@@ -604,7 +604,7 @@ public class WhileCanBeForeachInspection extends BaseInspection {
     }
 
     @Override
-    public void visitMethodCallExpression(@jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression = expression.getMethodExpression();
       @NonNls final String name = methodExpression.getReferenceName();

@@ -33,7 +33,7 @@ public class SimpleDocTagInfo implements JavadocTagInfo {
   private final boolean myInline;
   private final LanguageLevel myLanguageLevel;
 
-  public SimpleDocTagInfo(@jakarta.annotation.Nonnull String name, @Nonnull LanguageLevel level, boolean isInline, @Nonnull Class... contexts) {
+  public SimpleDocTagInfo(@Nonnull String name, @Nonnull LanguageLevel level, boolean isInline, @Nonnull Class... contexts) {
     myName = name;
     myContexts = contexts;
     myInline = isInline;

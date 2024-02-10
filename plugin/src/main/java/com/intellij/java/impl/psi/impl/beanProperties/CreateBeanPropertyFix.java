@@ -49,7 +49,7 @@ public abstract class CreateBeanPropertyFix implements LocalQuickFix, SyntheticI
   private static final CreateBeanPropertyFix[] NO_FIXES = new CreateBeanPropertyFix[0];
 
   protected final String myPropertyName;
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected final PsiClass myPsiClass;
   @Nonnull
   protected final PsiType myType;
@@ -80,7 +80,7 @@ public abstract class CreateBeanPropertyFix implements LocalQuickFix, SyntheticI
         new CreateBeanPropertyFix(propertyName, psiClass, type) {
 
           @Override
-          @jakarta.annotation.Nonnull
+          @Nonnull
           public String getName() {
             return JavaQuickFixBundle.message("create.readable.writable.property.with.field", myPropertyName);
           }
@@ -114,7 +114,7 @@ public abstract class CreateBeanPropertyFix implements LocalQuickFix, SyntheticI
     };
   }
 
-  protected CreateBeanPropertyFix(String propertyName, @Nonnull PsiClass psiClass, @jakarta.annotation.Nonnull PsiType type) {
+  protected CreateBeanPropertyFix(String propertyName, @Nonnull PsiClass psiClass, @Nonnull PsiType type) {
     myPropertyName = propertyName;
     myPsiClass = psiClass;
     myType = type;
@@ -127,7 +127,7 @@ public abstract class CreateBeanPropertyFix implements LocalQuickFix, SyntheticI
   }
 
   @Override
-  public void applyFix(@jakarta.annotation.Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor) {
+  public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor) {
     applyFix(project);
   }
 
@@ -146,7 +146,7 @@ public abstract class CreateBeanPropertyFix implements LocalQuickFix, SyntheticI
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getText() {
     return getName();
   }

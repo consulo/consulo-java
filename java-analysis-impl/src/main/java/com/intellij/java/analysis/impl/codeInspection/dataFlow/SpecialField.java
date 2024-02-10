@@ -93,7 +93,7 @@ public enum SpecialField implements VariableDescriptor {
 
     @Nonnull
     @Override
-    public DfType fromConstant(@jakarta.annotation.Nullable Object obj) {
+    public DfType fromConstant(@Nullable Object obj) {
       return obj instanceof String ? DfTypes.intValue(((String) obj).length()) : DfTypes.TOP;
     }
   },
@@ -131,7 +131,7 @@ public enum SpecialField implements VariableDescriptor {
 
     @Nonnull
     @Override
-    public DfaValue createValue(@Nonnull DfaValueFactory factory, @jakarta.annotation.Nullable DfaValue qualifier, boolean forAccessor) {
+    public DfaValue createValue(@Nonnull DfaValueFactory factory, @Nullable DfaValue qualifier, boolean forAccessor) {
       if (qualifier instanceof DfaVariableValue) {
         DfaVariableValue var = (DfaVariableValue) qualifier;
         PsiModifierListOwner owner = var.getPsiVariable();
@@ -253,7 +253,7 @@ public enum SpecialField implements VariableDescriptor {
 
   public
   @Nls
-  String getPresentationText(@Nonnull DfType dfType, @jakarta.annotation.Nullable PsiType type) {
+  String getPresentationText(@Nonnull DfType dfType, @Nullable PsiType type) {
     if (getDefaultValue(false).equals(dfType)) {
       return "";
     }
@@ -290,13 +290,13 @@ public enum SpecialField implements VariableDescriptor {
    */
   @Override
   @Nonnull
-  public final DfaValue createValue(@Nonnull DfaValueFactory factory, @jakarta.annotation.Nullable DfaValue qualifier) {
+  public final DfaValue createValue(@Nonnull DfaValueFactory factory, @Nullable DfaValue qualifier) {
     return createValue(factory, qualifier, false);
   }
 
   @Nonnull
   @Override
-  public DfaValue createValue(@Nonnull DfaValueFactory factory, @jakarta.annotation.Nullable DfaValue qualifier, boolean forAccessor) {
+  public DfaValue createValue(@Nonnull DfaValueFactory factory, @Nullable DfaValue qualifier, boolean forAccessor) {
     if (qualifier instanceof DfaVariableValue) {
       DfaVariableValue variableValue = (DfaVariableValue) qualifier;
       PsiModifierListOwner psiVariable = variableValue.getPsiVariable();
@@ -450,7 +450,7 @@ public enum SpecialField implements VariableDescriptor {
    * @param value a qualifier value
    * @return a special field; null if no special field is detected to be related to given qualifier
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   public static SpecialField fromQualifier(@Nonnull DfaValue value) {
     DfReferenceType dfType = ObjectUtil.tryCast(value.getDfType(), DfReferenceType.class);
     if (dfType != null && dfType.getSpecialField() != null) {

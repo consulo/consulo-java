@@ -35,6 +35,6 @@ public interface PsiAssertStatement extends PsiStatement{
    *
    * @return the assert description expression, or null if none has been specified.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiExpression getAssertDescription();
 }

@@ -130,7 +130,7 @@ public class ImplementAbstractMethodHandler {
       }
     };
     myList.setCellRenderer(elementListCellRenderer);
-    final PopupChooserBuilder builder = new consulo.ide.impl.ui.impl.PopupChooserBuilder(myList);
+    final PopupChooserBuilder builder = new PopupChooserBuilder(myList);
     elementListCellRenderer.installSpeedSearch(builder);
 
     JBPopup popup = builder.

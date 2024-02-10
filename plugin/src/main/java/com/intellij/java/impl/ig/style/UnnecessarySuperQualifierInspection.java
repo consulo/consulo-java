@@ -58,7 +58,7 @@ public class UnnecessarySuperQualifierInspection extends BaseInspection {
 
   private static class UnnecessarySuperQualifierFix
     extends InspectionGadgetsFix {
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "unnecessary.super.qualifier.quickfix");

@@ -70,12 +70,12 @@ public class ManifestColorsAndFontsPage implements ColorSettingsPage {
     ADDITIONAL_HIGHLIGHTING.put("parameterSeparator", ManifestColorsAndFonts.PARAMETER_SEPARATOR_KEY);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return "Manifest & Bnd";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public AttributesDescriptor[] getAttributeDescriptors() {
     return ATTRIBUTE_DESCRIPTORS;
   }
@@ -85,12 +85,12 @@ public class ManifestColorsAndFontsPage implements ColorSettingsPage {
     return ADDITIONAL_HIGHLIGHTING;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public ColorDescriptor[] getColorDescriptors() {
     return new ColorDescriptor[0];
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public SyntaxHighlighter getHighlighter() {
     return new ManifestSyntaxHighlighter(ManifestLanguageVersion.Bnd);
   }

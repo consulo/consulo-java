@@ -49,7 +49,7 @@ public class TryWithIdenticalCatchesInspection extends BaseInspection {
     return true;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     final PsiType type = (PsiType)infos[1];
@@ -62,7 +62,7 @@ public class TryWithIdenticalCatchesInspection extends BaseInspection {
   }
 
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("try.with.identical.catches.display.name");

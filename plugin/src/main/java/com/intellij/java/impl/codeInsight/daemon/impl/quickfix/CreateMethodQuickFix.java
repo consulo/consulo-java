@@ -70,8 +70,8 @@ public class CreateMethodQuickFix extends LocalQuickFixAndIntentionActionOnPsiEl
   @Override
   public void invoke(@Nonnull Project project,
                      @Nonnull PsiFile file,
-                     @jakarta.annotation.Nullable Editor editor,
-                     @jakarta.annotation.Nonnull PsiElement startElement,
+                     @Nullable Editor editor,
+                     @Nonnull PsiElement startElement,
                      @Nonnull PsiElement endElement) {
     PsiClass myTargetClass = (PsiClass) startElement;
     if (!FileModificationService.getInstance().preparePsiElementForWrite(myTargetClass.getContainingFile())) return;

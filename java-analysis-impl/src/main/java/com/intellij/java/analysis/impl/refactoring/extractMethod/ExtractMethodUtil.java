@@ -110,7 +110,7 @@ public class ExtractMethodUtil {
     }
   }
 
-  public static void addCastsToEnsureResolveTarget(@Nonnull final PsiMethod oldTarget, @jakarta.annotation.Nonnull final PsiMethodCallExpression call) throws IncorrectOperationException {
+  public static void addCastsToEnsureResolveTarget(@Nonnull final PsiMethod oldTarget, @Nonnull final PsiMethodCallExpression call) throws IncorrectOperationException {
     final PsiMethod newTarget = call.resolveMethod();
     final PsiManager manager = oldTarget.getManager();
     final PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();

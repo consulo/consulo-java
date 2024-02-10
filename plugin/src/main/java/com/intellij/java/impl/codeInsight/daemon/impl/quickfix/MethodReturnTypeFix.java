@@ -87,7 +87,7 @@ public class MethodReturnTypeFix extends LocalQuickFixAndIntentionActionOnPsiEle
   }
 
   @Override
-  public void invoke(@Nonnull Project project, @Nonnull PsiFile file, Editor editor, @jakarta.annotation.Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
+  public void invoke(@Nonnull Project project, @Nonnull PsiFile file, Editor editor, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
     final PsiMethod myMethod = (PsiMethod) startElement;
 
     if (!FileModificationService.getInstance().prepareFileForWrite(myMethod.getContainingFile())) {
@@ -347,7 +347,7 @@ public class MethodReturnTypeFix extends LocalQuickFixAndIntentionActionOnPsiEle
     return false;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static PsiReferenceParameterList findTypeArgumentsList(final PsiClass superClass, final PsiClass derivedClass) {
     PsiReferenceParameterList referenceParameterList = null;
     if (derivedClass instanceof PsiAnonymousClass) {

@@ -39,7 +39,7 @@ import jakarta.annotation.Nullable;
 public class ManualArrayCopyInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "manual.array.copy.display.name");
@@ -51,7 +51,7 @@ public class ManualArrayCopyInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "manual.array.copy.problem.descriptor");
@@ -77,7 +77,7 @@ public class ManualArrayCopyInspection extends BaseInspection {
     }
 
     @Override
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("manual.array.copy.replace.quickfix");
     }
@@ -93,7 +93,7 @@ public class ManualArrayCopyInspection extends BaseInspection {
       replaceStatement(forStatement, newExpression);
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     private String buildSystemArrayCopyText(PsiForStatement forStatement) throws IncorrectOperationException {
       final PsiExpression condition = forStatement.getCondition();
       final PsiBinaryExpression binaryExpression = (PsiBinaryExpression)ParenthesesUtils.stripParentheses(condition);
@@ -181,7 +181,7 @@ public class ManualArrayCopyInspection extends BaseInspection {
       return buffer.toString();
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     private static PsiArrayAccessExpression getLhsArrayAccessExpression(
       PsiForStatement forStatement) {
       PsiStatement body = forStatement.getBody();
@@ -223,7 +223,7 @@ public class ManualArrayCopyInspection extends BaseInspection {
       return (PsiArrayAccessExpression)deparenthesizedExpression;
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     private static PsiArrayAccessExpression getRhsArrayAccessExpression(
       PsiForStatement forStatement) {
       PsiStatement body = forStatement.getBody();
@@ -280,7 +280,7 @@ public class ManualArrayCopyInspection extends BaseInspection {
     }
 
     @NonNls
-    @jakarta.annotation.Nullable
+    @Nullable
     private static String buildLengthText(PsiExpression max, PsiExpression min, boolean plusOne) {
       max = ParenthesesUtils.stripParentheses(max);
       if (max == null) {
@@ -376,7 +376,7 @@ public class ManualArrayCopyInspection extends BaseInspection {
     }
 
     @NonNls
-    @jakarta.annotation.Nullable
+    @Nullable
     private static String buildOffsetText(PsiExpression expression,
                                           PsiLocalVariable variable,
                                           PsiExpression limitExpression,
@@ -450,7 +450,7 @@ public class ManualArrayCopyInspection extends BaseInspection {
 
     @Override
     public void visitForStatement(
-      @jakarta.annotation.Nonnull PsiForStatement statement) {
+      @Nonnull PsiForStatement statement) {
       super.visitForStatement(statement);
       final PsiStatement initialization = statement.getInitialization();
       if (!(initialization instanceof PsiDeclarationStatement)) {
@@ -553,9 +553,9 @@ public class ManualArrayCopyInspection extends BaseInspection {
     }
 
     private static boolean expressionIsArrayCopy(
-      @jakarta.annotation.Nullable PsiExpression expression,
+      @Nullable PsiExpression expression,
       @Nonnull PsiVariable variable,
-      @jakarta.annotation.Nullable PsiVariable variable2) {
+      @Nullable PsiVariable variable2) {
       final PsiExpression strippedExpression =
         ParenthesesUtils.stripParentheses(expression);
       if (strippedExpression == null) {
@@ -606,7 +606,7 @@ public class ManualArrayCopyInspection extends BaseInspection {
     }
 
     private static boolean areExpressionsCopyable(
-      @Nullable PsiExpression lhs, @jakarta.annotation.Nullable PsiExpression rhs) {
+      @Nullable PsiExpression lhs, @Nullable PsiExpression rhs) {
       if (lhs == null || rhs == null) {
         return false;
       }

@@ -31,7 +31,7 @@ import java.util.Set;
 @ExtensionImpl
 public class ClassNameSameAsAncestorNameInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "class.name.same.as.ancestor.name.display.name");

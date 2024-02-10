@@ -20,7 +20,7 @@ public final class JavaAnalysisBundle extends AbstractBundle
 	}
 
 	@Nonnull
-	public static String message(@jakarta.annotation.Nonnull @PropertyKey(resourceBundle = BUNDLE) String key, @Nonnull Object  ...params)
+	public static String message(@Nonnull @PropertyKey(resourceBundle = BUNDLE) String key, @Nonnull Object  ...params)
 	{
 		return INSTANCE.getMessage(key, params);
 	}

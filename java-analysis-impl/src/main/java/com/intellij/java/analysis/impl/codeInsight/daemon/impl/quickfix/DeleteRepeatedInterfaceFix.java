@@ -39,14 +39,14 @@ public class DeleteRepeatedInterfaceFix implements SyntheticIntentionAction {
     myConjList = conjList;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getText() {
     return "Delete repeated '" + myConjunct.getText() + "'";
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     for (PsiTypeElement element : myConjList) {
       if (!element.isValid()) {
         return false;

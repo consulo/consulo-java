@@ -29,7 +29,7 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class NonFinalCloneInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("non.final.clone.display.name");
   }
@@ -47,7 +47,7 @@ public class NonFinalCloneInspection extends BaseInspection {
   private static class NonFinalCloneVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       super.visitMethod(method);
       final String name = method.getName();
       if (!HardcodedMethodConstants.CLONE.equals(name)) {

@@ -44,7 +44,7 @@ public class JavaFindUsagesProvider implements FindUsagesProvider {
   public static final String DEFAULT_PACKAGE_NAME = UsageViewBundle.message("default.package.presentable.name");
 
   @Override
-  public boolean canFindUsagesFor(@jakarta.annotation.Nonnull PsiElement element) {
+  public boolean canFindUsagesFor(@Nonnull PsiElement element) {
     if (element instanceof PsiDirectory) {
       PsiPackage psiPackage = JavaDirectoryService.getInstance().getPackage((PsiDirectory) element);
       return psiPackage != null && psiPackage.getQualifiedName().length() != 0;
@@ -77,8 +77,8 @@ public class JavaFindUsagesProvider implements FindUsagesProvider {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
-  public String getType(@jakarta.annotation.Nonnull PsiElement element) {
+  @Nonnull
+  public String getType(@Nonnull PsiElement element) {
     if (element instanceof PsiDirectory) {
       return LangBundle.message("terms.directory");
     }
@@ -138,8 +138,8 @@ public class JavaFindUsagesProvider implements FindUsagesProvider {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
-  public String getDescriptiveName(@jakarta.annotation.Nonnull final PsiElement element) {
+  @Nonnull
+  public String getDescriptiveName(@Nonnull final PsiElement element) {
     if (ThrowSearchUtil.isSearchable(element)) {
       return ThrowSearchUtil.getSearchableTypeName(element);
     }
@@ -351,7 +351,7 @@ public class JavaFindUsagesProvider implements FindUsagesProvider {
     return null;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

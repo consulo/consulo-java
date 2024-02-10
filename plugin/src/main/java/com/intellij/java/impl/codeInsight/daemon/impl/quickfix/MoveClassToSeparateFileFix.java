@@ -44,13 +44,13 @@ public class MoveClassToSeparateFileFix implements SyntheticIntentionAction {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getText() {
     return JavaQuickFixBundle.message("move.class.to.separate.file.text", myClass.getName());
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, @Nullable Editor editor, @jakarta.annotation.Nonnull PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, @Nullable Editor editor, @Nonnull PsiFile file) {
     if  (!myClass.isValid() || !myClass.getManager().isInProject(myClass)) return false;
     PsiDirectory dir = file.getContainingDirectory();
     if (dir == null) return false;
@@ -65,7 +65,7 @@ public class MoveClassToSeparateFileFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, @Nullable Editor editor, @jakarta.annotation.Nonnull PsiFile file) {
+  public void invoke(@Nonnull Project project, @Nullable Editor editor, @Nonnull PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(myClass.getContainingFile())) return;
 
     PsiDirectory dir = file.getContainingDirectory();

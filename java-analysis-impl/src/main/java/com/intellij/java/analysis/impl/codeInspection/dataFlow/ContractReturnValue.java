@@ -47,7 +47,7 @@ public abstract class ContractReturnValue
 					.message("contract.return.validator.return.type.must.be.boolean");
 
 	private final
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	String myName;
 	private final int myOrdinal;
 
@@ -232,7 +232,7 @@ public abstract class ContractReturnValue
 	 * @return a ContractReturnValue object. Returns an object which represents any possible value if the supplied ordinal does not
 	 * correspond to any valid ContractReturnValue.
 	 */
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public static ContractReturnValue valueOf(int ordinal)
 	{
 		switch(ordinal)

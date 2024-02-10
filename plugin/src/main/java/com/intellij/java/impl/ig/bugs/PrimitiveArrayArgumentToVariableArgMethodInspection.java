@@ -29,13 +29,13 @@ import consulo.annotation.component.ExtensionImpl;
 public class PrimitiveArrayArgumentToVariableArgMethodInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("primitive.array.argument.to.var.arg.method.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("primitive.array.argument.to.var.arg.method.problem.descriptor");
   }

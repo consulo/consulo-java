@@ -35,7 +35,7 @@ public class SynchronizeOnLockInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "synchronize.on.lock.display.name");
@@ -59,7 +59,7 @@ public class SynchronizeOnLockInspection extends BaseInspection {
 
     @Override
     public void visitSynchronizedStatement(
-      @jakarta.annotation.Nonnull PsiSynchronizedStatement statement) {
+      @Nonnull PsiSynchronizedStatement statement) {
       super.visitSynchronizedStatement(statement);
       final PsiExpression lockExpression = statement.getLockExpression();
       if (lockExpression == null) {

@@ -36,7 +36,7 @@ import jakarta.annotation.Nonnull;
 @IntentionMetaData(ignoreId = "java.RemoveLiteralUnderscoresAction", categories = {"Java", "Numbers"}, fileExtensions = "java")
 public class RemoveLiteralUnderscoresAction extends PsiElementBaseIntentionAction {
   @Override
-  public boolean isAvailable(@Nonnull final Project project, final Editor editor, @jakarta.annotation.Nonnull final PsiElement element) {
+  public boolean isAvailable(@Nonnull final Project project, final Editor editor, @Nonnull final PsiElement element) {
     final PsiLiteralExpression literalExpression = PsiTreeUtil.getParentOfType(element, PsiLiteralExpression.class, false);
     if (literalExpression == null) return false;
 
@@ -61,7 +61,7 @@ public class RemoveLiteralUnderscoresAction extends PsiElementBaseIntentionActio
     literalExpression.replace(replacement);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getText() {
     return CodeInsightBundle.message("intention.remove.literal.underscores");

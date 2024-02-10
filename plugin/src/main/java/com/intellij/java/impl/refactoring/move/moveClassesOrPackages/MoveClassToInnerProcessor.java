@@ -71,7 +71,7 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
 
   public MoveClassToInnerProcessor(Project project,
                                    final PsiClass[] classesToMove,
-                                   @jakarta.annotation.Nonnull final PsiClass targetClass,
+                                   @Nonnull final PsiClass targetClass,
                                    boolean searchInComments,
                                    boolean searchInNonJavaFiles,
                                    MoveCallback moveCallback) {
@@ -95,12 +95,12 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
     }
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
     return new MoveMultipleElementsViewDescriptor(myClassesToMove, myTargetClass.getQualifiedName());
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public UsageInfo[] findUsages() {
     final List<UsageInfo> usages = new ArrayList<UsageInfo>();
     for (PsiClass classToMove : myClassesToMove) {
@@ -237,7 +237,7 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
         myTargetClass.getQualifiedName());
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected Collection<? extends PsiElement> getElementsToWrite(@Nonnull final UsageViewDescriptor descriptor) {
     List<PsiElement> result = new ArrayList<PsiElement>();
     result.addAll(super.getElementsToWrite(descriptor));

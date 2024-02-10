@@ -68,6 +68,6 @@ public interface JvmMethod extends JvmTypeParametersOwner {
    * @see Method#getGenericExceptionTypes
    * @see Method#getAnnotatedExceptionTypes
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   JvmReferenceType[] getThrowsTypes();
 }

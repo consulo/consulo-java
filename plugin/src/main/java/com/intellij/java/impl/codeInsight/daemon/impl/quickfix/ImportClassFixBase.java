@@ -60,18 +60,18 @@ import java.util.regex.PatternSyntaxException;
  * @author peter
  */
 public abstract class ImportClassFixBase<T extends PsiElement, R extends PsiReference> implements HintAction, HighPriorityAction, SyntheticIntentionAction {
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private final T myElement;
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private final R myRef;
 
-  protected ImportClassFixBase(@Nonnull T elem, @jakarta.annotation.Nonnull R ref) {
+  protected ImportClassFixBase(@Nonnull T elem, @Nonnull R ref) {
     myElement = elem;
     myRef = ref;
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, @jakarta.annotation.Nonnull PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiFile file) {
     if (!myElement.isValid()) {
       return false;
     }
@@ -93,18 +93,18 @@ public abstract class ImportClassFixBase<T extends PsiElement, R extends PsiRefe
   }
 
   @Nullable
-  protected abstract String getReferenceName(@jakarta.annotation.Nonnull R reference);
+  protected abstract String getReferenceName(@Nonnull R reference);
 
-  protected abstract PsiElement getReferenceNameElement(@jakarta.annotation.Nonnull R reference);
+  protected abstract PsiElement getReferenceNameElement(@Nonnull R reference);
 
-  protected abstract boolean hasTypeParameters(@jakarta.annotation.Nonnull R reference);
+  protected abstract boolean hasTypeParameters(@Nonnull R reference);
 
   @Nonnull
   public List<PsiClass> getClassesToImport() {
     return getClassesToImport(false);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public List<PsiClass> getClassesToImport(boolean acceptWrongNumberOfTypeParams) {
     if (myRef instanceof PsiJavaReference) {
       JavaResolveResult result = ((PsiJavaReference)myRef).advancedResolve(true);
@@ -231,7 +231,7 @@ public abstract class ImportClassFixBase<T extends PsiElement, R extends PsiRefe
     return classList;
   }
 
-  private void filterAlreadyImportedButUnresolved(@jakarta.annotation.Nonnull List<PsiClass> list) {
+  private void filterAlreadyImportedButUnresolved(@Nonnull List<PsiClass> list) {
     PsiElement element = myRef.getElement();
     PsiFile containingFile = element == null ? null : element.getContainingFile();
     if (!(containingFile instanceof PsiJavaFile)) {
@@ -264,8 +264,8 @@ public abstract class ImportClassFixBase<T extends PsiElement, R extends PsiRefe
     return null;
   }
 
-  @jakarta.annotation.Nonnull
-  protected List<PsiClass> filterByContext(@jakarta.annotation.Nonnull List<PsiClass> candidates, @jakarta.annotation.Nonnull T ref) {
+  @Nonnull
+  protected List<PsiClass> filterByContext(@Nonnull List<PsiClass> candidates, @Nonnull T ref) {
     return candidates;
   }
 
@@ -315,7 +315,7 @@ public abstract class ImportClassFixBase<T extends PsiElement, R extends PsiRefe
     POPUP_NOT_SHOWN
   }
 
-  public Result doFix(@jakarta.annotation.Nonnull final Editor editor, boolean allowPopup, final boolean allowCaretNearRef) {
+  public Result doFix(@Nonnull final Editor editor, boolean allowPopup, final boolean allowCaretNearRef) {
     List<PsiClass> classesToImport = getClassesToImport();
     if (classesToImport.isEmpty()) {
       return Result.POPUP_NOT_SHOWN;
@@ -368,7 +368,7 @@ public abstract class ImportClassFixBase<T extends PsiElement, R extends PsiRefe
     return Result.POPUP_NOT_SHOWN;
   }
 
-  public static boolean isAddUnambiguousImportsOnTheFlyEnabled(@jakarta.annotation.Nonnull PsiFile psiFile) {
+  public static boolean isAddUnambiguousImportsOnTheFlyEnabled(@Nonnull PsiFile psiFile) {
     return/* FileTypeUtils.isInServerPageFile(psiFile) ? CodeInsightSettings.getInstance().JSP_ADD_UNAMBIGIOUS_IMPORTS_ON_THE_FLY :*/ CodeInsightSettings
       .getInstance()
       .ADD_UNAMBIGIOUS_IMPORTS_ON_THE_FLY;
@@ -395,7 +395,7 @@ public abstract class ImportClassFixBase<T extends PsiElement, R extends PsiRefe
   protected abstract boolean isQualified(R reference);
 
   @Override
-  public boolean showHint(@jakarta.annotation.Nonnull final Editor editor) {
+  public boolean showHint(@Nonnull final Editor editor) {
     if (isQualified(myRef)) {
       return false;
     }
@@ -435,7 +435,7 @@ public abstract class ImportClassFixBase<T extends PsiElement, R extends PsiRefe
     }
   }
 
-  private boolean isCaretNearRef(@jakarta.annotation.Nonnull Editor editor, @jakarta.annotation.Nonnull R ref) {
+  private boolean isCaretNearRef(@Nonnull Editor editor, @Nonnull R ref) {
     PsiElement nameElement = getReferenceNameElement(ref);
     if (nameElement == null) {
       return false;

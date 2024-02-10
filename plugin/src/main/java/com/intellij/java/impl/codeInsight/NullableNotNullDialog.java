@@ -26,11 +26,11 @@ public class NullableNotNullDialog extends DialogWrapper {
   private final AnnotationsPanel myNotNullPanel;
   private final boolean myShowInstrumentationOptions;
 
-  public NullableNotNullDialog(@jakarta.annotation.Nonnull Project project) {
+  public NullableNotNullDialog(@Nonnull Project project) {
     this(project, false);
   }
 
-  private NullableNotNullDialog(@jakarta.annotation.Nonnull Project project, boolean showInstrumentationOptions) {
+  private NullableNotNullDialog(@Nonnull Project project, boolean showInstrumentationOptions) {
     super(project, true);
     myProject = project;
     myShowInstrumentationOptions = showInstrumentationOptions;
@@ -51,7 +51,7 @@ public class NullableNotNullDialog extends DialogWrapper {
     setTitle("Nullable/NotNull Configuration");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static Button createConfigureAnnotationsButton() {
     Button button = Button.create(LocalizeValue.localizeTODO("Configure annotations"));
     button.addClickListener(clickEvent -> showDialog(TargetAWT.to(clickEvent.getComponent()), false));

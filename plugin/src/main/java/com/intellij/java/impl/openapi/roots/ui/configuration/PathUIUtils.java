@@ -18,6 +18,7 @@ package com.intellij.java.impl.openapi.roots.ui.configuration;
 import consulo.content.library.OrderRoot;
 import consulo.content.library.ui.LibraryRootsDetector;
 import consulo.ide.impl.idea.openapi.roots.libraries.ui.impl.RootDetectionUtil;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
 import consulo.java.impl.library.JavaSourceRootDetector;
 import consulo.virtualFileSystem.VirtualFile;
 
@@ -56,6 +57,6 @@ public class PathUIUtils
 		{
 			result.add(root.getFile());
 		}
-		return consulo.ide.impl.idea.openapi.vfs.VfsUtil.toVirtualFileArray(result);
+		return VfsUtil.toVirtualFileArray(result);
 	}
 }

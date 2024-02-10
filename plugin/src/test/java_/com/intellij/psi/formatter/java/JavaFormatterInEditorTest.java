@@ -48,7 +48,7 @@ public abstract class JavaFormatterInEditorTest extends LightPlatformCodeInsight
     );
   }
   
-  public void doTest(@Nonnull String before, @jakarta.annotation.Nonnull String after) throws IOException {
+  public void doTest(@Nonnull String before, @Nonnull String after) throws IOException {
     configureFromFileText(getTestName(false) + ".java", before);
     CodeStyleManager.getInstance(getProject()).reformatText(getFile(), 0, getEditor().getDocument().getTextLength());
     checkResultByText(after);

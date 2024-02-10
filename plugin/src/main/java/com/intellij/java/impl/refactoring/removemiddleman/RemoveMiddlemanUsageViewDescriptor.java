@@ -26,7 +26,7 @@ class RemoveMiddlemanUsageViewDescriptor implements UsageViewDescriptor {
   private @Nonnull
   final PsiField field;
 
-  RemoveMiddlemanUsageViewDescriptor(@jakarta.annotation.Nonnull PsiField field) {
+  RemoveMiddlemanUsageViewDescriptor(@Nonnull PsiField field) {
     super();
     this.field = field;
   }

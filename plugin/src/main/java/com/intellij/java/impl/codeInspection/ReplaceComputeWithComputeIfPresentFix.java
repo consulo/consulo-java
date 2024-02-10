@@ -28,7 +28,7 @@ public class ReplaceComputeWithComputeIfPresentFix implements LocalQuickFix, Hig
   }
 
   @Override
-  public void applyFix(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull ProblemDescriptor descriptor) {
+  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
     PsiLambdaExpression lambda = PsiTreeUtil.getParentOfType(descriptor.getStartElement(), PsiLambdaExpression.class);
     if (lambda == null) {
       return;

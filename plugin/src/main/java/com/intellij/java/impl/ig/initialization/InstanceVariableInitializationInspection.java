@@ -55,7 +55,7 @@ public class InstanceVariableInitializationInspection extends BaseInspection {
     return "InstanceVariableMayNotBeInitialized";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "instance.variable.may.not.be.initialized.display.name");
@@ -90,7 +90,7 @@ public class InstanceVariableInitializationInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@jakarta.annotation.Nonnull PsiField field) {
+    public void visitField(@Nonnull PsiField field) {
       if (field.hasModifierProperty(PsiModifier.STATIC) ||
           field.hasModifierProperty(PsiModifier.FINAL)) {
         return;
@@ -158,7 +158,7 @@ public class InstanceVariableInitializationInspection extends BaseInspection {
     }
 
     @Nullable
-    private PsiMethod getSetupMethod(@jakarta.annotation.Nonnull PsiClass aClass) {
+    private PsiMethod getSetupMethod(@Nonnull PsiClass aClass) {
       final PsiMethod[] methods =
         aClass.findMethodsByName("setUp", false);
       for (PsiMethod method : methods) {
@@ -177,7 +177,7 @@ public class InstanceVariableInitializationInspection extends BaseInspection {
       return null;
     }
 
-    private boolean isInitializedInInitializer(@jakarta.annotation.Nonnull PsiField field) {
+    private boolean isInitializedInInitializer(@Nonnull PsiField field) {
       final PsiClass aClass = field.getContainingClass();
       if (aClass == null) {
         return false;

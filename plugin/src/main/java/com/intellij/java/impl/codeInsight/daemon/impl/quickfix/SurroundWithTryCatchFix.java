@@ -59,7 +59,7 @@ public class SurroundWithTryCatchFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return myStatement != null &&
            myStatement.isValid() &&
            (!(myStatement instanceof PsiExpressionStatement) ||

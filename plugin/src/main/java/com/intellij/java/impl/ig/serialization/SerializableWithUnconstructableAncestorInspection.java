@@ -60,7 +60,7 @@ public class SerializableWithUnconstructableAncestorInspection extends BaseInspe
   private static class SerializableWithUnconstructableAncestorVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       if (aClass.isInterface() || aClass.isAnnotationType()) {
         return;
       }

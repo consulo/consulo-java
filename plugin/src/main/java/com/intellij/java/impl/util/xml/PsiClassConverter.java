@@ -51,7 +51,7 @@ public class PsiClassConverter extends Converter<PsiClass> implements CustomRefe
     return t == null ? null : t.getQualifiedName();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiReference[] createReferences(GenericDomValue<PsiClass> genericDomValue, PsiElement element, ConvertContext context) {
 
     ExtendClass extendClass = genericDomValue.getAnnotation(ExtendClass.class);
@@ -109,7 +109,7 @@ public class PsiClassConverter extends Converter<PsiClass> implements CustomRefe
     return provider;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   protected GlobalSearchScope getScope(@Nonnull ConvertContext context) {
     return context.getSearchScope();
   }

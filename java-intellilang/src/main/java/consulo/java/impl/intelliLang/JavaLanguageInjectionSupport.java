@@ -88,7 +88,7 @@ public class JavaLanguageInjectionSupport extends AbstractLanguageInjectionSuppo
     return JAVA_SUPPORT_ID;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public Class[] getPatternClasses() {
     return new Class[] { PsiJavaPatterns.class };
   }
@@ -266,7 +266,7 @@ public class JavaLanguageInjectionSupport extends AbstractLanguageInjectionSuppo
   public static boolean doInjectInJavaMethod(@Nonnull final Project project,
                                              @Nullable final PsiMethod psiMethod,
                                              final int parameterIndex,
-                                             @jakarta.annotation.Nonnull PsiLanguageInjectionHost host, @Nonnull final String languageId) {
+                                             @Nonnull PsiLanguageInjectionHost host, @Nonnull final String languageId) {
     if (psiMethod == null) return false;
     if (parameterIndex < -1) return false;
     if (parameterIndex >= psiMethod.getParameterList().getParametersCount()) return false;
@@ -306,7 +306,7 @@ public class JavaLanguageInjectionSupport extends AbstractLanguageInjectionSuppo
     return idx < 0? -2 : idx;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   static PsiMethod findPsiMethod(final PsiElement parent) {
     if (parent instanceof PsiNameValuePair) {
       final PsiAnnotation annotation = PsiTreeUtil.getParentOfType(parent, PsiAnnotation.class);

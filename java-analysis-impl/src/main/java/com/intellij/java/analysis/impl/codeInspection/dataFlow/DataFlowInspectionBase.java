@@ -63,8 +63,8 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
 	private static final String SHORT_NAME = "ConstantConditions";
 
 	@Override
-	@jakarta.annotation.Nonnull
-	public PsiElementVisitor buildVisitorImpl(@jakarta.annotation.Nonnull ProblemsHolder holder,
+	@Nonnull
+	public PsiElementVisitor buildVisitorImpl(@Nonnull ProblemsHolder holder,
 											  boolean isOnTheFly,
 											  LocalInspectionToolSession session,
 											  DataFlowInspectionStateBase state)
@@ -278,7 +278,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
 	}
 
 	protected
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	List<LocalQuickFix> createCastFixes(PsiTypeCastExpression castExpression,
 										PsiType realType,
 										boolean onTheFly,
@@ -287,7 +287,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
 		return Collections.emptyList();
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	protected List<LocalQuickFix> createNPEFixes(PsiExpression qualifier, PsiExpression expression, boolean onTheFly, DataFlowInspectionStateBase state)
 	{
 		return Collections.emptyList();
@@ -490,7 +490,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
 		});
 	}
 
-	private static boolean isCondition(@jakarta.annotation.Nonnull PsiExpression expression)
+	private static boolean isCondition(@Nonnull PsiExpression expression)
 	{
 		PsiType type = expression.getType();
 		if(type == null || !PsiType.BOOLEAN.isAssignableFrom(type))
@@ -896,7 +896,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
 	}
 
 	private static
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	String getContractMessage(List<? extends MethodContract> contracts)
 	{
 		if(contracts.stream().allMatch(mc -> mc.getConditions().stream().allMatch(ContractValue::isBoundCheckingCondition)))
@@ -908,7 +908,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
 
 	private static
 	@Nonnull
-	PsiElement getElementToHighlight(@jakarta.annotation.Nonnull PsiCall call)
+	PsiElement getElementToHighlight(@Nonnull PsiCall call)
 	{
 		PsiJavaCodeReferenceElement ref;
 		if(call instanceof PsiNewExpression)
@@ -1004,9 +1004,9 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
 		reporter.registerProblem(toHighlight, message, fixes.toArray(LocalQuickFix.EMPTY_ARRAY));
 	}
 
-	private void reportFailingCasts(@jakarta.annotation.Nonnull ProblemReporter reporter,
+	private void reportFailingCasts(@Nonnull ProblemReporter reporter,
                                   @Nonnull DataFlowInstructionVisitor visitor,
-                                  @jakarta.annotation.Nonnull Map<PsiExpression, ConstantResult> constantExpressions, DataFlowInspectionStateBase state)
+                                  @Nonnull Map<PsiExpression, ConstantResult> constantExpressions, DataFlowInspectionStateBase state)
 	{
 		visitor.getFailingCastExpressions().forKeyValue((typeCast, info) -> {
 			boolean alwaysFails = info.getFirst();
@@ -1267,7 +1267,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
 	private void reportNullableReturns(ProblemReporter reporter,
                                      List<NullabilityProblem<?>> problems,
                                      Map<PsiExpression, ConstantResult> expressions,
-                                     @jakarta.annotation.Nonnull PsiElement block, DataFlowInspectionStateBase state)
+                                     @Nonnull PsiElement block, DataFlowInspectionStateBase state)
 	{
 		final PsiMethod method = getScopeMethod(block);
 		if(method == null)
@@ -1348,7 +1348,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
 		}
 	}
 
-	private static boolean isAssertionEffectively(@jakarta.annotation.Nonnull PsiElement anchor, ConstantResult result)
+	private static boolean isAssertionEffectively(@Nonnull PsiElement anchor, ConstantResult result)
 	{
 		Object value = result.value();
 		if(value instanceof Boolean)
@@ -1362,7 +1362,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
 		return isAssertCallArgument(anchor, ContractValue.nullValue());
 	}
 
-	private static boolean isAssertionEffectively(@jakarta.annotation.Nonnull PsiElement anchor, boolean evaluatesToTrue)
+	private static boolean isAssertionEffectively(@Nonnull PsiElement anchor, boolean evaluatesToTrue)
 	{
 		PsiElement parent;
 		while(true)
@@ -1416,7 +1416,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
 		return isAssertCallArgument(anchor, ContractValue.booleanValue(evaluatesToTrue));
 	}
 
-	private static boolean isAssertCallArgument(@jakarta.annotation.Nonnull PsiElement anchor, @jakarta.annotation.Nonnull ContractValue wantedConstraint)
+	private static boolean isAssertCallArgument(@Nonnull PsiElement anchor, @Nonnull ContractValue wantedConstraint)
 	{
 		PsiElement parent = PsiUtil.skipParenthesizedExprUp(anchor.getParent());
 		if(parent instanceof PsiExpressionList)
@@ -1550,14 +1550,14 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
 		{
 			@Override
 			public
-			@jakarta.annotation.Nonnull
+			@Nonnull
 			String getName()
 			{
 				return text;
 			}
 
 			@Override
-			public void applyFix(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull ProblemDescriptor descriptor)
+			public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 			{
 				final PsiElement psiElement = descriptor.getPsiElement();
 				if(psiElement == null)
@@ -1582,7 +1582,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
 
 			@Override
 			public
-			@jakarta.annotation.Nonnull
+			@Nonnull
 			String getFamilyName()
 			{
 				return JavaAnalysisBundle.message("inspection.data.flow.simplify.boolean.expression.quickfix");
@@ -1591,7 +1591,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
 	}
 
 	protected static
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	LocalQuickFix createSimplifyToAssignmentFix()
 	{
 		return new SimplifyToAssignmentFix();
@@ -1604,7 +1604,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
 
 	@Override
 	public
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	String getGroupDisplayName()
 	{
 		return InspectionsBundle.message("group.names.probable.bugs");
@@ -1612,7 +1612,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
 
 	@Override
 	public
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	String getShortName()
 	{
 		return SHORT_NAME;
@@ -1628,7 +1628,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
 
 		@Override
 		public
-		@jakarta.annotation.Nonnull
+		@Nonnull
 		String toString()
 		{
 			return this == ZERO ? "0" : StringUtil.toLowerCase(name());
@@ -1652,8 +1652,8 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
 		}
 
 		static
-		@jakarta.annotation.Nonnull
-		ConstantResult fromDfType(@jakarta.annotation.Nonnull DfType dfType)
+		@Nonnull
+		ConstantResult fromDfType(@Nonnull DfType dfType)
 		{
 			if(dfType == DfTypes.NULL)
 			{
@@ -1675,8 +1675,8 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
 		}
 
 		static
-		@jakarta.annotation.Nonnull
-		ConstantResult mergeValue(@jakarta.annotation.Nullable ConstantResult state, @Nonnull DfaMemoryState memState, @jakarta.annotation.Nullable DfaValue value)
+		@Nonnull
+		ConstantResult mergeValue(@Nullable ConstantResult state, @Nonnull DfaMemoryState memState, @Nullable DfaValue value)
 		{
 			if(state == UNKNOWN || value == null)
 			{

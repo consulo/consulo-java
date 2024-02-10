@@ -83,7 +83,7 @@ public class CreateMethodFromMethodReferenceFix extends CreateFromUsageBaseFix {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected List<PsiClass> getTargetClasses(PsiElement element) {
     List<PsiClass> targets = super.getTargetClasses(element);
     PsiMethodReferenceExpression call = getMethodReference();

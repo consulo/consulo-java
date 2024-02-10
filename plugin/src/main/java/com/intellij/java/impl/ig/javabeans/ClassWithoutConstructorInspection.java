@@ -54,7 +54,7 @@ public class ClassWithoutConstructorInspection extends BaseInspection {
   private static class ClassWithoutConstructorFix
     extends InspectionGadgetsFix {
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "class.without.constructor.create.quickfix");
@@ -103,7 +103,7 @@ public class ClassWithoutConstructorInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       // no call to super, so it doesn't drill down
       if (aClass.isInterface() || aClass.isEnum() ||
           aClass.isAnnotationType() /*|| JspPsiUtil.isInJspFile(aClass)*/) {

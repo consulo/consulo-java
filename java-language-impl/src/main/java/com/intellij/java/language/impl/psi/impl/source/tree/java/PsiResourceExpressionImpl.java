@@ -32,7 +32,7 @@ public class PsiResourceExpressionImpl extends CompositePsiElement implements Ps
 		super(JavaElementType.RESOURCE_EXPRESSION);
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public PsiExpression getExpression()
 	{

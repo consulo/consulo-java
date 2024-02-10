@@ -50,7 +50,7 @@ public abstract class EvalInstruction extends ExpressionPushingInstruction<PsiEx
 	 */
 	public abstract
 	@Nonnull
-	DfaValue eval(@jakarta.annotation.Nonnull DfaValueFactory factory,
+	DfaValue eval(@Nonnull DfaValueFactory factory,
 				  @Nonnull DfaMemoryState state,
-				  @jakarta.annotation.Nonnull DfaValue  ... arguments);
+				  @Nonnull DfaValue  ... arguments);
 }

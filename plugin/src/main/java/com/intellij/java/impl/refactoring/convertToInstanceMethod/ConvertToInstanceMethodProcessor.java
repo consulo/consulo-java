@@ -99,7 +99,7 @@ public class ConvertToInstanceMethodProcessor extends BaseRefactoringProcessor {
     myTargetClass = (PsiClass) elements[2];
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected UsageInfo[] findUsages() {
     LOG.assertTrue(myTargetParameter.getDeclarationScope() == myMethod);
     final Project project = myMethod.getProject();

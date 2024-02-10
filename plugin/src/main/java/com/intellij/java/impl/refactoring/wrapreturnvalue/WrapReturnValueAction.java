@@ -28,7 +28,7 @@ import consulo.language.editor.refactoring.action.BaseRefactoringAction;
 
 public class WrapReturnValueAction extends BaseRefactoringAction{
 
-  protected RefactoringActionHandler getHandler(@jakarta.annotation.Nonnull DataContext context){
+  protected RefactoringActionHandler getHandler(@Nonnull DataContext context){
         return new WrapReturnValueHandler();
     }
 
@@ -37,7 +37,7 @@ public class WrapReturnValueAction extends BaseRefactoringAction{
   }
 
   @Override
-  protected boolean isAvailableOnElementInEditorAndFile(@Nonnull PsiElement element, @Nonnull Editor editor, @jakarta.annotation.Nonnull PsiFile file, @jakarta.annotation.Nonnull DataContext context) {
+  protected boolean isAvailableOnElementInEditorAndFile(@Nonnull PsiElement element, @Nonnull Editor editor, @Nonnull PsiFile file, @Nonnull DataContext context) {
     final PsiMethod psiMethod = PsiTreeUtil.getParentOfType(element, PsiMethod.class, false);
     if (psiMethod != null && !(psiMethod instanceof PsiCompiledElement)) {
       final PsiType returnType = psiMethod.getReturnType();
@@ -46,7 +46,7 @@ public class WrapReturnValueAction extends BaseRefactoringAction{
     return false;
   }
 
-  public boolean isEnabledOnElements(@jakarta.annotation.Nonnull PsiElement[] elements) {
+  public boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
     if (elements.length != 1) {
         return false;
     }

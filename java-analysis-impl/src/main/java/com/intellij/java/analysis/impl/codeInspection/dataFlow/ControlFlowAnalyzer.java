@@ -74,7 +74,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
    *                     If PsiClass then class initializers + field initializers will be analyzed
    * @param inlining     if true inlining is performed for known method calls
    */
-  ControlFlowAnalyzer(final DfaValueFactory valueFactory, @jakarta.annotation.Nonnull PsiElement codeFragment, boolean inlining) {
+  ControlFlowAnalyzer(final DfaValueFactory valueFactory, @Nonnull PsiElement codeFragment, boolean inlining) {
     myInlining = inlining;
     myFactory = valueFactory;
     myCodeFragment = codeFragment;
@@ -107,7 +107,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
   }
 
   public
-  @jakarta.annotation.Nullable
+  @Nullable
   ControlFlow buildControlFlow() {
     myCurrentFlow = new ControlFlow(myFactory);
     try {
@@ -138,7 +138,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
   }
 
   private
-  @jakarta.annotation.Nonnull
+  @Nonnull
   PsiClassType createClassType(GlobalSearchScope scope, String fqn) {
     PsiClass aClass = JavaPsiFacade.getInstance(myProject).findClass(fqn, scope);
     if (aClass != null) {
@@ -201,7 +201,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
   }
 
   @Override
-  public void visitErrorElement(@jakarta.annotation.Nonnull PsiErrorElement element) {
+  public void visitErrorElement(@Nonnull PsiErrorElement element) {
     throw new CannotAnalyzeException();
   }
 
@@ -415,11 +415,11 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
     finishElement(statement);
   }
 
-  void addNullCheck(@jakarta.annotation.Nonnull PsiExpression expression) {
+  void addNullCheck(@Nonnull PsiExpression expression) {
     addNullCheck(NullabilityProblemKind.fromContext(expression, myCustomNullabilityProblems));
   }
 
-  void addNullCheck(@jakarta.annotation.Nullable NullabilityProblemKind.NullabilityProblem<?> problem) {
+  void addNullCheck(@Nullable NullabilityProblemKind.NullabilityProblem<?> problem) {
     if (problem != null) {
       DfaControlTransferValue transfer = shouldHandleException() && problem.thrownException() != null
           ? myFactory.controlTransfer(myExceptionCache.get(problem.thrownException()), myTrapStack) : null;
@@ -437,7 +437,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
     }
   }
 
-  private void controlTransfer(@jakarta.annotation.Nonnull TransferTarget target, FList<Trap> traps) {
+  private void controlTransfer(@Nonnull TransferTarget target, FList<Trap> traps) {
     addInstruction(new ControlTransferInstruction(myFactory.controlTransfer(target, traps)));
   }
 
@@ -449,7 +449,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
   }
 
   private
-  @jakarta.annotation.Nonnull
+  @Nonnull
   List<DfaVariableValue> getVariablesInside(PsiElement exitedStatement) {
     return ContainerUtil.map(PsiTreeUtil.findChildrenOfType(exitedStatement, PsiVariable.class),
         myFactory.getVarFactory()::createVariableValue);
@@ -655,7 +655,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
   }
 
   private static
-  @jakarta.annotation.Nullable
+  @Nullable
   Long asLong(PsiExpression expression) {
     Object value = ExpressionUtils.computeConstantExpression(expression);
     if (value instanceof Integer || value instanceof Long) {
@@ -918,7 +918,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
     }
   }
 
-  private void processSwitch(@jakarta.annotation.Nonnull PsiSwitchBlock switchBlock) {
+  private void processSwitch(@Nonnull PsiSwitchBlock switchBlock) {
     PsiExpression selector = PsiUtil.skipParenthesizedExprDown(switchBlock.getExpression());
     DfaVariableValue expressionValue = null;
     boolean syntheticVar = true;
@@ -1263,7 +1263,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
   }
 
   private
-  @jakarta.annotation.Nullable
+  @Nullable
   DfaVariableValue getTargetVariable(PsiExpression expression) {
     PsiElement parent = PsiUtil.skipParenthesizedExprUp(expression.getParent());
     if (expression instanceof PsiArrayInitializerExpression && parent instanceof PsiNewExpression) {
@@ -1420,9 +1420,9 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
     }
   }
 
-  private void acceptBinaryRightOperand(@jakarta.annotation.Nullable IElementType op, PsiType type,
+  private void acceptBinaryRightOperand(@Nullable IElementType op, PsiType type,
                                         PsiExpression lExpr, @Nullable PsiType lType,
-                                        PsiExpression rExpr, @jakarta.annotation.Nullable PsiType rType) {
+                                        PsiExpression rExpr, @Nullable PsiType rType) {
     boolean comparing = op == JavaTokenType.EQEQ || op == JavaTokenType.NE;
     boolean comparingRef = comparing
         && !TypeConversionUtil.isPrimitiveAndNotNull(lType)
@@ -1459,11 +1459,11 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
     }
   }
 
-  void generateBoxingUnboxingInstructionFor(@jakarta.annotation.Nonnull PsiExpression expression, PsiType expectedType) {
+  void generateBoxingUnboxingInstructionFor(@Nonnull PsiExpression expression, PsiType expectedType) {
     generateBoxingUnboxingInstructionFor(expression, expression.getType(), expectedType, false);
   }
 
-  void generateBoxingUnboxingInstructionFor(@jakarta.annotation.Nonnull PsiExpression context, PsiType actualType, PsiType expectedType, boolean explicit) {
+  void generateBoxingUnboxingInstructionFor(@Nonnull PsiExpression context, PsiType actualType, PsiType expectedType, boolean explicit) {
     if (PsiType.VOID.equals(expectedType)) {
       return;
     }
@@ -1594,13 +1594,13 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
     finishElement(expression);
   }
 
-  void addMethodThrows(PsiMethod method, @jakarta.annotation.Nullable PsiElement explicitCall) {
+  void addMethodThrows(PsiMethod method, @Nullable PsiElement explicitCall) {
     if (shouldHandleException()) {
       addThrows(explicitCall, method == null ? Collections.emptyList() : Arrays.asList(method.getThrowsList().getReferencedTypes()));
     }
   }
 
-  private void addThrows(@jakarta.annotation.Nullable PsiElement explicitCall, Collection<? extends PsiType> exceptions) {
+  private void addThrows(@Nullable PsiElement explicitCall, Collection<? extends PsiType> exceptions) {
     StreamEx<TypeConstraint> allExceptions = StreamEx.of(JAVA_LANG_ERROR, JAVA_LANG_RUNTIME_EXCEPTION)
         .map(fqn -> myExceptionCache.get(fqn).getThrowable());
     if (!exceptions.isEmpty()) {
@@ -1619,7 +1619,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
     });
   }
 
-  void throwException(@Nullable PsiType ref, @jakarta.annotation.Nullable PsiElement anchor) {
+  void throwException(@Nullable PsiType ref, @Nullable PsiElement anchor) {
     if (ref != null) {
       throwException(new ExceptionTransfer(TypeConstraints.instanceOf(ref)), anchor);
     }
@@ -1697,7 +1697,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
     finishElement(call);
   }
 
-  void addBareCall(@jakarta.annotation.Nullable PsiMethodCallExpression expression, @jakarta.annotation.Nonnull PsiReferenceExpression reference) {
+  void addBareCall(@Nullable PsiMethodCallExpression expression, @Nonnull PsiReferenceExpression reference) {
     addConditionalErrorThrow();
     PsiMethod method = ObjectUtil.tryCast(reference.resolve(), PsiMethod.class);
     List<? extends MethodContract> contracts =
@@ -1856,7 +1856,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
   }
 
   private
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiMethod pushConstructorArguments(PsiConstructorCall call) {
     PsiExpressionList args = call.getArgumentList();
     PsiMethod ctr = call.resolveConstructor();
@@ -2037,7 +2037,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
         myCurrentFlow.getEndOffset(element).getInstructionOffset() > -1;
   }
 
-  public void removeLambda(@jakarta.annotation.Nonnull PsiLambdaExpression lambda) {
+  public void removeLambda(@Nonnull PsiLambdaExpression lambda) {
     int start = myCurrentFlow.getStartOffset(lambda).getInstructionOffset();
     int end = myCurrentFlow.getEndOffset(lambda).getInstructionOffset();
     for (int i = start; i < end; i++) {
@@ -2055,13 +2055,13 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
    * @param resultNullability desired nullability returned by block return statement
    * @param target            a variable to store the block result (returned via {@code return} statement)
    */
-  void inlineBlock(@jakarta.annotation.Nonnull PsiCodeBlock block, @jakarta.annotation.Nonnull Nullability resultNullability, @jakarta.annotation.Nonnull DfaVariableValue target) {
+  void inlineBlock(@Nonnull PsiCodeBlock block, @Nonnull Nullability resultNullability, @Nonnull DfaVariableValue target) {
     enterExpressionBlock(block, resultNullability, target);
     block.accept(this);
     exitExpressionBlock();
   }
 
-  private void enterExpressionBlock(@jakarta.annotation.Nonnull PsiCodeBlock block, @jakarta.annotation.Nonnull Nullability resultNullability, @jakarta.annotation.Nonnull DfaVariableValue target) {
+  private void enterExpressionBlock(@Nonnull PsiCodeBlock block, @Nonnull Nullability resultNullability, @Nonnull DfaVariableValue target) {
     // Transfer value is pushed to avoid emptying stack beyond this point
     pushTrap(new Trap.InsideInlinedBlock(block));
     addInstruction(new PushInstruction(myFactory.controlTransfer(ReturnTransfer.INSTANCE, FList.emptyList()), null));
@@ -2086,7 +2086,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
    * @param problem    a problem to check. Use {@link NullabilityProblemKind#noProblem} to suppress the problem which
    *                   would be detected by default.
    */
-  void addCustomNullabilityProblem(@jakarta.annotation.Nonnull PsiExpression expression, @jakarta.annotation.Nonnull NullabilityProblemKind<? super PsiExpression> problem) {
+  void addCustomNullabilityProblem(@Nonnull PsiExpression expression, @Nonnull NullabilityProblemKind<? super PsiExpression> problem) {
     myCustomNullabilityProblems.put(expression, problem);
   }
 
@@ -2096,7 +2096,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
    *
    * @param expression an expression to deregister.
    */
-  void removeCustomNullabilityProblem(@jakarta.annotation.Nonnull PsiExpression expression) {
+  void removeCustomNullabilityProblem(@Nonnull PsiExpression expression) {
     myCustomNullabilityProblems.remove(expression);
   }
 
@@ -2106,8 +2106,8 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
    * @param type a type of variable to create
    * @return newly created variable
    */
-  @jakarta.annotation.Nonnull
-  DfaVariableValue createTempVariable(@jakarta.annotation.Nullable PsiType type) {
+  @Nonnull
+  DfaVariableValue createTempVariable(@Nullable PsiType type) {
     if (type == null) {
       type = PsiType.VOID;
     }
@@ -2120,7 +2120,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
    * @param variable to check
    * @return true if supplied variable is a temp variable.
    */
-  public static boolean isTempVariable(@jakarta.annotation.Nonnull DfaVariableValue variable) {
+  public static boolean isTempVariable(@Nonnull DfaVariableValue variable) {
     return variable.getDescriptor() instanceof Synthetic;
   }
 
@@ -2150,8 +2150,8 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
 
     @Override
     public
-    @jakarta.annotation.Nullable
-    PsiType getType(@jakarta.annotation.Nullable DfaVariableValue qualifier) {
+    @Nullable
+    PsiType getType(@Nullable DfaVariableValue qualifier) {
       return myType;
     }
 
@@ -2166,17 +2166,17 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
     @Nullable
     ExpressionBlockContext myPreviousBlock;
     final
-    @jakarta.annotation.Nonnull
+    @Nonnull
     PsiCodeBlock myCodeBlock;
     final boolean myForceNonNullBlockResult;
     final
-    @jakarta.annotation.Nonnull
+    @Nonnull
     DfaVariableValue myTarget;
 
     ExpressionBlockContext(@Nullable ExpressionBlockContext previousBlock,
-                           @jakarta.annotation.Nonnull PsiCodeBlock codeBlock,
+                           @Nonnull PsiCodeBlock codeBlock,
                            boolean forceNonNullBlockResult,
-                           @jakarta.annotation.Nonnull DfaVariableValue target) {
+                           @Nonnull DfaVariableValue target) {
       myPreviousBlock = previousBlock;
       myCodeBlock = codeBlock;
       myForceNonNullBlockResult = forceNonNullBlockResult;

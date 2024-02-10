@@ -77,7 +77,7 @@ public class RecordAugmentProvider extends PsiAugmentProvider {
     return methods;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static PsiMethod getCanonicalConstructor(PsiExtensibleClass aClass,
                                                    List<PsiMethod> ownMethods,
                                                    @Nonnull PsiRecordHeader recordHeader) {
@@ -132,8 +132,8 @@ public class RecordAugmentProvider extends PsiAugmentProvider {
     return fields;
   }
 
-  @jakarta.annotation.Nullable
-  private static PsiField createRecordField(@jakarta.annotation.Nonnull PsiRecordComponent component, @Nonnull PsiElementFactory factory) {
+  @Nullable
+  private static PsiField createRecordField(@Nonnull PsiRecordComponent component, @Nonnull PsiElementFactory factory) {
     String name = component.getName();
     if (hasForbiddenType(component)) {
       return null;
@@ -151,7 +151,7 @@ public class RecordAugmentProvider extends PsiAugmentProvider {
     }
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static PsiMethod createRecordMethod(@Nonnull PsiRecordComponent component, @Nonnull PsiElementFactory factory) {
     String name = component.getName();
     if (name == null) {
@@ -178,7 +178,7 @@ public class RecordAugmentProvider extends PsiAugmentProvider {
     return typeElement == null || typeElement.getText().equals(PsiKeyword.RECORD);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static String getTypeText(@Nonnull PsiRecordComponent component) {
     PsiTypeElement typeElement = component.getTypeElement();
     if (typeElement == null) {

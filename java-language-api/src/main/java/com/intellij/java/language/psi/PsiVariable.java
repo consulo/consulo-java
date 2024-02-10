@@ -45,7 +45,7 @@ public interface PsiVariable extends PsiModifierListOwner, PsiNameIdentifierOwne
    *
    * @return the type element for the variable type.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiTypeElement getTypeElement();
 
   /**
@@ -54,7 +54,7 @@ public interface PsiVariable extends PsiModifierListOwner, PsiNameIdentifierOwne
    * @return the initializer expression, or null if it has no initializer.
    * @see {@link #hasInitializer()}
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiExpression getInitializer();
 
   /**
@@ -91,7 +91,7 @@ public interface PsiVariable extends PsiModifierListOwner, PsiNameIdentifierOwne
    * @return the variable name identifier.
    */
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiIdentifier getNameIdentifier();
 
   @Override

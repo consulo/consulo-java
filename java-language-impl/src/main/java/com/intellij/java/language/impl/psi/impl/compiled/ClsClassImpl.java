@@ -78,7 +78,7 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   public String getQualifiedName() {
     return getStub().getQualifiedName();
   }
@@ -122,7 +122,7 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiReferenceList getImplementsList() {
     return assertNotNull(getStub().findChildStubByType(JavaStubElementTypes.IMPLEMENTS_LIST)).getPsi();
   }
@@ -134,7 +134,7 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiClassType[] getImplementsListTypes() {
     return PsiClassImplUtil.getImplementsListTypes(this);
   }
@@ -151,7 +151,7 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiClass[] getSupers() {
     if (JavaClassNames.JAVA_LANG_OBJECT.equals(getQualifiedName())) {
       return PsiClass.EMPTY_ARRAY;
@@ -181,7 +181,7 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiField[] getFields() {
     return myInnersCache.getFields();
   }
@@ -262,7 +262,7 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiMethod[] getAllMethods() {
     return PsiClassImplUtil.getAllMethods(this);
   }
@@ -302,7 +302,7 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public List<Pair<PsiMethod, PsiSubstitutor>> getAllMethodsAndTheirSubstitutors() {
     return PsiClassImplUtil.getAllWithSubstitutorsByMap(this, PsiClassImplUtil.MemberType.METHOD);
   }
@@ -470,7 +470,7 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
   }
 
   @Override
-  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitClass(this);
     } else {
@@ -504,7 +504,7 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
     return InheritanceImplUtil.isInheritor(this, baseClass, checkDeep);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public PsiClass getSourceMirrorClass() {
     final PsiClass delegate = getUserData(DELEGATE_KEY);
     if (delegate instanceof ClsClassImpl) {
@@ -603,7 +603,7 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiRecordComponent[] getRecordComponents() {
     PsiRecordHeader header = getRecordHeader();
     return header == null ? PsiRecordComponent.EMPTY_ARRAY : header.getRecordComponents();
@@ -611,7 +611,7 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
 
   @Override
   public
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiRecordHeader getRecordHeader() {
     PsiRecordHeaderStub headerStub = getStub().findChildStubByType(JavaStubElementTypes.RECORD_HEADER);
     return headerStub == null ? null : headerStub.getPsi();

@@ -57,7 +57,7 @@ public class IfStatementWithIdenticalBranchesInspection
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "if.statement.with.identical.branches.problem.descriptor");
@@ -73,14 +73,14 @@ public class IfStatementWithIdenticalBranchesInspection
     public CollapseIfFix() {
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "if.statement.with.identical.branches.collapse.quickfix");
     }
 
     @Override
-    public void doFix(@jakarta.annotation.Nonnull Project project,
+    public void doFix(@Nonnull Project project,
                       ProblemDescriptor descriptor)
       throws IncorrectOperationException {
       final PsiElement identifier = descriptor.getPsiElement();

@@ -47,7 +47,7 @@ public class DebuggerManagerThreadImpl extends InvokeAndWaitThread<DebuggerComma
 
 	private volatile boolean myDisposed;
 
-	DebuggerManagerThreadImpl(@jakarta.annotation.Nonnull Disposable parent, Project project)
+	DebuggerManagerThreadImpl(@Nonnull Disposable parent, Project project)
 	{
 		super(project);
 		Disposer.register(parent, this);

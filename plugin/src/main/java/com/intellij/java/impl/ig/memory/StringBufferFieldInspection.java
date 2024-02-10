@@ -36,7 +36,7 @@ public class StringBufferFieldInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiType type = (PsiType)infos[0];
     final String typeName = type.getPresentableText();
@@ -53,7 +53,7 @@ public class StringBufferFieldInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@jakarta.annotation.Nonnull PsiField field) {
+    public void visitField(@Nonnull PsiField field) {
       super.visitField(field);
       final PsiType type = field.getType();
       if (!type.equalsToText(JavaClassNames.JAVA_LANG_STRING_BUFFER) &&

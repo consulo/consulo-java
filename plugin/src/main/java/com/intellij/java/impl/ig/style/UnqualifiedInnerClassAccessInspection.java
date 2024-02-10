@@ -43,13 +43,13 @@ public class UnqualifiedInnerClassAccessInspection extends BaseInspection {
   public boolean ignoreReferencesToLocalInnerClasses = false;
 
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("unqualified.inner.class.access.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("unqualified.inner.class.access.problem.descriptor");

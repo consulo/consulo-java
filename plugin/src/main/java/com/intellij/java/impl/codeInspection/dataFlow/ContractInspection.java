@@ -31,7 +31,7 @@ import static com.intellij.java.analysis.impl.codeInspection.dataFlow.StandardMe
  */
 public abstract class ContractInspection extends AbstractBaseJavaLocalInspectionTool {
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
                                             final boolean isOnTheFly,
                                             LocalInspectionToolSession session,

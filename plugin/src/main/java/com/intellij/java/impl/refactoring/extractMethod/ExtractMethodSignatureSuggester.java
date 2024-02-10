@@ -294,7 +294,7 @@ public class ExtractMethodSignatureSuggester {
   }
 
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private InputVariables detectTopLevelExpressionsToReplaceWithParameters(List<PsiExpression> copies) {
     final PsiParameter[] parameters = myExtractedMethod.getParameterList().getParameters();
     final List<PsiVariable> inputVariables = new ArrayList<PsiVariable>(Arrays.asList(parameters));
@@ -388,14 +388,14 @@ public class ExtractMethodSignatureSuggester {
       init();
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     @Override
     protected JComponent createNorthPanel() {
       return new JLabel("<html><b>No exact method duplicates were found</b>, though changed method as shown below has " + myDuplicatesNumber + " duplicate" + (myDuplicatesNumber > 1 ? "s" :
           "") + " </html>");
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     @Override
     @RequiredUIAccess
     protected JComponent createCenterPanel() {

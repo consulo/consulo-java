@@ -44,13 +44,13 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
   private final ExternalAnnotationsManager.AnnotationPlace myAnnotationPlace;
 
   public AddAnnotationPsiFix(@Nonnull String fqn,
-                             @jakarta.annotation.Nonnull PsiModifierListOwner modifierListOwner,
+                             @Nonnull PsiModifierListOwner modifierListOwner,
                              @Nonnull String... annotationsToRemove) {
     this(fqn, modifierListOwner, PsiNameValuePair.EMPTY_ARRAY, annotationsToRemove);
   }
 
   public AddAnnotationPsiFix(@Nonnull String fqn,
-                             @jakarta.annotation.Nonnull PsiModifierListOwner modifierListOwner,
+                             @Nonnull PsiModifierListOwner modifierListOwner,
                              @Nonnull PsiNameValuePair[] values,
                              @Nonnull String... annotationsToRemove) {
     super(modifierListOwner);
@@ -63,7 +63,7 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
     myAnnotationPlace = choosePlace(modifierListOwner);
   }
 
-  public static String calcText(PsiModifierListOwner modifierListOwner, @jakarta.annotation.Nullable String annotation) {
+  public static String calcText(PsiModifierListOwner modifierListOwner, @Nullable String annotation) {
     final String shortName = annotation == null ? null : annotation.substring(annotation.lastIndexOf('.') + 1);
     if (modifierListOwner instanceof PsiNamedElement) {
       final String name = ((PsiNamedElement) modifierListOwner).getName();
@@ -83,7 +83,7 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
   }
 
   public static
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiModifierListOwner getContainer(PsiFile file, int offset) {
     return getContainer(file, offset, false);
   }
@@ -132,13 +132,13 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
 
   @Override
   public boolean isAvailable(@Nonnull Project project,
-                             @jakarta.annotation.Nonnull PsiFile file,
+                             @Nonnull PsiFile file,
                              @Nonnull PsiElement startElement,
                              @Nonnull PsiElement endElement) {
     return isAvailable((PsiModifierListOwner) startElement, myAnnotation);
   }
 
-  public static boolean isAvailable(@Nonnull PsiModifierListOwner modifierListOwner, @jakarta.annotation.Nonnull String annotationFQN) {
+  public static boolean isAvailable(@Nonnull PsiModifierListOwner modifierListOwner, @Nonnull String annotationFQN) {
     if (!modifierListOwner.isValid()) {
       return false;
     }
@@ -219,7 +219,7 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
     }
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private ExternalAnnotationsManager.AnnotationPlace choosePlace(@Nonnull PsiModifierListOwner modifierListOwner) {
     Project project = modifierListOwner.getProject();
     final ExternalAnnotationsManager annotationsManager = ExternalAnnotationsManager.getInstance(project);
@@ -262,8 +262,8 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
    * @param owner an owner object to add the annotation to ({@link PsiModifierList} or {@link PsiType}).
    * @return added physical annotation; null if annotation already exists (in this case, no changes are performed)
    */
-  @jakarta.annotation.Nullable
-  public static PsiAnnotation addPhysicalAnnotationIfAbsent(@jakarta.annotation.Nonnull String fqn,
+  @Nullable
+  public static PsiAnnotation addPhysicalAnnotationIfAbsent(@Nonnull String fqn,
                                                             @Nonnull PsiNameValuePair[] pairs,
                                                             @Nonnull PsiAnnotationOwner owner) {
     if (owner.hasAnnotation(fqn)) {
@@ -368,7 +368,7 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
    * @return newly created fix or null if adding nullability annotation is impossible for the specified element.
    */
   public static
-  @jakarta.annotation.Nullable
+  @Nullable
   AddAnnotationPsiFix createAddNullableFix(PsiModifierListOwner owner) {
     NullableNotNullManager manager = NullableNotNullManager.getInstance(owner.getProject());
     return createAddNullableNotNullFix(owner, manager.getDefaultNullable(), manager.getNotNulls());
@@ -381,14 +381,14 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
    * @return newly created fix or null if adding nullability annotation is impossible for the specified element.
    */
   public static
-  @jakarta.annotation.Nullable
+  @Nullable
   AddAnnotationPsiFix createAddNotNullFix(PsiModifierListOwner owner) {
     NullableNotNullManager manager = NullableNotNullManager.getInstance(owner.getProject());
     return createAddNullableNotNullFix(owner, manager.getDefaultNotNull(), manager.getNullables());
   }
 
   private static
-  @jakarta.annotation.Nullable
+  @Nullable
   AddAnnotationPsiFix createAddNullableNotNullFix(PsiModifierListOwner owner, String annotationToAdd,
                                                   List<String> annotationsToRemove) {
     if (!isNullabilityAnnotationApplicable(owner)) {

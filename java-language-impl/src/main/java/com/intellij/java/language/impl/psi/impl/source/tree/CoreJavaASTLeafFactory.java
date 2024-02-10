@@ -37,7 +37,7 @@ import jakarta.annotation.Nullable;
 public class CoreJavaASTLeafFactory implements Constants, ASTLeafFactory {
   @Override
   @Nonnull
-  public LeafElement createLeaf(@jakarta.annotation.Nonnull final IElementType type, @jakarta.annotation.Nonnull LanguageVersion languageVersion, @jakarta.annotation.Nonnull final CharSequence text) {
+  public LeafElement createLeaf(@Nonnull final IElementType type, @Nonnull LanguageVersion languageVersion, @Nonnull final CharSequence text) {
     if (type == JavaTokenType.C_STYLE_COMMENT || type == JavaTokenType.END_OF_LINE_COMMENT) {
       return new PsiCoreCommentImpl(type, text);
     } else if (type == JavaTokenType.IDENTIFIER) {

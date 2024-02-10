@@ -32,9 +32,9 @@ import jakarta.annotation.Nullable;
 public class PsiCapturedWildcardType extends PsiType.Stub {
   @Nonnull
   private final PsiWildcardType myExistential;
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private final PsiElement myContext;
-  @jakarta.annotation.Nullable
+  @Nullable
   private final PsiTypeParameter myParameter;
 
   private PsiType myUpperBound;
@@ -44,12 +44,12 @@ public class PsiCapturedWildcardType extends PsiType.Stub {
     return create(existential, context, null);
   }
 
-  @jakarta.annotation.Nonnull
-  public static PsiCapturedWildcardType create(@Nonnull PsiWildcardType existential, @Nonnull PsiElement context, @jakarta.annotation.Nullable PsiTypeParameter parameter) {
+  @Nonnull
+  public static PsiCapturedWildcardType create(@Nonnull PsiWildcardType existential, @Nonnull PsiElement context, @Nullable PsiTypeParameter parameter) {
     return new PsiCapturedWildcardType(existential, context, parameter);
   }
 
-  private PsiCapturedWildcardType(@jakarta.annotation.Nonnull PsiWildcardType existential, @Nonnull PsiElement context, @jakarta.annotation.Nullable PsiTypeParameter parameter) {
+  private PsiCapturedWildcardType(@Nonnull PsiWildcardType existential, @Nonnull PsiElement context, @Nullable PsiTypeParameter parameter) {
     super(TypeAnnotationProvider.EMPTY);
     myExistential = existential;
     myContext = context;
@@ -64,7 +64,7 @@ public class PsiCapturedWildcardType extends PsiType.Stub {
   }
 
   @Nullable
-  public static PsiType captureUpperBound(@Nonnull PsiTypeParameter typeParameter, @Nonnull PsiWildcardType wildcardType, @jakarta.annotation.Nonnull PsiSubstitutor captureSubstitutor) {
+  public static PsiType captureUpperBound(@Nonnull PsiTypeParameter typeParameter, @Nonnull PsiWildcardType wildcardType, @Nonnull PsiSubstitutor captureSubstitutor) {
     final PsiType[] boundTypes = typeParameter.getExtendsListTypes();
     PsiType originalBound = !wildcardType.isSuper() ? wildcardType.getBound() : null;
     PsiType glb = originalBound;
@@ -123,13 +123,13 @@ public class PsiCapturedWildcardType extends PsiType.Stub {
     return myUpperBound.hashCode() + 31 * myContext.hashCode();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getPresentableText(boolean annotated) {
     return "capture of " + myExistential.getPresentableText(annotated);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getCanonicalText(boolean annotated) {
     return myExistential.getCanonicalText(annotated);
@@ -147,7 +147,7 @@ public class PsiCapturedWildcardType extends PsiType.Stub {
   }
 
   @Override
-  public boolean equalsToText(@jakarta.annotation.Nonnull String text) {
+  public boolean equalsToText(@Nonnull String text) {
     return false;
   }
 
@@ -188,7 +188,7 @@ public class PsiCapturedWildcardType extends PsiType.Stub {
     }
   }
 
-  public void setUpperBound(@jakarta.annotation.Nonnull PsiType upperBound) {
+  public void setUpperBound(@Nonnull PsiType upperBound) {
     myUpperBound = upperBound;
   }
 

@@ -34,13 +34,13 @@ abstract class LightClassReferenceBase extends LightElement implements PsiJavaCo
 
   private LightReferenceParameterList myParameterList;
 
-  protected LightClassReferenceBase(@jakarta.annotation.Nonnull PsiManager manager, @jakarta.annotation.Nonnull String text) {
+  protected LightClassReferenceBase(@Nonnull PsiManager manager, @Nonnull String text) {
     super(manager, JavaLanguage.INSTANCE);
     myText = text;
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public JavaResolveResult[] multiResolve(boolean incompleteCode) {
     final JavaResolveResult result = advancedResolve(incompleteCode);
     if (result != JavaResolveResult.EMPTY) {
@@ -88,7 +88,7 @@ abstract class LightClassReferenceBase extends LightElement implements PsiJavaCo
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getCanonicalText() {
     String name = getQualifiedName();
     if (name == null) {
@@ -114,7 +114,7 @@ abstract class LightClassReferenceBase extends LightElement implements PsiJavaCo
   }
 
   @Override
-  public PsiElement handleElementRename(@jakarta.annotation.Nonnull String newElementName) throws IncorrectOperationException {
+  public PsiElement handleElementRename(@Nonnull String newElementName) throws IncorrectOperationException {
     //TODO?
     throw new UnsupportedOperationException();
   }
@@ -126,7 +126,7 @@ abstract class LightClassReferenceBase extends LightElement implements PsiJavaCo
   }
 
   @Override
-  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitReferenceElement(this);
     } else {
@@ -140,7 +140,7 @@ abstract class LightClassReferenceBase extends LightElement implements PsiJavaCo
   }
 
   @Override
-  public boolean isReferenceTo(@jakarta.annotation.Nonnull PsiElement element) {
+  public boolean isReferenceTo(@Nonnull PsiElement element) {
     return element instanceof PsiClass && getManager().areElementsEquivalent(resolve(), element);
   }
 
@@ -155,13 +155,13 @@ abstract class LightClassReferenceBase extends LightElement implements PsiJavaCo
     return false;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public TextRange getRangeInElement() {
     return new TextRange(0, getTextLength());
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public PsiElement getElement() {
     return this;

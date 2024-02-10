@@ -174,7 +174,7 @@ public class RefJavaManagerImpl extends RefJavaManager
 		}
 	};
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	private Pair<UnusedDeclarationInspection, UnusedDeclarationInspectionState> getDeadCodeTool(PsiElement element)
 	{
 		PsiFile file = element.getContainingFile();
@@ -196,7 +196,7 @@ public class RefJavaManagerImpl extends RefJavaManager
 	}
 
 	@Override
-	public boolean shouldProcessExternalFile(@jakarta.annotation.Nonnull PsiFile file)
+	public boolean shouldProcessExternalFile(@Nonnull PsiFile file)
 	{
 		return file instanceof PsiClassOwner;
 	}
@@ -320,8 +320,8 @@ public class RefJavaManagerImpl extends RefJavaManager
 	}
 
 	@Override
-	@jakarta.annotation.Nullable
-	public RefElement createRefElement(@jakarta.annotation.Nonnull final PsiElement elem)
+	@Nullable
+	public RefElement createRefElement(@Nonnull final PsiElement elem)
 	{
 		if(elem instanceof PsiClass)
 		{
@@ -418,7 +418,7 @@ public class RefJavaManagerImpl extends RefJavaManager
 	}
 
 	@Override
-	public void visitElement(@jakarta.annotation.Nonnull final PsiElement element)
+	public void visitElement(@Nonnull final PsiElement element)
 	{
 		if(myProjectIterator == null)
 		{

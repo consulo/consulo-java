@@ -26,13 +26,13 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class ContinueStatementWithLabelInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "continue.statement.with.label.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "continue.statement.with.label.problem.descriptor");

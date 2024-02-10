@@ -22,16 +22,16 @@ import java.lang.ref.Reference;
 public class PsiRecordComponentImpl extends JavaStubPsiElement<PsiRecordComponentStub> implements PsiRecordComponent {
   private volatile Reference<PsiType> myCachedType;
 
-  public PsiRecordComponentImpl(@jakarta.annotation.Nonnull PsiRecordComponentStub stub) {
+  public PsiRecordComponentImpl(@Nonnull PsiRecordComponentStub stub) {
     super(stub, JavaStubElementTypes.RECORD_COMPONENT);
   }
 
-  public PsiRecordComponentImpl(@jakarta.annotation.Nonnull ASTNode node) {
+  public PsiRecordComponentImpl(@Nonnull ASTNode node) {
     super(node);
   }
 
   @Override
-  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitRecordComponent(this);
     } else {
@@ -39,7 +39,7 @@ public class PsiRecordComponentImpl extends JavaStubPsiElement<PsiRecordComponen
     }
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public PsiClass getContainingClass() {
     PsiElement parent = getParent();
@@ -50,7 +50,7 @@ public class PsiRecordComponentImpl extends JavaStubPsiElement<PsiRecordComponen
     return grandParent instanceof PsiClass ? (PsiClass) grandParent : null;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public PsiModifierList getModifierList() {
     final PsiModifierList modifierList = getStubOrPsiChild(JavaStubElementTypes.MODIFIER_LIST);
@@ -59,11 +59,11 @@ public class PsiRecordComponentImpl extends JavaStubPsiElement<PsiRecordComponen
   }
 
   @Override
-  public boolean hasModifierProperty(@jakarta.annotation.Nonnull String name) {
+  public boolean hasModifierProperty(@Nonnull String name) {
     return getModifierList().hasModifierProperty(name);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public PsiType getType() {
     PsiRecordComponentStub stub = getStub();
@@ -82,7 +82,7 @@ public class PsiRecordComponentImpl extends JavaStubPsiElement<PsiRecordComponen
     return JavaSharedImplUtil.getType(typeElement, getNameIdentifier());
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public PsiTypeElement getTypeElement() {
     return (PsiTypeElement) findNotNullChildByType(JavaElementType.TYPE);
@@ -94,7 +94,7 @@ public class PsiRecordComponentImpl extends JavaStubPsiElement<PsiRecordComponen
     JavaSharedImplUtil.normalizeBrackets(this);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public Object computeConstantValue() {
     return null;
@@ -112,12 +112,12 @@ public class PsiRecordComponentImpl extends JavaStubPsiElement<PsiRecordComponen
   }
 
   @Override
-  public PsiElement setName(@jakarta.annotation.Nonnull String name) throws IncorrectOperationException {
+  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
     PsiIdentifier identifier = getNameIdentifier();
     return PsiImplUtil.setName(identifier, name);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getName() {
     final PsiRecordComponentStub stub = getGreenStub();
@@ -128,7 +128,7 @@ public class PsiRecordComponentImpl extends JavaStubPsiElement<PsiRecordComponen
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public CompositeElement getNode() {
     return (CompositeElement) super.getNode();
   }

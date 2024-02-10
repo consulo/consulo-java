@@ -20,9 +20,9 @@ import java.util.Set;
 public class ChangeMethodSignatureFromUsageReverseOrderFix extends ChangeMethodSignatureFromUsageFix
 {
 	public ChangeMethodSignatureFromUsageReverseOrderFix(@Nonnull PsiMethod targetMethod,
-														 @jakarta.annotation.Nonnull PsiExpression[] expressions,
+														 @Nonnull PsiExpression[] expressions,
 														 @Nonnull PsiSubstitutor substitutor,
-														 @jakarta.annotation.Nonnull PsiElement context,
+														 @Nonnull PsiElement context,
 														 boolean changeAllUsages,
 														 int minUsagesNumberToShowDialog)
 	{

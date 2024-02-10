@@ -48,7 +48,7 @@ public class SuperClassHasFrequentlyUsedInheritorsInspection extends BaseJavaLoc
 
   @Nullable
   @Override
-  public ProblemDescriptor[] checkClass(@jakarta.annotation.Nonnull final PsiClass aClass,
+  public ProblemDescriptor[] checkClass(@Nonnull final PsiClass aClass,
                                         @Nonnull final InspectionManager manager,
                                         final boolean isOnTheFly, Object state) {
     if (aClass.isInterface() ||
@@ -91,7 +91,7 @@ public class SuperClassHasFrequentlyUsedInheritorsInspection extends BaseJavaLoc
   }
 
   @Nullable
-  private static PsiClass getSuperIfUnique(final @jakarta.annotation.Nonnull PsiClass aClass) {
+  private static PsiClass getSuperIfUnique(final @Nonnull PsiClass aClass) {
     if (aClass instanceof PsiAnonymousClass) {
       return (PsiClass)((PsiAnonymousClass)aClass).getBaseClassReference().resolve();
     }

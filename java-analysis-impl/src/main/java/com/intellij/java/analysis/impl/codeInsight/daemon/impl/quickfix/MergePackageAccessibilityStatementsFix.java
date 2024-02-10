@@ -55,15 +55,15 @@ public class MergePackageAccessibilityStatementsFix extends MergeModuleStatement
   }
 
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getFamilyName() {
     return JavaQuickFixBundle.message("java.9.merge.module.statements.fix.family.name", getKeyword());
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
-  protected String getReplacementText(@jakarta.annotation.Nonnull List<PsiPackageAccessibilityStatement> statementsToMerge) {
+  protected String getReplacementText(@Nonnull List<PsiPackageAccessibilityStatement> statementsToMerge) {
     final List<String> moduleNames = getModuleNames(statementsToMerge);
     if (!moduleNames.isEmpty()) {
       return getKeyword() + " " + myPackageName + " " + PsiKeyword.TO + " " + joinUniqueNames(moduleNames) + ";";
@@ -90,7 +90,7 @@ public class MergePackageAccessibilityStatementsFix extends MergeModuleStatement
     return StreamSupport.stream(getStatements(javaModule, myRole).spliterator(), false).filter(statement -> myPackageName.equals(statement.getPackageName())).collect(Collectors.toList());
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static MergeModuleStatementsFix createFix(@Nullable PsiPackageAccessibilityStatement statement) {
     if (statement != null) {
       final PsiElement parent = statement.getParent();
@@ -116,7 +116,7 @@ public class MergePackageAccessibilityStatementsFix extends MergeModuleStatement
     return Collections.emptyList();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private String getKeyword() {
     switch (myRole) {
       case OPENS:

@@ -484,7 +484,7 @@ public class MismatchedCollectionQueryUpdateInspection
     }
 
     @Override
-    public void visitLocalVariable(@jakarta.annotation.Nonnull PsiLocalVariable variable) {
+    public void visitLocalVariable(@Nonnull PsiLocalVariable variable) {
       super.visitLocalVariable(variable);
       final PsiCodeBlock codeBlock = PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class);
       if (!checkVariable(variable, codeBlock)) {

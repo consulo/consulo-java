@@ -172,14 +172,14 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
     myBreakpointManager.init();
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public DebuggerSession getSession(DebugProcess process) {
     ApplicationManager.getApplication().assertIsDispatchThread();
     return getSessions().stream().filter(debuggerSession -> process == debuggerSession.getProcess()).findFirst().orElse(null);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Collection<DebuggerSession> getSessions() {
     synchronized (mySessions) {
@@ -188,7 +188,7 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
     }
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public Element getState() {
     Element state = new Element("state");
@@ -215,7 +215,7 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
 
   @Override
   @Nullable
-  public DebuggerSession attachVirtualMachine(@jakarta.annotation.Nonnull DebugEnvironment environment) throws ExecutionException {
+  public DebuggerSession attachVirtualMachine(@Nonnull DebugEnvironment environment) throws ExecutionException {
     ApplicationManager.getApplication().assertIsDispatchThread();
     DebugProcessEvents debugProcess = new DebugProcessEvents(myProject);
     DebuggerSession session = DebuggerSession.create(environment.getSessionName(), debugProcess, environment);
@@ -359,7 +359,7 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
     return myBreakpointManager;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public DebuggerContextImpl getContext() {
     return getContextManager().getContext();
@@ -540,7 +540,7 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
   private static class MyDebuggerStateManager extends DebuggerStateManager {
     private DebuggerSession myDebuggerSession;
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public DebuggerContextImpl getContext() {
       return myDebuggerSession == null ? DebuggerContextImpl.EMPTY_CONTEXT : myDebuggerSession.getContextManager().getContext();

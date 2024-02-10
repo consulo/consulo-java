@@ -93,16 +93,16 @@ class ControlFlowImpl extends AbstractControlFlow
 	private static final class ImmutableControlFlow extends AbstractControlFlow
 	{
 		private final
-		@jakarta.annotation.Nonnull
+		@Nonnull
 		List<Instruction> myInstructions;
 		private final
-		@jakarta.annotation.Nonnull
+		@Nonnull
 		PsiElement[] myElementsForInstructions;
 		private final boolean myConstantConditionOccurred;
 
 		private ImmutableControlFlow(@Nonnull Instruction[] instructions,
                                  @Nonnull HashMap<PsiElement, int[]> myElementToOffsetMap,
-                                 @jakarta.annotation.Nonnull PsiElement [] elementsForInstructions, boolean occurred)
+                                 @Nonnull PsiElement [] elementsForInstructions, boolean occurred)
 		{
 			super(myElementToOffsetMap);
 			myInstructions = Arrays.asList(instructions);
@@ -111,7 +111,7 @@ class ControlFlowImpl extends AbstractControlFlow
 		}
 
 		@Override
-		@jakarta.annotation.Nonnull
+		@Nonnull
 		public List<Instruction> getInstructions()
 		{
 			return myInstructions;

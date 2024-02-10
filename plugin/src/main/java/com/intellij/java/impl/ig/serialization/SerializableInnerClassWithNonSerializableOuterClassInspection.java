@@ -31,7 +31,7 @@ public class SerializableInnerClassWithNonSerializableOuterClassInspection
       "serializable.inner.class.with.non.serializable.outer.class.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "serializable.inner.class.with.non.serializable.outer.class.problem.descriptor");

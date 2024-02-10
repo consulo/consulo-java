@@ -52,7 +52,7 @@ public class SPIPackageOrClassReferenceElement extends ASTWrapperPsiElement impl
     return new TextRange(last.getStartOffsetInParent(), getTextLength());
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getCanonicalText() {
     return getText();
@@ -107,7 +107,7 @@ public class SPIPackageOrClassReferenceElement extends ASTWrapperPsiElement impl
     return this;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Object[] getVariants() {
     return ArrayUtil.EMPTY_OBJECT_ARRAY;

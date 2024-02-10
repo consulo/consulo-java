@@ -34,13 +34,13 @@ import org.jetbrains.annotations.NonNls;
 public class SetupCallsSuperSetupInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "SetUpDoesntCallSuperSetUp";
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "setup.calls.super.setup.display.name");
@@ -55,7 +55,7 @@ public class SetupCallsSuperSetupInspection extends BaseInspection {
 
   private static class AddSuperSetUpCall extends InspectionGadgetsFix {
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "setup.calls.super.setup.add.quickfix");
@@ -97,7 +97,7 @@ public class SetupCallsSuperSetupInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       //note: no call to super;
       @NonNls final String methodName = method.getName();
       if (!"setUp".equals(methodName)) {

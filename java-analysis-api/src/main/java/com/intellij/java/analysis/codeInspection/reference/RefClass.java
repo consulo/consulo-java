@@ -28,19 +28,19 @@ import java.util.Set;
  */
 public interface RefClass extends RefJavaElement {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   Set<RefClass> getBaseClasses();
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   Set<RefClass> getSubClasses();
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   List<RefMethod> getConstructors();
 
   @Nonnull
   Set<RefElement> getInTypeReferences();
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   Set<RefElement> getInstanceReferences();
 
   RefMethod getDefaultConstructor();

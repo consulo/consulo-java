@@ -44,7 +44,7 @@ import java.util.Set;
 public class MacroUtil {
   private static final Logger LOG = Logger.getInstance(MacroUtil.class);
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @RequiredReadAction
   public static PsiType resultToPsiType(Result result, ExpressionContext context) {
     if (result instanceof PsiTypeResult) {
@@ -106,7 +106,7 @@ public class MacroUtil {
     }
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @RequiredReadAction
   private static PsiExpression[] getStandardExpressions(PsiElement place) {
     ArrayList<PsiExpression> array = new ArrayList<>();
@@ -144,7 +144,7 @@ public class MacroUtil {
     return array.toArray(new PsiExpression[array.size()]);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static PsiExpression[] getStandardExpressionsOfType(PsiElement place, PsiType type) {
     List<PsiExpression> array = new ArrayList<>();
     PsiExpression[] expressions = getStandardExpressions(place);
@@ -158,7 +158,7 @@ public class MacroUtil {
   }
 
   @Nonnull
-  public static PsiVariable[] getVariablesVisibleAt(@jakarta.annotation.Nullable final PsiElement place, String prefix) {
+  public static PsiVariable[] getVariablesVisibleAt(@Nullable final PsiElement place, String prefix) {
     if (place == null) {
       return new PsiVariable[0];
     }
@@ -167,7 +167,7 @@ public class MacroUtil {
     final List<PsiVariable> list = new ArrayList<>();
     VariablesProcessor varproc = new VariablesProcessor(prefix, true, list) {
       @Override
-      public boolean execute(@jakarta.annotation.Nonnull PsiElement pe, @jakarta.annotation.Nonnull ResolveState state) {
+      public boolean execute(@Nonnull PsiElement pe, @Nonnull ResolveState state) {
         if (pe instanceof PsiVariable) {
           if (!usedNames.add(((PsiVariable) pe).getName())) {
             return false;

@@ -515,7 +515,7 @@ public class PositionManagerImpl implements PositionManager, MultiRequestPositio
 		return psiClass;
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	private PsiFile findAlternativeJreSourceFile(ClsClassImpl psiClass)
 	{
 		String sourceFileName = psiClass.getSourceFileName();
@@ -851,7 +851,7 @@ public class PositionManagerImpl implements PositionManager, MultiRequestPositio
 		}
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	private static SourcePosition calcLineMappedSourcePosition(PsiFile psiFile, int originalLine)
 	{
 		int line = DebuggerUtilsEx.bytecodeToSourceLine(psiFile, originalLine);

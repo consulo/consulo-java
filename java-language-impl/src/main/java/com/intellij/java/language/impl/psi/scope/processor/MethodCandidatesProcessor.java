@@ -38,16 +38,16 @@ import java.util.List;
 public class MethodCandidatesProcessor extends MethodsProcessor {
   protected boolean myHasAccessibleStaticCorrectCandidate;
 
-  public MethodCandidatesProcessor(@jakarta.annotation.Nonnull PsiElement place, PsiFile placeFile, @Nonnull PsiConflictResolver[] resolvers, @Nonnull List<CandidateInfo> container) {
+  public MethodCandidatesProcessor(@Nonnull PsiElement place, PsiFile placeFile, @Nonnull PsiConflictResolver[] resolvers, @Nonnull List<CandidateInfo> container) {
     super(resolvers, container, place, placeFile);
   }
 
-  public MethodCandidatesProcessor(@jakarta.annotation.Nonnull PsiElement place, PsiFile placeFile) {
+  public MethodCandidatesProcessor(@Nonnull PsiElement place, PsiFile placeFile) {
     super(new PsiConflictResolver[]{DuplicateConflictResolver.INSTANCE}, new SmartList<CandidateInfo>(), place, placeFile);
   }
 
   @Override
-  public void add(@jakarta.annotation.Nonnull PsiElement element, @Nonnull PsiSubstitutor substitutor) {
+  public void add(@Nonnull PsiElement element, @Nonnull PsiSubstitutor substitutor) {
     if (element instanceof PsiMethod) {
       final PsiMethod method = (PsiMethod) element;
       addMethod(method, substitutor, isInStaticScope() && !method.hasModifierProperty(PsiModifier.STATIC));

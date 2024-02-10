@@ -145,7 +145,7 @@ class WrapReturnValueDialog extends RefactoringDialog {
     return myInnerClassNameTextField.getText().trim();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getPackageName() {
     return packageTextField.getText().trim();
   }

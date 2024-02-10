@@ -53,7 +53,7 @@ class DebuggerLaunchingConfigurable implements IdeaConfigurableUi<DebuggerSettin
 	}
 
 	@Override
-	public void apply(@jakarta.annotation.Nonnull DebuggerSettings settings)
+	public void apply(@Nonnull DebuggerSettings settings)
 	{
 		getSettingsTo(settings);
 	}
@@ -80,7 +80,7 @@ class DebuggerLaunchingConfigurable implements IdeaConfigurableUi<DebuggerSettin
 		return !debuggerSettings.equals(currentSettings);
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public JComponent getComponent()
 	{
@@ -99,7 +99,7 @@ class DebuggerLaunchingConfigurable implements IdeaConfigurableUi<DebuggerSettin
 		transportPanel.add(new JLabel(DebuggerBundle.message("label.debugger.launching.configurable.debugger.transport")), BorderLayout.WEST);
 		transportPanel.add(box, BorderLayout.CENTER);
 
-		consulo.ide.impl.idea.ui.components.panels.VerticalBox panel = new VerticalBox();
+		VerticalBox panel = new VerticalBox();
 		panel.setOpaque(false);
 		panel.add(transportPanel);
 		panel.add(myCbForceClassicVM);

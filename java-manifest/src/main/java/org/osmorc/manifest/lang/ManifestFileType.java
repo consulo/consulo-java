@@ -46,7 +46,7 @@ public class ManifestFileType extends LanguageFileType
 		super(ManifestLanguage.INSTANCE);
 	}
 
-	public ManifestFileType(@jakarta.annotation.Nonnull Language language)
+	public ManifestFileType(@Nonnull Language language)
 	{
 		super(language);
 	}

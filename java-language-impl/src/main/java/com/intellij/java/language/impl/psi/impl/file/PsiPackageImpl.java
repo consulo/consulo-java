@@ -139,7 +139,7 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   public PsiModifierList getAnnotationList() {
     if (myAnnotationList == null) {
       myAnnotationList = CachedValuesManager.getManager(myManager.getProject()).createCachedValue(new PackageAnnotationValueProvider(), false);
@@ -154,7 +154,7 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiJavaPackage[] getSubPackages(@Nonnull GlobalSearchScope scope) {
     return getFacade().getSubPackages(this, scope);
   }
@@ -201,7 +201,7 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
     return getClassNamesCache().contains(name);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public PsiClass[] findClassByShortName(@Nonnull String name, @Nonnull GlobalSearchScope scope) {
     return getFacade().findClassByShortName(name, this, scope);
@@ -215,7 +215,7 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
   }
 
   @Override
-  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @jakarta.annotation.Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place) {
+  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place) {
     GlobalSearchScope scope = place.getResolveScope();
 
     processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, this);

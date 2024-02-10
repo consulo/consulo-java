@@ -48,14 +48,14 @@ public class UnnecessaryBlockStatementInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "unnecessary.code.block.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "unnecessary.block.statement.problem.descriptor");
@@ -80,7 +80,7 @@ public class UnnecessaryBlockStatementInspection extends BaseInspection {
 
   private static class UnnecessaryBlockFix extends InspectionGadgetsFix {
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "unnecessary.code.block.unwrap.quickfix");

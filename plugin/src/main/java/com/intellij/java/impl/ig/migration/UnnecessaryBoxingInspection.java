@@ -64,7 +64,7 @@ public class UnnecessaryBoxingInspection extends BaseInspection
 		return true;
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	@Override
 	public JComponent createOptionsPanel()
 	{
@@ -204,7 +204,7 @@ public class UnnecessaryBoxingInspection extends BaseInspection
 	{
 
 		@Override
-		public void visitNewExpression(@jakarta.annotation.Nonnull PsiNewExpression expression)
+		public void visitNewExpression(@Nonnull PsiNewExpression expression)
 		{
 			super.visitNewExpression(expression);
 			final PsiExpressionList argumentList = expression.getArgumentList();

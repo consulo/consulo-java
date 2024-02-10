@@ -13,7 +13,7 @@ import java.util.Map;
 public class PsiSubstitutorFactoryImpl extends PsiSubstitutorFactory {
   @Nonnull
   @Override
-  protected PsiSubstitutor createSubstitutor(@jakarta.annotation.Nonnull PsiTypeParameter typeParameter, PsiType mapping) {
+  protected PsiSubstitutor createSubstitutor(@Nonnull PsiTypeParameter typeParameter, PsiType mapping) {
     return new PsiSubstitutorImpl(typeParameter, mapping);
   }
 

@@ -34,7 +34,7 @@ public class ComparatorMethodParameterNotUsedInspection
 
   @Override
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "comparator.method.parameter.not.used.display.name");

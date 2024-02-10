@@ -263,7 +263,7 @@ public final class SignatureParsing {
     return dimensions;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static String parseTypeString(CharacterIterator signature, Function<String, String> mapping) throws ClsFormatException {
     int dimensions = parseDimensions(signature);
 

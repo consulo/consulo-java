@@ -194,7 +194,7 @@ public class DeferFinalAssignmentFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return
         variable != null
             && variable.isValid()

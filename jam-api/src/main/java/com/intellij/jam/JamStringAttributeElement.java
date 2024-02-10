@@ -30,7 +30,7 @@ import jakarta.annotation.Nullable;
 public class JamStringAttributeElement<T> extends JamAttributeElement<T> implements MutableGenericValue<T> {
   private final JamConverter<T> myConverter;
 
-  public JamStringAttributeElement(@jakarta.annotation.Nonnull PsiElementRef<PsiAnnotation> parent, String attributeName, JamConverter<T> converter) {
+  public JamStringAttributeElement(@Nonnull PsiElementRef<PsiAnnotation> parent, String attributeName, JamConverter<T> converter) {
     super(attributeName, parent);
     myConverter = converter;
   }
@@ -48,7 +48,7 @@ public class JamStringAttributeElement<T> extends JamAttributeElement<T> impleme
     return JamCommonUtil.getObjectValue(value, String.class);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public PsiLiteral getPsiLiteral() {
     final PsiAnnotationMemberValue value = getPsiElement();
     return value instanceof PsiLiteral ? (PsiLiteral) value : null;

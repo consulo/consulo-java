@@ -55,7 +55,7 @@ public class JavacCompilerConfiguration implements PersistentStateComponent<JpsJ
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public JpsJavaCompilerOptions getState() {
     JpsJavaCompilerOptions state = new JpsJavaCompilerOptions();
     XmlSerializerUtil.copyBean(mySettings, state);

@@ -40,7 +40,7 @@ public class StaticInheritanceTest extends LightQuickFixTestCase {
     return "/com/siyeh/igtest/inheritance/staticInheritance/";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected String getTestDataPath() {
     return PluginPathManager.getPluginHomePath("InspectionGadgets") + "/test";

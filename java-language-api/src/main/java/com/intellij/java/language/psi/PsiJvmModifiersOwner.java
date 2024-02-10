@@ -17,7 +17,7 @@ import jakarta.annotation.Nullable;
  */
 public interface PsiJvmModifiersOwner extends PsiModifierListOwner, JvmModifiersOwner {
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   default PsiAnnotation[] getAnnotations() {
     return PsiModifierListOwner.super.getAnnotations();
   }
@@ -29,7 +29,7 @@ public interface PsiJvmModifiersOwner extends PsiModifierListOwner, JvmModifiers
   }
 
   @Override
-  default boolean hasAnnotation(@jakarta.annotation.Nonnull String fqn) {
+  default boolean hasAnnotation(@Nonnull String fqn) {
     return PsiModifierListOwner.super.hasAnnotation(fqn);
   }
 
@@ -38,7 +38,7 @@ public interface PsiJvmModifiersOwner extends PsiModifierListOwner, JvmModifiers
     return PsiModifierListOwner.super.hasModifier(modifier);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   default PsiElement getSourceElement() {
     return this;

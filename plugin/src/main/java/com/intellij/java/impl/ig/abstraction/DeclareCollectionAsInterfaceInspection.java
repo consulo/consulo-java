@@ -151,7 +151,7 @@ public class DeclareCollectionAsInterfaceInspection extends BaseInspection
 	{
 
 		@Override
-		public void visitVariable(@jakarta.annotation.Nonnull PsiVariable variable)
+		public void visitVariable(@Nonnull PsiVariable variable)
 		{
 			if(isOnTheFly() && DeclarationSearchUtils.isTooExpensiveToSearch(variable, false))
 			{
@@ -201,7 +201,7 @@ public class DeclareCollectionAsInterfaceInspection extends BaseInspection
 		}
 
 		@Override
-		public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method)
+		public void visitMethod(@Nonnull PsiMethod method)
 		{
 			super.visitMethod(method);
 			if(ignorePrivateMethodsAndFields && method.hasModifierProperty(PsiModifier.PRIVATE))

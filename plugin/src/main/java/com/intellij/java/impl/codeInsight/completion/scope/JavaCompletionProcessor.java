@@ -68,7 +68,7 @@ public class JavaCompletionProcessor extends BaseScopeProcessor implements Eleme
   private final Options myOptions;
   private final boolean myAllowStaticWithInstanceQualifier;
 
-  public JavaCompletionProcessor(@jakarta.annotation.Nonnull PsiElement element, ElementFilter filter, Options options, @Nonnull Condition<String> nameCondition) {
+  public JavaCompletionProcessor(@Nonnull PsiElement element, ElementFilter filter, Options options, @Nonnull Condition<String> nameCondition) {
     myOptions = options;
     myElement = element;
     myMatcher = nameCondition;
@@ -115,7 +115,7 @@ public class JavaCompletionProcessor extends BaseScopeProcessor implements Eleme
   }
 
   @Override
-  public void handleEvent(@jakarta.annotation.Nonnull Event event, Object associated) {
+  public void handleEvent(@Nonnull Event event, Object associated) {
     if (event == JavaScopeProcessorEvent.START_STATIC) {
       myStatic = true;
     }
@@ -130,7 +130,7 @@ public class JavaCompletionProcessor extends BaseScopeProcessor implements Eleme
   }
 
   @Override
-  public boolean execute(@jakarta.annotation.Nonnull PsiElement element, @jakarta.annotation.Nonnull ResolveState state) {
+  public boolean execute(@Nonnull PsiElement element, @Nonnull ResolveState state) {
     if (element instanceof PsiPackage && !isQualifiedContext()) {
       if (myScope instanceof PsiClass) {
         return true;
@@ -228,7 +228,7 @@ public class JavaCompletionProcessor extends BaseScopeProcessor implements Eleme
     return StaticProblem.none;
   }
 
-  public boolean satisfies(@jakarta.annotation.Nonnull PsiElement element, @jakarta.annotation.Nonnull ResolveState state) {
+  public boolean satisfies(@Nonnull PsiElement element, @Nonnull ResolveState state) {
     final String name = PsiUtilCore.getName(element);
     if (name != null && StringUtil.isNotEmpty(name) && myMatcher.value(name)) {
       if (myFilter.isClassAcceptable(element.getClass()) && myFilter.isAcceptable(new CandidateInfo(element, state.get(PsiSubstitutor.KEY)), myElement)) {
@@ -238,12 +238,12 @@ public class JavaCompletionProcessor extends BaseScopeProcessor implements Eleme
     return false;
   }
 
-  public void setQualifierType(@jakarta.annotation.Nullable PsiType qualifierType) {
+  public void setQualifierType(@Nullable PsiType qualifierType) {
     myQualifierType = qualifierType;
     myQualifierClass = PsiUtil.resolveClassInClassTypeOnly(qualifierType);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public PsiType getQualifierType() {
     return myQualifierType;
   }
@@ -266,7 +266,7 @@ public class JavaCompletionProcessor extends BaseScopeProcessor implements Eleme
     return !myOptions.checkAccess && !(element instanceof PsiCompiledElement);
   }
 
-  public void setCompletionElements(@jakarta.annotation.Nonnull Object[] elements) {
+  public void setCompletionElements(@Nonnull Object[] elements) {
     for (Object element : elements) {
       CompletionElement completion = new CompletionElement(element, PsiSubstitutor.EMPTY);
       myResults.put(completion, completion);
@@ -311,7 +311,7 @@ public class JavaCompletionProcessor extends BaseScopeProcessor implements Eleme
   }
 
   @Override
-  public <T> T getHint(@jakarta.annotation.Nonnull Key<T> hintKey) {
+  public <T> T getHint(@Nonnull Key<T> hintKey) {
     if (hintKey == ElementClassHint.KEY) {
       //noinspection unchecked
       return (T) this;

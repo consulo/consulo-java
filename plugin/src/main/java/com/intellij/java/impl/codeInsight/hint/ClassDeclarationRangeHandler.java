@@ -31,8 +31,8 @@ public class ClassDeclarationRangeHandler implements DeclarationRangeHandler {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
-  public TextRange getDeclarationRange(@jakarta.annotation.Nonnull final PsiElement container) {
+  @Nonnull
+  public TextRange getDeclarationRange(@Nonnull final PsiElement container) {
     PsiClass aClass = (PsiClass) container;
     if (aClass instanceof PsiAnonymousClass) {
       PsiConstructorCall call = (PsiConstructorCall) aClass.getParent();

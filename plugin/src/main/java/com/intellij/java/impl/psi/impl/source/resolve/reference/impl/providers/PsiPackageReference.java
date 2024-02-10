@@ -80,7 +80,7 @@ public class PsiPackageReference extends PsiPolyVariantReferenceBase<PsiElement>
 		return subPackages.toArray();
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public String getUnresolvedMessagePattern()
 	{
@@ -94,7 +94,7 @@ public class PsiPackageReference extends PsiPolyVariantReferenceBase<PsiElement>
 		return doMultiResolve();
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	protected ResolveResult[] doMultiResolve()
 	{
 		final Collection<PsiJavaPackage> packages = new HashSet<PsiJavaPackage>();
@@ -106,7 +106,7 @@ public class PsiPackageReference extends PsiPolyVariantReferenceBase<PsiElement>
 	}
 
 	@Override
-	public PsiElement bindToElement(@jakarta.annotation.Nonnull final PsiElement element) throws IncorrectOperationException
+	public PsiElement bindToElement(@Nonnull final PsiElement element) throws IncorrectOperationException
 	{
 		if(!(element instanceof PsiJavaPackage))
 		{

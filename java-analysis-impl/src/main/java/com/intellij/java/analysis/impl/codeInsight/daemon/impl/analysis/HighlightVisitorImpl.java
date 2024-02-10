@@ -108,12 +108,12 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
   private final Set<PsiClass> myOverrideEquivalentMethodsVisitedClasses = new HashSet<>();
 
   @Inject
-  public HighlightVisitorImpl(@jakarta.annotation.Nonnull PsiResolveHelper resolveHelper) {
+  public HighlightVisitorImpl(@Nonnull PsiResolveHelper resolveHelper) {
     myResolveHelper = resolveHelper;
   }
 
   @Nonnull
-  private MostlySingularMultiMap<MethodSignature, PsiMethod> getDuplicateMethods(@jakarta.annotation.Nonnull PsiClass aClass) {
+  private MostlySingularMultiMap<MethodSignature, PsiMethod> getDuplicateMethods(@Nonnull PsiClass aClass) {
     MostlySingularMultiMap<MethodSignature, PsiMethod> signatures = myDuplicateMethods.get(aClass);
     if (signatures == null) {
       signatures = new MostlySingularMultiMap<>();
@@ -131,17 +131,17 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
   }
 
   @Override
-  public void visit(@jakarta.annotation.Nonnull PsiElement element) {
+  public void visit(@Nonnull PsiElement element) {
     element.accept(this);
   }
 
-  private void registerReferencesFromInjectedFragments(@jakarta.annotation.Nonnull PsiElement element) {
+  private void registerReferencesFromInjectedFragments(@Nonnull PsiElement element) {
     InjectedLanguageManager manager = InjectedLanguageManager.getInstance(myFile.getProject());
     manager.enumerateEx(element, myFile, false, (injectedPsi, places) -> injectedPsi.accept(REGISTER_REFERENCES_VISITOR));
   }
 
   @Override
-  public boolean analyze(@jakarta.annotation.Nonnull PsiFile file, boolean updateWholeFile, @jakarta.annotation.Nonnull HighlightInfoHolder holder, @jakarta.annotation.Nonnull Runnable highlight) {
+  public boolean analyze(@Nonnull PsiFile file, boolean updateWholeFile, @Nonnull HighlightInfoHolder holder, @Nonnull Runnable highlight) {
     try {
       prepare(holder, file);
       if (updateWholeFile) {
@@ -220,8 +220,8 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
     }
   }
 
-  @jakarta.annotation.Nullable
-  public static JavaResolveResult resolveJavaReference(@jakarta.annotation.Nonnull PsiReference reference) {
+  @Nullable
+  public static JavaResolveResult resolveJavaReference(@Nonnull PsiReference reference) {
     if (reference instanceof PsiJavaReference) {
       PsiJavaReference psiJavaReference = (PsiJavaReference) reference;
       return psiJavaReference.advancedResolve(false);
@@ -749,7 +749,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
   }
 
   @Override
-  public void visitImportStaticReferenceElement(@jakarta.annotation.Nonnull PsiImportStaticReferenceElement ref) {
+  public void visitImportStaticReferenceElement(@Nonnull PsiImportStaticReferenceElement ref) {
     final String refName = ref.getReferenceName();
     final JavaResolveResult[] results = ref.multiResolve(false);
 
@@ -944,7 +944,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
     }
   }
 
-  private void highlightReferencedMethodOrClassName(@jakarta.annotation.Nonnull PsiJavaCodeReferenceElement element, PsiElement resolved) {
+  private void highlightReferencedMethodOrClassName(@Nonnull PsiJavaCodeReferenceElement element, PsiElement resolved) {
     PsiElement parent = element.getParent();
     final TextAttributesScheme colorsScheme = myHolder.getColorsScheme();
     if (parent instanceof PsiMethodCallExpression) {
@@ -1224,7 +1224,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
     }
   }
 
-  private JavaResolveResult doVisitReferenceElement(@jakarta.annotation.Nonnull PsiJavaCodeReferenceElement ref) {
+  private JavaResolveResult doVisitReferenceElement(@Nonnull PsiJavaCodeReferenceElement ref) {
     JavaResolveResult result = resolveOptimised(ref);
     if (result == null) {
       return null;
@@ -1355,8 +1355,8 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
     return result;
   }
 
-  @jakarta.annotation.Nullable
-  private JavaResolveResult resolveOptimised(@jakarta.annotation.Nonnull PsiJavaCodeReferenceElement ref) {
+  @Nullable
+  private JavaResolveResult resolveOptimised(@Nonnull PsiJavaCodeReferenceElement ref) {
     try {
       if (ref instanceof PsiReferenceExpressionImpl) {
         PsiReferenceExpressionImpl.OurGenericsResolver resolver = PsiReferenceExpressionImpl.OurGenericsResolver.INSTANCE;
@@ -1370,8 +1370,8 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
     }
   }
 
-  @jakarta.annotation.Nullable
-  private JavaResolveResult[] resolveOptimised(@jakarta.annotation.Nonnull PsiReferenceExpression expression) {
+  @Nullable
+  private JavaResolveResult[] resolveOptimised(@Nonnull PsiReferenceExpression expression) {
     try {
       if (expression instanceof PsiReferenceExpressionImpl) {
         PsiReferenceExpressionImpl.OurGenericsResolver resolver = PsiReferenceExpressionImpl.OurGenericsResolver.INSTANCE;
@@ -1857,7 +1857,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
     }
   }
 
-  private boolean isReassigned(@jakarta.annotation.Nonnull PsiVariable variable) {
+  private boolean isReassigned(@Nonnull PsiVariable variable) {
     try {
       boolean reassigned;
       if (variable instanceof PsiParameter) {

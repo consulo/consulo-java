@@ -39,8 +39,8 @@ public enum LongRangeBinOp
 	 * @return the resulting LongRangeSet which covers possible results of the operation (probably including some more elements).
 	 */
 	public
-	@jakarta.annotation.Nonnull
-	LongRangeSet eval(@jakarta.annotation.Nonnull LongRangeSet left, @Nonnull LongRangeSet right, boolean isLong)
+	@Nonnull
+	LongRangeSet eval(@Nonnull LongRangeSet left, @Nonnull LongRangeSet right, boolean isLong)
 	{
 		switch(this)
 		{
@@ -81,7 +81,7 @@ public enum LongRangeBinOp
 	 * @return the resulting LongRangeSet which covers possible results of the operation (probably including some more elements).
 	 */
 	public
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	LongRangeSet evalWide(@Nonnull LongRangeSet left, @Nonnull LongRangeSet right, boolean isLong)
 	{
 		switch(this)

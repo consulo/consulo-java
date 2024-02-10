@@ -61,7 +61,7 @@ public class InfiniteLoopStatementInspection extends BaseInspection
 	{
 
 		@Override
-		public void visitForStatement(@jakarta.annotation.Nonnull PsiForStatement statement)
+		public void visitForStatement(@Nonnull PsiForStatement statement)
 		{
 			super.visitForStatement(statement);
 			checkStatement(statement);
@@ -75,7 +75,7 @@ public class InfiniteLoopStatementInspection extends BaseInspection
 		}
 
 		@Override
-		public void visitDoWhileStatement(@jakarta.annotation.Nonnull PsiDoWhileStatement statement)
+		public void visitDoWhileStatement(@Nonnull PsiDoWhileStatement statement)
 		{
 			super.visitDoWhileStatement(statement);
 			checkStatement(statement);

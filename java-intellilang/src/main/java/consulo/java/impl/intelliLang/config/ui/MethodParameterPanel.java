@@ -27,7 +27,9 @@ import consulo.dataContext.TypeSafeDataProvider;
 import consulo.document.Document;
 import consulo.document.event.DocumentAdapter;
 import consulo.document.event.DocumentEvent;
+import consulo.ide.impl.idea.ui.dualView.TreeTableView;
 import consulo.ide.impl.idea.ui.treeStructure.treetable.ListTreeTableModelOnColumns;
+import consulo.ide.impl.idea.ui.treeStructure.treetable.TreeColumnInfo;
 import consulo.ide.impl.idea.util.containers.Convertor;
 import consulo.ide.impl.intelliLang.inject.config.ui.AbstractInjectionPanel;
 import consulo.ide.impl.intelliLang.inject.config.ui.AdvancedPanel;
@@ -76,7 +78,7 @@ public class MethodParameterPanel extends AbstractInjectionPanel<MethodParameter
   private JPanel myRoot;
   private JPanel myClassPanel;
 
-  private consulo.ide.impl.idea.ui.dualView.TreeTableView myParamsTable;
+  private TreeTableView myParamsTable;
 
   private final ReferenceEditorWithBrowseButton myClassField;
   private DefaultMutableTreeNode myRootNode;
@@ -375,7 +377,7 @@ public class MethodParameterPanel extends AbstractInjectionPanel<MethodParameter
             return valueOf(o) != null;
           }
 
-        }, new consulo.ide.impl.idea.ui.treeStructure.treetable.TreeColumnInfo("Method/Parameters")
+        }, new TreeColumnInfo("Method/Parameters")
     };
   }
 
@@ -399,7 +401,7 @@ public class MethodParameterPanel extends AbstractInjectionPanel<MethodParameter
     }
   }
 
-  private class MyView extends consulo.ide.impl.idea.ui.dualView.TreeTableView implements TypeSafeDataProvider {
+  private class MyView extends TreeTableView implements TypeSafeDataProvider {
     public MyView(ListTreeTableModelOnColumns treeTableModel) {
       super(treeTableModel);
     }

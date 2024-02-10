@@ -34,7 +34,7 @@ public final class DfaBinOpValue extends DfaValue
 	@Nonnull
 	LongRangeBinOp myOp;
 
-	private DfaBinOpValue(@jakarta.annotation.Nonnull DfaVariableValue left, @Nonnull DfaValue right, boolean isLong, @Nonnull LongRangeBinOp op)
+	private DfaBinOpValue(@Nonnull DfaVariableValue left, @Nonnull DfaValue right, boolean isLong, @Nonnull LongRangeBinOp op)
 	{
 		super(left.getFactory());
 		switch(op)

@@ -130,13 +130,13 @@ public class JavaCompiler implements TranslatingCompiler {
     return list;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public FileType[] getInputFileTypes() {
     return new FileType[]{JavaFileType.INSTANCE};
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public FileType[] getOutputFileTypes() {
     return new FileType[]{JavaClassFileType.INSTANCE};

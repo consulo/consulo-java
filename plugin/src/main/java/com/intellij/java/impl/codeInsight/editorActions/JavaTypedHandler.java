@@ -170,7 +170,7 @@ public class JavaTypedHandler extends TypedHandlerDelegate {
         return Result.STOP;
       }
       if (PsiTreeUtil.getParentOfType(leaf, PsiCodeBlock.class, false, PsiMember.class) != null) {
-        consulo.ide.impl.idea.openapi.editor.EditorModificationUtil.insertStringAtCaret(editor, "{");
+        EditorModificationUtil.insertStringAtCaret(editor, "{");
         TypedHandler.indentOpenedBrace(project, editor);
         return Result.STOP;
       }
@@ -181,7 +181,7 @@ public class JavaTypedHandler extends TypedHandlerDelegate {
 
   private static boolean shouldInsertStatementBody(@Nonnull PsiElement statement,
                                                    @Nonnull Document doc,
-                                                   @jakarta.annotation.Nullable PsiElement prev) {
+                                                   @Nullable PsiElement prev) {
     PsiStatement block = statement instanceof PsiWhileStatement ? ((PsiWhileStatement) statement).getBody() : (
         (PsiIfStatement) statement).getThenBranch();
     PsiExpression condition = PsiTreeUtil.getChildOfType(statement, PsiExpression.class);
@@ -215,7 +215,7 @@ public class JavaTypedHandler extends TypedHandlerDelegate {
   public Result charTyped(final char c,
                           final Project project,
                           @Nonnull final Editor editor,
-                          @jakarta.annotation.Nonnull final PsiFile file) {
+                          @Nonnull final PsiFile file) {
     if (myJavaLTTyped) {
       myJavaLTTyped = false;
       handleAfterJavaLT(editor, JavaTokenType.LT, JavaTokenType.GT, INVALID_INSIDE_REFERENCE);
@@ -228,7 +228,7 @@ public class JavaTypedHandler extends TypedHandlerDelegate {
     return Result.CONTINUE;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static FileType getOriginalFileType(final PsiFile file) {
     final VirtualFile virtualFile = file.getVirtualFile();
     return virtualFile != null ? virtualFile.getFileType() : null;

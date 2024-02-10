@@ -54,7 +54,7 @@ import java.util.HashSet;
 @IntentionMetaData(ignoreId = "java.DelegateWithDefaultParamValueIntentionAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class DelegateWithDefaultParamValueIntentionAction extends PsiElementBaseIntentionAction implements Iconable, LowPriorityAction {
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     final PsiParameter parameter = PsiTreeUtil.getParentOfType(element, PsiParameter.class);
     if (parameter != null) {
       if (!parameter.getLanguage().isKindOf(JavaLanguage.INSTANCE)) return false;
@@ -170,7 +170,7 @@ public class DelegateWithDefaultParamValueIntentionAction extends PsiElementBase
     return new PsiParameter[]{PsiTreeUtil.getParentOfType(element, PsiParameter.class)};
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getText() {
     return "Generate delegated method with default parameter value";

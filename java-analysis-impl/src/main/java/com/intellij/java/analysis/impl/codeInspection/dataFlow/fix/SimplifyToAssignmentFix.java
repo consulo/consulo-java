@@ -39,7 +39,7 @@ public class SimplifyToAssignmentFix implements LocalQuickFix
 		return InspectionsBundle.message("inspection.data.flow.simplify.to.assignment.quickfix.name");
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -47,7 +47,7 @@ public class SimplifyToAssignmentFix implements LocalQuickFix
 	}
 
 	@Override
-	public void applyFix(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull ProblemDescriptor descriptor)
+	public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 	{
 		final PsiElement psiElement = descriptor.getPsiElement();
 		if(psiElement == null)

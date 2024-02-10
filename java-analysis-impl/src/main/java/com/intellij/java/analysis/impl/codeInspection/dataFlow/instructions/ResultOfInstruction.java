@@ -23,7 +23,7 @@ public class ResultOfInstruction extends EvalInstruction
 	@Override
 	public
 	@Nonnull
-	DfaValue eval(@jakarta.annotation.Nonnull DfaValueFactory factory, @Nonnull DfaMemoryState state, @Nonnull DfaValue ... arguments)
+	DfaValue eval(@Nonnull DfaValueFactory factory, @Nonnull DfaMemoryState state, @Nonnull DfaValue ... arguments)
 	{
 		return arguments[0];
 	}
@@ -33,7 +33,7 @@ public class ResultOfInstruction extends EvalInstruction
 		return "RESULT_OF " + getExpression().getText();
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public PsiExpression getExpression()
 	{

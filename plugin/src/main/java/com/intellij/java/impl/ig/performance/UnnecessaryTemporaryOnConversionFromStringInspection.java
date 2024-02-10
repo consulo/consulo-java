@@ -77,7 +77,7 @@ public class UnnecessaryTemporaryOnConversionFromStringInspection
       replacementString);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @NonNls
   static String calculateReplacementExpression(
     PsiMethodCallExpression expression) {
@@ -189,7 +189,7 @@ public class UnnecessaryTemporaryOnConversionFromStringInspection
 
     @Override
     public void visitMethodCallExpression(
-      @jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+      @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       final PsiReferenceExpression methodExpression =
         expression.getMethodExpression();

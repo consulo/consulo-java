@@ -65,14 +65,14 @@ public class UnnecessaryUnboxingInspection extends BaseInspection
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return InspectionGadgetsBundle.message("unnecessary.unboxing.display.name");
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	protected String buildErrorString(Object... infos)
 	{
 		return InspectionGadgetsBundle.message("unnecessary.unboxing.problem.descriptor");
@@ -101,7 +101,7 @@ public class UnnecessaryUnboxingInspection extends BaseInspection
 	{
 
 		@Override
-		@jakarta.annotation.Nonnull
+		@Nonnull
 		public String getFamilyName()
 		{
 			return InspectionGadgetsBundle.message("unnecessary.unboxing.remove.quickfix");
@@ -168,7 +168,7 @@ public class UnnecessaryUnboxingInspection extends BaseInspection
 	{
 
 		@Override
-		public void visitMethodCallExpression(@jakarta.annotation.Nonnull PsiMethodCallExpression expression)
+		public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression)
 		{
 			super.visitMethodCallExpression(expression);
 			if(!isUnboxingExpression(expression))
@@ -184,7 +184,7 @@ public class UnnecessaryUnboxingInspection extends BaseInspection
 			registerError(expression);
 		}
 
-		private boolean canRemainBoxed(@jakarta.annotation.Nonnull PsiExpression expression, @Nonnull PsiExpression unboxedExpression)
+		private boolean canRemainBoxed(@Nonnull PsiExpression expression, @Nonnull PsiExpression unboxedExpression)
 		{
 			PsiElement parent = expression.getParent();
 			while(parent instanceof PsiParenthesizedExpression)
@@ -317,7 +317,7 @@ public class UnnecessaryUnboxingInspection extends BaseInspection
 			return unboxingMethod.equals(methodName);
 		}
 
-		private boolean isSameMethodCalledWithoutUnboxing(@jakarta.annotation.Nonnull PsiCallExpression callExpression, @jakarta.annotation.Nonnull PsiExpression unboxingExpression, @jakarta.annotation.Nonnull PsiExpression unboxedExpression)
+		private boolean isSameMethodCalledWithoutUnboxing(@Nonnull PsiCallExpression callExpression, @Nonnull PsiExpression unboxingExpression, @Nonnull PsiExpression unboxedExpression)
 		{
 			final PsiMethod originalMethod = callExpression.resolveMethod();
 			if(originalMethod == null)

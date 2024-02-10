@@ -47,7 +47,7 @@ public class PsiStatementPattern<T extends PsiStatement, Self extends PsiStateme
     return insideMethod(PsiJavaPatterns.psiMethod().withName(methodName).definedInClass(qualifiedClassName));
   }
 
-  public Self insideMethod(@jakarta.annotation.Nonnull @NonNls String methodName, @jakarta.annotation.Nonnull @NonNls String qualifiedClassName) {
+  public Self insideMethod(@Nonnull @NonNls String methodName, @Nonnull @NonNls String qualifiedClassName) {
     return insideMethod(StandardPatterns.string().equalTo(methodName), qualifiedClassName);
   }
 

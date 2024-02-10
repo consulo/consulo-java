@@ -35,15 +35,15 @@ public interface TypeConstraint {
    * @param other other constraint to join with
    * @return joined constraint. If some type satisfies either this or other constraint, it also satisfies the resulting constraint.
    */
-  @jakarta.annotation.Nonnull
-  TypeConstraint join(@jakarta.annotation.Nonnull TypeConstraint other);
+  @Nonnull
+  TypeConstraint join(@Nonnull TypeConstraint other);
 
   /**
    * @param other other constraint to meet with
    * @return intersection constraint. If some type satisfies the resulting constraint, it also satisfies both this and other constraints.
    */
   @Nonnull
-  TypeConstraint meet(@jakarta.annotation.Nonnull TypeConstraint other);
+  TypeConstraint meet(@Nonnull TypeConstraint other);
 
   /**
    * @param other other constraint to check
@@ -74,7 +74,7 @@ public interface TypeConstraint {
    * @param type declared PsiType of the value
    * @return presentation text that tells about additional constraints; can be empty if no additional constraints are known
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   default String getPresentationText(@Nullable PsiType type) {
     return toShortString();
   }
@@ -110,7 +110,7 @@ public interface TypeConstraint {
   default
   @Nullable
   @Nls
-  String getAssignabilityExplanation(@jakarta.annotation.Nonnull TypeConstraint otherType,
+  String getAssignabilityExplanation(@Nonnull TypeConstraint otherType,
                                      boolean expectedAssignable,
                                      @Nls String elementTitle) {
     return null;
@@ -149,7 +149,7 @@ public interface TypeConstraint {
    * @return an array component type for an array type; BOTTOM if this type is not always an array type or primitive array
    */
   default
-  @jakarta.annotation.Nonnull
+  @Nonnull
   TypeConstraint getArrayComponent() {
     return TypeConstraints.BOTTOM;
   }
@@ -159,7 +159,7 @@ public interface TypeConstraint {
    * @return an extracted type constraint
    */
   static
-  @jakarta.annotation.Nonnull
+  @Nonnull
   TypeConstraint fromDfType(DfType type) {
     return type instanceof DfReferenceType ? ((DfReferenceType) type).getConstraint() :
         type == DfTypes.BOTTOM ? TypeConstraints.BOTTOM :
@@ -187,7 +187,7 @@ public interface TypeConstraint {
     @Override
     default
     @Nonnull
-    TypeConstraint meet(@jakarta.annotation.Nonnull TypeConstraint other) {
+    TypeConstraint meet(@Nonnull TypeConstraint other) {
       if (this.equals(other) || other.isSuperConstraintOf(this)) {
         return this;
       }
@@ -269,7 +269,7 @@ public interface TypeConstraint {
      * @return a constraint that represents objects not only of this type but also of any subtypes. May return self if the type is final.
      */
     default
-    @jakarta.annotation.Nonnull
+    @Nonnull
     TypeConstraint instanceOf() {
       if (isFinal()) {
         return canBeInstantiated() ? this : TypeConstraints.BOTTOM;
@@ -281,7 +281,7 @@ public interface TypeConstraint {
      * @return a constraint that represents objects that are not instanceof this type
      */
     default
-    @jakarta.annotation.Nonnull
+    @Nonnull
     TypeConstraint notInstanceOf() {
       return new Constrained(Collections.emptySet(), Collections.singleton(this));
     }
@@ -307,10 +307,10 @@ public interface TypeConstraint {
     @Nonnull
     Set<Exact> myInstanceOf;
     private final
-    @jakarta.annotation.Nonnull
+    @Nonnull
     Set<Exact> myNotInstanceOf;
 
-    Constrained(@jakarta.annotation.Nonnull Set<Exact> instanceOf, @jakarta.annotation.Nonnull Set<Exact> notInstanceOf) {
+    Constrained(@Nonnull Set<Exact> instanceOf, @Nonnull Set<Exact> notInstanceOf) {
       assert !instanceOf.isEmpty() || !notInstanceOf.isEmpty();
       myInstanceOf = instanceOf;
       myNotInstanceOf = notInstanceOf;
@@ -331,7 +331,7 @@ public interface TypeConstraint {
 
     @Override
     public
-    @jakarta.annotation.Nullable
+    @Nullable
     TypeConstraint tryNegate() {
       if (myInstanceOf.size() == 1 && myNotInstanceOf.isEmpty()) {
         return myInstanceOf.iterator().next().notInstanceOf();
@@ -362,8 +362,8 @@ public interface TypeConstraint {
     }
 
     private
-    @jakarta.annotation.Nonnull
-    TypeConstraint joinWithConstrained(@jakarta.annotation.Nonnull Constrained other) {
+    @Nonnull
+    TypeConstraint joinWithConstrained(@Nonnull Constrained other) {
       Set<Exact> notTypes = new HashSet<>(this.myNotInstanceOf);
       notTypes.retainAll(other.myNotInstanceOf);
       Set<Exact> instanceOfTypes;
@@ -387,12 +387,12 @@ public interface TypeConstraint {
 
     private static
     @Nonnull
-    Set<Exact> withSuper(@jakarta.annotation.Nonnull Set<Exact> instanceofValues) {
+    Set<Exact> withSuper(@Nonnull Set<Exact> instanceofValues) {
       return StreamEx.of(instanceofValues).flatMap(Exact::superTypes).append(instanceofValues).toSet();
     }
 
     private
-    @jakarta.annotation.Nullable
+    @Nullable
     Constrained withInstanceofValue(@Nonnull Exact type) {
       if (myInstanceOf.contains(type)) {
         return this;
@@ -423,7 +423,7 @@ public interface TypeConstraint {
       return new Constrained(newInstanceof, myNotInstanceOf);
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     private Constrained withNotInstanceofValue(Exact type) {
       if (myNotInstanceOf.contains(type)) {
         return this;
@@ -453,8 +453,8 @@ public interface TypeConstraint {
 
     @Override
     public
-    @jakarta.annotation.Nonnull
-    TypeConstraint meet(@jakarta.annotation.Nonnull TypeConstraint other) {
+    @Nonnull
+    TypeConstraint meet(@Nonnull TypeConstraint other) {
       if (this.isSuperConstraintOf(other)) {
         return other;
       }
@@ -584,7 +584,7 @@ public interface TypeConstraint {
 
     @Override
     public
-    @jakarta.annotation.Nonnull
+    @Nonnull
     TypeConstraint getArrayComponent() {
       return instanceOfTypes().map(Exact::getArrayComponent)
           .map(type -> type instanceof Exact ? ((Exact) type).instanceOf() : TypeConstraints.BOTTOM)
@@ -610,7 +610,7 @@ public interface TypeConstraint {
     }
 
     @Override
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String toString() {
       return EntryStream.of("instanceof ", myInstanceOf,
           "not instanceof ", myNotInstanceOf)
@@ -620,8 +620,8 @@ public interface TypeConstraint {
     }
 
     @Override
-    @jakarta.annotation.Nonnull
-    public String getPresentationText(@jakarta.annotation.Nullable PsiType type) {
+    @Nonnull
+    public String getPresentationText(@Nullable PsiType type) {
       Set<Exact> instanceOfTypes = myInstanceOf;
       Exact exact = type == null ? null : ObjectUtil.tryCast(TypeConstraints.exact(type), Exact.class);
       if (exact != null) {

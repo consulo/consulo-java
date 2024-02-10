@@ -87,7 +87,7 @@ public abstract class RefJavaManager implements RefManagerExtension<RefJavaManag
 		return Arrays.asList(JavaLanguage.INSTANCE);
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public Language getLanguage()
 	{

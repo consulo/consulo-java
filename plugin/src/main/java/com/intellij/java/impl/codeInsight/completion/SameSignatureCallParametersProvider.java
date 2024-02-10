@@ -55,7 +55,7 @@ class SameSignatureCallParametersProvider implements CompletionProvider {
       .class).withParent(psiElement(PsiExpressionList.class).withParent(PsiCall.class)));
 
   @Override
-  public void addCompletions(@Nonnull CompletionParameters parameters, ProcessingContext context, @jakarta.annotation.Nonnull CompletionResultSet result) {
+  public void addCompletions(@Nonnull CompletionParameters parameters, ProcessingContext context, @Nonnull CompletionResultSet result) {
     addSignatureItems(parameters, result);
   }
 

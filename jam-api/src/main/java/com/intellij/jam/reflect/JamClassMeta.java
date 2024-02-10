@@ -37,7 +37,7 @@ public class JamClassMeta<Jam extends JamElement> extends JamMemberMeta<PsiClass
     super(jamClass);
   }
 
-  public JamClassMeta(@jakarta.annotation.Nullable JamMemberArchetype<? super PsiClass, ? super Jam> parent, Class<? extends Jam> jamClass, SemKey<Jam> jamKey) {
+  public JamClassMeta(@Nullable JamMemberArchetype<? super PsiClass, ? super Jam> parent, Class<? extends Jam> jamClass, SemKey<Jam> jamKey) {
     super(parent, jamClass, jamKey);
   }
 

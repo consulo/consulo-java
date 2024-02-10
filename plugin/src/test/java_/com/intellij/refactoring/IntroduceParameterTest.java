@@ -416,7 +416,7 @@ public abstract class IntroduceParameterTest extends LightRefactoringTestCase
 			{
 				@Nullable
 				@Override
-				public <T> T getData(@jakarta.annotation.Nonnull Key<T> key)
+				public <T> T getData(@Nonnull Key<T> key)
 				{
 					return null;
 				}

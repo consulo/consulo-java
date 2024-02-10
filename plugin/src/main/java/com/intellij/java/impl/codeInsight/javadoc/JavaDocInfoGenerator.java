@@ -246,7 +246,7 @@ public class JavaDocInfoGenerator {
   }
 
   @Nullable
-  private String fixupDoc(@jakarta.annotation.Nonnull final StringBuilder buffer) {
+  private String fixupDoc(@Nonnull final StringBuilder buffer) {
     String text = buffer.toString();
     if (text.isEmpty()) {
       return null;
@@ -292,7 +292,7 @@ public class JavaDocInfoGenerator {
    * Converts a relative link into {@link DocumentationManagerProtocol#PSI_ELEMENT_PROTOCOL PSI_ELEMENT_PROTOCOL}-type link if possible
    */
   @Nullable
-  static String createReferenceForRelativeLink(@jakarta.annotation.Nonnull String relativeLink, @jakarta.annotation.Nonnull PsiElement contextElement) {
+  static String createReferenceForRelativeLink(@Nonnull String relativeLink, @Nonnull PsiElement contextElement) {
     String fragment = null;
     int hashPosition = relativeLink.indexOf('#');
     if (hashPosition >= 0) {
@@ -633,7 +633,7 @@ public class JavaDocInfoGenerator {
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static PsiDocComment getDocComment(final PsiDocCommentOwner docOwner) {
     PsiElement navElement = docOwner.getNavigationElement();
     if (!(navElement instanceof PsiDocCommentOwner)) {
@@ -2267,7 +2267,7 @@ public class JavaDocInfoGenerator {
   private static class MyVisitor extends JavaElementVisitor {
     private final StringBuilder myBuffer;
 
-    MyVisitor(@jakarta.annotation.Nonnull StringBuilder buffer) {
+    MyVisitor(@Nonnull StringBuilder buffer) {
       myBuffer = buffer;
     }
 

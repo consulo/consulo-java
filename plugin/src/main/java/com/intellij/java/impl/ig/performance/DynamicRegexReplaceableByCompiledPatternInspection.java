@@ -78,7 +78,7 @@ public class DynamicRegexReplaceableByCompiledPatternInspection extends BaseInsp
 
   private static class DynamicRegexReplaceableByCompiledPatternFix extends InspectionGadgetsFix {
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
           "dynamic.regex.replaceable.by.compiled.pattern.quickfix");

@@ -41,7 +41,7 @@ public class ControlFlowUtils {
     return ifStatement.equals(elseBranch);
   }
 
-  public static boolean statementMayCompleteNormally(@jakarta.annotation.Nullable PsiStatement statement) {
+  public static boolean statementMayCompleteNormally(@Nullable PsiStatement statement) {
     if (statement == null) {
       return true;
     }
@@ -101,7 +101,7 @@ public class ControlFlowUtils {
     }
   }
 
-  private static boolean doWhileStatementMayCompleteNormally(@jakarta.annotation.Nonnull PsiDoWhileStatement loopStatement) {
+  private static boolean doWhileStatementMayCompleteNormally(@Nonnull PsiDoWhileStatement loopStatement) {
     final PsiExpression condition = loopStatement.getCondition();
     final Object value = ExpressionUtils.computeConstantExpression(condition);
     final PsiStatement body = loopStatement.getBody();
@@ -129,7 +129,7 @@ public class ControlFlowUtils {
     return Boolean.TRUE != value;
   }
 
-  private static boolean switchStatementMayCompleteNormally(@jakarta.annotation.Nonnull PsiSwitchStatement switchStatement) {
+  private static boolean switchStatementMayCompleteNormally(@Nonnull PsiSwitchStatement switchStatement) {
     if (statementIsBreakTarget(switchStatement)) {
       return true;
     }
@@ -206,7 +206,7 @@ public class ControlFlowUtils {
     return aClass != null && aClass.isEnum();
   }
 
-  private static boolean tryStatementMayCompleteNormally(@jakarta.annotation.Nonnull PsiTryStatement tryStatement) {
+  private static boolean tryStatementMayCompleteNormally(@Nonnull PsiTryStatement tryStatement) {
     final PsiCodeBlock finallyBlock = tryStatement.getFinallyBlock();
     if (finallyBlock != null) {
       if (!codeBlockMayCompleteNormally(finallyBlock)) {
@@ -226,7 +226,7 @@ public class ControlFlowUtils {
     return false;
   }
 
-  private static boolean ifStatementMayCompleteNormally(@jakarta.annotation.Nonnull PsiIfStatement ifStatement) {
+  private static boolean ifStatementMayCompleteNormally(@Nonnull PsiIfStatement ifStatement) {
     final PsiExpression condition = ifStatement.getCondition();
     final Object value = ExpressionUtils.computeConstantExpression(condition);
     final PsiStatement thenBranch = ifStatement.getThenBranch();
@@ -250,7 +250,7 @@ public class ControlFlowUtils {
     return statementMayCompleteNormally(branch1) || statementMayCompleteNormally(branch2);
   }
 
-  private static boolean labeledStatementMayCompleteNormally(@jakarta.annotation.Nonnull PsiLabeledStatement labeledStatement) {
+  private static boolean labeledStatementMayCompleteNormally(@Nonnull PsiLabeledStatement labeledStatement) {
     final PsiStatement statement = labeledStatement.getStatement();
     if (statement == null) {
       return false;
@@ -271,13 +271,13 @@ public class ControlFlowUtils {
     return true;
   }
 
-  private static boolean statementIsBreakTarget(@jakarta.annotation.Nonnull PsiStatement statement) {
+  private static boolean statementIsBreakTarget(@Nonnull PsiStatement statement) {
     final BreakFinder breakFinder = new BreakFinder(statement);
     statement.accept(breakFinder);
     return breakFinder.breakFound();
   }
 
-  private static boolean statementContainsContinueToAncestor(@jakarta.annotation.Nonnull PsiStatement statement) {
+  private static boolean statementContainsContinueToAncestor(@Nonnull PsiStatement statement) {
     PsiElement parent = statement.getParent();
     while (parent instanceof PsiLabeledStatement) {
       statement = (PsiStatement) parent;
@@ -288,7 +288,7 @@ public class ControlFlowUtils {
     return continueToAncestorFinder.continueToAncestorFound();
   }
 
-  public static boolean containsReturn(@jakarta.annotation.Nonnull PsiElement element) {
+  public static boolean containsReturn(@Nonnull PsiElement element) {
     final ReturnFinder returnFinder = new ReturnFinder();
     element.accept(returnFinder);
     return returnFinder.returnFound();
@@ -312,7 +312,7 @@ public class ControlFlowUtils {
     return methodCallFinder.containsCallToMethod();
   }
 
-  public static boolean isInLoop(@jakarta.annotation.Nonnull PsiElement element) {
+  public static boolean isInLoop(@Nonnull PsiElement element) {
     final PsiLoopStatement loopStatement = PsiTreeUtil.getParentOfType(element, PsiLoopStatement.class, true, PsiClass.class);
     if (loopStatement == null) {
       return false;
@@ -344,11 +344,11 @@ public class ControlFlowUtils {
     return PsiTreeUtil.getParentOfType(element, PsiCatchSection.class, true, PsiClass.class) != null;
   }
 
-  public static boolean isInExitStatement(@jakarta.annotation.Nonnull PsiExpression expression) {
+  public static boolean isInExitStatement(@Nonnull PsiExpression expression) {
     return isInReturnStatementArgument(expression) || isInThrowStatementArgument(expression);
   }
 
-  private static boolean isInReturnStatementArgument(@jakarta.annotation.Nonnull PsiExpression expression) {
+  private static boolean isInReturnStatementArgument(@Nonnull PsiExpression expression) {
     return PsiTreeUtil.getParentOfType(expression, PsiReturnStatement.class) != null;
   }
 
@@ -356,8 +356,8 @@ public class ControlFlowUtils {
     return PsiTreeUtil.getParentOfType(expression, PsiThrowStatement.class) != null;
   }
 
-  @jakarta.annotation.Nullable
-  public static PsiStatement stripBraces(@jakarta.annotation.Nullable PsiStatement statement) {
+  @Nullable
+  public static PsiStatement stripBraces(@Nullable PsiStatement statement) {
     if (statement instanceof PsiBlockStatement) {
       final PsiBlockStatement block = (PsiBlockStatement) statement;
       final PsiStatement onlyStatement = getOnlyStatementInBlock(block.getCodeBlock());
@@ -367,7 +367,7 @@ public class ControlFlowUtils {
     }
   }
 
-  public static boolean statementCompletesWithStatement(@jakarta.annotation.Nonnull PsiStatement containingStatement, @jakarta.annotation.Nonnull PsiStatement statement) {
+  public static boolean statementCompletesWithStatement(@Nonnull PsiStatement containingStatement, @Nonnull PsiStatement statement) {
     PsiElement statementToCheck = statement;
     while (true) {
       if (statementToCheck.equals(containingStatement)) {
@@ -389,7 +389,7 @@ public class ControlFlowUtils {
     }
   }
 
-  public static boolean blockCompletesWithStatement(@jakarta.annotation.Nonnull PsiCodeBlock body, @jakarta.annotation.Nonnull PsiStatement statement) {
+  public static boolean blockCompletesWithStatement(@Nonnull PsiCodeBlock body, @Nonnull PsiStatement statement) {
     PsiElement statementToCheck = statement;
     while (true) {
       if (statementToCheck == null) {
@@ -416,12 +416,12 @@ public class ControlFlowUtils {
     }
   }
 
-  @jakarta.annotation.Nullable
-  private static PsiElement getContainingStatementOrBlock(@jakarta.annotation.Nonnull PsiElement statement) {
+  @Nullable
+  private static PsiElement getContainingStatementOrBlock(@Nonnull PsiElement statement) {
     return PsiTreeUtil.getParentOfType(statement, PsiStatement.class, PsiCodeBlock.class);
   }
 
-  private static boolean statementIsLastInBlock(@Nonnull PsiCodeBlock block, @jakarta.annotation.Nonnull PsiStatement statement) {
+  private static boolean statementIsLastInBlock(@Nonnull PsiCodeBlock block, @Nonnull PsiStatement statement) {
     for (PsiElement child = block.getLastChild(); child != null; child = child.getPrevSibling()) {
       if (!(child instanceof PsiStatement)) {
         continue;
@@ -437,17 +437,17 @@ public class ControlFlowUtils {
     return false;
   }
 
-  @jakarta.annotation.Nullable
-  public static PsiStatement getFirstStatementInBlock(@jakarta.annotation.Nullable PsiCodeBlock codeBlock) {
+  @Nullable
+  public static PsiStatement getFirstStatementInBlock(@Nullable PsiCodeBlock codeBlock) {
     return PsiTreeUtil.getChildOfType(codeBlock, PsiStatement.class);
   }
 
   @Nullable
-  public static PsiStatement getLastStatementInBlock(@jakarta.annotation.Nullable PsiCodeBlock codeBlock) {
+  public static PsiStatement getLastStatementInBlock(@Nullable PsiCodeBlock codeBlock) {
     return getLastChildOfType(codeBlock, PsiStatement.class);
   }
 
-  private static <T extends PsiElement> T getLastChildOfType(@jakarta.annotation.Nullable PsiElement element, @jakarta.annotation.Nonnull Class<T> aClass) {
+  private static <T extends PsiElement> T getLastChildOfType(@Nullable PsiElement element, @Nonnull Class<T> aClass) {
     if (element == null) {
       return null;
     }
@@ -464,11 +464,11 @@ public class ControlFlowUtils {
    * @return null, if zero or more than one statements in the specified code block.
    */
   @Nullable
-  public static PsiStatement getOnlyStatementInBlock(@jakarta.annotation.Nullable PsiCodeBlock codeBlock) {
+  public static PsiStatement getOnlyStatementInBlock(@Nullable PsiCodeBlock codeBlock) {
     return getOnlyChildOfType(codeBlock, PsiStatement.class);
   }
 
-  static <T extends PsiElement> T getOnlyChildOfType(@Nullable PsiElement element, @jakarta.annotation.Nonnull Class<T> aClass) {
+  static <T extends PsiElement> T getOnlyChildOfType(@Nullable PsiElement element, @Nonnull Class<T> aClass) {
     if (element == null) {
       return null;
     }
@@ -486,11 +486,11 @@ public class ControlFlowUtils {
     return result;
   }
 
-  public static boolean hasStatementCount(@jakarta.annotation.Nullable PsiCodeBlock codeBlock, int count) {
+  public static boolean hasStatementCount(@Nullable PsiCodeBlock codeBlock, int count) {
     return hasChildrenOfTypeCount(codeBlock, count, PsiStatement.class);
   }
 
-  static <T extends PsiElement> boolean hasChildrenOfTypeCount(@jakarta.annotation.Nullable PsiElement element, int count, @jakarta.annotation.Nonnull Class<T> aClass) {
+  static <T extends PsiElement> boolean hasChildrenOfTypeCount(@Nullable PsiElement element, int count, @Nonnull Class<T> aClass) {
     if (element == null) {
       return false;
     }
@@ -510,7 +510,7 @@ public class ControlFlowUtils {
     return hasStatementCount(codeBlock, 0);
   }
 
-  public static boolean methodAlwaysThrowsException(@jakarta.annotation.Nonnull PsiMethod method) {
+  public static boolean methodAlwaysThrowsException(@Nonnull PsiMethod method) {
     final PsiCodeBlock body = method.getBody();
     if (body == null) {
       return true;
@@ -667,7 +667,7 @@ public class ControlFlowUtils {
     return false;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static PsiStatement nextExecutedStatement(PsiStatement statement) {
     PsiStatement next = PsiTreeUtil.getNextSiblingOfType(statement, PsiStatement.class);
     while (next instanceof PsiBlockStatement) {
@@ -753,12 +753,12 @@ public class ControlFlowUtils {
     }
 
     @Override
-    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       // do nothing to keep from drilling into inner classes
     }
 
     @Override
-    public void visitMethodCallExpression(@jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
       if (m_found) {
         return;
       }
@@ -792,7 +792,7 @@ public class ControlFlowUtils {
     }
 
     @Override
-    public void visitClass(@jakarta.annotation.Nonnull PsiClass psiClass) {
+    public void visitClass(@Nonnull PsiClass psiClass) {
       // do nothing, to keep drilling into inner classes
     }
 
@@ -815,7 +815,7 @@ public class ControlFlowUtils {
     private boolean m_found;
     private final PsiStatement m_target;
 
-    private BreakFinder(@jakarta.annotation.Nonnull PsiStatement target) {
+    private BreakFinder(@Nonnull PsiStatement target) {
       m_target = target;
     }
 
@@ -824,7 +824,7 @@ public class ControlFlowUtils {
     }
 
     @Override
-    public void visitBreakStatement(@jakarta.annotation.Nonnull PsiBreakStatement statement) {
+    public void visitBreakStatement(@Nonnull PsiBreakStatement statement) {
       if (m_found) {
         return;
       }

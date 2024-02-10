@@ -15,7 +15,7 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class JavaConcatenationToInjectorAdapter extends BaseConcatenation2InjectorAdapter implements MultiHostInjector {
   @Inject
-  public JavaConcatenationToInjectorAdapter(@jakarta.annotation.Nonnull Project project) {
+  public JavaConcatenationToInjectorAdapter(@Nonnull Project project) {
     super(project);
   }
 

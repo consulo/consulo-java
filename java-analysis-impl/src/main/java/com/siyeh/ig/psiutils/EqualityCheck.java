@@ -24,11 +24,11 @@ public class EqualityCheck {
   @Nonnull
   PsiExpression myLeft;
   private final
-  @jakarta.annotation.Nonnull
+  @Nonnull
   PsiExpression myRight;
   private final boolean myLeftDereferenced;
 
-  private EqualityCheck(@Nonnull PsiExpression left, @jakarta.annotation.Nonnull PsiExpression right, boolean leftDereferenced) {
+  private EqualityCheck(@Nonnull PsiExpression left, @Nonnull PsiExpression right, boolean leftDereferenced) {
     myLeft = left;
     myRight = right;
     myLeftDereferenced = leftDereferenced;
@@ -85,7 +85,7 @@ public class EqualityCheck {
     return myLeft;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiExpression getRight() {
     return myRight;
   }

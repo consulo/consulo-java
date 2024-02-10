@@ -123,7 +123,7 @@ public class RedundantLambdaParameterTypeIntention extends PsiElementBaseIntenti
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull Project project,
+  public void invoke(@Nonnull Project project,
                      Editor editor,
                      @Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(element, PsiLambdaExpression.class);

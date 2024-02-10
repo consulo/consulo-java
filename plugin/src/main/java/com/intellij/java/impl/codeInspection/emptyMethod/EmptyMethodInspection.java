@@ -284,7 +284,7 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
 	protected boolean queryExternalUsagesRequests(
     @Nonnull final RefManager manager,
     @Nonnull final GlobalJavaInspectionContext context,
-    @jakarta.annotation.Nonnull final ProblemDescriptionsProcessor descriptionsProcessor, Object state)
+    @Nonnull final ProblemDescriptionsProcessor descriptionsProcessor, Object state)
 	{
 		manager.iterate(new RefJavaVisitor()
 		{

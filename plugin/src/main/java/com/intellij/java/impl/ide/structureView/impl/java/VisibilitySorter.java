@@ -52,7 +52,7 @@ public class VisibilitySorter implements Sorter{
     return true;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public ActionPresentation getPresentation() {
     return PRESENTATION;
   }

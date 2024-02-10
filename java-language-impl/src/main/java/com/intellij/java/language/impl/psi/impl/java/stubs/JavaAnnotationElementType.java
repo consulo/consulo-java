@@ -49,12 +49,12 @@ public class JavaAnnotationElementType extends JavaStubElementType<PsiAnnotation
   }
 
   @Override
-  public PsiAnnotation createPsi(@jakarta.annotation.Nonnull PsiAnnotationStub stub) {
+  public PsiAnnotation createPsi(@Nonnull PsiAnnotationStub stub) {
     return getPsiFactory(stub).createAnnotation(stub);
   }
 
   @Override
-  public PsiAnnotation createPsi(@jakarta.annotation.Nonnull ASTNode node) {
+  public PsiAnnotation createPsi(@Nonnull ASTNode node) {
     return new PsiAnnotationImpl(node);
   }
 
@@ -65,18 +65,18 @@ public class JavaAnnotationElementType extends JavaStubElementType<PsiAnnotation
   }
 
   @Override
-  public void serialize(@Nonnull PsiAnnotationStub stub, @jakarta.annotation.Nonnull StubOutputStream dataStream) throws IOException {
+  public void serialize(@Nonnull PsiAnnotationStub stub, @Nonnull StubOutputStream dataStream) throws IOException {
     dataStream.writeUTFFast(stub.getText());
   }
 
   @Nonnull
   @Override
-  public PsiAnnotationStub deserialize(@jakarta.annotation.Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
+  public PsiAnnotationStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
     return new PsiAnnotationStubImpl(parentStub, dataStream.readUTFFast());
   }
 
   @Override
-  public void indexStub(@jakarta.annotation.Nonnull PsiAnnotationStub stub, @jakarta.annotation.Nonnull IndexSink sink) {
+  public void indexStub(@Nonnull PsiAnnotationStub stub, @Nonnull IndexSink sink) {
     String shortName = getReferenceShortName(stub.getText());
     if (!StringUtil.isEmptyOrSpaces(shortName)) {
       sink.occurrence(JavaStubIndexKeys.ANNOTATIONS, shortName);

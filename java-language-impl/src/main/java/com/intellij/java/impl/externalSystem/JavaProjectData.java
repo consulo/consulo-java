@@ -35,7 +35,7 @@ import java.util.regex.Pattern;
  */
 public class JavaProjectData extends AbstractExternalEntityData {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static final Key<JavaProjectData> KEY = Key.create(JavaProjectData.class, ProjectKeys.PROJECT.getProcessingWeight() + 1);
 
   private static final Logger LOG = Logger.getInstance(JavaProjectData.class);
@@ -46,29 +46,29 @@ public class JavaProjectData extends AbstractExternalEntityData {
   private static final JavaSdkVersion DEFAULT_JDK_VERSION    = JavaSdkVersion.JDK_1_6;
   private static final Pattern        JDK_VERSION_PATTERN    = Pattern.compile(".*1\\.(\\d+).*");
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private JavaSdkVersion myJdkVersion    = DEFAULT_JDK_VERSION;
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private LanguageLevel  myLanguageLevel = DEFAULT_LANGUAGE_LEVEL;
 
   @Nonnull
   private  String myCompileOutputPath;
 
-  public JavaProjectData(@jakarta.annotation.Nonnull ProjectSystemId owner, @jakarta.annotation.Nonnull String compileOutputPath) {
+  public JavaProjectData(@Nonnull ProjectSystemId owner, @Nonnull String compileOutputPath) {
     super(owner);
     myCompileOutputPath = compileOutputPath;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getCompileOutputPath() {
     return myCompileOutputPath;
   }
 
-  public void setCompileOutputPath(@jakarta.annotation.Nonnull String compileOutputPath) {
+  public void setCompileOutputPath(@Nonnull String compileOutputPath) {
     myCompileOutputPath = ExternalSystemApiUtil.toCanonicalPath(compileOutputPath);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public JavaSdkVersion getJdkVersion() {
     return myJdkVersion;
   }
@@ -121,16 +121,16 @@ public class JavaProjectData extends AbstractExternalEntityData {
     return false;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public LanguageLevel getLanguageLevel() {
     return myLanguageLevel;
   }
 
-  public void setLanguageLevel(@jakarta.annotation.Nonnull LanguageLevel level) {
+  public void setLanguageLevel(@Nonnull LanguageLevel level) {
     myLanguageLevel = level;
   }
 
-  public void setLanguageLevel(@jakarta.annotation.Nullable String languageLevel) {
+  public void setLanguageLevel(@Nullable String languageLevel) {
     LanguageLevel level = LanguageLevel.parse(languageLevel);
     if (level != null) {
       myLanguageLevel = level;

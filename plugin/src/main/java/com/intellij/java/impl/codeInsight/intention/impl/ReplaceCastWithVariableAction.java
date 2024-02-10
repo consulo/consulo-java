@@ -46,7 +46,7 @@ public class ReplaceCastWithVariableAction extends PsiElementBaseIntentionAction
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     final PsiTypeCastExpression typeCastExpression = PsiTreeUtil.getParentOfType(element, PsiTypeCastExpression.class);
     final PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
 
@@ -77,7 +77,7 @@ public class ReplaceCastWithVariableAction extends PsiElementBaseIntentionAction
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, @jakarta.annotation.Nonnull PsiElement element) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiTypeCastExpression typeCastExpression = PsiTreeUtil.getParentOfType(element, PsiTypeCastExpression.class);
 
     if (typeCastExpression == null) {
@@ -90,8 +90,8 @@ public class ReplaceCastWithVariableAction extends PsiElementBaseIntentionAction
   }
 
   @Nullable
-  private static PsiLocalVariable findReplacement(@jakarta.annotation.Nonnull PsiMethod method,
-                                                  @jakarta.annotation.Nonnull PsiVariable castedVar,
+  private static PsiLocalVariable findReplacement(@Nonnull PsiMethod method,
+                                                  @Nonnull PsiVariable castedVar,
                                                   @Nonnull PsiTypeCastExpression expression) {
     final TextRange expressionTextRange = expression.getTextRange();
     for (PsiExpression occurrence : CodeInsightUtil.findExpressionOccurrences(method,expression)){
@@ -116,7 +116,7 @@ public class ReplaceCastWithVariableAction extends PsiElementBaseIntentionAction
 
   private static boolean isChangedBetween(@Nonnull final PsiVariable variable,
                                           @Nonnull final PsiElement scope,
-                                          @jakarta.annotation.Nonnull final PsiElement start,
+                                          @Nonnull final PsiElement start,
                                           @Nonnull final PsiElement end) {
     if (variable.hasModifierProperty(PsiModifier.FINAL)) {
       return false;

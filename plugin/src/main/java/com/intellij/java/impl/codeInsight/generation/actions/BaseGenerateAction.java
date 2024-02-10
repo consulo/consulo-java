@@ -41,7 +41,7 @@ public class BaseGenerateAction extends CodeInsightAction implements GenerateAct
   }
 
   @Override
-  protected void update(@Nonnull Presentation presentation, @jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull Editor editor, @jakarta.annotation.Nonnull PsiFile file, @jakarta.annotation.Nonnull DataContext dataContext, @Nullable String actionPlace) {
+  protected void update(@Nonnull Presentation presentation, @Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiFile file, @Nonnull DataContext dataContext, @Nullable String actionPlace) {
     super.update(presentation, project, editor, file, dataContext, actionPlace);
     if (myHandler instanceof ContextAwareActionHandler && presentation.isEnabled()) {
       presentation.setEnabled(((ContextAwareActionHandler) myHandler).isAvailableForQuickList(editor, file, dataContext));
@@ -54,13 +54,13 @@ public class BaseGenerateAction extends CodeInsightAction implements GenerateAct
     return null;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected final CodeInsightActionHandler getHandler() {
     return myHandler;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   protected PsiClass getTargetClass(Editor editor, PsiFile file) {
     int offset = editor.getCaretModel().getOffset();
     PsiElement element = file.findElementAt(offset);
@@ -72,7 +72,7 @@ public class BaseGenerateAction extends CodeInsightAction implements GenerateAct
   }
 
   @Override
-  protected boolean isValidForFile(@jakarta.annotation.Nonnull Project project, @Nonnull Editor editor, @jakarta.annotation.Nonnull PsiFile file) {
+  protected boolean isValidForFile(@Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiFile file) {
     if (!(file instanceof PsiJavaFile)) {
       return false;
     }

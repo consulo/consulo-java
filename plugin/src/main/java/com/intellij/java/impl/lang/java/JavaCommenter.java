@@ -69,13 +69,13 @@ public class JavaCommenter implements CodeDocumentationAwareCommenterEx {
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   public IElementType getBlockCommentTokenType() {
     return JavaTokenType.C_STYLE_COMMENT;
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   public IElementType getDocumentationCommentTokenType() {
     return JavaDocElementType.DOC_COMMENT;
   }

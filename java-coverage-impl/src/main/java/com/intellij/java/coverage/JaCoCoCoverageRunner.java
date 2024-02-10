@@ -37,7 +37,7 @@ import java.util.Collection;
 @ExtensionImpl
 public class JaCoCoCoverageRunner extends JavaCoverageRunner {
   @Override
-  public ProjectData loadCoverageData(@jakarta.annotation.Nonnull File sessionDataFile, @Nullable CoverageSuite baseCoverageSuite) {
+  public ProjectData loadCoverageData(@Nonnull File sessionDataFile, @Nullable CoverageSuite baseCoverageSuite) {
     final ProjectData data = new ProjectData();
     try {
       final Project project = baseCoverageSuite instanceof BaseCoverageSuite ? ((BaseCoverageSuite) baseCoverageSuite).getProject() : null;

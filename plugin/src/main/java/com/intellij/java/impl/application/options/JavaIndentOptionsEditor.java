@@ -84,7 +84,7 @@ public class JavaIndentOptionsEditor extends SmartIndentOptionsEditor {
   }
 
   @Override
-  public void reset(@Nonnull final CodeStyleSettings settings, @jakarta.annotation.Nonnull final CommonCodeStyleSettings.IndentOptions options) {
+  public void reset(@Nonnull final CodeStyleSettings settings, @Nonnull final CommonCodeStyleSettings.IndentOptions options) {
     super.reset(settings, options);
     myLabelIndent.setValue(options.LABEL_INDENT_SIZE);
     myLabelIndentAbsolute.setSelected(options.LABEL_INDENT_ABSOLUTE);

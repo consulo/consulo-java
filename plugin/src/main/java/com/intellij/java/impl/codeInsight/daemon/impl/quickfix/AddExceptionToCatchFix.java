@@ -54,7 +54,7 @@ public class AddExceptionToCatchFix extends BaseIntentionAction implements Synth
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
     int offset = editor.getCaretModel().getOffset();
 
@@ -154,7 +154,7 @@ public class AddExceptionToCatchFix extends BaseIntentionAction implements Synth
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!(file instanceof PsiJavaFile)) return false;
 
     int offset = editor.getCaretModel().getOffset();

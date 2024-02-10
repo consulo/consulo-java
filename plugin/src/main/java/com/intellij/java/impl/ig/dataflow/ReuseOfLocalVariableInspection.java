@@ -49,7 +49,7 @@ public class ReuseOfLocalVariableInspection
   extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "reuse.of.local.variable.display.name");
@@ -70,7 +70,7 @@ public class ReuseOfLocalVariableInspection
   private static class ReuseOfLocalVariableFix
     extends InspectionGadgetsFix {
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "reuse.of.local.variable.split.quickfix");
@@ -170,7 +170,7 @@ public class ReuseOfLocalVariableInspection
 
     @Override
     public void visitAssignmentExpression(
-      @jakarta.annotation.Nonnull PsiAssignmentExpression assignment) {
+      @Nonnull PsiAssignmentExpression assignment) {
       super.visitAssignmentExpression(assignment);
       final PsiElement assignmentParent = assignment.getParent();
       if (!(assignmentParent instanceof PsiExpressionStatement)) {
@@ -282,8 +282,8 @@ public class ReuseOfLocalVariableInspection
      */
     @Nullable
     public static PsiElement getChildWhichContainsElement(
-      @jakarta.annotation.Nonnull PsiCodeBlock ancestor,
-      @jakarta.annotation.Nonnull PsiElement descendant) {
+      @Nonnull PsiCodeBlock ancestor,
+      @Nonnull PsiElement descendant) {
       PsiElement element = descendant;
       while (!element.equals(ancestor)) {
         descendant = element;

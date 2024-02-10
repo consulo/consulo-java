@@ -30,7 +30,7 @@ public class WhileStatementPostfixTemplate extends TypedPostfixTemplate {
   }
 
   @Override
-  public void expand(@Nonnull PsiElement context, @jakarta.annotation.Nonnull Editor editor) {
+  public void expand(@Nonnull PsiElement context, @Nonnull Editor editor) {
     PsiElement expression = myPsiInfo.getTopmostExpression(context);
     assert expression != null;
 

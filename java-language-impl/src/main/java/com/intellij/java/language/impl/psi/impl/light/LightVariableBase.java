@@ -71,13 +71,13 @@ public abstract class LightVariableBase extends LightElement implements PsiVaria
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getName() {
     return StringUtil.notNullize(getNameIdentifier().getText());
   }
 
   @Override
-  public PsiElement setName(@jakarta.annotation.Nonnull String name) throws IncorrectOperationException {
+  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
     PsiImplUtil.setName(getNameIdentifier(), name);
     return this;
   }
@@ -91,13 +91,13 @@ public abstract class LightVariableBase extends LightElement implements PsiVaria
     return myType;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected PsiType computeType() {
     return PsiType.VOID;
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiTypeElement getTypeElement() {
     return JavaPsiFacade.getInstance(getProject()).getElementFactory().createTypeElement(myType);
   }
@@ -108,7 +108,7 @@ public abstract class LightVariableBase extends LightElement implements PsiVaria
   }
 
   @Override
-  public boolean hasModifierProperty(@jakarta.annotation.Nonnull String name) {
+  public boolean hasModifierProperty(@Nonnull String name) {
     return getModifierList().hasModifierProperty(name);
   }
 

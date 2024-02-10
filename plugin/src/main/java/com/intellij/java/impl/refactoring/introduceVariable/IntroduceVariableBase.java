@@ -48,6 +48,7 @@ import consulo.document.FileDocumentManager;
 import consulo.document.RangeMarker;
 import consulo.document.util.TextRange;
 import consulo.externalService.statistic.FeatureUsageTracker;
+import consulo.ide.impl.idea.featureStatistics.ProductivityFeatureNames;
 import consulo.ide.impl.idea.ide.util.PropertiesComponent;
 import consulo.ide.impl.idea.util.ArrayUtilRt;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
@@ -99,7 +100,7 @@ public abstract class IntroduceVariableBase extends IntroduceHandlerBase {
     return getSuggestedName(type, expression, expression);
   }
 
-  public static SuggestedNameInfo getSuggestedName(@jakarta.annotation.Nullable PsiType type, @jakarta.annotation.Nonnull final PsiExpression expression, final PsiElement anchor) {
+  public static SuggestedNameInfo getSuggestedName(@Nullable PsiType type, @Nonnull final PsiExpression expression, final PsiElement anchor) {
     final JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(expression.getProject());
     final SuggestedNameInfo nameInfo = codeStyleManager.suggestVariableName(VariableKind.LOCAL_VARIABLE, null, expression, type);
     final String[] strings = JavaCompletionUtil.completeVariableNameForRefactoring(codeStyleManager, type, VariableKind.LOCAL_VARIABLE,
@@ -108,7 +109,7 @@ public abstract class IntroduceVariableBase extends IntroduceHandlerBase {
     return codeStyleManager.suggestUniqueVariableName(delegate, anchor, true);
   }
 
-  public void invoke(@jakarta.annotation.Nonnull final Project project, final Editor editor, final PsiFile file, DataContext dataContext) {
+  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file, DataContext dataContext) {
     final SelectionModel selectionModel = editor.getSelectionModel();
     if (!selectionModel.hasSelection()) {
       final int offset = editor.getCaretModel().getOffset();
@@ -241,7 +242,7 @@ public abstract class IntroduceVariableBase extends IntroduceHandlerBase {
   }
 
   private boolean invoke(final Project project, final Editor editor, PsiFile file, int startOffset, int endOffset) {
-    FeatureUsageTracker.getInstance().triggerFeatureUsed(consulo.ide.impl.idea.featureStatistics.ProductivityFeatureNames.REFACTORING_INTRODUCE_VARIABLE);
+    FeatureUsageTracker.getInstance().triggerFeatureUsed(ProductivityFeatureNames.REFACTORING_INTRODUCE_VARIABLE);
     PsiDocumentManager.getInstance(project).commitAllDocuments();
 
 
@@ -458,7 +459,7 @@ public abstract class IntroduceVariableBase extends IntroduceHandlerBase {
         injectedLanguageManager.injectedToHost(file, endOffset));
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static String getErrorMessage(PsiExpression expr) {
     final Boolean needParenthesis = expr.getCopyableUserData(NEED_PARENTHESIS);
     if (needParenthesis != null && needParenthesis.booleanValue()) {

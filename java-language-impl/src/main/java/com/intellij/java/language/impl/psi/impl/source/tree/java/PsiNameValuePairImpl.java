@@ -46,7 +46,7 @@ public class PsiNameValuePairImpl extends JavaStubPsiElement<PsiNameValuePairStu
     super(stub, JavaStubElementTypes.NAME_VALUE_PAIR);
   }
 
-  public PsiNameValuePairImpl(@jakarta.annotation.Nonnull ASTNode node) {
+  public PsiNameValuePairImpl(@Nonnull ASTNode node) {
     super(node);
   }
 
@@ -85,9 +85,9 @@ public class PsiNameValuePairImpl extends JavaStubPsiElement<PsiNameValuePairStu
     return node == null ? null : (PsiAnnotationMemberValue) node.getPsi();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
-  public PsiAnnotationMemberValue setValue(@jakarta.annotation.Nonnull PsiAnnotationMemberValue newValue) {
+  public PsiAnnotationMemberValue setValue(@Nonnull PsiAnnotationMemberValue newValue) {
     getValue().replace(newValue);
     return getValue();
   }
@@ -174,7 +174,7 @@ public class PsiNameValuePairImpl extends JavaStubPsiElement<PsiNameValuePairStu
   }
 
   @Override
-  public final void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
+  public final void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitNameValuePair(this);
     } else {

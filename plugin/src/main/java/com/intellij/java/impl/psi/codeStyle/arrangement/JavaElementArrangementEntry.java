@@ -66,7 +66,7 @@ public class JavaElementArrangementEntry extends DefaultArrangementEntry
     myName = name;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Set<ArrangementSettingsToken> getModifiers() {
     return myModifiers;
@@ -82,7 +82,7 @@ public class JavaElementArrangementEntry extends DefaultArrangementEntry
     return myName;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Set<ArrangementSettingsToken> getTypes() {
     return myTypes;

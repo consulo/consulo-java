@@ -61,7 +61,7 @@ import static com.intellij.java.language.psi.PsiJavaModule.MODULE_INFO_FILE;
 
 public class ModuleHighlightUtil {
   @Nullable
-  public static PsiJavaModule getModuleDescriptor(@jakarta.annotation.Nonnull PsiFileSystemItem fsItem) {
+  public static PsiJavaModule getModuleDescriptor(@Nonnull PsiFileSystemItem fsItem) {
     VirtualFile file = fsItem.getVirtualFile();
     if (file == null) {
       return null;
@@ -93,7 +93,7 @@ public class ModuleHighlightUtil {
   }
 
   @Nullable
-  public static HighlightInfo checkFileName(@jakarta.annotation.Nonnull PsiJavaModule element, @Nonnull PsiFile file) {
+  public static HighlightInfo checkFileName(@Nonnull PsiJavaModule element, @Nonnull PsiFile file) {
     if (!MODULE_INFO_FILE.equals(file.getName())) {
       String message = JavaErrorBundle.message("module.file.wrong.name");
       HighlightInfo info = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(range(element)).descriptionAndTooltip(message).create();
@@ -105,7 +105,7 @@ public class ModuleHighlightUtil {
   }
 
   @Nullable
-  public static HighlightInfo checkFileDuplicates(@Nonnull PsiJavaModule element, @jakarta.annotation.Nonnull PsiFile file) {
+  public static HighlightInfo checkFileDuplicates(@Nonnull PsiJavaModule element, @Nonnull PsiFile file) {
     Module module = findModule(file);
     if (module != null) {
       Project project = file.getProject();
@@ -122,7 +122,7 @@ public class ModuleHighlightUtil {
     return null;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static List<HighlightInfo> checkDuplicateStatements(@Nonnull PsiJavaModule module) {
     List<HighlightInfo> results = new ArrayList<>();
 
@@ -157,7 +157,7 @@ public class ModuleHighlightUtil {
   }
 
   @Nonnull
-  public static List<HighlightInfo> checkUnusedServices(@jakarta.annotation.Nonnull PsiJavaModule module) {
+  public static List<HighlightInfo> checkUnusedServices(@Nonnull PsiJavaModule module) {
     List<HighlightInfo> results = new ArrayList<>();
 
     Set<String> exports = JBIterable.from(module.getExports()).map(st -> refText(st.getPackageReference())).filter(Objects::nonNull).toSet();
@@ -186,7 +186,7 @@ public class ModuleHighlightUtil {
   }
 
   @Nullable
-  public static HighlightInfo checkFileLocation(@Nonnull PsiJavaModule element, @jakarta.annotation.Nonnull PsiFile file) {
+  public static HighlightInfo checkFileLocation(@Nonnull PsiJavaModule element, @Nonnull PsiFile file) {
     VirtualFile vFile = file.getVirtualFile();
     if (vFile != null) {
       VirtualFile root = ProjectFileIndex.SERVICE.getInstance(file.getProject()).getSourceRootForFile(vFile);
@@ -242,7 +242,7 @@ public class ModuleHighlightUtil {
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static HighlightInfo checkPackageReference(@Nonnull PsiPackageAccessibilityStatement statement) {
     PsiJavaCodeReferenceElement refElement = statement.getPackageReference();
     if (refElement != null) {
@@ -265,7 +265,7 @@ public class ModuleHighlightUtil {
   }
 
   @Nonnull
-  public static List<HighlightInfo> checkPackageAccessTargets(@jakarta.annotation.Nonnull PsiPackageAccessibilityStatement statement) {
+  public static List<HighlightInfo> checkPackageAccessTargets(@Nonnull PsiPackageAccessibilityStatement statement) {
     List<HighlightInfo> results = new ArrayList<>();
 
     Set<String> targets = new HashSet<>();
@@ -289,7 +289,7 @@ public class ModuleHighlightUtil {
   }
 
   @Nullable
-  public static HighlightInfo checkServiceReference(@jakarta.annotation.Nullable PsiJavaCodeReferenceElement refElement) {
+  public static HighlightInfo checkServiceReference(@Nullable PsiJavaCodeReferenceElement refElement) {
     if (refElement != null) {
       PsiElement target = refElement.resolve();
       if (target == null) {
@@ -370,7 +370,7 @@ public class ModuleHighlightUtil {
   }
 
   @Nullable
-  public static HighlightInfo checkPackageAccessibility(@jakarta.annotation.Nonnull PsiJavaCodeReferenceElement ref, @Nonnull PsiElement target, @jakarta.annotation.Nonnull PsiJavaModule refModule) {
+  public static HighlightInfo checkPackageAccessibility(@Nonnull PsiJavaCodeReferenceElement ref, @Nonnull PsiElement target, @Nonnull PsiJavaModule refModule) {
     if (PsiTreeUtil.getParentOfType(ref, PsiDocComment.class) == null) {
       Module module = findModule(refModule);
       if (module != null) {
@@ -423,8 +423,8 @@ public class ModuleHighlightUtil {
     return null;
   }
 
-  @jakarta.annotation.Nullable
-  public static HighlightInfo checkClashingReads(@jakarta.annotation.Nonnull PsiJavaModule module) {
+  @Nullable
+  public static HighlightInfo checkClashingReads(@Nonnull PsiJavaModule module) {
     Trinity<String, PsiJavaModule, PsiJavaModule> conflict = JavaModuleGraphUtil.findConflict(module);
     if (conflict != null) {
       String message = JavaErrorBundle.message("module.conflicting.reads", module.getName(), conflict.first, conflict.second.getName(), conflict.third.getName());

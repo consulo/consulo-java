@@ -54,7 +54,7 @@ public abstract class JavaCodeStyleManager {
   })
   public static final int UNCOMPLETE_CODE = INCOMPLETE_CODE;
 
-  public abstract boolean addImport(@jakarta.annotation.Nonnull PsiJavaFile file, @Nonnull PsiClass refClass);
+  public abstract boolean addImport(@Nonnull PsiJavaFile file, @Nonnull PsiClass refClass);
 
   @Nonnull
   public abstract PsiElement shortenClassReferences(@Nonnull PsiElement element, @MagicConstant(flags = {
@@ -62,8 +62,8 @@ public abstract class JavaCodeStyleManager {
     INCOMPLETE_CODE
   }) int flags) throws IncorrectOperationException;
 
-  @jakarta.annotation.Nonnull
-  public abstract String getPrefixByVariableKind(@jakarta.annotation.Nonnull VariableKind variableKind);
+  @Nonnull
+  public abstract String getPrefixByVariableKind(@Nonnull VariableKind variableKind);
 
   @Nonnull
   public abstract String getSuffixByVariableKind(@Nonnull VariableKind variableKind);
@@ -120,7 +120,7 @@ public abstract class JavaCodeStyleManager {
    * @return true if file contains import which would be shadowed
    * false otherwise
    */
-  public boolean hasConflictingOnDemandImport(@Nonnull PsiJavaFile file, @jakarta.annotation.Nonnull PsiClass psiClass, @Nonnull String referenceName) {
+  public boolean hasConflictingOnDemandImport(@Nonnull PsiJavaFile file, @Nonnull PsiClass psiClass, @Nonnull String referenceName) {
     return false;
   }
 
@@ -154,8 +154,8 @@ public abstract class JavaCodeStyleManager {
 
   public SuggestedNameInfo suggestVariableName(@Nonnull final VariableKind kind,
                                                @Nullable final String propertyName,
-                                               @jakarta.annotation.Nullable final PsiExpression expr,
-                                               @jakarta.annotation.Nullable PsiType type) {
+                                               @Nullable final PsiExpression expr,
+                                               @Nullable PsiType type) {
     return suggestVariableName(kind, propertyName, expr, type, true);
   }
 
@@ -163,14 +163,14 @@ public abstract class JavaCodeStyleManager {
    * Generates compiled parameter name for given type.
    * Should not access indices due to performance reasons (e.g. see IDEA-116803)
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   public String suggestCompiledParameterName(@Nonnull PsiType type) {
     SuggestedNameInfo info = suggestVariableName(VariableKind.PARAMETER, null, null, type, true);
     return ContainerUtil.getFirstItem(Arrays.asList(info.names));
   }
 
-  @jakarta.annotation.Nonnull
-  public abstract SuggestedNameInfo suggestVariableName(@jakarta.annotation.Nonnull VariableKind kind,
+  @Nonnull
+  public abstract SuggestedNameInfo suggestVariableName(@Nonnull VariableKind kind,
                                                         @Nullable String propertyName,
                                                         @Nullable PsiExpression expr,
                                                         @Nullable PsiType type,
@@ -185,7 +185,7 @@ public abstract class JavaCodeStyleManager {
    * @return the stripped-down name.
    */
   @Nonnull
-  public abstract String variableNameToPropertyName(@NonNls @Nonnull String name, @jakarta.annotation.Nonnull VariableKind variableKind);
+  public abstract String variableNameToPropertyName(@NonNls @Nonnull String name, @Nonnull VariableKind variableKind);
 
   /**
    * Appends code style defined prefixes and/or suffixes for the specified variable kind
@@ -195,8 +195,8 @@ public abstract class JavaCodeStyleManager {
    * @param variableKind the kind of the variable.
    * @return the variable name.
    */
-  @jakarta.annotation.Nonnull
-  public abstract String propertyNameToVariableName(@NonNls @Nonnull String propertyName, @jakarta.annotation.Nonnull VariableKind variableKind);
+  @Nonnull
+  public abstract String propertyNameToVariableName(@NonNls @Nonnull String propertyName, @Nonnull VariableKind variableKind);
 
   /**
    * Suggests a unique name for the variable used at the specified location.
@@ -217,8 +217,8 @@ public abstract class JavaCodeStyleManager {
    * @param lookForward  if true, the existing variables are searched in both directions; if false - only backward
    * @return the generated unique name
    */
-  @jakarta.annotation.Nonnull
-  public SuggestedNameInfo suggestUniqueVariableName(@jakarta.annotation.Nonnull SuggestedNameInfo baseNameInfo, PsiElement place, boolean lookForward) {
+  @Nonnull
+  public SuggestedNameInfo suggestUniqueVariableName(@Nonnull SuggestedNameInfo baseNameInfo, PsiElement place, boolean lookForward) {
     return suggestUniqueVariableName(baseNameInfo, place, false, lookForward);
   }
 
@@ -257,6 +257,6 @@ public abstract class JavaCodeStyleManager {
    */
   public abstract void removeRedundantImports(@Nonnull PsiJavaFile file) throws IncorrectOperationException;
 
-  @jakarta.annotation.Nullable
-  public abstract Collection<PsiImportStatementBase> findRedundantImports(@jakarta.annotation.Nonnull PsiJavaFile file);
+  @Nullable
+  public abstract Collection<PsiImportStatementBase> findRedundantImports(@Nonnull PsiJavaFile file);
 }

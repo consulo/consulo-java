@@ -56,7 +56,7 @@ public abstract class MethodsProcessor extends ConflictFilterProcessor implement
 	private PsiType[] myTypeArguments;
 	private final LanguageLevel myLanguageLevel;
 
-	public MethodsProcessor(@Nonnull PsiConflictResolver[] resolvers, @jakarta.annotation.Nonnull List<CandidateInfo> container, @Nonnull PsiElement place, @Nonnull PsiFile placeFile)
+	public MethodsProcessor(@Nonnull PsiConflictResolver[] resolvers, @Nonnull List<CandidateInfo> container, @Nonnull PsiElement place, @Nonnull PsiFile placeFile)
 	{
 		super(null, ourFilter, resolvers, container, place, placeFile);
 		myLanguageLevel = PsiUtil.getLanguageLevel(placeFile);
@@ -130,13 +130,13 @@ public abstract class MethodsProcessor extends ConflictFilterProcessor implement
 		this.myIsConstructor = myIsConstructor;
 	}
 
-	public void forceAddResult(@jakarta.annotation.Nonnull PsiMethod method)
+	public void forceAddResult(@Nonnull PsiMethod method)
 	{
 		add(new CandidateInfo(method, PsiSubstitutor.EMPTY, false, false, myCurrentFileContext));
 	}
 
 	@Override
-	public <T> T getHint(@jakarta.annotation.Nonnull Key<T> hintKey)
+	public <T> T getHint(@Nonnull Key<T> hintKey)
 	{
 		if(hintKey == ElementClassHint.KEY)
 		{

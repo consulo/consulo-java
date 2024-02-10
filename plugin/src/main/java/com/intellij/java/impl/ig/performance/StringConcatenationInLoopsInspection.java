@@ -45,13 +45,13 @@ public class StringConcatenationInLoopsInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("string.concatenation.in.loops.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("string.concatenation.in.loops.problem.descriptor");
   }
@@ -104,7 +104,7 @@ public class StringConcatenationInLoopsInspection extends BaseInspection {
     }
 
     @Override
-    public void visitAssignmentExpression(@jakarta.annotation.Nonnull PsiAssignmentExpression expression) {
+    public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression expression) {
       super.visitAssignmentExpression(expression);
       if (expression.getRExpression() == null) {
         return;

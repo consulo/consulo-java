@@ -38,12 +38,12 @@ public interface JavaFileManager {
   }
 
   @Nullable
-  PsiClass findClass(@jakarta.annotation.Nonnull String qName, @Nonnull GlobalSearchScope scope);
+  PsiClass findClass(@Nonnull String qName, @Nonnull GlobalSearchScope scope);
 
-  PsiClass[] findClasses(@jakarta.annotation.Nonnull String qName, @jakarta.annotation.Nonnull GlobalSearchScope scope);
+  PsiClass[] findClasses(@Nonnull String qName, @Nonnull GlobalSearchScope scope);
 
   Collection<String> getNonTrivialPackagePrefixes();
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   Collection<PsiJavaModule> findModules(@Nonnull String moduleName, @Nonnull GlobalSearchScope scope);
 }

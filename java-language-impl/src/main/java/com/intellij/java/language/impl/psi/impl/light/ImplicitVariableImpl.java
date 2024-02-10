@@ -34,7 +34,7 @@ public abstract class ImplicitVariableImpl extends LightVariableBase implements 
   }
 
   @Override
-  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitImplicitVariable(this);
     } else {

@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.serialization;
 
+import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
 import com.intellij.java.language.psi.PsiClass;
@@ -50,7 +51,7 @@ public abstract class SerializableInspection extends BaseInspection {
       superClassList, InspectionGadgetsBundle.message("ignore.classes.in.hierarchy.column.name"),
       InspectionGadgetsBundle.message("choose.super.class.to.ignore"));
     UiUtils.setComponentSize(chooserList, 7, 25);
-    final consulo.deadCodeNotWorking.impl.CheckBox checkBox = new consulo.deadCodeNotWorking.impl.CheckBox(InspectionGadgetsBundle.message(
+    final CheckBox checkBox = new CheckBox(InspectionGadgetsBundle.message(
       "ignore.anonymous.inner.classes"), this, "ignoreAnonymousInnerClasses");
 
     final GridBagConstraints constraints = new GridBagConstraints();

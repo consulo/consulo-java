@@ -88,7 +88,7 @@ class PsiMethodListPopupStep implements ListPopupStep<SmartStepTarget>
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public String getTextFor(SmartStepTarget value)
 	{
 		final String label = value.getLabel();

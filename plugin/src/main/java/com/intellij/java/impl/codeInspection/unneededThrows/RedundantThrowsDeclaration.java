@@ -59,7 +59,7 @@ public class RedundantThrowsDeclaration extends BaseJavaBatchLocalInspectionTool
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @NonNls
   public String getShortName() {
     return "RedundantThrowsDeclaration";
@@ -67,7 +67,7 @@ public class RedundantThrowsDeclaration extends BaseJavaBatchLocalInspectionTool
 
   @Override
   @Nullable
-  public ProblemDescriptor[] checkFile(@jakarta.annotation.Nonnull PsiFile file, @jakarta.annotation.Nonnull final InspectionManager manager, final boolean isOnTheFly, Object state) {
+  public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull final InspectionManager manager, final boolean isOnTheFly, Object state) {
     final Set<ProblemDescriptor> problems = new HashSet<ProblemDescriptor>();
     file.accept(new JavaRecursiveElementWalkingVisitor() {
       @Override public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {

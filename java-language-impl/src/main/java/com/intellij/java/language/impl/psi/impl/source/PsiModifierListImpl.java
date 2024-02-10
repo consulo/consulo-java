@@ -321,7 +321,7 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiAnnotation addAnnotation(@Nonnull @NonNls String qualifiedName) {
     return (PsiAnnotation)addAfter(JavaPsiFacade.getElementFactory(getProject()).createAnnotationFromText("@" + qualifiedName, this), null);
   }
@@ -347,7 +347,7 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
     final List<String> modifiers;
     final long modCount;
 
-    ModifierCache(@jakarta.annotation.Nonnull PsiFile file, @Nonnull Set<String> modifiers) {
+    ModifierCache(@Nonnull PsiFile file, @Nonnull Set<String> modifiers) {
       this.file = file;
       List<String> modifierList = new ArrayList<>(modifiers);
       Collections.sort(modifierList);

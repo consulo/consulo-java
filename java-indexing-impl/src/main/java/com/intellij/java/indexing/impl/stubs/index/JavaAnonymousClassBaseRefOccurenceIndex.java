@@ -48,7 +48,7 @@ public class JavaAnonymousClassBaseRefOccurenceIndex extends StringStubIndexExte
   }
 
   @Override
-  public Collection<PsiAnonymousClass> get(final String s, final Project project, @jakarta.annotation.Nonnull final ProjectAwareSearchScope scope) {
+  public Collection<PsiAnonymousClass> get(final String s, final Project project, @Nonnull final ProjectAwareSearchScope scope) {
     return super.get(s, project, new JavaSourceFilterScope(scope));
   }
 }

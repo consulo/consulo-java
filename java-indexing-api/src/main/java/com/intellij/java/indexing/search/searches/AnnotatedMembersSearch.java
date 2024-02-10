@@ -34,7 +34,7 @@ public class AnnotatedMembersSearch {
     return AnnotatedElementsSearch.searchPsiMembers(annotationClass, scope);
   }
 
-  public static Query<PsiMember> search(@jakarta.annotation.Nonnull PsiClass annotationClass) {
+  public static Query<PsiMember> search(@Nonnull PsiClass annotationClass) {
     return search(annotationClass, GlobalSearchScope.allScope(annotationClass.getProject()));
   }
 }

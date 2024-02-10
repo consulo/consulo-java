@@ -41,7 +41,7 @@ public abstract class CheckForOutOfMemoryOnLargeArrayAllocationInspection
       "large.array.allocation.no.outofmemoryerror.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "large.array.allocation.no.outofmemoryerror.problem.descriptor");

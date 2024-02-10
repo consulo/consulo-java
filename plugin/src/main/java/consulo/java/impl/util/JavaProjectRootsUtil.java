@@ -25,7 +25,7 @@ import jakarta.annotation.Nullable;
  * @since 13:10/21.05.13
  */
 public class JavaProjectRootsUtil extends ProjectRootsUtil {
-  public static boolean isJavaSourceFile(@jakarta.annotation.Nonnull Project project, @Nonnull VirtualFile file, boolean withLibrary) {
+  public static boolean isJavaSourceFile(@Nonnull Project project, @Nonnull VirtualFile file, boolean withLibrary) {
     FileTypeManager fileTypeManager = FileTypeManager.getInstance();
     if (file.isDirectory()) {
       return false;

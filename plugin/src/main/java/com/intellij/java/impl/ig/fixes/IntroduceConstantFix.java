@@ -31,7 +31,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 
 public class IntroduceConstantFix extends InspectionGadgetsFix {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getName() {
     return InspectionGadgetsBundle.message("introduce.constant.quickfix");
   }

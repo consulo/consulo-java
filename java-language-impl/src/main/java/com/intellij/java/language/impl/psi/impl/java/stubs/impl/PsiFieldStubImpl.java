@@ -23,7 +23,7 @@ public class PsiFieldStubImpl extends StubBase<PsiField> implements PsiFieldStub
 	private final String myInitializer;
 	private final byte myFlags;
 
-	public PsiFieldStubImpl(StubElement parent, @jakarta.annotation.Nullable String name, @jakarta.annotation.Nonnull TypeInfo type, @Nullable String initializer, byte flags)
+	public PsiFieldStubImpl(StubElement parent, @Nullable String name, @Nonnull TypeInfo type, @Nullable String initializer, byte flags)
 	{
 		super(parent, isEnumConst(flags) ? JavaStubElementTypes.ENUM_CONSTANT : JavaStubElementTypes.FIELD);
 		myName = name;

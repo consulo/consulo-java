@@ -32,7 +32,7 @@ public class DelegatingFix extends InspectionGadgetsFix {
     this.delegate = delegate;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getName() {
     return delegate.getName();
   }

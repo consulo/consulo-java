@@ -50,7 +50,7 @@ public class AdvancedSettingsUI implements SearchableConfigurable {
   private AdvancedSettingsPanel myPanel;
   private final Project myProject;
 
-  public AdvancedSettingsUI(@jakarta.annotation.Nonnull final Project project, Configuration configuration) {
+  public AdvancedSettingsUI(@Nonnull final Project project, Configuration configuration) {
     myProject = project;
     myConfiguration = configuration.getAdvancedConfiguration();
   }
@@ -239,7 +239,7 @@ public class AdvancedSettingsUI implements SearchableConfigurable {
       return false;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     private Configuration.InstrumentationType getInstrumentation() {
       if (myNoInstrumentation.isSelected()) {
         return Configuration.InstrumentationType.NONE;
@@ -266,7 +266,7 @@ public class AdvancedSettingsUI implements SearchableConfigurable {
       myConfiguration.setSourceModificationAllowed(mySourceModificationAllowedCheckBox.isSelected());
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     private Configuration.DfaOption getDfaOption() {
       if (myDfaOff.isSelected()) {
         return Configuration.DfaOption.OFF;
@@ -297,7 +297,7 @@ public class AdvancedSettingsUI implements SearchableConfigurable {
       mySourceModificationAllowedCheckBox.setSelected(myConfiguration.isSourceModificationAllowed());
     }
 
-    private void setDfaOption(@jakarta.annotation.Nonnull final Configuration.DfaOption dfaOption) {
+    private void setDfaOption(@Nonnull final Configuration.DfaOption dfaOption) {
       switch (dfaOption) {
         case OFF:
           myDfaOff.setSelected(true);

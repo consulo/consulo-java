@@ -47,7 +47,7 @@ public class FunctionalExpressionSearch extends ExtensibleQueryFactory<PsiFuncti
       return myElementToSearch;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public SearchScope getEffectiveSearchScope() {
       SearchScope accessScope = PsiSearchHelper.getInstance(myElementToSearch.getProject()).getUseScope(myElementToSearch);
       return myScope.intersectWith(accessScope);
@@ -58,7 +58,7 @@ public class FunctionalExpressionSearch extends ExtensibleQueryFactory<PsiFuncti
     super(FunctionalExpressionSearchExecutor.class);
   }
 
-  public static Query<PsiFunctionalExpression> search(@Nonnull final PsiClass aClass, @jakarta.annotation.Nonnull SearchScope scope) {
+  public static Query<PsiFunctionalExpression> search(@Nonnull final PsiClass aClass, @Nonnull SearchScope scope) {
     return INSTANCE.createUniqueResultsQuery(new SearchParameters(aClass, scope));
   }
 

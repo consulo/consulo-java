@@ -38,7 +38,7 @@ public class LengthOneStringsInConcatenationInspection
   extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "length.one.strings.in.concatenation.display.name");
@@ -106,7 +106,7 @@ public class LengthOneStringsInConcatenationInspection
 
     @Override
     public void visitLiteralExpression(
-      @jakarta.annotation.Nonnull PsiLiteralExpression expression) {
+      @Nonnull PsiLiteralExpression expression) {
       super.visitLiteralExpression(expression);
       final PsiType type = expression.getType();
       if (!TypeUtils.isJavaLangString(type)) {

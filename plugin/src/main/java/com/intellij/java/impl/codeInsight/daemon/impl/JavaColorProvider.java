@@ -43,7 +43,7 @@ public class JavaColorProvider implements ElementColorProvider {
     return getJavaColorFromExpression(element);
   }
 
-  public static boolean isColorType(@jakarta.annotation.Nullable PsiType type) {
+  public static boolean isColorType(@Nullable PsiType type) {
     if (type != null) {
       final PsiClass aClass = PsiTypesUtil.getPsiClass(type);
       if (aClass != null) {
@@ -57,7 +57,7 @@ public class JavaColorProvider implements ElementColorProvider {
   }
 
   @Nullable
-  public static ColorValue getJavaColorFromExpression(@jakarta.annotation.Nullable PsiElement element) {
+  public static ColorValue getJavaColorFromExpression(@Nullable PsiElement element) {
     if (element instanceof PsiNewExpression) {
       final PsiNewExpression expr = (PsiNewExpression) element;
       if (isColorType(expr.getType())) {
@@ -67,7 +67,7 @@ public class JavaColorProvider implements ElementColorProvider {
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static ColorValue getColor(PsiExpressionList list) {
     try {
       final PsiExpression[] args = list.getExpressions();
@@ -110,7 +110,7 @@ public class JavaColorProvider implements ElementColorProvider {
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static ColorConstructors getConstructorType(PsiType[] types) {
     int len = types.length;
     if (len == 0) {
@@ -149,7 +149,7 @@ public class JavaColorProvider implements ElementColorProvider {
 
   @RequiredWriteAction
   @Override
-  public void setColorTo(@jakarta.annotation.Nonnull PsiElement element, @jakarta.annotation.Nonnull ColorValue colorValue) {
+  public void setColorTo(@Nonnull PsiElement element, @Nonnull ColorValue colorValue) {
     PsiExpressionList argumentList = ((PsiNewExpression) element).getArgumentList();
     assert argumentList != null;
 

@@ -77,7 +77,7 @@ public class CodeBlockBlock extends AbstractJavaBlock
 	 * @param baseNode  base AST node
 	 * @return alignment strategy to use for the given node
 	 */
-	private static AlignmentStrategy getAlignmentStrategy(Alignment alignment, ASTNode baseNode, @jakarta.annotation.Nonnull CommonCodeStyleSettings settings)
+	private static AlignmentStrategy getAlignmentStrategy(Alignment alignment, ASTNode baseNode, @Nonnull CommonCodeStyleSettings settings)
 	{
 		if(baseNode.getElementType() != JavaElementType.CLASS || !settings.ALIGN_MULTILINE_EXTENDS_LIST)
 		{
@@ -226,7 +226,7 @@ public class CodeBlockBlock extends AbstractJavaBlock
 		final SyntheticCodeBlock result = new SyntheticCodeBlock(localResult, childAlignment, getSettings(), myJavaSettings, indent, childWrap)
 		{
 			@Override
-			@jakarta.annotation.Nonnull
+			@Nonnull
 			public ChildAttributes getChildAttributes(final int newChildIndex)
 			{
 				IElementType prevElementType = null;

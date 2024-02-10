@@ -118,7 +118,7 @@ public class MigrationClassImpl extends LightElement implements PsiClass{
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiClassType[] getImplementsListTypes() {
     return PsiClassType.EMPTY_ARRAY;
   }
@@ -152,13 +152,13 @@ public class MigrationClassImpl extends LightElement implements PsiClass{
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public Collection<HierarchicalMethodSignature> getVisibleSignatures() {
     return Collections.emptySet();
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiField[] getFields() {
     return PsiField.EMPTY_ARRAY;
   }
@@ -200,7 +200,7 @@ public class MigrationClassImpl extends LightElement implements PsiClass{
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiMethod[] getAllMethods() {
     return PsiMethod.EMPTY_ARRAY;
   }
@@ -228,13 +228,13 @@ public class MigrationClassImpl extends LightElement implements PsiClass{
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiMethod[] findMethodsByName(String name, boolean checkBases) {
     return PsiMethod.EMPTY_ARRAY;
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public List<Pair<PsiMethod, PsiSubstitutor>> findMethodsAndTheirSubstitutorsByName(String name, boolean checkBases) {
     return new ArrayList<Pair<PsiMethod,PsiSubstitutor>>();
   }
@@ -331,7 +331,7 @@ public class MigrationClassImpl extends LightElement implements PsiClass{
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public SearchScope getUseScope() {
     return PsiClassImplUtil.getClassUseScope(this);
   }

@@ -38,7 +38,7 @@ public class ExpectedTypeUtils {
   private ExpectedTypeUtils() {
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiType findExpectedType(@Nonnull PsiExpression expression, boolean calculateTypeForComplexReferences) {
     return findExpectedType(expression, calculateTypeForComplexReferences, false);
   }
@@ -101,13 +101,13 @@ public class ExpectedTypeUtils {
       operatorAssignmentOps.add(JavaTokenType.GTGTGTEQ);
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     private final PsiExpression wrappedExpression;
     private final boolean calculateTypeForComplexReferences;
     private final boolean reportCasts;
     private PsiType expectedType = null;
 
-    ExpectedTypeVisitor(@jakarta.annotation.Nonnull PsiExpression wrappedExpression, boolean calculateTypeForComplexReferences, boolean reportCasts) {
+    ExpectedTypeVisitor(@Nonnull PsiExpression wrappedExpression, boolean calculateTypeForComplexReferences, boolean reportCasts) {
       this.wrappedExpression = wrappedExpression;
       this.calculateTypeForComplexReferences = calculateTypeForComplexReferences;
       this.reportCasts = reportCasts;
@@ -118,7 +118,7 @@ public class ExpectedTypeUtils {
     }
 
     @Override
-    public void visitField(@jakarta.annotation.Nonnull PsiField field) {
+    public void visitField(@Nonnull PsiField field) {
       final PsiExpression initializer = field.getInitializer();
       if (wrappedExpression.equals(initializer)) {
         expectedType = field.getType();
@@ -126,7 +126,7 @@ public class ExpectedTypeUtils {
     }
 
     @Override
-    public void visitVariable(@jakarta.annotation.Nonnull PsiVariable variable) {
+    public void visitVariable(@Nonnull PsiVariable variable) {
       expectedType = variable.getType();
     }
 
@@ -226,7 +226,7 @@ public class ExpectedTypeUtils {
     }
 
     @Override
-    public void visitPrefixExpression(@jakarta.annotation.Nonnull PsiPrefixExpression expression) {
+    public void visitPrefixExpression(@Nonnull PsiPrefixExpression expression) {
       final PsiType type = expression.getType();
       if (type instanceof PsiPrimitiveType) {
         expectedType = type;
@@ -236,7 +236,7 @@ public class ExpectedTypeUtils {
     }
 
     @Override
-    public void visitPostfixExpression(@jakarta.annotation.Nonnull PsiPostfixExpression expression) {
+    public void visitPostfixExpression(@Nonnull PsiPostfixExpression expression) {
       final PsiType type = expression.getType();
       if (type instanceof PsiPrimitiveType) {
         expectedType = type;
@@ -268,12 +268,12 @@ public class ExpectedTypeUtils {
     }
 
     @Override
-    public void visitWhileStatement(@jakarta.annotation.Nonnull PsiWhileStatement whileStatement) {
+    public void visitWhileStatement(@Nonnull PsiWhileStatement whileStatement) {
       expectedType = PsiType.BOOLEAN;
     }
 
     @Override
-    public void visitForStatement(@jakarta.annotation.Nonnull PsiForStatement statement) {
+    public void visitForStatement(@Nonnull PsiForStatement statement) {
       expectedType = PsiType.BOOLEAN;
     }
 
@@ -305,17 +305,17 @@ public class ExpectedTypeUtils {
     }
 
     @Override
-    public void visitDoWhileStatement(@jakarta.annotation.Nonnull PsiDoWhileStatement statement) {
+    public void visitDoWhileStatement(@Nonnull PsiDoWhileStatement statement) {
       expectedType = PsiType.BOOLEAN;
     }
 
     @Override
-    public void visitSynchronizedStatement(@jakarta.annotation.Nonnull PsiSynchronizedStatement statement) {
+    public void visitSynchronizedStatement(@Nonnull PsiSynchronizedStatement statement) {
       expectedType = TypeUtils.getObjectType(statement);
     }
 
     @Override
-    public void visitAssignmentExpression(@jakarta.annotation.Nonnull PsiAssignmentExpression assignment) {
+    public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression assignment) {
       final PsiExpression rExpression = assignment.getRExpression();
       final IElementType tokenType = assignment.getOperationTokenType();
       final PsiExpression lExpression = assignment.getLExpression();
@@ -427,7 +427,7 @@ public class ExpectedTypeUtils {
     }
 
     @Override
-    public void visitReferenceExpression(@jakarta.annotation.Nonnull PsiReferenceExpression referenceExpression) {
+    public void visitReferenceExpression(@Nonnull PsiReferenceExpression referenceExpression) {
       if (calculateTypeForComplexReferences) {
         final Project project = referenceExpression.getProject();
         final JavaResolveResult resolveResult = referenceExpression.advancedResolve(false);
@@ -482,7 +482,7 @@ public class ExpectedTypeUtils {
       }
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     private static PsiMethod findDeepestVisibleSuperMethod(PsiMethod method, PsiType returnType, PsiElement element) {
       if (method.isConstructor()) {
         return null;
@@ -560,7 +560,7 @@ public class ExpectedTypeUtils {
       return ClassUtils.inSamePackage(containingClass, referencingLocation);
     }
 
-    private static boolean isArithmeticOperation(@jakarta.annotation.Nonnull IElementType sign) {
+    private static boolean isArithmeticOperation(@Nonnull IElementType sign) {
       return arithmeticOps.contains(sign);
     }
 
@@ -576,12 +576,12 @@ public class ExpectedTypeUtils {
       return operatorAssignmentOps.contains(sign);
     }
 
-    private static int getParameterPosition(@jakarta.annotation.Nonnull PsiExpressionList expressionList, PsiExpression expression) {
+    private static int getParameterPosition(@Nonnull PsiExpressionList expressionList, PsiExpression expression) {
       return ArrayUtil.indexOf(expressionList.getExpressions(), expression);
     }
 
     @Nullable
-    private static PsiType getTypeOfParameter(@jakarta.annotation.Nonnull JavaResolveResult result, int parameterPosition) {
+    private static PsiType getTypeOfParameter(@Nonnull JavaResolveResult result, int parameterPosition) {
       final PsiMethod method = (PsiMethod) result.getElement();
       if (method == null) {
         return null;

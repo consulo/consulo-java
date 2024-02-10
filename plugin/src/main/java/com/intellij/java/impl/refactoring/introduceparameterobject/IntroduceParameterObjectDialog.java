@@ -227,7 +227,7 @@ public class IntroduceParameterObjectDialog extends RefactoringDialog {
     return myInnerClassNameTextField.getText().trim();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getPackageName() {
     return packageTextField.getText().trim();
   }
@@ -237,7 +237,7 @@ public class IntroduceParameterObjectDialog extends RefactoringDialog {
     return existingClassField.getText().trim();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getClassName() {
     return classNameField.getText().trim();
   }

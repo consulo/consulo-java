@@ -102,7 +102,7 @@ public class JUnitUtil {
       "org.junit.internal.runners.JUnit4ClassRunner"
   };
 
-  public static boolean isSuiteMethod(@jakarta.annotation.Nonnull PsiMethod psiMethod) {
+  public static boolean isSuiteMethod(@Nonnull PsiMethod psiMethod) {
     if (!psiMethod.hasModifierProperty(PsiModifier.PUBLIC)) {
       return false;
     }
@@ -192,7 +192,7 @@ public class JUnitUtil {
     return isTestClass(psiClass, true, true);
   }
 
-  public static boolean isTestClass(@jakarta.annotation.Nonnull PsiClass psiClass, boolean checkAbstract, boolean checkForTestCaseInheritance) {
+  public static boolean isTestClass(@Nonnull PsiClass psiClass, boolean checkAbstract, boolean checkForTestCaseInheritance) {
     if (psiClass.getQualifiedName() == null) {
       return false;
     }
@@ -228,7 +228,7 @@ public class JUnitUtil {
     return LanguageCachedValueUtil.getCachedValue(psiClass, () -> CachedValueProvider.Result.create(hasTestOrSuiteMethods(psiClass), PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT));
   }
 
-  private static boolean hasTestOrSuiteMethods(@jakarta.annotation.Nonnull PsiClass psiClass) {
+  private static boolean hasTestOrSuiteMethods(@Nonnull PsiClass psiClass) {
     for (final PsiMethod method : psiClass.getAllMethods()) {
       if (isSuiteMethod(method)) {
         return true;
@@ -293,7 +293,7 @@ public class JUnitUtil {
     return false;
   }
 
-  public static boolean isJUnit5TestClass(@jakarta.annotation.Nonnull final PsiClass psiClass, boolean checkAbstract) {
+  public static boolean isJUnit5TestClass(@Nonnull final PsiClass psiClass, boolean checkAbstract) {
     final PsiModifierList modifierList = psiClass.getModifierList();
     if (modifierList == null) {
       return false;
@@ -416,7 +416,7 @@ public class JUnitUtil {
     return JavaPsiFacade.getInstance(project).findClass(TEST_CASE_CLASS, scope);
   }
 
-  public static boolean isTestMethodOrConfig(@jakarta.annotation.Nonnull PsiMethod psiMethod) {
+  public static boolean isTestMethodOrConfig(@Nonnull PsiMethod psiMethod) {
     final PsiClass containingClass = psiMethod.getContainingClass();
     if (containingClass == null) {
       return false;
@@ -529,7 +529,7 @@ public class JUnitUtil {
     return JavaPsiFacade.getInstance(project).findClass(qualifiedName, scope);
   }
 
-  public static PsiJavaPackage getContainingPackage(@jakarta.annotation.Nonnull PsiClass psiClass) {
+  public static PsiJavaPackage getContainingPackage(@Nonnull PsiClass psiClass) {
     PsiDirectory directory = psiClass.getContainingFile().getContainingDirectory();
     return directory == null ? null : JavaDirectoryService.getInstance().getPackage(directory);
   }

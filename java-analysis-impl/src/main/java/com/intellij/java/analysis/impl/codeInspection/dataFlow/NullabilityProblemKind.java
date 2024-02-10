@@ -52,12 +52,12 @@ public final class NullabilityProblemKind<T extends PsiElement> {
     myNormalMessage = null;
   }
 
-  private NullabilityProblemKind(@jakarta.annotation.Nullable String exception, @Nonnull String name,
+  private NullabilityProblemKind(@Nullable String exception, @Nonnull String name,
                                  @Nonnull @PropertyKey(resourceBundle = BUNDLE) String message) {
     this(exception, name, message, message);
   }
 
-  private NullabilityProblemKind(@jakarta.annotation.Nullable String exception, @Nonnull String name,
+  private NullabilityProblemKind(@Nullable String exception, @Nonnull String name,
                                  @Nonnull @PropertyKey(resourceBundle = BUNDLE) String alwaysNullMessage,
                                  @Nonnull @PropertyKey(resourceBundle = BUNDLE) String normalMessage) {
     myException = exception;
@@ -123,7 +123,7 @@ public final class NullabilityProblemKind<T extends PsiElement> {
    */
   @Contract("null, _ -> null")
   @Nullable
-  public final NullabilityProblem<T> problem(@Nullable T anchor, @jakarta.annotation.Nullable PsiExpression expression) {
+  public final NullabilityProblem<T> problem(@Nullable T anchor, @Nullable PsiExpression expression) {
     return anchor == null || this == noProblem ? null : new NullabilityProblem<>(this, anchor, expression);
   }
 
@@ -505,7 +505,7 @@ public final class NullabilityProblemKind<T extends PsiElement> {
      * @return name of exception (or its superclass) which is thrown if violation occurs,
      * or null if no exception is thrown (e.g. when assigning null to variable annotated as notnull).
      */
-    @jakarta.annotation.Nullable
+    @Nullable
     public String thrownException() {
       return myKind.myException;
     }

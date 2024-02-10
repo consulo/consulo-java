@@ -74,7 +74,7 @@ public class RedundantSuppressInspection extends GlobalInspectionTool implements
     return false;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

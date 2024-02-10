@@ -51,7 +51,7 @@ public class ClassesWithAnnotatedMembersSearch extends ExtensibleQueryFactory<Ps
     super(ClassesWithAnnotatedMembersSearchExecutor.class);
   }
 
-  public static Query<PsiClass> search(@Nonnull PsiClass annotationClass, @jakarta.annotation.Nonnull SearchScope scope) {
+  public static Query<PsiClass> search(@Nonnull PsiClass annotationClass, @Nonnull SearchScope scope) {
     return INSTANCE.createQuery(new Parameters(annotationClass, scope));
   }
 }

@@ -118,7 +118,7 @@ public class ChangeContextUtil {
 
   public static PsiElement decodeContextInfo(@Nonnull PsiElement scope,
                                              @Nullable PsiClass thisClass,
-                                             @jakarta.annotation.Nullable PsiExpression thisAccessExpr) throws IncorrectOperationException {
+                                             @Nullable PsiExpression thisAccessExpr) throws IncorrectOperationException {
     if (scope.getCopyableUserData(ENCODED_KEY) != null) {
       scope.putCopyableUserData(ENCODED_KEY, null);
 

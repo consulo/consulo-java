@@ -45,11 +45,11 @@ public class InstancesTracker implements PersistentStateComponent<InstancesTrack
   private final EventDispatcher<InstancesTrackerListener> myDispatcher = EventDispatcher.create(InstancesTrackerListener.class);
   private MyState myState = new MyState();
 
-  public static InstancesTracker getInstance(@jakarta.annotation.Nonnull Project project) {
+  public static InstancesTracker getInstance(@Nonnull Project project) {
     return ServiceManager.getService(project, InstancesTracker.class);
   }
 
-  public boolean isTracked(@jakarta.annotation.Nonnull String className) {
+  public boolean isTracked(@Nonnull String className) {
     return myState.classes.containsKey(className);
   }
 
@@ -58,7 +58,7 @@ public class InstancesTracker implements PersistentStateComponent<InstancesTrack
   }
 
   @Nullable
-  public TrackingType getTrackingType(@jakarta.annotation.Nonnull String className) {
+  public TrackingType getTrackingType(@Nonnull String className) {
     return myState.classes.getOrDefault(className, null);
   }
 
@@ -67,7 +67,7 @@ public class InstancesTracker implements PersistentStateComponent<InstancesTrack
     return new HashMap<>(myState.classes);
   }
 
-  public void add(@jakarta.annotation.Nonnull String name, @Nonnull TrackingType type) {
+  public void add(@Nonnull String name, @Nonnull TrackingType type) {
     if (type.equals(myState.classes.getOrDefault(name, null))) {
       return;
     }
@@ -76,22 +76,22 @@ public class InstancesTracker implements PersistentStateComponent<InstancesTrack
     myDispatcher.getMulticaster().classChanged(name, type);
   }
 
-  public void remove(@jakarta.annotation.Nonnull String name) {
+  public void remove(@Nonnull String name) {
     TrackingType removed = myState.classes.remove(name);
     if (removed != null) {
       myDispatcher.getMulticaster().classRemoved(name);
     }
   }
 
-  public void addTrackerListener(@jakarta.annotation.Nonnull InstancesTrackerListener listener) {
+  public void addTrackerListener(@Nonnull InstancesTrackerListener listener) {
     myDispatcher.addListener(listener);
   }
 
-  public void addTrackerListener(@jakarta.annotation.Nonnull InstancesTrackerListener listener, @jakarta.annotation.Nonnull Disposable parentDisposable) {
+  public void addTrackerListener(@Nonnull InstancesTrackerListener listener, @Nonnull Disposable parentDisposable) {
     myDispatcher.addListener(listener, parentDisposable);
   }
 
-  public void removeTrackerListener(@jakarta.annotation.Nonnull InstancesTrackerListener listener) {
+  public void removeTrackerListener(@Nonnull InstancesTrackerListener listener) {
     myDispatcher.removeListener(listener);
   }
 
@@ -103,7 +103,7 @@ public class InstancesTracker implements PersistentStateComponent<InstancesTrack
     }
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public MyState getState() {
     return new MyState(myState);
@@ -123,7 +123,7 @@ public class InstancesTracker implements PersistentStateComponent<InstancesTrack
     MyState() {
     }
 
-    MyState(@jakarta.annotation.Nonnull MyState state) {
+    MyState(@Nonnull MyState state) {
       isBackgroundTrackingEnabled = state.isBackgroundTrackingEnabled;
       for (Map.Entry<String, TrackingType> classState : state.classes.entrySet()) {
         classes.put(classState.getKey(), classState.getValue());

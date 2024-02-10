@@ -47,13 +47,13 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
   private final TypeAnnotationContainer myAnnotations;
   private final ClsJavaCodeReferenceElementImpl myQualifier;
 
-  public ClsJavaCodeReferenceElementImpl(@Nonnull PsiElement parent, @jakarta.annotation.Nonnull String canonicalText) {
+  public ClsJavaCodeReferenceElementImpl(@Nonnull PsiElement parent, @Nonnull String canonicalText) {
     this(parent, canonicalText, TypeAnnotationContainer.EMPTY);
   }
 
   public ClsJavaCodeReferenceElementImpl(@Nonnull PsiElement parent,
-                                         @jakarta.annotation.Nonnull String canonicalText,
-                                         @jakarta.annotation.Nonnull TypeAnnotationContainer annotations) {
+                                         @Nonnull String canonicalText,
+                                         @Nonnull TypeAnnotationContainer annotations) {
     myParent = parent;
 
     String canonical = TypeInfo.internFrequentType(canonicalText);
@@ -70,7 +70,7 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiElement[] getChildren() {
     if (myQualifier != null) {
       return myRefParameterList != null ? new PsiElement[]{
@@ -146,14 +146,14 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
     public static final Resolver INSTANCE = new Resolver();
 
     @Override
-    @jakarta.annotation.Nonnull
-    public JavaResolveResult[] resolve(@jakarta.annotation.Nonnull ClsJavaCodeReferenceElementImpl ref, @Nonnull PsiFile containingFile, boolean incompleteCode) {
+    @Nonnull
+    public JavaResolveResult[] resolve(@Nonnull ClsJavaCodeReferenceElementImpl ref, @Nonnull PsiFile containingFile, boolean incompleteCode) {
       final JavaResolveResult resolveResult = ref.advancedResolveImpl(containingFile);
       return resolveResult == null ? JavaResolveResult.EMPTY_ARRAY : new JavaResolveResult[]{resolveResult};
     }
   }
 
-  private JavaResolveResult advancedResolveImpl(@jakarta.annotation.Nonnull PsiFile containingFile) {
+  private JavaResolveResult advancedResolveImpl(@Nonnull PsiFile containingFile) {
     PsiTypeElement[] typeElements = myRefParameterList == null ? PsiTypeElement.EMPTY_ARRAY : myRefParameterList.getTypeParameterElements();
     PsiElement resolve = resolveElement(containingFile);
     if (resolve == null) {
@@ -177,7 +177,7 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
     }
   }
 
-  private void collectOuterClassTypeArgs(@jakarta.annotation.Nonnull PsiClass psiClass,
+  private void collectOuterClassTypeArgs(@Nonnull PsiClass psiClass,
                                          final String canonicalText,
                                          final Map<PsiTypeParameter, PsiType> substitutionMap) {
     final PsiClass containingClass = psiClass.getContainingClass();
@@ -203,7 +203,7 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public JavaResolveResult advancedResolve(boolean incompleteCode) {
     final JavaResolveResult[] results = multiResolve(incompleteCode);
     if (results.length == 1) {
@@ -227,7 +227,7 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
     return (JavaResolveResult[]) results;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private JavaResolveResult[] diagnoseNoFile() {
     PsiElement root = SyntaxTraverser.psiApi().parents(this).last();
     PsiUtilCore.ensureValid(Objects.requireNonNull(root));
@@ -299,7 +299,7 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
   }
 
   @Override
-  public PsiElement handleElementRename(@jakarta.annotation.Nonnull String newElementName) throws IncorrectOperationException {
+  public PsiElement handleElementRename(@Nonnull String newElementName) throws IncorrectOperationException {
     throw cannotModifyException(this);
   }
 
@@ -334,12 +334,12 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
   }
 
   @Override
-  public void setMirror(@jakarta.annotation.Nonnull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, JavaElementType.JAVA_CODE_REFERENCE);
   }
 
   @Override
-  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitReferenceElement(this);
     } else {

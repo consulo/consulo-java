@@ -37,7 +37,7 @@ import com.siyeh.ig.psiutils.TestUtils;
 public class JUnit3StyleTestMethodInJUnit4ClassInspection extends BaseInspection {
 
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("junit3.style.test.method.in.junit4.class.display.name");

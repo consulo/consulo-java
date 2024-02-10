@@ -46,6 +46,6 @@ public interface PsiUnaryExpression extends PsiExpression
 	 *
 	 * @return the token type.
 	 */
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	IElementType getOperationTokenType();
 }

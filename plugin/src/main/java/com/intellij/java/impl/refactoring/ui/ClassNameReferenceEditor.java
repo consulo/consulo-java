@@ -41,7 +41,7 @@ public class ClassNameReferenceEditor extends ReferenceEditorWithBrowseButton {
   private PsiClass mySelectedClass;
   private String myChooserTitle;
 
-  public ClassNameReferenceEditor(@Nonnull final Project project, @jakarta.annotation.Nullable final PsiClass selectedClass) {
+  public ClassNameReferenceEditor(@Nonnull final Project project, @Nullable final PsiClass selectedClass) {
     this(project, selectedClass, null);
   }
 

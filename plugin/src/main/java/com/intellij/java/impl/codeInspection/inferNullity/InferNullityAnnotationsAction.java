@@ -138,7 +138,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
     processUsages(project, scope, usageInfos);
   }
 
-  protected void processUsages(@jakarta.annotation.Nonnull Project project, @Nonnull AnalysisScope scope, @Nonnull UsageInfo[] usageInfos) {
+  protected void processUsages(@Nonnull Project project, @Nonnull AnalysisScope scope, @Nonnull UsageInfo[] usageInfos) {
     if (usageInfos.length < 5) {
       applyRunnable(project, () -> usageInfos).run();
     } else {

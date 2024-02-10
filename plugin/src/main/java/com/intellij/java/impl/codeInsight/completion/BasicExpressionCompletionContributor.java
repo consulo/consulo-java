@@ -105,7 +105,7 @@ public class BasicExpressionCompletionContributor {
 
     PsiScopesUtil.treeWalkUp(new BaseScopeProcessor() {
       @Override
-      public boolean execute(@Nonnull PsiElement element, @jakarta.annotation.Nonnull ResolveState state) {
+      public boolean execute(@Nonnull PsiElement element, @Nonnull ResolveState state) {
         if (element instanceof PsiLocalVariable) {
           if (!matcher.prefixMatches(((PsiLocalVariable) element).getName())) {
             return true;
@@ -136,7 +136,7 @@ public class BasicExpressionCompletionContributor {
     }
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private static LookupElement expressionToLookupElement(@Nonnull PsiExpression expression) {
     if (expression instanceof PsiReferenceExpression) {
       final PsiReferenceExpression refExpr = (PsiReferenceExpression) expression;

@@ -8,7 +8,7 @@ import jakarta.annotation.Nonnull;
  */
 public interface PsiPatternVariable extends PsiParameter
 {
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	String getName();
 

@@ -27,7 +27,7 @@ public class MethodSignatureBackedByPsiMethod extends MethodSignatureBase {
   private final PsiMethod myMethod;
   private final boolean myIsRaw;
 
-  protected MethodSignatureBackedByPsiMethod(@jakarta.annotation.Nonnull PsiMethod method,
+  protected MethodSignatureBackedByPsiMethod(@Nonnull PsiMethod method,
                                              @Nonnull PsiSubstitutor substitutor,
                                              boolean isRaw,
                                              @Nonnull PsiType[] parameterTypes,

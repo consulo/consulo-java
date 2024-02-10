@@ -47,7 +47,7 @@ public class TurnRefsToSuperDialog extends RefactoringDialog {
   private JList mySuperClassesList = null;
   private final JCheckBox myCbReplaceInstanceOf = new JCheckBox();
 
-  TurnRefsToSuperDialog(Project project, @jakarta.annotation.Nonnull PsiClass subClass, List superClasses) {
+  TurnRefsToSuperDialog(Project project, @Nonnull PsiClass subClass, List superClasses) {
     super(project, true);
 
     mySubClass = subClass;

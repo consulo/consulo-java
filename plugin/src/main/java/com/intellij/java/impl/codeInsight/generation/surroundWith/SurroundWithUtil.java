@@ -120,7 +120,7 @@ public class SurroundWithUtil {
     return false;
   }
 
-  public static TextRange getRangeToSelect (@jakarta.annotation.Nonnull PsiCodeBlock block) {
+  public static TextRange getRangeToSelect (@Nonnull PsiCodeBlock block) {
     PsiElement first = block.getFirstBodyElement();
     if (first instanceof PsiWhiteSpace) {
       first = first.getNextSibling();

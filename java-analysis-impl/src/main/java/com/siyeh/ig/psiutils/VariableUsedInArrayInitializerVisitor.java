@@ -29,7 +29,7 @@ class VariableUsedInArrayInitializerVisitor extends JavaRecursiveElementVisitor 
   private final PsiVariable variable;
   private boolean passed = false;
 
-  public VariableUsedInArrayInitializerVisitor(@jakarta.annotation.Nonnull PsiVariable variable) {
+  public VariableUsedInArrayInitializerVisitor(@Nonnull PsiVariable variable) {
     super();
     this.variable = variable;
   }

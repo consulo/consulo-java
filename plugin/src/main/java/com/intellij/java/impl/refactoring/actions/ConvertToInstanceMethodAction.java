@@ -40,12 +40,12 @@ public class ConvertToInstanceMethodAction extends BaseRefactoringAction {
     return elements.length == 1 && elements[0] instanceof PsiMethod;
   }
 
-  protected boolean isAvailableOnElementInEditorAndFile(@Nonnull PsiElement element, @Nonnull final Editor editor, @Nonnull PsiFile file, @jakarta.annotation.Nonnull DataContext context) {
+  protected boolean isAvailableOnElementInEditorAndFile(@Nonnull PsiElement element, @Nonnull final Editor editor, @Nonnull PsiFile file, @Nonnull DataContext context) {
     if (element instanceof PsiIdentifier) element = element.getParent();
     return element instanceof PsiMethod && ((PsiMethod) element).hasModifierProperty(PsiModifier.STATIC);
   }
 
-  protected RefactoringActionHandler getHandler(@jakarta.annotation.Nonnull DataContext dataContext) {
+  protected RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
     return new ConvertToInstanceMethodHandler();
   }
 }

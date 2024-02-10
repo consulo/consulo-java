@@ -46,7 +46,7 @@ public class DfaValueFactory {
   @Nonnull
   FieldChecker myFieldChecker;
   private final
-  @jakarta.annotation.Nonnull
+  @Nonnull
   Project myProject;
   private
   @Nullable
@@ -57,7 +57,7 @@ public class DfaValueFactory {
    * @param context                   an item to analyze (code-block, expression, class)
    * @param unknownMembersAreNullable if true, unknown (non-annotated members) are assumed to be nullable
    */
-  public DfaValueFactory(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nullable PsiElement context, boolean unknownMembersAreNullable) {
+  public DfaValueFactory(@Nonnull Project project, @Nullable PsiElement context, boolean unknownMembersAreNullable) {
     myProject = project;
     myFieldChecker = new FieldChecker(context);
     myUnknownMembersAreNullable = unknownMembersAreNullable;
@@ -77,7 +77,7 @@ public class DfaValueFactory {
       or(psiMember(), psiParameter().withSuperParent(2, psiMember()));
 
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public Nullability suggestNullabilityForNonAnnotatedMember(@Nonnull PsiModifierListOwner member) {
     if (myUnknownMembersAreNullable &&
         MEMBER_OR_METHOD_PARAMETER.accepts(member) &&
@@ -89,12 +89,12 @@ public class DfaValueFactory {
   }
 
   @Nonnull
-  public DfaTypeValue getObjectType(@jakarta.annotation.Nullable PsiType type, @Nonnull Nullability nullability) {
+  public DfaTypeValue getObjectType(@Nullable PsiType type, @Nonnull Nullability nullability) {
     return fromDfType(DfTypes.typedObject(type, nullability));
   }
 
   public
-  @jakarta.annotation.Nullable
+  @Nullable
   DfaVariableValue getAssertionDisabled() {
     return myAssertionDisabled;
   }
@@ -119,7 +119,7 @@ public class DfaValueFactory {
     return myExpressionFactory.getExpressionDfaValue(psiExpression);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public DfaTypeValue getInt(int value) {
     return fromDfType(DfTypes.intValue(value));
   }
@@ -177,7 +177,7 @@ public class DfaValueFactory {
    * @param variable variable to create a constant based on its value
    * @return a value that represents a constant created from variable; null if variable cannot be represented as a constant
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   public DfaValue getConstantFromVariable(PsiVariable variable) {
     if (!variable.hasModifierProperty(PsiModifier.FINAL) || DfaUtil.ignoreInitializer(variable)) {
       return null;
@@ -211,7 +211,7 @@ public class DfaValueFactory {
     return myProject;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static Boolean computeJavaLangBooleanFieldReference(final PsiVariable variable) {
     if (!(variable instanceof PsiField)) {
       return null;
@@ -224,7 +224,7 @@ public class DfaValueFactory {
     return "TRUE".equals(name) ? Boolean.TRUE : "FALSE".equals(name) ? Boolean.FALSE : null;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public DfaTypeValue fromDfType(@Nonnull DfType dfType) {
     return myTypeValueFactory.create(dfType);
   }
@@ -233,7 +233,7 @@ public class DfaValueFactory {
     return Collections.unmodifiableCollection(myValues);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public DfaControlTransferValue controlTransfer(TransferTarget kind, FList<Trap> traps) {
     return myControlTransfers.get(Pair.create(kind, traps));
   }
@@ -253,17 +253,17 @@ public class DfaValueFactory {
     }
   };
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public DfaVariableValue.Factory getVarFactory() {
     return myVarFactory;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public DfaBoxedValue.Factory getBoxedFactory() {
     return myBoxedFactory;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public DfaExpressionFactory getExpressionFactory() {
     return myExpressionFactory;
   }
@@ -273,8 +273,8 @@ public class DfaValueFactory {
     return myBinOpFactory;
   }
 
-  @jakarta.annotation.Nonnull
-  public DfaValue createCommonValue(@jakarta.annotation.Nonnull PsiExpression[] expressions, PsiType targetType) {
+  @Nonnull
+  public DfaValue createCommonValue(@Nonnull PsiExpression[] expressions, PsiType targetType) {
     DfaValue loopElement = null;
     for (PsiExpression expression : expressions) {
       DfaValue expressionValue = createValue(expression);

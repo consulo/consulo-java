@@ -26,6 +26,6 @@ public interface PsiForeachStatementBase extends PsiLoopStatement {
    *
    * @return the closing parenthesis, or null if the statement is incomplete.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiJavaToken getRParenth();
 }

@@ -33,9 +33,9 @@ import jakarta.annotation.Nullable;
  */
 @ExtensionImpl
 public class JavaCollapseBlockHandler implements CollapseBlockHandler {
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
-  public PsiElement findParentBlock(@jakarta.annotation.Nullable PsiElement element) {
+  public PsiElement findParentBlock(@Nullable PsiElement element) {
     return PsiTreeUtil.getParentOfType(element, PsiCodeBlock.class);
   }
 

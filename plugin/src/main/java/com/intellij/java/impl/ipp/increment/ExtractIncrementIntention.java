@@ -51,7 +51,7 @@ public class ExtractIncrementIntention extends MutablyNamedIntention {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new ExtractIncrementPredicate();
   }
@@ -262,19 +262,19 @@ public class ExtractIncrementIntention extends MutablyNamedIntention {
     replaceExpression(operandText, (PsiExpression)element);
   }
 
-  private static String getElementText(@jakarta.annotation.Nonnull PsiElement element,
-                                       @jakarta.annotation.Nullable PsiElement elementToReplace,
-                                       @jakarta.annotation.Nullable String replacement) {
+  private static String getElementText(@Nonnull PsiElement element,
+                                       @Nullable PsiElement elementToReplace,
+                                       @Nullable String replacement) {
     final StringBuilder out = new StringBuilder();
     getElementText(element, elementToReplace, replacement, out);
     return out.toString();
   }
 
   private static void getElementText(
-    @jakarta.annotation.Nonnull PsiElement element,
+    @Nonnull PsiElement element,
     @Nullable PsiElement elementToReplace,
-    @jakarta.annotation.Nullable String replacement,
-    @jakarta.annotation.Nonnull StringBuilder out) {
+    @Nullable String replacement,
+    @Nonnull StringBuilder out) {
     if (element.equals(elementToReplace)) {
       out.append(replacement);
       return;

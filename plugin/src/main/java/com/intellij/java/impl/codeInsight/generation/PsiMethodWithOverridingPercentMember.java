@@ -76,8 +76,8 @@ public class PsiMethodWithOverridingPercentMember extends PsiMethodMember {
     }
   };
 
-  @jakarta.annotation.Nonnull
-  public static PsiMethodWithOverridingPercentMember[] calculateOverridingPercents(@jakarta.annotation.Nonnull final Collection<CandidateInfo> candidateInfos) {
+  @Nonnull
+  public static PsiMethodWithOverridingPercentMember[] calculateOverridingPercents(@Nonnull final Collection<CandidateInfo> candidateInfos) {
     final List<PsiMethodWithOverridingPercentMember> result = new ArrayList<PsiMethodWithOverridingPercentMember>(candidateInfos.size());
     final Map<String, Collection<PsiClass>> classShortNames2Inheritors = new HashMap<String, Collection<PsiClass>>();
     for (final CandidateInfo candidateInfo : candidateInfos) {
@@ -128,7 +128,7 @@ public class PsiMethodWithOverridingPercentMember extends PsiMethodMember {
     return counter;
   }
 
-  private static boolean maybeSuper(@jakarta.annotation.Nonnull final PsiMethod superMethod, @Nonnull final PsiMethod method) {
+  private static boolean maybeSuper(@Nonnull final PsiMethod superMethod, @Nonnull final PsiMethod method) {
     if (!superMethod.getName().equals(method.getName())) {
       return false;
     }
@@ -148,7 +148,7 @@ public class PsiMethodWithOverridingPercentMember extends PsiMethodMember {
   }
 
   @Nullable
-  private static String getTypeShortName(@jakarta.annotation.Nonnull final PsiType type) {
+  private static String getTypeShortName(@Nonnull final PsiType type) {
     if (type instanceof PsiPrimitiveType) {
       return ((PsiPrimitiveType) type).getBoxedTypeName();
     }

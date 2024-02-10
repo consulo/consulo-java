@@ -50,7 +50,7 @@ public class AddExceptionFromFieldInitializerToConstructorThrowsFix extends Base
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!myWrongElement.isValid()) {
       return false;
     }

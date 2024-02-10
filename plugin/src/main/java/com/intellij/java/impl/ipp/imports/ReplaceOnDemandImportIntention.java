@@ -36,7 +36,7 @@ import java.util.Set;
   "Declaration"})
 public class ReplaceOnDemandImportIntention extends Intention {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected PsiElementPredicate getElementPredicate() {
     return new OnDemandImportPredicate();
   }

@@ -34,7 +34,7 @@ public interface PsiCatchSection extends PsiElement {
   PsiCatchSection[] EMPTY_ARRAY = new PsiCatchSection[0];
 
   ArrayFactory<PsiCatchSection> ARRAY_FACTORY = new ArrayFactory<PsiCatchSection>() {
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public PsiCatchSection[] create(final int count) {
       return count == 0 ? EMPTY_ARRAY : new PsiCatchSection[count];
@@ -46,7 +46,7 @@ public interface PsiCatchSection extends PsiElement {
    *
    * @return the parameter for the called variable, or null if none is specified.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiParameter getParameter();
 
   /**
@@ -54,7 +54,7 @@ public interface PsiCatchSection extends PsiElement {
    *
    * @return the code block, or null if the section is incomplete.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiCodeBlock getCatchBlock();
 
   /**
@@ -75,7 +75,7 @@ public interface PsiCatchSection extends PsiElement {
    *
    * @return the types, or empty list if the section is incomplete.
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   List<PsiType> getPreciseCatchTypes();
 
   /**

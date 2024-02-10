@@ -51,7 +51,7 @@ public interface PsiMethodReferenceExpression extends PsiReferenceExpression, Ps
 	/**
 	 * @return potential applicable member for exact reference, otherwise null
 	 */
-	@jakarta.annotation.Nullable
+	@Nullable
 	PsiMember getPotentiallyApplicableMember();
 
 	/**

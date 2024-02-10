@@ -88,7 +88,7 @@ public abstract class DfaCondition
 		static final Exact FALSE = new Exact("FALSE");
 		static final Exact UNKNOWN = new Exact("UNKNOWN");
 
-		@jakarta.annotation.Nonnull
+		@Nonnull
 		@Override
 		public DfaCondition negate()
 		{

@@ -57,7 +57,7 @@ public class JavaStructureViewBuilderFactory implements PsiStructureViewFactory 
     };
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

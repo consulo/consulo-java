@@ -29,7 +29,7 @@ public class ClsAnnotationParameterListImpl extends ClsElementImpl implements Ps
   private final PsiAnnotation myParent;
   private final ClsNameValuePairImpl[] myAttributes;
 
-  public ClsAnnotationParameterListImpl(@jakarta.annotation.Nonnull PsiAnnotation parent, @jakarta.annotation.Nonnull PsiNameValuePair[] psiAttributes) {
+  public ClsAnnotationParameterListImpl(@Nonnull PsiAnnotation parent, @Nonnull PsiNameValuePair[] psiAttributes) {
     myParent = parent;
     myAttributes = new ClsNameValuePairImpl[psiAttributes.length];
     for (int i = 0; i < myAttributes.length; i++) {
@@ -53,13 +53,13 @@ public class ClsAnnotationParameterListImpl extends ClsElementImpl implements Ps
   }
 
   @Override
-  public void setMirror(@jakarta.annotation.Nonnull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, null);
     setMirrors(myAttributes, SourceTreeToPsiMap.<PsiAnnotationParameterList>treeToPsiNotNull(element).getAttributes());
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiElement[] getChildren() {
     return myAttributes;
   }
@@ -70,7 +70,7 @@ public class ClsAnnotationParameterListImpl extends ClsElementImpl implements Ps
   }
 
   @Override
-  public void accept(@jakarta.annotation.Nonnull PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitAnnotationParameterList(this);
     } else {
@@ -79,7 +79,7 @@ public class ClsAnnotationParameterListImpl extends ClsElementImpl implements Ps
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiNameValuePair[] getAttributes() {
     return myAttributes;
   }

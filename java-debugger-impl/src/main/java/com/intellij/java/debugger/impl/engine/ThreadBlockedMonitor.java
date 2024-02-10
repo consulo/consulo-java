@@ -58,7 +58,7 @@ public class ThreadBlockedMonitor
 		Disposer.register(disposable, this::cancelTask);
 	}
 
-	public void startWatching(@jakarta.annotation.Nullable ThreadReferenceProxy thread)
+	public void startWatching(@Nullable ThreadReferenceProxy thread)
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
 		if(thread != null)
@@ -97,13 +97,13 @@ public class ThreadBlockedMonitor
 		}
 	}
 
-	private static void onThreadBlocked(@jakarta.annotation.Nonnull final ThreadReference blockedThread, @jakarta.annotation.Nonnull final ThreadReference blockingThread, final DebugProcessImpl process)
+	private static void onThreadBlocked(@Nonnull final ThreadReference blockedThread, @Nonnull final ThreadReference blockingThread, final DebugProcessImpl process)
 	{
 		XDebuggerUIConstants.NOTIFICATION_GROUP.createNotification(DebuggerBundle.message("status.thread.blocked.by", blockedThread.name(), blockingThread.name()), DebuggerBundle.message("status" + ""
 				+ ".thread" + ".blocked.by.resume", blockingThread.name()), NotificationType.INFORMATION, new NotificationListener()
 		{
 			@Override
-			public void hyperlinkUpdate(@jakarta.annotation.Nonnull Notification notification, @Nonnull HyperlinkEvent event)
+			public void hyperlinkUpdate(@Nonnull Notification notification, @Nonnull HyperlinkEvent event)
 			{
 				if(event.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
 				{

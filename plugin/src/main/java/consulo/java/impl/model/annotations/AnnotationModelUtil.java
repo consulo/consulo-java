@@ -26,7 +26,7 @@ public class AnnotationModelUtil {
       return myStringValue;
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     @Override
     public T getValue() {
       return myValue;
@@ -48,7 +48,7 @@ public class AnnotationModelUtil {
 
   @RequiredReadAction
   @SuppressWarnings("unchecked")
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static <T> List<AnnotationGenericValue<T>> getEnumArrayValue(PsiAnnotation annotation, String name, Class<T> c) {
     List<AnnotationGenericValue<T>> values = new ArrayList<>();
 
@@ -79,7 +79,7 @@ public class AnnotationModelUtil {
     return values;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static AnnotationGenericValue<Boolean> getBooleanValue(PsiAnnotation annotation, String name, boolean defaultValue) {
     PsiAnnotationMemberValue attributeValue = annotation.findAttributeValue(name);
     boolean value = defaultValue;

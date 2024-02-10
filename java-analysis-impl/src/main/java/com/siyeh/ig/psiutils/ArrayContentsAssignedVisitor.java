@@ -27,13 +27,13 @@ class ArrayContentsAssignedVisitor extends JavaRecursiveElementVisitor {
   private boolean assigned = false;
   private final PsiVariable variable;
 
-  public ArrayContentsAssignedVisitor(@jakarta.annotation.Nonnull PsiVariable variable) {
+  public ArrayContentsAssignedVisitor(@Nonnull PsiVariable variable) {
     this.variable = variable;
   }
 
   @Override
   public void visitAssignmentExpression(
-    @jakarta.annotation.Nonnull PsiAssignmentExpression assignment) {
+    @Nonnull PsiAssignmentExpression assignment) {
     if (assigned) {
       return;
     }
@@ -56,7 +56,7 @@ class ArrayContentsAssignedVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitPrefixExpression(
-    @jakarta.annotation.Nonnull PsiPrefixExpression expression) {
+    @Nonnull PsiPrefixExpression expression) {
     if (assigned) {
       return;
     }

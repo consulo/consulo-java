@@ -33,7 +33,7 @@ import java.util.List;
 @IntentionMetaData(ignoreId = "java.CreateEnumSwitchBranchesIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class CreateEnumSwitchBranchesIntention extends Intention {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected PsiElementPredicate getElementPredicate() {
     return new EnumSwitchPredicate();
   }

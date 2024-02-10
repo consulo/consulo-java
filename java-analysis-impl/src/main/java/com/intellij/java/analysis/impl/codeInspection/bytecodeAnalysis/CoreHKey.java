@@ -25,7 +25,7 @@ final class CoreHKey
 	MemberDescriptor myMethod;
 	final int dirKey;
 
-	CoreHKey(@jakarta.annotation.Nonnull MemberDescriptor method, int dirKey)
+	CoreHKey(@Nonnull MemberDescriptor method, int dirKey)
 	{
 		this.myMethod = method;
 		this.dirKey = dirKey;

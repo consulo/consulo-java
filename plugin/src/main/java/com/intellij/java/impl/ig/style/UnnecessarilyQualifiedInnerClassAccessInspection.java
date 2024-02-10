@@ -49,7 +49,7 @@ public class UnnecessarilyQualifiedInnerClassAccessInspection
       "unnecessarily.qualified.inner.class.access.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     final PsiClass aClass = (PsiClass)infos[0];
@@ -74,7 +74,7 @@ public class UnnecessarilyQualifiedInnerClassAccessInspection
   private static class UnnecessarilyQualifiedInnerClassAccessFix
     extends InspectionGadgetsFix {
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "unnecessarily.qualified.inner.class.access.quickfix");

@@ -46,7 +46,7 @@ public class InlineVariableFix extends InspectionGadgetsFix {
   }
 
   @Override
-  public void doFix(@jakarta.annotation.Nonnull final Project project, final ProblemDescriptor descriptor) {
+  public void doFix(@Nonnull final Project project, final ProblemDescriptor descriptor) {
     final PsiElement nameElement = descriptor.getPsiElement();
     final PsiLocalVariable variable =
       (PsiLocalVariable)nameElement.getParent();

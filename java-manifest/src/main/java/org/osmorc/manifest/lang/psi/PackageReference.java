@@ -58,7 +58,7 @@ public class PackageReference extends PsiReferenceBase<PsiElement> implements Em
     }
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private PsiJavaPackage getPsiPackage() {
     return myIndex == 0
         ? JavaPsiFacade.getInstance(getElement().getProject()).findPackage("")

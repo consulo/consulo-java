@@ -27,17 +27,17 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class ThreadPriorityInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "CallToThreadSetPriority";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("thread.priority.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "thread.priority.problem.descriptor");
@@ -52,7 +52,7 @@ public class ThreadPriorityInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @jakarta.annotation.Nonnull PsiMethodCallExpression methodCallExpression) {
+      @Nonnull PsiMethodCallExpression methodCallExpression) {
       super.visitMethodCallExpression(methodCallExpression);
       if (!isThreadSetPriority(methodCallExpression)) {
         return;
@@ -85,7 +85,7 @@ public class ThreadPriorityInspection extends BaseInspection {
     }
 
     private static boolean hasNormalPriorityArgument(
-      @jakarta.annotation.Nonnull PsiMethodCallExpression methodCallExpression) {
+      @Nonnull PsiMethodCallExpression methodCallExpression) {
       final PsiExpressionList argumentList =
         methodCallExpression.getArgumentList();
       final PsiExpression[] expressions = argumentList.getExpressions();

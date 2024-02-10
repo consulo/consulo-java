@@ -8,7 +8,7 @@ class DirectionResultPair {
   @Nonnull
   final Result result;
 
-  DirectionResultPair(int directionKey, @jakarta.annotation.Nonnull Result result) {
+  DirectionResultPair(int directionKey, @Nonnull Result result) {
     this.directionKey = directionKey;
     this.result = result;
   }

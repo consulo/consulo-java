@@ -144,7 +144,7 @@ public class MoveInstanceMembersUtil {
     }
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiClass getClassReferencedByThis(final PsiExpression expression) {
     PsiClass enclosingClass = PsiTreeUtil.getParentOfType(expression, PsiClass.class);
     if (enclosingClass == null) return null;

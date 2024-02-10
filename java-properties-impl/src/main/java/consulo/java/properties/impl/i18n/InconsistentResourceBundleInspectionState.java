@@ -18,7 +18,7 @@ public class InconsistentResourceBundleInspectionState implements InspectionTool
 	public boolean REPORT_INCONSISTENT_PROPERTIES = true;
 	public boolean REPORT_DUPLICATED_PROPERTIES = true;
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	@Override
 	public UnnamedConfigurable createConfigurable()
 	{

@@ -68,7 +68,7 @@ public class ReplaceAssertLiteralWithAssertEqualsIntention extends MutablyNamedI
   }
 
   @Override
-  public void processIntention(@jakarta.annotation.Nonnull PsiElement element) {
+  public void processIntention(@Nonnull PsiElement element) {
     final PsiMethodCallExpression call = (PsiMethodCallExpression)element;
     final PsiReferenceExpression methodExpression = call.getMethodExpression();
     @NonNls final String methodName = methodExpression.getReferenceName();

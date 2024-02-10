@@ -49,7 +49,7 @@ public class ClassInheritorsSearch extends ExtensibleQueryFactory<PsiClass, Clas
     }
 
     public SearchParameters(@Nonnull final PsiClass aClass,
-                            @jakarta.annotation.Nonnull SearchScope scope,
+                            @Nonnull SearchScope scope,
                             final boolean checkDeep,
                             final boolean checkInheritance,
                             boolean includeAnonymous,
@@ -97,11 +97,11 @@ public class ClassInheritorsSearch extends ExtensibleQueryFactory<PsiClass, Clas
     return search(new SearchParameters(aClass, scope, checkDeep, checkInheritance, includeAnonymous));
   }
 
-  public static Query<PsiClass> search(@jakarta.annotation.Nonnull SearchParameters parameters) {
+  public static Query<PsiClass> search(@Nonnull SearchParameters parameters) {
     return INSTANCE.createUniqueResultsQuery(parameters, HashingStrategy.canonical(), it -> ApplicationManager.getApplication().runReadAction((Supplier<SmartPsiElementPointer<PsiClass>>) () -> SmartPointerManager.getInstance(it.getProject()).createSmartPsiElementPointer(it)));
   }
 
-  public static Query<PsiClass> search(@Nonnull final PsiClass aClass, @jakarta.annotation.Nonnull SearchScope scope, final boolean checkDeep, final boolean checkInheritance) {
+  public static Query<PsiClass> search(@Nonnull final PsiClass aClass, @Nonnull SearchScope scope, final boolean checkDeep, final boolean checkInheritance) {
     return search(aClass, scope, checkDeep, checkInheritance, true);
   }
 

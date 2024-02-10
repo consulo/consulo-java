@@ -39,7 +39,7 @@ public class SpecialDirUtil {
   public static final String META_INF = "META-INF";
 
   @Nullable
-  public static String getSpecialDirLocation(@Nonnull Module module, @jakarta.annotation.Nonnull String name) {
+  public static String getSpecialDirLocation(@Nonnull Module module, @Nonnull String name) {
     final JavaModuleExtension extension = ModuleUtilCore.getExtension(module, JavaModuleExtension.class);
     if(extension == null) {
       return null;
@@ -67,8 +67,8 @@ public class SpecialDirUtil {
     return null;
   }
 
-  @jakarta.annotation.Nonnull
-  public static List<VirtualFile> collectSpecialDirs(@jakarta.annotation.Nonnull Module module, @jakarta.annotation.Nonnull String name) {
+  @Nonnull
+  public static List<VirtualFile> collectSpecialDirs(@Nonnull Module module, @Nonnull String name) {
     final JavaModuleExtension extension = ModuleUtilCore.getExtension(module, JavaModuleExtension.class);
     if(extension == null) {
       return Collections.emptyList();

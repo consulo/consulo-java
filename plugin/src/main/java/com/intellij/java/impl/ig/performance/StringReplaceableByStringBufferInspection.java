@@ -40,13 +40,13 @@ public class StringReplaceableByStringBufferInspection extends BaseInspection {
   public boolean onlyWarnOnLoop = true;
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "NonConstantStringShouldBeStringBuffer";
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "string.replaceable.by.string.buffer.display.name");
@@ -76,7 +76,7 @@ public class StringReplaceableByStringBufferInspection extends BaseInspection {
 
     @Override
     public void visitLocalVariable(
-      @jakarta.annotation.Nonnull PsiLocalVariable variable) {
+      @Nonnull PsiLocalVariable variable) {
       super.visitLocalVariable(variable);
       final PsiCodeBlock codeBlock =
         PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class);

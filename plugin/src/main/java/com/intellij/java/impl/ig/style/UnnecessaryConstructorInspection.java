@@ -80,7 +80,7 @@ public class UnnecessaryConstructorInspection extends BaseInspection {
 
   private static class UnnecessaryConstructorFix
     extends InspectionGadgetsFix {
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "unnecessary.constructor.remove.quickfix");

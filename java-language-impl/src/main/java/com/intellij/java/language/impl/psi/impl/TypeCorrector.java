@@ -53,7 +53,7 @@ class TypeCorrector extends PsiTypeMapper {
   }
 
   @Nullable
-  public <T extends PsiType> T correctType(@jakarta.annotation.Nonnull T type) {
+  public <T extends PsiType> T correctType(@Nonnull T type) {
     if (type instanceof PsiClassType) {
       PsiClassType classType = (PsiClassType) type;
       if (classType.getParameterCount() == 0) {
@@ -97,7 +97,7 @@ class TypeCorrector extends PsiTypeMapper {
     return mappedType;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private PsiSubstitutor mapSubstitutor(PsiClass originalClass, PsiClass mappedClass, PsiSubstitutor substitutor) {
     PsiTypeParameter[] typeParameters = mappedClass.getTypeParameters();
     PsiTypeParameter[] originalTypeParameters = originalClass.getTypeParameters();
@@ -160,7 +160,7 @@ class TypeCorrector extends PsiTypeMapper {
       myResolveResult = resolveResult;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public PsiClass resolve() {
       return myResolveResult.myMappedClass;
@@ -171,7 +171,7 @@ class TypeCorrector extends PsiTypeMapper {
       return myDelegate.getClassName();
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public PsiType[] getParameters() {
       return ContainerUtil.map2Array(myDelegate.getParameters(), PsiType.class, new Function<PsiType, PsiType>() {
@@ -197,7 +197,7 @@ class TypeCorrector extends PsiTypeMapper {
       return myResolveResult;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public PsiClassType rawType() {
       PsiClass psiClass = resolve();
@@ -205,21 +205,21 @@ class TypeCorrector extends PsiTypeMapper {
       return factory.createType(psiClass, factory.createRawSubstitutor(psiClass));
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public GlobalSearchScope getResolveScope() {
       return myResolveScope;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public LanguageLevel getLanguageLevel() {
       return myLanguageLevel;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
-    public PsiClassType setLanguageLevel(@jakarta.annotation.Nonnull LanguageLevel languageLevel) {
+    public PsiClassType setLanguageLevel(@Nonnull LanguageLevel languageLevel) {
       return new PsiCorrectedClassType(languageLevel, myDelegate, myResolveResult);
     }
 
@@ -235,7 +235,7 @@ class TypeCorrector extends PsiTypeMapper {
       return myDelegate.getCanonicalText(annotated);
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public String getInternalCanonicalText() {
       return myDelegate.getInternalCanonicalText();
@@ -247,7 +247,7 @@ class TypeCorrector extends PsiTypeMapper {
     }
 
     @Override
-    public boolean equalsToText(@jakarta.annotation.Nonnull @NonNls String text) {
+    public boolean equalsToText(@Nonnull @NonNls String text) {
       return myDelegate.equalsToText(text);
     }
   }
@@ -266,7 +266,7 @@ class TypeCorrector extends PsiTypeMapper {
       myClassResolveResult = classResolveResult;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public PsiSubstitutor getSubstitutor() {
       PsiSubstitutor result = myLazySubstitutor;

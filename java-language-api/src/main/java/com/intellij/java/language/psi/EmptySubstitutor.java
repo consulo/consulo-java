@@ -55,7 +55,7 @@ public final class EmptySubstitutor implements PsiSubstitutor {
     return PsiSubstitutorFactory.getInstance().createSubstitutor(classParameter, mapping);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public PsiSubstitutor putAll(@Nonnull PsiClass parentClass, PsiType[] mappings) {
     if (!parentClass.hasTypeParameters())
@@ -65,7 +65,7 @@ public final class EmptySubstitutor implements PsiSubstitutor {
 
   @Nonnull
   @Override
-  public PsiSubstitutor putAll(@jakarta.annotation.Nonnull PsiSubstitutor another) {
+  public PsiSubstitutor putAll(@Nonnull PsiSubstitutor another) {
     return another;
   }
 

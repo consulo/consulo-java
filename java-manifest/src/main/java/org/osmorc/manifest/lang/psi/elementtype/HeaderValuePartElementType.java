@@ -57,7 +57,7 @@ public class HeaderValuePartElementType extends AbstractManifestStubElementType<
   }
 
   @Override
-  public HeaderValuePartStub createStub(@jakarta.annotation.Nonnull HeaderValuePart psi, StubElement parentStub) {
+  public HeaderValuePartStub createStub(@Nonnull HeaderValuePart psi, StubElement parentStub) {
     return new HeaderValuePartStubImpl(parentStub, psi.getUnwrappedText());
   }
 

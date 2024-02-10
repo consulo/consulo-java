@@ -107,7 +107,7 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
     super(project, descriptor, allowDelegation, context);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static JavaChangeSignatureDialog createAndPreselectNew(@Nonnull Project project,
                                                                 @Nonnull PsiMethod method,
                                                                 @Nonnull List<? extends ParameterInfoImpl> parameterInfos,
@@ -122,7 +122,7 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
                                                                 final List<? extends ParameterInfoImpl> parameterInfos,
                                                                 final boolean allowDelegation,
                                                                 final PsiReferenceExpression refExpr,
-                                                                @jakarta.annotation.Nullable Consumer<? super List<ParameterInfoImpl>> callback) {
+                                                                @Nullable Consumer<? super List<ParameterInfoImpl>> callback) {
     return new JavaChangeSignatureDialog(project, method, allowDelegation, refExpr) {
       @Override
       protected int getSelectedIdx() {
@@ -197,7 +197,7 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected List<Pair<String, JPanel>> createAdditionalPanels() {
     final PsiMethod method = myMethod.getMethod();
 
@@ -368,7 +368,7 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
         new TextFieldCompletionProvider() {
 
           @Override
-          public void addCompletionVariants(@Nonnull String text, int offset, @jakarta.annotation.Nonnull String prefix,
+          public void addCompletionVariants(@Nonnull String text, int offset, @Nonnull String prefix,
                                                @Nonnull CompletionResultSet result) {
             final PsiCodeFragment fragment = item.typeCodeFragment;
             if (fragment instanceof PsiTypeCodeFragment) {
@@ -521,7 +521,7 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
         myMethodsToPropagateExceptions);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   protected CanonicalTypes.Type getReturnType() {
     if (myReturnTypeField != null) {
       try {

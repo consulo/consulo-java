@@ -29,7 +29,7 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class DollarSignInNameInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "dollar.sign.in.name.display.name");
@@ -39,7 +39,7 @@ public class DollarSignInNameInspection extends BaseInspection {
     return new RenameFix();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "dollar.sign.in.name.problem.descriptor");
@@ -69,7 +69,7 @@ public class DollarSignInNameInspection extends BaseInspection {
     }
 
     @Override
-    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       super.visitMethod(method);
       final String name = method.getName();
       if (name.indexOf((int)'$') < 0) {
@@ -79,7 +79,7 @@ public class DollarSignInNameInspection extends BaseInspection {
     }
 
     @Override
-    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       //note: no call to super, to avoid drill-down
       final String name = aClass.getName();
       if (name == null) {

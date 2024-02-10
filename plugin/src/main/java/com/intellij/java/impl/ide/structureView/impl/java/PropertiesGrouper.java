@@ -28,7 +28,7 @@ import java.util.*;
 public class PropertiesGrouper implements Grouper {
   @NonNls public static final String ID = "SHOW_PROPERTIES";
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public Collection<Group> group(final Object parent, Collection<TreeElement> children) {
     if (((AbstractTreeNode) parent).getValue() instanceof PropertyGroup) return Collections.emptyList();
     Map<Group,Group> result = new HashMap<Group, Group>();
@@ -61,7 +61,7 @@ public class PropertiesGrouper implements Grouper {
     return new ActionPresentationData(IdeBundle.message("action.structureview.show.properties"), null, AllIcons.Nodes.Property);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getName() {
     return ID;
   }

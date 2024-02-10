@@ -29,7 +29,7 @@ public interface MethodReturnInferenceResult
 			this.value = value;
 		}
 
-		@jakarta.annotation.Nonnull
+		@Nonnull
 		public Nullability getValue()
 		{
 			return value;
@@ -85,7 +85,7 @@ public interface MethodReturnInferenceResult
 			return delegateCalls;
 		}
 
-		@jakarta.annotation.Nonnull
+		@Nonnull
 		@Override
 		public Nullability getNullability(PsiMethod method, Supplier<PsiCodeBlock> body)
 		{
@@ -168,7 +168,7 @@ public interface MethodReturnInferenceResult
 		}
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	Nullability getNullability(PsiMethod method, Supplier<PsiCodeBlock> body);
 
 	@Nonnull

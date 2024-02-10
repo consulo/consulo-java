@@ -78,7 +78,7 @@ public class WrapLongWithMathToIntExactFix extends LocalQuickFixAndIntentionActi
 				areSameTypes(((PsiExpression) startElement).getType(), PsiType.LONG);
 	}
 
-	private static boolean areSameTypes(@jakarta.annotation.Nullable PsiType type, @Nonnull PsiPrimitiveType expected)
+	private static boolean areSameTypes(@Nullable PsiType type, @Nonnull PsiPrimitiveType expected)
 	{
 		return !(type == null ||
 				!type.isValid() ||
@@ -101,7 +101,7 @@ public class WrapLongWithMathToIntExactFix extends LocalQuickFixAndIntentionActi
 	private static class MyMethodArgumentFix extends MethodArgumentFix implements HighPriorityAction
 	{
 
-		protected MyMethodArgumentFix(@Nonnull PsiExpressionList list, int i, @jakarta.annotation.Nonnull PsiType toType, @Nonnull ArgumentFixerActionFactory fixerActionFactory)
+		protected MyMethodArgumentFix(@Nonnull PsiExpressionList list, int i, @Nonnull PsiType toType, @Nonnull ArgumentFixerActionFactory fixerActionFactory)
 		{
 			super(list, i, toType, fixerActionFactory);
 		}
@@ -124,7 +124,7 @@ public class WrapLongWithMathToIntExactFix extends LocalQuickFixAndIntentionActi
 
 	public static class MyMethodArgumentFixerFactory extends ArgumentFixerActionFactory
 	{
-		@jakarta.annotation.Nullable
+		@Nullable
 		@Override
 		protected PsiExpression getModifiedArgument(final PsiExpression expression, final PsiType toType) throws IncorrectOperationException
 		{
@@ -132,7 +132,7 @@ public class WrapLongWithMathToIntExactFix extends LocalQuickFixAndIntentionActi
 		}
 
 		@Override
-		public boolean areTypesConvertible(final PsiType exprType, final PsiType parameterType, @jakarta.annotation.Nonnull final PsiElement context)
+		public boolean areTypesConvertible(final PsiType exprType, final PsiType parameterType, @Nonnull final PsiElement context)
 		{
 			return parameterType.isConvertibleFrom(exprType) || (areSameTypes(parameterType, PsiType.INT) && areSameTypes(exprType, PsiType.LONG));
 		}

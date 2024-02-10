@@ -35,7 +35,7 @@ public class ObjectAllocationInLoopInspection extends BaseInspection {
       "object.allocation.in.loop.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "object.allocation.in.loop.problem.descriptor");

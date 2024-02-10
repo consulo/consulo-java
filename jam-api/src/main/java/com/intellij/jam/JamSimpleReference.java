@@ -45,7 +45,7 @@ public class JamSimpleReference<T> extends PsiReferenceBase<PsiLiteral> {
     return element == null? myContext.getPsiLiteral() : element;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public Object[] getVariants() {
     return myConverter.getLookupVariants(myContext);
   }

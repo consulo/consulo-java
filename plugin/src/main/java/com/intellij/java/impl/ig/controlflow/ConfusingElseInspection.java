@@ -170,7 +170,7 @@ public class ConfusingElseInspection extends BaseInspection {
       return !(parent instanceof PsiCodeBlock);
     }
 
-    @jakarta.annotation.Nullable
+    @Nullable
     private PsiStatement getNextStatement(PsiIfStatement statement) {
       while (true) {
         final PsiElement parent = statement.getParent();

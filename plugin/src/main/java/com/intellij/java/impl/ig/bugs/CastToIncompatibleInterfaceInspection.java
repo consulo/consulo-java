@@ -48,7 +48,7 @@ public class CastToIncompatibleInterfaceInspection extends BaseInspection {
 
     @Override
     public void visitTypeCastExpression(
-      @jakarta.annotation.Nonnull PsiTypeCastExpression expression) {
+      @Nonnull PsiTypeCastExpression expression) {
       super.visitTypeCastExpression(expression);
       final PsiTypeElement castTypeElement = expression.getCastType();
       if (castTypeElement == null) {

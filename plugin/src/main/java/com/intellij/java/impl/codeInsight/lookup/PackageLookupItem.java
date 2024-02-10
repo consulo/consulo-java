@@ -24,11 +24,11 @@ public class PackageLookupItem extends LookupElement {
   private final String myString;
   private final boolean myAddDot;
 
-  public PackageLookupItem(@jakarta.annotation.Nonnull PsiPackage aPackage) {
+  public PackageLookupItem(@Nonnull PsiPackage aPackage) {
     this(aPackage, null);
   }
 
-  public PackageLookupItem(@jakarta.annotation.Nonnull PsiPackage pkg, @Nullable PsiElement context) {
+  public PackageLookupItem(@Nonnull PsiPackage pkg, @Nullable PsiElement context) {
     myPackage = pkg;
     myString = StringUtil.notNullize(myPackage.getName());
 

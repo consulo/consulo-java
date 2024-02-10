@@ -52,13 +52,13 @@ public class PullAsAbstractUpFix extends LocalQuickFixAndIntentionActionOnPsiEle
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getText() {
     return myName;
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getFamilyName() {
     return "Pull up";
   }
@@ -66,17 +66,17 @@ public class PullAsAbstractUpFix extends LocalQuickFixAndIntentionActionOnPsiEle
   @Override
   public boolean isAvailable(@Nonnull Project project,
                              @Nonnull PsiFile file,
-                             @jakarta.annotation.Nonnull PsiElement startElement,
-                             @jakarta.annotation.Nonnull PsiElement endElement) {
+                             @Nonnull PsiElement startElement,
+                             @Nonnull PsiElement endElement) {
     return startElement instanceof PsiMethod && startElement.isValid() && ((PsiMethod) startElement).getContainingClass() != null;
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull Project project,
-                     @jakarta.annotation.Nonnull PsiFile file,
+  public void invoke(@Nonnull Project project,
+                     @Nonnull PsiFile file,
                      @Nullable Editor editor,
-                     @jakarta.annotation.Nonnull PsiElement startElement,
-                     @jakarta.annotation.Nonnull PsiElement endElement) {
+                     @Nonnull PsiElement startElement,
+                     @Nonnull PsiElement endElement) {
     final PsiMethod method = (PsiMethod) startElement;
     if (!FileModificationService.getInstance().prepareFileForWrite(method.getContainingFile())) return;
 
@@ -105,7 +105,7 @@ public class PullAsAbstractUpFix extends LocalQuickFixAndIntentionActionOnPsiEle
             "Choose super class",
             new PsiElementProcessor<PsiClass>() {
               @Override
-              public boolean execute(@jakarta.annotation.Nonnull PsiClass aClass) {
+              public boolean execute(@Nonnull PsiClass aClass) {
                 pullUp(method, containingClass, aClass);
                 return false;
               }
@@ -139,7 +139,7 @@ public class PullAsAbstractUpFix extends LocalQuickFixAndIntentionActionOnPsiEle
     return false;
   }
 
-  public static void registerQuickFix(@jakarta.annotation.Nonnull PsiMethod methodWithOverrides, @jakarta.annotation.Nonnull QuickFixActionRegistrar registrar) {
+  public static void registerQuickFix(@Nonnull PsiMethod methodWithOverrides, @Nonnull QuickFixActionRegistrar registrar) {
     PsiClass containingClass = methodWithOverrides.getContainingClass();
     if (containingClass == null) return;
     final PsiManager manager = containingClass.getManager();

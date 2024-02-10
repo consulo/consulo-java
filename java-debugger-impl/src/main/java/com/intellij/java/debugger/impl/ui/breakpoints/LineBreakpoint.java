@@ -247,7 +247,7 @@ public class LineBreakpoint<P extends JavaBreakpointProperties> extends Breakpoi
 		});
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	protected JavaLineBreakpointType getXBreakpointType()
 	{
 		XBreakpointType<?, P> type = myXBreakpoint.getType();
@@ -314,7 +314,7 @@ public class LineBreakpoint<P extends JavaBreakpointProperties> extends Breakpoi
 		return true;
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	private Collection<VirtualFile> findClassCandidatesInSourceContent(final String className, final GlobalSearchScope scope, final ProjectFileIndex fileIndex)
 	{
 		final int dollarIndex = className.indexOf("$");
@@ -607,7 +607,7 @@ public class LineBreakpoint<P extends JavaBreakpointProperties> extends Breakpoi
 		return canAdd[0];
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	public String getMethodName()
 	{
 		XSourcePosition position = myXBreakpoint.getSourcePosition();

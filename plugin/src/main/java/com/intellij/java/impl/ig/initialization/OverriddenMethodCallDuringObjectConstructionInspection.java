@@ -31,7 +31,7 @@ import jakarta.annotation.Nonnull;
 public class OverriddenMethodCallDuringObjectConstructionInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("overridden.method.call.in.constructor.display.name");
   }
@@ -50,7 +50,7 @@ public class OverriddenMethodCallDuringObjectConstructionInspection extends Base
   private static class OverriddenMethodCallInConstructorVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethodCallExpression(@jakarta.annotation.Nonnull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!MethodCallUtils.isCallDuringObjectConstruction(expression)) {
         return;

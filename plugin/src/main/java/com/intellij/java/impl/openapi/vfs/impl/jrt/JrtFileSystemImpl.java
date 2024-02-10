@@ -32,7 +32,7 @@ public class JrtFileSystemImpl extends ArchiveFileSystem implements JrtFileSyste
   private final Map<String, ArchiveHandler> myHandlers = Collections.synchronizedMap(Maps.newHashMap(FileUtil.PATH_HASHING_STRATEGY));
   private final AtomicBoolean mySubscribed = new AtomicBoolean(false);
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getProtocol() {
     return PROTOCOL;
@@ -40,34 +40,34 @@ public class JrtFileSystemImpl extends ArchiveFileSystem implements JrtFileSyste
 
   @Nonnull
   @Override
-  public String normalize(@jakarta.annotation.Nonnull String path) {
+  public String normalize(@Nonnull String path) {
     int p = path.indexOf(SEPARATOR);
     return p > 0 ? FileUtil.normalize(path.substring(0, p)) + path.substring(p) : super.normalize(path);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
-  protected String extractLocalPath(@jakarta.annotation.Nonnull String rootPath) {
+  protected String extractLocalPath(@Nonnull String rootPath) {
     return StringUtil.trimEnd(rootPath, SEPARATOR);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
-  protected String composeRootPath(@jakarta.annotation.Nonnull String localPath) {
+  protected String composeRootPath(@Nonnull String localPath) {
     return localPath + SEPARATOR;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
-  public String extractRootPath(@jakarta.annotation.Nonnull String entryPath) {
+  public String extractRootPath(@Nonnull String entryPath) {
     int separatorIndex = entryPath.indexOf(SEPARATOR);
     assert separatorIndex >= 0 : "Path passed to JrtFileSystem must have a separator '!/' but got: " + entryPath;
     return entryPath.substring(0, separatorIndex + SEPARATOR.length());
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
-  protected ArchiveHandler getHandler(@jakarta.annotation.Nonnull VirtualFile entryFile) {
+  protected ArchiveHandler getHandler(@Nonnull VirtualFile entryFile) {
     checkSubscription();
 
     String homePath = extractLocalPath(extractRootPath(entryFile.getPath()));
@@ -91,7 +91,7 @@ public class JrtFileSystemImpl extends ArchiveFileSystem implements JrtFileSyste
     }
     app.getMessageBus().connect(app).subscribe(BulkFileListener.class, new BulkFileListener() {
       @Override
-      public void after(@jakarta.annotation.Nonnull List<? extends VFileEvent> events) {
+      public void after(@Nonnull List<? extends VFileEvent> events) {
         Set<VirtualFile> toRefresh = null;
 
         for (VFileEvent e : events) {
@@ -138,7 +138,7 @@ public class JrtFileSystemImpl extends ArchiveFileSystem implements JrtFileSyste
   }
 
   @Override
-  public VirtualFile findFileByPathIfCached(@jakarta.annotation.Nonnull String path) {
+  public VirtualFile findFileByPathIfCached(@Nonnull String path) {
     return VfsImplUtil.findFileByPathIfCached(this, path);
   }
 
@@ -153,20 +153,20 @@ public class JrtFileSystemImpl extends ArchiveFileSystem implements JrtFileSyste
   }
 
   @Override
-  protected boolean isCorrectFileType(@jakarta.annotation.Nonnull VirtualFile local) {
+  protected boolean isCorrectFileType(@Nonnull VirtualFile local) {
     String path = local.getPath();
     return OwnJdkUtil.isModularRuntime(path) && !OwnJdkUtil.isExplodedModularRuntime(path);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public VirtualFile getLocalVirtualFileFor(@Nullable VirtualFile virtualFile) {
     return getLocalByEntry(virtualFile);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
-  public VirtualFile findLocalVirtualFileByPath(@jakarta.annotation.Nonnull String s) {
+  public VirtualFile findLocalVirtualFileByPath(@Nonnull String s) {
     return findLocalByRootPath(s);
   }
 

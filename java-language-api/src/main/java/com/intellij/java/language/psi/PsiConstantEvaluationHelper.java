@@ -51,7 +51,7 @@ public abstract class PsiConstantEvaluationHelper {
   public abstract Object computeConstantExpression(PsiElement expression, boolean throwExceptionOnOverflow);
 
   public abstract Object computeExpression(PsiExpression expression, boolean throwExceptionOnOverflow,
-                                           @jakarta.annotation.Nullable final AuxEvaluator auxEvaluator);
+                                           @Nullable final AuxEvaluator auxEvaluator);
 
   public interface AuxEvaluator {
     Object computeExpression(final PsiExpression expression, final AuxEvaluator auxEvaluator);

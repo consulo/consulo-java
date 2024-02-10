@@ -101,7 +101,7 @@ public class ExtractClassHandler implements ElementsHandler {
     return PsiTreeUtil.getParentOfType(aClass, PsiClass.class, true) != null;
   }
 
-  public void invoke(@Nonnull Project project, @jakarta.annotation.Nonnull PsiElement[] elements, DataContext dataContext) {
+  public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
     if (elements.length != 1) {
       return;
     }

@@ -49,7 +49,7 @@ public class SimplifyBooleanExpressionFix extends LocalQuickFixOnPsiElement {
 
   // subExpressionValue == Boolean.TRUE or Boolean.FALSE if subExpression evaluates to boolean constant and needs to be replaced
   //   otherwise subExpressionValue= null and we starting to simplify expression without any further knowledge
-  public SimplifyBooleanExpressionFix(@jakarta.annotation.Nonnull PsiExpression subExpression, Boolean subExpressionValue) {
+  public SimplifyBooleanExpressionFix(@Nonnull PsiExpression subExpression, Boolean subExpressionValue) {
     super(subExpression);
     mySubExpressionValue = subExpressionValue;
   }
@@ -62,7 +62,7 @@ public class SimplifyBooleanExpressionFix extends LocalQuickFixOnPsiElement {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getFamilyName() {
     return JavaQuickFixBundle.message("simplify.boolean.expression.family");
   }
@@ -78,7 +78,7 @@ public class SimplifyBooleanExpressionFix extends LocalQuickFixOnPsiElement {
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull final Project project, @jakarta.annotation.Nonnull PsiFile file, @jakarta.annotation.Nonnull PsiElement startElement, @jakarta.annotation.Nonnull PsiElement endElement) {
+  public void invoke(@Nonnull final Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
     if (!isAvailable()) return;
     final PsiExpression expression = getSubExpression();
     LOG.assertTrue(expression.isValid());

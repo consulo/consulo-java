@@ -33,7 +33,7 @@ import static com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaUtil.ha
 
 public final class CommonDataflow {
   private static class DataflowPoint {
-    @jakarta.annotation.Nonnull
+    @Nonnull
     DfType myDfType = DfTypes.BOTTOM;
     // empty = top; null = bottom
     @Nullable
@@ -93,10 +93,10 @@ public final class CommonDataflow {
    */
   public static final class DataflowResult {
     private final
-    @jakarta.annotation.Nonnull
+    @Nonnull
     Map<PsiExpression, DataflowPoint> myData = new HashMap<>();
     private
-    @jakarta.annotation.Nonnull
+    @Nonnull
     Map<PsiExpression, DataflowPoint> myDataAssertionsDisabled = myData;
     private final RunnerResult myResult;
 
@@ -104,7 +104,7 @@ public final class CommonDataflow {
       myResult = result;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     DataflowResult copy() {
       DataflowResult copy = new DataflowResult(myResult);
       myData.forEach((expression, point) -> copy.myData.put(expression, new DataflowPoint(point)));
@@ -187,8 +187,8 @@ public final class CommonDataflow {
      * @param expression an expression to get its value
      * @return a set of possible values or empty set if not known
      */
-    @jakarta.annotation.Nonnull
-    public Set<Object> getExpressionValues(@jakarta.annotation.Nullable PsiExpression expression) {
+    @Nonnull
+    public Set<Object> getExpressionValues(@Nullable PsiExpression expression) {
       DataflowPoint point = myData.get(expression);
       if (point == null) {
         return Collections.emptySet();
@@ -203,7 +203,7 @@ public final class CommonDataflow {
      * May return {@link DfTypes#TOP} if no information from dataflow is known about this expression
      * @see #getDfTypeNoAssertions(PsiExpression)
      */
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public DfType getDfType(PsiExpression expression) {
       DataflowPoint point = myData.get(expression);
       return point == null ? DfTypes.TOP : point.myDfType;
@@ -215,7 +215,7 @@ public final class CommonDataflow {
      * May return {@link DfTypes#TOP} if no information from dataflow is known about this expression
      * @see #getDfType(PsiExpression)
      */
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public DfType getDfTypeNoAssertions(PsiExpression expression) {
       DataflowPoint point = myDataAssertionsDisabled.get(expression);
       return point == null ? DfTypes.TOP : point.myDfType;
@@ -265,7 +265,7 @@ public final class CommonDataflow {
    * @param context a context to get the dataflow result
    * @return the dataflow result or null if dataflow cannot be launched for this context (e.g. we are inside too complex method)
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   public static DataflowResult getDataflowResult(PsiExpression context) {
     PsiElement body = DfaUtil.getDataflowContext(context);
     if (body == null) {
@@ -310,7 +310,7 @@ public final class CommonDataflow {
    * @param expression an expression to infer the DfType
    * @return DfType for that expression. May return {@link DfTypes#TOP} if no information from dataflow is known about this expression
    */
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public static DfType getDfType(PsiExpression expression) {
     DataflowResult result = getDataflowResult(expression);
     if (result == null) {
@@ -328,7 +328,7 @@ public final class CommonDataflow {
    * @return long range set
    */
   @Contract("null -> null")
-  @jakarta.annotation.Nullable
+  @Nullable
   public static LongRangeSet getExpressionRange(@Nullable PsiExpression expression) {
     if (expression == null) {
       return null;
@@ -376,8 +376,8 @@ public final class CommonDataflow {
     }
 
     @Override
-    protected void beforeExpressionPush(@jakarta.annotation.Nonnull DfaValue value,
-                                        @jakarta.annotation.Nonnull PsiExpression expression,
+    protected void beforeExpressionPush(@Nonnull DfaValue value,
+                                        @Nonnull PsiExpression expression,
                                         @Nullable TextRange range,
                                         @Nonnull DfaMemoryState state) {
       if (range == null) {

@@ -45,9 +45,9 @@ public class DfaExpressionFactory {
     myFactory = factory;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Contract("null -> null")
-  DfaValue getExpressionDfaValue(@jakarta.annotation.Nullable PsiExpression expression) {
+  DfaValue getExpressionDfaValue(@Nullable PsiExpression expression) {
     if (expression == null) {
       return null;
     }
@@ -168,7 +168,7 @@ public class DfaExpressionFactory {
     return getQualifierValue(qualifierExpression);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private DfaValue getQualifierValue(PsiExpression qualifierExpression) {
     DfaValue qualifierValue = getExpressionDfaValue(qualifierExpression);
     if (qualifierValue == null) {
@@ -197,7 +197,7 @@ public class DfaExpressionFactory {
   }
 
   @Contract("null -> null")
-  @jakarta.annotation.Nullable
+  @Nullable
   public static VariableDescriptor getAccessedVariableOrGetter(final PsiElement target) {
     SpecialField sf = SpecialField.findSpecialField(target);
     if (sf != null) {
@@ -231,8 +231,8 @@ public class DfaExpressionFactory {
     return contracts.isEmpty();
   }
 
-  @jakarta.annotation.Nonnull
-  private DfaValue getAdvancedExpressionDfaValue(@Nullable PsiExpression expression, @jakarta.annotation.Nullable PsiType targetType) {
+  @Nonnull
+  private DfaValue getAdvancedExpressionDfaValue(@Nullable PsiExpression expression, @Nullable PsiType targetType) {
     if (expression == null) {
       return myFactory.getUnknown();
     }
@@ -322,7 +322,7 @@ public class DfaExpressionFactory {
     return indexVariable.createValue(myFactory, arrayDfaVar);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private ArrayElementDescriptor getArrayIndexVariable(int index) {
     if (index >= 0) {
       return myArrayIndices.computeIfAbsent(index, ArrayElementDescriptor::new);
@@ -330,8 +330,8 @@ public class DfaExpressionFactory {
     return null;
   }
 
-  @jakarta.annotation.Nonnull
-  private static PsiSubstitutor getSubstitutor(PsiElement member, @jakarta.annotation.Nullable DfaVariableValue qualifier) {
+  @Nonnull
+  private static PsiSubstitutor getSubstitutor(PsiElement member, @Nullable DfaVariableValue qualifier) {
     if (member instanceof PsiMember && qualifier != null) {
       PsiClass fieldClass = ((PsiMember) member).getContainingClass();
       PsiClassType classType = ObjectUtil.tryCast(qualifier.getType(), PsiClassType.class);
@@ -359,7 +359,7 @@ public class DfaExpressionFactory {
 
     @Nonnull
     @Override
-    public PsiType getType(@jakarta.annotation.Nullable DfaVariableValue qualifier) {
+    public PsiType getType(@Nullable DfaVariableValue qualifier) {
       return PsiType.BOOLEAN;
     }
 
@@ -385,7 +385,7 @@ public class DfaExpressionFactory {
     }
 
     @Override
-    public PsiType getType(@jakarta.annotation.Nullable DfaVariableValue qualifier) {
+    public PsiType getType(@Nullable DfaVariableValue qualifier) {
       PsiType type = myVariable.getType();
       if (type instanceof PsiEllipsisType) {
         type = ((PsiEllipsisType) type).toArrayType();
@@ -405,7 +405,7 @@ public class DfaExpressionFactory {
 
     @Nonnull
     @Override
-    public DfaValue createValue(@jakarta.annotation.Nonnull DfaValueFactory factory, @Nullable DfaValue qualifier, boolean forAccessor) {
+    public DfaValue createValue(@Nonnull DfaValueFactory factory, @Nullable DfaValue qualifier, boolean forAccessor) {
       if (myVariable.hasModifierProperty(PsiModifier.VOLATILE)) {
         PsiType type = getType(ObjectUtil.tryCast(qualifier, DfaVariableValue.class));
         return factory.getObjectType(type, DfaPsiUtil.getElementNullability(type, myVariable));
@@ -455,7 +455,7 @@ public class DfaExpressionFactory {
       }
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public String toString() {
       return myGetter.getName();
@@ -483,9 +483,9 @@ public class DfaExpressionFactory {
       return true;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
-    public DfaValue createValue(@jakarta.annotation.Nonnull DfaValueFactory factory, @jakarta.annotation.Nullable DfaValue qualifier, boolean forAccessor) {
+    public DfaValue createValue(@Nonnull DfaValueFactory factory, @Nullable DfaValue qualifier, boolean forAccessor) {
       if (myGetter.hasModifierProperty(PsiModifier.STATIC)) {
         return factory.getVarFactory().createVariableValue(this);
       }
@@ -552,7 +552,7 @@ public class DfaExpressionFactory {
 
     @Nonnull
     @Override
-    public PsiType getType(@jakarta.annotation.Nullable DfaVariableValue qualifier) {
+    public PsiType getType(@Nullable DfaVariableValue qualifier) {
       return new PsiImmediateClassType(myQualifier, PsiSubstitutor.EMPTY);
     }
 

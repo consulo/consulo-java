@@ -41,7 +41,7 @@ import org.jetbrains.annotations.NonNls;
 public class UnnecessaryInheritDocInspection extends BaseInspection {
 
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(

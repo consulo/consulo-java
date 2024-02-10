@@ -46,7 +46,7 @@ public class StringBufferReplaceableByStringInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiElement element = (PsiElement)infos[0];
     if (element instanceof PsiNewExpression) {
@@ -297,7 +297,7 @@ public class StringBufferReplaceableByStringInspection extends BaseInspection {
     }
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static PsiExpression getCompleteExpression(PsiNewExpression expression) {
     PsiElement completeExpression = expression;
     boolean found = false;

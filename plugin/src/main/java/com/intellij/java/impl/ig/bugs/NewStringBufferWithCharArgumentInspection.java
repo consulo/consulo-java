@@ -43,7 +43,7 @@ public class NewStringBufferWithCharArgumentInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "new.string.buffer.with.char.argument.problem.descriptor");
@@ -67,7 +67,7 @@ public class NewStringBufferWithCharArgumentInspection extends BaseInspection {
   private static class NewStringBufferWithCharArgumentFix
     extends InspectionGadgetsFix {
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "new.string.buffer.with.char.argument.quickfix");

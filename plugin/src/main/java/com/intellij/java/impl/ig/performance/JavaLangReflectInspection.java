@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NonNls;
 @ExtensionImpl
 public class JavaLangReflectInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "java.lang.reflect.display.name");
@@ -48,7 +48,7 @@ public class JavaLangReflectInspection extends BaseInspection {
   private static class JavaLangReflectVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitVariable(@jakarta.annotation.Nonnull PsiVariable variable) {
+    public void visitVariable(@Nonnull PsiVariable variable) {
       super.visitVariable(variable);
       final PsiType type = variable.getType();
       final PsiType componentType = type.getDeepComponentType();

@@ -90,7 +90,7 @@ public abstract class ClassBrowser extends BrowseModuleValueActionListener {
         return ConfigurationUtil.MAIN_CLASS.test(aClass) && findMainMethod(aClass) != null;
       }
 
-      @jakarta.annotation.Nullable
+      @Nullable
       private PsiMethod findMainMethod(final PsiClass aClass) {
         return ReadAction.compute(() -> PsiMethodUtil.findMainMethod(aClass));
       }

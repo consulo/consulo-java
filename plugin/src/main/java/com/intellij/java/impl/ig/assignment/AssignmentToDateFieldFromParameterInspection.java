@@ -48,7 +48,7 @@ public class AssignmentToDateFieldFromParameterInspection extends BaseInspection
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final String type = (String)infos[0];
     final PsiExpression rhs = (PsiExpression)infos[1];

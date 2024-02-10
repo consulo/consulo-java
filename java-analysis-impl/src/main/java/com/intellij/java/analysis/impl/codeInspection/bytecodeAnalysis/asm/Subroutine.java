@@ -21,7 +21,7 @@ public class Subroutine
 	{
 	}
 
-	Subroutine(@Nullable LabelNode start, int maxLocals, @jakarta.annotation.Nullable JumpInsnNode caller)
+	Subroutine(@Nullable LabelNode start, int maxLocals, @Nullable JumpInsnNode caller)
 	{
 		this.start = start;
 		this.access = new boolean[maxLocals];

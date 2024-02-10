@@ -34,12 +34,12 @@ import jakarta.annotation.Nonnull;
  * @author max
  */
 public class ClsTypeParametersListImpl extends ClsRepositoryPsiElement<PsiTypeParameterListStub> implements PsiTypeParameterList {
-  public ClsTypeParametersListImpl(@jakarta.annotation.Nonnull PsiTypeParameterListStub stub) {
+  public ClsTypeParametersListImpl(@Nonnull PsiTypeParameterListStub stub) {
     super(stub);
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @jakarta.annotation.Nonnull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
     final PsiTypeParameter[] params = getTypeParameters();
     if (params.length != 0) {
       buffer.append('<');

@@ -63,7 +63,7 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 
 	private Image myIcon = AllIcons.Debugger.StackFrame;
 
-	public StackFrameDescriptorImpl(@jakarta.annotation.Nonnull StackFrameProxyImpl frame, @jakarta.annotation.Nonnull MethodsTracker tracker)
+	public StackFrameDescriptorImpl(@Nonnull StackFrameProxyImpl frame, @Nonnull MethodsTracker tracker)
 	{
 		myFrame = frame;
 
@@ -167,7 +167,7 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 		return myMethodOccurrence.isRecursive();
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	public ValueMarkup getValueMarkup()
 	{
 		if(myThisObject != null)
@@ -308,7 +308,7 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 		return myIsInLibraryContent;
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	public Location getLocation()
 	{
 		return myLocation;

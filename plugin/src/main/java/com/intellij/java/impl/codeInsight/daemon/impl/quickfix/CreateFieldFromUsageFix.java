@@ -128,7 +128,7 @@ public class CreateFieldFromUsageFix extends CreateVarFromUsageFix {
     });
   }
 
-  private static boolean shouldCreateFinalMember(@Nonnull PsiReferenceExpression ref, @jakarta.annotation.Nonnull PsiClass targetClass) {
+  private static boolean shouldCreateFinalMember(@Nonnull PsiReferenceExpression ref, @Nonnull PsiClass targetClass) {
     if (!PsiTreeUtil.isAncestor(targetClass, ref, true)) {
       return false;
     }

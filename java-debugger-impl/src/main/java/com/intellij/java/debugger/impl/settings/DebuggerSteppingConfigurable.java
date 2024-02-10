@@ -36,7 +36,7 @@ class DebuggerSteppingConfigurable implements IdeaConfigurableUi<DebuggerSetting
 	private JCheckBox myCbSkipSimpleGetters;
 
 	@Override
-	public void reset(@jakarta.annotation.Nonnull DebuggerSettings settings)
+	public void reset(@Nonnull DebuggerSettings settings)
 	{
 		myCbSkipSimpleGetters.setSelected(settings.SKIP_GETTERS);
 		myCbSkipSyntheticMethods.setSelected(settings.SKIP_SYNTHETIC_METHODS);
@@ -76,7 +76,7 @@ class DebuggerSteppingConfigurable implements IdeaConfigurableUi<DebuggerSetting
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public JComponent getComponent()
 	{
 		final JPanel panel = new JPanel(new GridBagLayout());

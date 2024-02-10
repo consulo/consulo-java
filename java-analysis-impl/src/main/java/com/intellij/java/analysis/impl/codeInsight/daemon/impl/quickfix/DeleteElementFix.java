@@ -33,32 +33,32 @@ import jakarta.annotation.Nullable;
 public class DeleteElementFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   private final String myText;
 
-  public DeleteElementFix(@jakarta.annotation.Nonnull PsiElement element) {
+  public DeleteElementFix(@Nonnull PsiElement element) {
     super(element);
     myText = null;
   }
 
-  public DeleteElementFix(@Nonnull PsiElement element, @jakarta.annotation.Nonnull @Nls String text) {
+  public DeleteElementFix(@Nonnull PsiElement element, @Nonnull @Nls String text) {
     super(element);
     myText = text;
   }
 
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getText() {
     return ObjectUtil.notNull(myText, getFamilyName());
   }
 
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getFamilyName() {
     return JavaQuickFixBundle.message("delete.element.fix.text");
   }
 
   @Override
-  public void invoke(@Nonnull Project project, @jakarta.annotation.Nonnull PsiFile file, @Nullable Editor editor, @Nonnull PsiElement startElement, @jakarta.annotation.Nonnull PsiElement endElement) {
+  public void invoke(@Nonnull Project project, @Nonnull PsiFile file, @Nullable Editor editor, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
     if (FileModificationService.getInstance().preparePsiElementForWrite(file)) {
       WriteAction.run(() -> new CommentTracker().deleteAndRestoreComments(startElement));
     }

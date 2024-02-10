@@ -137,7 +137,7 @@ public abstract class CreateClassFromUsageBaseFix extends BaseIntentionAction im
     return myRefElement.getElement();
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   protected String getSuperClassName(final PsiJavaCodeReferenceElement element) {
     String superClassName = null;
     PsiElement parent = element.getParent();

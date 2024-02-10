@@ -45,11 +45,11 @@ public class JavaAutoRunManager extends AbstractAutoTestManager {
   }
 
   @Inject
-  public JavaAutoRunManager(@jakarta.annotation.Nonnull Project project) {
+  public JavaAutoRunManager(@Nonnull Project project) {
     super(project);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected AutoTestWatcher createWatcher(Project project) {
     return new AutoTestWatcher() {

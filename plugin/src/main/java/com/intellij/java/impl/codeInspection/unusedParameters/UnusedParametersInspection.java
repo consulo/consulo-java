@@ -228,14 +228,14 @@ public class UnusedParametersInspection extends GlobalJavaBatchInspectionTool im
 	}
 
 	@Override
-	@jakarta.annotation.Nullable
+	@Nullable
 	public String getHint(@Nonnull final QuickFix fix)
 	{
 		return ((AcceptSuggested) fix).getHint();
 	}
 
 	@Override
-	@jakarta.annotation.Nullable
+	@Nullable
 	public QuickFix getQuickFix(final String hint)
 	{
 		return new AcceptSuggested(null, null, hint);
@@ -296,7 +296,7 @@ public class UnusedParametersInspection extends GlobalJavaBatchInspectionTool im
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return InspectionsBundle.message("inspection.unused.parameter.display.name");
@@ -310,7 +310,7 @@ public class UnusedParametersInspection extends GlobalJavaBatchInspectionTool im
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public String getShortName()
 	{
 		return SHORT_NAME;
@@ -346,7 +346,7 @@ public class UnusedParametersInspection extends GlobalJavaBatchInspectionTool im
 		}
 
 		@Override
-		@jakarta.annotation.Nonnull
+		@Nonnull
 		public String getName()
 		{
 			return InspectionsBundle.message("inspection.unused.parameter.delete.quickfix");

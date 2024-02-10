@@ -40,7 +40,7 @@ public class MoveCommentToSeparateLineIntention extends Intention {
     return new CommentOnLineWithSourcePredicate();
   }
 
-  public void processIntention(@jakarta.annotation.Nonnull PsiElement element)
+  public void processIntention(@Nonnull PsiElement element)
     throws IncorrectOperationException {
     final PsiComment selectedComment = (PsiComment)element;
     PsiElement elementToCheck = selectedComment;

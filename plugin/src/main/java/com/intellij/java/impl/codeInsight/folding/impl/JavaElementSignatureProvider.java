@@ -37,7 +37,7 @@ public class JavaElementSignatureProvider extends AbstractElementSignatureProvid
 
   @Override
   @Nullable
-  public String getSignature(@jakarta.annotation.Nonnull final PsiElement element) {
+  public String getSignature(@Nonnull final PsiElement element) {
     PsiFile file = element.getContainingFile();
     if (!(file instanceof PsiJavaFile)) {
       return null;
@@ -165,7 +165,7 @@ public class JavaElementSignatureProvider extends AbstractElementSignatureProvid
                                                 @Nonnull PsiElement parent,
                                                 @Nonnull String type,
                                                 @Nonnull StringTokenizer tokenizer,
-                                                @jakarta.annotation.Nullable StringBuilder processingInfoStorage) {
+                                                @Nullable StringBuilder processingInfoStorage) {
     if (type.equals("imports")) {
       if (!(file instanceof PsiJavaFile)) return null;
       return ((PsiJavaFile) file).getImportList();

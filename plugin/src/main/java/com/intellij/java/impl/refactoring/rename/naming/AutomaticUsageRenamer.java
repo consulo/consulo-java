@@ -88,7 +88,7 @@ public abstract class AutomaticUsageRenamer<T> {
     return myElements;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   /**
    * Element source, path. For example, package. Taken into account while sorting.
    */

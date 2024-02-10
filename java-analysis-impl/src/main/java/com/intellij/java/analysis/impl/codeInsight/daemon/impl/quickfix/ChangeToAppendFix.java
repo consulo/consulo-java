@@ -48,7 +48,7 @@ public class ChangeToAppendFix implements SyntheticIntentionAction {
     myAssignmentExpression = assignmentExpression;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getText() {
     return JavaQuickFixBundle.message("change.to.append.text",
@@ -58,7 +58,7 @@ public class ChangeToAppendFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return JavaTokenType.PLUSEQ == myTokenType &&
            myAssignmentExpression.isValid() &&
            PsiManager.getInstance(project).isInProject(myAssignmentExpression) &&

@@ -56,12 +56,12 @@ public class JavaDebuggerEvaluator extends XDebuggerEvaluator {
   }
 
   @Override
-  public void evaluate(@jakarta.annotation.Nonnull final String expression, @jakarta.annotation.Nonnull final XEvaluationCallback callback, @jakarta.annotation.Nullable XSourcePosition expressionPosition) {
+  public void evaluate(@Nonnull final String expression, @Nonnull final XEvaluationCallback callback, @Nullable XSourcePosition expressionPosition) {
     evaluate(XExpression.fromText(expression), callback, expressionPosition);
   }
 
   @Override
-  public void evaluate(@jakarta.annotation.Nonnull final XExpression expression, @jakarta.annotation.Nonnull final XEvaluationCallback callback, @Nullable XSourcePosition expressionPosition) {
+  public void evaluate(@Nonnull final XExpression expression, @Nonnull final XEvaluationCallback callback, @Nullable XSourcePosition expressionPosition) {
     myDebugProcess.getManagerThread().schedule(new DebuggerContextCommandImpl(myDebugProcess.getDebuggerContext(), myStackFrame.getStackFrameProxy().threadProxy()) {
       @Override
       public Priority getPriority() {
@@ -121,7 +121,7 @@ public class JavaDebuggerEvaluator extends XDebuggerEvaluator {
     return currentRange.get();
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static Pair<PsiElement, TextRange> findExpression(PsiElement element, boolean allowMethodCalls) {
     final EditorTextProvider textProvider = EditorTextProvider.forLanguage(element.getLanguage());
     if (textProvider != null) {

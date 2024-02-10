@@ -33,7 +33,7 @@ public final class ControlFlowFactory implements Disposable {
   }
 
   @Inject
-  public ControlFlowFactory(@jakarta.annotation.Nonnull Project project) {
+  public ControlFlowFactory(@Nonnull Project project) {
     project.getMessageBus().connect(this).subscribe(AnyPsiChangeListener.class, new AnyPsiChangeListener() {
       @Override
       public void beforePsiChanged(boolean isPhysical) {
@@ -58,17 +58,17 @@ public final class ControlFlowFactory implements Disposable {
   private static final class ControlFlowContext {
     private final ControlFlowPolicy policy;
     private final
-    @jakarta.annotation.Nonnull
+    @Nonnull
     ControlFlowOptions options;
     private final long modificationCount;
     private final
     @Nonnull
     ControlFlow controlFlow;
 
-    private ControlFlowContext(@jakarta.annotation.Nonnull ControlFlowOptions options,
-                               @jakarta.annotation.Nonnull ControlFlowPolicy policy,
+    private ControlFlowContext(@Nonnull ControlFlowOptions options,
+                               @Nonnull ControlFlowPolicy policy,
                                long modificationCount,
-                               @jakarta.annotation.Nonnull ControlFlow controlFlow) {
+                               @Nonnull ControlFlow controlFlow) {
       this.options = options;
       this.policy = policy;
       this.modificationCount = modificationCount;
@@ -113,19 +113,19 @@ public final class ControlFlowFactory implements Disposable {
       return true;
     }
 
-    private boolean isFor(@jakarta.annotation.Nonnull ControlFlowContext that) {
+    private boolean isFor(@Nonnull ControlFlowContext that) {
       return isFor(that.policy, that.options, that.modificationCount);
     }
   }
 
-  @jakarta.annotation.Nonnull
-  public ControlFlow getControlFlow(@Nonnull PsiElement element, @jakarta.annotation.Nonnull ControlFlowPolicy policy) throws AnalysisCanceledException {
+  @Nonnull
+  public ControlFlow getControlFlow(@Nonnull PsiElement element, @Nonnull ControlFlowPolicy policy) throws AnalysisCanceledException {
     return doGetControlFlow(element, policy, ControlFlowOptions.create(true, true, true));
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public ControlFlow getControlFlow(@Nonnull PsiElement element,
-                                    @jakarta.annotation.Nonnull ControlFlowPolicy policy,
+                                    @Nonnull ControlFlowPolicy policy,
                                     boolean evaluateConstantIfCondition) throws AnalysisCanceledException {
     return doGetControlFlow(element, policy, ControlFlowOptions.create(true, evaluateConstantIfCondition, true));
   }
@@ -137,8 +137,8 @@ public final class ControlFlowFactory implements Disposable {
     return getInstance(element.getProject()).doGetControlFlow(element, policy, options);
   }
 
-  @jakarta.annotation.Nonnull
-  private ControlFlow doGetControlFlow(@jakarta.annotation.Nonnull PsiElement element,
+  @Nonnull
+  private ControlFlow doGetControlFlow(@Nonnull PsiElement element,
                                        @Nonnull ControlFlowPolicy policy,
                                        @Nonnull ControlFlowOptions options) throws AnalysisCanceledException {
     if (!element.isPhysical()) {
@@ -157,9 +157,9 @@ public final class ControlFlowFactory implements Disposable {
     return controlFlow;
   }
 
-  @jakarta.annotation.Nonnull
-  private static ControlFlowContext createContext(@jakarta.annotation.Nonnull ControlFlowOptions options,
-                                                  @jakarta.annotation.Nonnull ControlFlowPolicy policy,
+  @Nonnull
+  private static ControlFlowContext createContext(@Nonnull ControlFlowOptions options,
+                                                  @Nonnull ControlFlowPolicy policy,
                                                   @Nonnull ControlFlow controlFlow,
                                                   final long modificationCount) {
     return new ControlFlowContext(options, policy, modificationCount, controlFlow);
@@ -167,8 +167,8 @@ public final class ControlFlowFactory implements Disposable {
 
   private void registerControlFlow(@Nonnull PsiElement element,
                                    @Nonnull ControlFlow flow,
-                                   @jakarta.annotation.Nonnull ControlFlowOptions options,
-                                   @jakarta.annotation.Nonnull ControlFlowPolicy policy) {
+                                   @Nonnull ControlFlowOptions options,
+                                   @Nonnull ControlFlowPolicy policy) {
     final long modificationCount = element.getManager().getModificationTracker().getModificationCount();
     ControlFlowContext controlFlowContext = createContext(options, policy, flow, modificationCount);
 
@@ -177,7 +177,7 @@ public final class ControlFlowFactory implements Disposable {
   }
 
   @Nonnull
-  private ConcurrentList<ControlFlowContext> getOrCreateCachedFlowsForElement(@jakarta.annotation.Nonnull PsiElement element) {
+  private ConcurrentList<ControlFlowContext> getOrCreateCachedFlowsForElement(@Nonnull PsiElement element) {
     return cachedFlows.computeIfAbsent(element, __ -> Lists.newLockFreeCopyOnWriteList());
   }
 

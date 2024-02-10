@@ -41,7 +41,7 @@ public class ReplaceWithListAccessFix implements SyntheticIntentionAction {
     myArrayAccessExpression = arrayAccessExpression;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getText() {
     return JavaQuickFixBundle.message("replace.with.list.access.text");
@@ -83,7 +83,7 @@ public class ReplaceWithListAccessFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
     final PsiExpression arrayExpression = myArrayAccessExpression.getArrayExpression();
     final PsiExpression indexExpression = myArrayAccessExpression.getIndexExpression();
@@ -107,12 +107,12 @@ public class ReplaceWithListAccessFix implements SyntheticIntentionAction {
     replaceWithGet(factory, codeStyleManager, arrayExpression, indexExpression, myArrayAccessExpression);
   }
 
-  @jakarta.annotation.Nonnull
-  private static PsiElement replaceWithGet(@jakarta.annotation.Nonnull PsiElementFactory factory,
-                                           @jakarta.annotation.Nonnull CodeStyleManager codeStyleManager,
-                                           @jakarta.annotation.Nonnull PsiExpression arrayExpression,
-                                           @jakarta.annotation.Nonnull PsiExpression indexExpression,
-                                           @jakarta.annotation.Nonnull PsiElement anchor) {
+  @Nonnull
+  private static PsiElement replaceWithGet(@Nonnull PsiElementFactory factory,
+                                           @Nonnull CodeStyleManager codeStyleManager,
+                                           @Nonnull PsiExpression arrayExpression,
+                                           @Nonnull PsiExpression indexExpression,
+                                           @Nonnull PsiElement anchor) {
 
     final PsiElement listAccess = factory.createExpressionFromText(
       arrayExpression.getText() + ".get(" + indexExpression.getText() + ")",

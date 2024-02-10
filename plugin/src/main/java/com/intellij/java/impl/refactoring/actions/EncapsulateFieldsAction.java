@@ -34,7 +34,7 @@ public class EncapsulateFieldsAction extends BaseRefactoringAction {
   }
 
   @Override
-  protected boolean isAvailableOnElementInEditorAndFile(@jakarta.annotation.Nonnull PsiElement element, @jakarta.annotation.Nonnull Editor editor, @jakarta.annotation.Nonnull PsiFile file, @Nonnull DataContext context) {
+  protected boolean isAvailableOnElementInEditorAndFile(@Nonnull PsiElement element, @Nonnull Editor editor, @Nonnull PsiFile file, @Nonnull DataContext context) {
     final PsiElement psiElement = file.findElementAt(editor.getCaretModel().getOffset());
     final PsiClass containingClass = PsiTreeUtil.getParentOfType(psiElement, PsiClass.class, false);
     if (containingClass != null) {
@@ -46,7 +46,7 @@ public class EncapsulateFieldsAction extends BaseRefactoringAction {
     return false;
   }
 
-  public boolean isEnabledOnElements(@jakarta.annotation.Nonnull PsiElement[] elements) {
+  public boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
     if (elements.length == 1) {
       return elements[0] instanceof PsiClass && elements[0].getLanguage().isKindOf(JavaLanguage.INSTANCE) || isAcceptedField(elements[0]);
     } else if (elements.length > 1) {
@@ -60,7 +60,7 @@ public class EncapsulateFieldsAction extends BaseRefactoringAction {
     return false;
   }
 
-  public RefactoringActionHandler getHandler(@jakarta.annotation.Nonnull DataContext dataContext) {
+  public RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
     return new EncapsulateFieldsHandler();
   }
 

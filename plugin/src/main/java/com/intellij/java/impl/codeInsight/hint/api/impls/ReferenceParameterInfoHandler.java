@@ -70,7 +70,7 @@ public class ReferenceParameterInfoHandler implements ParameterInfoHandler<PsiRe
   }
 
   @Override
-  public void showParameterInfo(@jakarta.annotation.Nonnull final PsiReferenceParameterList element, final CreateParameterInfoContext context) {
+  public void showParameterInfo(@Nonnull final PsiReferenceParameterList element, final CreateParameterInfoContext context) {
     context.showHint(element, element.getTextRange().getStartOffset() + 1, this);
   }
 
@@ -80,7 +80,7 @@ public class ReferenceParameterInfoHandler implements ParameterInfoHandler<PsiRe
   }
 
   @Override
-  public void updateParameterInfo(@jakarta.annotation.Nonnull final PsiReferenceParameterList o, final UpdateParameterInfoContext context) {
+  public void updateParameterInfo(@Nonnull final PsiReferenceParameterList o, final UpdateParameterInfoContext context) {
     int index = ParameterInfoUtils.getCurrentParameterIndex(o.getNode(), context.getOffset(), JavaTokenType.COMMA);
     context.setCurrentParameter(index);
     final Object[] objectsToView = context.getObjectsToView();
@@ -88,7 +88,7 @@ public class ReferenceParameterInfoHandler implements ParameterInfoHandler<PsiRe
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getParameterCloseChars() {
     return ",>";
   }

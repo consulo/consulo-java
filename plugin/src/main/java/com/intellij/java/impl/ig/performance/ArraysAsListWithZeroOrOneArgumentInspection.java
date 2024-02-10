@@ -36,7 +36,7 @@ import org.jetbrains.annotations.Nls;
 public class ArraysAsListWithZeroOrOneArgumentInspection extends BaseInspection {
 
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("arrays.as.list.with.zero.or.one.argument.display.name");

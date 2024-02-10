@@ -58,13 +58,13 @@ public class AnnotateMethodFix implements LocalQuickFix {
     return getFamilyName() + " " + getPreposition() + " \'@" + ClassUtil.extractClassName(myAnnotation) + "\'";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String getPreposition() {
     return "with";
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getFamilyName() {
     if (annotateSelf()) {
       if (annotateOverriddenMethods()) {

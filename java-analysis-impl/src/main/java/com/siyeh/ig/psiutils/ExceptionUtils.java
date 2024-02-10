@@ -44,7 +44,7 @@ public class ExceptionUtils {
   }
 
   @Nonnull
-  public static Set<PsiClassType> calculateExceptionsThrown(@jakarta.annotation.Nullable PsiElement element) {
+  public static Set<PsiClassType> calculateExceptionsThrown(@Nullable PsiElement element) {
     return calculateExceptionsThrown(element, new LinkedHashSet<>(5));
   }
 

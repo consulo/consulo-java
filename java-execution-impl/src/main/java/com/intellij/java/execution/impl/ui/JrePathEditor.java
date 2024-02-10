@@ -56,7 +56,7 @@ public class JrePathEditor extends Wrapper implements PanelWithAnchor {
     setContent(myLabeledComponent);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public String getJrePathOrName() {
     return mySdkComboBox.getSelectedSdkName();
   }
@@ -72,7 +72,7 @@ public class JrePathEditor extends Wrapper implements PanelWithAnchor {
 
   @Deprecated
   @DeprecationInfo("Use #setByName()")
-  public void setPathOrName(@jakarta.annotation.Nullable String pathOrName, boolean useAlternativeJre) {
+  public void setPathOrName(@Nullable String pathOrName, boolean useAlternativeJre) {
     setByName(pathOrName);
   }
 

@@ -65,7 +65,7 @@ public class PsiMethodReferenceType extends PsiType {
     return null;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public PsiType[] getSuperTypes() {
     return PsiType.EMPTY_ARRAY;

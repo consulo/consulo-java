@@ -24,7 +24,7 @@ public abstract class EmptyIntentionInspectionQuickFixTest extends LightQuickFix
     return "/codeInsight/daemonCodeAnalyzer/quickFix/emptyIntention";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{new DefUseInspection(), new LocalInspectionTool() {
@@ -37,7 +37,7 @@ public abstract class EmptyIntentionInspectionQuickFixTest extends LightQuickFix
 
       @Override
       @Nls
-      @jakarta.annotation.Nonnull
+      @Nonnull
       public String getDisplayName() {
         return "My";
       }

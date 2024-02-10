@@ -59,12 +59,12 @@ public class ClassFileStubBuilder implements BinaryFileStubBuilder {
   }
 
   @Override
-  public boolean acceptsFile(@jakarta.annotation.Nonnull VirtualFile file) {
+  public boolean acceptsFile(@Nonnull VirtualFile file) {
     return true;
   }
 
   @Override
-  public StubElement buildStubTree(@jakarta.annotation.Nonnull FileContent fileContent) {
+  public StubElement buildStubTree(@Nonnull FileContent fileContent) {
     VirtualFile file = fileContent.getFile();
     byte[] content = fileContent.getContent();
 

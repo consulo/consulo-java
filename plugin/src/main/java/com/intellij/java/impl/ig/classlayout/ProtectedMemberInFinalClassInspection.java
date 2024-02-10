@@ -64,7 +64,7 @@ public class ProtectedMemberInFinalClassInspection extends BaseInspection {
     return new RemoveModifierFix((String)infos[0]);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     return new InspectionGadgetsFix[] {
@@ -188,7 +188,7 @@ public class ProtectedMemberInFinalClassInspection extends BaseInspection {
     }
 
     @Override
-    public void visitField(@jakarta.annotation.Nonnull PsiField field) {
+    public void visitField(@Nonnull PsiField field) {
       if (!field.hasModifierProperty(PsiModifier.PROTECTED)) {
         return;
       }

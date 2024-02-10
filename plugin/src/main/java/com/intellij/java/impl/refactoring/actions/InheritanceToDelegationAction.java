@@ -36,7 +36,7 @@ public class InheritanceToDelegationAction extends BaseRefactoringAction {
         elements[0].getLanguage().isKindOf(JavaLanguage.INSTANCE);
   }
 
-  public RefactoringActionHandler getHandler(@jakarta.annotation.Nonnull DataContext dataContext) {
+  public RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
     return new InheritanceToDelegationHandler();
   }
 }

@@ -48,7 +48,7 @@ public class SplitIfAction extends PsiElementBaseIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     if (!(element instanceof PsiJavaToken)) {
       return false;
     }
@@ -78,7 +78,7 @@ public class SplitIfAction extends PsiElementBaseIntentionAction {
   }
 
   @Override
-  public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, @jakarta.annotation.Nonnull PsiElement element) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     try {
       if (!FileModificationService.getInstance().preparePsiElementForWrite(element)) return;
 

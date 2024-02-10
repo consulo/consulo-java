@@ -39,7 +39,7 @@ public class ConvertCatchToThrowsIntention extends Intention {
   }
 
   @Override
-  protected void processIntention(@jakarta.annotation.Nonnull PsiElement element) throws IncorrectOperationException {
+  protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiCatchSection catchSection = (PsiCatchSection)element.getParent();
     final PsiMethod method = PsiTreeUtil.getParentOfType(catchSection, PsiMethod.class);
     if (method == null) {

@@ -50,7 +50,7 @@ public abstract class JamSimpleReferenceConverter<T> extends JamConverter<T>{
   }
 
   @Nullable
-  protected PsiElement getPsiElementFor(@jakarta.annotation.Nonnull T target) {
+  protected PsiElement getPsiElementFor(@Nonnull T target) {
     if (target instanceof PsiElement) {
       return (PsiElement)target;
     } else if (target instanceof CommonModelElement) {
@@ -59,7 +59,7 @@ public abstract class JamSimpleReferenceConverter<T> extends JamConverter<T>{
     return null;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected LookupElement createLookupElementFor(@Nonnull T target) {
     String name = ElementPresentationManager.getElementName(target);
     if (name != null) {

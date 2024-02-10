@@ -130,7 +130,7 @@ public class JavaCompletionUtil {
         .completeVariableNameForRefactoring(codeStyleManager, new CamelHumpMatcher(""), varType, varKind, suggestedNameInfo, true, false);
   }
 
-  public static boolean isInExcludedPackage(@jakarta.annotation.Nonnull final PsiMember member, boolean allowInstanceInnerClasses) {
+  public static boolean isInExcludedPackage(@Nonnull final PsiMember member, boolean allowInstanceInnerClasses) {
     final String name = PsiUtil.getMemberQualifiedName(member);
     if (name == null) {
       return false;
@@ -148,8 +148,8 @@ public class JavaCompletionUtil {
     return JavaProjectCodeInsightSettings.getSettings(member.getProject()).isExcluded(name);
   }
 
-  @jakarta.annotation.Nonnull
-  public static <T extends PsiType> T originalize(@jakarta.annotation.Nonnull T type) {
+  @Nonnull
+  public static <T extends PsiType> T originalize(@Nonnull T type) {
     if (!type.isValid()) {
       return type;
     }
@@ -214,11 +214,11 @@ public class JavaCompletionUtil {
   }
 
   @Nullable
-  public static PsiType getQualifiedMemberReferenceType(@Nullable PsiType qualifierType, @jakarta.annotation.Nonnull final PsiMember member) {
+  public static PsiType getQualifiedMemberReferenceType(@Nullable PsiType qualifierType, @Nonnull final PsiMember member) {
     final Ref<PsiSubstitutor> subst = Ref.create(PsiSubstitutor.EMPTY);
     class MyProcessor implements PsiScopeProcessor, NameHint, ElementClassHint {
       @Override
-      public boolean execute(@jakarta.annotation.Nonnull PsiElement element, @jakarta.annotation.Nonnull ResolveState state) {
+      public boolean execute(@Nonnull PsiElement element, @Nonnull ResolveState state) {
         if (element == member) {
           subst.set(state.get(PsiSubstitutor.KEY));
         }
@@ -231,7 +231,7 @@ public class JavaCompletionUtil {
       }
 
       @Override
-      public String getName(@jakarta.annotation.Nonnull ResolveState state) {
+      public String getName(@Nonnull ResolveState state) {
         return member.getName();
       }
 
@@ -243,7 +243,7 @@ public class JavaCompletionUtil {
       }
 
       @Override
-      public <T> T getHint(@jakarta.annotation.Nonnull Key<T> hintKey) {
+      public <T> T getHint(@Nonnull Key<T> hintKey) {
         //noinspection unchecked
         return hintKey == NameHint.KEY || hintKey == ElementClassHint.KEY ? (T) this : null;
       }
@@ -367,7 +367,7 @@ public class JavaCompletionUtil {
   }
 
   @Nonnull
-  static PsiReferenceExpression createReference(@jakarta.annotation.Nonnull String text, @jakarta.annotation.Nonnull PsiElement context) {
+  static PsiReferenceExpression createReference(@Nonnull String text, @Nonnull PsiElement context) {
     return (PsiReferenceExpression) JavaPsiFacade.getElementFactory(context.getProject()).createExpressionFromText(text, context);
   }
 
@@ -393,10 +393,10 @@ public class JavaCompletionUtil {
   }
 
   private static boolean shouldCast(@Nonnull LookupElement item,
-                                    @jakarta.annotation.Nonnull PsiTypeLookupItem castTypeItem,
+                                    @Nonnull PsiTypeLookupItem castTypeItem,
                                     @Nullable PsiType plainQualifier,
-                                    @jakarta.annotation.Nonnull JavaCompletionProcessor processor,
-                                    @jakarta.annotation.Nonnull Set<? extends PsiType> expectedTypes) {
+                                    @Nonnull JavaCompletionProcessor processor,
+                                    @Nonnull Set<? extends PsiType> expectedTypes) {
     PsiType castType = castTypeItem.getType();
     if (plainQualifier != null) {
       Object o = item.getObject();
@@ -438,8 +438,8 @@ public class JavaCompletionUtil {
     return false;
   }
 
-  @jakarta.annotation.Nonnull
-  private static LookupElement castQualifier(@Nonnull LookupElement item, @jakarta.annotation.Nonnull PsiTypeLookupItem castTypeItem) {
+  @Nonnull
+  private static LookupElement castQualifier(@Nonnull LookupElement item, @Nonnull PsiTypeLookupItem castTypeItem) {
     return new LookupElementDecorator<LookupElement>(item) {
       @Override
       public void handleInsert(@Nonnull InsertionContext context) {
@@ -480,9 +480,9 @@ public class JavaCompletionUtil {
     };
   }
 
-  private static PsiTypeLookupItem findQualifierCast(@jakarta.annotation.Nonnull LookupElement item,
+  private static PsiTypeLookupItem findQualifierCast(@Nonnull LookupElement item,
                                                      @Nonnull List<? extends PsiTypeLookupItem> castTypeItems,
-                                                     @jakarta.annotation.Nullable PsiType plainQualifier, JavaCompletionProcessor processor, Set<? extends PsiType> expectedTypes) {
+                                                     @Nullable PsiType plainQualifier, JavaCompletionProcessor processor, Set<? extends PsiType> expectedTypes) {
     return ContainerUtil.find(castTypeItems, c -> shouldCast(item, c, plainQualifier, processor, expectedTypes));
   }
 
@@ -493,8 +493,8 @@ public class JavaCompletionUtil {
 
   @Nonnull
   public static LookupElement highlightIfNeeded(@Nullable PsiType qualifierType,
-                                                @jakarta.annotation.Nonnull LookupElement item,
-                                                @jakarta.annotation.Nonnull Object object,
+                                                @Nonnull LookupElement item,
+                                                @Nonnull Object object,
                                                 @Nonnull PsiElement place) {
     if (shouldMarkRed(object, place)) {
       return PrioritizedLookupElement.withExplicitProximity(LookupElementDecorator.withRenderer(item, new LookupElementRenderer<LookupElementDecorator<LookupElement>>() {
@@ -518,7 +518,7 @@ public class JavaCompletionUtil {
     return item;
   }
 
-  private static boolean shouldMarkRed(@jakarta.annotation.Nonnull Object object, @jakarta.annotation.Nonnull PsiElement place) {
+  private static boolean shouldMarkRed(@Nonnull Object object, @Nonnull PsiElement place) {
     if (!(object instanceof PsiMember)) {
       return false;
     }
@@ -612,7 +612,7 @@ public class JavaCompletionUtil {
     return Collections.singletonList(LookupItemUtil.objectToLookupItem(completion));
   }
 
-  public static boolean hasAccessibleConstructor(@jakarta.annotation.Nonnull PsiType type, @jakarta.annotation.Nonnull PsiElement place) {
+  public static boolean hasAccessibleConstructor(@Nonnull PsiType type, @Nonnull PsiElement place) {
     if (type instanceof PsiArrayType) {
       return true;
     }
@@ -626,7 +626,7 @@ public class JavaCompletionUtil {
     return methods.length == 0 || Arrays.stream(methods).anyMatch(constructor -> isConstructorCompletable(constructor, place));
   }
 
-  private static boolean isConstructorCompletable(@jakarta.annotation.Nonnull PsiMethod constructor, @jakarta.annotation.Nonnull PsiElement place) {
+  private static boolean isConstructorCompletable(@Nonnull PsiMethod constructor, @Nonnull PsiElement place) {
     if (!(constructor instanceof PsiCompiledElement)) {
       return true; // it's possible to use a quick fix to make accessible after completion
     }
@@ -639,7 +639,7 @@ public class JavaCompletionUtil {
     return true;
   }
 
-  public static LinkedHashSet<String> getAllLookupStrings(@jakarta.annotation.Nonnull PsiMember member) {
+  public static LinkedHashSet<String> getAllLookupStrings(@Nonnull PsiMember member) {
     LinkedHashSet<String> allLookupStrings = new LinkedHashSet<>();
     String name = member.getName();
     allLookupStrings.add(name);
@@ -664,7 +664,7 @@ public class JavaCompletionUtil {
     return element instanceof PsiExpression && SideEffectChecker.mayHaveSideEffects((PsiExpression) element);
   }
 
-  public static void insertClassReference(@jakarta.annotation.Nonnull PsiClass psiClass, @jakarta.annotation.Nonnull PsiFile file, int offset) {
+  public static void insertClassReference(@Nonnull PsiClass psiClass, @Nonnull PsiFile file, int offset) {
     insertClassReference(psiClass, file, offset, offset);
   }
 
@@ -773,7 +773,7 @@ public class JavaCompletionUtil {
     return psiReference.resolve();
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static RangeMarker insertTemporary(int endOffset, Document document, String temporary) {
     final CharSequence chars = document.getCharsSequence();
     if (endOffset < chars.length() && Character.isJavaIdentifierPart(chars.charAt(endOffset))) {
@@ -786,14 +786,14 @@ public class JavaCompletionUtil {
     return null;
   }
 
-  public static void insertParentheses(@jakarta.annotation.Nonnull InsertionContext context,
-                                       @jakarta.annotation.Nonnull LookupElement item,
+  public static void insertParentheses(@Nonnull InsertionContext context,
+                                       @Nonnull LookupElement item,
                                        boolean overloadsMatter,
                                        boolean hasParams) {
     insertParentheses(context, item, overloadsMatter, hasParams, false);
   }
 
-  public static void insertParentheses(@jakarta.annotation.Nonnull InsertionContext context,
+  public static void insertParentheses(@Nonnull InsertionContext context,
                                        @Nonnull LookupElement item,
                                        boolean overloadsMatter,
                                        boolean hasParams,
@@ -973,13 +973,13 @@ public class JavaCompletionUtil {
     return true;
   }
 
-  public static FakePsiElement createContextWithXxxVariable(@jakarta.annotation.Nonnull PsiElement place, @jakarta.annotation.Nonnull PsiType varType) {
+  public static FakePsiElement createContextWithXxxVariable(@Nonnull PsiElement place, @Nonnull PsiType varType) {
     return new FakePsiElement() {
       @Override
-      public boolean processDeclarations(@jakarta.annotation.Nonnull PsiScopeProcessor processor,
-                                         @jakarta.annotation.Nonnull ResolveState state,
+      public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
+                                         @Nonnull ResolveState state,
                                          PsiElement lastParent,
-                                         @jakarta.annotation.Nonnull PsiElement place) {
+                                         @Nonnull PsiElement place) {
         return processor.execute(new LightVariableBuilder("xxx", varType, place), ResolveState.initial());
       }
 
@@ -990,8 +990,8 @@ public class JavaCompletionUtil {
     };
   }
 
-  @jakarta.annotation.Nonnull
-  public static String escapeXmlIfNeeded(InsertionContext context, @jakarta.annotation.Nonnull String generics) {
+  @Nonnull
+  public static String escapeXmlIfNeeded(InsertionContext context, @Nonnull String generics) {
 //		if(context.getFile().getViewProvider().getBaseLanguage() == StdLanguages.JSPX)
 //		{
 //			return StringUtil.escapeXmlEntities(generics);
@@ -1014,7 +1014,7 @@ public class JavaCompletionUtil {
     return false;
   }
 
-  public static int findQualifiedNameStart(@jakarta.annotation.Nonnull InsertionContext context) {
+  public static int findQualifiedNameStart(@Nonnull InsertionContext context) {
     int start = context.getTailOffset() - 1;
     while (start >= 0) {
       char ch = context.getDocument().getCharsSequence().charAt(start);

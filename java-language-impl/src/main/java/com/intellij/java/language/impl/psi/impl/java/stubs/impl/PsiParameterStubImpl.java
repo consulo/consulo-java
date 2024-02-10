@@ -28,12 +28,12 @@ public class PsiParameterStubImpl extends StubBase<PsiParameter> implements PsiP
 	private final TypeInfo myType;
 	private byte myFlags;
 
-	public PsiParameterStubImpl(StubElement parent, @jakarta.annotation.Nonnull String name, @jakarta.annotation.Nonnull TypeInfo type, boolean ellipsis, boolean generatedName)
+	public PsiParameterStubImpl(StubElement parent, @Nonnull String name, @Nonnull TypeInfo type, boolean ellipsis, boolean generatedName)
 	{
 		this(parent, name, type, packFlags(ellipsis, generatedName));
 	}
 
-	public PsiParameterStubImpl(StubElement parent, @Nonnull String name, @jakarta.annotation.Nonnull TypeInfo type, byte flags)
+	public PsiParameterStubImpl(StubElement parent, @Nonnull String name, @Nonnull TypeInfo type, byte flags)
 	{
 		super(parent, JavaStubElementTypes.PARAMETER);
 		myName = name;
@@ -67,7 +67,7 @@ public class PsiParameterStubImpl extends StubBase<PsiParameter> implements PsiP
 		return null;
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public String getName()
 	{

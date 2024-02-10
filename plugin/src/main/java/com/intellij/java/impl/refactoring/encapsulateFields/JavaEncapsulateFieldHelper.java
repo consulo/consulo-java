@@ -263,7 +263,7 @@ public class JavaEncapsulateFieldHelper extends EncapsulateFieldHelper {
     return methodCall;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static PsiMethodCallExpression createGetterCall(FieldDescriptor fieldDescriptor,
                                                           PsiReferenceExpression expr,
                                                           PsiClass aClass,
@@ -288,7 +288,7 @@ public class JavaEncapsulateFieldHelper extends EncapsulateFieldHelper {
     return methodCall;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static PsiMethodCallExpression checkMethodResolvable(PsiMethodCallExpression methodCall,
                                                                PsiMethod targetMethod,
                                                                PsiReferenceExpression context,

@@ -23,7 +23,7 @@ public interface VariableDescriptor
 	/**
 	 * @return a PSI element associated with this descriptor or null if not applicable
 	 */
-	@jakarta.annotation.Nullable
+	@Nullable
 	default PsiModifierListOwner getPsiElement()
 	{
 		return null;
@@ -49,8 +49,8 @@ public interface VariableDescriptor
 	 * @param qualifier qualifier to use
 	 * @return a field value
 	 */
-	@jakarta.annotation.Nonnull
-	default DfaValue createValue(@Nonnull DfaValueFactory factory, @jakarta.annotation.Nullable DfaValue qualifier)
+	@Nonnull
+	default DfaValue createValue(@Nonnull DfaValueFactory factory, @Nullable DfaValue qualifier)
 	{
 		return createValue(factory, qualifier, false);
 	}
@@ -63,8 +63,8 @@ public interface VariableDescriptor
 	 * @param forAccessor whether the value is created for accessor result
 	 * @return a field value
 	 */
-	@jakarta.annotation.Nonnull
-	default DfaValue createValue(@jakarta.annotation.Nonnull DfaValueFactory factory, @jakarta.annotation.Nullable DfaValue qualifier, boolean forAccessor)
+	@Nonnull
+	default DfaValue createValue(@Nonnull DfaValueFactory factory, @Nullable DfaValue qualifier, boolean forAccessor)
 	{
 		if(qualifier instanceof DfaVariableValue)
 		{
@@ -86,6 +86,6 @@ public interface VariableDescriptor
 	 * @param qualifier qualifier (may be null if absent)
 	 * @return type of the value
 	 */
-	@jakarta.annotation.Nullable
+	@Nullable
 	PsiType getType(@Nullable DfaVariableValue qualifier);
 }

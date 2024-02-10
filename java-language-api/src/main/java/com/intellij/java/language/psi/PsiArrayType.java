@@ -27,7 +27,7 @@ import jakarta.annotation.Nonnull;
 public class PsiArrayType extends PsiType.Stub {
   private final PsiType myComponentType;
 
-  public PsiArrayType(@jakarta.annotation.Nonnull PsiType componentType) {
+  public PsiArrayType(@Nonnull PsiType componentType) {
     this(componentType, TypeAnnotationProvider.EMPTY);
   }
 
@@ -36,7 +36,7 @@ public class PsiArrayType extends PsiType.Stub {
     myComponentType = componentType;
   }
 
-  public PsiArrayType(@Nonnull PsiType componentType, @jakarta.annotation.Nonnull TypeAnnotationProvider provider) {
+  public PsiArrayType(@Nonnull PsiType componentType, @Nonnull TypeAnnotationProvider provider) {
     super(provider);
     myComponentType = componentType;
   }
@@ -53,7 +53,7 @@ public class PsiArrayType extends PsiType.Stub {
     return getText(myComponentType.getCanonicalText(annotated), "[]", true, annotated);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getInternalCanonicalText() {
     return getText(myComponentType.getInternalCanonicalText(), "[]", true, true);

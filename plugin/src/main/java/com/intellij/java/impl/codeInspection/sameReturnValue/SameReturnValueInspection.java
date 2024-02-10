@@ -127,7 +127,7 @@ public class SameReturnValueInspection extends GlobalJavaInspectionTool
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return InspectionsBundle.message("inspection.same.return.value.display.name");

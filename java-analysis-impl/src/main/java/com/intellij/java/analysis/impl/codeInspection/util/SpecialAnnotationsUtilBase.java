@@ -35,10 +35,10 @@ import java.util.Collections;
 import java.util.List;
 
 public class SpecialAnnotationsUtilBase {
-  public static LocalQuickFix createAddToSpecialAnnotationsListQuickFix(@jakarta.annotation.Nonnull final String text,
+  public static LocalQuickFix createAddToSpecialAnnotationsListQuickFix(@Nonnull final String text,
                                                                         @Nonnull final String family,
-                                                                        @jakarta.annotation.Nonnull final List<String> targetList,
-                                                                        @jakarta.annotation.Nonnull final String qualifiedName,
+                                                                        @Nonnull final List<String> targetList,
+                                                                        @Nonnull final String qualifiedName,
                                                                         final PsiElement context) {
     return new LocalQuickFix() {
       @Override
@@ -48,7 +48,7 @@ public class SpecialAnnotationsUtilBase {
       }
 
       @Override
-      @jakarta.annotation.Nonnull
+      @Nonnull
       public String getFamilyName() {
         return family;
       }
@@ -60,7 +60,7 @@ public class SpecialAnnotationsUtilBase {
     };
   }
 
-  public static void doQuickFixInternal(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull List<String> targetList, @Nonnull String qualifiedName) {
+  public static void doQuickFixInternal(@Nonnull Project project, @Nonnull List<String> targetList, @Nonnull String qualifiedName) {
     targetList.add(qualifiedName);
     Collections.sort(targetList);
     final InspectionProfile inspectionProfile = InspectionProjectProfileManager.getInstance(project).getInspectionProfile();
@@ -79,7 +79,7 @@ public class SpecialAnnotationsUtilBase {
     */
   }
 
-  public static void createAddToSpecialAnnotationFixes(@jakarta.annotation.Nonnull PsiModifierListOwner owner, @Nonnull Processor<String> processor) {
+  public static void createAddToSpecialAnnotationFixes(@Nonnull PsiModifierListOwner owner, @Nonnull Processor<String> processor) {
     final PsiModifierList modifierList = owner.getModifierList();
     if (modifierList != null) {
       final PsiAnnotation[] psiAnnotations = modifierList.getAnnotations();

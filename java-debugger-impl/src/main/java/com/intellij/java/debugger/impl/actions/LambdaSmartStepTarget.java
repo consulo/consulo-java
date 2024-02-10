@@ -36,7 +36,7 @@ public class LambdaSmartStepTarget extends SmartStepTarget
 	public LambdaSmartStepTarget(
 			@Nonnull PsiLambdaExpression lambda,
 			@Nullable String label,
-			@jakarta.annotation.Nullable PsiElement highlightElement,
+			@Nullable PsiElement highlightElement,
 			int ordinal,
 			Range<Integer> lines)
 	{

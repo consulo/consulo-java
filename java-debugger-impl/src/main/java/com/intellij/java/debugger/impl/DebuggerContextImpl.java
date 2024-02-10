@@ -59,7 +59,7 @@ public final class DebuggerContextImpl implements DebuggerContext
 
 	private DebuggerContextImpl(
 			@Nullable DebuggerSession session,
-			@jakarta.annotation.Nullable DebugProcessImpl debugProcess,
+			@Nullable DebugProcessImpl debugProcess,
 			@Nullable SuspendContextImpl context,
 			ThreadReferenceProxyImpl threadProxy,
 			StackFrameProxyImpl frameProxy,

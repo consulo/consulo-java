@@ -38,16 +38,16 @@ public class LightFieldBuilder extends LightVariableBuilder<LightFieldBuilder> i
   private PsiDocComment myDocComment = null;
   private boolean myIsDeprecated = false;
 
-  public LightFieldBuilder(@jakarta.annotation.Nonnull String name, @Nonnull String type, @Nonnull PsiElement navigationElement) {
+  public LightFieldBuilder(@Nonnull String name, @Nonnull String type, @Nonnull PsiElement navigationElement) {
     super(name, JavaPsiFacade.getElementFactory(navigationElement.getProject()).createTypeFromText(type, navigationElement),
           navigationElement);
   }
 
-  public LightFieldBuilder(@Nonnull String name, @jakarta.annotation.Nonnull PsiType type, @jakarta.annotation.Nonnull PsiElement navigationElement) {
+  public LightFieldBuilder(@Nonnull String name, @Nonnull PsiType type, @Nonnull PsiElement navigationElement) {
     super(name, type, navigationElement);
   }
 
-  public LightFieldBuilder(PsiManager manager, @Nonnull String name, @jakarta.annotation.Nonnull PsiType type) {
+  public LightFieldBuilder(PsiManager manager, @Nonnull String name, @Nonnull PsiType type) {
     super(manager, name, type, JavaLanguage.INSTANCE);
   }
 

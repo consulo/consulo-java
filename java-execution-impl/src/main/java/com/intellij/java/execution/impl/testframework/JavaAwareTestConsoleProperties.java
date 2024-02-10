@@ -72,7 +72,7 @@ public abstract class JavaAwareTestConsoleProperties<T extends ModuleBasedConfig
     return getStackTraceErrorNavigatable(location, stacktrace);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static Navigatable getStackTraceErrorNavigatable(@Nonnull Location<?> location, @Nonnull String stacktrace) {
     final PsiLocation<?> psiLocation = location.toPsiLocation();
     final PsiClass containingClass = psiLocation.getParentElement(PsiClass.class);
@@ -105,7 +105,7 @@ public abstract class JavaAwareTestConsoleProperties<T extends ModuleBasedConfig
     return lastLine != null ? lastLine.getOpenFileDescriptor(containingClass.getContainingFile().getVirtualFile()) : null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public DebuggerSession getDebugSession() {
     final DebuggerManagerEx debuggerManager = DebuggerManagerEx.getInstanceEx(getProject());
     if (debuggerManager == null) {

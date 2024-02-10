@@ -58,7 +58,7 @@ import static com.intellij.java.language.patterns.PsiJavaPatterns.psiElement;
 public class AnnotationsHighlightUtil {
   private static final Logger LOG = Logger.getInstance(AnnotationsHighlightUtil.class);
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static HighlightInfo checkNameValuePair(PsiNameValuePair pair) {
     PsiReference ref = pair.getReference();
     if (ref == null) {
@@ -346,7 +346,7 @@ public class AnnotationsHighlightUtil {
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static HighlightInfo checkConstantExpression(PsiExpression expression) {
     final PsiElement parent = expression.getParent();
     if (PsiUtil.isAnnotationMethod(parent) || parent instanceof PsiNameValuePair || parent instanceof PsiArrayInitializerMemberValue) {
@@ -359,7 +359,7 @@ public class AnnotationsHighlightUtil {
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static HighlightInfo checkValidAnnotationType(PsiType type, final PsiTypeElement typeElement) {
     if (type != null && type.accept(AnnotationReturnTypeVisitor.INSTANCE).booleanValue()) {
       return null;
@@ -451,7 +451,7 @@ public class AnnotationsHighlightUtil {
   }
 
   @Nullable
-  private static HighlightInfo checkReferenceTarget(PsiAnnotation annotation, @jakarta.annotation.Nullable PsiJavaCodeReferenceElement ref) {
+  private static HighlightInfo checkReferenceTarget(PsiAnnotation annotation, @Nullable PsiJavaCodeReferenceElement ref) {
     if (ref == null) {
       return null;
     }
@@ -551,7 +551,7 @@ public class AnnotationsHighlightUtil {
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static HighlightInfo checkAnnotationDeclaration(final PsiElement parent, final PsiReferenceList list) {
     if (PsiUtil.isAnnotationMethod(parent)) {
       PsiAnnotationMethod method = (PsiAnnotationMethod) parent;
@@ -568,7 +568,7 @@ public class AnnotationsHighlightUtil {
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static HighlightInfo checkPackageAnnotationContainingFile(PsiPackageStatement statement, PsiFile file) {
     PsiModifierList annotationList = statement.getAnnotationList();
     if (annotationList != null && !PsiJavaPackage.PACKAGE_INFO_FILE.equals(file.getName())) {
@@ -650,7 +650,7 @@ public class AnnotationsHighlightUtil {
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static String doCheckRepeatableAnnotation(@Nonnull PsiAnnotation annotation) {
     PsiAnnotationOwner owner = annotation.getOwner();
     if (!(owner instanceof PsiModifierList)) {
@@ -696,7 +696,7 @@ public class AnnotationsHighlightUtil {
     return null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static PsiClass getRepeatableContainer(@Nonnull PsiAnnotation annotation) {
     PsiAnnotationMemberValue containerRef = PsiImplUtil.findAttributeValue(annotation, null);
     if (!(containerRef instanceof PsiClassObjectAccessExpression)) {
@@ -779,7 +779,7 @@ public class AnnotationsHighlightUtil {
     return modifierList != null && modifierList.hasModifierProperty(PsiModifier.STATIC);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static RetentionPolicy getRetentionPolicy(@Nonnull PsiClass annotation) {
     PsiModifierList modifierList = annotation.getModifierList();
     if (modifierList != null) {
@@ -851,7 +851,7 @@ public class AnnotationsHighlightUtil {
       myAnnotation = annotation;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public String getText() {
       return "Remove";
@@ -863,7 +863,7 @@ public class AnnotationsHighlightUtil {
     }
 
     @Override
-    public void invoke(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
       myAnnotation.delete();
     }
 

@@ -193,7 +193,7 @@ public class ClassUtils {
     return parentClass != null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiClass getContainingClass(PsiElement element) {
     return PsiTreeUtil.getParentOfType(element, PsiClass.class);
   }

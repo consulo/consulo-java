@@ -38,7 +38,7 @@ public class JDClassComment extends JDParamListOwnerComment
 	}
 
 	@Override
-	protected void generateSpecial(@jakarta.annotation.Nonnull String prefix, @Nonnull StringBuilder sb)
+	protected void generateSpecial(@Nonnull String prefix, @Nonnull StringBuilder sb)
 	{
 		super.generateSpecial(prefix, sb);
 		String continuationPrefix = prefix + javadocContinuationIndent();
@@ -76,7 +76,7 @@ public class JDClassComment extends JDParamListOwnerComment
 		return myVersion;
 	}
 
-	public void setVersion(@jakarta.annotation.Nonnull String version)
+	public void setVersion(@Nonnull String version)
 	{
 		this.myVersion = version;
 	}

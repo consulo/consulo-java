@@ -20,13 +20,13 @@ import jakarta.annotation.Nonnull;
 public class PropertiesJavaReferenceContributor extends PsiReferenceContributor
 {
 	@Override
-	public void registerReferenceProviders(@jakarta.annotation.Nonnull PsiReferenceRegistrar registrar)
+	public void registerReferenceProviders(@Nonnull PsiReferenceRegistrar registrar)
 	{
 		registrar.registerReferenceProvider(PsiJavaPatterns.psiElement(PropertyValueImpl.class), new PsiReferenceProvider()
 		{
 			@Nonnull
 			@Override
-			public PsiReference[] getReferencesByElement(@jakarta.annotation.Nonnull PsiElement element, @Nonnull ProcessingContext context)
+			public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull ProcessingContext context)
 			{
 				String text = element.getText();
 				String[] words = text.split("\\s");

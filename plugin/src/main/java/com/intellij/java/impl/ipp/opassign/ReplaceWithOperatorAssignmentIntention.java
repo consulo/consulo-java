@@ -49,7 +49,7 @@ public class ReplaceWithOperatorAssignmentIntention extends MutablyNamedIntentio
     return new ReplaceableWithOperatorAssignmentPredicate();
   }
 
-  public void processIntention(@jakarta.annotation.Nonnull PsiElement element){
+  public void processIntention(@Nonnull PsiElement element){
     final PsiAssignmentExpression expression = (PsiAssignmentExpression)element;
     final PsiExpression rhs = expression.getRExpression();
     final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)PsiUtil.deparenthesizeExpression(rhs);

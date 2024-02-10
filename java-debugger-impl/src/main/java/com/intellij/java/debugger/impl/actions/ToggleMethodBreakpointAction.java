@@ -88,7 +88,7 @@ public class ToggleMethodBreakpointAction extends AnAction
 		}
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	private static PlaceInDocument getPlace(AnActionEvent event)
 	{
 		final Project project = event.getData(CommonDataKeys.PROJECT);

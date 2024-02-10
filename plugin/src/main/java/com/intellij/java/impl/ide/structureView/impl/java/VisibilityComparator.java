@@ -36,7 +36,7 @@ public class VisibilityComparator implements Comparator {
     myNextComparator = comparator;
   }
 
-  public int compare(@jakarta.annotation.Nonnull Object descriptor1, @jakarta.annotation.Nonnull Object descriptor2) {
+  public int compare(@Nonnull Object descriptor1, @Nonnull Object descriptor2) {
     int accessLevel1 = getAccessLevel(descriptor1);
     int accessLevel2 = getAccessLevel(descriptor2);
     if (accessLevel1 == accessLevel2 && myNextComparator != null) {

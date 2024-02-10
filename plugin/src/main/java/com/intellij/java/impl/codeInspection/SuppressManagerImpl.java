@@ -48,7 +48,7 @@ public class SuppressManagerImpl extends SuppressManager {
 //  }
 //
   @Override
-  public boolean isSuppressedFor(@jakarta.annotation.Nonnull final PsiElement element, final String toolId) {
+  public boolean isSuppressedFor(@Nonnull final PsiElement element, final String toolId) {
     return JavaSuppressionUtil.getElementToolSuppressedIn(element, toolId) != null;
   }
 //

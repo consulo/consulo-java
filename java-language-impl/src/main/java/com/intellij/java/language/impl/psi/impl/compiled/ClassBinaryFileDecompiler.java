@@ -40,8 +40,8 @@ public class ClassBinaryFileDecompiler implements BinaryFileDecompiler {
 
   @Override
   @Nonnull
-  public CharSequence decompile(@jakarta.annotation.Nonnull VirtualFile file) {
-    com.intellij.java.language.psi.compiled.ClassFileDecompiler decompiler = ClassFileDecompilers.find(file);
+  public CharSequence decompile(@Nonnull VirtualFile file) {
+    ClassFileDecompiler decompiler = ClassFileDecompilers.find(file);
     if (decompiler instanceof ClassFileDecompiler.Full) {
       PsiManager manager = PsiManager.getInstance(ProjectManager.getInstance().getDefaultProject());
       return ((ClassFileDecompiler.Full) decompiler).createFileViewProvider(file, manager, true).getContents();
@@ -51,8 +51,8 @@ public class ClassBinaryFileDecompiler implements BinaryFileDecompiler {
   }
 
   @Nonnull
-  public static CharSequence decompileText(@jakarta.annotation.Nonnull VirtualFile file) {
-    com.intellij.java.language.psi.compiled.ClassFileDecompiler decompiler = ClassFileDecompilers.find(file);
+  public static CharSequence decompileText(@Nonnull VirtualFile file) {
+    ClassFileDecompiler decompiler = ClassFileDecompilers.find(file);
     if (decompiler instanceof ClassFileDecompiler.Light) {
       return ((ClassFileDecompiler.Light) decompiler).getText(file);
     }

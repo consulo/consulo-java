@@ -58,8 +58,8 @@ public class HighlightControlFlowUtil {
   private HighlightControlFlowUtil() {
   }
 
-  @jakarta.annotation.Nullable
-  public static HighlightInfo checkMissingReturnStatement(@jakarta.annotation.Nullable PsiCodeBlock body, @Nullable PsiType returnType) {
+  @Nullable
+  public static HighlightInfo checkMissingReturnStatement(@Nullable PsiCodeBlock body, @Nullable PsiType returnType) {
     if (body == null || returnType == null || PsiType.VOID.equals(returnType.getDeepComponentType())) {
       return null;
     }
@@ -94,12 +94,12 @@ public class HighlightControlFlowUtil {
   }
 
   @Nonnull
-  private static ControlFlow getControlFlow(@jakarta.annotation.Nonnull PsiElement context) throws AnalysisCanceledException {
+  private static ControlFlow getControlFlow(@Nonnull PsiElement context) throws AnalysisCanceledException {
     LocalsOrMyInstanceFieldsControlFlowPolicy policy = LocalsOrMyInstanceFieldsControlFlowPolicy.getInstance();
     return ControlFlowFactory.getInstance(context.getProject()).getControlFlow(context, policy);
   }
 
-  public static HighlightInfo checkUnreachableStatement(@jakarta.annotation.Nullable PsiCodeBlock codeBlock) {
+  public static HighlightInfo checkUnreachableStatement(@Nullable PsiCodeBlock codeBlock) {
     if (codeBlock == null) {
       return null;
     }
@@ -246,7 +246,7 @@ public class HighlightControlFlowUtil {
     }
   }
 
-  private static boolean variableDefinitelyNotAssignedIn(@Nonnull PsiVariable variable, @jakarta.annotation.Nonnull PsiElement context) {
+  private static boolean variableDefinitelyNotAssignedIn(@Nonnull PsiVariable variable, @Nonnull PsiElement context) {
     try {
       ControlFlow controlFlow = getControlFlow(context);
       return ControlFlowUtil.isVariableDefinitelyNotAssigned(variable, controlFlow);
@@ -256,7 +256,7 @@ public class HighlightControlFlowUtil {
   }
 
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static HighlightInfo checkFinalFieldInitialized(@Nonnull PsiField field) {
     if (!field.hasModifierProperty(PsiModifier.FINAL)) {
       return null;
@@ -282,11 +282,11 @@ public class HighlightControlFlowUtil {
   public static HighlightInfo checkVariableInitializedBeforeUsage(@Nonnull PsiReferenceExpression expression,
                                                                   @Nonnull PsiVariable variable,
                                                                   @Nonnull Map<PsiElement, Collection<PsiReferenceExpression>> uninitializedVarProblems,
-                                                                  @jakarta.annotation.Nonnull PsiFile containingFile) {
+                                                                  @Nonnull PsiFile containingFile) {
     return checkVariableInitializedBeforeUsage(expression, variable, uninitializedVarProblems, containingFile, false);
   }
 
-  public static HighlightInfo checkVariableInitializedBeforeUsage(@jakarta.annotation.Nonnull PsiReferenceExpression expression,
+  public static HighlightInfo checkVariableInitializedBeforeUsage(@Nonnull PsiReferenceExpression expression,
                                                                   @Nonnull PsiVariable variable,
                                                                   @Nonnull Map<PsiElement, Collection<PsiReferenceExpression>> uninitializedVarProblems,
                                                                   @Nonnull PsiFile containingFile,
@@ -473,14 +473,14 @@ public class HighlightControlFlowUtil {
     return null;
   }
 
-  private static boolean isFieldInitializedInClassInitializer(@jakarta.annotation.Nonnull PsiField field,
+  private static boolean isFieldInitializedInClassInitializer(@Nonnull PsiField field,
                                                               boolean isFieldStatic,
                                                               @Nonnull PsiClassInitializer[] initializers) {
     return ContainerUtil.find(initializers, initializer -> initializer.hasModifierProperty(PsiModifier.STATIC) == isFieldStatic
         && variableDefinitelyAssignedIn(field, initializer.getBody())) != null;
   }
 
-  private static boolean inInnerClass(@Nonnull PsiElement psiElement, @jakarta.annotation.Nullable PsiClass containingClass) {
+  private static boolean inInnerClass(@Nonnull PsiElement psiElement, @Nullable PsiClass containingClass) {
     for (PsiElement element = psiElement; element != null; element = element.getParent()) {
       if (element instanceof PsiClass) {
         final boolean innerClass = !psiElement.getManager().areElementsEquivalent(element, containingClass);
@@ -649,7 +649,7 @@ public class HighlightControlFlowUtil {
   }
 
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static HighlightInfo checkFinalVariableInitializedInLoop(@Nonnull PsiReferenceExpression expression, @Nonnull PsiElement resolved) {
     if (ControlFlowUtil.isVariableAssignedInLoop(expression, resolved)) {
       String description = JavaErrorBundle.message("variable.assigned.in.loop", ((PsiVariable) resolved).getName());
@@ -661,7 +661,7 @@ public class HighlightControlFlowUtil {
   }
 
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static HighlightInfo checkCannotWriteToFinal(@Nonnull PsiExpression expression, @Nonnull PsiFile containingFile) {
     PsiReferenceExpression reference = null;
     boolean readBeforeWrite = false;
@@ -739,14 +739,14 @@ public class HighlightControlFlowUtil {
     return true;
   }
 
-  private static boolean isSameField(@Nonnull PsiMember enclosingCtrOrInitializer, @Nonnull PsiField field, @jakarta.annotation.Nonnull PsiReferenceExpression reference, @Nonnull PsiFile containingFile) {
+  private static boolean isSameField(@Nonnull PsiMember enclosingCtrOrInitializer, @Nonnull PsiField field, @Nonnull PsiReferenceExpression reference, @Nonnull PsiFile containingFile) {
     if (!containingFile.getManager().areElementsEquivalent(enclosingCtrOrInitializer.getContainingClass(), field.getContainingClass())) {
       return false;
     }
     return LocalsOrMyInstanceFieldsControlFlowPolicy.isLocalOrMyInstanceReference(reference);
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static HighlightInfo checkVariableMustBeFinal(@Nonnull PsiVariable variable, @Nonnull PsiJavaCodeReferenceElement context, @Nonnull LanguageLevel languageLevel) {
     if (variable.hasModifierProperty(PsiModifier.FINAL)) {
       return null;
@@ -790,7 +790,7 @@ public class HighlightControlFlowUtil {
     return null;
   }
 
-  public static boolean isEffectivelyFinal(@Nonnull PsiVariable variable, @Nonnull PsiElement scope, @jakarta.annotation.Nullable PsiJavaCodeReferenceElement context) {
+  public static boolean isEffectivelyFinal(@Nonnull PsiVariable variable, @Nonnull PsiElement scope, @Nullable PsiJavaCodeReferenceElement context) {
     boolean effectivelyFinal;
     if (variable instanceof PsiParameter) {
       effectivelyFinal = notAccessedForWriting(variable, new LocalSearchScope(((PsiParameter) variable).getDeclarationScope()));
@@ -832,8 +832,8 @@ public class HighlightControlFlowUtil {
     return true;
   }
 
-  @jakarta.annotation.Nullable
-  public static PsiElement getInnerClassVariableReferencedFrom(@Nonnull PsiVariable variable, @jakarta.annotation.Nonnull PsiElement context) {
+  @Nullable
+  public static PsiElement getInnerClassVariableReferencedFrom(@Nonnull PsiVariable variable, @Nonnull PsiElement context) {
     final PsiElement[] scope;
     if (variable instanceof PsiResourceVariable) {
       scope = ((PsiResourceVariable) variable).getDeclarationScope();
@@ -871,7 +871,7 @@ public class HighlightControlFlowUtil {
   }
 
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static HighlightInfo checkInitializerCompleteNormally(@Nonnull PsiClassInitializer initializer) {
     final PsiCodeBlock body = initializer.getBody();
     // unhandled exceptions already reported

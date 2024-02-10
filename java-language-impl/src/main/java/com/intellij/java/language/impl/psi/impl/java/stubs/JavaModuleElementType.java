@@ -40,7 +40,7 @@ public class JavaModuleElementType extends JavaStubElementType<PsiJavaModuleStub
     super("MODULE");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public ASTNode createCompositeNode() {
     return new CompositeElement(this);
@@ -52,7 +52,7 @@ public class JavaModuleElementType extends JavaStubElementType<PsiJavaModuleStub
   }
 
   @Override
-  public PsiJavaModule createPsi(@jakarta.annotation.Nonnull ASTNode node) {
+  public PsiJavaModule createPsi(@Nonnull ASTNode node) {
     return new PsiJavaModuleImpl(node);
   }
 
@@ -63,11 +63,11 @@ public class JavaModuleElementType extends JavaStubElementType<PsiJavaModuleStub
   }
 
   @Override
-  public void serialize(@jakarta.annotation.Nonnull PsiJavaModuleStub stub, @jakarta.annotation.Nonnull StubOutputStream dataStream) throws IOException {
+  public void serialize(@Nonnull PsiJavaModuleStub stub, @Nonnull StubOutputStream dataStream) throws IOException {
     dataStream.writeName(stub.getName());
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public PsiJavaModuleStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
     String name = StringRef.toString(dataStream.readName());
@@ -75,7 +75,7 @@ public class JavaModuleElementType extends JavaStubElementType<PsiJavaModuleStub
   }
 
   @Override
-  public void indexStub(@Nonnull PsiJavaModuleStub stub, @jakarta.annotation.Nonnull IndexSink sink) {
+  public void indexStub(@Nonnull PsiJavaModuleStub stub, @Nonnull IndexSink sink) {
     sink.occurrence(JavaStubIndexKeys.MODULE_NAMES, stub.getName());
   }
 }

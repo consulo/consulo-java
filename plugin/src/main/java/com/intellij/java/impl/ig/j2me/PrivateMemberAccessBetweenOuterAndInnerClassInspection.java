@@ -37,7 +37,7 @@ public class PrivateMemberAccessBetweenOuterAndInnerClassInspection
   extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "private.member.access.between.outer.and.inner.classes.display.name");
@@ -87,7 +87,7 @@ public class PrivateMemberAccessBetweenOuterAndInnerClassInspection
     }
 
     @Override
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       if (constructor) {
         return InspectionGadgetsBundle.message(
@@ -216,7 +216,7 @@ public class PrivateMemberAccessBetweenOuterAndInnerClassInspection
 
     @Override
     public void visitReferenceExpression(
-      @jakarta.annotation.Nonnull PsiReferenceExpression expression) {
+      @Nonnull PsiReferenceExpression expression) {
     /*  if (JspPsiUtil.isInJspFile(expression)) {
         // disable for jsp files IDEADEV-12957
         return;

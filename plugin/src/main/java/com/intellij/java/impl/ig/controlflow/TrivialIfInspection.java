@@ -52,7 +52,7 @@ public class TrivialIfInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("trivial.if.display.name");
   }
@@ -63,7 +63,7 @@ public class TrivialIfInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("trivial.if.problem.descriptor");
   }
@@ -74,7 +74,7 @@ public class TrivialIfInspection extends BaseInspection {
   }
 
   private static class TrivialIfFix extends InspectionGadgetsFix {
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
         "constant.conditional.expression.simplify.quickfix");

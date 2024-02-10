@@ -30,13 +30,13 @@ import jakarta.annotation.Nonnull;
 public class MapReplaceableByEnumMapInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("map.replaceable.by.enum.map.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("map.replaceable.by.enum.map.problem.descriptor");
   }

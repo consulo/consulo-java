@@ -31,10 +31,10 @@ import java.util.stream.Collectors;
  */
 public class ControlTransferInstruction extends Instruction
 {
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	private DfaControlTransferValue transfer;
 
-	public ControlTransferInstruction(@jakarta.annotation.Nonnull DfaControlTransferValue transfer)
+	public ControlTransferInstruction(@Nonnull DfaControlTransferValue transfer)
 	{
 		this.transfer = transfer;
 		this.transfer.getTraps().forEach(trap -> trap.link(this));
@@ -46,7 +46,7 @@ public class ControlTransferInstruction extends Instruction
 		return visitor.visitControlTransfer(this, runner, state);
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public DfaControlTransferValue getTransfer()
 	{
 		return transfer;

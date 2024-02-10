@@ -29,6 +29,8 @@ import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.TreePath;
 
+import consulo.ide.impl.idea.xdebugger.impl.frame.XDebugView;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 import jakarta.annotation.Nonnull;
 import com.intellij.java.debugger.impl.DebuggerManagerEx;
 import com.intellij.java.debugger.impl.engine.JavaDebugProcess;
@@ -55,7 +57,7 @@ public abstract class DebuggerAction extends AnAction
 {
 	private static final DebuggerTreeNodeImpl[] EMPTY_TREE_NODE_ARRAY = new DebuggerTreeNodeImpl[0];
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	public static DebuggerTree getTree(DataContext dataContext)
 	{
 		return dataContext.getData(DebuggerTree.DATA_KEY);
@@ -67,7 +69,7 @@ public abstract class DebuggerAction extends AnAction
 		return dataContext.getData(DebuggerTreePanel.DATA_KEY);
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	public static DebuggerTreeNodeImpl getSelectedNode(DataContext dataContext)
 	{
 		DebuggerTree tree = getTree(dataContext);
@@ -93,7 +95,7 @@ public abstract class DebuggerAction extends AnAction
 		return (DebuggerTreeNodeImpl) component;
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	public static DebuggerTreeNodeImpl[] getSelectedNodes(DataContext dataContext)
 	{
 		DebuggerTree tree = getTree(dataContext);
@@ -132,7 +134,7 @@ public abstract class DebuggerAction extends AnAction
 		}
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	public static DebuggerStateManager getContextManager(DataContext dataContext)
 	{
 		DebuggerTreePanel panel = getPanel(dataContext);
@@ -203,12 +205,12 @@ public abstract class DebuggerAction extends AnAction
 		});
 	}
 
-	public static void refreshViews(@Nonnull consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl node)
+	public static void refreshViews(@Nonnull XValueNodeImpl node)
 	{
-		refreshViews(consulo.ide.impl.idea.xdebugger.impl.frame.XDebugView.getSession(node.getTree()));
+		refreshViews(XDebugView.getSession(node.getTree()));
 	}
 
-	public static void refreshViews(@jakarta.annotation.Nullable XDebugSession session)
+	public static void refreshViews(@Nullable XDebugSession session)
 	{
 		if(session != null)
 		{

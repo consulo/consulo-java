@@ -54,7 +54,7 @@ public class DefaultInferredAnnotationProvider implements InferredAnnotationProv
 
   @Nullable
   @Override
-  public PsiAnnotation findInferredAnnotation(@jakarta.annotation.Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN) {
+  public PsiAnnotation findInferredAnnotation(@Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN) {
     if (!JB_INFERRED_ANNOTATIONS.contains(annotationFQN) && !isDefaultNullabilityAnnotation(annotationFQN)) {
       return null;
     }
@@ -124,11 +124,11 @@ public class DefaultInferredAnnotationProvider implements InferredAnnotationProv
    * There is a number of well-known methods where automatic inference fails (for example, {@link Objects#requireNonNull(Object)}.
    * For such methods, contracts are hardcoded, and for their parameters inferred @NotNull are suppressed.<p/>
    * <p>
-   * {@link Contract} and {@link jakarta.annotation.Nonnull} annotations on methods are not necessarily applicable to the overridden implementations, so they're ignored, too.<p/>
+   * {@link Contract} and {@link Nonnull} annotations on methods are not necessarily applicable to the overridden implementations, so they're ignored, too.<p/>
    *
    * @return whether inference is to be suppressed the given annotation on the given method or parameter
    */
-  private boolean ignoreInference(@Nonnull PsiModifierListOwner owner, @jakarta.annotation.Nullable String annotationFQN) {
+  private boolean ignoreInference(@Nonnull PsiModifierListOwner owner, @Nullable String annotationFQN) {
     if (annotationFQN == null)
       return true;
     if (owner instanceof PsiMethod && PsiUtil.canBeOverridden((PsiMethod) owner)) {
@@ -247,7 +247,7 @@ public class DefaultInferredAnnotationProvider implements InferredAnnotationProv
 
   @Nonnull
   @Override
-  public List<PsiAnnotation> findInferredAnnotations(@jakarta.annotation.Nonnull PsiModifierListOwner listOwner) {
+  public List<PsiAnnotation> findInferredAnnotations(@Nonnull PsiModifierListOwner listOwner) {
     listOwner = PsiUtil.preferCompiledElement(listOwner);
     List<PsiAnnotation> result = new ArrayList<>();
     PsiAnnotation[] fromBytecode = ProjectBytecodeAnalysis.getInstance(myProject).findInferredAnnotations(listOwner);

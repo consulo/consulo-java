@@ -49,7 +49,7 @@ public abstract class BaseSmartPointerPsiNode<Type extends SmartPsiElementPointe
     return getChildrenImpl();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected abstract Collection<AbstractTreeNode> getChildrenImpl();
 
   protected boolean isMarkReadOnly() {

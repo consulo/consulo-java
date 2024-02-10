@@ -40,7 +40,7 @@ import java.util.List;
 public class ReplaceIfWithSwitchIntention extends Intention {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiElementPredicate getElementPredicate() {
     return new IfToSwitchPredicate();
   }
@@ -136,8 +136,8 @@ public class ReplaceIfWithSwitchIntention extends Intention {
   }
 
   @Nullable
-  public static <T extends PsiElement> T getPrevSiblingOfType(@Nullable PsiElement element, @jakarta.annotation.Nonnull Class<T> aClass,
-                                                              @jakarta.annotation.Nonnull Class<? extends PsiElement>... stopAt) {
+  public static <T extends PsiElement> T getPrevSiblingOfType(@Nullable PsiElement element, @Nonnull Class<T> aClass,
+                                                              @Nonnull Class<? extends PsiElement>... stopAt) {
     if (element == null) {
       return null;
     }

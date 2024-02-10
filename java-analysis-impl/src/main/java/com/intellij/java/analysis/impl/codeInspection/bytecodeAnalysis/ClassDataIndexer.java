@@ -60,7 +60,7 @@ public class ClassDataIndexer implements BiFunction<Project, VirtualFile,Map<HMe
 
   @Nullable
   @Override
-  public Map<HMember, Equations> apply(Project project, @jakarta.annotation.Nonnull VirtualFile file) {
+  public Map<HMember, Equations> apply(Project project, @Nonnull VirtualFile file) {
     HashMap<HMember, Equations> map = new HashMap<>();
     if (isFileExcluded(file)) {
       return map;
@@ -150,7 +150,7 @@ public class ClassDataIndexer implements BiFunction<Project, VirtualFile,Map<HMe
     return effect;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private static Equations convertEquations(EKey methodKey, List<Equation> rawMethodEquations) {
     List<DirectionResultPair> compressedMethodEquations =
         ContainerUtil.map(rawMethodEquations, equation -> new DirectionResultPair(equation.key.dirKey, equation.result));
@@ -215,7 +215,7 @@ public class ClassDataIndexer implements BiFunction<Project, VirtualFile,Map<HMe
     return staticFields;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   static List<Equations> getEquations(GlobalSearchScope scope, HMember key) {
     return ContainerUtil.mapNotNull(FileBasedIndex.getInstance().getContainingFiles(BytecodeAnalysisIndex.NAME, key, scope),
         file -> ourGist.getFileData(null, file).get(key));

@@ -28,12 +28,12 @@ public class ForDescendingPostfixTemplate extends ForIndexedPostfixTemplate {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String getOperator() {
     return "--";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected String getComparativeSign(@Nonnull PsiExpression expr) {
     return JavaPostfixTemplatesUtils.isNumber(expr.getType()) ? ">" : ">=";
@@ -41,7 +41,7 @@ public class ForDescendingPostfixTemplate extends ForIndexedPostfixTemplate {
 
   @Nullable
   @Override
-  protected Pair<String, String> calculateBounds(@jakarta.annotation.Nonnull PsiExpression expression) {
+  protected Pair<String, String> calculateBounds(@Nonnull PsiExpression expression) {
     String bound = getExpressionBound(expression);
     if (bound == null) {
       return null;

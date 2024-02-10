@@ -34,7 +34,7 @@ import jakarta.annotation.Nullable;
 public class ShowModulePropertiesFix extends IntentionAndQuickFixAction implements SyntheticIntentionAction {
   private final String myModuleName;
 
-  public ShowModulePropertiesFix(@jakarta.annotation.Nonnull PsiElement context) {
+  public ShowModulePropertiesFix(@Nonnull PsiElement context) {
     this(ModuleUtilCore.findModuleForPsiElement(context));
   }
 
@@ -50,18 +50,18 @@ public class ShowModulePropertiesFix extends IntentionAndQuickFixAction implemen
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getFamilyName() {
     return getText();
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull final Project project, final Editor editor, final PsiFile file) {
+  public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
     return myModuleName != null;
   }
 
   @Override
-  public void applyFix(@jakarta.annotation.Nonnull Project project, PsiFile file, @Nullable Editor editor) {
+  public void applyFix(@Nonnull Project project, PsiFile file, @Nullable Editor editor) {
     ShowSettingsUtil.getInstance().showProjectStructureDialog(project, projectStructureSelector -> {
       projectStructureSelector.select(myModuleName, null, true);
     });

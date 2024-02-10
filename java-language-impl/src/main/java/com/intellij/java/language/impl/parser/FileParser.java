@@ -27,12 +27,12 @@ public class FileParser
 
 	private final JavaParser myParser;
 
-	public FileParser(@jakarta.annotation.Nonnull JavaParser javaParser)
+	public FileParser(@Nonnull JavaParser javaParser)
 	{
 		myParser = javaParser;
 	}
 
-	public void parse(@jakarta.annotation.Nonnull PsiBuilder builder)
+	public void parse(@Nonnull PsiBuilder builder)
 	{
 		parseFile(builder, FileParser::stopImportListParsing, JavaErrorBundle.getInstance(), "expected.class.or.interface");
 	}
@@ -40,7 +40,7 @@ public class FileParser
 	public void parseFile(@Nonnull PsiBuilder builder,
 						  @Nonnull Predicate<? super PsiBuilder> importListStopper,
 						  @Nonnull AbstractBundle bundle,
-						  @jakarta.annotation.Nonnull String errorMessageKey)
+						  @Nonnull String errorMessageKey)
 	{
 		parsePackageStatement(builder);
 
@@ -155,7 +155,7 @@ public class FileParser
 		done(statement, JavaElementType.PACKAGE_STATEMENT);
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	protected Pair<PsiBuilder.Marker, Boolean> parseImportList(PsiBuilder builder, Predicate<? super PsiBuilder> stopper)
 	{
 		PsiBuilder.Marker list = builder.mark();
@@ -209,7 +209,7 @@ public class FileParser
 		return Pair.create(list, isEmpty);
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	protected PsiBuilder.Marker parseImportStatement(PsiBuilder builder)
 	{
 		if(builder.getTokenType() != JavaTokenType.IMPORT_KEYWORD)
@@ -234,7 +234,7 @@ public class FileParser
 	}
 
 	@Nonnull
-	private static String error(@Nonnull AbstractBundle bundle, @jakarta.annotation.Nonnull String errorMessageKey)
+	private static String error(@Nonnull AbstractBundle bundle, @Nonnull String errorMessageKey)
 	{
 		return bundle.getMessage(errorMessageKey);
 	}

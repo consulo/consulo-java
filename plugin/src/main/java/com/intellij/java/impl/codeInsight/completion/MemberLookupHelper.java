@@ -45,7 +45,7 @@ public class MemberLookupHelper
 		this(overloads.get(0), containingClass, shouldImport, true);
 	}
 
-	public MemberLookupHelper(PsiMember member, @jakarta.annotation.Nullable PsiClass containingClass, boolean shouldImport, final boolean mergedOverloads)
+	public MemberLookupHelper(PsiMember member, @Nullable PsiClass containingClass, boolean shouldImport, final boolean mergedOverloads)
 	{
 		myMember = member;
 		myContainingClass = containingClass;
@@ -58,7 +58,7 @@ public class MemberLookupHelper
 		return myMember;
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	public PsiClass getContainingClass()
 	{
 		return myContainingClass;
@@ -112,8 +112,8 @@ public class MemberLookupHelper
 		}
 	}
 
-	@jakarta.annotation.Nullable
-	private PsiType patchGetClass(@jakarta.annotation.Nullable PsiType type)
+	@Nullable
+	private PsiType patchGetClass(@Nullable PsiType type)
 	{
 		if(myMember instanceof PsiMethod && PsiTypesUtil.isGetClass((PsiMethod) myMember) && type instanceof PsiClassType)
 		{
@@ -127,8 +127,8 @@ public class MemberLookupHelper
 		return type;
 	}
 
-	@jakarta.annotation.Nonnull
-	static String getMethodParameterString(@jakarta.annotation.Nonnull PsiMethod method, @Nonnull PsiSubstitutor substitutor)
+	@Nonnull
+	static String getMethodParameterString(@Nonnull PsiMethod method, @Nonnull PsiSubstitutor substitutor)
 	{
 		return PsiFormatUtil.formatMethod(method, substitutor, PsiFormatUtilBase.SHOW_PARAMETERS, PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_TYPE);
 	}

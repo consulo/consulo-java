@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.generation.ui;
 
+import consulo.ide.impl.idea.ide.wizard.StepAdapter;
 import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.impl.codeInsight.generation.EqualsHashCodeTemplatesManager;
@@ -441,7 +442,7 @@ public class GenerateEqualsWizard extends AbstractGenerateEqualsWizard<PsiClass,
 		}
 	}
 
-	private static class TemplateChooserStep extends consulo.ide.impl.idea.ide.wizard.StepAdapter
+	private static class TemplateChooserStep extends StepAdapter
 	{
 		private final JComponent myPanel;
 
@@ -476,7 +477,7 @@ public class GenerateEqualsWizard extends AbstractGenerateEqualsWizard<PsiClass,
 			checkbox.addActionListener(new ActionListener()
 			{
 				@Override
-				public void actionPerformed(@jakarta.annotation.Nonnull final ActionEvent M)
+				public void actionPerformed(@Nonnull final ActionEvent M)
 				{
 					JavaCodeInsightSettings.getInstance().USE_INSTANCEOF_ON_EQUALS_PARAMETER = checkbox.isSelected();
 				}

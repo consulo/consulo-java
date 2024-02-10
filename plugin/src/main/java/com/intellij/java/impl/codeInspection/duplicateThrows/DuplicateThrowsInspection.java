@@ -49,13 +49,13 @@ public class DuplicateThrowsInspection extends BaseLocalInspectionTool {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getGroupDisplayName() {
     return GroupNames.DECLARATION_REDUNDANCY;
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getShortName() {
     return "DuplicateThrows";
   }
@@ -68,8 +68,8 @@ public class DuplicateThrowsInspection extends BaseLocalInspectionTool {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
-  public PsiElementVisitor buildVisitorImpl(@jakarta.annotation.Nonnull final ProblemsHolder holder,
+  @Nonnull
+  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
                                             boolean isOnTheFly,
                                             LocalInspectionToolSession session,
                                             Object state) {

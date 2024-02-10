@@ -83,7 +83,7 @@ public class PsiResourceVariableImpl extends PsiLocalVariableImpl implements Psi
     }
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public SearchScope getUseScope() {
     return new LocalSearchScope(getDeclarationScope());

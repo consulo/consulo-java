@@ -71,7 +71,7 @@ public class ExpressionParser {
 
   private final JavaParser myParser;
 
-  public ExpressionParser(@jakarta.annotation.Nonnull JavaParser javaParser) {
+  public ExpressionParser(@Nonnull JavaParser javaParser) {
     myParser = javaParser;
   }
 
@@ -651,11 +651,11 @@ public class ExpressionParser {
     return parseArrayInitializer(builder, JavaElementType.ARRAY_INITIALIZER_EXPRESSION, this::parse, "expected.expression");
   }
 
-  @jakarta.annotation.Nonnull
-  public PsiBuilder.Marker parseArrayInitializer(@jakarta.annotation.Nonnull PsiBuilder builder,
-                                                 @jakarta.annotation.Nonnull IElementType type,
-                                                 @jakarta.annotation.Nonnull Function<? super PsiBuilder, PsiBuilder.Marker> elementParser,
-                                                 @jakarta.annotation.Nonnull @PropertyKey(resourceBundle = BUNDLE) String missingElementKey) {
+  @Nonnull
+  public PsiBuilder.Marker parseArrayInitializer(@Nonnull PsiBuilder builder,
+                                                 @Nonnull IElementType type,
+                                                 @Nonnull Function<? super PsiBuilder, PsiBuilder.Marker> elementParser,
+                                                 @Nonnull @PropertyKey(resourceBundle = BUNDLE) String missingElementKey) {
     PsiBuilder.Marker arrayInit = builder.mark();
     builder.advanceLexer();
 
@@ -696,7 +696,7 @@ public class ExpressionParser {
     return arrayInit;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private PsiBuilder.Marker parseNew(PsiBuilder builder, @Nullable PsiBuilder.Marker start) {
     PsiBuilder.Marker newExpr = (start != null ? start.precede() : builder.mark());
     builder.advanceLexer();
@@ -829,7 +829,7 @@ public class ExpressionParser {
     return expr;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private PsiBuilder.Marker parseMethodReference(final PsiBuilder builder, final PsiBuilder.Marker start) {
     builder.advanceLexer();
 

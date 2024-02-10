@@ -125,7 +125,7 @@ public class TypeEvaluator
 		return getType(new TypeMigrationUsageInfo(element));
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	public PsiType getType(final TypeMigrationUsageInfo usageInfo)
 	{
 		final LinkedList<PsiType> e = myTypeMap.get(usageInfo);
@@ -307,7 +307,7 @@ public class TypeEvaluator
 		return getType(expr);
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	private PsiType evaluateReferenceExpressionType(PsiExpression expr)
 	{
 		final PsiReferenceExpression ref = (PsiReferenceExpression) expr;
@@ -534,7 +534,7 @@ public class TypeEvaluator
 		return migrationTtype;
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	public <T> T getSettings(Class<T> aClass)
 	{
 		return myRules.getConversionSettings(aClass);

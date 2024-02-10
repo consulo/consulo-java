@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
+import consulo.ide.impl.idea.xdebugger.impl.XDebuggerManagerImpl;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -62,13 +63,13 @@ public class ConstructorInstancesTracker implements TrackerForNewInstances, Disp
 	@Nullable
 	private HashSet<ObjectReference> myNewObjects = null;
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	private HashSet<ObjectReference> myTrackedObjects = new HashSet<>();
 
 	private volatile boolean myIsBackgroundMode;
 	private volatile boolean myIsBackgroundTrackingEnabled;
 
-	public ConstructorInstancesTracker(@jakarta.annotation.Nonnull ReferenceType ref, @jakarta.annotation.Nonnull XDebugSession debugSession, @Nonnull InstancesTracker instancesTracker)
+	public ConstructorInstancesTracker(@Nonnull ReferenceType ref, @Nonnull XDebugSession debugSession, @Nonnull InstancesTracker instancesTracker)
 	{
 		myProject = debugSession.getProject();
 		myIsBackgroundTrackingEnabled = instancesTracker.isBackgroundTrackingEnabled();
@@ -105,7 +106,7 @@ public class ConstructorInstancesTracker implements TrackerForNewInstances, Disp
 
 		final JavaLineBreakpointType breakPointType = new JavaLineBreakpointType();
 
-		final XBreakpoint bpn = new XLineBreakpointImpl<>(breakPointType, ((consulo.ide.impl.idea.xdebugger.impl.XDebuggerManagerImpl) XDebuggerManager.getInstance(myProject)).getBreakpointManager(), new JavaLineBreakpointProperties(),
+		final XBreakpoint bpn = new XLineBreakpointImpl<>(breakPointType, ((XDebuggerManagerImpl) XDebuggerManager.getInstance(myProject)).getBreakpointManager(), new JavaLineBreakpointProperties(),
 				new LineBreakpointState<>());
 
 		myBreakpoint = new MyConstructorBreakpoints(myProject, bpn);
@@ -143,7 +144,7 @@ public class ConstructorInstancesTracker implements TrackerForNewInstances, Disp
 		myTrackedObjects = new HashSet<>();
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public List<ObjectReference> getNewInstances()
 	{
@@ -285,7 +286,7 @@ public class ConstructorInstancesTracker implements TrackerForNewInstances, Disp
 			}
 		}
 
-		private void handleEvent(@jakarta.annotation.Nonnull SuspendContextCommandImpl action, @jakarta.annotation.Nonnull LocatableEvent event)
+		private void handleEvent(@Nonnull SuspendContextCommandImpl action, @Nonnull LocatableEvent event)
 		{
 			try
 			{

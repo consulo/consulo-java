@@ -37,7 +37,7 @@ public enum DfaNullability
 	@Nonnull
 	String myInternalName;
 	private final
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	Supplier<String> myPresentationalName;
 	private final
 	@Nonnull
@@ -65,7 +65,7 @@ public enum DfaNullability
 	}
 
 	@Nonnull
-	public DfaNullability unite(@jakarta.annotation.Nonnull DfaNullability other)
+	public DfaNullability unite(@Nonnull DfaNullability other)
 	{
 		if(this == other)
 		{
@@ -83,7 +83,7 @@ public enum DfaNullability
 		return UNKNOWN;
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	public DfaNullability intersect(@Nonnull DfaNullability right)
 	{
 		if(this == NOT_NULL)

@@ -45,7 +45,7 @@ public abstract class JavaCommandLineState extends CommandLineState implements J
     myParams = null;
   }
 
-  protected void buildProcessHandler(@jakarta.annotation.Nonnull ProcessHandlerBuilder builder) throws ExecutionException {
+  protected void buildProcessHandler(@Nonnull ProcessHandlerBuilder builder) throws ExecutionException {
     if (ansiColoringEnabled()) {
       builder.colored();
     }

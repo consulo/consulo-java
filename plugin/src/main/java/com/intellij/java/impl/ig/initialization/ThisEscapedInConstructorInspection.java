@@ -29,7 +29,7 @@ import jakarta.annotation.Nonnull;
 public class ThisEscapedInConstructorInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "ThisEscapedInObjectConstruction";
   }

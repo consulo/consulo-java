@@ -52,7 +52,7 @@ public class TestCaseWithNoTestMethodsInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "test.case.with.no.test.methods.problem.descriptor");
@@ -76,7 +76,7 @@ public class TestCaseWithNoTestMethodsInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       if (aClass.isInterface()
           || aClass.isEnum()
           || aClass.isAnnotationType()

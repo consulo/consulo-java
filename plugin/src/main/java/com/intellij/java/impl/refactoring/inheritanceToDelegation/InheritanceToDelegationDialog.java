@@ -87,7 +87,7 @@ public class InheritanceToDelegationDialog extends RefactoringDialog {
     super.dispose();
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getFieldName() {
     return myFieldNameField.getEnteredName();
   }

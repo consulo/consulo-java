@@ -27,12 +27,12 @@ import org.jetbrains.annotations.NonNls;
 @ExtensionImpl
 public class NakedNotifyInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("naked.notify.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "naked.notify.problem.descriptor");
@@ -45,7 +45,7 @@ public class NakedNotifyInspection extends BaseInspection {
   private static class NakedNotifyVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       super.visitMethod(method);
       if (!method.hasModifierProperty(PsiModifier.SYNCHRONIZED)) {
         return;

@@ -125,7 +125,7 @@ public class JavaConstructorCallElement extends LookupElementDecorator<LookupEle
     return Collections.singletonList(classItem);
   }
 
-  private static boolean shouldSuggestConstructor(@jakarta.annotation.Nonnull PsiClass psiClass, @Nonnull PsiElement position, PsiMethod constructor) {
+  private static boolean shouldSuggestConstructor(@Nonnull PsiClass psiClass, @Nonnull PsiElement position, PsiMethod constructor) {
     return JavaResolveUtil.isAccessible(constructor, psiClass, constructor.getModifierList(), position, null, null) || willBeAccessibleInAnonymous(psiClass, constructor);
   }
 

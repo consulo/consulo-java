@@ -27,7 +27,7 @@ import java.util.Set;
 public interface AnnotationProcessingConfiguration {
   boolean isEnabled();
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   String getProcessorPath();
 
   @Nonnull

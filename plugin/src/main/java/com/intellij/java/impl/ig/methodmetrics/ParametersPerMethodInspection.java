@@ -32,13 +32,13 @@ public class ParametersPerMethodInspection extends MethodMetricInspection {
     return "MethodWithTooManyParameters";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "parameters.per.method.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer parameterCount = (Integer)infos[0];
     return InspectionGadgetsBundle.message(
@@ -60,7 +60,7 @@ public class ParametersPerMethodInspection extends MethodMetricInspection {
   private class ParametersPerMethodVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       // note: no call to super
       if (method.getNameIdentifier() == null) {
         return;

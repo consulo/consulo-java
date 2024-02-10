@@ -51,7 +51,7 @@ public class TailRecursionInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   protected InspectionGadgetsFix buildFix(Object... infos) {
     final PsiMethod containingMethod = (PsiMethod)infos[0];
     if (!mayBeReplacedByIterativeMethod(containingMethod)) {

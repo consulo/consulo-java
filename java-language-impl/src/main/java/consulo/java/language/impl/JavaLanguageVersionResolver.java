@@ -45,7 +45,7 @@ public class JavaLanguageVersionResolver implements LanguageVersionResolver {
   @Nonnull
   @RequiredReadAction
   @Override
-  public LanguageVersion getLanguageVersion(@jakarta.annotation.Nonnull Language language, @jakarta.annotation.Nullable Project project, @jakarta.annotation.Nullable VirtualFile virtualFile) {
+  public LanguageVersion getLanguageVersion(@Nonnull Language language, @Nullable Project project, @Nullable VirtualFile virtualFile) {
     if (project == null || virtualFile == null) {
       return LanguageLevel.HIGHEST.toLangVersion();
     }

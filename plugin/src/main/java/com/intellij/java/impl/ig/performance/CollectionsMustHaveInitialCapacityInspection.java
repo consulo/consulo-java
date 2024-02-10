@@ -53,14 +53,14 @@ public class CollectionsMustHaveInitialCapacityInspection extends BaseInspection
   }
 
   @Override
-  public void writeSettings(@jakarta.annotation.Nonnull Element node) throws WriteExternalException {
+  public void writeSettings(@Nonnull Element node) throws WriteExternalException {
     mySettings.writeSettings(node);
     if (myIgnoreFields) {
       JDOMExternalizer.write(node, "ignoreFields", true);
     }
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   @Override
   public JComponent createOptionsPanel() {
     JPanel p = new JPanel(new BorderLayout());
@@ -83,7 +83,7 @@ public class CollectionsMustHaveInitialCapacityInspection extends BaseInspection
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("collections.must.have.initial.capacity.problem.descriptor");
   }

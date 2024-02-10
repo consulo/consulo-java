@@ -37,7 +37,7 @@ public class WhileLoopSpinsOnFieldInspection extends BaseInspection {
   public boolean ignoreNonEmtpyLoops = false;
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "while.loop.spins.on.field.display.name");
@@ -51,7 +51,7 @@ public class WhileLoopSpinsOnFieldInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   public JComponent createOptionsPanel() {
     return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message(
       "while.loop.spins.on.field.ignore.non.empty.loops.option"),

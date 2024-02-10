@@ -56,13 +56,13 @@ public class ReturnNullInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("return.of.null.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "return.of.null.problem.descriptor");
@@ -108,7 +108,7 @@ public class ReturnNullInspection extends BaseInspection {
 
     @Override
     public void visitLiteralExpression(
-      @jakarta.annotation.Nonnull PsiLiteralExpression value) {
+      @Nonnull PsiLiteralExpression value) {
       super.visitLiteralExpression(value);
       final String text = value.getText();
       if (!PsiKeyword.NULL.equals(text)) {

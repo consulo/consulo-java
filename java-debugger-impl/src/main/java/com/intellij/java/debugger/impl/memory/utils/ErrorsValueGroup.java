@@ -38,7 +38,7 @@ public class ErrorsValueGroup extends XValueGroup
 		super("Errors");
 	}
 
-	public void addErrorValue(@jakarta.annotation.Nonnull String message, @Nonnull XNamedValue value)
+	public void addErrorValue(@Nonnull String message, @Nonnull XNamedValue value)
 	{
 		List<XNamedValue> lst;
 		if(!myErrorMessage2ValueMap.containsKey(message))
@@ -74,7 +74,7 @@ public class ErrorsValueGroup extends XValueGroup
 	{
 
 		@Override
-		public void computeChildren(@jakarta.annotation.Nonnull XCompositeNode node)
+		public void computeChildren(@Nonnull XCompositeNode node)
 		{
 			XValueChildrenList lst = new XValueChildrenList();
 			String name = getName();
@@ -82,7 +82,7 @@ public class ErrorsValueGroup extends XValueGroup
 			node.addChildren(lst, true);
 		}
 
-		MyErrorsValueGroup(@jakarta.annotation.Nonnull String name)
+		MyErrorsValueGroup(@Nonnull String name)
 		{
 			super(name);
 		}

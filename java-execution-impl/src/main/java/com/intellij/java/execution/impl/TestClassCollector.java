@@ -47,7 +47,7 @@ import java.util.function.Predicate;
 public class TestClassCollector {
   private static final Logger LOG = Logger.getInstance(TestClassCollector.class);
 
-  public static String[] collectClassFQNames(String packageName, @jakarta.annotation.Nullable Path rootPath, JavaTestConfigurationBase configuration, Function<ClassLoader, Predicate<Class<?>>> predicateProducer) {
+  public static String[] collectClassFQNames(String packageName, @Nullable Path rootPath, JavaTestConfigurationBase configuration, Function<ClassLoader, Predicate<Class<?>>> predicateProducer) {
     Module module = configuration.getConfigurationModule().getModule();
     ClassLoader classLoader = createUsersClassLoader(configuration);
     Set<String> classes = new HashSet<>();

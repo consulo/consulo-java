@@ -35,11 +35,11 @@ public class FilteringTask implements Runnable
 
 	private volatile boolean myIsCancelled = false;
 
-	public FilteringTask(@jakarta.annotation.Nonnull String className,
-			@jakarta.annotation.Nonnull DebugProcessImpl debugProcess,
+	public FilteringTask(@Nonnull String className,
+			@Nonnull DebugProcessImpl debugProcess,
 			@Nonnull XExpression expression,
-			@jakarta.annotation.Nonnull List<ObjectReference> references,
-			@jakarta.annotation.Nonnull FilteringTaskCallback callback)
+			@Nonnull List<ObjectReference> references,
+			@Nonnull FilteringTaskCallback callback)
 	{
 		myChecker = StringUtil.isEmptyOrSpaces(expression.getExpression()) ? ConditionChecker.ALL_MATCHED_CHECKER : new ConditionCheckerImpl(debugProcess, expression, className);
 		myReferences = references;

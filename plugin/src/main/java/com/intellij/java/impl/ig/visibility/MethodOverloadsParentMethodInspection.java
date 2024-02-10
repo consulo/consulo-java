@@ -44,7 +44,7 @@ public class MethodOverloadsParentMethodInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("method.overloads.display.name");
   }
@@ -60,7 +60,7 @@ public class MethodOverloadsParentMethodInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("method.overloads.problem.descriptor");
   }
@@ -80,7 +80,7 @@ public class MethodOverloadsParentMethodInspection extends BaseInspection {
   private class MethodOverloadsParentMethodVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       if (method.hasModifierProperty(PsiModifier.PRIVATE) || method.hasModifierProperty(PsiModifier.STATIC)) {
         return;
       }

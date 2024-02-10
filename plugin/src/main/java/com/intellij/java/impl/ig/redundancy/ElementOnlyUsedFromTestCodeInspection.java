@@ -48,7 +48,7 @@ public abstract class ElementOnlyUsedFromTestCodeInspection extends BaseGlobalIn
 	private static final Key<Boolean> ONLY_USED_FROM_TEST_CODE =
 			Key.create("ONLY_USED_FROM_TEST_CODE");
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public String getDisplayName()
 	{

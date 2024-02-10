@@ -45,18 +45,18 @@ public class MethodUtils {
   }
 
   @Contract("null -> false")
-  public static boolean isComparatorCompare(@jakarta.annotation.Nullable PsiMethod method) {
+  public static boolean isComparatorCompare(@Nullable PsiMethod method) {
     return method != null && methodMatches(method, JavaClassNames.JAVA_UTIL_COMPARATOR, PsiType.INT, "compare", null, null);
   }
 
   @Contract("null -> false")
-  public static boolean isCompareTo(@jakarta.annotation.Nullable PsiMethod method) {
+  public static boolean isCompareTo(@Nullable PsiMethod method) {
     return method != null && methodMatches(method, null, PsiType.INT, HardcodedMethodConstants.COMPARE_TO, PsiType.NULL) && InheritanceUtil.isInheritor(method.getContainingClass(),
         JavaClassNames.JAVA_LANG_COMPARABLE);
   }
 
   @Contract("null -> false")
-  public static boolean isCompareToIgnoreCase(@jakarta.annotation.Nullable PsiMethod method) {
+  public static boolean isCompareToIgnoreCase(@Nullable PsiMethod method) {
     if (method == null) {
       return false;
     }
@@ -65,7 +65,7 @@ public class MethodUtils {
   }
 
   @Contract("null -> false")
-  public static boolean isHashCode(@jakarta.annotation.Nullable PsiMethod method) {
+  public static boolean isHashCode(@Nullable PsiMethod method) {
     return method != null && methodMatches(method, null, PsiType.INT, HardcodedMethodConstants.HASH_CODE);
   }
 
@@ -75,7 +75,7 @@ public class MethodUtils {
   }
 
   @Contract("null -> false")
-  public static boolean isToString(@jakarta.annotation.Nullable PsiMethod method) {
+  public static boolean isToString(@Nullable PsiMethod method) {
     if (method == null) {
       return false;
     }
@@ -84,7 +84,7 @@ public class MethodUtils {
   }
 
   @Contract("null -> false")
-  public static boolean isEquals(@jakarta.annotation.Nullable PsiMethod method) {
+  public static boolean isEquals(@Nullable PsiMethod method) {
     if (method == null) {
       return false;
     }
@@ -115,9 +115,9 @@ public class MethodUtils {
    */
   public static boolean methodMatches(@Nonnull PsiMethod method,
                                       @NonNls @Nullable String containingClassName,
-                                      @jakarta.annotation.Nullable PsiType returnType,
-                                      @jakarta.annotation.Nullable Pattern methodNamePattern,
-                                      @jakarta.annotation.Nullable PsiType... parameterTypes) {
+                                      @Nullable PsiType returnType,
+                                      @Nullable Pattern methodNamePattern,
+                                      @Nullable PsiType... parameterTypes) {
     if (methodNamePattern != null) {
       final String name = method.getName();
       final Matcher matcher = methodNamePattern.matcher(name);
@@ -140,11 +140,11 @@ public class MethodUtils {
    * @return true, if the specified method matches the specified constraints,
    * false otherwise
    */
-  public static boolean methodMatches(@jakarta.annotation.Nonnull PsiMethod method,
-                                      @NonNls @jakarta.annotation.Nullable String containingClassName,
-                                      @jakarta.annotation.Nullable PsiType returnType,
+  public static boolean methodMatches(@Nonnull PsiMethod method,
+                                      @NonNls @Nullable String containingClassName,
+                                      @Nullable PsiType returnType,
                                       @NonNls @Nullable String methodName,
-                                      @jakarta.annotation.Nullable PsiType... parameterTypes) {
+                                      @Nullable PsiType... parameterTypes) {
     final String name = method.getName();
     if (methodName != null && !methodName.equals(name)) {
       return false;
@@ -152,7 +152,7 @@ public class MethodUtils {
     return methodMatches(method, containingClassName, returnType, parameterTypes);
   }
 
-  private static boolean methodMatches(@Nonnull PsiMethod method, @NonNls @jakarta.annotation.Nullable String containingClassName, @jakarta.annotation.Nullable PsiType returnType, @jakarta.annotation.Nullable PsiType... parameterTypes) {
+  private static boolean methodMatches(@Nonnull PsiMethod method, @NonNls @Nullable String containingClassName, @Nullable PsiType returnType, @Nullable PsiType... parameterTypes) {
     if (parameterTypes != null) {
       final PsiParameterList parameterList = method.getParameterList();
       if (parameterList.getParametersCount() != parameterTypes.length) {
@@ -185,10 +185,10 @@ public class MethodUtils {
   }
 
   public static boolean simpleMethodMatches(@Nonnull PsiMethod method,
-                                            @NonNls @jakarta.annotation.Nullable String containingClassName,
+                                            @NonNls @Nullable String containingClassName,
                                             @NonNls @Nullable String returnTypeString,
-                                            @NonNls @jakarta.annotation.Nullable String methodName,
-                                            @NonNls @jakarta.annotation.Nullable String... parameterTypeStrings) {
+                                            @NonNls @Nullable String methodName,
+                                            @NonNls @Nullable String... parameterTypeStrings) {
     final Project project = method.getProject();
     final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
     final PsiElementFactory factory = psiFacade.getElementFactory();
@@ -220,7 +220,7 @@ public class MethodUtils {
     return getSuper(method) != null;
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static PsiMethod getSuper(@Nonnull PsiMethod method) {
     final MethodSignatureBackedByPsiMethod signature = getSuperMethodSignature(method);
     if (signature == null) {
@@ -229,7 +229,7 @@ public class MethodUtils {
     return signature.getMethod();
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public static MethodSignatureBackedByPsiMethod getSuperMethodSignature(@Nonnull PsiMethod method) {
     if (method.isConstructor() || method.hasModifierProperty(PsiModifier.STATIC) || method.hasModifierProperty(PsiModifier.PRIVATE)) {
       return null;

@@ -7,11 +7,11 @@ import jakarta.annotation.Nonnull;
  * @author Dmitry Batkovich <dmitry.batkovich@jetbrains.com>
  */
 class InheritorsCountData implements Comparable<InheritorsCountData> {
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private final PsiClass myPsiClass;
   private final int myInheritorsCount;
 
-  public InheritorsCountData(@jakarta.annotation.Nonnull final PsiClass psiClass, final int inheritorsCount) {
+  public InheritorsCountData(@Nonnull final PsiClass psiClass, final int inheritorsCount) {
     myPsiClass = psiClass;
     myInheritorsCount = inheritorsCount;
   }
@@ -25,7 +25,7 @@ class InheritorsCountData implements Comparable<InheritorsCountData> {
     return myInheritorsCount == data.myInheritorsCount && myPsiClass.equals(data.myPsiClass);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public PsiClass getPsiClass() {
     return myPsiClass;
   }

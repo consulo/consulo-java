@@ -64,7 +64,7 @@ public class FindDfaProblemCauseFix implements LocalQuickFix, LowPriorityAction
 	}
 
 	@Nls(capitalization = Nls.Capitalization.Sentence)
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
@@ -72,7 +72,7 @@ public class FindDfaProblemCauseFix implements LocalQuickFix, LowPriorityAction
 	}
 
 	@Override
-	public void applyFix(@jakarta.annotation.Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
+	public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 	{
 		ThrowableComputable<TrackingRunner.CauseItem, RuntimeException> causeFinder = () -> {
 			PsiExpression element = myAnchor.getElement();

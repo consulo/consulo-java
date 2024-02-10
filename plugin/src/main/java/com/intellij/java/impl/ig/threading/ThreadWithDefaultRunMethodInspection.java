@@ -29,13 +29,13 @@ import com.siyeh.ig.psiutils.TypeUtils;
 @ExtensionImpl
 public class ThreadWithDefaultRunMethodInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "thread.with.default.run.method.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "InstantiatingAThreadWithDefaultRunMethod";
   }

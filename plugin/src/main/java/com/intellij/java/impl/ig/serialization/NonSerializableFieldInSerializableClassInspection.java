@@ -39,14 +39,14 @@ public class NonSerializableFieldInSerializableClassInspection extends Serializa
   public final ExternalizableStringSet ignorableAnnotations = new ExternalizableStringSet();
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "non.serializable.field.in.serializable.class.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "non.serializable.field.in.serializable.class.problem.descriptor");
@@ -58,7 +58,7 @@ public class NonSerializableFieldInSerializableClassInspection extends Serializa
       ignorableAnnotations, InspectionGadgetsBundle.message("ignore.if.annotated.by"))};
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     final PsiField field = (PsiField)infos[0];

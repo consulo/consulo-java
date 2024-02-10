@@ -79,7 +79,7 @@ public class DataFlowInspection extends DataFlowInspectionBase
 		return new LocalQuickFix[]{toRemove ? new RemoveAssignmentFix() : createSimplifyToAssignmentFix()};
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@Override
 	public String getDisplayName()
 	{

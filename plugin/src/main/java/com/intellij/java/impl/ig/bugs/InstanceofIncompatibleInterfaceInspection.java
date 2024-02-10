@@ -49,7 +49,7 @@ public class InstanceofIncompatibleInterfaceInspection
 
     @Override
     public void visitInstanceOfExpression(
-      @jakarta.annotation.Nonnull PsiInstanceOfExpression expression) {
+      @Nonnull PsiInstanceOfExpression expression) {
       super.visitInstanceOfExpression(expression);
       final PsiTypeElement castTypeElement = expression.getCheckType();
       if (castTypeElement == null) {

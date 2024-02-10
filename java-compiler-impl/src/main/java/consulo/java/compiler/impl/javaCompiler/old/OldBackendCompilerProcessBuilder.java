@@ -50,7 +50,7 @@ public class OldBackendCompilerProcessBuilder extends BackendCompilerProcessBuil
 		return createStartupCommand(myModuleChunk, myOutputPath, myCompileContext, myJavaCompilerOptions, myAnnotationProcessorsEnabled);
 	}
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	@RequiredReadAction
 	private GeneralCommandLine createStartupCommand(ModuleChunk chunk,
                                                   String outputPath,

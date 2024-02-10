@@ -38,7 +38,7 @@ public class PsiFieldMember extends PsiElementClassMember<PsiField> implements P
 {
 	private static final int FIELD_OPTIONS = PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_TYPE | PsiFormatUtilBase.TYPE_AFTER;
 
-	public PsiFieldMember(@jakarta.annotation.Nonnull PsiField field)
+	public PsiFieldMember(@Nonnull PsiField field)
 	{
 		super(field, PsiFormatUtil.formatVariable(field, FIELD_OPTIONS, PsiSubstitutor.EMPTY));
 	}
@@ -48,7 +48,7 @@ public class PsiFieldMember extends PsiElementClassMember<PsiField> implements P
 		super(psiMember, substitutor, PsiFormatUtil.formatVariable(psiMember, FIELD_OPTIONS, PsiSubstitutor.EMPTY));
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	@Override
 	public GenerationInfo generateGetter() throws IncorrectOperationException
 	{
@@ -56,14 +56,14 @@ public class PsiFieldMember extends PsiElementClassMember<PsiField> implements P
 		return infos != null && infos.length > 0 ? infos[0] : null;
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	@Override
 	public GenerationInfo[] generateGetters(PsiClass aClass) throws IncorrectOperationException
 	{
 		return createGenerateInfos(aClass, GetterSetterPrototypeProvider.generateGetterSetters(getElement(), true, false));
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	@Override
 	public GenerationInfo generateSetter() throws IncorrectOperationException
 	{
@@ -97,7 +97,7 @@ public class PsiFieldMember extends PsiElementClassMember<PsiField> implements P
 		return methods.isEmpty() ? null : methods.toArray(new GenerationInfo[methods.size()]);
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	private static PsiMethod createMethodIfNotExists(PsiClass aClass, final PsiMethod template)
 	{
 		PsiMethod existing = aClass.findMethodBySignature(template, false);

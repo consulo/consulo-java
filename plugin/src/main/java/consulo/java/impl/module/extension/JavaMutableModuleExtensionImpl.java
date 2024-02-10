@@ -54,7 +54,7 @@ public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl impl
   @RequiredUIAccess
   @Nullable
   @Override
-  public Component createConfigurationComponent(@Nonnull Disposable disposable, @jakarta.annotation.Nonnull Runnable runnable) {
+  public Component createConfigurationComponent(@Nonnull Disposable disposable, @Nonnull Runnable runnable) {
     return VerticalLayout.create().add(Label.create("Unsupported platform"));
   }
 
@@ -70,7 +70,7 @@ public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl impl
   }
 
   @Override
-  public void setBytecodeVersion(@jakarta.annotation.Nullable String version) {
+  public void setBytecodeVersion(@Nullable String version) {
     myBytecodeVersion = version;
   }
 
@@ -81,12 +81,12 @@ public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl impl
   }
 
   @Override
-  public void setSpecialDirLocation(@jakarta.annotation.Nonnull SpecialDirLocation specialDirLocation) {
+  public void setSpecialDirLocation(@Nonnull SpecialDirLocation specialDirLocation) {
     mySpecialDirLocation = specialDirLocation;
   }
 
   @Override
-  public boolean isModified(@jakarta.annotation.Nonnull JavaModuleExtensionImpl javaModuleExtension) {
+  public boolean isModified(@Nonnull JavaModuleExtensionImpl javaModuleExtension) {
     if (isModifiedImpl(javaModuleExtension)) {
       return true;
     }
@@ -109,7 +109,7 @@ public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl impl
     return false;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public MutableModuleInheritableNamedPointer<Sdk> getInheritableSdk() {
     return (MutableModuleInheritableNamedPointer<Sdk>) super.getInheritableSdk();

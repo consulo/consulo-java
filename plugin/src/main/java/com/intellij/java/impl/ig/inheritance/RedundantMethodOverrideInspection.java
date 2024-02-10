@@ -43,21 +43,21 @@ public class RedundantMethodOverrideInspection extends BaseInspection
 {
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return InspectionGadgetsBundle.message("redundant.method.override.display.name");
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	protected String buildErrorString(Object... infos)
 	{
 		return InspectionGadgetsBundle.message("redundant.method.override.problem.descriptor");
 	}
 
 	@Override
-	@jakarta.annotation.Nullable
+	@Nullable
 	protected InspectionGadgetsFix buildFix(Object... infos)
 	{
 		return new RedundantMethodOverrideFix();
@@ -136,7 +136,7 @@ public class RedundantMethodOverrideInspection extends BaseInspection
 			private final PsiMethod myMethod;
 			private final PsiMethod mySuperMethod;
 
-			ParameterEquivalenceChecker(@Nonnull PsiMethod method, @jakarta.annotation.Nonnull PsiMethod superMethod)
+			ParameterEquivalenceChecker(@Nonnull PsiMethod method, @Nonnull PsiMethod superMethod)
 			{
 				myMethod = method;
 				mySuperMethod = superMethod;

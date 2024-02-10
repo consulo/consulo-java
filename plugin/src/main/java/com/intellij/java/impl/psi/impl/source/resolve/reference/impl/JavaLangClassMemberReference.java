@@ -25,7 +25,7 @@ import static com.intellij.java.analysis.impl.psi.impl.source.resolve.reference.
 public class JavaLangClassMemberReference extends PsiReferenceBase<PsiLiteralExpression> implements InsertHandler<LookupElement> {
   private final PsiExpression myContext;
 
-  public JavaLangClassMemberReference(@Nonnull PsiLiteralExpression literal, @jakarta.annotation.Nonnull PsiExpression context) {
+  public JavaLangClassMemberReference(@Nonnull PsiLiteralExpression literal, @Nonnull PsiExpression context) {
     super(literal);
     myContext = context;
   }
@@ -182,7 +182,7 @@ public class JavaLangClassMemberReference extends PsiReferenceBase<PsiLiteralExp
 
 
   @Nullable
-  public static PsiMethod matchMethod(@Nonnull PsiMethod[] methods, @jakarta.annotation.Nonnull List<? extends ReflectiveType> argumentTypes) {
+  public static PsiMethod matchMethod(@Nonnull PsiMethod[] methods, @Nonnull List<? extends ReflectiveType> argumentTypes) {
     int mismatchCount = Integer.MAX_VALUE;
     PsiMethod bestGuess = null;
     for (PsiMethod method : methods) {
@@ -221,7 +221,7 @@ public class JavaLangClassMemberReference extends PsiReferenceBase<PsiLiteralExp
   }
 
   @Nullable
-  public static List<PsiExpression> getReflectionMethodArguments(@jakarta.annotation.Nonnull PsiMethodCallExpression definitionCall, int argumentOffset) {
+  public static List<PsiExpression> getReflectionMethodArguments(@Nonnull PsiMethodCallExpression definitionCall, int argumentOffset) {
     final PsiExpression[] arguments = definitionCall.getArgumentList().getExpressions();
 
     if (arguments.length == argumentOffset + 1) {

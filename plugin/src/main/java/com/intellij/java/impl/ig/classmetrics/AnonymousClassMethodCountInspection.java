@@ -33,7 +33,7 @@ public class AnonymousClassMethodCountInspection
   private static final int DEFAULT_METHOD_COUNT_LIMIT = 1;
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "AnonymousInnerClassWithTooManyMethods";
   }
@@ -89,7 +89,7 @@ public class AnonymousClassMethodCountInspection
 
     @Override
     public void visitAnonymousClass(
-      @jakarta.annotation.Nonnull PsiAnonymousClass aClass) {
+      @Nonnull PsiAnonymousClass aClass) {
       if (aClass instanceof PsiEnumConstantInitializer) {
         return;
       }

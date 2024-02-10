@@ -150,7 +150,7 @@ public class GuavaLineMarkerProvider implements LineMarkerProvider {
     }));
   }
 
-  @jakarta.annotation.Nullable
+  @Nullable
   private static PsiClass findSubscribeAnnotation(@Nonnull PsiElement element) {
     return LanguageCachedValueUtil.getCachedValue(element, () ->
     {

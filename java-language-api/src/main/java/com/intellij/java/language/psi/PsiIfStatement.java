@@ -46,7 +46,7 @@ public interface PsiIfStatement extends PsiStatement {
    * @return the statement instance, or null if the statement has no <code>else</code>
    * part or is incomplete.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiStatement getElseBranch();
 
   /**
@@ -55,7 +55,7 @@ public interface PsiIfStatement extends PsiStatement {
    * @return the keyword instance, or null if the statement has no <code>else</code>
    * part.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiKeyword getElseElement();
 
   /**
@@ -76,14 +76,14 @@ public interface PsiIfStatement extends PsiStatement {
    * @throws IncorrectOperationException if the modification fails for some reason (for example,
    * the containing file is read-only).
    */
-  void setThenBranch(@jakarta.annotation.Nonnull PsiStatement statement) throws IncorrectOperationException;
+  void setThenBranch(@Nonnull PsiStatement statement) throws IncorrectOperationException;
 
   /**
    * Returns the opening parenthesis enclosing the statement condition.
    *
    * @return the opening parenthesis, or null if the statement is incomplete.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiJavaToken getLParenth();
 
   /**

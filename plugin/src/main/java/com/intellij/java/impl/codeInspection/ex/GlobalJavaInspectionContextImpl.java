@@ -155,7 +155,7 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
 	}
 
 	@SuppressWarnings({"UseOfSystemOutOrSystemErr"})
-	public static boolean isInspectionsEnabled(final boolean online, @jakarta.annotation.Nonnull Project project)
+	public static boolean isInspectionsEnabled(final boolean online, @Nonnull Project project)
 	{
 		final Module[] modules = ModuleManager.getInstance(project).getModules();
 		if(online)
@@ -280,7 +280,7 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
 			}
 
 			@Override
-			public boolean isSearchInModuleContent(@jakarta.annotation.Nonnull Module aModule)
+			public boolean isSearchInModuleContent(@Nonnull Module aModule)
 			{
 				return true;
 			}
@@ -553,9 +553,9 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
 	}
 
 	@Override
-	public void performPreRunActivities(@jakarta.annotation.Nonnull final List<Tools> globalTools,
+	public void performPreRunActivities(@Nonnull final List<Tools> globalTools,
 										@Nonnull final List<Tools> localTools,
-										@jakarta.annotation.Nonnull final GlobalInspectionContext context)
+										@Nonnull final GlobalInspectionContext context)
 	{
 		getEntryPointsManager(context.getRefManager()).resolveEntryPoints(context.getRefManager());
 		// UnusedDeclarationInspection should run first
@@ -572,7 +572,7 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
 
 
 	@Override
-	public void performPostRunActivities(@jakarta.annotation.Nonnull List<InspectionToolWrapper> needRepeatSearchRequest, @jakarta.annotation.Nonnull final GlobalInspectionContext context)
+	public void performPostRunActivities(@Nonnull List<InspectionToolWrapper> needRepeatSearchRequest, @Nonnull final GlobalInspectionContext context)
 	{
 		JobDescriptor progress = context.getStdJobDescriptors().FIND_EXTERNAL_USAGES;
 		progress.setTotalAmount(getRequestCount());

@@ -68,6 +68,6 @@ public abstract class GenericReference extends CachingReference implements Empty
   @Nullable
   public abstract PsiElement getContext();
 
-  @jakarta.annotation.Nullable
+  @Nullable
   public abstract PsiReference getContextReference();
 }

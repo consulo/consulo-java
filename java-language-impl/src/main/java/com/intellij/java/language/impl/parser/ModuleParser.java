@@ -37,12 +37,12 @@ public class ModuleParser {
 
   private final JavaParser myParser;
 
-  public ModuleParser(@jakarta.annotation.Nonnull JavaParser parser) {
+  public ModuleParser(@Nonnull JavaParser parser) {
     myParser = parser;
   }
 
   @Nullable
-  public PsiBuilder.Marker parse(@jakarta.annotation.Nonnull PsiBuilder builder) {
+  public PsiBuilder.Marker parse(@Nonnull PsiBuilder builder) {
     PsiBuilder.Marker module = builder.mark();
 
     PsiBuilder.Marker firstAnnotation = myParser.getDeclarationParser().parseAnnotations(builder);

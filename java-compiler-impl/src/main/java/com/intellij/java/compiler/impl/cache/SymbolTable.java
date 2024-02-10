@@ -39,7 +39,7 @@ public class SymbolTable {
   private static final int STRING_CACHE_SIZE = 1024;
 
   private final SLRUCache<Integer, String> myIndexStringCache = new SLRUCache<Integer, String>(STRING_CACHE_SIZE * 2, STRING_CACHE_SIZE) {
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String createValue(Integer key) {
       try {
         return myTrie.valueOf(key.intValue());

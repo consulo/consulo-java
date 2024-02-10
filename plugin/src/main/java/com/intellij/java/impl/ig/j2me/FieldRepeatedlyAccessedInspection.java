@@ -46,14 +46,14 @@ public class FieldRepeatedlyAccessedInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "field.repeatedly.accessed.in.method.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... arg) {
     final String fieldName = ((PsiNamedElement)arg[0]).getName();
     return InspectionGadgetsBundle.message(

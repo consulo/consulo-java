@@ -28,13 +28,13 @@ public class CheckingResultImpl implements CheckingResult
 	private final Result myResult;
 	private final String myDescription;
 
-	private CheckingResultImpl(@jakarta.annotation.Nonnull Result result, @jakarta.annotation.Nonnull String description)
+	private CheckingResultImpl(@Nonnull Result result, @Nonnull String description)
 	{
 		myResult = result;
 		myDescription = description;
 	}
 
-	public static CheckingResult error(@jakarta.annotation.Nonnull String description)
+	public static CheckingResult error(@Nonnull String description)
 	{
 		return new CheckingResultImpl(Result.ERROR, description);
 	}
@@ -47,7 +47,7 @@ public class CheckingResultImpl implements CheckingResult
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public String getFailureDescription()
 	{
 		return myDescription;

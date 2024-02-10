@@ -43,6 +43,6 @@ public interface PsiConditionalExpression extends PsiExpression {
    *
    * @return the false result expression, or null if the conditional expression is incomplete.
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   PsiExpression getElseExpression();
 }

@@ -42,7 +42,7 @@ public class PsiTypeTokenizer extends Tokenizer<PsiTypeElement>
 {
 	@Override
 	@RequiredReadAction
-	public void tokenize(@jakarta.annotation.Nonnull PsiTypeElement element, TokenConsumer consumer)
+	public void tokenize(@Nonnull PsiTypeElement element, TokenConsumer consumer)
 	{
 		final PsiType type = element.getType();
 		if(type instanceof PsiDisjunctionType)
@@ -89,8 +89,8 @@ public class PsiTypeTokenizer extends Tokenizer<PsiTypeElement>
 		}
 	}
 
-	@jakarta.annotation.Nonnull
-	private static TextRange getRangeToCheck(@jakarta.annotation.Nonnull String text, @Nonnull String name)
+	@Nonnull
+	private static TextRange getRangeToCheck(@Nonnull String text, @Nonnull String name)
 	{
 		final int i = text.indexOf(name);
 		return new TextRange(i, i + name.length());

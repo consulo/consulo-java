@@ -48,7 +48,7 @@ public class MisorderedAssertEqualsParametersInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message("misordered.assert.equals.parameters.problem.descriptor");
   }
@@ -61,7 +61,7 @@ public class MisorderedAssertEqualsParametersInspection extends BaseInspection {
   private static class FlipParametersFix extends InspectionGadgetsFix {
 
     @Override
-    @jakarta.annotation.Nonnull
+    @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message("misordered.assert.equals.parameters.flip.quickfix");
     }

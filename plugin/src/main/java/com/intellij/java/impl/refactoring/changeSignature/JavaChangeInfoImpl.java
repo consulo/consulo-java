@@ -77,7 +77,7 @@ public class JavaChangeInfoImpl implements JavaChangeInfo {
                     PsiMethod method,
                     String newName,
                     CanonicalTypes.Type newType,
-                    @jakarta.annotation.Nonnull ParameterInfoImpl[] newParms,
+                    @Nonnull ParameterInfoImpl[] newParms,
                     ThrownExceptionInfo[] newExceptions,
                     boolean generateDelegate,
                     Set<PsiMethod> propagateParametersMethods,
@@ -219,7 +219,7 @@ public class JavaChangeInfoImpl implements JavaChangeInfo {
     }
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public JavaParameterInfo[] getNewParameters() {
     return newParms;
   }
@@ -351,7 +351,7 @@ public class JavaChangeInfoImpl implements JavaChangeInfo {
     return oldParameterNames;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String[] getOldParameterTypes() {
     return oldParameterTypes;
   }

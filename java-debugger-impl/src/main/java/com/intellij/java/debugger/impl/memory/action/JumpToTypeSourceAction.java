@@ -51,7 +51,7 @@ public class JumpToTypeSourceAction extends ClassesActionBase
 		}
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	private PsiClass getPsiClass(AnActionEvent e)
 	{
 		final ReferenceType selectedClass = getSelectedClass(e);

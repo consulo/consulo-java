@@ -34,20 +34,20 @@ public class JNDIResourceInspection extends ResourceInspection {
   public boolean insideTryAllowed = false;
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getID() {
     return "JNDIResourceOpenedButNotSafelyClosed";
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "jndi.resource.opened.not.closed.display.name");
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiExpression expression = (PsiExpression)infos[0];
     final PsiType type = expression.getType();
@@ -102,7 +102,7 @@ public class JNDIResourceInspection extends ResourceInspection {
 
     @Override
     public void visitNewExpression(
-      @jakarta.annotation.Nonnull PsiNewExpression expression) {
+      @Nonnull PsiNewExpression expression) {
       super.visitNewExpression(expression);
       if (!isJNDIResource(expression)) {
         return;

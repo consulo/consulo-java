@@ -42,20 +42,20 @@ public class RedundantLambdaCodeBlockInspection extends BaseJavaBatchLocalInspec
   public static final Logger LOG = Logger.getInstance(RedundantLambdaCodeBlockInspection.class);
 
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getGroupDisplayName() {
     return GroupNames.LANGUAGE_LEVEL_SPECIFIC_GROUP_NAME;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public HighlightDisplayLevel getDefaultLevel() {
     return HighlightDisplayLevel.WARNING;
   }
 
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return "Statement lambda can be replaced with expression lambda";
@@ -66,13 +66,13 @@ public class RedundantLambdaCodeBlockInspection extends BaseJavaBatchLocalInspec
     return true;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getShortName() {
     return "CodeBlock2Expr";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
                                             boolean isOnTheFly,
@@ -141,14 +141,14 @@ public class RedundantLambdaCodeBlockInspection extends BaseJavaBatchLocalInspec
   }
 
   private static class ReplaceWithExprFix implements LocalQuickFix, HighPriorityAction {
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public String getFamilyName() {
       return "Replace with expression lambda";
     }
 
     @Override
-    public void applyFix(@jakarta.annotation.Nonnull Project project, @jakarta.annotation.Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
       final PsiElement element = descriptor.getPsiElement();
       if (element != null) {
         final PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(element, PsiLambdaExpression.class);

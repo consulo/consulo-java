@@ -37,7 +37,7 @@ public class ReadObjectAndWriteObjectPrivateInspection
     return "NonPrivateSerializationMethod";
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "readwriteobject.private.display.name");

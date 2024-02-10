@@ -30,7 +30,7 @@ public class ReplaceTypeInCastFix implements LocalQuickFix {
     return InspectionGadgetsBundle.message("cast.conflicts.with.instanceof.quickfix1", myExistingTypeText, myWantedTypeText);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getFamilyName() {
     return "Replace cast type";

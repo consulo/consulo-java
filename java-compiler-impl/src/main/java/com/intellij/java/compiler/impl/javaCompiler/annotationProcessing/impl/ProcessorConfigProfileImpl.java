@@ -85,7 +85,7 @@ public final class ProcessorConfigProfileImpl implements ProcessorConfigProfile 
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getProcessorPath() {
     return myProcessorPath;
   }
@@ -106,7 +106,7 @@ public final class ProcessorConfigProfileImpl implements ProcessorConfigProfile 
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getGeneratedSourcesDirectoryName(boolean forTests) {
     return forTests? myGeneratedTestsDirectoryName : myGeneratedProductionDirectoryName;
   }
@@ -132,7 +132,7 @@ public final class ProcessorConfigProfileImpl implements ProcessorConfigProfile 
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public Set<String> getModuleNames() {
     return myModuleNames;
   }
@@ -184,7 +184,7 @@ public final class ProcessorConfigProfileImpl implements ProcessorConfigProfile 
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public Map<String, String> getProcessorOptions() {
     return Collections.unmodifiableMap(myProcessorOptions);
   }
@@ -195,7 +195,7 @@ public final class ProcessorConfigProfileImpl implements ProcessorConfigProfile 
   }
 
   @Override
-  @jakarta.annotation.Nullable
+  @Nullable
   public String getOption(String key) {
     return myProcessorOptions.get(key);
   }

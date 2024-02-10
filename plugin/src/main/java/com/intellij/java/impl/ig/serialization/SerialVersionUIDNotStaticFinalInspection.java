@@ -47,7 +47,7 @@ public class SerialVersionUIDNotStaticFinalInspection extends BaseInspection {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "serialversionuid.private.static.final.long.problem.descriptor");

@@ -34,7 +34,7 @@ public class GoToInstruction extends BranchingInstruction
 		this(offset, role, false);
 	}
 
-	GoToInstruction(int offset, @jakarta.annotation.Nonnull Role role, boolean isReturn)
+	GoToInstruction(int offset, @Nonnull Role role, boolean isReturn)
 	{
 		super(offset, role);
 		this.isReturn = isReturn;
@@ -60,7 +60,7 @@ public class GoToInstruction extends BranchingInstruction
 	}
 
 	@Override
-	public void accept(@jakarta.annotation.Nonnull ControlFlowInstructionVisitor visitor, int offset, int nextOffset)
+	public void accept(@Nonnull ControlFlowInstructionVisitor visitor, int offset, int nextOffset)
 	{
 		visitor.visitGoToInstruction(this, offset, nextOffset);
 	}

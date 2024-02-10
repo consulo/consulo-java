@@ -326,7 +326,7 @@ public class DebuggerDataViewsConfigurable implements SearchableConfigurable
 	}
 
 	@Override
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public String getId()
 	{
 		return getHelpTopic();

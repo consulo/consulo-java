@@ -53,7 +53,7 @@ public abstract class BackendCompilerProcessBuilder
 	@RequiredReadAction
 	public abstract GeneralCommandLine buildCommandLine() throws IOException;
 
-	@jakarta.annotation.Nonnull
+	@Nonnull
 	public ProcessHandler createProcess(GeneralCommandLine commandLine) throws ExecutionException
 	{
 		return ProcessHandlerFactory.getInstance().createProcessHandler(commandLine);

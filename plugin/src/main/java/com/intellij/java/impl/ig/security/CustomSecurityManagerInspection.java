@@ -27,7 +27,7 @@ import jakarta.annotation.Nonnull;
 public class CustomSecurityManagerInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "custom.security.manager.display.name");
@@ -49,7 +49,7 @@ public class CustomSecurityManagerInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       if (!InheritanceUtil.isInheritor(aClass,
                                        "java.lang.SecurityManager")) {
         return;

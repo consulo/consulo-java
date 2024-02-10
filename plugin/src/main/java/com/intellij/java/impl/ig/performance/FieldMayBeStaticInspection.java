@@ -30,7 +30,7 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class FieldMayBeStaticInspection extends BaseInspection {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "field.may.be.static.display.name");

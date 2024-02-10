@@ -33,7 +33,7 @@ import java.util.Set;
 public class ExpectedExceptionNeverThrownInspection
   extends BaseInspection {
   @Nls
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(

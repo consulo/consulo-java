@@ -32,7 +32,7 @@ import jakarta.annotation.Nonnull;
 })
 public class IfToAssertionIntention extends Intention {
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected PsiElementPredicate getElementPredicate() {
     return new IfStatementPredicate();

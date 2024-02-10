@@ -44,7 +44,7 @@ public class SuperMethodReturnFix implements SyntheticIntentionAction {
   }
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getText() {
     String name = PsiFormatUtil.formatMethod(
             mySuperMethod,
@@ -57,7 +57,7 @@ public class SuperMethodReturnFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@jakarta.annotation.Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return
             mySuperMethod != null
             && mySuperMethod.isValid()

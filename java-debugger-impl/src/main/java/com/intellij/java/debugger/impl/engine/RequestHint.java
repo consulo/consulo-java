@@ -129,7 +129,7 @@ public class RequestHint
 				}
 
 				@Override
-				@jakarta.annotation.Nonnull
+				@Nonnull
 				public DebugProcess getDebugProcess()
 				{
 					return suspendContext.getDebugProcess();
@@ -196,7 +196,7 @@ public class RequestHint
 		return myDepth;
 	}
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	public MethodFilter getMethodFilter()
 	{
 		return myMethodFilter;

@@ -17,7 +17,7 @@ public class PatternValidatorState implements InspectionToolState<PatternValidat
 {
 	public boolean CHECK_NON_CONSTANT_VALUES = true;
 
-	@jakarta.annotation.Nullable
+	@Nullable
 	@Override
 	public UnnamedConfigurable createConfigurable()
 	{

@@ -30,7 +30,7 @@ import jakarta.annotation.Nullable;
 @ExtensionImpl
 public class JavaAnchorProvider implements SmartPointerAnchorProvider {
   @Override
-  public PsiElement getAnchor(@jakarta.annotation.Nonnull PsiElement element) {
+  public PsiElement getAnchor(@Nonnull PsiElement element) {
     if (!element.getLanguage().isKindOf(JavaLanguage.INSTANCE) || !element.isPhysical()) {
       return null;
     }

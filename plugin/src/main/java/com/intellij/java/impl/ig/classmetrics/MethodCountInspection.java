@@ -19,6 +19,7 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.ui.ex.awt.UIUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
@@ -69,7 +70,7 @@ public class MethodCountInspection extends BaseInspection {
     constraints.insets.right = 0;
     panel.add(valueField, constraints);
 
-    final consulo.deadCodeNotWorking.impl.CheckBox gettersSettersCheckBox = new consulo.deadCodeNotWorking.impl.CheckBox(
+    final CheckBox gettersSettersCheckBox = new CheckBox(
       InspectionGadgetsBundle.message(
         "method.count.ignore.getters.setters.option"),
       this, "ignoreGettersAndSetters");

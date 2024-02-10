@@ -37,7 +37,7 @@ public class AssignmentToStaticFieldFromInstanceMethodInspection
       "assignment.to.static.field.from.instance.method.display.name");
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
       "assignment.to.static.field.from.instance.method.problem.descriptor");
@@ -52,7 +52,7 @@ public class AssignmentToStaticFieldFromInstanceMethodInspection
 
     @Override
     public void visitAssignmentExpression(
-      @jakarta.annotation.Nonnull PsiAssignmentExpression expression) {
+      @Nonnull PsiAssignmentExpression expression) {
       if (!WellFormednessUtils.isWellFormed(expression)) {
         return;
       }
@@ -77,7 +77,7 @@ public class AssignmentToStaticFieldFromInstanceMethodInspection
 
     @Override
     public void visitPostfixExpression(
-      @jakarta.annotation.Nonnull PsiPostfixExpression expression) {
+      @Nonnull PsiPostfixExpression expression) {
       final IElementType tokenType = expression.getOperationTokenType();
       if (!tokenType.equals(JavaTokenType.PLUSPLUS) &&
           !tokenType.equals(JavaTokenType.MINUSMINUS)) {

@@ -53,7 +53,7 @@ public class TreeJavaClassChooserDialog extends AbstractTreeClassChooserDialog<P
   }
 
   public TreeJavaClassChooserDialog(String title,
-                                    @jakarta.annotation.Nonnull Project project,
+                                    @Nonnull Project project,
                                     GlobalSearchScope scope,
                                     final ClassFilter classFilter, @Nullable PsiClass initialClass) {
     super(title, project, scope, PsiClass.class, createFilter(classFilter), initialClass);
@@ -61,7 +61,7 @@ public class TreeJavaClassChooserDialog extends AbstractTreeClassChooserDialog<P
 
 
   public TreeJavaClassChooserDialog(String title,
-                                    @jakarta.annotation.Nonnull Project project,
+                                    @Nonnull Project project,
                                     GlobalSearchScope scope,
                                     @Nullable ClassFilter classFilter,
                                     PsiClass baseClass,
@@ -116,7 +116,7 @@ public class TreeJavaClassChooserDialog extends AbstractTreeClassChooserDialog<P
     return ContainerUtil.newArrayList(classes);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   @Override
   protected TreeClassInheritorsProvider<PsiClass> getInheritorsProvider(@Nonnull PsiClass baseClass) {
     return new JavaInheritorsProvider(getProject(), baseClass, (GlobalSearchScope) getScope());
@@ -135,7 +135,7 @@ public class TreeJavaClassChooserDialog extends AbstractTreeClassChooserDialog<P
       myProject = project;
     }
 
-    @jakarta.annotation.Nonnull
+    @Nonnull
     @Override
     public Query<PsiClass> searchForInheritors(PsiClass baseClass, ProjectAwareSearchScope searchScope, boolean checkDeep) {
       return ClassInheritorsSearch.search(baseClass, searchScope, checkDeep);

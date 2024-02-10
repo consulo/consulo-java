@@ -22,23 +22,23 @@ import jakarta.annotation.Nonnull;
  * @author nik
  */
 public class ConfigFileInfo {
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private final ConfigFileMetaData myMetaData;
-  @jakarta.annotation.Nonnull
+  @Nonnull
   private final String myUrl;
 
 
-  public ConfigFileInfo(@jakarta.annotation.Nonnull final ConfigFileMetaData metaData, @Nonnull final String url) {
+  public ConfigFileInfo(@Nonnull final ConfigFileMetaData metaData, @Nonnull final String url) {
     myMetaData = metaData;
     myUrl = url;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public ConfigFileMetaData getMetaData() {
     return myMetaData;
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getUrl() {
     return myUrl;
   }

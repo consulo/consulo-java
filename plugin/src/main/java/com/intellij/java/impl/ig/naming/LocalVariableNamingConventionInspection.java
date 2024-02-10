@@ -17,6 +17,7 @@ package com.intellij.java.impl.ig.naming;
 
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -161,10 +162,10 @@ public class LocalVariableNamingConventionInspection
   @Override
   public Collection<? extends JComponent> createExtraOptions() {
     return Arrays.asList(
-      new consulo.deadCodeNotWorking.impl.CheckBox(InspectionGadgetsBundle.message(
+      new CheckBox(InspectionGadgetsBundle.message(
         "local.variable.naming.convention.ignore.option"),
                    this, "m_ignoreForLoopParameters"),
-      new consulo.deadCodeNotWorking.impl.CheckBox(InspectionGadgetsBundle.message(
+      new CheckBox(InspectionGadgetsBundle.message(
         "local.variable.naming.convention.ignore.catch.option"),
                    this, "m_ignoreCatchParameters"));
   }

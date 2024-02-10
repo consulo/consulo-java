@@ -47,12 +47,12 @@ public abstract class JavaRefactoringFactory {
   /**
    * Creates move destination for a specified package that preserves source folders for moved items.
    */
-  public abstract MoveDestination createSourceFolderPreservingMoveDestination(@jakarta.annotation.Nonnull String targetPackageQualifiedName);
+  public abstract MoveDestination createSourceFolderPreservingMoveDestination(@Nonnull String targetPackageQualifiedName);
 
   /**
    * Creates move destination for a specified package that moves all items to a specifed source folder
    */
-  public abstract MoveDestination createSourceRootMoveDestination(@Nonnull String targetPackageQualifiedName, @jakarta.annotation.Nonnull VirtualFile sourceRoot);
+  public abstract MoveDestination createSourceRootMoveDestination(@Nonnull String targetPackageQualifiedName, @Nonnull VirtualFile sourceRoot);
 
   public abstract MoveClassesOrPackagesRefactoring createMoveClassesOrPackages(PsiElement[] elements, MoveDestination moveDestination);
 

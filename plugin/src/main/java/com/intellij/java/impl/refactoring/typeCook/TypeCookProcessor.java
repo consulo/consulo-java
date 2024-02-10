@@ -52,7 +52,7 @@ public class TypeCookProcessor extends BaseRefactoringProcessor {
     return new TypeCookViewDescriptor(myElements);
   }
 
-  @jakarta.annotation.Nonnull
+  @Nonnull
   protected UsageInfo[] findUsages() {
     final SystemBuilder systemBuilder = new SystemBuilder(myProject, mySettings);
 

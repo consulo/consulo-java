@@ -50,7 +50,7 @@ public class FinalMethodInspection extends BaseInspection {
 
   private static class FinalMethodVisitor extends BaseInspectionVisitor {
     @Override
-    public void visitMethod(@jakarta.annotation.Nonnull PsiMethod method) {
+    public void visitMethod(@Nonnull PsiMethod method) {
       //no call to super, so we don't drill into anonymous classes
       if (!method.hasModifierProperty(PsiModifier.FINAL)) {
         return;

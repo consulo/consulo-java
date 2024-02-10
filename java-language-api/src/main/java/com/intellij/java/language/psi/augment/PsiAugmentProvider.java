@@ -108,7 +108,7 @@ public abstract class PsiAugmentProvider {
    * Extends {@link PsiTypeElement#getType()} so that a type could be retrieved from external place
    * (e.g. inferred from a variable initializer).
    */
-  @jakarta.annotation.Nullable
+  @Nullable
   protected PsiType inferType(@Nonnull PsiTypeElement typeElement) {
     return null;
   }
@@ -144,7 +144,7 @@ public abstract class PsiAugmentProvider {
 
   @Nonnull
   public static <Psi extends PsiElement> List<Psi> collectAugments(@Nonnull PsiElement element, @Nonnull Class<? extends Psi> type,
-                                                                   @jakarta.annotation.Nullable String nameHint) {
+                                                                   @Nullable String nameHint) {
     List<Psi> result = new SmartList<>();
 
     forEach(element.getProject(), provider -> {

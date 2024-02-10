@@ -29,7 +29,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 public class CheckedExceptionClassInspection extends BaseInspection {
 
   @Override
-  @jakarta.annotation.Nonnull
+  @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
       "checked.exception.class.display.name");
@@ -50,7 +50,7 @@ public class CheckedExceptionClassInspection extends BaseInspection {
   private static class CheckedExceptionClassVisitor
     extends BaseInspectionVisitor {
     @Override
-    public void visitClass(@jakarta.annotation.Nonnull PsiClass aClass) {
+    public void visitClass(@Nonnull PsiClass aClass) {
       if (!InheritanceUtil.isInheritor(aClass,
                                        JavaClassNames.JAVA_LANG_THROWABLE)) {
         return;

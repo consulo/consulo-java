@@ -34,7 +34,7 @@ public interface CallInliner
 	 * @return true if inlining is successful. In this case subsequent inliners are skipped and default processing is omitted.
 	 * If false is returned, inliner must not emit any instructions via builder.
 	 */
-	boolean tryInlineCall(@jakarta.annotation.Nonnull CFGBuilder builder, @Nonnull PsiMethodCallExpression call);
+	boolean tryInlineCall(@Nonnull CFGBuilder builder, @Nonnull PsiMethodCallExpression call);
 
 	/**
 	 * @param expression expression to test
