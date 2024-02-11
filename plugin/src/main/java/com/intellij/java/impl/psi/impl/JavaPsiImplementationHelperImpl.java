@@ -15,35 +15,34 @@
  */
 package com.intellij.java.impl.psi.impl;
 
-import com.intellij.java.language.impl.codeInsight.template.JavaTemplateUtil;
 import com.intellij.java.impl.psi.impl.source.codeStyle.ImportHelper;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.JavaClassFileType;
+import com.intellij.java.language.impl.codeInsight.template.JavaTemplateUtil;
 import com.intellij.java.language.impl.psi.impl.JavaPsiImplementationHelper;
 import com.intellij.java.language.impl.psi.impl.compiled.ClsClassImpl;
 import com.intellij.java.language.impl.psi.impl.compiled.ClsElementImpl;
 import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ServiceImpl;
 import consulo.component.ProcessCanceledException;
 import consulo.content.base.BinariesOrderRootType;
 import consulo.content.base.SourcesOrderRootType;
 import consulo.fileTemplate.FileTemplate;
 import consulo.fileTemplate.FileTemplateManager;
-import consulo.ide.ServiceManager;
-import consulo.ide.impl.idea.openapi.module.ModuleUtil;
 import consulo.ide.impl.idea.openapi.roots.impl.LibraryScopeCache;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
-import consulo.ide.impl.language.codeStyle.arrangement.MemberOrderService;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.ast.ASTNode;
 import consulo.language.codeStyle.CodeStyleSettings;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.codeStyle.arrangement.MemberOrderService;
 import consulo.language.psi.*;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.language.util.ModuleUtilCore;
 import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.module.content.DirectoryIndex;
@@ -54,11 +53,12 @@ import consulo.module.content.layer.orderEntry.OrderEntryWithTracking;
 import consulo.project.DumbService;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -72,10 +72,12 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
   private static final Logger LOG = Logger.getInstance(JavaPsiImplementationHelperImpl.class);
 
   private final Project myProject;
+  private final MemberOrderService myMemberOrderService;
 
   @Inject
-  public JavaPsiImplementationHelperImpl(Project project) {
+  public JavaPsiImplementationHelperImpl(Project project, MemberOrderService memberOrderService) {
     myProject = project;
+    myMemberOrderService = memberOrderService;
   }
 
   @Override
@@ -101,7 +103,7 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
     }
 
     final Set<OrderEntry> orderEntries = Set.copyOf(idx.getOrderEntriesForFile(vFile));
-    GlobalSearchScope librariesScope = LibraryScopeCache.getInstance(myProject).getLibrariesOnlyScope();
+    GlobalSearchScope librariesScope =  LibraryScopeCache.getInstance(myProject).getLibrariesOnlyScope();
     for (PsiClass original : JavaPsiFacade.getInstance(myProject).findClasses(fqn, librariesScope)) {
       PsiFile psiFile = original.getContainingFile();
       if (psiFile != null) {
@@ -133,7 +135,7 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
     String packageName = clsFile.getPackageName();
     String relativePath = packageName.isEmpty() ? sourceFileName : packageName.replace('.', '/') + '/' + sourceFileName;
 
-    ProjectFileIndex index = ProjectFileIndex.SERVICE.getInstance(clsFile.getProject());
+    ProjectFileIndex index = ProjectFileIndex.getInstance(clsFile.getProject());
     for (OrderEntry orderEntry : index.getOrderEntriesForFile(clsFile.getContainingFile().getVirtualFile())) {
       if (!(orderEntry instanceof OrderEntryWithTracking)) {
         continue;
@@ -159,13 +161,13 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
     final VirtualFile sourceRoot = index.getSourceRootForFile(virtualFile);
     final VirtualFile folder = virtualFile.getParent();
     if (sourceRoot != null && folder != null) {
-      String relativePath = VfsUtilCore.getRelativePath(folder, sourceRoot, '/');
+      String relativePath = VirtualFileUtil.getRelativePath(folder, sourceRoot, '/');
       if (relativePath == null) {
         throw new AssertionError("Null relative path: folder=" + folder + "; root=" + sourceRoot);
       }
       List<OrderEntry> orderEntries = index.getOrderEntriesForFile(virtualFile);
       if (orderEntries.isEmpty()) {
-        LOG.error("Inconsistent: " + DirectoryIndex.getInstance(myProject).getInfoForDirectory(folder).toString());
+        LOG.error("Inconsistent: " + DirectoryIndex.getInstance(myProject).getInfoForFile(folder).toString());
       }
       final VirtualFile[] files = orderEntries.get(0).getFiles(BinariesOrderRootType.getInstance());
       for (VirtualFile rootFile : files) {
@@ -177,11 +179,11 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
           }
         }
       }
-      final Module moduleForFile = ModuleUtil.findModuleForFile(virtualFile, myProject);
+      final Module moduleForFile = ModuleUtilCore.findModuleForFile(virtualFile, myProject);
       if (moduleForFile == null) {
         return null;
       }
-      final JavaModuleExtension extension = ModuleUtil.getExtension(moduleForFile, JavaModuleExtension.class);
+      final JavaModuleExtension extension = ModuleUtilCore.getExtension(moduleForFile, JavaModuleExtension.class);
       return extension == null ? null : extension.getLanguageLevel();
     }
     return null;
@@ -210,10 +212,10 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
 
   @Nullable
   @Override
+  @RequiredReadAction
   public PsiElement getDefaultMemberAnchor(@Nonnull PsiClass aClass, @Nonnull PsiMember member) {
     CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(aClass.getProject());
-    MemberOrderService service = ServiceManager.getService(MemberOrderService.class);
-    PsiElement anchor = service.getAnchor(member, settings.getCommonSettings(JavaLanguage.INSTANCE), aClass);
+    PsiElement anchor = myMemberOrderService.getAnchor(member, settings.getCommonSettings(JavaLanguage.INSTANCE), aClass);
 
     PsiElement newAnchor = skipWhitespaces(aClass, anchor);
     if (newAnchor != null) {

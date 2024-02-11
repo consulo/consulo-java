@@ -17,6 +17,7 @@ package com.intellij.java.language.impl.psi.impl;
 
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
 import consulo.ide.ServiceManager;
@@ -53,6 +54,7 @@ public abstract class JavaPsiImplementationHelper {
   public abstract ASTNode getDefaultImportAnchor(PsiImportList list, PsiImportStatementBase statement);
 
   @Nullable
+  @RequiredReadAction
   public abstract PsiElement getDefaultMemberAnchor(@Nonnull PsiClass psiClass, @Nonnull PsiMember firstPsi);
 
   public abstract void setupCatchBlock(String exceptionName, PsiElement context, PsiCatchSection element);
