@@ -26,12 +26,12 @@ import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.util.collection.ArrayFactory;
-import consulo.util.lang.Comparing;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * Represents a class type.
@@ -92,44 +92,33 @@ public abstract class PsiClassType extends PsiType implements JvmReferenceType {
   }
 
   public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
+    if (this == obj) return true;
     if (!(obj instanceof PsiClassType)) {
-      return obj instanceof PsiCapturedWildcardType && ((PsiCapturedWildcardType)obj).getLowerBound()
-                                                                                     .equalsToText(JavaClassNames.JAVA_LANG_OBJECT) && equalsToText(
-        JavaClassNames
-          .JAVA_LANG_OBJECT);
+      return obj instanceof PsiCapturedWildcardType &&
+        ((PsiCapturedWildcardType)obj).getLowerBound().equalsToText(JavaClassNames.JAVA_LANG_OBJECT) &&
+        equalsToText(JavaClassNames.JAVA_LANG_OBJECT);
     }
     PsiClassType otherClassType = (PsiClassType)obj;
 
     String className = getClassName();
     String otherClassName = otherClassType.getClassName();
-    if (!Comparing.equal(className, otherClassName)) {
-      return false;
-    }
+    if (!Objects.equals(className, otherClassName)) return false;
 
-    if (getParameterCount() != otherClassType.getParameterCount()) {
-      return false;
-    }
+    if (getParameterCount() != otherClassType.getParameterCount()) return false;
 
     final ClassResolveResult result = resolveGenerics();
     final ClassResolveResult otherResult = otherClassType.resolveGenerics();
-    if (result == otherResult) {
-      return true;
-    }
+    if (result == otherResult) return true;
 
     final PsiClass aClass = result.getElement();
     final PsiClass otherClass = otherResult.getElement();
     if (aClass == null || otherClass == null) {
       return aClass == otherClass;
     }
-    return aClass.getManager().areElementsEquivalent(aClass, otherClass) && (PsiUtil.isRawSubstitutor(aClass,
-                                                                                                      result.getSubstitutor()) || PsiUtil.equalOnEquivalentClasses(
-      this,
-      aClass,
-      otherClassType,
-      otherClass));
+    return aClass.getManager().areElementsEquivalent(aClass, otherClass) && PsiUtil.equalOnEquivalentClasses(this,
+                                                                                                             aClass,
+                                                                                                             otherClassType,
+                                                                                                             otherClass);
   }
 
   /**
