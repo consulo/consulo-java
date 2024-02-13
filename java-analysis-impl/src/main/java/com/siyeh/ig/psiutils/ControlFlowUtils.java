@@ -15,16 +15,16 @@
  */
 package com.siyeh.ig.psiutils;
 
+import com.intellij.java.language.impl.psi.util.JavaPsiPatternUtil;
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.util.PsiTreeUtil;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NonNls;
 
 public class ControlFlowUtils {
 
@@ -36,34 +36,41 @@ public class ControlFlowUtils {
     if (!(parent instanceof PsiIfStatement)) {
       return false;
     }
-    final PsiIfStatement parentStatement = (PsiIfStatement) parent;
+    final PsiIfStatement parentStatement = (PsiIfStatement)parent;
     final PsiStatement elseBranch = parentStatement.getElseBranch();
     return ifStatement.equals(elseBranch);
   }
 
   public static boolean statementMayCompleteNormally(@Nullable PsiStatement statement) {
+    return statementMayCompleteNormally(statement, null);
+  }
+
+  private static boolean statementMayCompleteNormally(@Nullable PsiStatement statement, @Nullable PsiMethod psiMethod) {
     if (statement == null) {
       return true;
     }
-    if (statement instanceof PsiBreakStatement || statement instanceof PsiContinueStatement ||
-        statement instanceof PsiReturnStatement || statement instanceof PsiThrowStatement) {
+    if (statement instanceof PsiBreakStatement || statement instanceof PsiContinueStatement || statement instanceof PsiYieldStatement ||
+      statement instanceof PsiReturnStatement || statement instanceof PsiThrowStatement) {
       return false;
-    } else if (statement instanceof PsiExpressionListStatement || statement instanceof PsiEmptyStatement ||
-        statement instanceof PsiAssertStatement || statement instanceof PsiDeclarationStatement ||
-        statement instanceof PsiSwitchLabelStatement || statement instanceof PsiForeachStatement) {
+    }
+    else if (statement instanceof PsiExpressionListStatement || statement instanceof PsiEmptyStatement ||
+      statement instanceof PsiAssertStatement || statement instanceof PsiDeclarationStatement ||
+      statement instanceof PsiSwitchLabelStatement || statement instanceof PsiForeachStatementBase) {
       return true;
-    } else if (statement instanceof PsiExpressionStatement) {
-      final PsiExpressionStatement expressionStatement = (PsiExpressionStatement) statement;
+    }
+    else if (statement instanceof final PsiExpressionStatement expressionStatement) {
       final PsiExpression expression = expressionStatement.getExpression();
-      if (!(expression instanceof PsiMethodCallExpression)) {
+      if (!(expression instanceof final PsiMethodCallExpression methodCallExpression)) {
         return true;
       }
-      final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) expression;
       final PsiMethod method = methodCallExpression.resolveMethod();
       if (method == null) {
         return true;
       }
-      @NonNls final String methodName = method.getName();
+      if (method.equals(psiMethod)) {
+        return false;
+      }
+      final String methodName = method.getName();
       if (!methodName.equals("exit")) {
         return true;
       }
@@ -73,39 +80,59 @@ public class ControlFlowUtils {
       }
       final String className = aClass.getQualifiedName();
       return !"java.lang.System".equals(className);
-    } else if (statement instanceof PsiForStatement) {
-      return forStatementMayCompleteNormally((PsiForStatement) statement);
-    } else if (statement instanceof PsiWhileStatement) {
-      return whileStatementMayCompleteNormally((PsiWhileStatement) statement);
-    } else if (statement instanceof PsiDoWhileStatement) {
-      return doWhileStatementMayCompleteNormally((PsiDoWhileStatement) statement);
-    } else if (statement instanceof PsiSynchronizedStatement) {
-      final PsiCodeBlock body = ((PsiSynchronizedStatement) statement).getBody();
-      return codeBlockMayCompleteNormally(body);
-    } else if (statement instanceof PsiBlockStatement) {
-      final PsiCodeBlock codeBlock = ((PsiBlockStatement) statement).getCodeBlock();
-      return codeBlockMayCompleteNormally(codeBlock);
-    } else if (statement instanceof PsiLabeledStatement) {
-      return labeledStatementMayCompleteNormally((PsiLabeledStatement) statement);
-    } else if (statement instanceof PsiIfStatement) {
-      return ifStatementMayCompleteNormally((PsiIfStatement) statement);
-    } else if (statement instanceof PsiTryStatement) {
-      return tryStatementMayCompleteNormally((PsiTryStatement) statement);
-    } else if (statement instanceof PsiSwitchStatement) {
-      return switchStatementMayCompleteNormally((PsiSwitchStatement) statement);
-    } else if (statement instanceof PsiTemplateStatement || statement instanceof PsiClassLevelDeclarationStatement) {
+    }
+    else if (statement instanceof PsiForStatement forStatement) {
+      return forStatementMayCompleteNormally(forStatement);
+    }
+    else if (statement instanceof PsiWhileStatement whileStatement) {
+      return whileStatementMayCompleteNormally(whileStatement);
+    }
+    else if (statement instanceof PsiDoWhileStatement doWhileStatement) {
+      return doWhileStatementMayCompleteNormally(doWhileStatement, psiMethod);
+    }
+    else if (statement instanceof PsiSynchronizedStatement synchronizedStatement) {
+      return codeBlockMayCompleteNormally(synchronizedStatement.getBody(), psiMethod);
+    }
+    else if (statement instanceof PsiBlockStatement block) {
+      return codeBlockMayCompleteNormally(block.getCodeBlock(), psiMethod);
+    }
+    else if (statement instanceof PsiLabeledStatement labeled) {
+      return labeledStatementMayCompleteNormally(labeled, psiMethod);
+    }
+    else if (statement instanceof PsiIfStatement ifStatement) {
+      return ifStatementMayCompleteNormally(ifStatement, psiMethod);
+    }
+    else if (statement instanceof PsiTryStatement tryStatement) {
+      return tryStatementMayCompleteNormally(tryStatement, psiMethod);
+    }
+    else if (statement instanceof PsiSwitchStatement switchStatement) {
+      return switchStatementMayCompleteNormally(switchStatement, psiMethod);
+    }
+    else if (statement instanceof PsiSwitchLabeledRuleStatement rule) {
+      PsiStatement body = rule.getBody();
+      return body != null && statementMayCompleteNormally(body, psiMethod);
+    }
+    else if (statement instanceof PsiTemplateStatement || statement instanceof PsiClassLevelDeclarationStatement) {
       return true;
-    } else {
+    }
+    else {
       assert false : "unknown statement type: " + statement.getClass();
       return true;
     }
   }
 
-  private static boolean doWhileStatementMayCompleteNormally(@Nonnull PsiDoWhileStatement loopStatement) {
+  private static boolean doWhileStatementMayCompleteNormally(@Nonnull PsiDoWhileStatement loopStatement, @Nullable PsiMethod method) {
     final PsiExpression condition = loopStatement.getCondition();
     final Object value = ExpressionUtils.computeConstantExpression(condition);
     final PsiStatement body = loopStatement.getBody();
-    return statementMayCompleteNormally(body) && value != Boolean.TRUE || statementIsBreakTarget(loopStatement) || statementContainsContinueToAncestor(loopStatement);
+    return statementMayCompleteNormally(body, method) && value != Boolean.TRUE
+      || statementContainsBreakToStatementOrAncestor(loopStatement) || statementContainsContinueToAncestor(loopStatement);
+  }
+
+  private static boolean statementContainsBreakToStatementOrAncestor(@Nonnull PsiStatement statement) {
+    final BreakFinder breakFinder = new BreakFinder(statement, true);
+    statement.accept(breakFinder);
+    return breakFinder.breakFound();
   }
 
   private static boolean whileStatementMayCompleteNormally(@Nonnull PsiWhileStatement loopStatement) {
@@ -129,8 +156,16 @@ public class ControlFlowUtils {
     return Boolean.TRUE != value;
   }
 
-  private static boolean switchStatementMayCompleteNormally(@Nonnull PsiSwitchStatement switchStatement) {
+  private static boolean switchStatementMayCompleteNormally(@Nonnull PsiSwitchStatement switchStatement, @Nullable PsiMethod method) {
     if (statementIsBreakTarget(switchStatement)) {
+      return true;
+    }
+    final PsiExpression selectorExpression = switchStatement.getExpression();
+    if (selectorExpression == null) {
+      return true;
+    }
+    final PsiType selectorType = selectorExpression.getType();
+    if (selectorType == null) {
       return true;
     }
     final PsiCodeBlock body = switchStatement.getBody();
@@ -142,52 +177,67 @@ public class ControlFlowUtils {
       return true;
     }
     int numCases = 0;
-    boolean hasDefaultCase = false;
+    boolean hasDefaultCase = false, hasUnconditionalPattern = false;
     for (PsiStatement statement : statements) {
-      if (statement instanceof PsiSwitchLabelStatement) {
-        numCases++;
-        final PsiSwitchLabelStatement switchLabelStatement = (PsiSwitchLabelStatement) statement;
+      if (statement instanceof PsiSwitchLabelStatementBase switchLabelStatement) {
+        if (statement instanceof PsiSwitchLabelStatement) {
+          numCases++;
+        }
+        if (hasDefaultCase || hasUnconditionalPattern) {
+          continue;
+        }
         if (switchLabelStatement.isDefaultCase()) {
           hasDefaultCase = true;
+          continue;
+        }
+        // this information doesn't exist in spec draft (14.22) for pattern in switch as expected
+        // but for now javac considers the switch statement containing at least either case default label element or an unconditional pattern "incomplete normally"
+        PsiCaseLabelElementList labelElementList = switchLabelStatement.getCaseLabelElementList();
+        if (labelElementList == null) {
+          continue;
+        }
+        for (PsiCaseLabelElement labelElement : labelElementList.getElements()) {
+          if (labelElement instanceof PsiDefaultCaseLabelElement) {
+            hasDefaultCase = true;
+          }
+          else if (labelElement instanceof PsiPattern) {
+            hasUnconditionalPattern = JavaPsiPatternUtil.isUnconditionalForType(labelElement, selectorType);
+          }
         }
       }
-      if (statement instanceof PsiBreakStatement) {
-        final PsiBreakStatement breakStatement = (PsiBreakStatement) statement;
-        if (breakStatement.getLabelIdentifier() == null) {
-          return true;
-        }
+      else if (statement instanceof final PsiBreakStatement breakStatement && breakStatement.getLabelIdentifier() == null) {
+        return true;
       }
     }
+    // todo actually there is no information about an impact of enum constants on switch statements being complete normally in spec (Unreachable statements)
+    // todo comparing to javac that produces some false-negative highlighting in enum switch statements containing all possible constants
     final boolean isEnum = isEnumSwitch(switchStatement);
-    if (!hasDefaultCase && !isEnum) {
+    if (!hasDefaultCase && !hasUnconditionalPattern && !isEnum) {
       return true;
     }
-    if (!hasDefaultCase) {
-      final PsiExpression expression = switchStatement.getExpression();
-      if (expression == null) {
-        return true;
-      }
-      final PsiClassType type = (PsiClassType) expression.getType();
-      if (type == null) {
-        return true;
-      }
-      final PsiClass aClass = type.resolve();
+    if (!hasDefaultCase && !hasUnconditionalPattern) {
+      final PsiClass aClass = ((PsiClassType)selectorType).resolve();
       if (aClass == null) {
         return true;
       }
-      final PsiField[] fields = aClass.getFields();
-      int numEnums = 0;
-      for (final PsiField field : fields) {
-        final PsiType fieldType = field.getType();
-        if (fieldType.equals(type)) {
-          numEnums++;
-        }
-      }
-      if (numEnums != numCases) {
+      if (!hasChildrenOfTypeCount(aClass, numCases, PsiEnumConstant.class)) {
         return true;
       }
     }
-    return statementMayCompleteNormally(statements[statements.length - 1]);
+    // todo replace the code and comments below with the method that helps to understand whether
+    // todo we need to check every statement or only the last statement in the code block
+    // 14.22. Unreachable Statements
+    // We need to check every rule's body not just the last one if the switch block includes the switch rules
+    boolean isLabeledRuleSwitch = statements[0] instanceof PsiSwitchLabeledRuleStatement;
+    if (isLabeledRuleSwitch) {
+      for (PsiStatement statement : statements) {
+        if (statementMayCompleteNormally(statement, method)) {
+          return true;
+        }
+      }
+      return false;
+    }
+    return statementMayCompleteNormally(statements[statements.length - 1], method);
   }
 
   private static boolean isEnumSwitch(PsiSwitchStatement statement) {
@@ -202,40 +252,40 @@ public class ControlFlowUtils {
     if (!(type instanceof PsiClassType)) {
       return false;
     }
-    final PsiClass aClass = ((PsiClassType) type).resolve();
+    final PsiClass aClass = ((PsiClassType)type).resolve();
     return aClass != null && aClass.isEnum();
   }
 
-  private static boolean tryStatementMayCompleteNormally(@Nonnull PsiTryStatement tryStatement) {
+  private static boolean tryStatementMayCompleteNormally(@Nonnull PsiTryStatement tryStatement, @Nullable PsiMethod method) {
     final PsiCodeBlock finallyBlock = tryStatement.getFinallyBlock();
     if (finallyBlock != null) {
-      if (!codeBlockMayCompleteNormally(finallyBlock)) {
+      if (!codeBlockMayCompleteNormally(finallyBlock, method)) {
         return false;
       }
     }
     final PsiCodeBlock tryBlock = tryStatement.getTryBlock();
-    if (codeBlockMayCompleteNormally(tryBlock)) {
+    if (codeBlockMayCompleteNormally(tryBlock, method)) {
       return true;
     }
     final PsiCodeBlock[] catchBlocks = tryStatement.getCatchBlocks();
     for (final PsiCodeBlock catchBlock : catchBlocks) {
-      if (codeBlockMayCompleteNormally(catchBlock)) {
+      if (codeBlockMayCompleteNormally(catchBlock, method)) {
         return true;
       }
     }
     return false;
   }
 
-  private static boolean ifStatementMayCompleteNormally(@Nonnull PsiIfStatement ifStatement) {
+  private static boolean ifStatementMayCompleteNormally(@Nonnull PsiIfStatement ifStatement, @Nullable PsiMethod method) {
     final PsiExpression condition = ifStatement.getCondition();
     final Object value = ExpressionUtils.computeConstantExpression(condition);
     final PsiStatement thenBranch = ifStatement.getThenBranch();
     if (value == Boolean.TRUE) {
-      return statementMayCompleteNormally(thenBranch);
+      return statementMayCompleteNormally(thenBranch, method);
     }
     final PsiStatement elseBranch = ifStatement.getElseBranch();
     if (value == Boolean.FALSE) {
-      return statementMayCompleteNormally(elseBranch);
+      return statementMayCompleteNormally(elseBranch, method);
     }
     // process branch with fewer statements first
     PsiStatement branch1;
@@ -243,28 +293,33 @@ public class ControlFlowUtils {
     if ((thenBranch == null ? 0 : thenBranch.getTextLength()) < (elseBranch == null ? 0 : elseBranch.getTextLength())) {
       branch1 = thenBranch;
       branch2 = elseBranch;
-    } else {
+    }
+    else {
       branch2 = thenBranch;
       branch1 = elseBranch;
     }
-    return statementMayCompleteNormally(branch1) || statementMayCompleteNormally(branch2);
+    return statementMayCompleteNormally(branch1, method) || statementMayCompleteNormally(branch2, method);
   }
 
-  private static boolean labeledStatementMayCompleteNormally(@Nonnull PsiLabeledStatement labeledStatement) {
+  private static boolean labeledStatementMayCompleteNormally(@Nonnull PsiLabeledStatement labeledStatement, @Nullable PsiMethod method) {
     final PsiStatement statement = labeledStatement.getStatement();
     if (statement == null) {
       return false;
     }
-    return statementMayCompleteNormally(statement) || statementIsBreakTarget(statement);
+    return statementMayCompleteNormally(statement, method) || statementContainsBreakToStatementOrAncestor(statement);
   }
 
   public static boolean codeBlockMayCompleteNormally(@Nullable PsiCodeBlock block) {
+    return codeBlockMayCompleteNormally(block, null);
+  }
+
+  private static boolean codeBlockMayCompleteNormally(@Nullable PsiCodeBlock block, @Nullable PsiMethod method) {
     if (block == null) {
       return true;
     }
     final PsiStatement[] statements = block.getStatements();
     for (final PsiStatement statement : statements) {
-      if (!statementMayCompleteNormally(statement)) {
+      if (!statementMayCompleteNormally(statement, method)) {
         return false;
       }
     }
@@ -272,7 +327,7 @@ public class ControlFlowUtils {
   }
 
   private static boolean statementIsBreakTarget(@Nonnull PsiStatement statement) {
-    final BreakFinder breakFinder = new BreakFinder(statement);
+    final BreakFinder breakFinder = new BreakFinder(statement, false);
     statement.accept(breakFinder);
     return breakFinder.breakFound();
   }
@@ -280,7 +335,7 @@ public class ControlFlowUtils {
   private static boolean statementContainsContinueToAncestor(@Nonnull PsiStatement statement) {
     PsiElement parent = statement.getParent();
     while (parent instanceof PsiLabeledStatement) {
-      statement = (PsiStatement) parent;
+      statement = (PsiStatement)parent;
       parent = parent.getParent();
     }
     final ContinueToAncestorFinder continueToAncestorFinder = new ContinueToAncestorFinder(statement);
@@ -306,7 +361,11 @@ public class ControlFlowUtils {
     return systemExitFinder.exitFound();
   }
 
-  public static boolean elementContainsCallToMethod(PsiElement context, String containingClassName, PsiType returnType, String methodName, PsiType... parameterTypes) {
+  public static boolean elementContainsCallToMethod(PsiElement context,
+                                                    String containingClassName,
+                                                    PsiType returnType,
+                                                    String methodName,
+                                                    PsiType... parameterTypes) {
     final MethodCallFinder methodCallFinder = new MethodCallFinder(containingClassName, returnType, methodName, parameterTypes);
     context.accept(methodCallFinder);
     return methodCallFinder.containsCallToMethod();
@@ -324,7 +383,8 @@ public class ControlFlowUtils {
   public static boolean isInFinallyBlock(@Nonnull PsiElement element) {
     PsiElement currentElement = element;
     while (true) {
-      final PsiTryStatement tryStatement = PsiTreeUtil.getParentOfType(currentElement, PsiTryStatement.class, true, PsiClass.class, PsiLambdaExpression.class);
+      final PsiTryStatement tryStatement =
+        PsiTreeUtil.getParentOfType(currentElement, PsiTryStatement.class, true, PsiClass.class, PsiLambdaExpression.class);
       if (tryStatement == null) {
         return false;
       }
@@ -359,10 +419,11 @@ public class ControlFlowUtils {
   @Nullable
   public static PsiStatement stripBraces(@Nullable PsiStatement statement) {
     if (statement instanceof PsiBlockStatement) {
-      final PsiBlockStatement block = (PsiBlockStatement) statement;
+      final PsiBlockStatement block = (PsiBlockStatement)statement;
       final PsiStatement onlyStatement = getOnlyStatementInBlock(block.getCodeBlock());
       return (onlyStatement != null) ? onlyStatement : block;
-    } else {
+    }
+    else {
       return statement;
     }
   }
@@ -378,7 +439,7 @@ public class ControlFlowUtils {
         return false;
       }
       if (container instanceof PsiCodeBlock) {
-        if (!statementIsLastInBlock((PsiCodeBlock) container, (PsiStatement) statementToCheck)) {
+        if (!statementIsLastInBlock((PsiCodeBlock)container, (PsiStatement)statementToCheck)) {
           return false;
         }
       }
@@ -403,14 +464,15 @@ public class ControlFlowUtils {
         return false;
       }
       if (container instanceof PsiCodeBlock) {
-        if (!statementIsLastInBlock((PsiCodeBlock) container, (PsiStatement) statementToCheck)) {
+        if (!statementIsLastInBlock((PsiCodeBlock)container, (PsiStatement)statementToCheck)) {
           return false;
         }
         if (container.equals(body)) {
           return true;
         }
         statementToCheck = PsiTreeUtil.getParentOfType(container, PsiStatement.class);
-      } else {
+      }
+      else {
         statementToCheck = container;
       }
     }
@@ -426,7 +488,7 @@ public class ControlFlowUtils {
       if (!(child instanceof PsiStatement)) {
         continue;
       }
-      final PsiStatement childStatement = (PsiStatement) child;
+      final PsiStatement childStatement = (PsiStatement)child;
       if (statement.equals(childStatement)) {
         return true;
       }
@@ -454,7 +516,7 @@ public class ControlFlowUtils {
     for (PsiElement child = element.getLastChild(); child != null; child = child.getPrevSibling()) {
       if (aClass.isInstance(child)) {
         //noinspection unchecked
-        return (T) child;
+        return (T)child;
       }
     }
     return null;
@@ -477,8 +539,9 @@ public class ControlFlowUtils {
       if (aClass.isInstance(child)) {
         if (result == null) {
           //noinspection unchecked
-          result = (T) child;
-        } else {
+          result = (T)child;
+        }
+        else {
           return null;
         }
       }
@@ -526,7 +589,7 @@ public class ControlFlowUtils {
     if (!(body instanceof PsiCodeBlock)) {
       return true;
     }
-    final PsiCodeBlock codeBlock = (PsiCodeBlock) body;
+    final PsiCodeBlock codeBlock = (PsiCodeBlock)body;
     return !containsReturn(codeBlock) && !codeBlockMayCompleteNormally(codeBlock);
   }
 
@@ -562,35 +625,41 @@ public class ControlFlowUtils {
   @Contract("null, _ -> false")
   public static boolean statementBreaksLoop(PsiStatement statement, PsiLoopStatement loop) {
     if (statement instanceof PsiBreakStatement) {
-      return ((PsiBreakStatement) statement).findExitedStatement() == loop;
+      return ((PsiBreakStatement)statement).findExitedStatement() == loop;
     }
     if (statement instanceof PsiReturnStatement) {
-      PsiExpression returnValue = ((PsiReturnStatement) statement).getReturnValue();
+      PsiExpression returnValue = ((PsiReturnStatement)statement).getReturnValue();
       PsiElement cur = loop;
       for (PsiElement parent = cur.getParent(); ; parent = cur.getParent()) {
         if (parent instanceof PsiLabeledStatement) {
           cur = parent;
-        } else if (parent instanceof PsiCodeBlock) {
-          PsiCodeBlock block = (PsiCodeBlock) parent;
+        }
+        else if (parent instanceof PsiCodeBlock) {
+          PsiCodeBlock block = (PsiCodeBlock)parent;
           PsiStatement[] statements = block.getStatements();
           if (block.getParent() instanceof PsiBlockStatement && statements.length > 0 && statements[statements.length - 1] == cur) {
             cur = block.getParent();
-          } else {
+          }
+          else {
             break;
           }
-        } else if (parent instanceof PsiIfStatement) {
-          if (cur == ((PsiIfStatement) parent).getThenBranch() || cur == ((PsiIfStatement) parent).getElseBranch()) {
+        }
+        else if (parent instanceof PsiIfStatement) {
+          if (cur == ((PsiIfStatement)parent).getThenBranch() || cur == ((PsiIfStatement)parent).getElseBranch()) {
             cur = parent;
-          } else {
+          }
+          else {
             break;
           }
-        } else {
+        }
+        else {
           break;
         }
       }
       PsiElement nextElement = PsiTreeUtil.skipSiblingsForward(cur, PsiComment.class, PsiWhiteSpace.class);
       if (nextElement instanceof PsiReturnStatement) {
-        return EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalent(returnValue, ((PsiReturnStatement) nextElement).getReturnValue());
+        return EquivalenceChecker.getCanonicalPsiEquivalence()
+                                 .expressionsAreEquivalent(returnValue, ((PsiReturnStatement)nextElement).getReturnValue());
       }
       if (nextElement == null && returnValue == null && cur.getParent() instanceof PsiMethod) {
         return true;
@@ -619,7 +688,7 @@ public class ControlFlowUtils {
         return true;
       }
       if (sibling instanceof PsiBreakStatement) {
-        PsiBreakStatement breakStatement = (PsiBreakStatement) sibling;
+        PsiBreakStatement breakStatement = (PsiBreakStatement)sibling;
         PsiStatement exitedStatement = breakStatement.findExitedStatement();
         if (exitedStatement == loop) {
           return true;
@@ -641,17 +710,21 @@ public class ControlFlowUtils {
   public static boolean isEmpty(PsiElement element, boolean commentIsContent, boolean emptyBlocks) {
     if (!commentIsContent && element instanceof PsiComment) {
       return true;
-    } else if (element instanceof PsiEmptyStatement) {
+    }
+    else if (element instanceof PsiEmptyStatement) {
       return !commentIsContent ||
-          PsiTreeUtil.getChildOfType(element, PsiComment.class) == null &&
-              !(PsiTreeUtil.skipWhitespacesBackward(element) instanceof PsiComment);
-    } else if (element instanceof PsiWhiteSpace) {
+        PsiTreeUtil.getChildOfType(element, PsiComment.class) == null &&
+          !(PsiTreeUtil.skipWhitespacesBackward(element) instanceof PsiComment);
+    }
+    else if (element instanceof PsiWhiteSpace) {
       return true;
-    } else if (element instanceof PsiBlockStatement) {
-      final PsiBlockStatement block = (PsiBlockStatement) element;
+    }
+    else if (element instanceof PsiBlockStatement) {
+      final PsiBlockStatement block = (PsiBlockStatement)element;
       return isEmpty(block.getCodeBlock(), commentIsContent, emptyBlocks);
-    } else if (emptyBlocks && element instanceof PsiCodeBlock) {
-      final PsiCodeBlock codeBlock = (PsiCodeBlock) element;
+    }
+    else if (emptyBlocks && element instanceof PsiCodeBlock) {
+      final PsiCodeBlock codeBlock = (PsiCodeBlock)element;
       final PsiElement[] children = codeBlock.getChildren();
       if (children.length == 2) {
         return true;
@@ -671,7 +744,7 @@ public class ControlFlowUtils {
   private static PsiStatement nextExecutedStatement(PsiStatement statement) {
     PsiStatement next = PsiTreeUtil.getNextSiblingOfType(statement, PsiStatement.class);
     while (next instanceof PsiBlockStatement) {
-      PsiStatement[] statements = ((PsiBlockStatement) next).getCodeBlock().getStatements();
+      PsiStatement[] statements = ((PsiBlockStatement)next).getCodeBlock().getStatements();
       if (statements.length == 0) {
         break;
       }
@@ -682,10 +755,11 @@ public class ControlFlowUtils {
       if (parent instanceof PsiCodeBlock) {
         PsiElement gParent = parent.getParent();
         if (gParent instanceof PsiBlockStatement || gParent instanceof PsiSwitchStatement) {
-          return nextExecutedStatement((PsiStatement) gParent);
+          return nextExecutedStatement((PsiStatement)gParent);
         }
-      } else if (parent instanceof PsiLabeledStatement || parent instanceof PsiIfStatement || parent instanceof PsiSwitchLabelStatement || parent instanceof PsiSwitchStatement) {
-        return nextExecutedStatement((PsiStatement) parent);
+      }
+      else if (parent instanceof PsiLabeledStatement || parent instanceof PsiIfStatement || parent instanceof PsiSwitchLabelStatement || parent instanceof PsiSwitchStatement) {
+        return nextExecutedStatement((PsiStatement)parent);
       }
     }
     return next;
@@ -814,12 +888,14 @@ public class ControlFlowUtils {
 
     private boolean m_found;
     private final PsiStatement m_target;
+    private final boolean myAncestor;
 
-    private BreakFinder(@Nonnull PsiStatement target) {
+    BreakFinder(@Nonnull PsiStatement target, boolean ancestor) {
       m_target = target;
+      myAncestor = ancestor;
     }
 
-    private boolean breakFound() {
+    boolean breakFound() {
       return m_found;
     }
 
@@ -833,13 +909,18 @@ public class ControlFlowUtils {
       if (exitedStatement == null) {
         return;
       }
-      if (PsiTreeUtil.isAncestor(exitedStatement, m_target, false)) {
+      if (myAncestor) {
+        if (PsiTreeUtil.isAncestor(exitedStatement, m_target, false)) {
+          m_found = true;
+        }
+      }
+      else if (exitedStatement == m_target) {
         m_found = true;
       }
     }
 
     @Override
-    public void visitIfStatement(PsiIfStatement statement) {
+    public void visitIfStatement(@Nonnull PsiIfStatement statement) {
       if (m_found) {
         return;
       }

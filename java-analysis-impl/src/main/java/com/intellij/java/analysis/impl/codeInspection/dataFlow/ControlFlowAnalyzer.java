@@ -35,11 +35,11 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.FList;
 import consulo.util.collection.FactoryMap;
 import consulo.util.lang.ObjectUtil;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Contract;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import java.util.*;
 
 import static com.intellij.java.language.psi.CommonClassNames.*;
@@ -398,13 +398,14 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
   }
 
   @Override
-  public void visitYieldStatement(PsiYieldStatement statement) {
+  public void visitYieldStatement(@Nonnull PsiYieldStatement statement) {
     startElement(statement);
     PsiSwitchExpression enclosing = statement.findEnclosingExpression();
     PsiExpression expression = statement.getExpression();
     if (enclosing != null && myExpressionBlockContext != null && myExpressionBlockContext.myCodeBlock == enclosing.getBody()) {
       myExpressionBlockContext.generateReturn(expression, this);
-    } else {
+    }
+    else {
       // yield in incorrect location or only part of switch is analyzed
       if (expression != null) {
         expression.accept(this);

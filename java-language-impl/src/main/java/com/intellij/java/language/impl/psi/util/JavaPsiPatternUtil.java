@@ -4,7 +4,10 @@ package com.intellij.java.language.impl.psi.util;
 import com.intellij.java.language.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
 import com.intellij.java.language.impl.psi.impl.source.JavaVarTypeUtil;
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -84,6 +87,71 @@ public final class JavaPsiPatternUtil {
       }
     }
     return null;
+  }
+
+  @Contract(value = "null, _ -> false", pure = true)
+  public static boolean isUnconditionalForType(@Nullable PsiCaseLabelElement pattern, @Nonnull PsiType type) {
+    return isUnconditionalForType(pattern, type, false) && !isGuarded(pattern);
+  }
+
+  @Nullable
+  public static PsiPrimaryPattern findUnconditionalPattern(@Nullable PsiCaseLabelElement pattern) {
+    if (pattern == null || isGuarded(pattern)) return null;
+    if (pattern instanceof PsiParenthesizedPattern) {
+      return findUnconditionalPattern(((PsiParenthesizedPattern)pattern).getPattern());
+    }
+    else if (pattern instanceof PsiDeconstructionPattern || pattern instanceof PsiTypeTestPattern || pattern instanceof PsiUnnamedPattern) {
+      return (PsiPrimaryPattern)pattern;
+    }
+    return null;
+  }
+
+  @Contract("null,_,_ -> false")
+  public static boolean isUnconditionalForType(@Nullable PsiCaseLabelElement pattern, @Nonnull PsiType type, boolean forDomination) {
+    PsiPrimaryPattern unconditionalPattern = findUnconditionalPattern(pattern);
+    if (unconditionalPattern == null) return false;
+    if (unconditionalPattern instanceof PsiDeconstructionPattern) {
+      return forDomination && dominates(getPatternType(unconditionalPattern), type);
+    }
+    else if (unconditionalPattern instanceof PsiTypeTestPattern || unconditionalPattern instanceof PsiUnnamedPattern) {
+      return dominates(getPatternType(unconditionalPattern), type);
+    }
+    return false;
+  }
+
+  public static boolean dominates(@Nullable PsiType who, @Nullable PsiType overWhom) {
+    if (who == null || overWhom == null) return false;
+    if (who.getCanonicalText().equals(overWhom.getCanonicalText())) return true;
+    overWhom = TypeConversionUtil.erasure(overWhom);
+    PsiType baseType = TypeConversionUtil.erasure(who);
+    if (overWhom.equals(PsiTypes.nullType())) return who instanceof PsiClassType || who instanceof PsiArrayType;
+    if (overWhom instanceof PsiArrayType || baseType instanceof PsiArrayType) {
+      return baseType != null && TypeConversionUtil.isAssignable(baseType, overWhom);
+    }
+    PsiClass typeClass = PsiTypesUtil.getPsiClass(overWhom);
+    PsiClass baseTypeClass = PsiTypesUtil.getPsiClass(baseType);
+    return typeClass != null && baseTypeClass != null && InheritanceUtil.isInheritorOrSelf(typeClass, baseTypeClass, true);
+  }
+
+  @Nullable
+  private static Object evaluateConstant(@Nullable PsiExpression expression) {
+    if (expression == null) return null;
+    return JavaPsiFacade.getInstance(expression.getProject()).getConstantEvaluationHelper()
+                        .computeConstantExpression(expression, false);
+  }
+
+  public static boolean isGuarded(@Nonnull PsiCaseLabelElement pattern) {
+    PsiElement parent = pattern.getParent();
+    if (parent instanceof PsiCaseLabelElementList) {
+      PsiElement gParent = parent.getParent();
+      if (gParent instanceof PsiSwitchLabelStatementBase) {
+        PsiExpression guardExpression = ((PsiSwitchLabelStatementBase)gParent).getGuardExpression();
+        if (guardExpression != null && !Boolean.TRUE.equals(evaluateConstant(guardExpression))) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   public static @Nullable PsiTypeElement getPatternTypeElement(@Nullable PsiCaseLabelElement pattern) {
