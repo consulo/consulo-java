@@ -16,15 +16,11 @@
 package com.intellij.java.impl.codeInspection.varScopeCanBeNarrowed;
 
 import com.intellij.java.analysis.codeInspection.GroupNames;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.ImplicitUsageProvider;
-import consulo.language.editor.inspection.InspectionsBundle;
-import consulo.language.editor.inspection.LocalInspectionToolSession;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.language.editor.inspection.ProblemsHolder;
-import com.intellij.java.impl.codeInspection.util.SpecialAnnotationsUtil;
 import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;
 import com.intellij.java.analysis.impl.psi.controlFlow.AllVariablesControlFlowPolicy;
+import com.intellij.java.impl.codeInspection.util.SpecialAnnotationsUtil;
+import com.intellij.java.impl.lang.java.JavaCommenter;
+import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.impl.psi.controlFlow.AnalysisCanceledException;
 import com.intellij.java.language.impl.psi.controlFlow.ControlFlow;
@@ -35,24 +31,27 @@ import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.java.impl.lang.java.JavaCommenter;
-import consulo.component.extension.Extensions;
-import consulo.project.Project;
-import consulo.util.lang.Comparing;
-import consulo.util.xml.serializer.JDOMExternalizableStringList;
-import consulo.util.lang.ref.Ref;
-import consulo.util.xml.serializer.WriteExternalException;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.ImplicitUsageProvider;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.LocalInspectionToolSession;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.impl.refactoring.util.RefactoringUtil;
-import consulo.java.language.module.util.JavaClassNames;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.ref.Ref;
+import consulo.util.xml.serializer.JDOMExternalizableStringList;
+import consulo.util.xml.serializer.WriteExternalException;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
@@ -132,25 +131,30 @@ public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
   private static void doCheckClass(final PsiClass aClass, ProblemsHolder holder, final List<String> excludeAnnos) {
     if (aClass.isInterface()) return;
     final PsiField[] fields = aClass.getFields();
-    final Set<PsiField> candidates = new LinkedHashSet<PsiField>();
+    final Set<PsiField> candidates = new LinkedHashSet<>();
     for (PsiField field : fields) {
-      if (AnnotationUtil.isAnnotated(field, excludeAnnos)) {
+      if (!field.isPhysical() || AnnotationUtil.isAnnotated(field, excludeAnnos, 0)) {
         continue;
       }
-      if (field.hasModifierProperty(PsiModifier.PRIVATE) && !(field.hasModifierProperty(PsiModifier.STATIC) && field.hasModifierProperty(PsiModifier.FINAL))) {
+      if (field.hasModifierProperty(PsiModifier.VOLATILE)) {
+        // Assume that fields marked as volatile can be modified concurrently
+        // (e.g. if the only method where they are changed is called from several threads)
+        continue;
+      }
+      if (field.hasModifierProperty(PsiModifier.PRIVATE) && !(field.hasModifierProperty(PsiModifier.STATIC) && field.hasModifierProperty(
+        PsiModifier.FINAL))) {
         candidates.add(field);
       }
     }
 
-
     removeFieldsReferencedFromInitializers(aClass, candidates);
     if (candidates.isEmpty()) return;
 
-    final Set<PsiField> usedFields = new HashSet<PsiField>();
+    final Set<PsiField> usedFields = new HashSet<>();
     removeReadFields(aClass, candidates, usedFields);
 
     if (candidates.isEmpty()) return;
-    final ImplicitUsageProvider[] implicitUsageProviders = Extensions.getExtensions(ImplicitUsageProvider.EP_NAME);
+    final List<ImplicitUsageProvider> implicitUsageProviders = ImplicitUsageProvider.EP_NAME.getExtensionList();
 
     for (PsiField field : candidates) {
       if (usedFields.contains(field) && !hasImplicitReadOrWriteUsage(field, implicitUsageProviders)) {
@@ -206,7 +210,7 @@ public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
           }
         }
       }
-      final Ref<Collection<PsiVariable>> writtenVariables = new Ref<Collection<PsiVariable>>();
+      final Ref<Collection<PsiVariable>> writtenVariables = new Ref<>();
       final List<PsiReferenceExpression> readBeforeWrites = ControlFlowUtil.getReadBeforeWrite(controlFlow);
       for (final PsiReferenceExpression readBeforeWrite : readBeforeWrites) {
         final PsiElement resolved = readBeforeWrite.resolve();
@@ -269,7 +273,7 @@ public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
     });
   }
 
-  private static boolean hasImplicitReadOrWriteUsage(final PsiField field, ImplicitUsageProvider[] implicitUsageProviders) {
+  private static boolean hasImplicitReadOrWriteUsage(final PsiField field, List<ImplicitUsageProvider> implicitUsageProviders) {
     for (ImplicitUsageProvider provider : implicitUsageProviders) {
       if (provider.isImplicitRead(field) || provider.isImplicitWrite(field)) {
         return true;
