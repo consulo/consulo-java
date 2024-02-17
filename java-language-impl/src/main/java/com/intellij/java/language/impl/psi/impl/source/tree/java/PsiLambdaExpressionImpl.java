@@ -270,6 +270,12 @@ public class PsiLambdaExpressionImpl extends JavaStubPsiElement<FunctionalExpres
     }
   }
 
+  @Override
+  @Nullable
+  public PsiType getGroundTargetType(PsiType functionalInterfaceType) {
+    return FunctionalInterfaceParameterizationUtil.getGroundTargetType(functionalInterfaceType, this);
+  }
+
   private static PsiType toArray(PsiType paramType) {
     if (paramType instanceof PsiEllipsisType) {
       return ((PsiEllipsisType) paramType).toArrayType();
