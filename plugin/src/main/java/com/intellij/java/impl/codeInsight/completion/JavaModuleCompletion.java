@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.java.impl.codeInsight.completion.JavaKeywordCompletion.OverrideableSpace;
+import com.intellij.java.impl.codeInsight.completion.JavaKeywordCompletion.OverridableSpace;
 import com.intellij.java.indexing.impl.stubs.index.JavaAutoModuleNameIndex;
 import com.intellij.java.indexing.impl.stubs.index.JavaModuleNameIndex;
 import com.intellij.java.indexing.impl.stubs.index.JavaSourceModuleNameIndex;
@@ -83,29 +83,29 @@ class JavaModuleCompletion {
   private static void addFileHeaderKeywords(PsiElement position, Consumer<LookupElement> result) {
     PsiElement prev = PsiTreeUtil.prevVisibleLeaf(position);
     if (prev == null) {
-      result.accept(new OverrideableSpace(createKeywordLookupItem(position, PsiKeyword.MODULE), TailType.HUMBLE_SPACE_BEFORE_WORD));
-      result.accept(new OverrideableSpace(createKeywordLookupItem(position, PsiKeyword.OPEN), TailType.HUMBLE_SPACE_BEFORE_WORD));
+      result.accept(new OverridableSpace(createKeywordLookupItem(position, PsiKeyword.MODULE), TailType.HUMBLE_SPACE_BEFORE_WORD));
+      result.accept(new OverridableSpace(createKeywordLookupItem(position, PsiKeyword.OPEN), TailType.HUMBLE_SPACE_BEFORE_WORD));
     } else if (PsiUtil.isJavaToken(prev, JavaTokenType.OPEN_KEYWORD)) {
-      result.accept(new OverrideableSpace(createKeywordLookupItem(position, PsiKeyword.MODULE), TailType.HUMBLE_SPACE_BEFORE_WORD));
+      result.accept(new OverridableSpace(createKeywordLookupItem(position, PsiKeyword.MODULE), TailType.HUMBLE_SPACE_BEFORE_WORD));
     }
   }
 
   private static void addModuleStatementKeywords(PsiElement position, Consumer<LookupElement> result) {
-    result.accept(new OverrideableSpace(createKeywordLookupItem(position, PsiKeyword.REQUIRES), TailType.HUMBLE_SPACE_BEFORE_WORD));
-    result.accept(new OverrideableSpace(createKeywordLookupItem(position, PsiKeyword.EXPORTS), TailType.HUMBLE_SPACE_BEFORE_WORD));
-    result.accept(new OverrideableSpace(createKeywordLookupItem(position, PsiKeyword.OPENS), TailType.HUMBLE_SPACE_BEFORE_WORD));
-    result.accept(new OverrideableSpace(createKeywordLookupItem(position, PsiKeyword.USES), TailType.HUMBLE_SPACE_BEFORE_WORD));
-    result.accept(new OverrideableSpace(createKeywordLookupItem(position, PsiKeyword.PROVIDES), TailType.HUMBLE_SPACE_BEFORE_WORD));
+    result.accept(new OverridableSpace(createKeywordLookupItem(position, PsiKeyword.REQUIRES), TailType.HUMBLE_SPACE_BEFORE_WORD));
+    result.accept(new OverridableSpace(createKeywordLookupItem(position, PsiKeyword.EXPORTS), TailType.HUMBLE_SPACE_BEFORE_WORD));
+    result.accept(new OverridableSpace(createKeywordLookupItem(position, PsiKeyword.OPENS), TailType.HUMBLE_SPACE_BEFORE_WORD));
+    result.accept(new OverridableSpace(createKeywordLookupItem(position, PsiKeyword.USES), TailType.HUMBLE_SPACE_BEFORE_WORD));
+    result.accept(new OverridableSpace(createKeywordLookupItem(position, PsiKeyword.PROVIDES), TailType.HUMBLE_SPACE_BEFORE_WORD));
   }
 
   private static void addProvidesStatementKeywords(PsiElement position, Consumer<LookupElement> result) {
-    result.accept(new OverrideableSpace(createKeywordLookupItem(position, PsiKeyword.WITH), TailType.HUMBLE_SPACE_BEFORE_WORD));
+    result.accept(new OverridableSpace(createKeywordLookupItem(position, PsiKeyword.WITH), TailType.HUMBLE_SPACE_BEFORE_WORD));
   }
 
   private static void addRequiresStatementKeywords(PsiElement context, PsiElement position, Consumer<LookupElement> result) {
     if (context.getParent() instanceof PsiRequiresStatement) {
-      result.accept(new OverrideableSpace(createKeywordLookupItem(position, PsiKeyword.TRANSITIVE), TailType.HUMBLE_SPACE_BEFORE_WORD));
-      result.accept(new OverrideableSpace(createKeywordLookupItem(position, PsiKeyword.STATIC), TailType.HUMBLE_SPACE_BEFORE_WORD));
+      result.accept(new OverridableSpace(createKeywordLookupItem(position, PsiKeyword.TRANSITIVE), TailType.HUMBLE_SPACE_BEFORE_WORD));
+      result.accept(new OverridableSpace(createKeywordLookupItem(position, PsiKeyword.STATIC), TailType.HUMBLE_SPACE_BEFORE_WORD));
     }
   }
 
@@ -192,7 +192,7 @@ class JavaModuleCompletion {
   private static void processPackage(PsiPackage pkg, GlobalSearchScope scope, Consumer<LookupElement> result) {
     String packageName = pkg.getQualifiedName();
     if (isQualified(packageName) && !PsiUtil.isPackageEmpty(pkg.getDirectories(scope), packageName)) {
-      result.accept(new OverrideableSpace(lookupElement(pkg), TailType.SEMICOLON));
+      result.accept(new OverridableSpace(lookupElement(pkg), TailType.SEMICOLON));
     }
     for (PsiPackage subPackage : pkg.getSubPackages(scope)) {
       processPackage(subPackage, scope, result);
@@ -206,7 +206,7 @@ class JavaModuleCompletion {
     AllClassesGetter.processJavaClasses(resultSet.getPrefixMatcher(), project, _scope, psiClass ->
     {
       if (isQualified(psiClass.getQualifiedName()) && filter.test(psiClass)) {
-        resultSet.addElement(new OverrideableSpace(lookupElement(psiClass), tail));
+        resultSet.addElement(new OverridableSpace(lookupElement(psiClass), tail));
       }
       return true;
     });

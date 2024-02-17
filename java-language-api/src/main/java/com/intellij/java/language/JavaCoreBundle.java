@@ -18,22 +18,18 @@ package com.intellij.java.language;
 import consulo.component.util.localize.AbstractBundle;
 import org.jetbrains.annotations.PropertyKey;
 
-public class JavaCoreBundle extends AbstractBundle
-{
-	private static final JavaCoreBundle ourInstance = new JavaCoreBundle();
+public class JavaCoreBundle extends AbstractBundle {
+  private static final JavaCoreBundle ourInstance = new JavaCoreBundle();
 
-	private JavaCoreBundle()
-	{
-		super("messages.JavaCoreBundle");
-	}
+  private JavaCoreBundle() {
+    super("messages.JavaCoreBundle");
+  }
 
-	public static String message(@PropertyKey(resourceBundle = "messages.JavaCoreBundle") String key)
-	{
-		return ourInstance.getMessage(key);
-	}
+  public static String message(@PropertyKey(resourceBundle = "messages.JavaCoreBundle") String key) {
+    return ourInstance.getMessage(key);
+  }
 
-	public static String message(@PropertyKey(resourceBundle = "messages.JavaCoreBundle") String key, Object... params)
-	{
-		return ourInstance.getMessage(key, params);
-	}
+  public static String message(@PropertyKey(resourceBundle = "messages.JavaCoreBundle") String key, Object... params) {
+    return ourInstance.getMessage(key, params);
+  }
 }

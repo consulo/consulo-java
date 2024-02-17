@@ -16,7 +16,7 @@
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 
 import com.intellij.java.language.LanguageLevel;
-import com.intellij.java.language.projectRoots.JavaSdk;
+import com.intellij.java.language.impl.projectRoots.JavaSdkVersionUtil;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
@@ -34,7 +34,6 @@ import consulo.module.content.ModuleRootManager;
 import consulo.module.content.layer.ModifiableRootModel;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -53,16 +52,14 @@ public class IncreaseLanguageLevelFix implements SyntheticIntentionAction {
   @Override
   @Nonnull
   public String getText() {
-    return CodeInsightBundle.message("set.language.level.to.0", myLevel.getDescription());
+    return CodeInsightBundle.message("set.language.level.to.0", myLevel.getDescription().get());
   }
 
   private static boolean isJdkSupportsLevel(@Nullable final Sdk jdk, final LanguageLevel level) {
-    if (jdk == null) {
-      return true;
-    }
-    final JavaSdk sdk = JavaSdk.getInstance();
-    final JavaSdkVersion version = sdk.getVersion(jdk);
-    return version != null && version.getMaxLanguageLevel().isAtLeast(level);
+    if (jdk == null) return true;
+    JavaSdkVersion version = JavaSdkVersionUtil.getJavaSdkVersion(jdk);
+    JavaSdkVersion required = JavaSdkVersion.fromLanguageLevel(level);
+    return version != null && (level.isPreview() ? version.equals(required) : version.isAtLeast(required));
   }
 
   @Override
@@ -77,8 +74,7 @@ public class IncreaseLanguageLevelFix implements SyntheticIntentionAction {
       return false;
     }
 
-    return true;
-    //    return isLanguageLevelAcceptable(module, myLevel);
+     return isLanguageLevelAcceptable(module, myLevel);
   }
 
   public static boolean isLanguageLevelAcceptable(Module module, final LanguageLevel level) {

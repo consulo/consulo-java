@@ -15,22 +15,25 @@
  */
 package com.intellij.java.impl.ig.psiutils;
 
-import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightUtil;
+import com.intellij.java.language.JavaFeature;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiReference;
-import consulo.language.ast.IElementType;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.ig.psiutils.EquivalenceChecker;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.SideEffectChecker;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.java.language.module.util.JavaClassNames;
-import org.jetbrains.annotations.NonNls;
-
+import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiErrorElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.util.PsiTreeUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NonNls;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -272,14 +275,38 @@ public class SwitchUtils {
    * @return true if given switch block has a rule-based format; false if it has conventional label-based format (like 'case 0:')
    * If switch body has no labels yet and language level permits, rule-based format is assumed.
    */
+  @RequiredReadAction
   public static boolean isRuleFormatSwitch(@Nonnull PsiSwitchBlock block) {
-    if (!HighlightUtil.Feature.ENHANCED_SWITCH.isAvailable(block)) {
+    if (!PsiUtil.isAvailable(JavaFeature.ENHANCED_SWITCH, block)) {
       return false;
     }
-    final PsiSwitchLabelStatementBase label = PsiTreeUtil.getChildOfType(block.getBody(), PsiSwitchLabelStatementBase.class);
-    return label == null || label instanceof PsiSwitchLabeledRuleStatement;
+
+    final PsiCodeBlock switchBody = block.getBody();
+    if (switchBody != null) {
+      for (var child = switchBody.getFirstChild(); child != null; child = child.getNextSibling()) {
+        if (child instanceof PsiSwitchLabelStatementBase && !isBeingCompleted((PsiSwitchLabelStatementBase)child)) {
+          return child instanceof PsiSwitchLabeledRuleStatement;
+        }
+      }
+    }
+
+    return true;
   }
 
+  /**
+   * Checks if the label is being completed and there are no other case label elements in the list of the case label's elements
+   *
+   * @param label the label to analyze
+   * @return true if the label is currently being completed
+   */
+  @Contract(pure = true)
+  @RequiredReadAction
+  private static boolean isBeingCompleted(@Nonnull PsiSwitchLabelStatementBase label) {
+    if (!(label.getLastChild() instanceof PsiErrorElement)) return false;
+
+    final PsiCaseLabelElementList list = label.getCaseLabelElementList();
+    return list != null && list.getElements().length == 1;
+  }
 
   /**
    * @param label a switch label statement

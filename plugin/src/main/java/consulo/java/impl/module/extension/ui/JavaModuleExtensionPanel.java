@@ -71,9 +71,7 @@ public class JavaModuleExtensionPanel extends JPanel {
           append(TargetOptionsComponent.COMPILER_DEFAULT, SimpleTextAttributes.GRAY_ATTRIBUTES);
         } else if (value instanceof LanguageLevel) {
           final LanguageLevel languageLevel = (LanguageLevel) value;
-          append(languageLevel.getShortText(), SimpleTextAttributes.REGULAR_ATTRIBUTES);
-          append(" ");
-          append(languageLevel.getDescription(), SimpleTextAttributes.GRAY_ATTRIBUTES);
+          append(languageLevel.getDescription().get(), SimpleTextAttributes.GRAY_ATTRIBUTES);
         } else if (value instanceof Module) {
           setIcon(AllIcons.Nodes.Module);
           append(((Module) value).getName(), SimpleTextAttributes.REGULAR_BOLD_ATTRIBUTES);
@@ -81,7 +79,7 @@ public class JavaModuleExtensionPanel extends JPanel {
           final JavaModuleExtension extension = ModuleUtilCore.getExtension((Module) value, JavaModuleExtension.class);
           if (extension != null) {
             final LanguageLevel languageLevel = extension.getLanguageLevel();
-            append("(" + languageLevel.getShortText() + ")", SimpleTextAttributes.GRAY_ATTRIBUTES);
+            append("(" + languageLevel.getMajor() + ")", SimpleTextAttributes.GRAY_ATTRIBUTES);
           }
         } else if (value instanceof String) {
           setIcon(AllIcons.Nodes.Module);

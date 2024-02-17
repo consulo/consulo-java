@@ -1,88 +1,127 @@
-/*
- * Copyright 2000-2012 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
+// Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.intellij.java.language;
 
+import consulo.application.util.JavaVersion;
 import consulo.component.util.pointer.Named;
 import consulo.component.util.pointer.NamedPointer;
+import consulo.java.language.localize.JavaLanguageLocalize;
 import consulo.java.language.psi.JavaLanguageVersion;
+import consulo.localize.LocalizeValue;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.Nls;
 
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
- * @author dsl
+ * Represents a language level (i.e. features available) of a Java code.
+ * <p>
+ * Unsupported language levels are marked as {@link Deprecated} to draw attention. They should not be normally used,
+ * except probably in rare tests and inside {@link JavaFeature}.
+ *
+ * @see JavaSdkVersion
+ * @see JavaFeature
  */
 public enum LanguageLevel implements Named, NamedPointer<LanguageLevel> {
-  JDK_1_3("1.3", JavaCoreBundle.message("jdk.1.3.language.level.description"), 3),
-  JDK_1_4("1.4", JavaCoreBundle.message("jdk.1.4.language.level.description"), 4),
-  JDK_1_5("1.5", JavaCoreBundle.message("jdk.1.5.language.level.description"), 5),
-  JDK_1_6("1.6", JavaCoreBundle.message("jdk.1.6.language.level.description"), 6),
-  JDK_1_7("1.7", JavaCoreBundle.message("jdk.1.7.language.level.description"), 7),
-  JDK_1_8("1.8", JavaCoreBundle.message("jdk.1.8.language.level.description"), 8),
-  JDK_1_9("9", JavaCoreBundle.message("jdk.1.9.language.level.description"), 9),
-  JDK_10("10", JavaCoreBundle.message("jdk.10.language.level.description"), 10),
-  JDK_11("11", JavaCoreBundle.message("jdk.11.language.level.description"), 11),
-  JDK_12("12", JavaCoreBundle.message("jdk.12.language.level.description"), 12),
-  JDK_13("13", JavaCoreBundle.message("jdk.13.language.level.description"), 13),
-  JDK_14("14", JavaCoreBundle.message("jdk.14.language.level.description"), 14),
-  JDK_15("15", JavaCoreBundle.message("jdk.15.language.level.description"), 15),
-  JDK_16("16", JavaCoreBundle.message("jdk.16.language.level.description"), 16),
-  JDK_17("17", JavaCoreBundle.message("jdk.17.language.level.description"), 17),
-  JDK_18("18", JavaCoreBundle.message("jdk.18.language.level.description"), 18),
-  JDK_19("19", JavaCoreBundle.message("jdk.19.language.level.description"), 19),
-  JDK_20("20", JavaCoreBundle.message("jdk.20.language.level.description"), 20),
-  JDK_21("21", JavaCoreBundle.message("jdk.21.language.level.description"), 21),
-  JDK_22("22", JavaCoreBundle.message("jdk.22.language.level.description"), 22),
-  JDK_X("X", JavaCoreBundle.message("jdk.X.language.level.description"), 22);
+  JDK_1_3(JavaLanguageLocalize.jdk1_3LanguageLevelDescription(), 3),
+  JDK_1_4(JavaLanguageLocalize.jdk1_4LanguageLevelDescription(), 4),
+  JDK_1_5(JavaLanguageLocalize.jdk1_5LanguageLevelDescription(), 5),
+  JDK_1_6(JavaLanguageLocalize.jdk1_6LanguageLevelDescription(), 6),
+  JDK_1_7(JavaLanguageLocalize.jdk1_7LanguageLevelDescription(), 7),
+  JDK_1_8(JavaLanguageLocalize.jdk1_8LanguageLevelDescription(), 8),
+  JDK_1_9(JavaLanguageLocalize.jdk1_9LanguageLevelDescription(), 9),
+  JDK_10(JavaLanguageLocalize.jdk10LanguageLevelDescription(), 10),
+  JDK_11(JavaLanguageLocalize.jdk11LanguageLevelDescription(), 11),
+  JDK_12(JavaLanguageLocalize.jdk12LanguageLevelDescription(), 12),
+  JDK_13(JavaLanguageLocalize.jdk13LanguageLevelDescription(), 13),
+  JDK_14(JavaLanguageLocalize.jdk14LanguageLevelDescription(), 14),
+  JDK_15(JavaLanguageLocalize.jdk15LanguageLevelDescription(), 15),
+  JDK_16(JavaLanguageLocalize.jdk16LanguageLevelDescription(), 16),
+  JDK_17(JavaLanguageLocalize.jdk17LanguageLevelDescription(), 17),
+  @Deprecated
+  JDK_17_PREVIEW(17),
+  JDK_18(JavaLanguageLocalize.jdk18LanguageLevelDescription(), 18),
+  @Deprecated
+  JDK_18_PREVIEW(18),
+  JDK_19(JavaLanguageLocalize.jdk19LanguageLevelDescription(), 19),
+  @Deprecated
+  JDK_19_PREVIEW(19),
+  JDK_20(JavaLanguageLocalize.jdk20LanguageLevelDescription(), 20),
+  @Deprecated
+  JDK_20_PREVIEW(20),
+  JDK_21(JavaLanguageLocalize.jdk21LanguageLevelDescription(), 21),
+  JDK_21_PREVIEW(JavaLanguageLocalize.jdk21PreviewLanguageLevelDescription(), 21),
+  JDK_22(JavaLanguageLocalize.jdk22LanguageLevelDescription(), 22),
+  JDK_22_PREVIEW(JavaLanguageLocalize.jdk22PreviewLanguageLevelDescription(), 22),
+  JDK_X(JavaLanguageLocalize.jdkXLanguageLevelDescription(), 23),
+
+  ;
+  private static final Map<Integer, LanguageLevel> ourStandardVersions =
+    Stream.of(values()).filter(ver -> !ver.isPreview())
+          .collect(Collectors.toMap(ver -> ver.myVersion.feature, Function.identity()));
 
   public static final LanguageLevel HIGHEST = JDK_21;
   public static final Key<LanguageLevel> KEY = Key.create("LANGUAGE_LEVEL");
 
-  private final String myShortText;
-  private final String myPresentableText;
-  private final int myMajor;
-  private final boolean myPreview;
-
-  private JavaLanguageVersion myLangVersion;
-
   /**
-   * @see <a href="http://docs.oracle.com/javase/8/docs/technotes/tools/windows/javac.html">Javac Reference</a>
+   * Should point to the latest released JDK.
    */
-  LanguageLevel(String shortText, String presentableText, int major) {
-    myShortText = shortText;
-    myPresentableText = presentableText;
-    myMajor = major;
-    myLangVersion = new JavaLanguageVersion(name(), shortText, this);
-    myPreview = name().endsWith("_PREVIEW");
+
+  private final LocalizeValue myPresentableText;
+  private final JavaVersion myVersion;
+  private final boolean myPreview;
+  private final boolean myUnsupported;
+
+  private final JavaLanguageVersion myLangVersion;
+
+  LanguageLevel(LocalizeValue presentableTextSupplier, int major) {
+    this(presentableTextSupplier, major, false);
+  }
+
+  LanguageLevel(int major) {
+    this(JavaLanguageLocalize.jdkUnsupportedPreviewLanguageLevelDescription(major), major, true);
+  }
+
+  LanguageLevel(LocalizeValue presentableTextSupplier, int major, boolean unsupported) {
+    myPresentableText = presentableTextSupplier;
+    myVersion = JavaVersion.compose(major);
+    myUnsupported = unsupported;
+    myPreview = name().endsWith("_PREVIEW") || name().endsWith("_X");
+    if (myUnsupported && !myPreview) {
+      throw new IllegalArgumentException("Only preview versions could be unsupported: " + name());
+    }
+    myLangVersion = new JavaLanguageVersion(name(), name(), this);
   }
 
   public int getMajor() {
-    return myMajor;
+    return myVersion.feature;
   }
 
+  /**
+   * @return true if this language level is not supported anymore. It's still possible to invoke compiler or launch the program
+   * using this language level. However, it's not guaranteed that the code insight features will work correctly.
+   */
+  public boolean isUnsupported() {
+    return myUnsupported;
+  }
+  
   /**
    * String representation of the level, suitable to pass as a value of compiler's "-source" and "-target" options
    */
   @Nonnull
   public String getCompilerComplianceDefaultOption() {
-    return myMajor <= 8 ? "1." + myMajor : String.valueOf(myMajor);
+    int major = getMajor();
+    return major <= 8 ? "1." + major : String.valueOf(major);
   }
 
   public boolean isPreview() {
@@ -94,7 +133,8 @@ public enum LanguageLevel implements Named, NamedPointer<LanguageLevel> {
     return myLangVersion;
   }
 
-  public String getDescription() {
+  @Nonnull
+  public LocalizeValue getDescription() {
     return myPresentableText;
   }
 
@@ -128,15 +168,5 @@ public enum LanguageLevel implements Named, NamedPointer<LanguageLevel> {
       return null;
     }
     return ContainerUtil.find(values(), level -> Objects.equals(level.getCompilerComplianceDefaultOption(), compilerComplianceOption));
-  }
-
-  @Nonnull
-  public String getShortText() {
-    return myShortText;
-  }
-
-  @Nonnull
-  public String getFullText() {
-    return "Java " + myShortText;
   }
 }

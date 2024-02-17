@@ -8,7 +8,6 @@ import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiModifierListStub;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.augment.PsiAugmentProvider;
-import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.ast.ASTNode;
 import consulo.language.ast.IElementType;
 import consulo.language.impl.ast.CompositeElement;
@@ -26,7 +25,6 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.interner.Interner;
 import consulo.util.lang.BitUtil;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.*;
 
@@ -194,9 +192,6 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
     else if (parent instanceof PsiResourceVariable) {
       Collections.addAll(implicitModifiers, FINAL);
     }
-    else if (parent instanceof PsiPatternVariable && !PsiUtil.isLanguageLevel16OrHigher(parent)) {
-      Collections.addAll(implicitModifiers, FINAL);
-    }
     return implicitModifiers;
   }
 
@@ -298,15 +293,15 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
   @Override
   @Nonnull
   public PsiAnnotation[] getAnnotations() {
-    final PsiAnnotation[] own = getStubOrPsiChildren(JavaStubElementTypes.ANNOTATION, PsiAnnotation.ARRAY_FACTORY);
-    final List<PsiAnnotation> ext = PsiAugmentProvider.collectAugments(this, PsiAnnotation.class);
+    PsiAnnotation[] own = getStubOrPsiChildren(JavaStubElementTypes.ANNOTATION, PsiAnnotation.ARRAY_FACTORY);
+    List<PsiAnnotation> ext = PsiAugmentProvider.collectAugments(this, PsiAnnotation.class, null);
     return ArrayUtil.mergeArrayAndCollection(own, ext, PsiAnnotation.ARRAY_FACTORY);
   }
 
   @Override
   @Nonnull
   public PsiAnnotation[] getApplicableAnnotations() {
-    final PsiAnnotation.TargetType[] targets = AnnotationTargetUtil.getTargetsForLocation(this);
+    PsiAnnotation.TargetType[] targets = AnnotationTargetUtil.getTargetsForLocation(this);
     List<PsiAnnotation> filtered = ContainerUtil.findAll(getAnnotations(), annotation -> {
       PsiAnnotation.TargetType target = AnnotationTargetUtil.findAnnotationTarget(annotation, targets);
       return target != null && target != PsiAnnotation.TargetType.UNKNOWN;
@@ -322,7 +317,7 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
 
   @Override
   @Nonnull
-  public PsiAnnotation addAnnotation(@Nonnull @NonNls String qualifiedName) {
+  public PsiAnnotation addAnnotation(@Nonnull String qualifiedName) {
     return (PsiAnnotation)addAfter(JavaPsiFacade.getElementFactory(getProject()).createAnnotationFromText("@" + qualifiedName, this), null);
   }
 

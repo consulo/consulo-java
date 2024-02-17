@@ -126,7 +126,7 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
       }
     };
     llCombo.setSelectedItem(myEffectiveLanguageLevel != null ? myEffectiveLanguageLevel : LanguageLevel.JDK_1_3);
-    llCombo.setRenderer(SimpleListCellRenderer.create("", LanguageLevel::getFullText));
+    llCombo.setRenderer(SimpleListCellRenderer.create("", languageLevel -> languageLevel.getDescription().get()));
     llCombo.addActionListener(e -> myEffectiveLanguageLevel = (LanguageLevel) llCombo.getSelectedItem());
 
     JPanel comboPanel = new JPanel(new BorderLayout());
@@ -437,8 +437,7 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
   }
 
   private static String getJdkName(LanguageLevel languageLevel) {
-    final String presentableText = languageLevel.getFullText();
-    return presentableText.substring(0, presentableText.indexOf(' '));
+    return languageLevel.getDescription().get();
   }
 
   public static LanguageLevel getLastIncompatibleLanguageLevel(@Nonnull PsiMember member, @Nonnull LanguageLevel languageLevel) {

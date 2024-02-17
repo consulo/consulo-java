@@ -15,6 +15,8 @@
  */
 package com.intellij.java.language.psi.util;
 
+import com.intellij.java.language.JavaFeature;
+import com.intellij.java.language.LanguageFeatureProvider;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.projectRoots.JavaVersionService;
@@ -43,6 +45,7 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
+import consulo.util.lang.ThreeState;
 import consulo.util.lang.TimeoutUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.archive.ArchiveFileSystem;
@@ -1169,20 +1172,23 @@ public final class PsiUtil extends PsiUtilCore {
     return getLanguageLevel(element).isAtLeast(LanguageLevel.JDK_11);
   }
 
-  public static boolean isLanguageLevel14OrHigher(@Nonnull PsiElement element) {
-    return getLanguageLevel(element).isAtLeast(LanguageLevel.JDK_14);
-  }
-
-  public static boolean isLanguageLevel16OrHigher(@Nonnull PsiElement element) {
-    return getLanguageLevel(element).isAtLeast(LanguageLevel.JDK_16);
-  }
-
-  public static boolean isLanguageLevel17OrHigher(@Nonnull PsiElement element) {
-    return getLanguageLevel(element).isAtLeast(LanguageLevel.JDK_17);
-  }
-
-  public static boolean isLanguageLevel18OrHigher(@Nonnull PsiElement element) {
-    return getLanguageLevel(element).isAtLeast(LanguageLevel.JDK_18);
+  /**
+   * @param feature feature to check
+   * @param element a valid PsiElement to check (it's better to supply PsiFile if already known; any element is accepted for convenience)
+   * @return true if the feature is available in the PsiFile the supplied element belongs to
+   */
+  @RequiredReadAction
+  public static boolean isAvailable(@Nonnull JavaFeature feature, @Nonnull PsiElement element) {
+    if (!feature.isSufficient(getLanguageLevel(element))) return false;
+    if (!feature.canBeCustomized()) return true;
+    PsiFile file = element.getContainingFile();
+    if (file == null) return true;
+    for (LanguageFeatureProvider extension : file.getProject().getExtensionList(LanguageFeatureProvider.class)) {
+      ThreeState threeState = extension.isFeatureSupported(feature, file);
+      if (threeState != ThreeState.UNSURE)
+        return threeState.toBoolean();
+    }
+    return true;
   }
 
   @Nonnull

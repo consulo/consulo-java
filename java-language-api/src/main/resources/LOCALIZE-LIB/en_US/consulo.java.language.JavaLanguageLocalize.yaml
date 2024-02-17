@@ -1,0 +1,503 @@
+0.is.not.an.identifier:
+  text: '''''{0}'''' is not an identifier.'
+annotation.name.is.missing:
+  text: Annotation attribute must be of the form 'name=value'
+anonymous.class.context.display:
+  text: Anonymous in {0}
+anonymous.class.derived.display:
+  text: Anonymous class derived from {0}
+aux.context.display:
+  text: (in {0})
+bound.not.expected:
+  text: Unexpected bound
+catch.without.try:
+  text: '''catch'' without ''try'''
+class.context.display:
+  text: '{0} in {1}'
+class.literal.expected:
+  text: .class expected
+context.type.java.comment:
+  text: Comment
+context.type.string:
+  text: string
+default.language.level.description:
+  text: SDK default
+element.abstract_method:
+  text: abstract method
+element.annotation:
+  text: annotation
+element.anonymous_class:
+  text: anonymous class
+element.class:
+  text: class
+element.type.parameter:
+  text: type parameter
+element.constant:
+  text: constant field
+element.constructor:
+  text: constructor
+element.enum:
+  text: enum
+element.enum_constant:
+  text: enum constant
+element.expression:
+  text: expression
+element.field:
+  text: field
+element.initializer:
+  text: initializer
+element.interface:
+  text: interface
+element.label:
+  text: label
+element.local_variable:
+  text: local variable
+element.method:
+  text: method
+element.module:
+  text: module
+element.package:
+  text: package
+element.parameter:
+  text: parameter
+element.pattern_variable:
+  text: pattern variable
+element.record:
+  text: record
+element.record_component:
+  text: record component
+element.snippet_body:
+  text: snippet body
+element.statement:
+  text: statement
+element.unknown:
+  text: element
+element.variable:
+  text: variable
+element.throws.list:
+  text: throws list
+element.extends.list:
+  text: extends list
+element.type.arguments:
+  text: type arguments
+element.type.semicolon:
+  text: semicolon
+element.receiver.parameter:
+  text: receiver parameter
+element.method.call:
+  text: method call
+else.without.if:
+  text: '''else'' without ''if'''
+enum.constant.context:
+  text: Enum constant ''{0}'' in ''{1}''
+expected.array.initializer:
+  text: Array initializer expected
+expected.boolean.expression:
+  text: Boolean expression expected
+expected.catch.or.finally:
+  text: '''catch'' or ''finally'' expected'
+expected.class.or.interface:
+  text: '''class'' or ''interface'' expected'
+expected.class.reference:
+  text: Class reference expected
+expected.colon:
+  text: ''':'' expected'
+expected.comma:
+  text: ''','' expected'
+expected.comma.or.rparen:
+  text: ''','' or '')'' expected'
+expected.comma.or.semicolon:
+  text: ''','' or '';'' expected'
+expected.dot:
+  text: '''.'' expected'
+expected.eq:
+  text: '''='' expected'
+expected.expression:
+  text: Expression expected
+expected.gt:
+  text: '''>'' expected.'
+expected.gt.or.comma:
+  text: '''>'' or '','' expected'
+expected.identifier:
+  text: Identifier expected
+expected.identifier.or.type:
+  text: Identifier or type expected
+expected.lbrace:
+  text: '''{'' expected'
+expected.lbrace.or.semicolon:
+  text: '''{'' or '';'' expected'
+expected.lbracket:
+  text: '''['' expected'
+expected.lparen:
+  text: '''('' expected'
+expected.lparen.or.lbracket:
+  text: '''('' or ''['' expected'
+expected.lt.or.lparen:
+  text: '''<'' or ''('' expected'
+expected.module.declaration:
+  text: Module declaration expected
+expected.module.statement:
+  text: Module directive expected
+expected.package.reference:
+  text: Package reference expected
+expected.parameter:
+  text: Parameter expected
+expected.rbrace:
+  text: '''}'' expected'
+expected.rbracket:
+  text: ''']'' expected'
+expected.resource:
+  text: Resource definition expected
+expected.rparen:
+  text: ''')'' expected'
+expected.semicolon:
+  text: ''';'' expected'
+expected.statement:
+  text: Statement expected
+expected.string:
+  text: String literal expected
+expected.switch.label:
+  text: '''case'', ''default'' or ''}'' expected'
+expected.switch.rule:
+  text: Expression, block or throw statement expected
+expected.type:
+  text: Type expected
+expected.type.parameter:
+  text: Type parameter expected
+expected.value:
+  text: Value expected
+expected.while:
+  text: '''while'' expected'
+expected.with:
+  text: '''with'' expected'
+filetype.description.class:
+  text: Java class
+filetype.description.java:
+  text: Java
+filetype.description.jshell:
+  text: JShell snippet
+finally.without.try:
+  text: '''finally'' without ''try'''
+import.statement.identifier.or.asterisk.expected.:
+  text: Identifier or '*' expected
+java.terms.anonymous.class.base.ref:
+  text: anonymous {0}
+javadoc.exception.tag.class.is.not.throwable:
+  text: Class {0} is not a descendant of Throwable
+javadoc.exception.tag.exception.is.not.thrown:
+  text: '{0} is not declared to be thrown by method {1}'
+javadoc.exception.tag.wrong.tag.value:
+  text: Wrong tag value
+javadoc.param.tag.parameter.name.expected:
+  text: Parameter name expected
+javadoc.param.tag.type.parameter.gt.expected:
+  text: '''>'' expected'
+javadoc.param.tag.type.parameter.name.expected:
+  text: Type parameter name expected
+javadoc.ref.tag.class.ref.expected:
+  text: Class reference expected
+javadoc.value.field.required:
+  text: '@value tag must reference a field'
+javadoc.value.field.with.initializer.required:
+  text: '@value tag must reference a field with a constant initializer'
+javadoc.value.static.field.required:
+  text: '@value tag must reference a static field'
+javadoc.value.tag.jdk15.required:
+  text: '@value tag may not have any arguments when JDK 1.4 or earlier is used'
+feature.assertions:
+  text: Assertions
+feature.enums:
+  text: Enums
+feature.generics:
+  text: Generics
+feature.annotations:
+  text: Annotations
+feature.override.interface:
+  text: '@Override in interfaces'
+feature.static.imports:
+  text: Static imports
+feature.for.each:
+  text: For-each loops
+feature.varargs:
+  text: Variable arity methods
+feature.hex.fp.literals:
+  text: Hexadecimal floating point literals
+feature.diamond.types:
+  text: Diamond types
+feature.multi.catch:
+  text: Multi-catches
+feature.try.with.resources:
+  text: Try-with-resources
+feature.binary.literals:
+  text: Binary literals
+feature.underscores.in.literals:
+  text: Underscores in literals
+feature.string.switch:
+  text: Strings in 'switch' statements
+feature.stream.and.optional.api:
+  text: Stream and Optional API
+feature.advanced.collection.api:
+  text: Lambda methods in collections
+feature.with.initial:
+  text: ThreadLocal.withInitial()
+feature.extension.methods:
+  text: Extension methods
+feature.method.references:
+  text: Method references
+feature.lambda.expressions:
+  text: Lambda expressions
+feature.type.annotations:
+  text: Type annotations
+feature.type.receivers:
+  text: Receiver parameters
+feature.intersections.in.casts:
+  text: Intersection types in casts
+feature.static.interface.calls:
+  text: Static interface method calls
+feature.effectively.final:
+  text: Effectively final variables
+feature.try.with.resources.refs:
+  text: Resource references
+feature.modules:
+  text: Modules
+feature.private.interface.methods:
+  text: Private interface methods
+feature.collection.factories:
+  text: Collection factory methods
+feature.lvti:
+  text: Local variable type inference
+feature.var.lambda.parameter:
+  text: '''var'' in lambda parameters'
+feature.nestmates:
+  text: Nest-based access control
+feature.text.blocks:
+  text: Text block literals
+feature.text.block.escape.sequences:
+  text: '''\s'' escape sequences'
+feature.enhanced.switch:
+  text: Enhanced 'switch' blocks
+feature.switch.expressions:
+  text: '''switch'' expressions'
+feature.serial.annotation:
+  text: '@Serial annotation'
+feature.records:
+  text: Records
+feature.patterns.instanceof:
+  text: Patterns in 'instanceof'
+feature.sealed.classes:
+  text: Sealed classes
+feature.strictfp:
+  text: Always-strict floating point semantics
+feature.no.this.capture:
+  text: Inner classes don't capture 'this'
+feature.local.interfaces:
+  text: Local interfaces
+feature.local.enums:
+  text: Local enums
+feature.inner.statics:
+  text: Static declarations in inner classes
+feature.patterns.in.switch:
+  text: Patterns in switch
+feature.javadoc.snippets:
+  text: '@snippet in Javadoc'
+feature.pattern.guard.and.record.patterns:
+  text: Pattern guards and record patterns
+feature.record.patterns.in.for.each:
+  text: Record patterns in for-each loops
+feature.enum.qualified.name.in.switch:
+  text: Qualified enum as a constant in switch
+feature.string.templates:
+  text: String templates
+feature.unnamed.vars:
+  text: Unnamed patterns and variables
+feature.implicit.classes:
+  text: Implicitly declared classes
+feature.scoped.values:
+  text: Scoped Values
+feature.structured.concurrency:
+  text: Structured Concurrency
+feature.sequenced.collections:
+  text: Sequenced Collections
+feature.classfile.api:
+  text: ClassFile API
+feature.stream.gatherers:
+  text: Stream Gatherers
+feature.foreign.functions:
+  text: Foreign Function & Memory API
+feature.virtual.threads:
+  text: Virtual Threads
+feature.statements.before.super:
+  text: Statements before super()
+jdk.1_3.language.level.description:
+  text: 1.3 - Plain old Java
+jdk.1_4.language.level.description:
+  text: 1.4 - 'assert' keyword
+jdk.1_5.language.level.description:
+  text: 5 - 'enum' keyword, generics, autoboxing etc.
+jdk.1_6.language.level.description:
+  text: 6 - @Override in interfaces
+jdk.1_7.language.level.description:
+  text: 7 - Diamonds, ARM, multi-catch etc.
+jdk.1_8.language.level.description:
+  text: 8 - Lambdas, type annotations etc.
+jdk.1_9.language.level.description:
+  text: 9 - Modules, private methods in interfaces etc.
+jdk.10.language.level.description:
+  text: 10 - Local variable type inference
+jdk.11.language.level.description:
+  text: 11 - Local variable syntax for lambda parameters
+jdk.12.language.level.description:
+  text: 12 - No new language features
+jdk.13.language.level.description:
+  text: 13 - No new language features
+jdk.14.language.level.description:
+  text: 14 - Switch expressions
+jdk.15.language.level.description:
+  text: 15 - Text blocks
+jdk.16.language.level.description:
+  text: 16 - Records, patterns, local enums and interfaces
+jdk.17.language.level.description:
+  text: 17 - Sealed types, always-strict floating-point semantics
+jdk.18.language.level.description:
+  text: 18 - JavaDoc snippets
+jdk.19.language.level.description:
+  text: 19 - No new language features
+jdk.20.language.level.description:
+  text: 20 - No new language features
+jdk.21.language.level.description:
+  text: 21 - Record patterns, pattern matching for switch
+jdk.21.preview.language.level.description:
+  text: 21 (Preview) - String templates, unnamed classes and instance main methods etc.
+jdk.22.language.level.description:
+  text: 22 - Unnamed variables and patterns
+jdk.22.preview.language.level.description:
+  text: 22 (Preview) - Statements before super(), string templates (2nd preview) etc.
+jdk.X.language.level.description:
+  text: X - Experimental features
+jdk.unsupported.preview.language.level.description:
+  text: '{0} (Preview) - Unsupported'
+local.class.preposition:
+  text: local
+method.context.display:
+  text: '{0}() in {1}'
+node.abstract.flag.tooltip:
+  text: Abstract
+node.annotation.tooltip:
+  text: Annotation
+node.anonymous.class.tooltip:
+  text: Anonymous Class
+node.class.tooltip:
+  text: Class
+node.enum.tooltip:
+  text: Enum
+node.exception.tooltip:
+  text: Exception
+node.field.tooltip:
+  text: Field
+node.final.flag.tooltip:
+  text: Final
+node.interface.tooltip:
+  text: Interface
+node.junit.test.tooltip:
+  text: JUnit Test
+node.method.tooltip:
+  text: Method
+node.record.tooltip:
+  text: Record (Preview Feature)
+node.runnable.class.tooltip:
+  text: Runnable Class
+node.static.flag.tooltip:
+  text: Static
+psi.error.attempt.to.edit.class.file:
+  text: Cannot modify compiled element in file ''{0}''
+task.background.title.maven:
+  text: Maven
+unexpected.identifier:
+  text: Unexpected identifier
+unexpected.token:
+  text: Unexpected token
+unexpected.tokens:
+  text: Unexpected tokens
+error.message.wildcard.not.expected:
+  text: Unexpected wildcard
+bad.return.type.in.method.reference:
+  text: 'Bad return type in method reference: cannot convert {0} to {1}'
+bad.return.type.in.lambda.expression:
+  text: 'Bad return type in lambda expression: {0} cannot be converted to {1}'
+bad.return.type.in.lambda.expression1:
+  text: 'Bad return type in lambda expression: {0} cannot be converted to void'
+missing.return.value.lambda:
+  text: Missing return value
+unexpected.return.value:
+  text: Unexpected return value
+lambda.body.must.be.a.statement.expression:
+  text: Lambda body must be a statement expression
+diamond.error.explicit.type.parameters.for.constructor:
+  text: Cannot use diamonds with explicit type parameters for constructor
+diamond.error.cannot.infer.arguments:
+  text: Cannot infer arguments
+diamond.error.cannot.infer.arguments.unable.to.resolve.constructor:
+  text: Cannot infer arguments (unable to resolve constructor)
+diamond.error.anonymous.inner.classes:
+  text: Cannot use '<>' with anonymous inner classes
+diamond.error.anonymous.inner.classes.non.private:
+  text: Cannot use '<>' due to non-private method which doesn't override or implement a method from a supertype
+diamond.error.cannot.infer.type.arguments:
+  text: Cannot infer type arguments for {0}
+error.incompatible.type.no.type.variable:
+  text: no instance(s) of type variable(s) exist so that {0}
+error.incompatible.type.no.type.variable.0:
+  text: no instance(s) of type variable(s) {0} exist so that {1}
+type.conforms.to.constraint:
+  text: '{0} conforms to {1}'
+type.can.be.converted:
+  text: '{0} can be converted to {1}'
+conflicting.conjuncts:
+  text: '{0} and {1}'
+error.type.parameter.has.incompatible.upper.bounds:
+  text: 'Type parameter {0} has incompatible upper bounds: {1}'
+error.incompatible.upper.bounds:
+  text: 'Incompatible upper bounds: {0}'
+error.inference.variable.has.incompatible.bounds:
+  text: |-
+    inference variable {0} has incompatible bounds:
+     {1}: {2}
+    {3}: {4}
+error.incompatible.type:
+  text: '{0} is not compatible with {1}'
+error.incompatible.type.not.a.functional.interface:
+  text: '{0} is not a functional interface'
+error.incompatible.type.no.valid.function.type.found:
+  text: No valid function type can be found for {0}
+error.incompatible.type.parameter.type.is.not.yet.inferred:
+  text: 'Parameter type is not yet inferred: {0}'
+error.incompatible.type.return.type.is.not.yet.inferred:
+  text: 'Return type is not yet inferred: {0}'
+error.incompatible.type.unhandled.exception:
+  text: 'Unhandled exception: {0}'
+error.incompatible.type.failed.to.resolve.argument:
+  text: Failed to resolve argument
+error.incompatible.type.incompatible.parameter.types.in.lambda:
+  text: Incompatible parameter types in lambda expression
+error.incompatible.type.incompatible.types.expected.void.lambda:
+  text: 'Incompatible types: expected void but the lambda body is neither a statement expression nor a void-compatible block'
+error.incompatible.type.expected.value.lambda:
+  text: 'Incompatible types: expected not void but the lambda body is a block that is not value-compatible'
+error.incompatible.type.bad.lambda.return.type:
+  text: 'Bad return type in lambda expression: {0} cannot be converted to {1}'
+error.incompatible.type.incompatible.parameter.types.in.method.reference:
+  text: Incompatible parameter types in method reference expression
+error.incompatible.type.incompatible.types.expected.not.void.got.void.method.reference:
+  text: 'Incompatible types: expected not void but compile-time declaration for the method reference has void return type'
+error.incompatible.type.declaration.for.the.method.reference.not.found:
+  text: No compile-time declaration for the method reference is found
+error.incompatible.type.expected.non.void.got.void.method.reference:
+  text: 'Incompatible types: expected not void but compile-time declaration for the method reference has void return type'
+error.incompatible.type.not.convertible:
+  text: 'Incompatible types: {0} is not convertible to {1}'
+error.incompatible.type.incompatible.equality.constraint:
+  text: 'Incompatible equality constraint: {0} and {1}'
+list.item.no.module:
+  text: <no module>
+element.kind.and.name:
+  text: '{0} {1}'

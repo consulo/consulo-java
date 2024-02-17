@@ -412,7 +412,7 @@ public class JavaRegExpHost implements RegExpLanguageHost {
   @Nonnull
   @RequiredReadAction
   private static JavaSdkVersion getJavaVersion(PsiElement element) {
-    final Module module = ModuleUtilCore.findModuleForPsiElement(element);
+    final Module module = element.getModule();
     if (module != null) {
       final Sdk sdk = ModuleUtilCore.getSdk(element, JavaModuleExtension.class);
       if (sdk != null && sdk.getSdkType() instanceof JavaSdk) {

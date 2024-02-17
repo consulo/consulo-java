@@ -16,6 +16,7 @@
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 
 import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
+import com.intellij.java.language.JavaFeature;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.codeInsight.AnnotationTargetUtil;
 import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
@@ -391,7 +392,7 @@ public class AnnotationsHighlightUtil {
     }
 
     if (!(owner instanceof PsiModifierList)) {
-      HighlightInfo info = HighlightUtil.checkFeature(annotation, HighlightUtil.Feature.TYPE_ANNOTATIONS, level, file);
+      HighlightInfo info = HighlightUtil.checkFeature(annotation, JavaFeature.TYPE_ANNOTATIONS, level, file);
       if (info != null) {
         return info;
       }

@@ -3,16 +3,14 @@ package com.intellij.java.language;
 
 import com.intellij.java.language.psi.PsiModifier;
 import consulo.component.util.localize.AbstractBundle;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.PropertyKey;
 
-import jakarta.annotation.Nonnull;
 import java.util.function.Supplier;
 
 public final class JavaPsiBundle extends AbstractBundle {
-  @NonNls
-  public static final String BUNDLE = "messages.JavaPsiBundle";
+  public static final String BUNDLE = "com.intellij.java.language.JavaPsiBundle";
   public static final JavaPsiBundle INSTANCE = new JavaPsiBundle();
 
   private JavaPsiBundle() {
