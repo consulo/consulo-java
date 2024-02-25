@@ -54,6 +54,11 @@ public class ClsParsingUtil {
   private ClsParsingUtil() {
   }
 
+  // expecting the parameter in the "unsigned short" format
+  public static boolean isPreviewLevel(int minor) {
+    return minor == 0xFFFF;
+  }
+
   public static PsiExpression createExpressionFromText(@Nonnull String exprText, @Nonnull PsiManager manager, @Nonnull ClsElementImpl parent) {
     PsiJavaParserFacade parserFacade = JavaPsiFacade.getInstance(manager.getProject()).getParserFacade();
     try {

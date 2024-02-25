@@ -15,13 +15,16 @@
  */
 package com.intellij.java.language.impl.psi.impl.java.stubs;
 
+import com.intellij.java.language.impl.psi.impl.java.stubs.index.JavaStubIndexKeys;
 import com.intellij.java.language.impl.psi.impl.source.JavaFileElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.*;
+import com.intellij.java.language.impl.psi.util.JavaImplicitClassUtil;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiKeyword;
 import consulo.language.ast.ASTNode;
 import consulo.language.psi.stub.IStubFileElementType;
-
+import consulo.language.psi.stub.IndexSink;
+import consulo.language.psi.stub.StubElement;
 import jakarta.annotation.Nonnull;
 
 /**
@@ -64,6 +67,21 @@ public interface JavaStubElementTypes {
     @Override
     public ASTNode createCompositeNode() {
       return new AnonymousClassElement();
+    }
+  };
+  JavaClassElementType IMPLICIT_CLASS = new JavaClassElementType("IMPLICIT_CLASS") {
+    @Nonnull
+    @Override
+    public ASTNode createCompositeNode() {
+      return new ImplicitClassElement();
+    }
+
+    @Override
+    public void indexStub(@Nonnull PsiClassStub stub, @Nonnull IndexSink sink) {
+      StubElement parent = stub.getParentStub();
+      if (parent instanceof PsiJavaFileStub) {
+        sink.occurrence(JavaStubIndexKeys.IMPLICIT_CLASSES, JavaImplicitClassUtil.getJvmName(((PsiJavaFileStub)parent).getPsi().getName()));
+      }
     }
   };
   JavaClassElementType ENUM_CONSTANT_INITIALIZER = new JavaClassElementType("ENUM_CONSTANT_INITIALIZER") {

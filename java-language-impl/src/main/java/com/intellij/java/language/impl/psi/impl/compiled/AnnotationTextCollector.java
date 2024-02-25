@@ -1,22 +1,23 @@
 // Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.language.impl.psi.impl.compiled;
 
+import com.intellij.java.language.impl.psi.impl.cache.TypeInfo;
 import consulo.internal.org.objectweb.asm.AnnotationVisitor;
 import consulo.internal.org.objectweb.asm.Opcodes;
 import consulo.internal.org.objectweb.asm.Type;
-
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 final class AnnotationTextCollector extends AnnotationVisitor {
-  private final StringBuilder myBuilder = new StringBuilder();
-  private final Function<String, String> myMapping;
+  private final @Nonnull StringBuilder myBuilder = new StringBuilder();
+  private final @Nonnull SignatureParsing.TypeInfoProvider myMapping;
   private final Consumer<? super String> myCallback;
   private boolean hasPrefix;
   private boolean hasParams;
 
-  AnnotationTextCollector(@Nullable String desc, Function<String, String> mapping, Consumer<? super String> callback) {
+  AnnotationTextCollector(@Nullable String desc, @Nonnull SignatureParsing.TypeInfoProvider mapping, Consumer<? super String> callback) {
     super(Opcodes.API_VERSION);
     myMapping = mapping;
     myCallback = callback;
@@ -30,7 +31,7 @@ final class AnnotationTextCollector extends AnnotationVisitor {
   @Override
   public void visit(String name, Object value) {
     valuePairPrefix(name);
-    myBuilder.append(StubBuildingVisitor.constToString(value, null, true, myMapping));
+    myBuilder.append(StubBuildingVisitor.constToString(value, TypeInfo.SimpleTypeInfo.NULL, true, myMapping));
   }
 
   @Override
@@ -45,7 +46,8 @@ final class AnnotationTextCollector extends AnnotationVisitor {
       if (hasPrefix) {
         myBuilder.append('(');
       }
-    } else {
+    }
+    else {
       myBuilder.append(',');
     }
 

@@ -7,6 +7,7 @@ import com.intellij.java.language.impl.psi.impl.PsiClassImplUtil;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.language.impl.psi.impl.PsiSuperMethodImplUtil;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
+import com.intellij.java.language.impl.psi.impl.java.stubs.PsiClassReferenceListStub;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiClassStub;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiRecordHeaderStub;
 import com.intellij.java.language.impl.psi.impl.java.stubs.impl.PsiClassStubImpl;
@@ -34,10 +35,9 @@ import consulo.navigation.ItemPresentationProvider;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.Pair;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
-
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
@@ -125,6 +125,12 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
   @Nonnull
   public PsiReferenceList getImplementsList() {
     return assertNotNull(getStub().findChildStubByType(JavaStubElementTypes.IMPLEMENTS_LIST)).getPsi();
+  }
+
+  @Override
+  public @Nullable PsiReferenceList getPermitsList() {
+    PsiClassReferenceListStub type = getStub().findChildStubByType(JavaStubElementTypes.PERMITS_LIST);
+    return type == null ? null : type.getPsi();
   }
 
   @Override

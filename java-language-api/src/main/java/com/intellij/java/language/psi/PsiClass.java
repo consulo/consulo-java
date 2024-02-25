@@ -22,14 +22,14 @@ import consulo.language.pom.PomRenameableTarget;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiNameIdentifierOwner;
 import consulo.language.psi.PsiQualifiedNamedElement;
-import consulo.language.util.IncorrectOperationException;
 import consulo.language.psi.PsiTarget;
+import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.ArrayFactory;
 import consulo.util.lang.Pair;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -120,6 +120,30 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
    */
   @Nonnull
   PsiClassType[] getImplementsListTypes();
+
+  /**
+   * Returns the list of classes that this class or interface explicitly permits.
+   *
+   * @return the permits list, or null if there's none.
+   */
+  @Nullable
+  default PsiReferenceList getPermitsList() {
+    return null;
+  }
+
+  /**
+   * Returns the array of class types that this class or interface explicitly permits.
+   *
+   * @return the array of explicitly permitted classes.
+   */
+  @Nonnull
+  default PsiClassType[] getPermitsListTypes() {
+    PsiReferenceList permitsList = getPermitsList();
+    if (permitsList != null) {
+      return permitsList.getReferencedTypes();
+    }
+    return PsiClassType.EMPTY_ARRAY;
+  }
 
   /**
    * Returns the base class of this class.

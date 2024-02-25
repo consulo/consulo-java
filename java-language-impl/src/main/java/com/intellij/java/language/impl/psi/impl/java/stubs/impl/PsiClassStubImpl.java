@@ -1,361 +1,288 @@
-/*
- * Copyright 2000-2016 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2021 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.language.impl.psi.impl.java.stubs.impl;
 
-import consulo.language.impl.psi.stub.StubBasedPsiElementBase;
-import com.intellij.java.language.LanguageLevel;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.impl.DebugUtil;
+import com.intellij.java.language.impl.psi.impl.cache.TypeInfo;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaClassElementType;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiClassStub;
-import com.intellij.java.language.impl.psi.impl.java.stubs.PsiJavaFileStub;
+import com.intellij.java.language.psi.PsiClass;
+import consulo.language.impl.DebugUtil;
+import consulo.language.impl.psi.stub.StubBasedPsiElementBase;
 import consulo.language.psi.stub.StubBase;
 import consulo.language.psi.stub.StubElement;
 import consulo.util.lang.BitUtil;
-
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-/**
- * @author max
- */
-public class PsiClassStubImpl<T extends PsiClass> extends StubBase<T> implements PsiClassStub<T>
-{
-	private static final int DEPRECATED = 0x01;
-	private static final int INTERFACE = 0x02;
-	private static final int ENUM = 0x04;
-	private static final int ENUM_CONSTANT_INITIALIZER = 0x08;
-	private static final int ANONYMOUS = 0x10;
-	private static final int ANON_TYPE = 0x20;
-	private static final int IN_QUALIFIED_NEW = 0x40;
-	private static final int DEPRECATED_ANNOTATION = 0x80;
-	private static final int ANONYMOUS_INNER = 0x100;
-	private static final int LOCAL_CLASS_INNER = 0x200;
-	private static final int HAS_DOC_COMMENT = 0x400;
-	private static final int RECORD = 0x800;
+public class PsiClassStubImpl<T extends PsiClass> extends StubBase<T> implements PsiClassStub<T> {
+  private static final int DEPRECATED = 0x01;
+  private static final int INTERFACE = 0x02;
+  private static final int ENUM = 0x04;
+  private static final int ENUM_CONSTANT_INITIALIZER = 0x08;
+  private static final int ANONYMOUS = 0x10;
+  private static final int ANON_TYPE = 0x20;
+  private static final int IN_QUALIFIED_NEW = 0x40;
+  private static final int DEPRECATED_ANNOTATION = 0x80;
+  private static final int ANONYMOUS_INNER = 0x100;
+  private static final int LOCAL_CLASS_INNER = 0x200;
+  private static final int HAS_DOC_COMMENT = 0x400;
+  private static final int RECORD = 0x800;
+  private static final int IMPLICIT = 0x1000;
 
-	private final String myQualifiedName;
-	private final String myName;
-	private final String myBaseRefText;
-	private final short myFlags;
-	private String mySourceFileName;
+  private final @Nonnull TypeInfo myTypeInfo;
+  private final String myQualifiedName;
+  private final String myName;
+  private final String myBaseRefText;
+  private final short myFlags;
+  private String mySourceFileName;
 
-	public PsiClassStubImpl(final JavaClassElementType type,
-							final StubElement parent,
-							@Nullable final String qualifiedName,
-							@Nullable final String name,
-							@Nullable final String baseRefText,
-							final short flags)
-	{
-		super(parent, type);
-		myQualifiedName = qualifiedName;
-		myName = name;
-		myBaseRefText = baseRefText;
-		myFlags = flags;
-		if(StubBasedPsiElementBase.ourTraceStubAstBinding)
-		{
-			String creationTrace = "Stub creation thread: " + Thread.currentThread() + "\n" + DebugUtil.currentStackTrace();
-			putUserData(StubBasedPsiElementBase.CREATION_TRACE, creationTrace);
-		}
-	}
+  public PsiClassStubImpl(@Nonnull JavaClassElementType type,
+                          final StubElement parent,
+                          @Nullable final String qualifiedName,
+                          @Nullable final String name,
+                          @Nullable final String baseRefText,
+                          final short flags) {
+    this(type, parent, TypeInfo.fromString(qualifiedName), name, baseRefText, flags);
+  }
 
-	@Override
-	public String getName()
-	{
-		return myName;
-	}
+  public PsiClassStubImpl(@Nonnull JavaClassElementType type,
+                          final StubElement parent,
+                          @Nonnull final TypeInfo typeInfo,
+                          @Nullable final String name,
+                          @Nullable final String baseRefText,
+                          final short flags) {
+    super(parent, type);
+    myTypeInfo = typeInfo;
+    myQualifiedName = typeInfo.text();
+    myName = name;
+    myBaseRefText = baseRefText;
+    myFlags = flags;
+    if (StubBasedPsiElementBase.ourTraceStubAstBinding) {
+      String creationTrace = "Stub creation thread: " + Thread.currentThread() + "\n" + DebugUtil.currentStackTrace();
+      putUserData(StubBasedPsiElementBase.CREATION_TRACE, creationTrace);
+    }
+  }
 
-	@Override
-	public String getQualifiedName()
-	{
-		return myQualifiedName;
-	}
+  @Override
+  public String getName() {
+    return myName;
+  }
 
-	@Override
-	public String getBaseClassReferenceText()
-	{
-		return myBaseRefText;
-	}
+  public @Nonnull TypeInfo getQualifiedNameTypeInfo() {
+    return myTypeInfo;
+  }
 
-	@Override
-	public boolean isDeprecated()
-	{
-		return BitUtil.isSet(myFlags, DEPRECATED);
-	}
+  @Override
+  public String getQualifiedName() {
+    return myQualifiedName;
+  }
 
-	@Override
-	public boolean hasDeprecatedAnnotation()
-	{
-		return BitUtil.isSet(myFlags, DEPRECATED_ANNOTATION);
-	}
+  @Override
+  public String getBaseClassReferenceText() {
+    return myBaseRefText;
+  }
 
-	@Override
-	public boolean isInterface()
-	{
-		return BitUtil.isSet(myFlags, INTERFACE);
-	}
+  @Override
+  public boolean isDeprecated() {
+    return BitUtil.isSet(myFlags, DEPRECATED);
+  }
 
-	@Override
-	public boolean isEnum()
-	{
-		return BitUtil.isSet(myFlags, ENUM);
-	}
+  @Override
+  public boolean hasDeprecatedAnnotation() {
+    return BitUtil.isSet(myFlags, DEPRECATED_ANNOTATION);
+  }
 
-	@Override
-	public boolean isRecord()
-	{
-		return BitUtil.isSet(myFlags, RECORD);
-	}
+  @Override
+  public boolean isInterface() {
+    return BitUtil.isSet(myFlags, INTERFACE);
+  }
 
-	@Override
-	public boolean isEnumConstantInitializer()
-	{
-		return isEnumConstInitializer(myFlags);
-	}
+  @Override
+  public boolean isEnum() {
+    return BitUtil.isSet(myFlags, ENUM);
+  }
 
-	public static boolean isEnumConstInitializer(final short flags)
-	{
-		return BitUtil.isSet(flags, ENUM_CONSTANT_INITIALIZER);
-	}
+  @Override
+  public boolean isRecord() {
+    return BitUtil.isSet(myFlags, RECORD);
+  }
 
-	@Override
-	public boolean isAnonymous()
-	{
-		return isAnonymous(myFlags);
-	}
+  @Override
+  public boolean isImplicit() {
+    return BitUtil.isSet(myFlags, IMPLICIT);
+  }
 
-	public static boolean isAnonymous(final short flags)
-	{
-		return BitUtil.isSet(flags, ANONYMOUS);
-	}
+  @Override
+  public boolean isEnumConstantInitializer() {
+    return isEnumConstInitializer(myFlags);
+  }
 
-	@Override
-	public boolean isAnnotationType()
-	{
-		return BitUtil.isSet(myFlags, ANON_TYPE);
-	}
+  public static boolean isEnumConstInitializer(final short flags) {
+    return BitUtil.isSet(flags, ENUM_CONSTANT_INITIALIZER);
+  }
 
-	@Override
-	public LanguageLevel getLanguageLevel()
-	{
-		StubElement parent = getParentStub();
-		if(parent instanceof PsiJavaFileStub)
-		{
-			LanguageLevel level = ((PsiJavaFileStub) parent).getLanguageLevel();
-			if(level != null)
-			{
-				return level;
-			}
-		}
-		return LanguageLevel.HIGHEST;
-	}
+  public static boolean isImplicit(final short flags) {
+    return BitUtil.isSet(flags, IMPLICIT);
+  }
 
-	@Override
-	public String getSourceFileName()
-	{
-		return mySourceFileName;
-	}
+  @Override
+  public boolean isAnonymous() {
+    return isAnonymous(myFlags);
+  }
 
-	public void setSourceFileName(String sourceFileName)
-	{
-		mySourceFileName = sourceFileName;
-	}
+  public static boolean isAnonymous(final short flags) {
+    return BitUtil.isSet(flags, ANONYMOUS);
+  }
 
-	@Override
-	public boolean isAnonymousInQualifiedNew()
-	{
-		return BitUtil.isSet(myFlags, IN_QUALIFIED_NEW);
-	}
+  @Override
+  public boolean isAnnotationType() {
+    return BitUtil.isSet(myFlags, ANON_TYPE);
+  }
 
-	public short getFlags()
-	{
-		return myFlags;
-	}
+  @Override
+  public boolean hasDocComment() {
+    return BitUtil.isSet(myFlags, HAS_DOC_COMMENT);
+  }
 
-	public static short packFlags(boolean isDeprecated,
-								  boolean isInterface,
-								  boolean isEnum,
-								  boolean isEnumConstantInitializer,
-								  boolean isAnonymous,
-								  boolean isAnnotationType,
-								  boolean isInQualifiedNew,
-								  boolean hasDeprecatedAnnotation,
-								  boolean anonymousInner,
-								  boolean localClassInner,
-								  boolean hasDocComment)
-	{
-		return packFlags(isDeprecated,
-				isInterface,
-				isEnum,
-				isEnumConstantInitializer,
-				isAnonymous,
-				isAnnotationType,
-				isInQualifiedNew,
-				hasDeprecatedAnnotation,
-				anonymousInner,
-				localClassInner,
-				hasDocComment,
-				false);
-	}
+  @Override
+  public String getSourceFileName() {
+    return mySourceFileName;
+  }
 
-	public static short packFlags(boolean isDeprecated,
-								  boolean isInterface,
-								  boolean isEnum,
-								  boolean isEnumConstantInitializer,
-								  boolean isAnonymous,
-								  boolean isAnnotationType,
-								  boolean isInQualifiedNew,
-								  boolean hasDeprecatedAnnotation,
-								  boolean anonymousInner,
-								  boolean localClassInner,
-								  boolean hasDocComment,
-								  boolean isRecord)
-	{
-		short flags = 0;
-		if(isDeprecated)
-		{
-			flags |= DEPRECATED;
-		}
-		if(isInterface)
-		{
-			flags |= INTERFACE;
-		}
-		if(isEnum)
-		{
-			flags |= ENUM;
-		}
-		if(isEnumConstantInitializer)
-		{
-			flags |= ENUM_CONSTANT_INITIALIZER;
-		}
-		if(isAnonymous)
-		{
-			flags |= ANONYMOUS;
-		}
-		if(isAnnotationType)
-		{
-			flags |= ANON_TYPE;
-		}
-		if(isInQualifiedNew)
-		{
-			flags |= IN_QUALIFIED_NEW;
-		}
-		if(hasDeprecatedAnnotation)
-		{
-			flags |= DEPRECATED_ANNOTATION;
-		}
-		if(anonymousInner)
-		{
-			flags |= ANONYMOUS_INNER;
-		}
-		if(localClassInner)
-		{
-			flags |= LOCAL_CLASS_INNER;
-		}
-		if(hasDocComment)
-		{
-			flags |= HAS_DOC_COMMENT;
-		}
-		if(isRecord)
-		{
-			flags |= RECORD;
-		}
-		return flags;
-	}
+  public void setSourceFileName(String sourceFileName) {
+    mySourceFileName = sourceFileName;
+  }
 
-	public boolean isAnonymousInner()
-	{
-		return BitUtil.isSet(myFlags, ANONYMOUS_INNER);
-	}
+  @Override
+  public boolean isAnonymousInQualifiedNew() {
+    return BitUtil.isSet(myFlags, IN_QUALIFIED_NEW);
+  }
 
-	public boolean isLocalClassInner()
-	{
-		return BitUtil.isSet(myFlags, LOCAL_CLASS_INNER);
-	}
+  public short getFlags() {
+    return myFlags;
+  }
 
-	@Override
-	@SuppressWarnings("SpellCheckingInspection")
-	public String toString()
-	{
-		StringBuilder builder = new StringBuilder();
-		builder.append("PsiClassStub[");
+  public static short packFlags(boolean isDeprecated,
+                                boolean isInterface,
+                                boolean isEnum,
+                                boolean isEnumConstantInitializer,
+                                boolean isAnonymous,
+                                boolean isAnnotationType,
+                                boolean isInQualifiedNew,
+                                boolean hasDeprecatedAnnotation,
+                                boolean anonymousInner,
+                                boolean localClassInner,
+                                boolean hasDocComment) {
+    return packFlags(isDeprecated,
+                     isInterface,
+                     isEnum,
+                     isEnumConstantInitializer,
+                     isAnonymous,
+                     isAnnotationType,
+                     isInQualifiedNew,
+                     hasDeprecatedAnnotation,
+                     anonymousInner,
+                     localClassInner,
+                     hasDocComment,
+                     false,
+                     false);
+  }
 
-		if(isInterface())
-		{
-			builder.append("interface ");
-		}
+  public static short packFlags(boolean isDeprecated,
+                                boolean isInterface,
+                                boolean isEnum,
+                                boolean isEnumConstantInitializer,
+                                boolean isAnonymous,
+                                boolean isAnnotationType,
+                                boolean isInQualifiedNew,
+                                boolean hasDeprecatedAnnotation,
+                                boolean anonymousInner,
+                                boolean localClassInner,
+                                boolean hasDocComment,
+                                boolean isRecord,
+                                boolean isImplicit) {
+    short flags = 0;
+    if (isDeprecated) flags |= DEPRECATED;
+    if (isInterface) flags |= INTERFACE;
+    if (isEnum) flags |= ENUM;
+    if (isEnumConstantInitializer) flags |= ENUM_CONSTANT_INITIALIZER;
+    if (isAnonymous) flags |= ANONYMOUS;
+    if (isAnnotationType) flags |= ANON_TYPE;
+    if (isInQualifiedNew) flags |= IN_QUALIFIED_NEW;
+    if (hasDeprecatedAnnotation) flags |= DEPRECATED_ANNOTATION;
+    if (anonymousInner) flags |= ANONYMOUS_INNER;
+    if (localClassInner) flags |= LOCAL_CLASS_INNER;
+    if (hasDocComment) flags |= HAS_DOC_COMMENT;
+    if (isRecord) flags |= RECORD;
+    if (isImplicit) flags |= IMPLICIT;
+    return flags;
+  }
 
-		if(isAnonymous())
-		{
-			builder.append("anonymous ");
-		}
+  public boolean isAnonymousInner() {
+    return BitUtil.isSet(myFlags, ANONYMOUS_INNER);
+  }
 
-		if(isEnum())
-		{
-			builder.append("enum ");
-		}
+  public boolean isLocalClassInner() {
+    return BitUtil.isSet(myFlags, LOCAL_CLASS_INNER);
+  }
 
-		if(isRecord())
-		{
-			builder.append("record ");
-		}
+  @Override
+  @SuppressWarnings("SpellCheckingInspection")
+  public String toString() {
+    StringBuilder builder = new StringBuilder();
+    builder.append("PsiClassStub[");
 
-		if(isAnnotationType())
-		{
-			builder.append("annotation ");
-		}
+    if (isInterface()) {
+      builder.append("interface ");
+    }
 
-		if(isEnumConstantInitializer())
-		{
-			builder.append("enumInit ");
-		}
+    if (isAnonymous()) {
+      builder.append("anonymous ");
+    }
 
-		if(isDeprecated())
-		{
-			builder.append("deprecated ");
-		}
+    if (isEnum()) {
+      builder.append("enum ");
+    }
 
-		if(hasDeprecatedAnnotation())
-		{
-			builder.append("deprecatedA ");
-		}
+    if (isRecord()) {
+      builder.append("record ");
+    }
 
-		builder.append("name=").append(getName()).append(" fqn=").append(getQualifiedName());
+    if (isAnnotationType()) {
+      builder.append("annotation ");
+    }
 
-		if(getBaseClassReferenceText() != null)
-		{
-			builder.append(" baseref=").append(getBaseClassReferenceText());
-		}
+    if (isEnumConstantInitializer()) {
+      builder.append("enumInit ");
+    }
 
-		if(isAnonymousInQualifiedNew())
-		{
-			builder.append(" inqualifnew");
-		}
+    if (isDeprecated()) {
+      builder.append("deprecated ");
+    }
 
-		if(isAnonymousInner())
-		{
-			builder.append(" jvmAnonymousInner");
-		}
+    if (hasDeprecatedAnnotation()) {
+      builder.append("deprecatedA ");
+    }
 
-		if(isLocalClassInner())
-		{
-			builder.append(" jvmLocalClassInner");
-		}
+    builder.append("name=").append(getName()).append(" fqn=").append(getQualifiedName());
 
-		builder.append("]");
+    if (getBaseClassReferenceText() != null) {
+      builder.append(" baseref=").append(getBaseClassReferenceText());
+    }
 
-		return builder.toString();
-	}
+    if (isAnonymousInQualifiedNew()) {
+      builder.append(" inqualifnew");
+    }
+
+    if (isAnonymousInner()) {
+      builder.append(" jvmAnonymousInner");
+    }
+
+    if (isLocalClassInner()) {
+      builder.append(" jvmLocalClassInner");
+    }
+
+    builder.append("]");
+
+    return builder.toString();
+  }
 }

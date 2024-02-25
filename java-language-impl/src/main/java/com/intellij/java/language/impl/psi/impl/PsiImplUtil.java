@@ -514,7 +514,7 @@ public class PsiImplUtil {
     return modifierList != null && modifierList.findAnnotation("java.lang.Deprecated") != null;
   }
 
-  public static boolean isDeprecatedByDocTag(@Nonnull PsiDocCommentOwner owner) {
+  public static boolean isDeprecatedByDocTag(@Nonnull PsiJavaDocumentedElement owner) {
     PsiDocComment docComment = owner.getDocComment();
     return docComment != null && docComment.findTagByName("deprecated") != null;
   }

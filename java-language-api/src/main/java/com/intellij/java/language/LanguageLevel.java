@@ -13,7 +13,6 @@ import consulo.util.dataholder.Key;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.Nls;
 
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -114,7 +113,7 @@ public enum LanguageLevel implements Named, NamedPointer<LanguageLevel> {
   public boolean isUnsupported() {
     return myUnsupported;
   }
-  
+
   /**
    * String representation of the level, suitable to pass as a value of compiler's "-source" and "-target" options
    */
@@ -138,8 +137,31 @@ public enum LanguageLevel implements Named, NamedPointer<LanguageLevel> {
     return myPresentableText;
   }
 
+  /**
+   * @return corresponding preview level, or {@code null} if level has no paired preview level
+   */
+  @Nullable
+  public LanguageLevel getPreviewLevel() {
+    if (myPreview) return this;
+    try {
+      return valueOf(name() + "_PREVIEW");
+    }
+    catch (IllegalArgumentException e) {
+      return null;
+    }
+  }
+
   public boolean isAtLeast(final LanguageLevel level) {
     return compareTo(level) >= 0;
+  }
+
+  /**
+   * @param level level to compare to
+   * @return true if this language level is strictly less than the level we are comparing to.
+   * A preview level for Java version X is assumed to be between non-preview version X and non-preview version X+1
+   */
+  public boolean isLessThan(@Nonnull LanguageLevel level) {
+    return compareTo(level) < 0;
   }
 
   @Override

@@ -26,6 +26,7 @@ import consulo.application.dumb.IndexNotReadyException;
 import consulo.application.progress.ProgressManager;
 import consulo.application.util.CachedValueProvider;
 import consulo.application.util.Queryable;
+import consulo.component.ProcessCanceledException;
 import consulo.component.util.ModificationTracker;
 import consulo.container.PluginException;
 import consulo.container.plugin.PluginId;
@@ -54,14 +55,15 @@ import consulo.project.ProjectManager;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.BitUtil;
+import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.SoftReference;
 import consulo.virtualFileSystem.VirtualFile;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
 import java.io.IOException;
 import java.lang.ref.Reference;
 import java.util.Collections;
@@ -578,34 +580,37 @@ public class ClsFileImpl extends PsiBinaryFileImpl implements PsiJavaFile, PsiFi
       String className = file.getNameWithoutExtension();
       String internalName = reader.getClassName();
       boolean module = internalName.equals("module-info") && BitUtil.isSet(reader.getAccess(), Opcodes.ACC_MODULE);
-      JavaSdkVersion jdkVersion = ClsParsingUtil.getJdkVersionByBytecode(reader.readShort(6));
+      JavaSdkVersion jdkVersion = ClsParsingUtil.getJdkVersionByBytecode(reader.readUnsignedShort(6));
       LanguageLevel level = jdkVersion != null ? jdkVersion.getMaxLanguageLevel() : null;
+      if (level != null && level.isAtLeast(LanguageLevel.JDK_11) && ClsParsingUtil.isPreviewLevel(reader.readUnsignedShort(4))) {
+        level = ObjectUtil.notNull(level.getPreviewLevel(), LanguageLevel.HIGHEST);
+      }
 
       if (module) {
         PsiJavaFileStub stub = new PsiJavaFileStubImpl(null, "", level, true);
         ModuleStubBuildingVisitor visitor = new ModuleStubBuildingVisitor(stub);
         reader.accept(visitor, EMPTY_ATTRIBUTES, ClassReader.SKIP_FRAMES);
-        if (visitor.getResult() != null) {
-          return stub;
-        }
-      } else {
+        if (visitor.getResult() != null) return stub;
+      }
+      else {
         PsiJavaFileStub stub = new PsiJavaFileStubImpl(null, getPackageName(internalName), level, true);
         try {
-          FileContentPair source = new FileContentPair(file, bytes);
+          FileContentPair source = new FileContentPair(file, reader);
           StubBuildingVisitor<FileContentPair> visitor = new StubBuildingVisitor<>(source, STRATEGY, stub, 0, className);
-          reader.accept(visitor, EMPTY_ATTRIBUTES, ClassReader.SKIP_FRAMES);
-          if (visitor.getResult() != null) {
-            return stub;
-          }
-        } catch (OutOfOrderInnerClassException e) {
-          if (LOG.isTraceEnabled()) {
-            LOG.trace(file.getPath());
-          }
+          reader.accept(visitor, EMPTY_ATTRIBUTES, ClassReader.SKIP_FRAMES | ClassReader.SKIP_CODE | ClassReader.VISIT_LOCAL_VARIABLES);
+          if (visitor.getResult() != null) return stub;
+        }
+        catch (OutOfOrderInnerClassException e) {
+          if (LOG.isTraceEnabled()) LOG.trace(file.getPath());
         }
       }
 
       return null;
-    } catch (Exception e) {
+    }
+    catch (ProcessCanceledException e) {
+      throw e;
+    }
+    catch (Throwable e) {
       throw new ClsFormatException(file.getPath() + ": " + e.getMessage(), e);
     }
   }
@@ -615,13 +620,12 @@ public class ClsFileImpl extends PsiBinaryFileImpl implements PsiJavaFile, PsiFi
     return p > 0 ? internalName.substring(0, p).replace('/', '.') : "";
   }
 
-  static class FileContentPair extends Pair<VirtualFile, byte[]> {
-    FileContentPair(@Nonnull VirtualFile file, @Nonnull byte[] content) {
+  static class FileContentPair extends Pair<VirtualFile, ClassReader> {
+    FileContentPair(@Nonnull VirtualFile file, @Nonnull ClassReader content) {
       super(file, content);
     }
 
-    @Nonnull
-    public byte[] getContent() {
+    public @Nonnull ClassReader getContent() {
       return second;
     }
 
@@ -632,9 +636,8 @@ public class ClsFileImpl extends PsiBinaryFileImpl implements PsiJavaFile, PsiFi
   }
 
   private static final InnerClassSourceStrategy<FileContentPair> STRATEGY = new InnerClassSourceStrategy<FileContentPair>() {
-    @Nullable
     @Override
-    public FileContentPair findInnerClass(String innerName, FileContentPair outerClass) {
+    public @Nullable FileContentPair findInnerClass(String innerName, FileContentPair outerClass) {
       String baseName = outerClass.first.getNameWithoutExtension();
       VirtualFile dir = outerClass.first.getParent();
       assert dir != null : outerClass;
@@ -642,8 +645,9 @@ public class ClsFileImpl extends PsiBinaryFileImpl implements PsiJavaFile, PsiFi
       if (innerClass != null) {
         try {
           byte[] bytes = innerClass.contentsToByteArray(false);
-          return new FileContentPair(innerClass, bytes);
-        } catch (IOException ignored) {
+          return new FileContentPair(innerClass, new ClassReader(bytes));
+        }
+        catch (IOException ignored) {
         }
       }
       return null;
@@ -651,7 +655,16 @@ public class ClsFileImpl extends PsiBinaryFileImpl implements PsiJavaFile, PsiFi
 
     @Override
     public void accept(FileContentPair innerClass, StubBuildingVisitor<FileContentPair> visitor) {
-      new ClassReader(innerClass.second).accept(visitor, EMPTY_ATTRIBUTES, ClassReader.SKIP_FRAMES);
+      try {
+        innerClass.second.accept(visitor,
+                                 EMPTY_ATTRIBUTES,
+                                 ClassReader.SKIP_FRAMES | ClassReader.SKIP_CODE | ClassReader.VISIT_LOCAL_VARIABLES);
+      }
+      catch (Exception e) {  // workaround for bug in skipping annotations when a first parameter of inner class is dropped (IDEA-204145)
+        VirtualFile file = innerClass.first;
+        if (LOG.isDebugEnabled()) LOG.debug(String.valueOf(file), e);
+        else LOG.info(file + ": " + e.getMessage());
+      }
     }
   };
 

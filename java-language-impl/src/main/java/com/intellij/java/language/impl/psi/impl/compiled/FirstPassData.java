@@ -5,87 +5,75 @@ import com.intellij.java.language.impl.psi.impl.cache.TypeInfo;
 import consulo.internal.org.objectweb.asm.*;
 import consulo.logging.Logger;
 import consulo.util.collection.ContainerUtil;
-import consulo.util.lang.BitUtil;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import org.jetbrains.annotations.Contract;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.Contract;
+
 import java.io.IOException;
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+
+import static consulo.util.lang.BitUtil.isSet;
 
 /**
  * Information retrieved during the first pass of a class file parsing
  */
-class FirstPassData implements Function<String, String> {
+class FirstPassData implements SignatureParsing.TypeInfoProvider {
   private static final Logger LOG = Logger.getInstance(FirstPassData.class);
 
-  private static class InnerClassEntry {
-    final
-    @Nonnull
-    String myOuterName;
-    final
-    @Nullable
-    String myInnerName;
+  private abstract static class ClassEntry {
+  }
+
+  private static final class RegularClassEntry extends ClassEntry {
+    final @Nonnull String myName;
+
+    private RegularClassEntry(@Nonnull String name) {
+      myName = name;
+    }
+  }
+
+  private static final class StringInnerClassEntry extends ClassEntry {
+    final @Nonnull String myOuterName;
+    final @Nonnull String myInnerName;
     final boolean myStatic;
 
-    private InnerClassEntry(@Nonnull String outerName, @Nullable String innerName, boolean aStatic) {
+    private StringInnerClassEntry(@Nonnull String outerName, @Nonnull String innerName, boolean aStatic) {
       myOuterName = outerName;
       myInnerName = innerName;
       myStatic = aStatic;
     }
   }
 
-  private static final FirstPassData NO_DATA = new FirstPassData(Collections.emptyMap(), null, Collections.emptySet());
-  private static final FirstPassData EMPTY = new FirstPassData(Collections.emptyMap(), null, Collections.emptySet());
-  private final
-  @Nonnull
-  Map<String, InnerClassEntry> myMap;
-  private final
-  @Nonnull
-  Set<String> myNonStatic;
-  private final
-  @Nonnull
-  Set<ObjectMethod> mySyntheticMethods;
-  private final
-  @Nullable
-  String myVarArgRecordComponent;
+  private static final class TypeInfoInnerClassEntry extends ClassEntry {
+    private final TypeInfo.RefTypeInfo myOuterType;
+    private final String myInnerName;
 
-  private FirstPassData(@Nonnull Map<String, InnerClassEntry> map,
+    private TypeInfoInnerClassEntry(@Nonnull TypeInfo.RefTypeInfo outerType, @Nonnull String innerName) {
+      myOuterType = outerType;
+      myInnerName = innerName;
+    }
+  }
+
+  private static final FirstPassData NO_DATA = new FirstPassData(Collections.emptyMap(), "", null, Collections.emptySet(), true, false);
+  private final @Nonnull Map<String, ClassEntry> myMap;
+  private final @Nonnull Set<ObjectMethod> mySyntheticMethods;
+  private final @Nonnull String myTopLevelName;
+  private final @Nullable String myVarArgRecordComponent;
+  private final boolean myTrustInnerClasses;
+  private final boolean mySealed;
+
+  private FirstPassData(@Nonnull Map<String, ClassEntry> map,
+                        @Nonnull String topLevelName,
                         @Nullable String component,
-                        @Nonnull Set<ObjectMethod> syntheticMethods) {
+                        @Nonnull Set<ObjectMethod> syntheticMethods,
+                        boolean trustInnerClasses, boolean sealed) {
     myMap = map;
+    myTopLevelName = topLevelName;
     myVarArgRecordComponent = component;
     mySyntheticMethods = syntheticMethods;
-    if (!map.isEmpty()) {
-      List<String> jvmNames = map.entrySet().stream().filter(e -> !e.getValue().myStatic).map(Map.Entry::getKey).collect(Collectors.toList());
-
-      myNonStatic = ContainerUtil.map2Set(jvmNames, this::mapJvmClassNameToJava);
-    } else {
-      myNonStatic = Collections.emptySet();
-    }
-  }
-
-  @Override
-  @Nonnull
-  public String apply(@Nonnull String jvmName) {
-    return mapJvmClassNameToJava(jvmName);
-  }
-
-  /**
-   * @param javaName java class name
-   * @return nesting level: number of enclosing classes for which this class is non-static
-   */
-  int getInnerDepth(@Nonnull String javaName) {
-    int depth = 0;
-    while (!javaName.isEmpty() && myNonStatic.contains(javaName)) {
-      depth++;
-      javaName = StringUtil.getPackageName(javaName);
-    }
-    return depth;
+    myTrustInnerClasses = trustInnerClasses;
+    mySealed = sealed;
   }
 
   /**
@@ -94,6 +82,13 @@ class FirstPassData implements Function<String, String> {
    */
   boolean isVarArgComponent(@Nonnull String componentName) {
     return componentName.equals(myVarArgRecordComponent);
+  }
+
+  /**
+   * @return true if class is sealed (has at least one permitted subclass)
+   */
+  boolean isSealed() {
+    return mySealed;
   }
 
   /**
@@ -106,79 +101,85 @@ class FirstPassData implements Function<String, String> {
   }
 
   /**
-   * @param jvmNames array JVM type names (e.g. throws list, implements list)
+   * @param jvmNames array of JVM type names (e.g. throws list, implements list)
    * @return list of TypeInfo objects that correspond to given types. GUESSING_MAPPER is not used.
    */
   @Contract("null -> null; !null -> !null")
   List<TypeInfo> createTypes(@Nullable String[] jvmNames) {
     return jvmNames == null ? null :
-        ContainerUtil.map(jvmNames, jvmName -> new TypeInfo(mapJvmClassNameToJava(jvmName, false)));
+      ContainerUtil.map(jvmNames, jvmName -> toTypeInfo(jvmName, false));
   }
 
   /**
    * @param jvmName JVM class name like java/util/Map$Entry
    * @return Java class name like java.util.Map.Entry
    */
-  @Nonnull
-  String mapJvmClassNameToJava(@Nonnull String jvmName) {
-    return mapJvmClassNameToJava(jvmName, true);
+  @Override
+  public @Nonnull TypeInfo.RefTypeInfo toTypeInfo(@Nonnull String jvmName) {
+    return toTypeInfo(jvmName, true);
   }
 
   /**
    * @param jvmName    JVM class name like java/util/Map$Entry
-   * @param useGuesser if true, {@link StubBuildingVisitor#GUESSING_MAPPER} will be used in case if the entry was absent in
+   * @param useGuesser if true, {@link StubBuildingVisitor#GUESSING_PROVIDER} will be used in case if the entry was absent in
    *                   InnerClasses table.
    * @return Java class name like java.util.Map.Entry
    */
   @Nonnull
-  String mapJvmClassNameToJava(@Nonnull String jvmName, boolean useGuesser) {
-    String className = jvmName;
-
-    if (className.indexOf('$') >= 0) {
-      InnerClassEntry p = myMap.get(className);
-      if (p != null) {
-        className = p.myOuterName;
-        if (p.myInnerName != null) {
-          className = mapJvmClassNameToJava(p.myOuterName) + '.' + p.myInnerName;
-          myMap.put(className, new InnerClassEntry(className, null, true));
-        }
-      } else if (useGuesser) {
-        return StubBuildingVisitor.GUESSING_MAPPER.apply(jvmName);
+  TypeInfo.RefTypeInfo toTypeInfo(@Nonnull String jvmName, boolean useGuesser) {
+    ClassEntry p = myMap.get(jvmName);
+    if (p != null) {
+      if (p instanceof RegularClassEntry) {
+        return new TypeInfo.RefTypeInfo(((RegularClassEntry)p).myName);
       }
+      if (p instanceof StringInnerClassEntry) {
+        StringInnerClassEntry entry = (StringInnerClassEntry)p;
+        TypeInfo.RefTypeInfo outer = toTypeInfo(entry.myOuterName, false);
+        p = new TypeInfoInnerClassEntry(outer, entry.myInnerName);
+        myMap.put(jvmName, p);
+      }
+      assert p instanceof TypeInfoInnerClassEntry;
+      return new TypeInfo.RefTypeInfo(((TypeInfoInnerClassEntry)p).myInnerName, ((TypeInfoInnerClassEntry)p).myOuterType);
     }
-
-    return className.replace('/', '.');
+    else if (jvmName.indexOf('$') >= 0 && !jvmName.equals(myTopLevelName) && (useGuesser || !myTrustInnerClasses)) {
+      return StubBuildingVisitor.GUESSING_PROVIDER.toTypeInfo(jvmName);
+    }
+    String name = jvmName.replace('/', '.');
+    myMap.put(jvmName, new RegularClassEntry(name));
+    return new TypeInfo.RefTypeInfo(name);
   }
 
-  static
-  @Nonnull
-  FirstPassData create(Object classSource) {
-    byte[] bytes = null;
+  static @Nonnull FirstPassData create(Object classSource) {
+    ClassReader reader = null;
     if (classSource instanceof ClsFileImpl.FileContentPair) {
-      bytes = ((ClsFileImpl.FileContentPair) classSource).getContent();
-    } else if (classSource instanceof VirtualFile) {
+      reader = ((ClsFileImpl.FileContentPair)classSource).getContent();
+    }
+    else if (classSource instanceof VirtualFile) {
       try {
-        bytes = ((VirtualFile) classSource).contentsToByteArray(false);
-      } catch (IOException ignored) {
+        reader = new ClassReader(((VirtualFile)classSource).contentsToByteArray(false));
+      }
+      catch (IOException ignored) {
       }
     }
 
-    if (bytes != null) {
-      return fromClassBytes(bytes);
+    if (reader != null) {
+      return fromReader(reader);
     }
 
     return NO_DATA;
   }
 
-  @Nonnull
-  private static FirstPassData fromClassBytes(byte[] classBytes) {
+  private static @Nonnull FirstPassData fromReader(@Nonnull ClassReader reader) {
 
     class FirstPassVisitor extends ClassVisitor {
-      final Map<String, InnerClassEntry> mapping = new HashMap<>();
+      final Map<String, ClassEntry> mapping = new HashMap<>();
       Set<String> varArgConstructors;
       Set<ObjectMethod> syntheticSignatures;
       StringBuilder canonicalSignature;
       String lastComponent;
+      String name;
+      boolean trustInnerClasses = true;
+      boolean sealed = false;
 
       FirstPassVisitor() {
         super(Opcodes.API_VERSION);
@@ -186,11 +187,25 @@ class FirstPassData implements Function<String, String> {
 
       @Override
       public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
-        if (BitUtil.isSet(access, Opcodes.ACC_RECORD)) {
+        if (isSet(access, Opcodes.ACC_RECORD)) {
           varArgConstructors = new HashSet<>();
           canonicalSignature = new StringBuilder("(");
           syntheticSignatures = EnumSet.noneOf(ObjectMethod.class);
         }
+        this.name = name;
+      }
+
+      @Override
+      public void visitSource(String source, String debug) {
+        if (source != null && StringUtil.endsWithIgnoreCase(source, ".groovy")) {
+          trustInnerClasses = false;
+        }
+        super.visitSource(source, debug);
+      }
+
+      @Override
+      public void visitPermittedSubclass(String permittedSubclass) {
+        sealed = true;
       }
 
       @Override
@@ -209,7 +224,7 @@ class FirstPassData implements Function<String, String> {
       @Override
       public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
         if (isRecord()) {
-          if (name.equals("<init>") && BitUtil.isSet(access, Opcodes.ACC_VARARGS)) {
+          if (name.equals("<init>") && isSet(access, Opcodes.ACC_VARARGS)) {
             varArgConstructors.add(descriptor);
           }
           ObjectMethod method = ObjectMethod.from(name, descriptor);
@@ -221,7 +236,7 @@ class FirstPassData implements Function<String, String> {
                                                  Handle bootstrapMethodHandle,
                                                  Object... bootstrapMethodArguments) {
                 if (indyName.equals(name) && bootstrapMethodHandle.getName().equals("bootstrap") &&
-                    bootstrapMethodHandle.getOwner().equals("java/lang/runtime/ObjectMethods")) {
+                  bootstrapMethodHandle.getOwner().equals("java/lang/runtime/ObjectMethods")) {
                   syntheticSignatures.add(method);
                 }
               }
@@ -234,15 +249,16 @@ class FirstPassData implements Function<String, String> {
       @Override
       public void visitInnerClass(String name, String outerName, String innerName, int access) {
         if (outerName != null && innerName != null) {
-          mapping.put(name, new InnerClassEntry(outerName, innerName, BitUtil.isSet(access, Opcodes.ACC_STATIC)));
+          mapping.put(name, new StringInnerClassEntry(outerName, innerName, isSet(access, Opcodes.ACC_STATIC)));
         }
       }
     }
 
     FirstPassVisitor visitor = new FirstPassVisitor();
     try {
-      new ClassReader(classBytes).accept(visitor, ClsFileImpl.EMPTY_ATTRIBUTES, ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
-    } catch (Exception ex) {
+      reader.accept(visitor, ClsFileImpl.EMPTY_ATTRIBUTES, ClassReader.SKIP_FRAMES);
+    }
+    catch (Exception ex) {
       LOG.debug(ex);
     }
     String varArgComponent = null;
@@ -253,10 +269,7 @@ class FirstPassData implements Function<String, String> {
       }
     }
     Set<ObjectMethod> syntheticMethods = visitor.syntheticSignatures == null ? Collections.emptySet() : visitor.syntheticSignatures;
-    if (varArgComponent == null && visitor.mapping.isEmpty() && syntheticMethods.isEmpty()) {
-      return EMPTY;
-    }
-    return new FirstPassData(visitor.mapping, varArgComponent, syntheticMethods);
+    return new FirstPassData(visitor.mapping, visitor.name, varArgComponent, syntheticMethods, visitor.trustInnerClasses, visitor.sealed);
   }
 
   private enum ObjectMethod {
@@ -264,21 +277,15 @@ class FirstPassData implements Function<String, String> {
     HASH_CODE("hashCode", "()I"),
     TO_STRING("toString", "()Ljava/lang/String;");
 
-    private final
-    @Nonnull
-    String myName;
-    private final
-    @Nonnull
-    String myDesc;
+    private final @Nonnull String myName;
+    private final @Nonnull String myDesc;
 
     ObjectMethod(@Nonnull String name, @Nonnull String desc) {
       myName = name;
       myDesc = desc;
     }
 
-    static
-    @Nullable
-    ObjectMethod from(@Nonnull String name, @Nonnull String desc) {
+    static @Nullable ObjectMethod from(@Nonnull String name, @Nonnull String desc) {
       for (ObjectMethod method : values()) {
         if (method.myName.equals(name) && method.myDesc.equals(desc)) {
           return method;

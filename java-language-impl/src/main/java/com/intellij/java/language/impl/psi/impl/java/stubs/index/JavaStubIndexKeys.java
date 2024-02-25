@@ -33,6 +33,8 @@ public class JavaStubIndexKeys {
   public static final StubIndexKey<String, PsiClass> CLASS_SHORT_NAMES = StubIndexKey.createIndexKey("java.class.shortname");
   public static final StubIndexKey<Integer, PsiClass> CLASS_FQN = StubIndexKey.createIndexKey("java.class.fqn");
   public static final StubIndexKey<String, PsiJavaModule> MODULE_NAMES = StubIndexKey.createIndexKey("java.module.name");
+  //preserve old name for index
+  public static final StubIndexKey<String, PsiImplicitClass> IMPLICIT_CLASSES = StubIndexKey.createIndexKey("java.unnamed.class");
 
   private JavaStubIndexKeys() {
   }

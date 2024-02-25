@@ -51,14 +51,14 @@ public class JavaParameterElementType extends JavaStubElementType<PsiParameterSt
     TypeInfo typeInfo = TypeInfo.create(tree, node, parentStub);
     LighterASTNode id = LightTreeUtil.requiredChildOfType(tree, node, JavaTokenType.IDENTIFIER);
     String name = RecordUtil.intern(tree.getCharTable(), id);
-    return new PsiParameterStubImpl(parentStub, name, typeInfo, typeInfo.isEllipsis, false);
+    return new PsiParameterStubImpl(parentStub, name, typeInfo, typeInfo.isEllipsis(), false);
   }
 
   @Override
   public void serialize(@Nonnull PsiParameterStub stub, @Nonnull StubOutputStream dataStream) throws IOException {
     dataStream.writeName(stub.getName());
     TypeInfo.writeTYPE(dataStream, stub.getType());
-    dataStream.writeByte(((PsiParameterStubImpl) stub).getFlags());
+    dataStream.writeByte(((PsiParameterStubImpl)stub).getFlags());
   }
 
   @Nonnull
