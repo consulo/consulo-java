@@ -21,24 +21,20 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.dumb.DumbAware;
 import consulo.application.progress.ProgressManager;
-import consulo.java.impl.ide.JavaModuleIconDescriptorUpdater;
-import consulo.java.impl.ide.projectView.impl.JavaModuleRootTreeNode;
 import consulo.java.impl.util.JavaProjectRootsUtil;
 import consulo.language.file.FileViewProvider;
 import consulo.language.psi.*;
 import consulo.module.content.ProjectFileIndex;
-import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
 import consulo.project.ui.view.tree.AbstractTreeNode;
 import consulo.project.ui.view.tree.PsiFileNode;
 import consulo.project.ui.view.tree.SelectableTreeStructureProvider;
 import consulo.project.ui.view.tree.ViewSettings;
-import consulo.ui.ex.tree.TreeHelper;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.inject.Inject;
-
 import jakarta.annotation.Nullable;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -46,21 +42,18 @@ import java.util.List;
 @ExtensionImpl
 public class ClassesTreeStructureProvider implements SelectableTreeStructureProvider, DumbAware {
   private final Project myProject;
+  private final Provider<ProjectFileIndex> myProjectFileIndexProvider;
 
   @Inject
-  public ClassesTreeStructureProvider(Project project) {
+  public ClassesTreeStructureProvider(Project project, Provider<ProjectFileIndex> projectFileIndexProvider) {
     myProject = project;
+    myProjectFileIndexProvider = projectFileIndexProvider;
   }
 
   @Override
   @RequiredReadAction
   public Collection<AbstractTreeNode> modify(AbstractTreeNode parent, Collection<AbstractTreeNode> children, ViewSettings settings) {
-    return TreeHelper.calculateYieldingToWriteAction(() -> doModify(children, settings));
-  }
-
-  @Nonnull
-  private List<AbstractTreeNode> doModify(Collection<AbstractTreeNode> children, ViewSettings settings) {
-    List<AbstractTreeNode> result = new ArrayList<>();
+    List<AbstractTreeNode> result = new ArrayList<>(children.size());
     for (final AbstractTreeNode child : children) {
       ProgressManager.checkCanceled();
 
@@ -71,7 +64,7 @@ public class ClassesTreeStructureProvider implements SelectableTreeStructureProv
 
         if (!(classOwner instanceof PsiCompiledElement)) {
           //do not show duplicated items if jar file contains classes and sources
-          final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(myProject).getFileIndex();
+          final ProjectFileIndex fileIndex = myProjectFileIndexProvider.get();
           if (file != null && fileIndex.isInLibrarySource(file)) {
             final PsiElement originalElement = classOwner.getOriginalElement();
             if (originalElement instanceof PsiFile) {
@@ -93,8 +86,6 @@ public class ClassesTreeStructureProvider implements SelectableTreeStructureProv
           }
           continue;
         }
-      } else if (o instanceof PsiDirectory && JavaModuleIconDescriptorUpdater.isModuleDirectory((PsiDirectory) o)) {
-        result.add(new JavaModuleRootTreeNode(myProject, (PsiDirectory) o, settings));
       }
 
       result.add(child);

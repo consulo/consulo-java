@@ -19,6 +19,7 @@ package consulo.java.impl.ide.projectView.impl;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiJavaModule;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.java.language.impl.icon.JavaPsiImplIconGroup;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiFile;
 import consulo.project.Project;
@@ -47,13 +48,14 @@ public class JavaModuleRootTreeNode extends PsiDirectoryNode {
     }
 
     PsiFile file = value.findFile(PsiJavaModule.MODULE_INFO_CLS_FILE);
-    if (file instanceof PsiJavaFile) {
+    if (file instanceof PsiJavaFile psiJavaFile) {
       String name = "INVALID";
-      PsiJavaModule moduleDeclaration = ((PsiJavaFile) file).getModuleDeclaration();
+      PsiJavaModule moduleDeclaration = psiJavaFile.getModuleDeclaration();
       if (moduleDeclaration != null) {
         name = StringUtil.notNullize(moduleDeclaration.getName(), name);
       }
       data.setPresentableText(name);
+      data.setIcon(JavaPsiImplIconGroup.nodesJavamodule());
     }
   }
 }

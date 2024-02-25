@@ -43,7 +43,7 @@ import java.util.List;
 public class ClassFileStubBuilder implements BinaryFileStubBuilder {
   private static final Logger LOG = Logger.getInstance(ClassFileStubBuilder.class);
 
-  public static final int STUB_VERSION = 21;
+  public static final int STUB_VERSION = 22;
 
   private final Application myApplication;
 

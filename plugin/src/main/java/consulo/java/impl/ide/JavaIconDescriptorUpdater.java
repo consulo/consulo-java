@@ -26,7 +26,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.application.AllIcons;
 import consulo.component.util.Iconable;
 import consulo.java.impl.util.JavaProjectRootsUtil;
-import consulo.java.language.impl.JavaIcons;
 import consulo.java.language.impl.icon.JavaPsiImplIconGroup;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.icon.IconDescriptor;
@@ -38,7 +37,6 @@ import consulo.language.psi.PsiManager;
 import consulo.project.DumbService;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
-
 import jakarta.annotation.Nonnull;
 
 /**
@@ -157,7 +155,7 @@ public class JavaIconDescriptorUpdater implements IconDescriptorUpdater {
       return false;
     }
     if (!JavaProjectRootsUtil.isJavaSourceFile(element.getProject(), virtualFile, true)) {
-      iconDescriptor.setMainIcon(JavaIcons.FileTypes.JavaOutsideSource);
+      iconDescriptor.setMainIcon(JavaPsiImplIconGroup.filetypesJavaoutsidesource());
       return true;
     }
     return false;
