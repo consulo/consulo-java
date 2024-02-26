@@ -184,7 +184,7 @@ public class DeprecationInspection extends BaseJavaBatchLocalInspectionTool<Depr
 
     private void checkImplicitCallToSuper(PsiMethod method) {
       final PsiClass containingClass = method.getContainingClass();
-      assert containingClass != null;
+      assert containingClass != null : method.toString();
       final PsiClass superClass = containingClass.getSuperClass();
       if (hasDefaultDeprecatedConstructor(superClass)) {
         if (superClass instanceof PsiAnonymousClass) {
