@@ -91,6 +91,11 @@ public class JavaCompletionContributor extends CompletionContributor {
   private static final PsiNameValuePairPattern NAME_VALUE_PAIR = psiNameValuePair().withSuperParent(2, psiElement(PsiAnnotation.class));
   private static final ElementPattern<PsiElement> ANNOTATION_ATTRIBUTE_NAME = or(psiElement(PsiIdentifier.class).withParent(NAME_VALUE_PAIR), psiElement().afterLeaf("(").withParent
       (psiReferenceExpression().withParent(NAME_VALUE_PAIR)));
+
+  private static final ElementPattern<PsiElement> IN_VARIABLE_TYPE = psiElement()
+    .withParents(PsiJavaCodeReferenceElement.class, PsiTypeElement.class, PsiDeclarationStatement.class)
+    .afterLeaf(psiElement().inside(psiAnnotation()));
+
   private static final ElementPattern SWITCH_LABEL = psiElement().withSuperParent(2, psiElement(PsiSwitchLabelStatement.class).withSuperParent(2, psiElement(PsiSwitchStatement.class).with(new
                                                                                                                                                                                                 PatternCondition<PsiSwitchStatement>("enumExpressionType") {
                                                                                                                                                                                                   @Override
@@ -122,7 +127,11 @@ public class JavaCompletionContributor extends CompletionContributor {
       return new AnnotationTypeFilter();
     }
 
-    if (JavaKeywordCompletion.DECLARATION_START.getValue().accepts(position) || JavaKeywordCompletion.isInsideParameterList(position) || isInsideAnnotationName(position)) {
+    if (JavaKeywordCompletion.isDeclarationStart(position) ||
+      JavaKeywordCompletion.isInsideParameterList(position) ||
+      isInsideAnnotationName(position) ||
+      PsiTreeUtil.getParentOfType(position, PsiReferenceParameterList.class, false, PsiAnnotation.class) != null ||
+      IN_VARIABLE_TYPE.accepts(position)) {
       return new OrFilter(ElementClassFilter.CLASS, ElementClassFilter.PACKAGE);
     }
 
