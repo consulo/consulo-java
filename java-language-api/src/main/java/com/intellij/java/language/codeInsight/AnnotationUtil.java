@@ -466,7 +466,7 @@ public class AnnotationUtil {
           HierarchicalMethodSignature methodSignature = method.getHierarchicalMethodSignature();
 
           final List<HierarchicalMethodSignature> superSignatures = methodSignature.getSuperSignatures();
-          PsiResolveHelper resolveHelper = PsiResolveHelper.SERVICE.getInstance(aClass.getProject());
+          PsiResolveHelper resolveHelper = PsiResolveHelper.getInstance(aClass.getProject());
           for (final HierarchicalMethodSignature superSignature : superSignatures) {
             final PsiMethod superMethod = superSignature.getMethod();
             if (visited == null) {
@@ -493,7 +493,7 @@ public class AnnotationUtil {
             HierarchicalMethodSignature methodSignature = method.getHierarchicalMethodSignature();
 
             final List<HierarchicalMethodSignature> superSignatures = methodSignature.getSuperSignatures();
-            PsiResolveHelper resolveHelper = PsiResolveHelper.SERVICE.getInstance(aClass.getProject());
+            PsiResolveHelper resolveHelper = PsiResolveHelper.getInstance(aClass.getProject());
             for (final HierarchicalMethodSignature superSignature : superSignatures) {
               final PsiMethod superMethod = superSignature.getMethod();
               if (visited == null) {

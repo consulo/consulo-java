@@ -691,7 +691,7 @@ public class ImportHelper {
     String className = extractClassName(file, fullyQualifiedName);
 
     Project project = file.getProject();
-    PsiResolveHelper resolveHelper = PsiResolveHelper.SERVICE.getInstance(project);
+    PsiResolveHelper resolveHelper = PsiResolveHelper.getInstance(project);
 
     PsiClass psiClass = resolveHelper.resolveReferencedClass(className, file);
     return psiClass != null && fullyQualifiedName.equals(psiClass.getQualifiedName());

@@ -20,12 +20,11 @@ import com.intellij.java.language.psi.impl.source.resolve.ParameterTypeInference
 import com.intellij.java.language.psi.infos.CandidateInfo;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
+import consulo.application.util.RecursionGuard;
 import consulo.application.util.RecursionManager;
 import consulo.ide.ServiceManager;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
-import consulo.application.util.RecursionGuard;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -39,6 +38,7 @@ public interface PsiResolveHelper {
   RecursionGuard<PsiExpression> ourGuard = RecursionManager.createGuard("typeArgInference");
   RecursionGuard<PsiElement> ourGraphGuard = RecursionManager.createGuard("graphTypeArgInference");
 
+  @Deprecated
   class SERVICE {
     private SERVICE() {
     }
@@ -46,6 +46,10 @@ public interface PsiResolveHelper {
     public static PsiResolveHelper getInstance(Project project) {
       return ServiceManager.getService(project, PsiResolveHelper.class);
     }
+  }
+
+  static PsiResolveHelper getInstance(Project project) {
+    return project.getInstance(PsiResolveHelper.class);
   }
 
   /**

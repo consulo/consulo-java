@@ -103,7 +103,7 @@ public class FunctionalInterfaceSuggester
 				right[parameters.length] = interfaceMethod.getReturnType();
 
 				final PsiTypeParameter[] typeParameters = aClass.getTypeParameters();
-				final PsiSubstitutor substitutor = PsiResolveHelper.SERVICE.getInstance(aClass.getProject())
+				final PsiSubstitutor substitutor = PsiResolveHelper.getInstance(aClass.getProject())
 						.inferTypeArguments(typeParameters, left, right, PsiUtil.getLanguageLevel(method));
 				if(PsiUtil.isRawSubstitutor(aClass, substitutor))
 				{
@@ -248,7 +248,7 @@ public class FunctionalInterfaceSuggester
 					left[parameters.length] = returnExpressions.isEmpty() ? PsiType.VOID : returnExpressions.get(0).getType();
 					right[parameters.length] = returnType;
 
-					final PsiSubstitutor substitutor = PsiResolveHelper.SERVICE.getInstance(project)
+					final PsiSubstitutor substitutor = PsiResolveHelper.getInstance(project)
 							.inferTypeArguments(interface2Consider.getTypeParameters(), left, right, PsiUtil.getLanguageLevel(expression));
 
 					PsiType type = JavaPsiFacade.getElementFactory(project).createType(interface2Consider, substitutor);
@@ -292,7 +292,7 @@ public class FunctionalInterfaceSuggester
 								left[parameters.length] = method.isConstructor() ? qualifierType : method.getReturnType();
 								right[parameters.length] = returnType;
 
-								final PsiSubstitutor substitutor = PsiResolveHelper.SERVICE.getInstance(project)
+								final PsiSubstitutor substitutor = PsiResolveHelper.getInstance(project)
 										.inferTypeArguments(interface2Consider.getTypeParameters(), left, right, PsiUtil.getLanguageLevel(expression));
 
 								PsiType type = JavaPsiFacade.getElementFactory(project).createType(interface2Consider, substitutor);

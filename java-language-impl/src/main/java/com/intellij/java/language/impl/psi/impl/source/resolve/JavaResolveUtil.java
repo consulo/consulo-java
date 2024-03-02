@@ -338,9 +338,9 @@ public class JavaResolveUtil {
     final FileElement holder = result.getTreeElement();
     holder.rawAddChildren((TreeElement)expressionList.getNode());
 
-    return PsiResolveHelper.SERVICE.getInstance(project)
-                                   .resolveConstructor(PsiTypesUtil.getClassType(superClassWhichTheSuperCallMustResolveTo),
-                                                       expressionList,
-                                                       place).getElement();
+    return PsiResolveHelper.getInstance(project)
+                           .resolveConstructor(PsiTypesUtil.getClassType(superClassWhichTheSuperCallMustResolveTo),
+                                               expressionList,
+                                               place).getElement();
   }
 }

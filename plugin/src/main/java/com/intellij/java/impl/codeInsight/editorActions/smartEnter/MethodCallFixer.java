@@ -113,7 +113,7 @@ public class MethodCallFixer implements Fixer
 	private static Integer getUnambiguousParameterCount(PsiCallExpression call)
 	{
 		int argCount = -1;
-		for(CandidateInfo candidate : PsiResolveHelper.SERVICE.getInstance(call.getProject()).getReferencedMethodCandidates(call, false))
+		for(CandidateInfo candidate : PsiResolveHelper.getInstance(call.getProject()).getReferencedMethodCandidates(call, false))
 		{
 			PsiElement element = candidate.getElement();
 			if(!(element instanceof PsiMethod))

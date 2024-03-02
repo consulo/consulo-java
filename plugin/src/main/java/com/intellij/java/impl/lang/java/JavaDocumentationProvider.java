@@ -19,6 +19,7 @@ import com.intellij.java.impl.codeInsight.javadoc.JavaDocExternalFilter;
 import com.intellij.java.impl.codeInsight.javadoc.JavaDocInfoGenerator;
 import com.intellij.java.impl.psi.impl.beanProperties.BeanPropertyElement;
 import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.JavadocBundle;
 import com.intellij.java.language.impl.codeInsight.javadoc.JavaDocUtil;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.language.impl.psi.impl.source.javadoc.PsiDocParamRef;
@@ -39,7 +40,6 @@ import consulo.language.CodeDocumentationAwareCommenter;
 import consulo.language.Commenter;
 import consulo.language.LangBundle;
 import consulo.language.Language;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.action.CodeDocumentationUtil;
 import consulo.language.editor.documentation.*;
 import consulo.language.psi.*;
@@ -57,9 +57,9 @@ import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.VirtualFileSystem;
 import consulo.virtualFileSystem.archive.ArchiveFileSystem;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.*;
 
 /**
@@ -123,7 +123,7 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
       PsiExpression constantInitializer = JavaDocInfoGenerator.calcInitializerExpression(variable);
       if (constantInitializer != null) {
         buffer.append("\n");
-        JavaDocInfoGenerator.appendExpressionValue(buffer, constantInitializer, CodeInsightBundle.message("javadoc.resolved.value"));
+        JavaDocInfoGenerator.appendExpressionValue(buffer, constantInitializer, "");
       }
     }
   }
@@ -535,7 +535,7 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
             createElementLink(sb, constructor, StringUtil.escapeXml(str));
           }
 
-          return CodeInsightBundle.message("javadoc.constructor.candidates", targetClass.getName(), sb);
+          return JavadocBundle.message("javadoc.constructor.candidates", targetClass.getName(), sb);
         }
       }
     }
@@ -587,7 +587,7 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
   }
 
   private String getMethodCandidateInfo(PsiMethodCallExpression expr) {
-    final PsiResolveHelper rh = JavaPsiFacade.getInstance(expr.getProject()).getResolveHelper();
+    final PsiResolveHelper rh = PsiResolveHelper.getInstance(expr.getProject());
     final CandidateInfo[] candidates = rh.getReferencedMethodCandidates(expr, true);
     final String text = expr.getText();
     if (candidates.length > 0) {
@@ -611,10 +611,10 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
         createElementLink(sb, element, StringUtil.escapeXml(str));
       }
 
-      return CodeInsightBundle.message("javadoc.candidates", text, sb);
+      return JavadocBundle.message("javadoc.candidates", text, sb);
     }
 
-    return CodeInsightBundle.message("javadoc.candidates.not.found", text);
+    return JavadocBundle.message("javadoc.candidates.not.found", text);
   }
 
   private static void createElementLink(StringBuilder sb, PsiElement element, String str) {

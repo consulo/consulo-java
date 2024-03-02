@@ -810,7 +810,7 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver {
                                                            @Nonnull PsiType[] types1,
                                                            @Nonnull PsiType[] types2,
                                                            @Nonnull LanguageLevel languageLevel) {
-    PsiSubstitutor substitutor = PsiResolveHelper.SERVICE.getInstance(method.getProject()).inferTypeArguments(typeParameters, types1, types2, languageLevel);
+    PsiSubstitutor substitutor = PsiResolveHelper.getInstance(method.getProject()).inferTypeArguments(typeParameters, types1, types2, languageLevel);
     for (PsiTypeParameter typeParameter : PsiUtil.typeParametersIterable(method)) {
       ProgressManager.checkCanceled();
       LOG.assertTrue(typeParameter != null);
