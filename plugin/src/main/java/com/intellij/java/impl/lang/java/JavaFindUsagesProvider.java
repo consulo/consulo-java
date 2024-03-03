@@ -41,7 +41,6 @@ import jakarta.annotation.Nonnull;
  */
 @ExtensionImpl
 public class JavaFindUsagesProvider implements FindUsagesProvider {
-  public static final String DEFAULT_PACKAGE_NAME = UsageViewBundle.message("default.package.presentable.name");
 
   @Override
   public boolean canFindUsagesFor(@Nonnull PsiElement element) {
@@ -343,7 +342,7 @@ public class JavaFindUsagesProvider implements FindUsagesProvider {
     if (name.length() > 0) {
       return name;
     }
-    return DEFAULT_PACKAGE_NAME;
+    return UsageViewBundle.message("default.package.presentable.name");
   }
 
   @Override

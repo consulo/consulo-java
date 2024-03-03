@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.refactoring.move.moveClassesOrPackages;
 
-import com.intellij.java.impl.lang.java.JavaFindUsagesProvider;
 import com.intellij.java.impl.refactoring.MoveDestination;
 import com.intellij.java.impl.refactoring.PackageWrapper;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
@@ -37,6 +36,7 @@ import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
 import consulo.usage.MoveRenameUsageInfo;
 import consulo.usage.UsageInfo;
+import consulo.usage.UsageViewBundle;
 import consulo.virtualFileSystem.VirtualFile;
 
 import jakarta.annotation.Nullable;
@@ -262,7 +262,7 @@ public class MoveClassesOrPackagesUtil {
       return name;
     }
     else {
-      return JavaFindUsagesProvider.DEFAULT_PACKAGE_NAME;
+      return UsageViewBundle.message("default.package.presentable.name");
     }
   }
 
