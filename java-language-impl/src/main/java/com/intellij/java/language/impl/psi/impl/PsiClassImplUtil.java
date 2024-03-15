@@ -58,10 +58,10 @@ import consulo.util.lang.Pair;
 import consulo.util.lang.SystemProperties;
 import consulo.util.lang.function.PairProcessor;
 import consulo.virtualFileSystem.VirtualFile;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
 import javax.swing.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentMap;
@@ -760,25 +760,22 @@ public class PsiClassImplUtil {
     if (psiClass.isEnum()) {
       return findSpecialSuperClass(psiClass, JavaClassNames.JAVA_LANG_ENUM);
     }
+    if (psiClass.isRecord()) {
+      return findSpecialSuperClass(psiClass, JavaClassNames.JAVA_LANG_RECORD);
+    }
 
     if (psiClass instanceof PsiAnonymousClass) {
-      PsiClassType baseClassReference = ((PsiAnonymousClass) psiClass).getBaseClassType();
+      PsiClassType baseClassReference = ((PsiAnonymousClass)psiClass).getBaseClassType();
       PsiClass baseClass = baseClassReference.resolve();
-      if (baseClass == null || baseClass.isInterface()) {
-        return findSpecialSuperClass(psiClass, JavaClassNames.JAVA_LANG_OBJECT);
-      }
+      if (baseClass == null || baseClass.isInterface()) return findSpecialSuperClass(psiClass, JavaClassNames.JAVA_LANG_OBJECT);
       return baseClass;
     }
 
-    if (JavaClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName())) {
-      return null;
-    }
+    if (JavaClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName())) return null;
 
-    final PsiClassType[] referenceElements = psiClass.getExtendsListTypes();
+    PsiClassType[] referenceElements = psiClass.getExtendsListTypes();
 
-    if (referenceElements.length == 0) {
-      return findSpecialSuperClass(psiClass, JavaClassNames.JAVA_LANG_OBJECT);
-    }
+    if (referenceElements.length == 0) return findSpecialSuperClass(psiClass, JavaClassNames.JAVA_LANG_OBJECT);
 
     PsiClass psiResolved = referenceElements[0].resolve();
     return psiResolved == null ? findSpecialSuperClass(psiClass, JavaClassNames.JAVA_LANG_OBJECT) : psiResolved;

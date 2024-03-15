@@ -16,6 +16,7 @@ public interface JavaClassNames
 	String JAVA_LANG_CLASS = "java.lang.Class";
 	String JAVA_LANG_OVERRIDE = "java.lang.Override";
 	String JAVA_LANG_ENUM = "java.lang.Enum";
+	String JAVA_LANG_RECORD = "java.lang.Record";
 	String JAVA_LANG_VOID = "java.lang.Void";
 	String JAVA_LANG_THROWABLE = "java.lang.Throwable";
 	String JAVA_LANG_EXCEPTION = "java.lang.Exception";
