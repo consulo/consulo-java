@@ -18,7 +18,10 @@ package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 /**
  * Created by Max Medvedev on 28/05/14
  */
-public interface ClassKind
-{
-	String getDescription();
+public interface ClassKind {
+  String getDescription();
+
+  default String getDescriptionAccusative() {
+    return getDescription();
+  }
 }

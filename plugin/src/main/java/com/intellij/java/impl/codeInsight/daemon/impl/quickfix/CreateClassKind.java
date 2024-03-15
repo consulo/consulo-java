@@ -16,26 +16,40 @@
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.ClassKind;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import com.intellij.java.language.psi.util.JavaElementKind;
+import consulo.java.language.impl.icon.JavaPsiImplIconGroup;
+import consulo.platform.base.icon.PlatformIconGroup;
+import consulo.ui.image.Image;
 
 /**
  * @author ven
-*/
-public enum CreateClassKind implements ClassKind
-{
-  CLASS     (JavaQuickFixBundle.message("create.class")),
-  INTERFACE (JavaQuickFixBundle.message("create.interface")),
-  ENUM      (JavaQuickFixBundle.message("create.enum")),
-  ANNOTATION("annotation");
+ */
+public enum CreateClassKind implements ClassKind {
+  CLASS(JavaElementKind.CLASS, PlatformIconGroup.nodesClass()),
+  INTERFACE(JavaElementKind.INTERFACE, PlatformIconGroup.nodesInterface()),
+  ENUM(JavaElementKind.ENUM, PlatformIconGroup.nodesEnum()),
+  ANNOTATION(JavaElementKind.ANNOTATION, PlatformIconGroup.nodesAnnotationtype()),
+  RECORD(JavaElementKind.RECORD, JavaPsiImplIconGroup.nodesRecord());
 
-  private final String myDescription;
+  private final JavaElementKind myKind;
+  private final Image myKindIcon;
 
-  CreateClassKind(final String description) {
-    myDescription = description;
+  CreateClassKind(JavaElementKind kind, Image kindIcon) {
+    myKind = kind;
+    myKindIcon = kindIcon;
+  }
+
+  public Image getKindIcon() {
+    return myKindIcon;
   }
 
   @Override
   public String getDescription() {
-    return myDescription;
+    return myKind.subject();
+  }
+
+  @Override
+  public String getDescriptionAccusative() {
+    return myKind.object();
   }
 }
