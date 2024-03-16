@@ -8,6 +8,7 @@ open module consulo.java.language.api {
   requires kava.beans;
 
   exports com.intellij.java.language;
+  exports com.intellij.java.language.annoPackages;
   exports com.intellij.java.language.codeInsight;
   exports com.intellij.java.language.codeInsight.daemon.impl.analysis;
   exports com.intellij.java.language.codeInsight.folding;

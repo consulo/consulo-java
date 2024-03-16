@@ -80,4 +80,6 @@ open module consulo.java.language.impl {
   exports com.intellij.java.language.impl.codeInsight.template.macro;
   exports com.intellij.java.language.impl.codeInsight.template;
   exports consulo.java.language.impl.util;
+
+  exports consulo.java.language.impl.annoPackages to consulo.java;
 }

@@ -23,13 +23,14 @@ import com.intellij.java.indexing.impl.search.JavaSourceFilterScope;
 import com.intellij.java.language.impl.psi.impl.java.stubs.index.JavaStubIndexKeys;
 import com.intellij.java.language.psi.PsiAnnotation;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.stub.StringStubIndexExtension;
 import consulo.language.psi.stub.StubIndex;
 import consulo.language.psi.stub.StubIndexKey;
 import consulo.project.Project;
 import consulo.project.content.scope.ProjectAwareSearchScope;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.Collection;
 
 @ExtensionImpl
@@ -48,6 +49,12 @@ public class JavaAnnotationIndex extends StringStubIndexExtension<PsiAnnotation>
 
   @Override
   public Collection<PsiAnnotation> get(@Nonnull final String s, @Nonnull final Project project, @Nonnull final ProjectAwareSearchScope scope) {
+    return StubIndex.getElements(getKey(), s, project, new JavaSourceFilterScope(scope), PsiAnnotation.class);
+  }
+
+  public Collection<PsiAnnotation> getAnnotations(@Nonnull final String s,
+                                                  @Nonnull final Project project,
+                                                  @Nonnull final GlobalSearchScope scope) {
     return StubIndex.getElements(getKey(), s, project, new JavaSourceFilterScope(scope), PsiAnnotation.class);
   }
 }

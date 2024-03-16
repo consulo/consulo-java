@@ -37,13 +37,13 @@ public class AnnotationsPanel {
                           String name,
                           String defaultAnnotation,
                           List<String> annotations,
-                          String[] defaultAnnotations,
+                          List<String> defaultAnnotations,
                           Set<String> checkedAnnotations,
                           boolean showInstrumentationOptions,
                           boolean showDefaultActions) {
     myProject = project;
     myDefaultAnnotation = defaultAnnotation;
-    myDefaultAnnotations = new HashSet<>(Arrays.asList(defaultAnnotations));
+    myDefaultAnnotations = new HashSet<>(defaultAnnotations);
     myTableModel = new DefaultTableModel() {
       @Override
       public boolean isCellEditable(int row, int column) {

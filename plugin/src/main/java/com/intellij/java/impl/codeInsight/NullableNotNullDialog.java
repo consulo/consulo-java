@@ -39,13 +39,18 @@ public class NullableNotNullDialog extends DialogWrapper {
     myNullablePanel = new AnnotationsPanel(project,
                                            "Nullable",
                                            manager.getDefaultNullable(),
-                                           manager.getNullables(), NullableNotNullManager.DEFAULT_NULLABLES,
-                                           Collections.emptySet(), false, true);
+                                           manager.getNullables(),
+                                           manager.getDefaultNullables(),
+                                           Collections.emptySet(),
+                                           false,
+                                           true);
     myNotNullPanel = new AnnotationsPanel(project,
                                           "NotNull",
                                           manager.getDefaultNotNull(),
-                                          manager.getNotNulls(), NullableNotNullManager.DEFAULT_NOT_NULLS,
-                                          new HashSet<>(manager.getInstrumentedNotNulls()), showInstrumentationOptions, true);
+                                          manager.getNotNulls(),
+                                          manager.getDefaultNotNulls(),
+                                          new HashSet<>(manager.getInstrumentedNotNulls()),
+                                          showInstrumentationOptions, true);
 
     init();
     setTitle("Nullable/NotNull Configuration");
