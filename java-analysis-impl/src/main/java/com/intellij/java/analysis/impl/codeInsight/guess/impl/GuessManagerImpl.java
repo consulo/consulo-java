@@ -27,13 +27,14 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.Maps;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.BitUtil;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import java.util.*;
 
 @Singleton
@@ -573,7 +574,7 @@ public final class GuessManagerImpl extends GuessManager {
     }
 
     MultiMap<PsiExpression, PsiType> getResult() {
-      MultiMap<PsiExpression, PsiType> result = MultiMap.createSet(ExpressionVariableDescriptor.EXPRESSION_HASHING_STRATEGY);
+      MultiMap<PsiExpression, PsiType> result = MultiMap.createSet(Maps.newHashMap(ExpressionVariableDescriptor.EXPRESSION_HASHING_STRATEGY));
       Project project = myForPlace.getProject();
       myResult.forEach((value, constraint) -> {
         if (value.getDescriptor() instanceof ExpressionVariableDescriptor) {

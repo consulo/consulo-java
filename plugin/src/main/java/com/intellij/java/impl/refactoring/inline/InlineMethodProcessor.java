@@ -219,7 +219,7 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
       @Nullable
       @Override
       public MultiMap<PsiElement, String> getConflicts(PsiReference reference, PsiElement referenced) {
-        return MultiMap.emptyInstance();
+        return MultiMap.empty();
       }
 
       @Override

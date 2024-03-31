@@ -282,13 +282,7 @@ public class TypeMigrationLabeler {
 
   class MigrationProducer {
     private final Map<UsageInfo, Object> myRemainConversions;
-    private final MultiMap<PsiTypeElement, TypeMigrationUsageInfo> myVariableMigration = new MultiMap<PsiTypeElement, TypeMigrationUsageInfo>() {
-      @Nonnull
-      @Override
-      protected Map<PsiTypeElement, Collection<TypeMigrationUsageInfo>> createMap() {
-        return new HashMap<>();
-      }
-    };
+    private final MultiMap<PsiTypeElement, TypeMigrationUsageInfo> myVariableMigration = new MultiMap<>();
 
     private MigrationProducer(Map<UsageInfo, Object> conversions) {
       myRemainConversions = conversions;

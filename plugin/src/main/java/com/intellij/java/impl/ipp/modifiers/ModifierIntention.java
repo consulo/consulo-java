@@ -89,13 +89,13 @@ abstract class ModifierIntention extends Intention implements LowPriorityAction 
       final PsiClass aClass = (PsiClass)member;
       final PsiElement parent = aClass.getParent();
       if (!(parent instanceof PsiJavaFile)) {
-        return MultiMap.emptyInstance();
+        return MultiMap.empty();
       }
       final PsiJavaFile javaFile = (PsiJavaFile)parent;
       final String name = FileUtil.getNameWithoutExtension(javaFile.getName());
       final String className = aClass.getName();
       if (name.equals(className)) {
-        return MultiMap.emptyInstance();
+        return MultiMap.empty();
       }
       final MultiMap<PsiElement, String> conflicts = new MultiMap();
       conflicts.putValue(aClass, IntentionPowerPackBundle.message(
@@ -107,7 +107,7 @@ abstract class ModifierIntention extends Intention implements LowPriorityAction 
     }
     final PsiModifierList modifierList = member.getModifierList();
     if (modifierList == null || modifierList.hasModifierProperty(PsiModifier.PRIVATE)) {
-      return MultiMap.emptyInstance();
+      return MultiMap.empty();
     }
     final MultiMap<PsiElement, String> conflicts = new MultiMap();
     if (member instanceof PsiMethod) {
