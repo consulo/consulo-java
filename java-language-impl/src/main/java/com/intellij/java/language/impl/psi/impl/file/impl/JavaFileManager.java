@@ -21,24 +21,27 @@ package com.intellij.java.language.impl.psi.impl.file.impl;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaModule;
+import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
-import consulo.ide.ServiceManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.Collection;
 
 @ServiceAPI(ComponentScope.PROJECT)
 public interface JavaFileManager {
   static JavaFileManager getInstance(@Nonnull Project project) {
-    return ServiceManager.getService(project, JavaFileManager.class);
+    return project.getInstance(JavaFileManager.class);
   }
 
   @Nullable
   PsiClass findClass(@Nonnull String qName, @Nonnull GlobalSearchScope scope);
+
+  @Nullable
+  PsiJavaPackage findPackage(@Nonnull String qualifiedName);
 
   PsiClass[] findClasses(@Nonnull String qName, @Nonnull GlobalSearchScope scope);
 

@@ -25,12 +25,15 @@ import com.intellij.java.language.impl.psi.impl.file.impl.JavaFileManager;
 import com.intellij.java.language.impl.psi.impl.light.AutomaticJavaModule;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaModule;
+import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.java.language.psi.PsiNameHelper;
 import consulo.annotation.component.ServiceImpl;
 import consulo.disposer.Disposable;
+import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiInvalidElementAccessException;
 import consulo.language.psi.PsiManager;
+import consulo.language.psi.PsiPackageManager;
 import consulo.language.psi.scope.DelegatingGlobalSearchScope;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.logging.Logger;
@@ -67,19 +70,29 @@ import java.util.stream.Stream;
 public class JavaFileManagerImpl implements JavaFileManager, Disposable {
   private static final Logger LOG = Logger.getInstance(JavaFileManagerImpl.class);
 
+  private final Project myProject;
   private final PsiManager myManager;
+  private final PsiPackageManager myPackageManager;
   private volatile Set<String> myNontrivialPackagePrefixes;
   private boolean myDisposed;
 
   @Inject
-  public JavaFileManagerImpl(Project project) {
-    myManager = PsiManager.getInstance(project);
+  public JavaFileManagerImpl(Project project, PsiManager psiManager, PsiPackageManager packageManager) {
+    myProject = project;
+    myManager = psiManager;
+    myPackageManager = packageManager;
     project.getMessageBus().connect().subscribe(ModuleRootListener.class, new ModuleRootListener() {
       @Override
       public void rootsChanged(final ModuleRootEvent event) {
         myNontrivialPackagePrefixes = null;
       }
     });
+  }
+
+  @Nullable
+  @Override
+  public PsiJavaPackage findPackage(@Nonnull String qualifiedName) {
+    return (PsiJavaPackage)myPackageManager.findPackage(qualifiedName, JavaModuleExtension.class);
   }
 
   @Override
@@ -107,7 +120,7 @@ public class JavaFileManagerImpl implements JavaFileManager, Disposable {
 
   @Nonnull
   private List<Pair<PsiClass, VirtualFile>> doFindClasses(@Nonnull String qName, @Nonnull final GlobalSearchScope scope) {
-    final Collection<PsiClass> classes = JavaFullClassNameIndex.getInstance().get(qName.hashCode(), myManager.getProject(), scope);
+    final Collection<PsiClass> classes = JavaFullClassNameIndex.getInstance().get(qName.hashCode(), myProject, scope);
     if (classes.isEmpty()) {
       return Collections.emptyList();
     }
@@ -165,9 +178,9 @@ public class JavaFileManagerImpl implements JavaFileManager, Disposable {
   private boolean hasAcceptablePackage(@Nonnull VirtualFile vFile) {
     if (vFile.getFileType() == JavaClassFileType.INSTANCE) {
       // See IDEADEV-5626
-      final VirtualFile root = ProjectRootManager.getInstance(myManager.getProject()).getFileIndex().getClassRootForFile(vFile);
+      final VirtualFile root = ProjectRootManager.getInstance(myProject).getFileIndex().getClassRootForFile(vFile);
       VirtualFile parent = vFile.getParent();
-      final PsiNameHelper nameHelper = PsiNameHelper.getInstance(myManager.getProject());
+      final PsiNameHelper nameHelper = PsiNameHelper.getInstance(myProject);
       while (parent != null && !Comparing.equal(parent, root)) {
         if (!nameHelper.isIdentifier(parent.getName())) {
           return false;
@@ -185,7 +198,7 @@ public class JavaFileManagerImpl implements JavaFileManager, Disposable {
     Set<String> names = myNontrivialPackagePrefixes;
     if (names == null) {
       names = new HashSet<>();
-      final ProjectRootManager rootManager = ProjectRootManager.getInstance(myManager.getProject());
+      final ProjectRootManager rootManager = ProjectRootManager.getInstance(myProject);
       final VirtualFile[] sourceRoots = rootManager.getContentSourceRoots();
       final ProjectFileIndex fileIndex = rootManager.getFileIndex();
       for (final VirtualFile sourceRoot : sourceRoots) {

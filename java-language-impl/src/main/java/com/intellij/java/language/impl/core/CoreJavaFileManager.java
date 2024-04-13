@@ -19,14 +19,16 @@ import com.intellij.java.language.impl.psi.impl.file.impl.JavaFileManager;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassOwner;
 import com.intellij.java.language.psi.PsiJavaModule;
+import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.logging.Logger;
 import consulo.virtualFileSystem.VirtualFile;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -51,14 +53,15 @@ public class CoreJavaFileManager implements JavaFileManager {
     return myClasspath;
   }
 
- /* @Override
-//  public PsiJavaPackage findPackage(@NotNull String packageName) {
+  @Override
+  public PsiJavaPackage findPackage(@NotNull String packageName) {
+    throw new UnsupportedOperationException();
     /*final List<VirtualFile> files = findDirectoriesByPackageName(packageName);
     if (files.size() > 0) {
       return new PsiPackageImpl(myPsiManager, packageName);
     }    */
-  //   return null;
-  // }   */
+    //   return null;
+  }
 
   private List<VirtualFile> findDirectoriesByPackageName(String packageName) {
     List<VirtualFile> result = new ArrayList<VirtualFile>();
@@ -123,7 +126,8 @@ public class CoreJavaFileManager implements JavaFileManager {
     String rootClassName;
     if (bucks < 0) {
       rootClassName = className;
-    } else {
+    }
+    else {
       rootClassName = className.substring(0, bucks);
       className = className.substring(bucks + 1);
     }
@@ -141,7 +145,7 @@ public class CoreJavaFileManager implements JavaFileManager {
 
       final PsiFile file = psiManager.findFile(vFile);
       if (file instanceof PsiClassOwner) {
-        final PsiClass[] classes = ((PsiClassOwner) file).getClasses();
+        final PsiClass[] classes = ((PsiClassOwner)file).getClasses();
         if (classes.length == 1) {
           PsiClass curClass = classes[0];
 
