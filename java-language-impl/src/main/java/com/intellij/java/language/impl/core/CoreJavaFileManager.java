@@ -27,7 +27,6 @@ import consulo.logging.Logger;
 import consulo.virtualFileSystem.VirtualFile;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -54,7 +53,7 @@ public class CoreJavaFileManager implements JavaFileManager {
   }
 
   @Override
-  public PsiJavaPackage findPackage(@NotNull String packageName) {
+  public PsiJavaPackage findPackage(@Nonnull String packageName) {
     throw new UnsupportedOperationException();
     /*final List<VirtualFile> files = findDirectoriesByPackageName(packageName);
     if (files.size() > 0) {
