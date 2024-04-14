@@ -17,7 +17,7 @@ package com.intellij.jam;
 
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
-import consulo.ide.ServiceManager;
+import consulo.application.Application;
 import consulo.language.psi.PsiElementRef;
 
 import java.util.function.Function;
@@ -26,12 +26,11 @@ import java.util.function.Function;
  * @author peter
  */
 @ServiceAPI(ComponentScope.APPLICATION)
-public abstract class JamClassGenerator {
+public interface JamClassGenerator {
 
-  public static JamClassGenerator getInstance() {
-    return ServiceManager.getService(JamClassGenerator.class);
+  static JamClassGenerator getInstance() {
+    return Application.get().getInstance(JamClassGenerator.class);
   }
 
-  public abstract <T> Function<PsiElementRef, T> generateJamElementFactory(Class<T> aClass);
-
+  <T> Function<PsiElementRef, T> generateJamElementFactory(Class<T> aClass);
 }
