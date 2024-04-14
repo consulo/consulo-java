@@ -41,22 +41,22 @@ public class JamElementFactory<T> implements Function<PsiElementRef, T> {
     }
   }
 
-  private final Class<T> targetClass;
+  private final Class<T> myTargetClass;
 
-  private final boolean hasDefaultConstructor;
+  private final boolean myHasDefaultConstructor;
 
   public JamElementFactory(Class<T> targetClass) {
-    this.targetClass = targetClass;
-    hasDefaultConstructor = findDefaultConstructor(targetClass) != null;
+    this.myTargetClass = targetClass;
+    myHasDefaultConstructor = findDefaultConstructor(targetClass) != null;
   }
 
   @Override
   public T apply(PsiElementRef psiElementRef) {
-    AdvancedProxyBuilder<T> builder = AdvancedProxyBuilder.create(targetClass);
-    if (!hasDefaultConstructor) {
+    AdvancedProxyBuilder<T> builder = AdvancedProxyBuilder.create(myTargetClass);
+    if (!myHasDefaultConstructor) {
       builder.withSuperConstructorArguments(psiElementRef.getPsiElement());
     }
-    builder.withInvocationHandler(new InvocationHandlerImpl<>(targetClass, psiElementRef));
+    builder.withInvocationHandler(new InvocationHandlerImpl<>(myTargetClass, psiElementRef));
     return builder.build();
   }
 
