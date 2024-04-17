@@ -13,6 +13,7 @@ import consulo.util.dataholder.Key;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -173,6 +174,21 @@ public enum LanguageLevel implements Named, NamedPointer<LanguageLevel> {
   @Override
   public String getName() {
     return name();
+  }
+
+  /**
+   * @return the {@link JavaVersion} object that corresponds to this language level
+   */
+  @Nonnull
+  public JavaVersion toJavaVersion() {
+    return myVersion;
+  }
+
+  /**
+   * @return the language level feature number (like 8 for {@link #JDK_1_8}).
+   */
+  public int feature() {
+    return myVersion.feature;
   }
 
   @Nonnull
