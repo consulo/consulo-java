@@ -46,10 +46,10 @@ import consulo.util.lang.function.Condition;
 import consulo.util.lang.function.Conditions;
 import consulo.util.lang.ref.SoftReference;
 import consulo.virtualFileSystem.VirtualFile;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -62,21 +62,26 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
   private volatile CachedValue<Collection<PsiDirectory>> myDirectories;
   private volatile SoftReference<Set<String>> myPublicClassNamesCache;
 
-  public PsiPackageImpl(PsiManager manager, PsiPackageManager packageManager, Class<? extends ModuleExtension> extensionClass, String qualifiedName) {
+  public PsiPackageImpl(PsiManager manager,
+                        PsiPackageManager packageManager,
+                        Class<? extends ModuleExtension> extensionClass,
+                        String qualifiedName) {
     super(manager, packageManager, extensionClass, qualifiedName);
   }
 
   @Override
   protected Collection<PsiDirectory> getAllDirectories(boolean includeLibrarySource) {
     if (myDirectories == null) {
-      myDirectories = CachedValuesManager.getManager(myManager.getProject()).createCachedValue(new CachedValueProvider<Collection<PsiDirectory>>() {
-        @Override
-        public Result<Collection<PsiDirectory>> compute() {
-          final CommonProcessors.CollectProcessor<PsiDirectory> processor = new CommonProcessors.CollectProcessor<PsiDirectory>();
-          getFacade().processPackageDirectories(PsiPackageImpl.this, allScope(), processor);
-          return Result.create(processor.getResults(), PsiPackageImplementationHelper.getInstance().getDirectoryCachedValueDependencies(PsiPackageImpl.this));
-        }
-      }, false);
+      myDirectories =
+        CachedValuesManager.getManager(myManager.getProject()).createCachedValue(new CachedValueProvider<Collection<PsiDirectory>>() {
+          @Override
+          public Result<Collection<PsiDirectory>> compute() {
+            final CommonProcessors.CollectProcessor<PsiDirectory> processor = new CommonProcessors.CollectProcessor<PsiDirectory>();
+            getFacade().processPackageDirectories(PsiPackageImpl.this, allScope(), processor);
+            return Result.create(processor.getResults(),
+                                 PsiPackageImplementationHelper.getInstance().getDirectoryCachedValueDependencies(PsiPackageImpl.this));
+          }
+        }, false);
     }
     return myDirectories.getValue();
   }
@@ -93,7 +98,7 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
 
   @Override
   public PsiPackageImpl getParentPackage() {
-    return (PsiPackageImpl) super.getParentPackage();
+    return (PsiPackageImpl)super.getParentPackage();
   }
 
 
@@ -112,8 +117,9 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
   @Override
   public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor) visitor).visitPackage(this);
-    } else {
+      ((JavaElementVisitor)visitor).visitPackage(this);
+    }
+    else {
       visitor.visitElement(this);
     }
   }
@@ -139,10 +145,17 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
   }
 
   @Override
+  @Nonnull
+  public PsiFile[] getFiles(@Nonnull GlobalSearchScope scope) {
+    return getFacade().getPackageFiles(this, scope);
+  }
+
+  @Override
   @Nullable
   public PsiModifierList getAnnotationList() {
     if (myAnnotationList == null) {
-      myAnnotationList = CachedValuesManager.getManager(myManager.getProject()).createCachedValue(new PackageAnnotationValueProvider(), false);
+      myAnnotationList =
+        CachedValuesManager.getManager(myManager.getProject()).createCachedValue(new PackageAnnotationValueProvider(), false);
     }
     return myAnnotationList.getValue();
   }
@@ -165,7 +178,7 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
   }
 
   private JavaPsiFacadeImpl getFacade() {
-    return (JavaPsiFacadeImpl) JavaPsiFacade.getInstance(myManager.getProject());
+    return (JavaPsiFacadeImpl)JavaPsiFacade.getInstance(myManager.getProject());
   }
 
   private Set<String> getClassNamesCache() {
@@ -215,7 +228,10 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
   }
 
   @Override
-  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place) {
+  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
+                                     @Nonnull ResolveState state,
+                                     PsiElement lastParent,
+                                     @Nonnull PsiElement place) {
     GlobalSearchScope scope = place.getResolveScope();
 
     processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, this);
@@ -232,7 +248,8 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
         if (!processClasses(processor, state, classes, Conditions.<String>alwaysTrue())) {
           return false;
         }
-      } else {
+      }
+      else {
         PsiClass[] classes = getClasses(scope);
         if (!processClasses(processor, state, classes, nameCondition != null ? nameCondition : Conditions.<String>alwaysTrue())) {
           return false;
@@ -247,7 +264,8 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
             return false;
           }
         }
-      } else {
+      }
+      else {
         PsiPackage[] packs = getSubPackages(scope);
         for (PsiPackage pack : packs) {
           final String packageName = pack.getName();
@@ -266,7 +284,10 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
     return true;
   }
 
-  private static boolean processClasses(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, @Nonnull PsiClass[] classes, @Nonnull Condition<String> nameCondition) {
+  private static boolean processClasses(@Nonnull PsiScopeProcessor processor,
+                                        @Nonnull ResolveState state,
+                                        @Nonnull PsiClass[] classes,
+                                        @Nonnull Condition<String> nameCondition) {
     for (PsiClass aClass : classes) {
       String name = aClass.getName();
       if (name != null && nameCondition.value(name)) {
@@ -274,9 +295,11 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
           if (!processor.execute(aClass, state)) {
             return false;
           }
-        } catch (ProcessCanceledException e) {
+        }
+        catch (ProcessCanceledException e) {
           throw e;
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
           LOGGER.error(e);
         }
       }

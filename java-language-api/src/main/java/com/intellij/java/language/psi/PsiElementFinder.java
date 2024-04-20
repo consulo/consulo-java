@@ -20,14 +20,16 @@ import consulo.annotation.component.ExtensionAPI;
 import consulo.application.util.function.Processor;
 import consulo.component.extension.ExtensionPointName;
 import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.SmartList;
 import consulo.virtualFileSystem.VirtualFile;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * Allows to extend the mechanism of locating classes and packages by full-qualified name.
@@ -99,6 +101,33 @@ public abstract class PsiElementFinder {
   @Nonnull
   public PsiJavaPackage[] getSubPackages(@Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope) {
     return PsiJavaPackage.EMPTY_ARRAY;
+  }
+
+  /**
+   * Returns a array of files belonging to the specified package which are not located in any of the package directories.
+   *
+   * @param psiPackage the package to return the list of files for.
+   * @param scope      the scope in which files are searched.
+   * @return the array of files.
+   */
+  @Nonnull
+  public PsiFile[] getPackageFiles(@Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope) {
+    return PsiFile.EMPTY_ARRAY;
+  }
+
+  /**
+   * Returns the filter to use for filtering the list of files in the directories belonging to a package to exclude files
+   * that actually belong to a different package. (For example, in Kotlin the package of a file is determined by its
+   * package statement and not by its location in the directory structure, so the files which have a differring package
+   * statement need to be excluded.)
+   *
+   * @param psiPackage the package for which the list of files is requested.
+   * @param scope      the scope in which children are requested.
+   * @return the filter to use, or null if no additional filtering is necessary.
+   */
+  @Nullable
+  public Predicate<PsiFile> getPackageFilesFilter(@Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope) {
+    return null;
   }
 
   /**

@@ -15,22 +15,20 @@
  */
 package com.intellij.java.language.psi;
 
+import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiPackage;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.util.collection.ArrayFactory;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * Represents a Java package.
  */
-public interface PsiJavaPackage extends PsiJvmModifiersOwner, PsiPackage
-{
-  @NonNls String PACKAGE_INFO_CLASS = "package-info";
-  @NonNls String PACKAGE_INFO_FILE = PACKAGE_INFO_CLASS + ".java";
+public interface PsiJavaPackage extends PsiJvmModifiersOwner, PsiPackage {
+  String PACKAGE_INFO_CLASS = "package-info";
+  String PACKAGE_INFO_FILE = PACKAGE_INFO_CLASS + ".java";
 
   PsiJavaPackage[] EMPTY_ARRAY = new PsiJavaPackage[0];
 
@@ -73,6 +71,14 @@ public interface PsiJavaPackage extends PsiJvmModifiersOwner, PsiPackage
    */
   @Nonnull
   PsiClass[] getClasses(@Nonnull GlobalSearchScope scope);
+
+  /**
+   * Returns the list of all files in the package, restricted by the specified scope. (This is
+   * normally the list of all files in all directories corresponding to the package, but it can
+   * be modified by custom language plugins which have a different notion of packages.)
+   */
+  @Nonnull
+  PsiFile[] getFiles(@Nonnull GlobalSearchScope scope);
 
   /**
    * Returns the list of package-level annotations for the package.

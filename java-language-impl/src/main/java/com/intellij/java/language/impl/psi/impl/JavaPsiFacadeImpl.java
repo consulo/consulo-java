@@ -33,12 +33,13 @@ import consulo.util.collection.SmartList;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * @author max
@@ -63,7 +64,8 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
   public JavaPsiFacadeImpl(Project project,
                            PsiResolveHelper psiResolveHelper,
                            PsiPackageManager psiManager,
-                           PsiElementFactory psiElementFactory, PsiNameHelper psiNameHelper) {
+                           PsiElementFactory psiElementFactory,
+                           PsiNameHelper psiNameHelper) {
     myProject = project;
     myPackageManager = psiManager;
     myPsiResolveHelper = psiResolveHelper;
@@ -203,7 +205,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
   @Override
   @Nonnull
   public PsiJavaParserFacade getParserFacade() {
-    return getElementFactory(); // TODO: lighter implementation which doesn't mark all the elements as generated.
+    return getElementFactory();
   }
 
   @Override
@@ -242,6 +244,39 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
     }
 
     return result == null ? PsiClass.EMPTY_ARRAY : result.toArray(new PsiClass[result.size()]);
+  }
+
+  @Nonnull
+  public PsiFile[] getPackageFiles(@Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope) {
+    Predicate<PsiFile> filter = null;
+
+    for (PsiElementFinder finder : filteredFinders()) {
+      Predicate<PsiFile> finderFilter = finder.getPackageFilesFilter(psiPackage, scope);
+      if (finderFilter != null) {
+        if (filter == null) {
+          filter = finderFilter;
+        }
+        else {
+          final Predicate<PsiFile> oldFilter = filter;
+          filter = psiFile -> oldFilter.test(psiFile) && finderFilter.test(psiFile);
+        }
+      }
+    }
+
+    Set<PsiFile> result = new LinkedHashSet<>();
+    PsiDirectory[] directories = psiPackage.getDirectories(scope);
+    for (PsiDirectory directory : directories) {
+      for (PsiFile file : directory.getFiles()) {
+        if (filter == null || filter.test(file)) {
+          result.add(file);
+        }
+      }
+    }
+
+    for (PsiElementFinder finder : filteredFinders()) {
+      Collections.addAll(result, finder.getPackageFiles(psiPackage, scope));
+    }
+    return result.toArray(PsiFile.EMPTY_ARRAY);
   }
 
   public boolean processPackageDirectories(@Nonnull PsiJavaPackage psiPackage,
