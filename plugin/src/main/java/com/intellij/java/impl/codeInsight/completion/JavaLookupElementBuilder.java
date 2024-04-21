@@ -91,8 +91,8 @@ public class JavaLookupElementBuilder {
     if (StringUtil.isNotEmpty(name)) {
       builder = builder.withLookupString(name);
     }
-    if (withLocation) {
-      return builder.withTailText(" (" + PsiFormatUtil.getPackageDisplayName(psiClass) + ")", true);
+    if (withLocation) {                                                              
+      return builder.withTailText(" " + PsiFormatUtil.getPackageDisplayName(psiClass), true);
     }
     return builder;
   }

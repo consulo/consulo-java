@@ -292,7 +292,7 @@ public class PsiTypeLookupItem extends LookupItem implements TypedLookupItem {
   public PsiTypeLookupItem setShowPackage() {
     Object object = getObject();
     if (object instanceof PsiClass) {
-      myLocationString = " (" + PsiFormatUtil.getPackageDisplayName((PsiClass) object) + ")";
+      myLocationString = " " + PsiFormatUtil.getPackageDisplayName((PsiClass) object);
     }
     return this;
   }

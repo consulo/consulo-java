@@ -101,7 +101,7 @@ public class PsiTypeCanonicalLookupElement extends LookupElement {
     final PsiClass psiClass = getPsiClass();
     if (psiClass != null) {
       presentation.setIcon(presentation.isReal() ? IconDescriptorUpdaters.getIcon(psiClass, Iconable.ICON_FLAG_VISIBILITY) : EMPTY_ICON);
-      presentation.setTailText(" (" + PsiFormatUtil.getPackageDisplayName(psiClass) + ")", true);
+      presentation.setTailText(" " + PsiFormatUtil.getPackageDisplayName(psiClass), true);
     }
     final PsiType type = getPsiType();
     presentation.setItemText(type.getPresentableText());
