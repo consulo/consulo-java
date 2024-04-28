@@ -43,14 +43,12 @@ public class AnnotationAttributeChildLink extends PsiChildLink<PsiAnnotation, Ps
   public PsiAnnotationMemberValue findLinkedChild(@Nullable PsiAnnotation psiAnnotation) {
     if (psiAnnotation == null) return null;
 
-    psiAnnotation.getText();
     return psiAnnotation.findDeclaredAttributeValue(myAttributeName);
   }
 
   @Override
   @Nonnull
   public PsiAnnotationMemberValue createChild(@Nonnull PsiAnnotation psiAnnotation) throws IncorrectOperationException {
-    psiAnnotation.getText();
     final PsiExpression nullValue = JavaPsiFacade.getElementFactory(psiAnnotation.getProject()).createExpressionFromText(PsiKeyword.NULL, null);
     psiAnnotation.setDeclaredAttributeValue(myAttributeName, nullValue);
     return ObjectUtil.assertNotNull(psiAnnotation.findDeclaredAttributeValue(myAttributeName));
