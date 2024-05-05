@@ -26,15 +26,18 @@ import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import consulo.document.util.TextRange;
 import consulo.language.ast.ASTNode;
+import consulo.language.file.light.LightVirtualFile;
 import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiReference;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
-
+import consulo.util.lang.ref.SoftReference;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
+import java.lang.ref.Reference;
 
 /**
  * @author Dmitry Avdeev
@@ -92,6 +95,31 @@ public class PsiNameValuePairImpl extends JavaStubPsiElement<PsiNameValuePairStu
     return getValue();
   }
 
+  private volatile Reference<PsiAnnotationMemberValue> myDetachedValue;
+
+  @Override
+  @Nullable
+  public PsiAnnotationMemberValue getDetachedValue() {
+    PsiNameValuePairStub stub = getStub();
+    if (stub != null) {
+      String text = stub.getValue();
+      PsiAnnotationMemberValue result = SoftReference.dereference(myDetachedValue);
+      if (result == null) {
+        PsiAnnotation anno = JavaPsiFacade.getElementFactory(getProject()).createAnnotationFromText("@F(" + text + ")", this);
+        ((LightVirtualFile)anno.getContainingFile().getViewProvider().getVirtualFile()).setWritable(false);
+        myDetachedValue = new SoftReference<>(result = anno.findAttributeValue(null));
+      }
+      return result;
+    }
+
+    return getValue();
+  }
+
+  @Override
+  public void subtreeChanged() {
+    myDetachedValue = null;
+    super.subtreeChanged();
+  }
 
   @Override
   public PsiReference getReference() {

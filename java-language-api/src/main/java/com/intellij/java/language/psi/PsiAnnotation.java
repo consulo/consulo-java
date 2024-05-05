@@ -99,7 +99,7 @@ public interface PsiAnnotation extends PsiAnnotationMemberValue, PsiMetaOwner, J
    * the element and the element has no default value.
    */
   @Nullable
-  PsiAnnotationMemberValue findAttributeValue(@Nullable @NonNls String attributeName);
+  PsiAnnotationMemberValue findAttributeValue(@Nullable String attributeName);
 
   /**
    * Returns the value of the annotation element with the specified name.
@@ -109,7 +109,15 @@ public interface PsiAnnotation extends PsiAnnotationMemberValue, PsiMetaOwner, J
    * the element.
    */
   @Nullable
-  PsiAnnotationMemberValue findDeclaredAttributeValue(@Nullable @NonNls String attributeName);
+  PsiAnnotationMemberValue findDeclaredAttributeValue(@Nullable String attributeName);
+
+  /**
+   * @see PsiNameValuePair#getDetachedValue()
+   */
+  @Nullable
+  default PsiAnnotationMemberValue findDeclaredAttributeDetachedValue(@Nullable String attributeName) {
+    return findDeclaredAttributeValue(attributeName);
+  }
 
   /**
    * Set annotation attribute value. Adds new name-value pair or uses an existing one, expands unnamed 'value' attribute name if needed.
@@ -118,7 +126,7 @@ public interface PsiAnnotation extends PsiAnnotationMemberValue, PsiMetaOwner, J
    * @param value         new value template element
    * @return new declared attribute value
    */
-  <T extends PsiAnnotationMemberValue> T setDeclaredAttributeValue(@Nullable @NonNls String attributeName, @Nullable T value);
+  <T extends PsiAnnotationMemberValue> T setDeclaredAttributeValue(@Nullable String attributeName, @Nullable T value);
 
   /**
    * Returns an owner of the annotation - usually a parent, but for type annotations the owner might be a type element.

@@ -31,8 +31,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.function.PairFunction;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -40,8 +38,9 @@ import jakarta.annotation.Nullable;
  * @author ven
  */
 public class PsiAnnotationImpl extends JavaStubPsiElement<PsiAnnotationStub> implements PsiAnnotation {
-  private static final PairFunction<Project, String, PsiAnnotation> ANNOTATION_CREATOR = (project, text) -> JavaPsiFacade.getInstance(project).getElementFactory().createAnnotationFromText(text,
-      null);
+  private static final PairFunction<Project, String, PsiAnnotation> ANNOTATION_CREATOR =
+    (project, text) -> JavaPsiFacade.getInstance(project).getElementFactory().createAnnotationFromText(text,
+                                                                                                       null);
 
   public PsiAnnotationImpl(final PsiAnnotationStub stub) {
     super(stub, JavaStubElementTypes.ANNOTATION);
@@ -83,13 +82,19 @@ public class PsiAnnotationImpl extends JavaStubPsiElement<PsiAnnotationStub> imp
 
   @Override
   @Nullable
-  public PsiAnnotationMemberValue findDeclaredAttributeValue(@NonNls final String attributeName) {
+  public PsiAnnotationMemberValue findDeclaredAttributeValue(final String attributeName) {
     return PsiImplUtil.findDeclaredAttributeValue(this, attributeName);
   }
 
+  @Nullable
   @Override
-  public <T extends PsiAnnotationMemberValue> T setDeclaredAttributeValue(@NonNls String attributeName, @Nullable T value) {
-    @SuppressWarnings("unchecked") T t = (T) PsiImplUtil.setDeclaredAttributeValue(this, attributeName, value, ANNOTATION_CREATOR);
+  public PsiAnnotationMemberValue findDeclaredAttributeDetachedValue(@Nullable String attributeName) {
+    return PsiImplUtil.findDeclaredAttributeDetachedValue(this, attributeName);
+  }
+
+  @Override
+  public <T extends PsiAnnotationMemberValue> T setDeclaredAttributeValue(String attributeName, @Nullable T value) {
+    @SuppressWarnings("unchecked") T t = (T)PsiImplUtil.setDeclaredAttributeValue(this, attributeName, value, ANNOTATION_CREATOR);
     return t;
   }
 
@@ -116,8 +121,9 @@ public class PsiAnnotationImpl extends JavaStubPsiElement<PsiAnnotationStub> imp
   @Override
   public final void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor) visitor).visitAnnotation(this);
-    } else {
+      ((JavaElementVisitor)visitor).visitAnnotation(this);
+    }
+    else {
       visitor.visitElement(this);
     }
   }
@@ -138,33 +144,35 @@ public class PsiAnnotationImpl extends JavaStubPsiElement<PsiAnnotationStub> imp
     PsiElement parent = getParent();
 
     if (parent instanceof PsiAnnotationOwner) {
-      return (PsiAnnotationOwner) parent;
+      return (PsiAnnotationOwner)parent;
     }
 
     if (parent instanceof PsiNewExpression) {
-      return ((PsiNewExpression) parent).getOwner(this);
+      return ((PsiNewExpression)parent).getOwner(this);
     }
 
     if (parent instanceof PsiReferenceExpression) {
       PsiElement ctx = parent.getParent();
       if (ctx instanceof PsiMethodReferenceExpression) {
-        return new PsiClassReferenceType((PsiJavaCodeReferenceElement) parent, null);
+        return new PsiClassReferenceType((PsiJavaCodeReferenceElement)parent, null);
       }
-    } else if (parent instanceof PsiJavaCodeReferenceElement) {
+    }
+    else if (parent instanceof PsiJavaCodeReferenceElement) {
       PsiElement ctx = PsiTreeUtil.skipParentsOfType(parent, PsiJavaCodeReferenceElement.class);
       if (ctx instanceof PsiReferenceList || ctx instanceof PsiNewExpression || ctx instanceof PsiTypeElement || ctx instanceof PsiAnonymousClass) {
-        return new PsiClassReferenceType((PsiJavaCodeReferenceElement) parent, null);
+        return new PsiClassReferenceType((PsiJavaCodeReferenceElement)parent, null);
       }
     }
 
     PsiTypeElement typeElement = null;
     PsiElement anchor = null;
     if (parent instanceof PsiMethod) {
-      typeElement = ((PsiMethod) parent).getReturnTypeElement();
-      anchor = ((PsiMethod) parent).getParameterList();
-    } else if (parent instanceof PsiField || parent instanceof PsiParameter || parent instanceof PsiLocalVariable) {
-      typeElement = ((PsiVariable) parent).getTypeElement();
-      anchor = ((PsiVariable) parent).getNameIdentifier();
+      typeElement = ((PsiMethod)parent).getReturnTypeElement();
+      anchor = ((PsiMethod)parent).getParameterList();
+    }
+    else if (parent instanceof PsiField || parent instanceof PsiParameter || parent instanceof PsiLocalVariable) {
+      typeElement = ((PsiVariable)parent).getTypeElement();
+      anchor = ((PsiVariable)parent).getNameIdentifier();
     }
     if (typeElement != null && anchor != null) {
       return JavaSharedImplUtil.getType(typeElement, anchor, this);

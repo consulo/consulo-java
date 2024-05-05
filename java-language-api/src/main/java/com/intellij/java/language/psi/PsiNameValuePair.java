@@ -73,4 +73,15 @@ public interface PsiNameValuePair extends PsiElement {
 
   @Nonnull
   PsiAnnotationMemberValue setValue(@Nonnull PsiAnnotationMemberValue newValue);
+
+  /**
+   * @return a element representing the annotation attribute's value. The main difference to {@link #getValue()} is that this method
+   * avoids expensive AST loading (see {@link consulo.language.impl.psi.stub.StubBasedPsiElementBase} doc).
+   * The downside is that the result might not be in the same tree as the parent, might be non-physical and so
+   * should only be used for read operations.
+   */
+  @Nullable
+  default PsiAnnotationMemberValue getDetachedValue() {
+    return getValue();
+  }
 }

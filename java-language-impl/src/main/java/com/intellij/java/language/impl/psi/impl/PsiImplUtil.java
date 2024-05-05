@@ -16,8 +16,8 @@
 package com.intellij.java.language.impl.psi.impl;
 
 import com.intellij.java.language.codeInsight.AnnotationTargetUtil;
-import com.intellij.java.language.impl.psi.impl.light.LightClassReference;
 import com.intellij.java.language.impl.psi.impl.light.AutomaticJavaModule;
+import com.intellij.java.language.impl.psi.impl.light.LightClassReference;
 import com.intellij.java.language.impl.psi.impl.source.PsiClassReferenceType;
 import com.intellij.java.language.impl.psi.impl.source.PsiImmediateClassType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
@@ -59,14 +59,12 @@ import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.function.PairFunction;
 import consulo.virtualFileSystem.VirtualFile;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import org.jetbrains.annotations.NonNls;
+
+import java.util.*;
+import java.util.function.Function;
 
 import static com.intellij.java.language.psi.PsiAnnotation.TargetType;
 
@@ -91,15 +89,28 @@ public class PsiImplUtil {
   }
 
   @Nullable
-  public static PsiAnnotationMemberValue findDeclaredAttributeValue(@Nonnull PsiAnnotation annotation, @NonNls String attributeName) {
+  public static PsiAnnotationMemberValue findDeclaredAttributeValue(@Nonnull PsiAnnotation annotation, String attributeName) {
+    return findDeclaredAttributeValueImpl(annotation, attributeName, PsiNameValuePair::getValue);
+  }
+
+  @Nullable
+  public static PsiAnnotationMemberValue findDeclaredAttributeDetachedValue(@Nonnull PsiAnnotation annotation, String attributeName) {
+    return findDeclaredAttributeValueImpl(annotation, attributeName, PsiNameValuePair::getDetachedValue);
+  }
+
+  @Nullable
+  private static PsiAnnotationMemberValue findDeclaredAttributeValueImpl(@Nonnull PsiAnnotation annotation,
+                                                                         String attributeName,
+                                                                         @Nonnull Function<PsiNameValuePair, PsiAnnotationMemberValue> valueGetter) {
     if ("value".equals(attributeName)) {
       attributeName = null;
     }
+
     PsiNameValuePair[] attributes = annotation.getParameterList().getAttributes();
     for (PsiNameValuePair attribute : attributes) {
-      @NonNls final String name = attribute.getName();
-      if (Comparing.equal(name, attributeName) || attributeName == null && PsiAnnotation.DEFAULT_REFERENCED_METHOD_NAME.equals(name)) {
-        return attribute.getValue();
+      final String name = attribute.getName();
+      if (Objects.equals(name, attributeName) || attributeName == null && PsiAnnotation.DEFAULT_REFERENCED_METHOD_NAME.equals(name)) {
+        return valueGetter.apply(attribute);
       }
     }
     return null;
@@ -119,10 +130,10 @@ public class PsiImplUtil {
     if (referenceElement != null) {
       PsiElement resolved = referenceElement.resolve();
       if (resolved != null) {
-        PsiMethod[] methods = ((PsiClass) resolved).findMethodsByName(attributeName, false);
+        PsiMethod[] methods = ((PsiClass)resolved).findMethodsByName(attributeName, false);
         for (PsiMethod method : methods) {
           if (PsiUtil.isAnnotationMethod(method)) {
-            return ((PsiAnnotationMethod) method).getDefaultValue();
+            return ((PsiAnnotationMethod)method).getDefaultValue();
           }
         }
       }
@@ -146,7 +157,8 @@ public class PsiImplUtil {
       String name = names[i];
       try {
         refs[i] = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory().createPackageReferenceElement(name);
-      } catch (IncorrectOperationException e) {
+      }
+      catch (IncorrectOperationException e) {
         LOG.error(e);
       }
     }
@@ -173,12 +185,13 @@ public class PsiImplUtil {
         break;
       }
     }
-    String message = parameter + ":" + parameter.getClass() + " not found among parameters: " + Arrays.asList(parameters) + "." + " parameterList' parent: " + parameterList.getParent() + ";" +
+    String message =
+      parameter + ":" + parameter.getClass() + " not found among parameters: " + Arrays.asList(parameters) + "." + " parameterList' parent: " + parameterList.getParent() + ";" +
         "" + " parameter.isValid()=" + parameter.isValid() + ";" + " parameterList.isValid()= " + parameterList.isValid() + ";" + " parameterList stub: " + (parameterList instanceof
-        StubBasedPsiElement ? ((StubBasedPsiElement) parameterList).getStub() : "---") + "; " + " parameter stub: " + (parameter instanceof StubBasedPsiElement ? ((StubBasedPsiElement)
+        StubBasedPsiElement ? ((StubBasedPsiElement)parameterList).getStub() : "---") + "; " + " parameter stub: " + (parameter instanceof StubBasedPsiElement ? ((StubBasedPsiElement)
         parameter).getStub() : "---") + ";" + " suspect: " + suspect + " (index=" + i + "); " + (suspect == null ? null : suspect.getClass()) + " suspect stub: " + (suspect instanceof
-        StubBasedPsiElement ? ((StubBasedPsiElement) suspect).getStub() : suspect == null ? "-null-" : "---" + suspect.getClass()) + ";" + " parameter.equals(suspect) = " + parameter.equals
-        (suspect) + "; " + " parameter.getNode() == suspect.getNode():  " + (parameter.getNode() == (suspect == null ? null : suspect.getNode())) + "; " + ".";
+        StubBasedPsiElement ? ((StubBasedPsiElement)suspect).getStub() : suspect == null ? "-null-" : "---" + suspect.getClass()) + ";" + " parameter.equals(suspect) = " + parameter.equals
+                                                                                                                                                                                       (suspect) + "; " + " parameter.getNode() == suspect.getNode():  " + (parameter.getNode() == (suspect == null ? null : suspect.getNode())) + "; " + ".";
     LOG.error(message);
     return i;
   }
@@ -289,7 +302,7 @@ public class PsiImplUtil {
       types[i] = typeElements[i].getType();
     }
     if (types.length == 1 && types[0] instanceof PsiDiamondType) {
-      return ((PsiDiamondType) types[0]).resolveInferredTypes().getTypes();
+      return ((PsiDiamondType)types[0]).resolveInferredTypes().getTypes();
     }
     return types;
   }
@@ -311,9 +324,12 @@ public class PsiImplUtil {
     PsiType operandType = classAccessExpression.getOperand().getType();
     if (operandType instanceof PsiPrimitiveType && !PsiType.NULL.equals(operandType)) {
       if (PsiType.VOID.equals(operandType)) {
-        operandType = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory().createTypeByFQClassName("java.lang.Void", classAccessExpression.getResolveScope());
-      } else {
-        operandType = ((PsiPrimitiveType) operandType).getBoxedType(classAccessExpression);
+        operandType = JavaPsiFacade.getInstance(manager.getProject())
+                                   .getElementFactory()
+                                   .createTypeByFQClassName("java.lang.Void", classAccessExpression.getResolveScope());
+      }
+      else {
+        operandType = ((PsiPrimitiveType)operandType).getBoxedType(classAccessExpression);
       }
     }
     final PsiTypeParameter[] typeParameters = classClass.getTypeParameters();
@@ -389,7 +405,8 @@ public class PsiImplUtil {
 
     if (node != null && node.getElementType() == JavaDocElementType.DOC_COMMENT) {
       return node;
-    } else {
+    }
+    else {
       return null;
     }
   }
@@ -399,8 +416,8 @@ public class PsiImplUtil {
     PsiUtil.ensureValidType(type);
 
     PsiExpression topLevel = expression;
-    while (topLevel.getParent() instanceof PsiArrayAccessExpression && ((PsiArrayAccessExpression) topLevel.getParent()).getArrayExpression() == topLevel) {
-      topLevel = (PsiExpression) topLevel.getParent();
+    while (topLevel.getParent() instanceof PsiArrayAccessExpression && ((PsiArrayAccessExpression)topLevel.getParent()).getArrayExpression() == topLevel) {
+      topLevel = (PsiExpression)topLevel.getParent();
     }
 
     if (topLevel instanceof PsiArrayAccessExpression && !PsiUtil.isAccessedForWriting(topLevel)) {
@@ -418,34 +435,38 @@ public class PsiImplUtil {
 
   private static PsiType doNormalizeWildcardByPosition(PsiType type, @Nonnull PsiExpression expression, PsiExpression topLevel) {
     if (type instanceof PsiCapturedWildcardType) {
-      final PsiWildcardType wildcardType = ((PsiCapturedWildcardType) type).getWildcard();
+      final PsiWildcardType wildcardType = ((PsiCapturedWildcardType)type).getWildcard();
       if (expression instanceof PsiReferenceExpression && LambdaUtil.isLambdaReturnExpression(expression)) {
         return type;
       }
 
       if (PsiUtil.isAccessedForWriting(topLevel)) {
         return wildcardType.isSuper() ? wildcardType.getBound() : PsiCapturedWildcardType.create(wildcardType, expression);
-      } else {
-        final PsiType upperBound = ((PsiCapturedWildcardType) type).getUpperBound();
+      }
+      else {
+        final PsiType upperBound = ((PsiCapturedWildcardType)type).getUpperBound();
         return upperBound instanceof PsiWildcardType ? doNormalizeWildcardByPosition(upperBound, expression, topLevel) : upperBound;
       }
     }
 
 
     if (type instanceof PsiWildcardType) {
-      final PsiWildcardType wildcardType = (PsiWildcardType) type;
+      final PsiWildcardType wildcardType = (PsiWildcardType)type;
 
       if (PsiUtil.isAccessedForWriting(topLevel)) {
         return wildcardType.isSuper() ? wildcardType.getBound() : PsiCapturedWildcardType.create(wildcardType, expression);
-      } else {
+      }
+      else {
         if (wildcardType.isExtends()) {
           return wildcardType.getBound();
-        } else {
+        }
+        else {
           return PsiType.getJavaLangObject(expression.getManager(), expression.getResolveScope());
         }
       }
-    } else if (type instanceof PsiArrayType) {
-      final PsiType componentType = ((PsiArrayType) type).getComponentType();
+    }
+    else if (type instanceof PsiArrayType) {
+      final PsiType componentType = ((PsiArrayType)type).getComponentType();
       final PsiType normalizedComponentType = doNormalizeWildcardByPosition(componentType, expression, topLevel);
       if (normalizedComponentType != componentType) {
         return normalizedComponentType.createArrayType();
@@ -468,8 +489,10 @@ public class PsiImplUtil {
     PsiClass aClass = member.getContainingClass();
     if (aClass instanceof PsiAnonymousClass) {
       //member from anonymous class can be called from outside the class
-      PsiElement methodCallExpr = PsiUtil.isLanguageLevel8OrHigher(aClass) ? PsiTreeUtil.getTopmostParentOfType(aClass, PsiStatement.class) : PsiTreeUtil.getParentOfType(aClass,
-          PsiMethodCallExpression.class);
+      PsiElement methodCallExpr = PsiUtil.isLanguageLevel8OrHigher(aClass) ? PsiTreeUtil.getTopmostParentOfType(aClass,
+                                                                                                                PsiStatement.class) : PsiTreeUtil.getParentOfType(
+        aClass,
+        PsiMethodCallExpression.class);
       return new LocalSearchScope(methodCallExpr != null ? methodCallExpr : aClass);
     }
 
@@ -483,7 +506,7 @@ public class PsiImplUtil {
       return topClass != null ? new LocalSearchScope(topClass) : file == null ? maximalUseScope : new LocalSearchScope(file);
     }
     if (file instanceof PsiJavaFile) {
-      PsiJavaPackage aPackage = JavaPsiFacade.getInstance(project).findPackage(((PsiJavaFile) file).getPackageName());
+      PsiJavaPackage aPackage = JavaPsiFacade.getInstance(project).findPackage(((PsiJavaFile)file).getPackageName());
       if (aPackage != null) {
         SearchScope scope = PackageScope.packageScope(aPackage, false);
         return scope.intersectWith(maximalUseScope);
@@ -499,7 +522,7 @@ public class PsiImplUtil {
   @Nullable
   public static ServerPageFile getServerPageFile(final PsiElement element) {
     final PsiFile psiFile = PsiUtilCore.getTemplateLanguageFile(element);
-    return psiFile instanceof ServerPageFile ? (ServerPageFile) psiFile : null;
+    return psiFile instanceof ServerPageFile ? (ServerPageFile)psiFile : null;
   }
 
   public static PsiElement setName(@Nonnull PsiElement element, @Nonnull String name) throws IncorrectOperationException {
@@ -523,7 +546,7 @@ public class PsiImplUtil {
   public static PsiJavaDocumentedElement findDocCommentOwner(@Nonnull PsiDocComment comment) {
     PsiElement parent = comment.getParent();
     if (parent instanceof PsiJavaDocumentedElement) {
-      PsiJavaDocumentedElement owner = (PsiJavaDocumentedElement) parent;
+      PsiJavaDocumentedElement owner = (PsiJavaDocumentedElement)parent;
       if (owner.getDocComment() == comment) {
         return owner;
       }
@@ -542,10 +565,12 @@ public class PsiImplUtil {
         return null;
       }
       existing.getParent().delete();
-    } else {
+    }
+    else {
       if (existing != null) {
-        ((PsiNameValuePair) existing.getParent()).setValue(value);
-      } else {
+        ((PsiNameValuePair)existing.getParent()).setValue(value);
+      }
+      else {
         PsiNameValuePair[] attributes = psiAnnotation.getParameterList().getAttributes();
         if (attributes.length == 1) {
           PsiNameValuePair attribute = attributes[0];
@@ -560,7 +585,8 @@ public class PsiImplUtil {
         final String namePrefix;
         if (allowNoName) {
           namePrefix = "";
-        } else {
+        }
+        else {
           namePrefix = attributeName + "=";
         }
         psiAnnotation.getParameterList().addBefore(createNameValuePair(value, namePrefix, annotationCreator), null);
@@ -569,7 +595,9 @@ public class PsiImplUtil {
     return psiAnnotation.findDeclaredAttributeValue(attributeName);
   }
 
-  private static PsiNameValuePair createNameValuePair(@Nonnull PsiAnnotationMemberValue value, @Nonnull String namePrefix, @Nonnull PairFunction<Project, String, PsiAnnotation> annotationCreator) {
+  private static PsiNameValuePair createNameValuePair(@Nonnull PsiAnnotationMemberValue value,
+                                                      @Nonnull String namePrefix,
+                                                      @Nonnull PairFunction<Project, String, PsiAnnotation> annotationCreator) {
     return annotationCreator.fun(value.getProject(), "@A(" + namePrefix + value.getText() + ")").getParameterList().getAttributes()[0];
   }
 
@@ -597,7 +625,7 @@ public class PsiImplUtil {
   public static PsiSwitchExpression findEnclosingSwitchExpression(@Nonnull PsiElement start) {
     for (PsiElement e = start; !isCodeBoundary(e); e = e.getParent()) {
       if (e instanceof PsiSwitchExpression)
-        return (PsiSwitchExpression) e;
+        return (PsiSwitchExpression)e;
     }
     return null;
   }
@@ -672,7 +700,7 @@ public class PsiImplUtil {
     for (ASTNode child = psiCodeBlock.getFirstChildNode(); child != null && idx < count; child = child.getTreeNext()) {
       PsiElement element = child.getPsi();
       if (element instanceof PsiStatement) {
-        result[idx++] = (PsiStatement) element;
+        result[idx++] = (PsiStatement)element;
       }
     }
     return result;
@@ -684,7 +712,7 @@ public class PsiImplUtil {
   }
 
   public static PsiElement handleMirror(PsiElement element) {
-    return element instanceof PsiMirrorElement ? ((PsiMirrorElement) element).getPrototype() : element;
+    return element instanceof PsiMirrorElement ? ((PsiMirrorElement)element).getPrototype() : element;
   }
 
   @Nullable
@@ -693,7 +721,7 @@ public class PsiImplUtil {
     if (parent instanceof PsiTypeElement) {
       PsiElement grandParent = parent.getParent();
       if (grandParent instanceof PsiModifierListOwner) {
-        return ((PsiModifierListOwner) grandParent).getModifierList();
+        return ((PsiModifierListOwner)grandParent).getModifierList();
       }
     }
 
@@ -701,7 +729,7 @@ public class PsiImplUtil {
   }
 
   public static boolean isTypeAnnotation(@Nullable PsiElement element) {
-    return element instanceof PsiAnnotation && AnnotationTargetUtil.isTypeAnnotation((PsiAnnotation) element);
+    return element instanceof PsiAnnotation && AnnotationTargetUtil.isTypeAnnotation((PsiAnnotation)element);
   }
 
   public static void collectTypeUseAnnotations(@Nonnull PsiModifierList modifierList, @Nonnull List<PsiAnnotation> annotations) {
@@ -736,7 +764,7 @@ public class PsiImplUtil {
   public static void markTypeAnnotations(@Nonnull PsiTypeElement typeElement) {
     PsiElement left = PsiTreeUtil.skipSiblingsBackward(typeElement, PsiComment.class, PsiWhiteSpace.class, PsiTypeParameterList.class);
     if (left instanceof PsiModifierList) {
-      for (PsiAnnotation annotation : ((PsiModifierList) left).getAnnotations()) {
+      for (PsiAnnotation annotation : ((PsiModifierList)left).getAnnotations()) {
         if (AnnotationTargetUtil.isTypeAnnotation(annotation)) {
           annotation.putUserData(TYPE_ANNO_MARK, Boolean.TRUE);
         }
@@ -747,7 +775,7 @@ public class PsiImplUtil {
   public static void deleteTypeAnnotations(@Nonnull PsiTypeElement typeElement) {
     PsiElement left = PsiTreeUtil.skipSiblingsBackward(typeElement, PsiComment.class, PsiWhiteSpace.class, PsiTypeParameterList.class);
     if (left instanceof PsiModifierList) {
-      for (PsiAnnotation annotation : ((PsiModifierList) left).getAnnotations()) {
+      for (PsiAnnotation annotation : ((PsiModifierList)left).getAnnotations()) {
         if (TYPE_ANNO_MARK.get(annotation) == Boolean.TRUE) {
           annotation.delete();
         }
@@ -756,30 +784,35 @@ public class PsiImplUtil {
   }
 
   public static boolean isLeafElementOfType(@Nullable PsiElement element, IElementType type) {
-    return element instanceof LeafElement && ((LeafElement) element).getElementType() == type;
+    return element instanceof LeafElement && ((LeafElement)element).getElementType() == type;
   }
 
   public static boolean isLeafElementOfType(PsiElement element, TokenSet tokenSet) {
-    return element instanceof LeafElement && tokenSet.contains(((LeafElement) element).getElementType());
+    return element instanceof LeafElement && tokenSet.contains(((LeafElement)element).getElementType());
   }
 
-  public static PsiType buildTypeFromTypeString(@Nonnull final String typeName, @Nonnull final PsiElement context, @Nonnull final PsiFile psiFile) {
+  public static PsiType buildTypeFromTypeString(@Nonnull final String typeName,
+                                                @Nonnull final PsiElement context,
+                                                @Nonnull final PsiFile psiFile) {
     PsiType resultType;
     final PsiManager psiManager = psiFile.getManager();
 
     if (typeName.indexOf('<') != -1 || typeName.indexOf('[') != -1 || typeName.indexOf('.') == -1) {
       try {
         return JavaPsiFacade.getInstance(psiManager.getProject()).getElementFactory().createTypeFromText(typeName, context);
-      } catch (Exception ignored) {
+      }
+      catch (Exception ignored) {
       } // invalid syntax will produce unresolved class type
     }
 
     PsiClass aClass = JavaPsiFacade.getInstance(psiManager.getProject()).findClass(typeName, context.getResolveScope());
 
     if (aClass == null) {
-      final LightClassReference ref = new LightClassReference(psiManager, PsiNameHelper.getShortClassName(typeName), typeName, PsiSubstitutor.EMPTY, psiFile);
+      final LightClassReference ref =
+        new LightClassReference(psiManager, PsiNameHelper.getShortClassName(typeName), typeName, PsiSubstitutor.EMPTY, psiFile);
       resultType = new PsiClassReferenceType(ref, null);
-    } else {
+    }
+    else {
       PsiElementFactory factory = JavaPsiFacade.getInstance(psiManager.getProject()).getElementFactory();
       PsiSubstitutor substitutor = factory.createRawSubstitutor(aClass);
       resultType = factory.createType(aClass, substitutor);
@@ -815,7 +848,7 @@ public class PsiImplUtil {
       // method refs: do not cache results during parent conflict resolving, acceptable checks, etc
       final Map<PsiElement, PsiType> map = LambdaUtil.ourFunctionTypes.get();
       if (map != null && map.containsKey(element)) {
-        return (JavaResolveResult[]) resolver.resolve(element, psiFile, incompleteCode);
+        return (JavaResolveResult[])resolver.resolve(element, psiFile, incompleteCode);
       }
     }
 
@@ -829,7 +862,7 @@ public class PsiImplUtil {
                                                                                              boolean incompleteCode,
                                                                                              @Nonnull ResolveCache.PolyVariantContextResolver<? super T> resolver) {
     ResolveResult[] results = ResolveCache.getInstance(project).resolveWithCaching(element, resolver, true, incompleteCode, psiFile);
-    return results.length == 0 ? JavaResolveResult.EMPTY_ARRAY : (JavaResolveResult[]) results;
+    return results.length == 0 ? JavaResolveResult.EMPTY_ARRAY : (JavaResolveResult[])results;
   }
 
   /**
@@ -844,7 +877,7 @@ public class PsiImplUtil {
     if (parent instanceof PsiExpressionList) {
       PsiElement grand = parent.getParent();
       if (grand instanceof PsiSwitchLabelStatementBase) {
-        return (PsiSwitchLabelStatementBase) grand;
+        return (PsiSwitchLabelStatementBase)grand;
       }
     }
     return null;
@@ -852,8 +885,9 @@ public class PsiImplUtil {
 
   public static VirtualFile getModuleVirtualFile(@Nonnull PsiJavaModule module) {
     if (module instanceof AutomaticJavaModule) {
-      return ((AutomaticJavaModule) module).getRootVirtualFile();
-    } else {
+      return ((AutomaticJavaModule)module).getRootVirtualFile();
+    }
+    else {
       return module.getContainingFile().getVirtualFile();
     }
   }
