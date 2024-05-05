@@ -30,11 +30,7 @@ public class JavaModuleIconDescriptorUpdater implements IconDescriptorUpdater {
   public static boolean isModuleDirectory(PsiDirectory directory) {
     String name = directory.getName();
     if (name.equals("classes")) {
-      boolean moduleRoot = JModFileType.isModuleRoot(directory.getVirtualFile());
-      if (!moduleRoot) {
-        System.out.println();
-      }
-      return moduleRoot;
+      return JModFileType.isModuleRoot(directory.getVirtualFile());
     } else if (directory.getVirtualFile().getFileSystem() instanceof JrtFileSystem) {
       return JrtFileSystem.isModuleRoot(directory.getVirtualFile());
     }
