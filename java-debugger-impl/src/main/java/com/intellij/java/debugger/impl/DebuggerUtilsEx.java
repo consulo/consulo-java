@@ -56,6 +56,7 @@ import consulo.execution.debug.XDebuggerManager;
 import consulo.execution.debug.XSourcePosition;
 import consulo.execution.debug.XSourcePositionWithHighlighter;
 import consulo.execution.debug.frame.XValueNode;
+import consulo.execution.ui.RunContentManager;
 import consulo.execution.ui.console.ConsoleView;
 import consulo.execution.ui.console.LineNumbersMapping;
 import consulo.execution.ui.console.TextConsoleBuilder;
@@ -63,7 +64,6 @@ import consulo.execution.ui.console.TextConsoleBuilderFactory;
 import consulo.execution.ui.layout.RunnerLayoutUi;
 import consulo.execution.unscramble.ThreadDumpPanel;
 import consulo.execution.unscramble.ThreadState;
-import consulo.ide.impl.idea.execution.ui.layout.impl.RunnerContentUi;
 import consulo.ide.impl.idea.xdebugger.impl.XSourcePositionImpl;
 import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.event.Event;
@@ -92,12 +92,11 @@ import consulo.util.xml.serializer.JDOMExternalizable;
 import consulo.util.xml.serializer.WriteExternalException;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jdom.Attribute;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -468,7 +467,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
 
     final String id = THREAD_DUMP_CONTENT_PREFIX + " #" + myCurrentThreadDumpId;
     final Content content = ui.createContent(id, panel.getComponent(), id, null, null);
-    content.putUserData(RunnerContentUi.LIGHTWEIGHT_CONTENT_MARKER, Boolean.TRUE);
+    content.putUserData(RunContentManager.LIGHTWEIGHT_CONTENT_MARKER, Boolean.TRUE);
     content.setCloseable(true);
     content.setDescription("Thread Dump");
     ui.addContent(content);
