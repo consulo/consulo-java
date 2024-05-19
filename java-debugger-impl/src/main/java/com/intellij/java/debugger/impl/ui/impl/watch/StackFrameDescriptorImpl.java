@@ -28,7 +28,6 @@ import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
 import com.intellij.java.debugger.impl.settings.ThreadsViewSettings;
 import com.intellij.java.debugger.impl.ui.tree.StackFrameDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.render.DescriptorLabelListener;
-import consulo.application.AllIcons;
 import consulo.application.ApplicationManager;
 import consulo.execution.debug.XDebugSession;
 import consulo.execution.debug.frame.XValueMarkers;
@@ -38,11 +37,12 @@ import consulo.language.editor.FileColorManager;
 import consulo.language.psi.PsiFile;
 import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.ui.image.Image;
 import consulo.virtualFileSystem.VirtualFile;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.awt.*;
 
 /**
@@ -61,7 +61,7 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 	private Color myBackgroundColor;
 	private SourcePosition mySourcePosition;
 
-	private Image myIcon = AllIcons.Debugger.StackFrame;
+	private Image myIcon = PlatformIconGroup.debuggerFrame();
 
 	public StackFrameDescriptorImpl(@Nonnull StackFrameProxyImpl frame, @Nonnull MethodsTracker tracker)
 	{
@@ -326,13 +326,13 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 		{
 			if(myFrame.isObsolete())
 			{
-				return AllIcons.Debugger.Db_obsolete;
+				return PlatformIconGroup.debuggerDb_obsolete();
 			}
 		}
 		catch(EvaluateException ignored)
 		{
 		}
-		return AllIcons.Debugger.StackFrame;
+		return PlatformIconGroup.debuggerFrame();
 	}
 
 	public Image getIcon()
