@@ -17,9 +17,9 @@ package com.intellij.java.language.jvm;
 
 import com.intellij.java.language.jvm.types.JvmReferenceType;
 import com.intellij.java.language.jvm.types.JvmType;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
@@ -70,4 +70,8 @@ public interface JvmMethod extends JvmTypeParametersOwner {
    */
   @Nonnull
   JvmReferenceType[] getThrowsTypes();
+
+  default boolean hasParameters() {
+    return getParameters().length > 0;
+  }
 }

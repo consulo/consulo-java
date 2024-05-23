@@ -116,7 +116,7 @@ public class RecordAugmentProvider extends PsiAugmentProvider {
   }
 
   @Nonnull
-  private static <Psi extends PsiElement> List<Psi> getFieldAugments(PsiClass aClass) {
+  public static <Psi extends PsiElement> List<Psi> getFieldAugments(PsiClass aClass) {
     PsiRecordComponent[] components = aClass.getRecordComponents();
     PsiElementFactory factory = JavaPsiFacade.getInstance(aClass.getProject()).getElementFactory();
     ArrayList<Psi> fields = new ArrayList<>(components.length);

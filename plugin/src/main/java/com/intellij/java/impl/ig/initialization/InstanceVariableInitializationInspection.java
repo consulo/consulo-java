@@ -15,32 +15,23 @@
  */
 package com.intellij.java.impl.ig.initialization;
 
-import jakarta.annotation.Nonnull;
-import javax.swing.JComponent;
-
-import jakarta.annotation.Nullable;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.ImplicitUsageProvider;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
-import consulo.component.extension.Extensions;
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiClassInitializer;
-import com.intellij.java.language.psi.PsiCodeBlock;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiField;
-import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiModifier;
-import com.intellij.java.language.psi.PsiParameterList;
-import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.impl.ig.fixes.MakeInitializerExplicitFix;
+import com.intellij.java.impl.ig.psiutils.InitializationUtils;
+import com.intellij.java.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.MakeInitializerExplicitFix;
 import com.siyeh.ig.psiutils.ClassUtils;
-import com.intellij.java.impl.ig.psiutils.InitializationUtils;
 import com.siyeh.ig.psiutils.TestUtils;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.component.extension.Extensions;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.editor.ImplicitUsageProvider;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
+import javax.swing.*;
 
 @ExtensionImpl
 public class InstanceVariableInitializationInspection extends BaseInspection {
@@ -124,7 +115,7 @@ public class InstanceVariableInitializationInspection extends BaseInspection {
       if (isInitializedInInitializer(field)) {
         return;
       }
-      if (isInitializedInConstructors(field, aClass)) {
+      if (InitializationUtils.isInitializedInConstructors(field, aClass)) {
         return;
       }
       if (isTestClass) {
@@ -133,21 +124,6 @@ public class InstanceVariableInitializationInspection extends BaseInspection {
       else {
         registerFieldError(field, Boolean.FALSE);
       }
-    }
-
-    private boolean isInitializedInConstructors(PsiField field,
-                                                PsiClass aClass) {
-      final PsiMethod[] constructors = aClass.getConstructors();
-      if (constructors.length == 0) {
-        return false;
-      }
-      for (final PsiMethod constructor : constructors) {
-        if (!InitializationUtils.methodAssignsVariableOrFails(
-          constructor, field)) {
-          return false;
-        }
-      }
-      return true;
     }
 
     private boolean isInitializedInSetup(PsiField field,
@@ -177,21 +153,13 @@ public class InstanceVariableInitializationInspection extends BaseInspection {
       return null;
     }
 
-    private boolean isInitializedInInitializer(@Nonnull PsiField field) {
+    private static boolean isInitializedInInitializer(@Nonnull PsiField field) {
       final PsiClass aClass = field.getContainingClass();
       if (aClass == null) {
         return false;
       }
-      final PsiClassInitializer[] initializers = aClass.getInitializers();
-      for (final PsiClassInitializer initializer : initializers) {
-        if (initializer.hasModifierProperty(PsiModifier.STATIC)) {
-          continue;
-        }
-        final PsiCodeBlock body = initializer.getBody();
-        if (InitializationUtils.blockAssignsVariableOrFails(body,
-                                                            field)) {
-          return true;
-        }
+      if (InitializationUtils.isInitializedInInitializer(field, aClass)) {
+        return true;
       }
       final PsiField[] fields = aClass.getFields();
       for (PsiField otherField : fields) {
@@ -202,8 +170,7 @@ public class InstanceVariableInitializationInspection extends BaseInspection {
           continue;
         }
         final PsiExpression initializer = otherField.getInitializer();
-        if (InitializationUtils.expressionAssignsVariableOrFails(
-          initializer, field)) {
+        if (InitializationUtils.expressionAssignsVariableOrFails(initializer, field)) {
           return true;
         }
       }

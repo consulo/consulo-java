@@ -20,16 +20,15 @@ import com.intellij.java.language.jvm.JvmParameter;
 import com.intellij.java.language.jvm.types.JvmReferenceType;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
+import consulo.language.pom.PomRenameableTarget;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiNameIdentifierOwner;
 import consulo.language.psi.PsiTarget;
-import consulo.util.collection.ArrayFactory;
-import consulo.language.pom.PomRenameableTarget;
 import consulo.language.util.IncorrectOperationException;
-import org.jetbrains.annotations.NonNls;
-
+import consulo.util.collection.ArrayFactory;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.List;
 
 /**
@@ -38,7 +37,7 @@ import java.util.List;
  * @see PsiClass#getMethods()
  */
 public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifierListOwner, PsiDocCommentOwner, PsiTypeParameterListOwner, PomRenameableTarget<PsiElement>, PsiTarget,
-    PsiParameterListOwner, JvmMethod {
+  PsiParameterListOwner, JvmMethod {
   /**
    * The empty array of PSI methods which can be reused to avoid unnecessary allocations.
    */
@@ -194,14 +193,18 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
 
   @Override
   @Nonnull
-  @NonNls
   String getName();
 
   @Override
-  PsiElement setName(@NonNls @Nonnull String name) throws IncorrectOperationException;
+  PsiElement setName(@Nonnull String name) throws IncorrectOperationException;
 
   @Nonnull
   HierarchicalMethodSignature getHierarchicalMethodSignature();
+
+  @Override
+  default boolean hasParameters() {
+    return !getParameterList().isEmpty();
+  }
 
   @Nonnull
   @Override
