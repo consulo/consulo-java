@@ -17,20 +17,22 @@ package com.intellij.java.language.psi.util;
 
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.ASTNode;
 import consulo.language.ast.IElementType;
+import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.function.Condition;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -442,6 +444,22 @@ public class PsiTypesUtil {
       newType = newType.createArrayType();
     }
     return newType;
+  }
+
+  /**
+   * @return null if type can't be explicitly specified
+   */
+  @Nullable
+  public static PsiTypeElement replaceWithExplicitType(PsiTypeElement typeElement) {
+    PsiType type = typeElement.getType();
+    if (!isDenotableType(type, typeElement)) {
+      return null;
+    }
+    Project project = typeElement.getProject();
+    PsiTypeElement typeElementByExplicitType = JavaPsiFacade.getElementFactory(project).createTypeElement(type);
+    PsiElement explicitTypeElement = typeElement.replace(typeElementByExplicitType);
+    explicitTypeElement = JavaCodeStyleManager.getInstance(project).shortenClassReferences(explicitTypeElement);
+    return (PsiTypeElement)CodeStyleManager.getInstance(project).reformat(explicitTypeElement);
   }
 
   public static class TypeParameterSearcher extends PsiTypeVisitor<Boolean> {

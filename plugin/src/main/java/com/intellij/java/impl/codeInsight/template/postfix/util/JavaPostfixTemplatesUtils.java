@@ -27,10 +27,9 @@ import consulo.language.editor.postfixTemplate.PostfixTemplatePsiInfo;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.lang.function.Condition;
-import org.jetbrains.annotations.Contract;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.Contract;
 
 public abstract class JavaPostfixTemplatesUtils {
   private JavaPostfixTemplatesUtils() {
@@ -63,35 +62,35 @@ public abstract class JavaPostfixTemplatesUtils {
     @Nonnull
     @Override
     public PsiExpression getNegatedExpression(@Nonnull PsiElement element) {
-      return CodeInsightServicesUtil.invertCondition((PsiExpression) element);
+      return CodeInsightServicesUtil.invertCondition((PsiExpression)element);
     }
   };
 
   public static Condition<PsiElement> IS_BOOLEAN = new Condition<PsiElement>() {
     @Override
     public boolean value(PsiElement element) {
-      return element instanceof PsiExpression && isBoolean(((PsiExpression) element).getType());
+      return element instanceof PsiExpression && isBoolean(((PsiExpression)element).getType());
     }
   };
 
   public static Condition<PsiElement> IS_THROWABLE = new Condition<PsiElement>() {
     @Override
     public boolean value(PsiElement element) {
-      return element instanceof PsiExpression && isThrowable((((PsiExpression) element).getType()));
+      return element instanceof PsiExpression && isThrowable((((PsiExpression)element).getType()));
     }
   };
 
   public static Condition<PsiElement> IS_NON_VOID = new Condition<PsiElement>() {
     @Override
     public boolean value(PsiElement element) {
-      return element instanceof PsiExpression && isNonVoid((((PsiExpression) element).getType()));
+      return element instanceof PsiExpression && isNonVoid((((PsiExpression)element).getType()));
     }
   };
 
   public static Condition<PsiElement> IS_NOT_PRIMITIVE = new Condition<PsiElement>() {
     @Override
     public boolean value(PsiElement element) {
-      return element instanceof PsiExpression && isNotPrimitiveTypeExpression(((PsiExpression) element));
+      return element instanceof PsiExpression && isNotPrimitiveTypeExpression(((PsiExpression)element));
     }
   };
 

@@ -16,6 +16,7 @@
 package consulo.java.language.impl.codeInsight;
 
 import com.intellij.java.language.psi.PsiClassType;
+import consulo.annotation.DeprecationInfo;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
@@ -27,6 +28,8 @@ import jakarta.annotation.Nonnull;
  * @since 23:44/30.03.13
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
+@Deprecated(forRemoval = true)
+@DeprecationInfo("Use CustomExceptionHandler")
 public interface ExtraExceptionHandler {
   ExtensionPointName<ExtraExceptionHandler> EP_NAME = ExtensionPointName.create(ExtraExceptionHandler.class);
 

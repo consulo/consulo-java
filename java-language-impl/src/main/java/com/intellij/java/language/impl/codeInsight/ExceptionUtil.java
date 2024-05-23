@@ -15,6 +15,7 @@
  */
 package com.intellij.java.language.impl.codeInsight;
 
+import com.intellij.java.language.codeInsight.CustomExceptionHandler;
 import com.intellij.java.language.impl.psi.controlFlow.*;
 import com.intellij.java.language.impl.psi.impl.PsiClassImplUtil;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
@@ -27,23 +28,24 @@ import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.util.lang.Pair;
+import consulo.java.language.impl.codeInsight.ExtraExceptionHandler;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiUtilCore;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.psi.PsiUtilCore;
+import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
-import consulo.util.lang.BitUtil;
-import consulo.util.collection.SmartList;
 import consulo.util.collection.ContainerUtil;
-import consulo.java.language.impl.codeInsight.ExtraExceptionHandler;
-import consulo.java.language.module.util.JavaClassNames;
-import org.jetbrains.annotations.NonNls;
-
+import consulo.util.collection.SmartList;
+import consulo.util.lang.BitUtil;
+import consulo.util.lang.Pair;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
 import java.util.*;
 
 /**
@@ -741,6 +743,14 @@ public class ExceptionUtil {
       return false;
     }
 
+    Project project = element.getProject();
+
+    CustomExceptionHandler handler =
+      project.getExtensionPoint(CustomExceptionHandler.class).findFirstSafe(it -> it.isHandled(element, exceptionType, topElement));
+    if (handler != null) {
+      return true;
+    }
+
     final PsiElement parent = element.getParent();
 
     if (parent instanceof PsiMethod) {
@@ -792,8 +802,8 @@ public class ExceptionUtil {
         return areAllConstructorsThrow(aClass, exceptionType);
       }
     } else {
-      for (ExtraExceptionHandler handler : ExtraExceptionHandler.EP_NAME.getExtensionList()) {
-        if (handler.isHandled(exceptionType, element)) {
+      for (ExtraExceptionHandler exceptionHandler : ExtraExceptionHandler.EP_NAME.getExtensionList()) {
+        if (exceptionHandler.isHandled(exceptionType, element)) {
           return true;
         }
       }
