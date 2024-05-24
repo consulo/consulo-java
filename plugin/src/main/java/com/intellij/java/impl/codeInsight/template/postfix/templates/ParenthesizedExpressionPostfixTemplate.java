@@ -15,26 +15,11 @@
  */
 package com.intellij.java.impl.codeInsight.template.postfix.templates;
 
-import jakarta.annotation.Nonnull;
+import com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils;
+import consulo.application.dumb.DumbAware;
 
-import consulo.codeEditor.Editor;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.java.language.psi.PsiElementFactory;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiParenthesizedExpression;
-
-public class ParenthesizedExpressionPostfixTemplate extends ExpressionPostfixTemplateWithChooser {
+public class ParenthesizedExpressionPostfixTemplate extends ParenthesizedPostfixTemplate implements DumbAware {
   public ParenthesizedExpressionPostfixTemplate() {
-    super("par", "(expression)");
-  }
-
-  @Override
-  protected void doIt(@Nonnull Editor editor, @Nonnull PsiExpression expression) {
-    PsiElementFactory factory = JavaPsiFacade.getInstance(expression.getProject()).getElementFactory();
-    PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression)factory.createExpressionFromText("(expr)", expression.getParent());
-    PsiExpression operand = parenthesizedExpression.getExpression();
-    assert operand != null;
-    operand.replace(expression);
-    expression.replace(parenthesizedExpression);
+    super(JavaPostfixTemplatesUtils.JAVA_PSI_INFO, JavaPostfixTemplatesUtils.selectorAllExpressionsWithCurrentOffset(JavaPostfixTemplatesUtils.IS_NON_VOID));
   }
 }

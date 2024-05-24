@@ -21,22 +21,24 @@ import com.intellij.java.impl.refactoring.ui.TypeSelectorManagerImpl;
 import com.intellij.java.impl.refactoring.util.occurrences.*;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.dataContext.DataContext;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.project.ui.wm.WindowManager;
+import consulo.dataContext.DataContext;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.introduce.inplace.AbstractInplaceIntroducer;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import consulo.language.editor.refactoring.introduce.inplace.AbstractInplaceIntroducer;
-import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
-
+import consulo.project.Project;
+import consulo.project.ui.wm.WindowManager;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
-public class IntroduceFieldHandler extends BaseExpressionToFieldHandler {
+public class IntroduceFieldHandler extends BaseExpressionToFieldHandler implements JavaIntroduceFieldHandlerBase {
 
   public static final String REFACTORING_NAME = RefactoringBundle.message("introduce.field.title");
   private static final MyOccurrenceFilter MY_OCCURRENCE_FILTER = new MyOccurrenceFilter();
@@ -55,7 +57,8 @@ public class IntroduceFieldHandler extends BaseExpressionToFieldHandler {
       String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("cannot.introduce.field.in.interface"));
       CommonRefactoringUtil.showErrorHint(parentClass.getProject(), editor, message, REFACTORING_NAME, getHelpID());
       return false;
-    } else {
+    }
+    else {
       return true;
     }
   }
@@ -68,7 +71,12 @@ public class IntroduceFieldHandler extends BaseExpressionToFieldHandler {
     if (!CommonRefactoringUtil.checkReadOnlyStatus(project, file)) return;
     PsiDocumentManager.getInstance(project).commitAllDocuments();
 
-    ElementToWorkOn.processElementToWorkOn(editor, file, REFACTORING_NAME, HelpID.INTRODUCE_FIELD, project, getElementProcessor(project, editor));
+    ElementToWorkOn.processElementToWorkOn(editor,
+                                           file,
+                                           REFACTORING_NAME,
+                                           HelpID.INTRODUCE_FIELD,
+                                           project,
+                                           getElementProcessor(project, editor));
   }
 
   protected Settings showRefactoringDialog(Project project, Editor editor, PsiClass parentClass, PsiExpression expr,
@@ -78,11 +86,12 @@ public class IntroduceFieldHandler extends BaseExpressionToFieldHandler {
 
     PsiLocalVariable localVariable = null;
     if (anchorElement instanceof PsiLocalVariable) {
-      localVariable = (PsiLocalVariable) anchorElement;
-    } else if (expr instanceof PsiReferenceExpression) {
-      PsiElement ref = ((PsiReferenceExpression) expr).resolve();
+      localVariable = (PsiLocalVariable)anchorElement;
+    }
+    else if (expr instanceof PsiReferenceExpression) {
+      PsiElement ref = ((PsiReferenceExpression)expr).resolve();
       if (ref instanceof PsiLocalVariable) {
-        localVariable = (PsiLocalVariable) ref;
+        localVariable = (PsiLocalVariable)ref;
       }
     }
 
@@ -90,13 +99,13 @@ public class IntroduceFieldHandler extends BaseExpressionToFieldHandler {
     boolean replaceAll = false;
     if (activeIntroducer != null) {
       activeIntroducer.stopIntroduce(editor);
-      expr = (PsiExpression) activeIntroducer.getExpr();
-      localVariable = (PsiLocalVariable) activeIntroducer.getLocalVariable();
-      occurrences = (PsiExpression[]) activeIntroducer.getOccurrences();
+      expr = (PsiExpression)activeIntroducer.getExpr();
+      localVariable = (PsiLocalVariable)activeIntroducer.getLocalVariable();
+      occurrences = (PsiExpression[])activeIntroducer.getOccurrences();
       enteredName = activeIntroducer.getInputName();
       replaceAll = activeIntroducer.isReplaceAllOccurrences();
-      type = ((AbstractJavaInplaceIntroducer) activeIntroducer).getType();
-      IntroduceFieldDialog.ourLastInitializerPlace = ((InplaceIntroduceFieldPopup) activeIntroducer).getInitializerPlace();
+      type = ((AbstractJavaInplaceIntroducer)activeIntroducer).getType();
+      IntroduceFieldDialog.ourLastInitializerPlace = ((InplaceIntroduceFieldPopup)activeIntroducer).getInitializerPlace();
     }
 
     final PsiMethod containingMethod = PsiTreeUtil.getParentOfType(expr != null ? expr : anchorElement, PsiMethod.class);
@@ -113,28 +122,29 @@ public class IntroduceFieldHandler extends BaseExpressionToFieldHandler {
     }
     int occurrencesNumber = occurrences.length;
     final boolean currentMethodConstructor = containingMethod != null && containingMethod.isConstructor();
-    final boolean allowInitInMethod = (!currentMethodConstructor || !isInSuperOrThis) && (anchorElement instanceof PsiLocalVariable || anchorElement instanceof PsiStatement);
+    final boolean allowInitInMethod =
+      (!currentMethodConstructor || !isInSuperOrThis) && (anchorElement instanceof PsiLocalVariable || anchorElement instanceof PsiStatement);
     final boolean allowInitInMethodIfAll = (!currentMethodConstructor || !isInSuperOrThis) && anchorElementIfAll instanceof PsiStatement;
 
     if (editor != null && editor.getSettings().isVariableInplaceRenameEnabled() &&
-        (expr == null || expr.isPhysical()) && activeIntroducer == null) {
+      (expr == null || expr.isPhysical()) && activeIntroducer == null) {
       myInplaceIntroduceFieldPopup =
-          new InplaceIntroduceFieldPopup(localVariable, parentClass, declareStatic, currentMethodConstructor, occurrences, expr,
-              new TypeSelectorManagerImpl(project, type, containingMethod, expr, occurrences), editor,
-              allowInitInMethod, allowInitInMethodIfAll, anchorElement, anchorElementIfAll,
-              expr != null ? createOccurrenceManager(expr, parentClass) : null, project);
+        new InplaceIntroduceFieldPopup(localVariable, parentClass, declareStatic, currentMethodConstructor, occurrences, expr,
+                                       new TypeSelectorManagerImpl(project, type, containingMethod, expr, occurrences), editor,
+                                       allowInitInMethod, allowInitInMethodIfAll, anchorElement, anchorElementIfAll,
+                                       expr != null ? createOccurrenceManager(expr, parentClass) : null, project);
       if (myInplaceIntroduceFieldPopup.startInplaceIntroduceTemplate()) {
         return null;
       }
     }
 
     IntroduceFieldDialog dialog = new IntroduceFieldDialog(
-        project, parentClass, expr, localVariable,
-        currentMethodConstructor,
-        localVariable != null, declareStatic, occurrences,
-        allowInitInMethod, allowInitInMethodIfAll,
-        new TypeSelectorManagerImpl(project, type, containingMethod, expr, occurrences),
-        enteredName
+      project, parentClass, expr, localVariable,
+      currentMethodConstructor,
+      localVariable != null, declareStatic, occurrences,
+      allowInitInMethod, allowInitInMethodIfAll,
+      new TypeSelectorManagerImpl(project, type, containingMethod, expr, occurrences),
+      enteredName
     );
     dialog.setReplaceAllOccurrences(replaceAll);
     dialog.show();
@@ -152,10 +162,10 @@ public class IntroduceFieldHandler extends BaseExpressionToFieldHandler {
 
 
     return new Settings(dialog.getEnteredName(), expr, occurrences, dialog.isReplaceAllOccurrences(),
-        declareStatic, dialog.isDeclareFinal(),
-        dialog.getInitializerPlace(), dialog.getFieldVisibility(),
-        localVariable,
-        dialog.getFieldType(), localVariable != null, (TargetDestination) null, false, false);
+                        declareStatic, dialog.isDeclareFinal(),
+                        dialog.getInitializerPlace(), dialog.getFieldVisibility(),
+                        localVariable,
+                        dialog.getFieldType(), localVariable != null, (TargetDestination)null, false, false);
   }
 
   @Override
@@ -190,7 +200,8 @@ public class IntroduceFieldHandler extends BaseExpressionToFieldHandler {
   protected boolean invokeImpl(final Project project, PsiLocalVariable localVariable, final Editor editor) {
     final PsiElement parent = localVariable.getParent();
     if (!(parent instanceof PsiDeclarationStatement)) {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("error.wrong.caret.position.local.or.expression.name"));
+      String message =
+        RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("error.wrong.caret.position.local.or.expression.name"));
       CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, getHelpID());
       return false;
     }
@@ -201,7 +212,14 @@ public class IntroduceFieldHandler extends BaseExpressionToFieldHandler {
                                                PsiExpression[] occurences,
                                                boolean isStatic) {
         final PsiStatement statement = PsiTreeUtil.getParentOfType(local, PsiStatement.class);
-        return IntroduceFieldHandler.this.showRefactoringDialog(project, editor, aClass, local.getInitializer(), local.getType(), occurences, local, statement);
+        return IntroduceFieldHandler.this.showRefactoringDialog(project,
+                                                                editor,
+                                                                aClass,
+                                                                local.getInitializer(),
+                                                                local.getType(),
+                                                                occurences,
+                                                                local,
+                                                                statement);
       }
 
       @Override
@@ -210,6 +228,18 @@ public class IntroduceFieldHandler extends BaseExpressionToFieldHandler {
       }
     };
     return localToFieldHandler.convertLocalToField(localVariable, editor);
+  }
+
+  public void invoke(@NotNull Project project, PsiElement element, @Nullable Editor editor) {
+    if (element instanceof PsiExpression) {
+      invokeImpl(project, (PsiExpression)element, editor);
+    }
+    else if (element instanceof PsiLocalVariable) {
+      invokeImpl(project, (PsiLocalVariable)element, editor);
+    }
+    else {
+      LOG.error("elements[0] should be PsiExpression or PsiLocalVariable; was " + element);
+    }
   }
 
   protected int getChosenClassIndex(List<PsiClass> classes) {

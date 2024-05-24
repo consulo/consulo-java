@@ -38,7 +38,7 @@ import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 
-public class IntroduceVariableHandler extends IntroduceVariableBase {
+public class IntroduceVariableHandler extends IntroduceVariableBase implements JavaIntroduceVariableHandlerBase {
 
   public void invoke(@Nonnull final Project project, final Editor editor, final PsiExpression expression) {
     invokeImpl(project, expression, editor);

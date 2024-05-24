@@ -1,51 +1,22 @@
-/*
- * Copyright 2000-2014 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.impl.codeInsight.template.postfix.templates;
 
-import consulo.language.editor.postfixTemplate.TypedPostfixTemplate;
-import com.intellij.java.language.psi.*;
-import consulo.codeEditor.Editor;
-import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
+import com.intellij.java.language.LanguageLevel;
+import consulo.application.dumb.DumbAware;
+import org.jetbrains.annotations.NotNull;
 
-import static com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.IS_BOOLEAN;
-import static com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
+import java.util.Collections;
 
-public class WhileStatementPostfixTemplate extends TypedPostfixTemplate {
-  public WhileStatementPostfixTemplate() {
-    super("while", "while (expr)", JAVA_PSI_INFO, IS_BOOLEAN);
+public class WhileStatementPostfixTemplate extends JavaEditablePostfixTemplate implements DumbAware {
+  public WhileStatementPostfixTemplate(@NotNull JavaPostfixTemplateProvider provider) {
+    super("while", "while ($EXPR$) {\n$END$\n}", "while (expr) {}",
+          Collections.singleton(new JavaPostfixTemplateExpressionCondition.JavaPostfixTemplateBooleanExpressionCondition()),
+          LanguageLevel.JDK_1_3, true, provider);
   }
 
   @Override
-  public void expand(@Nonnull PsiElement context, @Nonnull Editor editor) {
-    PsiElement expression = myPsiInfo.getTopmostExpression(context);
-    assert expression != null;
-
-    PsiElementFactory factory = JavaPsiFacade.getElementFactory(context.getProject());
-    PsiWhileStatement whileStatement = (PsiWhileStatement) factory.createStatementFromText("while(expr)", context);
-    PsiExpression condition = whileStatement.getCondition();
-    assert condition != null;
-    condition.replace(expression);
-    PsiElement replacedWhileStatement = expression.replace(whileStatement);
-    if (replacedWhileStatement instanceof PsiWhileStatement) {
-      PsiJavaToken parenth = ((PsiWhileStatement) replacedWhileStatement).getRParenth();
-      if (parenth != null) {
-        editor.getCaretModel().moveToOffset(parenth.getTextRange().getEndOffset());
-      }
-    }
+  public boolean isBuiltin() {
+    return true;
   }
 }
 

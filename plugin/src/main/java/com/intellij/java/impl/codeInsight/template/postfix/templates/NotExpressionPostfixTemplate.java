@@ -15,37 +15,18 @@
  */
 package com.intellij.java.impl.codeInsight.template.postfix.templates;
 
-import com.intellij.java.impl.codeInsight.CodeInsightServicesUtil;
-import com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils;
-import consulo.codeEditor.Editor;
-import consulo.util.lang.function.Condition;
-import com.intellij.java.language.psi.PsiExpression;
-import jakarta.annotation.Nonnull;
+import consulo.application.dumb.DumbAware;
+import consulo.language.editor.refactoring.postfixTemplate.NotPostfixTemplate;
 
-public class NotExpressionPostfixTemplate extends ExpressionPostfixTemplateWithChooser {
-  private static final Condition<PsiExpression> BOOLEAN_TYPE_CONDITION = new Condition<PsiExpression>() {
-    @Override
-    public boolean value(PsiExpression expression) {
-      return JavaPostfixTemplatesUtils.isBoolean(expression.getType());
-    }
-  };
+import static com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.*;
+
+public class NotExpressionPostfixTemplate extends NotPostfixTemplate implements DumbAware {
 
   public NotExpressionPostfixTemplate() {
-    super("not",  "!expr");
+    super(JAVA_PSI_INFO, selectorAllExpressionsWithCurrentOffset(IS_BOOLEAN));
   }
 
   public NotExpressionPostfixTemplate(String alias) {
-    super(alias, alias, "!expr");
-  }
-
-  @Override
-  protected void doIt(@Nonnull Editor editor, @Nonnull PsiExpression expression) {
-    expression.replace(CodeInsightServicesUtil.invertCondition(expression));
-  }
-
-  @Nonnull
-  @Override
-  protected Condition<PsiExpression> getTypeCondition() {
-    return BOOLEAN_TYPE_CONDITION;
+    super(alias, alias, "!expr", JAVA_PSI_INFO, selectorAllExpressionsWithCurrentOffset(IS_BOOLEAN));
   }
 }

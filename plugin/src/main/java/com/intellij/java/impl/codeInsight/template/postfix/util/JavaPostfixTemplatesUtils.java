@@ -16,47 +16,44 @@
 package com.intellij.java.impl.codeInsight.template.postfix.util;
 
 import com.intellij.java.impl.codeInsight.CodeInsightServicesUtil;
+import com.intellij.java.impl.refactoring.util.CommonJavaRefactoringUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.PsiExpressionTrimRenderer;
 import consulo.codeEditor.Editor;
+import consulo.document.Document;
 import consulo.document.util.TextRange;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.editor.postfixTemplate.PostfixTemplatePsiInfo;
+import consulo.language.editor.refactoring.postfixTemplate.PostfixTemplateExpressionSelector;
+import consulo.language.editor.refactoring.postfixTemplate.PostfixTemplateExpressionSelectorBase;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.util.lang.function.Condition;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.function.Predicates;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 public abstract class JavaPostfixTemplatesUtils {
   private JavaPostfixTemplatesUtils() {
   }
 
   public static PostfixTemplatePsiInfo JAVA_PSI_INFO = new PostfixTemplatePsiInfo() {
-
-    @Nonnull
-    @Override
-    public PsiElement createStatement(@Nonnull PsiElement context,
-                                      @Nonnull String prefix,
-                                      @Nonnull String suffix) {
-      return JavaPostfixTemplatesUtils.createStatement(context, prefix, suffix);
-    }
-
     @Nonnull
     @Override
     public PsiElement createExpression(@Nonnull PsiElement context,
                                        @Nonnull String prefix,
                                        @Nonnull String suffix) {
       return JavaPostfixTemplatesUtils.createExpression(context, prefix, suffix);
-    }
-
-    @Nullable
-    @Override
-    public PsiExpression getTopmostExpression(@Nonnull PsiElement element) {
-      return JavaPostfixTemplatesUtils.getTopmostExpression(element);
     }
 
     @Nonnull
@@ -66,33 +63,17 @@ public abstract class JavaPostfixTemplatesUtils {
     }
   };
 
-  public static Condition<PsiElement> IS_BOOLEAN = new Condition<PsiElement>() {
-    @Override
-    public boolean value(PsiElement element) {
-      return element instanceof PsiExpression && isBoolean(((PsiExpression)element).getType());
-    }
-  };
+  public static Predicate<PsiElement> IS_BOOLEAN =
+    element -> element instanceof PsiExpression && isBoolean(((PsiExpression)element).getType());
 
-  public static Condition<PsiElement> IS_THROWABLE = new Condition<PsiElement>() {
-    @Override
-    public boolean value(PsiElement element) {
-      return element instanceof PsiExpression && isThrowable((((PsiExpression)element).getType()));
-    }
-  };
+  public static Predicate<PsiElement> IS_THROWABLE =
+    element -> element instanceof PsiExpression && isThrowable((((PsiExpression)element).getType()));
 
-  public static Condition<PsiElement> IS_NON_VOID = new Condition<PsiElement>() {
-    @Override
-    public boolean value(PsiElement element) {
-      return element instanceof PsiExpression && isNonVoid((((PsiExpression)element).getType()));
-    }
-  };
+  public static Predicate<PsiElement> IS_NON_VOID =
+    element -> element instanceof PsiExpression && isNonVoid((((PsiExpression)element).getType()));
 
-  public static Condition<PsiElement> IS_NOT_PRIMITIVE = new Condition<PsiElement>() {
-    @Override
-    public boolean value(PsiElement element) {
-      return element instanceof PsiExpression && isNotPrimitiveTypeExpression(((PsiExpression)element));
-    }
-  };
+  public static Predicate<PsiElement> IS_NOT_PRIMITIVE =
+    element -> element instanceof PsiExpression && isNotPrimitiveTypeExpression(((PsiExpression)element));
 
   public static PsiElement createStatement(@Nonnull PsiElement context,
                                            @Nonnull String prefix,
@@ -174,6 +155,60 @@ public abstract class JavaPostfixTemplatesUtils {
     editor.getDocument().deleteString(range.getStartOffset(), range.getEndOffset());
 
     editor.getCaretModel().moveToOffset(range.getStartOffset());
+  }
+
+  public static PostfixTemplateExpressionSelector selectorTopmost(Predicate<? super PsiElement> additionalFilter) {
+    return new PostfixTemplateExpressionSelectorBase(additionalFilter) {
+      @Override
+      protected List<PsiElement> getNonFilteredExpressions(@NotNull PsiElement context, @NotNull Document document, int offset) {
+        return ContainerUtil.createMaybeSingletonList(getTopmostExpression(context));
+      }
+
+      @Override
+      protected Predicate<PsiElement> getFilters(int offset) {
+        return Predicates.and(super.getFilters(offset), getPsiErrorFilter());
+      }
+
+      @NotNull
+      @Override
+      public Function<PsiElement, String> getRenderer() {
+        return JavaPostfixTemplatesUtils.getRenderer();
+      }
+    };
+  }
+
+  @NotNull
+  public static PostfixTemplateExpressionSelector selectorAllExpressionsWithCurrentOffset(@Nullable Predicate<? super PsiElement> additionalFilter) {
+    return new PostfixTemplateExpressionSelectorBase(additionalFilter) {
+      @Override
+      protected List<PsiElement> getNonFilteredExpressions(@NotNull PsiElement context, @NotNull Document document, int offset) {
+        return new ArrayList<>(CommonJavaRefactoringUtil.collectExpressions(context.getContainingFile(), document,
+                                                                            Math.max(offset - 1, 0), false));
+      }
+
+      @NotNull
+      @Override
+      public List<PsiElement> getExpressions(@NotNull PsiElement context, @NotNull Document document, int offset) {
+        List<PsiElement> expressions = super.getExpressions(context, document, offset);
+        if (!expressions.isEmpty()) return expressions;
+
+        return ContainerUtil.filter(ContainerUtil.<PsiElement>createMaybeSingletonList(getTopmostExpression(context)), getFilters(offset));
+      }
+
+      @NotNull
+      @Override
+      public Function<PsiElement, String> getRenderer() {
+        return JavaPostfixTemplatesUtils.getRenderer();
+      }
+    };
+  }
+
+  @Nonnull
+  public static Function<PsiElement, String> getRenderer() {
+    return element -> {
+      assert element instanceof PsiExpression;
+      return PsiExpressionTrimRenderer.render((PsiExpression)element);
+    };
   }
 }
 

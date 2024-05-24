@@ -15,18 +15,16 @@
  */
 package com.intellij.java.impl.codeInsight.template.postfix.templates;
 
-import consulo.language.editor.postfixTemplate.ElseExpressionPostfixTemplateBase;
 import com.intellij.java.impl.codeInsight.generation.surroundWith.JavaWithIfExpressionSurrounder;
+import consulo.language.editor.refactoring.postfixTemplate.ElseExpressionPostfixTemplateBase;
 import consulo.language.editor.surroundWith.Surrounder;
-
 import jakarta.annotation.Nonnull;
 
-import static com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.IS_BOOLEAN;
-import static com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
+import static com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.*;
 
 public class ElseStatementPostfixTemplate extends ElseExpressionPostfixTemplateBase {
   public ElseStatementPostfixTemplate() {
-    super(JAVA_PSI_INFO, IS_BOOLEAN);
+    super(JAVA_PSI_INFO, selectorTopmost(IS_BOOLEAN));
   }
 
   @Nonnull

@@ -15,27 +15,26 @@
  */
 package com.intellij.java.impl.codeInsight.template.postfix.templates;
 
-import consulo.language.editor.postfixTemplate.SurroundPostfixTemplateBase;
 import com.intellij.java.impl.codeInsight.generation.surroundWith.JavaWithIfExpressionSurrounder;
+import consulo.application.dumb.DumbAware;
+import consulo.language.editor.refactoring.postfixTemplate.SurroundPostfixTemplateBase;
 import consulo.language.editor.surroundWith.Surrounder;
+import org.jetbrains.annotations.NotNull;
 
-import jakarta.annotation.Nonnull;
+import static com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.*;
 
-import static com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.IS_NOT_PRIMITIVE;
-import static com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
-
-public class IsNullCheckPostfixTemplate extends SurroundPostfixTemplateBase {
+public class IsNullCheckPostfixTemplate extends SurroundPostfixTemplateBase implements DumbAware {
   public IsNullCheckPostfixTemplate() {
-    super("null", "if (expr == null)", JAVA_PSI_INFO, IS_NOT_PRIMITIVE);
+    super("null", "if (expr == null)", JAVA_PSI_INFO, selectorTopmost(IS_NOT_PRIMITIVE));
   }
 
-  @Nonnull
+  @NotNull
   @Override
   protected String getTail() {
     return "== null";
   }
 
-  @Nonnull
+  @NotNull
   @Override
   protected Surrounder getSurrounder() {
     return new JavaWithIfExpressionSurrounder();

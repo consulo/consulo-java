@@ -15,20 +15,24 @@
  */
 package com.intellij.java.impl.codeInsight.template.postfix.templates;
 
-import consulo.language.editor.postfixTemplate.PostfixTemplatesUtils;
 import com.intellij.java.impl.codeInsight.generation.surroundWith.JavaWithCastSurrounder;
-import com.intellij.java.language.psi.PsiExpression;
+import consulo.application.dumb.DumbAware;
 import consulo.codeEditor.Editor;
+import consulo.language.editor.postfixTemplate.PostfixTemplatesUtils;
+import consulo.language.editor.refactoring.postfixTemplate.PostfixTemplateWithExpressionSelector;
+import consulo.language.psi.PsiElement;
+import org.jetbrains.annotations.NotNull;
 
-import jakarta.annotation.Nonnull;
+import static com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.IS_NON_VOID;
+import static com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.selectorAllExpressionsWithCurrentOffset;
 
-public class CastExpressionPostfixTemplate extends ExpressionPostfixTemplateWithChooser {
+public class CastExpressionPostfixTemplate extends PostfixTemplateWithExpressionSelector implements DumbAware {
   public CastExpressionPostfixTemplate() {
-    super("cast", "((SomeType) expr)");
+    super("cast", "((SomeType) expr)", selectorAllExpressionsWithCurrentOffset(IS_NON_VOID));
   }
 
   @Override
-  protected void doIt(@Nonnull final Editor editor, @Nonnull final PsiExpression expression) {
+  protected void expandForChooseExpression(@NotNull PsiElement expression, @NotNull Editor editor) {
     PostfixTemplatesUtils.surround(new JavaWithCastSurrounder(), editor, expression);
   }
 }

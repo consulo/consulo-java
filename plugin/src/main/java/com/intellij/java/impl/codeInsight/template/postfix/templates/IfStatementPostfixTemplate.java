@@ -15,23 +15,32 @@
  */
 package com.intellij.java.impl.codeInsight.template.postfix.templates;
 
-import consulo.language.editor.postfixTemplate.IfPostfixTemplateBase;
 import com.intellij.java.impl.codeInsight.generation.surroundWith.JavaWithIfExpressionSurrounder;
+import com.intellij.java.impl.refactoring.util.CommonJavaRefactoringUtil;
+import com.intellij.java.language.psi.PsiExpression;
+import consulo.application.dumb.DumbAware;
+import consulo.language.editor.refactoring.postfixTemplate.IfPostfixTemplateBase;
 import consulo.language.editor.surroundWith.Surrounder;
-import jakarta.annotation.Nonnull;
+import consulo.language.psi.PsiElement;
+import org.jetbrains.annotations.NotNull;
 
-import static com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.IS_BOOLEAN;
-import static com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.JAVA_PSI_INFO;
+import static com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.*;
 
-public class IfStatementPostfixTemplate extends IfPostfixTemplateBase {
+public class IfStatementPostfixTemplate extends IfPostfixTemplateBase implements DumbAware {
   public IfStatementPostfixTemplate() {
-    super(JAVA_PSI_INFO, IS_BOOLEAN);
+    super(JAVA_PSI_INFO, selectorTopmost(IS_BOOLEAN));
   }
 
-  @Nonnull
+  @Override
+  protected PsiElement getWrappedExpression(PsiElement expression) {
+    return CommonJavaRefactoringUtil.unparenthesizeExpression((PsiExpression)expression);
+  }
+
+  @NotNull
   @Override
   protected Surrounder getSurrounder() {
     return new JavaWithIfExpressionSurrounder();
   }
 }
 
+                                                                                            
