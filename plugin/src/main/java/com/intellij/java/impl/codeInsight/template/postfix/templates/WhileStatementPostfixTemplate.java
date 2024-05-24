@@ -3,12 +3,12 @@ package com.intellij.java.impl.codeInsight.template.postfix.templates;
 
 import com.intellij.java.language.LanguageLevel;
 import consulo.application.dumb.DumbAware;
-import org.jetbrains.annotations.NotNull;
+import jakarta.annotation.Nonnull;
 
 import java.util.Collections;
 
 public class WhileStatementPostfixTemplate extends JavaEditablePostfixTemplate implements DumbAware {
-  public WhileStatementPostfixTemplate(@NotNull JavaPostfixTemplateProvider provider) {
+  public WhileStatementPostfixTemplate(@Nonnull JavaPostfixTemplateProvider provider) {
     super("while", "while ($EXPR$) {\n$END$\n}", "while (expr) {}",
           Collections.singleton(new JavaPostfixTemplateExpressionCondition.JavaPostfixTemplateBooleanExpressionCondition()),
           LanguageLevel.JDK_1_3, true, provider);

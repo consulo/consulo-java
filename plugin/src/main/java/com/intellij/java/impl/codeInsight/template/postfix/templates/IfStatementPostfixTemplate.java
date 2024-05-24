@@ -22,7 +22,7 @@ import consulo.application.dumb.DumbAware;
 import consulo.language.editor.refactoring.postfixTemplate.IfPostfixTemplateBase;
 import consulo.language.editor.surroundWith.Surrounder;
 import consulo.language.psi.PsiElement;
-import org.jetbrains.annotations.NotNull;
+import jakarta.annotation.Nonnull;
 
 import static com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.*;
 
@@ -36,7 +36,7 @@ public class IfStatementPostfixTemplate extends IfPostfixTemplateBase implements
     return CommonJavaRefactoringUtil.unparenthesizeExpression((PsiExpression)expression);
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected Surrounder getSurrounder() {
     return new JavaWithIfExpressionSurrounder();

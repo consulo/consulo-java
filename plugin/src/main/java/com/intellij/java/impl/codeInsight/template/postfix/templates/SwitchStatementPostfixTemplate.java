@@ -22,7 +22,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.DumbService;
 import consulo.project.Project;
-import org.jetbrains.annotations.NotNull;
+import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +58,7 @@ public class SwitchStatementPostfixTemplate extends SurroundPostfixTemplateBase 
     super("switch", "switch(expr)", JavaPostfixTemplatesUtils.JAVA_PSI_INFO, selectorTopmost(SWITCH_TYPE));
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected Surrounder getSurrounder() {
     return new JavaExpressionSurrounder() {
@@ -85,7 +85,7 @@ public class SwitchStatementPostfixTemplate extends SurroundPostfixTemplateBase 
         return TextRange.from(editor.getCaretModel().getOffset(), 0);
       }
 
-      @NotNull
+      @Nonnull
       private static TextRange postprocessSwitch(Editor editor,
                                                  PsiExpression expr,
                                                  CodeStyleManager codeStyleManager,
@@ -122,7 +122,7 @@ public class SwitchStatementPostfixTemplate extends SurroundPostfixTemplateBase 
   public static PostfixTemplateExpressionSelector selectorTopmost(Predicate<? super PsiElement> additionalFilter) {
     return new PostfixTemplateExpressionSelectorBase(additionalFilter) {
       @Override
-      protected List<PsiElement> getNonFilteredExpressions(@NotNull PsiElement context, @NotNull Document document, int offset) {
+      protected List<PsiElement> getNonFilteredExpressions(@Nonnull PsiElement context, @Nonnull Document document, int offset) {
         boolean isEnhancedSwitchAvailable = PsiUtil.isAvailable(JavaFeature.ENHANCED_SWITCH, context);
         List<PsiElement> result = new ArrayList<>();
 
@@ -147,7 +147,7 @@ public class SwitchStatementPostfixTemplate extends SurroundPostfixTemplateBase 
         return super.getFilters(offset).and(getPsiErrorFilter());
       }
 
-      @NotNull
+      @Nonnull
       @Override
       public Function<PsiElement, String> getRenderer() {
         return JavaPostfixTemplatesUtils.getRenderer();

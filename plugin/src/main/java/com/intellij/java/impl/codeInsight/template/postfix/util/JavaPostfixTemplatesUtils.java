@@ -36,7 +36,6 @@ import consulo.util.lang.function.Predicates;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -160,7 +159,7 @@ public abstract class JavaPostfixTemplatesUtils {
   public static PostfixTemplateExpressionSelector selectorTopmost(Predicate<? super PsiElement> additionalFilter) {
     return new PostfixTemplateExpressionSelectorBase(additionalFilter) {
       @Override
-      protected List<PsiElement> getNonFilteredExpressions(@NotNull PsiElement context, @NotNull Document document, int offset) {
+      protected List<PsiElement> getNonFilteredExpressions(@Nonnull PsiElement context, @Nonnull Document document, int offset) {
         return ContainerUtil.createMaybeSingletonList(getTopmostExpression(context));
       }
 
@@ -169,7 +168,7 @@ public abstract class JavaPostfixTemplatesUtils {
         return Predicates.and(super.getFilters(offset), getPsiErrorFilter());
       }
 
-      @NotNull
+      @Nonnull
       @Override
       public Function<PsiElement, String> getRenderer() {
         return JavaPostfixTemplatesUtils.getRenderer();
@@ -177,25 +176,25 @@ public abstract class JavaPostfixTemplatesUtils {
     };
   }
 
-  @NotNull
+  @Nonnull
   public static PostfixTemplateExpressionSelector selectorAllExpressionsWithCurrentOffset(@Nullable Predicate<? super PsiElement> additionalFilter) {
     return new PostfixTemplateExpressionSelectorBase(additionalFilter) {
       @Override
-      protected List<PsiElement> getNonFilteredExpressions(@NotNull PsiElement context, @NotNull Document document, int offset) {
+      protected List<PsiElement> getNonFilteredExpressions(@Nonnull PsiElement context, @Nonnull Document document, int offset) {
         return new ArrayList<>(CommonJavaRefactoringUtil.collectExpressions(context.getContainingFile(), document,
                                                                             Math.max(offset - 1, 0), false));
       }
 
-      @NotNull
+      @Nonnull
       @Override
-      public List<PsiElement> getExpressions(@NotNull PsiElement context, @NotNull Document document, int offset) {
+      public List<PsiElement> getExpressions(@Nonnull PsiElement context, @Nonnull Document document, int offset) {
         List<PsiElement> expressions = super.getExpressions(context, document, offset);
         if (!expressions.isEmpty()) return expressions;
 
         return ContainerUtil.filter(ContainerUtil.<PsiElement>createMaybeSingletonList(getTopmostExpression(context)), getFilters(offset));
       }
 
-      @NotNull
+      @Nonnull
       @Override
       public Function<PsiElement, String> getRenderer() {
         return JavaPostfixTemplatesUtils.getRenderer();

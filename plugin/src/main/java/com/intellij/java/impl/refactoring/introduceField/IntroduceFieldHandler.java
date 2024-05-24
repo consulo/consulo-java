@@ -34,7 +34,6 @@ import consulo.project.Project;
 import consulo.project.ui.wm.WindowManager;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -230,7 +229,7 @@ public class IntroduceFieldHandler extends BaseExpressionToFieldHandler implemen
     return localToFieldHandler.convertLocalToField(localVariable, editor);
   }
 
-  public void invoke(@NotNull Project project, PsiElement element, @Nullable Editor editor) {
+  public void invoke(@Nonnull Project project, PsiElement element, @Nullable Editor editor) {
     if (element instanceof PsiExpression) {
       invokeImpl(project, (PsiExpression)element, editor);
     }

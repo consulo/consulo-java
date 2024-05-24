@@ -5,9 +5,9 @@ import consulo.codeEditor.Editor;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public interface JavaIntroduceFieldHandlerBase extends RefactoringActionHandler {
-  void invoke(@NotNull Project project, PsiElement element, @Nullable Editor editor);
+  void invoke(@Nonnull Project project, PsiElement element, @Nullable Editor editor);
 }

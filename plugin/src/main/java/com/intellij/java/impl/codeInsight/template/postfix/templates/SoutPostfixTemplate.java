@@ -3,12 +3,12 @@ package com.intellij.java.impl.codeInsight.template.postfix.templates;
 
 import com.intellij.java.language.LanguageLevel;
 import consulo.application.dumb.DumbAware;
-import org.jetbrains.annotations.NotNull;
+import jakarta.annotation.Nonnull;
 
 import java.util.Collections;
 
 public class SoutPostfixTemplate extends JavaEditablePostfixTemplate implements DumbAware {
-  public SoutPostfixTemplate(@NotNull JavaPostfixTemplateProvider provider) {
+  public SoutPostfixTemplate(@Nonnull JavaPostfixTemplateProvider provider) {
     super("sout",
           "System.out.println($EXPR$);$END$",
           "System.out.println(expr)",

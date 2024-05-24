@@ -3,12 +3,12 @@ package com.intellij.java.impl.codeInsight.template.postfix.templates;
 
 import com.intellij.java.language.LanguageLevel;
 import consulo.application.dumb.DumbAware;
-import org.jetbrains.annotations.NotNull;
+import jakarta.annotation.Nonnull;
 
 import java.util.Collections;
 
 public class AssertStatementPostfixTemplate extends JavaEditablePostfixTemplate implements DumbAware {
-  public AssertStatementPostfixTemplate(@NotNull JavaPostfixTemplateProvider provider) {
+  public AssertStatementPostfixTemplate(@Nonnull JavaPostfixTemplateProvider provider) {
     super("assert", "assert $EXPR$;$END$", "assert expr",
           Collections.singleton(new JavaPostfixTemplateExpressionCondition.JavaPostfixTemplateBooleanExpressionCondition()),
           LanguageLevel.JDK_1_4, true, provider);

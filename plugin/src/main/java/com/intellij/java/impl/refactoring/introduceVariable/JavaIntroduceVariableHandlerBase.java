@@ -5,8 +5,8 @@ import com.intellij.java.language.psi.PsiExpression;
 import consulo.codeEditor.Editor;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.project.Project;
-import org.jetbrains.annotations.NotNull;
+import jakarta.annotation.Nonnull;
 
 public interface JavaIntroduceVariableHandlerBase extends RefactoringActionHandler {
-  void invoke(@NotNull Project project, Editor editor, PsiExpression expression);
+  void invoke(@Nonnull Project project, Editor editor, PsiExpression expression);
 }

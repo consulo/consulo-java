@@ -3,12 +3,12 @@ package com.intellij.java.impl.codeInsight.template.postfix.templates;
 
 import com.intellij.java.language.LanguageLevel;
 import consulo.application.dumb.DumbAware;
-import org.jetbrains.annotations.NotNull;
+import jakarta.annotation.Nonnull;
 
 import java.util.Collections;
 
 public class SynchronizedStatementPostfixTemplate extends JavaEditablePostfixTemplate implements DumbAware {
-  public SynchronizedStatementPostfixTemplate(@NotNull JavaPostfixTemplateProvider provider) {
+  public SynchronizedStatementPostfixTemplate(@Nonnull JavaPostfixTemplateProvider provider) {
     super("synchronized",
           "synchronized ($EXPR$) {\n$END$\n}",
           "synchronized (expr)",

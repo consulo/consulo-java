@@ -4,12 +4,12 @@ package com.intellij.java.impl.codeInsight.template.postfix.templates;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.CommonClassNames;
 import consulo.application.dumb.DumbAware;
-import org.jetbrains.annotations.NotNull;
+import jakarta.annotation.Nonnull;
 
 import java.util.Collections;
 
 public class ThrowExceptionPostfixTemplate extends JavaEditablePostfixTemplate implements DumbAware {
-  public ThrowExceptionPostfixTemplate(@NotNull JavaPostfixTemplateProvider provider) {
+  public ThrowExceptionPostfixTemplate(@Nonnull JavaPostfixTemplateProvider provider) {
     super("throw",
           "throw $EXPR$;$END$",
           "throw expr",

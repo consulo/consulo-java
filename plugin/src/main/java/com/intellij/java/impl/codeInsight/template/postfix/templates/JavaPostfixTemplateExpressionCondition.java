@@ -8,10 +8,10 @@ import com.intellij.java.language.psi.PsiTypes;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import consulo.java.impl.JavaBundle;
 import consulo.language.editor.refactoring.postfixTemplate.PostfixTemplateExpressionCondition;
+import jakarta.annotation.Nonnull;
 import org.jdom.Element;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -23,7 +23,7 @@ public interface JavaPostfixTemplateExpressionCondition extends PostfixTemplateE
 
     private final String myFqn;
 
-    public JavaPostfixTemplateExpressionFqnCondition(@NotNull String fqn) {
+    public JavaPostfixTemplateExpressionFqnCondition(@Nonnull String fqn) {
       myFqn = fqn;
     }
 
@@ -32,19 +32,19 @@ public interface JavaPostfixTemplateExpressionCondition extends PostfixTemplateE
     }
 
     @Override
-    public boolean test(@NotNull PsiExpression element) {
+    public boolean test(@Nonnull PsiExpression element) {
       PsiType type = element.getType();
       return type != null && InheritanceUtil.isInheritor(type, myFqn);
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public String getId() {
       return ID;
     }
 
     @Override
-    public @NotNull @Nls String getPresentableName() {
+    public @Nonnull @Nls String getPresentableName() {
       return myFqn;
     }
 
@@ -62,7 +62,7 @@ public interface JavaPostfixTemplateExpressionCondition extends PostfixTemplateE
     }
 
     @Override
-    public void serializeTo(@NotNull Element element) {
+    public void serializeTo(@Nonnull Element element) {
       JavaPostfixTemplateExpressionCondition.super.serializeTo(element);
       element.setAttribute(FQN_ATTR, getFqn());
     }
@@ -72,19 +72,19 @@ public interface JavaPostfixTemplateExpressionCondition extends PostfixTemplateE
     public static final @NonNls String ID = "void";
 
     @Override
-    public boolean test(@NotNull PsiExpression element) {
+    public boolean test(@Nonnull PsiExpression element) {
       PsiType type = element.getType();
       return type != null && PsiTypes.voidType().equals(type);
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public String getId() {
       return ID;
     }
 
     @Override
-    public @NotNull @Nls String getPresentableName() {
+    public @Nonnull @Nls String getPresentableName() {
       return JavaBundle.message("postfix.template.condition.void.name");
     }
 
@@ -105,18 +105,18 @@ public interface JavaPostfixTemplateExpressionCondition extends PostfixTemplateE
     public static final @NonNls String ID = "non void";
 
     @Override
-    public boolean test(@NotNull PsiExpression element) {
+    public boolean test(@Nonnull PsiExpression element) {
       return JavaPostfixTemplatesUtils.isNonVoid(element.getType());
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public String getId() {
       return ID;
     }
 
     @Override
-    public @NotNull @Nls String getPresentableName() {
+    public @Nonnull @Nls String getPresentableName() {
       return JavaBundle.message("postfix.template.condition.non.void.name");
     }
 
@@ -136,18 +136,18 @@ public interface JavaPostfixTemplateExpressionCondition extends PostfixTemplateE
     public static final @NonNls String ID = "boolean";
 
     @Override
-    public boolean test(@NotNull PsiExpression element) {
+    public boolean test(@Nonnull PsiExpression element) {
       return JavaPostfixTemplatesUtils.isBoolean(element.getType());
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public String getId() {
       return ID;
     }
 
     @Override
-    public @NotNull @Nls String getPresentableName() {
+    public @Nonnull @Nls String getPresentableName() {
       return JavaBundle.message("postfix.template.condition.boolean.name");
     }
 
@@ -167,18 +167,18 @@ public interface JavaPostfixTemplateExpressionCondition extends PostfixTemplateE
     public static final @NonNls String ID = "number";
 
     @Override
-    public boolean test(@NotNull PsiExpression element) {
+    public boolean test(@Nonnull PsiExpression element) {
       return JavaPostfixTemplatesUtils.isNumber(element.getType());
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public String getId() {
       return ID;
     }
 
     @Override
-    public @NotNull @Nls String getPresentableName() {
+    public @Nonnull @Nls String getPresentableName() {
       return JavaBundle.message("postfix.template.condition.number.name");
     }
 
@@ -198,18 +198,18 @@ public interface JavaPostfixTemplateExpressionCondition extends PostfixTemplateE
     public static final @NonNls String ID = "notPrimitive";
 
     @Override
-    public boolean test(@NotNull PsiExpression element) {
+    public boolean test(@Nonnull PsiExpression element) {
       return JavaPostfixTemplatesUtils.isNotPrimitiveTypeExpression(element);
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public String getId() {
       return ID;
     }
 
     @Override
-    public @NotNull @Nls String getPresentableName() {
+    public @Nonnull @Nls String getPresentableName() {
       return JavaBundle.message("postfix.template.condition.not.primitive.type.name");
     }
 
@@ -229,18 +229,18 @@ public interface JavaPostfixTemplateExpressionCondition extends PostfixTemplateE
     public static final @NonNls String ID = "array";
 
     @Override
-    public boolean test(@NotNull PsiExpression element) {
+    public boolean test(@Nonnull PsiExpression element) {
       return JavaPostfixTemplatesUtils.isArray(element.getType());
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public String getId() {
       return ID;
     }
 
     @Override
-    public @NotNull @Nls String getPresentableName() {
+    public @Nonnull @Nls String getPresentableName() {
       return JavaBundle.message("postfix.template.condition.array.name");
     }
 

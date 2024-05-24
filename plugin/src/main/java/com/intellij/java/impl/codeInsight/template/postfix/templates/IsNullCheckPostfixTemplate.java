@@ -19,7 +19,7 @@ import com.intellij.java.impl.codeInsight.generation.surroundWith.JavaWithIfExpr
 import consulo.application.dumb.DumbAware;
 import consulo.language.editor.refactoring.postfixTemplate.SurroundPostfixTemplateBase;
 import consulo.language.editor.surroundWith.Surrounder;
-import org.jetbrains.annotations.NotNull;
+import jakarta.annotation.Nonnull;
 
 import static com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.*;
 
@@ -28,13 +28,13 @@ public class IsNullCheckPostfixTemplate extends SurroundPostfixTemplateBase impl
     super("null", "if (expr == null)", JAVA_PSI_INFO, selectorTopmost(IS_NOT_PRIMITIVE));
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected String getTail() {
     return "== null";
   }
 
-  @NotNull
+  @Nonnull
   @Override
   protected Surrounder getSurrounder() {
     return new JavaWithIfExpressionSurrounder();
