@@ -16,15 +16,18 @@
 package com.intellij.java.language.psi;
 
 import com.intellij.java.language.jvm.JvmAnnotation;
+import com.intellij.java.language.jvm.annotation.JvmAnnotationAttribute;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.meta.PsiMetaOwner;
 import consulo.util.collection.ArrayFactory;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nullable;
 import java.lang.annotation.ElementType;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Represents a Java annotation.
@@ -146,22 +149,8 @@ public interface PsiAnnotation extends PsiAnnotationMemberValue, PsiMetaOwner, J
 
   @Nonnull
   @Override
-  default PsiElement getSourceElement() {
-    return this;
-  }
-
-  @Override
-  default void navigate(boolean requestFocus) {
-  }
-
-  @Override
-  default boolean canNavigate() {
-    return false;
-  }
-
-  @Override
-  default boolean canNavigateToSource() {
-    return false;
+  default List<JvmAnnotationAttribute> getAttributes() {
+    return Arrays.asList(getParameterList().getAttributes());
   }
 
   /**

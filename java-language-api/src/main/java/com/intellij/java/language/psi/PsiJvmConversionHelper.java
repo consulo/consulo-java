@@ -16,13 +16,18 @@
 package com.intellij.java.language.psi;
 
 import com.intellij.java.language.jvm.JvmClassKind;
+import com.intellij.java.language.jvm.JvmEnumField;
 import com.intellij.java.language.jvm.JvmModifier;
 import com.intellij.java.language.jvm.JvmTypeParameter;
+import com.intellij.java.language.jvm.annotation.JvmAnnotationAttributeValue;
 import com.intellij.java.language.jvm.types.JvmReferenceType;
 import com.intellij.java.language.jvm.types.JvmSubstitutor;
 import com.intellij.java.language.jvm.types.JvmType;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.psi.PsiElement;
 import consulo.logging.Logger;
+import consulo.logging.attachment.AttachmentFactory;
+import consulo.logging.attachment.RuntimeExceptionWithAttachments;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -137,6 +142,45 @@ class PsiJvmConversionHelper {
   static boolean hasListAnnotation(@Nonnull PsiModifierListOwner modifierListOwner, @Nonnull String fqn) {
     PsiModifierList list = modifierListOwner.getModifierList();
     return list != null && list.hasAnnotation(fqn);
+  }
+
+  @Nonnull
+  static String getAnnotationAttributeName(@Nonnull PsiNameValuePair pair) {
+    String name = pair.getName();
+    return name == null ? PsiAnnotation.DEFAULT_REFERENCED_METHOD_NAME : name;
+  }
+
+  @Nullable
+  static JvmAnnotationAttributeValue getAnnotationAttributeValue(@Nonnull PsiNameValuePair pair) {
+    return getAnnotationAttributeValue(pair.getValue());
+  }
+
+  @Nullable
+  static JvmAnnotationAttributeValue getAnnotationAttributeValue(@Nullable PsiAnnotationMemberValue value) {
+    if (value instanceof PsiClassObjectAccessExpression) {
+      return new PsiAnnotationClassValue((PsiClassObjectAccessExpression)value);
+    }
+    if (value instanceof PsiAnnotation) {
+      return new PsiNestedAnnotationValue((PsiAnnotation)value);
+    }
+    if (value instanceof PsiArrayInitializerMemberValue) {
+      return new PsiAnnotationArrayValue((PsiArrayInitializerMemberValue)value);
+    }
+    if (value instanceof PsiReferenceExpression) {
+      PsiElement resolved = ((PsiReferenceExpression)value).resolve();
+      if (resolved instanceof JvmEnumField) {
+        return new PsiAnnotationEnumFieldValue((PsiReferenceExpression)value, (JvmEnumField)resolved);
+      }
+    }
+    if (value instanceof PsiExpression) {
+      return new PsiAnnotationConstantValue((PsiExpression)value);
+    }
+
+    if (value != null) {
+      LOG.warn(new RuntimeExceptionWithAttachments("Not implemented: " + value.getClass(), AttachmentFactory.get().create("text", value.getText())));
+    }
+
+    return null;
   }
 
   static class PsiJvmSubstitutor implements JvmSubstitutor {

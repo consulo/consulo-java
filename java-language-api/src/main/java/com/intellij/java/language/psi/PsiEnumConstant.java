@@ -15,6 +15,7 @@
  */
 package com.intellij.java.language.psi;
 
+import com.intellij.java.language.jvm.JvmEnumField;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -23,7 +24,7 @@ import jakarta.annotation.Nullable;
  *
  * @author dsl
  */
-public interface PsiEnumConstant extends PsiField, PsiConstructorCall {
+public interface PsiEnumConstant extends PsiField, PsiConstructorCall, JvmEnumField {
   /**
    * Returns the list of arguments passed to the constructor of the enum type to create the
    * instance of the constant.

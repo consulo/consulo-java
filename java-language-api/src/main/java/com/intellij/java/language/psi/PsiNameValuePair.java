@@ -15,11 +15,11 @@
  */
 package com.intellij.java.language.psi;
 
-import consulo.util.collection.ArrayFactory;
+import com.intellij.java.language.jvm.annotation.JvmAnnotationAttribute;
+import com.intellij.java.language.jvm.annotation.JvmAnnotationAttributeValue;
 import consulo.language.psi.PsiElement;
+import consulo.util.collection.ArrayFactory;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nullable;
 
 /**
@@ -29,19 +29,13 @@ import jakarta.annotation.Nullable;
  * @see PsiAnnotation
  * @see PsiAnnotationParameterList
  */
-public interface PsiNameValuePair extends PsiElement {
+public interface PsiNameValuePair extends PsiElement, JvmAnnotationAttribute {
   /**
    * The empty array of PSI name/value pairs which can be reused to avoid unnecessary allocations.
    */
   PsiNameValuePair[] EMPTY_ARRAY = new PsiNameValuePair[0];
 
-  ArrayFactory<PsiNameValuePair> ARRAY_FACTORY = new ArrayFactory<PsiNameValuePair>() {
-    @Nonnull
-    @Override
-    public PsiNameValuePair[] create(final int count) {
-      return count == 0 ? EMPTY_ARRAY : new PsiNameValuePair[count];
-    }
-  };
+  ArrayFactory<PsiNameValuePair> ARRAY_FACTORY = count -> count == 0 ? EMPTY_ARRAY : new PsiNameValuePair[count];
 
   /**
    * Returns the identifier specifying the name of the element.
@@ -57,7 +51,6 @@ public interface PsiNameValuePair extends PsiElement {
    * @return the name, or null if the annotation declaration is incomplete.
    */
   @Nullable
-  @NonNls
   String getName();
 
   @Nullable
@@ -83,5 +76,17 @@ public interface PsiNameValuePair extends PsiElement {
   @Nullable
   default PsiAnnotationMemberValue getDetachedValue() {
     return getValue();
+  }
+
+  @Nonnull
+  @Override
+  default String getAttributeName() {
+    return PsiJvmConversionHelper.getAnnotationAttributeName(this);
+  }
+
+  @Nullable
+  @Override
+  default JvmAnnotationAttributeValue getAttributeValue() {
+    return PsiJvmConversionHelper.getAnnotationAttributeValue(this);
   }
 }
