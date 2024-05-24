@@ -5,10 +5,13 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.util.PropertyKind;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
 import consulo.application.Application;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
+@ExtensionAPI(ComponentScope.APPLICATION)
 public interface PropertyAccessorDetector {
   @Nullable
   @RequiredReadAction
