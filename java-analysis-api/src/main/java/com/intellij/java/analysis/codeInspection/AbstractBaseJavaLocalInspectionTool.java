@@ -105,6 +105,12 @@ public abstract class AbstractBaseJavaLocalInspectionTool<State> extends LocalIn
 
   @Nonnull
   @Override
+  public final PsiElementVisitor buildVisitor(@Nonnull ProblemsHolder holder, boolean isOnTheFly) {
+    return super.buildVisitor(holder, isOnTheFly);
+  }
+
+  @Nonnull
+  @Override
   @SuppressWarnings("unchecked")
   public final PsiElementVisitor buildVisitor(@Nonnull ProblemsHolder holder,
                                         boolean isOnTheFly,
