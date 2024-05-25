@@ -131,7 +131,7 @@ public class JavaPostfixTemplateProvider extends PostfixTemplateProvider {
   }
 
   private static boolean isSemicolonNeeded(@Nonnull PsiFile file, @Nonnull Editor editor) {
-    return JavaCompletionContributor.semicolonNeeded(editor, file, CompletionInitializationContext.calcStartOffset(editor.getCaretModel().getCurrentCaret()));
+    return JavaCompletionContributor.semicolonNeeded(file, CompletionInitializationContext.calcStartOffset(editor.getCaretModel().getCurrentCaret()));
   }
 
   @Nonnull

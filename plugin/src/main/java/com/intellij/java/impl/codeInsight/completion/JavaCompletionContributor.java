@@ -758,7 +758,7 @@ public class JavaCompletionContributor extends CompletionContributor {
       }
 
       if (context.getCompletionType() == CompletionType.BASIC) {
-        if (semicolonNeeded(context.getEditor(), file, context.getStartOffset())) {
+        if (semicolonNeeded(file, context.getStartOffset())) {
           context.setDummyIdentifier(CompletionInitializationContext.DUMMY_IDENTIFIER.trim() + ";");
           return;
         }
@@ -787,56 +787,59 @@ public class JavaCompletionContributor extends CompletionContributor {
     }
   }
 
-  public static boolean semicolonNeeded(final Editor editor, PsiFile file, final int startOffset) {
-    final PsiJavaCodeReferenceElement ref = PsiTreeUtil.findElementOfClassAtOffset(file, startOffset, PsiJavaCodeReferenceElement.class, false);
+  public static boolean semicolonNeeded(PsiFile file, int startOffset) {
+    PsiJavaCodeReferenceElement ref = PsiTreeUtil.findElementOfClassAtOffset(file, startOffset, PsiJavaCodeReferenceElement.class, false);
     if (ref != null && !(ref instanceof PsiReferenceExpression)) {
       if (ref.getParent() instanceof PsiTypeElement) {
         return true;
       }
     }
-    if (psiElement(PsiIdentifier.class).withParent(psiParameter()).accepts(file.findElementAt(startOffset))) {
+    PsiElement at = file.findElementAt(startOffset);
+    if (psiElement(PsiIdentifier.class).withParent(psiParameter()).accepts(at)) {
       return true;
     }
 
-    HighlighterIterator iterator = ((EditorEx) editor).getHighlighter().createIterator(startOffset);
-    if (iterator.atEnd()) {
-      return false;
+    if (PsiUtilCore.getElementType(at) == JavaTokenType.IDENTIFIER) {
+      at = PsiTreeUtil.nextLeaf(at);
     }
 
-    if (iterator.getTokenType() == JavaTokenType.IDENTIFIER) {
-      iterator.advance();
-    }
+    at = skipWhitespacesAndComments(at);
 
-    while (!iterator.atEnd() && ElementType.JAVA_COMMENT_OR_WHITESPACE_BIT_SET.contains((IElementType) iterator.getTokenType())) {
-      iterator.advance();
-    }
-
-    if (!iterator.atEnd() && iterator.getTokenType() == JavaTokenType.LPARENTH && PsiTreeUtil.getParentOfType(ref, PsiExpression.class, PsiClass.class) == null) {
+    if (PsiUtilCore.getElementType(at) == JavaTokenType.LPARENTH &&
+      PsiTreeUtil.getParentOfType(ref, PsiExpression.class, PsiClass.class) == null &&
+      PsiTreeUtil.getParentOfType(at, PsiImplicitClass.class) == null) { // TODO check before it that there is record
       // looks like a method declaration, e.g. StringBui<caret>methodName() inside a class
       return true;
     }
 
-    if (!iterator.atEnd() && (iterator.getTokenType() == JavaTokenType.COLON) && null == PsiTreeUtil.findElementOfClassAtOffset(file, startOffset, PsiConditionalExpression.class, false)) {
+    if (PsiUtilCore.getElementType(at) == JavaTokenType.COLON &&
+      PsiTreeUtil.findElementOfClassAtOffset(file, startOffset, PsiConditionalExpression.class, false) == null) {
       return true;
     }
 
-    while (!iterator.atEnd() && ElementType.JAVA_COMMENT_OR_WHITESPACE_BIT_SET.contains((IElementType) iterator.getTokenType())) {
-      iterator.advance();
-    }
+    at = skipWhitespacesAndComments(at);
 
-    if (iterator.atEnd() || iterator.getTokenType() != JavaTokenType.IDENTIFIER) {
-      return false;
-    }
-    iterator.advance();
-
-    while (!iterator.atEnd() && ElementType.JAVA_COMMENT_OR_WHITESPACE_BIT_SET.contains((IElementType) iterator.getTokenType())) {
-      iterator.advance();
-    }
-    if (iterator.atEnd()) {
+    if (PsiUtilCore.getElementType(at) != JavaTokenType.IDENTIFIER) {
       return false;
     }
 
-    return iterator.getTokenType() == JavaTokenType.EQ; // <caret> foo = something, we don't want the reference to be treated as a type
+    at = PsiTreeUtil.nextLeaf(at);
+    at = skipWhitespacesAndComments(at);
+
+    // <caret> foo = something, we don't want the reference to be treated as a type
+    return at != null && at.getNode().getElementType() == JavaTokenType.EQ;
+  }
+
+  @Nullable
+  private static PsiElement skipWhitespacesAndComments(@Nullable PsiElement at) {
+    PsiElement nextLeaf = at;
+    while (nextLeaf != null && (nextLeaf instanceof PsiWhiteSpace ||
+      nextLeaf instanceof PsiComment ||
+      nextLeaf instanceof PsiErrorElement ||
+      nextLeaf.getTextLength() == 0)) {
+      nextLeaf = PsiTreeUtil.nextLeaf(nextLeaf, true);
+    }
+    return nextLeaf;
   }
 
   private static void autoImport(@Nonnull final PsiFile file, int offset, @Nonnull final Editor editor) {

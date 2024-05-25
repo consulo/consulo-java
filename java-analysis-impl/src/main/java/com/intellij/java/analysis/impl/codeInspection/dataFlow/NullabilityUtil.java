@@ -8,6 +8,7 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaVariable
 import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.language.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.augment.PsiAugmentProvider;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import consulo.application.util.CachedValueProvider;
@@ -21,7 +22,6 @@ import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.LanguageCachedValueUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Pair;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -69,7 +69,7 @@ public final class NullabilityUtil {
   }
 
   static Pair<PsiExpression, Nullability> getNullabilityFromFieldInitializers(PsiField field, Nullability defaultNullability) {
-    if (DfaPsiUtil.isFinalField(field)) {
+    if (DfaPsiUtil.isFinalField(field) && PsiAugmentProvider.canTrustFieldInitializer(field)) {
       PsiExpression initializer = field.getInitializer();
       if (initializer != null) {
         return Pair.create(initializer, getExpressionNullability(initializer));

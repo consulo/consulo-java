@@ -15,9 +15,6 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 
-import consulo.language.editor.rawHighlight.HighlightInfo;
-import consulo.language.editor.rawHighlight.HighlightInfoType;
-import consulo.language.editor.intention.QuickFixAction;
 import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
 import com.intellij.java.analysis.impl.psi.controlFlow.AllVariablesControlFlowPolicy;
 import com.intellij.java.language.LanguageLevel;
@@ -25,23 +22,27 @@ import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.java.language.impl.psi.controlFlow.*;
 import com.intellij.java.language.impl.psi.util.JavaPsiRecordUtil;
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.augment.PsiAugmentProvider;
 import com.intellij.java.language.psi.util.FileTypeUtils;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.application.dumb.IndexNotReadyException;
+import consulo.application.util.function.Processor;
 import consulo.document.util.TextRange;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.intention.QuickFixAction;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.language.editor.rawHighlight.HighlightInfoType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
-import consulo.language.ast.IElementType;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.application.util.function.Processor;
 import consulo.util.collection.ContainerUtil;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -387,6 +388,10 @@ public class HighlightControlFlowUtil {
           }
           if (anotherField != null && !anotherField.hasModifierProperty(PsiModifier.STATIC) && field.hasModifierProperty(PsiModifier.STATIC) &&
               isFieldInitializedInClassInitializer(field, true, aClass.getInitializers())) {
+            return null;
+          }
+
+          if (anotherField != null && anotherField.hasInitializer() && !PsiAugmentProvider.canTrustFieldInitializer(anotherField)) {
             return null;
           }
 

@@ -17,6 +17,7 @@ package com.intellij.java.impl.codeInsight.template.postfix.templates;
 
 import com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils;
 import consulo.application.dumb.DumbAware;
+import consulo.language.editor.refactoring.postfixTemplate.ParenthesizedPostfixTemplate;
 
 public class ParenthesizedExpressionPostfixTemplate extends ParenthesizedPostfixTemplate implements DumbAware {
   public ParenthesizedExpressionPostfixTemplate() {

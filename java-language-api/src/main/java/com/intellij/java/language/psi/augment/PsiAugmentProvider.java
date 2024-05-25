@@ -1,10 +1,7 @@
 // Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.language.psi.augment;
 
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiModifierList;
-import com.intellij.java.language.psi.PsiType;
-import com.intellij.java.language.psi.PsiTypeElement;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
@@ -27,9 +24,9 @@ import consulo.project.Project;
 import consulo.util.collection.SmartList;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.ref.Ref;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -127,6 +124,15 @@ public abstract class PsiAugmentProvider {
   @Nonnull
   protected Set<String> transformModifiers(@Nonnull PsiModifierList modifierList, @Nonnull Set<String> modifiers) {
     return modifiers;
+  }
+
+  /**
+   * @param field field to check
+   * @return true if this field initializer can be changed due to extra-linguistic extensions
+   * (e.g., it's annotated via some annotation and annotation processor will transform the field to be non-constant)
+   */
+  protected boolean fieldInitializerMightBeChanged(@Nonnull PsiField field) {
+    return false;
   }
 
   //</editor-fold>
@@ -227,6 +233,25 @@ public abstract class PsiAugmentProvider {
         result.set(true);
       }
       return !canInfer;
+    });
+
+    return result.get();
+  }
+
+  /**
+   * @param field field to check
+   * @return true if we can trust the field initializer;
+   * false if any of providers reported that the initializer might be changed
+   */
+  public static boolean canTrustFieldInitializer(@Nonnull PsiField field) {
+    AtomicBoolean result = new AtomicBoolean(true);
+
+    forEach(field.getProject(), provider -> {
+      boolean mightBeReplaced = provider.fieldInitializerMightBeChanged(field);
+      if (mightBeReplaced) {
+        result.set(false);
+      }
+      return !mightBeReplaced;
     });
 
     return result.get();

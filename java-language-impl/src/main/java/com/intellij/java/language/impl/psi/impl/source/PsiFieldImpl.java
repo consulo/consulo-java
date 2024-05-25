@@ -26,6 +26,7 @@ import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaSharedImplUtil;
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.augment.PsiAugmentProvider;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import consulo.application.util.Queryable;
 import consulo.content.scope.SearchScope;
@@ -49,9 +50,9 @@ import consulo.navigation.ItemPresentation;
 import consulo.navigation.ItemPresentationProvider;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.SoftReference;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.lang.ref.Reference;
 import java.util.*;
 
@@ -299,7 +300,8 @@ public class PsiFieldImpl extends JavaStubPsiElement<PsiFieldStub> implements Ps
     }
 
     PsiExpression initializer = getDetachedInitializer();
-
+    if (initializer == null) return null;
+    if (!PsiAugmentProvider.canTrustFieldInitializer(this)) return null;
     return PsiConstantEvaluationHelperImpl.computeCastTo(initializer, type, visitedVars);
   }
 

@@ -17,6 +17,7 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.*;
 import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.augment.PsiAugmentProvider;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
@@ -97,8 +98,9 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
       addInstruction(new FlushFieldsInstruction());
     }
     for (PsiElement element = psiClass.getFirstChild(); element != null; element = element.getNextSibling()) {
-      if (((element instanceof PsiField && ((PsiField) element).hasInitializer()) || element instanceof PsiClassInitializer) &&
-          ((PsiMember) element).hasModifierProperty(PsiModifier.STATIC) == isStatic) {
+      if ((element instanceof PsiField field &&
+        field.hasInitializer() && PsiAugmentProvider.canTrustFieldInitializer(field) || element instanceof PsiClassInitializer) &&
+        ((PsiMember)element).hasModifierProperty(PsiModifier.STATIC) == isStatic) {
         element.accept(this);
       }
     }

@@ -16,19 +16,17 @@
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author ven
@@ -43,32 +41,50 @@ public class AddNewArrayExpressionFix implements SyntheticIntentionAction {
   @Override
   @Nonnull
   public String getText() {
-    PsiType type = getType();
+    PsiType type = getType(myInitializer);
     return JavaQuickFixBundle.message("add.new.array.text", type.getPresentableText());
+  }
+
+  @Nullable
+  @Override
+  public PsiElement getElementToMakeWritable(@Nonnull PsiFile currentFile) {
+    return myInitializer;
   }
 
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!myInitializer.isValid() || !myInitializer.getManager().isInProject(myInitializer)) return false;
-    return getType() != null;
+    return getType(myInitializer) != null;
   }
 
   @Override
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
-    if (!FileModificationService.getInstance().preparePsiElementsForWrite(myInitializer, file)) return;
-    PsiManager manager = file.getManager();
-    PsiType type = getType();
-    PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
-    @NonNls String text = "new " + type.getPresentableText() + "[]{}";
-    PsiNewExpression newExpr = (PsiNewExpression) factory.createExpressionFromText(text, null);
-    newExpr.getArrayInitializer().replace(myInitializer);
-    newExpr = (PsiNewExpression) CodeStyleManager.getInstance(manager.getProject()).reformat(newExpr);
-    myInitializer.replace(newExpr);
+    doFix(myInitializer);
   }
 
-  private PsiType getType() {
-    final PsiExpression[] initializers = myInitializer.getInitializers();
-    final PsiElement parent = myInitializer.getParent();
+  public static void doFix(@Nonnull PsiArrayInitializerExpression initializer) {
+    PsiType type = getType(initializer);
+    if (type == null) {
+      return;
+    }
+
+    doFix(type, initializer);
+  }
+
+  private static void doFix(@Nonnull PsiType type, PsiArrayInitializerExpression initializer) {
+    Project project = initializer.getProject();
+    PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
+    String text = "new " + type.getPresentableText() + "[]{}";
+    PsiNewExpression newExpr = (PsiNewExpression)factory.createExpressionFromText(text, null);
+    newExpr.getArrayInitializer().replace(initializer);
+    newExpr = (PsiNewExpression)CodeStyleManager.getInstance(project).reformat(newExpr);
+    initializer.replace(newExpr);
+  }
+
+  @RequiredReadAction
+  private static PsiType getType(PsiArrayInitializerExpression initializer) {
+    final PsiExpression[] initializers = initializer.getInitializers();
+    final PsiElement parent = initializer.getParent();
     if (!(parent instanceof PsiAssignmentExpression)) {
       if (initializers.length <= 0) return null;
       return initializers[0].getType();
