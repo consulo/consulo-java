@@ -25,7 +25,6 @@ import consulo.application.AllIcons;
 import consulo.application.HelpManager;
 import consulo.component.util.Iconable;
 import consulo.ide.impl.idea.refactoring.ui.DocCommentPanel;
-import consulo.ide.impl.idea.util.IconUtil;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.ui.RefactoringDialog;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
@@ -622,7 +621,7 @@ public class EncapsulateFieldsDialog extends RefactoringDialog implements Encaps
         case GETTER_COLUMN:
         case SETTER_COLUMN:
         {
-          Image methodIcon = IconUtil.getEmptyIcon(true);
+          Image methodIcon = Image.empty(Image.DEFAULT_ICON_SIZE);
           Image overrideIcon = Image.empty(Image.DEFAULT_ICON_SIZE);
 
           PsiMethod prototype = modelColumn == GETTER_COLUMN ? myGetterPrototypes[row] : mySetterPrototypes[row];
