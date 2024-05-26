@@ -30,14 +30,15 @@ import consulo.language.psi.path.FileReference;
 import consulo.project.Project;
 import consulo.ui.ex.awt.JBUI;
 import consulo.ui.image.Image;
+import consulo.ui.image.ImageEffects;
 import consulo.util.collection.SLRUMap;
 import consulo.util.lang.Pair;
 import consulo.virtualFileSystem.VirtualFile;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import jakarta.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -60,9 +61,11 @@ public class ProjectIconsAccessor implements Disposable
 		return ServiceManager.getService(project, ProjectIconsAccessor.class);
 	}
 
-	private static final int ICON_MAX_WEIGHT = 16;
+	private static final int ICON_MAX_ICON_DIMENSION = Image.DEFAULT_ICON_SIZE;
 
-	private static final int ICON_MAX_HEIGHT = 16;
+	// hidpi image
+	private static final int ICON_MAX_ICON_X2_DIMENSION = Image.DEFAULT_ICON_SIZE * 2;
+
 
 	private static final String JAVAX_SWING_ICON = "javax.swing.Icon";
 
@@ -148,7 +151,7 @@ public class ProjectIconsAccessor implements Disposable
 			try
 			{
 				final Image icon = createOrFindBetterIcon(file);
-				iconInfo = new Pair<>(stamp, hasProperSize(icon) ? icon : null);
+				iconInfo = new Pair<>(stamp, prepareImage(icon));
 				myIconsCache.put(file.getPath(), iconInfo);
 			}
 			catch(Exception e)
@@ -170,9 +173,26 @@ public class ProjectIconsAccessor implements Disposable
 		return extension != null && ICON_EXTENSIONS.contains(extension.toLowerCase(Locale.US));
 	}
 
-	private static boolean hasProperSize(Image icon)
+	@Nullable
+	private static Image prepareImage(Image icon)
 	{
-		return icon.getHeight() <= JBUI.scale(ICON_MAX_WEIGHT) && icon.getWidth() <= JBUI.scale(ICON_MAX_HEIGHT);
+		int height = icon.getHeight();
+		int width = icon.getWidth();
+
+		// lower 16x16
+		int maxIconDim = JBUI.scale(ICON_MAX_ICON_DIMENSION);
+		if(height <= maxIconDim && width <= maxIconDim)
+		{
+			return icon;
+		}
+
+		int maxImageDim = JBUI.scale(ICON_MAX_ICON_X2_DIMENSION);
+		if(height > maxImageDim && width > maxImageDim)
+		{
+			return null;
+		}
+
+		return ImageEffects.resize(icon, ICON_MAX_ICON_DIMENSION, ICON_MAX_ICON_DIMENSION);
 	}
 
 	private static Image createOrFindBetterIcon(VirtualFile file) throws IOException
