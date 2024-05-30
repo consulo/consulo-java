@@ -15,17 +15,16 @@
  */
 package com.intellij.java.debugger.impl.memory.ui;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
 import com.intellij.java.debugger.impl.memory.filtering.FilteringResult;
-import consulo.application.AllIcons;
+import consulo.platform.base.icon.PlatformIconGroup;
+import consulo.ui.ex.awt.BorderLayoutPanel;
 import consulo.ui.ex.awt.JBLabel;
 import consulo.ui.ex.awt.JBProgressBar;
-import consulo.ui.ex.awt.UIUtil;
-import consulo.ui.ex.awt.BorderLayoutPanel;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 class FilteringProgressView extends BorderLayoutPanel
 {
@@ -34,7 +33,7 @@ class FilteringProgressView extends BorderLayoutPanel
 
 	private final JBProgressBar myProgressBar = new JBProgressBar();
 	private final BorderLayoutPanel myProgressPanel = new BorderLayoutPanel();
-	private final JBLabel myStopButton = new JBLabel(UIUtil.isUnderDarcula() ? AllIcons.Actions.Clean : AllIcons.Actions.CleanLight);
+	private final JBLabel myStopButton = new JBLabel(PlatformIconGroup.actionsClose());
 	private final JBLabel myProgressText = new JBLabel();
 
 	private int myProceedCount = 0;

@@ -20,6 +20,7 @@ import com.intellij.java.compiler.impl.javaCompiler.annotationProcessing.impl.Pr
 import consulo.application.AllIcons;
 import consulo.module.Module;
 import consulo.module.ModuleManager;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
 import consulo.ui.ex.InputValidatorEx;
 import consulo.ui.ex.RelativePoint;
@@ -50,7 +51,6 @@ import java.util.*;
 /**
  * @author Konstantin Bulenkov
  */
-@SuppressWarnings({"unchecked", "UseOfObsoleteCollectionType"})
 public class AnnotationProcessorsPanel extends JPanel {
   private final ProcessorConfigProfile myDefaultProfile = new ProcessorConfigProfileImpl("");
   private final List<ProcessorConfigProfile> myModuleProfiles = new ArrayList<ProcessorConfigProfile>();
@@ -71,7 +71,7 @@ public class AnnotationProcessorsPanel extends JPanel {
     myTree = new Tree(new MyTreeModel());
     myTree.setRootVisible(false);
         final JPanel treePanel =
-          ToolbarDecorator.createDecorator(myTree).addExtraAction(new AnActionButton("Move to", AllIcons.Actions.Nextfile) {
+          ToolbarDecorator.createDecorator(myTree).addExtraAction(new AnActionButton("Move to", PlatformIconGroup.actionsForward()) {
             @Override
             public void actionPerformed(AnActionEvent e) {
               final MyModuleNode node = (MyModuleNode)myTree.getSelectionPath().getLastPathComponent();
