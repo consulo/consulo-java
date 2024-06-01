@@ -19,10 +19,10 @@ package consulo.java.impl.module.extension.ui;
 import com.intellij.java.compiler.impl.javaCompiler.TargetOptionsComponent;
 import com.intellij.java.language.JavaCoreBundle;
 import com.intellij.java.language.LanguageLevel;
-import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.AllIcons;
+import consulo.java.language.bundle.JavaSdkTypeUtil;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.java.language.module.extension.JavaMutableModuleExtension;
 import consulo.java.language.module.extension.SpecialDirLocation;
@@ -91,11 +91,11 @@ public class JavaModuleExtensionPanel extends JPanel {
     sdkBoxBuilder.postConsumer((oldValue, newValue) -> {
       Object selectedItem = myLanguageLevelComboBox.getSelectedItem();
       if (selectedItem instanceof LanguageLevel && newValue != null && oldValue != null) {
-        JavaSdkVersion oldSdkVersion = JavaSdk.getInstance().getVersion(oldValue);
+        JavaSdkVersion oldSdkVersion = JavaSdkTypeUtil.getVersion(oldValue);
 
         // if old sdk version exists and lang version is equal sdk lang version
         if (oldSdkVersion != null && oldSdkVersion.getMaxLanguageLevel() == selectedItem) {
-          JavaSdkVersion newSdkVersion = JavaSdk.getInstance().getVersion(newValue);
+          JavaSdkVersion newSdkVersion = JavaSdkTypeUtil.getVersion(newValue);
           if (newSdkVersion != null) {
             myLanguageLevelComboBox.setSelectedItem(newSdkVersion.getMaxLanguageLevel());
           }

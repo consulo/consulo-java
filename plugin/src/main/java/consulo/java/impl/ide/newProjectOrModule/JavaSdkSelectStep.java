@@ -16,7 +16,7 @@
 
 package consulo.java.impl.ide.newProjectOrModule;
 
-import com.intellij.java.language.projectRoots.JavaSdk;
+import com.intellij.java.language.projectRoots.JavaSdkType;
 import consulo.content.bundle.SdkTable;
 import consulo.disposer.Disposable;
 import consulo.ide.newModule.ui.UnifiedProjectOrModuleNameStep;
@@ -46,7 +46,7 @@ public class JavaSdkSelectStep extends UnifiedProjectOrModuleNameStep<JavaNewMod
     super.extend(builder, uiDisposable);
 
     BundleBoxBuilder boxBuilder = BundleBoxBuilder.create(uiDisposable);
-    boxBuilder.withSdkTypeFilter(sdkTypeId -> sdkTypeId instanceof JavaSdk);
+    boxBuilder.withSdkTypeFilter(sdkTypeId -> sdkTypeId instanceof JavaSdkType);
 
     builder.addLabeled(LocalizeValue.localizeTODO("JDK:"), (myBundleBox = boxBuilder.build()).getComponent());
 

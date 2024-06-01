@@ -9,7 +9,6 @@ import com.intellij.java.debugger.ui.classFilter.ClassFilter;
 import com.intellij.java.execution.CommonJavaRunConfigurationParameters;
 import com.intellij.java.execution.impl.RunConfigurationExtension;
 import com.intellij.java.execution.impl.junit.RefactoringListeners;
-import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
@@ -23,6 +22,7 @@ import consulo.execution.configuration.RunnerSettings;
 import consulo.execution.configuration.ui.SettingsEditor;
 import consulo.execution.coverage.*;
 import consulo.java.execution.configurations.OwnJavaParameters;
+import consulo.java.language.bundle.JavaSdkTypeUtil;
 import consulo.language.editor.refactoring.event.RefactoringElementListener;
 import consulo.language.editor.refactoring.event.RefactoringElementListenerComposite;
 import consulo.language.psi.PsiElement;
@@ -36,10 +36,9 @@ import consulo.project.ui.notification.Notifications;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jdom.Element;
-
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,7 +82,7 @@ public class CoverageJavaRunConfigurationExtension extends RunConfigurationExten
       coverageConfig.appendCoverageArgument(params);
 
       final Sdk jdk = params.getJdk();
-      if (jdk != null && JavaSdk.getInstance().isOfVersionOrHigher(jdk, JavaSdkVersion.JDK_1_7) && coverageRunner instanceof JavaCoverageRunner && !((JavaCoverageRunner)coverageRunner).isJdk7Compatible()) {
+      if (jdk != null && JavaSdkTypeUtil.isOfVersionOrHigher(jdk, JavaSdkVersion.JDK_1_7) && coverageRunner instanceof JavaCoverageRunner && !((JavaCoverageRunner)coverageRunner).isJdk7Compatible()) {
         Notifications.Bus.notify(new Notification(NotificationGroup.balloonGroup("Coverage"), "Coverage instrumentation is not fully compatible with JDK 7",
                                                   coverageRunner.getPresentableName() +
                                                   " coverage instrumentation can lead to java.lang.VerifyError errors with JDK 7. If so, please try IDEA coverage runner.",

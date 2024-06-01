@@ -16,23 +16,21 @@
 package com.intellij.java.impl.externalSystem;
 
 import com.intellij.java.language.LanguageLevel;
-import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.content.bundle.Sdk;
-import consulo.content.bundle.SdkTable;
 import consulo.externalSystem.model.DataNode;
 import consulo.externalSystem.model.Key;
 import consulo.externalSystem.service.project.manage.ProjectDataService;
 import consulo.externalSystem.util.DisposeAwareProjectChange;
 import consulo.externalSystem.util.ExternalSystemApiUtil;
+import consulo.java.language.bundle.JavaSdkTypeUtil;
 import consulo.java.language.module.extension.JavaMutableModuleExtension;
 import consulo.module.Module;
 import consulo.module.ModuleManager;
 import consulo.module.content.ModuleRootManager;
 import consulo.module.content.layer.ModifiableRootModel;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -91,11 +89,10 @@ public class JavaProjectDataService implements ProjectDataService<JavaProjectDat
 
   @Nullable
   private static Sdk findJdk(@Nonnull JavaSdkVersion version) {
-    JavaSdk javaSdk = JavaSdk.getInstance();
-    List<Sdk> javaSdks = SdkTable.getInstance().getSdksOfType(javaSdk);
+    List<Sdk> javaSdks = JavaSdkTypeUtil.getAllJavaSdks();
     Sdk candidate = null;
     for (Sdk sdk : javaSdks) {
-      JavaSdkVersion v = javaSdk.getVersion(sdk);
+      JavaSdkVersion v = JavaSdkTypeUtil.getVersion(sdk);
       if (v == version) {
         return sdk;
       } else if (candidate == null && v != null && version.getMaxLanguageLevel().isAtLeast(version.getMaxLanguageLevel())) {

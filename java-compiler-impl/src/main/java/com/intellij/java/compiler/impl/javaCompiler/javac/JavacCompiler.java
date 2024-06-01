@@ -23,7 +23,7 @@ import com.intellij.java.compiler.impl.javaCompiler.annotationProcessing.Annotat
 import com.intellij.java.indexing.impl.stubs.index.JavaModuleNameIndex;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.psi.impl.light.AutomaticJavaModule;
-import com.intellij.java.language.projectRoots.JavaSdk;
+import com.intellij.java.language.projectRoots.JavaSdkType;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiJavaModule;
@@ -45,6 +45,7 @@ import consulo.java.compiler.impl.javaCompiler.BackendCompilerProcessBuilder;
 import consulo.java.compiler.impl.javaCompiler.JavaToolMonitor;
 import consulo.java.compiler.impl.javaCompiler.NewBackendCompilerProcessBuilder;
 import consulo.java.compiler.impl.javaCompiler.old.OldBackendCompilerProcessBuilder;
+import consulo.java.language.bundle.JavaSdkTypeUtil;
 import consulo.java.language.fileTypes.JModFileType;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.content.LanguageContentFolderScopes;
@@ -67,10 +68,10 @@ import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.PathsList;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
-import jakarta.inject.Inject;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import jakarta.inject.Inject;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -124,7 +125,7 @@ public class JavacCompiler implements BackendCompiler {
 
       checkedJdks.add(javaSdk);
       final SdkTypeId sdkType = javaSdk.getSdkType();
-      assert sdkType instanceof JavaSdk;
+      assert sdkType instanceof JavaSdkType;
 
       final VirtualFile homeDirectory = javaSdk.getHomeDirectory();
       if (homeDirectory == null) {
@@ -157,7 +158,7 @@ public class JavacCompiler implements BackendCompiler {
       }
 
       if (!javaSdkVersion.isAtLeast(JavaSdkVersion.JDK_1_9)) {
-        final String toolsJarPath = ((JavaSdk)sdkType).getToolsPath(javaSdk);
+        final String toolsJarPath = ((JavaSdkType)sdkType).getToolsPath(javaSdk);
         if (toolsJarPath == null) {
           Messages.showMessageDialog(myProject,
                                      JavaCompilerBundle.message("javac.error.tools.jar.missing", javaSdk.getName()),
@@ -214,26 +215,25 @@ public class JavacCompiler implements BackendCompiler {
     JavaCompilerConfiguration javaCompilerConfiguration = JavaCompilerConfiguration.getInstance(myProject);
 
     //noinspection ConstantConditions
-    return AccessRule.read(() ->
-                           {
-                             final Sdk jdk = getJdkForStartupCommand(chunk);
+    return AccessRule.read(() -> {
+      final Sdk jdk = getJdkForStartupCommand(chunk);
 
-                             JavaSdkVersion version = JavaSdk.getInstance().getVersion(jdk);
+      JavaSdkVersion version = JavaSdkTypeUtil.getVersion(jdk);
 
-                             if (version != null && version.isAtLeast(JavaSdkVersion.JDK_1_8)) {
-                               return new NewBackendCompilerProcessBuilder(chunk,
-                                                                           outputDir,
-                                                                           compileContext,
-                                                                           javaCompilerOptions,
-                                                                           javaCompilerConfiguration.isAnnotationProcessorsEnabled());
-                             }
+      if (version != null && version.isAtLeast(JavaSdkVersion.JDK_1_8)) {
+        return new NewBackendCompilerProcessBuilder(chunk,
+                                                    outputDir,
+                                                    compileContext,
+                                                    javaCompilerOptions,
+                                                    javaCompilerConfiguration.isAnnotationProcessorsEnabled());
+      }
 
-                             return new OldBackendCompilerProcessBuilder(chunk,
-                                                                         outputDir,
-                                                                         compileContext,
-                                                                         javaCompilerOptions,
-                                                                         javaCompilerConfiguration.isAnnotationProcessorsEnabled());
-                           });
+      return new OldBackendCompilerProcessBuilder(chunk,
+                                                  outputDir,
+                                                  compileContext,
+                                                  javaCompilerOptions,
+                                                  javaCompilerConfiguration.isAnnotationProcessorsEnabled());
+    });
   }
 
   public static List<String> addAdditionalSettings(ParametersList parametersList,

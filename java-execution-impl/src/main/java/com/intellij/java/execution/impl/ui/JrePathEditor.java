@@ -15,21 +15,20 @@
  */
 package com.intellij.java.execution.impl.ui;
 
-import com.intellij.java.language.projectRoots.JavaSdk;
+import com.intellij.java.language.projectRoots.JavaSdkType;
 import consulo.annotation.DeprecationInfo;
-import consulo.application.AllIcons;
 import consulo.content.bundle.BundleHolder;
 import consulo.ide.setting.ShowSettingsUtil;
 import consulo.java.execution.JavaExecutionBundle;
 import consulo.module.ui.awt.SdkComboBox;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.ui.ex.awt.LabeledComponent;
 import consulo.ui.ex.awt.PanelWithAnchor;
 import consulo.ui.ex.awt.Wrapper;
-
 import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 import java.awt.event.ActionListener;
-import java.util.Objects;
 
 /**
  * @author nik
@@ -49,7 +48,7 @@ public class JrePathEditor extends Wrapper implements PanelWithAnchor {
   public JrePathEditor() {
     BundleHolder model = ShowSettingsUtil.getInstance().getSdksModel();
 
-    mySdkComboBox = new SdkComboBox(model, id -> Objects.equals(JavaSdk.getInstance(), id), null, "Auto Select", AllIcons.Actions.FindPlain);
+    mySdkComboBox = new SdkComboBox(model, id -> id instanceof JavaSdkType, null, "Auto Select", PlatformIconGroup.actionsFind());
 
     myLabeledComponent = LabeledComponent.create(mySdkComboBox, JavaExecutionBundle.message("run.configuration.jre.label"));
 

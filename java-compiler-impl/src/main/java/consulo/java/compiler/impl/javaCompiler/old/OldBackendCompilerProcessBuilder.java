@@ -3,7 +3,7 @@ package consulo.java.compiler.impl.javaCompiler.old;
 import com.intellij.java.compiler.impl.javaCompiler.javac.JavacCompiler;
 import com.intellij.java.compiler.impl.javaCompiler.javac.JpsJavaCompilerOptions;
 import com.intellij.java.language.impl.projectRoots.ex.JavaSdkUtil;
-import com.intellij.java.language.projectRoots.JavaSdk;
+import com.intellij.java.language.projectRoots.JavaSdkType;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.compiler.CompileContext;
@@ -13,6 +13,7 @@ import consulo.content.bundle.Sdk;
 import consulo.java.compiler.JavaCompilerBundle;
 import consulo.java.compiler.JavaCompilerUtil;
 import consulo.java.compiler.impl.javaCompiler.BackendCompilerProcessBuilder;
+import consulo.java.language.bundle.JavaSdkTypeUtil;
 import consulo.java.rt.JavaRtClassNames;
 import consulo.logging.Logger;
 import consulo.process.cmd.GeneralCommandLine;
@@ -60,13 +61,13 @@ public class OldBackendCompilerProcessBuilder extends BackendCompilerProcessBuil
 	{
 		final Sdk jdk = JavacCompiler.getJdkForStartupCommand(chunk);
 		final String versionString = jdk.getVersionString();
-		JavaSdkVersion version = JavaSdk.getInstance().getVersion(jdk);
-		if(versionString == null || version == null || !(jdk.getSdkType() instanceof JavaSdk))
+		JavaSdkVersion version = JavaSdkTypeUtil.getVersion(jdk);
+		if(versionString == null || version == null || !(jdk.getSdkType() instanceof JavaSdkType))
 		{
 			throw new IllegalArgumentException(JavaCompilerBundle.message("javac.error.unknown.jdk.version", jdk.getName()));
 		}
 
-		JavaSdk sdkType = (JavaSdk) jdk.getSdkType();
+		JavaSdkType sdkType = (JavaSdkType) jdk.getSdkType();
 
 		if(!version.isAtLeast(JavaSdkVersion.JDK_1_9))
 		{

@@ -16,28 +16,28 @@
 
 package consulo.java.compiler.bytecodeProcessing.impl;
 
-import com.intellij.java.language.codeInsight.NullableNotNullManager;
-import com.intellij.java.compiler.impl.cache.Cache;
-import com.intellij.java.compiler.impl.cache.JavaDependencyCache;
-import com.intellij.java.compiler.impl.javaCompiler.JavaCompilerConfiguration;
 import com.intellij.compiler.instrumentation.FailSafeClassReader;
 import com.intellij.compiler.instrumentation.InstrumentationClassFinder;
 import com.intellij.compiler.instrumentation.InstrumenterClassWriter;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.compiler.CacheCorruptedException;
 import com.intellij.compiler.notNullVerification.NotNullVerifyingInstrumenter;
-import consulo.compiler.CompileContext;
-import consulo.module.Module;
-import com.intellij.java.language.projectRoots.JavaSdk;
+import com.intellij.java.compiler.impl.cache.Cache;
+import com.intellij.java.compiler.impl.cache.JavaDependencyCache;
+import com.intellij.java.compiler.impl.javaCompiler.JavaCompilerConfiguration;
+import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
-import consulo.content.bundle.Sdk;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.function.ThrowableComputable;
-import consulo.util.collection.ArrayUtil;
+import consulo.compiler.CacheCorruptedException;
+import consulo.compiler.CompileContext;
+import consulo.content.bundle.Sdk;
+import consulo.internal.org.objectweb.asm.ClassWriter;
 import consulo.java.compiler.JavaCompilerUtil;
 import consulo.java.compiler.bytecodeProcessing.JavaBytecodeProcessor;
-import consulo.internal.org.objectweb.asm.ClassWriter;
-
+import consulo.java.language.bundle.JavaSdkTypeUtil;
+import consulo.module.Module;
+import consulo.util.collection.ArrayUtil;
 import jakarta.annotation.Nullable;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -61,7 +61,7 @@ public class NotNullJavaBytecodeProcessorCompiler implements JavaBytecodeProcess
 	{
 		Sdk jdk = JavaCompilerUtil.getSdkForCompilation(affectedModule);
 
-		boolean isJdk6 = jdk != null && JavaSdk.getInstance().isOfVersionOrHigher(jdk, JavaSdkVersion.JDK_1_6);
+		boolean isJdk6 = jdk != null && JavaSdkTypeUtil.isOfVersionOrHigher(jdk, JavaSdkVersion.JDK_1_6);
 
 		boolean addNotNullAssertions = JavaCompilerConfiguration.getInstance(affectedModule.getProject()).isAddNotNullAssertions();
 

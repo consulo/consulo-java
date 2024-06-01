@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2012 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,29 +13,48 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 package com.intellij.java.language.projectRoots;
 
-import consulo.annotation.DeprecationInfo;
+import com.intellij.java.language.internal.DefaultJavaSdkType;
 import consulo.content.bundle.Sdk;
+import consulo.content.bundle.SdkModificator;
+import consulo.content.bundle.SdkTable;
+import consulo.content.bundle.SdkType;
 import consulo.process.cmd.GeneralCommandLine;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 
-/**
- * User: anna
- * Date: 14-Jan-2008
- */
-@Deprecated
-@DeprecationInfo("Use JavaSdk")
-public interface JavaSdkType {
-  @NonNls
-  String getBinPath(Sdk sdk);
+import java.io.File;
 
-  @NonNls
-  String getToolsPath(Sdk sdk);
+public abstract class JavaSdkType extends SdkType {
+  /**
+   * Return default impl JavaSdkType implementation
+   */
+  @Nonnull
+  public static JavaSdkType getDefaultJavaSdkType() {
+    return EP_NAME.findExtensionOrFail(DefaultJavaSdkType.class);
+  }
 
-  void setupCommandLine(@Nonnull GeneralCommandLine commandLine, @Nonnull Sdk sdk);
+  public JavaSdkType(String name) {
+    super(name);
+  }
+
+  public final Sdk createJdk(String jdkName, @Nonnull String home) {
+    Sdk jdk = SdkTable.getInstance().createSdk(jdkName, this);
+    SdkModificator sdkModificator = jdk.getSdkModificator();
+
+    String path = home.replace(File.separatorChar, '/');
+    sdkModificator.setHomePath(path);
+    sdkModificator.setVersionString(jdkName); // must be set after home path, otherwise setting home path clears the version string
+    sdkModificator.commitChanges();
+
+    setupSdkPaths(jdk);
+
+    return jdk;
+  }
+
+  public abstract String getBinPath(Sdk sdk);
+
+  public abstract String getToolsPath(Sdk sdk);
+
+  public abstract void setupCommandLine(@Nonnull GeneralCommandLine generalCommandLine, @Nonnull Sdk sdk);
 }

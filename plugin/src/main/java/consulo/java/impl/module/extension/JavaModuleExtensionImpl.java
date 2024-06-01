@@ -16,13 +16,14 @@
 package consulo.java.impl.module.extension;
 
 import com.intellij.java.language.LanguageLevel;
-import com.intellij.java.language.projectRoots.JavaSdk;
+import com.intellij.java.language.projectRoots.JavaSdkType;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.compiler.CompileContext;
 import consulo.compiler.ModuleChunk;
 import consulo.content.bundle.Sdk;
 import consulo.content.bundle.SdkType;
+import consulo.java.language.bundle.JavaSdkTypeUtil;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.java.language.module.extension.SpecialDirLocation;
 import consulo.module.content.layer.ModuleRootLayer;
@@ -30,10 +31,10 @@ import consulo.module.content.layer.extension.ModuleExtensionWithSdkBase;
 import consulo.module.extension.ModuleInheritableNamedPointer;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import org.jdom.Element;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jdom.Element;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -59,7 +60,7 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkBase<JavaModu
     super(id, moduleRootLayer);
     myLanguageLevel = new LanguageLevelModuleInheritableNamedPointerImpl(moduleRootLayer, id);
     myLanguageLevelValue = new LazyValueBySdk<>(this, LanguageLevel.HIGHEST, sdk -> {
-      JavaSdkVersion sdkVersion = JavaSdk.getInstance().getVersion(sdk);
+      JavaSdkVersion sdkVersion = JavaSdkTypeUtil.getVersion(sdk);
       return sdkVersion == null ? LanguageLevel.HIGHEST : sdkVersion.getMaxLanguageLevel();
     });
   }
@@ -109,13 +110,21 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkBase<JavaModu
   @Nonnull
   @Override
   public Set<VirtualFile> getCompilationClasspath(@Nonnull CompileContext compileContext, @Nonnull ModuleChunk moduleChunk) {
-    return moduleChunk.getCompilationClasspathFiles(JavaSdk.getInstance());
+    Sdk sdk = getSdk();
+    if (sdk == null) {
+      return Set.of();
+    }
+    return moduleChunk.getCompilationClasspathFiles((SdkType)sdk.getSdkType());
   }
 
   @Nonnull
   @Override
   public Set<VirtualFile> getCompilationBootClasspath(@Nonnull CompileContext compileContext, @Nonnull ModuleChunk moduleChunk) {
-    return moduleChunk.getCompilationBootClasspathFiles(JavaSdk.getInstance());
+    Sdk sdk = getSdk();
+    if (sdk == null) {
+      return Set.of();
+    }
+    return moduleChunk.getCompilationBootClasspathFiles((SdkType) sdk.getSdkType());
   }
 
   @Nonnull
@@ -126,7 +135,7 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkBase<JavaModu
   @Nonnull
   @Override
   public Class<? extends SdkType> getSdkTypeClass() {
-    return JavaSdk.class;
+    return JavaSdkType.class;
   }
 
   @Nonnull

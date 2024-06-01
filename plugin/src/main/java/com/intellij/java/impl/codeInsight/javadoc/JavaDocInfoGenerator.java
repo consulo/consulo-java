@@ -25,7 +25,6 @@ import com.intellij.java.language.impl.codeInsight.javadoc.JavaDocUtil;
 import com.intellij.java.language.impl.psi.impl.JavaConstantExpressionEvaluator;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.*;
@@ -36,6 +35,7 @@ import consulo.content.bundle.Sdk;
 import consulo.ide.impl.idea.openapi.util.io.FileUtil;
 import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
 import consulo.ide.impl.idea.util.ArrayUtilRt;
+import consulo.java.language.bundle.JavaSdkTypeUtil;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.LangBundle;
 import consulo.language.ast.ASTNode;
@@ -55,12 +55,12 @@ import consulo.util.jdom.JDOMUtil;
 import consulo.util.lang.*;
 import consulo.util.lang.xml.XmlStringUtil;
 import consulo.virtualFileSystem.VirtualFile;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -120,7 +120,7 @@ public class JavaDocInfoGenerator {
     myElement = element;
 
     Sdk jdk = JavadocGeneratorRunProfile.getSdk(myProject);
-    mySdkVersion = jdk == null ? null : JavaSdk.getInstance().getVersion(jdk);
+    mySdkVersion = jdk == null ? null : JavaSdkTypeUtil.getVersion(jdk);
   }
 
   private static InheritDocProvider<PsiElement[]> mapProvider(InheritDocProvider<PsiDocTag> i, boolean dropFirst) {

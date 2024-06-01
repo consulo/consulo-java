@@ -18,7 +18,7 @@ package com.intellij.java.execution.impl.util;
 import com.intellij.java.execution.CommonJavaRunConfigurationParameters;
 import com.intellij.java.execution.JavaExecutionUtil;
 import com.intellij.java.language.impl.projectRoots.ex.PathUtilEx;
-import com.intellij.java.language.projectRoots.JavaSdk;
+import com.intellij.java.language.projectRoots.JavaSdkType;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.content.bundle.Sdk;
 import consulo.content.bundle.SdkTable;
@@ -190,7 +190,7 @@ public class JavaParametersUtil {
       throw new CantRunException(JavaExecutionBundle.message("jre.path.is.not.valid.jre.home.error.message", jreHome));
     }
 
-    final JavaSdk javaSdk = JavaSdk.getInstance();
+    final JavaSdkType javaSdk = JavaSdkType.getDefaultJavaSdkType();
     return javaSdk.createJdk(ObjectUtil.notNull(javaSdk.getVersionString(jreHome), ""), jreHome);
   }
 

@@ -17,14 +17,14 @@ package com.intellij.java.impl.codeInspection.magicConstant;
 
 import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
-import com.intellij.java.impl.openapi.projectRoots.impl.JavaSdkImpl;
+import com.intellij.java.impl.openapi.projectRoots.impl.DefaultJavaSdkTypeImpl;
 import com.intellij.java.impl.slicer.DuplicateMap;
 import com.intellij.java.impl.slicer.SliceAnalysisParams;
 import com.intellij.java.impl.slicer.SliceRootNode;
 import com.intellij.java.impl.slicer.SliceUsage;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.codeInsight.ExternalAnnotationsManager;
-import com.intellij.java.language.projectRoots.JavaSdk;
+import com.intellij.java.language.projectRoots.JavaSdkType;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
@@ -221,7 +221,7 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool {
     for (OrderEntry orderEntry : entries) {
       if (orderEntry instanceof ModuleExtensionWithSdkOrderEntry) {
         Sdk temp = ((ModuleExtensionWithSdkOrderEntry) orderEntry).getSdk();
-        if (temp != null && temp.getSdkType() == JavaSdk.getInstance()) {
+        if (temp != null && temp.getSdkType() instanceof JavaSdkType) {
           jdk = temp;
           break;
         }
@@ -259,7 +259,7 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool {
           @Override
           public void run() {
             SdkModificator modificator = finalJdk.getSdkModificator();
-            JavaSdkImpl.attachJdkAnnotations(modificator);
+            DefaultJavaSdkTypeImpl.attachJdkAnnotations(modificator);
             modificator.commitChanges();
           }
         });

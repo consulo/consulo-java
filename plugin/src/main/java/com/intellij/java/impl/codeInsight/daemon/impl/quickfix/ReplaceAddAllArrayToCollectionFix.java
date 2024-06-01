@@ -20,14 +20,13 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import consulo.codeEditor.Editor;
 import consulo.content.bundle.Sdk;
-import consulo.ide.impl.idea.openapi.module.ModuleUtil;
+import consulo.java.language.bundle.JavaSdkTypeUtil;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.SyntheticIntentionAction;
@@ -39,9 +38,8 @@ import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 public class ReplaceAddAllArrayToCollectionFix implements SyntheticIntentionAction {
   private final PsiMethodCallExpression myMethodCall;
@@ -60,10 +58,10 @@ public class ReplaceAddAllArrayToCollectionFix implements SyntheticIntentionActi
   public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
     if (myMethodCall == null || !myMethodCall.isValid()) return false;
 
-    final Module module = ModuleUtilCore.findModuleForPsiElement(file);
+    final Module module = file.getModule();
     if (module == null) return false;
-    final Sdk jdk = ModuleUtil.getSdk(module, JavaModuleExtension.class);
-    if (jdk == null || !JavaSdk.getInstance().isOfVersionOrHigher(jdk, JavaSdkVersion.JDK_1_5)) return false;
+    final Sdk jdk = ModuleUtilCore.getSdk(module, JavaModuleExtension.class);
+    if (jdk == null || !JavaSdkTypeUtil.isOfVersionOrHigher(jdk, JavaSdkVersion.JDK_1_5)) return false;
 
     final PsiReferenceExpression expression = myMethodCall.getMethodExpression();
     final PsiElement element = expression.resolve();

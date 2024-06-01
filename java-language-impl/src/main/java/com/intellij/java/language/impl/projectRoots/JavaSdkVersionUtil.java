@@ -15,14 +15,14 @@
  */
 package com.intellij.java.language.impl.projectRoots;
 
-import com.intellij.java.language.projectRoots.JavaSdk;
+import com.intellij.java.language.projectRoots.JavaSdkType;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
-import consulo.language.util.ModuleUtilCore;
-import consulo.content.bundle.Sdk;
-import consulo.language.psi.PsiElement;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.content.bundle.Sdk;
+import consulo.java.language.bundle.JavaSdkTypeUtil;
 import consulo.java.language.module.extension.JavaModuleExtension;
-
+import consulo.language.psi.PsiElement;
+import consulo.language.util.ModuleUtilCore;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -43,6 +43,10 @@ public class JavaSdkVersionUtil {
   }
 
   public static JavaSdkVersion getJavaSdkVersion(@Nullable Sdk sdk) {
-    return sdk != null && sdk.getSdkType() instanceof JavaSdk ? ((JavaSdk) sdk.getSdkType()).getVersion(sdk) : null;
+    if (sdk != null && sdk.getSdkType() instanceof JavaSdkType) {
+      return JavaSdkTypeUtil.getVersion(sdk);
+    }
+
+    return null;
   }
 }

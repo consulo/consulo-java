@@ -15,20 +15,20 @@
  */
 package com.intellij.java.compiler.impl;
 
-import consulo.application.ApplicationManager;
-import consulo.module.Module;
-import consulo.language.util.ModuleUtilCore;
-import consulo.project.Project;
-import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
-import consulo.content.bundle.Sdk;
-import consulo.application.util.function.Computable;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiManager;
 import com.intellij.java.language.psi.util.ClassUtil;
 import consulo.annotation.DeprecationInfo;
+import consulo.application.ApplicationManager;
+import consulo.application.util.function.Computable;
+import consulo.content.bundle.Sdk;
 import consulo.internal.org.objectweb.asm.ClassWriter;
+import consulo.java.language.bundle.JavaSdkTypeUtil;
 import consulo.java.language.module.extension.JavaModuleExtension;
+import consulo.language.psi.PsiManager;
+import consulo.language.util.ModuleUtilCore;
+import consulo.module.Module;
+import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
 
 /**
@@ -52,7 +52,7 @@ public class PsiClassWriter extends ClassWriter
   private static boolean isJdk6(final Module module) {
     final Sdk projectJdk = ModuleUtilCore.getSdk(module, JavaModuleExtension.class);
     if (projectJdk == null) return false;
-    return JavaSdk.getInstance().isOfVersionOrHigher(projectJdk, JavaSdkVersion.JDK_1_6);
+    return JavaSdkTypeUtil.isOfVersionOrHigher(projectJdk, JavaSdkVersion.JDK_1_6);
   }
 
   protected String getCommonSuperClass(final String type1, final String type2) {

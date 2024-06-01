@@ -33,7 +33,7 @@ import com.intellij.java.debugger.impl.ui.breakpoints.BreakpointManager;
 import com.intellij.java.debugger.impl.ui.tree.render.BatchEvaluator;
 import com.intellij.java.execution.configurations.RemoteConnection;
 import com.intellij.java.language.impl.projectRoots.ex.JavaSdkUtil;
-import com.intellij.java.language.projectRoots.JavaSdk;
+import com.intellij.java.language.projectRoots.JavaSdkType;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.annotation.component.ServiceImpl;
@@ -48,6 +48,7 @@ import consulo.component.persist.StoragePathMacros;
 import consulo.content.bundle.Sdk;
 import consulo.execution.ExecutionResult;
 import consulo.java.execution.configurations.OwnJavaParameters;
+import consulo.java.language.bundle.JavaSdkTypeUtil;
 import consulo.logging.Logger;
 import consulo.process.ExecutionException;
 import consulo.process.KillableProcessHandler;
@@ -387,7 +388,7 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
     if (jdk == null) {
       throw new ExecutionException(DebuggerBundle.message("error.jdk.not.specified"));
     }
-    final JavaSdkVersion version = JavaSdk.getInstance().getVersion(jdk);
+    final JavaSdkVersion version = JavaSdkTypeUtil.getVersion(jdk);
     String versionString = jdk.getVersionString();
     if (version == JavaSdkVersion.JDK_1_0 || version == JavaSdkVersion.JDK_1_1) {
       throw new ExecutionException(DebuggerBundle.message("error.unsupported.jdk.version", versionString));

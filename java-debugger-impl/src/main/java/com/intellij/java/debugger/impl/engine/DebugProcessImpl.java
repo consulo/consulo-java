@@ -52,13 +52,11 @@ import com.intellij.java.debugger.impl.ui.tree.render.PrimitiveRenderer;
 import com.intellij.java.debugger.ui.classFilter.ClassFilter;
 import com.intellij.java.debugger.ui.classFilter.DebuggerClassFilterProvider;
 import com.intellij.java.execution.configurations.RemoteConnection;
-import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.java.language.projectRoots.JavaSdkType;
 import consulo.application.ApplicationManager;
 import consulo.application.util.Patches;
 import consulo.application.util.Semaphore;
 import consulo.content.bundle.Sdk;
-import consulo.content.bundle.SdkTable;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
 import consulo.execution.CantRunException;
@@ -75,6 +73,7 @@ import consulo.internal.com.sun.jdi.connect.*;
 import consulo.internal.com.sun.jdi.request.EventRequest;
 import consulo.internal.com.sun.jdi.request.EventRequestManager;
 import consulo.internal.com.sun.jdi.request.StepRequest;
+import consulo.java.language.bundle.JavaSdkTypeUtil;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
@@ -99,11 +98,11 @@ import consulo.util.collection.Lists;
 import consulo.util.dataholder.UserDataHolderBase;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.*;
@@ -248,8 +247,9 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 
     try {
       return myNodeRenderersMap.computeIfAbsent(type, t -> myRenderers.stream().
-        filter(r -> DebuggerUtilsImpl.suppressExceptions(() -> r.isApplicable(type), false, true, ClassNotPreparedException.class)).
-                                                                        findFirst().orElseGet(() -> getDefaultRenderer(type)));
+                                                                      filter(r -> DebuggerUtilsImpl.suppressExceptions(() -> r.isApplicable(
+                                                                        type), false, true, ClassNotPreparedException.class)).
+                                                                      findFirst().orElseGet(() -> getDefaultRenderer(type)));
     }
     catch (ClassNotPreparedException e) {
       LOG.info(e);
@@ -639,21 +639,20 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
     if (getSession().getAlternativeJre() == null) {
       Sdk runjre = getSession().getRunJre();
       if ((runjre == null || runjre.getSdkType() instanceof JavaSdkType) && !versionMatch(runjre, version)) {
-        SdkTable.getInstance()
-                .getSdksOfType(JavaSdk.getInstance())
-                .stream()
-                .filter(sdk -> versionMatch(sdk, version))
-                .findFirst()
-                .ifPresent(sdk ->
-                           {
-                             XDebuggerUIConstants.NOTIFICATION_GROUP.createNotification(DebuggerBundle.message(
-                               "message.remote.jre.version.mismatch",
-                               version,
-                               runjre != null ? runjre.getVersionString() :
-                                 "unknown",
-                               sdk.getName()), NotificationType.INFORMATION).notify(myProject);
-                             getSession().setAlternativeJre(sdk);
-                           });
+        JavaSdkTypeUtil.getAllJavaSdks()
+                       .stream()
+                       .filter(sdk -> versionMatch(sdk, version))
+                       .findFirst()
+                       .ifPresent(sdk ->
+                                  {
+                                    XDebuggerUIConstants.NOTIFICATION_GROUP.createNotification(DebuggerBundle.message(
+                                      "message.remote.jre.version.mismatch",
+                                      version,
+                                      runjre != null ? runjre.getVersionString() :
+                                        "unknown",
+                                      sdk.getName()), NotificationType.INFORMATION).notify(myProject);
+                                    getSession().setAlternativeJre(sdk);
+                                  });
       }
     }
   }
@@ -1016,7 +1015,8 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 
         return invokeMethodAndFork(suspendContext);
       }
-      catch (InvocationException | InternalException | UnsupportedOperationException | ObjectCollectedException | InvalidTypeException | IncompatibleThreadStateException e) {
+      catch (InvocationException | InternalException | UnsupportedOperationException | ObjectCollectedException | InvalidTypeException |
+             IncompatibleThreadStateException e) {
         throw EvaluateExceptionUtil.createEvaluateException(e);
       }
       finally {
@@ -1828,7 +1828,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
                                                 () -> Messages.showMessageDialog(myProject,
                                                                                  DebuggerBundle.message("error.pop.bottom.stackframe"),
                                                                                  ActionsBundle.actionText
-                                                                                   (DebuggerActions.POP_FRAME),
+                                                                                                (DebuggerActions.POP_FRAME),
                                                                                  Messages.getErrorIcon()));
         return;
       }

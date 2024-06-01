@@ -15,13 +15,14 @@
  */
 package consulo.java.regexp.impl;
 
-import com.intellij.java.language.projectRoots.JavaSdk;
+import com.intellij.java.language.projectRoots.JavaSdkType;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.component.util.UnicodeCharacterRegistry;
 import consulo.content.bundle.Sdk;
+import consulo.java.language.bundle.JavaSdkTypeUtil;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.ModuleUtilCore;
@@ -415,8 +416,8 @@ public class JavaRegExpHost implements RegExpLanguageHost {
     final Module module = element.getModule();
     if (module != null) {
       final Sdk sdk = ModuleUtilCore.getSdk(element, JavaModuleExtension.class);
-      if (sdk != null && sdk.getSdkType() instanceof JavaSdk) {
-        final JavaSdkVersion version = JavaSdk.getInstance().getVersion(sdk);
+      if (sdk != null && sdk.getSdkType() instanceof JavaSdkType) {
+        final JavaSdkVersion version = JavaSdkTypeUtil.getVersion(sdk);
         if (version != null) {
           return version;
         }

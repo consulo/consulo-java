@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.openapi.projectRoots.impl;
 
-import com.intellij.java.language.projectRoots.JavaSdk;
+import com.intellij.java.language.internal.DefaultJavaSdkType;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.projectRoots.OwnJdkVersionDetector;
 import com.intellij.java.language.projectRoots.roots.AnnotationOrderRootType;
@@ -29,17 +29,16 @@ import consulo.content.base.DocumentationOrderRootType;
 import consulo.content.base.SourcesOrderRootType;
 import consulo.content.bundle.Sdk;
 import consulo.content.bundle.SdkModificator;
-import consulo.content.bundle.SdkTable;
 import consulo.fileChooser.FileChooserDescriptor;
 import consulo.java.execution.projectRoots.OwnJdkUtil;
+import consulo.java.language.bundle.JavaSdkTypeUtil;
 import consulo.java.language.fileTypes.JModFileType;
-import consulo.java.language.impl.JavaIcons;
+import consulo.java.language.impl.icon.JavaPsiImplIconGroup;
 import consulo.logging.Logger;
 import consulo.platform.Platform;
 import consulo.process.cmd.GeneralCommandLine;
 import consulo.project.ProjectBundle;
 import consulo.ui.image.Image;
-import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.Sets;
 import consulo.util.dataholder.Key;
 import consulo.util.io.FileUtil;
@@ -51,10 +50,10 @@ import consulo.virtualFileSystem.VirtualFileManager;
 import consulo.virtualFileSystem.archive.ArchiveVfsUtil;
 import consulo.virtualFileSystem.archive.ZipArchiveFileType;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
@@ -68,20 +67,16 @@ import java.util.regex.Pattern;
  * @since Sep 17, 2004
  */
 @ExtensionImpl
-public class JavaSdkImpl extends JavaSdk {
-  private static final Logger LOG = Logger.getInstance(JavaSdkImpl.class);
+public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
+  private static final Logger LOG = Logger.getInstance(DefaultJavaSdkTypeImpl.class);
   // do not use javaw.exe for Windows because of issues with encoding
-  @NonNls
   private static final String VM_EXE_NAME = "java";
-  @NonNls
   private final Pattern myVersionStringPattern = Pattern.compile("^(.*)java version \"([1234567890_.]*)\"(.*)$");
-  @NonNls
   private static final String JAVA_VERSION_PREFIX = "java version ";
-  @NonNls
   private static final String OPENJDK_VERSION_PREFIX = "openjdk version ";
   public static final Key<Boolean> KEY = Key.create("JavaSdk");
 
-  public JavaSdkImpl() {
+  public DefaultJavaSdkTypeImpl() {
     super("JDK");
   }
 
@@ -91,9 +86,10 @@ public class JavaSdkImpl extends JavaSdk {
     return ProjectBundle.message("sdk.java.name");
   }
 
+  @Nonnull
   @Override
   public Image getIcon() {
-    return JavaIcons.Java;
+    return JavaPsiImplIconGroup.java();
   }
 
   @Nonnull
@@ -106,7 +102,7 @@ public class JavaSdkImpl extends JavaSdk {
   @Override
   @Nullable
   public String getDefaultDocumentationUrl(@Nonnull final Sdk sdk) {
-    final JavaSdkVersion version = getVersion(sdk);
+    final JavaSdkVersion version = JavaSdkTypeUtil.getVersion(sdk);
     if (version == JavaSdkVersion.JDK_1_5) {
       return "http://docs.oracle.com/javase/1.5.0/docs/api/";
     }
@@ -174,13 +170,16 @@ public class JavaSdkImpl extends JavaSdk {
       collectJavaPathsAtMac(list, "/Library/Java/JavaVirtualMachines");
       collectJavaPathsAtMac(list, "/System/Library/Java/JavaVirtualMachines");
       list.add("/usr/libexec/java_home");
-    } else if (SystemInfo.isSolaris) {
+    }
+    else if (SystemInfo.isSolaris) {
       list.add("/usr/jdk");
-    } else if (SystemInfo.isLinux) {
+    }
+    else if (SystemInfo.isLinux) {
       list.add("/usr/java");
       list.add("/opt/java");
       list.add("/usr/lib/jvm");
-    } else if (SystemInfo.isWindows) {
+    }
+    else if (SystemInfo.isWindows) {
       collectJavaPathsAtWindows(list, "ProgramFiles");
       collectJavaPathsAtWindows(list, "ProgramFiles(x86)");
     }
@@ -284,10 +283,12 @@ public class JavaSdkImpl extends JavaSdk {
         // user did not change name -> set it automatically
         final String versionString = getVersionString(sdkHome);
         suggestedName = versionString == null ? currentSdkName : matcher.replaceFirst("$1" + versionString + "$3");
-      } else {
+      }
+      else {
         suggestedName = currentSdkName;
       }
-    } else {
+    }
+    else {
       String versionString = getVersionString(sdkHome);
       suggestedName = versionString == null ? ProjectBundle.message("sdk.java.unknown.name") : getVersionNumber(versionString);
     }
@@ -311,7 +312,8 @@ public class JavaSdkImpl extends JavaSdk {
             int minor = Integer.parseInt(versionString.substring(dotIdx + 1, minorDot));
             versionString = major + "." + minor;
           }
-        } catch (NumberFormatException e) {
+        }
+        catch (NumberFormatException e) {
           // Do nothing. Use original version string if failed to parse according to major.minor pattern.
         }
       }
@@ -339,14 +341,16 @@ public class JavaSdkImpl extends JavaSdk {
           }
         }
       }
-    } else if (OwnJdkUtil.isModularRuntime(jdkHome)) {
+    }
+    else if (OwnJdkUtil.isModularRuntime(jdkHome)) {
       String jrtBaseUrl = JrtFileSystem.PROTOCOL_PREFIX + getPath(jdkHome) + JrtFileSystem.SEPARATOR;
       List<String> modules = readModulesFromReleaseFile(jdkHome);
       if (modules != null) {
         for (String module : modules) {
           sdkModificator.addRoot(jrtBaseUrl + module, BinariesOrderRootType.getInstance());
         }
-      } else {
+      }
+      else {
         VirtualFile jrt = VirtualFileManager.getInstance().findFileByUrl(jrtBaseUrl);
         if (jrt != null) {
           for (VirtualFile virtualFile : jrt.getChildren()) {
@@ -354,7 +358,8 @@ public class JavaSdkImpl extends JavaSdk {
           }
         }
       }
-    } else {
+    }
+    else {
       addJavaFxSources(jdkHome, sdkModificator);
 
       for (VirtualFile aClass : findClasses(jdkHome, false)) {
@@ -378,7 +383,8 @@ public class JavaSdkImpl extends JavaSdk {
             sdkModificator.addRoot(child, SourcesOrderRootType.getInstance());
           }
         }
-      } else {
+      }
+      else {
         sdkModificator.addRoot(srcZipFile, SourcesOrderRootType.getInstance());
       }
     }
@@ -386,7 +392,8 @@ public class JavaSdkImpl extends JavaSdk {
     VirtualFile docs = findDocs(jdkHome, "docs/api");
     if (docs != null) {
       sdkModificator.addRoot(docs, DocumentationOrderRootType.getInstance());
-    } else if (SystemInfo.isMac) {
+    }
+    else if (SystemInfo.isMac) {
       VirtualFile commonDocs = findDocs(jdkHome, "docs");
       if (commonDocs == null) {
         commonDocs = findInJar(new File(jdkHome, "docs.jar"), "doc/api");
@@ -436,7 +443,8 @@ public class JavaSdkImpl extends JavaSdk {
         if (modules != null) {
           return StringUtil.split(StringUtil.unquoteString(modules), " ");
         }
-      } catch (IOException | IllegalArgumentException e) {
+      }
+      catch (IOException | IllegalArgumentException e) {
         LOG.info(e);
       }
     }
@@ -444,7 +452,7 @@ public class JavaSdkImpl extends JavaSdk {
   }
 
   public static boolean attachJdkAnnotations(@Nonnull SdkModificator modificator) {
-    File pluginPath = PluginManager.getPluginPath(JavaSdkImpl.class);
+    File pluginPath = PluginManager.getPluginPath(DefaultJavaSdkTypeImpl.class);
 
     File file = new File(pluginPath, "jdk-annotations.jar");
 
@@ -473,53 +481,8 @@ public class JavaSdkImpl extends JavaSdk {
     return jdkInfo != null ? OwnJdkVersionDetector.formatVersionString(jdkInfo.version) : null;
   }
 
-  @Override
-  public int compareTo(@Nonnull String versionString, @Nonnull String versionNumber) {
-    return getVersionNumber(versionString).compareTo(versionNumber);
-  }
-
-  @Override
-  public JavaSdkVersion getVersion(@Nonnull Sdk sdk) {
-    return getVersion1(sdk);
-  }
-
-  private static JavaSdkVersion getVersion1(Sdk sdk) {
-    String version = sdk.getVersionString();
-    if (version == null) {
-      return null;
-    }
-    return JavaSdkVersion.fromVersionString(version);
-  }
-
-  @Override
-  @Nullable
-  public JavaSdkVersion getVersion(@Nonnull String versionString) {
-    return JavaSdkVersion.fromVersionString(versionString);
-  }
-
-  @Override
-  public boolean isOfVersionOrHigher(@Nonnull Sdk sdk, @Nonnull JavaSdkVersion version) {
-    JavaSdkVersion sdkVersion = getVersion(sdk);
-    return sdkVersion != null && sdkVersion.isAtLeast(version);
-  }
-
-  @Override
-  public Sdk createJdk(@Nonnull String jdkName, @Nonnull String home, boolean isJre) {
-    Sdk jdk = SdkTable.getInstance().createSdk(jdkName, this);
-    SdkModificator sdkModificator = jdk.getSdkModificator();
-
-    String path = home.replace(File.separatorChar, '/');
-    sdkModificator.setHomePath(path);
-    sdkModificator.setVersionString(jdkName); // must be set after home path, otherwise setting home path clears the version string
-    sdkModificator.commitChanges();
-
-    setupSdkPaths(jdk);
-
-    return jdk;
-  }
-
   private static List<VirtualFile> findClasses(File file, boolean isJre) {
-    List<VirtualFile> result = ContainerUtil.newArrayList();
+    List<VirtualFile> result = new ArrayList<>();
 
     List<File> rootFiles = getJdkClassesRoots(file, isJre);
     for (File child : rootFiles) {
@@ -545,36 +508,38 @@ public class JavaSdkImpl extends JavaSdk {
         File libExtDir = new File(openJdkRtJar.getParentFile(), "ext");
         File libEndorsedDir = new File(libDir, "endorsed");
         jarDirs = new File[]{
-            libEndorsedDir,
-            libDir,
-            classesDir,
-            libExtDir
+          libEndorsedDir,
+          libDir,
+          classesDir,
+          libExtDir
         };
-      } else {
+      }
+      else {
         File libDir = new File(home, "lib");
         File classesDir = new File(home, "../Classes");
         File libExtDir = new File(libDir, "ext");
         File libEndorsedDir = new File(libDir, "endorsed");
         jarDirs = new File[]{
-            libEndorsedDir,
-            libDir,
-            classesDir,
-            libExtDir
+          libEndorsedDir,
+          libDir,
+          classesDir,
+          libExtDir
         };
       }
-    } else {
+    }
+    else {
       File libDir = isJre ? new File(home, "lib") : new File(home, "jre/lib");
       File libExtDir = new File(libDir, "ext");
       File libEndorsedDir = new File(libDir, "endorsed");
       jarDirs = new File[]{
-          libEndorsedDir,
-          libDir,
-          libExtDir
+        libEndorsedDir,
+        libDir,
+        libExtDir
       };
     }
 
     Set<String> pathFilter = Sets.newHashSet(FileUtil.PATH_HASHING_STRATEGY);
-    List<File> rootFiles = ContainerUtil.newArrayList();
+    List<File> rootFiles = new ArrayList<>();
     for (File jarDir : jarDirs) {
       if (jarDir != null && jarDir.isDirectory()) {
         File[] jarFiles = jarDir.listFiles(jarFileFilter);
@@ -610,7 +575,8 @@ public class JavaSdkImpl extends JavaSdk {
   private static String getCanonicalPath(File file) {
     try {
       return file.getCanonicalPath();
-    } catch (IOException e) {
+    }
+    catch (IOException e) {
       return null;
     }
   }
@@ -650,8 +616,8 @@ public class JavaSdkImpl extends JavaSdk {
   @Override
   public boolean isRootTypeApplicable(OrderRootType type) {
     return type == BinariesOrderRootType.getInstance() ||
-        type == SourcesOrderRootType.getInstance() ||
-        type == DocumentationOrderRootType.getInstance() ||
-        type == AnnotationOrderRootType.getInstance();
+      type == SourcesOrderRootType.getInstance() ||
+      type == DocumentationOrderRootType.getInstance() ||
+      type == AnnotationOrderRootType.getInstance();
   }
 }

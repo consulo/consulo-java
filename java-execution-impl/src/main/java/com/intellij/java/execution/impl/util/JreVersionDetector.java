@@ -23,11 +23,11 @@
 package com.intellij.java.execution.impl.util;
 
 import com.intellij.java.execution.CommonJavaRunConfigurationParameters;
-import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.projectRoots.OwnJdkVersionDetector;
 import consulo.content.bundle.Sdk;
 import consulo.execution.configuration.ModuleBasedConfiguration;
+import consulo.java.language.bundle.JavaSdkTypeUtil;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
@@ -64,6 +64,6 @@ public class JreVersionDetector {
     if (jdk == null) {
       return false;
     }
-    return JavaSdk.getInstance().isOfVersionOrHigher(jdk, JavaSdkVersion.JDK_1_5);
+    return JavaSdkTypeUtil.isOfVersionOrHigher(jdk, JavaSdkVersion.JDK_1_5);
   }
 }

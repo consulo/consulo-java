@@ -18,7 +18,6 @@ package consulo.java.impl.intelliLang.pattern.compiler;
 
 import com.intellij.java.compiler.impl.PsiClassWriter;
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
@@ -31,6 +30,7 @@ import consulo.compiler.scope.CompileScope;
 import consulo.content.bundle.Sdk;
 import consulo.internal.org.objectweb.asm.ClassReader;
 import consulo.internal.org.objectweb.asm.ClassWriter;
+import consulo.java.language.bundle.JavaSdkTypeUtil;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.content.ProductionContentFolderTypeProvider;
 import consulo.language.psi.PsiFile;
@@ -45,7 +45,6 @@ import consulo.project.DumbService;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -113,7 +112,7 @@ public abstract class AnnotationBasedInstrumentingCompiler implements ClassInstr
     final Module module = index.getModuleForFile(sourceFile);
     if (module != null) {
       final Sdk jdk = ModuleUtilCore.getSdk(module, JavaModuleExtension.class);
-      final boolean jdk6 = jdk != null && JavaSdk.getInstance().isOfVersionOrHigher(jdk, JavaSdkVersion.JDK_1_6);
+      final boolean jdk6 = jdk != null && JavaSdkTypeUtil.isOfVersionOrHigher(jdk, JavaSdkVersion.JDK_1_6);
 
       final ModuleCompilerPathsManager compilerPathsManager = ModuleCompilerPathsManager.getInstance(module);
       final VirtualFile compilerOutputPath = compilerPathsManager.getCompilerOutput(ProductionContentFolderTypeProvider.getInstance());

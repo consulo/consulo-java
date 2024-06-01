@@ -18,7 +18,6 @@ package com.intellij.java.impl.javadoc;
 import com.intellij.java.execution.configurations.JavaCommandLineStateUtil;
 import com.intellij.java.language.JavadocBundle;
 import com.intellij.java.language.impl.projectRoots.ex.PathUtilEx;
-import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.java.language.projectRoots.JavaSdkType;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.psi.PsiJavaFile;
@@ -38,6 +37,7 @@ import consulo.execution.ui.console.RegexpFilter;
 import consulo.ide.impl.idea.ide.BrowserUtil;
 import consulo.ide.impl.idea.openapi.util.io.FileUtil;
 import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
+import consulo.java.language.bundle.JavaSdkTypeUtil;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
@@ -136,7 +136,7 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
       if (jdkPath == null) {
         throw new CantRunException(JavadocBundle.message("javadoc.generate.no.jdk.path"));
       }
-      JavaSdkVersion version = JavaSdk.getInstance().getVersion(jdk);
+      JavaSdkVersion version = JavaSdkTypeUtil.getVersion(jdk);
       if (myConfiguration.HEAP_SIZE != null && myConfiguration.HEAP_SIZE.trim().length() != 0) {
         if (version == null || version.isAtLeast(JavaSdkVersion.JDK_1_2)) {
           cmdLine.getParametersList().prepend("-J-Xmx" + myConfiguration.HEAP_SIZE + "m");
@@ -275,7 +275,7 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
 
       final PathsList classPath;
       final OrderEnumerator orderEnumerator = ProjectRootManager.getInstance(myProject).orderEntries(modules);
-      if (jdk.getSdkType() instanceof JavaSdk) {
+      if (jdk.getSdkType() instanceof JavaSdkType) {
         classPath = orderEnumerator.withoutSdk().withoutModuleSourceEntries().getPathsList();
       } else {
         //libraries are included into jdk

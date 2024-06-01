@@ -17,12 +17,13 @@ package com.intellij.java.language.impl.projectRoots.ex;
 
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.projectRoots.JavaSdkVersionUtil;
-import com.intellij.java.language.projectRoots.JavaSdk;
+import com.intellij.java.language.projectRoots.JavaSdkType;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import consulo.annotation.DeprecationInfo;
 import consulo.container.plugin.PluginManager;
 import consulo.content.bundle.Sdk;
 import consulo.content.bundle.SdkTypeId;
+import consulo.java.language.bundle.JavaSdkTypeUtil;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
@@ -83,8 +84,8 @@ public class JavaSdkUtil {
   public static boolean isJdkAtLeast(@Nullable Sdk jdk, @Nonnull JavaSdkVersion expected) {
     if (jdk != null) {
       SdkTypeId type = jdk.getSdkType();
-      if (type instanceof JavaSdk) {
-        JavaSdkVersion actual = ((JavaSdk) type).getVersion(jdk);
+      if (type instanceof JavaSdkType) {
+        JavaSdkVersion actual = JavaSdkTypeUtil.getVersion(jdk);
         if (actual != null) {
           return actual.isAtLeast(expected);
         }

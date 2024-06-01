@@ -46,5 +46,8 @@ open module consulo.java.language.api {
   exports consulo.java.language.fileTypes;
   exports consulo.java.language.module.extension;
   exports consulo.java.language.module.util;
+  exports consulo.java.language.bundle;
   exports consulo.java.language.psi;
+
+  exports com.intellij.java.language.internal to consulo.java;
 }
