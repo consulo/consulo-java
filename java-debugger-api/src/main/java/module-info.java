@@ -18,4 +18,5 @@ module consulo.java.debugger.api {
 	exports com.intellij.java.debugger.requests;
 	exports com.intellij.java.debugger.ui.classFilter;
 	exports com.intellij.java.debugger.ui.tree;
+	exports com.intellij.java.debugger.localize;
 }

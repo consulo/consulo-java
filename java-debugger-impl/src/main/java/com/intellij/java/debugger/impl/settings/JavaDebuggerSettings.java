@@ -22,7 +22,6 @@ import consulo.configurable.IdeaSimpleConfigurable;
 import consulo.configurable.OptionsBundle;
 import consulo.execution.debug.setting.DebuggerSettingsCategory;
 import consulo.execution.debug.setting.XDebuggerSettings;
-import consulo.ide.impl.idea.openapi.util.Getter;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
@@ -32,6 +31,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 
 import static java.util.Collections.singletonList;
 
@@ -52,27 +52,24 @@ public class JavaDebuggerSettings extends XDebuggerSettings<Element> {
   @Nonnull
   @Override
   public Collection<? extends Configurable> createConfigurables(@Nonnull DebuggerSettingsCategory category) {
-    Getter<DebuggerSettings> settingsGetter = () -> DebuggerSettings.getInstance();
+    Supplier<DebuggerSettings> settingsSupplier = DebuggerSettings::getInstance;
 
     switch (category) {
       case GENERAL:
-        return singletonList(IdeaSimpleConfigurable.create("reference.idesettings.debugger.launching",
-                                                           OptionsBundle.message("options.java.display.name"),
-                                                           DebuggerLaunchingConfigurable.class,
-                                                           settingsGetter));
+        return singletonList(new NewDebuggerLaunchingConfigurable(settingsSupplier));
       case DATA_VIEWS:
         return createDataViewsConfigurable();
       case STEPPING:
         return singletonList(IdeaSimpleConfigurable.create("reference.idesettings.debugger.stepping",
                                                            OptionsBundle.message("options.java.display.name"),
                                                            DebuggerSteppingConfigurable.class,
-                                                           settingsGetter));
+                                                           settingsSupplier));
       case HOTSWAP:
         return singletonList(IdeaSimpleConfigurable.create("reference.idesettings.debugger.hotswap",
                                                            OptionsBundle.message("options.java.display" +
                                                                                    ".name"),
                                                            JavaHotSwapConfigurableUi.class,
-                                                           settingsGetter));
+                                                           settingsSupplier));
     }
     return Collections.emptyList();
   }
@@ -85,12 +82,7 @@ public class JavaDebuggerSettings extends XDebuggerSettings<Element> {
                                                                        ".typerenderers",
                                                                      DebuggerBundle.message("user.renderers.configurable.display.name"),
                                                                      UserRenderersConfigurable.class,
-                                                                     new Getter<NodeRendererSettings>() {
-                                                                       @Override
-                                                                       public NodeRendererSettings get() {
-                                                                         return NodeRendererSettings.getInstance();
-                                                                       }
-                                                                     }));
+                                                                     NodeRendererSettings::getInstance));
   }
 
   @Override

@@ -20,93 +20,78 @@ import consulo.configurable.IdeaConfigurableUi;
 import consulo.ide.impl.idea.ui.components.panels.VerticalBox;
 import consulo.java.debugger.impl.apiAdapters.TransportClassDelegates;
 import consulo.ui.ex.awt.StateRestoringCheckBox;
-
 import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 import java.awt.*;
 
-class DebuggerLaunchingConfigurable implements IdeaConfigurableUi<DebuggerSettings>
-{
-	private JRadioButton myRbSocket;
-	private JRadioButton myRbShmem;
-	private StateRestoringCheckBox myCbForceClassicVM;
-	private JCheckBox myCbDisableJIT;
+class DebuggerLaunchingConfigurable implements IdeaConfigurableUi<DebuggerSettings> {
+  private JRadioButton myRbSocket;
+  private JRadioButton myRbShmem;
+  private StateRestoringCheckBox myCbForceClassicVM;
+  private JCheckBox myCbDisableJIT;
 
-	@Override
-	public void reset(@Nonnull DebuggerSettings settings)
-	{
-		Class<?> sharedMemoryTransportServiceClass = TransportClassDelegates.getSharedMemoryTransportServiceClass();
+  @Override
+  public void reset(@Nonnull DebuggerSettings settings) {
+    Class<?> sharedMemoryTransportServiceClass = TransportClassDelegates.getSharedMemoryTransportServiceClass();
 
-		if(settings.DEBUGGER_TRANSPORT == DebuggerSettings.SHMEM_TRANSPORT)
-		{
-			myRbShmem.setSelected(true);
-		}
-		else
-		{
-			myRbSocket.setSelected(true);
-		}
+    if (settings.DEBUGGER_TRANSPORT == DebuggerSettings.SHMEM_TRANSPORT) {
+      myRbShmem.setSelected(true);
+    }
+    else {
+      myRbSocket.setSelected(true);
+    }
 
-		myRbShmem.setEnabled(sharedMemoryTransportServiceClass != null);
+    myRbShmem.setEnabled(sharedMemoryTransportServiceClass != null);
 
-		myCbForceClassicVM.setSelected(settings.FORCE_CLASSIC_VM);
-		myCbDisableJIT.setSelected(settings.DISABLE_JIT);
-	}
+    myCbForceClassicVM.setSelected(settings.FORCE_CLASSIC_VM);
+    myCbDisableJIT.setSelected(settings.DISABLE_JIT);
+  }
 
-	@Override
-	public void apply(@Nonnull DebuggerSettings settings)
-	{
-		getSettingsTo(settings);
-	}
+  @Override
+  public void apply(@Nonnull DebuggerSettings settings) {
+    getSettingsTo(settings);
+  }
 
-	private void getSettingsTo(DebuggerSettings settings)
-	{
-		if(myRbShmem.isSelected())
-		{
-			settings.DEBUGGER_TRANSPORT = DebuggerSettings.SHMEM_TRANSPORT;
-		}
-		else
-		{
-			settings.DEBUGGER_TRANSPORT = DebuggerSettings.SOCKET_TRANSPORT;
-		}
-		settings.FORCE_CLASSIC_VM = myCbForceClassicVM.isSelectedWhenSelectable();
-		settings.DISABLE_JIT = myCbDisableJIT.isSelected();
-	}
+  private void getSettingsTo(DebuggerSettings settings) {
+    settings.DEBUGGER_TRANSPORT = myRbShmem.isSelected() ? DebuggerSettings.SHMEM_TRANSPORT : DebuggerSettings.SOCKET_TRANSPORT;
+    settings.FORCE_CLASSIC_VM = myCbForceClassicVM.isSelectedWhenSelectable();
+    settings.DISABLE_JIT = myCbDisableJIT.isSelected();
+  }
 
-	@Override
-	public boolean isModified(@Nonnull DebuggerSettings currentSettings)
-	{
-		DebuggerSettings debuggerSettings = currentSettings.clone();
-		getSettingsTo(debuggerSettings);
-		return !debuggerSettings.equals(currentSettings);
-	}
+  @Override
+  public boolean isModified(@Nonnull DebuggerSettings currentSettings) {
+    DebuggerSettings debuggerSettings = currentSettings.clone();
+    getSettingsTo(debuggerSettings);
+    return !debuggerSettings.equals(currentSettings);
+  }
 
-	@Nonnull
-	@Override
-	public JComponent getComponent()
-	{
-		myCbForceClassicVM = new StateRestoringCheckBox(DebuggerBundle.message("label.debugger.launching.configurable.force.classic.vm"));
-		myCbDisableJIT = new JCheckBox(DebuggerBundle.message("label.debugger.launching.configurable.disable.jit"));
-		myRbSocket = new JRadioButton(DebuggerBundle.message("label.debugger.launching.configurable.socket"));
-		myRbShmem = new JRadioButton(DebuggerBundle.message("label.debugger.launching.configurable.shmem"));
+  @Nonnull
+  @Override
+  public JComponent getComponent() {
+    myCbForceClassicVM = new StateRestoringCheckBox(DebuggerBundle.message("label.debugger.launching.configurable.force.classic.vm"));
+    myCbDisableJIT = new JCheckBox(DebuggerBundle.message("label.debugger.launching.configurable.disable.jit"));
+    myRbSocket = new JRadioButton(DebuggerBundle.message("label.debugger.launching.configurable.socket"));
+    myRbShmem = new JRadioButton(DebuggerBundle.message("label.debugger.launching.configurable.shmem"));
 
-		final ButtonGroup gr = new ButtonGroup();
-		gr.add(myRbSocket);
-		gr.add(myRbShmem);
-		final Box box = Box.createHorizontalBox();
-		box.add(myRbSocket);
-		box.add(myRbShmem);
-		final JPanel transportPanel = new JPanel(new BorderLayout());
-		transportPanel.add(new JLabel(DebuggerBundle.message("label.debugger.launching.configurable.debugger.transport")), BorderLayout.WEST);
-		transportPanel.add(box, BorderLayout.CENTER);
+    final ButtonGroup gr = new ButtonGroup();
+    gr.add(myRbSocket);
+    gr.add(myRbShmem);
+    final Box box = Box.createHorizontalBox();
+    box.add(myRbSocket);
+    box.add(myRbShmem);
+    final JPanel transportPanel = new JPanel(new BorderLayout());
+    transportPanel.add(new JLabel(DebuggerBundle.message("label.debugger.launching.configurable.debugger.transport")), BorderLayout.WEST);
+    transportPanel.add(box, BorderLayout.CENTER);
 
-		VerticalBox panel = new VerticalBox();
-		panel.setOpaque(false);
-		panel.add(transportPanel);
-		panel.add(myCbForceClassicVM);
-		panel.add(myCbDisableJIT);
+    VerticalBox panel = new VerticalBox();
+    panel.setOpaque(false);
+    panel.add(transportPanel);
+    panel.add(myCbForceClassicVM);
+    panel.add(myCbDisableJIT);
 
-		JPanel result = new JPanel(new BorderLayout());
-		result.add(panel, BorderLayout.NORTH);
-		return result;
-	}
+    JPanel result = new JPanel(new BorderLayout());
+    result.add(panel, BorderLayout.NORTH);
+    return result;
+  }
 }
