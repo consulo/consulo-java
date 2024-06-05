@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.ig.cloneable;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
@@ -25,6 +23,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.CloneUtils;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class CloneCallsSuperCloneInspection extends BaseInspection {
@@ -36,14 +35,12 @@ public class CloneCallsSuperCloneInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "clone.doesnt.call.super.clone.display.name");
+    return InspectionGadgetsBundle.message("clone.doesnt.call.super.clone.display.name");
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "clone.doesnt.call.super.clone.problem.descriptor");
+    return InspectionGadgetsBundle.message("clone.doesnt.call.super.clone.problem.descriptor");
   }
 
   public boolean isEnabledByDefault() {
