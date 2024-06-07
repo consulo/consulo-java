@@ -17,11 +17,13 @@ package com.intellij.java.impl.codeInsight.generation.ui;
 
 import com.intellij.java.impl.codeInsight.generation.EqualsHashCodeTemplatesManager;
 import com.intellij.java.impl.codeInsight.generation.GenerateEqualsHelper;
+import com.intellij.java.impl.generate.template.TemplateResource;
+import com.intellij.java.impl.generate.view.GenerateTemplateConfigurable;
 import consulo.configurable.ConfigurationException;
 import consulo.configurable.UnnamedConfigurable;
-import consulo.ide.impl.idea.openapi.ui.NamedItemsListEditor;
 import consulo.project.Project;
 import consulo.ui.ex.awt.JBUI;
+import consulo.ui.ex.awt.NamedItemsListEditor;
 import consulo.ui.ex.awt.Splitter;
 import consulo.ui.ex.awt.TitledSeparator;
 import consulo.util.collection.HashingStrategy;
@@ -31,8 +33,6 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import com.intellij.java.impl.generate.template.TemplateResource;
-import com.intellij.java.impl.generate.view.GenerateTemplateConfigurable;
 
 import javax.swing.*;
 import java.awt.*;

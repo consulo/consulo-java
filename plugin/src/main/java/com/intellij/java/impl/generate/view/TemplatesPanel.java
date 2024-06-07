@@ -19,20 +19,20 @@
  */
 package com.intellij.java.impl.generate.view;
 
-import com.intellij.java.language.psi.PsiType;
-import consulo.configurable.ConfigurationException;
-import consulo.configurable.UnnamedConfigurable;
-import consulo.ide.impl.idea.openapi.ui.NamedItemsListEditor;
-import consulo.project.Project;
-import consulo.util.collection.HashingStrategy;
-import consulo.util.lang.Comparing;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.java.impl.generate.template.TemplateResource;
 import com.intellij.java.impl.generate.template.TemplatesManager;
 import com.intellij.java.impl.generate.template.toString.ToStringTemplatesManager;
-
+import com.intellij.java.language.psi.PsiType;
+import consulo.configurable.ConfigurationException;
+import consulo.configurable.UnnamedConfigurable;
+import consulo.project.Project;
+import consulo.ui.ex.awt.NamedItemsListEditor;
+import consulo.util.collection.HashingStrategy;
+import consulo.util.lang.Comparing;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NonNls;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.function.Supplier;
