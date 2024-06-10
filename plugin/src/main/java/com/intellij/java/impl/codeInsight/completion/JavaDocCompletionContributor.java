@@ -54,6 +54,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.language.util.ProcessingContext;
 import consulo.logging.Logger;
+import consulo.platform.Platform;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.CharArrayUtil;
@@ -355,7 +356,7 @@ public class JavaDocCompletionContributor extends CompletionContributor {
 
     private static void addSpecialTags(final List<String> result, PsiDocComment comment, String tagName) {
       if ("author".equals(tagName)) {
-        result.add(tagName + " " + SystemProperties.getUserName());
+        result.add(tagName + " " + Platform.current().user().name());
         return;
       }
 
