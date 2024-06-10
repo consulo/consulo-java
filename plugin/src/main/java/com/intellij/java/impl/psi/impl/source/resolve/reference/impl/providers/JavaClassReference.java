@@ -33,7 +33,6 @@ import com.intellij.java.language.psi.search.PackageScope;
 import com.intellij.java.language.psi.util.ClassKind;
 import com.intellij.java.language.psi.util.ClassUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.component.util.Iconable;
 import consulo.document.util.TextRange;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupElementBuilder;
@@ -57,10 +56,9 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.CharArrayUtil;
 import consulo.util.lang.StringUtil;
-import consulo.util.lang.function.Condition;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -275,16 +273,11 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
     for (final PsiPackage subPackage : aPackage.getSubPackages(scope)) {
       final String shortName = subPackage.getQualifiedName().substring(startOffset);
       if (PsiNameHelper.getInstance(subPackage.getProject()).isIdentifier(shortName)) {
-        list.add(LookupElementBuilder.create(subPackage).withIcon(IconDescriptorUpdaters.getIcon(subPackage, Iconable.ICON_FLAG_VISIBILITY)));
+        list.add(LookupElementBuilder.create(subPackage).withIcon(IconDescriptorUpdaters.getIcon(subPackage, 0)));
       }
     }
 
-    final List<PsiClass> classes = ContainerUtil.filter(aPackage.getClasses(scope), new Condition<PsiClass>() {
-      @Override
-      public boolean value(PsiClass psiClass) {
-        return StringUtil.isNotEmpty(psiClass.getName());
-      }
-    });
+    final List<PsiClass> classes = ContainerUtil.filter(aPackage.getClasses(scope), psiClass -> StringUtil.isNotEmpty(psiClass.getName()));
     final Map<CustomizableReferenceProvider.CustomizationKey, Object> options = getOptions();
     if (options != null) {
       final boolean instantiatable = JavaClassReferenceProvider.INSTANTIATABLE.getBooleanValue(options);

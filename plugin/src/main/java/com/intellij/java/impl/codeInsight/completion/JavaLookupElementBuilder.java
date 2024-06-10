@@ -18,11 +18,9 @@ package com.intellij.java.impl.codeInsight.completion;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.language.psi.util.PsiFormatUtilBase;
-import consulo.component.util.Iconable;
 import consulo.language.editor.completion.lookup.LookupElementBuilder;
 import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.util.lang.StringUtil;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -41,7 +39,7 @@ public class JavaLookupElementBuilder {
                                               final String lookupString,
                                               final @Nullable PsiClass qualifierClass) {
     final LookupElementBuilder builder = LookupElementBuilder.create(field, lookupString).withIcon(
-      IconDescriptorUpdaters.getIcon(field, Iconable.ICON_FLAG_VISIBILITY));
+      IconDescriptorUpdaters.getIcon(field, 0));
     return setBoldIfInClass(field, qualifierClass, builder);
   }
 
@@ -53,7 +51,7 @@ public class JavaLookupElementBuilder {
                                                @Nonnull String lookupString, final @Nonnull PsiSubstitutor substitutor,
                                                @Nullable PsiClass qualifierClass) {
     LookupElementBuilder builder = LookupElementBuilder.create(method, lookupString)
-      .withIcon(IconDescriptorUpdaters.getIcon(method, Iconable.ICON_FLAG_VISIBILITY))
+      .withIcon(IconDescriptorUpdaters.getIcon(method, 0))
       .withPresentableText(method.getName())
       .withTailText(PsiFormatUtil.formatMethod(method, substitutor,
                                                PsiFormatUtilBase.SHOW_PARAMETERS,
@@ -86,7 +84,7 @@ public class JavaLookupElementBuilder {
                                               final String lookupString,
                                               final boolean withLocation) {
     LookupElementBuilder builder =
-      LookupElementBuilder.create(psiClass, lookupString).withIcon(IconDescriptorUpdaters.getIcon(psiClass, Iconable.ICON_FLAG_VISIBILITY));
+      LookupElementBuilder.create(psiClass, lookupString).withIcon(IconDescriptorUpdaters.getIcon(psiClass, 0));
     String name = psiClass.getName();
     if (StringUtil.isNotEmpty(name)) {
       builder = builder.withLookupString(name);

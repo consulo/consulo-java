@@ -25,7 +25,6 @@ import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.language.psi.util.PsiFormatUtilBase;
 import com.intellij.java.language.util.VisibilityUtil;
 import consulo.application.AllIcons;
-import consulo.component.util.Iconable;
 import consulo.language.editor.completion.CompletionParameters;
 import consulo.language.editor.completion.CompletionResultSet;
 import consulo.language.editor.completion.CompletionType;
@@ -93,7 +92,7 @@ public class JavaGenerateMemberCompletionContributor {
       Collections.addAll(prototypes, GetterSetterPrototypeProvider.generateGetterSetters(field, false));
       for (final PsiMethod prototype : prototypes) {
         if (parent.findMethodBySignature(prototype, false) == null && addedSignatures.add(prototype.getSignature(PsiSubstitutor.EMPTY))) {
-          Image icon = IconDescriptorUpdaters.getIcon(prototype, Iconable.ICON_FLAG_VISIBILITY);
+          Image icon = IconDescriptorUpdaters.getIcon(prototype, 0);
           result.addElement(createGenerateMethodElement(prototype, PsiSubstitutor.EMPTY, icon, "", new InsertHandler<LookupElement>() {
             @Override
             public void handleInsert(InsertionContext context, LookupElement item) {

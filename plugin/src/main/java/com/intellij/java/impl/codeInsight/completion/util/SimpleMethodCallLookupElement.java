@@ -15,14 +15,13 @@
  */
 package com.intellij.java.impl.codeInsight.completion.util;
 
-import consulo.language.editor.completion.lookup.InsertionContext;
-import consulo.language.editor.completion.lookup.LookupElement;
-import consulo.language.editor.completion.lookup.LookupElementPresentation;
-import consulo.component.util.Iconable;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
+import consulo.language.editor.completion.lookup.InsertionContext;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElementPresentation;
 import consulo.language.icon.IconDescriptorUpdaters;
 import jakarta.annotation.Nonnull;
 
@@ -53,7 +52,7 @@ public class SimpleMethodCallLookupElement extends LookupElement {
 
   @Override
   public void renderElement(LookupElementPresentation presentation) {
-    presentation.setIcon(IconDescriptorUpdaters.getIcon(myMethod, Iconable.ICON_FLAG_VISIBILITY));
+    presentation.setIcon(IconDescriptorUpdaters.getIcon(myMethod, 0));
     presentation.setItemText(myMethod.getName());
     presentation.setTailText(PsiFormatUtil.formatMethod(myMethod,
                                                         PsiSubstitutor.EMPTY,

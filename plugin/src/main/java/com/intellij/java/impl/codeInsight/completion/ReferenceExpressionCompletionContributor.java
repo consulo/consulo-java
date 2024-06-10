@@ -28,7 +28,6 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.application.AllIcons;
 import consulo.application.util.matcher.PrefixMatcher;
-import consulo.component.util.Iconable;
 import consulo.externalService.statistic.FeatureUsageTracker;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
@@ -49,10 +48,10 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -251,7 +250,7 @@ public class ReferenceExpressionCompletionContributor {
         final PsiExpression[] dimensions = newExpression.getArrayDimensions();
         if (dimensions.length == 1 && "1".equals(dimensions[0].getText()) && newExpression.getArrayInitializer() == null) {
           final String text = variable.getName() + "[0]";
-          return new ExpressionLookupItem(createExpression(text, element), IconDescriptorUpdaters.getIcon(variable, Iconable.ICON_FLAG_VISIBILITY), text, text);
+          return new ExpressionLookupItem(createExpression(text, element), IconDescriptorUpdaters.getIcon(variable, 0), text, text);
         }
       }
     }
@@ -309,7 +308,7 @@ public class ReferenceExpressionCompletionContributor {
                                               final PsiType expectedType) throws IncorrectOperationException {
     if (itemType instanceof PsiArrayType && expectedType.isAssignableFrom(((PsiArrayType) itemType).getComponentType())) {
       final PsiExpression conversion = createExpression(getQualifierText(qualifier) + prefix + "[0]", element);
-      result.accept(new ExpressionLookupItem(conversion, IconDescriptorUpdaters.getIcon(object, Iconable.ICON_FLAG_VISIBILITY), prefix + "[...]", prefix) {
+      result.accept(new ExpressionLookupItem(conversion, IconDescriptorUpdaters.getIcon(object, 0), prefix + "[...]", prefix) {
         @Override
         public void handleInsert(InsertionContext context) {
           FeatureUsageTracker.getInstance().triggerFeatureUsed(JavaCompletionFeatures.SECOND_SMART_COMPLETION_ARRAY_MEMBER);
