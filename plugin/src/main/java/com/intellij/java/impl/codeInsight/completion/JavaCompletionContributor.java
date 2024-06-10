@@ -30,7 +30,6 @@ import com.intellij.java.language.impl.psi.filters.classes.AnnotationTypeFilter;
 import com.intellij.java.language.impl.psi.filters.element.ModifierFilter;
 import com.intellij.java.language.impl.psi.impl.source.PsiJavaCodeReferenceElementImpl;
 import com.intellij.java.language.impl.psi.impl.source.PsiLabelReference;
-import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.impl.psi.scope.ElementClassFilter;
 import com.intellij.java.language.patterns.PsiJavaElementPattern;
 import com.intellij.java.language.patterns.PsiNameValuePairPattern;
@@ -40,8 +39,6 @@ import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.matcher.PrefixMatcher;
 import consulo.codeEditor.Editor;
-import consulo.codeEditor.EditorEx;
-import consulo.codeEditor.HighlighterIterator;
 import consulo.document.Document;
 import consulo.document.util.DocumentUtil;
 import consulo.externalService.statistic.FeatureUsageTracker;
@@ -50,7 +47,6 @@ import consulo.ide.impl.idea.codeInsight.completion.LegacyCompletionContributor;
 import consulo.ide.impl.idea.codeInsight.completion.WordCompletionContributor;
 import consulo.language.LangBundle;
 import consulo.language.Language;
-import consulo.language.ast.IElementType;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.completion.*;
 import consulo.language.editor.completion.lookup.*;
@@ -68,9 +64,9 @@ import consulo.util.collection.MultiMap;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.function.Condition;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -278,8 +274,6 @@ public class JavaCompletionContributor extends CompletionContributor {
         .isNotEmpty(matcher.getPrefix())) {
       new JavaStaticMemberProcessor(parameters).processStaticMethodsGlobally(matcher, result);
     }
-
-    result.stopHere();
   }
 
   private static void addIdentifierVariants(@Nonnull CompletionParameters parameters, PsiElement position, CompletionResultSet result, JavaCompletionSession session, PrefixMatcher matcher) {
