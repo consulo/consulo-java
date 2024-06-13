@@ -15,26 +15,24 @@
  */
 package com.intellij.java.debugger.impl.actions;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import consulo.ide.impl.idea.xdebugger.impl.ui.tree.actions.XDebuggerTreeActionBase;
-import jakarta.annotation.Nonnull;
-
+import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.JavaValue;
 import com.intellij.java.debugger.impl.engine.events.DebuggerContextCommandImpl;
-import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.tree.render.NodeRenderer;
-import consulo.execution.debug.frame.XValue;
-import consulo.ui.ex.action.*;
-import consulo.ui.ex.action.ToggleAction;
 import consulo.application.dumb.DumbAware;
+import consulo.execution.debug.frame.XValue;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.actions.XDebuggerTreeActionBase;
 import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 import consulo.logging.Logger;
+import consulo.ui.ex.action.*;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ViewAsGroup extends ActionGroup implements DumbAware
 {
@@ -44,7 +42,7 @@ public class ViewAsGroup extends ActionGroup implements DumbAware
 
 	public ViewAsGroup()
 	{
-		super(null, true);
+		setPopup(true);
 	}
 
 	private static class RendererAction extends ToggleAction
