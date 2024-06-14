@@ -259,16 +259,14 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
   }
 
   protected void restartAnalysis(final Project project, final AnalysisScope scope) {
-    TransactionGuard guard = TransactionGuard.getInstance();
-    TransactionId id = guard.getContextTransaction();
-    DumbService.getInstance(project).smartInvokeLater(() -> TransactionGuard.getInstance().submitTransaction(project, id, () ->
-    {
+    DumbService.getInstance(project).smartInvokeLater(() -> {
       if (DumbService.isDumb(project)) {
         restartAnalysis(project, scope);
-      } else {
+      }
+      else {
         analyze(project, scope);
       }
-    }));
+    });
   }
 
   private void showUsageView(@Nonnull Project project, final UsageInfo[] usageInfos, @Nonnull AnalysisScope scope) {

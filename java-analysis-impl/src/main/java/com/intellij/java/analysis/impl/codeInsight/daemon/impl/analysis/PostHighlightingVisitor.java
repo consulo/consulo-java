@@ -34,8 +34,6 @@ import com.intellij.java.language.psi.search.searches.SuperMethodsSearch;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.util.VisibilityUtil;
-import consulo.application.ApplicationManager;
-import consulo.application.TransactionGuard;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.util.ConcurrentFactoryMap;
 import consulo.component.ProcessCanceledException;
@@ -67,16 +65,16 @@ import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import org.jetbrains.annotations.PropertyKey;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.PropertyKey;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public class PostHighlightingVisitor {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.PostHighlightingPass");
+  private static final Logger LOG = Logger.getInstance(PostHighlightingVisitor.class);
   private final RefCountHolder myRefCountHolder;
   @Nonnull
   private final Project myProject;
@@ -96,11 +94,9 @@ public class PostHighlightingVisitor {
   private void optimizeImportsOnTheFlyLater(@Nonnull final ProgressIndicator progress) {
     if ((myHasRedundantImports || myHasMissortedImports) && !progress.isCanceled()) {
       // schedule optimise action at the time of session disposal, which is after all applyInformation() calls
-      Disposable invokeFixLater = () ->
-      {
+      Disposable invokeFixLater = () -> {
         // later because should invoke when highlighting is finished
-        TransactionGuard.getInstance().submitTransactionLater(myProject, () ->
-        {
+        myProject.getUIAccess().give(() -> {
           if (!myFile.isValid() || !myFile.isWritable()) {
             return;
           }
@@ -135,8 +131,7 @@ public class PostHighlightingVisitor {
 
     myRefCountHolder = refCountHolder;
 
-
-    ApplicationManager.getApplication().assertReadAccessAllowed();
+    myProject.getApplication().assertReadAccessAllowed();
 
     InspectionProfile profile = InspectionProjectProfileManager.getInstance(myProject).getInspectionProfile();
 
