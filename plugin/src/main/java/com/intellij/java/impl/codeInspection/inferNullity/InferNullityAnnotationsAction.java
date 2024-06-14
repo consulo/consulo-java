@@ -22,8 +22,6 @@ import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.application.ApplicationManager;
 import consulo.application.Result;
-import consulo.application.TransactionGuard;
-import consulo.application.TransactionId;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
 import consulo.application.util.function.Computable;
