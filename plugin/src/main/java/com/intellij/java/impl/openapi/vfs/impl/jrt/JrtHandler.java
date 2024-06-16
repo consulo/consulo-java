@@ -1,9 +1,8 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.impl.openapi.vfs.impl.jrt;
 
-import consulo.logging.Logger;
-import consulo.application.util.SystemInfo;
 import consulo.ide.impl.idea.openapi.vfs.impl.ArchiveHandler;
+import consulo.logging.Logger;
 import consulo.util.lang.ref.SoftReference;
 import jakarta.annotation.Nonnull;
 
@@ -68,19 +67,7 @@ class JrtHandler extends ArchiveHandler
 			String path = getFile().getPath();
 			try
 			{
-				if(SystemInfo.IS_AT_LEAST_JAVA9)
-				{
-					fs = FileSystems.newFileSystem(ROOT_URI, Collections.singletonMap("java.home", path));
-				}
-				else
-				{
-					File file = new File(path, "lib/jrt-fs.jar");
-					if(!file.exists())
-					{
-						throw new IOException("Missing provider: " + file);
-					}
-					fs = FileSystems.newFileSystem(ROOT_URI, Collections.emptyMap(), new MyClassLoader(file));
-				}
+				fs = FileSystems.newFileSystem(ROOT_URI, Collections.singletonMap("java.home", path));
 				myFileSystem = new SoftReference<>(fs);
 			}
 			catch(RuntimeException | Error e)
