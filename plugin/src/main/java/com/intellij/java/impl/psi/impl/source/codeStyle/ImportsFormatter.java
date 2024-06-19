@@ -29,8 +29,6 @@ import consulo.util.lang.CharArrayUtil;
 import consulo.util.lang.StringUtil;
 import consulo.xml.psi.XmlRecursiveElementVisitor;
 import consulo.xml.psi.xml.*;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 
 /**
@@ -41,12 +39,8 @@ public class ImportsFormatter extends XmlRecursiveElementVisitor {
 
   private final FormattingDocumentModelImpl myDocumentModel;
   private final CommonCodeStyleSettings.IndentOptions myIndentOptions;
-  private static final
-  @NonNls
-  String PAGE_DIRECTIVE = "page";
-  private static final
-  @NonNls
-  String IMPORT_ATT = "import";
+  private static final String PAGE_DIRECTIVE = "page";
+  private static final String IMPORT_ATT = "import";
 
   private final PostFormatProcessorHelper myPostProcessor;
 
@@ -95,7 +89,7 @@ public class ImportsFormatter extends XmlRecursiveElementVisitor {
   }
 
   private String formatImports(final int startOffset, final String value) {
-    final StringBuffer result = new StringBuffer();
+    final StringBuilder result = new StringBuilder();
     String offset = calcOffset(startOffset);
     final String[] imports = value.split(",");
     if (imports.length >= 1) {

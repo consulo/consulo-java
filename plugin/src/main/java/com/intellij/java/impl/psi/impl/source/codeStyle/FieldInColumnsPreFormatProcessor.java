@@ -20,16 +20,15 @@ import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.psi.PsiField;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.ast.ASTNode;
-import consulo.project.Project;
 import consulo.document.util.TextRange;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiFile;
+import consulo.language.ast.ASTNode;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.codeStyle.CommonCodeStyleSettings;
-import consulo.ide.impl.psi.impl.source.codeStyle.PreFormatProcessor;
+import consulo.language.codeStyle.PreFormatProcessor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
-
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 /**

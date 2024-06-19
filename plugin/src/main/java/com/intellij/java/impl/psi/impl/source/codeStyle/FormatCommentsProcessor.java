@@ -1,8 +1,6 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.impl.psi.impl.source.codeStyle;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.codeStyle.CodeStyle;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.java.impl.psi.impl.source.codeStyle.javadoc.CommentFormatter;
 import com.intellij.java.language.JavaLanguage;
@@ -10,15 +8,16 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import consulo.language.ast.ASTNode;
-import consulo.language.inject.InjectedLanguageManager;
-import consulo.project.Project;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.document.util.TextRange;
+import consulo.language.ast.ASTNode;
+import consulo.language.codeStyle.CodeStyle;
+import consulo.language.codeStyle.PreFormatProcessor;
+import consulo.language.impl.psi.SourceTreeToPsiMap;
+import consulo.language.inject.InjectedLanguageManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import consulo.language.impl.psi.SourceTreeToPsiMap;
-import consulo.ide.impl.psi.impl.source.codeStyle.PreFormatProcessor;
-
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl

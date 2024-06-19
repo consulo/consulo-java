@@ -17,11 +17,10 @@ package com.intellij.java.impl.psi.impl.source.codeStyle;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.document.util.TextRange;
+import consulo.language.codeStyle.CodeStyleSettings;
+import consulo.language.codeStyle.PostFormatProcessor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import consulo.language.codeStyle.CodeStyleSettings;
-import consulo.ide.impl.psi.impl.source.codeStyle.PostFormatProcessor;
-
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl

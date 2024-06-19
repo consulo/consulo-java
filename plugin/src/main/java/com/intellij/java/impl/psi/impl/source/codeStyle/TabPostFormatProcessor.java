@@ -17,19 +17,18 @@ package com.intellij.java.impl.psi.impl.source.codeStyle;
 
 import com.intellij.java.language.JavaLanguage;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.ast.ASTNode;
-import consulo.language.Language;
 import consulo.document.Document;
-import consulo.language.file.LanguageFileType;
 import consulo.document.util.TextRange;
-import consulo.util.lang.StringUtil;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiFile;
+import consulo.language.Language;
+import consulo.language.ast.ASTNode;
 import consulo.language.codeStyle.CodeStyleSettings;
 import consulo.language.codeStyle.FormatterUtil;
-import consulo.ide.impl.psi.impl.source.codeStyle.PostFormatProcessor;
+import consulo.language.codeStyle.PostFormatProcessor;
+import consulo.language.file.LanguageFileType;
 import consulo.language.impl.ast.TreeUtil;
-
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
