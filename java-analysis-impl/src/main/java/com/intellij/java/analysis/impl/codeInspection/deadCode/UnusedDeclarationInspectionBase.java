@@ -457,7 +457,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
       }
     }
 
-    return myContext.getProject().getExtensionPoint(ImplicitUsageProvider.class).findFirstSafe(it -> it.isImplicitUsage(element)) != null;
+    return project.getExtensionPoint(ImplicitUsageProvider.class).findFirstSafe(it -> it.isImplicitUsage(element)) != null;
   }
 
   public boolean isGlobalEnabledInEditor() {
