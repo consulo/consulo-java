@@ -15,7 +15,7 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 
-import com.intellij.java.analysis.codeInsight.daemon.UnusedImportProvider;
+import com.intellij.java.analysis.codeInsight.daemon.JavaImplicitUsageProvider;
 import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.GlobalUsageHelper;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.JavaHighlightInfoTypes;
@@ -37,7 +37,6 @@ import com.intellij.java.language.util.VisibilityUtil;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.util.ConcurrentFactoryMap;
 import consulo.component.ProcessCanceledException;
-import consulo.component.extension.Extensions;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
 import consulo.document.Document;
@@ -54,10 +53,7 @@ import consulo.language.editor.inspection.scheme.InspectionProjectProfileManager
 import consulo.language.editor.intention.EmptyIntentionAction;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.QuickFixAction;
-import consulo.language.editor.rawHighlight.HighlightDisplayKey;
-import consulo.language.editor.rawHighlight.HighlightInfo;
-import consulo.language.editor.rawHighlight.HighlightInfoHolder;
-import consulo.language.editor.rawHighlight.HighlightInfoType;
+import consulo.language.editor.rawHighlight.*;
 import consulo.language.editor.util.CollectHighlightsUtil;
 import consulo.language.file.FileViewProvider;
 import consulo.language.pom.PomNamedTarget;
@@ -214,13 +210,13 @@ public class PostHighlightingVisitor {
                                                                                                                    .shouldInspect(myFile)) {
       return true;
     }
-    final ImplicitUsageProvider[] implicitUsageProviders = Extensions.getExtensions(ImplicitUsageProvider.EP_NAME);
-    for (ImplicitUsageProvider provider : implicitUsageProviders) {
-      if (provider instanceof UnusedImportProvider && ((UnusedImportProvider)provider).isUnusedImportEnabled(myFile)) {
-        return true;
+
+    return myProject.getExtensionPoint(ImplicitUsageProvider.class).findFirstSafe(implicitUsageProvider -> {
+      if (implicitUsageProvider instanceof JavaImplicitUsageProvider javaImplicitUsageProvider) {
+        return javaImplicitUsageProvider.isUnusedImportEnabled(myFile);
       }
-    }
-    return false;
+      return false;
+    }) != null;
   }
 
   @Nullable

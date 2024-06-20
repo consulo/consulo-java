@@ -55,17 +55,10 @@ public class UnusedSymbolUtil {
   public static boolean isImplicitUsage(@Nonnull Project project,
                                         @Nonnull PsiModifierListOwner element,
                                         @Nonnull ProgressIndicator progress) {
-    if (isInjected(project, element)) {
-      return true;
-    }
-    for (ImplicitUsageProvider provider : ImplicitUsageProvider.EP_NAME.getExtensionList()) {
+    return isInjected(project, element) || project.getExtensionPoint(ImplicitUsageProvider.class).findFirstSafe(provider -> {
       progress.checkCanceled();
-      if (provider.isImplicitUsage(element)) {
-        return true;
-      }
-    }
-
-    return false;
+      return provider.isImplicitUsage(element);
+    }) != null;
   }
 
   public static boolean isImplicitRead(@Nonnull PsiVariable variable) {
@@ -75,15 +68,11 @@ public class UnusedSymbolUtil {
   public static boolean isImplicitRead(@Nonnull Project project,
                                        @Nonnull PsiVariable element,
                                        @Nullable ProgressIndicator progress) {
-    for (ImplicitUsageProvider provider : ImplicitUsageProvider.EP_NAME.getExtensionList()) {
+    return project.getExtensionPoint(ImplicitUsageProvider.class).findFirstSafe(provider -> {
       ProgressManager.checkCanceled();
-      if (provider.isImplicitRead(element)) {
-        return true;
-      }
-    }
-    return isInjected(project, element);
+      return provider.isImplicitRead(element);
+    }) != null || isInjected(project, element);
   }
-
 
   public static boolean isImplicitWrite(@Nonnull PsiVariable variable) {
     return isImplicitWrite(variable.getProject(), variable, null);
@@ -92,13 +81,10 @@ public class UnusedSymbolUtil {
   public static boolean isImplicitWrite(@Nonnull Project project,
                                         @Nonnull PsiVariable element,
                                         @Nullable ProgressIndicator progress) {
-    for (ImplicitUsageProvider provider : ImplicitUsageProvider.EP_NAME.getExtensionList()) {
+    return project.getExtensionPoint(ImplicitUsageProvider.class).findFirstSafe(provider -> {
       ProgressManager.checkCanceled();
-      if (provider.isImplicitWrite(element)) {
-        return true;
-      }
-    }
-    return isInjected(project, element);
+      return provider.isImplicitWrite(element);
+    }) != null || isInjected(project, element);
   }
 
   @Nullable

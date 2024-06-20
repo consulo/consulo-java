@@ -29,6 +29,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.component.extension.Extensions;
 import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.language.editor.ImplicitUsageProvider;
+import consulo.project.Project;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
 import org.jdom.Element;
@@ -149,11 +150,9 @@ public class InstanceVariableUninitializedUseInspection extends BaseInspection {
       if (aClass == null) {
         return;
       }
-      for (ImplicitUsageProvider provider :
-        Extensions.getExtensions(ImplicitUsageProvider.EP_NAME)) {
-        if (provider.isImplicitWrite(field)) {
-          return;
-        }
+      Project project = field.getProject();
+      if (project.getExtensionPoint(ImplicitUsageProvider.class).findFirstSafe(it -> it.isImplicitWrite(field)) != null) {
+        return;
       }
       final UninitializedReadCollector uninitializedReadsCollector = new UninitializedReadCollector();
       if (!isInitializedInInitializer(field, uninitializedReadsCollector)) {

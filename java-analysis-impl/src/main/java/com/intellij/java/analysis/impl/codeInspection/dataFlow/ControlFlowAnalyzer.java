@@ -93,7 +93,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
       }
     }
     if (!isStatic &&
-        ImplicitUsageProvider.EP_NAME.getExtensionList().stream().anyMatch(p -> JavaImplicitUsageProvider.isClassWithCustomizedInitialization(p, psiClass))) {
+        myProject.getExtensionList(ImplicitUsageProvider.class).stream().anyMatch(p -> JavaImplicitUsageProvider.isClassWithCustomizedInitialization(p, psiClass))) {
       addInstruction(new EscapeInstruction(Collections.singleton(getFactory().getVarFactory().createThisValue(psiClass))));
       addInstruction(new FlushFieldsInstruction());
     }

@@ -154,10 +154,8 @@ public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
     removeReadFields(aClass, candidates, usedFields);
 
     if (candidates.isEmpty()) return;
-    final List<ImplicitUsageProvider> implicitUsageProviders = ImplicitUsageProvider.EP_NAME.getExtensionList();
-
     for (PsiField field : candidates) {
-      if (usedFields.contains(field) && !hasImplicitReadOrWriteUsage(field, implicitUsageProviders)) {
+      if (usedFields.contains(field) && !hasImplicitReadOrWriteUsage(field)) {
         final String message = InspectionsBundle.message("inspection.field.can.be.local.problem.descriptor");
         holder.registerProblem(field.getNameIdentifier(), message, new ConvertFieldToLocalQuickFix());
       }
@@ -273,13 +271,10 @@ public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
     });
   }
 
-  private static boolean hasImplicitReadOrWriteUsage(final PsiField field, List<ImplicitUsageProvider> implicitUsageProviders) {
-    for (ImplicitUsageProvider provider : implicitUsageProviders) {
-      if (provider.isImplicitRead(field) || provider.isImplicitWrite(field)) {
-        return true;
-      }
-    }
-    return false;
+  private static boolean hasImplicitReadOrWriteUsage(final PsiField field) {
+    return field.getProject().getExtensionPoint(ImplicitUsageProvider.class).findFirstSafe(provider -> {
+      return provider.isImplicitRead(field) || provider.isImplicitWrite(field);
+    }) != null;
   }
 
   private static class ConvertFieldToLocalQuickFix extends BaseConvertToLocalQuickFix<PsiField> {

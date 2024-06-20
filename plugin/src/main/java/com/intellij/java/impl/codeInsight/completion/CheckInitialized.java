@@ -25,8 +25,8 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.filter.ElementFilter;
 import consulo.language.psi.util.PsiTreeUtil;
 import jakarta.annotation.Nonnull;
-
 import jakarta.annotation.Nullable;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -34,136 +34,108 @@ import java.util.Set;
 /**
  * @author peter
  */
-class CheckInitialized implements ElementFilter
-{
-	private final Set<PsiField> myNonInitializedFields;
-	private final boolean myInsideConstructorCall;
+class CheckInitialized implements ElementFilter {
+  private final Set<PsiField> myNonInitializedFields;
+  private final boolean myInsideConstructorCall;
 
-	CheckInitialized(@Nonnull PsiElement position)
-	{
-		myNonInitializedFields = getNonInitializedFields(position);
-		myInsideConstructorCall = isInsideConstructorCall(position);
-	}
+  CheckInitialized(@Nonnull PsiElement position) {
+    myNonInitializedFields = getNonInitializedFields(position);
+    myInsideConstructorCall = isInsideConstructorCall(position);
+  }
 
-	static boolean isInsideConstructorCall(@Nonnull PsiElement position)
-	{
-		return ExpressionUtils.isConstructorInvocation(PsiTreeUtil.getParentOfType(position, PsiMethodCallExpression.class)) && !JavaKeywordCompletion.AFTER_DOT.accepts(position);
-	}
+  static boolean isInsideConstructorCall(@Nonnull PsiElement position) {
+    return ExpressionUtils.isConstructorInvocation(PsiTreeUtil.getParentOfType(position,
+                                                                               PsiMethodCallExpression.class)) && !JavaKeywordCompletion.AFTER_DOT.accepts(
+      position);
+  }
 
-	private static boolean isInitializedImplicitly(PsiField field)
-	{
-		field = CompletionUtilCore.getOriginalOrSelf(field);
-		for(ImplicitUsageProvider provider : ImplicitUsageProvider.EP_NAME.getExtensions())
-		{
-			if(provider.isImplicitWrite(field))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
+  private static boolean isInitializedImplicitly(PsiField field) {
+    field = CompletionUtilCore.getOriginalOrSelf(field);
 
-	static Set<PsiField> getNonInitializedFields(PsiElement element)
-	{
-		final PsiStatement statement = PsiTreeUtil.getParentOfType(element, PsiStatement.class);
-		//noinspection SSBasedInspection
-		final PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class, true, PsiClass.class);
-		if(statement == null || method == null || !method.isConstructor())
-		{
-			return Collections.emptySet();
-		}
+    final PsiField finalField = field;
+    return field.getProject().getExtensionPoint(ImplicitUsageProvider.class).findFirstSafe(it -> it.isImplicitWrite(finalField)) != null;
+  }
 
-		PsiElement parent = element.getParent();
-		if(parent instanceof PsiReferenceExpression && !ExpressionUtil.isEffectivelyUnqualified((PsiReferenceExpression) parent))
-		{
-			return Collections.emptySet();
-		}
+  static Set<PsiField> getNonInitializedFields(PsiElement element) {
+    final PsiStatement statement = PsiTreeUtil.getParentOfType(element, PsiStatement.class);
+    //noinspection SSBasedInspection
+    final PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class, true, PsiClass.class);
+    if (statement == null || method == null || !method.isConstructor()) {
+      return Collections.emptySet();
+    }
 
-		while(parent != statement)
-		{
-			PsiElement next = parent.getParent();
-			if(next instanceof PsiAssignmentExpression && parent == ((PsiAssignmentExpression) next).getLExpression())
-			{
-				return Collections.emptySet();
-			}
-			if(parent instanceof PsiJavaCodeReferenceElement)
-			{
-				PsiStatement psiStatement = PsiTreeUtil.getParentOfType(parent, PsiStatement.class);
-				if(psiStatement != null && psiStatement.getTextRange().getStartOffset() == parent.getTextRange().getStartOffset())
-				{
-					return Collections.emptySet();
-				}
-			}
-			parent = next;
-		}
+    PsiElement parent = element.getParent();
+    if (parent instanceof PsiReferenceExpression && !ExpressionUtil.isEffectivelyUnqualified((PsiReferenceExpression)parent)) {
+      return Collections.emptySet();
+    }
 
-		final Set<PsiField> fields = new HashSet<>();
-		final PsiClass containingClass = method.getContainingClass();
-		assert containingClass != null;
-		for(PsiField field : containingClass.getFields())
-		{
-			if(!field.hasModifierProperty(PsiModifier.STATIC) && field.getInitializer() == null && !isInitializedImplicitly(field))
-			{
-				fields.add(field);
-			}
-		}
+    while (parent != statement) {
+      PsiElement next = parent.getParent();
+      if (next instanceof PsiAssignmentExpression && parent == ((PsiAssignmentExpression)next).getLExpression()) {
+        return Collections.emptySet();
+      }
+      if (parent instanceof PsiJavaCodeReferenceElement) {
+        PsiStatement psiStatement = PsiTreeUtil.getParentOfType(parent, PsiStatement.class);
+        if (psiStatement != null && psiStatement.getTextRange().getStartOffset() == parent.getTextRange().getStartOffset()) {
+          return Collections.emptySet();
+        }
+      }
+      parent = next;
+    }
 
-		method.accept(new JavaRecursiveElementWalkingVisitor()
-		{
-			@Override
-			public void visitAssignmentExpression(PsiAssignmentExpression expression)
-			{
-				if(expression.getTextRange().getStartOffset() < statement.getTextRange().getStartOffset())
-				{
-					final PsiExpression lExpression = expression.getLExpression();
-					if(lExpression instanceof PsiReferenceExpression)
-					{
-						//noinspection SuspiciousMethodCalls
-						fields.remove(((PsiReferenceExpression) lExpression).resolve());
-					}
-				}
-				super.visitAssignmentExpression(expression);
-			}
+    final Set<PsiField> fields = new HashSet<>();
+    final PsiClass containingClass = method.getContainingClass();
+    assert containingClass != null;
+    for (PsiField field : containingClass.getFields()) {
+      if (!field.hasModifierProperty(PsiModifier.STATIC) && field.getInitializer() == null && !isInitializedImplicitly(field)) {
+        fields.add(field);
+      }
+    }
 
-			@Override
-			public void visitMethodCallExpression(PsiMethodCallExpression expression)
-			{
-				if(expression.getTextRange().getStartOffset() < statement.getTextRange().getStartOffset())
-				{
-					final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-					if(methodExpression.textMatches(PsiKeyword.THIS))
-					{
-						fields.clear();
-					}
-				}
-				super.visitMethodCallExpression(expression);
-			}
-		});
-		return fields;
-	}
+    method.accept(new JavaRecursiveElementWalkingVisitor() {
+      @Override
+      public void visitAssignmentExpression(PsiAssignmentExpression expression) {
+        if (expression.getTextRange().getStartOffset() < statement.getTextRange().getStartOffset()) {
+          final PsiExpression lExpression = expression.getLExpression();
+          if (lExpression instanceof PsiReferenceExpression) {
+            //noinspection SuspiciousMethodCalls
+            fields.remove(((PsiReferenceExpression)lExpression).resolve());
+          }
+        }
+        super.visitAssignmentExpression(expression);
+      }
 
-	@Override
-	public boolean isAcceptable(Object element, @Nullable PsiElement context)
-	{
-		if(element instanceof CandidateInfo)
-		{
-			element = ((CandidateInfo) element).getElement();
-		}
-		if(element instanceof PsiField)
-		{
-			return !myNonInitializedFields.contains(element);
-		}
-		if(element instanceof PsiMethod && myInsideConstructorCall)
-		{
-			return ((PsiMethod) element).hasModifierProperty(PsiModifier.STATIC);
-		}
+      @Override
+      public void visitMethodCallExpression(PsiMethodCallExpression expression) {
+        if (expression.getTextRange().getStartOffset() < statement.getTextRange().getStartOffset()) {
+          final PsiReferenceExpression methodExpression = expression.getMethodExpression();
+          if (methodExpression.textMatches(PsiKeyword.THIS)) {
+            fields.clear();
+          }
+        }
+        super.visitMethodCallExpression(expression);
+      }
+    });
+    return fields;
+  }
 
-		return true;
-	}
+  @Override
+  public boolean isAcceptable(Object element, @Nullable PsiElement context) {
+    if (element instanceof CandidateInfo) {
+      element = ((CandidateInfo)element).getElement();
+    }
+    if (element instanceof PsiField) {
+      return !myNonInitializedFields.contains(element);
+    }
+    if (element instanceof PsiMethod && myInsideConstructorCall) {
+      return ((PsiMethod)element).hasModifierProperty(PsiModifier.STATIC);
+    }
 
-	@Override
-	public boolean isClassAcceptable(Class hintClass)
-	{
-		return true;
-	}
+    return true;
+  }
+
+  @Override
+  public boolean isClassAcceptable(Class hintClass) {
+    return true;
+  }
 }

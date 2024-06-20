@@ -25,7 +25,7 @@ import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.application.CommonBundle;
-import consulo.component.extension.Extensions;
+import consulo.component.extension.ExtensionPoint;
 import consulo.ide.impl.idea.ide.util.MemberChooser;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleManager;
@@ -59,9 +59,9 @@ public class GenerateConstructorHandler extends GenerateMembersHandlerBase {
   @Override
   protected ClassMember[] getAllOriginalMembers(PsiClass aClass) {
     PsiField[] fields = aClass.getFields();
-    ArrayList<ClassMember> array = new ArrayList<ClassMember>();
-    ImplicitUsageProvider[] implicitUsageProviders = Extensions.getExtensions(ImplicitUsageProvider.EP_NAME);
-    fieldLoop:
+    ArrayList<ClassMember> array = new ArrayList<>();
+    ExtensionPoint<ImplicitUsageProvider> usageProviders = aClass.getProject().getExtensionPoint(ImplicitUsageProvider.class);
+
     for (PsiField field : fields) {
       if (field.hasModifierProperty(PsiModifier.STATIC)) {
         continue;
@@ -71,11 +71,11 @@ public class GenerateConstructorHandler extends GenerateMembersHandlerBase {
         continue;
       }
 
-      for (ImplicitUsageProvider provider : implicitUsageProviders) {
-        if (provider.isImplicitWrite(field)) {
-          continue fieldLoop;
-        }
+      boolean isImplicitWrote = usageProviders.findFirstSafe(it -> it.isImplicitWrite(field)) != null;
+      if (isImplicitWrote) {
+        continue;
       }
+
       array.add(new PsiFieldMember(field));
     }
     return array.toArray(new ClassMember[array.size()]);
@@ -96,7 +96,7 @@ public class GenerateConstructorHandler extends GenerateMembersHandlerBase {
     PsiMethod[] baseConstructors = null;
     PsiClass baseClass = aClass.getSuperClass();
     if (baseClass != null) {
-      ArrayList<PsiMethod> array = new ArrayList<PsiMethod>();
+      ArrayList<PsiMethod> array = new ArrayList<>();
       for (PsiMethod method : baseClass.getConstructors()) {
         if (JavaPsiFacade.getInstance(method.getProject()).getResolveHelper().isAccessible(method, aClass, null)) {
           array.add(method);
@@ -108,7 +108,7 @@ public class GenerateConstructorHandler extends GenerateMembersHandlerBase {
         } else {
           final PsiSubstitutor substitutor = TypeConversionUtil.getSuperClassSubstitutor(baseClass, aClass, PsiSubstitutor.EMPTY);
           PsiMethodMember[] constructors = ContainerUtil.map2Array(array, PsiMethodMember.class, s -> new PsiMethodMember(s, substitutor));
-          MemberChooser<PsiMethodMember> chooser = new MemberChooser<PsiMethodMember>(constructors, false, true, project);
+          MemberChooser<PsiMethodMember> chooser = new MemberChooser<>(constructors, false, true, project);
           chooser.setTitle(CodeInsightBundle.message("generate.constructor.super.constructor.chooser.title"));
           chooser.show();
           List<PsiMethodMember> elements = chooser.getSelectedElements();
@@ -136,7 +136,7 @@ public class GenerateConstructorHandler extends GenerateMembersHandlerBase {
       }
     }
     if (baseConstructors != null) {
-      ArrayList<ClassMember> array = new ArrayList<ClassMember>();
+      ArrayList<ClassMember> array = new ArrayList<>();
       for (PsiMethod baseConstructor : baseConstructors) {
         array.add(new PsiMethodMember(baseConstructor));
       }
@@ -161,7 +161,7 @@ public class GenerateConstructorHandler extends GenerateMembersHandlerBase {
   }
 
   protected static List<ClassMember> preselect(ClassMember[] members) {
-    final List<ClassMember> preselection = new ArrayList<ClassMember>();
+    final List<ClassMember> preselection = new ArrayList<>();
     for (ClassMember member : members) {
       if (member instanceof PsiFieldMember) {
         final PsiField psiField = ((PsiFieldMember) member).getElement();
@@ -176,8 +176,8 @@ public class GenerateConstructorHandler extends GenerateMembersHandlerBase {
   @Override
   @Nonnull
   protected List<? extends GenerationInfo> generateMemberPrototypes(PsiClass aClass, ClassMember[] members) throws IncorrectOperationException {
-    List<PsiMethod> baseConstructors = new ArrayList<PsiMethod>();
-    List<PsiField> fieldsVector = new ArrayList<PsiField>();
+    List<PsiMethod> baseConstructors = new ArrayList<>();
+    List<PsiField> fieldsVector = new ArrayList<>();
     for (ClassMember member1 : members) {
       PsiElement member = ((PsiElementClassMember) member1).getElement();
       if (member instanceof PsiMethod) {
@@ -189,7 +189,7 @@ public class GenerateConstructorHandler extends GenerateMembersHandlerBase {
     PsiField[] fields = fieldsVector.toArray(new PsiField[fieldsVector.size()]);
 
     if (!baseConstructors.isEmpty()) {
-      List<GenerationInfo> constructors = new ArrayList<GenerationInfo>(baseConstructors.size());
+      List<GenerationInfo> constructors = new ArrayList<>(baseConstructors.size());
       final PsiClass superClass = aClass.getSuperClass();
       assert superClass != null;
       PsiSubstitutor substitutor = TypeConversionUtil.getSuperClassSubstitutor(superClass, aClass, PsiSubstitutor.EMPTY);
@@ -271,7 +271,7 @@ public class GenerateConstructorHandler extends GenerateMembersHandlerBase {
 
     final PsiMethod dummyConstructor = factory.createConstructor(aClass.getName());
     dummyConstructor.getParameterList().replace(constructor.getParameterList().copy());
-    List<PsiParameter> fieldParams = new ArrayList<PsiParameter>();
+    List<PsiParameter> fieldParams = new ArrayList<>();
     for (PsiField field : fields) {
       String fieldName = field.getName();
       String name = javaStyle.variableNameToPropertyName(fieldName, VariableKind.FIELD);

@@ -1,6 +1,7 @@
 // Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
+import com.intellij.java.analysis.codeInsight.daemon.JavaImplicitUsageProvider;
 import com.intellij.java.analysis.impl.codeInsight.JavaPsiEquivalenceUtil;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightControlFlowUtil;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaExpressionFactory;
@@ -20,6 +21,7 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.PsiSearchHelper;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.LanguageCachedValueUtil;
+import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Pair;
 import jakarta.annotation.Nonnull;
@@ -103,7 +105,10 @@ public final class NullabilityUtil {
   }
 
   private static boolean isImplicitlyInitializedNotNull(PsiField field) {
-    return ContainerUtil.exists(ImplicitUsageProvider.EP_NAME.getExtensionList(), p -> p.isImplicitlyNotNullInitialized(field));
+    Project project = field.getProject();
+    return project.getExtensionPoint(ImplicitUsageProvider.class).findFirstSafe(provider -> {
+      return provider instanceof JavaImplicitUsageProvider javaImplicitUsageProvider && javaImplicitUsageProvider.isImplicitlyNotNullInitialized(field);
+    }) != null;
   }
 
   private static boolean weAreSureThereAreNoExplicitWrites(PsiField field) {

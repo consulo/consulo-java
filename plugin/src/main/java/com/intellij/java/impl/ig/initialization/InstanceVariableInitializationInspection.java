@@ -25,9 +25,9 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.TestUtils;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.component.extension.Extensions;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.editor.ImplicitUsageProvider;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -99,12 +99,9 @@ public class InstanceVariableInitializationInspection extends BaseInspection {
       if (aClass == null) {
         return;
       }
-      final ImplicitUsageProvider[] implicitUsageProviders =
-        Extensions.getExtensions(ImplicitUsageProvider.EP_NAME);
-      for (ImplicitUsageProvider provider : implicitUsageProviders) {
-        if (provider.isImplicitWrite(field)) {
-          return;
-        }
+      Project project = field.getProject();
+      if (project.getExtensionPoint(ImplicitUsageProvider.class).findFirstSafe(it -> it.isImplicitWrite(field)) != null) {
+        return;
       }
       final boolean isTestClass = TestUtils.isJUnitTestClass(aClass);
       if (isTestClass) {
