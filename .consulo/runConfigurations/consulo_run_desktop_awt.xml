@@ -26,7 +26,7 @@
             <list>
               <option value="consulo:run-desktop-awt" />
               <option value="-pl" />
-              <option value=":com.intellij.images" />
+              <option value=":consulo.java" />
             </list>
           </option>
           <option name="profilesMap">
