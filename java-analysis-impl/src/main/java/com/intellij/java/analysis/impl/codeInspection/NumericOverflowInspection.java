@@ -16,7 +16,6 @@
 package com.intellij.java.analysis.impl.codeInspection;
 
 import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
-import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.java.language.psi.JavaPsiFacade;
@@ -28,6 +27,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.ProblemsHolder;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.project.Project;
@@ -47,7 +47,7 @@ public class NumericOverflowInspection extends BaseJavaBatchLocalInspectionTool 
   @Nonnull
   @Override
   public String getGroupDisplayName() {
-    return GroupNames.NUMERIC_GROUP_NAME;
+    return InspectionLocalize.groupNamesNumericIssues().get();
   }
 
   @Override

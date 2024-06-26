@@ -20,10 +20,11 @@ import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.inspection.AbstractBatchSuppressByNoInspectionCommentFix;
-import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.SuppressionUtil;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.rawHighlight.HighlightDisplayKey;
 import consulo.language.editor.util.LanguageUndoUtil;
 import consulo.language.psi.PsiElement;
@@ -34,7 +35,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -60,6 +60,7 @@ public class SuppressFix extends AbstractBatchSuppressByNoInspectionCommentFix {
 
   @Override
   @Nullable
+  @RequiredReadAction
   public PsiDocCommentOwner getContainer(final PsiElement context) {
     if (context == null || !context.getManager().isInProject(context)) {
       return null;
@@ -83,18 +84,25 @@ public class SuppressFix extends AbstractBatchSuppressByNoInspectionCommentFix {
   }
 
   @Override
+  @RequiredReadAction
   public boolean isAvailable(@Nonnull final Project project, @Nonnull final PsiElement context) {
     PsiDocCommentOwner container = getContainer(context);
     boolean isValid = container != null && !(container instanceof PsiMethod && container instanceof SyntheticElement);
     if (!isValid) {
       return false;
     }
-    setText(container instanceof PsiClass ? InspectionsBundle.message("suppress.inspection.class") : container instanceof PsiMethod ?
-        InspectionsBundle.message("suppress.inspection.method") : InspectionsBundle.message("suppress.inspection.field"));
+    setText(
+      container instanceof PsiClass
+        ? InspectionLocalize.suppressInspectionClass().get()
+        : container instanceof PsiMethod
+        ? InspectionLocalize.suppressInspectionMethod().get()
+        : InspectionLocalize.suppressInspectionField().get()
+    );
     return true;
   }
 
   @Override
+  @RequiredReadAction
   public void invoke(@Nonnull final Project project, @Nonnull final PsiElement element) throws IncorrectOperationException {
     if (doSuppress(project, getContainer(element))) {
       return;
@@ -104,6 +112,7 @@ public class SuppressFix extends AbstractBatchSuppressByNoInspectionCommentFix {
     LanguageUndoUtil.markPsiFileForUndo(element.getContainingFile());
   }
 
+  @RequiredReadAction
   private boolean doSuppress(@Nonnull Project project, PsiDocCommentOwner container) {
     assert container != null;
     if (!FileModificationService.getInstance().preparePsiElementForWrite(container)) {

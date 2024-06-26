@@ -19,15 +19,15 @@ import com.intellij.java.analysis.impl.codeInspection.JavaSuppressionUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.editor.FileModificationService;
-import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.SuppressionUtil;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -42,6 +42,7 @@ public class SuppressAllForClassFix extends SuppressFix {
     super(SuppressionUtil.ALL);
   }
 
+  @RequiredReadAction
   @Override
   @Nullable
   public PsiDocCommentOwner getContainer(final PsiElement element) {
@@ -62,9 +63,10 @@ public class SuppressAllForClassFix extends SuppressFix {
   @Override
   @Nonnull
   public String getText() {
-    return InspectionsBundle.message("suppress.all.for.class");
+    return InspectionLocalize.suppressAllForClass().get();
   }
 
+  @RequiredReadAction
   @Override
   public void invoke(@Nonnull final Project project, @Nonnull final PsiElement element) throws IncorrectOperationException {
     final PsiDocCommentOwner container = getContainer(element);

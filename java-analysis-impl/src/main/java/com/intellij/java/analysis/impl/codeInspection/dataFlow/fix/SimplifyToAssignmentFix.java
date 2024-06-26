@@ -15,17 +15,18 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.fix;
 
-import jakarta.annotation.Nonnull;
-import consulo.language.editor.inspection.InspectionsBundle;
-import consulo.language.editor.inspection.LocalQuickFix;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiAssignmentExpression;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.PsiExpression;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
+import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
@@ -36,27 +37,28 @@ public class SimplifyToAssignmentFix implements LocalQuickFix
 	@Override
 	public String getName()
 	{
-		return InspectionsBundle.message("inspection.data.flow.simplify.to.assignment.quickfix.name");
+		return InspectionLocalize.inspectionDataFlowSimplifyToAssignmentQuickfixName().get();
 	}
 
 	@Nonnull
 	@Override
 	public String getFamilyName()
 	{
-		return InspectionsBundle.message("inspection.data.flow.simplify.boolean.expression.quickfix");
+		return InspectionLocalize.inspectionDataFlowSimplifyBooleanExpressionQuickfix().get();
 	}
 
 	@Override
+	@RequiredReadAction
 	public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 	{
 		final PsiElement psiElement = descriptor.getPsiElement();
-		if(psiElement == null)
+		if (psiElement == null)
 		{
 			return;
 		}
 
 		final PsiAssignmentExpression assignmentExpression = PsiTreeUtil.getParentOfType(psiElement, PsiAssignmentExpression.class);
-		if(assignmentExpression == null)
+		if (assignmentExpression == null)
 		{
 			return;
 		}

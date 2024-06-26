@@ -19,7 +19,7 @@ import com.intellij.java.compiler.impl.OutputParser;
 import com.intellij.java.compiler.impl.javaCompiler.FileObject;
 import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.java.language.impl.JavaFileType;
-import consulo.compiler.CompilerBundle;
+import consulo.compiler.localize.CompilerLocalize;
 import consulo.logging.Logger;
 import consulo.util.io.FileUtil;
 import consulo.util.lang.Comparing;
@@ -48,14 +48,14 @@ public class FilePathActionJavac extends JavacParserAction
 	@Override
 	protected void doExecute(final String line, final String originalPath, final OutputParser.Callback callback)
 	{
-		if(LOG.isDebugEnabled())
+		if (LOG.isDebugEnabled())
 		{
 			LOG.debug("Process parsing message: " + originalPath);
 		}
 
 		String filePath = originalPath;
 		// for jdk7: cut off characters wrapping the path. e.g. "RegularFileObject[C:/tmp/bugs/src/a/Demo1.java]"
-		if(myJdk7FormatMatcher.reset(filePath).matches())
+		if (myJdk7FormatMatcher.reset(filePath).matches())
 		{
 			filePath = myJdk7FormatMatcher.group(1);
 		}
@@ -63,11 +63,11 @@ public class FilePathActionJavac extends JavacParserAction
 		// jdk 9 specific
 		// C:\\Users\\VISTALL\\Documents\\Consulo\\untitled71\\out\\production\\untitled71:org\\example\\Main.class
 		int i = filePath.lastIndexOf(':');
-		if(i != -1)
+		if (i != -1)
 		{
 			// check next character - if it slash, it's not module separator
 			char next = filePath.charAt(i + 1);
-			if(next != '\\' && next != '/')
+			if (next != '\\' && next != '/')
 			{
 				char[] chars = filePath.toCharArray();
 				chars[i] = '/';
@@ -79,12 +79,12 @@ public class FilePathActionJavac extends JavacParserAction
 		final String name = index >= 0 ? filePath.substring(index + 1) : filePath;
 
 		CharSequence extension = FileUtil.getExtension((CharSequence) name);
-		if(Comparing.equal(extension, JavaFileType.INSTANCE.getDefaultExtension()))
+		if (Comparing.equal(extension, JavaFileType.INSTANCE.getDefaultExtension()))
 		{
 			callback.fileProcessed(filePath);
-			callback.setProgressText(CompilerBundle.message("progress.parsing.file", name));
+			callback.setProgressText(CompilerLocalize.progressParsingFile(name).get());
 		}
-		else if(Comparing.equal(extension, JavaClassFileType.INSTANCE.getDefaultExtension()))
+		else if (Comparing.equal(extension, JavaClassFileType.INSTANCE.getDefaultExtension()))
 		{
 			callback.fileGenerated(new FileObject(new File(filePath)));
 		}

@@ -15,28 +15,28 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import jakarta.annotation.Nonnull;
-
-import com.intellij.java.language.codeInsight.AnnotationUtil;
-import consulo.language.editor.FileModificationService;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationFix;
-import consulo.language.editor.inspection.InspectionsBundle;
-import consulo.language.editor.inspection.LocalQuickFix;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.logging.Logger;
-import consulo.project.Project;
-import consulo.language.psi.PsiElement;
+import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
-import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.java.language.psi.util.ClassUtil;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.util.collection.ArrayUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.util.collection.ArrayUtil;
+import jakarta.annotation.Nonnull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author cdr
@@ -54,10 +54,11 @@ public class AnnotateOverriddenMethodParameterFix implements LocalQuickFix {
   @Override
   @Nonnull
   public String getName() {
-    return InspectionsBundle.message("annotate.overridden.methods.parameters", ClassUtil.extractClassName(myAnnotation));
+    return InspectionLocalize.annotateOverriddenMethodsParameters(ClassUtil.extractClassName(myAnnotation)).get();
   }
 
   @Override
+  @RequiredReadAction
   public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
     final PsiElement psiElement = descriptor.getPsiElement();
 
@@ -68,14 +69,15 @@ public class AnnotateOverriddenMethodParameterFix implements LocalQuickFix {
     PsiParameter[] parameters = method.getParameterList().getParameters();
     int index = ArrayUtil.find(parameters, parameter);
 
-    List<PsiParameter> toAnnotate = new ArrayList<PsiParameter>();
+    List<PsiParameter> toAnnotate = new ArrayList<>();
 
     PsiMethod[] methods = OverridingMethodsSearch.search(method, GlobalSearchScope.allScope(project), true).toArray(PsiMethod.EMPTY_ARRAY);
     for (PsiMethod psiMethod : methods) {
       PsiParameter[] psiParameters = psiMethod.getParameterList().getParameters();
       if (index >= psiParameters.length) continue;
       PsiParameter psiParameter = psiParameters[index];
-      if (!AnnotationUtil.isAnnotated(psiParameter, myAnnotation, false, false) && psiMethod.getManager().isInProject(psiMethod)) {
+      if (!AnnotationUtil.isAnnotated(psiParameter, myAnnotation, false, false)
+        && psiMethod.getManager().isInProject(psiMethod)) {
         toAnnotate.add(psiParameter);
       }
     }

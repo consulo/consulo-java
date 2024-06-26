@@ -21,6 +21,7 @@ import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.java.language.impl.JavaFileType;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.compiler.*;
+import consulo.compiler.localize.CompilerLocalize;
 import consulo.compiler.scope.CompileScope;
 import consulo.content.ContentFolderTypeProvider;
 import consulo.java.language.module.extension.JavaModuleExtension;
@@ -38,9 +39,9 @@ import consulo.util.io.FileUtil;
 import consulo.util.lang.ExceptionUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
+import jakarta.annotation.Nonnull;
 import jakarta.inject.Inject;
 
-import jakarta.annotation.Nonnull;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +69,7 @@ public class JavaCompiler implements TranslatingCompiler {
   @Override
   @Nonnull
   public String getDescription() {
-    return CompilerBundle.message("java.compiler.description");
+    return CompilerLocalize.javaCompilerDescription().get();
   }
 
   @Override
@@ -95,13 +96,15 @@ public class JavaCompiler implements TranslatingCompiler {
     context.putUserData(ourOutputFileParseInfo, parsingInfo);
 
     final BackendCompiler backEndCompiler = getBackEndCompiler();
-    final BackendCompilerWrapper wrapper = new BackendCompilerWrapper(this,
-                                                                      moduleChunk,
-                                                                      myProject,
-                                                                      filterResourceFiles(context, files),
-                                                                      (CompileContextEx)context,
-                                                                      backEndCompiler,
-                                                                      sink);
+    final BackendCompilerWrapper wrapper = new BackendCompilerWrapper(
+      this,
+      moduleChunk,
+      myProject,
+      filterResourceFiles(context, files),
+      (CompileContextEx)context,
+      backEndCompiler,
+      sink
+    );
     try {
       wrapper.compile(parsingInfo);
     }

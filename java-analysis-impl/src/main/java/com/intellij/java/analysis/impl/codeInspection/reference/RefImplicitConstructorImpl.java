@@ -24,21 +24,21 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.reference;
 
-import consulo.language.editor.inspection.InspectionsBundle;
 import com.intellij.java.analysis.codeInspection.reference.RefClass;
 import com.intellij.java.analysis.codeInspection.reference.RefImplicitConstructor;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaUtil;
-import consulo.application.ApplicationManager;
-import consulo.application.util.function.Computable;
-import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiModifierListOwner;
-
+import consulo.application.Application;
+import consulo.application.util.function.Computable;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
+import consulo.language.psi.PsiFile;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 public class RefImplicitConstructorImpl extends RefMethodImpl implements RefImplicitConstructor {
 
   RefImplicitConstructorImpl(RefClass ownerClass) {
-    super(InspectionsBundle.message("inspection.reference.implicit.constructor.name", ownerClass.getName()), ownerClass);
+    super(InspectionLocalize.inspectionReferenceImplicitConstructorName(ownerClass.getName()).get(), ownerClass);
   }
 
   @Override
@@ -52,8 +52,9 @@ public class RefImplicitConstructorImpl extends RefMethodImpl implements RefImpl
   }
 
   @Override
+  @Nonnull
   public String getName() {
-    return InspectionsBundle.message("inspection.reference.implicit.constructor.name", getOwnerClass().getName());
+    return InspectionLocalize.inspectionReferenceImplicitConstructorName(getOwnerClass().getName()).get();
   }
 
   @Override
@@ -63,12 +64,7 @@ public class RefImplicitConstructorImpl extends RefMethodImpl implements RefImpl
 
   @Override
   public boolean isValid() {
-    return ApplicationManager.getApplication().runReadAction(new Computable<Boolean>() {
-      @Override
-      public Boolean compute() {
-        return getOwnerClass().isValid();
-      }
-    }).booleanValue();
+    return Application.get().runReadAction((Computable<Boolean>)() -> getOwnerClass().isValid());
   }
 
   @Override
@@ -89,7 +85,7 @@ public class RefImplicitConstructorImpl extends RefMethodImpl implements RefImpl
   @Override
   @Nullable
   public PsiFile getContainingFile() {
-    return ((RefClassImpl) getOwnerClass()).getContainingFile();
+    return getOwnerClass().getContainingFile();
   }
 
   @Override

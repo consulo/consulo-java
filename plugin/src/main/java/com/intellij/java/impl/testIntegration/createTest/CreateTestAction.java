@@ -23,10 +23,10 @@ import consulo.codeEditor.Editor;
 import consulo.ide.impl.idea.ide.util.PropertiesComponent;
 import consulo.language.content.LanguageContentFolderScopes;
 import consulo.language.content.TestContentFolderTypeProvider;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -39,11 +39,12 @@ import consulo.module.content.ProjectRootManager;
 import consulo.module.content.layer.ContentEntry;
 import consulo.module.content.layer.ContentFolder;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awt.UIUtil;
 import consulo.undoRedo.CommandProcessor;
 import consulo.virtualFileSystem.VirtualFile;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -58,7 +59,7 @@ public class CreateTestAction extends PsiElementBaseIntentionAction {
 
   @Nonnull
   public String getText() {
-    return CodeInsightBundle.message("intention.create.test");
+    return CodeInsightLocalize.intentionCreateTest().get();
   }
 
   @Nonnull
@@ -66,6 +67,7 @@ public class CreateTestAction extends PsiElementBaseIntentionAction {
     return getText();
   }
 
+  @RequiredReadAction
   public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     if (!isAvailableForElement(element)) return false;
 
@@ -93,25 +95,20 @@ public class CreateTestAction extends PsiElementBaseIntentionAction {
     if (psiClass == null) return false;
 
     Module srcModule = psiClass.getModule();
-    if (srcModule == null) return false;
-
-    if (psiClass.isAnnotationType() ||
-        psiClass instanceof PsiAnonymousClass ||
-        PsiTreeUtil.getParentOfType(psiClass, PsiClass.class) != null || // inner
-        isUnderTestSources(psiClass)) {
-      return false;
-    }
-    return true;
+    return srcModule != null && !psiClass.isAnnotationType() && !(psiClass instanceof PsiAnonymousClass)
+      && PsiTreeUtil.getParentOfType(psiClass, PsiClass.class) == null && // inner
+      !isUnderTestSources(psiClass);
   }
 
   private static boolean isUnderTestSources(PsiClass c) {
     ProjectRootManager rm = ProjectRootManager.getInstance(c.getProject());
     VirtualFile f = c.getContainingFile().getVirtualFile();
-    if (f == null) return false;
-    return rm.getFileIndex().isInTestSourceContent(f);
+    return f != null && rm.getFileIndex().isInTestSourceContent(f);
   }
 
   @Override
+  @RequiredReadAction
+  @RequiredUIAccess
   public void invoke(final @Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(element)) return;
     final Module srcModule = ModuleUtilCore.findModuleForPsiElement(element);
@@ -123,11 +120,15 @@ public class CreateTestAction extends PsiElementBaseIntentionAction {
     PsiJavaPackage srcPackage = JavaDirectoryService.getInstance().getPackage(srcDir);
 
     final PropertiesComponent propertiesComponent = PropertiesComponent.getInstance();
-    final HashSet<VirtualFile> testFolders = new HashSet<VirtualFile>();
+    final HashSet<VirtualFile> testFolders = new HashSet<>();
     checkForTestRoots(srcModule, testFolders);
     if (testFolders.isEmpty() && !propertiesComponent.getBoolean(CREATE_TEST_IN_THE_SAME_ROOT, false)) {
-      if (Messages.showOkCancelDialog(project, "Create test in the same source root?", "No Test Roots Found", Messages.getQuestionIcon()) !=
-          DialogWrapper.OK_EXIT_CODE) {
+      if (Messages.showOkCancelDialog(
+        project,
+        "Create test in the same source root?",
+        "No Test Roots Found",
+        UIUtil.getQuestionIcon()
+      ) != DialogWrapper.OK_EXIT_CODE) {
         return;
       }
 
@@ -138,20 +139,24 @@ public class CreateTestAction extends PsiElementBaseIntentionAction {
     d.show();
     if (!d.isOK()) return;
 
-    CommandProcessor.getInstance().executeCommand(project, new Runnable() {
-      @Override
-      public void run() {
+    CommandProcessor.getInstance().executeCommand(
+      project,
+      () -> {
         TestFramework framework = d.getSelectedTestFrameworkDescriptor();
         TestGenerator generator = TestGenerator.forLanguage(framework.getLanguage());
         generator.generateTest(project, d);
-      }
-    }, CodeInsightBundle.message("intention.create.test"), this);
+      },
+      CodeInsightLocalize.intentionCreateTest().get(),
+      this
+    );
   }
 
+  @RequiredReadAction
   protected static void checkForTestRoots(Module srcModule, Set<VirtualFile> testFolders) {
-    checkForTestRoots(srcModule, testFolders, new HashSet<Module>());
+    checkForTestRoots(srcModule, testFolders, new HashSet<>());
   }
 
+  @RequiredReadAction
   private static void checkForTestRoots(final Module srcModule, final Set<VirtualFile> testFolders, final Set<Module> processed) {
     final boolean isFirst = processed.isEmpty();
     if (!processed.add(srcModule)) return;
@@ -167,10 +172,9 @@ public class CreateTestAction extends PsiElementBaseIntentionAction {
     }
     if (isFirst && !testFolders.isEmpty()) return;
 
-    final HashSet<Module> modules = new HashSet<Module>();
+    final HashSet<Module> modules = new HashSet<>();
     ModuleUtilCore.collectModulesDependsOn(srcModule, modules);
     for (Module module : modules) {
-
       checkForTestRoots(module, testFolders, processed);
     }
   }
@@ -180,8 +184,8 @@ public class CreateTestAction extends PsiElementBaseIntentionAction {
     final PsiClass psiClass = PsiTreeUtil.getParentOfType(element, PsiClass.class, false);
     if (psiClass == null) {
       final PsiFile containingFile = element.getContainingFile();
-      if (containingFile instanceof PsiClassOwner) {
-        final PsiClass[] classes = ((PsiClassOwner)containingFile).getClasses();
+      if (containingFile instanceof PsiClassOwner classOwner) {
+        final PsiClass[] classes = classOwner.getClasses();
         if (classes.length == 1) {
           return classes[0];
         }

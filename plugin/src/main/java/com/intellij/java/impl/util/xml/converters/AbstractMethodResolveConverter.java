@@ -18,18 +18,16 @@ package com.intellij.java.impl.util.xml.converters;
 import com.intellij.java.language.psi.*;
 import consulo.application.util.function.CommonProcessors;
 import consulo.application.util.function.Processor;
-import consulo.ide.IdeBundle;
-import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
+import consulo.platform.base.localize.IdeLocalize;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Comparing;
-import consulo.util.lang.function.Condition;
 import consulo.util.lang.ref.Ref;
 import consulo.xml.util.xml.ConvertContext;
 import consulo.xml.util.xml.DomElement;
 import consulo.xml.util.xml.GenericDomValue;
 import consulo.xml.util.xml.ResolvingConverter;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -69,8 +67,10 @@ public abstract class AbstractMethodResolveConverter<ParentType extends DomEleme
 
   public String getErrorMessage(final String s, final ConvertContext context) {
     final ParentType parent = getParent(context);
-    return CodeInsightBundle
-      .message("error.cannot.resolve.0.1", IdeBundle.message("element.method"), getReferenceCanonicalText(s, getMethodParams(parent)));
+    return CodeInsightLocalize.errorCannotResolve01(
+      IdeLocalize.elementMethod(),
+      getReferenceCanonicalText(s, getMethodParams(parent))
+    ).get();
   }
 
   @Nonnull
@@ -84,15 +84,13 @@ public abstract class AbstractMethodResolveConverter<ParentType extends DomEleme
                                final ConvertContext context) {
     if (super.isReferenceTo(element, stringValue, resolveResult, context)) return true;
 
-    final Ref<Boolean> result = new Ref<Boolean>(Boolean.FALSE);
-    processMethods(context, new Processor<PsiMethod>() {
-      public boolean process(final PsiMethod method) {
-        if (method.equals(element)) {
-          result.set(Boolean.TRUE);
-          return false;
-        }
-        return true;
+    final Ref<Boolean> result = new Ref<>(Boolean.FALSE);
+    processMethods(context, method -> {
+      if (method.equals(element)) {
+        result.set(Boolean.TRUE);
+        return false;
       }
+      return true;
     }, s -> s.findMethodsByName(stringValue, true));
 
     return result.get();
@@ -113,17 +111,11 @@ public abstract class AbstractMethodResolveConverter<ParentType extends DomEleme
 
   @Nonnull
   public Collection<? extends PsiMethod> getVariants(final ConvertContext context) {
-    LinkedHashSet<PsiMethod> methodList = new LinkedHashSet<PsiMethod>();
-    Processor<PsiMethod> processor = CommonProcessors.notNullProcessor(new CommonProcessors.CollectProcessor<PsiMethod>(methodList));
-    processMethods(context, processor, new Function<PsiClass, PsiMethod[]>() {
-      public PsiMethod[] apply(final PsiClass s) {
-        final List<PsiMethod> list = ContainerUtil.findAll(getVariants(s), new Condition<PsiMethod>() {
-          public boolean value(final PsiMethod object) {
-            return acceptMethod(object, context);
-          }
-        });
-        return list.toArray(new PsiMethod[list.size()]);
-      }
+    LinkedHashSet<PsiMethod> methodList = new LinkedHashSet<>();
+    Processor<PsiMethod> processor = CommonProcessors.notNullProcessor(new CommonProcessors.CollectProcessor<>(methodList));
+    processMethods(context, processor, s -> {
+      final List<PsiMethod> list = ContainerUtil.findAll(getVariants(s), object -> acceptMethod(object, context));
+      return list.toArray(new PsiMethod[list.size()]);
     });
     return methodList;
   }
@@ -138,7 +130,8 @@ public abstract class AbstractMethodResolveConverter<ParentType extends DomEleme
 
   public static boolean methodSuits(final PsiMethod psiMethod) {
     if (psiMethod.isConstructor()) return false;
-    return psiMethod.getContainingClass().isInterface() || (!psiMethod.hasModifierProperty(PsiModifier.FINAL) && !psiMethod.hasModifierProperty(PsiModifier.STATIC));
+    return psiMethod.getContainingClass().isInterface()
+      || (!psiMethod.hasModifierProperty(PsiModifier.FINAL) && !psiMethod.hasModifierProperty(PsiModifier.STATIC));
   }
 
   public Set<String> getAdditionalVariants() {
@@ -146,23 +139,17 @@ public abstract class AbstractMethodResolveConverter<ParentType extends DomEleme
   }
 
   public PsiMethod fromString(final String methodName, final ConvertContext context) {
-    final CommonProcessors.FindFirstProcessor<PsiMethod> processor = new CommonProcessors.FindFirstProcessor<PsiMethod>();
-    processMethods(context, processor, new Function<PsiClass, PsiMethod[]>() {
-      public PsiMethod[] apply(final PsiClass s) {
-        final PsiMethod method = findMethod(s, methodName, getMethodParams(getParent(context)));
-        if (method != null && acceptMethod(method, context)) {
-          return new PsiMethod[]{method};
-        }
-        return PsiMethod.EMPTY_ARRAY;
+    final CommonProcessors.FindFirstProcessor<PsiMethod> processor = new CommonProcessors.FindFirstProcessor<>();
+    processMethods(context, processor, s -> {
+      final PsiMethod method = findMethod(s, methodName, getMethodParams(getParent(context)));
+      if (method != null && acceptMethod(method, context)) {
+        return new PsiMethod[]{method};
       }
+      return PsiMethod.EMPTY_ARRAY;
     });
     if (processor.isFound()) return processor.getFoundValue();
 
-    processMethods(context, processor, new Function<PsiClass, PsiMethod[]>() {
-      public PsiMethod[] apply(final PsiClass s) {
-        return s.findMethodsByName(methodName, true);
-      }
-    });
+    processMethods(context, processor, s -> s.findMethodsByName(methodName, true));
     return processor.getFoundValue();
   }
 
@@ -192,11 +179,10 @@ public abstract class AbstractMethodResolveConverter<ParentType extends DomEleme
   @Nullable
   public static PsiMethod findMethod(final PsiClass psiClass, final String methodName, @Nullable final AbstractMethodParams methodParameters) {
     if (psiClass == null || methodName == null) return null;
-    return ContainerUtil.find(psiClass.findMethodsByName(methodName, true), new Condition<PsiMethod>() {
-      public boolean value(final PsiMethod object) {
-        return methodParamsMatchSignature(methodParameters, object);
-      }
-    });
+    return ContainerUtil.find(
+      psiClass.findMethodsByName(methodName, true),
+      object -> methodParamsMatchSignature(methodParameters, object)
+    );
   }
 
   public static boolean methodParamsMatchSignature(@Nullable final AbstractMethodParams params, final PsiMethod psiMethod) {

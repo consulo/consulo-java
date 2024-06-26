@@ -30,36 +30,40 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.testIntegration.TestFramework;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
-import consulo.application.*;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.application.AllIcons;
+import consulo.application.HelpManager;
+import consulo.application.ReadAction;
+import consulo.application.Result;
 import consulo.document.event.DocumentAdapter;
 import consulo.document.event.DocumentEvent;
 import consulo.ide.impl.idea.ide.util.PropertiesComponent;
 import consulo.language.content.LanguageContentFolderScopes;
 import consulo.language.content.TestContentFolderTypeProvider;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.WriteCommandAction;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.ui.awt.EditorTextField;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.module.Module;
 import consulo.module.content.ModuleRootManager;
 import consulo.module.content.layer.ContentEntry;
 import consulo.module.content.layer.ContentFolder;
+import consulo.platform.base.localize.CommonLocalize;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.RecentsManager;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.action.CustomShortcutSet;
-import consulo.ui.ex.awt.DialogWrapper;
-import consulo.ui.ex.awt.JBLabel;
-import consulo.ui.ex.awt.Messages;
-import consulo.ui.ex.awt.ScrollPaneFactory;
+import consulo.ui.ex.awt.*;
 import consulo.util.lang.Pair;
 import consulo.virtualFileSystem.VirtualFile;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -82,7 +86,7 @@ public class CreateTestDialog extends DialogWrapper {
   private PsiDirectory myTargetDirectory;
   private TestFramework mySelectedFramework;
 
-  private final List<JRadioButton> myLibraryButtons = new ArrayList<JRadioButton>();
+  private final List<JRadioButton> myLibraryButtons = new ArrayList<>();
   private EditorTextField myTargetClassNameField;
   private ReferenceEditorComboWithBrowseButton mySuperClassField;
   private ReferenceEditorComboWithBrowseButton myTargetPackageField;
@@ -96,11 +100,14 @@ public class CreateTestDialog extends DialogWrapper {
 
   private JRadioButton myDefaultLibraryButton;
 
-  public CreateTestDialog(@Nonnull Project project,
-                          @Nonnull String title,
-                          PsiClass targetClass,
-                          PsiJavaPackage targetPackage,
-                          Module targetModule) {
+  @RequiredUIAccess
+  public CreateTestDialog(
+    @Nonnull Project project,
+    @Nonnull String title,
+    PsiClass targetClass,
+    PsiJavaPackage targetPackage,
+    Module targetModule
+  ) {
     super(project, true);
     myProject = project;
 
@@ -114,11 +121,12 @@ public class CreateTestDialog extends DialogWrapper {
     myDefaultLibraryButton.doClick();
   }
 
+  @RequiredUIAccess
   private void initControls(PsiClass targetClass, PsiJavaPackage targetPackage) {
     ButtonGroup group = new ButtonGroup();
 
-    Map<String, JRadioButton> nameToButtonMap = new HashMap<String, JRadioButton>();
-    List<Pair<String, JRadioButton>> attachedLibraries = new ArrayList<Pair<String, JRadioButton>>();
+    Map<String, JRadioButton> nameToButtonMap = new HashMap<>();
+    List<Pair<String, JRadioButton>> attachedLibraries = new ArrayList<>();
 
     for (final TestFramework descriptor : TestFramework.EXTENSION_NAME.getExtensionList()) {
       final JRadioButton b = new JRadioButton(descriptor.getName());
@@ -130,11 +138,9 @@ public class CreateTestDialog extends DialogWrapper {
         attachedLibraries.add(Pair.create(descriptor.getName(), b));
       }
 
-      b.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          if (b.isSelected()) {
-            onLibrarySelected(descriptor);
-          }
+      b.addActionListener(e -> {
+        if (b.isSelected()) {
+          onLibrarySelected(descriptor);
         }
       });
     }
@@ -160,16 +166,11 @@ public class CreateTestDialog extends DialogWrapper {
       myDefaultLibraryButton = myLibraryButtons.get(0);
     }
 
-    myFixLibraryButton = new JButton(CodeInsightBundle.message("intention.create.test.dialog.fix.library"));
-    myFixLibraryButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        ApplicationManager.getApplication().runWriteAction(new Runnable() {
-          public void run() {
-            OrderEntryFix.addJarToRoots(mySelectedFramework.getLibraryPath(), myTargetModule, null);
-          }
-        });
-        myFixLibraryPanel.setVisible(false);
-      }
+    myFixLibraryButton = new JButton(CodeInsightLocalize.intentionCreateTestDialogFixLibrary().get());
+    myFixLibraryButton.addActionListener(e -> {
+      myProject.getApplication()
+        .runWriteAction(() -> OrderEntryFix.addJarToRoots(mySelectedFramework.getLibraryPath(), myTargetModule, null));
+      myFixLibraryPanel.setVisible(false);
     });
 
     myTargetClassNameField = new EditorTextField(targetClass.getName() + "Test");
@@ -185,10 +186,15 @@ public class CreateTestDialog extends DialogWrapper {
     mySuperClassField.setMinimumSize(mySuperClassField.getPreferredSize());
 
     String targetPackageName = targetPackage != null ? targetPackage.getQualifiedName() : "";
-    myTargetPackageField = new PackageNameReferenceEditorCombo(targetPackageName, myProject, RECENTS_KEY, CodeInsightBundle.message("dialog.create.class.package.chooser.title"));
+    myTargetPackageField = new PackageNameReferenceEditorCombo(
+      targetPackageName,
+      myProject,
+      RECENTS_KEY,
+      CodeInsightLocalize.dialogCreateClassPackageChooserTitle().get()
+    );
 
     new AnAction() {
-      public void actionPerformed(AnActionEvent e) {
+      public void actionPerformed(@Nonnull AnActionEvent e) {
         myTargetPackageField.getButton().doClick();
       }
     }.registerCustomShortcutSet(new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, InputEvent.SHIFT_DOWN_MASK)),
@@ -197,20 +203,16 @@ public class CreateTestDialog extends DialogWrapper {
     myGenerateBeforeBox = new JCheckBox("setUp/@Before");
     myGenerateAfterBox = new JCheckBox("tearDown/@After");
 
-    myShowInheritedMethodsBox = new JCheckBox(CodeInsightBundle.message("intention.create.test.dialog.show.inherited"));
-    myShowInheritedMethodsBox.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        updateMethodsTable();
-      }
-    });
+    myShowInheritedMethodsBox = new JCheckBox(CodeInsightLocalize.intentionCreateTestDialogShowInherited().get());
+    myShowInheritedMethodsBox.addActionListener(e -> updateMethodsTable());
     restoreShowInheritedMembersStatus();
     myMethodsTable = new MemberSelectionTable(Collections.<MemberInfo>emptyList(), null);
     updateMethodsTable();
   }
 
   private void onLibrarySelected(TestFramework descriptor) {
-    String text = CodeInsightBundle.message("intention.create.test.dialog.library.not.found", descriptor.getName());
-    myFixLibraryLabel.setText(text);
+    LocalizeValue text = CodeInsightLocalize.intentionCreateTestDialogLibraryNotFound(descriptor.getName());
+    myFixLibraryLabel.setText(text.get());
     myFixLibraryPanel.setVisible(!descriptor.isLibraryAttached(myTargetModule));
 
     String superClass = descriptor.getDefaultSuperClass();
@@ -222,7 +224,7 @@ public class CreateTestDialog extends DialogWrapper {
     List<MemberInfo> methods = TestIntegrationUtils.extractClassMethods(
         myTargetClass, myShowInheritedMethodsBox.isSelected());
 
-    Set<PsiMember> selectedMethods = new HashSet<PsiMember>();
+    Set<PsiMember> selectedMethods = new HashSet<>();
     for (MemberInfo each : myMethodsTable.getSelectedMemberInfos()) {
       selectedMethods.add(each.getMember());
     }
@@ -296,7 +298,7 @@ public class CreateTestDialog extends DialogWrapper {
     constr.gridy = gridy++;
     constr.gridx = 0;
     constr.weightx = 0;
-    panel.add(new JLabel(CodeInsightBundle.message("intention.create.test.dialog.testing.library")), constr);
+    panel.add(new JLabel(CodeInsightLocalize.intentionCreateTestDialogTestingLibrary().get()), constr);
 
     constr.gridx = 1;
     constr.weightx = 1;
@@ -320,7 +322,7 @@ public class CreateTestDialog extends DialogWrapper {
     constr.gridx = 0;
     constr.weightx = 0;
     constr.gridwidth = 1;
-    panel.add(new JLabel(CodeInsightBundle.message("intention.create.test.dialog.class.name")), constr);
+    panel.add(new JLabel(CodeInsightLocalize.intentionCreateTestDialogClassName().get()), constr);
 
     constr.gridx = 1;
     constr.weightx = 1;
@@ -330,7 +332,7 @@ public class CreateTestDialog extends DialogWrapper {
     constr.gridy = gridy++;
     constr.gridx = 0;
     constr.weightx = 0;
-    panel.add(new JLabel(CodeInsightBundle.message("intention.create.test.dialog.super.class")), constr);
+    panel.add(new JLabel(CodeInsightLocalize.intentionCreateTestDialogSuperClass().get()), constr);
 
     constr.gridx = 1;
     constr.weightx = 1;
@@ -340,7 +342,7 @@ public class CreateTestDialog extends DialogWrapper {
     constr.gridy = gridy++;
     constr.gridx = 0;
     constr.weightx = 0;
-    panel.add(new JLabel(CodeInsightBundle.message("dialog.create.class.destination.package.label")), constr);
+    panel.add(new JLabel(CodeInsightLocalize.dialogCreateClassDestinationPackageLabel().get()), constr);
 
     constr.gridx = 1;
     constr.weightx = 1;
@@ -353,7 +355,7 @@ public class CreateTestDialog extends DialogWrapper {
     constr.gridy = gridy++;
     constr.gridx = 0;
     constr.weightx = 0;
-    panel.add(new JLabel(CodeInsightBundle.message("intention.create.test.dialog.generate")), constr);
+    panel.add(new JLabel(CodeInsightLocalize.intentionCreateTestDialogGenerate().get()), constr);
 
     constr.gridx = 1;
     constr.weightx = 1;
@@ -367,7 +369,7 @@ public class CreateTestDialog extends DialogWrapper {
     constr.gridy = gridy++;
     constr.gridx = 0;
     constr.weightx = 0;
-    panel.add(new JLabel(CodeInsightBundle.message("intention.create.test.dialog.select.methods")), constr);
+    panel.add(new JLabel(CodeInsightLocalize.intentionCreateTestDialogSelectMethods().get()), constr);
 
     constr.gridx = 1;
     constr.weightx = 1;
@@ -389,7 +391,7 @@ public class CreateTestDialog extends DialogWrapper {
   }
 
   private static Insets insets(int top, int bottom) {
-    return new Insets(top, 8, bottom, 8);
+    return JBUI.insets(top, 8, bottom, 8);
   }
 
   public String getClassName() {
@@ -441,7 +443,7 @@ public class CreateTestDialog extends DialogWrapper {
     }
 
     if (errorMessage != null) {
-      Messages.showMessageDialog(myProject, errorMessage, CommonBundle.getErrorTitle(), Messages.getErrorIcon());
+      Messages.showMessageDialog(myProject, errorMessage, CommonLocalize.titleError().get(), UIUtil.getErrorIcon());
     }
 
     saveDefaultLibraryName();
@@ -455,7 +457,7 @@ public class CreateTestDialog extends DialogWrapper {
     final PackageWrapper targetPackage = new PackageWrapper(PsiManager.getInstance(myProject), packageName);
 
     final VirtualFile selectedRoot = ReadAction.compute(() -> {
-      final HashSet<VirtualFile> testFolders = new HashSet<VirtualFile>();
+      final HashSet<VirtualFile> testFolders = new HashSet<>();
       CreateTestAction.checkForTestRoots(myTargetModule, testFolders);
       VirtualFile[] roots;
       if (testFolders.isEmpty()) {
@@ -479,7 +481,7 @@ public class CreateTestDialog extends DialogWrapper {
       return null;
     }
 
-    return new WriteCommandAction<PsiDirectory>(myProject, CodeInsightBundle.message("create.directory.command")) {
+    return new WriteCommandAction<PsiDirectory>(myProject, CodeInsightLocalize.createDirectoryCommand().get()) {
       protected void run(Result<PsiDirectory> result) throws Throwable {
         result.setResult(RefactoringUtil.createPackageDirectoryInSourceRoot(targetPackage, selectedRoot));
       }
@@ -487,8 +489,9 @@ public class CreateTestDialog extends DialogWrapper {
   }
 
   @Nullable
+  @RequiredReadAction
   private PsiDirectory chooseDefaultDirectory(String packageName) {
-    List<PsiDirectory> dirs = new ArrayList<PsiDirectory>();
+    List<PsiDirectory> dirs = new ArrayList<>();
     for (ContentEntry e : ModuleRootManager.getInstance(myTargetModule).getContentEntries()) {
       for (ContentFolder f : e.getFolders(LanguageContentFolderScopes.of(TestContentFolderTypeProvider.getInstance()))) {
         final VirtualFile file = f.getFile();
@@ -527,7 +530,7 @@ public class CreateTestDialog extends DialogWrapper {
     public void actionPerformed(ActionEvent e) {
       TreeClassChooserFactory f = TreeClassChooserFactory.getInstance(myProject);
       TreeClassChooser dialog =
-          f.createAllProjectScopeChooser(CodeInsightBundle.message("intention.create.test.dialog.choose.super.class"));
+          f.createAllProjectScopeChooser(CodeInsightLocalize.intentionCreateTestDialogChooseSuperClass().get());
       dialog.showDialog();
       PsiClass aClass = dialog.getSelected();
       if (aClass != null) {

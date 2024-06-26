@@ -17,8 +17,6 @@ package com.intellij.java.impl.refactoring.actions;
 
 import com.intellij.java.language.psi.PsiClassOwner;
 import consulo.application.dumb.DumbAware;
-import consulo.language.editor.CommonDataKeys;
-import consulo.language.editor.LangDataKeys;
 import consulo.language.editor.refactoring.rename.PsiElementRenameHandler;
 import consulo.language.psi.PsiFile;
 import consulo.project.Project;
@@ -32,26 +30,24 @@ import consulo.virtualFileSystem.VirtualFile;
  * @author ven
  */
 public class RenameFileAction extends AnAction implements DumbAware {
-  public static final String RENAME_FILE = "Rename File...";
-
   public void actionPerformed(final AnActionEvent e) {
-    final PsiFile file = e.getData(LangDataKeys.PSI_FILE);
+    final PsiFile file = e.getData(PsiFile.KEY);
     assert file != null;
     final VirtualFile virtualFile = file.getVirtualFile();
     assert virtualFile != null;
-    final Project project = e.getData(CommonDataKeys.PROJECT);
+    final Project project = e.getData(Project.KEY);
     assert project != null;
     PsiElementRenameHandler.invoke(file, project, file, null);
   }
 
   public void update(AnActionEvent e) {
-    PsiFile file = e.getData(LangDataKeys.PSI_FILE);
+    PsiFile file = e.getData(PsiFile.KEY);
     Presentation presentation = e.getPresentation();
-    boolean enabled = file instanceof PsiClassOwner && e.getPlace() != ActionPlaces.EDITOR_POPUP && e.getData(CommonDataKeys.PROJECT) != null;
+    boolean enabled = file instanceof PsiClassOwner && e.getPlace() != ActionPlaces.EDITOR_POPUP && e.getData(Project.KEY) != null;
     presentation.setEnabled(enabled);
     presentation.setVisible(enabled);
     if (enabled) {
-      presentation.setText(RENAME_FILE);
+      presentation.setText("Rename File...");
       presentation.setDescription("Rename selected file");
     }
   }

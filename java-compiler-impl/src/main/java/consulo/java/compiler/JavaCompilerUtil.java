@@ -21,12 +21,13 @@ import com.intellij.java.language.module.EffectiveLanguageLevelUtil;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.compiler.CompileContext;
-import consulo.compiler.CompilerBundle;
 import consulo.compiler.ModuleChunk;
+import consulo.compiler.localize.CompilerLocalize;
 import consulo.content.bundle.Sdk;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
+import consulo.platform.Platform;
 import consulo.process.cmd.ParametersList;
 import consulo.util.io.CharsetToolkit;
 import consulo.util.lang.StringUtil;
@@ -71,12 +72,14 @@ public class JavaCompilerUtil {
     }
   }
 
-  public static void addSourceCommandLineSwitch(final Sdk jdk,
-                                                LanguageLevel chunkLanguageLevel,
-                                                @NonNls final ParametersList parametersList) {
+  public static void addSourceCommandLineSwitch(
+    final Sdk jdk,
+    LanguageLevel chunkLanguageLevel,
+    @NonNls final ParametersList parametersList
+  ) {
     final String versionString = jdk.getVersionString();
     if (StringUtil.isEmpty(versionString)) {
-      throw new IllegalArgumentException(CompilerBundle.message("javac.error.unknown.jdk.version", jdk.getName()));
+      throw new IllegalArgumentException(CompilerLocalize.javacErrorUnknownJdkVersion(jdk.getName()).get());
     }
 
     final LanguageLevel applicableLanguageLevel = getApplicableLanguageLevel(versionString, chunkLanguageLevel);
@@ -116,23 +119,25 @@ public class JavaCompilerUtil {
   public static void addLocaleOptions(final ParametersList parametersList, final boolean launcherUsed) {
     // need to specify default encoding so that javac outputs messages in 'correct' language
     //noinspection HardCodedStringLiteral
-    parametersList.add((launcherUsed ? "-J" : "") + "-D" + CharsetToolkit.FILE_ENCODING_PROPERTY + "=" + CharsetToolkit.getDefaultSystemCharset()
-                                                                                                                       .name());
+    parametersList.add(
+      (launcherUsed ? "-J" : "") + "-D" + CharsetToolkit.FILE_ENCODING_PROPERTY + "=" +
+      CharsetToolkit.getDefaultSystemCharset().name()
+    );
     // javac's VM should use the same default locale that IDEA uses in order for javac to print messages in 'correct' language
     //noinspection HardCodedStringLiteral
-    final String lang = System.getProperty("user.language");
+    final String lang = Platform.current().jvm().getRuntimeProperty("user.language");
     if (lang != null) {
       //noinspection HardCodedStringLiteral
       parametersList.add((launcherUsed ? "-J" : "") + "-Duser.language=" + lang);
     }
     //noinspection HardCodedStringLiteral
-    final String country = System.getProperty("user.country");
+    final String country = Platform.current().jvm().getRuntimeProperty("user.country");
     if (country != null) {
       //noinspection HardCodedStringLiteral
       parametersList.add((launcherUsed ? "-J" : "") + "-Duser.country=" + country);
     }
     //noinspection HardCodedStringLiteral
-    final String region = System.getProperty("user.region");
+    final String region = Platform.current().jvm().getRuntimeProperty("user.region");
     if (region != null) {
       //noinspection HardCodedStringLiteral
       parametersList.add((launcherUsed ? "-J" : "") + "-Duser.region=" + region);

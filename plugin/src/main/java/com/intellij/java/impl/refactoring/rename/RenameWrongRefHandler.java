@@ -18,11 +18,9 @@ package com.intellij.java.impl.refactoring.rename;
 
 import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.RenameWrongRefFix;
 import com.intellij.java.language.psi.PsiReferenceExpression;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.CommonDataKeys;
 import consulo.dataContext.DataContext;
-import consulo.language.editor.LangDataKeys;
-import consulo.language.editor.PlatformDataKeys;
 import consulo.application.Result;
 import consulo.language.editor.WriteCommandAction;
 import consulo.codeEditor.Editor;
@@ -36,27 +34,29 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class RenameWrongRefHandler implements RenameHandler {
   @Override
+  @RequiredReadAction
   public final boolean isAvailableOnDataContext(final DataContext dataContext) {
-    final Editor editor = dataContext.getData(PlatformDataKeys.EDITOR);
-    final PsiFile file = dataContext.getData(LangDataKeys.PSI_FILE);
-    final Project project = dataContext.getData(CommonDataKeys.PROJECT);
-    if (editor == null || file == null || project == null) {
-      return false;
-    }
-    return isAvailable(project, editor, file);
+    final Editor editor = dataContext.getData(Editor.KEY);
+    final PsiFile file = dataContext.getData(PsiFile.KEY);
+    final Project project = dataContext.getData(Project.KEY);
+    return !(editor == null || file == null || project == null) && isAvailable(project, editor, file);
   }
 
+  @RequiredReadAction
   public static boolean isAvailable(Project project, Editor editor, PsiFile file) {
     final PsiReference reference = file.findReferenceAt(editor.getCaretModel().getOffset());
-    return reference instanceof PsiReferenceExpression && new RenameWrongRefFix((PsiReferenceExpression) reference, true).isAvailable(project, editor, file);
+    return reference instanceof PsiReferenceExpression referenceExpression
+      && new RenameWrongRefFix(referenceExpression, true).isAvailable(project, editor, file);
   }
 
   @Override
+  @RequiredReadAction
   public final boolean isRenaming(final DataContext dataContext) {
     return isAvailableOnDataContext(dataContext);
   }
 
   @Override
+  @RequiredReadAction
   public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file, final DataContext dataContext) {
     final PsiReferenceExpression reference = (PsiReferenceExpression) file.findReferenceAt(editor.getCaretModel().getOffset());
     new WriteCommandAction(project) {

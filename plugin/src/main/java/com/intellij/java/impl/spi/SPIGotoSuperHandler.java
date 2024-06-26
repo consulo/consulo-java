@@ -19,6 +19,7 @@ import com.intellij.java.impl.codeInsight.navigation.BaseJavaGotoSuperHandler;
 import com.intellij.java.impl.spi.psi.SPIClassProviderReferenceElement;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.spi.SPILanguage;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
 import consulo.language.psi.PsiFile;
@@ -31,6 +32,7 @@ import jakarta.annotation.Nonnull;
  */
 @ExtensionImpl
 public class SPIGotoSuperHandler extends BaseJavaGotoSuperHandler {
+  @RequiredReadAction
   @Override
   protected PsiNameIdentifierOwner getElement(PsiFile file, int offset) {
     final SPIClassProviderReferenceElement

@@ -7,7 +7,8 @@ import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
-import consulo.application.ApplicationManager;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.application.Application;
 import consulo.application.util.function.Computable;
 import consulo.codeEditor.Editor;
 import consulo.document.RangeMarker;
@@ -23,9 +24,9 @@ import consulo.language.psi.PsiErrorElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.Comparing;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -35,12 +36,15 @@ import jakarta.annotation.Nullable;
 public abstract class AbstractJavaInplaceIntroducer extends AbstractInplaceIntroducer<PsiVariable, PsiExpression> {
   protected TypeSelectorManagerImpl myTypeSelectorManager;
 
-  public AbstractJavaInplaceIntroducer(final Project project,
-                                       Editor editor,
-                                       PsiExpression expr,
-                                       PsiVariable localVariable,
-                                       PsiExpression[] occurrences,
-                                       TypeSelectorManagerImpl typeSelectorManager, String title) {
+  public AbstractJavaInplaceIntroducer(
+    final Project project,
+    Editor editor,
+    PsiExpression expr,
+    PsiVariable localVariable,
+    PsiExpression[] occurrences,
+    TypeSelectorManagerImpl typeSelectorManager,
+    String title
+  ) {
     super(project, EditorWindow.getTopLevelEditor(editor), expr, localVariable, occurrences, title, JavaFileType.INSTANCE);
     myTypeSelectorManager = typeSelectorManager;
   }
@@ -56,8 +60,8 @@ public abstract class AbstractJavaInplaceIntroducer extends AbstractInplaceIntro
     myTypeSelectorManager.setAllOccurrences(replaceAll);
     final PsiType defaultType = myTypeSelectorManager.getTypeSelector().getSelectedType();
     final String propertyName = variable != null
-                                ? JavaCodeStyleManager.getInstance(myProject).variableNameToPropertyName(variable.getName(), VariableKind.LOCAL_VARIABLE)
-                                : null;
+      ? JavaCodeStyleManager.getInstance(myProject).variableNameToPropertyName(variable.getName(), VariableKind.LOCAL_VARIABLE)
+      : null;
     final String[] names = suggestNames(defaultType, propertyName);
     if (propertyName != null && names.length > 1) {
       final JavaCodeStyleManager javaCodeStyleManager = JavaCodeStyleManager.getInstance(myProject);
@@ -77,20 +81,20 @@ public abstract class AbstractJavaInplaceIntroducer extends AbstractInplaceIntro
   }
 
   @Override
+  @RequiredUIAccess
   protected void correctExpression() {
     final PsiElement parent = getExpr().getParent();
     if (parent instanceof PsiExpressionStatement && parent.getLastChild() instanceof PsiErrorElement) {
-      myExpr = ((PsiExpressionStatement)ApplicationManager.getApplication().runWriteAction(new Computable<PsiElement>() {
-        @Override
-        public PsiElement compute() {
-          return parent.replace(JavaPsiFacade.getElementFactory(myProject).createStatementFromText(parent.getText() + ";", parent));
-        }
-      })).getExpression();
+      myExpr = ((PsiExpressionStatement)Application.get().runWriteAction(
+        (Computable<PsiElement>)() ->
+          parent.replace(JavaPsiFacade.getElementFactory(myProject).createStatementFromText(parent.getText() + ";", parent))
+      )).getExpression();
       myEditor.getCaretModel().moveToOffset(myExpr.getTextRange().getStartOffset());
     }
   }
 
   @Override
+  @RequiredReadAction
   public PsiExpression restoreExpression(PsiFile containingFile, PsiVariable psiVariable, RangeMarker marker, String exprText) {
     return restoreExpression(containingFile, psiVariable, JavaPsiFacade.getElementFactory(myProject), marker, exprText);
   }
@@ -104,8 +108,8 @@ public abstract class AbstractJavaInplaceIntroducer extends AbstractInplaceIntro
     }
     try {
       myTypeSelectorManager = myExpr != null
-                              ? new TypeSelectorManagerImpl(myProject, typePointer.getType(), myExpr, myOccurrences)
-                              : new TypeSelectorManagerImpl(myProject, typePointer.getType(), myOccurrences);
+        ? new TypeSelectorManagerImpl(myProject, typePointer.getType(), myExpr, myOccurrences)
+        : new TypeSelectorManagerImpl(myProject, typePointer.getType(), myOccurrences);
     }
     catch (Exception e) {
       LOG.error(e);
@@ -122,8 +126,9 @@ public abstract class AbstractJavaInplaceIntroducer extends AbstractInplaceIntro
     return myTypeSelectorManager.getDefaultType();
   }
 
+  @RequiredReadAction
   public static String[] appendUnresolvedExprName(String[] names, final PsiExpression expr) {
-    if (expr instanceof PsiReferenceExpression && ((PsiReferenceExpression)expr).resolve() == null) {
+    if (expr instanceof PsiReferenceExpression referenceExpression && referenceExpression.resolve() == null) {
       final String name = expr.getText();
       if (PsiNameHelper.getInstance(expr.getProject()).isIdentifier(name, LanguageLevel.HIGHEST)) {
         names = ArrayUtil.mergeArrays(new String[]{name}, names);
@@ -132,23 +137,24 @@ public abstract class AbstractJavaInplaceIntroducer extends AbstractInplaceIntro
     return names;
   }
 
+  @RequiredReadAction
   @Nullable
-  public static PsiExpression restoreExpression(PsiFile containingFile,
-                                                PsiVariable psiVariable,
-                                                PsiElementFactory elementFactory,
-                                                RangeMarker marker, String exprText) {
+  public static PsiExpression restoreExpression(
+    PsiFile containingFile,
+    PsiVariable psiVariable,
+    PsiElementFactory elementFactory,
+    RangeMarker marker, String exprText
+  ) {
     if (exprText == null) return null;
     if (psiVariable == null || !psiVariable.isValid()) return null;
     final PsiElement refVariableElement = containingFile.findElementAt(marker.getStartOffset());
     final PsiElement refVariableElementParent = refVariableElement != null ? refVariableElement.getParent() : null;
-    PsiExpression expression = refVariableElement instanceof PsiKeyword && refVariableElementParent instanceof PsiNewExpression
-                               ? (PsiNewExpression)refVariableElementParent 
-                               : PsiTreeUtil.getParentOfType(refVariableElement, PsiReferenceExpression.class);
-    if (expression instanceof PsiReferenceExpression && !(expression.getParent() instanceof PsiMethodCallExpression)) {
-      final String referenceName = ((PsiReferenceExpression)expression).getReferenceName();
-      if (((PsiReferenceExpression)expression).resolve() == psiVariable ||
-          Comparing.strEqual(psiVariable.getName(), referenceName) ||
-          Comparing.strEqual(exprText, referenceName)) {
+    PsiExpression expression = refVariableElement instanceof PsiKeyword && refVariableElementParent instanceof PsiNewExpression newExpression
+      ? newExpression : PsiTreeUtil.getParentOfType(refVariableElement, PsiReferenceExpression.class);
+    if (expression instanceof PsiReferenceExpression referenceExpression && !(expression.getParent() instanceof PsiMethodCallExpression)) {
+      final String referenceName = referenceExpression.getReferenceName();
+      if (referenceExpression.resolve() == psiVariable || Comparing.strEqual(psiVariable.getName(), referenceName)
+        || Comparing.strEqual(exprText, referenceName)) {
         return (PsiExpression)expression.replace(elementFactory.createExpressionFromText(exprText, psiVariable));
       }
     }
@@ -157,11 +163,11 @@ public abstract class AbstractJavaInplaceIntroducer extends AbstractInplaceIntro
     }
     while (expression instanceof PsiReferenceExpression) {
       final PsiElement parent = expression.getParent();
-      if (parent instanceof PsiMethodCallExpression) {
-        if (parent.getText().equals(exprText)) return (PsiExpression)parent;
+      if (parent instanceof PsiMethodCallExpression methodCallExpression) {
+        if (parent.getText().equals(exprText)) return methodCallExpression;
       }
-      if (parent instanceof PsiExpression) {
-        expression = (PsiExpression)parent;
+      if (parent instanceof PsiExpression parentExpression) {
+        expression = parentExpression;
       } else {
         return null;
       }
@@ -170,35 +176,31 @@ public abstract class AbstractJavaInplaceIntroducer extends AbstractInplaceIntro
       return expression;
     }
 
-    if (refVariableElementParent instanceof PsiExpression && refVariableElementParent.getText().equals(exprText)) {
-      return (PsiExpression)refVariableElementParent;
-    }
-
-    return null;
+    return refVariableElementParent instanceof PsiExpression psiExpression && refVariableElementParent.getText().equals(exprText)
+      ? psiExpression : null;
   }
 
-   public static Expression createExpression(final TypeExpression expression, final String defaultType) {
-     return new Expression() {
-       @Override
-       public Result calculateResult(ExpressionContext context) {
-         return new TextResult(defaultType);
-       }
+  public static Expression createExpression(final TypeExpression expression, final String defaultType) {
+    return new Expression() {
+      @Override
+      public Result calculateResult(ExpressionContext context) {
+        return new TextResult(defaultType);
+      }
 
-       @Override
-       public Result calculateQuickResult(ExpressionContext context) {
-         return new TextResult(defaultType);
-       }
+      @Override
+      public Result calculateQuickResult(ExpressionContext context) {
+        return new TextResult(defaultType);
+      }
 
-       @Override
-       public LookupElement[] calculateLookupItems(ExpressionContext context) {
-         return expression.calculateLookupItems(context);
-       }
+      @Override
+      public LookupElement[] calculateLookupItems(ExpressionContext context) {
+        return expression.calculateLookupItems(context);
+      }
 
-       @Override
-       public String getAdvertisingText() {
-         return null;
-       }
-     };
-   }
-
+      @Override
+      public String getAdvertisingText() {
+        return null;
+      }
+    };
+  }
 }

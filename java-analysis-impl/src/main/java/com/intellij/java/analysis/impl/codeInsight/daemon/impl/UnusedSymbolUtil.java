@@ -23,6 +23,7 @@ import com.intellij.java.language.impl.psi.impl.FindSuperElementsHelper;
 import com.intellij.java.language.impl.psi.impl.source.PsiClassImpl;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PropertyUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
 import consulo.application.util.function.Processor;
@@ -47,14 +48,18 @@ import consulo.usage.UsageInfo;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
+import static consulo.language.psi.search.PsiSearchHelper.SearchCostResult.TOO_MANY_OCCURRENCES;
+
 public class UnusedSymbolUtil {
   public static boolean isInjected(@Nonnull Project project, @Nonnull PsiModifierListOwner modifierListOwner) {
     return EntryPointsManagerBase.getInstance(project).isEntryPoint(modifierListOwner);
   }
 
-  public static boolean isImplicitUsage(@Nonnull Project project,
-                                        @Nonnull PsiModifierListOwner element,
-                                        @Nonnull ProgressIndicator progress) {
+  public static boolean isImplicitUsage(
+    @Nonnull Project project,
+    @Nonnull PsiModifierListOwner element,
+    @Nonnull ProgressIndicator progress
+  ) {
     return isInjected(project, element) || project.getExtensionPoint(ImplicitUsageProvider.class).findFirstSafe(provider -> {
       progress.checkCanceled();
       return provider.isImplicitUsage(element);
@@ -65,9 +70,7 @@ public class UnusedSymbolUtil {
     return isImplicitRead(variable.getProject(), variable, null);
   }
 
-  public static boolean isImplicitRead(@Nonnull Project project,
-                                       @Nonnull PsiVariable element,
-                                       @Nullable ProgressIndicator progress) {
+  public static boolean isImplicitRead(@Nonnull Project project, @Nonnull PsiVariable element, @Nullable ProgressIndicator progress) {
     return project.getExtensionPoint(ImplicitUsageProvider.class).findFirstSafe(provider -> {
       ProgressManager.checkCanceled();
       return provider.isImplicitRead(element);
@@ -78,9 +81,7 @@ public class UnusedSymbolUtil {
     return isImplicitWrite(variable.getProject(), variable, null);
   }
 
-  public static boolean isImplicitWrite(@Nonnull Project project,
-                                        @Nonnull PsiVariable element,
-                                        @Nullable ProgressIndicator progress) {
+  public static boolean isImplicitWrite(@Nonnull Project project, @Nonnull PsiVariable element, @Nullable ProgressIndicator progress) {
     return project.getExtensionPoint(ImplicitUsageProvider.class).findFirstSafe(provider -> {
       ProgressManager.checkCanceled();
       return provider.isImplicitWrite(element);
@@ -88,9 +89,11 @@ public class UnusedSymbolUtil {
   }
 
   @Nullable
-  public static HighlightInfo createUnusedSymbolInfo(@Nonnull PsiElement element,
-                                                     @Nonnull String message,
-                                                     @Nonnull final HighlightInfoType highlightInfoType) {
+  public static HighlightInfo createUnusedSymbolInfo(
+    @Nonnull PsiElement element,
+    @Nonnull String message,
+    @Nonnull final HighlightInfoType highlightInfoType
+  ) {
     HighlightInfo info = HighlightInfo.newHighlightInfo(highlightInfoType).range(element).descriptionAndTooltip
         (message).create();
     if (info == null) {
@@ -106,26 +109,29 @@ public class UnusedSymbolUtil {
     return info;
   }
 
-  public static boolean isFieldUnused(@Nonnull Project project,
-                                      @Nonnull PsiFile containingFile,
-                                      @Nonnull PsiField field,
-                                      @Nonnull ProgressIndicator progress,
-                                      @Nonnull GlobalUsageHelper helper) {
+  public static boolean isFieldUnused(
+    @Nonnull Project project,
+    @Nonnull PsiFile containingFile,
+    @Nonnull PsiField field,
+    @Nonnull ProgressIndicator progress,
+    @Nonnull GlobalUsageHelper helper
+  ) {
     if (helper.isLocallyUsed(field)) {
       return false;
     }
-    if (field instanceof PsiEnumConstant && isEnumValuesMethodUsed(project, containingFile, field, progress,
-        helper)) {
+    if (field instanceof PsiEnumConstant && isEnumValuesMethodUsed(project, containingFile, field, progress, helper)) {
       return false;
     }
     return weAreSureThereAreNoUsages(project, containingFile, field, progress, helper);
   }
 
-  public static boolean isMethodReferenced(@Nonnull Project project,
-                                           @Nonnull PsiFile containingFile,
-                                           @Nonnull PsiMethod method,
-                                           @Nonnull ProgressIndicator progress,
-                                           @Nonnull GlobalUsageHelper helper) {
+  public static boolean isMethodReferenced(
+    @Nonnull Project project,
+    @Nonnull PsiFile containingFile,
+    @Nonnull PsiMethod method,
+    @Nonnull ProgressIndicator progress,
+    @Nonnull GlobalUsageHelper helper
+  ) {
     if (helper.isLocallyUsed(method)) {
       return true;
     }
@@ -136,10 +142,7 @@ public class UnusedSymbolUtil {
       return true;
     }
     if (isPrivate) {
-      if (isIntentionalPrivateConstructor(method, containingClass)) {
-        return true;
-      }
-      if (isImplicitUsage(project, method, progress)) {
+      if (isIntentionalPrivateConstructor(method, containingClass) || isImplicitUsage(project, method, progress)) {
         return true;
       }
       if (!helper.isCurrentFileAlreadyChecked()) {
@@ -166,11 +169,13 @@ public class UnusedSymbolUtil {
     return false;
   }
 
-  private static boolean weAreSureThereAreNoUsages(@Nonnull Project project,
-                                                   @Nonnull PsiFile containingFile,
-                                                   @Nonnull final PsiMember member,
-                                                   @Nonnull ProgressIndicator progress,
-                                                   @Nonnull GlobalUsageHelper helper) {
+  private static boolean weAreSureThereAreNoUsages(
+    @Nonnull Project project,
+    @Nonnull PsiFile containingFile,
+    @Nonnull final PsiMember member,
+    @Nonnull ProgressIndicator progress,
+    @Nonnull GlobalUsageHelper helper
+  ) {
     log("* " + member.getName() + ": call wearesure");
     if (!helper.shouldCheckUsages(member)) {
       log("* " + member.getName() + ": should not check");
@@ -206,12 +211,15 @@ public class UnusedSymbolUtil {
   }
 
   // return false if can't process usages (weird member of too may usages) or processor returned false
-  public static boolean processUsages(@Nonnull Project project,
-                                      @Nonnull PsiFile containingFile,
-                                      @Nonnull PsiMember member,
-                                      @Nonnull ProgressIndicator progress,
-                                      @Nullable PsiFile ignoreFile,
-                                      @Nonnull Processor<UsageInfo> usageInfoProcessor) {
+  @RequiredReadAction
+  public static boolean processUsages(
+    @Nonnull Project project,
+    @Nonnull PsiFile containingFile,
+    @Nonnull PsiMember member,
+    @Nonnull ProgressIndicator progress,
+    @Nullable PsiFile ignoreFile,
+    @Nonnull Processor<UsageInfo> usageInfoProcessor
+  ) {
     String name = member.getName();
     if (name == null) {
       log("* " + member.getName() + " no name; false");
@@ -219,17 +227,17 @@ public class UnusedSymbolUtil {
     }
     SearchScope useScope = member.getUseScope();
     PsiSearchHelper searchHelper = PsiSearchHelper.SERVICE.getInstance(project);
-    if (useScope instanceof GlobalSearchScope) {
+    if (useScope instanceof GlobalSearchScope globalSearchScope) {
       // some classes may have references from within XML outside dependent modules, e.g. our actions
       if (member instanceof PsiClass) {
-        useScope = GlobalSearchScope.projectScope(project).uniteWith((GlobalSearchScope) useScope);
+        useScope = GlobalSearchScope.projectScope(project).uniteWith(globalSearchScope);
       }
 
       // if we've resolved all references, find usages will be fast
       PsiSearchHelper.SearchCostResult cheapEnough = RefResolveService.ENABLED && RefResolveService.getInstance
           (project).isUpToDate() ? PsiSearchHelper.SearchCostResult.FEW_OCCURRENCES : searchHelper
           .isCheapEnoughToSearch(name, (GlobalSearchScope) useScope, ignoreFile, progress);
-      if (cheapEnough == PsiSearchHelper.SearchCostResult.TOO_MANY_OCCURRENCES) {
+      if (cheapEnough == TOO_MANY_OCCURRENCES) {
         log("* " + member.getName() + " too many usages; false");
         return false;
       }
@@ -246,9 +254,8 @@ public class UnusedSymbolUtil {
         String propertyName = PropertyUtil.getPropertyName(member);
         if (propertyName != null) {
           SearchScope fileScope = containingFile.getUseScope();
-          if (fileScope instanceof GlobalSearchScope && searchHelper.isCheapEnoughToSearch(propertyName,
-              (GlobalSearchScope) fileScope, ignoreFile, progress) == PsiSearchHelper.SearchCostResult
-              .TOO_MANY_OCCURRENCES) {
+          if (fileScope instanceof GlobalSearchScope
+            && searchHelper.isCheapEnoughToSearch(propertyName, (GlobalSearchScope) fileScope, ignoreFile, progress) == TOO_MANY_OCCURRENCES) {
             log("* " + member.getName() + " too many prop usages; false");
             return false;
           }
@@ -262,8 +269,7 @@ public class UnusedSymbolUtil {
     } else if (member instanceof PsiClass) {
       options = new JavaClassFindUsagesOptions(project);
       options.isSearchForTextOccurrences = true;
-    } else if (member instanceof PsiMethod) {
-      PsiMethod method = (PsiMethod) member;
+    } else if (member instanceof PsiMethod method) {
       options = new JavaMethodFindUsagesOptions(project);
       options.isSearchForTextOccurrences = method.isConstructor();
     } else if (member instanceof PsiVariable) {
@@ -278,11 +284,13 @@ public class UnusedSymbolUtil {
     return JavaFindUsagesHelper.processElementUsages(member, options, usageInfoProcessor);
   }
 
-  private static boolean isEnumValuesMethodUsed(@Nonnull Project project,
-                                                @Nonnull PsiFile containingFile,
-                                                @Nonnull PsiMember member,
-                                                @Nonnull ProgressIndicator progress,
-                                                @Nonnull GlobalUsageHelper helper) {
+  private static boolean isEnumValuesMethodUsed(
+    @Nonnull Project project,
+    @Nonnull PsiFile containingFile,
+    @Nonnull PsiMember member,
+    @Nonnull ProgressIndicator progress,
+    @Nonnull GlobalUsageHelper helper
+  ) {
     final PsiClass containingClass = member.getContainingClass();
     if (!(containingClass instanceof PsiClassImpl)) {
       return true;
@@ -316,18 +324,19 @@ public class UnusedSymbolUtil {
     if (member instanceof PsiField) {
       return false;  //Java field cannot be referenced by anything but its name
     }
-    if (member instanceof PsiMethod) {
-      return PropertyUtil.isSimplePropertyAccessor((PsiMethod) member);  //Java accessors can be referenced by
-      // field name from Groovy
+    if (member instanceof PsiMethod method) {
+      return PropertyUtil.isSimplePropertyAccessor(method);  //Java accessors can be referenced by field name from Groovy
     }
     return false;
   }
 
-  public static boolean isClassUsed(@Nonnull Project project,
-                                    @Nonnull PsiFile containingFile,
-                                    @Nonnull PsiClass aClass,
-                                    @Nonnull ProgressIndicator progress,
-                                    @Nonnull GlobalUsageHelper helper) {
+  public static boolean isClassUsed(
+    @Nonnull Project project,
+    @Nonnull PsiFile containingFile,
+    @Nonnull PsiClass aClass,
+    @Nonnull ProgressIndicator progress,
+    @Nonnull GlobalUsageHelper helper
+  ) {
     Boolean result = helper.unusedClassCache.get(aClass);
     if (result == null) {
       result = isReallyUsed(project, containingFile, aClass, progress, helper);
@@ -336,11 +345,13 @@ public class UnusedSymbolUtil {
     return result;
   }
 
-  private static boolean isReallyUsed(@Nonnull Project project,
-                                      @Nonnull PsiFile containingFile,
-                                      @Nonnull PsiClass aClass,
-                                      @Nonnull ProgressIndicator progress,
-                                      @Nonnull GlobalUsageHelper helper) {
+  private static boolean isReallyUsed(
+    @Nonnull Project project,
+    @Nonnull PsiFile containingFile,
+    @Nonnull PsiClass aClass,
+    @Nonnull ProgressIndicator progress,
+    @Nonnull GlobalUsageHelper helper
+  ) {
     if (isImplicitUsage(project, aClass, progress) || helper.isLocallyUsed(aClass)) {
       return true;
     }

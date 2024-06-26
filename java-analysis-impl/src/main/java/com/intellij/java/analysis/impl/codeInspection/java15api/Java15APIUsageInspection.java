@@ -3,7 +3,6 @@ package com.intellij.java.analysis.impl.codeInspection.java15api;
 
 import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
 import com.intellij.java.analysis.codeInspection.AbstractBaseJavaLocalInspectionTool;
-import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.module.EffectiveLanguageLevelUtil;
@@ -13,11 +12,13 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemsHolder;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -182,13 +183,13 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
   @Override
   @Nonnull
   public String getGroupDisplayName() {
-    return GroupNames.LANGUAGE_LEVEL_SPECIFIC_GROUP_NAME;
+    return InspectionLocalize.groupNamesLanguageLevelSpecificIssuesAndMigrationAids().get();
   }
 
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionsBundle.message("inspection.1.5.display.name");
+    return InspectionLocalize.inspection15DisplayName().get();
   }
 
   @Override
@@ -290,6 +291,7 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
     }
 
     @Override
+    @RequiredReadAction
     public void visitNameValuePair(PsiNameValuePair pair) {
       super.visitNameValuePair(pair);
       PsiReference reference = pair.getReference();
@@ -378,7 +380,8 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
     }
 
     @Override
-    public void visitNewExpression(final PsiNewExpression expression) {
+    @RequiredReadAction
+    public void visitNewExpression(@Nonnull final PsiNewExpression expression) {
       super.visitNewExpression(expression);
       final PsiMethod constructor = expression.resolveConstructor();
       final Module module = ModuleUtilCore.findModuleForPsiElement(expression);
@@ -394,9 +397,11 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
     }
 
     @Override
-    public void visitMethod(PsiMethod method) {
+    @RequiredReadAction
+    public void visitMethod(@Nonnull PsiMethod method) {
       super.visitMethod(method);
-      PsiAnnotation annotation = !method.isConstructor() ? AnnotationUtil.findAnnotation(method, CommonClassNames.JAVA_LANG_OVERRIDE) : null;
+      PsiAnnotation annotation = !method.isConstructor()
+        ? AnnotationUtil.findAnnotation(method, CommonClassNames.JAVA_LANG_OVERRIDE) : null;
       if (annotation != null) {
         final Module module = ModuleUtilCore.findModuleForPsiElement(annotation);
         LanguageLevel sinceLanguageLevel = null;
@@ -420,18 +425,22 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
       }
     }
 
+    @RequiredReadAction
     private LanguageLevel getEffectiveLanguageLevel(Module module) {
-      if (myEffectiveLanguageLevel != null) {
-        return myEffectiveLanguageLevel;
-      }
-      return EffectiveLanguageLevelUtil.getEffectiveLanguageLevel(module);
+      return myEffectiveLanguageLevel != null ? myEffectiveLanguageLevel : EffectiveLanguageLevelUtil.getEffectiveLanguageLevel(module);
     }
 
     private void registerError(PsiElement reference, LanguageLevel api) {
       if (reference != null && isInProject(reference)) {
-        myHolder.registerProblem(reference,
-            InspectionsBundle.message("inspection.1.5.problem.descriptor", getShortName(api)),
-            myOnTheFly ? new LocalQuickFix[]{(LocalQuickFix) QuickFixFactory.getInstance().createIncreaseLanguageLevelFix(LanguageLevel.values()[api.ordinal() + 1])} : null);
+        myHolder.registerProblem(
+          reference,
+          InspectionLocalize.inspection15ProblemDescriptor(getShortName(api)).get(),
+          myOnTheFly
+            ? new LocalQuickFix[]{
+              (LocalQuickFix) QuickFixFactory.getInstance().createIncreaseLanguageLevelFix(LanguageLevel.values()[api.ordinal() + 1])
+            }
+            : null
+        );
       }
     }
   }
@@ -461,10 +470,13 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
       }
     }
     return containingClass != null ? getLastIncompatibleLanguageLevel(containingClass, languageLevel) : null;
-
   }
 
-  private static LanguageLevel getLastIncompatibleLanguageLevelForSignature(@Nonnull String signature, @Nonnull LanguageLevel languageLevel, @Nonnull Set<String> forbiddenApi) {
+  private static LanguageLevel getLastIncompatibleLanguageLevelForSignature(
+    @Nonnull String signature,
+    @Nonnull LanguageLevel languageLevel,
+    @Nonnull Set<String> forbiddenApi
+  ) {
     if (forbiddenApi.contains(signature)) {
       return languageLevel;
     }
@@ -481,28 +493,23 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
    */
   @Nullable
   public static String getSignature(@Nullable PsiMember member) {
-    if (member instanceof PsiClass) {
-      return ((PsiClass) member).getQualifiedName();
+    if (member instanceof PsiClass psiClass) {
+      return psiClass.getQualifiedName();
     }
     if (member instanceof PsiField) {
       String containingClass = getSignature(member.getContainingClass());
       return containingClass == null ? null : containingClass + "#" + member.getName();
     }
-    if (member instanceof PsiMethod) {
-      final PsiMethod method = (PsiMethod) member;
+    if (member instanceof PsiMethod method) {
       String containingClass = getSignature(member.getContainingClass());
       if (containingClass == null) {
         return null;
       }
 
       StringBuilder buf = new StringBuilder();
-      buf.append(containingClass);
-      buf.append('#');
-      buf.append(method.getName());
-      buf.append('(');
+      buf.append(containingClass).append('#').append(method.getName()).append('(');
       for (PsiType type : method.getSignature(PsiSubstitutor.EMPTY).getParameterTypes()) {
-        buf.append(type.getCanonicalText());
-        buf.append(";");
+        buf.append(type.getCanonicalText()).append(";");
       }
       buf.append(')');
       return buf.toString();

@@ -15,15 +15,15 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.fix;
 
-import consulo.language.editor.inspection.InspectionsBundle;
-import consulo.language.editor.inspection.LocalQuickFix;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
 import com.intellij.java.language.psi.JavaPsiFacade;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiInstanceOfExpression;
-
+import consulo.annotation.access.RequiredReadAction;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 /**
@@ -35,17 +35,18 @@ public class RedundantInstanceofFix implements LocalQuickFix
 	@Nonnull
 	public String getFamilyName()
 	{
-		return InspectionsBundle.message("inspection.data.flow.redundant.instanceof.quickfix");
+		return InspectionLocalize.inspectionDataFlowRedundantInstanceofQuickfix().get();
 	}
 
 	@Override
+	@RequiredReadAction
 	public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 	{
 		final PsiElement psiElement = descriptor.getPsiElement();
-		if(psiElement instanceof PsiInstanceOfExpression)
+		if (psiElement instanceof PsiInstanceOfExpression instanceOfExpression)
 		{
-			PsiExpression compareToNull = JavaPsiFacade.getInstance(psiElement.getProject()).getElementFactory().
-					createExpressionFromText(((PsiInstanceOfExpression) psiElement).getOperand().getText() + " != null", psiElement.getParent());
+			PsiExpression compareToNull = JavaPsiFacade.getInstance(psiElement.getProject()).getElementFactory()
+				.createExpressionFromText(instanceOfExpression.getOperand().getText() + " != null", psiElement.getParent());
 			psiElement.replace(compareToNull);
 		}
 	}

@@ -25,19 +25,22 @@ import com.intellij.java.compiler.impl.CompilerException;
 import com.intellij.java.compiler.impl.javaCompiler.javac.JavacCompiler;
 import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.java.language.impl.JavaFileType;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.ApplicationManager;
-import consulo.application.CommonBundle;
+import consulo.application.Application;
 import consulo.compiler.*;
+import consulo.compiler.localize.CompilerLocalize;
 import consulo.compiler.scope.CompileScope;
 import consulo.compiler.util.ModuleCompilerUtil;
 import consulo.ide.setting.ShowSettingsUtil;
 import consulo.java.compiler.impl.javaCompiler.JavaAdditionalOutputDirectoriesProvider;
 import consulo.logging.Logger;
 import consulo.module.Module;
+import consulo.platform.base.localize.CommonLocalize;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awt.UIUtil;
 import consulo.util.collection.Chunk;
 import consulo.util.lang.ExceptionUtil;
 import consulo.virtualFileSystem.LocalFileSystem;
@@ -64,15 +67,13 @@ public class AnnotationProcessingCompiler implements TranslatingCompiler {
   @Override
   @Nonnull
   public String getDescription() {
-    return CompilerBundle.message("annotation.processing.compiler.description");
+    return CompilerLocalize.annotationProcessingCompilerDescription().get();
   }
 
   @Override
   public boolean isCompilableFile(VirtualFile file, CompileContext context) {
-    if (!myCompilerConfiguration.isAnnotationProcessorsEnabled()) {
-      return false;
-    }
-    return file.getFileType() == JavaFileType.INSTANCE && !isExcludedFromAnnotationProcessing(file, context);
+    return myCompilerConfiguration.isAnnotationProcessorsEnabled() && file.getFileType() == JavaFileType.INSTANCE
+      && !isExcludedFromAnnotationProcessing(file, context);
   }
 
   @Override
@@ -110,18 +111,15 @@ public class AnnotationProcessingCompiler implements TranslatingCompiler {
     }
     finally {
       javacCompiler.setAnnotationProcessorMode(processorMode);
-      final Set<VirtualFile> dirsToRefresh = new HashSet<VirtualFile>();
-      ApplicationManager.getApplication().runReadAction(new Runnable() {
-        @Override
-        public void run() {
-          for (Module module : moduleChunk.getNodes()) {
-            final VirtualFile out = _context.getModuleOutputDirectory(module);
-            if (out != null) {
-              dirsToRefresh.add(out);
-            }
-          }
+      final Set<VirtualFile> dirsToRefresh = new HashSet<>();
+      Application.get().runReadAction(() -> {
+      for (Module module : moduleChunk.getNodes()) {
+        final VirtualFile out = _context.getModuleOutputDirectory(module);
+        if (out != null) {
+          dirsToRefresh.add(out);
         }
-      });
+      }
+    });
       for (VirtualFile root : dirsToRefresh) {
         root.refresh(false, true);
       }
@@ -162,6 +160,8 @@ public class AnnotationProcessingCompiler implements TranslatingCompiler {
   }
 
   @Override
+  @RequiredUIAccess
+  @RequiredReadAction
   public boolean validateConfiguration(CompileScope scope) {
     final List<Chunk<Module>> chunks = ModuleCompilerUtil.getSortedModuleChunks(myProject, Arrays.asList(scope.getAffectedModules()));
     for (final Chunk<Module> chunk : chunks) {
@@ -192,19 +192,21 @@ public class AnnotationProcessingCompiler implements TranslatingCompiler {
     LOGGER.assertTrue(modulesInChunk.length > 0);
     String moduleNameToSelect = modulesInChunk[0].getName();
     final String moduleNames = getModulesString(modulesInChunk);
-    Messages.showMessageDialog(myProject,
-															 CompilerBundle.message("error.annotation.processing.not.supported.for.module.cycles", moduleNames),
-															 CommonBundle.getErrorTitle(),
-															 Messages.getErrorIcon
-                                 ());
+    Messages.showMessageDialog(
+      myProject,
+      CompilerLocalize.errorAnnotationProcessingNotSupportedForModuleCycles(moduleNames).get(),
+      CommonLocalize.titleError().get(),
+      UIUtil.getErrorIcon()
+    );
     showConfigurationDialog(moduleNameToSelect, null);
   }
 
   @RequiredUIAccess
   private void showConfigurationDialog(String moduleNameToSelect, String tabNameToSelect) {
-    ShowSettingsUtil.getInstance().showProjectStructureDialog(myProject, projectStructureSelector -> {
-      projectStructureSelector.select(moduleNameToSelect, tabNameToSelect, true);
-    });
+    ShowSettingsUtil.getInstance().showProjectStructureDialog(
+      myProject,
+      projectStructureSelector -> projectStructureSelector.select(moduleNameToSelect, tabNameToSelect, true)
+    );
   }
 
   private static String getModulesString(Module[] modulesInChunk) {

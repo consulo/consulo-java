@@ -20,7 +20,7 @@
  */
 package com.intellij.java.impl.refactoring.move.moveClassesOrPackages;
 
-import consulo.application.CommonBundle;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import consulo.language.editor.refactoring.RefactoringBundle;
@@ -36,6 +36,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiUtilCore;
 import consulo.language.util.IncorrectOperationException;
+import consulo.platform.base.localize.CommonLocalize;
 import consulo.project.DumbService;
 import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
@@ -45,7 +46,6 @@ import consulo.usage.UsageViewDescriptor;
 import consulo.usage.UsageViewUtil;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.ref.Ref;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -60,16 +60,19 @@ public class MoveDirectoryWithClassesProcessor extends BaseRefactoringProcessor 
   private NonCodeUsageInfo[] myNonCodeUsages;
   private final MoveCallback myMoveCallback;
 
-  public MoveDirectoryWithClassesProcessor(Project project,
-                                           PsiDirectory[] directories,
-                                           PsiDirectory targetDirectory,
-                                           boolean searchInComments,
-                                           boolean searchInNonJavaFiles,
-                                           boolean includeSelf,
-                                           MoveCallback moveCallback) {
+  @RequiredReadAction
+  public MoveDirectoryWithClassesProcessor(
+    Project project,
+    PsiDirectory[] directories,
+    PsiDirectory targetDirectory,
+    boolean searchInComments,
+    boolean searchInNonJavaFiles,
+    boolean includeSelf,
+    MoveCallback moveCallback
+  ) {
     super(project);
     if (targetDirectory != null) {
-      final List<PsiDirectory> dirs = new ArrayList<PsiDirectory>(Arrays.asList(directories));
+      final List<PsiDirectory> dirs = new ArrayList<>(Arrays.asList(directories));
       for (Iterator<PsiDirectory> iterator = dirs.iterator(); iterator.hasNext(); ) {
         final PsiDirectory directory = iterator.next();
         if (targetDirectory.equals(directory.getParentDirectory()) || targetDirectory.equals(directory)) {
@@ -83,7 +86,7 @@ public class MoveDirectoryWithClassesProcessor extends BaseRefactoringProcessor 
     mySearchInComments = searchInComments;
     mySearchInNonJavaFiles = searchInNonJavaFiles;
     myMoveCallback = moveCallback;
-    myFilesToMove = new HashMap<PsiFile, TargetDirectoryWrapper>();
+    myFilesToMove = new HashMap<>();
     for (PsiDirectory dir : directories) {
       collectFiles2Move(myFilesToMove, dir, includeSelf ? dir.getParentDirectory() : dir, getTargetDirectory(dir));
     }
@@ -105,7 +108,7 @@ public class MoveDirectoryWithClassesProcessor extends BaseRefactoringProcessor 
   @Nonnull
   @Override
   public UsageInfo[] findUsages() {
-    final List<UsageInfo> usages = new ArrayList<UsageInfo>();
+    final List<UsageInfo> usages = new ArrayList<>();
     for (MoveDirectoryWithClassesHelper helper : MoveDirectoryWithClassesHelper.findAll()) {
       helper.findUsages(myFilesToMove.keySet(), myDirectories, usages, mySearchInComments, mySearchInNonJavaFiles, myProject);
     }
@@ -114,7 +117,7 @@ public class MoveDirectoryWithClassesProcessor extends BaseRefactoringProcessor 
 
   @Override
   protected boolean preprocessUsages(Ref<UsageInfo[]> refUsages) {
-    final MultiMap<PsiElement, String> conflicts = new MultiMap<PsiElement, String>();
+    final MultiMap<PsiElement, String> conflicts = new MultiMap<>();
     for (PsiFile psiFile : myFilesToMove.keySet()) {
       try {
         myFilesToMove.get(psiFile).checkMove(psiFile);
@@ -146,12 +149,12 @@ public class MoveDirectoryWithClassesProcessor extends BaseRefactoringProcessor 
 
       DumbService.getInstance(myProject).completeJustSubmittedTasks();
     } catch (IncorrectOperationException e) {
-      Messages.showErrorDialog(myProject, e.getMessage(), CommonBundle.getErrorTitle());
+      Messages.showErrorDialog(myProject, e.getMessage(), CommonLocalize.titleError().get());
       return;
     }
     try {
-      final List<PsiFile> movedFiles = new ArrayList<PsiFile>();
-      final Map<PsiElement, PsiElement> oldToNewElementsMapping = new HashMap<PsiElement, PsiElement>();
+      final List<PsiFile> movedFiles = new ArrayList<>();
+      final Map<PsiElement, PsiElement> oldToNewElementsMapping = new HashMap<>();
       for (PsiFile psiFile : myFilesToMove.keySet()) {
         for (MoveDirectoryWithClassesHelper helper : MoveDirectoryWithClassesHelper.findAll()) {
           helper.beforeMove(psiFile);
@@ -191,6 +194,7 @@ public class MoveDirectoryWithClassesProcessor extends BaseRefactoringProcessor 
     }
   }
 
+  @RequiredReadAction
   private TargetDirectoryWrapper getResultDirectory(PsiDirectory dir) {
     return myTargetDirectory != null
         ? new TargetDirectoryWrapper(myTargetDirectory, dir.getName())
@@ -206,21 +210,24 @@ public class MoveDirectoryWithClassesProcessor extends BaseRefactoringProcessor 
     }
   }
 
-  private static void collectFiles2Move(Map<PsiFile, TargetDirectoryWrapper> files2Move,
-                                        PsiDirectory directory,
-                                        PsiDirectory rootDirectory,
-                                        @Nonnull TargetDirectoryWrapper targetDirectory) {
+  @RequiredReadAction
+  private static void collectFiles2Move(
+    Map<PsiFile, TargetDirectoryWrapper> files2Move,
+    PsiDirectory directory,
+    PsiDirectory rootDirectory,
+    @Nonnull TargetDirectoryWrapper targetDirectory
+  ) {
     final PsiElement[] children = directory.getChildren();
     final String relativePath = VfsUtilCore.getRelativePath(directory.getVirtualFile(), rootDirectory.getVirtualFile(), '/');
 
-    final TargetDirectoryWrapper newTargetDirectory = relativePath.length() == 0
+    final TargetDirectoryWrapper newTargetDirectory = relativePath.isEmpty()
         ? targetDirectory
         : targetDirectory.findOrCreateChild(relativePath);
     for (PsiElement child : children) {
-      if (child instanceof PsiFile) {
-        files2Move.put((PsiFile) child, newTargetDirectory);
-      } else if (child instanceof PsiDirectory) {
-        collectFiles2Move(files2Move, (PsiDirectory) child, directory, newTargetDirectory);
+      if (child instanceof PsiFile file) {
+        files2Move.put(file, newTargetDirectory);
+      } else if (child instanceof PsiDirectory psiDirectory) {
+        collectFiles2Move(files2Move, psiDirectory, directory, newTargetDirectory);
       }
     }
   }

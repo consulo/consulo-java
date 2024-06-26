@@ -5,8 +5,8 @@ import com.intellij.java.compiler.impl.javaCompiler.FileObject;
 import consulo.application.util.concurrent.AppExecutorUtil;
 import consulo.compiler.CacheCorruptedException;
 import consulo.compiler.CompileContext;
-import consulo.compiler.CompilerBundle;
 import consulo.compiler.CompilerMessageCategory;
+import consulo.compiler.localize.CompilerLocalize;
 import consulo.java.rt.common.compiler.JavaCompilerInterface;
 import consulo.process.ProcessHandler;
 import consulo.process.event.ProcessAdapter;
@@ -86,7 +86,7 @@ public class JavaToolMonitor implements BackendCompilerMonitor, JavaCompilerInte
         }
 
         if (text.startsWith("java.lang.OutOfMemoryError")) {
-          log(CompilerMessageCategory.ERROR, CompilerBundle.message("error.javac.out.of.memory"), null, -1, -1);
+          log(CompilerMessageCategory.ERROR, CompilerLocalize.errorJavacOutOfMemory().get(), null, -1, -1);
           return;
         }
 
@@ -149,7 +149,7 @@ public class JavaToolMonitor implements BackendCompilerMonitor, JavaCompilerInte
   //			Path path = Paths.get(uri).toAbsolutePath();
   //
   //			Path relativize = myProjectFilePath.relativize(path);
-  //			if(relativize == null)
+  //			if (relativize == null)
   //			{
   //				filePath = path.toString();
   //			}
@@ -158,11 +158,11 @@ public class JavaToolMonitor implements BackendCompilerMonitor, JavaCompilerInte
   //				filePath = relativize.toString();
   //			}
   //		}
-  //		catch(Exception ignored)
+  //		catch (Exception ignored)
   //		{
   //		}
   //
-  //		if(filePath != null)
+  //		if (filePath != null)
   //		{
   //			myCompileContext.getProgressIndicator().setText(CompilerBundle.message("progress.parsing.file", filePath));
   //		}
