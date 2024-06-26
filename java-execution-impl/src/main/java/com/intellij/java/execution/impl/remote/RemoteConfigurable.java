@@ -20,18 +20,19 @@
  */
 package com.intellij.java.execution.impl.remote;
 
-import consulo.configurable.ConfigurationException;
-import consulo.execution.ExecutionBundle;
 import com.intellij.java.execution.configurations.RemoteConnection;
 import com.intellij.java.execution.impl.ui.ConfigurationArgumentsHelpArea;
 import com.intellij.java.execution.impl.ui.ConfigurationModuleSelector;
+import consulo.configurable.ConfigurationException;
 import consulo.execution.configuration.ui.SettingsEditor;
+import consulo.execution.localize.ExecutionLocalize;
+import consulo.platform.Platform;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.LabeledComponent;
-import consulo.application.util.SystemInfo;
 import consulo.ui.ex.awt.event.DocumentAdapter;
-import org.jetbrains.annotations.NonNls;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -58,13 +59,14 @@ public class RemoteConfigurable extends SettingsEditor<RemoteConfiguration> {
   protected static final String LOCALHOST = "localhost";
   private final ConfigurationModuleSelector myModuleSelector;
 
+  @RequiredUIAccess
   public RemoteConfigurable(final Project project) {
-    myHelpArea.setLabelText(ExecutionBundle.message("remote.configuration.remote.debugging.allows.you.to.connect.idea.to.a.running.jvm.label"));
+    myHelpArea.setLabelText(ExecutionLocalize.remoteConfigurationRemoteDebuggingAllowsYouToConnectIdeaToARunningJvmLabel().get());
     myHelpArea.setToolbarVisible();
 
-    myJDK13HelpArea.setLabelText(ExecutionBundle.message("environment.variables.helper.use.arguments.jdk13.label"));
+    myJDK13HelpArea.setLabelText(ExecutionLocalize.environmentVariablesHelperUseArgumentsJdk13Label().get());
     myJDK13HelpArea.setToolbarVisible();
-    myJDK14HelpArea.setLabelText(ExecutionBundle.message("environment.variables.helper.use.arguments.jdk14.label"));
+    myJDK14HelpArea.setLabelText(ExecutionLocalize.environmentVariablesHelperUseArgumentsJdk14Label().get());
     myJDK14HelpArea.setToolbarVisible();
 
     final ButtonGroup transportGroup = new ButtonGroup();
@@ -84,38 +86,34 @@ public class RemoteConfigurable extends SettingsEditor<RemoteConfiguration> {
     myHostField.getDocument().addDocumentListener(helpTextUpdater);
     myPortField.getDocument().addDocumentListener(helpTextUpdater);
     myRbSocket.setSelected(true);
-    final ActionListener listener = new ActionListener() {
-      public void actionPerformed(final ActionEvent e) {
-        final Object source = e.getSource();
-        if (source.equals(myRbSocket)) {
-           myShmemPanel.setVisible(false);
-           mySocketPanel.setVisible(true);
-        }
-        else if (source.equals(myRbShmem)) {
-           myShmemPanel.setVisible(true);
-           mySocketPanel.setVisible(false);
-        }
-        myPanel.repaint();
-        updateHelpText();
+    final ActionListener listener = e -> {
+      final Object source = e.getSource();
+      if (source.equals(myRbSocket)) {
+         myShmemPanel.setVisible(false);
+         mySocketPanel.setVisible(true);
       }
+      else if (source.equals(myRbShmem)) {
+         myShmemPanel.setVisible(true);
+         mySocketPanel.setVisible(false);
+      }
+      myPanel.repaint();
+      updateHelpText();
     };
     myRbShmem.addActionListener(listener);
     myRbSocket.addActionListener(listener);
 
-    final ItemListener updateListener = new ItemListener() {
-      public void itemStateChanged(final ItemEvent e) {
-        final boolean isAttach = myRbAttach.isSelected();
+    final ItemListener updateListener = e -> {
+      final boolean isAttach = myRbAttach.isSelected();
 
-        if(!isAttach && myHostField.isEditable()) {
-          myHostName = myHostField.getText();
-        }
-
-        myHostField.setEditable(isAttach);
-        myHostField.setEnabled(isAttach);
-
-        myHostField.setText(isAttach ? myHostName : LOCALHOST);
-        updateHelpText();
+      if (!isAttach && myHostField.isEditable()) {
+        myHostName = myHostField.getText();
       }
+
+      myHostField.setEditable(isAttach);
+      myHostField.setEnabled(isAttach);
+
+      myHostField.setText(isAttach ? myHostName : LOCALHOST);
+      updateHelpText();
     };
     myRbAttach.addItemListener(updateListener);
     myRbListen.addItemListener(updateListener);
@@ -150,7 +148,7 @@ public class RemoteConfigurable extends SettingsEditor<RemoteConfiguration> {
   }
 
   public void resetEditorFrom(final RemoteConfiguration configuration) {
-    if (!SystemInfo.isWindows) {
+    if (!Platform.current().os().isWindows()) {
       configuration.USE_SOCKET_TRANSPORT = true;
       myRbShmem.setEnabled(false);
       myAddressField.setEditable(false);
@@ -171,7 +169,7 @@ public class RemoteConfigurable extends SettingsEditor<RemoteConfiguration> {
     else {
       myRbAttach.doClick();
     }
-    myRbShmem.setEnabled(SystemInfo.isWindows);
+    myRbShmem.setEnabled(Platform.current().os().isWindows());
     myModuleSelector.reset(configuration);
   }
 
@@ -183,6 +181,7 @@ public class RemoteConfigurable extends SettingsEditor<RemoteConfiguration> {
   public void disposeEditor() {
   }
 
+  @RequiredUIAccess
   private void updateHelpText() {
     boolean useSockets = !myRbShmem.isSelected();
 

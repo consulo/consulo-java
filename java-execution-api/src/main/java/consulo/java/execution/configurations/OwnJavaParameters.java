@@ -21,7 +21,7 @@ import com.intellij.java.language.vfs.jrt.JrtFileSystem;
 import consulo.content.base.BinariesOrderRootType;
 import consulo.content.bundle.Sdk;
 import consulo.execution.CantRunException;
-import consulo.execution.ExecutionBundle;
+import consulo.execution.localize.ExecutionLocalize;
 import consulo.java.execution.OwnSimpleJavaParameters;
 import consulo.java.language.fileTypes.JModFileType;
 import consulo.java.language.module.extension.JavaModuleExtension;
@@ -38,10 +38,10 @@ import consulo.util.lang.VersionComparatorUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.encoding.EncodingProjectManager;
 import consulo.virtualFileSystem.util.PathsList;
-import org.intellij.lang.annotations.MagicConstant;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.intellij.lang.annotations.MagicConstant;
+
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -55,12 +55,12 @@ public class OwnJavaParameters extends OwnSimpleJavaParameters {
   public String getJdkPath() throws CantRunException {
     final Sdk jdk = getJdk();
     if (jdk == null) {
-      throw new CantRunException(ExecutionBundle.message("no.jdk.specified..error.message"));
+      throw new CantRunException(ExecutionLocalize.noJdkSpecifiedErrorMessage().get());
     }
 
     final VirtualFile jdkHome = jdk.getHomeDirectory();
     if (jdkHome == null) {
-      throw new CantRunException(ExecutionBundle.message("home.directory.not.specified.for.jdk.error.message"));
+      throw new CantRunException(ExecutionLocalize.homeDirectoryNotSpecifiedForJdkErrorMessage().get());
     }
     return jdkHome.getPresentableUrl();
   }
@@ -74,7 +74,11 @@ public class OwnJavaParameters extends OwnSimpleJavaParameters {
   public static final int CLASSES_AND_TESTS = CLASSES_ONLY | TESTS_ONLY;
   public static final int JDK_AND_CLASSES_AND_PROVIDED = JDK_ONLY | CLASSES_ONLY | INCLUDE_PROVIDED;
 
-  public void configureByModule(final Module module, @MagicConstant(valuesFromClass = OwnJavaParameters.class) int classPathType, @Nullable Sdk jdk) throws CantRunException {
+  public void configureByModule(
+    final Module module,
+    @MagicConstant(valuesFromClass = OwnJavaParameters.class) int classPathType,
+    @Nullable Sdk jdk
+  ) throws CantRunException {
     if ((classPathType & JDK_ONLY) != 0) {
       if (jdk == null) {
         throw CantRunException.noJdkConfigured();
@@ -97,7 +101,10 @@ public class OwnJavaParameters extends OwnSimpleJavaParameters {
     if (!pathsList.getPathList().isEmpty()) {
       ParametersList vmParameters = getVMParametersList();
       if (vmParameters.hasProperty(JAVA_LIBRARY_PATH_PROPERTY)) {
-        LOG.info(JAVA_LIBRARY_PATH_PROPERTY + " property is already specified, " + "native library paths from dependencies (" + pathsList.getPathsString() + ") won't be added");
+        LOG.info(
+          JAVA_LIBRARY_PATH_PROPERTY + " property is already specified, " +
+            "native library paths from dependencies (" + pathsList.getPathsString() + ") won't be added"
+        );
       } else {
         vmParameters.addProperty(JAVA_LIBRARY_PATH_PROPERTY, pathsList.getPathsString());
       }
@@ -109,7 +116,8 @@ public class OwnJavaParameters extends OwnSimpleJavaParameters {
     setCharset(encoding);
   }
 
-  public void configureByModule(final Module module, @MagicConstant(valuesFromClass = OwnJavaParameters.class) final int classPathType) throws CantRunException {
+  public void configureByModule(final Module module, @MagicConstant(valuesFromClass = OwnJavaParameters.class) final int classPathType)
+    throws CantRunException {
     configureByModule(module, classPathType, getValidJdkToRunModule(module, (classPathType & TESTS_ONLY) == 0));
   }
 
@@ -167,7 +175,8 @@ public class OwnJavaParameters extends OwnSimpleJavaParameters {
     return result;
   }
 
-  public void configureByProject(Project project, @MagicConstant(valuesFromClass = OwnJavaParameters.class) int classPathType, Sdk jdk) throws CantRunException {
+  public void configureByProject(Project project, @MagicConstant(valuesFromClass = OwnJavaParameters.class) int classPathType, Sdk jdk)
+    throws CantRunException {
     if ((classPathType & JDK_ONLY) != 0) {
       if (jdk == null) {
         throw CantRunException.noJdkConfigured();
@@ -195,12 +204,16 @@ public class OwnJavaParameters extends OwnSimpleJavaParameters {
     }
     OrderRootsEnumerator rootsEnumerator = enumerator.classes();
     if ((classPathType & JDK_ONLY) != 0) {
-      rootsEnumerator = rootsEnumerator.usingCustomRootProvider(e -> e instanceof ModuleExtensionWithSdkOrderEntry ? jdkRoots(jdk) : e.getFiles(BinariesOrderRootType.getInstance()));
+      rootsEnumerator = rootsEnumerator.usingCustomRootProvider(
+        e -> e instanceof ModuleExtensionWithSdkOrderEntry ? jdkRoots(jdk) : e.getFiles(BinariesOrderRootType.getInstance())
+      );
     }
     return rootsEnumerator;
   }
 
   private static VirtualFile[] jdkRoots(Sdk jdk) {
-    return Arrays.stream(jdk.getRootProvider().getFiles(BinariesOrderRootType.getInstance())).filter(f -> !JModFileType.isModuleRoot(f) && !JrtFileSystem.isModuleRoot(f)).toArray(VirtualFile[]::new);
+    return Arrays.stream(jdk.getRootProvider().getFiles(BinariesOrderRootType.getInstance()))
+      .filter(f -> !JModFileType.isModuleRoot(f) && !JrtFileSystem.isModuleRoot(f))
+      .toArray(VirtualFile[]::new);
   }
 }

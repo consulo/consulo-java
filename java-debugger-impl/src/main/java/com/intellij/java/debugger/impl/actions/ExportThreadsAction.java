@@ -29,13 +29,13 @@ import com.intellij.java.debugger.impl.DebuggerManagerEx;
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.DebuggerSession;
 import com.intellij.java.debugger.impl.ui.ExportDialog;
-import consulo.ui.ex.action.ActionsBundle;
+import consulo.platform.base.localize.ActionLocalize;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
-import consulo.language.editor.CommonDataKeys;
 import consulo.ui.ex.action.Presentation;
 import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awt.UIUtil;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.util.lang.SystemProperties;
@@ -46,25 +46,25 @@ public class ExportThreadsAction extends AnAction implements AnAction.Transparen
 	@Override
 	public void actionPerformed(@Nonnull AnActionEvent e)
 	{
-		Project project = e.getData(CommonDataKeys.PROJECT);
-		if(project == null)
+		Project project = e.getData(Project.KEY);
+		if (project == null)
 		{
 			return;
 		}
 		DebuggerContextImpl context = (DebuggerManagerEx.getInstanceEx(project)).getContext();
 
-		if(context.getDebuggerSession() != null)
+		if (context.getDebuggerSession() != null)
 		{
 			String destinationDirectory = "";
 			final VirtualFile baseDir = project.getBaseDir();
-			if(baseDir != null)
+			if (baseDir != null)
 			{
 				destinationDirectory = baseDir.getPresentableUrl();
 			}
 
 			ExportDialog dialog = new ExportDialog(context.getDebugProcess(), destinationDirectory);
 			dialog.show();
-			if(dialog.isOK())
+			if (dialog.isOK())
 			{
 				try
 				{
@@ -75,9 +75,9 @@ public class ExportThreadsAction extends AnAction implements AnAction.Transparen
 						writer.write(text);
 					}
 				}
-				catch(IOException ex)
+				catch (IOException ex)
 				{
-					Messages.showMessageDialog(project, ex.getMessage(), ActionsBundle.actionText(DebuggerActions.EXPORT_THREADS), Messages.getErrorIcon());
+					Messages.showMessageDialog(project, ex.getMessage(), ActionLocalize.actionExportthreadsText().get(), UIUtil.getErrorIcon());
 				}
 			}
 		}
@@ -87,8 +87,8 @@ public class ExportThreadsAction extends AnAction implements AnAction.Transparen
 	public void update(@Nonnull AnActionEvent event)
 	{
 		Presentation presentation = event.getPresentation();
-		Project project = event.getData(CommonDataKeys.PROJECT);
-		if(project == null)
+		Project project = event.getData(Project.KEY);
+		if (project == null)
 		{
 			presentation.setEnabled(false);
 			return;

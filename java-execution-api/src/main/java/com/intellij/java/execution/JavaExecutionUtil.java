@@ -23,8 +23,8 @@ import com.intellij.java.language.psi.PsiClassOwner;
 import com.intellij.java.language.psi.util.ClassUtil;
 import com.intellij.java.language.psi.util.PsiClassUtil;
 import consulo.annotation.DeprecationInfo;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.dataContext.DataContext;
-import consulo.execution.ExecutionBundle;
 import consulo.execution.RunnerRegistry;
 import consulo.execution.action.Location;
 import consulo.execution.action.PsiLocation;
@@ -32,6 +32,7 @@ import consulo.execution.configuration.RunProfile;
 import consulo.execution.configuration.RunProfileState;
 import consulo.execution.executor.DefaultRunExecutor;
 import consulo.execution.executor.Executor;
+import consulo.execution.localize.ExecutionLocalize;
 import consulo.execution.runner.ExecutionEnvironment;
 import consulo.execution.runner.ProgramRunner;
 import consulo.execution.ui.console.Filter;
@@ -49,9 +50,9 @@ import consulo.project.Project;
 import consulo.ui.image.Image;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.function.Condition;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -79,8 +80,14 @@ public class JavaExecutionUtil {
     return false;
   }
 
-  public static Module findModule(final Module contextModule, final Set<String> patterns, final Project project, Condition<PsiClass> isTestMethod) {
-    final Set<Module> modules = new HashSet<Module>();
+  @RequiredReadAction
+  public static Module findModule(
+    final Module contextModule,
+    final Set<String> patterns,
+    final Project project,
+    Condition<PsiClass> isTestMethod
+  ) {
+    final Set<Module> modules = new HashSet<>();
     for (String className : patterns) {
       final PsiClass psiClass = findMainClass(project, className.contains(",") ? className.substring(0, className.indexOf(',')) : className, GlobalSearchScope.allScope(project));
       if (psiClass != null && isTestMethod.value(psiClass)) {
@@ -95,7 +102,7 @@ public class JavaExecutionUtil {
       }
     }
     if (contextModule != null && modules.size() > 1) {
-      final HashSet<Module> moduleDependencies = new HashSet<Module>();
+      final HashSet<Module> moduleDependencies = new HashSet<>();
       ModuleUtilCore.getDependencies(contextModule, moduleDependencies);
       if (moduleDependencies.containsAll(modules)) {
         return contextModule;
@@ -171,6 +178,7 @@ public class JavaExecutionUtil {
     return getPresentableClassName(rtClassName);
   }
 
+  @RequiredReadAction
   public static Module findModule(@Nonnull final PsiClass psiClass) {
     return ModuleUtilCore.findModuleForPsiElement(psiClass);
   }
@@ -195,7 +203,7 @@ public class JavaExecutionUtil {
 
 
   public static boolean isNewName(final String name) {
-    return name == null || name.startsWith(ExecutionBundle.message("run.configuration.unnamed.name.prefix"));
+    return name == null || name.startsWith(ExecutionLocalize.runConfigurationUnnamedNamePrefix().get());
   }
 
   public static Location stepIntoSingleClass(final Location location) {

@@ -15,13 +15,14 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.testIntegration.JavaTestFramework;
 import com.intellij.java.language.testIntegration.TestFramework;
 import com.siyeh.ig.psiutils.TestUtils;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.application.ReadAction;
 import consulo.application.progress.ProgressManager;
 import consulo.application.util.CachedValueProvider;
 import consulo.execution.CantRunException;
-import consulo.execution.ExecutionBundle;
 import consulo.execution.action.Location;
 import consulo.execution.action.PsiLocation;
+import consulo.execution.localize.ExecutionLocalize;
 import consulo.execution.test.SourceScope;
 import consulo.language.psi.*;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -31,9 +32,9 @@ import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
 import consulo.project.Project;
 import consulo.util.lang.function.Condition;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.*;
 
 import static com.intellij.java.language.codeInsight.AnnotationUtil.CHECK_HIERARCHY;
@@ -119,7 +120,8 @@ public class JUnitUtil {
     if (returnType == null || returnType instanceof PsiPrimitiveType) {
       return false;
     }
-    return returnType.equalsToText(TEST_INTERFACE) || returnType.equalsToText(TEST_SUITE_CLASS) || InheritanceUtil.isInheritor(returnType, TEST_INTERFACE);
+    return returnType.equalsToText(TEST_INTERFACE) || returnType.equalsToText(TEST_SUITE_CLASS)
+      || InheritanceUtil.isInheritor(returnType, TEST_INTERFACE);
   }
 
   public static boolean isTestMethod(final Location<? extends PsiMethod> location) {
@@ -136,7 +138,8 @@ public class JUnitUtil {
 
   public static boolean isTestMethod(final Location<? extends PsiMethod> location, boolean checkAbstract, boolean checkRunWith, boolean checkClass) {
     final PsiMethod psiMethod = location.getPsiElement();
-    final PsiClass aClass = location instanceof MethodLocation ? ((MethodLocation) location).getContainingClass() : psiMethod.getContainingClass();
+    final PsiClass aClass = location instanceof MethodLocation methodLocation
+      ? methodLocation.getContainingClass() : psiMethod.getContainingClass();
     if (checkClass && (aClass == null || !isTestClass(aClass, checkAbstract, true))) {
       return false;
     }
@@ -204,8 +207,8 @@ public class JUnitUtil {
       final PsiAnnotation annotation = AnnotationUtil.findAnnotationInHierarchy(topLevelClass, Collections.singleton(RUN_WITH));
       if (annotation != null) {
         final PsiAnnotationMemberValue attributeValue = annotation.findAttributeValue("value");
-        if (attributeValue instanceof PsiClassObjectAccessExpression) {
-          final String runnerName = ((PsiClassObjectAccessExpression) attributeValue).getOperand().getType().getCanonicalText();
+        if (attributeValue instanceof PsiClassObjectAccessExpression classObjectAccessExpression) {
+          final String runnerName = classObjectAccessExpression.getOperand().getType().getCanonicalText();
           if (!(PARAMETERIZED_CLASS_NAME.equals(runnerName) || SUITE_CLASS_NAME.equals(runnerName))) {
             return true;
           }
@@ -225,7 +228,10 @@ public class JUnitUtil {
       return true;
     }
 
-    return LanguageCachedValueUtil.getCachedValue(psiClass, () -> CachedValueProvider.Result.create(hasTestOrSuiteMethods(psiClass), PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT));
+    return LanguageCachedValueUtil.getCachedValue(
+      psiClass,
+      () -> CachedValueProvider.Result.create(hasTestOrSuiteMethods(psiClass), PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT)
+    );
   }
 
   private static boolean hasTestOrSuiteMethods(@Nonnull PsiClass psiClass) {
@@ -293,6 +299,7 @@ public class JUnitUtil {
     return false;
   }
 
+  @RequiredReadAction
   public static boolean isJUnit5TestClass(@Nonnull final PsiClass psiClass, boolean checkAbstract) {
     final PsiModifierList modifierList = psiClass.getModifierList();
     if (modifierList == null) {
@@ -355,15 +362,13 @@ public class JUnitUtil {
   }
 
   public static boolean isTestAnnotated(final PsiMethod method) {
-    if (AnnotationUtil.isAnnotated(method, TEST_ANNOTATION, 0) || JUnitRecognizer.willBeAnnotatedAfterCompilation(method)) {
-      return true;
-    }
-
-    return MetaAnnotationUtil.isMetaAnnotated(method, TEST5_ANNOTATIONS);
+    return AnnotationUtil.isAnnotated(method, TEST_ANNOTATION, 0)
+      || JUnitRecognizer.willBeAnnotatedAfterCompilation(method)
+      || MetaAnnotationUtil.isMetaAnnotated(method, TEST5_ANNOTATIONS);
   }
 
-
   @Nullable
+  @RequiredReadAction
   private static PsiClass getTestCaseClassOrNull(final Location<?> location) {
     final Location<PsiClass> ancestorOrSelf = location.getAncestorOrSelf(PsiClass.class);
     if (ancestorOrSelf == null) {
@@ -501,8 +506,8 @@ public class JUnitUtil {
 
   public static boolean isInheritorOrSelfRunner(PsiAnnotation annotation, String... runners) {
     final PsiAnnotationMemberValue value = annotation.findAttributeValue(PsiAnnotation.DEFAULT_REFERENCED_METHOD_NAME);
-    if (value instanceof PsiClassObjectAccessExpression) {
-      final PsiTypeElement operand = ((PsiClassObjectAccessExpression) value).getOperand();
+    if (value instanceof PsiClassObjectAccessExpression classObjectAccessExpression) {
+      final PsiTypeElement operand = classObjectAccessExpression.getOperand();
       final PsiClass psiClass = PsiUtil.resolveClassInClassTypeOnly(operand.getType());
       return psiClass != null && Arrays.stream(runners).anyMatch(runner -> InheritanceUtil.isInheritor(psiClass, runner));
     }
@@ -516,7 +521,7 @@ public class JUnitUtil {
     public TestMethodFilter(final PsiClass aClass) {
       myClass = aClass;
       TestFramework framework = TestFrameworks.detectFramework(aClass);
-      this.framework = (framework instanceof JavaTestFramework) ? (JavaTestFramework) framework : null;
+      this.framework = framework instanceof JavaTestFramework javaTestFramework ? javaTestFramework : null;
     }
 
     public boolean value(final PsiMethod method) {
@@ -546,8 +551,8 @@ public class JUnitUtil {
       }
     }
     PsiElement element = location.getPsiElement();
-    if (element instanceof PsiClassOwner) {
-      PsiClass[] classes = ((PsiClassOwner) element).getClasses();
+    if (element instanceof PsiClassOwner classOwner) {
+      PsiClass[] classes = classOwner.getClasses();
       if (classes.length == 1 && isTestClass(classes[0], false, true)) {
         return classes[0];
       }
@@ -578,11 +583,11 @@ public class JUnitUtil {
 
   public static class NoJUnitException extends CantRunException {
     public NoJUnitException() {
-      super(ExecutionBundle.message("no.junit.error.message"));
+      super(ExecutionLocalize.noJunitErrorMessage().get());
     }
 
     public NoJUnitException(final String message) {
-      super(ExecutionBundle.message("no.junit.in.scope.error.message", message));
+      super(ExecutionLocalize.noJunitInScopeErrorMessage(message).get());
     }
   }
 }

@@ -18,7 +18,7 @@ package com.intellij.java.debugger.impl.ui;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.DebuggerSession;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
-import consulo.application.CommonBundle;
+import consulo.platform.base.localize.CommonLocalize;
 import consulo.project.Project;
 import consulo.ui.ex.awt.ElementsChooser;
 import consulo.ui.ex.awt.IdeBorderFactory;
@@ -65,7 +65,7 @@ public class RunHotswapDialog extends OptionsDialog {
     }
     myPanel.add(myElementsChooser, BorderLayout.CENTER);
     //myPanel.add(new JLabel("Choose debug sessions to reload classes:"), BorderLayout.NORTH);
-    if(sessions.size() == 1) {
+    if (sessions.size() == 1) {
       setTitle(DebuggerBundle.message("hotswap.dialog.title.with.session", sessions.get(0).getSessionName()));
       myPanel.setVisible(false);
     }
@@ -100,8 +100,8 @@ public class RunHotswapDialog extends OptionsDialog {
 
   @Nonnull
   protected Action[] createActions(){
-    setOKButtonText(CommonBundle.getYesButtonText());
-    setCancelButtonText(CommonBundle.getNoButtonText());
+    setOKButtonText(CommonLocalize.buttonYes().get());
+    setCancelButtonText(CommonLocalize.buttonNo().get());
     return new Action[]{getOKAction(), getCancelAction()};
   }
 
@@ -128,7 +128,7 @@ public class RunHotswapDialog extends OptionsDialog {
 
   public Collection<DebuggerSession> getSessionsToReload() {
     final List<SessionItem> markedElements = myElementsChooser.getMarkedElements();
-    final List<DebuggerSession>  sessions = new ArrayList<DebuggerSession>(markedElements.size());
+    final List<DebuggerSession>  sessions = new ArrayList<>(markedElements.size());
     for (SessionItem item : markedElements) {
       sessions.add(item.getSession());
     }

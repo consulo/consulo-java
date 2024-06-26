@@ -20,8 +20,6 @@ import com.intellij.java.execution.impl.testframework.AbstractPatternBasedConfig
 import consulo.execution.RunManager;
 import consulo.execution.configuration.ConfigurationType;
 import consulo.execution.configuration.RunConfiguration;
-import consulo.language.editor.CommonDataKeys;
-import consulo.language.editor.LangDataKeys;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.resolve.PsiElementProcessor;
 import consulo.project.Project;
@@ -52,12 +50,12 @@ public abstract class AbstractAddToTestsPatternAction<T extends JavaTestConfigur
   @RequiredUIAccess
   @Override
   public void actionPerformed(AnActionEvent e) {
-    final PsiElement[] psiElements = e.getData(LangDataKeys.PSI_ELEMENT_ARRAY);
+    final PsiElement[] psiElements = e.getData(PsiElement.KEY_OF_ARRAY);
     final LinkedHashSet<PsiElement> classes = new LinkedHashSet<>();
     PsiElementProcessor.CollectElements<PsiElement> processor = new PsiElementProcessor.CollectElements<>(classes);
     getPatternBasedProducer().collectTestMembers(psiElements, true, true, processor);
 
-    final Project project = e.getData(CommonDataKeys.PROJECT);
+    final Project project = e.getData(Project.KEY);
     final List<T> patternConfigurations = collectPatternConfigurations(classes, project);
     if (patternConfigurations.size() == 1) {
       final T configuration = patternConfigurations.get(0);
@@ -93,7 +91,7 @@ public abstract class AbstractAddToTestsPatternAction<T extends JavaTestConfigur
   public void update(AnActionEvent e) {
     final Presentation presentation = e.getPresentation();
     presentation.setVisible(false);
-    final PsiElement[] psiElements = e.getData(LangDataKeys.PSI_ELEMENT_ARRAY);
+    final PsiElement[] psiElements = e.getData(PsiElement.KEY_OF_ARRAY);
     if (psiElements != null) {
       PsiElementProcessor.CollectElementsWithLimit<PsiElement> processor = new PsiElementProcessor.CollectElementsWithLimit<>(2);
       getPatternBasedProducer().collectTestMembers(psiElements, false, false, processor);
@@ -101,7 +99,7 @@ public abstract class AbstractAddToTestsPatternAction<T extends JavaTestConfigur
       if (collection.isEmpty()) {
         return;
       }
-      final Project project = e.getData(CommonDataKeys.PROJECT);
+      final Project project = e.getData(Project.KEY);
       if (project != null) {
         final List<T> foundConfigurations = collectPatternConfigurations(collection, project);
         if (!foundConfigurations.isEmpty()) {
@@ -114,12 +112,14 @@ public abstract class AbstractAddToTestsPatternAction<T extends JavaTestConfigur
     }
   }
 
+  @SuppressWarnings("unchecked")
   private List<T> collectPatternConfigurations(Collection<PsiElement> foundClasses, Project project) {
     final List<RunConfiguration> configurations = RunManager.getInstance(project).getConfigurationsList(getConfigurationType());
     final List<T> foundConfigurations = new ArrayList<>();
     for (RunConfiguration configuration : configurations) {
       if (isPatternBasedConfiguration((T) configuration)) {
-        if (foundClasses.size() > 1 || foundClasses.size() == 1 && !getPatterns((T) configuration).contains(getPatternBasedProducer().getQName(ContainerUtil.getFirstItem(foundClasses)))) {
+        if (foundClasses.size() > 1 || foundClasses.size() == 1
+          && !getPatterns((T) configuration).contains(getPatternBasedProducer().getQName(ContainerUtil.getFirstItem(foundClasses)))) {
           foundConfigurations.add((T) configuration);
         }
       }

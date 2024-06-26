@@ -26,6 +26,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.ClassUtil;
 import com.intellij.java.language.testIntegration.JavaTestFramework;
 import com.intellij.java.language.testIntegration.TestFramework;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Caret;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.SelectionModel;
@@ -40,8 +41,6 @@ import consulo.execution.configuration.ConfigurationType;
 import consulo.execution.configuration.ModuleBasedConfiguration;
 import consulo.execution.configuration.RunConfiguration;
 import consulo.execution.test.TestsUIUtil;
-import consulo.language.editor.CommonDataKeys;
-import consulo.language.editor.LangDataKeys;
 import consulo.language.psi.*;
 import consulo.language.psi.resolve.PsiElementProcessor;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -80,8 +79,14 @@ public abstract class AbstractJavaTestConfigurationProducer<T extends JavaTestCo
     if (psiClass != null) {
       ConfigurationType configurationType = getConfigurationType();
       Set<TestFramework> frameworks = TestFrameworks.detectApplicableFrameworks(psiClass);
-      return frameworks.stream().filter(framework -> framework instanceof JavaTestFramework && ((JavaTestFramework) framework).isMyConfigurationType(configurationType)).map(framework ->
-          (JavaTestFramework) framework).findFirst().orElse(null);
+      return frameworks.stream()
+        .filter(
+          framework -> framework instanceof JavaTestFramework javaTestFramework
+            && javaTestFramework.isMyConfigurationType(configurationType)
+        )
+        .map(framework -> (JavaTestFramework) framework)
+        .findFirst()
+        .orElse(null);
     }
     return null;
   }
@@ -102,10 +107,12 @@ public abstract class AbstractJavaTestConfigurationProducer<T extends JavaTestCo
     }
     final PsiElement element = location.getPsiElement();
 
-    RunnerAndConfigurationSettings template = RunManager.getInstance(location.getProject()).getConfigurationTemplate(getConfigurationFactory());
+    RunnerAndConfigurationSettings template =
+      RunManager.getInstance(location.getProject()).getConfigurationTemplate(getConfigurationFactory());
+    @SuppressWarnings("unchecked")
     final Module predefinedModule = ((T) template.getConfiguration()).getConfigurationModule().getModule();
-    final String vmParameters = predefinedConfiguration instanceof CommonJavaRunConfigurationParameters ? ((CommonJavaRunConfigurationParameters) predefinedConfiguration).getVMParameters() :
-        null;
+    final String vmParameters = predefinedConfiguration instanceof CommonJavaRunConfigurationParameters runConfigurationParameters
+      ? runConfigurationParameters.getVMParameters() : null;
     if (vmParameters != null && !Comparing.strEqual(vmParameters, configuration.getVMParameters())) {
       return false;
     }
@@ -127,44 +134,42 @@ public abstract class AbstractJavaTestConfigurationProducer<T extends JavaTestCo
   }
 
   protected boolean differentParamSet(T configuration, Location contextLocation) {
-    String paramSetName = contextLocation instanceof PsiMemberParameterizedLocation ? configuration.prepareParameterizedParameter(((PsiMemberParameterizedLocation) contextLocation)
-        .getParamSetName()) : null;
-    if (paramSetName != null && !Comparing.strEqual(paramSetName, configuration.getProgramParameters())) {
-      return true;
-    }
-    return false;
+    String paramSetName = contextLocation instanceof PsiMemberParameterizedLocation memberParameterizedLocation
+      ? configuration.prepareParameterizedParameter(memberParameterizedLocation.getParamSetName()) : null;
+    return paramSetName != null && !Comparing.strEqual(paramSetName, configuration.getProgramParameters());
   }
 
-
   public Module findModule(ModuleBasedConfiguration configuration, Module contextModule, Set<String> patterns) {
-    return JavaExecutionUtil.findModule(contextModule, patterns, configuration.getProject(), psiClass -> isTestClass(psiClass));
+    return JavaExecutionUtil.findModule(contextModule, patterns, configuration.getProject(), this::isTestClass);
   }
 
   public void collectTestMembers(PsiElement[] psiElements, boolean checkAbstract, boolean checkIsTest, PsiElementProcessor.CollectElements<PsiElement> collectingProcessor) {
     for (PsiElement psiElement : psiElements) {
-      if (psiElement instanceof PsiClassOwner) {
-        final PsiClass[] classes = ((PsiClassOwner) psiElement).getClasses();
+      if (psiElement instanceof PsiClassOwner classOwner) {
+        final PsiClass[] classes = classOwner.getClasses();
         for (PsiClass aClass : classes) {
-          if ((!checkIsTest && aClass.hasModifierProperty(PsiModifier.PUBLIC) || checkIsTest && isTestClass(aClass)) && !collectingProcessor.execute(aClass)) {
+          if ((!checkIsTest && aClass.hasModifierProperty(PsiModifier.PUBLIC) || checkIsTest && isTestClass(aClass))
+            && !collectingProcessor.execute(aClass)) {
             return;
           }
         }
-      } else if (psiElement instanceof PsiClass) {
-        if ((!checkIsTest && ((PsiClass) psiElement).hasModifierProperty(PsiModifier.PUBLIC) || checkIsTest && isTestClass((PsiClass) psiElement)) && !collectingProcessor.execute(psiElement)) {
+      } else if (psiElement instanceof PsiClass psiClass) {
+        if ((!checkIsTest && psiClass.hasModifierProperty(PsiModifier.PUBLIC) || checkIsTest && isTestClass(psiClass))
+          && !collectingProcessor.execute(psiElement)) {
           return;
         }
-      } else if (psiElement instanceof PsiMethod) {
-        if (checkIsTest && isTestMethod(checkAbstract, (PsiMethod) psiElement) && !collectingProcessor.execute(psiElement)) {
+      } else if (psiElement instanceof PsiMethod method) {
+        if (checkIsTest && isTestMethod(checkAbstract, method) && !collectingProcessor.execute(psiElement)) {
           return;
         }
         if (!checkIsTest) {
-          final PsiClass containingClass = ((PsiMethod) psiElement).getContainingClass();
+          final PsiClass containingClass = method.getContainingClass();
           if (containingClass != null && containingClass.hasModifierProperty(PsiModifier.PUBLIC) && !collectingProcessor.execute(psiElement)) {
             return;
           }
         }
-      } else if (psiElement instanceof PsiDirectory) {
-        final PsiPackage aPackage = JavaDirectoryService.getInstance().getPackage((PsiDirectory) psiElement);
+      } else if (psiElement instanceof PsiDirectory directory) {
+        final PsiPackage aPackage = JavaDirectoryService.getInstance().getPackage(directory);
         if (aPackage != null && !collectingProcessor.execute(aPackage)) {
           return;
         }
@@ -172,19 +177,22 @@ public abstract class AbstractJavaTestConfigurationProducer<T extends JavaTestCo
     }
   }
 
-  protected boolean collectContextElements(DataContext dataContext,
-                                           boolean checkAbstract,
-                                           boolean checkIsTest,
-                                           LinkedHashSet<String> classes,
-                                           PsiElementProcessor.CollectElements<PsiElement> processor) {
-    PsiElement[] elements = dataContext.getData(LangDataKeys.PSI_ELEMENT_ARRAY);
+  @RequiredReadAction
+  protected boolean collectContextElements(
+    DataContext dataContext,
+    boolean checkAbstract,
+    boolean checkIsTest,
+    LinkedHashSet<String> classes,
+    PsiElementProcessor.CollectElements<PsiElement> processor
+  ) {
+    PsiElement[] elements = dataContext.getData(PsiElement.KEY_OF_ARRAY);
     if (elements != null) {
       return collectTestMembers(elements, checkAbstract, checkIsTest, processor, classes);
     } else {
-      final Editor editor = dataContext.getData(CommonDataKeys.EDITOR);
+      final Editor editor = dataContext.getData(Editor.KEY);
       PsiElement element = null;
       if (editor != null) {
-        final PsiFile editorFile = dataContext.getData(CommonDataKeys.PSI_FILE);
+        final PsiFile editorFile = dataContext.getData(PsiFile.KEY);
         final List<Caret> allCarets = editor.getCaretModel().getAllCarets();
         if (editorFile != null) {
           if (allCarets.size() > 1) {
@@ -219,18 +227,18 @@ public abstract class AbstractJavaTestConfigurationProducer<T extends JavaTestCo
       }
 
       if (element == null) {
-        element = dataContext.getData(CommonDataKeys.PSI_ELEMENT);
+        element = dataContext.getData(PsiElement.KEY);
       }
 
-      final VirtualFile[] files = dataContext.getData(CommonDataKeys.VIRTUAL_FILE_ARRAY);
+      final VirtualFile[] files = dataContext.getData(VirtualFile.KEY_OF_ARRAY);
       if (files != null) {
-        Project project = dataContext.getData(CommonDataKeys.PROJECT);
+        Project project = dataContext.getData(Project.KEY);
         if (project != null) {
           final PsiManager psiManager = PsiManager.getInstance(project);
           for (VirtualFile file : files) {
             final PsiFile psiFile = psiManager.findFile(file);
-            if (psiFile instanceof PsiClassOwner) {
-              PsiClass[] psiClasses = ((PsiClassOwner) psiFile).getClasses();
+            if (psiFile instanceof PsiClassOwner classOwner) {
+              PsiClass[] psiClasses = classOwner.getClasses();
               if (element != null && psiClasses.length > 0) {
                 for (PsiClass aClass : psiClasses) {
                   if (PsiTreeUtil.isAncestor(aClass, element, false)) {
@@ -284,15 +292,16 @@ public abstract class AbstractJavaTestConfigurationProducer<T extends JavaTestCo
   }
 
   public String getQName(PsiElement psiMember, Location location) {
-    if (psiMember instanceof PsiClass) {
-      return ClassUtil.getJVMClassName((PsiClass) psiMember);
-    } else if (psiMember instanceof PsiMember) {
-      final PsiClass containingClass = location instanceof MethodLocation ? ((MethodLocation) location).getContainingClass() : location instanceof PsiMemberParameterizedLocation ? (
-          (PsiMemberParameterizedLocation) location).getContainingClass() : ((PsiMember) psiMember).getContainingClass();
+    if (psiMember instanceof PsiClass psiClass) {
+      return ClassUtil.getJVMClassName(psiClass);
+    } else if (psiMember instanceof PsiMember member) {
+      final PsiClass containingClass = location instanceof MethodLocation methodLocation ? methodLocation.getContainingClass()
+        : location instanceof PsiMemberParameterizedLocation memberParameterizedLocation ? memberParameterizedLocation.getContainingClass()
+        : member.getContainingClass();
       assert containingClass != null;
       return ClassUtil.getJVMClassName(containingClass) + "," + getMethodPresentation((PsiMember) psiMember);
-    } else if (psiMember instanceof PsiPackage) {
-      return ((PsiPackage) psiMember).getQualifiedName() + ".*";
+    } else if (psiMember instanceof PsiPackage psiPackage) {
+      return psiPackage.getQualifiedName() + ".*";
     }
     return null;
   }
@@ -321,8 +330,8 @@ public abstract class AbstractJavaTestConfigurationProducer<T extends JavaTestCo
   }
 
   public void setupConfigurationParamName(T configuration, Location contextLocation) {
-    if (contextLocation instanceof PsiMemberParameterizedLocation) {
-      final String paramSetName = ((PsiMemberParameterizedLocation) contextLocation).getParamSetName();
+    if (contextLocation instanceof PsiMemberParameterizedLocation memberParameterizedLocation) {
+      final String paramSetName = memberParameterizedLocation.getParamSetName();
       if (paramSetName != null) {
         configuration.setProgramParameters(configuration.prepareParameterizedParameter(paramSetName));
       }

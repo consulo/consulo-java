@@ -26,8 +26,8 @@ import com.intellij.java.language.psi.JavaCodeFragment;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.util.PsiMethodUtil;
 import consulo.configurable.ConfigurationException;
-import consulo.execution.ExecutionBundle;
 import consulo.execution.configuration.ui.SettingsEditor;
+import consulo.execution.localize.ExecutionLocalize;
 import consulo.java.execution.JavaExecutionBundle;
 import consulo.language.psi.PsiElement;
 import consulo.module.ui.awt.ModuleDescriptionsComboBox;
@@ -35,8 +35,8 @@ import consulo.project.Project;
 import consulo.ui.ex.awt.JBCheckBox;
 import consulo.ui.ex.awt.LabeledComponent;
 import consulo.ui.ex.awt.UIUtil;
-
 import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 
 public class ApplicationConfigurable extends SettingsEditor<ApplicationConfiguration> {
@@ -59,10 +59,9 @@ public class ApplicationConfigurable extends SettingsEditor<ApplicationConfigura
     myMainClassField = new EditorTextFieldWithBrowseButton(project, true, new JavaCodeFragment.VisibilityChecker() {
       @Override
       public Visibility isDeclarationVisible(PsiElement declaration, PsiElement place) {
-        if (declaration instanceof PsiClass) {
-          final PsiClass aClass = (PsiClass) declaration;
-          if (ConfigurationUtil.MAIN_CLASS.test(aClass) && PsiMethodUtil.findMainMethod(aClass) != null || place.getParent() != null && myModuleSelector.findClass(((PsiClass) declaration)
-              .getQualifiedName()) != null) {
+        if (declaration instanceof PsiClass aClass) {
+          if (ConfigurationUtil.MAIN_CLASS.test(aClass) && PsiMethodUtil.findMainMethod(aClass) != null
+            || place.getParent() != null && myModuleSelector.findClass(aClass.getQualifiedName()) != null) {
             return Visibility.VISIBLE;
           }
         }
@@ -175,11 +174,11 @@ public class ApplicationConfigurable extends SettingsEditor<ApplicationConfigura
     if (myVersionDetector.isJre50Configured(configuration) || myVersionDetector.isModuleJre50Configured(configuration)) {
       myShowSwingInspectorBox.setEnabled(true);
       myShowSwingInspectorBox.setSelected(configuration.ENABLE_SWING_INSPECTOR);
-      myShowSwingInspectorBox.setText(ExecutionBundle.message("show.swing.inspector"));
+      myShowSwingInspectorBox.setText(ExecutionLocalize.showSwingInspector().get());
     } else {
       myShowSwingInspectorBox.setEnabled(false);
       myShowSwingInspectorBox.setSelected(false);
-      myShowSwingInspectorBox.setText(ExecutionBundle.message("show.swing.inspector.disabled"));
+      myShowSwingInspectorBox.setText(ExecutionLocalize.showSwingInspectorDisabled().get());
     }
   }
 

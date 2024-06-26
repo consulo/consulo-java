@@ -23,8 +23,7 @@ import com.intellij.java.language.psi.util.PsiMethodUtil;
 import com.intellij.java.language.util.ClassFilter;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
-import consulo.application.ApplicationManager;
-import consulo.application.CommonBundle;
+import consulo.application.Application;
 import consulo.application.WriteAction;
 import consulo.application.util.function.Computable;
 import consulo.compiler.artifact.ArtifactType;
@@ -41,6 +40,7 @@ import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.module.content.ProjectRootManager;
 import consulo.module.content.layer.OrderEnumerator;
+import consulo.platform.base.localize.CommonLocalize;
 import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.TextFieldWithBrowseButton;
@@ -50,11 +50,9 @@ import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.Ref;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -91,24 +89,30 @@ public class ManifestFileUtil {
 
     final Ref<VirtualFile> sourceDir = Ref.create(null);
     final Ref<VirtualFile> sourceFile = Ref.create(null);
-    ArtifactUtil.processElementsWithSubstitutions(root.getChildren(), context, artifactType, PackagingElementPath.EMPTY, new PackagingElementProcessor<PackagingElement<?>>() {
-      @Override
-      public boolean process(@Nonnull PackagingElement<?> element, @Nonnull PackagingElementPath path) {
-        if (element instanceof FileCopyPackagingElement) {
-          final VirtualFile file = ((FileCopyPackagingElement) element).findFile();
-          if (file != null) {
-            sourceFile.set(file);
+    ArtifactUtil.processElementsWithSubstitutions(
+      root.getChildren(),
+      context,
+      artifactType,
+      PackagingElementPath.EMPTY,
+      new PackagingElementProcessor<>() {
+        @Override
+        public boolean process(@Nonnull PackagingElement<?> element, @Nonnull PackagingElementPath path) {
+          if (element instanceof FileCopyPackagingElement fileCopyPackagingElement) {
+            final VirtualFile file = fileCopyPackagingElement.findFile();
+            if (file != null) {
+              sourceFile.set(file);
+            }
+          } else if (element instanceof DirectoryCopyPackagingElement directoryCopyPackagingElement) {
+            final VirtualFile file = directoryCopyPackagingElement.findFile();
+            if (file != null) {
+              sourceDir.set(file);
+              return false;
+            }
           }
-        } else if (element instanceof DirectoryCopyPackagingElement) {
-          final VirtualFile file = ((DirectoryCopyPackagingElement) element).findFile();
-          if (file != null) {
-            sourceDir.set(file);
-            return false;
-          }
+          return true;
         }
-        return true;
       }
-    });
+    );
 
     if (!sourceDir.isNull()) {
       return sourceDir.get();
@@ -149,24 +153,20 @@ public class ManifestFileUtil {
   }
 
   public static Manifest readManifest(@Nonnull VirtualFile manifestFile) {
-    try {
-      final InputStream inputStream = manifestFile.getInputStream();
-      final Manifest manifest;
-      try {
-        manifest = new Manifest(inputStream);
-      } finally {
-        inputStream.close();
-      }
-      return manifest;
-    } catch (IOException ignored) {
+    try (InputStream inputStream = manifestFile.getInputStream()) {
+      return new Manifest(inputStream);
+    }
+    catch (IOException ignored) {
       return new Manifest();
     }
   }
 
-  public static void updateManifest(@Nonnull VirtualFile file,
-                                    final @Nullable String mainClass,
-                                    final @Nullable List<String> classpath,
-                                    final boolean replaceValues) {
+  public static void updateManifest(
+    @Nonnull VirtualFile file,
+    final @Nullable String mainClass,
+    final @Nullable List<String> classpath,
+    final boolean replaceValues
+  ) {
     final Manifest manifest = readManifest(file);
     final Attributes mainAttributes = manifest.getMainAttributes();
 
@@ -181,7 +181,7 @@ public class ManifestFileUtil {
       if (replaceValues) {
         updatedClasspath = classpath;
       } else {
-        updatedClasspath = new ArrayList<String>();
+        updatedClasspath = new ArrayList<>();
         final String oldClasspath = (String) mainAttributes.get(Attributes.Name.CLASS_PATH);
         if (!StringUtil.isEmpty(oldClasspath)) {
           updatedClasspath.addAll(StringUtil.split(oldClasspath, " "));
@@ -199,14 +199,10 @@ public class ManifestFileUtil {
 
     ManifestBuilder.setVersionAttribute(mainAttributes);
 
-    try {
-      final OutputStream outputStream = file.getOutputStream(ManifestFileUtil.class);
-      try {
-        manifest.write(outputStream);
-      } finally {
-        outputStream.close();
-      }
-    } catch (IOException e) {
+    try (OutputStream outputStream = file.getOutputStream(ManifestFileUtil.class)) {
+      manifest.write(outputStream);
+    }
+    catch (IOException e) {
       LOGGER.info(e);
     }
   }
@@ -217,7 +213,7 @@ public class ManifestFileUtil {
     Manifest manifest = readManifest(manifestFile);
     String mainClass = manifest.getMainAttributes().getValue(Attributes.Name.MAIN_CLASS);
     final String classpathText = manifest.getMainAttributes().getValue(Attributes.Name.CLASS_PATH);
-    final List<String> classpath = new ArrayList<String>();
+    final List<String> classpath = new ArrayList<>();
     if (classpathText != null) {
       classpath.addAll(StringUtil.split(classpathText, " "));
     }
@@ -225,17 +221,17 @@ public class ManifestFileUtil {
   }
 
   public static List<String> getClasspathForElements(List<? extends PackagingElement<?>> elements, PackagingElementResolvingContext context, final ArtifactType artifactType) {
-    final List<String> classpath = new ArrayList<String>();
-    final PackagingElementProcessor<PackagingElement<?>> processor = new PackagingElementProcessor<PackagingElement<?>>() {
+    final List<String> classpath = new ArrayList<>();
+    final PackagingElementProcessor<PackagingElement<?>> processor = new PackagingElementProcessor<>() {
       @Override
       public boolean process(@Nonnull PackagingElement<?> element, @Nonnull PackagingElementPath path) {
-        if (element instanceof FileCopyPackagingElement) {
-          final String fileName = ((FileCopyPackagingElement) element).getOutputFileName();
+        if (element instanceof FileCopyPackagingElement fileCopyPackagingElement) {
+          final String fileName = fileCopyPackagingElement.getOutputFileName();
           classpath.add(ArtifactUtil.appendToPath(path.getPathString(), fileName));
         } else if (element instanceof DirectoryCopyPackagingElement) {
           classpath.add(path.getPathString());
-        } else if (element instanceof ArchivePackagingElement) {
-          final String archiveName = ((ArchivePackagingElement) element).getName();
+        } else if (element instanceof ArchivePackagingElement archivePackagingElement) {
+          final String archiveName = archivePackagingElement.getName();
           classpath.add(ArtifactUtil.appendToPath(path.getPathString(), archiveName));
         }
         return true;
@@ -261,7 +257,7 @@ public class ManifestFileUtil {
 
   @Nullable
   public static VirtualFile createManifestFile(final @Nonnull VirtualFile directory, final @Nonnull Project project) {
-    ApplicationManager.getApplication().assertIsDispatchThread();
+    project.getApplication().assertIsDispatchThread();
     final Ref<IOException> exc = Ref.create(null);
     final VirtualFile file = WriteAction.compute(() -> {
       VirtualFile dir = directory;
@@ -285,7 +281,7 @@ public class ManifestFileUtil {
     final IOException exception = exc.get();
     if (exception != null) {
       LOGGER.info(exception);
-      Messages.showErrorDialog(project, exception.getMessage(), CommonBundle.getErrorTitle());
+      Messages.showErrorDialog(project, exception.getMessage(), CommonLocalize.titleError().get());
       return null;
     }
     return file;
@@ -298,12 +294,10 @@ public class ManifestFileUtil {
   }
 
   public static void addManifestFileToLayout(final @Nonnull String path, final @Nonnull ArtifactEditorContext context, final @Nonnull CompositePackagingElement<?> element) {
-    context.editLayout(context.getArtifact(), new Runnable() {
-      public void run() {
-        final VirtualFile file = findManifestFile(element, context, context.getArtifactType());
-        if (file == null || !FileUtil.pathsEqual(file.getPath(), path)) {
-          PackagingElementFactory.getInstance(context.getProject()).addFileCopy(element, MANIFEST_DIR_NAME, path, MANIFEST_FILE_NAME);
-        }
+    context.editLayout(context.getArtifact(), () -> {
+      final VirtualFile file = findManifestFile(element, context, context.getArtifactType());
+      if (file == null || !FileUtil.pathsEqual(file.getPath(), path)) {
+        PackagingElementFactory.getInstance(context.getProject()).addFileCopy(element, MANIFEST_DIR_NAME, path, MANIFEST_FILE_NAME);
       }
     });
   }
@@ -319,13 +313,10 @@ public class ManifestFileUtil {
   }
 
   public static void setupMainClassField(final Project project, final TextFieldWithBrowseButton field) {
-    field.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        final PsiClass selected = selectMainClass(project, field.getText());
-        if (selected != null) {
-          field.setText(selected.getQualifiedName());
-        }
+    field.addActionListener(e -> {
+      final PsiClass selected = selectMainClass(project, field.getText());
+      if (selected != null) {
+        field.setText(selected.getQualifiedName());
       }
     });
   }
@@ -333,12 +324,8 @@ public class ManifestFileUtil {
   private static class MainClassFilter implements ClassFilter {
     @Override
     public boolean isAccepted(final PsiClass aClass) {
-      return ApplicationManager.getApplication().runReadAction(new Computable<Boolean>() {
-        @Override
-        public Boolean compute() {
-          return PsiMethodUtil.MAIN_CLASS.test(aClass) && PsiMethodUtil.hasMainMethod(aClass);
-        }
-      });
+      return Application.get()
+        .runReadAction((Computable<Boolean>)() -> PsiMethodUtil.MAIN_CLASS.test(aClass) && PsiMethodUtil.hasMainMethod(aClass));
     }
   }
 }

@@ -22,7 +22,6 @@ import consulo.execution.test.AbstractTestProxy;
 import com.intellij.java.execution.configurations.JavaRunConfigurationModule;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
-import consulo.language.editor.CommonDataKeys;
 import consulo.ui.ex.action.Presentation;
 import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
@@ -44,8 +43,9 @@ public abstract class AbstractExcludeFromRunAction<T extends ModuleBasedConfigur
   @RequiredUIAccess
   @Override
   public void actionPerformed(@Nonnull AnActionEvent e) {
-    final Project project = e.getData(CommonDataKeys.PROJECT);
+    final Project project = e.getData(Project.KEY);
     LOG.assertTrue(project != null);
+    @SuppressWarnings("unchecked")
     final T configuration = (T) e.getData(RunConfiguration.DATA_KEY);
     LOG.assertTrue(configuration != null);
     final GlobalSearchScope searchScope = configuration.getConfigurationModule().getSearchScope();
@@ -60,7 +60,7 @@ public abstract class AbstractExcludeFromRunAction<T extends ModuleBasedConfigur
   public void update(@Nonnull AnActionEvent e) {
     final Presentation presentation = e.getPresentation();
     presentation.setVisible(false);
-    final Project project = e.getData(CommonDataKeys.PROJECT);
+    final Project project = e.getData(Project.KEY);
     if (project != null) {
       final RunConfiguration configuration = e.getData(RunConfiguration.DATA_KEY);
       if (isPatternBasedConfiguration(configuration)) {
@@ -69,7 +69,7 @@ public abstract class AbstractExcludeFromRunAction<T extends ModuleBasedConfigur
           final Location location = testProxy.getLocation(project, ((T) configuration).getConfigurationModule().getSearchScope());
           if (location != null) {
             final PsiElement psiElement = location.getPsiElement();
-            if (psiElement instanceof PsiClass && getPattern((T) configuration).contains(((PsiClass) psiElement).getQualifiedName())) {
+            if (psiElement instanceof PsiClass psiClass && getPattern((T) configuration).contains(psiClass.getQualifiedName())) {
               presentation.setVisible(true);
             }
           }

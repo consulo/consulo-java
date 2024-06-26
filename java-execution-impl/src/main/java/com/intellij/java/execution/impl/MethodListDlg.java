@@ -21,15 +21,16 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import consulo.execution.ExecutionBundle;
+import consulo.execution.localize.ExecutionLocalize;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.SimpleTextAttributes;
 import consulo.ui.ex.awt.*;
 import consulo.ui.ex.awt.event.DoubleClickListener;
 import consulo.ui.ex.awt.tree.TreeUIHelper;
 import consulo.util.lang.function.Condition;
 import jakarta.annotation.Nonnull;
-
 import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -41,7 +42,7 @@ public class MethodListDlg extends DialogWrapper {
   private final PsiClass myClass;
   private static final Comparator<PsiMethod> METHOD_NAME_COMPARATOR = (psiMethod, psiMethod1) -> psiMethod.getName().compareToIgnoreCase(psiMethod1.getName());
   private final SortedListModel<PsiMethod> myListModel = new SortedListModel<>(METHOD_NAME_COMPARATOR);
-  private final JList myList = new JBList(myListModel);
+  private final JList<PsiMethod> myList = new JBList<>(myListModel);
   private final JPanel myWholePanel = new JPanel(new BorderLayout());
 
   public MethodListDlg(final PsiClass psiClass, final Condition<PsiMethod> filter, final JComponent parent) {
@@ -49,14 +50,24 @@ public class MethodListDlg extends DialogWrapper {
     myClass = psiClass;
     createList(psiClass.getAllMethods(), filter);
     myWholePanel.add(ScrollPaneFactory.createScrollPane(myList));
-    myList.setCellRenderer(new ColoredListCellRenderer() {
-      protected void customizeCellRenderer(@Nonnull final JList list, final Object value, final int index, final boolean selected, final boolean hasFocus) {
-        final PsiMethod psiMethod = (PsiMethod) value;
-        append(PsiFormatUtil.formatMethod(psiMethod, PsiSubstitutor.EMPTY, PsiFormatUtil.SHOW_NAME, 0), StructureNodeRenderer.applyDeprecation(psiMethod, SimpleTextAttributes
-            .REGULAR_ATTRIBUTES));
+    myList.setCellRenderer(new ColoredListCellRenderer<>() {
+      protected void customizeCellRenderer(
+        @Nonnull final JList<? extends PsiMethod> list,
+        final PsiMethod psiMethod,
+        final int index,
+        final boolean selected,
+        final boolean hasFocus
+      ) {
+        append(
+          PsiFormatUtil.formatMethod(psiMethod, PsiSubstitutor.EMPTY, PsiFormatUtil.SHOW_NAME, 0),
+          StructureNodeRenderer.applyDeprecation(psiMethod, SimpleTextAttributes.REGULAR_ATTRIBUTES)
+        );
         final PsiClass containingClass = psiMethod.getContainingClass();
         if (!myClass.equals(containingClass)) {
-          append(" (" + containingClass.getQualifiedName() + ")", StructureNodeRenderer.applyDeprecation(containingClass, SimpleTextAttributes.GRAY_ATTRIBUTES));
+          append(
+            " (" + containingClass.getQualifiedName() + ")",
+            StructureNodeRenderer.applyDeprecation(containingClass, SimpleTextAttributes.GRAY_ATTRIBUTES)
+          );
         }
       }
     });
@@ -71,13 +82,12 @@ public class MethodListDlg extends DialogWrapper {
 
     ScrollingUtil.ensureSelectionExists(myList);
     TreeUIHelper.getInstance().installListSpeedSearch(myList);
-    setTitle(ExecutionBundle.message("choose.test.method.dialog.title"));
+    setTitle(ExecutionLocalize.chooseTestMethodDialogTitle());
     init();
   }
 
   private void createList(final PsiMethod[] allMethods, final Condition<PsiMethod> filter) {
-    for (int i = 0; i < allMethods.length; i++) {
-      final PsiMethod method = allMethods[i];
+    for (final PsiMethod method : allMethods) {
       if (filter.value(method)) {
         myListModel.add(method);
       }
@@ -90,11 +100,12 @@ public class MethodListDlg extends DialogWrapper {
 
   @Nullable
   @Override
+  @RequiredUIAccess
   public JComponent getPreferredFocusedComponent() {
     return myList;
   }
 
   public PsiMethod getSelected() {
-    return (PsiMethod) myList.getSelectedValue();
+    return myList.getSelectedValue();
   }
 }

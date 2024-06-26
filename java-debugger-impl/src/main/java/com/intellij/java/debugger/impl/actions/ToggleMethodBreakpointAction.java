@@ -27,7 +27,6 @@ import consulo.fileEditor.FileEditorManager;
 import consulo.ui.ex.action.ActionPlaces;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
-import consulo.language.editor.CommonDataKeys;
 import consulo.document.Document;
 import consulo.codeEditor.Editor;
 import consulo.virtualFileSystem.fileType.FileType;
@@ -44,12 +43,11 @@ import jakarta.annotation.Nullable;
 
 public class ToggleMethodBreakpointAction extends AnAction
 {
-
 	public void update(AnActionEvent event)
 	{
 		boolean toEnable = getPlace(event) != null;
 
-		if(ActionPlaces.isPopupPlace(event.getPlace()))
+		if (ActionPlaces.isPopupPlace(event.getPlace()))
 		{
 			event.getPresentation().setVisible(toEnable);
 		}
@@ -62,22 +60,22 @@ public class ToggleMethodBreakpointAction extends AnAction
 
 	public void actionPerformed(AnActionEvent e)
 	{
-		Project project = e.getData(CommonDataKeys.PROJECT);
-		if(project == null)
+		Project project = e.getData(Project.KEY);
+		if (project == null)
 		{
 			return;
 		}
 		DebuggerManagerEx debugManager = DebuggerManagerEx.getInstanceEx(project);
-		if(debugManager == null)
+		if (debugManager == null)
 		{
 			return;
 		}
 		final BreakpointManager manager = debugManager.getBreakpointManager();
 		final PlaceInDocument place = getPlace(e);
-		if(place != null && DocumentUtil.isValidOffset(place.getOffset(), place.getDocument()))
+		if (place != null && DocumentUtil.isValidOffset(place.getOffset(), place.getDocument()))
 		{
 			Breakpoint breakpoint = manager.findBreakpoint(place.getDocument(), place.getOffset(), MethodBreakpoint.CATEGORY);
-			if(breakpoint == null)
+			if (breakpoint == null)
 			{
 				manager.addMethodBreakpoint(place.getDocument(), place.getDocument().getLineNumber(place.getOffset()));
 			}
@@ -91,8 +89,8 @@ public class ToggleMethodBreakpointAction extends AnAction
 	@Nullable
 	private static PlaceInDocument getPlace(AnActionEvent event)
 	{
-		final Project project = event.getData(CommonDataKeys.PROJECT);
-		if(project == null)
+		final Project project = event.getData(Project.KEY);
+		if (project == null)
 		{
 			return null;
 		}
@@ -100,14 +98,14 @@ public class ToggleMethodBreakpointAction extends AnAction
 		PsiElement method = null;
 		Document document = null;
 
-		if(ActionPlaces.PROJECT_VIEW_POPUP.equals(event.getPlace()) || ActionPlaces.STRUCTURE_VIEW_POPUP.equals(event.getPlace()) || ActionPlaces.FAVORITES_VIEW_POPUP.equals(event.getPlace()) ||
-				ActionPlaces.NAVIGATION_BAR_POPUP.equals(event.getPlace()))
+		if (ActionPlaces.PROJECT_VIEW_POPUP.equals(event.getPlace()) || ActionPlaces.STRUCTURE_VIEW_POPUP.equals(event.getPlace())
+			|| ActionPlaces.FAVORITES_VIEW_POPUP.equals(event.getPlace()) || ActionPlaces.NAVIGATION_BAR_POPUP.equals(event.getPlace()))
 		{
-			final PsiElement psiElement = event.getData(CommonDataKeys.PSI_ELEMENT);
-			if(psiElement instanceof PsiMethod)
+			final PsiElement psiElement = event.getData(PsiElement.KEY);
+			if (psiElement instanceof PsiMethod)
 			{
 				final PsiFile containingFile = psiElement.getContainingFile();
-				if(containingFile != null)
+				if (containingFile != null)
 				{
 					method = psiElement;
 					document = PsiDocumentManager.getInstance(project).getDocument(containingFile);
@@ -116,20 +114,20 @@ public class ToggleMethodBreakpointAction extends AnAction
 		}
 		else
 		{
-			Editor editor = event.getData(CommonDataKeys.EDITOR);
-			if(editor == null)
+			Editor editor = event.getData(Editor.KEY);
+			if (editor == null)
 			{
 				editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
 			}
-			if(editor != null)
+			if (editor != null)
 			{
 				document = editor.getDocument();
 				PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(document);
-				if(file != null)
+				if (file != null)
 				{
 					final VirtualFile virtualFile = file.getVirtualFile();
 					FileType fileType = virtualFile != null ? virtualFile.getFileType() : null;
-					if(JavaFileType.INSTANCE == fileType || JavaClassFileType.INSTANCE == fileType)
+					if (JavaFileType.INSTANCE == fileType || JavaClassFileType.INSTANCE == fileType)
 					{
 						method = findMethod(project, editor);
 					}
@@ -143,12 +141,12 @@ public class ToggleMethodBreakpointAction extends AnAction
 	@Nullable
 	private static PsiMethod findMethod(Project project, Editor editor)
 	{
-		if(editor == null)
+		if (editor == null)
 		{
 			return null;
 		}
 		PsiFile psiFile = PsiDocumentManager.getInstance(project).getPsiFile(editor.getDocument());
-		if(psiFile == null)
+		if (psiFile == null)
 		{
 			return null;
 		}

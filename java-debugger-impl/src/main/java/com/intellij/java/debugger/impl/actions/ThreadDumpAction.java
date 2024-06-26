@@ -31,11 +31,9 @@ import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
 import com.intellij.java.debugger.impl.jdi.VirtualMachineProxyImpl;
 import com.intellij.java.execution.unscramble.ThreadDumpParser;
 import consulo.application.Application;
-import consulo.application.ApplicationManager;
 import consulo.execution.debug.XDebugSession;
 import consulo.execution.unscramble.ThreadState;
 import consulo.internal.com.sun.jdi.*;
-import consulo.language.editor.CommonDataKeys;
 import consulo.project.Project;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
@@ -53,15 +51,15 @@ public class ThreadDumpAction extends AnAction implements AnAction.TransparentUp
 {
 	public void actionPerformed(AnActionEvent e)
 	{
-		final Project project = e.getData(CommonDataKeys.PROJECT);
-		if(project == null)
+		final Project project = e.getData(Project.KEY);
+		if (project == null)
 		{
 			return;
 		}
 		DebuggerContextImpl context = (DebuggerManagerEx.getInstanceEx(project)).getContext();
 
 		final DebuggerSession session = context.getDebuggerSession();
-		if(session != null && session.isAttached())
+		if (session != null && session.isAttached())
 		{
 			final DebugProcessImpl process = context.getDebugProcess();
 			process.getManagerThread().invoke(new DebuggerCommandImpl()
@@ -73,15 +71,11 @@ public class ThreadDumpAction extends AnAction implements AnAction.TransparentUp
 					try
 					{
 						final List<ThreadState> threads = buildThreadStates(vm);
-						ApplicationManager.getApplication().invokeLater(new Runnable()
-						{
-							public void run()
+						project.getApplication().invokeLater(() -> {
+							XDebugSession xSession = session.getXDebugSession();
+							if (xSession != null)
 							{
-								XDebugSession xSession = session.getXDebugSession();
-								if(xSession != null)
-								{
-									DebuggerUtilsEx.addThreadDump(project, threads, xSession.getUI(), session);
-								}
+								DebuggerUtilsEx.addThreadDump(project, threads, xSession.getUI(), session);
 							}
 						}, Application.get().getNoneModalityState());
 					}
@@ -97,15 +91,15 @@ public class ThreadDumpAction extends AnAction implements AnAction.TransparentUp
 	static List<ThreadState> buildThreadStates(VirtualMachineProxyImpl vmProxy)
 	{
 		final List<ThreadReference> threads = vmProxy.getVirtualMachine().allThreads();
-		final List<ThreadState> result = new ArrayList<ThreadState>();
-		final Map<String, ThreadState> nameToThreadMap = new HashMap<String, ThreadState>();
-		final Map<String, String> waitingMap = new HashMap<String, String>(); // key 'waits_for' value
-		for(ThreadReference threadReference : threads)
+		final List<ThreadState> result = new ArrayList<>();
+		final Map<String, ThreadState> nameToThreadMap = new HashMap<>();
+		final Map<String, String> waitingMap = new HashMap<>(); // key 'waits_for' value
+		for (ThreadReference threadReference : threads)
 		{
 			final StringBuilder buffer = new StringBuilder();
 			boolean hasEmptyStack = true;
 			final int threadStatus = threadReference.status();
-			if(threadStatus == ThreadReference.THREAD_STATUS_ZOMBIE)
+			if (threadStatus == ThreadReference.THREAD_STATUS_ZOMBIE)
 			{
 				continue;
 			}
@@ -117,14 +111,14 @@ public class ThreadDumpAction extends AnAction implements AnAction.TransparentUp
 
 			buffer.append("\"").append(threadName).append("\"");
 			ReferenceType referenceType = threadReference.referenceType();
-			if(referenceType != null)
+			if (referenceType != null)
 			{
 				//noinspection HardCodedStringLiteral
 				Field daemon = referenceType.fieldByName("daemon");
-				if(daemon != null)
+				if (daemon != null)
 				{
 					Value value = threadReference.getValue(daemon);
-					if(value instanceof BooleanValue && ((BooleanValue) value).booleanValue())
+					if (value instanceof BooleanValue booleanValue && booleanValue.booleanValue())
 					{
 						buffer.append(" ").append(DebuggerBundle.message("threads.export.attribute.label.daemon"));
 						threadState.setDaemon(true);
@@ -133,24 +127,22 @@ public class ThreadDumpAction extends AnAction implements AnAction.TransparentUp
 
 				//noinspection HardCodedStringLiteral
 				Field priority = referenceType.fieldByName("priority");
-				if(priority != null)
+				if (priority != null)
 				{
 					Value value = threadReference.getValue(priority);
-					if(value instanceof IntegerValue)
+					if (value instanceof IntegerValue integerValue)
 					{
-						buffer.append(" ").append(DebuggerBundle.message("threads.export.attribute.label.priority",
-								((IntegerValue) value).intValue()));
+						buffer.append(" ").append(DebuggerBundle.message("threads.export.attribute.label.priority", integerValue.intValue()));
 					}
 				}
 
 				Field tid = referenceType.fieldByName("tid");
-				if(tid != null)
+				if (tid != null)
 				{
 					Value value = threadReference.getValue(tid);
-					if(value instanceof LongValue)
+					if (value instanceof LongValue longValue)
 					{
-						buffer.append(" ").append(DebuggerBundle.message("threads.export.attribute.label.tid",
-								Long.toHexString(((LongValue) value).longValue())));
+						buffer.append(" ").append(DebuggerBundle.message("threads.export.attribute.label.tid", Long.toHexString(longValue.longValue())));
 						buffer.append(" nid=NA");
 					}
 				}
@@ -160,7 +152,7 @@ public class ThreadDumpAction extends AnAction implements AnAction.TransparentUp
 			//  buffer.append(", ").append(DebuggerBundle.message("threads.export.attribute.label.group", groupReference.name()));
 			//}
 			final String state = threadState.getState();
-			if(state != null)
+			if (state != null)
 			{
 				buffer.append(" ").append(state);
 			}
@@ -169,17 +161,17 @@ public class ThreadDumpAction extends AnAction implements AnAction.TransparentUp
 
 			try
 			{
-				if(vmProxy.canGetOwnedMonitorInfo() && vmProxy.canGetMonitorInfo())
+				if (vmProxy.canGetOwnedMonitorInfo() && vmProxy.canGetMonitorInfo())
 				{
 					List<ObjectReference> list = threadReference.ownedMonitors();
-					for(ObjectReference reference : list)
+					for (ObjectReference reference : list)
 					{
-						if(!vmProxy.canGetMonitorFrameInfo())
+						if (!vmProxy.canGetMonitorFrameInfo())
 						{ // java 5 and earlier
 							buffer.append("\n\t ").append(renderLockedObject(reference));
 						}
 						final List<ThreadReference> waiting = reference.waitingThreads();
-						for(ThreadReference thread : waiting)
+						for (ThreadReference thread : waiting)
 						{
 							final String waitingThreadName = threadName(thread);
 							waitingMap.put(waitingThreadName, threadName);
@@ -189,12 +181,12 @@ public class ThreadDumpAction extends AnAction implements AnAction.TransparentUp
 				}
 
 				ObjectReference waitedMonitor = vmProxy.canGetCurrentContendedMonitor() ? threadReference.currentContendedMonitor() : null;
-				if(waitedMonitor != null)
+				if (waitedMonitor != null)
 				{
-					if(vmProxy.canGetMonitorInfo())
+					if (vmProxy.canGetMonitorInfo())
 					{
 						ThreadReference waitedMonitorOwner = waitedMonitor.owningThread();
-						if(waitedMonitorOwner != null)
+						if (waitedMonitorOwner != null)
 						{
 							final String monitorOwningThreadName = threadName(waitedMonitorOwner);
 							waitingMap.put(threadName, monitorOwningThreadName);
@@ -208,13 +200,13 @@ public class ThreadDumpAction extends AnAction implements AnAction.TransparentUp
 				hasEmptyStack = frames.size() == 0;
 
 				final IntObjectMap<List<ObjectReference>> lockedAt = IntMaps.newIntObjectHashMap();
-				if(vmProxy.canGetMonitorFrameInfo())
+				if (vmProxy.canGetMonitorFrameInfo())
 				{
-					for(MonitorInfo info : threadReference.ownedMonitorsAndFrames())
+					for (MonitorInfo info : threadReference.ownedMonitorsAndFrames())
 					{
 						final int stackDepth = info.stackDepth();
 						List<ObjectReference> monitors;
-						if((monitors = lockedAt.get(stackDepth)) == null)
+						if ((monitors = lockedAt.get(stackDepth)) == null)
 						{
 							lockedAt.put(stackDepth, monitors = new SmartList<>());
 						}
@@ -222,7 +214,7 @@ public class ThreadDumpAction extends AnAction implements AnAction.TransparentUp
 					}
 				}
 
-				for(int i = 0, framesSize = frames.size(); i < framesSize; i++)
+				for (int i = 0, framesSize = frames.size(); i < framesSize; i++)
 				{
 					final StackFrame stackFrame = frames.get(i);
 					try
@@ -231,21 +223,21 @@ public class ThreadDumpAction extends AnAction implements AnAction.TransparentUp
 						buffer.append("\n\t  ").append(renderLocation(location));
 
 						final List<ObjectReference> monitors = lockedAt.get(i);
-						if(monitors != null)
+						if (monitors != null)
 						{
-							for(ObjectReference monitor : monitors)
+							for (ObjectReference monitor : monitors)
 							{
 								buffer.append("\n\t  - ").append(renderLockedObject(monitor));
 							}
 						}
 					}
-					catch(InvalidStackFrameException e)
+					catch (InvalidStackFrameException e)
 					{
 						buffer.append("\n\t  Invalid stack frame: ").append(e.getMessage());
 					}
 				}
 			}
-			catch(IncompatibleThreadStateException e)
+			catch (IncompatibleThreadStateException e)
 			{
 				buffer.append("\n\t ").append(DebuggerBundle.message("threads.export.attribute.error.incompatible.state"));
 			}
@@ -253,7 +245,7 @@ public class ThreadDumpAction extends AnAction implements AnAction.TransparentUp
 			ThreadDumpParser.inferThreadStateDetail(threadState);
 		}
 
-		for(String waiting : waitingMap.keySet())
+		for (String waiting : waitingMap.keySet())
 		{
 			final ThreadState waitingThread = nameToThreadMap.get(waiting);
 			final ThreadState awaitedThread = nameToThreadMap.get(waitingMap.get(waiting));
@@ -261,11 +253,11 @@ public class ThreadDumpAction extends AnAction implements AnAction.TransparentUp
 		}
 
 		// detect simple deadlocks
-		for(ThreadState thread : result)
+		for (ThreadState thread : result)
 		{
-			for(ThreadState awaitingThread : thread.getAwaitingThreads())
+			for (ThreadState awaitingThread : thread.getAwaitingThreads())
 			{
-				if(awaitingThread.isAwaitedBy(thread))
+				if (awaitingThread.isAwaitedBy(thread))
 				{
 					thread.addDeadlockedThread(awaitingThread);
 					awaitingThread.addDeadlockedThread(thread);
@@ -289,7 +281,7 @@ public class ThreadDumpAction extends AnAction implements AnAction.TransparentUp
 		{
 			monitorTypeName = monitor.referenceType().name();
 		}
-		catch(Throwable e)
+		catch (Throwable e)
 		{
 			monitorTypeName = "Error getting object type: '" + e.getMessage() + "'";
 		}
@@ -298,7 +290,7 @@ public class ThreadDumpAction extends AnAction implements AnAction.TransparentUp
 
 	private static String threadStatusToJavaThreadState(int status)
 	{
-		switch(status)
+		switch (status)
 		{
 			case ThreadReference.THREAD_STATUS_MONITOR:
 				return Thread.State.BLOCKED.name();
@@ -321,7 +313,7 @@ public class ThreadDumpAction extends AnAction implements AnAction.TransparentUp
 
 	private static String threadStatusToState(int status)
 	{
-		switch(status)
+		switch (status)
 		{
 			case ThreadReference.THREAD_STATUS_MONITOR:
 				return "waiting for monitor entry";
@@ -349,7 +341,7 @@ public class ThreadDumpAction extends AnAction implements AnAction.TransparentUp
 		{
 			sourceName = location.sourceName();
 		}
-		catch(Throwable e)
+		catch (Throwable e)
 		{
 			sourceName = "Unknown Source";
 		}
@@ -359,7 +351,7 @@ public class ThreadDumpAction extends AnAction implements AnAction.TransparentUp
 		{
 			methodName.append(location.declaringType().name());
 		}
-		catch(Throwable e)
+		catch (Throwable e)
 		{
 			methodName.append(e.getMessage());
 		}
@@ -368,7 +360,7 @@ public class ThreadDumpAction extends AnAction implements AnAction.TransparentUp
 		{
 			methodName.append(location.method().name());
 		}
-		catch(Throwable e)
+		catch (Throwable e)
 		{
 			methodName.append(e.getMessage());
 		}
@@ -378,7 +370,7 @@ public class ThreadDumpAction extends AnAction implements AnAction.TransparentUp
 		{
 			lineNumber = location.lineNumber();
 		}
-		catch(Throwable e)
+		catch (Throwable e)
 		{
 			lineNumber = -1;
 		}
@@ -390,12 +382,11 @@ public class ThreadDumpAction extends AnAction implements AnAction.TransparentUp
 		return threadReference.name() + "@" + threadReference.uniqueID();
 	}
 
-
 	public void update(AnActionEvent event)
 	{
 		Presentation presentation = event.getPresentation();
-		Project project = event.getData(CommonDataKeys.PROJECT);
-		if(project == null)
+		Project project = event.getData(Project.KEY);
+		if (project == null)
 		{
 			presentation.setEnabled(false);
 			return;

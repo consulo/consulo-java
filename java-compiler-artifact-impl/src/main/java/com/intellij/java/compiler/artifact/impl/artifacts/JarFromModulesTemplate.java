@@ -16,10 +16,7 @@
 package com.intellij.java.compiler.artifact.impl.artifacts;
 
 import com.intellij.java.compiler.artifact.impl.ManifestFileUtil;
-import consulo.application.ApplicationManager;
-import consulo.application.CommonBundle;
 import consulo.application.util.function.CommonProcessors;
-import consulo.application.util.function.Processor;
 import consulo.application.util.function.ThrowableComputable;
 import consulo.compiler.artifact.ArtifactTemplate;
 import consulo.compiler.artifact.ArtifactUtil;
@@ -32,7 +29,9 @@ import consulo.module.Module;
 import consulo.module.content.ProjectRootManager;
 import consulo.module.content.layer.ModulesProvider;
 import consulo.module.content.layer.OrderEnumerator;
+import consulo.platform.base.localize.CommonLocalize;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.Messages;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFilePathUtil;
@@ -55,6 +54,7 @@ public class JarFromModulesTemplate extends ArtifactTemplate {
   }
 
   @Override
+  @RequiredUIAccess
   public NewArtifactConfiguration createArtifact() {
     JarArtifactFromModulesDialog dialog = new JarArtifactFromModulesDialog(myContext);
     dialog.show();
@@ -62,26 +62,40 @@ public class JarFromModulesTemplate extends ArtifactTemplate {
       return null;
     }
 
-    return doCreateArtifact(dialog.getSelectedModules(), dialog.getMainClassName(), dialog.getDirectoryForManifest(),
-                            dialog.isExtractLibrariesToJar(), dialog.isIncludeTests());
+    return doCreateArtifact(
+      dialog.getSelectedModules(),
+      dialog.getMainClassName(),
+      dialog.getDirectoryForManifest(),
+      dialog.isExtractLibrariesToJar(),
+      dialog.isIncludeTests()
+    );
   }
 
   @Nullable
-  public NewArtifactConfiguration doCreateArtifact(final Module[] modules, final String mainClassName,
-                                                   final String directoryForManifest,
-                                                   final boolean extractLibrariesToJar,
-                                                   final boolean includeTests) {
+  @RequiredUIAccess
+  public NewArtifactConfiguration doCreateArtifact(
+    final Module[] modules,
+    final String mainClassName,
+    final String directoryForManifest,
+    final boolean extractLibrariesToJar,
+    final boolean includeTests
+  ) {
     VirtualFile manifestFile = null;
     final Project project = myContext.getProject();
     if (mainClassName != null && !mainClassName.isEmpty() || !extractLibrariesToJar) {
       final VirtualFile directory;
       try {
-        directory = ApplicationManager.getApplication().runWriteAction((ThrowableComputable<VirtualFile, IOException>) () -> VirtualFileUtil.createDirectoryIfMissing(directoryForManifest));
+        directory = project.getApplication().runWriteAction(
+          (ThrowableComputable<VirtualFile, IOException>) () -> VirtualFileUtil.createDirectoryIfMissing(directoryForManifest)
+        );
       }
       catch (IOException e) {
         LOG.info(e);
-        Messages.showErrorDialog(project, "Cannot create directory '" + directoryForManifest + "': " + e.getMessage(),
-                                 CommonBundle.getErrorTitle());
+        Messages.showErrorDialog(
+          project,
+          "Cannot create directory '" + directoryForManifest + "': " + e.getMessage(),
+          CommonLocalize.titleError().get()
+        );
         return null;
       }
       if (directory == null) return null;
@@ -100,24 +114,21 @@ public class JarFromModulesTemplate extends ArtifactTemplate {
 
     OrderEnumerator orderEnumerator = ProjectRootManager.getInstance(project).orderEntries(Arrays.asList(modules));
 
-    final Set<Library> libraries = new HashSet<Library>();
+    final Set<Library> libraries = new HashSet<>();
     if (!includeTests) {
       orderEnumerator = orderEnumerator.productionOnly();
     }
     final ModulesProvider modulesProvider = myContext.getModulesProvider();
     final OrderEnumerator enumerator = orderEnumerator.using(modulesProvider).withoutSdk().runtimeOnly().recursively();
-    enumerator.forEachLibrary(new CommonProcessors.CollectProcessor<Library>(libraries));
-    enumerator.forEachModule(new Processor<Module>() {
-      @Override
-      public boolean process(Module module) {
-        if (ProductionModuleOutputElementType.getInstance().isSuitableModule(modulesProvider, module)) {
-          archive.addOrFindChild(factory.createModuleOutput(module));
-        }
-        if (includeTests && TestModuleOutputElementType.getInstance().isSuitableModule(modulesProvider, module)) {
-          archive.addOrFindChild(factory.createTestModuleOutput(module));
-        }
-        return true;
+    enumerator.forEachLibrary(new CommonProcessors.CollectProcessor<>(libraries));
+    enumerator.forEachModule(module -> {
+      if (ProductionModuleOutputElementType.getInstance().isSuitableModule(modulesProvider, module)) {
+        archive.addOrFindChild(factory.createModuleOutput(module));
       }
+      if (includeTests && TestModuleOutputElementType.getInstance().isSuitableModule(modulesProvider, module)) {
+        archive.addOrFindChild(factory.createTestModuleOutput(module));
+      }
+      return true;
     });
 
     final JarArtifactType jarArtifactType = JarArtifactType.getInstance();
@@ -132,7 +143,7 @@ public class JarFromModulesTemplate extends ArtifactTemplate {
     }
     else {
       final ArtifactRootElement<?> root = factory.createArtifactRootElement();
-      List<String> classpath = new ArrayList<String>();
+      List<String> classpath = new ArrayList<>();
       root.addOrFindChild(archive);
       addLibraries(libraries, root, archive, classpath);
       ManifestFileUtil.updateManifest(manifestFile, mainClassName, classpath, true);

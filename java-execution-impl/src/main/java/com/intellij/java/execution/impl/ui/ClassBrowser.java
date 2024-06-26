@@ -25,7 +25,7 @@ import com.intellij.java.language.util.ClassFilter;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
 import consulo.application.ReadAction;
-import consulo.execution.ExecutionBundle;
+import consulo.execution.localize.ExecutionLocalize;
 import consulo.execution.ui.awt.BrowseModuleValueActionListener;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -95,7 +95,7 @@ public abstract class ClassBrowser extends BrowseModuleValueActionListener {
         return ReadAction.compute(() -> PsiMethodUtil.findMainMethod(aClass));
       }
     };
-    return new MainClassBrowser(project, moduleSelector, ExecutionBundle.message("choose.main.class.dialog.title")) {
+    return new MainClassBrowser(project, moduleSelector, ExecutionLocalize.chooseMainClassDialogTitle().get()) {
       @Override
       protected ClassFilter createFilter(final Module module) {
         return applicationClass;
@@ -103,11 +103,9 @@ public abstract class ClassBrowser extends BrowseModuleValueActionListener {
     };
   }
 
-  public static ClassBrowser createAppletClassBrowser(final Project project,
-                                                      final ConfigurationModuleSelector moduleSelector) {
-    final String title = ExecutionBundle.message("choose.applet.class.dialog.title");
+  public static ClassBrowser createAppletClassBrowser(final Project project, final ConfigurationModuleSelector moduleSelector) {
+    final String title = ExecutionLocalize.chooseAppletClassDialogTitle().get();
     return new MainClassBrowser(project, moduleSelector, title) {
-
       @Override
       protected TreeClassChooser createClassChooser(ClassFilter.ClassFilterWithScope classFilter) {
         final Module module = moduleSelector.getModule();
@@ -176,18 +174,20 @@ public abstract class ClassBrowser extends BrowseModuleValueActionListener {
 
     public static NoFilterException noJUnitInModule(final Module module) {
       return new NoFilterException(new MessagesEx.MessageInfo(
-          module.getProject(),
-          ExecutionBundle.message("junit.not.found.in.module.error.message", module.getName()),
-          ExecutionBundle.message("cannot.browse.test.inheritors.dialog.title")));
+        module.getProject(),
+        ExecutionLocalize.junitNotFoundInModuleErrorMessage(module.getName()).get(),
+        ExecutionLocalize.cannotBrowseTestInheritorsDialogTitle().get()
+      ));
     }
 
     public static NoFilterException moduleDoesntExist(final ConfigurationModuleSelector moduleSelector) {
       final Project project = moduleSelector.getProject();
       final String moduleName = moduleSelector.getModuleName();
       return new NoFilterException(new MessagesEx.MessageInfo(
-          project,
-          moduleName.isEmpty() ? "No module selected" : ExecutionBundle.message("module.does.not.exists", moduleName, project.getName()),
-          ExecutionBundle.message("cannot.browse.test.inheritors.dialog.title")));
+        project,
+        moduleName.isEmpty() ? "No module selected" : ExecutionLocalize.moduleDoesNotExists(moduleName, project.getName()).get(),
+        ExecutionLocalize.cannotBrowseTestInheritorsDialogTitle().get()
+      ));
     }
   }
 }

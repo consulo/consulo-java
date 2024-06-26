@@ -36,7 +36,7 @@ public class JavaVariableConflictResolver implements PsiConflictResolver{
   @Override
   public CandidateInfo resolveConflict(@Nonnull List<CandidateInfo> conflicts){
     final int size = conflicts.size();
-    if(size == 1){
+    if (size == 1){
       return conflicts.get(0);
     }
     if (size == 0) {
@@ -46,7 +46,7 @@ public class JavaVariableConflictResolver implements PsiConflictResolver{
     CandidateInfo currentResult = uncheckedResult[0];
 
     PsiElement currentElement = currentResult.getElement();
-    if(currentElement instanceof PsiField){
+    if (currentElement instanceof PsiField currentField) {
       for (int i = 1; i < uncheckedResult.length; i++) {
         final CandidateInfo candidate = uncheckedResult[i];
         final PsiElement otherElement = candidate.getElement();
@@ -64,7 +64,7 @@ public class JavaVariableConflictResolver implements PsiConflictResolver{
         }
 
         final PsiClass newClass = ((PsiField)otherElement).getContainingClass();
-        final PsiClass oldClass = ((PsiField)currentElement).getContainingClass();
+        final PsiClass oldClass = currentField.getContainingClass();
 
         final PsiElement scope = currentResult.getCurrentFileResolveScope();
         Boolean oldClassIsInheritor = null;

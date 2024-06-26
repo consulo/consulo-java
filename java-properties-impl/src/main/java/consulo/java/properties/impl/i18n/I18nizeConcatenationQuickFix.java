@@ -18,19 +18,21 @@ package consulo.java.properties.impl.i18n;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiConcatenationUtil;
 import com.intellij.lang.properties.psi.PropertiesFile;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Editor;
 import consulo.java.properties.impl.psi.I18nizedTextGenerator;
-import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import org.jetbrains.annotations.NonNls;
-
+import consulo.ui.annotation.RequiredUIAccess;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -44,10 +46,10 @@ public class I18nizeConcatenationQuickFix extends I18nizeQuickFix{
   public void checkApplicability(final PsiFile psiFile, final Editor editor) throws IncorrectOperationException {
     PsiPolyadicExpression concatenation = getEnclosingLiteralConcatenation(psiFile, editor);
     if (concatenation != null) return;
-    String message = CodeInsightBundle.message("quickfix.i18n.concatentation.error");
-    throw new IncorrectOperationException(message);
+    throw new IncorrectOperationException(CodeInsightLocalize.quickfixI18nConcatentationError().get());
   }
 
+  @RequiredReadAction
   @Override
   public JavaI18nizeQuickFixDialog createDialog(Project project, Editor editor, PsiFile psiFile) {
     PsiPolyadicExpression concatenation = getEnclosingLiteralConcatenation(psiFile, editor);
@@ -59,19 +61,24 @@ public class I18nizeConcatenationQuickFix extends I18nizeQuickFix{
   @Override
   @Nonnull
   public String getName() {
-    return CodeInsightBundle.message("quickfix.i18n.concatentation");
+    return CodeInsightLocalize.quickfixI18nConcatentation().get();
   }
 
   @Override
-  protected PsiElement doReplacementInJava(@Nonnull final PsiFile psiFile,
-                                           @Nonnull final Editor editor,
-                                           @Nullable PsiLiteralExpression literalExpression,
-                                           String i18nizedText) throws IncorrectOperationException {
+  @RequiredReadAction
+  protected PsiElement doReplacementInJava(
+    @Nonnull final PsiFile psiFile,
+    @Nonnull final Editor editor,
+    @Nullable PsiLiteralExpression literalExpression,
+    String i18nizedText
+  ) throws IncorrectOperationException {
     PsiPolyadicExpression concatenation = getEnclosingLiteralConcatenation(psiFile, editor);
-    PsiExpression expression = JavaPsiFacade.getInstance(psiFile.getProject()).getElementFactory().createExpressionFromText(i18nizedText, concatenation);
+    PsiExpression expression = JavaPsiFacade.getInstance(psiFile.getProject()).getElementFactory()
+      .createExpressionFromText(i18nizedText, concatenation);
     return concatenation.replace(expression);
   }
 
+  @RequiredReadAction
   private static String composeParametersText(final List<PsiExpression> args) {
     final StringBuilder result = new StringBuilder();
     for (Iterator<PsiExpression> iterator = args.iterator(); iterator.hasNext();) {
@@ -85,10 +92,11 @@ public class I18nizeConcatenationQuickFix extends I18nizeQuickFix{
   }
 
   @Override
+  @RequiredUIAccess
   protected JavaI18nizeQuickFixDialog createDialog(final Project project, final PsiFile context, final PsiLiteralExpression literalExpression) {
     PsiPolyadicExpression concatenation = getEnclosingLiteralConcatenation(literalExpression);
     StringBuilder formatString = new StringBuilder();
-    final List<PsiExpression> args = new ArrayList<PsiExpression>();
+    final List<PsiExpression> args = new ArrayList<>();
     try {
       PsiConcatenationUtil.buildFormatString(concatenation, formatString, args, false);
     }
@@ -96,7 +104,15 @@ public class I18nizeConcatenationQuickFix extends I18nizeQuickFix{
       LOG.error(e);
     }
 
-    return new JavaI18nizeQuickFixDialog(project, context, literalExpression, formatString.toString(), null, true, true) {
+    return new JavaI18nizeQuickFixDialog(
+      project,
+      context,
+      literalExpression,
+      formatString.toString(),
+      null,
+      true,
+      true
+    ) {
       @Override
       @Nullable
       protected String getTemplateName() {
@@ -104,8 +120,12 @@ public class I18nizeConcatenationQuickFix extends I18nizeQuickFix{
       }
 
       @Override
-      protected String generateText(final I18nizedTextGenerator textGenerator, final String propertyKey, final PropertiesFile propertiesFile,
-                                    final PsiLiteralExpression literalExpression) {
+      protected String generateText(
+        final I18nizedTextGenerator textGenerator,
+        final String propertyKey,
+        final PropertiesFile propertiesFile,
+        final PsiLiteralExpression literalExpression
+      ) {
         return textGenerator.getI18nizedConcatenationText(propertyKey, composeParametersText(args), propertiesFile, literalExpression);
       }
 
@@ -137,15 +157,19 @@ public class I18nizeConcatenationQuickFix extends I18nizeQuickFix{
     while (true) {
       if (element.getOperationTokenType() != JavaTokenType.PLUS) return concatenation;
       for (PsiExpression operand : element.getOperands()) {
-        stringLiteralOccured |= operand instanceof PsiLiteralExpression && ((PsiLiteralExpression)operand).getValue() instanceof String;
+        stringLiteralOccured |= operand instanceof PsiLiteralExpression literalExpression && literalExpression.getValue() instanceof String;
       }
 
       if (stringLiteralOccured) {
         concatenation = element;
       }
       PsiElement parent = element.getParent();
-      if (!(parent instanceof PsiPolyadicExpression)) return concatenation;
-      element = (PsiPolyadicExpression) parent;
+      if (parent instanceof PsiPolyadicExpression polyadicExpression) {
+        element = polyadicExpression;
+      }
+      else {
+        return concatenation;
+      }
     }
   }
 

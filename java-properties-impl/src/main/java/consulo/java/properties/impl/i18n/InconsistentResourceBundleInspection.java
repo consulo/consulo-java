@@ -21,16 +21,18 @@ import com.intellij.lang.properties.psi.PropertiesFile;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
 import consulo.language.editor.inspection.*;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.reference.RefManager;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.psi.PsiFile;
+import consulo.localize.LocalizeValue;
 import consulo.util.collection.BidirectionalMap;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.Comparing;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.*;
 
 /**
@@ -51,7 +53,7 @@ public class InconsistentResourceBundleInspection extends GlobalSimpleInspection
 	@Nonnull
 	public String getDisplayName()
 	{
-		return InspectionsBundle.message("inconsistent.resource.bundle.display.name");
+		return InspectionLocalize.inconsistentResourceBundleDisplayName().get();
 	}
 
 	@Override
@@ -92,104 +94,115 @@ public class InconsistentResourceBundleInspection extends GlobalSimpleInspection
 	}
 
 	@Override
-	public void checkFile(@Nonnull PsiFile file,
-						  @Nonnull InspectionManager manager,
-						  @Nonnull ProblemsHolder problemsHolder,
-						  @Nonnull GlobalInspectionContext globalContext,
-						  @Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor,
-						  @Nonnull Object state)
+	public void checkFile(
+		@Nonnull PsiFile file,
+		@Nonnull InspectionManager manager,
+		@Nonnull ProblemsHolder problemsHolder,
+		@Nonnull GlobalInspectionContext globalContext,
+		@Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor,
+		@Nonnull Object state
+	)
 	{
 		Set<ResourceBundle> visitedBundles = globalContext.getUserData(VISITED_BUNDLES_KEY);
-		checkFile(file, manager, visitedBundles, globalContext.getRefManager(), problemDescriptionsProcessor, (InconsistentResourceBundleInspectionState) state);
+		InconsistentResourceBundleInspectionState inspectionState = (InconsistentResourceBundleInspectionState)state;
+		checkFile(file, manager, visitedBundles, globalContext.getRefManager(), problemDescriptionsProcessor, inspectionState);
 	}
 
-	private void checkFile(@Nonnull final PsiFile file,
-						   @Nonnull final InspectionManager manager,
-						   @Nonnull Set<ResourceBundle> visitedBundles,
-						   RefManager refManager,
-						   ProblemDescriptionsProcessor processor,
-						   InconsistentResourceBundleInspectionState state)
+	private void checkFile(
+		@Nonnull final PsiFile file,
+		@Nonnull final InspectionManager manager,
+		@Nonnull Set<ResourceBundle> visitedBundles,
+		RefManager refManager,
+		ProblemDescriptionsProcessor processor,
+		InconsistentResourceBundleInspectionState state
+	)
 	{
-		if(!(file instanceof PropertiesFile))
+		if (!(file instanceof PropertiesFile))
 		{
 			return;
 		}
 		final PropertiesFile propertiesFile = (PropertiesFile) file;
 		ResourceBundle resourceBundle = propertiesFile.getResourceBundle();
-		if(!visitedBundles.add(resourceBundle))
+		if (!visitedBundles.add(resourceBundle))
 		{
 			return;
 		}
 		List<PropertiesFile> files = resourceBundle.getPropertiesFiles(manager.getProject());
-		if(files.size() < 2)
+		if (files.size() < 2)
 		{
 			return;
 		}
 		BidirectionalMap<PropertiesFile, PropertiesFile> parents = new BidirectionalMap<>();
-		for(PropertiesFile f : files)
+		for (PropertiesFile f : files)
 		{
 			PropertiesFile parent = PropertiesUtil.getParent(f, files);
-			if(parent != null)
+			if (parent != null)
 			{
 				parents.put(f, parent);
 			}
 		}
 		Map<PropertiesFile, Set<String>> keysUpToParent = new HashMap<>();
-		for(PropertiesFile f : files)
+		for (PropertiesFile f : files)
 		{
 			Set<String> keys = new HashSet<>(f.getNamesMap().keySet());
 			PropertiesFile parent = parents.get(f);
-			while(parent != null)
+			while (parent != null)
 			{
 				keys.addAll(parent.getNamesMap().keySet());
 				parent = parents.get(parent);
 			}
 			keysUpToParent.put(f, keys);
 		}
-		if(state.REPORT_MISSING_TRANSLATIONS)
+		if (state.REPORT_MISSING_TRANSLATIONS)
 		{
 			checkMissingTranslations(parents, files, keysUpToParent, manager, refManager, processor);
 		}
-		if(state.REPORT_INCONSISTENT_PROPERTIES)
+		if (state.REPORT_INCONSISTENT_PROPERTIES)
 		{
 			checkConsistency(parents, files, keysUpToParent, manager, refManager, processor);
 		}
-		if(state.REPORT_DUPLICATED_PROPERTIES)
+		if (state.REPORT_DUPLICATED_PROPERTIES)
 		{
 			checkDuplicatedProperties(parents, files, keysUpToParent, manager, refManager, processor);
 		}
 	}
 
-	private static void checkDuplicatedProperties(final BidirectionalMap<PropertiesFile, PropertiesFile> parents,
-												  final List<PropertiesFile> files,
-												  final Map<PropertiesFile, Set<String>> keysUpToParent,
-												  final InspectionManager manager,
-												  RefManager refManager,
-												  ProblemDescriptionsProcessor processor)
+	private static void checkDuplicatedProperties(
+		final BidirectionalMap<PropertiesFile, PropertiesFile> parents,
+		final List<PropertiesFile> files,
+		final Map<PropertiesFile, Set<String>> keysUpToParent,
+		final InspectionManager manager,
+		RefManager refManager,
+		ProblemDescriptionsProcessor processor
+	)
 	{
-		for(PropertiesFile file : files)
+		for (PropertiesFile file : files)
 		{
 			PropertiesFile parent = parents.get(file);
-			if(parent == null)
+			if (parent == null)
 			{
 				continue;
 			}
 			Set<String> parentKeys = keysUpToParent.get(parent);
 			Set<String> overriddenKeys = new HashSet<>(file.getNamesMap().keySet());
 			overriddenKeys.retainAll(parentKeys);
-			for(String overriddenKey : overriddenKeys)
+			for (String overriddenKey : overriddenKeys)
 			{
 				IProperty property = file.findPropertyByKey(overriddenKey);
 				assert property != null;
-				while(parent != null)
+				while (parent != null)
 				{
 					IProperty parentProperty = parent.findPropertyByKey(overriddenKey);
-					if(parentProperty != null && Comparing.strEqual(property.getValue(), parentProperty.getValue()))
+					if (parentProperty != null && Comparing.strEqual(property.getValue(), parentProperty.getValue()))
 					{
-						String message = InspectionsBundle.message("inconsistent.bundle.property.inherited.with.the.same.value", parent.getName());
-						ProblemDescriptor descriptor = manager.createProblemDescriptor(property.getPsiElement(), message,
-								RemovePropertyLocalFix.INSTANCE,
-								ProblemHighlightType.GENERIC_ERROR_OR_WARNING, false);
+						LocalizeValue message = InspectionLocalize.inconsistentBundlePropertyInheritedWithTheSameValue(parent.getName());
+						ProblemDescriptor descriptor = manager.createProblemDescriptor(
+							property.getPsiElement(), 
+							message.get(),
+							RemovePropertyLocalFix.INSTANCE,
+							ProblemHighlightType.GENERIC_ERROR_OR_WARNING, 
+							false
+						);
 						processor.addProblemElement(refManager.getReference(file.getContainingFile()), descriptor);
 					}
 					parent = parents.get(parent);
@@ -198,40 +211,49 @@ public class InconsistentResourceBundleInspection extends GlobalSimpleInspection
 		}
 	}
 
-	private static void checkConsistency(final BidirectionalMap<PropertiesFile, PropertiesFile> parents, final List<PropertiesFile> files,
-										 final Map<PropertiesFile, Set<String>> keysUpToParent,
-										 final InspectionManager manager,
-										 RefManager refManager, ProblemDescriptionsProcessor processor)
+	private static void checkConsistency(
+		final BidirectionalMap<PropertiesFile, PropertiesFile> parents,
+		final List<PropertiesFile> files,
+		final Map<PropertiesFile, Set<String>> keysUpToParent,
+		final InspectionManager manager,
+		RefManager refManager,
+		ProblemDescriptionsProcessor processor
+	)
 	{
-		for(PropertiesFile file : files)
+		for (PropertiesFile file : files)
 		{
 			PropertiesFile parent = parents.get(file);
 			Set<String> parentKeys = keysUpToParent.get(parent);
-			if(parent == null)
+			if (parent == null)
 			{
 				parentKeys = new HashSet<>();
-				for(PropertiesFile otherTopLevelFile : files)
+				for (PropertiesFile otherTopLevelFile : files)
 				{
-					if(otherTopLevelFile != file && parents.get(otherTopLevelFile) == null)
+					if (otherTopLevelFile != file && parents.get(otherTopLevelFile) == null)
 					{
 						parent = otherTopLevelFile;
 						parentKeys.addAll(otherTopLevelFile.getNamesMap().keySet());
 					}
 				}
-				if(parent == null)
+				if (parent == null)
 				{
 					continue;
 				}
 			}
 			Set<String> keys = new HashSet<>(file.getNamesMap().keySet());
 			keys.removeAll(parentKeys);
-			for(String inconsistentKey : keys)
+			for (String inconsistentKey : keys)
 			{
 				IProperty property = file.findPropertyByKey(inconsistentKey);
 				assert property != null;
-				String message = InspectionsBundle.message("inconsistent.bundle.property.error", inconsistentKey, parent.getName());
-				ProblemDescriptor descriptor = manager.createProblemDescriptor(property.getPsiElement(), message, false, LocalQuickFix.EMPTY_ARRAY,
-						ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+				LocalizeValue message = InspectionLocalize.inconsistentBundlePropertyError(inconsistentKey, parent.getName());
+				ProblemDescriptor descriptor = manager.createProblemDescriptor(
+					property.getPsiElement(), 
+					message.get(), 
+					false, 
+					LocalQuickFix.EMPTY_ARRAY,
+					ProblemHighlightType.GENERIC_ERROR_OR_WARNING
+				);
 				processor.addProblemElement(refManager.getReference(file.getContainingFile()), descriptor);
 			}
 		}
@@ -244,51 +266,56 @@ public class InconsistentResourceBundleInspection extends GlobalSimpleInspection
 												 RefManager refManager,
 												 ProblemDescriptionsProcessor processor)
 	{
-		for(PropertiesFile file : files)
+		for (PropertiesFile file : files)
 		{
 			PropertiesFile parent = parents.get(file);
-			if(parent == null)
+			if (parent == null)
 			{
 				continue;
 			}
 			List<PropertiesFile> children = parents.getKeysByValue(file);
 			boolean isLeaf = children == null || children.isEmpty();
-			if(!isLeaf)
+			if (!isLeaf)
 			{
 				continue;
 			}
 			Set<String> keys = file.getNamesMap().keySet();
 			Set<String> parentKeys = new HashSet<>(keysUpToParent.get(parent));
-			if(parent.getLocale().getLanguage().equals(file.getLocale().getLanguage()))
+			if (parent.getLocale().getLanguage().equals(file.getLocale().getLanguage()))
 			{
 				// properties can be left untranslated in the dialect files
 				keys = new HashSet<>(keys);
 				keys.addAll(parent.getNamesMap().keySet());
 				parent = parents.get(parent);
-				if(parent == null)
+				if (parent == null)
 				{
 					continue;
 				}
 				parentKeys = new HashSet<>(keysUpToParent.get(parent));
 			}
 			parentKeys.removeAll(keys);
-			for(String untranslatedKey : parentKeys)
+			for (String untranslatedKey : parentKeys)
 			{
 				IProperty untranslatedProperty = null;
 				PropertiesFile untranslatedFile = parent;
-				while(untranslatedFile != null)
+				while (untranslatedFile != null)
 				{
 					untranslatedProperty = untranslatedFile.findPropertyByKey(untranslatedKey);
-					if(untranslatedProperty != null)
+					if (untranslatedProperty != null)
 					{
 						break;
 					}
 					untranslatedFile = parents.get(untranslatedFile);
 				}
 				assert untranslatedProperty != null;
-				String message = InspectionsBundle.message("inconsistent.bundle.untranslated.property.error", untranslatedKey, file.getName());
-				ProblemDescriptor descriptor = manager.createProblemDescriptor(untranslatedProperty.getPsiElement(), message, false, LocalQuickFix.EMPTY_ARRAY,
-						ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+				LocalizeValue message = InspectionLocalize.inconsistentBundleUntranslatedPropertyError(untranslatedKey, file.getName());
+				ProblemDescriptor descriptor = manager.createProblemDescriptor(
+					untranslatedProperty.getPsiElement(), 
+					message.get(), 
+					false, 
+					LocalQuickFix.EMPTY_ARRAY,
+					ProblemHighlightType.GENERIC_ERROR_OR_WARNING
+				);
 				processor.addProblemElement(refManager.getReference(untranslatedFile.getContainingFile()), descriptor);
 			}
 		}

@@ -16,7 +16,6 @@
 package com.intellij.java.debugger.impl.ui;
 
 import consulo.dataContext.DataManager;
-import consulo.language.editor.CommonDataKeys;
 import consulo.project.Project;
 import consulo.project.ProjectManager;
 
@@ -29,8 +28,8 @@ public class JavaDebuggerSupport
 	public static Project getContextProjectForEditorFieldsInDebuggerConfigurables()
 	{
 		//todo[nik] improve
-		Project project = DataManager.getInstance().getDataContext().getData(CommonDataKeys.PROJECT);
-		if(project != null)
+		Project project = DataManager.getInstance().getDataContext().getData(Project.KEY);
+		if (project != null)
 		{
 			return project;
 		}

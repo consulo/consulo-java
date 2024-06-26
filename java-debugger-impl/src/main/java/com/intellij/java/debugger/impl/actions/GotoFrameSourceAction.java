@@ -19,7 +19,6 @@ import com.intellij.java.debugger.impl.DebuggerContextUtil;
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.StackFrameDescriptorImpl;
 import consulo.ui.ex.action.AnActionEvent;
-import consulo.language.editor.CommonDataKeys;
 import consulo.dataContext.DataContext;
 import consulo.project.Project;
 
@@ -36,13 +35,13 @@ public abstract class GotoFrameSourceAction extends DebuggerAction
 
 	protected static void doAction(DataContext dataContext)
 	{
-		final Project project = dataContext.getData(CommonDataKeys.PROJECT);
-		if(project == null)
+		final Project project = dataContext.getData(Project.KEY);
+		if (project == null)
 		{
 			return;
 		}
 		StackFrameDescriptorImpl stackFrameDescriptor = getStackFrameDescriptor(dataContext);
-		if(stackFrameDescriptor != null)
+		if (stackFrameDescriptor != null)
 		{
 			DebuggerContextUtil.setStackFrame(getContextManager(dataContext), stackFrameDescriptor.getFrameProxy());
 		}
@@ -56,11 +55,11 @@ public abstract class GotoFrameSourceAction extends DebuggerAction
 	private static StackFrameDescriptorImpl getStackFrameDescriptor(DataContext dataContext)
 	{
 		DebuggerTreeNodeImpl selectedNode = getSelectedNode(dataContext);
-		if(selectedNode == null)
+		if (selectedNode == null)
 		{
 			return null;
 		}
-		if(selectedNode.getDescriptor() == null || !(selectedNode.getDescriptor() instanceof StackFrameDescriptorImpl))
+		if (selectedNode.getDescriptor() == null || !(selectedNode.getDescriptor() instanceof StackFrameDescriptorImpl))
 		{
 			return null;
 		}
