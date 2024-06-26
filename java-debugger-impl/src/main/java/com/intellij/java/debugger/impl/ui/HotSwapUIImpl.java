@@ -109,7 +109,8 @@ public class HotSwapUIImpl extends HotSwapUI {
       findClassesProgress = createProgress ? new HotSwapProgressImpl(myProject) : null;
     }
 
-    Application.get().executeOnPooledThread(() -> {
+    final Application application = myProject.getApplication();
+    application.executeOnPooledThread(() -> {
       final Map<DebuggerSession, Map<String, HotSwapFile>> modifiedClasses;
       if (shouldPerformScan) {
         modifiedClasses = scanForModifiedClassesWithProgress(sessions, findClassesProgress);
@@ -130,7 +131,6 @@ public class HotSwapUIImpl extends HotSwapUI {
         }
       }
 
-      final Application application = Application.get();
       if (modifiedClasses.isEmpty()) {
         final String message = DebuggerBundle.message("status.hotswap.uptodate");
         HotSwapProgressImpl.NOTIFICATION_GROUP.createNotification(message, NotificationType.INFORMATION).notify(myProject);

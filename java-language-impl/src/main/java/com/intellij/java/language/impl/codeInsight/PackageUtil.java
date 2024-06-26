@@ -50,6 +50,7 @@ import jakarta.annotation.Nullable;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class PackageUtil
 {
@@ -186,26 +187,24 @@ public class PackageUtil
 		return psiDirectory;
 	}
 
-	private static PsiDirectory createSubdirectory(final PsiDirectory oldDirectory, final String name, Project project) throws IncorrectOperationException
+	private static PsiDirectory createSubdirectory(final PsiDirectory oldDirectory, final String name, Project project)
+		throws IncorrectOperationException
 	{
 		final PsiDirectory[] psiDirectory = new PsiDirectory[1];
 		final IncorrectOperationException[] exception = new IncorrectOperationException[1];
 
 		CommandProcessor.getInstance().executeCommand(
 			project,
-			() -> psiDirectory[0] = project.getApplication().runWriteAction(new Computable<PsiDirectory>()
+			() -> psiDirectory[0] = project.getApplication().runWriteAction((Supplier<PsiDirectory>)() ->
 			{
-				public PsiDirectory compute()
+				try
 				{
-					try
-					{
-						return oldDirectory.createSubdirectory(name);
-					}
-					catch (IncorrectOperationException e)
-					{
-						exception[0] = e;
-						return null;
-					}
+					return oldDirectory.createSubdirectory(name);
+				}
+				catch (IncorrectOperationException e)
+				{
+					exception[0] = e;
+					return null;
 				}
 			}),
 			IdeLocalize.commandCreateNewSubdirectory().get(),

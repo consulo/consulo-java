@@ -39,6 +39,7 @@ import consulo.execution.unscramble.AnalyzeStacktraceUtil;
 import consulo.execution.unscramble.ThreadDumpConsoleFactory;
 import consulo.execution.unscramble.ThreadState;
 import consulo.java.execution.configurations.OwnJavaParameters;
+import consulo.localize.LocalizeValue;
 import consulo.process.ExecutionException;
 import consulo.process.ProcessHandler;
 import consulo.process.event.ProcessAdapter;
@@ -150,7 +151,7 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner {
   private abstract static class ProxyBasedAction extends AnAction {
     protected final ProcessHandler myProcessHandler;
 
-    protected ProxyBasedAction(String text, String description, Image icon, ProcessHandler processHandler) {
+    protected ProxyBasedAction(LocalizeValue text, LocalizeValue description, Image icon, ProcessHandler processHandler) {
       super(text, description, icon);
       myProcessHandler = processHandler;
     }
@@ -185,7 +186,7 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner {
 
   protected static class ControlBreakAction extends ProxyBasedAction {
     public ControlBreakAction(final ProcessHandler processHandler) {
-      super(ExecutionLocalize.runConfigurationDumpThreadsActionName().get(), null, AllIcons.Actions.Dump, processHandler);
+      super(ExecutionLocalize.runConfigurationDumpThreadsActionName(), LocalizeValue.empty(), AllIcons.Actions.Dump, processHandler);
       setShortcutSet(new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_CANCEL, InputEvent.CTRL_DOWN_MASK)));
     }
 
@@ -266,7 +267,7 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner {
 
   protected static class SoftExitAction extends ProxyBasedAction {
     public SoftExitAction(final ProcessHandler processHandler) {
-      super(ExecutionLocalize.runConfigurationExitActionName().get(), null, AllIcons.Actions.Exit, processHandler);
+      super(ExecutionLocalize.runConfigurationExitActionName(), LocalizeValue.empty(), AllIcons.Actions.Exit, processHandler);
     }
 
     @Override
