@@ -30,7 +30,6 @@ import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
 import consulo.ui.ex.action.AnActionEvent;
-import consulo.language.editor.CommonDataKeys;
 import consulo.dataContext.DataContext;
 import consulo.ui.ex.action.Presentation;
 import consulo.ide.impl.idea.openapi.progress.util.ProgressWindowWithNotification;
@@ -48,18 +47,18 @@ public abstract class BaseValueAction extends DebuggerAction
 		final DataContext actionContext = e.getDataContext();
 		final DebuggerTreeNodeImpl node = getSelectedNode(actionContext);
 		final Value value = getValue(node);
-		if(value == null)
+		if (value == null)
 		{
 			return;
 		}
-		final Project project = e.getData(CommonDataKeys.PROJECT);
+		final Project project = e.getData(Project.KEY);
 		final DebuggerManagerEx debuggerManager = DebuggerManagerEx.getInstanceEx(project);
-		if(debuggerManager == null)
+		if (debuggerManager == null)
 		{
 			return;
 		}
 		final DebuggerContextImpl debuggerContext = debuggerManager.getContext();
-		if(debuggerContext == null || debuggerContext.getDebuggerSession() == null)
+		if (debuggerContext == null || debuggerContext.getDebuggerSession() == null)
 		{
 			return;
 		}
@@ -79,22 +78,18 @@ public abstract class BaseValueAction extends DebuggerAction
 
 				final String valueAsString = DebuggerUtilsEx.getValueOrErrorAsString(debuggerContext.createEvaluationContext(), value);
 
-				if(progressWindow.isCanceled())
+				if (progressWindow.isCanceled())
 				{
 					return;
 				}
 
-				DebuggerInvocationUtil.swingInvokeLater(project, new Runnable()
-				{
-					public void run()
+				DebuggerInvocationUtil.swingInvokeLater(project, () -> {
+					String text = valueAsString;
+					if (text == null)
 					{
-						String text = valueAsString;
-						if(text == null)
-						{
-							text = "";
-						}
-						processText(project, text, node, debuggerContext);
+						text = "";
 					}
+					processText(project, text, node, debuggerContext);
 				});
 			}
 		};
@@ -115,15 +110,11 @@ public abstract class BaseValueAction extends DebuggerAction
 	@Nullable
 	private static Value getValue(final DebuggerTreeNodeImpl node)
 	{
-		if(node == null)
+		if (node == null)
 		{
 			return null;
 		}
 		NodeDescriptorImpl descriptor = node.getDescriptor();
-		if(!(descriptor instanceof ValueDescriptor))
-		{
-			return null;
-		}
-		return ((ValueDescriptor) descriptor).getValue();
+		return descriptor instanceof ValueDescriptor valueDescriptor ? valueDescriptor.getValue() : null;
 	}
 }

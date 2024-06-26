@@ -15,11 +15,11 @@
  */
 package com.intellij.java.execution.impl.testframework;
 
-import consulo.application.ApplicationManager;
+import consulo.application.Application;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.Task;
 import consulo.component.ProcessCanceledException;
-import consulo.execution.ExecutionBundle;
+import consulo.execution.localize.ExecutionLocalize;
 import consulo.logging.Logger;
 import consulo.process.ExecutionException;
 import consulo.process.ProcessHandler;
@@ -27,7 +27,7 @@ import consulo.process.event.ProcessAdapter;
 import consulo.process.event.ProcessEvent;
 import consulo.project.DumbService;
 import consulo.project.Project;
-
+import consulo.ui.annotation.RequiredUIAccess;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -43,10 +43,9 @@ public abstract class SearchForTestsTask extends Task.Backgroundable {
   private ProgressIndicator myProcessIndicator;
 
   public SearchForTestsTask(@Nullable final Project project, final ServerSocket socket) {
-    super(project, ExecutionBundle.message("searching.test.progress.title"), true);
+    super(project, ExecutionLocalize.searchingTestProgressTitle().get(), true);
     myServerSocket = socket;
   }
-
 
   protected abstract void search() throws ExecutionException;
 
@@ -59,7 +58,7 @@ public abstract class SearchForTestsTask extends Task.Backgroundable {
   }
 
   public void startSearch() {
-    if (ApplicationManager.getApplication().isUnitTestMode()) {
+    if (Application.get().isUnitTestMode()) {
       try {
         search();
       } catch (Throwable e) {
@@ -146,11 +145,13 @@ public abstract class SearchForTestsTask extends Task.Backgroundable {
   }
 
   @Override
+  @RequiredUIAccess
   public void onCancel() {
     finish();
   }
 
   @Override
+  @RequiredUIAccess
   public void onSuccess() {
     Runnable runnable = () ->
     {

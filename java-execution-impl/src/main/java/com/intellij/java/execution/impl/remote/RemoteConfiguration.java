@@ -19,35 +19,30 @@
  */
 package com.intellij.java.execution.impl.remote;
 
-import java.util.Collection;
-
-import jakarta.annotation.Nonnull;
-
-import consulo.execution.ExecutionBundle;
-import consulo.execution.configuration.*;
-import consulo.execution.configuration.ui.SettingsEditorGroup;
-import consulo.execution.runner.ExecutionEnvironment;
-import consulo.process.ExecutionException;
-import org.jdom.Element;
-import consulo.compiler.execution.CompileStepBeforeRun;
-import com.intellij.java.debugger.impl.engine.RemoteStateState;
-import consulo.java.debugger.impl.GenericDebugRunnerConfiguration;
 import com.intellij.java.debugger.impl.GenericDebuggerRunnerSettings;
+import com.intellij.java.debugger.impl.engine.RemoteStateState;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
-import consulo.execution.configuration.log.ui.LogConfigurationPanel;
-import consulo.execution.executor.Executor;
 import com.intellij.java.execution.configurations.JavaRunConfigurationModule;
-import consulo.execution.configuration.ModuleBasedConfiguration;
 import com.intellij.java.execution.configurations.RemoteConnection;
-import consulo.execution.configuration.RunConfiguration;
-import consulo.execution.configuration.RunProfileState;
-import consulo.execution.configuration.RunConfigurationWithSuppressedDefaultRunAction;
-import consulo.module.Module;
+import consulo.compiler.execution.CompileStepBeforeRun;
+import consulo.execution.configuration.*;
+import consulo.execution.configuration.log.ui.LogConfigurationPanel;
 import consulo.execution.configuration.ui.SettingsEditor;
+import consulo.execution.configuration.ui.SettingsEditorGroup;
+import consulo.execution.executor.Executor;
+import consulo.execution.localize.ExecutionLocalize;
+import consulo.execution.runner.ExecutionEnvironment;
+import consulo.java.debugger.impl.GenericDebugRunnerConfiguration;
+import consulo.module.Module;
+import consulo.process.ExecutionException;
 import consulo.project.Project;
 import consulo.util.xml.serializer.DefaultJDOMExternalizer;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
+import jakarta.annotation.Nonnull;
+import org.jdom.Element;
+
+import java.util.Collection;
 
 public class RemoteConfiguration extends ModuleBasedConfiguration<JavaRunConfigurationModule> implements
 		RunConfigurationWithSuppressedDefaultRunAction, CompileStepBeforeRun.Suppressor, GenericDebugRunnerConfiguration, RemoteRunProfile
@@ -58,7 +53,7 @@ public class RemoteConfiguration extends ModuleBasedConfiguration<JavaRunConfigu
 	{
 		super.writeExternal(element);
 		final Module module = getConfigurationModule().getModule();
-		if(module != null)
+		if (module != null)
 		{ // default value
 			writeModule(element);
 		}
@@ -103,9 +98,9 @@ public class RemoteConfiguration extends ModuleBasedConfiguration<JavaRunConfigu
 	@Nonnull
 	public SettingsEditor<? extends RunConfiguration> getConfigurationEditor()
 	{
-		SettingsEditorGroup<RemoteConfiguration> group = new SettingsEditorGroup<RemoteConfiguration>();
-		group.addEditor(ExecutionBundle.message("run.configuration.configuration.tab.title"), new RemoteConfigurable(getProject()));
-		group.addEditor(ExecutionBundle.message("logs.tab.title"), new LogConfigurationPanel<RemoteConfiguration>());
+		SettingsEditorGroup<RemoteConfiguration> group = new SettingsEditorGroup<>();
+		group.addEditor(ExecutionLocalize.runConfigurationConfigurationTabTitle().get(), new RemoteConfigurable(getProject()));
+		group.addEditor(ExecutionLocalize.logsTabTitle().get(), new LogConfigurationPanel<>());
 		return group;
 	}
 

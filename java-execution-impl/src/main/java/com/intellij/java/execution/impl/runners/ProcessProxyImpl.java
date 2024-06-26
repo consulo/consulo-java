@@ -2,10 +2,10 @@
 package com.intellij.java.execution.impl.runners;
 
 import com.intellij.java.execution.runners.ProcessProxy;
-import consulo.application.util.SystemInfo;
 import consulo.container.plugin.PluginManager;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.logging.Logger;
+import consulo.platform.Platform;
 import consulo.process.ProcessHandler;
 import consulo.process.ProcessHandlerFeature;
 import consulo.util.dataholder.Key;
@@ -84,7 +84,7 @@ class ProcessProxyImpl implements ProcessProxy {
 
   @Override
   public boolean canSendBreak() {
-    if (SystemInfo.isWindows) {
+    if (Platform.current().os().isWindows()) {
       synchronized (myLock) {
         if (myConnection == null) {
           return false;
@@ -107,7 +107,7 @@ class ProcessProxyImpl implements ProcessProxy {
 
   @Override
   public void sendBreak() {
-    if (SystemInfo.isWindows) {
+    if (Platform.current().os().isWindows()) {
       writeLine("BREAK");
     } else {
       ProcessHandlerFeature.POSIX posix;

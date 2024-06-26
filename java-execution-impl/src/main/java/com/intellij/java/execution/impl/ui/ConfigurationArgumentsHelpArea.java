@@ -15,9 +15,10 @@
  */
 package com.intellij.java.execution.impl.ui;
 
-import consulo.execution.ExecutionBundle;
+import consulo.execution.localize.ExecutionLocalize;
 import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.ui.TextBoxWithExpandAction;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.ActionManager;
 import consulo.ui.ex.action.ActionPlaces;
 import consulo.ui.ex.action.ActionPopupMenu;
@@ -40,10 +41,15 @@ public class ConfigurationArgumentsHelpArea extends JPanel {
   public ConfigurationArgumentsHelpArea() {
     super(new BorderLayout());
 
-    myLabel = new JBLabel(ExecutionBundle.message("environment.variables.helper.use.arguments.label"));
+    myLabel = new JBLabel(ExecutionLocalize.environmentVariablesHelperUseArgumentsLabel().get());
     add(myLabel, BorderLayout.NORTH);
 
-    myHelpArea = TextBoxWithExpandAction.create(null, "Command line", s -> StringUtil.split(s, "\n"), list -> String.join("\n", list));
+    myHelpArea = TextBoxWithExpandAction.create(
+      null,
+      "Command line",
+      s -> StringUtil.split(s, "\n"),
+      list -> String.join("\n", list)
+    );
     myHelpArea.setEditable(false);
 
     add(TargetAWT.to(myHelpArea), BorderLayout.CENTER);
@@ -67,6 +73,7 @@ public class ConfigurationArgumentsHelpArea extends JPanel {
     return ActionManager.getInstance().createActionPopupMenu(ActionPlaces.UNKNOWN, group);
   }
 
+  @RequiredUIAccess
   public void updateText(final String text) {
     myHelpArea.setValue(text);
   }

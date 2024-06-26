@@ -18,18 +18,18 @@ package com.intellij.java.execution.configurations;
 import com.intellij.java.execution.JavaExecutionUtil;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.execution.ExecutionBundle;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.execution.RuntimeConfigurationException;
 import consulo.execution.RuntimeConfigurationWarning;
 import consulo.execution.configuration.RunConfigurationModule;
 import consulo.execution.configuration.RuntimeConfigurationError;
+import consulo.execution.localize.ExecutionLocalize;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
 import consulo.module.ModuleManager;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -65,12 +65,13 @@ public class JavaRunConfigurationModule extends RunConfigurationModule {
     return myClassesInLibraries ? GlobalSearchScope.allScope(getProject()) : GlobalSearchScope.projectScope(getProject());
   }
 
+  @RequiredReadAction
   public static Collection<Module> getModulesForClass(@Nonnull final Project project, final String className) {
     if (project.isDefault()) return Arrays.asList(ModuleManager.getInstance(project).getModules());
     PsiDocumentManager.getInstance(project).commitAllDocuments();
     final PsiClass[] possibleClasses = JavaPsiFacade.getInstance(project).findClasses(className, GlobalSearchScope.projectScope(project));
 
-    final Set<Module> modules = new HashSet<Module>();
+    final Set<Module> modules = new HashSet<>();
     for (PsiClass aClass : possibleClasses) {
       Module module = ModuleUtilCore.findModuleForPsiElement(aClass);
       if (module != null) {
@@ -80,7 +81,7 @@ public class JavaRunConfigurationModule extends RunConfigurationModule {
     if (modules.isEmpty()) {
       return Arrays.asList(ModuleManager.getInstance(project).getModules());
     } else {
-      final Set<Module> result = new HashSet<Module>();
+      final Set<Module> result = new HashSet<>();
       for (Module module : modules) {
         ModuleUtilCore.collectModulesDependsOn(module, result);
       }
@@ -92,7 +93,8 @@ public class JavaRunConfigurationModule extends RunConfigurationModule {
     final PsiClass psiClass = findClass(className);
     if (psiClass == null) {
       throw new RuntimeConfigurationWarning(
-          ExecutionBundle.message("class.not.found.in.module.error.message", className, getModuleName()));
+        ExecutionLocalize.classNotFoundInModuleErrorMessage(className, getModuleName()).get()
+      );
     }
     return psiClass;
   }

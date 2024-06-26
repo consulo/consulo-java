@@ -22,7 +22,7 @@ import consulo.application.Application;
 import consulo.content.bundle.Sdk;
 import consulo.content.bundle.SdkTypeId;
 import consulo.execution.CantRunException;
-import consulo.execution.ExecutionBundle;
+import consulo.execution.localize.ExecutionLocalize;
 import consulo.java.execution.OwnSimpleJavaParameters;
 import consulo.process.cmd.GeneralCommandLine;
 import consulo.process.cmd.ParametersList;
@@ -119,18 +119,18 @@ public class OwnJdkUtil {
   public static GeneralCommandLine setupJVMCommandLine(@Nonnull OwnSimpleJavaParameters javaParameters) throws CantRunException {
     Sdk jdk = javaParameters.getJdk();
     if (jdk == null) {
-      throw new CantRunException(ExecutionBundle.message("run.configuration.error.no.jdk.specified"));
+      throw new CantRunException(ExecutionLocalize.runConfigurationErrorNoJdkSpecified().get());
     }
     SdkTypeId type = jdk.getSdkType();
     if (!(type instanceof JavaSdkType)) {
-      throw new CantRunException(ExecutionBundle.message("run.configuration.error.no.jdk.specified"));
+      throw new CantRunException(ExecutionLocalize.runConfigurationErrorNoJdkSpecified().get());
     }
 
     GeneralCommandLine commandLine = new GeneralCommandLine();
     ((JavaSdkType) type).setupCommandLine(commandLine, jdk);
     String exePath = commandLine.getExePath();
     if (exePath == null) {
-      throw new CantRunException(ExecutionBundle.message("run.configuration.cannot.find.vm.executable"));
+      throw new CantRunException(ExecutionLocalize.runConfigurationCannotFindVmExecutable().get());
     }
 
     setupCommandLine(commandLine, javaParameters);
@@ -368,16 +368,18 @@ public class OwnJdkUtil {
     } else if (jarPath != null) {
       return Arrays.asList("-jar", jarPath);
     } else {
-      throw new CantRunException(ExecutionBundle.message("main.class.is.not.specified.error.message"));
+      throw new CantRunException(ExecutionLocalize.mainClassIsNotSpecifiedErrorMessage().get());
     }
   }
 
-  private static void setClasspathJarParams(GeneralCommandLine commandLine,
-                                            OwnSimpleJavaParameters javaParameters,
-                                            ParametersList vmParameters,
-                                            Class commandLineWrapper,
-                                            boolean dynamicVMOptions,
-                                            boolean dynamicParameters) throws CantRunException {
+  private static void setClasspathJarParams(
+    GeneralCommandLine commandLine,
+    OwnSimpleJavaParameters javaParameters,
+    ParametersList vmParameters,
+    Class commandLineWrapper,
+    boolean dynamicVMOptions,
+    boolean dynamicParameters
+  ) throws CantRunException {
     try {
       Manifest manifest = new Manifest();
       manifest.getMainAttributes().putValue("Created-By", Application.get().getName().get());

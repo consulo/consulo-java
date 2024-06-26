@@ -29,12 +29,12 @@ import consulo.ide.impl.idea.openapi.options.TabbedConfigurable;
 import consulo.ide.impl.idea.openapi.options.ex.SingleConfigurableEditor;
 import consulo.ide.impl.idea.xdebugger.impl.ui.tree.actions.XDebuggerTreeActionBase;
 import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
-import consulo.language.editor.CommonDataKeys;
+import consulo.platform.base.localize.ActionLocalize;
 import consulo.project.Project;
-import consulo.ui.ex.action.ActionsBundle;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnActionEvent;
-
 import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.util.List;
@@ -47,7 +47,7 @@ public class CustomizeContextViewAction extends XDebuggerTreeActionBase {
 
   @Override
   protected void perform(XValueNodeImpl node, @Nonnull String nodeName, AnActionEvent e) {
-    final Project project = e.getData(CommonDataKeys.PROJECT);
+    final Project project = e.getData(Project.KEY);
     Disposable disposable = Disposable.newDisposable();
     SingleConfigurableEditor editor = new SingleConfigurableEditor(project, new TabbedConfigurable(disposable) {
       @Override
@@ -56,6 +56,7 @@ public class CustomizeContextViewAction extends XDebuggerTreeActionBase {
       }
 
       @Override
+      @RequiredUIAccess
       public void apply() throws ConfigurationException {
         super.apply();
         NodeRendererSettings.getInstance().fireRenderersChanged();
@@ -87,7 +88,7 @@ public class CustomizeContextViewAction extends XDebuggerTreeActionBase {
 
   @Override
   public void update(AnActionEvent e) {
-    e.getPresentation().setText(ActionsBundle.actionText(DebuggerActions.CUSTOMIZE_VIEWS));
+    e.getPresentation().setTextValue(ActionLocalize.actionDebuggerCustomizecontextviewText());
 
     Project project = e.getData(Project.KEY);
     final XDebuggerManager debuggerManager = project == null ? null : XDebuggerManager.getInstance(project);

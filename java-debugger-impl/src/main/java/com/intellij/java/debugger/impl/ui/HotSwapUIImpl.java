@@ -22,20 +22,20 @@ import com.intellij.java.debugger.impl.HotSwapManager;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
 import consulo.annotation.component.ServiceImpl;
 import consulo.application.Application;
-import consulo.application.ApplicationManager;
-import consulo.application.CommonBundle;
 import consulo.application.progress.ProgressManager;
 import consulo.compiler.CompilerManager;
+import consulo.platform.base.localize.CommonLocalize;
 import consulo.project.Project;
 import consulo.project.ui.notification.NotificationType;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awt.UIUtil;
 import consulo.util.collection.Lists;
 import consulo.util.lang.ref.Ref;
+import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import jakarta.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -109,7 +109,7 @@ public class HotSwapUIImpl extends HotSwapUI {
       findClassesProgress = createProgress ? new HotSwapProgressImpl(myProject) : null;
     }
 
-    ApplicationManager.getApplication().executeOnPooledThread(() -> {
+    Application.get().executeOnPooledThread(() -> {
       final Map<DebuggerSession, Map<String, HotSwapFile>> modifiedClasses;
       if (shouldPerformScan) {
         modifiedClasses = scanForModifiedClassesWithProgress(sessions, findClassesProgress);
@@ -130,7 +130,7 @@ public class HotSwapUIImpl extends HotSwapUI {
         }
       }
 
-      final Application application = ApplicationManager.getApplication();
+      final Application application = Application.get();
       if (modifiedClasses.isEmpty()) {
         final String message = DebuggerBundle.message("status.hotswap.uptodate");
         HotSwapProgressImpl.NOTIFICATION_GROUP.createNotification(message, NotificationType.INFORMATION).notify(myProject);
@@ -157,14 +157,23 @@ public class HotSwapUIImpl extends HotSwapUI {
         }
         else {
           if (shouldDisplayHangWarning) {
-            final int answer = Messages.showCheckboxMessageDialog(DebuggerBundle.message("hotswap.dialog.hang.warning"), DebuggerBundle
-              .message("hotswap.dialog.title"), new String[]{
-              "Perform &Reload Classes",
-              "&Skip Reload Classes"
-            }, CommonBundle.message("dialog.options.do.not.show"), false, 1, 1, Messages.getWarningIcon(), (exitCode, cb) -> {
-              settings.HOTSWAP_HANG_WARNING_ENABLED = !cb.isSelected();
-              return exitCode == DialogWrapper.OK_EXIT_CODE ? exitCode : DialogWrapper.CANCEL_EXIT_CODE;
-            });
+            final int answer = Messages.showCheckboxMessageDialog(
+              DebuggerBundle.message("hotswap.dialog.hang.warning"),
+              DebuggerBundle.message("hotswap.dialog.title"),
+              new String[]{
+                "Perform &Reload Classes",
+                "&Skip Reload Classes"
+              },
+              CommonLocalize.dialogOptionsDoNotShow().get(),
+              false,
+              1,
+              1,
+              UIUtil.getWarningIcon(),
+              (exitCode, cb) -> {
+                settings.HOTSWAP_HANG_WARNING_ENABLED = !cb.isSelected();
+                return exitCode == DialogWrapper.OK_EXIT_CODE ? exitCode : DialogWrapper.CANCEL_EXIT_CODE;
+              }
+            );
             if (answer == DialogWrapper.CANCEL_EXIT_CODE) {
               for (DebuggerSession session : modifiedClasses.keySet()) {
                 session.setModifiedClassesScanRequired(true);
@@ -182,8 +191,10 @@ public class HotSwapUIImpl extends HotSwapUI {
     });
   }
 
-  private static Map<DebuggerSession, Map<String, HotSwapFile>> scanForModifiedClassesWithProgress(final List<DebuggerSession> sessions,
-                                                                                                   final HotSwapProgressImpl progress) {
+  private static Map<DebuggerSession, Map<String, HotSwapFile>> scanForModifiedClassesWithProgress(
+    final List<DebuggerSession> sessions,
+    final HotSwapProgressImpl progress
+  ) {
     final Ref<Map<DebuggerSession, Map<String, HotSwapFile>>> result = Ref.create(null);
     ProgressManager.getInstance().runProcess(() -> {
       try {

@@ -1,18 +1,18 @@
 package com.intellij.java.coverage;
 
 import consulo.application.Application;
-import consulo.application.util.SystemInfo;
 import consulo.application.util.TempFileService;
 import consulo.container.boot.ContainerPathManager;
 import consulo.execution.coverage.CoverageEngine;
 import consulo.execution.coverage.CoverageRunner;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.logging.Logger;
+import consulo.platform.Platform;
 import consulo.util.io.FilePermissionCopier;
 import consulo.util.io.FileUtil;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -32,22 +32,24 @@ public abstract class JavaCoverageRunner extends CoverageRunner {
     return engine instanceof JavaCoverageEngine;
   }
 
-  public abstract void appendCoverageArgument(final String sessionDataFilePath,
-                                              @Nullable final String[] patterns,
-                                              final OwnJavaParameters parameters,
-                                              final boolean collectLineInfo,
-                                              final boolean isSampling);
+  public abstract void appendCoverageArgument(
+    final String sessionDataFilePath,
+    @Nullable final String[] patterns,
+    final OwnJavaParameters parameters,
+    final boolean collectLineInfo,
+    final boolean isSampling
+  );
 
   @Nonnull
   protected static String handleSpacesInPath(@Nonnull File parent) {
     String agentPath;
-    final String userDefined = System.getProperty(COVERAGE_AGENT_PATH);
+    final String userDefined = Platform.current().jvm().getRuntimeProperty(COVERAGE_AGENT_PATH);
     if (userDefined != null && new File(userDefined).exists()) {
       agentPath = userDefined;
     } else {
       agentPath = parent.getParent();
     }
-    if (!SystemInfo.isWindows && agentPath.contains(" ")) {
+    if (!Platform.current().os().isWindows() && agentPath.contains(" ")) {
       File dir = new File(ContainerPathManager.get().getSystemPath(), "coverageJars");
       if (dir.getAbsolutePath().contains(" ")) {
         try {
@@ -82,10 +84,15 @@ public abstract class JavaCoverageRunner extends CoverageRunner {
 
   protected static File createTempFile() throws IOException {
     File tempFile = FileUtil.createTempFile("coverage", "args");
-    if (!SystemInfo.isWindows && tempFile.getAbsolutePath().contains(" ")) {
-      tempFile = FileUtil.createTempFile(new File(ContainerPathManager.get().getSystemPath(), "coverage"), "coverage", "args", true);
+    if (!Platform.current().os().isWindows() && tempFile.getAbsolutePath().contains(" ")) {
+      tempFile = FileUtil.createTempFile(
+        new File(ContainerPathManager.get().getSystemPath(), "coverage"),
+        "coverage",
+        "args",
+        true
+      );
       if (tempFile.getAbsolutePath().contains(" ")) {
-        final String userDefined = System.getProperty(COVERAGE_AGENT_PATH);
+        final String userDefined = Platform.current().jvm().getRuntimeProperty(COVERAGE_AGENT_PATH);
         if (userDefined != null && new File(userDefined).isDirectory()) {
           tempFile = FileUtil.createTempFile(new File(userDefined), "coverage", "args", true);
         }

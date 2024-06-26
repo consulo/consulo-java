@@ -25,7 +25,7 @@ import com.intellij.java.analysis.impl.codeInsight.quickfix.SetupJDKFix;
 import com.intellij.java.language.impl.codeInsight.template.JavaTemplateUtil;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
@@ -54,7 +54,7 @@ public class DefaultResourceBundleManager extends ResourceBundleManager {
     if (getResourceBundle() != null) {
       return true;
     }
-    throw new ResourceBundleNotFoundException(CodeInsightBundle.message("i18nize.dialog.error.jdk.message"), SetupJDKFix.getInstance());
+    throw new ResourceBundleNotFoundException(CodeInsightLocalize.i18nizeDialogErrorJdkMessage().get(), SetupJDKFix.getInstance());
   }
 
   public boolean canShowJavaCodeInfo() {

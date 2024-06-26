@@ -36,13 +36,13 @@ import consulo.content.bundle.Sdk;
 import consulo.disposer.Disposer;
 import consulo.execution.CantRunException;
 import consulo.execution.DefaultExecutionResult;
-import consulo.execution.ExecutionBundle;
 import consulo.execution.ExecutionResult;
 import consulo.execution.configuration.ModuleBasedConfiguration;
 import consulo.execution.configuration.RunConfigurationModule;
 import consulo.execution.configuration.RunnerSettings;
 import consulo.execution.configuration.log.OutputFileUtil;
 import consulo.execution.executor.Executor;
+import consulo.execution.localize.ExecutionLocalize;
 import consulo.execution.runner.ExecutionEnvironment;
 import consulo.execution.runner.ProgramRunner;
 import consulo.execution.test.*;
@@ -179,8 +179,8 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
 
     consoleView.attachToProcess(handler);
     final AbstractTestProxy root = viewer.getRoot();
-    if (root instanceof TestProxyRoot) {
-      ((TestProxyRoot) root).setHandler(handler);
+    if (root instanceof TestProxyRoot testProxyRoot) {
+      testProxyRoot.setHandler(handler);
     }
     handler.addProcessListener(new ProcessAdapter() {
       @Override
@@ -311,7 +311,7 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
     final OwnJavaParameters javaParameters = getJavaParameters();
     final Sdk jdk = javaParameters.getJdk();
     if (jdk == null) {
-      throw new ExecutionException(ExecutionBundle.message("run.configuration.error.no.jdk.specified"));
+      throw new ExecutionException(ExecutionLocalize.runConfigurationErrorNoJdkSpecified().get());
     }
 
     try {
@@ -427,14 +427,15 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
     }
   }
 
-  protected void writeClassesPerModule(String packageName,
-                                       OwnJavaParameters javaParameters,
-                                       Map<Module, List<String>> perModule) throws FileNotFoundException, UnsupportedEncodingException, CantRunException {
+  protected void writeClassesPerModule(
+    String packageName,
+    OwnJavaParameters javaParameters,
+    Map<Module, List<String>> perModule
+  ) throws FileNotFoundException, UnsupportedEncodingException, CantRunException {
     if (perModule != null) {
       final String classpath = getScope() == TestSearchScope.WHOLE_PROJECT ? null : javaParameters.getClassPath().getPathsString();
 
-      final PrintWriter wWriter = new PrintWriter(myWorkingDirsFile, CharsetToolkit.UTF8);
-      try {
+      try (PrintWriter wWriter = new PrintWriter(myWorkingDirsFile, CharsetToolkit.UTF8)) {
         wWriter.println(packageName);
         for (Module module : perModule.keySet()) {
           wWriter.println(module.getModuleDirPath());
@@ -444,10 +445,16 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
             final OwnJavaParameters parameters = new OwnJavaParameters();
             parameters.getClassPath().add(JavaSdkUtil.getJavaRtJarPath());
             configureRTClasspath(parameters);
-            JavaParametersUtil.configureModule(module, parameters, OwnJavaParameters.JDK_AND_CLASSES_AND_TESTS, getConfiguration().isAlternativeJrePathEnabled() ? getConfiguration()
-                .getAlternativeJrePath() : null);
+            JavaParametersUtil.configureModule(
+              module,
+              parameters,
+              OwnJavaParameters.JDK_AND_CLASSES_AND_TESTS,
+              getConfiguration().isAlternativeJrePathEnabled() ? getConfiguration()
+                .getAlternativeJrePath() : null
+            );
             wWriter.println(parameters.getClassPath().getPathsString());
-          } else {
+          }
+          else {
             wWriter.println(classpath);
           }
 
@@ -457,8 +464,6 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
             wWriter.println(className);
           }
         }
-      } finally {
-        wWriter.close();
       }
     }
   }

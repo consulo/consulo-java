@@ -15,9 +15,9 @@
  */
 package com.intellij.java.execution.impl.ui;
 
-import consulo.execution.ExecutionBundle;
-import consulo.execution.ui.awt.CommonProgramParametersPanel;
 import com.intellij.java.execution.CommonJavaRunConfigurationParameters;
+import consulo.execution.localize.ExecutionLocalize;
+import consulo.execution.ui.awt.CommonProgramParametersPanel;
 import consulo.execution.ui.awt.RawCommandLineEditor;
 import consulo.ui.ex.awt.LabeledComponent;
 
@@ -42,7 +42,10 @@ public class CommonJavaParametersPanel extends CommonProgramParametersPanel {
 
   @Override
   protected void addComponents() {
-    myVMParametersComponent = LabeledComponent.create(new RawCommandLineEditor(), ExecutionBundle.message("run.configuration.java.vm.parameters.label"));
+    myVMParametersComponent = LabeledComponent.create(
+      new RawCommandLineEditor(),
+      ExecutionLocalize.runConfigurationJavaVmParametersLabel().get()
+    );
     copyDialogCaption(myVMParametersComponent);
 
     myVMParametersComponent.setLabelLocation(BorderLayout.WEST);

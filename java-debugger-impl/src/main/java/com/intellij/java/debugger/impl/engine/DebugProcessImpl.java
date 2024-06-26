@@ -79,6 +79,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.logging.Logger;
+import consulo.platform.Platform;
 import consulo.process.ExecutionException;
 import consulo.process.ProcessHandler;
 import consulo.process.ProcessOutputTypes;
@@ -175,7 +176,9 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
     myDebugProcessDispatcher.addListener(new DebugProcessListener() {
       @Override
       public void paused(SuspendContext suspendContext) {
-        myThreadBlockedMonitor.stopWatching(suspendContext.getSuspendPolicy() != EventRequest.SUSPEND_ALL ? suspendContext.getThread() : null);
+        myThreadBlockedMonitor.stopWatching(
+          suspendContext.getSuspendPolicy() != EventRequest.SUSPEND_ALL ? suspendContext.getThread() : null
+        );
       }
     });
   }
@@ -195,13 +198,16 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
           NodeRendererSettings.getInstance().getAllRenderers().stream().filter(NodeRenderer::isEnabled).forEachOrdered(myRenderers::add);
         }
         finally {
-          DebuggerInvocationUtil.swingInvokeLater(myProject, () ->
-          {
-            final DebuggerSession session = mySession;
-            if (session != null && session.isAttached()) {
-              DebuggerAction.refreshViews(mySession.getXDebugSession());
+          DebuggerInvocationUtil.swingInvokeLater(
+            myProject,
+            () ->
+            {
+              final DebuggerSession session = mySession;
+              if (session != null && session.isAttached()) {
+                DebuggerAction.refreshViews(mySession.getXDebugSession());
+              }
             }
-          });
+          );
         }
       }
     });
@@ -246,10 +252,17 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
     }
 
     try {
-      return myNodeRenderersMap.computeIfAbsent(type, t -> myRenderers.stream().
-                                                                      filter(r -> DebuggerUtilsImpl.suppressExceptions(() -> r.isApplicable(
-                                                                        type), false, true, ClassNotPreparedException.class)).
-                                                                      findFirst().orElseGet(() -> getDefaultRenderer(type)));
+      return myNodeRenderersMap.computeIfAbsent(
+        type,
+        t -> myRenderers.stream()
+          .filter(r -> DebuggerUtilsImpl.suppressExceptions(
+            () -> r.isApplicable(type),
+            false,
+            true,
+            ClassNotPreparedException.class
+          ))
+          .findFirst()
+          .orElseGet(() -> getDefaultRenderer(type)));
     }
     catch (ClassNotPreparedException e) {
       LOG.info(e);
@@ -282,7 +295,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
     return classRenderer;
   }
 
-  private static final String ourTrace = System.getProperty("idea.debugger.trace");
+  private static final String ourTrace = Platform.current().jvm().getRuntimeProperty("idea.debugger.trace");
 
   @SuppressWarnings({"HardCodedStringLiteral"})
   protected void commitVM(VirtualMachine vm) {
@@ -372,11 +385,13 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
    * @param depth
    * @param hint           may be null
    */
-  protected void doStep(final SuspendContextImpl suspendContext,
-                        final ThreadReferenceProxyImpl stepThread,
-                        int size,
-                        int depth,
-                        RequestHint hint) {
+  protected void doStep(
+    final SuspendContextImpl suspendContext,
+    final ThreadReferenceProxyImpl stepThread,
+    int size,
+    int depth,
+    RequestHint hint
+  ) {
     if (stepThread == null) {
       return;
     }
@@ -395,7 +410,10 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
       // suspend policy to match the suspend policy of the context:
       // if all threads were suspended, then during stepping all the threads must be suspended
       // if only event thread were suspended, then only this particular thread must be suspended during stepping
-      stepRequest.setSuspendPolicy(suspendContext.getSuspendPolicy() == EventRequest.SUSPEND_EVENT_THREAD ? EventRequest.SUSPEND_EVENT_THREAD : EventRequest.SUSPEND_ALL);
+      stepRequest.setSuspendPolicy(
+        suspendContext.getSuspendPolicy() == EventRequest.SUSPEND_EVENT_THREAD
+          ? EventRequest.SUSPEND_EVENT_THREAD : EventRequest.SUSPEND_ALL
+      );
 
       stepRequest.addCountFilter(1);
 
@@ -406,7 +424,6 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
       stepRequest.enable();
     }
     catch (ObjectCollectedException ignored) {
-
     }
   }
 
@@ -442,7 +459,8 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
         ThreadReference threadReference = request.thread();
         // [jeka] on attempt to delete a request assigned to a thread with unknown status, a JDWP error occurs
         try {
-          if (threadReference.status() != ThreadReference.THREAD_STATUS_UNKNOWN && (stepThread == null || stepThread.equals(threadReference))) {
+          if (threadReference.status() != ThreadReference.THREAD_STATUS_UNKNOWN
+            && (stepThread == null || stepThread.equals(threadReference))) {
             toDelete.add(request);
           }
         }
@@ -535,8 +553,10 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
           (AttachingConnector)findConnector(myConnection.isUseSockets() ? SOCKET_ATTACHING_CONNECTOR_NAME : SHMEM_ATTACHING_CONNECTOR_NAME);
 
         if (connector == null) {
-          throw new CantRunException(DebuggerBundle.message("error.debug.connector.not.found",
-                                                            DebuggerBundle.getTransportName(myConnection)));
+          throw new CantRunException(DebuggerBundle.message(
+            "error.debug.connector.not.found",
+            DebuggerBundle.getTransportName(myConnection)
+          ));
         }
         myArguments = connector.defaultArguments();
         if (myConnection.isUseSockets()) {
@@ -628,31 +648,35 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
   private void checkVirtualMachineVersion(VirtualMachine vm) {
     final String version = vm.version();
     if ("1.4.0".equals(version)) {
-      DebuggerInvocationUtil.swingInvokeLater(myProject,
-                                              () -> Messages.showMessageDialog(myProject,
-                                                                               DebuggerBundle.message("warning.jdk140.unstable"),
-                                                                               DebuggerBundle.message("title.jdk140" +
-                                                                                                        ".unstable"),
-                                                                               Messages.getWarningIcon()));
+      DebuggerInvocationUtil.swingInvokeLater(
+        myProject,
+        () -> Messages.showMessageDialog(
+          myProject,
+          DebuggerBundle.message("warning.jdk140.unstable"),
+          DebuggerBundle.message("title.jdk140.unstable"),
+          UIUtil.getWarningIcon()
+        )
+      );
     }
 
     if (getSession().getAlternativeJre() == null) {
       Sdk runjre = getSession().getRunJre();
       if ((runjre == null || runjre.getSdkType() instanceof JavaSdkType) && !versionMatch(runjre, version)) {
-        JavaSdkTypeUtil.getAllJavaSdks()
-                       .stream()
-                       .filter(sdk -> versionMatch(sdk, version))
-                       .findFirst()
-                       .ifPresent(sdk ->
-                                  {
-                                    XDebuggerUIConstants.NOTIFICATION_GROUP.createNotification(DebuggerBundle.message(
-                                      "message.remote.jre.version.mismatch",
-                                      version,
-                                      runjre != null ? runjre.getVersionString() :
-                                        "unknown",
-                                      sdk.getName()), NotificationType.INFORMATION).notify(myProject);
-                                    getSession().setAlternativeJre(sdk);
-                                  });
+        JavaSdkTypeUtil.getAllJavaSdks().stream()
+          .filter(sdk -> versionMatch(sdk, version))
+          .findFirst()
+          .ifPresent(sdk ->
+          {
+            XDebuggerUIConstants.NOTIFICATION_GROUP.createNotification(
+              DebuggerBundle.message(
+                "message.remote.jre.version.mismatch",
+                version,
+                runjre != null ? runjre.getVersionString() : "unknown",
+                sdk.getName()),
+              NotificationType.INFORMATION
+            ).notify(myProject);
+            getSession().setAlternativeJre(sdk);
+          });
       }
     }
   }
@@ -832,7 +856,6 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
           myWaitFor.up();
         }
       }
-
     }
   }
 
@@ -854,11 +877,11 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
       VMStartException e1 = (VMStartException)e;
       message = e1.getLocalizedMessage();
     }
-    else if (e instanceof IllegalConnectorArgumentsException) {
-      IllegalConnectorArgumentsException e1 = (IllegalConnectorArgumentsException)e;
+    else if (e instanceof IllegalConnectorArgumentsException e1) {
       final List<String> invalidArgumentNames = e1.argumentNames();
-      message = formatMessage(DebuggerBundle.message("error.invalid.argument",
-                                                     invalidArgumentNames.size()) + ": " + e1.getLocalizedMessage()) + invalidArgumentNames;
+      message = formatMessage(
+        DebuggerBundle.message("error.invalid.argument", invalidArgumentNames.size()) + ": " + e1.getLocalizedMessage()
+      ) + invalidArgumentNames;
       LOG.debug(e1);
     }
     else if (e instanceof CantRunException) {
@@ -867,8 +890,8 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
     else if (e instanceof VMDisconnectedException) {
       message = DebuggerBundle.message("error.vm.disconnected");
     }
-    else if (e instanceof IOException) {
-      message = processIOException((IOException)e, null);
+    else if (e instanceof IOException e1) {
+      message = processIOException(e1, null);
     }
     else if (e instanceof ExecutionException) {
       message = e.getLocalizedMessage();
@@ -896,9 +919,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
     buf.append(e.getClass().getName()).append(" ");
     final String localizedMessage = e.getLocalizedMessage();
     if (!StringUtil.isEmpty(localizedMessage)) {
-      buf.append('"');
-      buf.append(localizedMessage);
-      buf.append('"');
+      buf.append('"').append(localizedMessage).append('"');
     }
     LOG.debug(e);
     message = buf.toString();
@@ -947,9 +968,11 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
       return "INVOKE: " + super.toString();
     }
 
-    protected abstract E invokeMethod(int invokePolicy,
-                                      Method method,
-                                      List<? extends Value> args) throws InvocationException, ClassNotLoadedException, IncompatibleThreadStateException, InvalidTypeException;
+    protected abstract E invokeMethod(
+      int invokePolicy,
+      Method method,
+      List<? extends Value> args
+    ) throws InvocationException, ClassNotLoadedException, IncompatibleThreadStateException, InvalidTypeException;
 
 
     E start(EvaluationContextImpl evaluationContext, boolean internalEvaluate) throws EvaluateException {
@@ -1015,8 +1038,8 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 
         return invokeMethodAndFork(suspendContext);
       }
-      catch (InvocationException | InternalException | UnsupportedOperationException | ObjectCollectedException | InvalidTypeException |
-             IncompatibleThreadStateException e) {
+      catch (InvocationException | InternalException | UnsupportedOperationException
+             | ObjectCollectedException | InvalidTypeException | IncompatibleThreadStateException e) {
         throw EvaluateExceptionUtil.createEvaluateException(e);
       }
       finally {
@@ -1025,8 +1048,9 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
           SuspendManagerUtil.restoreAfterResume(suspendContext, resumeData);
         }
         for (SuspendContextImpl suspendingContext : mySuspendManager.getEventContexts()) {
-          if (suspendingContexts.contains(suspendingContext) && !suspendingContext.isEvaluating() && !suspendingContext.suspends(
-            invokeThread)) {
+          if (suspendingContexts.contains(suspendingContext)
+            && !suspendingContext.isEvaluating()
+            && !suspendingContext.suspends(invokeThread)) {
             mySuspendManager.suspendThread(suspendingContext, invokeThread);
           }
         }
@@ -1039,87 +1063,86 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
       }
     }
 
-    private E invokeMethodAndFork(final SuspendContextImpl context) throws InvocationException, ClassNotLoadedException, IncompatibleThreadStateException, InvalidTypeException {
+    private E invokeMethodAndFork(final SuspendContextImpl context)
+      throws InvocationException, ClassNotLoadedException, IncompatibleThreadStateException, InvalidTypeException {
       final int invokePolicy = getInvokePolicy(context);
       final Exception[] exception = new Exception[1];
       final Value[] result = new Value[1];
       getManagerThread().startLongProcessAndFork(() ->
-                                                 {
-                                                   ThreadReferenceProxyImpl thread = context.getThread();
-                                                   try {
-                                                     try {
-                                                       if (LOG.isDebugEnabled()) {
-                                                         final VirtualMachineProxyImpl virtualMachineProxy = getVirtualMachineProxy();
-                                                         virtualMachineProxy.logThreads();
-                                                         LOG.debug("Invoke in " + thread.name());
-                                                         assertThreadSuspended(thread, context);
-                                                       }
+      {
+        ThreadReferenceProxyImpl thread = context.getThread();
+        try {
+          try {
+            if (LOG.isDebugEnabled()) {
+              final VirtualMachineProxyImpl virtualMachineProxy = getVirtualMachineProxy();
+              virtualMachineProxy.logThreads();
+              LOG.debug("Invoke in " + thread.name());
+              assertThreadSuspended(thread, context);
+            }
 
-                                                       if (myMethod.isVarArgs()) {
-                                                         // See IDEA-63581
-                                                         // if vararg parameter array is of interface type and Object[] is expected, JDI wrap it into another array,
-                                                         // in this case we have to unroll the array manually and pass its elements to the method instead of array object
-                                                         int lastIndex = myMethod.argumentTypeNames().size() - 1;
-                                                         if (lastIndex >= 0 && myArgs.size() > lastIndex) { // at least one varargs param
-                                                           Object firstVararg = myArgs.get(lastIndex);
-                                                           if (myArgs.size() == lastIndex + 1) { // only one vararg param
-                                                             if (firstVararg instanceof ArrayReference) {
-                                                               ArrayReference arrayRef = (ArrayReference)firstVararg;
-                                                               if (((ArrayType)arrayRef.referenceType()).componentType() instanceof InterfaceType) {
-                                                                 List<String> argTypes = myMethod.argumentTypeNames();
-                                                                 if (argTypes.size() > lastIndex && argTypes.get(lastIndex)
-                                                                                                            .startsWith(JavaClassNames.JAVA_LANG_OBJECT)) {
-                                                                   // unwrap array of interfaces for vararg param
-                                                                   myArgs.remove(lastIndex);
-                                                                   myArgs.addAll(arrayRef.getValues());
-                                                                 }
-                                                               }
-                                                             }
-                                                           }
-                                                           else if (firstVararg == null) { // more than one vararg params and the first one is null
-                                                             // this is a workaround for a bug in jdi, see IDEA-157321
-                                                             int argCount = myArgs.size();
-                                                             List<Type> paramTypes = myMethod.argumentTypes();
-                                                             int paramCount = paramTypes.size();
-                                                             ArrayType lastParamType = (ArrayType)paramTypes.get(paramTypes.size() - 1);
+            if (myMethod.isVarArgs()) {
+              // See IDEA-63581
+              // if vararg parameter array is of interface type and Object[] is expected, JDI wrap it into another array,
+              // in this case we have to unroll the array manually and pass its elements to the method instead of array object
+              int lastIndex = myMethod.argumentTypeNames().size() - 1;
+              if (lastIndex >= 0 && myArgs.size() > lastIndex) { // at least one varargs param
+                Object firstVararg = myArgs.get(lastIndex);
+                if (myArgs.size() == lastIndex + 1) { // only one vararg param
+                  if (firstVararg instanceof ArrayReference arrayRef) {
+                    if (((ArrayType)arrayRef.referenceType()).componentType() instanceof InterfaceType) {
+                      List<String> argTypes = myMethod.argumentTypeNames();
+                      if (argTypes.size() > lastIndex && argTypes.get(lastIndex).startsWith(JavaClassNames.JAVA_LANG_OBJECT)) {
+                        // unwrap array of interfaces for vararg param
+                        myArgs.remove(lastIndex);
+                        myArgs.addAll(arrayRef.getValues());
+                      }
+                    }
+                  }
+                }
+                else if (firstVararg == null) { // more than one vararg params and the first one is null
+                  // this is a workaround for a bug in jdi, see IDEA-157321
+                  int argCount = myArgs.size();
+                  List<Type> paramTypes = myMethod.argumentTypes();
+                  int paramCount = paramTypes.size();
+                  ArrayType lastParamType = (ArrayType)paramTypes.get(paramTypes.size() - 1);
 
-                                                             int count = argCount - paramCount + 1;
-                                                             ArrayReference argArray = lastParamType.newInstance(count);
-                                                             argArray.setValues(0, myArgs, paramCount - 1, count);
-                                                             myArgs.set(paramCount - 1, argArray);
-                                                             myArgs.subList(paramCount, argCount).clear();
-                                                           }
-                                                         }
-                                                       }
+                  int count = argCount - paramCount + 1;
+                  ArrayReference argArray = lastParamType.newInstance(count);
+                  argArray.setValues(0, myArgs, paramCount - 1, count);
+                  myArgs.set(paramCount - 1, argArray);
+                  myArgs.subList(paramCount, argCount).clear();
+                }
+              }
+            }
 
-                                                       if (!Patches.IBM_JDK_DISABLE_COLLECTION_BUG) {
-                                                         // ensure args are not collected
-                                                         myArgs.stream()
-                                                               .filter(value -> value instanceof ObjectReference)
-                                                               .forEach(value -> DebuggerUtilsEx.disableCollection((ObjectReference)value));
-                                                       }
+            if (!Patches.IBM_JDK_DISABLE_COLLECTION_BUG) {
+              // ensure args are not collected
+              myArgs.stream()
+                .filter(value -> value instanceof ObjectReference)
+                .forEach(value -> DebuggerUtilsEx.disableCollection((ObjectReference)value));
+            }
 
-                                                       // workaround for jdi hang in trace mode
-                                                       if (!StringUtil.isEmpty(ourTrace)) {
-                                                         myArgs.forEach(Object::toString);
-                                                       }
+            // workaround for jdi hang in trace mode
+            if (!StringUtil.isEmpty(ourTrace)) {
+              myArgs.forEach(Object::toString);
+            }
 
-                                                       result[0] = invokeMethod(invokePolicy, myMethod, myArgs);
-                                                     }
-                                                     finally {
-                                                       //  assertThreadSuspended(thread, context);
-                                                       if (!Patches.IBM_JDK_DISABLE_COLLECTION_BUG) {
-                                                         // ensure args are not collected
-                                                         myArgs.stream()
-                                                               .filter(value -> value instanceof ObjectReference)
-                                                               .forEach(value -> DebuggerUtilsEx.enableCollection((ObjectReference)value));
-                                                       }
-                                                     }
-                                                   }
-                                                   catch (Exception e) {
-                                                     exception[0] = e;
-                                                   }
-                                                 });
+            result[0] = invokeMethod(invokePolicy, myMethod, myArgs);
+          }
+          finally {
+            //  assertThreadSuspended(thread, context);
+            if (!Patches.IBM_JDK_DISABLE_COLLECTION_BUG) {
+              // ensure args are not collected
+              myArgs.stream()
+                .filter(value -> value instanceof ObjectReference)
+                .forEach(value -> DebuggerUtilsEx.enableCollection((ObjectReference)value));
+            }
+          }
+        }
+        catch (Exception e) {
+          exception[0] = e;
+        }
+      });
 
       if (exception[0] != null) {
         if (exception[0] instanceof InvocationException) {
@@ -1934,7 +1957,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
       public void startNotified(ProcessEvent event) {
         debugPortTimeout.addRequest(new Runnable() {
           public void run() {
-            if(isInInitialState()) {
+            if (isInInitialState()) {
               ApplicationManager.getApplication().schedule(new Runnable() {
                 public void run() {
                   String message = DebuggerBundle.message("status.connect.failed", DebuggerBundle.getAddressDisplayName(remoteConnection), DebuggerBundle.getTransportName(remoteConnection));

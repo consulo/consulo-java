@@ -22,26 +22,27 @@ package consulo.java.properties.impl.i18n;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.lang.properties.psi.PropertiesFile;
-import consulo.application.ApplicationManager;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.SelectionModel;
 import consulo.document.util.TextRange;
 import consulo.java.properties.impl.psi.PropertyCreationHandler;
 import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.util.PsiUtilBase;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.Messages;
 import consulo.undoRedo.CommandProcessor;
 import consulo.util.lang.StringUtil;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -54,18 +55,13 @@ public class I18nizeQuickFix implements LocalQuickFix, I18nQuickFixHandler {
   @Override
   public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor) {
     // do it later because the fix was called inside writeAction
-    ApplicationManager.getApplication().invokeLater(new Runnable(){
-      @Override
-      public void run() {
-        doFix(descriptor, project);
-      }
-    });
+    project.getApplication().invokeLater(() -> doFix(descriptor, project));
   }
 
   @Override
   @Nonnull
   public String getName() {
-    return CodeInsightBundle.message("inspection.i18n.quickfix");
+    return CodeInsightLocalize.inspectionI18nQuickfix().get();
   }
 
   @Override
@@ -75,6 +71,7 @@ public class I18nizeQuickFix implements LocalQuickFix, I18nQuickFixHandler {
   }
 
   @Override
+  @RequiredReadAction
   public void checkApplicability(final PsiFile psiFile, final Editor editor) throws IncorrectOperationException {
     PsiLiteralExpression literalExpression = I18nizeAction.getEnclosingStringLiteral(psiFile, editor);
     if (literalExpression != null) {
@@ -88,18 +85,20 @@ public class I18nizeQuickFix implements LocalQuickFix, I18nQuickFixHandler {
         return;
       }
     }
-    String message = CodeInsightBundle.message("i18nize.error.message");
-    throw new IncorrectOperationException(message);
+    LocalizeValue message = CodeInsightLocalize.i18nizeErrorMessage();
+    throw new IncorrectOperationException(message.get());
   }
 
   @Override
-  public void performI18nization(final PsiFile psiFile,
-                                 final Editor editor,
-                                 PsiLiteralExpression literalExpression,
-                                 Collection<PropertiesFile> propertiesFiles,
-                                 String key, String value, String i18nizedText,
-                                 PsiExpression[] parameters,
-                                 final PropertyCreationHandler propertyCreationHandler) throws IncorrectOperationException {
+  public void performI18nization(
+    final PsiFile psiFile,
+    final Editor editor,
+    PsiLiteralExpression literalExpression,
+    Collection<PropertiesFile> propertiesFiles,
+    String key, String value, String i18nizedText,
+    PsiExpression[] parameters,
+    final PropertyCreationHandler propertyCreationHandler
+  ) throws IncorrectOperationException {
     Project project = psiFile.getProject();
     propertyCreationHandler.createProperty(project, propertiesFiles, key, value, parameters);
     try {
@@ -107,17 +106,22 @@ public class I18nizeQuickFix implements LocalQuickFix, I18nQuickFixHandler {
       reformatAndCorrectReferences(newExpression);
     }
     catch (IncorrectOperationException e) {
-      Messages.showErrorDialog(project, CodeInsightBundle.message("inspection.i18n.expression.is.invalid.error.message"),
-                               CodeInsightBundle.message("inspection.error.dialog.title"));
+      Messages.showErrorDialog(
+        project,
+        CodeInsightLocalize.inspectionI18nExpressionIsInvalidErrorMessage().get(),
+        CodeInsightLocalize.inspectionErrorDialogTitle().get()
+      );
     }
   }
 
   @Override
+  @RequiredReadAction
   public JavaI18nizeQuickFixDialog createDialog(Project project, Editor editor, PsiFile psiFile) {
     final PsiLiteralExpression literalExpression = I18nizeAction.getEnclosingStringLiteral(psiFile, editor);
     return createDialog(project, psiFile, literalExpression);
   }
 
+  @RequiredReadAction
   private void doFix(final ProblemDescriptor descriptor, final Project project) {
     final PsiLiteralExpression literalExpression = (PsiLiteralExpression)descriptor.getPsiElement();
     final PsiFile psiFile = literalExpression.getContainingFile();
@@ -135,30 +139,38 @@ public class I18nizeQuickFix implements LocalQuickFix, I18nQuickFixHandler {
           !FileModificationService.getInstance().prepareFileForWrite(file.getContainingFile())) return;
     }
 
-    CommandProcessor.getInstance().executeCommand(project, new Runnable(){
-      @Override
-      public void run() {
-        ApplicationManager.getApplication().runWriteAction(new Runnable(){
-          @Override
-          public void run() {
-            try {
-              performI18nization(psiFile, PsiUtilBase.findEditor(psiFile), dialog.getLiteralExpression(), propertiesFiles, dialog.getKey(),
-                                 dialog.getValue(), dialog.getI18nizedText(), dialog.getParameters(),
-                                 dialog.getPropertyCreationHandler());
-            }
-            catch (IncorrectOperationException e) {
-              LOG.error(e);
-            }
-          }
-        });
-      }
-    }, CodeInsightBundle.message("quickfix.i18n.command.name"),project);
+    CommandProcessor.getInstance().executeCommand(
+      project,
+      () -> project.getApplication().runWriteAction(() -> {
+        try {
+          performI18nization(
+            psiFile,
+            PsiUtilBase.findEditor(psiFile),
+            dialog.getLiteralExpression(),
+            propertiesFiles,
+            dialog.getKey(),
+            dialog.getValue(),
+            dialog.getI18nizedText(),
+            dialog.getParameters(),
+            dialog.getPropertyCreationHandler()
+          );
+        }
+        catch (IncorrectOperationException e) {
+          LOG.error(e);
+        }
+      }),
+      CodeInsightLocalize.quickfixI18nCommandName().get(),
+      project
+    );
   }
 
-  protected PsiElement doReplacementInJava(@Nonnull final PsiFile psiFile,
-                                           final Editor editor,
-                                           final PsiLiteralExpression literalExpression,
-                                           String i18nizedText) throws                                                                                                                            IncorrectOperationException {
+  @RequiredReadAction
+  protected PsiElement doReplacementInJava(
+    @Nonnull final PsiFile psiFile,
+    final Editor editor,
+    final PsiLiteralExpression literalExpression,
+    String i18nizedText
+  ) throws IncorrectOperationException {
     return replaceStringLiteral(literalExpression, i18nizedText);
   }
 
@@ -168,18 +180,24 @@ public class I18nizeQuickFix implements LocalQuickFix, I18nQuickFixHandler {
     CodeStyleManager.getInstance(project).reformat(newExpression);
   }
 
+  @RequiredUIAccess
+  @RequiredReadAction
   protected JavaI18nizeQuickFixDialog createDialog(final Project project, final PsiFile context, final PsiLiteralExpression literalExpression) {
     String value = (String)literalExpression.getValue();
     if (mySelectionRange != null) {
       TextRange literalRange = literalExpression.getTextRange();
       TextRange intersection = literalRange.intersection(mySelectionRange);
-      value = literalExpression.getText().substring(intersection.getStartOffset() - literalRange.getStartOffset(), intersection.getEndOffset() - literalRange.getStartOffset());
+      value = literalExpression.getText().substring(
+        intersection.getStartOffset() - literalRange.getStartOffset(),
+        intersection.getEndOffset() - literalRange.getStartOffset()
+      );
     }
     value = StringUtil.escapeStringCharacters(value);
     return new JavaI18nizeQuickFixDialog(project, context, literalExpression, value, null, true, true);
   }
 
   @Nullable
+  @RequiredReadAction
   private static PsiBinaryExpression breakStringLiteral(PsiLiteralExpression literalExpression, int offset) throws IncorrectOperationException {
     TextRange literalRange = literalExpression.getTextRange();
     PsiElementFactory factory = JavaPsiFacade.getInstance(literalExpression.getProject()).getElementFactory();
@@ -188,15 +206,16 @@ public class I18nizeQuickFix implements LocalQuickFix, I18nQuickFixHandler {
       String value = (String)literalExpression.getValue();
       int breakIndex = offset - literalRange.getStartOffset()-1;
       String lsubstring = value.substring(0, breakIndex);
-      expression.getLOperand().replace(factory.createExpressionFromText("\""+lsubstring+"\"", literalExpression));
+      expression.getLOperand().replace(factory.createExpressionFromText("\"" + lsubstring + "\"", literalExpression));
       String rsubstring = value.substring(breakIndex);
-      expression.getROperand().replace(factory.createExpressionFromText("\""+rsubstring+"\"", literalExpression));
+      expression.getROperand().replace(factory.createExpressionFromText("\"" + rsubstring + "\"", literalExpression));
       return (PsiBinaryExpression)literalExpression.replace(expression);
     }
 
     return null;
   }
 
+  @RequiredReadAction
   private PsiElement replaceStringLiteral(PsiLiteralExpression literalExpression, String i18nizedText) throws IncorrectOperationException {
     PsiElementFactory factory = JavaPsiFacade.getInstance(literalExpression.getProject()).getElementFactory();
     if (mySelectionRange != null) {
@@ -218,5 +237,4 @@ public class I18nizeQuickFix implements LocalQuickFix, I18nQuickFixHandler {
     PsiExpression expression = factory.createExpressionFromText(i18nizedText, literalExpression);
     return literalExpression.replace(expression);
   }
-
 }

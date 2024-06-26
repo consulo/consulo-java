@@ -34,25 +34,26 @@ import consulo.java.analysis.impl.util.JavaI18nUtil;
 import consulo.java.properties.impl.psi.I18nizedTextGenerator;
 import consulo.java.properties.impl.psi.PropertyCreationHandler;
 import consulo.java.properties.impl.psi.ResourceBundleManager;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.ui.awt.EditorComboBox;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.HyperlinkLabel;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.MultiLineLabel;
+import consulo.ui.ex.awt.UIUtil;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.StringUtil;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
 import javax.swing.*;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
 import java.awt.*;
 import java.io.IOException;
 import java.util.HashMap;
@@ -82,13 +83,16 @@ public class JavaI18nizeQuickFixDialog extends I18nizeQuickFixDialog {
   @NonNls
   public static final String PROPERTY_VALUE_ATTR = "PROPERTY_VALUE";
 
-  public JavaI18nizeQuickFixDialog(@Nonnull Project project,
-                                   @Nonnull final PsiFile context,
-                                   @Nullable final PsiLiteralExpression literalExpression,
-                                   String defaultPropertyValue,
-                                   DialogCustomization customization,
-                                   final boolean showJavaCodeInfo,
-                                   final boolean showPreview) {
+  @RequiredUIAccess
+  public JavaI18nizeQuickFixDialog(
+    @Nonnull Project project,
+    @Nonnull final PsiFile context,
+    @Nullable final PsiLiteralExpression literalExpression,
+    String defaultPropertyValue,
+    DialogCustomization customization,
+    final boolean showJavaCodeInfo,
+    final boolean showPreview
+  ) {
     super(project, context, defaultPropertyValue, customization, true);
 
     ResourceBundleManager resourceBundleManager = null;
@@ -141,25 +145,17 @@ public class JavaI18nizeQuickFixDialog extends I18nizeQuickFixDialog {
     final String templateName = getTemplateName();
 
     if (templateName != null) {
-      HyperlinkLabel link = new HyperlinkLabel(CodeInsightBundle.message("i18nize.dialog.template.link.label"));
-      link.addHyperlinkListener(new HyperlinkListener() {
-        @Override
-        public void hyperlinkUpdate(HyperlinkEvent e) {
-          final FileTemplateConfigurable configurable = new FileTemplateConfigurable(project);
-          final FileTemplate template = FileTemplateManager.getInstance(project).getCodeTemplate(templateName);
-          SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-              configurable.setTemplate(template, null);
-            }
-          });
-          ShowSettingsUtil.getInstance().editConfigurable(myPanel, configurable).doWhenDone(() -> {
-            somethingChanged();
-            if (myShowJavaCodeInfo) {
-              suggestAvailableResourceBundleExpressions();
-            }
-          });
-        }
+      HyperlinkLabel link = new HyperlinkLabel(CodeInsightLocalize.i18nizeDialogTemplateLinkLabel().get());
+      link.addHyperlinkListener(e -> {
+        final FileTemplateConfigurable configurable = new FileTemplateConfigurable(project);
+        final FileTemplate template = FileTemplateManager.getInstance(project).getCodeTemplate(templateName);
+        SwingUtilities.invokeLater(() -> configurable.setTemplate(template, null));
+        ShowSettingsUtil.getInstance().editConfigurable(myPanel, configurable).doWhenDone(() -> {
+          somethingChanged();
+          if (myShowJavaCodeInfo) {
+            suggestAvailableResourceBundleExpressions();
+          }
+        });
       });
       myHyperLinkPanel.add(link, BorderLayout.CENTER);
     }
@@ -176,13 +172,13 @@ public class JavaI18nizeQuickFixDialog extends I18nizeQuickFixDialog {
 
   public static boolean isAvailable(PsiFile file) {
     final Project project = file.getProject();
-    final String title = CodeInsightBundle.message("i18nize.dialog.error.jdk.title");
+    final LocalizeValue title = CodeInsightLocalize.i18nizeDialogErrorJdkTitle();
     try {
       return ResourceBundleManager.getManager(file) != null;
     } catch (ResourceBundleManager.ResourceBundleNotFoundException e) {
       final IntentionAction fix = e.getFix();
       if (fix != null) {
-        if (Messages.showOkCancelDialog(project, e.getMessage(), title, Messages.getErrorIcon()) == OK_EXIT_CODE) {
+        if (Messages.showOkCancelDialog(project, e.getMessage(), title.get(), UIUtil.getErrorIcon()) == OK_EXIT_CODE) {
           try {
             fix.invoke(project, null, file);
             return false;
@@ -191,7 +187,7 @@ public class JavaI18nizeQuickFixDialog extends I18nizeQuickFixDialog {
           }
         }
       }
-      Messages.showErrorDialog(project, e.getMessage(), title);
+      Messages.showErrorDialog(project, e.getMessage(), title.get());
       return false;
     }
   }
@@ -218,12 +214,7 @@ public class JavaI18nizeQuickFixDialog extends I18nizeQuickFixDialog {
     }
 
     myRBEditorTextField.setHistory(ArrayUtil.toStringArray(result));
-    SwingUtilities.invokeLater(new Runnable() {
-      @Override
-      public void run() {
-        myRBEditorTextField.setSelectedIndex(0);
-      }
-    });
+    SwingUtilities.invokeLater(() -> myRBEditorTextField.setSelectedIndex(0));
   }
 
   @Override
@@ -259,7 +250,7 @@ public class JavaI18nizeQuickFixDialog extends I18nizeQuickFixDialog {
     String templateName = getTemplateName();
     LOG.assertTrue(templateName != null);
     FileTemplate template = FileTemplateManager.getInstance(myProject).getCodeTemplate(templateName);
-    Map<String, String> attributes = new HashMap<String, String>();
+    Map<String, String> attributes = new HashMap<>();
     attributes.put(PROPERTY_KEY_OPTION_KEY, propertyKey);
     attributes.put(RESOURCE_BUNDLE_OPTION_KEY, getResourceBundleText());
     attributes.put(PROPERTY_VALUE_ATTR, StringUtil.escapeStringCharacters(myDefaultPropertyValue));

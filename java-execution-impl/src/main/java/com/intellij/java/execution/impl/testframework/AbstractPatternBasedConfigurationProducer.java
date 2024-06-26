@@ -15,11 +15,11 @@
  */
 package com.intellij.java.execution.impl.testframework;
 
+import consulo.annotation.access.RequiredReadAction;
 import consulo.execution.action.ConfigurationContext;
 import consulo.execution.configuration.ConfigurationType;
 import com.intellij.java.execution.impl.JavaTestConfigurationBase;
 import consulo.execution.test.TestsUIUtil;
-import consulo.language.editor.CommonDataKeys;
 import consulo.dataContext.DataContext;
 import consulo.util.lang.Comparing;
 import consulo.language.psi.PsiElement;
@@ -35,6 +35,7 @@ public abstract class AbstractPatternBasedConfigurationProducer<T extends JavaTe
     super(configurationType);
   }
 
+  @RequiredReadAction
   public boolean isConfiguredFromContext(ConfigurationContext context, Set<String> patterns) {
     final LinkedHashSet<String> classes = new LinkedHashSet<>();
     final DataContext dataContext = context.getDataContext();
@@ -49,7 +50,7 @@ public abstract class AbstractPatternBasedConfigurationProducer<T extends JavaTe
       if (patterns.size() == 1) {
         final String pattern = patterns.iterator().next();
         if (!pattern.contains(",")) {
-          final PsiMethod method = PsiTreeUtil.getParentOfType(dataContext.getData(CommonDataKeys.PSI_ELEMENT), PsiMethod.class);
+          final PsiMethod method = PsiTreeUtil.getParentOfType(dataContext.getData(PsiElement.KEY), PsiMethod.class);
           return method != null && isTestMethod(false, method);
         }
       }
@@ -58,6 +59,7 @@ public abstract class AbstractPatternBasedConfigurationProducer<T extends JavaTe
     return false;
   }
 
+  @RequiredReadAction
   public PsiElement checkPatterns(ConfigurationContext context, LinkedHashSet<String> classes) {
     PsiElement[] result;
     final DataContext dataContext = context.getDataContext();

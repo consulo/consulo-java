@@ -7,7 +7,6 @@ import com.intellij.java.execution.CommonJavaRunConfigurationParameters;
 import com.intellij.java.execution.configurations.JavaRunConfigurationModule;
 import com.intellij.java.execution.impl.JavaRunConfigurationExtensionManager;
 import com.intellij.java.execution.impl.util.JavaParametersUtil;
-import consulo.execution.ExecutionBundle;
 import consulo.execution.RuntimeConfigurationException;
 import consulo.execution.RuntimeConfigurationWarning;
 import consulo.execution.configuration.*;
@@ -15,6 +14,7 @@ import consulo.execution.configuration.log.ui.LogConfigurationPanel;
 import consulo.execution.configuration.ui.SettingsEditor;
 import consulo.execution.configuration.ui.SettingsEditorGroup;
 import consulo.execution.executor.Executor;
+import consulo.execution.localize.ExecutionLocalize;
 import consulo.execution.runner.ExecutionEnvironment;
 import consulo.execution.ui.awt.EnvironmentVariablesComponent;
 import consulo.execution.util.ProgramParametersUtil;
@@ -22,10 +22,10 @@ import consulo.module.Module;
 import consulo.process.ExecutionException;
 import consulo.project.Project;
 import consulo.util.xml.serializer.*;
-import org.jdom.Element;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jdom.Element;
+
 import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -48,9 +48,9 @@ public class JarApplicationConfiguration extends LocatableConfigurationBase impl
   @Override
   public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
     SettingsEditorGroup<JarApplicationConfiguration> group = new SettingsEditorGroup<>();
-    group.addEditor(ExecutionBundle.message("run.configuration.configuration.tab.title"), new JarApplicationConfigurable(getProject()));
+    group.addEditor(ExecutionLocalize.runConfigurationConfigurationTabTitle().get(), new JarApplicationConfigurable(getProject()));
     JavaRunConfigurationExtensionManager.getInstance().appendEditors(this, group);
-    group.addEditor(ExecutionBundle.message("logs.tab.title"), new LogConfigurationPanel<>());
+    group.addEditor(ExecutionLocalize.logsTabTitle().get(), new LogConfigurationPanel<>());
     return group;
   }
 

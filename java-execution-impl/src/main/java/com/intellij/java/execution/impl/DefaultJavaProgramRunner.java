@@ -23,14 +23,13 @@ import com.intellij.java.execution.runners.ProcessProxyFactory;
 import com.intellij.java.execution.unscramble.ThreadDumpParser;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.AllIcons;
-import consulo.application.ApplicationManager;
 import consulo.application.util.DateFormatUtil;
 import consulo.document.FileDocumentManager;
-import consulo.execution.ExecutionBundle;
 import consulo.execution.ExecutionResult;
 import consulo.execution.RunnerRegistry;
 import consulo.execution.configuration.*;
 import consulo.execution.executor.DefaultRunExecutor;
+import consulo.execution.localize.ExecutionLocalize;
 import consulo.execution.runner.ExecutionEnvironment;
 import consulo.execution.runner.ProgramRunner;
 import consulo.execution.runner.RunContentBuilder;
@@ -52,9 +51,9 @@ import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.action.CustomShortcutSet;
 import consulo.ui.ex.action.Presentation;
 import consulo.ui.image.Image;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -72,7 +71,8 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner {
 
   @Override
   public boolean canRun(@Nonnull final String executorId, @Nonnull final RunProfile profile) {
-    return executorId.equals(DefaultRunExecutor.EXECUTOR_ID) && profile instanceof ModuleRunProfile && !(profile instanceof RunConfigurationWithSuppressedDefaultRunAction);
+    return executorId.equals(DefaultRunExecutor.EXECUTOR_ID) && profile instanceof ModuleRunProfile
+      && !(profile instanceof RunConfigurationWithSuppressedDefaultRunAction);
   }
 
   @Override
@@ -85,8 +85,8 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner {
 
     ExecutionResult executionResult;
     boolean shouldAddDefaultActions = true;
-    if (state instanceof JavaCommandLine) {
-      final OwnJavaParameters parameters = ((JavaCommandLine) state).getJavaParameters();
+    if (state instanceof JavaCommandLine javaCommandLine) {
+      final OwnJavaParameters parameters = javaCommandLine.getJavaParameters();
       patch(parameters, env.getRunnerSettings(), env.getRunProfile(), true);
 
       ProcessProxy proxy = ProcessProxyFactory.getInstance().createCommandLineProxy((JavaCommandLine) state);
@@ -106,7 +106,7 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner {
         }
       }
 
-      if (state instanceof JavaCommandLineState && !((JavaCommandLineState) state).shouldAddJavaProgramRunnerActions()) {
+      if (state instanceof JavaCommandLineState javaCommandLineState && !javaCommandLineState.shouldAddJavaProgramRunnerActions()) {
         shouldAddDefaultActions = false;
       }
     } else {
@@ -185,7 +185,7 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner {
 
   protected static class ControlBreakAction extends ProxyBasedAction {
     public ControlBreakAction(final ProcessHandler processHandler) {
-      super(ExecutionBundle.message("run.configuration.dump.threads.action.name"), null, AllIcons.Actions.Dump, processHandler);
+      super(ExecutionLocalize.runConfigurationDumpThreadsActionName().get(), null, AllIcons.Actions.Dump, processHandler);
       setShortcutSet(new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_CANCEL, InputEvent.CTRL_DOWN_MASK)));
     }
 
@@ -225,7 +225,7 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner {
         myProcessHandler.removeProcessListener(myListener);
         return;
       }
-      ApplicationManager.getApplication().executeOnPooledThread((Runnable) () ->
+      myProject.getApplication().executeOnPooledThread((Runnable) () ->
       {
         if (myProcessHandler.isProcessTerminated() || myProcessHandler.isProcessTerminating()) {
           return;
@@ -255,19 +255,18 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner {
     }
 
     private void showThreadDump(final String out, final List<ThreadState> threadStates) {
-      ApplicationManager.getApplication().invokeLater(new Runnable() {
-        @Override
-        public void run() {
-          AnalyzeStacktraceUtil.addConsole(myProject, threadStates.size() > 1 ? new ThreadDumpConsoleFactory(myProject, threadStates) : null, "<Stacktrace> " + DateFormatUtil
-              .formatDateTime(System.currentTimeMillis()), out);
-        }
-      }, ApplicationManager.getApplication().getNoneModalityState());
+      myProject.getApplication().invokeLater(
+        () -> AnalyzeStacktraceUtil.addConsole(myProject, threadStates.size() > 1
+          ? new ThreadDumpConsoleFactory(myProject, threadStates) : null,
+          "<Stacktrace> " + DateFormatUtil.formatDateTime(System.currentTimeMillis()), out),
+        myProject.getApplication().getNoneModalityState()
+      );
     }
   }
 
   protected static class SoftExitAction extends ProxyBasedAction {
     public SoftExitAction(final ProcessHandler processHandler) {
-      super(ExecutionBundle.message("run.configuration.exit.action.name"), null, AllIcons.Actions.Exit, processHandler);
+      super(ExecutionLocalize.runConfigurationExitActionName().get(), null, AllIcons.Actions.Exit, processHandler);
     }
 
     @Override

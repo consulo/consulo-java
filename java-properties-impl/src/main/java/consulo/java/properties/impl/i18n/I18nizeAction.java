@@ -20,14 +20,13 @@ import com.intellij.lang.properties.psi.PropertiesFile;
 import consulo.annotation.component.ActionImpl;
 import consulo.annotation.component.ActionParentRef;
 import consulo.annotation.component.ActionRef;
-import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
 import consulo.java.analysis.impl.util.JavaI18nUtil;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.LangDataKeys;
 import consulo.language.editor.PlatformDataKeys;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -35,14 +34,15 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.ActionPlaces;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.undoRedo.CommandProcessor;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
-
 import jakarta.annotation.Nullable;
+
 import java.util.Collection;
 
 @ActionImpl(id = "I18nize", parents = @ActionParentRef(@ActionRef(id = "RefactoringMenu")))
@@ -105,15 +105,18 @@ public class I18nizeAction extends AnAction {
     return e.getData(PlatformDataKeys.EDITOR);
   }
 
-  public static void doI18nSelectedString(final @Nonnull Project project,
-                                          final @Nonnull Editor editor,
-                                          final @Nonnull PsiFile psiFile,
-                                          final @Nonnull I18nQuickFixHandler handler) {
+  @RequiredUIAccess
+  public static void doI18nSelectedString(
+    final @Nonnull Project project,
+    final @Nonnull Editor editor,
+    final @Nonnull PsiFile psiFile,
+    final @Nonnull I18nQuickFixHandler handler
+  ) {
     try {
       handler.checkApplicability(psiFile, editor);
     }
     catch (IncorrectOperationException ex) {
-      CommonRefactoringUtil.showErrorHint(project, editor, ex.getMessage(), CodeInsightBundle.message("i18nize.error.title"), null);
+      CommonRefactoringUtil.showErrorHint(project, editor, ex.getMessage(), CodeInsightLocalize.i18nizeErrorTitle().get(), null);
       return;
     }
 
@@ -128,28 +131,34 @@ public class I18nizeAction extends AnAction {
       if (!FileModificationService.getInstance().prepareFileForWrite(file.getContainingFile())) return;
     }
 
-    ApplicationManager.getApplication().runWriteAction(new Runnable(){
-      @Override
-      public void run() {
-        CommandProcessor.getInstance().executeCommand(project, new Runnable(){
-          @Override
-          public void run() {
-            try {
-              handler.performI18nization(psiFile, editor, dialog.getLiteralExpression(), propertiesFiles, dialog.getKey(), StringUtil.unescapeStringCharacters(dialog.getValue()),
-                                         dialog.getI18nizedText(), dialog.getParameters(),
-                                         dialog.getPropertyCreationHandler());
-            }
-            catch (IncorrectOperationException e) {
-              LOG.error(e);
-            }
-          }
-        }, CodeInsightBundle.message("quickfix.i18n.command.name"),project);
-      }
-    });
+    project.getApplication().runWriteAction(() -> CommandProcessor.getInstance().executeCommand(
+      project,
+      () -> {
+        try {
+          handler.performI18nization(
+            psiFile,
+            editor,
+            dialog.getLiteralExpression(),
+            propertiesFiles,
+            dialog.getKey(),
+            StringUtil.unescapeStringCharacters(dialog.getValue()),
+            dialog.getI18nizedText(),
+            dialog.getParameters(),
+            dialog.getPropertyCreationHandler()
+          );
+        }
+        catch (IncorrectOperationException e) {
+          LOG.error(e);
+        }
+      },
+      CodeInsightLocalize.quickfixI18nCommandName().get(),
+      project
+    ));
   }
 
   @Override
-  public void actionPerformed(AnActionEvent e) {
+  @RequiredUIAccess
+  public void actionPerformed(@Nonnull AnActionEvent e) {
     final Editor editor = getEditor(e);
     final Project project = editor.getProject();
     assert project != null;
@@ -160,5 +169,4 @@ public class I18nizeAction extends AnAction {
 
     doI18nSelectedString(project, editor, psiFile, handler);
   }
-
 }

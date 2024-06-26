@@ -44,7 +44,6 @@ import consulo.execution.debug.XDebugProcess;
 import consulo.ui.ex.action.ActionManager;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
-import consulo.language.editor.CommonDataKeys;
 import consulo.ui.ex.action.CommonShortcuts;
 import consulo.dataContext.DataContext;
 import consulo.project.Project;
@@ -73,22 +72,22 @@ public abstract class DebuggerAction extends AnAction
 	public static DebuggerTreeNodeImpl getSelectedNode(DataContext dataContext)
 	{
 		DebuggerTree tree = getTree(dataContext);
-		if(tree == null)
+		if (tree == null)
 		{
 			return null;
 		}
 
-		if(tree.getSelectionCount() != 1)
+		if (tree.getSelectionCount() != 1)
 		{
 			return null;
 		}
 		TreePath path = tree.getSelectionPath();
-		if(path == null)
+		if (path == null)
 		{
 			return null;
 		}
 		Object component = path.getLastPathComponent();
-		if(!(component instanceof DebuggerTreeNodeImpl))
+		if (!(component instanceof DebuggerTreeNodeImpl))
 		{
 			return null;
 		}
@@ -99,22 +98,22 @@ public abstract class DebuggerAction extends AnAction
 	public static DebuggerTreeNodeImpl[] getSelectedNodes(DataContext dataContext)
 	{
 		DebuggerTree tree = getTree(dataContext);
-		if(tree == null)
+		if (tree == null)
 		{
 			return null;
 		}
 		TreePath[] paths = tree.getSelectionPaths();
-		if(paths == null || paths.length == 0)
+		if (paths == null || paths.length == 0)
 		{
 			return EMPTY_TREE_NODE_ARRAY;
 		}
-		List<DebuggerTreeNodeImpl> nodes = new ArrayList<DebuggerTreeNodeImpl>(paths.length);
-		for(TreePath path : paths)
+		List<DebuggerTreeNodeImpl> nodes = new ArrayList<>(paths.length);
+		for (TreePath path : paths)
 		{
 			Object component = path.getLastPathComponent();
-			if(component instanceof DebuggerTreeNodeImpl)
+			if (component instanceof DebuggerTreeNodeImpl debuggerTreeNode)
 			{
-				nodes.add((DebuggerTreeNodeImpl) component);
+				nodes.add(debuggerTreeNode);
 			}
 		}
 		return nodes.toArray(new DebuggerTreeNodeImpl[nodes.size()]);
@@ -123,13 +122,13 @@ public abstract class DebuggerAction extends AnAction
 	public static DebuggerContextImpl getDebuggerContext(DataContext dataContext)
 	{
 		DebuggerTreePanel panel = getPanel(dataContext);
-		if(panel != null)
+		if (panel != null)
 		{
 			return panel.getContext();
 		}
 		else
 		{
-			Project project = dataContext.getData(CommonDataKeys.PROJECT);
+			Project project = dataContext.getData(Project.KEY);
 			return project != null ? (DebuggerManagerEx.getInstanceEx(project)).getContext() : DebuggerContextImpl.EMPTY_CONTEXT;
 		}
 	}
@@ -156,7 +155,7 @@ public abstract class DebuggerAction extends AnAction
 			@Override
 			protected boolean onDoubleClick(MouseEvent e)
 			{
-				if(tree.getPathForLocation(e.getX(), e.getY()) == null)
+				if (tree.getPathForLocation(e.getX(), e.getY()) == null)
 				{
 					return false;
 				}
@@ -170,13 +169,9 @@ public abstract class DebuggerAction extends AnAction
 		final AnAction action = ActionManager.getInstance().getAction(actionName);
 		action.registerCustomShortcutSet(CommonShortcuts.getEditSource(), tree);
 
-		return new Disposable()
-		{
-			public void dispose()
-			{
-				listener.uninstall(tree);
-				action.unregisterCustomShortcutSet(tree);
-			}
+		return () -> {
+			listener.uninstall(tree);
+			action.unregisterCustomShortcutSet(tree);
 		};
 	}
 
@@ -184,7 +179,7 @@ public abstract class DebuggerAction extends AnAction
 	{
 		//noinspection HardCodedStringLiteral
 		String key = "initalized";
-		if(event.getPresentation().getClientProperty(key) != null)
+		if (event.getPresentation().getClientProperty(key) != null)
 		{
 			return false;
 		}
@@ -195,13 +190,9 @@ public abstract class DebuggerAction extends AnAction
 
 	public static void enableAction(final AnActionEvent event, final boolean enable)
 	{
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			public void run()
-			{
-				event.getPresentation().setEnabled(enable);
-				event.getPresentation().setVisible(true);
-			}
+		SwingUtilities.invokeLater(() -> {
+			event.getPresentation().setEnabled(enable);
+			event.getPresentation().setVisible(true);
 		});
 	}
 
@@ -212,12 +203,12 @@ public abstract class DebuggerAction extends AnAction
 
 	public static void refreshViews(@Nullable XDebugSession session)
 	{
-		if(session != null)
+		if (session != null)
 		{
 			XDebugProcess process = session.getDebugProcess();
-			if(process instanceof JavaDebugProcess)
+			if (process instanceof JavaDebugProcess debugProcess)
 			{
-				((JavaDebugProcess) process).saveNodeHistory();
+				debugProcess.saveNodeHistory();
 			}
 			session.rebuildViews();
 		}

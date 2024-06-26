@@ -22,12 +22,16 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaModule;
 import com.intellij.java.language.psi.util.PsiMethodUtil;
 import consulo.application.ReadAction;
-import consulo.execution.*;
+import consulo.execution.CantRunException;
+import consulo.execution.ProgramRunnerUtil;
+import consulo.execution.RuntimeConfigurationException;
+import consulo.execution.RuntimeConfigurationWarning;
 import consulo.execution.configuration.*;
 import consulo.execution.configuration.log.ui.LogConfigurationPanel;
 import consulo.execution.configuration.ui.SettingsEditor;
 import consulo.execution.configuration.ui.SettingsEditorGroup;
 import consulo.execution.executor.Executor;
+import consulo.execution.localize.ExecutionLocalize;
 import consulo.execution.runner.ExecutionEnvironment;
 import consulo.execution.ui.awt.EnvironmentVariablesComponent;
 import consulo.execution.ui.console.ArgumentFileFilter;
@@ -48,10 +52,10 @@ import consulo.project.Project;
 import consulo.util.lang.BitUtil;
 import consulo.util.xml.serializer.DefaultJDOMExternalizer;
 import consulo.virtualFileSystem.util.PathsList;
-import org.jdom.Element;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jdom.Element;
+
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -100,9 +104,9 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
   @Nonnull
   public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
     SettingsEditorGroup<ApplicationConfiguration> group = new SettingsEditorGroup<>();
-    group.addEditor(ExecutionBundle.message("run.configuration.configuration.tab.title"), new ApplicationConfigurable(getProject()));
+    group.addEditor(ExecutionLocalize.runConfigurationConfigurationTabTitle().get(), new ApplicationConfigurable(getProject()));
     JavaRunConfigurationExtensionManager.getInstance().appendEditors(this, group);
-    group.addEditor(ExecutionBundle.message("logs.tab.title"), new LogConfigurationPanel<>());
+    group.addEditor(ExecutionLocalize.logsTabTitle().get(), new LogConfigurationPanel<>());
     return group;
   }
 
@@ -166,9 +170,12 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
   public void checkConfiguration() throws RuntimeConfigurationException {
     JavaParametersUtil.checkAlternativeJRE(this);
     final JavaRunConfigurationModule configurationModule = getConfigurationModule();
-    final PsiClass psiClass = configurationModule.checkModuleAndClassName(MAIN_CLASS_NAME, ExecutionBundle.message("no.main.class.specified.error.text"));
+    final PsiClass psiClass = configurationModule.checkModuleAndClassName(
+      MAIN_CLASS_NAME,
+      ExecutionLocalize.noMainClassSpecifiedErrorText().get()
+    );
     if (!PsiMethodUtil.hasMainMethod(psiClass)) {
-      throw new RuntimeConfigurationWarning(ExecutionBundle.message("main.method.not.found.in.class.error.message", MAIN_CLASS_NAME));
+      throw new RuntimeConfigurationWarning(ExecutionLocalize.mainMethodNotFoundInClassErrorMessage(MAIN_CLASS_NAME).get());
     }
     ProgramParametersUtil.checkWorkingDirectoryExist(this, getProject(), configurationModule.getModule());
     JavaRunConfigurationExtensionManager.checkConfigurationIsValid(this);

@@ -38,10 +38,6 @@ public interface DebuggerActions extends XDebuggerActions {
   @NonNls String EDIT_FRAME_SOURCE = "Debugger.EditFrameSource";
   @NonNls String EDIT_NODE_SOURCE = "Debugger.EditNodeSource";
   @NonNls String REPRESENTATION_LIST = "Debugger.Representation";
-  @NonNls String CUSTOMIZE_VIEWS = "Debugger.CustomizeContextView";
-  @NonNls String CUSTOMIZE_THREADS_VIEW = "Debugger.CustomizeThreadsView";
   @NonNls String INSPECT = "Debugger.Inspect";
-  @NonNls String EXPORT_THREADS = "ExportThreads";
   @NonNls String DUMP_THREADS = "DumpThreads";
-
 }

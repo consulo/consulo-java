@@ -17,11 +17,11 @@ package com.intellij.java.compiler.artifact.impl.elements;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.AllIcons;
-import consulo.compiler.CompilerBundle;
 import consulo.compiler.artifact.Artifact;
 import consulo.compiler.artifact.ArtifactUtil;
 import consulo.compiler.artifact.element.*;
 import consulo.compiler.artifact.ui.ArtifactEditorContext;
+import consulo.compiler.localize.CompilerLocalize;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.util.ModuleUtilCore;
 import consulo.project.Project;
@@ -29,7 +29,6 @@ import consulo.ui.ex.awt.Messages;
 import consulo.ui.image.Image;
 import consulo.util.io.FileUtil;
 import consulo.util.io.PathUtil;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -44,7 +43,7 @@ public class JarArchiveElementType extends CompositePackagingElementType<JarArch
   }
 
   public JarArchiveElementType() {
-    super("jar-archive", CompilerBundle.message("element.type.name.jar.archive"));
+    super("jar-archive", CompilerLocalize.elementTypeNameJarArchive().get());
   }
 
   @Override
@@ -72,11 +71,20 @@ public class JarArchiveElementType extends CompositePackagingElementType<JarArch
 	}    */
 
   @Override
-  public CompositePackagingElement<?> createComposite(CompositePackagingElement<?> parent, @Nullable String baseName,
-                                                      @Nonnull ArtifactEditorContext context) {
+  public CompositePackagingElement<?> createComposite(
+    CompositePackagingElement<?> parent,
+    @Nullable String baseName,
+    @Nonnull ArtifactEditorContext context
+  ) {
     final String initialValue = ArtifactUtil.suggestFileName(parent, baseName != null ? baseName : "archive", ".jar");
-    String path = Messages.showInputDialog(context.getProject(), "Enter archive name: ", "New Archive", null, initialValue,
-        new FilePathValidator());
+    String path = Messages.showInputDialog(
+      context.getProject(),
+      "Enter archive name: ",
+      "New Archive",
+      null,
+      initialValue,
+      new FilePathValidator()
+    );
     if (path == null) {
       return null;
     }
@@ -84,6 +92,7 @@ public class JarArchiveElementType extends CompositePackagingElementType<JarArch
     final String parentPath = PathUtil.getParentPath(path);
     final String fileName = PathUtil.getFileName(path);
     final PackagingElement<?> element = new JarArchivePackagingElement(fileName);
-    return (CompositePackagingElement<?>) PackagingElementFactory.getInstance(context.getProject()).createParentDirectories(parentPath, element);
+    return (CompositePackagingElement<?>) PackagingElementFactory.getInstance(context.getProject())
+      .createParentDirectories(parentPath, element);
   }
 }
