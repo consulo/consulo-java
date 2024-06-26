@@ -142,13 +142,13 @@ public class BooleanMethodIsAlwaysInvertedInspection extends GlobalJavaInspectio
 			{
 				if (descriptionsProcessor.getDescriptions(refMethod) != null)
 				{ //suspicious method -> need to check external usages
-					final GlobalJavaInspectionContext.UsagesProcessor usagesProcessor = psiReference-> {
-					final PsiElement psiReferenceExpression = psiReference.getElement();
-					if (psiReferenceExpression instanceof PsiReferenceExpression referenceExpression && !isInvertedMethodCall(referenceExpression))
-					{
-						descriptionsProcessor.ignoreElement(refMethod);
-					}
-					return false;
+					final GlobalJavaInspectionContext.UsagesProcessor usagesProcessor = psiReference -> {
+						final PsiElement psiReferenceExpression = psiReference.getElement();
+						if (psiReferenceExpression instanceof PsiReferenceExpression referenceExpression && !isInvertedMethodCall(referenceExpression))
+						{
+							descriptionsProcessor.ignoreElement(refMethod);
+						}
+						return false;
 					};
 					traverseSuperMethods(refMethod, context, usagesProcessor);
 				}
