@@ -20,13 +20,13 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
 import consulo.application.AllIcons;
 import consulo.fileEditor.structureView.tree.*;
-import consulo.ide.IdeBundle;
+import consulo.platform.base.localize.IdeLocalize;
 import consulo.project.ui.view.tree.AbstractTreeNode;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.dataholder.Key;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import java.lang.ref.WeakReference;
 import java.util.Collection;
 import java.util.Collections;
@@ -41,13 +41,11 @@ public class SuperTypesGrouper implements Grouper {
   @Nonnull
   public Collection<Group> group(final Object parent, Collection<TreeElement> children) {
     if (isParentGrouped((AbstractTreeNode) parent)) return Collections.emptyList();
-    Map<Group, SuperTypeGroup> groups = new HashMap<Group, SuperTypeGroup>();
+    Map<Group, SuperTypeGroup> groups = new HashMap<>();
 
     for (TreeElement child : children) {
-      if (child instanceof PsiMethodTreeElement) {
-        final PsiMethodTreeElement element = (PsiMethodTreeElement) child;
-
-        PsiMethod method = ((PsiMethodTreeElement) child).getMethod();
+      if (child instanceof PsiMethodTreeElement element) {
+        PsiMethod method = element.getMethod();
         if (element.isInherited()) {
           PsiClass groupClass = method.getContainingClass();
           final SuperTypeGroup group = getOrCreateGroup(groupClass, SuperTypeGroup.OwnershipType.INHERITS, groups);
@@ -67,7 +65,7 @@ public class SuperTypesGrouper implements Grouper {
             }
 
             PsiMethod superMethod = superMethods[0];
-            method.putUserData(SUPER_METHOD_KEY, new WeakReference<PsiMethod>(superMethod));
+            method.putUserData(SUPER_METHOD_KEY, new WeakReference<>(superMethod));
             PsiClass groupClass = superMethod.getContainingClass();
             boolean overrides = methodOverridesSuper(method, superMethod);
             final SuperTypeGroup.OwnershipType ownershipType =
@@ -113,13 +111,15 @@ public class SuperTypesGrouper implements Grouper {
 
   @Nonnull
   public ActionPresentation getPresentation() {
-    return new ActionPresentationData(IdeBundle.message("action.structureview.group.methods.by.defining.type"), null,
-        AllIcons.General.ImplementingMethod);
+    return new ActionPresentationData(
+      IdeLocalize.actionStructureviewGroupMethodsByDefiningType().get(),
+      null,
+      AllIcons.General.ImplementingMethod
+    );
   }
 
   @Nonnull
   public String getName() {
     return ID;
   }
-
 }

@@ -23,6 +23,7 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.language.psi.util.PsiFormatUtilBase;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.application.AllIcons;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorColors;
@@ -44,6 +45,7 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.SyntheticElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.navigation.Navigatable;
+import consulo.platform.base.localize.IdeLocalize;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
@@ -111,7 +113,7 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
     final PsiElement enclosingElement = getEnclosingElement();
 
     if (enclosingElement == null) {
-      final String invalidPrefix = IdeBundle.message("node.hierarchy.invalid");
+      final String invalidPrefix = IdeLocalize.nodeHierarchyInvalid().get();
       if (!myHighlightedText.getText().startsWith(invalidPrefix)) {
         myHighlightedText.getBeginning().addText(invalidPrefix, HierarchyNodeDescriptor.getInvalidPrefixAttributes());
       }
@@ -132,7 +134,10 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
     if (enclosingElement instanceof PsiMethod) {
       if (enclosingElement instanceof SyntheticElement) {
         PsiFile file = enclosingElement.getContainingFile();
-        myHighlightedText.getEnding().addText(file != null ? file.getName() : IdeBundle.message("node.call.hierarchy.unknown.jsp"), mainTextAttributes);
+        myHighlightedText.getEnding().addText(
+          file != null ? file.getName() : IdeLocalize.nodeCallHierarchyUnknownJsp().get(),
+          mainTextAttributes
+        );
       } else {
         final PsiMethod method = (PsiMethod) enclosingElement;
         final StringBuilder buffer = new StringBuilder(128);
@@ -151,10 +156,13 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
     }
 
     if (myUsageCount > 1) {
-      myHighlightedText.getEnding().addText(IdeBundle.message("node.call.hierarchy.N.usages", myUsageCount), HierarchyNodeDescriptor.getUsageCountPrefixAttributes());
+      myHighlightedText.getEnding().addText(
+        IdeLocalize.nodeCallHierarchyNUsages(myUsageCount).get(),
+        HierarchyNodeDescriptor.getUsageCountPrefixAttributes()
+      );
     }
 
-    final PsiClass containingClass = enclosingElement instanceof PsiMethod ? ((PsiMethod) enclosingElement).getContainingClass() : (PsiClass) enclosingElement;
+    final PsiClass containingClass = enclosingElement instanceof PsiMethod method ? method.getContainingClass() : (PsiClass) enclosingElement;
     if (containingClass != null) {
       final String packageName = JavaHierarchyUtil.getPackageName(containingClass);
       myHighlightedText.getEnding().addText("  (" + packageName + ")", HierarchyNodeDescriptor.getPackageNameAttributes());
@@ -177,11 +185,12 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
   }
 
   @Override
+  @RequiredReadAction
   public void navigate(boolean requestFocus) {
     if (!myNavigateToReference) {
       PsiElement element = getPsiElement();
-      if (element instanceof Navigatable && ((Navigatable) element).canNavigate()) {
-        ((Navigatable) element).navigate(requestFocus);
+      if (element instanceof Navigatable navigatable && navigatable.canNavigate()) {
+        navigatable.navigate(requestFocus);
       }
       return;
     }
@@ -192,8 +201,8 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
       return;
     }
     final PsiElement callElement = element.getParent();
-    if (callElement instanceof Navigatable && ((Navigatable) callElement).canNavigate()) {
-      ((Navigatable) callElement).navigate(requestFocus);
+    if (callElement instanceof Navigatable navigatable && navigatable.canNavigate()) {
+      navigatable.navigate(requestFocus);
     } else {
       final PsiFile psiFile = callElement.getContainingFile();
       if (psiFile == null || psiFile.getVirtualFile() == null) {
@@ -209,7 +218,7 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
       HighlightManager highlightManager = HighlightManager.getInstance(getProject());
       EditorColorsManager colorManager = EditorColorsManager.getInstance();
       TextAttributes attributes = colorManager.getGlobalScheme().getAttributes(EditorColors.SEARCH_RESULT_ATTRIBUTES);
-      ArrayList<RangeHighlighter> highlighters = new ArrayList<RangeHighlighter>();
+      ArrayList<RangeHighlighter> highlighters = new ArrayList<>();
       for (PsiReference psiReference : myReferences) {
         final PsiElement eachElement = psiReference.getElement();
         if (eachElement != null) {
@@ -227,7 +236,7 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
   public boolean canNavigate() {
     if (!myNavigateToReference) {
       PsiElement element = getPsiElement();
-      return element instanceof Navigatable && ((Navigatable) element).canNavigate();
+      return element instanceof Navigatable navigatable && navigatable.canNavigate();
     }
     if (myReferences.isEmpty()) {
       return false;
@@ -237,7 +246,7 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
     if (callElement == null || !callElement.isValid()) {
       return false;
     }
-    if (!(callElement instanceof Navigatable) || !((Navigatable) callElement).canNavigate()) {
+    if (!(callElement instanceof Navigatable navigatable && navigatable.canNavigate())) {
       final PsiFile psiFile = callElement.getContainingFile();
       if (psiFile == null) {
         return false;

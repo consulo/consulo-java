@@ -22,6 +22,7 @@ import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.java.language.psi.PsiMethod;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.find.FindBundle;
 import consulo.find.FindUsagesHandler;
 import consulo.find.FindUsagesHandlerFactory;
 import consulo.language.psi.PsiDirectory;
@@ -62,13 +63,16 @@ public class JavaFindUsagesHandlerFactory extends FindUsagesHandlerFactory {
 
   @Override
   public FindUsagesHandler createFindUsagesHandler(@Nonnull final PsiElement element, final boolean forHighlightUsages) {
-    if (element instanceof PsiDirectory) {
-      final PsiJavaPackage psiPackage = JavaDirectoryService.getInstance().getPackage((PsiDirectory)element);
+    if (element instanceof PsiDirectory directory) {
+      final PsiJavaPackage psiPackage = JavaDirectoryService.getInstance().getPackage(directory);
       return psiPackage == null ? null : new JavaFindUsagesHandler(psiPackage, this);
     }
 
-    if (element instanceof PsiMethod && !forHighlightUsages) {
-      final PsiMethod[] methods = SuperMethodWarningUtil.checkSuperMethods((PsiMethod)element, JavaFindUsagesHandler.ACTION_STRING);
+    if (element instanceof PsiMethod method && !forHighlightUsages) {
+      final PsiMethod[] methods = SuperMethodWarningUtil.checkSuperMethods(
+        method,
+        FindBundle.message("find.super.method.warning.action.verb")
+      );
       if (methods.length > 1) {
         return new JavaFindUsagesHandler(element, methods, this);
       }

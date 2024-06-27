@@ -25,11 +25,11 @@ import com.intellij.java.impl.ide.projectView.impl.nodes.ClassTreeNode;
 import com.intellij.java.language.impl.psi.presentation.java.ClassPresentationUtil;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.bookmark.ui.view.BookmarkNodeProvider;
 import consulo.dataContext.DataContext;
 import consulo.language.content.FileIndexFacade;
-import consulo.language.editor.CommonDataKeys;
 import consulo.language.editor.LangDataKeys;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -51,9 +51,9 @@ import java.util.Collection;
 public class PsiClassFavoriteNodeProvider implements BookmarkNodeProvider {
   @Override
   public Collection<AbstractTreeNode> getFavoriteNodes(final DataContext context, final ViewSettings viewSettings) {
-    final Project project = context.getData(CommonDataKeys.PROJECT);
+    final Project project = context.getData(Project.KEY);
     if (project == null) return null;
-    PsiElement[] elements = context.getData(LangDataKeys.PSI_ELEMENT_ARRAY);
+    PsiElement[] elements = context.getData(PsiElement.KEY_OF_ARRAY);
     if (elements == null) {
       final PsiElement element = context.getData(LangDataKeys.PSI_ELEMENT);
       if (element != null) {
@@ -61,7 +61,7 @@ public class PsiClassFavoriteNodeProvider implements BookmarkNodeProvider {
       }
     }
     if (elements != null) {
-      final Collection<AbstractTreeNode> result = new ArrayList<AbstractTreeNode>();
+      final Collection<AbstractTreeNode> result = new ArrayList<>();
       for (PsiElement element : elements) {
         if (element instanceof PsiClass && checkClassUnderSources(element, project)) {
           result.add(new ClassSmartPointerNode(project, element, viewSettings));
@@ -84,7 +84,7 @@ public class PsiClassFavoriteNodeProvider implements BookmarkNodeProvider {
 
   @Override
   public AbstractTreeNode createNode(final Project project, final Object element, final ViewSettings viewSettings) {
-    if (element instanceof PsiClass && checkClassUnderSources((PsiElement) element, project)) {
+    if (element instanceof PsiClass psiClass && checkClassUnderSources(psiClass, project)) {
       return new ClassSmartPointerNode(project, element, viewSettings);
     }
     return BookmarkNodeProvider.super.createNode(project, element, viewSettings);
@@ -92,8 +92,8 @@ public class PsiClassFavoriteNodeProvider implements BookmarkNodeProvider {
 
   @Override
   public boolean elementContainsFile(final Object element, final VirtualFile vFile) {
-    if (element instanceof PsiClass) {
-      final PsiFile file = ((PsiClass) element).getContainingFile();
+    if (element instanceof PsiClass psiClass) {
+      final PsiFile file = psiClass.getContainingFile();
       if (file != null && Comparing.equal(file.getVirtualFile(), vFile)) return true;
     }
     return false;
@@ -101,8 +101,8 @@ public class PsiClassFavoriteNodeProvider implements BookmarkNodeProvider {
 
   @Override
   public int getElementWeight(final Object value, final boolean isSortByType) {
-    if (value instanceof PsiClass) {
-      return isSortByType ? ClassTreeNode.getClassPosition((PsiClass) value) : 3;
+    if (value instanceof PsiClass psiClass) {
+      return isSortByType ? ClassTreeNode.getClassPosition(psiClass) : 3;
     }
 
     return -1;
@@ -110,15 +110,12 @@ public class PsiClassFavoriteNodeProvider implements BookmarkNodeProvider {
 
   @Override
   public String getElementLocation(final Object element) {
-    if (element instanceof PsiClass) {
-      return ClassPresentationUtil.getNameForClass((PsiClass) element, true);
-    }
-    return null;
+    return element instanceof PsiClass psiClass ? ClassPresentationUtil.getNameForClass(psiClass, true) : null;
   }
 
   @Override
   public boolean isInvalidElement(final Object element) {
-    return element instanceof PsiClass && !((PsiClass) element).isValid();
+    return element instanceof PsiClass psiClass && !psiClass.isValid();
   }
 
   @Override
@@ -129,14 +126,11 @@ public class PsiClassFavoriteNodeProvider implements BookmarkNodeProvider {
 
   @Override
   public String getElementUrl(final Object element) {
-    if (element instanceof PsiClass) {
-      PsiClass aClass = (PsiClass) element;
-      return aClass.getQualifiedName();
-    }
-    return null;
+    return element instanceof PsiClass aClass ? aClass.getQualifiedName() : null;
   }
 
   @Override
+  @RequiredReadAction
   public String getElementModuleName(final Object element) {
     if (element instanceof PsiClass) {
       PsiClass aClass = (PsiClass) element;
@@ -147,6 +141,7 @@ public class PsiClassFavoriteNodeProvider implements BookmarkNodeProvider {
   }
 
   @Override
+  @RequiredReadAction
   public Object[] createPathFromUrl(final Project project, final String url, final String moduleName) {
     GlobalSearchScope scope = null;
     if (moduleName != null) {

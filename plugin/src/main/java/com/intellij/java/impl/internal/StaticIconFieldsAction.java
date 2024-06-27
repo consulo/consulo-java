@@ -26,10 +26,7 @@ import com.intellij.java.language.psi.PsiField;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
 import consulo.application.progress.Task;
-import consulo.application.util.function.Processor;
-import consulo.language.editor.CommonDataKeys;
 import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiReference;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.project.Project;
@@ -41,14 +38,12 @@ import jakarta.annotation.Nonnull;
 public class StaticIconFieldsAction extends AnAction {
   @Override
   public void actionPerformed(AnActionEvent e) {
-    final Project project = e.getData(CommonDataKeys.PROJECT);
-
+    final Project project = e.getData(Project.KEY);
 
     final UsageViewPresentation presentation = new UsageViewPresentation();
     presentation.setTabName("Statics");
     presentation.setTabText("Statitcs");
     final UsageView view = UsageViewManager.getInstance(project).showUsages(UsageTarget.EMPTY_ARRAY, new Usage[0], presentation);
-
 
     ProgressManager.getInstance().run(new Task.Backgroundable(project, "Searching icons usages") {
       @Override
@@ -66,20 +61,17 @@ public class StaticIconFieldsAction extends AnAction {
 
   private static void searchFields(PsiClass allIcons, final UsageView view, ProgressIndicator indicator) {
     indicator.setText("Searching for: " + allIcons.getQualifiedName());
-    ReferencesSearch.search(allIcons).forEach(new Processor<PsiReference>() {
-      @Override
-      public boolean process(PsiReference reference) {
-        PsiElement elt = reference.getElement();
+    ReferencesSearch.search(allIcons).forEach(reference -> {
+      PsiElement elt = reference.getElement();
 
-        while (elt instanceof PsiExpression) elt = elt.getParent();
+      while (elt instanceof PsiExpression) elt = elt.getParent();
 
-        if (elt instanceof PsiField) {
-          UsageInfo info = new UsageInfo(elt, false);
-          view.appendUsage(new UsageInfo2UsageAdapter(info));
-        }
-
-        return true;
+      if (elt instanceof PsiField) {
+        UsageInfo info = new UsageInfo(elt, false);
+        view.appendUsage(new UsageInfo2UsageAdapter(info));
       }
+
+      return true;
     });
   }
 }

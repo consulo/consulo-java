@@ -15,27 +15,27 @@
  */
 package com.intellij.java.impl.ide.structureView.impl.java;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import jakarta.annotation.Nullable;
-
-import consulo.application.AllIcons;
-import consulo.ide.IdeBundle;
-import consulo.fileEditor.structureView.tree.Group;
-import consulo.fileEditor.structureView.tree.TreeElement;
-import consulo.navigation.ItemPresentation;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiModifierList;
+import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.application.AllIcons;
+import consulo.fileEditor.structureView.tree.Group;
+import consulo.fileEditor.structureView.tree.TreeElement;
 import consulo.language.psi.SmartPointerManager;
 import consulo.language.psi.SmartPsiElementPointer;
-import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.navigation.ItemPresentation;
+import consulo.platform.base.localize.IdeLocalize;
 import consulo.ui.image.Image;
+import jakarta.annotation.Nullable;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class SuperTypeGroup implements Group, ItemPresentation, AccessLevelProvider{
   private final SmartPsiElementPointer mySuperClassPointer;
   private final OwnershipType myOverrides;
-  private final Collection<TreeElement> myChildren = new ArrayList<TreeElement>();
+  private final Collection<TreeElement> myChildren = new ArrayList<>();
 
   public static enum OwnershipType {
     IMPLEMENTS,
@@ -53,6 +53,7 @@ public class SuperTypeGroup implements Group, ItemPresentation, AccessLevelProvi
   }
 
   @Nullable
+  @RequiredReadAction
   private PsiClass getSuperClass() {
     return (PsiClass)mySuperClassPointer.getElement();
   }
@@ -78,15 +79,18 @@ public class SuperTypeGroup implements Group, ItemPresentation, AccessLevelProvi
     return null;
   }
 
+  @RequiredReadAction
   public String getPresentableText() {
     return toString();
   }
 
+  @RequiredReadAction
   public String toString() {
     final PsiClass superClass = getSuperClass();
-    return superClass != null ? superClass.getName() : IdeBundle.message("node.structureview.invalid");
+    return superClass != null ? superClass.getName() : IdeLocalize.nodeStructureviewInvalid().get();
   }
 
+  @RequiredReadAction
   public boolean equals(Object o) {
     if (this == o) return true;
     if (!(o instanceof SuperTypeGroup)) return false;
@@ -95,11 +99,10 @@ public class SuperTypeGroup implements Group, ItemPresentation, AccessLevelProvi
 
     if (myOverrides != superTypeGroup.myOverrides) return false;
     final PsiClass superClass = getSuperClass();
-    if (superClass != null ? !superClass .equals(superTypeGroup.getSuperClass() ) : superTypeGroup.getSuperClass()  != null) return false;
-
-    return true;
+    return superClass != null ? superClass.equals(superTypeGroup.getSuperClass()) : superTypeGroup.getSuperClass() == null;
   }
 
+  @RequiredReadAction
   public int hashCode() {
     final PsiClass superClass = getSuperClass();
     return superClass  != null ? superClass .hashCode() : 0;
@@ -109,6 +112,7 @@ public class SuperTypeGroup implements Group, ItemPresentation, AccessLevelProvi
     return this;
   }
 
+  @RequiredReadAction
   public int getAccessLevel() {
     final PsiClass superClass = getSuperClass();
     PsiModifierList modifierList = superClass == null ? null : superClass.getModifierList();

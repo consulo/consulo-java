@@ -18,21 +18,21 @@ package com.intellij.java.impl.psi.impl.beanProperties;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.util.PropertyUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.application.AllIcons;
 import consulo.document.util.TextRange;
-import consulo.ide.IdeBundle;
 import consulo.language.impl.psi.FakePsiElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.meta.PsiMetaData;
 import consulo.language.psi.meta.PsiMetaOwner;
 import consulo.language.psi.meta.PsiPresentableMetaData;
+import consulo.platform.base.localize.IdeLocalize;
 import consulo.ui.image.Image;
 import consulo.util.collection.ArrayUtil;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
 
 /**
  * @author peter
@@ -56,11 +56,13 @@ public class BeanPropertyElement extends FakePsiElement implements PsiMetaOwner,
     return myMethod;
   }
 
+  @Nonnull
   @Override
   public PsiElement getNavigationElement() {
     return myMethod;
   }
 
+  @Nonnull
   @Override
   public PsiManager getManager() {
     return myMethod.getManager();
@@ -73,12 +75,14 @@ public class BeanPropertyElement extends FakePsiElement implements PsiMetaOwner,
 
   @Override
   @NonNls
+  @RequiredReadAction
   public String getName(PsiElement context) {
     return getName();
   }
 
   @Override
   @Nonnull
+  @RequiredReadAction
   public String getName() {
     return myName;
   }
@@ -112,10 +116,11 @@ public class BeanPropertyElement extends FakePsiElement implements PsiMetaOwner,
 
   @Override
   public String getTypeName() {
-    return IdeBundle.message("bean.property");
+    return IdeLocalize.beanProperty().get();
   }
 
   @Override
+  @RequiredReadAction
   public TextRange getTextRange() {
     return TextRange.EMPTY_RANGE;
   }

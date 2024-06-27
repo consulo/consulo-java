@@ -15,16 +15,16 @@
  */
 package com.intellij.java.impl.ide.macro;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.ide.IdeBundle;
-import consulo.pathMacro.Macro;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiJavaPackage;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.dataContext.DataContext;
 import consulo.language.editor.LangDataKeys;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiFile;
-
+import consulo.pathMacro.Macro;
+import consulo.platform.base.localize.IdeLocalize;
 import jakarta.annotation.Nullable;
 
 @ExtensionImpl
@@ -34,9 +34,10 @@ public final class FilePackageMacro extends Macro {
   }
 
   public String getDescription() {
-    return IdeBundle.message("macro.file.package");
+    return IdeLocalize.macroFilePackage().get();
   }
 
+  @RequiredReadAction
   public String expand(DataContext dataContext) {
     PsiJavaPackage aPackage = getFilePackage(dataContext);
     if (aPackage == null) return null;

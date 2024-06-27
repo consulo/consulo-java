@@ -20,6 +20,7 @@ import consulo.ide.IdeBundle;
 import consulo.pathMacro.Macro;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.dataContext.DataContext;
+import consulo.platform.base.localize.IdeLocalize;
 
 @ExtensionImpl
 public class FileFQPackage extends Macro {
@@ -30,7 +31,7 @@ public class FileFQPackage extends Macro {
   }
 
   public String getDescription() {
-    return IdeBundle.message("macro.file.fully.qualified.package");
+    return IdeLocalize.macroFileFullyQualifiedPackage().get();
   }
 
   public String getName() {

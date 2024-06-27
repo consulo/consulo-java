@@ -15,34 +15,30 @@
  */
 package com.intellij.java.impl.cyclicDependencies.actions;
 
-import javax.swing.ButtonGroup;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-
+import com.intellij.java.impl.analysis.JavaAnalysisScope;
+import com.intellij.java.language.psi.PsiJavaPackage;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.dataContext.DataContext;
+import consulo.document.FileDocumentManager;
+import consulo.language.editor.LangDataKeys;
 import consulo.language.editor.PlatformDataKeys;
 import consulo.language.editor.scope.AnalysisScope;
-import consulo.language.editor.scope.AnalysisScopeBundle;
-import com.intellij.java.impl.analysis.JavaAnalysisScope;
-import consulo.ui.ex.action.AnAction;
-import consulo.ui.ex.action.AnActionEvent;
-import consulo.language.editor.CommonDataKeys;
-import consulo.dataContext.DataContext;
-import consulo.language.editor.LangDataKeys;
-import consulo.ui.ex.action.Presentation;
-import consulo.document.FileDocumentManager;
-import consulo.module.Module;
-import consulo.module.ModuleManager;
-import consulo.language.util.ModuleUtilCore;
-import consulo.project.Project;
-import consulo.ui.ex.awt.DialogWrapper;
+import consulo.language.editor.scope.localize.AnalysisScopeLocalize;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.util.ModuleUtilCore;
+import consulo.module.Module;
+import consulo.module.ModuleManager;
+import consulo.project.Project;
+import consulo.ui.ex.action.AnAction;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.Presentation;
+import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.IdeBorderFactory;
 import jakarta.annotation.Nullable;
+
+import javax.swing.*;
 
 /**
  * User: anna
@@ -54,29 +50,32 @@ public class CyclicDependenciesAction extends AnAction{
   private final String myTitle;
 
   public CyclicDependenciesAction() {
-    myAnalysisVerb = AnalysisScopeBundle.message("action.analyze.verb");
-    myAnalysisNoun = AnalysisScopeBundle.message("action.analysis.noun");
-    myTitle = AnalysisScopeBundle.message("action.cyclic.dependency.title");
+    myAnalysisVerb = AnalysisScopeLocalize.actionAnalyzeVerb().get();
+    myAnalysisNoun = AnalysisScopeLocalize.actionAnalysisNoun().get();
+    myTitle = AnalysisScopeLocalize.actionCyclicDependencyTitle().get();
   }
 
   public void update(AnActionEvent event) {
     Presentation presentation = event.getPresentation();
     presentation.setEnabled(
       getInspectionScope(event.getDataContext()) != null || 
-      event.getData(CommonDataKeys.PROJECT) != null);
+      event.getData(Project.KEY) != null);
   }
 
+  @RequiredReadAction
   public void actionPerformed(AnActionEvent e) {
     DataContext dataContext = e.getDataContext();
-    final Project project = e.getData(CommonDataKeys.PROJECT);
-    final Module module = e.getData(LangDataKeys.MODULE);
+    final Project project = e.getData(Project.KEY);
+    final Module module = e.getData(Module.KEY);
     if (project != null) {
       AnalysisScope scope = getInspectionScope(dataContext);
       if (scope == null || scope.getScopeType() != AnalysisScope.MODULES){
         ProjectModuleOrPackageDialog dlg = null;
         if (module != null) {
-          dlg = new ProjectModuleOrPackageDialog(ModuleManager.getInstance(project).getModules().length == 1 ? null : ModuleUtilCore
-            .getModuleNameInReadAction(module), scope);
+          dlg = new ProjectModuleOrPackageDialog(
+            ModuleManager.getInstance(project).getModules().length == 1 ? null : ModuleUtilCore.getModuleNameInReadAction(module),
+            scope
+          );
           dlg.show();
           if (!dlg.isOK()) return;
         }
@@ -102,7 +101,7 @@ public class CyclicDependenciesAction extends AnAction{
 
   @Nullable
   private static AnalysisScope getInspectionScope(final DataContext dataContext) {
-    final Project project = dataContext.getData(CommonDataKeys.PROJECT);
+    final Project project = dataContext.getData(Project.KEY);
     if (project == null) return null;
 
     AnalysisScope scope = getInspectionScopeImpl(dataContext);
@@ -129,16 +128,14 @@ public class CyclicDependenciesAction extends AnAction{
     }
 
     PsiElement psiTarget = dataContext.getData(LangDataKeys.PSI_ELEMENT);
-    if (psiTarget instanceof PsiDirectory) {
-      PsiDirectory psiDirectory = (PsiDirectory)psiTarget;
+    if (psiTarget instanceof PsiDirectory psiDirectory) {
       if (!psiDirectory.getManager().isInProject(psiDirectory)) return null;
       return new AnalysisScope(psiDirectory);
     }
-    else if (psiTarget instanceof PsiJavaPackage) {
-      PsiJavaPackage pack = (PsiJavaPackage)psiTarget;
+    else if (psiTarget instanceof PsiJavaPackage pack) {
       PsiDirectory[] dirs = pack.getDirectories(GlobalSearchScope.projectScope(pack.getProject()));
       if (dirs.length == 0) return null;
-      return new JavaAnalysisScope(pack, dataContext.getData(LangDataKeys.MODULE));
+      return new JavaAnalysisScope(pack, dataContext.getData(Module.KEY));
     }
 
     return null;
@@ -146,7 +143,7 @@ public class CyclicDependenciesAction extends AnAction{
 
   @Nullable
   private static AnalysisScope getProjectScope(DataContext dataContext) {
-    final Project data = dataContext.getData(CommonDataKeys.PROJECT);
+    final Project data = dataContext.getData(Project.KEY);
     if (data == null) {
       return null;
     }
@@ -155,7 +152,7 @@ public class CyclicDependenciesAction extends AnAction{
 
   @Nullable
   private static AnalysisScope getModuleScope(DataContext dataContext) {
-    final Module data = dataContext.getData(LangDataKeys.MODULE);
+    final Module data = dataContext.getData(Module.KEY);
     if (data == null) {
       return null;
     }
@@ -179,7 +176,7 @@ public class CyclicDependenciesAction extends AnAction{
       myModuleName = moduleName;
       mySelectedScope = selectedScope;
       init();
-      setTitle(AnalysisScopeBundle.message("cyclic.dependencies.scope.dialog.title", myTitle));
+      setTitle(AnalysisScopeLocalize.cyclicDependenciesScopeDialogTitle(myTitle));
       setHorizontalStretch(1.75f);
     }
 
@@ -189,12 +186,14 @@ public class CyclicDependenciesAction extends AnAction{
 
     protected JComponent createCenterPanel() {
       myScopePanel.setBorder(IdeBorderFactory.createTitledBorder(
-        AnalysisScopeBundle.message("analysis.scope.title", myAnalysisNoun), true));
-      myProjectButton.setText(AnalysisScopeBundle.message("cyclic.dependencies.scope.dialog.project.button", myAnalysisVerb));
+        AnalysisScopeLocalize.analysisScopeTitle(myAnalysisNoun).get(),
+        true
+      ));
+      myProjectButton.setText(AnalysisScopeLocalize.cyclicDependenciesScopeDialogProjectButton(myAnalysisVerb).get());
       ButtonGroup group = new ButtonGroup();
       group.add(myProjectButton);
       if (myModuleName != null) {
-        myModuleButton.setText(AnalysisScopeBundle.message("cyclic.dependencies.scope.dialog.module.button", myAnalysisVerb, myModuleName));
+        myModuleButton.setText(AnalysisScopeLocalize.cyclicDependenciesScopeDialogModuleButton(myAnalysisVerb, myModuleName).get());
         group.add(myModuleButton);
       }
       myModuleButton.setVisible(myModuleName != null);
@@ -218,8 +217,7 @@ public class CyclicDependenciesAction extends AnAction{
     }
 
     public boolean isModuleScopeSelected() {
-      return myModuleButton != null ? myModuleButton.isSelected() : false;
+      return myModuleButton != null && myModuleButton.isSelected();
     }
-
   }
 }

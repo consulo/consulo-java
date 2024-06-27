@@ -20,26 +20,21 @@ import consulo.fileEditor.structureView.tree.ActionPresentation;
 import consulo.fileEditor.structureView.tree.ActionPresentationData;
 import consulo.fileEditor.structureView.tree.Filter;
 import consulo.fileEditor.structureView.tree.TreeElement;
-import consulo.ide.IdeBundle;
-import org.jetbrains.annotations.NonNls;
-
+import consulo.platform.base.localize.IdeLocalize;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 public class PublicElementsFilter implements Filter {
   @NonNls
   public static final String ID = "SHOW_NON_PUBLIC";
 
   public boolean isVisible(TreeElement treeNode) {
-    if (treeNode instanceof JavaClassTreeElementBase) {
-      return ((JavaClassTreeElementBase) treeNode).isPublic();
-    } else {
-      return true;
-    }
+    return !(treeNode instanceof JavaClassTreeElementBase classTreeElementBase && !classTreeElementBase.isPublic());
   }
 
   @Nonnull
   public ActionPresentation getPresentation() {
-    return new ActionPresentationData(IdeBundle.message("action.structureview.show.non.public"), null, AllIcons.Nodes.C_private);
+    return new ActionPresentationData(IdeLocalize.actionStructureviewShowNonPublic().get(), null, AllIcons.Nodes.C_private);
   }
 
   @Nonnull

@@ -15,14 +15,15 @@
  */
 package com.intellij.java.impl.ide.macro;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.ide.IdeBundle;
-import consulo.pathMacro.Macro;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaFile;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.dataContext.DataContext;
 import consulo.language.editor.LangDataKeys;
 import consulo.language.psi.PsiFile;
+import consulo.pathMacro.Macro;
+import consulo.platform.base.localize.IdeLocalize;
 
 @ExtensionImpl
 public final class FileClassMacro extends Macro {
@@ -31,9 +32,10 @@ public final class FileClassMacro extends Macro {
   }
 
   public String getDescription() {
-    return IdeBundle.message("macro.class.name");
+    return IdeLocalize.macroClassName().get();
   }
 
+  @RequiredReadAction
   public String expand(DataContext dataContext) {
     //Project project = (Project)dataContext.getData(DataConstants.PROJECT);
     //if (project == null) {

@@ -25,10 +25,10 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiPackageStatement;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.fileTemplate.CreateFromTemplateHandler;
 import consulo.fileTemplate.FileTemplate;
-import consulo.ide.IdeBundle;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.file.FileTypeManager;
 import consulo.language.psi.PsiDirectory;
@@ -36,11 +36,12 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiFileFactory;
 import consulo.language.util.IncorrectOperationException;
+import consulo.platform.base.localize.IdeLocalize;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
 import consulo.virtualFileSystem.fileType.FileType;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.Map;
 
 /**
@@ -48,7 +49,14 @@ import java.util.Map;
  */
 @ExtensionImpl
 public class JavaCreateFromTemplateHandler implements CreateFromTemplateHandler {
-  public static PsiClass createClassOrInterface(Project project, PsiDirectory directory, String content, boolean reformat, String extension) throws IncorrectOperationException {
+  @RequiredWriteAction
+  public static PsiClass createClassOrInterface(
+    Project project,
+    PsiDirectory directory,
+    String content,
+    boolean reformat,
+    String extension
+  ) throws IncorrectOperationException {
     if (extension == null) {
       extension = JavaFileType.INSTANCE.getDefaultExtension();
     }
@@ -115,12 +123,15 @@ public class JavaCreateFromTemplateHandler implements CreateFromTemplateHandler 
 
   @Nonnull
   @Override
-  public PsiElement createFromTemplate(Project project,
-                                       PsiDirectory directory,
-                                       String fileName,
-                                       FileTemplate template,
-                                       String templateText,
-                                       @Nonnull Map<String, Object> props) throws IncorrectOperationException {
+  @RequiredWriteAction
+  public PsiElement createFromTemplate(
+    Project project,
+    PsiDirectory directory,
+    String fileName,
+    FileTemplate template,
+    String templateText,
+    @Nonnull Map<String, Object> props
+  ) throws IncorrectOperationException {
     String extension = template.getExtension();
     PsiElement result = createClassOrInterface(project, directory, templateText, template.isReformatCode(), extension);
     hackAwayEmptyPackage((PsiJavaFile) result.getContainingFile(), template, props);
@@ -158,7 +169,7 @@ public class JavaCreateFromTemplateHandler implements CreateFromTemplateHandler 
   @Nonnull
   @Override
   public String commandName(@Nonnull FileTemplate template) {
-    return IdeBundle.message("command.create.class.from.template");
+    return IdeLocalize.commandCreateClassFromTemplate().get();
   }
 
   public static boolean canCreate(PsiDirectory dir) {

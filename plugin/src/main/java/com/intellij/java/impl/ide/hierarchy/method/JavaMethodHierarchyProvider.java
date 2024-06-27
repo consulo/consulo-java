@@ -20,13 +20,12 @@ import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.dataContext.DataContext;
 import consulo.ide.impl.idea.ide.hierarchy.MethodHierarchyBrowserBase;
 import consulo.language.Language;
-import consulo.language.editor.CommonDataKeys;
-import consulo.language.editor.LangDataKeys;
 import consulo.language.editor.PlatformDataKeys;
 import consulo.language.editor.hierarchy.HierarchyBrowser;
 import consulo.language.editor.hierarchy.MethodHierarchyProvider;
@@ -45,23 +44,26 @@ import jakarta.annotation.Nullable;
  */
 @ExtensionImpl
 public class JavaMethodHierarchyProvider implements MethodHierarchyProvider {
+  @RequiredReadAction
   public PsiElement getTarget(@Nonnull final DataContext dataContext) {
     final PsiMethod method = getMethodImpl(dataContext);
-    if (method != null && method.getContainingClass() != null && !method.hasModifierProperty(PsiModifier.PRIVATE) && !method.hasModifierProperty(PsiModifier.STATIC)) {
+    if (method != null && method.getContainingClass() != null && !method.hasModifierProperty(PsiModifier.PRIVATE)
+      && !method.hasModifierProperty(PsiModifier.STATIC)) {
       return method;
     } else {
       return null;
     }
   }
 
+  @RequiredReadAction
   @Nullable
   private static PsiMethod getMethodImpl(final DataContext dataContext) {
-    final Project project = dataContext.getData(CommonDataKeys.PROJECT);
+    final Project project = dataContext.getData(Project.KEY);
     if (project == null) {
       return null;
     }
 
-    PsiElement element = dataContext.getData(LangDataKeys.PSI_ELEMENT);
+    PsiElement element = dataContext.getData(PsiElement.KEY);
     final PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class, false);
 
     if (method != null) {
@@ -91,7 +93,7 @@ public class JavaMethodHierarchyProvider implements MethodHierarchyProvider {
     }
 
     element = psiFile.findElementAt(offset - 1);
-    if (!(element instanceof PsiJavaToken) || ((PsiJavaToken) element).getTokenType() != JavaTokenType.SEMICOLON) {
+    if (!(element instanceof PsiJavaToken javaToken && javaToken.getTokenType() == JavaTokenType.SEMICOLON)) {
       return null;
     }
 

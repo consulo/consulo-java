@@ -18,8 +18,8 @@ package com.intellij.java.impl.ide.macro;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.IdeBundle;
 import consulo.pathMacro.Macro;
-import consulo.language.editor.CommonDataKeys;
 import consulo.dataContext.DataContext;
+import consulo.platform.base.localize.IdeLocalize;
 import consulo.project.Project;
 import consulo.module.content.layer.OrderEnumerator;
 
@@ -30,11 +30,11 @@ public final class ClasspathMacro extends Macro {
   }
 
   public String getDescription() {
-    return IdeBundle.message("macro.project.classpath");
+    return IdeLocalize.macroProjectClasspath().get();
   }
 
   public String expand(DataContext dataContext) {
-    Project project = dataContext.getData(CommonDataKeys.PROJECT);
+    Project project = dataContext.getData(Project.KEY);
     if (project == null) return null;
     return OrderEnumerator.orderEntries(project).getPathsList().getPathsString();
   }

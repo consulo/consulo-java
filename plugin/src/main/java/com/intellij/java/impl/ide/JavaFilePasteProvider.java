@@ -18,6 +18,7 @@ package com.intellij.java.impl.ide;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.Result;
 import consulo.dataContext.DataContext;
@@ -25,7 +26,6 @@ import consulo.document.Document;
 import consulo.document.util.TextRange;
 import consulo.ide.IdeView;
 import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.editor.CommonDataKeys;
 import consulo.language.editor.FilePasteProvider;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.psi.*;
@@ -34,9 +34,9 @@ import consulo.navigation.OpenFileDescriptorFactory;
 import consulo.project.Project;
 import consulo.ui.ex.awt.CopyPasteManager;
 import consulo.undoRedo.CommandProcessor;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 
@@ -45,16 +45,25 @@ import java.awt.datatransfer.Transferable;
  */
 @ExtensionImpl
 public class JavaFilePasteProvider implements FilePasteProvider {
+  @RequiredReadAction
   public void performPaste(@Nonnull final DataContext dataContext) {
-    final Project project = dataContext.getData(CommonDataKeys.PROJECT);
+    final Project project = dataContext.getData(Project.KEY);
     final IdeView ideView = dataContext.getData(IdeView.KEY);
-    if (project == null || ideView == null) return;
+    if (project == null || ideView == null) {
+      return;
+    }
     final PsiJavaFile javaFile = createJavaFileFromClipboardContent(project);
-    if (javaFile == null) return;
+    if (javaFile == null) {
+      return;
+    }
     final PsiClass[] classes = javaFile.getClasses();
-    if (classes.length < 1) return;
+    if (classes.length < 1) {
+      return;
+    }
     final PsiDirectory targetDir = ideView.getOrChooseDirectory();
-    if (targetDir == null) return;
+    if (targetDir == null) {
+      return;
+    }
     PsiClass publicClass = classes[0];
     for (PsiClass aClass : classes) {
       if (aClass.hasModifierProperty(PsiModifier.PUBLIC)) {
@@ -64,6 +73,7 @@ public class JavaFilePasteProvider implements FilePasteProvider {
     }
     final PsiClass mainClass = publicClass;
     new WriteCommandAction(project, "Paste class '" + mainClass.getName() + "'") {
+      @RequiredReadAction
       @Override
       protected void run(Result result) throws Throwable {
         PsiFile file;
@@ -75,8 +85,8 @@ public class JavaFilePasteProvider implements FilePasteProvider {
         final Document document = PsiDocumentManager.getInstance(project).getDocument(file);
         document.setText(javaFile.getText());
         PsiDocumentManager.getInstance(project).commitDocument(document);
-        if (file instanceof PsiJavaFile) {
-          updatePackageStatement((PsiJavaFile) file, targetDir);
+        if (file instanceof PsiJavaFile psiJavaFile) {
+          updatePackageStatement(psiJavaFile, targetDir);
         }
         OpenFileDescriptorFactory.getInstance(project).builder(file.getVirtualFile()).build().navigate(true);
       }
@@ -90,8 +100,9 @@ public class JavaFilePasteProvider implements FilePasteProvider {
     final Project project = javaFile.getProject();
     if ((oldStatement != null && !oldStatement.getPackageName().equals(aPackage.getQualifiedName()) ||
         (oldStatement == null && aPackage.getQualifiedName().length() > 0))) {
-      CommandProcessor.getInstance().executeCommand(project, new Runnable() {
-        public void run() {
+      CommandProcessor.getInstance().executeCommand(
+        project,
+        () -> {
           try {
             PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
             final PsiPackageStatement newStatement = factory.createPackageStatement(aPackage.getQualifiedName());
@@ -106,8 +117,10 @@ public class JavaFilePasteProvider implements FilePasteProvider {
           } catch (IncorrectOperationException e) {
             // ignore
           }
-        }
-      }, "Updating package statement", null);
+        },
+        "Updating package statement",
+        null
+      );
     }
   }
 
@@ -116,7 +129,7 @@ public class JavaFilePasteProvider implements FilePasteProvider {
   }
 
   public boolean isPasteEnabled(@Nonnull final DataContext dataContext) {
-    final Project project = dataContext.getData(CommonDataKeys.PROJECT);
+    final Project project = dataContext.getData(Project.KEY);
     final IdeView ideView = dataContext.getData(IdeView.KEY);
     if (project == null || ideView == null || ideView.getDirectories().length == 0) {
       return false;

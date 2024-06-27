@@ -15,20 +15,19 @@
  */
 package com.intellij.java.impl.ide.hierarchy.method;
 
+import consulo.platform.base.localize.IdeLocalize;
 import consulo.ui.ex.action.Presentation;
-import consulo.ide.IdeBundle;
 
 public final class ImplementMethodAction extends OverrideImplementMethodAction {
   protected final void update(final Presentation presentation, final int toImplement, final int toOverride) {
     if (toImplement > 0) {
       presentation.setEnabled(true);
       presentation.setVisible(true);
-      presentation.setText(toImplement == 1 ? IdeBundle.message("action.implement.method") : IdeBundle.message("action.implement.methods"));
+      presentation.setTextValue(toImplement == 1 ? IdeLocalize.actionImplementMethod() : IdeLocalize.actionImplementMethods());
     }
     else {
       presentation.setEnabled(false);
       presentation.setVisible(false);
     }
   }
-
 }

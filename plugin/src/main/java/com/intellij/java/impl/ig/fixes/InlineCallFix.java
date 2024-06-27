@@ -15,8 +15,9 @@
  */
 package com.intellij.java.impl.ig.fixes;
 
+import consulo.annotation.access.RequiredReadAction;
+import consulo.application.Application;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.application.ApplicationManager;
 import consulo.project.Project;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
@@ -34,26 +35,21 @@ public class InlineCallFix extends InspectionGadgetsFix {
     return InspectionGadgetsBundle.message("inline.call.quickfix");
   }
 
+  @RequiredReadAction
   public void doFix(final Project project, ProblemDescriptor descriptor) {
     final PsiElement nameElement = descriptor.getPsiElement();
-    final PsiReferenceExpression methodExpression =
-      (PsiReferenceExpression)nameElement.getParent();
+    final PsiReferenceExpression methodExpression = (PsiReferenceExpression)nameElement.getParent();
     assert methodExpression != null;
-    final PsiMethodCallExpression methodCallExpression =
-      (PsiMethodCallExpression)methodExpression.getParent();
-    final JavaRefactoringActionHandlerFactory factory =
-      JavaRefactoringActionHandlerFactory.getInstance();
+    final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)methodExpression.getParent();
+    final JavaRefactoringActionHandlerFactory factory = JavaRefactoringActionHandlerFactory.getInstance();
     final RefactoringActionHandler inlineHandler = factory.createInlineHandler();
-    final Runnable runnable = new Runnable() {
-      public void run() {
-        inlineHandler.invoke(project, new PsiElement[]{methodCallExpression}, null);
-      }
-    };
-    if (ApplicationManager.getApplication().isUnitTestMode()) {
+    final Runnable runnable = () -> inlineHandler.invoke(project, new PsiElement[]{methodCallExpression}, null);
+    final Application application = project.getApplication();
+    if (application.isUnitTestMode()) {
       runnable.run();
     }
     else {
-      ApplicationManager.getApplication().invokeLater(runnable, project.getDisposed());
+      application.invokeLater(runnable, project.getDisposed());
     }
   }
 }

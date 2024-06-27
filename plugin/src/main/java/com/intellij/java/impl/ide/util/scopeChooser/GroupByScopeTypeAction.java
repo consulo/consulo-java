@@ -21,31 +21,35 @@
 package com.intellij.java.impl.ide.util.scopeChooser;
 
 import consulo.application.AllIcons;
-import consulo.ide.IdeBundle;
-import consulo.ui.ex.action.AnActionEvent;
-import consulo.ui.ex.action.ToggleAction;
 import consulo.ide.impl.idea.packageDependencies.DependencyUISettings;
 import consulo.ide.impl.idea.packageDependencies.ui.ProjectPatternProvider;
+import consulo.platform.base.localize.IdeLocalize;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.ToggleAction;
+import jakarta.annotation.Nonnull;
 
 public final class GroupByScopeTypeAction extends ToggleAction {
   private final Runnable myUpdate;
 
   public GroupByScopeTypeAction(Runnable update) {
-    super(IdeBundle.message("action.group.by.scope.type"),
-          IdeBundle.message("action.description.group.by.scope"), AllIcons.Actions.GroupByTestProduction);
+    super(
+      IdeLocalize.actionGroupByScopeType(),
+      IdeLocalize.actionDescriptionGroupByScope(),
+      AllIcons.Actions.GroupByTestProduction
+    );
     myUpdate = update;
   }
 
-  public boolean isSelected(AnActionEvent event) {
+  public boolean isSelected(@Nonnull AnActionEvent event) {
     return DependencyUISettings.getInstance().UI_GROUP_BY_SCOPE_TYPE;
   }
 
-  public void setSelected(AnActionEvent event, boolean flag) {
+  public void setSelected(@Nonnull AnActionEvent event, boolean flag) {
     DependencyUISettings.getInstance().UI_GROUP_BY_SCOPE_TYPE = flag;
     myUpdate.run();
   }
 
-  public void update(final AnActionEvent e) {
+  public void update(@Nonnull final AnActionEvent e) {
     super.update(e);
     e.getPresentation().setVisible(DependencyUISettings.getInstance().SCOPE_TYPE != ProjectPatternProvider.FILE);
   }

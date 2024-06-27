@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.packageDependencies.ui;
 
-import com.intellij.java.impl.cyclicDependencies.ui.CyclicDependenciesPanel;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.application.AllIcons;
 import consulo.ide.impl.idea.packageDependencies.ui.FileNode;
 import consulo.ide.impl.idea.packageDependencies.ui.PackageDependenciesNode;
+import consulo.language.editor.scope.localize.AnalysisScopeLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.ui.image.Image;
@@ -41,7 +41,7 @@ public class PackageNode extends PackageDependenciesNode {
     myPackage = aPackage;
     myPackageName = showFQName ? aPackage.getQualifiedName() : aPackage.getName();
     if (myPackageName == null || myPackageName.length() == 0) {
-      myPackageName = CyclicDependenciesPanel.DEFAULT_PACKAGE_ABBREVIATION;
+      myPackageName = AnalysisScopeLocalize.dependenciesTreeNodeDefaultPackageAbbreviation().get();
     }
     String packageQName = aPackage.getQualifiedName();
     if (packageQName.length() == 0) {
@@ -118,7 +118,7 @@ public class PackageNode extends PackageDependenciesNode {
     Set<PsiFile> files = deps.keySet();
     String packageName = myPackageQName;
     for (PsiFile file : files) {
-      if (file instanceof PsiJavaFile && Comparing.equal(packageName, ((PsiJavaFile) file).getPackageName())) {
+      if (file instanceof PsiJavaFile javaFile && Comparing.equal(packageName, javaFile.getPackageName())) {
         return true;
       }
     }

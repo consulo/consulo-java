@@ -5,7 +5,6 @@ import com.intellij.java.language.psi.PsiLambdaExpression;
 import com.intellij.java.language.psi.PsiMember;
 import consulo.application.AllIcons;
 import consulo.application.dumb.DumbAware;
-import consulo.application.util.SystemInfo;
 import consulo.fileEditor.structureView.tree.ActionPresentation;
 import consulo.fileEditor.structureView.tree.ActionPresentationData;
 import consulo.fileEditor.structureView.tree.FileStructureNodeProvider;
@@ -14,10 +13,11 @@ import consulo.java.analysis.codeInsight.JavaCodeInsightBundle;
 import consulo.language.editor.structureView.PsiTreeElementBase;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.SyntaxTraverser;
+import consulo.platform.Platform;
 import consulo.ui.ex.action.KeyboardShortcut;
 import consulo.ui.ex.action.Shortcut;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -49,7 +49,7 @@ public class JavaLambdaNodeProvider implements FileStructureNodeProvider<JavaLam
   @Nonnull
   @Override
   public Shortcut[] getShortcut() {
-    return new Shortcut[]{KeyboardShortcut.fromString(SystemInfo.isMac ? "meta L" : "control L")};
+    return new Shortcut[]{KeyboardShortcut.fromString(Platform.current().os().isMac() ? "meta L" : "control L")};
   }
 
   @Nonnull

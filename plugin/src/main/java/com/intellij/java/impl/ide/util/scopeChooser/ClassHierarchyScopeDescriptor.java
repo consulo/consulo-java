@@ -20,21 +20,21 @@
  */
 package com.intellij.java.impl.ide.util.scopeChooser;
 
-import consulo.ide.IdeBundle;
-import consulo.content.scope.ScopeDescriptor;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.impl.psi.presentation.java.ClassPresentationUtil;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
-import consulo.project.Project;
+import consulo.content.scope.ScopeDescriptor;
+import consulo.content.scope.SearchScope;
+import consulo.java.impl.JavaBundle;
+import consulo.language.editor.util.PsiUtilBase;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.LocalSearchScope;
-import consulo.content.scope.SearchScope;
-import consulo.language.editor.util.PsiUtilBase;
-import consulo.java.impl.JavaBundle;
-
+import consulo.platform.base.localize.IdeLocalize;
+import consulo.project.Project;
 import jakarta.annotation.Nullable;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -55,7 +55,8 @@ public class ClassHierarchyScopeDescriptor extends ScopeDescriptor {
   @Nullable
   public SearchScope getScope() {
     if (myCachedScope == null) {
-      TreeClassChooser chooser = TreeClassChooserFactory.getInstance(myProject).createAllProjectScopeChooser(IdeBundle.message("prompt.choose.base.class.of.the.hierarchy"));
+      TreeClassChooser chooser = TreeClassChooserFactory.getInstance(myProject)
+        .createAllProjectScopeChooser(IdeLocalize.promptChooseBaseClassOfTheHierarchy().get());
 
       chooser.showDialog();
 
@@ -67,8 +68,10 @@ public class ClassHierarchyScopeDescriptor extends ScopeDescriptor {
 
       classesToSearch.addAll(ClassInheritorsSearch.search(aClass, true).findAll());
 
-      myCachedScope = new LocalSearchScope(PsiUtilBase.toPsiElementArray(classesToSearch),
-                                           IdeBundle.message("scope.hierarchy", ClassPresentationUtil.getNameForClass(aClass, true)));
+      myCachedScope = new LocalSearchScope(
+        PsiUtilBase.toPsiElementArray(classesToSearch),
+        IdeLocalize.scopeHierarchy(ClassPresentationUtil.getNameForClass(aClass, true)).get()
+      );
     }
 
     return myCachedScope;

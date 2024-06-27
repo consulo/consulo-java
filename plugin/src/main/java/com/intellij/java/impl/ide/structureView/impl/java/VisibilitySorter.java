@@ -16,9 +16,9 @@
 package com.intellij.java.impl.ide.structureView.impl.java;
 
 import consulo.application.AllIcons;
-import consulo.ide.IdeBundle;
 import consulo.fileEditor.structureView.tree.ActionPresentation;
 import consulo.fileEditor.structureView.tree.Sorter;
+import consulo.platform.base.localize.IdeLocalize;
 import consulo.ui.image.Image;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
@@ -31,7 +31,7 @@ public class VisibilitySorter implements Sorter{
 
   private static final ActionPresentation PRESENTATION = new ActionPresentation() {
     public String getText() {
-      return IdeBundle.message("action.structureview.sort.by.visibility");
+      return IdeLocalize.actionStructureviewSortByVisibility().get();
     }
 
     public String getDescription() {
@@ -42,6 +42,7 @@ public class VisibilitySorter implements Sorter{
       return AllIcons.ObjectBrowser.VisibilitySort;
     }
   };
+
   @NonNls public static final String ID = "VISIBILITY_SORTER";
 
   public Comparator getComparator() {

@@ -30,11 +30,11 @@ import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.search.PackageScope;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.application.Result;
 import consulo.document.Document;
 import consulo.document.util.TextRange;
 import consulo.ide.IdeView;
-import consulo.language.editor.CommonDataKeys;
 import consulo.language.editor.LangDataKeys;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.action.SelectWordUtil;
@@ -52,10 +52,9 @@ import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.SmartList;
 import consulo.util.lang.StringUtil;
-import consulo.util.lang.function.Condition;
 import consulo.util.lang.ref.Ref;
-
 import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
@@ -70,7 +69,7 @@ public class GenerateVisitorByHierarchyAction extends AnAction {
   public void actionPerformed(AnActionEvent e) {
     final Ref<String> visitorNameRef = Ref.create("MyVisitor");
     final Ref<PsiClass> parentClassRef = Ref.create(null);
-    final Project project = e.getData(CommonDataKeys.PROJECT);
+    final Project project = e.getData(Project.KEY);
     assert project != null;
     final PsiNameHelper helper = PsiNameHelper.getInstance(project);
     final PackageChooserDialog dialog = new PackageChooserDialog("Choose Target Package and Hierarchy Root Class", project) {
@@ -90,7 +89,6 @@ public class GenerateVisitorByHierarchyAction extends AnAction {
         return super.doValidate();
       }
 
-
       protected JComponent createCenterPanel() {
         final JPanel panel = new JPanel(new BorderLayout());
         panel.add(super.createCenterPanel(), BorderLayout.CENTER);
@@ -100,7 +98,7 @@ public class GenerateVisitorByHierarchyAction extends AnAction {
       }
 
       private JComponent createNamePanel() {
-        LabeledComponent<JTextField> labeledComponent = new LabeledComponent<JTextField>();
+        LabeledComponent<JTextField> labeledComponent = new LabeledComponent<>();
         labeledComponent.setText("Visitor class");
         final JTextField nameField = new JTextField(visitorNameRef.get());
         labeledComponent.setComponent(nameField);
@@ -113,7 +111,7 @@ public class GenerateVisitorByHierarchyAction extends AnAction {
       }
 
       private JComponent createBaseClassPanel() {
-        LabeledComponent<EditorTextField> labeledComponent = new LabeledComponent<EditorTextField>();
+        LabeledComponent<EditorTextField> labeledComponent = new LabeledComponent<>();
         labeledComponent.setText("Hierarchy root class");
         final JavaCodeFragmentFactory factory = JavaCodeFragmentFactory.getInstance(project);
         final PsiTypeCodeFragment codeFragment = factory.createTypeCodeFragment("", null, true, JavaCodeFragmentFactory.ALLOW_VOID);
@@ -125,7 +123,7 @@ public class GenerateVisitorByHierarchyAction extends AnAction {
             parentClassRef.set(null);
             try {
               final PsiType psiType = codeFragment.getType();
-              final PsiClass psiClass = psiType instanceof PsiClassType ? ((PsiClassType)psiType).resolve() : null;
+              final PsiClass psiClass = psiType instanceof PsiClassType classType ? classType.resolve() : null;
               parentClassRef.set(psiClass);
             }
             catch (PsiTypeCodeFragment.IncorrectTypeException e1) {
@@ -137,11 +135,11 @@ public class GenerateVisitorByHierarchyAction extends AnAction {
       }
     };
     final PsiElement element = e.getData(LangDataKeys.PSI_ELEMENT);
-    if (element instanceof PsiJavaPackage) {
-      dialog.selectPackage(((PsiJavaPackage)element).getQualifiedName());
+    if (element instanceof PsiJavaPackage javaPackage) {
+      dialog.selectPackage(javaPackage.getQualifiedName());
     }
-    else if (element instanceof PsiDirectory) {
-      final PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage((PsiDirectory)element);
+    else if (element instanceof PsiDirectory directory) {
+      final PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(directory);
       if (aPackage != null) {
         dialog.selectPackage(aPackage.getQualifiedName());
       }
@@ -149,7 +147,7 @@ public class GenerateVisitorByHierarchyAction extends AnAction {
     dialog.show();
     if (dialog.getExitCode() != DialogWrapper.OK_EXIT_CODE ||
         dialog.getSelectedPackage() == null ||
-        dialog.getSelectedPackage().getQualifiedName().length() == 0 ||
+        dialog.getSelectedPackage().getQualifiedName().isEmpty() ||
         parentClassRef.isNull()) {
       return;
     }
@@ -162,38 +160,41 @@ public class GenerateVisitorByHierarchyAction extends AnAction {
   }
 
   public static String generateEverything(final PsiJavaPackage psiPackage, final PsiClass rootClass, final String visitorName) {
-    final String visitorQName = PsiNameHelper.getShortClassName(visitorName).equals(visitorName)?
-                                psiPackage.getQualifiedName()+"."+ visitorName : visitorName;
-    final PsiDirectory directory = PackageUtil.findOrCreateDirectoryForPackage(rootClass.getProject(),
-                                                                               StringUtil.getPackageName(visitorQName), null, false);
+    final String visitorQName = PsiNameHelper.getShortClassName(visitorName).equals(visitorName)
+      ? psiPackage.getQualifiedName() + "." + visitorName : visitorName;
+    final PsiDirectory directory = PackageUtil.findOrCreateDirectoryForPackage(
+      rootClass.getProject(),
+      StringUtil.getPackageName(visitorQName),
+      null,
+      false
+    );
     generateVisitorClass(visitorQName, rootClass, directory, new PackageScope(psiPackage, false, false));
     return visitorQName;
   }
 
   public void update(final AnActionEvent e) {
-    e.getPresentation().setEnabled(e.getData(CommonDataKeys.PROJECT) != null);
+    e.getPresentation().setEnabled(e.getData(Project.KEY) != null);
   }
 
-  private static void generateVisitorClass(final String visitorName,
-                                           final PsiClass baseClass,
-                                           final PsiDirectory directory,
-                                           final GlobalSearchScope scope) {
-
-    final Map<PsiClass, Set<PsiClass>> classes = new HashMap<PsiClass, Set<PsiClass>>();
+  private static void generateVisitorClass(
+    final String visitorName,
+    final PsiClass baseClass,
+    final PsiDirectory directory,
+    final GlobalSearchScope scope
+  ) {
+    final Map<PsiClass, Set<PsiClass>> classes = new HashMap<>();
     for (PsiClass aClass : ClassInheritorsSearch.search(baseClass, scope, true).findAll()) {
       if (aClass.hasModifierProperty(PsiModifier.ABSTRACT) == baseClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
-        final List<PsiClass> implementors =
-          ContainerUtil.findAll(ClassInheritorsSearch.search(aClass).findAll(), new Condition<PsiClass>() {
-            public boolean value(final PsiClass psiClass) {
-              return !psiClass.hasModifierProperty(PsiModifier.ABSTRACT);
-            }
-          });
-        classes.put(aClass, new HashSet<PsiClass>(implementors));
+        final List<PsiClass> implementors = ContainerUtil.findAll(
+          ClassInheritorsSearch.search(aClass).findAll(),
+          psiClass -> !psiClass.hasModifierProperty(PsiModifier.ABSTRACT)
+        );
+        classes.put(aClass, new HashSet<>(implementors));
       }
     }
-    final Map<PsiClass, Set<PsiClass>> pathMap = new HashMap<PsiClass, Set<PsiClass>>();
+    final Map<PsiClass, Set<PsiClass>> pathMap = new HashMap<>();
     for (PsiClass aClass : classes.keySet()) {
-      final Set<PsiClass> superClasses = new LinkedHashSet<PsiClass>();
+      final Set<PsiClass> superClasses = new LinkedHashSet<>();
       for (PsiClass superClass : aClass.getSupers()) {
         if (superClass.isInheritor(baseClass, true)) {
           superClasses.add(superClass);
@@ -209,7 +210,7 @@ public class GenerateVisitorByHierarchyAction extends AnAction {
       pathMap.put(aClass, superClasses);
     }
     pathMap.put(baseClass, Collections.<PsiClass>emptySet());
-    final ArrayList<PsiFile> psiFiles = new ArrayList<PsiFile>();
+    final ArrayList<PsiFile> psiFiles = new ArrayList<>();
     for (Set<PsiClass> implementors : classes.values()) {
       for (PsiClass psiClass : implementors) {
         psiFiles.add(psiClass.getContainingFile());
@@ -245,7 +246,7 @@ public class GenerateVisitorByHierarchyAction extends AnAction {
   @Nonnull
   private static String detectClassPrefix(Collection<PsiClass> classes) {
     String detectedPrefix = "";
-    List<TextRange> range = new SmartList<TextRange>();
+    List<TextRange> range = new SmartList<>();
     for (PsiClass aClass : classes) {
       String className = aClass.getName();
       SelectWordUtil.addWordSelection(true, className, 0, range);
@@ -259,19 +260,27 @@ public class GenerateVisitorByHierarchyAction extends AnAction {
     return detectedPrefix;
   }
 
-  private static void generateVisitorClass(final PsiClass visitorClass, final Map<PsiClass, Set<PsiClass>> classes,
-                                           final Map<PsiClass, Set<PsiClass>> pathMap, int classPrefix) throws Throwable {
+  @RequiredReadAction
+  private static void generateVisitorClass(
+    final PsiClass visitorClass,
+    final Map<PsiClass, Set<PsiClass>> classes,
+    final Map<PsiClass, Set<PsiClass>> pathMap,
+    int classPrefix
+  ) throws Throwable {
     final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(visitorClass.getProject()).getElementFactory();
     for (PsiClass psiClass : classes.keySet()) {
       final PsiMethod method = elementFactory.createMethodFromText(
-        "public void accept(final " + visitorClass.getQualifiedName() + " visitor) { visitor.visit" + psiClass.getName().substring(classPrefix) + "(this); }", psiClass);
+        "public void accept(final " + visitorClass.getQualifiedName() + " visitor) {" +
+          " visitor.visit" + psiClass.getName().substring(classPrefix) + "(this); }",
+        psiClass
+      );
       for (PsiClass implementor : classes.get(psiClass)) {
         addOrReplaceMethod(method, implementor);
       }
     }
 
-    final Set<PsiClass> visitedClasses = new HashSet<PsiClass>();
-    final LinkedList<PsiClass> toProcess = new LinkedList<PsiClass>(classes.keySet());
+    final Set<PsiClass> visitedClasses = new HashSet<>();
+    final LinkedList<PsiClass> toProcess = new LinkedList<>(classes.keySet());
     while (!toProcess.isEmpty()) {
       final PsiClass psiClass = toProcess.removeFirst();
       if (!visitedClasses.add(psiClass)) continue;
@@ -297,15 +306,14 @@ public class GenerateVisitorByHierarchyAction extends AnAction {
 
   }
 
+  @RequiredReadAction
   private static void addOrReplaceMethod(final PsiMethod method, final PsiClass implementor) throws IncorrectOperationException {
     final PsiMethod accept = implementor.findMethodBySignature(method, false);
     if (accept != null) {
       accept.replace(method);
     }
     else {
-      GenerateMembersUtil.insertMembersAtOffset(implementor.getContainingFile(), implementor.getLastChild().getTextOffset(), Collections.<GenerationInfo>singletonList(new PsiGenerationInfo<PsiMethod>(method)));
+      GenerateMembersUtil.insertMembersAtOffset(implementor.getContainingFile(), implementor.getLastChild().getTextOffset(), Collections.<GenerationInfo>singletonList(new PsiGenerationInfo<>(method)));
     }
   }
-
-
 }
