@@ -15,17 +15,17 @@
  */
 package com.intellij.java.impl.codeInspection.duplicateThrows;
 
-import com.intellij.java.analysis.codeInspection.GroupNames;
+import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;
 import com.intellij.java.impl.codeInspection.DeleteThrowsFix;
+import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.ProblemsHolder;
-import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
-import com.intellij.java.language.psi.*;
-import consulo.language.psi.*;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -40,7 +40,7 @@ public class DuplicateThrowsInspection extends BaseLocalInspectionTool {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionsBundle.message("inspection.duplicate.throws.display.name");
+    return InspectionLocalize.inspectionDuplicateThrowsDisplayName().get();
   }
 
   @Override
@@ -51,7 +51,7 @@ public class DuplicateThrowsInspection extends BaseLocalInspectionTool {
   @Override
   @Nonnull
   public String getGroupDisplayName() {
-    return GroupNames.DECLARATION_REDUNDANCY;
+    return InspectionLocalize.groupNamesDeclarationRedundancy().get();
   }
 
   @Override
@@ -64,18 +64,23 @@ public class DuplicateThrowsInspection extends BaseLocalInspectionTool {
   @Override
   public JComponent createOptionsPanel() {
     return new SingleCheckboxOptionsPanel(
-      InspectionsBundle.message("inspection.duplicate.throws.ignore.subclassing.option"), this, "ignoreSubclassing");
+      InspectionLocalize.inspectionDuplicateThrowsIgnoreSubclassingOption().get(),
+      this,
+      "ignoreSubclassing"
+    );
   }
 
   @Override
   @Nonnull
-  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
-                                            boolean isOnTheFly,
-                                            LocalInspectionToolSession session,
-                                            Object state) {
+  public PsiElementVisitor buildVisitorImpl(
+    @Nonnull final ProblemsHolder holder,
+    boolean isOnTheFly,
+    LocalInspectionToolSession session,
+    Object state
+  ) {
     return new JavaElementVisitor() {
 
-      @Override public void visitMethod(PsiMethod method) {
+      @Override public void visitMethod(@Nonnull PsiMethod method) {
         PsiReferenceList throwsList = method.getThrowsList();
         PsiJavaCodeReferenceElement[] refs = throwsList.getReferenceElements();
         PsiClassType[] types = throwsList.getReferencedTypes();
@@ -83,23 +88,23 @@ public class DuplicateThrowsInspection extends BaseLocalInspectionTool {
           PsiClassType type = types[i];
           for (int j = i+1; j < types.length; j++) {
             PsiClassType otherType = types[j];
-            String problem = null;
+            LocalizeValue problem = null;
             PsiJavaCodeReferenceElement ref = refs[i];
             if (type.equals(otherType)) {
-              problem = InspectionsBundle.message("inspection.duplicate.throws.problem");
+              problem = InspectionLocalize.inspectionDuplicateThrowsProblem();
             }
             else if (!ignoreSubclassing) {
               if (otherType.isAssignableFrom(type)) {
-                problem = InspectionsBundle.message("inspection.duplicate.throws.more.general.problem", otherType.getCanonicalText());
+                problem = InspectionLocalize.inspectionDuplicateThrowsMoreGeneralProblem(otherType.getCanonicalText());
               }
               else if (type.isAssignableFrom(otherType)) {
-                problem = InspectionsBundle.message("inspection.duplicate.throws.more.general.problem", type.getCanonicalText());
+                problem = InspectionLocalize.inspectionDuplicateThrowsMoreGeneralProblem(type.getCanonicalText());
                 ref = refs[j];
                 type = otherType;
               }
             }
             if (problem != null) {
-              holder.registerProblem(ref, problem, ProblemHighlightType.LIKE_UNUSED_SYMBOL, new DeleteThrowsFix(method, type));
+              holder.registerProblem(ref, problem.get(), ProblemHighlightType.LIKE_UNUSED_SYMBOL, new DeleteThrowsFix(method, type));
             }
           }
         }

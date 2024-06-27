@@ -16,28 +16,32 @@
 package com.intellij.java.impl.codeInspection.defUse;
 
 import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
-import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.impl.psi.controlFlow.DefUseUtil;
 import com.intellij.java.language.psi.*;
-import consulo.language.editor.inspection.*;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.language.editor.inspection.LocalInspectionToolSession;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.language.editor.inspection.ProblemsHolder;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
+import consulo.ui.ex.awt.JBUI;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
-import java.util.*;
+import java.util.Set;
 
 public abstract class DefUseInspectionBase extends BaseJavaBatchLocalInspectionTool {
   public boolean REPORT_PREFIX_EXPRESSIONS = false;
   public boolean REPORT_POSTFIX_EXPRESSIONS = true;
   public boolean REPORT_REDUNDANT_INITIALIZER = true;
 
-  public static final String DISPLAY_NAME = InspectionsBundle.message("inspection.unused.assignment.display.name");
   @NonNls
   public static final String SHORT_NAME = "UnusedAssignment";
 
@@ -49,6 +53,7 @@ public abstract class DefUseInspectionBase extends BaseJavaBatchLocalInspectionT
                                             Object state) {
     return new JavaElementVisitor() {
       @Override
+      @RequiredReadAction
       public void visitMethod(PsiMethod method) {
         checkCodeBlock(method.getBody(), holder, isOnTheFly);
       }
@@ -60,17 +65,20 @@ public abstract class DefUseInspectionBase extends BaseJavaBatchLocalInspectionT
     };
   }
 
-  private void checkCodeBlock(final PsiCodeBlock body,
-                              final ProblemsHolder holder,
-                              final boolean isOnTheFly) {
+  @RequiredReadAction
+  private void checkCodeBlock(
+    final PsiCodeBlock body,
+    final ProblemsHolder holder,
+    final boolean isOnTheFly
+  ) {
     if (body == null) return;
-    final Set<PsiVariable> usedVariables = new HashSet<PsiVariable>();
+    final Set<PsiVariable> usedVariables = new HashSet<>();
     List<DefUseUtil.Info> unusedDefs = DefUseUtil.getUnusedDefs(body, usedVariables);
 
     if (unusedDefs != null && !unusedDefs.isEmpty()) {
-      Collections.sort(unusedDefs, new Comparator<DefUseUtil.Info>() {
-        @Override
-        public int compare(DefUseUtil.Info o1, DefUseUtil.Info o2) {
+      Collections.sort(
+        unusedDefs,
+        (o1, o2) -> {
           int offset1 = o1.getContext().getTextOffset();
           int offset2 = o2.getContext().getTextOffset();
 
@@ -79,7 +87,7 @@ public abstract class DefUseInspectionBase extends BaseJavaBatchLocalInspectionT
 
           return 1;
         }
-      });
+      );
 
       for (DefUseUtil.Info info : unusedDefs) {
         PsiElement context = info.getContext();
@@ -88,29 +96,41 @@ public abstract class DefUseInspectionBase extends BaseJavaBatchLocalInspectionT
         if (context instanceof PsiDeclarationStatement || context instanceof PsiResourceVariable) {
           if (!info.isRead()) {
             if (!isOnTheFly) {
-              holder.registerProblem(psiVariable.getNameIdentifier(),
-                  InspectionsBundle.message("inspection.unused.assignment.problem.descriptor1", "<code>#ref</code> #loc"),
-                  ProblemHighlightType.LIKE_UNUSED_SYMBOL);
+              holder.registerProblem(
+                psiVariable.getNameIdentifier(),
+                InspectionLocalize.inspectionUnusedAssignmentProblemDescriptor1("<code>#ref</code> #loc").get(),
+                ProblemHighlightType.LIKE_UNUSED_SYMBOL
+              );
             }
           } else {
             if (REPORT_REDUNDANT_INITIALIZER) {
-              holder.registerProblem(psiVariable.getInitializer(),
-                  InspectionsBundle.message("inspection.unused.assignment.problem.descriptor2",
-                      "<code>" + psiVariable.getName() + "</code>", "<code>#ref</code> #loc"),
-                  ProblemHighlightType.LIKE_UNUSED_SYMBOL,
-                  createRemoveInitializerFix());
+              holder.registerProblem(
+                psiVariable.getInitializer(),
+                InspectionLocalize.inspectionUnusedAssignmentProblemDescriptor2(
+                  "<code>" + psiVariable.getName() + "</code>",
+                  "<code>#ref</code> #loc"
+                ).get(),
+                ProblemHighlightType.LIKE_UNUSED_SYMBOL,
+                createRemoveInitializerFix()
+              );
             }
           }
-        } else if (context instanceof PsiAssignmentExpression) {
-          final PsiAssignmentExpression assignment = (PsiAssignmentExpression) context;
-          holder.registerProblem(assignment.getLExpression(),
-              InspectionsBundle.message("inspection.unused.assignment.problem.descriptor3",
-                  assignment.getRExpression().getText(), "<code>#ref</code>" + " #loc"), ProblemHighlightType.LIKE_UNUSED_SYMBOL);
+        } else if (context instanceof PsiAssignmentExpression assignment) {
+          holder.registerProblem(
+            assignment.getLExpression(),
+            InspectionLocalize.inspectionUnusedAssignmentProblemDescriptor3(
+              assignment.getRExpression().getText(),
+              "<code>#ref</code>" + " #loc"
+            ).get(),
+            ProblemHighlightType.LIKE_UNUSED_SYMBOL
+          );
         } else {
           if (context instanceof PsiPrefixExpression && REPORT_PREFIX_EXPRESSIONS ||
               context instanceof PsiPostfixExpression && REPORT_POSTFIX_EXPRESSIONS) {
-            holder.registerProblem(context,
-                InspectionsBundle.message("inspection.unused.assignment.problem.descriptor4", "<code>#ref</code> #loc"));
+            holder.registerProblem(
+              context,
+              InspectionLocalize.inspectionUnusedAssignmentProblemDescriptor4("<code>#ref</code> #loc").get()
+            );
           }
         }
       }
@@ -124,21 +144,21 @@ public abstract class DefUseInspectionBase extends BaseJavaBatchLocalInspectionT
       @Override
       public void visitLocalVariable(PsiLocalVariable variable) {
         if (!usedVariables.contains(variable) && variable.getInitializer() == null && !isOnTheFly) {
-          holder.registerProblem(variable.getNameIdentifier(),
-              InspectionsBundle.message("inspection.unused.assignment.problem.descriptor5", "<code>#ref</code> #loc"),
-              ProblemHighlightType.LIKE_UNUSED_SYMBOL);
+          holder.registerProblem(
+            variable.getNameIdentifier(),
+            InspectionLocalize.inspectionUnusedAssignmentProblemDescriptor5("<code>#ref</code> #loc").get(),
+            ProblemHighlightType.LIKE_UNUSED_SYMBOL
+          );
         }
       }
 
       @Override
+      @RequiredReadAction
       public void visitAssignmentExpression(PsiAssignmentExpression expression) {
         PsiExpression lExpression = expression.getLExpression();
         PsiExpression rExpression = expression.getRExpression();
 
-        if (lExpression instanceof PsiReferenceExpression && rExpression instanceof PsiReferenceExpression) {
-          PsiReferenceExpression lRef = (PsiReferenceExpression) lExpression;
-          PsiReferenceExpression rRef = (PsiReferenceExpression) rExpression;
-
+        if (lExpression instanceof PsiReferenceExpression lRef && rExpression instanceof PsiReferenceExpression rRef) {
           if (lRef.resolve() != rRef.resolve()) return;
           PsiExpression lQualifier = lRef.getQualifierExpression();
           PsiExpression rQualifier = rRef.getQualifierExpression();
@@ -147,8 +167,10 @@ public abstract class DefUseInspectionBase extends BaseJavaBatchLocalInspectionT
               lQualifier instanceof PsiThisExpression && rQualifier instanceof PsiThisExpression ||
               lQualifier instanceof PsiThisExpression && rQualifier == null ||
               lQualifier == null && rQualifier instanceof PsiThisExpression) && !isOnTheFly) {
-            holder.registerProblem(expression,
-                InspectionsBundle.message("inspection.unused.assignment.problem.descriptor6", "<code>#ref</code>"));
+            holder.registerProblem(
+              expression,
+              InspectionLocalize.inspectionUnusedAssignmentProblemDescriptor6("<code>#ref</code>").get()
+            );
           }
         }
       }
@@ -178,38 +200,23 @@ public abstract class DefUseInspectionBase extends BaseJavaBatchLocalInspectionT
       gc.fill = GridBagConstraints.HORIZONTAL;
       gc.anchor = GridBagConstraints.NORTHWEST;
 
-      myReportInitializer = new JCheckBox(InspectionsBundle.message("inspection.unused.assignment.option2"));
+      myReportInitializer = new JCheckBox(InspectionLocalize.inspectionUnusedAssignmentOption2().get());
       myReportInitializer.setSelected(REPORT_REDUNDANT_INITIALIZER);
-      myReportInitializer.getModel().addChangeListener(new ChangeListener() {
-        @Override
-        public void stateChanged(ChangeEvent e) {
-          REPORT_REDUNDANT_INITIALIZER = myReportInitializer.isSelected();
-        }
-      });
-      gc.insets = new Insets(0, 0, 15, 0);
+      myReportInitializer.getModel().addChangeListener(e -> REPORT_REDUNDANT_INITIALIZER = myReportInitializer.isSelected());
+      gc.insets = JBUI.insetsBottom(15);
       gc.gridy = 0;
       add(myReportInitializer, gc);
 
-      myReportPrefix = new JCheckBox(InspectionsBundle.message("inspection.unused.assignment.option"));
+      myReportPrefix = new JCheckBox(InspectionLocalize.inspectionUnusedAssignmentOption().get());
       myReportPrefix.setSelected(REPORT_PREFIX_EXPRESSIONS);
-      myReportPrefix.getModel().addChangeListener(new ChangeListener() {
-        @Override
-        public void stateChanged(ChangeEvent e) {
-          REPORT_PREFIX_EXPRESSIONS = myReportPrefix.isSelected();
-        }
-      });
-      gc.insets = new Insets(0, 0, 0, 0);
+      myReportPrefix.getModel().addChangeListener(e -> REPORT_PREFIX_EXPRESSIONS = myReportPrefix.isSelected());
+      gc.insets = JBUI.emptyInsets();
       gc.gridy++;
       add(myReportPrefix, gc);
 
-      myReportPostfix = new JCheckBox(InspectionsBundle.message("inspection.unused.assignment.option1"));
+      myReportPostfix = new JCheckBox(InspectionLocalize.inspectionUnusedAssignmentOption1().get());
       myReportPostfix.setSelected(REPORT_POSTFIX_EXPRESSIONS);
-      myReportPostfix.getModel().addChangeListener(new ChangeListener() {
-        @Override
-        public void stateChanged(ChangeEvent e) {
-          REPORT_POSTFIX_EXPRESSIONS = myReportPostfix.isSelected();
-        }
-      });
+      myReportPostfix.getModel().addChangeListener(e-> REPORT_POSTFIX_EXPRESSIONS = myReportPostfix.isSelected());
 
       gc.weighty = 1;
       gc.gridy++;
@@ -221,13 +228,13 @@ public abstract class DefUseInspectionBase extends BaseJavaBatchLocalInspectionT
   @Override
   @Nonnull
   public String getDisplayName() {
-    return DISPLAY_NAME;
+    return InspectionLocalize.inspectionUnusedAssignmentDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String getGroupDisplayName() {
-    return GroupNames.BUGS_GROUP_NAME;
+    return InspectionLocalize.groupNamesProbableBugs().get();
   }
 
   @Override

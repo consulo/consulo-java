@@ -17,18 +17,17 @@ package com.intellij.java.impl.codeInspection.sameReturnValue;
 
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionTool;
-import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaVisitor;
 import com.intellij.java.analysis.codeInspection.reference.RefMethod;
-import com.intellij.java.language.psi.PsiMethod;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.*;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.reference.RefElement;
 import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.reference.RefManager;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.scope.AnalysisScope;
-
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -40,49 +39,47 @@ public class SameReturnValueInspection extends GlobalJavaInspectionTool
 {
 	@Override
 	@Nullable
-	public CommonProblemDescriptor[] checkElement(RefEntity refEntity,
-												  AnalysisScope scope,
-												  InspectionManager manager,
-												  GlobalInspectionContext globalContext,
-												  ProblemDescriptionsProcessor processor,
-												  Object state)
+	public CommonProblemDescriptor[] checkElement(
+		@Nonnull RefEntity refEntity,
+		@Nonnull AnalysisScope scope,
+		@Nonnull InspectionManager manager,
+		@Nonnull GlobalInspectionContext globalContext,
+		@Nonnull ProblemDescriptionsProcessor processor,
+		@Nonnull Object state
+	)
 	{
-		if(refEntity instanceof RefMethod)
+		if (refEntity instanceof RefMethod refMethod)
 		{
-			final RefMethod refMethod = (RefMethod) refEntity;
-
-			if(refMethod.isConstructor())
-			{
-				return null;
-			}
-			if(refMethod.hasSuperMethods())
+			if (refMethod.isConstructor() || refMethod.hasSuperMethods())
 			{
 				return null;
 			}
 
 			String returnValue = refMethod.getReturnValueIfSame();
-			if(returnValue != null)
+			if (returnValue != null)
 			{
-				final String message;
-				if(refMethod.getDerivedMethods().isEmpty())
+				final LocalizeValue message;
+				if (refMethod.getDerivedMethods().isEmpty())
 				{
-					message = InspectionsBundle.message("inspection.same.return.value.problem.descriptor", "<code>" + returnValue + "</code>");
+					message = InspectionLocalize.inspectionSameReturnValueProblemDescriptor("<code>" + returnValue + "</code>");
 				}
-				else if(refMethod.hasBody())
+				else if (refMethod.hasBody())
 				{
-					message = InspectionsBundle.message("inspection.same.return.value.problem.descriptor1", "<code>" + returnValue + "</code>");
+					message = InspectionLocalize.inspectionSameReturnValueProblemDescriptor1("<code>" + returnValue + "</code>");
 				}
 				else
 				{
-					message = InspectionsBundle.message("inspection.same.return.value.problem.descriptor2", "<code>" + returnValue + "</code>");
+					message = InspectionLocalize.inspectionSameReturnValueProblemDescriptor2("<code>" + returnValue + "</code>");
 				}
 
 				return new ProblemDescriptor[]{
-						manager.createProblemDescriptor(refMethod.getElement().getNavigationElement(),
-								message,
-								false,
-								null,
-								ProblemHighlightType.GENERIC_ERROR_OR_WARNING)
+					manager.createProblemDescriptor(
+						refMethod.getElement().getNavigationElement(),
+						message.get(),
+						false,
+						null,
+						ProblemHighlightType.GENERIC_ERROR_OR_WARNING
+					)
 				};
 			}
 		}
@@ -93,29 +90,27 @@ public class SameReturnValueInspection extends GlobalJavaInspectionTool
 
 	@Override
 	protected boolean queryExternalUsagesRequests(
-			final RefManager manager, final GlobalJavaInspectionContext globalContext,
-			final ProblemDescriptionsProcessor processor, Object state)
+		final RefManager manager,
+		final GlobalJavaInspectionContext globalContext,
+		final ProblemDescriptionsProcessor processor,
+		Object state
+	)
 	{
 		manager.iterate(new RefJavaVisitor()
 		{
 			@Override
 			public void visitElement(@Nonnull RefEntity refEntity)
 			{
-				if(refEntity instanceof RefElement && processor.getDescriptions(refEntity) != null)
+				if (refEntity instanceof RefElement && processor.getDescriptions(refEntity) != null)
 				{
 					refEntity.accept(new RefJavaVisitor()
 					{
 						@Override
 						public void visitMethod(@Nonnull final RefMethod refMethod)
 						{
-							globalContext.enqueueDerivedMethodsProcessor(refMethod, new GlobalJavaInspectionContext.DerivedMethodsProcessor()
-							{
-								@Override
-								public boolean process(PsiMethod derivedMethod)
-								{
-									processor.ignoreElement(refMethod);
-									return false;
-								}
+							globalContext.enqueueDerivedMethodsProcessor(refMethod, derivedMethod -> {
+								processor.ignoreElement(refMethod);
+								return false;
 							});
 						}
 					});
@@ -130,14 +125,14 @@ public class SameReturnValueInspection extends GlobalJavaInspectionTool
 	@Nonnull
 	public String getDisplayName()
 	{
-		return InspectionsBundle.message("inspection.same.return.value.display.name");
+		return InspectionLocalize.inspectionSameReturnValueDisplayName().get();
 	}
 
 	@Override
 	@Nonnull
 	public String getGroupDisplayName()
 	{
-		return GroupNames.DECLARATION_REDUNDANCY;
+		return InspectionLocalize.groupNamesDeclarationRedundancy().get();
 	}
 
 	@Override

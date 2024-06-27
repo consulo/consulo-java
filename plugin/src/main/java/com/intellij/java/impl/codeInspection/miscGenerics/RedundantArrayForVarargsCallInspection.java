@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.codeInspection.miscGenerics;
 
-import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.impl.codeInspection.miscGenerics.GenericsInspectionToolBase;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.codeInsight.ExpectedTypesProvider;
@@ -24,19 +23,19 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.FileModificationService;
-import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,29 +65,29 @@ public class RedundantArrayForVarargsCallInspection extends GenericsInspectionTo
     @Override
     @Nonnull
     public String getName() {
-      return InspectionsBundle.message("inspection.redundant.array.creation.quickfix");
+      return InspectionLocalize.inspectionRedundantArrayCreationQuickfix().get();
     }
   }
 
   @Override
   public ProblemDescriptor[] getDescriptions(PsiElement place, final InspectionManager manager, final boolean isOnTheFly, Object state) {
     if (!PsiUtil.isLanguageLevel5OrHigher(place)) return null;
-    final List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>();
+    final List<ProblemDescriptor> problems = new ArrayList<>();
     place.accept(new JavaRecursiveElementWalkingVisitor() {
       @Override
-      public void visitCallExpression(PsiCallExpression expression) {
+      public void visitCallExpression(@Nonnull PsiCallExpression expression) {
         super.visitCallExpression(expression);
         checkCall(expression);
       }
 
       @Override
-      public void visitEnumConstant(PsiEnumConstant enumConstant) {
+      public void visitEnumConstant(@Nonnull PsiEnumConstant enumConstant) {
         super.visitEnumConstant(enumConstant);
         checkCall(enumConstant);
       }
 
       @Override
-      public void visitClass(PsiClass aClass) {
+      public void visitClass(@Nonnull PsiClass aClass) {
         //do not go inside to prevent multiple signals of the same problem
       }
 
@@ -96,8 +95,7 @@ public class RedundantArrayForVarargsCallInspection extends GenericsInspectionTo
         final JavaResolveResult resolveResult = expression.resolveMethodGenerics();
         PsiElement element = resolveResult.getElement();
         final PsiSubstitutor substitutor = resolveResult.getSubstitutor();
-        if (element instanceof PsiMethod && ((PsiMethod) element).isVarArgs()) {
-          PsiMethod method = (PsiMethod) element;
+        if (element instanceof PsiMethod method && method.isVarArgs()) {
           PsiParameter[] parameters = method.getParameterList().getParameters();
           PsiExpressionList argumentList = expression.getArgumentList();
           if (argumentList != null) {
@@ -107,16 +105,18 @@ public class RedundantArrayForVarargsCallInspection extends GenericsInspectionTo
               PsiParameter lastParameter = parameters[args.length - 1];
               PsiType lastParamType = lastParameter.getType();
               LOG.assertTrue(lastParamType instanceof PsiEllipsisType);
-              if (lastArg instanceof PsiNewExpression &&
+              if (lastArg instanceof PsiNewExpression newExpression &&
                   substitutor.substitute(((PsiEllipsisType) lastParamType).toArrayType()).equals(lastArg.getType())) {
-                PsiExpression[] initializers = getInitializers((PsiNewExpression) lastArg);
+                PsiExpression[] initializers = getInitializers(newExpression);
                 if (initializers != null) {
                   if (isSafeToFlatten(expression, method, initializers)) {
-                    final ProblemDescriptor descriptor = manager.createProblemDescriptor(lastArg,
-                        InspectionsBundle.message("inspection.redundant.array.creation.for.varargs.call.descriptor"),
-                        myQuickFixAction,
-                        ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
-                        isOnTheFly);
+                    final ProblemDescriptor descriptor = manager.createProblemDescriptor(
+                      lastArg,
+                      InspectionLocalize.inspectionRedundantArrayCreationForVarargsCallDescriptor().get(),
+                      myQuickFixAction,
+                      ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
+                      isOnTheFly
+                    );
 
                     problems.add(descriptor);
                   }
@@ -144,8 +144,7 @@ public class RedundantArrayForVarargsCallInspection extends GenericsInspectionTo
           }
           final Project project = callExpression.getProject();
           final JavaResolveResult resolveResult;
-          if (callExpression instanceof PsiEnumConstant) {
-            final PsiEnumConstant enumConstant = (PsiEnumConstant) callExpression;
+          if (callExpression instanceof PsiEnumConstant enumConstant) {
             final PsiClass containingClass = enumConstant.getContainingClass();
             final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
             final PsiClassType classType = facade.getElementFactory().createType(containingClass);
@@ -185,7 +184,7 @@ public class RedundantArrayForVarargsCallInspection extends GenericsInspectionTo
       PsiExpression firstDimension = dims[0];
       Object value =
           JavaPsiFacade.getInstance(newExpression.getProject()).getConstantEvaluationHelper().computeConstantExpression(firstDimension);
-      if (value instanceof Integer && ((Integer) value).intValue() == 0) return PsiExpression.EMPTY_ARRAY;
+      if (value instanceof Integer intValue && intValue == 0) return PsiExpression.EMPTY_ARRAY;
     }
 
     return null;
@@ -199,13 +198,13 @@ public class RedundantArrayForVarargsCallInspection extends GenericsInspectionTo
   @Override
   @Nonnull
   public String getGroupDisplayName() {
-    return GroupNames.VERBOSE_GROUP_NAME;
+    return InspectionLocalize.groupNamesVerboseOrRedundantCodeConstructs().get();
   }
 
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionsBundle.message("inspection.redundant.array.creation.display.name");
+    return InspectionLocalize.inspectionRedundantArrayCreationDisplayName().get();
   }
 
   @Override

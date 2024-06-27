@@ -15,13 +15,18 @@
  */
 package com.intellij.java.impl.codeInspection.compiler;
 
-import consulo.language.editor.inspection.InspectionsBundle;
-import consulo.language.editor.inspection.ProblemsHolder;
 import com.intellij.java.language.psi.*;
-import consulo.language.pattern.ElementPattern;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.language.editor.inspection.ProblemsHolder;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
+import consulo.language.pattern.ElementPattern;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiWhiteSpace;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
+import jakarta.annotation.Nonnull;
 
 import static com.intellij.java.language.patterns.PsiJavaPatterns.psiElement;
 
@@ -36,18 +41,19 @@ public class JavacQuirksInspectionVisitor extends JavaElementVisitor {
   }
 
   @Override
-  public void visitAnnotationArrayInitializer(final PsiArrayInitializerMemberValue initializer) {
+  @RequiredReadAction
+  public void visitAnnotationArrayInitializer(@Nonnull final PsiArrayInitializerMemberValue initializer) {
     if (PsiUtil.isLanguageLevel7OrHigher(initializer)) return;
     final PsiElement lastElement = PsiTreeUtil.skipSiblingsBackward(initializer.getLastChild(), PsiWhiteSpace.class, PsiComment.class);
     if (lastElement != null && PsiUtil.isJavaToken(lastElement, JavaTokenType.COMMA)) {
-      final String message = InspectionsBundle.message("inspection.compiler.javac.quirks.anno.array.comma.problem");
-      final String fixName = InspectionsBundle.message("inspection.compiler.javac.quirks.anno.array.comma.fix");
-      myHolder.registerProblem(lastElement, message, new RemoveElementQuickFix(fixName));
+      final LocalizeValue message = InspectionLocalize.inspectionCompilerJavacQuirksAnnoArrayCommaProblem();
+      final LocalizeValue fixName = InspectionLocalize.inspectionCompilerJavacQuirksAnnoArrayCommaFix();
+      myHolder.registerProblem(lastElement, message.get(), new RemoveElementQuickFix(fixName.get()));
     }
   }
 
   @Override
-  public void visitTypeCastExpression(final PsiTypeCastExpression expression) {
+  public void visitTypeCastExpression(@Nonnull final PsiTypeCastExpression expression) {
     if (PsiUtil.isLanguageLevel7OrHigher(expression)) return;
     final PsiTypeElement type = expression.getCastType();
     if (type != null) {
@@ -56,9 +62,9 @@ public class JavacQuirksInspectionVisitor extends JavaElementVisitor {
         public void visitReferenceParameterList(final PsiReferenceParameterList list) {
           super.visitReferenceParameterList(list);
           if (list.getFirstChild() != null && QUALIFIER_REFERENCE.accepts(list)) {
-            final String message = InspectionsBundle.message("inspection.compiler.javac.quirks.qualifier.type.args.problem");
-            final String fixName = InspectionsBundle.message("inspection.compiler.javac.quirks.qualifier.type.args.fix");
-            myHolder.registerProblem(list, message, new RemoveElementQuickFix(fixName));
+            final LocalizeValue message = InspectionLocalize.inspectionCompilerJavacQuirksQualifierTypeArgsProblem();
+            final LocalizeValue fixName = InspectionLocalize.inspectionCompilerJavacQuirksQualifierTypeArgsFix();
+            myHolder.registerProblem(list, message.get(), new RemoveElementQuickFix(fixName.get()));
           }
         }
       });

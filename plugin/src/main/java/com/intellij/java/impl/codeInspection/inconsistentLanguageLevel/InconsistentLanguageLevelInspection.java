@@ -20,12 +20,13 @@
  */
 package com.intellij.java.impl.codeInspection.inconsistentLanguageLevel;
 
-import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.impl.codeInspection.unnecessaryModuleDependency.UnnecessaryModuleDependencyInspection;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.module.EffectiveLanguageLevelUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.ide.setting.ShowSettingsUtil;
 import consulo.language.editor.inspection.*;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.reference.RefModule;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.scope.AnalysisScope;
@@ -38,11 +39,12 @@ import consulo.module.content.ModuleRootManager;
 import consulo.module.content.layer.orderEntry.ModuleOrderEntry;
 import consulo.module.content.layer.orderEntry.OrderEntry;
 import consulo.project.Project;
-import consulo.project.ProjectBundle;
+import consulo.project.localize.ProjectLocalize;
+import consulo.ui.annotation.RequiredUIAccess;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -57,49 +59,55 @@ public abstract class InconsistentLanguageLevelInspection extends GlobalInspecti
 	}
 
 	@Override
-	public void runInspection(@Nonnull AnalysisScope scope,
-							  @Nonnull InspectionManager manager,
-							  @Nonnull GlobalInspectionContext globalContext,
-							  @Nonnull ProblemDescriptionsProcessor problemProcessor,
-							  Object state)
+	@RequiredReadAction
+	public void runInspection(
+		@Nonnull AnalysisScope scope,
+		@Nonnull InspectionManager manager,
+		@Nonnull GlobalInspectionContext globalContext,
+		@Nonnull ProblemDescriptionsProcessor problemProcessor,
+		@Nonnull Object state
+	)
 	{
-		final Set<Module> modules = new HashSet<Module>();
+		final Set<Module> modules = new HashSet<>();
 		scope.accept(new PsiElementVisitor()
 		{
 			@Override
+			@RequiredReadAction
 			public void visitElement(PsiElement element)
 			{
 				final Module module = ModuleUtilCore.findModuleForPsiElement(element);
-				if(module != null)
+				if (module != null)
 				{
 					modules.add(module);
 				}
 			}
 		});
 
-
-		for(Module module : modules)
+		for (Module module : modules)
 		{
 			LanguageLevel languageLevel = EffectiveLanguageLevelUtil.getEffectiveLanguageLevel(module);
 
 			final RefModule refModule = globalContext.getRefManager().getRefModule(module);
-			for(OrderEntry entry : ModuleRootManager.getInstance(module).getOrderEntries())
+			for (OrderEntry entry : ModuleRootManager.getInstance(module).getOrderEntries())
 			{
-				if(!(entry instanceof ModuleOrderEntry))
+				if (!(entry instanceof ModuleOrderEntry))
 				{
 					continue;
 				}
 				final Module dependantModule = ((ModuleOrderEntry) entry).getModule();
-				if(dependantModule == null)
+				if (dependantModule == null)
 				{
 					continue;
 				}
 				LanguageLevel dependantLanguageLevel = EffectiveLanguageLevelUtil.getEffectiveLanguageLevel(dependantModule);
-				if(languageLevel.compareTo(dependantLanguageLevel) < 0)
+				if (languageLevel.compareTo(dependantLanguageLevel) < 0)
 				{
-					final CommonProblemDescriptor problemDescriptor = manager.createProblemDescriptor("Inconsistent language level settings: module " + module.getName() + " with language level " +
-							languageLevel + " depends on module " + dependantModule.getName() + " with language level " + dependantLanguageLevel, new UnnecessaryModuleDependencyInspection
-							.RemoveModuleDependencyFix(module, dependantModule), new OpenModuleSettingsFix(module));
+					final CommonProblemDescriptor problemDescriptor = manager.createProblemDescriptor(
+						"Inconsistent language level settings: module " + module.getName() + " with language level " +
+							languageLevel + " depends on module " + dependantModule.getName() + " with language level " + dependantLanguageLevel,
+						new UnnecessaryModuleDependencyInspection.RemoveModuleDependencyFix(module, dependantModule),
+						new OpenModuleSettingsFix(module)
+					);
 					problemProcessor.addProblemElement(refModule, problemDescriptor);
 				}
 			}
@@ -117,7 +125,7 @@ public abstract class InconsistentLanguageLevelInspection extends GlobalInspecti
 	@Nonnull
 	public String getGroupDisplayName()
 	{
-		return GroupNames.MODULARIZATION_GROUP_NAME;
+		return InspectionLocalize.groupNamesModularizationIssues().get();
 	}
 
 	@Override
@@ -158,14 +166,17 @@ public abstract class InconsistentLanguageLevelInspection extends GlobalInspecti
 			return getName();
 		}
 
+		@RequiredUIAccess
 		@Override
 		public void applyFix(@Nonnull Project project, @Nonnull CommonProblemDescriptor descriptor)
 		{
-			if(!myModule.isDisposed())
+			if (!myModule.isDisposed())
 			{
-				ShowSettingsUtil.getInstance().showProjectStructureDialog(project, projectStructureSelector -> {
-					projectStructureSelector.select(myModule.getName(), ProjectBundle.message("modules.classpath.title"), true);
-				});
+				ShowSettingsUtil.getInstance().showProjectStructureDialog(
+					project,
+					projectStructureSelector ->
+						projectStructureSelector.select(myModule.getName(), ProjectLocalize.modulesClasspathTitle().get(), true)
+				);
 			}
 		}
 	}

@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.codeInspection.varScopeCanBeNarrowed;
 
-import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;
 import com.intellij.java.analysis.impl.psi.controlFlow.AllVariablesControlFlowPolicy;
 import com.intellij.java.impl.codeInspection.util.SpecialAnnotationsUtil;
@@ -31,17 +30,19 @@ import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.ImplicitUsageProvider;
-import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ProblemsHolder;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.ref.Ref;
@@ -79,13 +80,13 @@ public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
   @Override
   @Nonnull
   public String getGroupDisplayName() {
-    return GroupNames.CLASS_LAYOUT_GROUP_NAME;
+    return InspectionLocalize.groupNamesClassStructure().get();
   }
 
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionsBundle.message("inspection.field.can.be.local.display.name");
+    return InspectionLocalize.inspectionFieldCanBeLocalDisplayName().get();
   }
 
   @Override
@@ -104,8 +105,10 @@ public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
   @Nullable
   @Override
   public JComponent createOptionsPanel() {
-    final JPanel listPanel = SpecialAnnotationsUtil
-        .createSpecialAnnotationsListControl(EXCLUDE_ANNOS, InspectionsBundle.message("special.annotations.annotations.list"));
+    final JPanel listPanel = SpecialAnnotationsUtil.createSpecialAnnotationsListControl(
+      EXCLUDE_ANNOS,
+      InspectionLocalize.specialAnnotationsAnnotationsList().get()
+    );
 
     final JPanel panel = new JPanel(new BorderLayout(2, 2));
     panel.add(listPanel, BorderLayout.CENTER);
@@ -114,13 +117,15 @@ public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
 
   @Nonnull
   @Override
-  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
-                                            final boolean isOnTheFly,
-                                            LocalInspectionToolSession session,
-                                            Object state) {
+  public PsiElementVisitor buildVisitorImpl(
+    @Nonnull final ProblemsHolder holder,
+    final boolean isOnTheFly,
+    LocalInspectionToolSession session,
+    Object state
+  ) {
     return new JavaElementVisitor() {
       @Override
-      public void visitJavaFile(PsiJavaFile file) {
+      public void visitJavaFile(@Nonnull PsiJavaFile file) {
         for (PsiClass aClass : file.getClasses()) {
           doCheckClass(aClass, holder, EXCLUDE_ANNOS);
         }
@@ -156,8 +161,8 @@ public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
     if (candidates.isEmpty()) return;
     for (PsiField field : candidates) {
       if (usedFields.contains(field) && !hasImplicitReadOrWriteUsage(field)) {
-        final String message = InspectionsBundle.message("inspection.field.can.be.local.problem.descriptor");
-        holder.registerProblem(field.getNameIdentifier(), message, new ConvertFieldToLocalQuickFix());
+        final LocalizeValue message = InspectionLocalize.inspectionFieldCanBeLocalProblemDescriptor();
+        holder.registerProblem(field.getNameIdentifier(), message.get(), new ConvertFieldToLocalQuickFix());
       }
     }
   }
@@ -170,7 +175,8 @@ public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
       }
 
       @Override
-      public void visitMethod(PsiMethod method) {
+      @RequiredReadAction
+      public void visitMethod(@Nonnull PsiMethod method) {
         super.visitMethod(method);
 
         final PsiCodeBlock body = method.getBody();
@@ -180,7 +186,8 @@ public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
       }
 
       @Override
-      public void visitLambdaExpression(PsiLambdaExpression expression) {
+      @RequiredReadAction
+      public void visitLambdaExpression(@Nonnull PsiLambdaExpression expression) {
         super.visitLambdaExpression(expression);
         final PsiElement body = expression.getBody();
         if (body != null) {
@@ -188,21 +195,22 @@ public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
         }
       }
 
+      @RequiredReadAction
       @Override
-      public void visitClassInitializer(PsiClassInitializer initializer) {
+      public void visitClassInitializer(@Nonnull PsiClassInitializer initializer) {
         super.visitClassInitializer(initializer);
         checkCodeBlock(initializer.getBody(), candidates, usedFields);
       }
     });
   }
 
+  @RequiredReadAction
   private static void checkCodeBlock(final PsiElement body, final Set<PsiField> candidates, Set<PsiField> usedFields) {
     try {
       final ControlFlow controlFlow = ControlFlowFactory.getInstance(body.getProject()).getControlFlow(body, AllVariablesControlFlowPolicy.getInstance());
       final List<PsiVariable> usedVars = ControlFlowUtil.getUsedVariables(controlFlow, 0, controlFlow.getSize());
       for (PsiVariable usedVariable : usedVars) {
-        if (usedVariable instanceof PsiField) {
-          final PsiField usedField = (PsiField) usedVariable;
+        if (usedVariable instanceof PsiField usedField) {
           if (!usedFields.add(usedField)) {
             candidates.remove(usedField); //used in more than one code block
           }
@@ -212,9 +220,9 @@ public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
       final List<PsiReferenceExpression> readBeforeWrites = ControlFlowUtil.getReadBeforeWrite(controlFlow);
       for (final PsiReferenceExpression readBeforeWrite : readBeforeWrites) {
         final PsiElement resolved = readBeforeWrite.resolve();
-        if (resolved instanceof PsiField) {
-          final PsiField field = (PsiField) resolved;
-          if (!isImmutableState(field.getType()) || !PsiUtil.isConstantExpression(field.getInitializer()) || getWrittenVariables(controlFlow, writtenVariables).contains(field)) {
+        if (resolved instanceof PsiField field) {
+          if (!isImmutableState(field.getType()) || !PsiUtil.isConstantExpression(field.getInitializer())
+            || getWrittenVariables(controlFlow, writtenVariables).contains(field)) {
             PsiElement parent = body.getParent();
             if (!(parent instanceof PsiMethod) ||
                 !((PsiMethod) parent).isConstructor() ||
@@ -247,16 +255,17 @@ public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
   private static void removeFieldsReferencedFromInitializers(final PsiClass aClass, final Set<PsiField> candidates) {
     aClass.accept(new JavaRecursiveElementWalkingVisitor() {
       @Override
-      public void visitMethod(PsiMethod method) {
+      public void visitMethod(@Nonnull PsiMethod method) {
         //do not go inside method
       }
 
       @Override
-      public void visitClassInitializer(PsiClassInitializer initializer) {
+      public void visitClassInitializer(@Nonnull PsiClassInitializer initializer) {
         //do not go inside class initializer
       }
 
       @Override
+      @RequiredReadAction
       public void visitReferenceExpression(PsiReferenceExpression expression) {
         final PsiElement resolved = expression.resolve();
         if (resolved instanceof PsiField) {
@@ -272,15 +281,15 @@ public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
   }
 
   private static boolean hasImplicitReadOrWriteUsage(final PsiField field) {
-    return field.getProject().getExtensionPoint(ImplicitUsageProvider.class).findFirstSafe(provider -> {
-      return provider.isImplicitRead(field) || provider.isImplicitWrite(field);
-    }) != null;
+    return field.getProject().getExtensionPoint(ImplicitUsageProvider.class)
+      .findFirstSafe(provider -> provider.isImplicitRead(field) || provider.isImplicitWrite(field)) != null;
   }
 
   private static class ConvertFieldToLocalQuickFix extends BaseConvertToLocalQuickFix<PsiField> {
 
     @Override
     @Nullable
+    @RequiredReadAction
     protected PsiField getVariable(@Nonnull ProblemDescriptor descriptor) {
       return PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiField.class);
     }
@@ -301,7 +310,12 @@ public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
       return RefactoringUtil.suggestUniqueVariableName(localName, scope, field);
     }
 
-    private static void moveDocCommentToDeclaration(@Nonnull Project project, @Nonnull PsiDocComment docComment, @Nonnull PsiElement declaration) {
+    @RequiredReadAction
+    private static void moveDocCommentToDeclaration(
+      @Nonnull Project project,
+      @Nonnull PsiDocComment docComment,
+      @Nonnull PsiElement declaration
+    ) {
       final StringBuilder buf = new StringBuilder();
       for (PsiElement psiElement : docComment.getDescriptionElements()) {
         buf.append(psiElement.getText());

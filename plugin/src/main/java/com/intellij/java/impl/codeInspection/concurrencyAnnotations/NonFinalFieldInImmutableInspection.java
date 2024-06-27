@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.codeInspection.concurrencyAnnotations;
 
-import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
 import com.intellij.java.analysis.impl.codeInspection.concurrencyAnnotations.JCiPUtil;
 import com.intellij.java.language.psi.JavaElementVisitor;
@@ -25,6 +24,7 @@ import com.intellij.java.language.psi.PsiModifier;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemsHolder;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiElementVisitor;
 import org.jetbrains.annotations.Nls;
 
@@ -36,7 +36,7 @@ public class NonFinalFieldInImmutableInspection extends BaseJavaLocalInspectionT
   @Override
   @Nonnull
   public String getGroupDisplayName() {
-    return GroupNames.CONCURRENCY_ANNOTATION_ISSUES;
+    return InspectionLocalize.groupNamesConcurrencyAnnotationIssues().get();
   }
 
   @Override
