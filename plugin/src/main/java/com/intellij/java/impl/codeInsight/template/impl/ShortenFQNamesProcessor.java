@@ -15,20 +15,20 @@
  */
 package com.intellij.java.impl.codeInsight.template.impl;
 
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.CodeInsightBundle;
+import consulo.codeEditor.Editor;
+import consulo.document.Document;
+import consulo.document.RangeMarker;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.template.Template;
 import consulo.language.editor.template.TemplateOptionalProcessor;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import consulo.document.Document;
-import consulo.codeEditor.Editor;
-import consulo.document.RangeMarker;
-import consulo.project.Project;
+import consulo.language.editor.util.PsiUtilBase;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiFile;
-import consulo.language.editor.util.PsiUtilBase;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.project.Project;
 
 @ExtensionImpl
 public class ShortenFQNamesProcessor implements TemplateOptionalProcessor {
@@ -53,7 +53,7 @@ public class ShortenFQNamesProcessor implements TemplateOptionalProcessor {
 
   @Override
   public String getOptionName() {
-    return CodeInsightBundle.message("dialog.edit.template.checkbox.shorten.fq.names");
+    return CodeInsightLocalize.dialogEditTemplateCheckboxShortenFqNames().get();
   }
 
   @Override

@@ -15,10 +15,6 @@
  */
 package com.intellij.java.impl.codeInspection;
 
-import consulo.application.CommonBundle;
-import consulo.language.editor.FileModificationService;
-import consulo.language.editor.inspection.LocalQuickFix;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.impl.refactoring.PackageWrapper;
 import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesProcessor;
 import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesUtil;
@@ -27,15 +23,19 @@ import com.intellij.java.impl.refactoring.util.RefactoringMessageUtil;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiJavaFile;
 import consulo.application.ApplicationManager;
-import consulo.project.Project;
-import consulo.ui.ex.awt.Messages;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.logging.Logger;
-
+import consulo.platform.base.localize.CommonLocalize;
+import consulo.project.Project;
+import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awt.UIUtil;
 import jakarta.annotation.Nonnull;
 
 public class MoveToPackageFix implements LocalQuickFix {
@@ -75,12 +75,7 @@ public class MoveToPackageFix implements LocalQuickFix {
 
     if (!FileModificationService.getInstance().prepareFileForWrite(myFile)) return;
 
-    ApplicationManager.getApplication().invokeLater(new Runnable() {
-      @Override
-      public void run() {
-        chooseDirectoryAndMove(project, myFile);
-      }
-    });
+    ApplicationManager.getApplication().invokeLater(() -> chooseDirectoryAndMove(project, myFile));
   }
 
   private void chooseDirectoryAndMove(Project project, PsiFile myFile) {
@@ -92,7 +87,7 @@ public class MoveToPackageFix implements LocalQuickFix {
       }
       String error = RefactoringMessageUtil.checkCanCreateFile(directory, myFile.getName());
       if (error != null) {
-        Messages.showMessageDialog(project, error, CommonBundle.getErrorTitle(), Messages.getErrorIcon());
+        Messages.showMessageDialog(project, error, CommonLocalize.titleError().get(), UIUtil.getErrorIcon());
         return;
       }
       new MoveClassesOrPackagesProcessor(
@@ -109,6 +104,4 @@ public class MoveToPackageFix implements LocalQuickFix {
   public boolean startInWriteAction() {
     return false;
   }
-
-
 }

@@ -20,7 +20,7 @@ import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.application.ApplicationManager;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.application.Result;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
@@ -38,7 +38,7 @@ import consulo.language.editor.FileModificationService;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.scope.AnalysisScope;
-import consulo.language.editor.scope.AnalysisScopeBundle;
+import consulo.language.editor.scope.localize.AnalysisScopeLocalize;
 import consulo.language.file.FileViewProvider;
 import consulo.language.psi.*;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -49,8 +49,10 @@ import consulo.module.Module;
 import consulo.module.content.util.ModuleRootModificationUtil;
 import consulo.project.DumbService;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.TitledSeparator;
+import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.ex.awt.VerticalFlowLayout;
 import consulo.usage.*;
 import consulo.util.collection.ContainerUtil;
@@ -58,10 +60,9 @@ import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.Ref;
 import consulo.virtualFileSystem.VirtualFile;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
-
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.*;
@@ -79,6 +80,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
   }
 
   @Override
+  @RequiredUIAccess
   protected void analyze(@Nonnull final Project project, @Nonnull final AnalysisScope scope) {
     PropertiesComponent.getInstance().setValue(ANNOTATE_LOCAL_VARIABLES, myAnnotateLocalVariablesCb.isSelected());
 
@@ -92,6 +94,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
       final private Set<Module> processed = new HashSet<>();
 
       @Override
+      @RequiredReadAction
       public void visitFile(PsiFile file) {
         fileCount[0]++;
         final ProgressIndicator progressIndicator = ProgressManager.getInstance().getProgressIndicator();
@@ -100,7 +103,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
           if (virtualFile != null) {
             progressIndicator.setText2(ProjectUtil.calcRelativeToProjectPath(virtualFile, project));
           }
-          progressIndicator.setText(AnalysisScopeBundle.message("scanning.scope.progress.title"));
+          progressIndicator.setTextValue(AnalysisScopeLocalize.scanningScopeProgressTitle());
         }
         if (!(file instanceof PsiJavaFile)) {
           return;
@@ -118,7 +121,11 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
       return;
     }
     if (!modulesWithLL.isEmpty()) {
-      Messages.showErrorDialog(project, "Infer Nullity Annotations requires the project language level be set to 1.5 or greater.", INFER_NULLITY_ANNOTATIONS);
+      Messages.showErrorDialog(
+        project,
+        "Infer Nullity Annotations requires the project language level be set to 1.5 or greater.",
+        INFER_NULLITY_ANNOTATIONS
+      );
       return;
     }
     if (!modulesWithoutAnnotations.isEmpty()) {
@@ -144,16 +151,24 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
     }
   }
 
-  public static boolean addAnnotationsDependency(@Nonnull final Project project, @Nonnull final Set<Module> modulesWithoutAnnotations, @Nonnull String annoFQN, final String title) {
+  @RequiredUIAccess
+  public static boolean addAnnotationsDependency(
+    @Nonnull final Project project,
+    @Nonnull final Set<Module> modulesWithoutAnnotations,
+    @Nonnull String annoFQN,
+    final String title
+  ) {
     final Library annotationsLib = LibraryUtil.findLibraryByClass(annoFQN, project);
     if (annotationsLib != null) {
+      @NonNls
       String message = "Module" + (modulesWithoutAnnotations.size() == 1 ? " " : "s ");
       message += StringUtil.join(modulesWithoutAnnotations, Module::getName, ", ");
       message += (modulesWithoutAnnotations.size() == 1 ? " doesn't" : " don't");
-      message += " refer to the existing '" + annotationsLib.getName() + "' library with Consulo nullity annotations. Would you like to add the dependenc";
+      message += " refer to the existing '" + annotationsLib.getName() + "' library" +
+        " with Consulo nullity annotations. Would you like to add the dependenc";
       message += (modulesWithoutAnnotations.size() == 1 ? "y" : "ies") + " now?";
-      if (Messages.showOkCancelDialog(project, message, title, Messages.getErrorIcon()) == Messages.OK) {
-        ApplicationManager.getApplication().runWriteAction(() ->
+      if (Messages.showOkCancelDialog(project, message, title, UIUtil.getErrorIcon()) == Messages.OK) {
+        project.getApplication().runWriteAction(() ->
         {
           for (Module module : modulesWithoutAnnotations) {
             ModuleRootModificationUtil.addDependency(module, annotationsLib);
@@ -164,7 +179,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
       return false;
     }
 
-		/*if(Messages.showOkCancelDialog(project, "It is required that JetBrains annotations" + " be available in all your project sources.\n\nYou will need to add annotations.jar as a library. " +
+		/*if (Messages.showOkCancelDialog(project, "It is required that JetBrains annotations" + " be available in all your project sources.\n\nYou will need to add annotations.jar as a library. " +
         "It is possible to configure custom JAR\nin e.g. Constant Conditions & Exceptions inspection or use JetBrains annotations available in installation. " + "\nIntelliJ IDEA nullity " +
 				"annotations are freely usable and redistributable under the Apache 2.0 license.\nWould you like to do it now?", title, Messages.getErrorIcon()) == Messages.OK)
 		{
@@ -202,8 +217,9 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
         }
       }
     });
-    if (ApplicationManager.getApplication().isDispatchThread()) {
-      if (!ProgressManager.getInstance().runProcessWithProgressSynchronously(searchForUsages, INFER_NULLITY_ANNOTATIONS, true, project)) {
+    if (project.getApplication().isDispatchThread()) {
+      if (!ProgressManager.getInstance()
+        .runProcessWithProgressSynchronously(searchForUsages, INFER_NULLITY_ANNOTATIONS, true, project)) {
         return null;
       }
     } else {
@@ -256,6 +272,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
     };
   }
 
+  @RequiredUIAccess
   protected void restartAnalysis(final Project project, final AnalysisScope scope) {
     DumbService.getInstance(project).smartInvokeLater(() -> {
       if (DumbService.isDumb(project)) {
@@ -270,8 +287,12 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
   private void showUsageView(@Nonnull Project project, final UsageInfo[] usageInfos, @Nonnull AnalysisScope scope) {
     final UsageTarget[] targets = UsageTarget.EMPTY_ARRAY;
     final Ref<Usage[]> convertUsagesRef = new Ref<>();
-    if (!ProgressManager.getInstance().runProcessWithProgressSynchronously(() -> ApplicationManager.getApplication().runReadAction(() -> convertUsagesRef.set(UsageInfo2UsageAdapter.convert
-        (usageInfos))), "Preprocess Usages", true, project)) {
+    if (!ProgressManager.getInstance().runProcessWithProgressSynchronously(
+      () -> project.getApplication().runReadAction(() -> convertUsagesRef.set(UsageInfo2UsageAdapter.convert(usageInfos))),
+      "Preprocess Usages",
+      true,
+      project
+    )) {
       return;
     }
 
@@ -319,7 +340,8 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
   protected JComponent getAdditionalActionSettings(Project project, BaseAnalysisActionDialog dialog) {
     final JPanel panel = new JPanel(new VerticalFlowLayout());
     panel.add(new TitledSeparator());
-    myAnnotateLocalVariablesCb = new JCheckBox("Annotate local variables", PropertiesComponent.getInstance().getBoolean(ANNOTATE_LOCAL_VARIABLES));
+    myAnnotateLocalVariablesCb =
+      new JCheckBox("Annotate local variables", PropertiesComponent.getInstance().getBoolean(ANNOTATE_LOCAL_VARIABLES));
     panel.add(myAnnotateLocalVariablesCb);
     return panel;
   }

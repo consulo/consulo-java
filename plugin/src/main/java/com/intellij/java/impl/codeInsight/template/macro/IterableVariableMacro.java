@@ -17,9 +17,10 @@ package com.intellij.java.impl.codeInsight.template.macro;
 
 import com.intellij.java.language.impl.codeInsight.template.macro.MacroUtil;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
-import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.template.Expression;
 import consulo.language.editor.template.ExpressionContext;
 import consulo.language.psi.PsiDocumentManager;
@@ -31,8 +32,8 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
-
 import jakarta.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,11 +51,12 @@ public class IterableVariableMacro extends VariableTypeMacroBase {
 
   @Override
   public String getPresentableName() {
-    return CodeInsightBundle.message("macro.iterable.variable");
+    return CodeInsightLocalize.macroIterableVariable().get();
   }
 
   @Override
   @Nullable
+  @RequiredReadAction
   protected PsiElement[] getVariables(Expression[] params, final ExpressionContext context) {
     if (params.length != 0) {
       return null;

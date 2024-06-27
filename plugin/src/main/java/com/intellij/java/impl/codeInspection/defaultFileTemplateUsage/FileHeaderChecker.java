@@ -15,15 +15,16 @@
  */
 package com.intellij.java.impl.codeInspection.defaultFileTemplateUsage;
 
-import com.intellij.java.language.impl.codeInsight.template.JavaTemplateUtil;
 import com.intellij.java.language.impl.JavaFileType;
+import com.intellij.java.language.impl.codeInsight.template.JavaTemplateUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.fileTemplate.FileTemplate;
 import consulo.fileTemplate.FileTemplateManager;
 import consulo.fileTemplate.FileTemplateUtil;
-import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
@@ -34,8 +35,8 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.collection.primitive.ints.IntMaps;
 import consulo.util.collection.primitive.ints.IntObjectMap;
-
 import jakarta.annotation.Nonnull;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Properties;
@@ -63,7 +64,7 @@ public class FileHeaderChecker {
     }
 
     LocalQuickFix[] fixes = createQuickFix(matcher, offsetToProperty, file.getProject(), onTheFly);
-    String description = InspectionsBundle.message("default.file.template.description");
+    String description = InspectionLocalize.defaultFileTemplateDescription().get();
     return manager.createProblemDescriptor(element, description, onTheFly, fixes, ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
   }
 
@@ -89,6 +90,7 @@ public class FileHeaderChecker {
 
     ReplaceWithFileTemplateFix replaceTemplateFix = new ReplaceWithFileTemplateFix() {
       @Override
+      @RequiredReadAction
       public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
         PsiElement element = descriptor.getPsiElement();
         if (element == null) {

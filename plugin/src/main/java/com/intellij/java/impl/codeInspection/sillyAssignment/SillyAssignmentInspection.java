@@ -18,20 +18,20 @@ package com.intellij.java.impl.codeInspection.sillyAssignment;
 import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.ProblemsHolder;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.lang.Comparing;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
 
 /**
  * User: anna
@@ -42,7 +42,7 @@ public class SillyAssignmentInspection extends BaseJavaLocalInspectionTool {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionsBundle.message("inspection.variable.assigned.to.itself.display.name");
+    return InspectionLocalize.inspectionVariableAssignedToItselfDisplayName().get();
   }
 
   @Override
@@ -59,24 +59,29 @@ public class SillyAssignmentInspection extends BaseJavaLocalInspectionTool {
 
   @Override
   @Nonnull
-  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
-                                            boolean isOnTheFly,
-                                            LocalInspectionToolSession session,
-                                            Object state) {
+  public PsiElementVisitor buildVisitorImpl(
+    @Nonnull final ProblemsHolder holder,
+    boolean isOnTheFly,
+    LocalInspectionToolSession session,
+    Object state
+  ) {
     return new JavaElementVisitor() {
 
-      @Override public void visitAssignmentExpression(PsiAssignmentExpression expression) {
+      @Override public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression expression) {
         checkSillyAssignment(expression, holder);
       }
 
-      @Override public void visitReferenceExpression(PsiReferenceExpression expression) {
+      @Override
+      public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
         visitElement(expression);
       }
 
-      @Override public void visitVariable(final PsiVariable variable) {
+      @Override
+      @RequiredReadAction
+      public void visitVariable(@Nonnull final PsiVariable variable) {
         final PsiExpression initializer = PsiUtil.deparenthesizeExpression(variable.getInitializer());
-        if (initializer instanceof PsiAssignmentExpression) {
-          final PsiExpression lExpr = PsiUtil.deparenthesizeExpression(((PsiAssignmentExpression)initializer).getLExpression());
+        if (initializer instanceof PsiAssignmentExpression assignmentExpression) {
+          final PsiExpression lExpr = PsiUtil.deparenthesizeExpression(assignmentExpression.getLExpression());
           checkExpression(variable, lExpr);
         }
         else {
@@ -84,17 +89,21 @@ public class SillyAssignmentInspection extends BaseJavaLocalInspectionTool {
         }
       }
 
+      @RequiredReadAction
       private void checkExpression(PsiVariable variable, PsiExpression expression) {
         if (!(expression instanceof PsiReferenceExpression)) {
           return;
         }
         final PsiReferenceExpression refExpr = (PsiReferenceExpression)expression;
         final PsiExpression qualifier = refExpr.getQualifierExpression();
-        if (qualifier == null || qualifier instanceof PsiThisExpression || qualifier instanceof PsiSuperExpression ||
-            variable.hasModifierProperty(PsiModifier.STATIC)) {
+        if (qualifier == null || qualifier instanceof PsiThisExpression || qualifier instanceof PsiSuperExpression
+          || variable.hasModifierProperty(PsiModifier.STATIC)) {
           if (refExpr.isReferenceTo(variable)) {
-            holder.registerProblem(expression, InspectionsBundle.message("assignment.to.declared.variable.problem.descriptor",
-                                                                         variable.getName()), ProblemHighlightType.LIKE_UNUSED_SYMBOL);
+            holder.registerProblem(
+              expression,
+              InspectionLocalize.assignmentToDeclaredVariableProblemDescriptor(variable.getName()).get(),
+              ProblemHighlightType.LIKE_UNUSED_SYMBOL
+            );
           }
         }
       }
@@ -110,28 +119,46 @@ public class SillyAssignmentInspection extends BaseJavaLocalInspectionTool {
     rExpression = PsiUtil.deparenthesizeExpression(rExpression);
     if (!(lExpression instanceof PsiReferenceExpression)) return;
     PsiReferenceExpression rRef;
-    if (!(rExpression instanceof PsiReferenceExpression)) {
-      if (!(rExpression instanceof PsiAssignmentExpression)) return;
-      final PsiAssignmentExpression rAssignmentExpression = (PsiAssignmentExpression)rExpression;
+    if (rExpression instanceof PsiReferenceExpression rReferenceExpression) {
+      rRef = rReferenceExpression;
+    }
+    else if (rExpression instanceof PsiAssignmentExpression rAssignmentExpression) {
       final PsiExpression assignee = PsiUtil.deparenthesizeExpression(rAssignmentExpression.getLExpression());
-      if (!(assignee instanceof PsiReferenceExpression)) return;
-      rRef = (PsiReferenceExpression)assignee;
-    } else {
-      rRef = (PsiReferenceExpression)rExpression;
+      if (assignee instanceof PsiReferenceExpression referenceExpressionAssignee) {
+        rRef = referenceExpressionAssignee;
+      }
+      else {
+        return;
+      }
+    }
+    else {
+      return;
     }
     PsiReferenceExpression lRef = (PsiReferenceExpression)lExpression;
     PsiManager manager = assignment.getManager();
-    if (!sameInstanceReferences(lRef, rRef, manager)) return;
+    if (!sameInstanceReferences(lRef, rRef, manager)) {
+      return;
+    }
     final PsiVariable variable = (PsiVariable)lRef.resolve();
-    if (variable == null) return;
-    holder.registerProblem(assignment, InspectionsBundle.message("assignment.to.itself.problem.descriptor", variable.getName()),
-                           ProblemHighlightType.LIKE_UNUSED_SYMBOL);
+    if (variable == null) {
+      return;
+    }
+    holder.registerProblem(
+      assignment,
+      InspectionLocalize.assignmentToItselfProblemDescriptor(variable.getName()).get(),
+      ProblemHighlightType.LIKE_UNUSED_SYMBOL
+    );
   }
 
   /**
    * @return true if both expressions resolve to the same variable/class or field in the same instance of the class
    */
-  private static boolean sameInstanceReferences(@Nullable PsiJavaCodeReferenceElement lRef, @Nullable PsiJavaCodeReferenceElement rRef, PsiManager manager) {
+  @RequiredReadAction
+  private static boolean sameInstanceReferences(
+    @Nullable PsiJavaCodeReferenceElement lRef,
+    @Nullable PsiJavaCodeReferenceElement rRef,
+    PsiManager manager
+  ) {
     if (lRef == null && rRef == null) return true;
     if (lRef == null || rRef == null) return false;
     PsiElement lResolved = lRef.resolve();
@@ -143,8 +170,8 @@ public class SillyAssignmentInspection extends BaseJavaLocalInspectionTool {
 
     final PsiElement lQualifier = lRef.getQualifier();
     final PsiElement rQualifier = rRef.getQualifier();
-    if (lQualifier instanceof PsiJavaCodeReferenceElement && rQualifier instanceof PsiJavaCodeReferenceElement) {
-      return sameInstanceReferences((PsiJavaCodeReferenceElement)lQualifier, (PsiJavaCodeReferenceElement)rQualifier, manager);
+    if (lQualifier instanceof PsiJavaCodeReferenceElement lJavaRef && rQualifier instanceof PsiJavaCodeReferenceElement rJavaRef) {
+      return sameInstanceReferences(lJavaRef, rJavaRef, manager);
     }
 
     if (Comparing.equal(lQualifier, rQualifier)) return true;
@@ -158,9 +185,10 @@ public class SillyAssignmentInspection extends BaseJavaLocalInspectionTool {
     return false;
   }
 
+  @RequiredReadAction
   private static PsiJavaCodeReferenceElement getQualifier(PsiElement qualifier) {
-    if (qualifier instanceof PsiThisExpression) {
-      final PsiJavaCodeReferenceElement thisQualifier = ((PsiThisExpression)qualifier).getQualifier();
+    if (qualifier instanceof PsiThisExpression thisExpression) {
+      final PsiJavaCodeReferenceElement thisQualifier = thisExpression.getQualifier();
       if (thisQualifier != null) {
         final PsiClass innerMostClass = PsiTreeUtil.getParentOfType(thisQualifier, PsiClass.class);
         if (innerMostClass == thisQualifier.resolve()) {

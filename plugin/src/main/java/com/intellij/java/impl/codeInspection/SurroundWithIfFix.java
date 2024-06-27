@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInspection;
 
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -26,6 +27,7 @@ import com.intellij.java.language.psi.*;
 import consulo.document.Document;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.project.Project;
 import consulo.document.util.TextRange;
 import consulo.language.psi.PsiComment;
@@ -61,12 +63,13 @@ public class SurroundWithIfFix implements LocalQuickFix {
   }
 
   @Override
+  @RequiredReadAction
   public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
     PsiElement element = descriptor.getPsiElement();
     PsiElement anchorStatement = RefactoringUtil.getParentStatement(element, false);
     LOG.assertTrue(anchorStatement != null);
-    if (anchorStatement.getParent() instanceof PsiLambdaExpression) {
-      final PsiCodeBlock body = RefactoringUtil.expandExpressionLambdaToCodeBlock((PsiLambdaExpression) anchorStatement.getParent());
+    if (anchorStatement.getParent() instanceof PsiLambdaExpression lambdaExpression) {
+      final PsiCodeBlock body = RefactoringUtil.expandExpressionLambdaToCodeBlock(lambdaExpression);
       anchorStatement = body.getStatements()[0];
     }
     Editor editor = PsiUtilBase.findEditor(anchorStatement);
@@ -111,9 +114,10 @@ public class SurroundWithIfFix implements LocalQuickFix {
   @Override
   @Nonnull
   public String getFamilyName() {
-    return InspectionsBundle.message("inspection.surround.if.family");
+    return InspectionLocalize.inspectionSurroundIfFamily().get();
   }
 
+  @RequiredReadAction
   public static boolean isAvailable(PsiExpression qualifier) {
     if (!qualifier.isValid() || qualifier.getText() == null) {
       return false;

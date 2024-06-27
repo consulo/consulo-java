@@ -20,12 +20,12 @@
  */
 package com.intellij.java.impl.codeInspection;
 
-import consulo.language.editor.inspection.InspectionsBundle;
-import consulo.language.editor.inspection.HTMLComposerExtension;
 import com.intellij.java.analysis.codeInspection.reference.RefClass;
 import com.intellij.java.analysis.codeInspection.reference.RefMethod;
 import com.intellij.java.language.JavaLanguage;
 import consulo.language.Language;
+import consulo.language.editor.inspection.HTMLComposerExtension;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.util.dataholder.Key;
 
 public abstract class HTMLJavaHTMLComposer implements HTMLComposerExtension<HTMLJavaHTMLComposer> {
@@ -35,11 +35,17 @@ public abstract class HTMLJavaHTMLComposer implements HTMLComposerExtension<HTML
 
   public static String getClassOrInterface(RefClass refClass, boolean capitalizeFirstLetter) {
     if (refClass.isInterface()) {
-      return capitalizeFirstLetter ? InspectionsBundle.message("inspection.export.results.capitalized.interface") : InspectionsBundle.message("inspection.export.results.interface");
+      return capitalizeFirstLetter
+        ? InspectionLocalize.inspectionExportResultsCapitalizedInterface().get()
+        : InspectionLocalize.inspectionExportResultsInterface().get();
     } else if (refClass.isAbstract()) {
-      return capitalizeFirstLetter ? InspectionsBundle.message("inspection.export.results.capitalized.abstract.class") : InspectionsBundle.message("inspection.export.results.abstract.class");
+      return capitalizeFirstLetter
+        ? InspectionLocalize.inspectionExportResultsCapitalizedAbstractClass().get()
+        : InspectionLocalize.inspectionExportResultsAbstractClass().get();
     } else {
-      return capitalizeFirstLetter ? InspectionsBundle.message("inspection.export.results.capitalized.class") : InspectionsBundle.message("inspection.export.results.class");
+      return capitalizeFirstLetter
+        ? InspectionLocalize.inspectionExportResultsCapitalizedClass().get()
+        : InspectionLocalize.inspectionExportResultsClass().get();
     }
   }
 

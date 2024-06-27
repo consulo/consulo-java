@@ -23,7 +23,7 @@ import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiVariable;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.template.Expression;
 import consulo.language.editor.template.ExpressionContext;
 import consulo.language.editor.template.Result;
@@ -50,7 +50,7 @@ public class RightSideTypeMacro extends Macro {
 
   @Override
   public String getPresentableName() {
-    return CodeInsightBundle.message("macro.right.side.type");
+    return CodeInsightLocalize.macroRightSideType().get();
   }
 
   @Override
@@ -60,15 +60,13 @@ public class RightSideTypeMacro extends Macro {
     PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(context.getEditor().getDocument());
     PsiElement element = file.findElementAt(offset);
     element = PsiTreeUtil.getParentOfType(element, PsiAssignmentExpression.class, PsiVariable.class);
-    if (element instanceof PsiAssignmentExpression) {
-      PsiAssignmentExpression assignment = (PsiAssignmentExpression) element;
+    if (element instanceof PsiAssignmentExpression assignment) {
       PsiExpression rhs = assignment.getRExpression();
       if (rhs == null) return null;
       final PsiType rhsType = rhs.getType();
       if (rhsType == null) return null;
       return new PsiTypeResult(rhsType, project);
-    } else if (element instanceof PsiVariable) {
-      PsiVariable var = (PsiVariable) element;
+    } else if (element instanceof PsiVariable var) {
       PsiExpression initializer = var.getInitializer();
       if (initializer == null) return null;
       PsiType type = RefactoringUtil.getTypeByExpression(initializer);
@@ -82,5 +80,4 @@ public class RightSideTypeMacro extends Macro {
   public boolean isAcceptableInContext(TemplateContextType context) {
     return context instanceof JavaCodeContextType;
   }
-
 }

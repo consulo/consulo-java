@@ -15,26 +15,27 @@
  */
 package com.intellij.java.impl.codeInsight.template.impl;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.CodeInsightBundle;
-import consulo.language.editor.template.Template;
-import consulo.language.editor.template.TemplateOptionalProcessor;
 import com.intellij.java.impl.codeInsight.intention.impl.AddOnDemandStaticImportAction;
 import com.intellij.java.impl.codeInsight.intention.impl.AddSingleMemberStaticImportAction;
-import consulo.document.Document;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
+import consulo.document.Document;
 import consulo.document.RangeMarker;
-import consulo.project.Project;
-import consulo.util.lang.Pair;
+import consulo.language.editor.localize.CodeInsightLocalize;
+import consulo.language.editor.template.Template;
+import consulo.language.editor.template.TemplateOptionalProcessor;
+import consulo.language.editor.util.PsiUtilBase;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import consulo.language.editor.util.PsiUtilBase;
 import consulo.language.psi.PsiUtilCore;
-import org.jetbrains.annotations.Nls;
-
+import consulo.project.Project;
+import consulo.util.lang.Pair;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.Nls;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -93,7 +94,7 @@ public class ShortenToStaticImportProcessor implements TemplateOptionalProcessor
   @Nls
   @Override
   public String getOptionName() {
-    return CodeInsightBundle.message("dialog.edit.template.checkbox.use.static.import");
+    return CodeInsightLocalize.dialogEditTemplateCheckboxUseStaticImport().get();
   }
 
   @Override
@@ -131,11 +132,13 @@ public class ShortenToStaticImportProcessor implements TemplateOptionalProcessor
 
   private static class OnDemandStaticImporter implements StaticImporter {
     @Override
+    @RequiredReadAction
     public boolean canPerform(@Nonnull PsiElement element) {
       return AddOnDemandStaticImportAction.getClassToPerformStaticImport(element) != null;
     }
 
     @Override
+    @RequiredReadAction
     public void perform(Project project, PsiFile file, Editor editor, PsiElement element) {
       AddOnDemandStaticImportAction.invoke(project, file, editor, element);
     }

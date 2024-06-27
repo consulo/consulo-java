@@ -16,19 +16,19 @@
 package com.intellij.java.impl.codeInsight.template.macro;
 
 import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
-import com.intellij.java.language.impl.codeInsight.template.macro.PsiTypeResult;
 import com.intellij.java.language.impl.codeInsight.template.macro.MacroUtil;
+import com.intellij.java.language.impl.codeInsight.template.macro.PsiTypeResult;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.template.Expression;
 import consulo.language.editor.template.ExpressionContext;
 import consulo.language.editor.template.Result;
 import consulo.language.editor.template.context.TemplateContextType;
 import consulo.language.editor.template.macro.Macro;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 
 /**
@@ -43,7 +43,7 @@ public class IterableComponentTypeMacro extends Macro {
 
   @Override
   public String getPresentableName() {
-    return CodeInsightBundle.message("macro.iterable.component.type");
+    return CodeInsightLocalize.macroIterableComponentType().get();
   }
 
   @Override
@@ -53,6 +53,7 @@ public class IterableComponentTypeMacro extends Macro {
   }
 
   @Override
+  @RequiredReadAction
   public Result calculateResult(@Nonnull Expression[] params, ExpressionContext context) {
     if (params.length != 1) return null;
     final Result result = params[0].calculateResult(context);
@@ -65,12 +66,12 @@ public class IterableComponentTypeMacro extends Macro {
     PsiType type = expr.getType();
 
 
-    if (type instanceof PsiArrayType) {
-      return new PsiTypeResult(((PsiArrayType)type).getComponentType(), project);
+    if (type instanceof PsiArrayType arrayType) {
+      return new PsiTypeResult(arrayType.getComponentType(), project);
     }
 
-    if (type instanceof PsiClassType) {
-      PsiClassType.ClassResolveResult resolveResult = ((PsiClassType)type).resolveGenerics();
+    if (type instanceof PsiClassType classType) {
+      PsiClassType.ClassResolveResult resolveResult = classType.resolveGenerics();
       PsiClass aClass = resolveResult.getElement();
 
       if (aClass != null) {
@@ -79,13 +80,13 @@ public class IterableComponentTypeMacro extends Macro {
           PsiSubstitutor substitutor = TypeConversionUtil.getClassSubstitutor(iterableClass, aClass, resolveResult.getSubstitutor());
           if (substitutor != null) {
             PsiType parameterType = substitutor.substitute(iterableClass.getTypeParameters()[0]);
-            if (parameterType instanceof PsiCapturedWildcardType) {
-              parameterType = ((PsiCapturedWildcardType)parameterType).getWildcard();
+            if (parameterType instanceof PsiCapturedWildcardType capturedWildcardType) {
+              parameterType = capturedWildcardType.getWildcard();
             }
             if (parameterType != null) {
-              if (parameterType instanceof PsiWildcardType) {
-                if (((PsiWildcardType)parameterType).isExtends()) {
-                  return new PsiTypeResult(((PsiWildcardType)parameterType).getBound(), project);
+              if (parameterType instanceof PsiWildcardType wildcardType) {
+                if (wildcardType.isExtends()) {
+                  return new PsiTypeResult(wildcardType.getBound(), project);
                 }
                 else return null;
               }
@@ -100,6 +101,7 @@ public class IterableComponentTypeMacro extends Macro {
   }
 
   @Override
+  @RequiredReadAction
   public Result calculateQuickResult(@Nonnull Expression[] params, ExpressionContext context) {
     return calculateResult(params, context);
   }
@@ -108,5 +110,4 @@ public class IterableComponentTypeMacro extends Macro {
   public boolean isAcceptableInContext(TemplateContextType context) {
     return context instanceof JavaCodeContextType;
   }
-
 }

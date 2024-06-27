@@ -21,8 +21,9 @@ package com.intellij.java.impl.codeInsight.template.macro;
 
 import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.template.Expression;
 import consulo.language.editor.template.ExpressionContext;
 import consulo.language.editor.template.Result;
@@ -34,7 +35,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -46,7 +46,7 @@ public class CastToLeftSideTypeMacro extends Macro {
 
   @Override
   public String getPresentableName() {
-    return CodeInsightBundle.message("macro.cast.to.left.side.type");
+    return CodeInsightLocalize.macroCastToLeftSideType().get();
   }
 
   @Override
@@ -56,6 +56,7 @@ public class CastToLeftSideTypeMacro extends Macro {
   }
 
   @Override
+  @RequiredReadAction
   public Result calculateResult(@Nonnull Expression[] params, ExpressionContext context) {
     int offset = context.getStartOffset();
     Project project = context.getProject();
@@ -64,17 +65,17 @@ public class CastToLeftSideTypeMacro extends Macro {
     element = PsiTreeUtil.getParentOfType(element, PsiAssignmentExpression.class, PsiVariable.class);
     PsiType leftType = null;
     PsiExpression rightSide = null;
-    if (element instanceof PsiAssignmentExpression) {
-      PsiAssignmentExpression assignment = (PsiAssignmentExpression) element;
+    if (element instanceof PsiAssignmentExpression assignment) {
       leftType  = assignment.getLExpression().getType();
       rightSide = assignment.getRExpression();
-    } else if (element instanceof PsiVariable) {
-      PsiVariable var = (PsiVariable) element;
+    } else if (element instanceof PsiVariable var) {
       leftType = var.getType();
       rightSide = var.getInitializer();
     }
 
-    while (rightSide instanceof PsiTypeCastExpression) rightSide = ((PsiTypeCastExpression) rightSide).getOperand();
+    while (rightSide instanceof PsiTypeCastExpression typeCastExpression) {
+      rightSide = typeCastExpression.getOperand();
+    }
 
     if (leftType != null && rightSide != null && rightSide.getType() != null && !leftType.isAssignableFrom(rightSide.getType())) {
         return new TextResult("("+ leftType.getCanonicalText() + ")");
@@ -87,5 +88,4 @@ public class CastToLeftSideTypeMacro extends Macro {
   public boolean isAcceptableInContext(TemplateContextType context) {
     return context instanceof JavaCodeContextType;
   }
-
 }

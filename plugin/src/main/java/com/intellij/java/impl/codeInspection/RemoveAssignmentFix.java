@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInspection;
 
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
@@ -32,15 +33,12 @@ public class RemoveAssignmentFix extends RemoveInitializerFix {
     return JavaInspectionsBundle.message("inspection.unused.assignment.remove.assignment.quickfix");
   }
 
+  @RequiredReadAction
   @Override
   public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
     final PsiElement element = descriptor.getPsiElement();
     final PsiElement parent;
-    if (element instanceof PsiReferenceExpression) {
-      parent = element.getParent();
-    } else {
-      parent = element;
-    }
+    parent = element instanceof PsiReferenceExpression ? element.getParent() : element;
     if (!(parent instanceof PsiAssignmentExpression)) {
       return;
     }
@@ -59,12 +57,12 @@ public class RemoveAssignmentFix extends RemoveInitializerFix {
     }
 
     PsiElement resolve = null;
-    if (element instanceof PsiReferenceExpression) {
-      resolve = ((PsiReferenceExpression) element).resolve();
+    if (element instanceof PsiReferenceExpression referenceExpression) {
+      resolve = referenceExpression.resolve();
     } else {
       final PsiExpression lExpr = PsiUtil.deparenthesizeExpression(((PsiAssignmentExpression) parent).getLExpression());
-      if (lExpr instanceof PsiReferenceExpression) {
-        resolve = ((PsiReferenceExpression) lExpr).resolve();
+      if (lExpr instanceof PsiReferenceExpression referenceExpression) {
+        resolve = referenceExpression.resolve();
       }
     }
     if (!(resolve instanceof PsiVariable)) {

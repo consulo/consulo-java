@@ -15,8 +15,9 @@
  */
 package com.intellij.java.impl.codeInsight.template.macro;
 
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.template.Expression;
 import consulo.language.editor.template.ExpressionContext;
 import consulo.language.psi.PsiElement;
@@ -38,14 +39,15 @@ public class SuggestFirstVariableNameMacro extends VariableOfTypeMacro {
 
   @Override
   public String getPresentableName() {
-    return CodeInsightBundle.message("macro.suggest.first.variable.name");
+    return CodeInsightLocalize.macroSuggestFirstVariableName().get();
   }
 
   @Override
+  @RequiredReadAction
   protected PsiElement[] getVariables(Expression[] params, ExpressionContext context) {
     final PsiElement[] variables = super.getVariables(params, context);
     if (variables == null) return null;
-    final List<PsiElement> result = new ArrayList<PsiElement>();
+    final List<PsiElement> result = new ArrayList<>();
     final List<String> skip = Arrays.asList("true", "false", "this", "super");
     for (PsiElement variable : variables) {
       if (!skip.contains(variable.getText())) {

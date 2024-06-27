@@ -21,7 +21,7 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.LangBundle;
-import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.template.Expression;
 import consulo.language.editor.template.ExpressionContext;
 import consulo.language.editor.template.Result;
@@ -29,7 +29,6 @@ import consulo.language.editor.template.TextResult;
 import consulo.language.editor.template.context.TemplateContextType;
 import consulo.language.editor.template.macro.Macro;
 import consulo.language.psi.PsiElement;
-
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -42,7 +41,7 @@ public class MethodNameMacro extends Macro {
 
   @Override
   public String getPresentableName() {
-    return CodeInsightBundle.message("macro.methodname");
+    return CodeInsightLocalize.macroMethodname().get();
   }
 
   @Override
@@ -54,13 +53,13 @@ public class MethodNameMacro extends Macro {
   @Override
   public Result calculateResult(@Nonnull Expression[] params, final ExpressionContext context) {
     PsiElement place = context.getPsiElementAtStartOffset();
-    while(place != null){
+    while (place != null){
       if (place instanceof PsiMethod){
         return new TextResult(((PsiMethod)place).getName());
-      } else if (place instanceof PsiClassInitializer) {
-        return ((PsiClassInitializer) place).hasModifierProperty(PsiModifier.STATIC) ?
-               new TextResult(LangBundle.message("java.terms.static.initializer")) :
-               new TextResult(LangBundle.message("java.terms.instance.initializer"));
+      } else if (place instanceof PsiClassInitializer classInitializer) {
+        return classInitializer.hasModifierProperty(PsiModifier.STATIC)
+          ? new TextResult(LangBundle.message("java.terms.static.initializer"))
+          : new TextResult(LangBundle.message("java.terms.instance.initializer"));
       }
       place = place.getParent();
     }
@@ -71,5 +70,4 @@ public class MethodNameMacro extends Macro {
   public boolean isAcceptableInContext(TemplateContextType context) {
     return context instanceof JavaCodeContextType;
   }
-
 }

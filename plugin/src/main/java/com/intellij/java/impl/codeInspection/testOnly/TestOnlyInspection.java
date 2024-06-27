@@ -23,17 +23,17 @@ import com.intellij.java.language.psi.PsiCallExpression;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.ProblemsHolder;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.module.content.ProjectRootManager;
 import consulo.virtualFileSystem.VirtualFile;
 import jakarta.annotation.Nonnull;
-
 import jakarta.annotation.Nullable;
 
 @ExtensionImpl
@@ -41,7 +41,7 @@ public class TestOnlyInspection extends BaseJavaLocalInspectionTool {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionsBundle.message("inspection.test.only.problems.display.name");
+    return InspectionLocalize.inspectionTestOnlyProblemsDisplayName().get();
   }
 
   @Override
@@ -58,12 +58,14 @@ public class TestOnlyInspection extends BaseJavaLocalInspectionTool {
 
   @Override
   @Nonnull
-  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder h,
-                                            boolean isOnTheFly,
-                                            LocalInspectionToolSession session,
-                                            Object state) {
+  public PsiElementVisitor buildVisitorImpl(
+    @Nonnull final ProblemsHolder h,
+    boolean isOnTheFly,
+    LocalInspectionToolSession session,
+    Object state
+  ) {
     return new JavaElementVisitor() {
-      @Override public void visitCallExpression(PsiCallExpression e) {
+      @Override public void visitCallExpression(@Nonnull PsiCallExpression e) {
         validate(e, h);
       }
     };
@@ -95,8 +97,7 @@ public class TestOnlyInspection extends BaseJavaLocalInspectionTool {
 
   private boolean isInsideTestClass(PsiCallExpression e) {
     PsiClass c = getTopLevelParentOfType(e, PsiClass.class);
-    if (c == null) return false;
-    return TestFrameworks.getInstance().isTestClass(c);
+    return c != null && TestFrameworks.getInstance().isTestClass(c);
   }
 
   private <T extends PsiElement> T getTopLevelParentOfType(PsiElement e, Class<T> c) {
@@ -114,12 +115,11 @@ public class TestOnlyInspection extends BaseJavaLocalInspectionTool {
   private boolean isUnderTestSources(PsiCallExpression e) {
     ProjectRootManager rm = ProjectRootManager.getInstance(e.getProject());
     VirtualFile f = e.getContainingFile().getVirtualFile();
-    if (f == null) return false;
-    return rm.getFileIndex().isInTestSourceContent(f);
+    return f != null && rm.getFileIndex().isInTestSourceContent(f);
   }
 
   private void reportProblem(PsiCallExpression e, ProblemsHolder h) {
-    String message = InspectionsBundle.message("inspection.test.only.problems.test.only.method.call");
-    h.registerProblem(e, message, ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+    LocalizeValue message = InspectionLocalize.inspectionTestOnlyProblemsTestOnlyMethodCall();
+    h.registerProblem(e, message.get(), ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
   }
 }

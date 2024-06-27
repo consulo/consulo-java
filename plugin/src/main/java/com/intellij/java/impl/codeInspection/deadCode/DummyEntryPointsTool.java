@@ -16,8 +16,8 @@
 package com.intellij.java.impl.codeInspection.deadCode;
 
 import consulo.language.editor.inspection.GlobalInspectionContext;
-import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.ProblemDescriptionsProcessor;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.inspection.scheme.JobDescriptor;
 import consulo.language.editor.scope.AnalysisScope;
@@ -33,11 +33,13 @@ public class DummyEntryPointsTool extends UnusedDeclarationInspection {
   }
 
   @Override
-  public void runInspection(@Nonnull AnalysisScope scope,
-                            @Nonnull InspectionManager manager,
-                            @Nonnull GlobalInspectionContext globalContext,
-                            @Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor,
-                            Object state) {
+  public void runInspection(
+    @Nonnull AnalysisScope scope,
+    @Nonnull InspectionManager manager,
+    @Nonnull GlobalInspectionContext globalContext,
+    @Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor,
+    Object state
+  ) {
   }
 
   @Nullable
@@ -49,7 +51,7 @@ public class DummyEntryPointsTool extends UnusedDeclarationInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionsBundle.message("inspection.dead.code.entry.points.display.name");
+    return InspectionLocalize.inspectionDeadCodeEntryPointsDisplayName().get();
   }
 
   @Override

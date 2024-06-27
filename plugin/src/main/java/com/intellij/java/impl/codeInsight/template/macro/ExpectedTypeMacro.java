@@ -24,9 +24,9 @@ import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.java.language.psi.PsiType;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.completion.CompletionUtilCore;
 import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.template.Expression;
 import consulo.language.editor.template.ExpressionContext;
 import consulo.language.editor.template.Result;
@@ -37,9 +37,9 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.ReparseRangeUtil;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -53,7 +53,7 @@ public class ExpectedTypeMacro extends Macro {
 
   @Override
   public String getPresentableName() {
-    return CodeInsightBundle.message("macro.expected.type");
+    return CodeInsightLocalize.macroExpectedType().get();
   }
 
   @Override
@@ -73,7 +73,7 @@ public class ExpectedTypeMacro extends Macro {
   public LookupElement[] calculateLookupItems(@Nonnull Expression[] params, ExpressionContext context) {
     PsiType[] types = getExpectedTypes(params, context);
     if (types == null || types.length < 2) return null;
-    Set<LookupElement> set = new LinkedHashSet<LookupElement>();
+    Set<LookupElement> set = new LinkedHashSet<>();
     for (PsiType type : types) {
       JavaEditorTemplateUtilImpl.addTypeLookupItem(set, type);
     }
@@ -90,16 +90,20 @@ public class ExpectedTypeMacro extends Macro {
     PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(context.getEditor().getDocument());
     assert file != null;
     final PsiFile fileCopy = (PsiFile)file.copy();
-    ReparseRangeUtil.reparseRange(fileCopy, context.getTemplateStartOffset(), context.getTemplateEndOffset(),
-                                                   CompletionUtilCore.DUMMY_IDENTIFIER);
+    ReparseRangeUtil.reparseRange(
+      fileCopy,
+      context.getTemplateStartOffset(),
+      context.getTemplateEndOffset(),
+      CompletionUtilCore.DUMMY_IDENTIFIER
+    );
     
     PsiElement element = fileCopy.findElementAt(context.getTemplateStartOffset());
 
-    if (element instanceof PsiIdentifier && element.getParent() instanceof PsiExpression) {
-      ExpectedTypeInfo[] infos = ExpectedTypesProvider.getExpectedTypes((PsiExpression)element.getParent(), true);
-      if (infos.length > 0){
+    if (element instanceof PsiIdentifier && element.getParent() instanceof PsiExpression parentExpression) {
+      ExpectedTypeInfo[] infos = ExpectedTypesProvider.getExpectedTypes(parentExpression, true);
+      if (infos.length > 0) {
         types = new PsiType[infos.length];
-        for(int i = 0; i < infos.length; i++) {
+        for (int i = 0; i < infos.length; i++) {
           ExpectedTypeInfo info = infos[i];
           types[i] = info.getType();
         }
@@ -113,5 +117,4 @@ public class ExpectedTypeMacro extends Macro {
   public boolean isAcceptableInContext(TemplateContextType context) {
     return context instanceof JavaCodeContextType;
   }
-
 }

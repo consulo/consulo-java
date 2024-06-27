@@ -21,10 +21,11 @@ import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHigh
 import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.RemoveUnusedVariableUtil;
 import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.java.language.psi.*;
-import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemsHolder;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiPackage;
@@ -45,7 +46,7 @@ public abstract class AccessStaticViaInstanceBase extends BaseJavaBatchLocalInsp
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionsBundle.message("access.static.via.instance");
+    return InspectionLocalize.accessStaticViaInstance().get();
   }
 
   @Override
@@ -67,10 +68,12 @@ public abstract class AccessStaticViaInstanceBase extends BaseJavaBatchLocalInsp
 
   @Override
   @Nonnull
-  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
-                                            final boolean isOnTheFly,
-                                            LocalInspectionToolSession session,
-                                            Object state) {
+  public PsiElementVisitor buildVisitorImpl(
+    @Nonnull final ProblemsHolder holder,
+    final boolean isOnTheFly,
+    LocalInspectionToolSession session,
+    Object state
+  ) {
     return new JavaElementVisitor() {
       @Override public void visitReferenceExpression(PsiReferenceExpression expression) {
         checkAccessStaticMemberViaInstanceReference(expression, holder, isOnTheFly);
@@ -78,6 +81,7 @@ public abstract class AccessStaticViaInstanceBase extends BaseJavaBatchLocalInsp
     };
   }
 
+  @RequiredReadAction
   private void checkAccessStaticMemberViaInstanceReference(PsiReferenceExpression expr, ProblemsHolder holder, boolean onTheFly) {
     JavaResolveResult result = expr.advancedResolve(false);
     PsiElement resolved = result.getElement();
@@ -86,8 +90,8 @@ public abstract class AccessStaticViaInstanceBase extends BaseJavaBatchLocalInsp
     PsiExpression qualifierExpression = expr.getQualifierExpression();
     if (qualifierExpression == null) return;
 
-    if (qualifierExpression instanceof PsiReferenceExpression) {
-      final PsiElement qualifierResolved = ((PsiReferenceExpression)qualifierExpression).resolve();
+    if (qualifierExpression instanceof PsiReferenceExpression referenceExpression) {
+      final PsiElement qualifierResolved = referenceExpression.resolve();
       if (qualifierResolved instanceof PsiClass || qualifierResolved instanceof PsiPackage) {
         return;
       }
@@ -98,7 +102,7 @@ public abstract class AccessStaticViaInstanceBase extends BaseJavaBatchLocalInsp
                                                    JavaHighlightUtil.formatType(qualifierExpression.getType()),
                                                    HighlightMessageUtil.getSymbolName(resolved, result.getSubstitutor()));
     if (!onTheFly) {
-      if (RemoveUnusedVariableUtil.checkSideEffects(qualifierExpression, null, new ArrayList<PsiElement>())) {
+      if (RemoveUnusedVariableUtil.checkSideEffects(qualifierExpression, null, new ArrayList<>())) {
         holder.registerProblem(expr, description);
         return;
       }
@@ -106,9 +110,11 @@ public abstract class AccessStaticViaInstanceBase extends BaseJavaBatchLocalInsp
     holder.registerProblem(expr, description, createAccessStaticViaInstanceFix(expr, onTheFly, result));
   }
 
-  protected LocalQuickFix createAccessStaticViaInstanceFix(PsiReferenceExpression expr,
-                                                           boolean onTheFly,
-                                                           JavaResolveResult result) {
+  protected LocalQuickFix createAccessStaticViaInstanceFix(
+    PsiReferenceExpression expr,
+    boolean onTheFly,
+    JavaResolveResult result
+  ) {
     return null;
   }
 }

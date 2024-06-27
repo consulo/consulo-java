@@ -24,6 +24,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.document.util.TextRange;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.template.Expression;
 import consulo.language.editor.template.ExpressionContext;
 import consulo.language.editor.template.Result;
@@ -51,7 +52,7 @@ public class VariableOfTypeMacro extends Macro {
 
   @Override
   public String getPresentableName() {
-    return CodeInsightBundle.message("macro.variable.of.type");
+    return CodeInsightLocalize.macroVariableOfType().get();
   }
 
   @Override
@@ -71,7 +72,7 @@ public class VariableOfTypeMacro extends Macro {
   public LookupElement[] calculateLookupItems(@Nonnull Expression[] params, final ExpressionContext context) {
     final PsiElement[] vars = getVariables(params, context);
     if (vars == null || vars.length < 2) return null;
-    final Set<LookupElement> set = new LinkedHashSet<LookupElement>();
+    final Set<LookupElement> set = new LinkedHashSet<>();
     for (PsiElement var : vars) {
       JavaEditorTemplateUtilImpl.addElementLookupItem(set, var);
     }
@@ -95,8 +96,8 @@ public class VariableOfTypeMacro extends Macro {
     PsiVariable[] variables = MacroUtil.getVariablesVisibleAt(place, "");
     PsiManager manager = PsiManager.getInstance(project);
     for (PsiVariable var : variables) {
-      if (var instanceof PsiField && var.hasModifierProperty(PsiModifier.STATIC)) {
-        PsiClass varClass = ((PsiField)var).getContainingClass();
+      if (var instanceof PsiField field && var.hasModifierProperty(PsiModifier.STATIC)) {
+        PsiClass varClass = field.getContainingClass();
         PsiClass placeClass = PsiTreeUtil.getParentOfType(place, PsiClass.class);
         if (!manager.areElementsEquivalent(varClass, placeClass)) continue;
       }

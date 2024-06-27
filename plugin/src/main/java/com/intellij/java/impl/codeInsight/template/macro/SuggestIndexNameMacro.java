@@ -21,8 +21,9 @@ import com.intellij.java.language.psi.PsiDeclarationStatement;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.java.language.psi.PsiLocalVariable;
 import com.intellij.java.language.psi.PsiVariable;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.template.Expression;
 import consulo.language.editor.template.ExpressionContext;
 import consulo.language.editor.template.Result;
@@ -45,7 +46,7 @@ public class SuggestIndexNameMacro extends Macro {
 
   @Override
   public String getPresentableName() {
-    return CodeInsightBundle.message("macro.suggest.index.name");
+    return CodeInsightLocalize.macroSuggestIndexName().get();
   }
 
   @Override
@@ -55,6 +56,7 @@ public class SuggestIndexNameMacro extends Macro {
   }
 
   @Override
+  @RequiredReadAction
   public Result calculateResult(@Nonnull Expression[] params, final ExpressionContext context) {
     if (params.length != 0) return null;
 
@@ -65,7 +67,7 @@ public class SuggestIndexNameMacro extends Macro {
     PsiElement place = file.findElementAt(offset);
     PsiVariable[] vars = MacroUtil.getVariablesVisibleAt(place, "");
   ChooseLetterLoop:
-    for(char letter = 'i'; letter <= 'z'; letter++){
+    for (char letter = 'i'; letter <= 'z'; letter++){
       for (PsiVariable var : vars) {
         PsiIdentifier identifier = var.getNameIdentifier();
         if (identifier == null || place.equals(identifier)) continue;
@@ -93,5 +95,4 @@ public class SuggestIndexNameMacro extends Macro {
   public boolean isAcceptableInContext(TemplateContextType context) {
     return context instanceof JavaCodeContextType;
   }
-
 }

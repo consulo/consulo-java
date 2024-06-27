@@ -10,13 +10,12 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemsHolder;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.util.lang.ObjectUtil;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -34,7 +33,7 @@ public class SuspiciousCollectionsMethodCallsInspection extends AbstractBaseJava
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionsBundle.message("inspection.suspicious.collections.method.calls.display.name");
+    return InspectionLocalize.inspectionSuspiciousCollectionsMethodCallsDisplayName().get();
   }
 
   @Override
@@ -45,15 +44,21 @@ public class SuspiciousCollectionsMethodCallsInspection extends AbstractBaseJava
   @Override
   @Nullable
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(JavaAnalysisBundle.message("report.suspicious.but.possibly.correct.method.calls"), this, "REPORT_CONVERTIBLE_METHOD_CALLS");
+    return new SingleCheckboxOptionsPanel(
+      JavaAnalysisBundle.message("report.suspicious.but.possibly.correct.method.calls"),
+      this,
+      "REPORT_CONVERTIBLE_METHOD_CALLS"
+    );
   }
 
   @Override
   @Nonnull
-  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
-                                            final boolean isOnTheFly,
-                                            LocalInspectionToolSession session,
-                                            Object state) {
+  public PsiElementVisitor buildVisitorImpl(
+    @Nonnull final ProblemsHolder holder,
+    final boolean isOnTheFly,
+    LocalInspectionToolSession session,
+    Object state
+  ) {
     final List<SuspiciousMethodCallUtil.PatternMethod> patternMethods = new ArrayList<>();
     return new JavaElementVisitor() {
       @Override
@@ -78,7 +83,13 @@ public class SuspiciousCollectionsMethodCallsInspection extends AbstractBaseJava
         if (interfaceMethod != null && interfaceMethod.getParameterList().getParametersCount() == 1) {
           final PsiSubstitutor psiSubstitutor = LambdaUtil.getSubstitutor(interfaceMethod, functionalInterfaceResolveResult);
           final MethodSignature signature = interfaceMethod.getSignature(psiSubstitutor);
-          String message = SuspiciousMethodCallUtil.getSuspiciousMethodCallMessage(expression, signature.getParameterTypes()[0], REPORT_CONVERTIBLE_METHOD_CALLS, patternMethods, 0);
+          String message = SuspiciousMethodCallUtil.getSuspiciousMethodCallMessage(
+            expression,
+            signature.getParameterTypes()[0],
+            REPORT_CONVERTIBLE_METHOD_CALLS,
+            patternMethods,
+            0
+          );
           if (message != null) {
             holder.registerProblem(ObjectUtil.notNull(expression.getReferenceNameElement(), expression), message);
           }
@@ -90,7 +101,7 @@ public class SuspiciousCollectionsMethodCallsInspection extends AbstractBaseJava
   @Override
   @Nonnull
   public String getGroupDisplayName() {
-    return InspectionsBundle.message("group.names.probable.bugs");
+    return InspectionLocalize.groupNamesProbableBugs().get();
   }
 
   @Override
@@ -99,15 +110,17 @@ public class SuspiciousCollectionsMethodCallsInspection extends AbstractBaseJava
     return "SuspiciousMethodCalls";
   }
 
-  private static String getSuspiciousMethodCallMessage(PsiMethodCallExpression methodCall,
-                                                       boolean reportConvertibleMethodCalls,
-                                                       List<SuspiciousMethodCallUtil.PatternMethod> patternMethods,
-                                                       PsiExpression arg,
-                                                       int i) {
+  private static String getSuspiciousMethodCallMessage(
+    PsiMethodCallExpression methodCall,
+    boolean reportConvertibleMethodCalls,
+    List<SuspiciousMethodCallUtil.PatternMethod> patternMethods,
+    PsiExpression arg,
+    int i
+  ) {
     PsiType argType = arg.getType();
     boolean exactType = arg instanceof PsiNewExpression;
     final String plainMessage = SuspiciousMethodCallUtil
-        .getSuspiciousMethodCallMessage(methodCall, arg, argType, exactType || reportConvertibleMethodCalls, patternMethods, i);
+      .getSuspiciousMethodCallMessage(methodCall, arg, argType, exactType || reportConvertibleMethodCalls, patternMethods, i);
     if (plainMessage != null && !exactType) {
       String methodName = methodCall.getMethodExpression().getReferenceName();
       if (SuspiciousMethodCallUtil.isCollectionAcceptingMethod(methodName)) {
@@ -116,7 +129,14 @@ public class SuspiciousCollectionsMethodCallsInspection extends AbstractBaseJava
       }
       TypeConstraint constraint = TypeConstraint.fromDfType(CommonDataflow.getDfType(arg));
       PsiType type = constraint.getPsiType(methodCall.getProject());
-      if (type != null && SuspiciousMethodCallUtil.getSuspiciousMethodCallMessage(methodCall, arg, type, reportConvertibleMethodCalls, patternMethods, i) == null) {
+      if (type != null && SuspiciousMethodCallUtil.getSuspiciousMethodCallMessage(
+        methodCall,
+        arg,
+        type,
+        reportConvertibleMethodCalls,
+        patternMethods,
+        i
+      ) == null) {
         return null;
       }
     }

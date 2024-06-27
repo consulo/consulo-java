@@ -24,17 +24,17 @@ import com.intellij.java.language.impl.codeInsight.template.macro.PsiTypeResult;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiWildcardType;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.document.util.TextRange;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.template.Expression;
 import consulo.language.editor.template.ExpressionContext;
 import consulo.language.editor.template.Result;
 import consulo.language.editor.template.context.TemplateContextType;
 import consulo.language.editor.template.macro.Macro;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -50,7 +50,7 @@ public class GuessElementTypeMacro extends Macro {
 
   @Override
   public String getPresentableName() {
-    return CodeInsightBundle.message("macro.guess.element.type.of.container");
+    return CodeInsightLocalize.macroGuessElementTypeOfContainer().get();
   }
 
   @Override
@@ -60,6 +60,7 @@ public class GuessElementTypeMacro extends Macro {
   }
 
   @Override
+  @RequiredReadAction
   public Result calculateResult(@Nonnull Expression[] params, final ExpressionContext context) {
     PsiType[] types = guessTypes(params, context);
     if (types == null || types.length == 0) return null;
@@ -67,10 +68,11 @@ public class GuessElementTypeMacro extends Macro {
   }
 
   @Override
+  @RequiredReadAction
   public LookupElement[] calculateLookupItems(@Nonnull Expression[] params, ExpressionContext context) {
     PsiType[] types = guessTypes(params, context);
     if (types == null || types.length < 2) return null;
-    Set<LookupElement> set = new LinkedHashSet<LookupElement>();
+    Set<LookupElement> set = new LinkedHashSet<>();
     for (PsiType type : types) {
       JavaEditorTemplateUtilImpl.addTypeLookupItem(set, type);
     }
@@ -78,6 +80,7 @@ public class GuessElementTypeMacro extends Macro {
   }
 
   @Nullable
+  @RequiredReadAction
   private static PsiType[] guessTypes(Expression[] params, ExpressionContext context) {
     if (params.length != 1) return null;
     final Result result = params[0].calculateResult(context);
@@ -87,12 +90,13 @@ public class GuessElementTypeMacro extends Macro {
 
     PsiExpression expr = MacroUtil.resultToPsiExpression(result, context);
     if (expr == null) return null;
-    PsiType[] types = GuessManager.getInstance(project).guessContainerElementType(expr, new TextRange(context.getTemplateStartOffset(), context.getTemplateEndOffset()));
+    PsiType[] types = GuessManager.getInstance(project)
+      .guessContainerElementType(expr, new TextRange(context.getTemplateStartOffset(), context.getTemplateEndOffset()));
     for (int i = 0; i < types.length; i++) {
       PsiType type = types[i];
-      if (type instanceof PsiWildcardType) {
-        if (((PsiWildcardType)type).isExtends()) {
-          types[i] = ((PsiWildcardType)type).getBound();
+      if (type instanceof PsiWildcardType wildcardType) {
+        if (wildcardType.isExtends()) {
+          types[i] = wildcardType.getBound();
         } else {
           types[i] = PsiType.getJavaLangObject(expr.getManager(), expr.getResolveScope());
         }
@@ -105,5 +109,4 @@ public class GuessElementTypeMacro extends Macro {
   public boolean isAcceptableInContext(TemplateContextType context) {
     return context instanceof JavaCodeContextType;
   }
-
 }

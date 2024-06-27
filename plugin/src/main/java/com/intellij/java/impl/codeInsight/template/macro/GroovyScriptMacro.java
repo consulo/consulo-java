@@ -16,16 +16,16 @@
 package com.intellij.java.impl.codeInsight.template.macro;
 
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupElementBuilder;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.template.Expression;
 import consulo.language.editor.template.ExpressionContext;
 import consulo.language.editor.template.Result;
 import consulo.language.editor.template.TextResult;
 import consulo.language.editor.template.macro.Macro;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -41,7 +41,7 @@ public class GroovyScriptMacro extends Macro {
 
   @Override
   public String getPresentableName() {
-    return CodeInsightBundle.message("macro.groovy.script");
+    return CodeInsightLocalize.macroGroovyScript().get();
   }
 
   @Override
@@ -64,11 +64,11 @@ public class GroovyScriptMacro extends Macro {
       Script script = possibleFile.exists() ? shell.parse(possibleFile) :  shell.parse(text);
       Binding binding = new Binding();
 
-      for(int i = 1; i < params.length; ++i) {
+      for (int i = 1; i < params.length; ++i) {
         Result paramResult = params[i].calculateResult(context);
         Object value = null;
-        if (paramResult instanceof ListResult) {
-          value = ContainerUtil.map2List(((ListResult)paramResult).getComponents(), new Function<Result, String>() {
+        if (paramResult instanceof ListResult listResult) {
+          value = ContainerUtil.map2List(listResult.getComponents(), new Function<Result, String>() {
             @Override
             public String apply(Result result) {
               return result.toString();
@@ -101,7 +101,7 @@ public class GroovyScriptMacro extends Macro {
   public LookupElement[] calculateLookupItems(@Nonnull Expression[] params, ExpressionContext context) {
     Object o = runIt(params, context);
     if (o != null) {
-      Set<LookupElement> set = new LinkedHashSet<LookupElement>();
+      Set<LookupElement> set = new LinkedHashSet<>();
       set.add(LookupElementBuilder.create(o.toString()));
       return set.toArray(new LookupElement[set.size()]);
     }
