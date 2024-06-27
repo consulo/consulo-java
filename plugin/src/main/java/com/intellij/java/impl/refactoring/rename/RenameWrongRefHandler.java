@@ -20,15 +20,16 @@ import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.RenameWrongRefFix
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.dataContext.DataContext;
 import consulo.application.Result;
-import consulo.language.editor.WriteCommandAction;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
+import consulo.dataContext.DataContext;
+import consulo.language.editor.WriteCommandAction;
+import consulo.language.editor.refactoring.rename.RenameHandler;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiReference;
-import consulo.language.editor.refactoring.rename.RenameHandler;
+import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -56,7 +57,7 @@ public class RenameWrongRefHandler implements RenameHandler {
   }
 
   @Override
-  @RequiredReadAction
+  @RequiredUIAccess
   public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file, final DataContext dataContext) {
     final PsiReferenceExpression reference = (PsiReferenceExpression) file.findReferenceAt(editor.getCaretModel().getOffset());
     new WriteCommandAction(project) {

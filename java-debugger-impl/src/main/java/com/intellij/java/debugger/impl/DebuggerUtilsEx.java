@@ -1128,8 +1128,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
   }
 
   public static boolean isInLibraryContent(@Nullable VirtualFile file, @Nonnull Project project) {
-    return ReadAction.compute(() ->
-    {
+    return ReadAction.compute(() -> {
       if (file == null) {
         return true;
       } else {

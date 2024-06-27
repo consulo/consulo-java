@@ -79,7 +79,6 @@ public class IncreaseLanguageLevelFix implements SyntheticIntentionAction {
   }
 
   @Override
-  @RequiredReadAction
   @RequiredUIAccess
   public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
     final VirtualFile virtualFile = file.getVirtualFile();
@@ -101,7 +100,7 @@ public class IncreaseLanguageLevelFix implements SyntheticIntentionAction {
 
     mutableModuleExtension.getInheritableLanguageLevel().set(null, myLevel.getName());
 
-    project.getApplication().runWriteAction(() -> rootModel.commit());
+    project.getApplication().runWriteAction(rootModel::commit);
   }
 
   @Override

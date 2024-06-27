@@ -91,6 +91,7 @@ public abstract class AbstractJavaTestConfigurationProducer<T extends JavaTestCo
     return null;
   }
 
+  @RequiredReadAction
   @Override
   public boolean isConfigurationFromContext(T configuration, ConfigurationContext context) {
     if (isMultipleElementsSelected(context)) {
@@ -139,6 +140,7 @@ public abstract class AbstractJavaTestConfigurationProducer<T extends JavaTestCo
     return paramSetName != null && !Comparing.strEqual(paramSetName, configuration.getProgramParameters());
   }
 
+  @RequiredReadAction
   public Module findModule(ModuleBasedConfiguration configuration, Module contextModule, Set<String> patterns) {
     return JavaExecutionUtil.findModule(contextModule, patterns, configuration.getProject(), this::isTestClass);
   }
@@ -212,8 +214,7 @@ public abstract class AbstractJavaTestConfigurationProducer<T extends JavaTestCo
               PsiClass psiClass = PsiTreeUtil.getParentOfType(editorFile.findElementAt(selectionStart), PsiClass.class);
               if (psiClass != null) {
                 TextRange selectionRange = new TextRange(selectionStart, selectionModel.getSelectionEnd());
-                PsiMethod[] methodsInSelection = Arrays.stream(psiClass.getMethods()).filter(method ->
-                {
+                PsiMethod[] methodsInSelection = Arrays.stream(psiClass.getMethods()).filter(method -> {
                   TextRange methodTextRange = method.getTextRange();
                   return methodTextRange != null && selectionRange.contains(methodTextRange);
                 }).toArray(PsiMethod[]::new);
@@ -310,6 +311,7 @@ public abstract class AbstractJavaTestConfigurationProducer<T extends JavaTestCo
     return psiMember.getName();
   }
 
+  @RequiredReadAction
   public boolean isMultipleElementsSelected(ConfigurationContext context) {
     if (!context.containsMultipleSelection()) {
       return false;

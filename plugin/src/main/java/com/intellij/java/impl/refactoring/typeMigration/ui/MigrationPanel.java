@@ -117,8 +117,7 @@ public class MigrationPanel extends JPanel implements Disposable {
     add(conflictsSplitter, BorderLayout.CENTER);
     Disposer.register(this, myConflictsPanel);
 
-    builder.addSubtreeToUpdate((DefaultMutableTreeNode) myRootsTree.getModel().getRoot(), () -> SwingUtilities.invokeLater(() ->
-    {
+    builder.addSubtreeToUpdate((DefaultMutableTreeNode) myRootsTree.getModel().getRoot(), () -> SwingUtilities.invokeLater(() -> {
       if (builder.isDisposed()) {
         return;
       }
@@ -161,7 +160,8 @@ public class MigrationPanel extends JPanel implements Disposable {
     final JButton performButton = new JButton(RefactoringBundle.message("type.migration.migrate.button.text"));
     performButton.addActionListener(new ActionListener() {
       private void expandTree(MigrationNode migrationNode) {
-        if (!migrationNode.getInfo().isExcluded() || migrationNode.areChildrenInitialized()) { //do not walk into excluded collapsed nodes: nothing to migrate can be found
+        if (!migrationNode.getInfo().isExcluded() || migrationNode.areChildrenInitialized()) {
+          //do not walk into excluded collapsed nodes: nothing to migrate can be found
           final Collection<? extends AbstractTreeNode> nodes = migrationNode.getChildren();
           for (final AbstractTreeNode node : nodes) {
             Application.get().runReadAction(() -> expandTree((MigrationNode) node));
@@ -175,11 +175,9 @@ public class MigrationPanel extends JPanel implements Disposable {
           final Object userObject = defaultMutableTreeNode.getUserObject();
           if (userObject instanceof MigrationRootNode migrationRootNode) {
             ProgressManager.getInstance().runProcessWithProgressSynchronously(
-              () ->
-              {
+              () -> {
                 final HashSet<VirtualFile> files = new HashSet<>();
-                final TypeMigrationUsageInfo[] usages = ReadAction.compute(() ->
-                {
+                final TypeMigrationUsageInfo[] usages = ReadAction.compute(() -> {
                   final Collection<? extends AbstractTreeNode> children = migrationRootNode.getChildren();
                   for (AbstractTreeNode child : children) {
                     expandTree((MigrationNode) child);
@@ -197,10 +195,9 @@ public class MigrationPanel extends JPanel implements Disposable {
                 });
 
                 Application.get().invokeLater(
-                  () ->
-                  {
-                    if (ReadonlyStatusHandler.getInstance(myProject).ensureFilesWritable(VfsUtilCore.toVirtualFileArray(files))
-                                             .hasReadonlyFiles()) {
+                  () -> {
+                    if (ReadonlyStatusHandler.getInstance(myProject)
+                      .ensureFilesWritable(VfsUtilCore.toVirtualFileArray(files)).hasReadonlyFiles()) {
                       return;
                     }
                     new WriteCommandAction(myProject) {

@@ -124,14 +124,11 @@ public abstract class SlicePanel extends JPanel implements TypeSafeDataProvider,
         return;
       }
       final SliceNode rootNode1 = myBuilder.getRootSliceNode();
-      myBuilder.expand(rootNode1, new Runnable() {
-        @Override
-        public void run() {
-          if (isDisposed || myBuilder.isDisposed() || myProject.isDisposed()) {
-            return;
-          }
-          myBuilder.select(rootNode1.myCachedChildren.get(0)); //first there is ony one child
+      myBuilder.expand(rootNode1, () -> {
+        if (isDisposed || myBuilder.isDisposed() || myProject.isDisposed()) {
+          return;
         }
+        myBuilder.select(rootNode1.myCachedChildren.get(0)); //first there is ony one child
       });
       treeSelectionChanged();
     });
