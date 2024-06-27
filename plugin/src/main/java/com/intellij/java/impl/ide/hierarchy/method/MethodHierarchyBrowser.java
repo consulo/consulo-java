@@ -15,29 +15,27 @@
  */
 package com.intellij.java.impl.ide.hierarchy.method;
 
-import java.util.Comparator;
-import java.util.Map;
-
-import jakarta.annotation.Nonnull;
-import javax.swing.JPanel;
-import javax.swing.JTree;
-
-import consulo.ide.IdeBundle;
+import com.intellij.java.impl.ide.hierarchy.JavaHierarchyUtil;
+import com.intellij.java.language.psi.PsiMethod;
 import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
 import consulo.ide.impl.idea.ide.hierarchy.HierarchyTreeBuilder;
 import consulo.ide.impl.idea.ide.hierarchy.HierarchyTreeStructure;
-import com.intellij.java.impl.ide.hierarchy.JavaHierarchyUtil;
 import consulo.ide.impl.idea.ide.hierarchy.MethodHierarchyBrowserBase;
-import consulo.ui.ex.action.IdeActions;
-import consulo.ui.ex.tree.NodeDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.logging.Logger;
+import consulo.platform.base.localize.IdeLocalize;
+import consulo.project.Project;
 import consulo.ui.ex.action.ActionGroup;
 import consulo.ui.ex.action.ActionManager;
 import consulo.ui.ex.action.ActionPlaces;
-import consulo.logging.Logger;
-import consulo.project.Project;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiMethod;
+import consulo.ui.ex.action.IdeActions;
 import consulo.ui.ex.awt.PopupHandler;
+import consulo.ui.ex.tree.NodeDescriptor;
+import jakarta.annotation.Nonnull;
+
+import javax.swing.*;
+import java.util.Comparator;
+import java.util.Map;
 
 public class MethodHierarchyBrowser extends MethodHierarchyBrowserBase {
   private static final Logger LOG = Logger.getInstance(MethodHierarchyBrowser.class);
@@ -59,17 +57,17 @@ public class MethodHierarchyBrowser extends MethodHierarchyBrowserBase {
   }
 
   protected JPanel createLegendPanel() {
-    return createStandardLegendPanel(IdeBundle.message("hierarchy.legend.method.is.defined.in.class"),
-                                     IdeBundle.message("hierarchy.legend.method.defined.in.superclass"),
-                                     IdeBundle.message("hierarchy.legend.method.should.be.defined"));
+    return createStandardLegendPanel(
+      IdeLocalize.hierarchyLegendMethodIsDefinedInClass().get(),
+      IdeLocalize.hierarchyLegendMethodDefinedInSuperclass().get(),
+      IdeLocalize.hierarchyLegendMethodShouldBeDefined().get()
+    );
   }
 
 
   protected PsiElement getElementFromDescriptor(@Nonnull final HierarchyNodeDescriptor descriptor) {
-    if (descriptor instanceof MethodHierarchyNodeDescriptor) {
-      return ((MethodHierarchyNodeDescriptor)descriptor).getTargetElement();
-    }
-    return null;
+    return descriptor instanceof MethodHierarchyNodeDescriptor methodHierarchyNodeDescriptor
+      ? methodHierarchyNodeDescriptor.getTargetElement() : null;
   }
 
   protected boolean isApplicableElement(@Nonnull final PsiElement psiElement) {

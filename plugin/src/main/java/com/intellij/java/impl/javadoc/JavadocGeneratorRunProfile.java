@@ -23,7 +23,6 @@ import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.ServerPageFile;
 import consulo.application.progress.ProgressManager;
-import consulo.application.util.SystemInfo;
 import consulo.content.base.SourcesOrderRootType;
 import consulo.content.bundle.Sdk;
 import consulo.execution.CantRunException;
@@ -48,6 +47,7 @@ import consulo.module.Module;
 import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
 import consulo.module.content.layer.OrderEnumerator;
+import consulo.platform.Platform;
 import consulo.process.ExecutionException;
 import consulo.process.ProcessHandler;
 import consulo.process.cmd.GeneralCommandLine;
@@ -132,7 +132,7 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
     }
 
     private void setupExeParams(final Sdk jdk, GeneralCommandLine cmdLine) throws ExecutionException {
-      final String jdkPath = jdk != null && jdk.getSdkType() instanceof JavaSdkType ? ((JavaSdkType) jdk.getSdkType()).getBinPath(jdk) : null;
+      final String jdkPath = jdk != null && jdk.getSdkType() instanceof JavaSdkType javaSdkType ? javaSdkType.getBinPath(jdk) : null;
       if (jdkPath == null) {
         throw new CantRunException(JavadocBundle.message("javadoc.generate.no.jdk.path"));
       }
@@ -145,14 +145,14 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
         }
       }
       cmdLine.setWorkDirectory((File) null);
-      @NonNls final String javadocExecutableName = File.separator + (SystemInfo.isWindows ? "javadoc.exe" : "javadoc");
+      @NonNls final String javadocExecutableName = File.separator + (Platform.current().os().isWindows() ? "javadoc.exe" : "javadoc");
       @NonNls String exePath = jdkPath.replace('/', File.separatorChar) + javadocExecutableName;
       if (new File(exePath).exists()) {
         cmdLine.setExePath(exePath);
       } else { //try to use wrapper jdk
         exePath = new File(jdkPath).getParent().replace('/', File.separatorChar) + javadocExecutableName;
         if (!new File(exePath).exists()) {
-          final File parent = new File(System.getProperty("java.home")).getParentFile(); //try system jre
+          final File parent = new File(Platform.current().jvm().getRuntimeProperty("java.home")).getParentFile(); //try system jre
           exePath = parent.getPath() + File.separator + "bin" + javadocExecutableName;
           if (!new File(exePath).exists()) {
             throw new CantRunException(JavadocBundle.message("javadoc.generate.no.jdk.path"));
@@ -212,18 +212,18 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
       try {
         final File sourcePathTempFile = FileUtil.createTempFile("javadoc", "args.txt", true);
         parameters.add("@" + sourcePathTempFile.getCanonicalPath());
-        final PrintWriter writer = new PrintWriter(new FileWriter(sourcePathTempFile));
-        try {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(sourcePathTempFile))) {
           final Collection<String> packages = new HashSet<>();
           final Collection<String> sources = new HashSet<>();
           final Runnable findRunnable = () ->
           {
             final int scopeType = myGenerationOptions.getScopeType();
-            final boolean usePackageNotation = scopeType == AnalysisScope.MODULE || scopeType == AnalysisScope.MODULES || scopeType == AnalysisScope.PROJECT || scopeType == AnalysisScope
-                .DIRECTORY;
+            final boolean usePackageNotation = scopeType == AnalysisScope.MODULE || scopeType == AnalysisScope.MODULES
+              || scopeType == AnalysisScope.PROJECT || scopeType == AnalysisScope.DIRECTORY;
             myGenerationOptions.accept(new MyContentIterator(myProject, packages, sources, modules, usePackageNotation));
           };
-          if (!ProgressManager.getInstance().runProcessWithProgressSynchronously(findRunnable, "Search for sources to generate javadoc in...", true, myProject)) {
+          if (!ProgressManager.getInstance()
+            .runProcessWithProgressSynchronously(findRunnable, "Search for sources to generate javadoc in...", true, myProject)) {
             return;
           }
           if (packages.size() + sources.size() == 0) {
@@ -252,14 +252,13 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
             }
             if (start) {
               start = false;
-            } else {
+            }
+            else {
               sourcePath.append(File.pathSeparator);
             }
             sourcePath.append(file.getPath());
           }
           writer.println(StringUtil.wrapWithDoubleQuote(sourcePath.toString()));
-        } finally {
-          writer.close();
         }
       } catch (IOException e) {
         LOGGER.error(e);
@@ -341,10 +340,10 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
       if (module != null) {
         myModules.add(module);
       }
-      if (file instanceof PsiJavaFile) {
-        final PsiJavaFile javaFile = (PsiJavaFile) file;
+      if (file instanceof PsiJavaFile javaFile) {
         final String packageName = javaFile.getPackageName();
-        if (containsPackagePrefix(module, packageName) || (packageName.length() == 0 && !(javaFile instanceof ServerPageFile)) || !myUsePackageNotation) {
+        if (containsPackagePrefix(module, packageName) || (packageName.length() == 0 && !(javaFile instanceof ServerPageFile))
+          || !myUsePackageNotation) {
           mySourceFiles.add(FileUtil.toSystemIndependentName(fileOrDir.getPath()));
         } else {
           myPackages.add(packageName);
@@ -356,13 +355,13 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
       if (module == null) {
         return false;
       }
-      /*for(ContentEntry contentEntry : ModuleRootManager.getInstance(module).getContentEntries())
+      /*for (ContentEntry contentEntry : ModuleRootManager.getInstance(module).getContentEntries())
 			{
-				for(ContentFolder sourceFolder : contentEntry.getFolders(JavaModuleSourceRootTypes.SOURCES))
+				for (ContentFolder sourceFolder : contentEntry.getFolders(JavaModuleSourceRootTypes.SOURCES))
 				{
 					final String packagePrefix = sourceFolder.getPackagePrefix();
 					final int prefixLength = packagePrefix.length();
-					if(prefixLength > 0 && packageFQName.startsWith(packagePrefix))
+					if (prefixLength > 0 && packageFQName.startsWith(packagePrefix))
 					{
 						return true;
 					}

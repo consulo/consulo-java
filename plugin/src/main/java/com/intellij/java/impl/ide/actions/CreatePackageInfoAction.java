@@ -20,24 +20,24 @@ import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.java.language.psi.PsiNameHelper;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.application.CommonBundle;
 import consulo.application.dumb.DumbAware;
 import consulo.dataContext.DataContext;
 import consulo.fileTemplate.AttributesDefaults;
 import consulo.fileTemplate.FileTemplate;
 import consulo.fileTemplate.FileTemplateManager;
-import consulo.ide.IdeBundle;
 import consulo.ide.IdeView;
 import consulo.ide.action.CreateFromTemplateActionBase;
 import consulo.java.impl.JavaBundle;
 import consulo.language.content.LanguageContentFolderScopes;
-import consulo.language.editor.CommonDataKeys;
 import consulo.language.psi.PsiDirectory;
 import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
+import consulo.platform.base.localize.CommonLocalize;
+import consulo.platform.base.localize.IdeLocalize;
 import consulo.project.Project;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awt.UIUtil;
 import consulo.util.lang.StringUtil;
 
 import jakarta.annotation.Nullable;
@@ -62,12 +62,21 @@ public class CreatePackageInfoAction extends CreateFromTemplateActionBase implem
         continue;
       }
       if (directory.findFile(PsiJavaPackage.PACKAGE_INFO_FILE) != null) {
-        Messages.showErrorDialog(dataContext.getData(CommonDataKeys.PROJECT), JavaBundle.message("error.package.already.contains.package-info", aPackage.getQualifiedName()), IdeBundle
-            .message("title.cannot.create.file"));
+        Messages.showErrorDialog(
+          dataContext.getData(Project.KEY),
+          JavaBundle.message("error.package.already.contains.package-info", aPackage.getQualifiedName()),
+          IdeLocalize.titleCannotCreateFile().get()
+        );
         return null;
       } else if (directory.findFile("package.html") != null) {
-        if (Messages.showOkCancelDialog(dataContext.getData(CommonDataKeys.PROJECT), JavaBundle.message("error.package.already.contains.package.html", aPackage.getQualifiedName()), JavaBundle
-            .message("error.package.html.found.title"), IdeBundle.message("button.create"), CommonBundle.message("button.cancel"), Messages.getQuestionIcon()) != Messages.OK) {
+        if (Messages.showOkCancelDialog(
+          dataContext.getData(Project.KEY),
+          JavaBundle.message("error.package.already.contains.package.html", aPackage.getQualifiedName()),
+          JavaBundle.message("error.package.html.found.title"),
+          IdeLocalize.buttonCreate().get(),
+          CommonLocalize.buttonCancel().get(),
+          UIUtil.getQuestionIcon()
+        ) != Messages.OK) {
           return null;
         }
       }
@@ -86,7 +95,7 @@ public class CreatePackageInfoAction extends CreateFromTemplateActionBase implem
   }
 
   private static boolean isAvailable(DataContext dataContext) {
-    final Project project = dataContext.getData(CommonDataKeys.PROJECT);
+    final Project project = dataContext.getData(Project.KEY);
     final IdeView view = dataContext.getData(IdeView.KEY);
     if (project == null || view == null) {
       return false;

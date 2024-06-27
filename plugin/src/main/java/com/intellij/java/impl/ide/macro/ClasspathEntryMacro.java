@@ -16,11 +16,9 @@
 package com.intellij.java.impl.ide.macro;
 
 import consulo.annotation.component.ExtensionImpl;
-import consulo.ide.IdeBundle;
-import consulo.language.editor.PlatformDataKeys;
 import consulo.pathMacro.Macro;
-import consulo.language.editor.CommonDataKeys;
 import consulo.dataContext.DataContext;
+import consulo.platform.base.localize.IdeLocalize;
 import consulo.project.Project;
 import consulo.module.content.ProjectRootManager;
 import consulo.virtualFileSystem.VirtualFile;
@@ -35,13 +33,13 @@ public final class ClasspathEntryMacro extends Macro {
   }
 
   public String getDescription() {
-    return IdeBundle.message("macro.classpath.entry");
+    return IdeLocalize.macroClasspathEntry().get();
   }
 
   public String expand(final DataContext dataContext) {
-    final Project project = dataContext.getData(CommonDataKeys.PROJECT);
+    final Project project = dataContext.getData(Project.KEY);
     if (project == null) return null;
-    final VirtualFile file = dataContext.getData(PlatformDataKeys.VIRTUAL_FILE);
+    final VirtualFile file = dataContext.getData(VirtualFile.KEY);
     if (file == null) return null;
     final VirtualFile classRoot = ProjectRootManager.getInstance(project).getFileIndex().getClassRootForFile(file);
     if (classRoot == null) return null;

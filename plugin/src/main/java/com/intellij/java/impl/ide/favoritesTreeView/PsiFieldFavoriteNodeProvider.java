@@ -25,11 +25,10 @@ import com.intellij.java.language.impl.psi.presentation.java.ClassPresentationUt
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.bookmark.ui.view.BookmarkNodeProvider;
 import consulo.dataContext.DataContext;
-import consulo.language.editor.CommonDataKeys;
-import consulo.language.editor.LangDataKeys;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.ModuleUtilCore;
@@ -48,19 +47,19 @@ import java.util.Collection;
 public class PsiFieldFavoriteNodeProvider implements BookmarkNodeProvider {
   @Override
   public Collection<AbstractTreeNode> getFavoriteNodes(final DataContext context, final ViewSettings viewSettings) {
-    final Project project = context.getData(CommonDataKeys.PROJECT);
+    final Project project = context.getData(Project.KEY);
     if (project == null) {
       return null;
     }
-    PsiElement[] elements = context.getData(LangDataKeys.PSI_ELEMENT_ARRAY);
+    PsiElement[] elements = context.getData(PsiElement.KEY_OF_ARRAY);
     if (elements == null) {
-      final PsiElement element = context.getData(LangDataKeys.PSI_ELEMENT);
+      final PsiElement element = context.getData(PsiElement.KEY);
       if (element != null) {
         elements = new PsiElement[]{element};
       }
     }
     if (elements != null) {
-      final Collection<AbstractTreeNode> result = new ArrayList<AbstractTreeNode>();
+      final Collection<AbstractTreeNode> result = new ArrayList<>();
       for (PsiElement element : elements) {
         if (element instanceof PsiField) {
           result.add(new FieldSmartPointerNode(project, element, viewSettings));
@@ -86,10 +85,7 @@ public class PsiFieldFavoriteNodeProvider implements BookmarkNodeProvider {
 
   @Override
   public int getElementWeight(final Object value, final boolean isSortByType) {
-    if (value instanceof PsiField) {
-      return 4;
-    }
-    return -1;
+    return value instanceof PsiField ? 4 : -1;
   }
 
   @Override
@@ -105,7 +101,7 @@ public class PsiFieldFavoriteNodeProvider implements BookmarkNodeProvider {
 
   @Override
   public boolean isInvalidElement(final Object element) {
-    return element instanceof PsiField && !((PsiField) element).isValid();
+    return element instanceof PsiField field && !field.isValid();
   }
 
   @Override
@@ -116,14 +112,11 @@ public class PsiFieldFavoriteNodeProvider implements BookmarkNodeProvider {
 
   @Override
   public String getElementUrl(final Object element) {
-    if (element instanceof PsiField) {
-      final PsiField aField = (PsiField) element;
-      return aField.getContainingClass().getQualifiedName() + ";" + aField.getName();
-    }
-    return null;
+    return element instanceof PsiField field ? field.getContainingClass().getQualifiedName() + ";" + field.getName() : null;
   }
 
   @Override
+  @RequiredReadAction
   public String getElementModuleName(final Object element) {
     if (element instanceof PsiField) {
       final Module module = ModuleUtilCore.findModuleForPsiElement((PsiField) element);
@@ -133,6 +126,7 @@ public class PsiFieldFavoriteNodeProvider implements BookmarkNodeProvider {
   }
 
   @Override
+  @RequiredReadAction
   public Object[] createPathFromUrl(final Project project, final String url, final String moduleName) {
     final Module module = moduleName != null ? ModuleManager.getInstance(project).findModuleByName(moduleName) : null;
     final GlobalSearchScope scope = module != null ? GlobalSearchScope.moduleScope(module) : GlobalSearchScope.allScope(project);

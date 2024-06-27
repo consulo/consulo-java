@@ -22,9 +22,7 @@ import consulo.codeEditor.LogicalPosition;
 import consulo.dataContext.DataContext;
 import consulo.document.Document;
 import consulo.language.editor.CodeInsightSettings;
-import consulo.language.editor.CommonDataKeys;
 import consulo.language.editor.EditorNavigationDelegate;
-import consulo.language.editor.LangDataKeys;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiFile;
 import consulo.project.Project;
@@ -86,13 +84,13 @@ public class JavadocNavigationDelegate implements EditorNavigationDelegate {
       return Result.CONTINUE;
     }
 
-    final Project project = dataContext.getData(CommonDataKeys.PROJECT);
+    final Project project = dataContext.getData(Project.KEY);
     if (project == null) {
       return Result.CONTINUE;
     }
 
     final Document document = editor.getDocument();
-    PsiFile psiFile = dataContext.getData(LangDataKeys.PSI_FILE);
+    PsiFile psiFile = dataContext.getData(PsiFile.KEY);
     if (psiFile == null) {
       psiFile = PsiDocumentManager.getInstance(project).getPsiFile(document);
     }

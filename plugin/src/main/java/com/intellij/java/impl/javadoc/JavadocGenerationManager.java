@@ -18,7 +18,6 @@ package com.intellij.java.impl.javadoc;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
 import consulo.annotation.component.ServiceImpl;
-import consulo.application.CommonBundle;
 import consulo.component.persist.PersistentStateComponent;
 import consulo.component.persist.State;
 import consulo.component.persist.Storage;
@@ -28,14 +27,14 @@ import consulo.execution.runner.ExecutionEnvironmentBuilder;
 import consulo.ide.ServiceManager;
 import consulo.ide.impl.idea.execution.util.ExecutionErrorDialog;
 import consulo.language.editor.scope.AnalysisScope;
+import consulo.platform.base.localize.CommonLocalize;
 import consulo.process.ExecutionException;
 import consulo.project.Project;
 import consulo.util.xml.serializer.XmlSerializer;
+import jakarta.annotation.Nonnull;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.jdom.Element;
-
-import jakarta.annotation.Nonnull;
 
 @ServiceAPI(ComponentScope.PROJECT)
 @ServiceImpl
@@ -75,7 +74,7 @@ public final class JavadocGenerationManager implements PersistentStateComponent<
       ExecutionEnvironmentBuilder.create(myProject, DefaultRunExecutor.getRunExecutorInstance(), profile).buildAndExecute();
     }
     catch (ExecutionException e) {
-      ExecutionErrorDialog.show(e, CommonBundle.getErrorTitle(), myProject);
+      ExecutionErrorDialog.show(e, CommonLocalize.titleError().get(), myProject);
     }
   }
 }

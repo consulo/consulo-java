@@ -45,20 +45,26 @@ public class JavaTypeHierarchyProvider implements TypeHierarchyProvider {
   @Override
   @RequiredUIAccess
   public PsiElement getTarget(@Nonnull final DataContext dataContext) {
-    final Project project = dataContext.getData(CommonDataKeys.PROJECT);
+    final Project project = dataContext.getData(Project.KEY);
     if (project == null) {
       return null;
     }
 
-    final Editor editor = dataContext.getData(PlatformDataKeys.EDITOR);
+    final Editor editor = dataContext.getData(Editor.KEY);
     if (editor != null) {
       final PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(editor.getDocument());
       if (file == null) {
         return null;
       }
 
-      final PsiElement targetElement = TargetElementUtil.findTargetElement(editor, Set.of(TargetElementUtilExtender
-          .ELEMENT_NAME_ACCEPTED, TargetElementUtilExtender.REFERENCED_ELEMENT_ACCEPTED, TargetElementUtilExtender.LOOKUP_ITEM_ACCEPTED));
+      final PsiElement targetElement = TargetElementUtil.findTargetElement(
+        editor,
+        Set.of(
+          TargetElementUtilExtender.ELEMENT_NAME_ACCEPTED,
+          TargetElementUtilExtender.REFERENCED_ELEMENT_ACCEPTED,
+          TargetElementUtilExtender.LOOKUP_ITEM_ACCEPTED
+        )
+      );
       if (targetElement instanceof PsiClass) {
         return targetElement;
       }
@@ -81,8 +87,8 @@ public class JavaTypeHierarchyProvider implements TypeHierarchyProvider {
 
       return null;
     } else {
-      final PsiElement element = dataContext.getData(LangDataKeys.PSI_ELEMENT);
-      return element instanceof PsiClass ? (PsiClass) element : null;
+      final PsiElement element = dataContext.getData(PsiElement.KEY);
+      return element instanceof PsiClass psiClass ? psiClass : null;
     }
   }
 
@@ -95,8 +101,8 @@ public class JavaTypeHierarchyProvider implements TypeHierarchyProvider {
   @Override
   public void browserActivated(@Nonnull final HierarchyBrowser hierarchyBrowser) {
     final TypeHierarchyBrowser browser = (TypeHierarchyBrowser) hierarchyBrowser;
-    final String typeName = browser.isInterface() ? TypeHierarchyBrowserBase.SUBTYPES_HIERARCHY_TYPE : TypeHierarchyBrowserBase
-        .TYPE_HIERARCHY_TYPE;
+    final String typeName = browser.isInterface()
+      ? TypeHierarchyBrowserBase.SUBTYPES_HIERARCHY_TYPE : TypeHierarchyBrowserBase.TYPE_HIERARCHY_TYPE;
     browser.changeView(typeName);
   }
 

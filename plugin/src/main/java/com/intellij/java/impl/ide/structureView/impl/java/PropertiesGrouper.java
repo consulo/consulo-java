@@ -17,8 +17,8 @@ package com.intellij.java.impl.ide.structureView.impl.java;
 
 import consulo.application.AllIcons;
 import consulo.fileEditor.structureView.tree.*;
-import consulo.ide.IdeBundle;
 import consulo.language.psi.PsiElement;
+import consulo.platform.base.localize.IdeLocalize;
 import consulo.project.ui.view.tree.AbstractTreeNode;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
@@ -30,8 +30,10 @@ public class PropertiesGrouper implements Grouper {
 
   @Nonnull
   public Collection<Group> group(final Object parent, Collection<TreeElement> children) {
-    if (((AbstractTreeNode) parent).getValue() instanceof PropertyGroup) return Collections.emptyList();
-    Map<Group,Group> result = new HashMap<Group, Group>();
+    if (((AbstractTreeNode) parent).getValue() instanceof PropertyGroup) {
+      return Collections.emptyList();
+    }
+    Map<Group,Group> result = new HashMap<>();
     for (TreeElement o : children) {
       if (o instanceof JavaClassTreeElementBase) {
         PsiElement element = ((JavaClassTreeElementBase)o).getElement();
@@ -58,7 +60,7 @@ public class PropertiesGrouper implements Grouper {
 
   @Nonnull
   public ActionPresentation getPresentation() {
-    return new ActionPresentationData(IdeBundle.message("action.structureview.show.properties"), null, AllIcons.Nodes.Property);
+    return new ActionPresentationData(IdeLocalize.actionStructureviewShowProperties().get(), null, AllIcons.Nodes.Property);
   }
 
   @Nonnull

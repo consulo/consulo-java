@@ -32,14 +32,13 @@ import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.document.util.TextRange;
 import consulo.ide.impl.idea.openapi.progress.util.ProgressWindowWithNotification;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.WriteCommandAction;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiCodeFragment;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
-
 import jakarta.annotation.Nullable;
 
 /**
@@ -51,7 +50,7 @@ import jakarta.annotation.Nullable;
 public class JavaWithRuntimeCastSurrounder extends JavaExpressionSurrounder {
   @Override
   public String getTemplateDescription() {
-    return CodeInsightBundle.message("surround.with.runtime.type.template");
+    return CodeInsightLocalize.surroundWithRuntimeTypeTemplate().get();
   }
 
   @Override
@@ -60,14 +59,7 @@ public class JavaWithRuntimeCastSurrounder extends JavaExpressionSurrounder {
       return false;
     }
     PsiFile file = expr.getContainingFile();
-    if (!(file instanceof PsiCodeFragment)) {
-      return false;
-    }
-    if (!DefaultCodeFragmentFactory.isDebuggerFile(file)) {
-      return false;
-    }
-
-    return RuntimeTypeEvaluator.isSubtypeable(expr);
+    return file instanceof PsiCodeFragment && DefaultCodeFragmentFactory.isDebuggerFile(file) && RuntimeTypeEvaluator.isSubtypeable(expr);
   }
 
   @Override
@@ -99,35 +91,34 @@ public class JavaWithRuntimeCastSurrounder extends JavaExpressionSurrounder {
 
       hold();
       final Project project = myElement.getProject();
-      DebuggerInvocationUtil.invokeLater(project, new Runnable() {
-        @Override
-        public void run() {
-          new WriteCommandAction(project, CodeInsightBundle.message("command.name.surround.with.runtime.cast")) {
-            @Override
-            protected void run(@Nonnull Result result) throws Throwable {
-              try {
-                PsiElementFactory factory = JavaPsiFacade.getInstance(myElement.getProject()).getElementFactory();
-                PsiParenthesizedExpression parenth =
-                  (PsiParenthesizedExpression)factory.createExpressionFromText("((" + type.getCanonicalText() + ")expr)", null);
-                //noinspection ConstantConditions
-                ((PsiTypeCastExpression)parenth.getExpression()).getOperand().replace(myElement);
-                parenth = (PsiParenthesizedExpression)JavaCodeStyleManager.getInstance(project).shortenClassReferences(parenth);
-                PsiExpression expr = (PsiExpression)myElement.replace(parenth);
-                TextRange range = expr.getTextRange();
-                myEditor.getSelectionModel().setSelection(range.getStartOffset(), range.getEndOffset());
-                myEditor.getCaretModel().moveToOffset(range.getEndOffset());
-                myEditor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
-              }
-              catch (IncorrectOperationException e) {
-                // OK here. Can be caused by invalid type like one for proxy starts with . '.Proxy34'
-              }
-              finally {
-                release();
-              }
+      DebuggerInvocationUtil.invokeLater(
+        project,
+        () -> new WriteCommandAction(project, CodeInsightLocalize.commandNameSurroundWithRuntimeCast().get()) {
+          @Override
+          protected void run(@Nonnull Result result) throws Throwable {
+            try {
+              PsiElementFactory factory = JavaPsiFacade.getInstance(myElement.getProject()).getElementFactory();
+              PsiParenthesizedExpression parenth =
+                (PsiParenthesizedExpression)factory.createExpressionFromText("((" + type.getCanonicalText() + ")expr)", null);
+              //noinspection ConstantConditions
+              ((PsiTypeCastExpression)parenth.getExpression()).getOperand().replace(myElement);
+              parenth = (PsiParenthesizedExpression)JavaCodeStyleManager.getInstance(project).shortenClassReferences(parenth);
+              PsiExpression expr = (PsiExpression)myElement.replace(parenth);
+              TextRange range = expr.getTextRange();
+              myEditor.getSelectionModel().setSelection(range.getStartOffset(), range.getEndOffset());
+              myEditor.getCaretModel().moveToOffset(range.getEndOffset());
+              myEditor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
             }
-          }.execute();
-        }
-      }, myProgressIndicator.getModalityState());
+            catch (IncorrectOperationException e) {
+              // OK here. Can be caused by invalid type like one for proxy starts with . '.Proxy34'
+            }
+            finally {
+              release();
+            }
+          }
+        }.execute(),
+        myProgressIndicator.getModalityState()
+      );
     }
 
   }

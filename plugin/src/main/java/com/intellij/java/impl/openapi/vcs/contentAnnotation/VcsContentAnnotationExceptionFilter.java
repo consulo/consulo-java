@@ -21,7 +21,7 @@ import com.intellij.java.language.psi.JavaRecursiveElementVisitor;
 import com.intellij.java.language.psi.PsiCallExpression;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
-import consulo.application.ApplicationManager;
+import consulo.application.Application;
 import consulo.application.util.function.Computable;
 import consulo.codeEditor.DefaultLanguageHighlighterColors;
 import consulo.colorScheme.EditorColorsManager;
@@ -70,7 +70,7 @@ public class VcsContentAnnotationExceptionFilter implements Filter, FilterMixin 
   public VcsContentAnnotationExceptionFilter(@Nonnull GlobalSearchScope scope) {
     myProject = scope.getProject();
     mySettings = VcsContentAnnotationSettings.getInstance(myProject);
-    myRevNumbersCache = new HashMap<VirtualFile, VcsRevisionNumber>();
+    myRevNumbersCache = new HashMap<>();
     myCache = new ExceptionInfoCache(scope);
   }
 
@@ -101,7 +101,12 @@ public class VcsContentAnnotationExceptionFilter implements Filter, FilterMixin 
   }
 
   @Override
-  public void applyHeavyFilter(@Nonnull final Document copiedFragment, int startOffset, int startLineNumber, @Nonnull Consumer<? super AdditionalHighlight> consumer) {
+  public void applyHeavyFilter(
+    @Nonnull final Document copiedFragment,
+    int startOffset,
+    int startLineNumber,
+    @Nonnull Consumer<? super AdditionalHighlight> consumer
+  ) {
     VcsContentAnnotation vcsContentAnnotation = VcsContentAnnotationImpl.getInstance(myProject);
     final LocalChangesCorrector localChangesCorrector = new LocalChangesCorrector(myProject);
     Trinity<PsiClass, PsiFile, String> previousLineResult = null;
@@ -111,12 +116,9 @@ public class VcsContentAnnotationExceptionFilter implements Filter, FilterMixin 
       final int lineEndOffset = copiedFragment.getLineEndOffset(i);
       final ExceptionWorker worker = new ExceptionWorker(myCache);
       final String[] lineText = new String[1];
-      ApplicationManager.getApplication().runReadAction(new Runnable() {
-        @Override
-        public void run() {
-          lineText[0] = copiedFragment.getText(new TextRange(lineStartOffset, lineEndOffset));
-          worker.execute(lineText[0], lineEndOffset);
-        }
+      myProject.getApplication().runReadAction(() -> {
+        lineText[0] = copiedFragment.getText(new TextRange(lineStartOffset, lineEndOffset));
+        worker.execute(lineText[0], lineEndOffset);
       });
       if (worker.getResult() != null) {
         VirtualFile vf = worker.getFile().getVirtualFile();
@@ -174,7 +176,7 @@ public class VcsContentAnnotationExceptionFilter implements Filter, FilterMixin 
           }
         }
       }
-      previousLineResult = worker.getResult() == null ? null : new Trinity<PsiClass, PsiFile, String>(worker.getPsiClass(), worker.getFile(), worker.getMethod());
+      previousLineResult = worker.getResult() == null ? null : new Trinity<>(worker.getPsiClass(), worker.getFile(), worker.getMethod());
     }
   }
 
@@ -190,7 +192,7 @@ public class VcsContentAnnotationExceptionFilter implements Filter, FilterMixin 
 
     private LocalChangesCorrector(final Project project) {
       myProject = project;
-      myRecentlyChanged = new HashMap<VirtualFile, UpToDateLineNumberProvider>();
+      myRecentlyChanged = new HashMap<>();
     }
 
     public boolean isFileAlreadyIdentifiedAsChanged(final VirtualFile vf) {
@@ -199,12 +201,8 @@ public class VcsContentAnnotationExceptionFilter implements Filter, FilterMixin 
 
     public boolean isRangeChangedLocally(final VirtualFile vf, final Document document, final TextRange range) {
       final UpToDateLineNumberProvider provider = getProvider(vf, document);
-      return ApplicationManager.getApplication().runReadAction(new Computable<Boolean>() {
-        @Override
-        public Boolean compute() {
-          return provider.isRangeChanged(range.getStartOffset(), range.getEndOffset());
-        }
-      });
+      return myProject.getApplication()
+        .runReadAction((Computable<Boolean>)() -> provider.isRangeChanged(range.getStartOffset(), range.getEndOffset()));
     }
 
     public TextRange getCorrectedRange(final VirtualFile vf, final Document document, final TextRange range) {
@@ -212,12 +210,10 @@ public class VcsContentAnnotationExceptionFilter implements Filter, FilterMixin 
       if (provider == null) {
         return range;
       }
-      return ApplicationManager.getApplication().runReadAction(new Computable<TextRange>() {
-        @Override
-        public TextRange compute() {
-          return new TextRange(provider.getLineNumber(range.getStartOffset()), provider.getLineNumber(range.getEndOffset()));
-        }
-      });
+      return myProject.getApplication().runReadAction((Computable<TextRange>)()-> new TextRange(
+        provider.getLineNumber(range.getStartOffset()),
+        provider.getLineNumber(range.getEndOffset()))
+      );
     }
 
     private UpToDateLineNumberProvider getProvider(VirtualFile vf, Document document) {
@@ -231,34 +227,28 @@ public class VcsContentAnnotationExceptionFilter implements Filter, FilterMixin 
   }
 
   private static Document getDocumentForFile(final ExceptionWorker worker) {
-    return ApplicationManager.getApplication().runReadAction(new Computable<Document>() {
-      @Override
-      public Document compute() {
-        final Document document = FileDocumentManager.getInstance().getDocument(worker.getFile().getVirtualFile());
-        if (document == null) {
-          LOG.info("can not get document for file: " + worker.getFile().getVirtualFile());
-          return null;
-        }
-        return document;
+    return Application.get().runReadAction((Computable<Document>)() -> {
+      final Document document = FileDocumentManager.getInstance().getDocument(worker.getFile().getVirtualFile());
+      if (document == null) {
+        LOG.info("can not get document for file: " + worker.getFile().getVirtualFile());
+        return null;
       }
+      return document;
     });
   }
 
   // line numbers
   private static List<TextRange> findMethodRange(final ExceptionWorker worker, final Document document, final Trinity<PsiClass, PsiFile, String> previousLineResult) {
-    return ApplicationManager.getApplication().runReadAction(new Computable<List<TextRange>>() {
-      @Override
-      public List<TextRange> compute() {
-        List<TextRange> ranges = getTextRangeForMethod(worker, previousLineResult);
-        if (ranges == null) {
-          return null;
-        }
-        final List<TextRange> result = new ArrayList<TextRange>();
-        for (TextRange range : ranges) {
-          result.add(new TextRange(document.getLineNumber(range.getStartOffset()), document.getLineNumber(range.getEndOffset())));
-        }
-        return result;
+    return Application.get().runReadAction((Computable<List<TextRange>>)() -> {
+      List<TextRange> ranges = getTextRangeForMethod(worker, previousLineResult);
+      if (ranges == null) {
+        return null;
       }
+      final List<TextRange> result = new ArrayList<>();
+      for (TextRange range : ranges) {
+        result.add(new TextRange(document.getLineNumber(range.getStartOffset()), document.getLineNumber(range.getEndOffset())));
+      }
+      return result;
     });
   }
 
@@ -269,7 +259,7 @@ public class VcsContentAnnotationExceptionFilter implements Filter, FilterMixin 
       return null;
     }
 
-    final List<PsiMethod> result = new SmartList<PsiMethod>();
+    final List<PsiMethod> result = new SmartList<>();
     for (final PsiMethod method : methods) {
       method.accept(new JavaRecursiveElementVisitor() {
         @Override
@@ -307,7 +297,7 @@ public class VcsContentAnnotationExceptionFilter implements Filter, FilterMixin 
       } else {
         List<PsiMethod> selectedMethods = selectMethod(methods, previousLineResult);
         final List<PsiMethod> toIterate = selectedMethods == null ? Arrays.asList(methods) : selectedMethods;
-        final List<TextRange> result = new ArrayList<TextRange>();
+        final List<TextRange> result = new ArrayList<>();
         for (PsiMethod psiMethod : toIterate) {
           result.add(psiMethod.getTextRange());
         }

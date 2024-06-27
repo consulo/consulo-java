@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.ide.util;
 
-import consulo.application.CommonBundle;
-import consulo.ide.IdeBundle;
+import consulo.platform.base.localize.CommonLocalize;
+import consulo.platform.base.localize.IdeLocalize;
 import consulo.project.Project;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.JBLabel;
-import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.image.Image;
 import jakarta.annotation.Nonnull;
 
@@ -30,7 +30,7 @@ import java.awt.event.ActionEvent;
 
 //TODO: review title and text!!!
 class SuperMethodWarningDialog extends DialogWrapper {
-  public static final int NO_EXIT_CODE=NEXT_USER_EXIT_CODE+1;
+  public static final int NO_EXIT_CODE = NEXT_USER_EXIT_CODE + 1;
   private final String myName;
   private final String[] myClassNames;
   private final String myActionString;
@@ -38,13 +38,15 @@ class SuperMethodWarningDialog extends DialogWrapper {
   private final boolean myIsParentInterface;
   private final boolean myIsContainedInInterface;
 
-  public SuperMethodWarningDialog(Project project,
-                                  String name,
-                                  String actionString,
-                                  boolean isSuperAbstract,
-                                  boolean isParentInterface,
-                                  boolean isContainedInInterface,
-                                  String... classNames) {
+  public SuperMethodWarningDialog(
+    Project project,
+    String name,
+    String actionString,
+    boolean isSuperAbstract,
+    boolean isParentInterface,
+    boolean isContainedInInterface,
+    String... classNames
+  ) {
     super(project, true);
     myName = name;
     myClassNames = classNames;
@@ -52,9 +54,9 @@ class SuperMethodWarningDialog extends DialogWrapper {
     myIsSuperAbstract = isSuperAbstract;
     myIsParentInterface = isParentInterface;
     myIsContainedInInterface = isContainedInInterface;
-    setTitle(IdeBundle.message("title.warning"));
+    setTitle(IdeLocalize.titleWarning());
     setButtonsAlignment(SwingUtilities.CENTER);
-    setOKButtonText(CommonBundle.getYesButtonText());
+    setOKButtonText(CommonLocalize.buttonYes().get());
     init();
   }
 
@@ -66,28 +68,30 @@ class SuperMethodWarningDialog extends DialogWrapper {
   public JComponent createNorthPanel() {
     JPanel panel = new JPanel(new BorderLayout());
     panel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-    Image icon = Messages.getWarningIcon();
+    Image icon = UIUtil.getWarningIcon();
     if (icon != null){
-      JLabel iconLabel = new JBLabel(Messages.getQuestionIcon());
+      JLabel iconLabel = new JBLabel(UIUtil.getQuestionIcon());
       panel.add(iconLabel, BorderLayout.WEST);
     }
     JPanel labelsPanel = new JPanel(new GridLayout(0, 1, 0, 0));
     labelsPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 10));
-    String classType = myIsParentInterface ? IdeBundle.message("element.of.interface") : IdeBundle.message("element.of.class");
-    String methodString = IdeBundle.message("element.method");
-    labelsPanel.add(new JLabel(IdeBundle.message("label.method", myName)));
+    String classType = myIsParentInterface ? IdeLocalize.elementOfInterface().get() : IdeLocalize.elementOfClass().get();
+    String methodString = IdeLocalize.elementMethod().get();
+    labelsPanel.add(new JLabel(IdeLocalize.labelMethod(myName).get()));
     if (myClassNames.length == 1) {
       final String className = myClassNames[0];
-      labelsPanel.add(new JLabel(myIsContainedInInterface || !myIsSuperAbstract
-                                 ? IdeBundle.message("label.overrides.method.of_class_or_interface.name", methodString, classType, className)
-                                 : IdeBundle.message("label.implements.method.of_class_or_interface.name", methodString, classType, className)));
+      labelsPanel.add(new JLabel(
+        myIsContainedInInterface || !myIsSuperAbstract
+          ? IdeLocalize.labelOverridesMethodOf_class_or_interfaceName(methodString, classType, className).get()
+          : IdeLocalize.labelImplementsMethodOf_class_or_interfaceName(methodString, classType, className).get()
+      ));
     } else {
-      labelsPanel.add(new JLabel(IdeBundle.message("label.implements.method.of_interfaces")));
+      labelsPanel.add(new JLabel(IdeLocalize.labelImplementsMethodOf_interfaces().get()));
       for (final String className : myClassNames) {
         labelsPanel.add(new JLabel("    " + className));
       }
     }
-    labelsPanel.add(new JLabel(IdeBundle.message("prompt.do.you.want.to.action_verb.the.method.from_class", myActionString, myClassNames.length > 1 ? 2 : 1)));
+    labelsPanel.add(new JLabel(IdeLocalize.promptDoYouWantToAction_verbTheMethodFrom_class(myActionString, myClassNames.length > 1 ? 2 : 1).get()));
     panel.add(labelsPanel, BorderLayout.CENTER);
     return panel;
   }
@@ -102,7 +106,7 @@ class SuperMethodWarningDialog extends DialogWrapper {
 
   private class NoAction extends AbstractAction {
     public NoAction() {
-      super(CommonBundle.getNoButtonText());
+      super(CommonLocalize.buttonNo().get());
     }
 
     public void actionPerformed(ActionEvent e) {

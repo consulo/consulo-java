@@ -15,21 +15,22 @@
  */
 package com.intellij.java.impl.ide.hierarchy.type;
 
-import java.awt.Font;
-
-import consulo.application.AllIcons;
-import consulo.ide.IdeBundle;
-import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
 import com.intellij.java.impl.ide.hierarchy.JavaHierarchyUtil;
-import consulo.colorScheme.TextAttributes;
-import consulo.project.Project;
-import consulo.ide.impl.idea.openapi.roots.ui.util.CompositeAppearance;
-import consulo.util.lang.Comparing;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiFunctionalExpression;
 import com.intellij.java.language.impl.psi.presentation.java.ClassPresentationUtil;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiFunctionalExpression;
+import consulo.application.AllIcons;
+import consulo.colorScheme.TextAttributes;
+import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
+import consulo.ide.impl.idea.openapi.roots.ui.util.CompositeAppearance;
+import consulo.language.psi.PsiElement;
+import consulo.platform.base.localize.IdeLocalize;
+import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.image.ImageEffects;
+import consulo.util.lang.Comparing;
+
+import java.awt.*;
 
 public final class TypeHierarchyNodeDescriptor extends HierarchyNodeDescriptor
 {
@@ -43,21 +44,22 @@ public final class TypeHierarchyNodeDescriptor extends HierarchyNodeDescriptor
 		return getPsiElement();
 	}
 
+	@RequiredUIAccess
 	public final boolean update()
 	{
 		boolean changes = super.update();
 
-		if(getPsiElement() == null)
+		if (getPsiElement() == null)
 		{
-			final String invalidPrefix = IdeBundle.message("node.hierarchy.invalid");
-			if(!myHighlightedText.getText().startsWith(invalidPrefix))
+			final String invalidPrefix = IdeLocalize.nodeHierarchyInvalid().get();
+			if (!myHighlightedText.getText().startsWith(invalidPrefix))
 			{
 				myHighlightedText.getBeginning().addText(invalidPrefix, HierarchyNodeDescriptor.getInvalidPrefixAttributes());
 			}
 			return true;
 		}
 
-		if(changes && myIsBase)
+		if (changes && myIsBase)
 		{
 			setIcon(ImageEffects.appendRight(AllIcons.Hierarchy.Base, getIcon()));
 		}
@@ -69,26 +71,28 @@ public final class TypeHierarchyNodeDescriptor extends HierarchyNodeDescriptor
 		myHighlightedText = new CompositeAppearance();
 
 		TextAttributes classNameAttributes = null;
-		if(myColor != null)
+		if (myColor != null)
 		{
 			classNameAttributes = new TextAttributes(myColor, null, null, null, Font.PLAIN);
 		}
-		if(psiElement instanceof PsiClass)
+		if (psiElement instanceof PsiClass psiClass)
 		{
-			myHighlightedText.getEnding().addText(ClassPresentationUtil.getNameForClass((PsiClass) psiElement, false), classNameAttributes);
-			myHighlightedText.getEnding().addText(" (" + JavaHierarchyUtil.getPackageName((PsiClass) psiElement) + ")", HierarchyNodeDescriptor.getPackageNameAttributes());
+			myHighlightedText.getEnding().addText(ClassPresentationUtil.getNameForClass(psiClass, false), classNameAttributes);
+			myHighlightedText.getEnding().addText(
+				" (" + JavaHierarchyUtil.getPackageName(psiClass) + ")",
+				HierarchyNodeDescriptor.getPackageNameAttributes()
+			);
 		}
-		else if(psiElement instanceof PsiFunctionalExpression)
+		else if (psiElement instanceof PsiFunctionalExpression functionalExpression)
 		{
-			myHighlightedText.getEnding().addText(ClassPresentationUtil.getFunctionalExpressionPresentation(((PsiFunctionalExpression) psiElement), false));
+			myHighlightedText.getEnding().addText(ClassPresentationUtil.getFunctionalExpressionPresentation(functionalExpression, false));
 		}
 		myName = myHighlightedText.getText();
 
-		if(!Comparing.equal(myHighlightedText, oldText))
+		if (!Comparing.equal(myHighlightedText, oldText))
 		{
 			changes = true;
 		}
 		return changes;
 	}
-
 }

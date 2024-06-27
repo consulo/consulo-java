@@ -4,7 +4,6 @@ package com.intellij.java.impl.ide.structureView.impl.java;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import consulo.application.AllIcons;
 import consulo.application.dumb.DumbAware;
-import consulo.application.util.SystemInfo;
 import consulo.fileEditor.structureView.tree.ActionPresentation;
 import consulo.fileEditor.structureView.tree.ActionPresentationData;
 import consulo.fileEditor.structureView.tree.FileStructureNodeProvider;
@@ -13,6 +12,7 @@ import consulo.java.analysis.codeInsight.JavaCodeInsightBundle;
 import consulo.language.editor.structureView.PsiTreeElementBase;
 import consulo.language.navigation.AnonymousElementProvider;
 import consulo.language.psi.PsiElement;
+import consulo.platform.Platform;
 import consulo.ui.ex.action.KeyboardShortcut;
 import consulo.ui.ex.action.Shortcut;
 
@@ -58,7 +58,7 @@ public class JavaAnonymousClassesNodeProvider implements FileStructureNodeProvid
 
   @Override
   public Shortcut[] getShortcut() {
-    return new Shortcut[]{KeyboardShortcut.fromString(SystemInfo.isMac ? "meta I" : "control I")};
+    return new Shortcut[]{KeyboardShortcut.fromString(Platform.current().os().isMac() ? "meta I" : "control I")};
   }
 
   @Nonnull

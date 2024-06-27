@@ -15,24 +15,22 @@
  */
 package com.intellij.java.impl.ide.hierarchy.type;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import consulo.ide.IdeBundle;
-import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
-import consulo.ide.impl.idea.ide.hierarchy.HierarchyTreeStructure;
-import consulo.project.Project;
-import consulo.java.language.module.util.JavaClassNames;
-import com.intellij.java.language.psi.PsiAnonymousClass;
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiFunctionalExpression;
-import com.intellij.java.language.psi.PsiModifier;
-import consulo.content.scope.SearchScope;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.indexing.search.searches.FunctionalExpressionSearch;
+import com.intellij.java.language.psi.PsiAnonymousClass;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiModifier;
+import consulo.content.scope.SearchScope;
+import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
+import consulo.ide.impl.idea.ide.hierarchy.HierarchyTreeStructure;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.platform.base.localize.IdeLocalize;
+import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
-import consulo.application.util.function.Processor;
 import jakarta.annotation.Nonnull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SubtypesHierarchyTreeStructure extends HierarchyTreeStructure
 {
@@ -55,38 +53,33 @@ public class SubtypesHierarchyTreeStructure extends HierarchyTreeStructure
 	protected final Object[] buildChildren(@Nonnull final HierarchyNodeDescriptor descriptor)
 	{
 		final Object element = ((TypeHierarchyNodeDescriptor) descriptor).getPsiClass();
-		if(!(element instanceof PsiClass))
+		if (!(element instanceof PsiClass))
 		{
 			return ArrayUtil.EMPTY_OBJECT_ARRAY;
 		}
 		final PsiClass psiClass = (PsiClass) element;
-		if(JavaClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName()))
+		if (JavaClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName()))
 		{
-			return new Object[]{IdeBundle.message("node.hierarchy.java.lang.object")};
+			return new Object[]{IdeLocalize.nodeHierarchyJavaLangObject().get()};
 		}
-		if(psiClass instanceof PsiAnonymousClass)
+		if (psiClass instanceof PsiAnonymousClass)
 		{
 			return ArrayUtil.EMPTY_OBJECT_ARRAY;
 		}
-		if(psiClass.hasModifierProperty(PsiModifier.FINAL))
+		if (psiClass.hasModifierProperty(PsiModifier.FINAL))
 		{
 			return ArrayUtil.EMPTY_OBJECT_ARRAY;
 		}
 		final SearchScope searchScope = psiClass.getUseScope().intersectWith(getSearchScope(myCurrentScopeType, psiClass));
-		final List<PsiClass> classes = new ArrayList<PsiClass>(ClassInheritorsSearch.search(psiClass, searchScope, false).findAll());
-		final List<HierarchyNodeDescriptor> descriptors = new ArrayList<HierarchyNodeDescriptor>(classes.size());
-		for(PsiClass aClass : classes)
+		final List<PsiClass> classes = new ArrayList<>(ClassInheritorsSearch.search(psiClass, searchScope, false).findAll());
+		final List<HierarchyNodeDescriptor> descriptors = new ArrayList<>(classes.size());
+		for (PsiClass aClass : classes)
 		{
 			descriptors.add(new TypeHierarchyNodeDescriptor(myProject, descriptor, aClass, false));
 		}
-		FunctionalExpressionSearch.search(psiClass, searchScope).forEach(new Processor<PsiFunctionalExpression>()
-		{
-			@Override
-			public boolean process(PsiFunctionalExpression expression)
-			{
-				descriptors.add(new TypeHierarchyNodeDescriptor(myProject, descriptor, expression, false));
-				return true;
-			}
+		FunctionalExpressionSearch.search(psiClass, searchScope).forEach(expression -> {
+			descriptors.add(new TypeHierarchyNodeDescriptor(myProject, descriptor, expression, false));
+			return true;
 		});
 		return descriptors.toArray(new HierarchyNodeDescriptor[descriptors.size()]);
 	}

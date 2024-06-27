@@ -37,7 +37,7 @@ import consulo.java.language.impl.icon.JavaPsiImplIconGroup;
 import consulo.logging.Logger;
 import consulo.platform.Platform;
 import consulo.process.cmd.GeneralCommandLine;
-import consulo.project.ProjectBundle;
+import consulo.project.localize.ProjectLocalize;
 import consulo.ui.image.Image;
 import consulo.util.collection.Sets;
 import consulo.util.dataholder.Key;
@@ -83,7 +83,7 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
   @Nonnull
   @Override
   public String getPresentableName() {
-    return ProjectBundle.message("sdk.java.name");
+    return ProjectLocalize.sdkJavaName().get();
   }
 
   @Nonnull
@@ -166,20 +166,17 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
   @Override
   public Collection<String> suggestHomePaths() {
     List<String> list = new ArrayList<>();
-    if (SystemInfo.isMac) {
+    if (Platform.current().os().isMac()) {
       collectJavaPathsAtMac(list, "/Library/Java/JavaVirtualMachines");
       collectJavaPathsAtMac(list, "/System/Library/Java/JavaVirtualMachines");
       list.add("/usr/libexec/java_home");
     }
-    else if (SystemInfo.isSolaris) {
-      list.add("/usr/jdk");
-    }
-    else if (SystemInfo.isLinux) {
+    else if (Platform.current().os().isLinux()) {
       list.add("/usr/java");
       list.add("/opt/java");
       list.add("/usr/lib/jvm");
     }
-    else if (SystemInfo.isWindows) {
+    else if (Platform.current().os().isWindows()) {
       collectJavaPathsAtWindows(list, "ProgramFiles");
       collectJavaPathsAtWindows(list, "ProgramFiles(x86)");
     }
@@ -253,7 +250,7 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
 
   @Override
   public String adjustSelectedSdkHome(String homePath) {
-    if (SystemInfo.isMac) {
+    if (Platform.current().os().isMac()) {
       File home = new File(homePath, MAC_HOME_PATH);
       if (home.exists()) {
         return home.getPath();
@@ -290,7 +287,7 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
     }
     else {
       String versionString = getVersionString(sdkHome);
-      suggestedName = versionString == null ? ProjectBundle.message("sdk.java.unknown.name") : getVersionNumber(versionString);
+      suggestedName = versionString == null ? ProjectLocalize.sdkJavaUnknownName().get() : getVersionNumber(versionString);
     }
     return suggestedName;
   }
@@ -393,7 +390,7 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
     if (docs != null) {
       sdkModificator.addRoot(docs, DocumentationOrderRootType.getInstance());
     }
-    else if (SystemInfo.isMac) {
+    else if (Platform.current().os().isMac()) {
       VirtualFile commonDocs = findDocs(jdkHome, "docs");
       if (commonDocs == null) {
         commonDocs = findInJar(new File(jdkHome, "docs.jar"), "doc/api");
@@ -500,7 +497,7 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
     FileFilter jarFileFilter = f -> !f.isDirectory() && f.getName().endsWith(".jar");
 
     File[] jarDirs;
-    if (SystemInfo.isMac && !home.getName().startsWith("mockJDK")) {
+    if (Platform.current().os().isMac() && !home.getName().startsWith("mockJDK")) {
       File openJdkRtJar = new File(home, "jre/lib/rt.jar");
       if (openJdkRtJar.exists() && !openJdkRtJar.isDirectory()) {
         File libDir = new File(home, "lib");

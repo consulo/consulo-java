@@ -6,15 +6,14 @@ import com.intellij.java.language.util.Bitness;
 import consulo.annotation.component.ServiceImpl;
 import consulo.application.Application;
 import consulo.application.util.JavaVersion;
-import consulo.application.util.SystemInfo;
 import consulo.logging.Logger;
+import consulo.platform.Platform;
 import consulo.process.io.BaseOutputReader;
 import consulo.util.io.CharsetToolkit;
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.inject.Singleton;
-
-import jakarta.annotation.Nonnull;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -65,7 +64,7 @@ public class OwnJdkVersionDetectorImpl extends OwnJdkVersionDetector {
           String versionString = manifest.getMainAttributes().getValue("Implementation-Version");
           if (versionString != null) {
             JavaVersion version = JavaVersion.parse(versionString);
-            boolean x64 = SystemInfo.isMac || new File(rtFile.getParent(), "amd64").isDirectory();
+            boolean x64 = Platform.current().os().isMac() || new File(rtFile.getParent(), "amd64").isDirectory();
             return new JdkVersionInfo(version, x64 ? Bitness.x64 : Bitness.x32);
           }
         }
@@ -75,7 +74,7 @@ public class OwnJdkVersionDetectorImpl extends OwnJdkVersionDetector {
     }
 
     // last resort
-    File javaExe = new File(homePath, "bin/" + (SystemInfo.isWindows ? "java.exe" : "java"));
+    File javaExe = new File(homePath, "bin/" + (Platform.current().os().isWindows() ? "java.exe" : "java"));
     if (javaExe.canExecute()) {
       try {
         Process process = new ProcessBuilder(javaExe.getPath(), "-version").redirectErrorStream(true).start();

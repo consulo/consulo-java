@@ -33,6 +33,7 @@ import consulo.language.psi.PsiFile;
 import consulo.logging.Logger;
 import consulo.module.content.ProjectRootManager;
 import consulo.platform.base.icon.PlatformIconGroup;
+import consulo.platform.base.localize.IdeLocalize;
 import consulo.project.Project;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.image.Image;
@@ -52,8 +53,12 @@ public class PackagePatternProvider extends PatternDialectProvider {
 
   @Nullable
   private static GeneralGroupNode getGroupParent(PackageDependenciesNode node) {
-    if (node instanceof GeneralGroupNode) return (GeneralGroupNode) node;
-    if (node == null || node instanceof RootNode) return null;
+    if (node instanceof GeneralGroupNode generalGroupNode) {
+      return generalGroupNode;
+    }
+    if (node == null || node instanceof RootNode) {
+      return null;
+    }
     return getGroupParent((PackageDependenciesNode) node.getParent());
   }
 
@@ -71,16 +76,16 @@ public class PackagePatternProvider extends PatternDialectProvider {
       }
     }
     final String scope = scope1;
-    if (node instanceof ModuleGroupNode) {
+    if (node instanceof ModuleGroupNode groupNode) {
       if (!recursively) return null;
-      @NonNls final String modulePattern = "group:" + ((ModuleGroupNode) node).getModuleGroup().toString();
+      @NonNls final String modulePattern = "group:" + groupNode.getModuleGroup().toString();
       return new PatternPackageSet("*..*", scope, modulePattern);
-    } else if (node instanceof ModuleNode) {
+    } else if (node instanceof ModuleNode moduleNode) {
       if (!recursively) return null;
-      final String modulePattern = ((ModuleNode) node).getModuleName();
+      final String modulePattern = moduleNode.getModuleName();
       return new PatternPackageSet("*..*", scope, modulePattern);
-    } else if (node instanceof PackageNode) {
-      String pattern = ((PackageNode) node).getPackageQName();
+    } else if (node instanceof PackageNode packageNode) {
+      String pattern = packageNode.getPackageQName();
       if (pattern != null) {
         pattern += recursively ? "..*" : ".*";
       } else {
@@ -88,13 +93,11 @@ public class PackagePatternProvider extends PatternDialectProvider {
       }
 
       return new PatternPackageSet(pattern, scope, getModulePattern(node));
-    } else if (node instanceof FileNode) {
+    } else if (node instanceof FileNode fNode) {
       if (recursively) return null;
-      FileNode fNode = (FileNode) node;
       final PsiElement element = fNode.getPsiElement();
       String qName = null;
-      if (element instanceof PsiClassOwner) {
-        final PsiClassOwner javaFile = (PsiClassOwner) element;
+      if (element instanceof PsiClassOwner javaFile) {
         final VirtualFile virtualFile = javaFile.getVirtualFile();
         LOG.assertTrue(virtualFile != null);
         final String packageName =
@@ -121,13 +124,17 @@ public class PackagePatternProvider extends PatternDialectProvider {
     return TreeModelBuilder.createTreeModel(project, false, marker);
   }
 
-  public TreeModel createTreeModel(final Project project, final Set<PsiFile> deps, final Marker marker,
-                                   final DependenciesPanel.DependencyPanelSettings settings) {
+  public TreeModel createTreeModel(
+    final Project project,
+    final Set<PsiFile> deps,
+    final Marker marker,
+    final DependenciesPanel.DependencyPanelSettings settings
+  ) {
     return TreeModelBuilder.createTreeModel(project, false, deps, marker, settings);
   }
 
   public String getDisplayName() {
-    return IdeBundle.message("title.packages");
+    return IdeLocalize.titlePackages().get();
   }
 
   @Nonnull

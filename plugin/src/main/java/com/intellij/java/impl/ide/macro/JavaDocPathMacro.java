@@ -15,13 +15,12 @@
  */
 package com.intellij.java.impl.ide.macro;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.ide.IdeBundle;
-import consulo.pathMacro.Macro;
 import com.intellij.java.impl.javadoc.JavadocConfiguration;
 import com.intellij.java.impl.javadoc.JavadocGenerationManager;
-import consulo.language.editor.CommonDataKeys;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.dataContext.DataContext;
+import consulo.pathMacro.Macro;
+import consulo.platform.base.localize.IdeLocalize;
 import consulo.project.Project;
 
 import java.io.File;
@@ -33,11 +32,11 @@ public final class JavaDocPathMacro extends Macro {
   }
 
   public String getDescription() {
-    return IdeBundle.message("macro.javadoc.output.directory");
+    return IdeLocalize.macroJavadocOutputDirectory().get();
   }
 
   public String expand(DataContext dataContext) {
-    final Project project = dataContext.getData(CommonDataKeys.PROJECT);
+    final Project project = dataContext.getData(Project.KEY);
     if (project == null) {
       return null;
     }

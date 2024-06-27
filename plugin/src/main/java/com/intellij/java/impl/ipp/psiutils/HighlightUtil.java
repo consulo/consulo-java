@@ -16,8 +16,8 @@
 package com.intellij.java.impl.ipp.psiutils;
 
 import com.intellij.java.impl.codeInsight.template.macro.SuggestVariableNameMacro;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.application.Application;
-import consulo.application.ApplicationManager;
 import consulo.application.util.query.Query;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorColors;
@@ -54,57 +54,53 @@ public class HighlightUtil {
     if (elementCollection.isEmpty()) {
       return;
     }
-    final Application application = ApplicationManager.getApplication();
-    application.invokeLater(new Runnable() {
-      public void run() {
-        final PsiElement[] elements = PsiUtilCore.toPsiElementArray(elementCollection);
-        final PsiElement firstElement = elements[0];
-        if (!firstElement.isValid()) {
-          return;
-        }
-        final Project project = firstElement.getProject();
-        final FileEditorManager editorManager = FileEditorManager.getInstance(project);
-        final EditorColorsManager editorColorsManager = EditorColorsManager.getInstance();
-        final Editor editor = editorManager.getSelectedTextEditor();
-        if (editor == null) {
-          return;
-        }
-        final EditorColorsScheme globalScheme = editorColorsManager.getGlobalScheme();
-        final TextAttributes textattributes = globalScheme.getAttributes(
-            EditorColors.SEARCH_RESULT_ATTRIBUTES);
-        final HighlightManager highlightManager = HighlightManager.getInstance(project);
-        highlightManager.addOccurrenceHighlights(editor, elements, textattributes, true, null);
-        final FindManager findmanager = FindManager.getInstance(project);
-        FindModel findmodel = findmanager.getFindNextModel();
-        if (findmodel == null) {
-          findmodel = findmanager.getFindInFileModel();
-        }
-        findmodel.setSearchHighlighters(true);
-        findmanager.setFindWasPerformed();
-        findmanager.setFindNextModel(findmodel);
-        application.invokeLater(new Runnable() {
-          public void run() {
-            final WindowManager windowManager = WindowManager.getInstance();
-            final StatusBar statusBar = windowManager.getStatusBar(project);
-            if (statusBar != null) {
-              statusBar.setInfo(statusBarText);
-            }
-          }
-        });
+    final Application application = Application.get();
+    application.invokeLater(() -> {
+      final PsiElement[] elements = PsiUtilCore.toPsiElementArray(elementCollection);
+      final PsiElement firstElement = elements[0];
+      if (!firstElement.isValid()) {
+        return;
       }
+      final Project project = firstElement.getProject();
+      final FileEditorManager editorManager = FileEditorManager.getInstance(project);
+      final EditorColorsManager editorColorsManager = EditorColorsManager.getInstance();
+      final Editor editor = editorManager.getSelectedTextEditor();
+      if (editor == null) {
+        return;
+      }
+      final EditorColorsScheme globalScheme = editorColorsManager.getGlobalScheme();
+      final TextAttributes textattributes = globalScheme.getAttributes(EditorColors.SEARCH_RESULT_ATTRIBUTES);
+      final HighlightManager highlightManager = HighlightManager.getInstance(project);
+      highlightManager.addOccurrenceHighlights(editor, elements, textattributes, true, null);
+      final FindManager findmanager = FindManager.getInstance(project);
+      FindModel findmodel = findmanager.getFindNextModel();
+      if (findmodel == null) {
+        findmodel = findmanager.getFindInFileModel();
+      }
+      findmodel.setSearchHighlighters(true);
+      findmanager.setFindWasPerformed();
+      findmanager.setFindNextModel(findmodel);
+      application.invokeLater(() -> {
+        final WindowManager windowManager = WindowManager.getInstance();
+        final StatusBar statusBar = windowManager.getStatusBar(project);
+        if (statusBar != null) {
+          statusBar.setInfo(statusBarText);
+        }
+      });
     });
   }
 
-  public static void highlightElement(
-    @Nonnull PsiElement element, @Nonnull final String statusBarText) {
+  public static void highlightElement(@Nonnull PsiElement element, @Nonnull final String statusBarText) {
     final List<PsiElement> elements = Collections.singletonList(element);
     highlightElements(elements, statusBarText);
   }
 
+  @RequiredReadAction
   public static String getPresentableText(PsiElement element) {
     return getPresentableText(element, new StringBuilder()).toString();
   }
 
+  @RequiredReadAction
   private static StringBuilder getPresentableText(PsiElement element, StringBuilder builder) {
     if (element == null) {
       return builder;
@@ -124,20 +120,19 @@ public class HighlightUtil {
     return builder;
   }
 
+  @RequiredReadAction
   public static void showRenameTemplate(PsiElement context, PsiNameIdentifierOwner element) {
     context = CodeInsightUtilBase.forcePsiPostprocessAndRestoreElement(context);
     final Query<PsiReference> query = ReferencesSearch.search(element, element.getUseScope());
     final Collection<PsiReference> references = query.findAll();
     final Project project = context.getProject();
-    final FileEditorManager fileEditorManager =
-      FileEditorManager.getInstance(project);
+    final FileEditorManager fileEditorManager = FileEditorManager.getInstance(project);
     final Editor editor = fileEditorManager.getSelectedTextEditor();
     if (editor == null) {
       return;
     }
     final TemplateBuilder builder = TemplateBuilderFactory.getInstance().createTemplateBuilder(context);
-    final Expression macroCallNode = new MacroCallNode(
-      new SuggestVariableNameMacro());
+    final Expression macroCallNode = new MacroCallNode(new SuggestVariableNameMacro());
     final PsiElement identifier = element.getNameIdentifier();
     builder.replaceElement(identifier, "PATTERN", macroCallNode, true);
     for (PsiReference reference : references) {
@@ -147,8 +142,7 @@ public class HighlightUtil {
     final TextRange textRange = context.getTextRange();
     final int startOffset = textRange.getStartOffset();
     editor.getCaretModel().moveToOffset(startOffset);
-    final TemplateManager templateManager =
-      TemplateManager.getInstance(project);
+    final TemplateManager templateManager = TemplateManager.getInstance(project);
     templateManager.startTemplate(editor, template);
   }
 }

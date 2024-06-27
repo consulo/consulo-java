@@ -22,6 +22,7 @@ import consulo.application.util.SystemInfo;
 import consulo.component.ProcessCanceledException;
 import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
 import consulo.language.file.FileTypeManager;
+import consulo.platform.Platform;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
@@ -96,16 +97,16 @@ public class JavaVfsSourceRootDetectionUtil {
     if (packageName != null){
       VirtualFile root = javaFile.getParent();
       int index = packageName.length();
-      while(index > 0){
+      while (index > 0){
         int index1 = packageName.lastIndexOf('.', index - 1);
         String token = packageName.substring(index1 + 1, index);
         String dirName = root.getName();
-        final boolean equalsToToken = SystemInfo.isFileSystemCaseSensitive ? dirName.equals(token) : dirName.equalsIgnoreCase(token);
+        final boolean equalsToToken = Platform.current().fs().isCaseSensitive() ? dirName.equals(token) : dirName.equalsIgnoreCase(token);
         if (!equalsToToken) {
           return null;
         }
         root = root.getParent();
-        if (root == null){
+        if (root == null) {
           return null;
         }
         index = index1;

@@ -20,10 +20,9 @@ import consulo.fileEditor.structureView.tree.ActionPresentation;
 import consulo.fileEditor.structureView.tree.ActionPresentationData;
 import consulo.fileEditor.structureView.tree.Filter;
 import consulo.fileEditor.structureView.tree.TreeElement;
-import consulo.ide.IdeBundle;
-import org.jetbrains.annotations.NonNls;
-
+import consulo.platform.base.localize.IdeLocalize;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 public class FieldsFilter implements Filter {
   @NonNls
@@ -35,7 +34,7 @@ public class FieldsFilter implements Filter {
 
   @Nonnull
   public ActionPresentation getPresentation() {
-    return new ActionPresentationData(IdeBundle.message("action.structureview.show.fields"), null, AllIcons.Nodes.Field);
+    return new ActionPresentationData(IdeLocalize.actionStructureviewShowFields().get(), null, AllIcons.Nodes.Field);
   }
 
   @Nonnull
