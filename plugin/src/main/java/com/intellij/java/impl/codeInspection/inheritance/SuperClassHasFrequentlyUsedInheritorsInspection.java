@@ -1,6 +1,5 @@
 package com.intellij.java.impl.codeInspection.inheritance;
 
-import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
 import com.intellij.java.impl.codeInspection.inheritance.search.InheritorsStatisticalDataSearch;
 import com.intellij.java.impl.codeInspection.inheritance.search.InheritorsStatisticsSearchResult;
@@ -10,6 +9,7 @@ import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import org.jetbrains.annotations.Nls;
 
@@ -31,7 +31,7 @@ public class SuperClassHasFrequentlyUsedInheritorsInspection extends BaseJavaLoc
   @Nonnull
   @Override
   public String getGroupDisplayName() {
-    return GroupNames.INHERITANCE_GROUP_NAME;
+    return InspectionLocalize.groupNamesInheritanceIssues().get();
   }
 
   @Nls

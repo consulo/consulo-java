@@ -15,13 +15,13 @@
  */
 package com.intellij.java.impl.codeInspection.concurrencyAnnotations;
 
-import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
 import com.intellij.java.analysis.impl.codeInspection.concurrencyAnnotations.JCiPUtil;
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemsHolder;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -36,7 +36,7 @@ public class FieldAccessNotGuardedInspection extends BaseJavaLocalInspectionTool
   @Override
   @Nonnull
   public String getGroupDisplayName() {
-    return GroupNames.CONCURRENCY_ANNOTATION_ISSUES;
+    return InspectionLocalize.groupNamesConcurrencyAnnotationIssues().get();
   }
 
   @Override

@@ -17,7 +17,6 @@ package com.intellij.java.impl.codeInspection.emptyMethod;
 
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionTool;
-import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaUtil;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaVisitor;
 import com.intellij.java.analysis.codeInspection.reference.RefMethod;
@@ -29,12 +28,11 @@ import com.intellij.java.language.psi.*;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.Application;
-import consulo.application.ApplicationManager;
-import consulo.application.util.function.Processor;
 import consulo.application.util.query.Query;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.java.deadCodeNotWorking.OldStyleInspection;
 import consulo.language.editor.inspection.*;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.reference.RefElement;
 import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.reference.RefManager;
@@ -67,48 +65,47 @@ import java.util.List;
 @ExtensionImpl
 public class EmptyMethodInspection extends GlobalJavaInspectionTool implements OldStyleInspection
 {
-	private static final String DISPLAY_NAME = InspectionsBundle.message("inspection.empty.method.display.name");
 	@NonNls
 	private static final String SHORT_NAME = "EmptyMethod";
 
 	private final BidirectionalMap<Boolean, QuickFix> myQuickFixes = new BidirectionalMap<Boolean, QuickFix>();
 
 	public final JDOMExternalizableStringList EXCLUDE_ANNOS = new JDOMExternalizableStringList();
-	@NonNls
-	private static final String QUICK_FIX_NAME = InspectionsBundle.message("inspection.empty.method.delete.quickfix");
 	private static final Logger LOG = Logger.getInstance(EmptyMethodInspection.class);
 
 	@Override
 	@Nullable
-	public CommonProblemDescriptor[] checkElement(@Nonnull RefEntity refEntity,
-												  @Nonnull AnalysisScope scope,
-												  @Nonnull InspectionManager manager,
-												  @Nonnull GlobalInspectionContext globalContext,
-												  @Nonnull ProblemDescriptionsProcessor processor,
-												  Object state)
+	public CommonProblemDescriptor[] checkElement(
+		@Nonnull RefEntity refEntity,
+		@Nonnull AnalysisScope scope,
+		@Nonnull InspectionManager manager,
+		@Nonnull GlobalInspectionContext globalContext,
+		@Nonnull ProblemDescriptionsProcessor processor,
+		Object state
+	)
 	{
-		if(!(refEntity instanceof RefMethod))
+		if (!(refEntity instanceof RefMethod))
 		{
 			return null;
 		}
 		final RefMethod refMethod = (RefMethod) refEntity;
 
-		if(!isBodyEmpty(refMethod))
+		if (!isBodyEmpty(refMethod))
 		{
 			return null;
 		}
-		if(refMethod.isConstructor())
+		if (refMethod.isConstructor())
 		{
 			return null;
 		}
-		if(refMethod.isSyntheticJSP())
+		if (refMethod.isSyntheticJSP())
 		{
 			return null;
 		}
 
-		for(RefMethod refSuper : refMethod.getSuperMethods())
+		for (RefMethod refSuper : refMethod.getSuperMethods())
 		{
-			if(checkElement(refSuper, scope, manager, globalContext, processor) != null)
+			if (checkElement(refSuper, scope, manager, globalContext, processor) != null)
 			{
 				return null;
 			}
@@ -116,29 +113,29 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
 
 		String message = null;
 		boolean needToDeleteHierarchy = false;
-		if(refMethod.isOnlyCallsSuper() && !refMethod.isFinal())
+		if (refMethod.isOnlyCallsSuper() && !refMethod.isFinal())
 		{
 			RefMethod refSuper = findSuperWithBody(refMethod);
 			final RefJavaUtil refUtil = RefJavaUtil.getInstance();
-			if(refSuper != null && Comparing.strEqual(refMethod.getAccessModifier(), refSuper.getAccessModifier()))
+			if (refSuper != null && Comparing.strEqual(refMethod.getAccessModifier(), refSuper.getAccessModifier()))
 			{
-				if(Comparing.strEqual(refSuper.getAccessModifier(), PsiModifier.PROTECTED) //protected modificator gives access to method in another package
+				if (Comparing.strEqual(refSuper.getAccessModifier(), PsiModifier.PROTECTED) //protected modificator gives access to method in another package
 						&& !Comparing.strEqual(refUtil.getPackageName(refSuper), refUtil.getPackageName(refMethod)))
 				{
 					return null;
 				}
 				final PsiModifierListOwner modifierListOwner = refMethod.getElement();
-				if(modifierListOwner != null)
+				if (modifierListOwner != null)
 				{
 					final PsiModifierList list = modifierListOwner.getModifierList();
-					if(list != null)
+					if (list != null)
 					{
 						final PsiModifierListOwner supMethod = refSuper.getElement();
-						if(supMethod != null)
+						if (supMethod != null)
 						{
 							final PsiModifierList superModifiedList = supMethod.getModifierList();
 							LOG.assertTrue(superModifiedList != null);
-							if(list.hasModifierProperty(PsiModifier.SYNCHRONIZED) && !superModifiedList.hasModifierProperty(PsiModifier.SYNCHRONIZED))
+							if (list.hasModifierProperty(PsiModifier.SYNCHRONIZED) && !superModifiedList.hasModifierProperty(PsiModifier.SYNCHRONIZED))
 							{
 								return null;
 							}
@@ -146,63 +143,58 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
 					}
 				}
 			}
-			if(refSuper == null || refUtil.compareAccess(refMethod.getAccessModifier(), refSuper.getAccessModifier()) <= 0)
+			if (refSuper == null || refUtil.compareAccess(refMethod.getAccessModifier(), refSuper.getAccessModifier()) <= 0)
 			{
-				message = InspectionsBundle.message("inspection.empty.method.problem.descriptor");
+				message = InspectionLocalize.inspectionEmptyMethodProblemDescriptor().get();
 			}
 		}
-		else if(refMethod.hasBody() && hasEmptySuperImplementation(refMethod))
+		else if (refMethod.hasBody() && hasEmptySuperImplementation(refMethod))
 		{
 
-			message = InspectionsBundle.message("inspection.empty.method.problem.descriptor1");
+			message = InspectionLocalize.inspectionEmptyMethodProblemDescriptor1().get();
 		}
-		else if(areAllImplementationsEmpty(refMethod))
+		else if (areAllImplementationsEmpty(refMethod))
 		{
-			if(refMethod.hasBody())
+			if (refMethod.hasBody())
 			{
-				if(refMethod.getDerivedMethods().isEmpty())
+				if (refMethod.getDerivedMethods().isEmpty())
 				{
-					if(refMethod.getSuperMethods().isEmpty())
+					if (refMethod.getSuperMethods().isEmpty())
 					{
-						message = InspectionsBundle.message("inspection.empty.method.problem.descriptor2");
+						message = InspectionLocalize.inspectionEmptyMethodProblemDescriptor2().get();
 					}
 				}
 				else
 				{
 					needToDeleteHierarchy = true;
-					message = InspectionsBundle.message("inspection.empty.method.problem.descriptor3");
+					message = InspectionLocalize.inspectionEmptyMethodProblemDescriptor3().get();
 				}
 			}
-			else
-			{
-				if(!refMethod.getDerivedMethods().isEmpty())
-				{
-					needToDeleteHierarchy = true;
-					message = InspectionsBundle.message("inspection.empty.method.problem.descriptor4");
-				}
+			else if (!refMethod.getDerivedMethods().isEmpty()) {
+				needToDeleteHierarchy = true;
+				message = InspectionLocalize.inspectionEmptyMethodProblemDescriptor4().get();
 			}
 		}
 
-		if(message != null)
+		if (message != null)
 		{
 			final ArrayList<LocalQuickFix> fixes = new ArrayList<LocalQuickFix>();
 			fixes.add(getFix(processor, needToDeleteHierarchy));
-			SpecialAnnotationsUtilBase.createAddToSpecialAnnotationFixes(refMethod.getElement(), new Processor<String>()
-			{
-				@Override
-				public boolean process(final String qualifiedName)
-				{
-					fixes.add(SpecialAnnotationsUtilBase.createAddToSpecialAnnotationsListQuickFix(
-							JavaQuickFixBundle.message("fix.add.special.annotation.text", qualifiedName),
-							JavaQuickFixBundle.message("fix.add.special.annotation.family"),
-							EXCLUDE_ANNOS, qualifiedName, refMethod.getElement()));
-					return true;
-				}
+			SpecialAnnotationsUtilBase.createAddToSpecialAnnotationFixes(refMethod.getElement(), qualifiedName -> {
+				fixes.add(SpecialAnnotationsUtilBase.createAddToSpecialAnnotationsListQuickFix(
+						JavaQuickFixBundle.message("fix.add.special.annotation.text", qualifiedName),
+						JavaQuickFixBundle.message("fix.add.special.annotation.family"),
+						EXCLUDE_ANNOS, qualifiedName, refMethod.getElement()));
+				return true;
 			});
 
-			final ProblemDescriptor descriptor = manager.createProblemDescriptor(refMethod.getElement().getNavigationElement(), message, false,
-					fixes.toArray(new LocalQuickFix[fixes.size()]),
-					ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+			final ProblemDescriptor descriptor = manager.createProblemDescriptor(
+				refMethod.getElement().getNavigationElement(),
+				message,
+				false,
+				fixes.toArray(new LocalQuickFix[fixes.size()]),
+				ProblemHighlightType.GENERIC_ERROR_OR_WARNING
+			);
 			return new ProblemDescriptor[]{descriptor};
 		}
 
@@ -212,22 +204,17 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
 	@RequiredReadAction
 	private boolean isBodyEmpty(final RefMethod refMethod)
 	{
-		if(!refMethod.isBodyEmpty())
+		if (!refMethod.isBodyEmpty())
 		{
 			return false;
 		}
 		final PsiModifierListOwner owner = refMethod.getElement();
-		if(owner == null)
-		{
+		if (owner == null || AnnotationUtil.isAnnotated(owner, EXCLUDE_ANNOS)) {
 			return false;
 		}
-		if(AnnotationUtil.isAnnotated(owner, EXCLUDE_ANNOS))
+		for (ImplicitMethodBodyProvider provider : Application.get().getExtensionPoint(ImplicitMethodBodyProvider.class))
 		{
-			return false;
-		}
-		for(ImplicitMethodBodyProvider provider : Application.get().getExtensionPoint(ImplicitMethodBodyProvider.class))
-		{
-			if(provider.hasImplicitMethodBody(refMethod))
+			if (provider.hasImplicitMethodBody(refMethod))
 			{
 				return false;
 			}
@@ -239,9 +226,9 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
 	@Nullable
 	private static RefMethod findSuperWithBody(RefMethod refMethod)
 	{
-		for(RefMethod refSuper : refMethod.getSuperMethods())
+		for (RefMethod refSuper : refMethod.getSuperMethods())
 		{
-			if(refSuper.hasBody())
+			if (refSuper.hasBody())
 			{
 				return refSuper;
 			}
@@ -251,14 +238,14 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
 
 	private boolean areAllImplementationsEmpty(RefMethod refMethod)
 	{
-		if(refMethod.hasBody() && !isBodyEmpty(refMethod))
+		if (refMethod.hasBody() && !isBodyEmpty(refMethod))
 		{
 			return false;
 		}
 
-		for(RefMethod refDerived : refMethod.getDerivedMethods())
+		for (RefMethod refDerived : refMethod.getDerivedMethods())
 		{
-			if(!areAllImplementationsEmpty(refDerived))
+			if (!areAllImplementationsEmpty(refDerived))
 			{
 				return false;
 			}
@@ -269,9 +256,9 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
 
 	private boolean hasEmptySuperImplementation(RefMethod refMethod)
 	{
-		for(RefMethod refSuper : refMethod.getSuperMethods())
+		for (RefMethod refSuper : refMethod.getSuperMethods())
 		{
-			if(refSuper.hasBody() && isBodyEmpty(refSuper))
+			if (refSuper.hasBody() && isBodyEmpty(refSuper))
 			{
 				return true;
 			}
@@ -284,41 +271,30 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
 	protected boolean queryExternalUsagesRequests(
     @Nonnull final RefManager manager,
     @Nonnull final GlobalJavaInspectionContext context,
-    @Nonnull final ProblemDescriptionsProcessor descriptionsProcessor, Object state)
+    @Nonnull final ProblemDescriptionsProcessor descriptionsProcessor,
+		Object state
+	)
 	{
 		manager.iterate(new RefJavaVisitor()
 		{
 			@Override
 			public void visitElement(@Nonnull RefEntity refEntity)
 			{
-				if(refEntity instanceof RefElement && descriptionsProcessor.getDescriptions(refEntity) != null)
+				if (refEntity instanceof RefElement && descriptionsProcessor.getDescriptions(refEntity) != null)
 				{
 					refEntity.accept(new RefJavaVisitor()
 					{
 						@Override
 						public void visitMethod(@Nonnull final RefMethod refMethod)
 						{
-							context.enqueueDerivedMethodsProcessor(refMethod, new GlobalJavaInspectionContext.DerivedMethodsProcessor()
-							{
-								@Override
-								public boolean process(PsiMethod derivedMethod)
-								{
-									PsiCodeBlock body = derivedMethod.getBody();
-									if(body == null)
-									{
-										return true;
-									}
-									if(body.getStatements().length == 0)
-									{
-										return true;
-									}
-									if(RefJavaUtil.getInstance().isMethodOnlyCallsSuper(derivedMethod))
-									{
-										return true;
-									}
-									descriptionsProcessor.ignoreElement(refMethod);
-									return false;
+							context.enqueueDerivedMethodsProcessor(refMethod, derivedMethod -> {
+								PsiCodeBlock body = derivedMethod.getBody();
+								if (body == null || body.getStatements().length == 0
+									|| RefJavaUtil.getInstance().isMethodOnlyCallsSuper(derivedMethod)) {
+									return true;
 								}
+								descriptionsProcessor.ignoreElement(refMethod);
+								return false;
 							});
 						}
 					});
@@ -334,14 +310,14 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
 	@Nonnull
 	public String getDisplayName()
 	{
-		return DISPLAY_NAME;
+		return InspectionLocalize.inspectionEmptyMethodDisplayName().get();
 	}
 
 	@Override
 	@Nonnull
 	public String getGroupDisplayName()
 	{
-		return GroupNames.DECLARATION_REDUNDANCY;
+		return InspectionLocalize.groupNamesDeclarationRedundancy().get();
 	}
 
 	@Override
@@ -354,7 +330,7 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
 	private LocalQuickFix getFix(final ProblemDescriptionsProcessor processor, final boolean needToDeleteHierarchy)
 	{
 		QuickFix fix = myQuickFixes.get(needToDeleteHierarchy);
-		if(fix == null)
+		if (fix == null)
 		{
 			fix = new DeleteMethodQuickFix(processor, needToDeleteHierarchy);
 			myQuickFixes.put(needToDeleteHierarchy, fix);
@@ -367,7 +343,7 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
 	public String getHint(@Nonnull final QuickFix fix)
 	{
 		final List<Boolean> list = myQuickFixes.getKeysByValue(fix);
-		if(list != null)
+		if (list != null)
 		{
 			LOG.assertTrue(list.size() == 1);
 			return String.valueOf(list.get(0));
@@ -386,8 +362,10 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
 	@Nullable
 	public JComponent createOptionsPanel()
 	{
-		final JPanel listPanel = SpecialAnnotationsUtil
-				.createSpecialAnnotationsListControl(EXCLUDE_ANNOS, InspectionsBundle.message("special.annotations.annotations.list"));
+		final JPanel listPanel = SpecialAnnotationsUtil.createSpecialAnnotationsListControl(
+			EXCLUDE_ANNOS,
+			InspectionLocalize.specialAnnotationsAnnotationsList().get()
+		);
 
 		final JPanel panel = new JPanel(new BorderLayout(2, 2));
 		panel.add(listPanel, BorderLayout.CENTER);
@@ -407,53 +385,44 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
 		@Nonnull
 		public String getName()
 		{
-			return QUICK_FIX_NAME;
+			return InspectionLocalize.inspectionEmptyMethodDeleteQuickfix().get();
 		}
 
 		@Override
 		@Nonnull
 		public String getFamilyName()
 		{
-			return QUICK_FIX_NAME;
+			return InspectionLocalize.inspectionEmptyMethodDeleteQuickfix().get();
 		}
 
 		@Override
+		@RequiredReadAction
 		public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor)
 		{
 			final PsiMethod psiMethod = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiMethod.class, false);
-			if(psiMethod != null)
+			if (psiMethod != null)
 			{
-				final List<PsiElement> psiElements = new ArrayList<PsiElement>();
+				final List<PsiElement> psiElements = new ArrayList<>();
 				psiElements.add(psiMethod);
-				if(Boolean.valueOf(myHint).booleanValue())
+				if (Boolean.valueOf(myHint))
 				{
 					final Query<Pair<PsiMethod, PsiMethod>> query = AllOverridingMethodsSearch.search(psiMethod.getContainingClass());
-					query.forEach(new Processor<Pair<PsiMethod, PsiMethod>>()
-					{
-						@Override
-						public boolean process(final Pair<PsiMethod, PsiMethod> pair)
+					query.forEach(pair -> {
+						if (pair.first == psiMethod)
 						{
-							if(pair.first == psiMethod)
-							{
-								psiElements.add(pair.second);
-							}
-							return true;
+							psiElements.add(pair.second);
 						}
+						return true;
 					});
 				}
 
-				ApplicationManager.getApplication().invokeLater(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						SafeDeleteHandler.invoke(project, PsiUtilCore.toPsiElementArray(psiElements), false);
-					}
-				}, project.getDisposed());
+				project.getApplication().invokeLater(
+					() -> SafeDeleteHandler.invoke(project, PsiUtilCore.toPsiElementArray(psiElements), false),
+					project.getDisposed()
+				);
 			}
 		}
 	}
-
 
 	private class DeleteMethodQuickFix implements LocalQuickFix, BatchQuickFix<CommonProblemDescriptor>
 	{
@@ -470,13 +439,13 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
 		@Nonnull
 		public String getName()
 		{
-			return QUICK_FIX_NAME;
+			return InspectionLocalize.inspectionEmptyMethodDeleteQuickfix().get();
 		}
 
 		@Override
 		public void applyFix(@Nonnull final Project project, @Nonnull ProblemDescriptor descriptor)
 		{
-			applyFix(project, new ProblemDescriptor[]{descriptor}, new ArrayList<PsiElement>(), null);
+			applyFix(project, new ProblemDescriptor[]{descriptor}, new ArrayList<>(), null);
 		}
 
 		@Override
@@ -490,7 +459,7 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
 		{
 			Collection<RefMethod> derivedMethods = refMethod.getDerivedMethods();
 			RefMethod[] refMethods = derivedMethods.toArray(new RefMethod[derivedMethods.size()]);
-			for(RefMethod refDerived : refMethods)
+			for (RefMethod refDerived : refMethods)
 			{
 				deleteMethod(refDerived, result);
 			}
@@ -500,29 +469,30 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
 		private void deleteMethod(RefMethod refMethod, List<PsiElement> result)
 		{
 			PsiElement psiElement = refMethod.getElement();
-			if(psiElement == null)
+			if (psiElement == null)
 			{
 				return;
 			}
-			if(!result.contains(psiElement))
+			if (!result.contains(psiElement))
 			{
 				result.add(psiElement);
 			}
 		}
 
 		@Override
-		public void applyFix(@Nonnull final Project project,
-							 @Nonnull final CommonProblemDescriptor[] descriptors,
-							 final List<PsiElement> psiElementsToIgnore,
-							 final Runnable refreshViews)
+		public void applyFix(
+			@Nonnull final Project project,
+			@Nonnull final CommonProblemDescriptor[] descriptors,
+			final List<PsiElement> psiElementsToIgnore,
+			final Runnable refreshViews
+		)
 		{
-			for(CommonProblemDescriptor descriptor : descriptors)
+			for (CommonProblemDescriptor descriptor : descriptors)
 			{
 				RefElement refElement = (RefElement) myProcessor.getElement(descriptor);
-				if(refElement.isValid() && refElement instanceof RefMethod)
+				if (refElement.isValid() && refElement instanceof RefMethod refMethod)
 				{
-					RefMethod refMethod = (RefMethod) refElement;
-					if(myNeedToDeleteHierarchy)
+					if (myNeedToDeleteHierarchy)
 					{
 						deleteHierarchy(refMethod, psiElementsToIgnore);
 					}
@@ -532,14 +502,10 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
 					}
 				}
 			}
-			ApplicationManager.getApplication().invokeLater(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					SafeDeleteHandler.invoke(project, PsiUtilCore.toPsiElementArray(psiElementsToIgnore), false, refreshViews);
-				}
-			}, project.getDisposed());
+			project.getApplication().invokeLater(
+				() -> SafeDeleteHandler.invoke(project, PsiUtilCore.toPsiElementArray(psiElementsToIgnore), false, refreshViews),
+				project.getDisposed()
+			);
 		}
 	}
 }

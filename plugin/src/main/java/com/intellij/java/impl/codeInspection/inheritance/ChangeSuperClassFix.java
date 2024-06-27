@@ -15,13 +15,13 @@
  */
 package com.intellij.java.impl.codeInspection.inheritance;
 
-import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.intention.LowPriorityAction;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
@@ -65,7 +65,7 @@ public class ChangeSuperClassFix implements LocalQuickFix {
   @Nonnull
   @Override
   public String getFamilyName() {
-    return GroupNames.INHERITANCE_GROUP_NAME;
+    return InspectionLocalize.groupNamesInheritanceIssues().get();
   }
 
   @Override

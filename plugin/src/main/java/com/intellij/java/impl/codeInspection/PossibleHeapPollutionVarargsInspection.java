@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.codeInspection;
 
-import com.intellij.java.analysis.codeInspection.GroupNames;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.LocalQuickFix;
@@ -29,6 +28,7 @@ import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.project.Project;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
@@ -51,7 +51,7 @@ public class PossibleHeapPollutionVarargsInspection extends BaseJavaBatchLocalIn
   @Nonnull
   @Override
   public String getGroupDisplayName() {
-    return GroupNames.LANGUAGE_LEVEL_SPECIFIC_GROUP_NAME;
+    return InspectionLocalize.groupNamesLanguageLevelSpecificIssuesAndMigrationAids().get();
   }
 
   @Nls

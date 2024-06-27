@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.codeInspection;
 
-import com.intellij.java.analysis.codeInspection.GroupNames;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.*;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.intention.HighPriorityAction;
 import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
 import com.intellij.java.language.impl.psi.impl.PsiDiamondTypeUtil;
@@ -44,7 +44,7 @@ public class ExplicitTypeCanBeDiamondInspection extends BaseJavaLocalInspectionT
   @Nonnull
   @Override
   public String getGroupDisplayName() {
-    return GroupNames.LANGUAGE_LEVEL_SPECIFIC_GROUP_NAME;
+    return InspectionLocalize.groupNamesLanguageLevelSpecificIssuesAndMigrationAids().get();
   }
 
   @Nls

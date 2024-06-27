@@ -16,24 +16,22 @@
 package com.intellij.java.impl.codeInspection.unneededThrows;
 
 import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
-import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.java.impl.codeInspection.DeleteThrowsFix;
 import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
-
-import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -49,13 +47,13 @@ public class RedundantThrowsDeclaration extends BaseJavaBatchLocalInspectionTool
   @Override
   @Nonnull
   public String getGroupDisplayName() {
-    return GroupNames.DECLARATION_REDUNDANCY;
+    return InspectionLocalize.groupNamesDeclarationRedundancy().get();
   }
 
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionsBundle.message("redundant.throws.declaration");
+    return InspectionLocalize.redundantThrowsDeclaration().get();
   }
 
   @Override
@@ -68,9 +66,9 @@ public class RedundantThrowsDeclaration extends BaseJavaBatchLocalInspectionTool
   @Override
   @Nullable
   public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull final InspectionManager manager, final boolean isOnTheFly, Object state) {
-    final Set<ProblemDescriptor> problems = new HashSet<ProblemDescriptor>();
+    final Set<ProblemDescriptor> problems = new HashSet<>();
     file.accept(new JavaRecursiveElementWalkingVisitor() {
-      @Override public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
+      @Override public void visitReferenceElement(@Nonnull PsiJavaCodeReferenceElement reference) {
         final ProblemDescriptor descriptor = checkExceptionsNeverThrown(reference, manager, isOnTheFly);
         if (descriptor != null) {
           problems.add(descriptor);
@@ -81,16 +79,26 @@ public class RedundantThrowsDeclaration extends BaseJavaBatchLocalInspectionTool
     return problems.isEmpty() ? null : problems.toArray(new ProblemDescriptor[problems.size()]);
   }
 
-  private static ProblemDescriptor checkExceptionsNeverThrown(PsiJavaCodeReferenceElement referenceElement,
-                                                              InspectionManager inspectionManager,
-                                                              boolean onTheFly) {
-    if (!(referenceElement.getParent() instanceof PsiReferenceList)) return null;
+  private static ProblemDescriptor checkExceptionsNeverThrown(
+    PsiJavaCodeReferenceElement referenceElement,
+    InspectionManager inspectionManager,
+    boolean onTheFly
+  ) {
+    if (!(referenceElement.getParent() instanceof PsiReferenceList)) {
+      return null;
+    }
     PsiReferenceList referenceList = (PsiReferenceList)referenceElement.getParent();
-    if (!(referenceList.getParent() instanceof PsiMethod)) return null;
+    if (!(referenceList.getParent() instanceof PsiMethod)) {
+      return null;
+    }
     PsiMethod method = (PsiMethod)referenceList.getParent();
-    if (referenceList != method.getThrowsList()) return null;
+    if (referenceList != method.getThrowsList()) {
+      return null;
+    }
     PsiClass containingClass = method.getContainingClass();
-    if (containingClass == null) return null;
+    if (containingClass == null) {
+      return null;
+    }
 
     PsiManager manager = referenceElement.getManager();
     PsiClassType exceptionType = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory().createType(referenceElement);
@@ -110,7 +118,7 @@ public class RedundantThrowsDeclaration extends BaseJavaBatchLocalInspectionTool
     }
 
     Collection<PsiClassType> types = ExceptionUtil.collectUnhandledExceptions(body, method);
-    Collection<PsiClassType> unhandled = new HashSet<PsiClassType>(types);
+    Collection<PsiClassType> unhandled = new HashSet<>(types);
     if (method.isConstructor()) {
       // there may be field initializer throwing exception
       // that exception must be caught in the constructor
