@@ -18,13 +18,13 @@ package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.projectRoots.JavaSdkVersionUtil;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
-import consulo.application.ApplicationManager;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Editor;
 import consulo.content.bundle.Sdk;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.java.language.module.extension.JavaMutableModuleExtension;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.intention.SyntheticIntentionAction;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.language.util.ModuleUtilCore;
@@ -33,6 +33,7 @@ import consulo.module.Module;
 import consulo.module.content.ModuleRootManager;
 import consulo.module.content.layer.ModifiableRootModel;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.virtualFileSystem.VirtualFile;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -52,7 +53,7 @@ public class IncreaseLanguageLevelFix implements SyntheticIntentionAction {
   @Override
   @Nonnull
   public String getText() {
-    return CodeInsightBundle.message("set.language.level.to.0", myLevel.getDescription().get());
+    return CodeInsightLocalize.setLanguageLevelTo0(myLevel.getDescription().get()).get();
   }
 
   private static boolean isJdkSupportsLevel(@Nullable final Sdk jdk, final LanguageLevel level) {
@@ -70,11 +71,7 @@ public class IncreaseLanguageLevelFix implements SyntheticIntentionAction {
     }
 
     final Module module = ModuleUtilCore.findModuleForFile(virtualFile, project);
-    if (module == null) {
-      return false;
-    }
-
-     return isLanguageLevelAcceptable(module, myLevel);
+    return module != null && isLanguageLevelAcceptable(module, myLevel);
   }
 
   public static boolean isLanguageLevelAcceptable(Module module, final LanguageLevel level) {
@@ -82,6 +79,7 @@ public class IncreaseLanguageLevelFix implements SyntheticIntentionAction {
   }
 
   @Override
+  @RequiredUIAccess
   public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
     final VirtualFile virtualFile = file.getVirtualFile();
     LOG.assertTrue(virtualFile != null);
@@ -102,12 +100,7 @@ public class IncreaseLanguageLevelFix implements SyntheticIntentionAction {
 
     mutableModuleExtension.getInheritableLanguageLevel().set(null, myLevel.getName());
 
-    ApplicationManager.getApplication().runWriteAction(new Runnable() {
-      @Override
-      public void run() {
-        rootModel.commit();
-      }
-    });
+    project.getApplication().runWriteAction(rootModel::commit);
   }
 
   @Override

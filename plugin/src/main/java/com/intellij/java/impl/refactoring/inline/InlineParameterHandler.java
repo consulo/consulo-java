@@ -15,30 +15,32 @@
  */
 package com.intellij.java.impl.refactoring.inline;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.PsiEquivalenceUtil;
+import com.intellij.java.analysis.impl.psi.controlFlow.DefUseUtil;
 import com.intellij.java.impl.codeInspection.sameParameterValue.SameParameterValueInspection;
+import com.intellij.java.impl.refactoring.HelpID;
+import com.intellij.java.impl.refactoring.util.InlineUtil;
+import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
-import consulo.application.ApplicationManager;
-import consulo.application.Result;
-import consulo.language.editor.WriteCommandAction;
-import consulo.logging.Logger;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.util.lang.ref.Ref;
-import consulo.language.psi.*;
-import com.intellij.java.analysis.impl.psi.controlFlow.DefUseUtil;
-import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
-import consulo.language.psi.search.ReferencesSearch;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.java.impl.refactoring.HelpID;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.application.Result;
+import consulo.codeEditor.Editor;
+import consulo.language.editor.PsiEquivalenceUtil;
+import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
-import com.intellij.java.impl.refactoring.util.InlineUtil;
 import consulo.language.editor.refactoring.util.RefactoringMessageDialog;
-import consulo.application.util.function.Processor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
+import consulo.util.lang.ref.Ref;
 import jakarta.annotation.Nullable;
 
 import java.util.*;
@@ -51,6 +53,7 @@ public class InlineParameterHandler extends JavaInlineActionHandler {
   private static final Logger LOG = Logger.getInstance(InlineParameterHandler.class);
   public static final String REFACTORING_NAME = RefactoringBundle.message("inline.parameter.refactoring");
 
+  @RequiredReadAction
   public boolean canInlineElement(PsiElement element) {
     if (element instanceof PsiParameter) {
       final PsiElement parent = element.getParent();
@@ -63,6 +66,8 @@ public class InlineParameterHandler extends JavaInlineActionHandler {
     return false;
   }
 
+  @RequiredReadAction
+  @RequiredUIAccess
   public void inlineElement(final Project project, final Editor editor, final PsiElement psiElement) {
     final PsiParameter psiParameter = (PsiParameter) psiElement;
     final PsiParameterList parameterList = (PsiParameterList) psiParameter.getParent();
@@ -78,43 +83,40 @@ public class InlineParameterHandler extends JavaInlineActionHandler {
       return;
     }
 
-    final Ref<PsiExpression> refInitializer = new Ref<PsiExpression>();
-    final Ref<PsiExpression> refConstantInitializer = new Ref<PsiExpression>();
-    final Ref<PsiCallExpression> refMethodCall = new Ref<PsiCallExpression>();
+    final Ref<PsiExpression> refInitializer = new Ref<>();
+    final Ref<PsiExpression> refConstantInitializer = new Ref<>();
+    final Ref<PsiCallExpression> refMethodCall = new Ref<>();
     final List<PsiReference> occurrences = Collections.synchronizedList(new ArrayList<PsiReference>());
     final Collection<PsiFile> containingFiles = Collections.synchronizedSet(new HashSet<PsiFile>());
     containingFiles.add(psiParameter.getContainingFile());
-    boolean result = ReferencesSearch.search(method).forEach(new Processor<PsiReference>() {
-      public boolean process(final PsiReference psiReference) {
-        PsiElement element = psiReference.getElement();
-        final PsiElement parent = element.getParent();
-        if (parent instanceof PsiCallExpression) {
-          final PsiCallExpression methodCall = (PsiCallExpression)parent;
-          occurrences.add(psiReference);
-          containingFiles.add(element.getContainingFile());
-          final PsiExpression[] expressions = methodCall.getArgumentList().getExpressions();
-          if (expressions.length <= index) return false;
-          PsiExpression argument = expressions[index];
-          if (!refInitializer.isNull()) {
-            return argument != null
-                   && PsiEquivalenceUtil.areElementsEquivalent(refInitializer.get(), argument)
-                   && PsiEquivalenceUtil.areElementsEquivalent(refMethodCall.get(), methodCall);
-          }
-          if (InlineToAnonymousConstructorProcessor.isConstant(argument) || getReferencedFinalField(argument) != null) {
-            if (refConstantInitializer.isNull()) {
-              refConstantInitializer.set(argument);
-            }
-            else if (!isSameConstant(argument, refConstantInitializer.get())) {
-              return false;
-            }
-          } else if (!isRecursiveReferencedParameter(argument, psiParameter)) {
-            if (!refConstantInitializer.isNull()) return false;
-            refInitializer.set(argument);
-            refMethodCall.set(methodCall);
-          }
+    boolean result = ReferencesSearch.search(method).forEach(psiReference -> {
+      PsiElement element = psiReference.getElement();
+      final PsiElement parent = element.getParent();
+      if (parent instanceof PsiCallExpression methodCall) {
+        occurrences.add(psiReference);
+        containingFiles.add(element.getContainingFile());
+        final PsiExpression[] expressions = methodCall.getArgumentList().getExpressions();
+        if (expressions.length <= index) return false;
+        PsiExpression argument = expressions[index];
+        if (!refInitializer.isNull()) {
+          return argument != null
+            && PsiEquivalenceUtil.areElementsEquivalent(refInitializer.get(), argument)
+            && PsiEquivalenceUtil.areElementsEquivalent(refMethodCall.get(), methodCall);
         }
-        return true;
+        if (InlineToAnonymousConstructorProcessor.isConstant(argument) || getReferencedFinalField(argument) != null) {
+          if (refConstantInitializer.isNull()) {
+            refConstantInitializer.set(argument);
+          }
+          else if (!isSameConstant(argument, refConstantInitializer.get())) {
+            return false;
+          }
+        } else if (!isRecursiveReferencedParameter(argument, psiParameter)) {
+          if (!refConstantInitializer.isNull()) return false;
+          refInitializer.set(argument);
+          refMethodCall.set(methodCall);
+        }
       }
+      return true;
     });
     final int offset = editor.getCaretModel().getOffset();
     final PsiElement refExpr = psiElement.getContainingFile().findElementAt(offset);
@@ -123,7 +125,7 @@ public class InlineParameterHandler extends JavaInlineActionHandler {
       final PsiElement[] defs = DefUseUtil.getDefs(codeBlock, psiParameter, refExpr);
       if (defs.length == 1) {
         final PsiElement def = defs[0];
-        if (def instanceof PsiReferenceExpression && PsiUtil.isOnAssignmentLeftHand((PsiExpression)def)) {
+        if (def instanceof PsiReferenceExpression referenceExpression && PsiUtil.isOnAssignmentLeftHand(referenceExpression)) {
           final PsiExpression rExpr = ((PsiAssignmentExpression)def.getParent()).getRExpression();
           if (rExpr != null) {
             final PsiElement[] refs = DefUseUtil.getRefs(codeBlock, psiParameter, refExpr);
@@ -154,11 +156,15 @@ public class InlineParameterHandler extends JavaInlineActionHandler {
       return;
     }
     if (!refInitializer.isNull()) {
-      if (ApplicationManager.getApplication().isUnitTestMode()) {
+      if (project.getApplication().isUnitTestMode()) {
         final InlineParameterExpressionProcessor processor =
-          new InlineParameterExpressionProcessor(refMethodCall.get(), method, psiParameter, refInitializer.get(),
-                                                 method.getProject().getUserData(
-                                                   InlineParameterExpressionProcessor.CREATE_LOCAL_FOR_TESTS));
+          new InlineParameterExpressionProcessor(
+            refMethodCall.get(),
+            method,
+            psiParameter,
+            refInitializer.get(),
+            method.getProject().getUserData(InlineParameterExpressionProcessor.CREATE_LOCAL_FOR_TESTS)
+          );
         processor.run();
       }
       else {
@@ -173,32 +179,45 @@ public class InlineParameterHandler extends JavaInlineActionHandler {
       return;
     }
 
-    final Ref<Boolean> isNotConstantAccessible = new Ref<Boolean>();
+    final Ref<Boolean> isNotConstantAccessible = new Ref<>();
     final PsiExpression constantExpression = refConstantInitializer.get();
     constantExpression.accept(new JavaRecursiveElementVisitor(){
       @Override
+      @RequiredReadAction
       public void visitReferenceExpression(PsiReferenceExpression expression) {
         super.visitReferenceExpression(expression);
         final PsiElement resolved = expression.resolve();
-        if (resolved instanceof PsiMember && !PsiUtil.isAccessible((PsiMember)resolved, method, null)) {
+        if (resolved instanceof PsiMember member && !PsiUtil.isAccessible(member, method, null)) {
           isNotConstantAccessible.set(Boolean.TRUE);
         }
       }
     });
     if (!isNotConstantAccessible.isNull() && isNotConstantAccessible.get()) {
-      CommonRefactoringUtil.showErrorHint(project, editor, "Constant initializer is not accessible in method body", RefactoringBundle.message("inline.parameter.refactoring"), null);
+      CommonRefactoringUtil.showErrorHint(
+        project,
+        editor,
+        "Constant initializer is not accessible in method body",
+        RefactoringBundle.message("inline.parameter.refactoring"),
+        null
+      );
       return;
     }
 
     for (PsiReference psiReference : ReferencesSearch.search(psiParameter)) {
       final PsiElement element = psiReference.getElement();
-      if (element instanceof PsiExpression && PsiUtil.isAccessedForWriting((PsiExpression)element)) {
-        CommonRefactoringUtil.showErrorHint(project, editor, "Inline parameter which has write usages is not supported", RefactoringBundle.message("inline.parameter.refactoring"), null);
+      if (element instanceof PsiExpression expression && PsiUtil.isAccessedForWriting(expression)) {
+        CommonRefactoringUtil.showErrorHint(
+          project,
+          editor,
+          "Inline parameter which has write usages is not supported",
+          RefactoringBundle.message("inline.parameter.refactoring"),
+          null
+        );
         return;
       }
     }
 
-    if (!ApplicationManager.getApplication().isUnitTestMode()) {
+    if (!project.getApplication().isUnitTestMode()) {
       String occurencesString = RefactoringBundle.message("occurences.string", occurrences.size());
       String question = RefactoringBundle.message("inline.parameter.confirmation", psiParameter.getName(),
                                                   constantExpression.getText()) + " " + occurencesString;
@@ -208,23 +227,23 @@ public class InlineParameterHandler extends JavaInlineActionHandler {
         HelpID.INLINE_VARIABLE,
         "OptionPane.questionIcon",
         true,
-        project);
+        project
+      );
       dialog.show();
       if (!dialog.isOK()){
         return;
       }
     }
 
-
     SameParameterValueInspection.InlineParameterValueFix.inlineSameParameterValue(method, psiParameter, constantExpression);
   }
 
   @Nullable
+  @RequiredReadAction
   private static PsiField getReferencedFinalField(final PsiExpression argument) {
-    if (argument instanceof PsiReferenceExpression) {
-      final PsiElement element = ((PsiReferenceExpression)argument).resolve();
-      if (element instanceof PsiField) {
-        final PsiField field = (PsiField)element;
+    if (argument instanceof PsiReferenceExpression referenceExpression) {
+      final PsiElement element = referenceExpression.resolve();
+      if (element instanceof PsiField field) {
         final PsiModifierList modifierList = field.getModifierList();
         if (modifierList != null && modifierList.hasModifierProperty(PsiModifier.FINAL)) {
           return field;
@@ -234,9 +253,10 @@ public class InlineParameterHandler extends JavaInlineActionHandler {
     return null;
   }
 
+  @RequiredReadAction
   private static boolean isRecursiveReferencedParameter(final PsiExpression argument, final PsiParameter param) {
-    if (argument instanceof PsiReferenceExpression) {
-      final PsiElement element = ((PsiReferenceExpression)argument).resolve();
+    if (argument instanceof PsiReferenceExpression referenceExpression) {
+      final PsiElement element = referenceExpression.resolve();
       if (element instanceof PsiParameter) {
         return element.equals(param);
       }
@@ -244,6 +264,7 @@ public class InlineParameterHandler extends JavaInlineActionHandler {
     return false;
   }
 
+  @RequiredReadAction
   private static boolean isSameConstant(final PsiExpression expr1, final PsiExpression expr2) {
     boolean expr1Null = InlineToAnonymousConstructorProcessor.ourNullPattern.accepts(expr1);
     boolean expr2Null = InlineToAnonymousConstructorProcessor.ourNullPattern.accepts(expr2);

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.compiler.impl.classParsing;
 
-import consulo.compiler.CompilerBundle;
+import consulo.compiler.localize.CompilerLocalize;
 import consulo.util.collection.ArrayUtil;
 
 import java.text.CharacterIterator;
@@ -65,14 +65,14 @@ public class GenericMethodSignature {
     }
 
     if (it.current() != '(') {
-      throw new SignatureParsingException(CompilerBundle.message("error.signature.parsing.expected.other.symbol", "(", formals.toString()));
+      throw new SignatureParsingException(CompilerLocalize.errorSignatureParsingExpectedOtherSymbol("(", formals).get());
     }
 
     it.next(); // skip '('
 
     final String[] paramSignatures;
     if (it.current() != ')') {
-      final List<String> params = new ArrayList<String>();
+      final List<String> params = new ArrayList<>();
       while (it.current() != ')') {
         final StringBuilder typeSignature = new StringBuilder();
         SignatureParser.INSTANCE.parseTypeSignature(it, typeSignature);

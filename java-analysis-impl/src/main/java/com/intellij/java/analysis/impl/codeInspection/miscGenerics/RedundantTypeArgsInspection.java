@@ -15,15 +15,15 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.miscGenerics;
 
-import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.impl.source.resolve.DefaultParameterTypeInferencePolicy;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
@@ -55,13 +55,13 @@ public class RedundantTypeArgsInspection extends GenericsInspectionToolBase {
   @Override
   @Nonnull
   public String getGroupDisplayName() {
-    return GroupNames.VERBOSE_GROUP_NAME;
+    return InspectionLocalize.groupNamesVerboseOrRedundantCodeConstructs().get();
   }
 
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionsBundle.message("inspection.redundant.type.display.name");
+    return InspectionLocalize.inspectionRedundantTypeDisplayName().get();
   }
 
   @Override
@@ -69,7 +69,6 @@ public class RedundantTypeArgsInspection extends GenericsInspectionToolBase {
   public String getShortName() {
     return "RedundantTypeArguments";
   }
-
 
   @Override
   public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod psiMethod, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
@@ -82,10 +81,10 @@ public class RedundantTypeArgsInspection extends GenericsInspectionToolBase {
 
   @Override
   public ProblemDescriptor[] getDescriptions(PsiElement place, final InspectionManager inspectionManager, boolean isOnTheFly, Object state) {
-    final List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>();
+    final List<ProblemDescriptor> problems = new ArrayList<>();
     place.accept(new JavaRecursiveElementWalkingVisitor() {
       @Override
-      public void visitMethodCallExpression(PsiMethodCallExpression expression) {
+      public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
         final PsiType[] typeArguments = expression.getTypeArguments();
         if (typeArguments.length > 0) {
           checkCallExpression(expression.getMethodExpression(), typeArguments, expression, inspectionManager, problems);
@@ -93,7 +92,7 @@ public class RedundantTypeArgsInspection extends GenericsInspectionToolBase {
       }
 
       @Override
-      public void visitNewExpression(PsiNewExpression expression) {
+      public void visitNewExpression(@Nonnull PsiNewExpression expression) {
         final PsiType[] typeArguments = expression.getTypeArguments();
         if (typeArguments.length > 0) {
           final PsiJavaCodeReferenceElement classReference = expression.getClassReference();
@@ -103,30 +102,39 @@ public class RedundantTypeArgsInspection extends GenericsInspectionToolBase {
         }
       }
 
-      private void checkCallExpression(final PsiJavaCodeReferenceElement reference,
-                                       final PsiType[] typeArguments,
-                                       PsiCallExpression expression,
-                                       final InspectionManager inspectionManager, final List<ProblemDescriptor> problems) {
-
+      private void checkCallExpression(
+        final PsiJavaCodeReferenceElement reference,
+        final PsiType[] typeArguments,
+        PsiCallExpression expression,
+        final InspectionManager inspectionManager,
+        final List<ProblemDescriptor> problems
+      ) {
         PsiExpressionList argumentList = expression.getArgumentList();
         if (argumentList == null) return;
         final JavaResolveResult resolveResult = reference.advancedResolve(false);
 
         final PsiElement element = resolveResult.getElement();
-        if (element instanceof PsiMethod && resolveResult.isValidResult()) {
-          PsiMethod method = (PsiMethod) element;
+        if (element instanceof PsiMethod method && resolveResult.isValidResult()) {
           final PsiTypeParameter[] typeParameters = method.getTypeParameters();
           if (typeParameters.length == typeArguments.length) {
             final PsiParameter[] parameters = method.getParameterList().getParameters();
             PsiResolveHelper resolveHelper = JavaPsiFacade.getInstance(expression.getProject()).getResolveHelper();
-            final PsiSubstitutor psiSubstitutor = resolveHelper
-                .inferTypeArguments(typeParameters, parameters, argumentList.getExpressions(), PsiSubstitutor.EMPTY, expression, DefaultParameterTypeInferencePolicy.INSTANCE);
+            final PsiSubstitutor psiSubstitutor = resolveHelper.inferTypeArguments(
+              typeParameters,
+              parameters,
+              argumentList.getExpressions(),
+              PsiSubstitutor.EMPTY,
+              expression,
+              DefaultParameterTypeInferencePolicy.INSTANCE
+            );
             for (int i = 0, length = typeParameters.length; i < length; i++) {
               PsiTypeParameter typeParameter = typeParameters[i];
               final PsiType inferredType = psiSubstitutor.getSubstitutionMap().get(typeParameter);
               if (!typeArguments[i].equals(inferredType)) return;
-              if (PsiUtil.resolveClassInType(method.getReturnType()) == typeParameter && PsiPrimitiveType.getUnboxedType(inferredType) != null)
+              if (PsiUtil.resolveClassInType(method.getReturnType()) == typeParameter
+                && PsiPrimitiveType.getUnboxedType(inferredType) != null) {
                 return;
+              }
             }
 
             final PsiCallExpression copy = (PsiCallExpression) expression.copy(); //see IDEADEV-8174
@@ -138,10 +146,13 @@ public class RedundantTypeArgsInspection extends GenericsInspectionToolBase {
               return;
             }
 
-            final ProblemDescriptor descriptor = inspectionManager.createProblemDescriptor(expression.getTypeArgumentList(),
-                InspectionsBundle.message("inspection.redundant.type.problem.descriptor"),
-                myQuickFixAction,
-                ProblemHighlightType.LIKE_UNUSED_SYMBOL, false);
+            final ProblemDescriptor descriptor = inspectionManager.createProblemDescriptor(
+              expression.getTypeArgumentList(),
+              InspectionLocalize.inspectionRedundantTypeProblemDescriptor().get(),
+              myQuickFixAction,
+              ProblemHighlightType.LIKE_UNUSED_SYMBOL,
+              false
+            );
             problems.add(descriptor);
           }
         }
@@ -157,15 +168,16 @@ public class RedundantTypeArgsInspection extends GenericsInspectionToolBase {
     @Override
     @Nonnull
     public String getName() {
-      return InspectionsBundle.message("inspection.redundant.type.remove.quickfix");
+      return InspectionLocalize.inspectionRedundantTypeRemoveQuickfix().get();
     }
 
     @Override
+    @RequiredReadAction
     public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
       final PsiReferenceParameterList typeArgumentList = (PsiReferenceParameterList) descriptor.getPsiElement();
       try {
-        final PsiMethodCallExpression expr =
-            (PsiMethodCallExpression) JavaPsiFacade.getInstance(project).getElementFactory().createExpressionFromText("foo()", null);
+        final PsiMethodCallExpression expr = (PsiMethodCallExpression) JavaPsiFacade.getInstance(project).getElementFactory()
+          .createExpressionFromText("foo()", null);
         typeArgumentList.replace(expr.getTypeArgumentList());
       } catch (IncorrectOperationException e) {
         LOG.error(e);

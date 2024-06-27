@@ -15,22 +15,26 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.redundantCast;
 
-import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.impl.codeInspection.miscGenerics.GenericsInspectionToolBase;
 import com.intellij.java.analysis.impl.codeInspection.miscGenerics.SuspiciousMethodCallUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiExpressionTrimRenderer;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.RedundantCastUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.*;
+import consulo.language.editor.inspection.InspectionToolState;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,17 +112,19 @@ public class RedundantCastInspection extends GenericsInspectionToolBase<Redundan
     PsiElement parent = PsiUtil.skipParenthesizedExprUp(cast.getParent());
     if (parent instanceof PsiExpressionList) {
       final PsiElement gParent = parent.getParent();
-      if (gParent instanceof PsiMethodCallExpression && state.IGNORE_SUSPICIOUS_METHOD_CALLS) {
+      if (gParent instanceof PsiMethodCallExpression methodCall && state.IGNORE_SUSPICIOUS_METHOD_CALLS) {
         final String message = SuspiciousMethodCallUtil
-          .getSuspiciousMethodCallMessage((PsiMethodCallExpression)gParent, operand, operand.getType(), true, new ArrayList<>(), 0);
+          .getSuspiciousMethodCallMessage(methodCall, operand, operand.getType(), true, new ArrayList<>(), 0);
         if (message != null) {
           return null;
         }
       }
     }
 
-    String message = InspectionsBundle.message("inspection.redundant.cast.problem.descriptor",
-                                               "<code>" + PsiExpressionTrimRenderer.render(operand) + "</code>", "<code>#ref</code> #loc");
+    String message = InspectionLocalize.inspectionRedundantCastProblemDescriptor(
+      "<code>" + PsiExpressionTrimRenderer.render(operand) + "</code>",
+      "<code>#ref</code> #loc"
+    ).get();
     return manager.createProblemDescriptor(castType, message, myQuickFixAction, ProblemHighlightType.LIKE_UNUSED_SYMBOL, onTheFly);
   }
 
@@ -127,10 +133,11 @@ public class RedundantCastInspection extends GenericsInspectionToolBase<Redundan
     @Override
     @Nonnull
     public String getFamilyName() {
-      return InspectionsBundle.message("inspection.redundant.cast.remove.quickfix");
+      return InspectionLocalize.inspectionRedundantCastRemoveQuickfix().get();
     }
 
     @Override
+    @RequiredReadAction
     public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
       PsiElement castTypeElement = descriptor.getPsiElement();
       PsiTypeCastExpression cast = castTypeElement == null ? null : (PsiTypeCastExpression)castTypeElement.getParent();
@@ -143,13 +150,13 @@ public class RedundantCastInspection extends GenericsInspectionToolBase<Redundan
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionsBundle.message("inspection.redundant.cast.display.name");
+    return InspectionLocalize.inspectionRedundantCastDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String getGroupDisplayName() {
-    return GroupNames.VERBOSE_GROUP_NAME;
+    return InspectionLocalize.groupNamesVerboseOrRedundantCodeConstructs().get();
   }
 
   @Override

@@ -16,16 +16,16 @@
 package com.intellij.java.analysis.impl.codeInspection.localCanBeFinal;
 
 import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
-import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.language.impl.psi.controlFlow.*;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.FileModificationService;
-import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.psi.PsiElement;
@@ -33,13 +33,11 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -84,7 +82,7 @@ public class LocalCanBeFinal extends BaseJavaBatchLocalInspectionTool {
       final List<ProblemDescriptor> problems = checkCodeBlock(initializer.getBody(), manager, isOnTheFly);
       if (problems != null) {
         if (allProblems == null) {
-          allProblems = new ArrayList<ProblemDescriptor>(1);
+          allProblems = new ArrayList<>(1);
         }
         allProblems.addAll(problems);
       }
@@ -99,6 +97,7 @@ public class LocalCanBeFinal extends BaseJavaBatchLocalInspectionTool {
     try {
       ControlFlowPolicy policy = new ControlFlowPolicy() {
         @Override
+        @RequiredReadAction
         public PsiVariable getUsedVariable(PsiReferenceExpression refExpr) {
           if (refExpr.isQualified()) return null;
 
@@ -133,9 +132,9 @@ public class LocalCanBeFinal extends BaseJavaBatchLocalInspectionTool {
     int start = flow.getStartOffset(body);
     int end = flow.getEndOffset(body);
 
-    final List<PsiVariable> writtenVariables = new ArrayList<PsiVariable>(ControlFlowUtil.getWrittenVariables(flow, start, end, false));
+    final List<PsiVariable> writtenVariables = new ArrayList<>(ControlFlowUtil.getWrittenVariables(flow, start, end, false));
 
-    final HashSet<PsiVariable> ssaVarsSet = new HashSet<PsiVariable>();
+    final HashSet<PsiVariable> ssaVarsSet = new HashSet<>();
     body.accept(new JavaRecursiveElementWalkingVisitor() {
       @Override
       public void visitCodeBlock(PsiCodeBlock block) {
@@ -156,7 +155,7 @@ public class LocalCanBeFinal extends BaseJavaBatchLocalInspectionTool {
       }
 
       @Override
-      public void visitForeachStatement(PsiForeachStatement statement) {
+      public void visitForeachStatement(@Nonnull PsiForeachStatement statement) {
         super.visitForeachStatement(statement);
         final PsiParameter param = statement.getIterationParameter();
         final PsiStatement body = statement.getBody();
@@ -169,18 +168,19 @@ public class LocalCanBeFinal extends BaseJavaBatchLocalInspectionTool {
         }
       }
 
+      @RequiredReadAction
       private HashSet<PsiElement> getDeclaredVariables(PsiCodeBlock block) {
-        final HashSet<PsiElement> result = new HashSet<PsiElement>();
+        final HashSet<PsiElement> result = new HashSet<>();
         PsiElement[] children = block.getChildren();
         for (PsiElement child : children) {
           child.accept(new JavaElementVisitor() {
             @Override
-            public void visitReferenceExpression(PsiReferenceExpression expression) {
+            public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
               visitReferenceElement(expression);
             }
 
             @Override
-            public void visitDeclarationStatement(PsiDeclarationStatement statement) {
+            public void visitDeclarationStatement(@Nonnull PsiDeclarationStatement statement) {
               PsiElement[] declaredElements = statement.getDeclaredElements();
               for (PsiElement declaredElement : declaredElements) {
                 if (declaredElement instanceof PsiVariable) result.add(declaredElement);
@@ -197,7 +197,7 @@ public class LocalCanBeFinal extends BaseJavaBatchLocalInspectionTool {
       }
     });
 
-    ArrayList<PsiVariable> result = new ArrayList<PsiVariable>(ssaVarsSet);
+    ArrayList<PsiVariable> result = new ArrayList<>(ssaVarsSet);
 
     if (body.getParent() instanceof PsiMethod) {
       PsiMethod method = (PsiMethod) body.getParent();
@@ -235,18 +235,26 @@ public class LocalCanBeFinal extends BaseJavaBatchLocalInspectionTool {
         iterator.remove();
       }
     }
-    List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>(result.size());
+    List<ProblemDescriptor> problems = new ArrayList<>(result.size());
     for (PsiVariable variable : result) {
       final PsiIdentifier nameIdenitier = variable.getNameIdentifier();
       PsiElement problemElement = nameIdenitier != null ? nameIdenitier : variable;
       if (variable instanceof PsiParameter && !(((PsiParameter) variable).getDeclarationScope() instanceof PsiForeachStatement)) {
-        problems.add(manager.createProblemDescriptor(problemElement,
-            InspectionsBundle.message("inspection.can.be.local.parameter.problem.descriptor"),
-            myQuickFix, ProblemHighlightType.GENERIC_ERROR_OR_WARNING, onTheFly));
+        problems.add(manager.createProblemDescriptor(
+          problemElement,
+          InspectionLocalize.inspectionCanBeLocalParameterProblemDescriptor().get(),
+          myQuickFix,
+          ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
+          onTheFly
+        ));
       } else {
-        problems.add(manager.createProblemDescriptor(problemElement,
-            InspectionsBundle.message("inspection.can.be.local.variable.problem.descriptor"),
-            myQuickFix, ProblemHighlightType.GENERIC_ERROR_OR_WARNING, onTheFly));
+        problems.add(manager.createProblemDescriptor(
+          problemElement,
+          InspectionLocalize.inspectionCanBeLocalVariableProblemDescriptor().get(),
+          myQuickFix,
+          ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
+          onTheFly
+        ));
       }
     }
 
@@ -256,13 +264,13 @@ public class LocalCanBeFinal extends BaseJavaBatchLocalInspectionTool {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionsBundle.message("inspection.local.can.be.final.display.name");
+    return InspectionLocalize.inspectionLocalCanBeFinalDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String getGroupDisplayName() {
-    return GroupNames.STYLE_GROUP_NAME;
+    return InspectionLocalize.groupNamesCodeStyleIssues().get();
   }
 
   @Override
@@ -275,10 +283,11 @@ public class LocalCanBeFinal extends BaseJavaBatchLocalInspectionTool {
     @Override
     @Nonnull
     public String getName() {
-      return InspectionsBundle.message("inspection.can.be.final.accept.quickfix");
+      return InspectionLocalize.inspectionCanBeFinalAcceptQuickfix().get();
     }
 
     @Override
+    @RequiredReadAction
     public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor problem) {
       if (!FileModificationService.getInstance().preparePsiElementForWrite(problem.getPsiElement())) return;
       PsiElement nameIdentifier = problem.getPsiElement();
@@ -327,25 +336,15 @@ public class LocalCanBeFinal extends BaseJavaBatchLocalInspectionTool {
       gc.anchor = GridBagConstraints.NORTHWEST;
 
 
-      myReportVariablesCheckbox = new JCheckBox(InspectionsBundle.message("inspection.local.can.be.final.option"));
+      myReportVariablesCheckbox = new JCheckBox(InspectionLocalize.inspectionLocalCanBeFinalOption().get());
       myReportVariablesCheckbox.setSelected(REPORT_VARIABLES);
-      myReportVariablesCheckbox.getModel().addChangeListener(new ChangeListener() {
-        @Override
-        public void stateChanged(ChangeEvent e) {
-          REPORT_VARIABLES = myReportVariablesCheckbox.isSelected();
-        }
-      });
+      myReportVariablesCheckbox.getModel().addChangeListener(e -> REPORT_VARIABLES = myReportVariablesCheckbox.isSelected());
       gc.gridy = 0;
       add(myReportVariablesCheckbox, gc);
 
-      myReportParametersCheckbox = new JCheckBox(InspectionsBundle.message("inspection.local.can.be.final.option1"));
+      myReportParametersCheckbox = new JCheckBox(InspectionLocalize.inspectionLocalCanBeFinalOption1().get());
       myReportParametersCheckbox.setSelected(REPORT_PARAMETERS);
-      myReportParametersCheckbox.getModel().addChangeListener(new ChangeListener() {
-        @Override
-        public void stateChanged(ChangeEvent e) {
-          REPORT_PARAMETERS = myReportParametersCheckbox.isSelected();
-        }
-      });
+      myReportParametersCheckbox.getModel().addChangeListener(e -> REPORT_PARAMETERS = myReportParametersCheckbox.isSelected());
 
       gc.weighty = 1;
       gc.gridy++;

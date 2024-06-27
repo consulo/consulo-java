@@ -22,22 +22,21 @@ import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.testIntegration.TestFramework;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.ApplicationManager;
 import consulo.application.util.function.Computable;
 import consulo.codeEditor.Editor;
 import consulo.ide.impl.idea.openapi.fileEditor.ex.IdeDocumentHistory;
 import consulo.language.Language;
 import consulo.language.codeStyle.PostprocessReformattingAspect;
-import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.Collection;
 
 @ExtensionImpl
@@ -46,33 +45,33 @@ public class JavaTestGenerator implements TestGenerator {
   }
 
   public PsiElement generateTest(final Project project, final CreateTestDialog d) {
-    return PostprocessReformattingAspect.getInstance(project).postponeFormattingInside(new Computable<PsiElement>() {
-      public PsiElement compute() {
-        return ApplicationManager.getApplication().runWriteAction(new Computable<PsiElement>() {
-          public PsiElement compute() {
-            try {
-              IdeDocumentHistory.getInstance(project).includeCurrentPlaceAsChangePlace();
+    return PostprocessReformattingAspect.getInstance(project).postponeFormattingInside(
+      () -> project.getApplication().runWriteAction(new Computable<PsiElement>() {
+        public PsiElement compute() {
+          try {
+            IdeDocumentHistory.getInstance(project).includeCurrentPlaceAsChangePlace();
 
-              PsiClass targetClass = JavaDirectoryService.getInstance().createClass(d.getTargetDirectory(), d.getClassName());
-              addSuperClass(targetClass, project, d.getSuperClassName());
+            PsiClass targetClass = JavaDirectoryService.getInstance().createClass(d.getTargetDirectory(), d.getClassName());
+            addSuperClass(targetClass, project, d.getSuperClassName());
 
-              Editor editor = CodeInsightUtil.positionCursor(project, targetClass.getContainingFile(), targetClass.getLBrace());
-              addTestMethods(editor,
-                             targetClass,
-                             d.getSelectedTestFrameworkDescriptor(),
-                             d.getSelectedMethods(),
-                             d.shouldGeneratedBefore(),
-                             d.shouldGeneratedAfter());
-              return targetClass;
-            }
-            catch (IncorrectOperationException e) {
-              showErrorLater(project, d.getClassName());
-              return null;
-            }
+            Editor editor = CodeInsightUtil.positionCursor(project, targetClass.getContainingFile(), targetClass.getLBrace());
+            addTestMethods(
+              editor,
+              targetClass,
+              d.getSelectedTestFrameworkDescriptor(),
+              d.getSelectedMethods(),
+              d.shouldGeneratedBefore(),
+              d.shouldGeneratedAfter()
+            );
+            return targetClass;
           }
-        });
-      }
-    });
+          catch (IncorrectOperationException e) {
+            showErrorLater(project, d.getClassName());
+            return null;
+          }
+        }
+      })
+    );
   }
 
   private static void addSuperClass(PsiClass targetClass, Project project, String superClassName) throws IncorrectOperationException {
@@ -115,20 +114,20 @@ public class JavaTestGenerator implements TestGenerator {
   }
 
   private static void showErrorLater(final Project project, final String targetClassName) {
-    ApplicationManager.getApplication().invokeLater(new Runnable() {
-      public void run() {
-        Messages.showErrorDialog(project,
-                                 CodeInsightBundle.message("intention.error.cannot.create.class.message", targetClassName),
-                                 CodeInsightBundle.message("intention.error.cannot.create.class.title"));
-      }
-    });
+    project.getApplication().invokeLater(() -> Messages.showErrorDialog(
+      project,
+      CodeInsightLocalize.intentionErrorCannotCreateClassMessage(targetClassName).get(),
+      CodeInsightLocalize.intentionErrorCannotCreateClassTitle().get()
+    ));
   }
 
-  private static void generateMethod(TestIntegrationUtils.MethodKind methodKind,
-                                     TestFramework descriptor,
-                                     PsiClass targetClass,
-                                     Editor editor,
-                                     @Nullable String name) {
+  private static void generateMethod(
+    TestIntegrationUtils.MethodKind methodKind,
+    TestFramework descriptor,
+    PsiClass targetClass,
+    Editor editor,
+    @Nullable String name
+  ) {
     PsiMethod method = (PsiMethod)targetClass.add(TestIntegrationUtils.createDummyMethod(targetClass));
     PsiDocumentManager.getInstance(targetClass.getProject()).doPostponedOperationsAndUnblockDocument(editor.getDocument());
     TestIntegrationUtils.runTestMethodTemplate(methodKind, descriptor, editor, targetClass, method, name, true);
@@ -136,7 +135,7 @@ public class JavaTestGenerator implements TestGenerator {
 
   @Override
   public String toString() {
-    return CodeInsightBundle.message("intention.create.test.dialog.java");
+    return CodeInsightLocalize.intentionCreateTestDialogJava().get();
   }
 
   @Nonnull

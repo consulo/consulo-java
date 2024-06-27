@@ -15,17 +15,16 @@
  */
 package com.intellij.java.analysis.impl.codeInspection;
 
-import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.language.codeInsight.ExternalAnnotationsManager;
+import com.intellij.java.language.psi.PsiAnnotation;
+import com.intellij.java.language.psi.PsiModifierListOwner;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
-import com.intellij.java.language.psi.PsiAnnotation;
-import com.intellij.java.language.psi.PsiModifierListOwner;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
-
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 /**
@@ -44,7 +43,7 @@ public class RemoveAnnotationQuickFix implements LocalQuickFix {
   @Override
   @Nonnull
   public String getName() {
-    return CodeInsightBundle.message("remove.annotation");
+    return CodeInsightLocalize.removeAnnotation().get();
   }
 
   @Override

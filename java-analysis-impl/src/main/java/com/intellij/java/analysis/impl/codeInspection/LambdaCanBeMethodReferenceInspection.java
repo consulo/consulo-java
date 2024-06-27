@@ -16,7 +16,6 @@
 package com.intellij.java.analysis.impl.codeInspection;
 
 import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
-import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.FunctionalInterfaceParameterizationUtil;
 import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
@@ -29,6 +28,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.editor.inspection.*;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.scheme.InspectionProjectProfileManager;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.psi.PsiComment;
@@ -68,7 +68,7 @@ public class LambdaCanBeMethodReferenceInspection extends BaseJavaBatchLocalInsp
   @Nonnull
   @Override
   public String getGroupDisplayName() {
-    return GroupNames.LANGUAGE_LEVEL_SPECIFIC_GROUP_NAME;
+    return InspectionLocalize.groupNamesLanguageLevelSpecificIssuesAndMigrationAids().get();
   }
 
   @Nls

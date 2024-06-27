@@ -18,21 +18,21 @@ package com.intellij.java.impl.util.descriptors.impl;
 
 import com.intellij.java.impl.util.descriptors.*;
 import consulo.annotation.component.ServiceImpl;
-import consulo.application.ApplicationManager;
+import consulo.application.Application;
 import consulo.fileTemplate.FileTemplate;
 import consulo.fileTemplate.FileTemplateManager;
-import consulo.ide.IdeBundle;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.io.FileUtil;
 import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
 import consulo.ide.impl.idea.util.FileContentUtil;
 import consulo.logging.Logger;
+import consulo.platform.base.localize.IdeLocalize;
 import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
 import consulo.virtualFileSystem.LocalFileSystem;
 import consulo.virtualFileSystem.VirtualFile;
+import jakarta.annotation.Nullable;
 import jakarta.inject.Singleton;
 
-import jakarta.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 
@@ -100,7 +100,7 @@ public class ConfigFileFactoryImpl extends ConfigFileFactory {
       if (existingFile == null || existingFile.isDirectory()) {
         final VirtualFile virtualFile;
         if (!FileUtil.createParentDirs(file) || (virtualFile = fileSystem.refreshAndFindFileByIoFile(file.getParentFile())) == null) {
-          throw new IOException(IdeBundle.message("error.message.unable.to.create.file", file.getPath()));
+          throw new IOException(IdeLocalize.errorMessageUnableToCreateFile(file.getPath()).get());
         }
         childData = virtualFile.createChildData(this, file.getName());
       } else {
@@ -110,8 +110,10 @@ public class ConfigFileFactoryImpl extends ConfigFileFactory {
       return childData;
     } catch (final IOException e) {
       LOG.info(e);
-      ApplicationManager.getApplication().invokeLater(() -> Messages.showErrorDialog(IdeBundle.message("message.text.error.creating.deployment.descriptor", e.getLocalizedMessage()), IdeBundle
-          .message("message.text.creating.deployment.descriptor")));
+      Application.get().invokeLater(() -> Messages.showErrorDialog(
+        IdeLocalize.messageTextErrorCreatingDeploymentDescriptor(e.getLocalizedMessage()).get(),
+        IdeLocalize.messageTextCreatingDeploymentDescriptor().get()
+      ));
     }
     return null;
   }

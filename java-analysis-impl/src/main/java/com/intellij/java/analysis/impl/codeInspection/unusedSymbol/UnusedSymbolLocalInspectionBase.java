@@ -15,10 +15,10 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.unusedSymbol;
 
-import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
 import com.intellij.java.analysis.impl.codeInspection.deadCode.UnusedDeclarationInspectionBase;
 import com.intellij.java.language.psi.PsiModifier;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.editor.rawHighlight.HighlightInfoType;
 import consulo.util.xml.serializer.InvalidDataException;
@@ -134,7 +134,7 @@ public class UnusedSymbolLocalInspectionBase extends BaseJavaLocalInspectionTool
   @Override
   @Nonnull
   public String getGroupDisplayName() {
-    return GroupNames.DECLARATION_REDUNDANCY;
+    return InspectionLocalize.groupNamesDeclarationRedundancy().get();
   }
 
   @Override

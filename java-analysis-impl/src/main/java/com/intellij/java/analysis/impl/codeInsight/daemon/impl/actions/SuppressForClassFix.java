@@ -15,14 +15,14 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.actions;
 
-import consulo.language.editor.rawHighlight.HighlightDisplayKey;
-import consulo.language.editor.inspection.InspectionsBundle;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiDeclarationStatement;
 import com.intellij.java.language.psi.PsiDocCommentOwner;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
+import consulo.language.editor.rawHighlight.HighlightDisplayKey;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -39,6 +39,7 @@ public class SuppressForClassFix extends SuppressFix {
     super(id);
   }
 
+  @RequiredReadAction
   @Override
   @Nullable
   public PsiDocCommentOwner getContainer(final PsiElement element) {
@@ -48,7 +49,8 @@ public class SuppressForClassFix extends SuppressFix {
     }
     while (container != null) {
       final PsiClass parentClass = PsiTreeUtil.getParentOfType(container, PsiClass.class);
-      if ((parentClass == null || container.getParent() instanceof PsiDeclarationStatement || container.getParent() instanceof PsiClass) && container instanceof PsiClass) {
+      if ((parentClass == null || container.getParent() instanceof PsiDeclarationStatement || container.getParent() instanceof PsiClass)
+        && container instanceof PsiClass) {
         return container;
       }
       container = parentClass;
@@ -59,6 +61,6 @@ public class SuppressForClassFix extends SuppressFix {
   @Override
   @Nonnull
   public String getText() {
-    return InspectionsBundle.message("suppress.inspection.class");
+    return InspectionLocalize.suppressInspectionClass().get();
   }
 }

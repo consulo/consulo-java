@@ -16,11 +16,10 @@
 
 package com.intellij.java.analysis.impl.codeInspection.unusedImport;
 
-import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.PairedUnfairLocalInspectionTool;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
@@ -32,18 +31,17 @@ import org.jetbrains.annotations.NonNls;
 public class UnusedImportLocalInspection extends BaseJavaLocalInspectionTool implements PairedUnfairLocalInspectionTool {
   @NonNls
   public static final String SHORT_NAME = "UNUSED_IMPORT";
-  public static final String DISPLAY_NAME = InspectionsBundle.message("unused.import");
 
   @Override
   @Nonnull
   public String getGroupDisplayName() {
-    return GroupNames.IMPORTS_GROUP_NAME;
+    return InspectionLocalize.groupNamesImports().get();
   }
 
   @Override
   @Nonnull
   public String getDisplayName() {
-    return DISPLAY_NAME;
+    return InspectionLocalize.unusedImport().get();
   }
 
   @Override

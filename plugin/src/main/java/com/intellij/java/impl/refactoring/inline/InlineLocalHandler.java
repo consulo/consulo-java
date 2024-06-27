@@ -23,9 +23,9 @@ import com.intellij.java.impl.refactoring.util.InlineUtil;
 import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.ApplicationManager;
-import consulo.application.util.function.Processor;
+import consulo.application.Application;
 import consulo.application.util.query.Query;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorColors;
@@ -51,8 +51,8 @@ import consulo.project.ui.wm.WindowManager;
 import consulo.undoRedo.CommandProcessor;
 import consulo.util.collection.ArrayUtil;
 import jakarta.annotation.Nonnull;
-
 import jakarta.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -67,15 +67,17 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
     return element instanceof PsiLocalVariable;
   }
 
+  @RequiredReadAction
   public void inlineElement(Project project, Editor editor, PsiElement element) {
     final PsiReference psiReference = TargetElementUtil.findReference(editor);
-    final PsiReferenceExpression refExpr = psiReference instanceof PsiReferenceExpression ? ((PsiReferenceExpression) psiReference) : null;
+    final PsiReferenceExpression refExpr = psiReference instanceof PsiReferenceExpression referenceExpression ? referenceExpression : null;
     invoke(project, editor, (PsiLocalVariable) element, refExpr);
   }
 
   /**
    * should be called in AtomicAction
    */
+  @RequiredReadAction
   public static void invoke(@Nonnull final Project project, final Editor editor, final PsiLocalVariable local, PsiReferenceExpression refExpr) {
     if (!CommonRefactoringUtil.checkReadOnlyStatus(project, local)) return;
 
@@ -94,29 +96,27 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
     final PsiClass containingClass = PsiTreeUtil.getParentOfType(local, PsiClass.class);
     final List<PsiElement> innerClassesWithUsages = Collections.synchronizedList(new ArrayList<PsiElement>());
     final List<PsiElement> innerClassUsages = Collections.synchronizedList(new ArrayList<PsiElement>());
-    query.forEach(new Processor<PsiReference>() {
-      public boolean process(final PsiReference psiReference) {
-        final PsiElement element = psiReference.getElement();
-        PsiElement innerClass = PsiTreeUtil.getParentOfType(element, PsiClass.class, PsiLambdaExpression.class);
-        while (innerClass != containingClass && innerClass != null) {
-          final PsiClass parentPsiClass = PsiTreeUtil.getParentOfType(innerClass, PsiClass.class, true);
-          if (parentPsiClass == containingClass) {
-            if (innerClass instanceof PsiLambdaExpression) {
-              if (PsiTreeUtil.isAncestor(innerClass, local, false)) {
-                innerClassesWithUsages.add(element);
-              } else {
-                innerClassesWithUsages.add(innerClass);
-              }
-              innerClass = parentPsiClass;
-              continue;
+    query.forEach(psiReference -> {
+      final PsiElement element = psiReference.getElement();
+      PsiElement innerClass = PsiTreeUtil.getParentOfType(element, PsiClass.class, PsiLambdaExpression.class);
+      while (innerClass != containingClass && innerClass != null) {
+        final PsiClass parentPsiClass = PsiTreeUtil.getParentOfType(innerClass, PsiClass.class, true);
+        if (parentPsiClass == containingClass) {
+          if (innerClass instanceof PsiLambdaExpression) {
+            if (PsiTreeUtil.isAncestor(innerClass, local, false)) {
+              innerClassesWithUsages.add(element);
+            } else {
+              innerClassesWithUsages.add(innerClass);
             }
-            innerClassesWithUsages.add(innerClass);
-            innerClassUsages.add(element);
+            innerClass = parentPsiClass;
+            continue;
           }
-          innerClass = parentPsiClass;
+          innerClassesWithUsages.add(innerClass);
+          innerClassUsages.add(element);
         }
-        return true;
+        innerClass = parentPsiClass;
       }
+      return true;
     });
 
     final PsiCodeBlock containerBlock = PsiTreeUtil.getParentOfType(local, PsiCodeBlock.class);
@@ -136,7 +136,7 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
       return;
     }
 
-    final List<PsiElement> refsToInlineList = new ArrayList<PsiElement>();
+    final List<PsiElement> refsToInlineList = new ArrayList<>();
     Collections.addAll(refsToInlineList, DefUseUtil.getRefs(containerBlock, local, defToInline));
     for (PsiElement innerClassUsage : innerClassUsages) {
       if (!refsToInlineList.contains(innerClassUsage)) {
@@ -178,7 +178,13 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
         return;
       }
       if (tryStatement != null && !PsiTreeUtil.isAncestor(tryStatement, ref, false)) {
-        CommonRefactoringUtil.showErrorHint(project, editor, "Unable to inline outside try/catch statement", REFACTORING_NAME, HelpID.INLINE_VARIABLE);
+        CommonRefactoringUtil.showErrorHint(
+          project,
+          editor,
+          "Unable to inline outside try/catch statement",
+          REFACTORING_NAME,
+          HelpID.INLINE_VARIABLE
+        );
         return;
       }
     }
@@ -209,7 +215,7 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
       return;
     }
 
-    if (editor != null && !ApplicationManager.getApplication().isUnitTestMode()) {
+    if (editor != null && !project.getApplication().isUnitTestMode()) {
       // TODO : check if initializer uses fieldNames that possibly will be hidden by other
       // locals with the same names after inlining
       highlightManager.addOccurrenceHighlights(
@@ -236,44 +242,43 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
       }
     }
 
-    final Runnable runnable = new Runnable() {
-      public void run() {
-        try {
-          PsiExpression[] exprs = new PsiExpression[refsToInline.length];
-          for (int idx = 0; idx < refsToInline.length; idx++) {
-            PsiJavaCodeReferenceElement refElement = (PsiJavaCodeReferenceElement) refsToInline[idx];
-            exprs[idx] = InlineUtil.inlineVariable(local, defToInline, refElement);
-          }
-
-          if (!isInliningVariableInitializer(defToInline)) {
-            defToInline.getParent().delete();
-          } else {
-            defToInline.delete();
-          }
-
-          if (ReferencesSearch.search(local).findFirst() == null) {
-            QuickFixFactory.getInstance().createRemoveUnusedVariableFix(local).invoke(project, editor, local.getContainingFile());
-          }
-
-          if (editor != null && !ApplicationManager.getApplication().isUnitTestMode()) {
-            highlightManager.addOccurrenceHighlights(editor, exprs, attributes, true, null);
-            WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringBundle.message("press.escape.to.remove.the.highlighting"));
-          }
-
-          for (final PsiExpression expr : exprs) {
-            InlineUtil.tryToInlineArrayCreationForVarargs(expr);
-          }
-        } catch (IncorrectOperationException e) {
-          LOG.error(e);
+    final Runnable runnable = () -> {
+      try {
+        PsiExpression[] exprs = new PsiExpression[refsToInline.length];
+        for (int idx = 0; idx < refsToInline.length; idx++) {
+          PsiJavaCodeReferenceElement refElement = (PsiJavaCodeReferenceElement) refsToInline[idx];
+          exprs[idx] = InlineUtil.inlineVariable(local, defToInline, refElement);
         }
+
+        if (!isInliningVariableInitializer(defToInline)) {
+          defToInline.getParent().delete();
+        } else {
+          defToInline.delete();
+        }
+
+        if (ReferencesSearch.search(local).findFirst() == null) {
+          QuickFixFactory.getInstance().createRemoveUnusedVariableFix(local).invoke(project, editor, local.getContainingFile());
+        }
+
+        if (editor != null && !project.getApplication().isUnitTestMode()) {
+          highlightManager.addOccurrenceHighlights(editor, exprs, attributes, true, null);
+          WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringBundle.message("press.escape.to.remove.the.highlighting"));
+        }
+
+        for (final PsiExpression expr : exprs) {
+          InlineUtil.tryToInlineArrayCreationForVarargs(expr);
+        }
+      } catch (IncorrectOperationException e) {
+        LOG.error(e);
       }
     };
 
-    CommandProcessor.getInstance().executeCommand(project, new Runnable() {
-      public void run() {
-        ApplicationManager.getApplication().runWriteAction(runnable);
-      }
-    }, RefactoringBundle.message("inline.command", localName), null);
+    CommandProcessor.getInstance().executeCommand(
+      project,
+      () -> Application.get().runWriteAction(runnable),
+      RefactoringBundle.message("inline.command", localName),
+      null
+    );
   }
 
   @Nullable
@@ -281,13 +286,13 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
     for (PsiElement element : refsToInline) {
 
       PsiElement parent = element.getParent();
-      if (parent instanceof PsiArrayAccessExpression) {
-        if (((PsiArrayAccessExpression) parent).getIndexExpression() == element) continue;
+      if (parent instanceof PsiArrayAccessExpression arrayAccessExpression) {
+        if (arrayAccessExpression.getIndexExpression() == element) continue;
         element = parent;
         parent = parent.getParent();
       }
 
-      if (parent instanceof PsiAssignmentExpression && element == ((PsiAssignmentExpression) parent).getLExpression()
+      if (parent instanceof PsiAssignmentExpression assignment && element == assignment.getLExpression()
           || isUnaryWriteExpression(parent)) {
 
         return element;
@@ -298,19 +303,19 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
 
   private static boolean isUnaryWriteExpression(PsiElement parent) {
     IElementType tokenType = null;
-    if (parent instanceof PsiPrefixExpression) {
-      tokenType = ((PsiPrefixExpression) parent).getOperationTokenType();
+    if (parent instanceof PsiPrefixExpression prefixExpression) {
+      tokenType = prefixExpression.getOperationTokenType();
     }
-    if (parent instanceof PsiPostfixExpression) {
-      tokenType = ((PsiPostfixExpression) parent).getOperationTokenType();
+    if (parent instanceof PsiPostfixExpression postfixExpression) {
+      tokenType = postfixExpression.getOperationTokenType();
     }
     return tokenType == JavaTokenType.PLUSPLUS || tokenType == JavaTokenType.MINUSMINUS;
   }
 
   private static boolean isSameDefinition(final PsiElement def, final PsiExpression defToInline) {
-    if (def instanceof PsiLocalVariable) return defToInline.equals(((PsiLocalVariable) def).getInitializer());
+    if (def instanceof PsiLocalVariable localVar) return defToInline.equals(localVar.getInitializer());
     final PsiElement parent = def.getParent();
-    return parent instanceof PsiAssignmentExpression && defToInline.equals(((PsiAssignmentExpression) parent).getRExpression());
+    return parent instanceof PsiAssignmentExpression assignment && defToInline.equals(assignment.getRExpression());
   }
 
   private static boolean isInliningVariableInitializer(final PsiExpression defToInline) {
@@ -318,12 +323,14 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
   }
 
   @Nullable
-  private static PsiExpression getDefToInline(final PsiLocalVariable local,
-                                              final PsiElement refExpr,
-                                              final PsiCodeBlock block) {
+  private static PsiExpression getDefToInline(
+    final PsiLocalVariable local,
+    final PsiElement refExpr,
+    final PsiCodeBlock block
+  ) {
     if (refExpr != null) {
       PsiElement def;
-      if (refExpr instanceof PsiReferenceExpression && PsiUtil.isAccessedForWriting((PsiExpression) refExpr)) {
+      if (refExpr instanceof PsiReferenceExpression referenceExpression && PsiUtil.isAccessedForWriting(referenceExpression)) {
         def = refExpr;
       } else {
         final PsiElement[] defs = DefUseUtil.getDefs(block, local, refExpr);
@@ -334,8 +341,7 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
         }
       }
 
-      if (def instanceof PsiReferenceExpression && def.getParent() instanceof PsiAssignmentExpression) {
-        final PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) def.getParent();
+      if (def instanceof PsiReferenceExpression && def.getParent() instanceof PsiAssignmentExpression assignmentExpression) {
         if (assignmentExpression.getOperationTokenType() != JavaTokenType.EQ) return null;
         final PsiExpression rExpr = assignmentExpression.getRExpression();
         if (rExpr != null) return rExpr;

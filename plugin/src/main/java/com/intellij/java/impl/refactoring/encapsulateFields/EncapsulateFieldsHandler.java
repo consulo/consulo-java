@@ -17,9 +17,9 @@ package com.intellij.java.impl.refactoring.encapsulateFields;
 
 import java.util.HashSet;
 
+import consulo.annotation.access.RequiredReadAction;
 import jakarta.annotation.Nonnull;
 
-import consulo.language.editor.CommonDataKeys;
 import consulo.dataContext.DataContext;
 import consulo.logging.Logger;
 import consulo.codeEditor.Editor;
@@ -38,6 +38,7 @@ public class EncapsulateFieldsHandler implements RefactoringActionHandler {
   private static final Logger LOG = Logger.getInstance(EncapsulateFieldsHandler.class);
   public static final String REFACTORING_NAME = RefactoringBundle.message("encapsulate.fields.title");
 
+  @RequiredReadAction
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
     int offset = editor.getCaretModel().getOffset();
     editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
@@ -48,8 +49,8 @@ public class EncapsulateFieldsHandler implements RefactoringActionHandler {
         CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.ENCAPSULATE_FIELDS);
         return;
       }
-      if (element instanceof PsiField) {
-        if (((PsiField) element).getContainingClass() == null) {
+      if (element instanceof PsiField field) {
+        if (field.getContainingClass() == null) {
           String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("the.field.should.be.declared.in.a.class"));
           CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.ENCAPSULATE_FIELDS);
           return;
@@ -71,12 +72,11 @@ public class EncapsulateFieldsHandler implements RefactoringActionHandler {
    */
   public void invoke(@Nonnull final Project project, @Nonnull final PsiElement[] elements, DataContext dataContext) {
     PsiClass aClass = null;
-    final HashSet<PsiField> preselectedFields = new HashSet<PsiField>();
+    final HashSet<PsiField> preselectedFields = new HashSet<>();
     if (elements.length == 1) {
-      if (elements[0] instanceof PsiClass) {
-        aClass = (PsiClass) elements[0];
-      } else if (elements[0] instanceof PsiField) {
-        PsiField field = (PsiField) elements[0];
+      if (elements[0] instanceof PsiClass psiClass) {
+        aClass = psiClass;
+      } else if (elements[0] instanceof PsiField field) {
         aClass = field.getContainingClass();
         preselectedFields.add(field);
       } else {
@@ -99,7 +99,7 @@ public class EncapsulateFieldsHandler implements RefactoringActionHandler {
           else {
             String message = RefactoringBundle.getCannotRefactorMessage(
               RefactoringBundle.message("fields.to.be.refactored.should.belong.to.the.same.class"));
-            Editor editor = dataContext.getData(CommonDataKeys.EDITOR);
+            Editor editor = dataContext.getData(Editor.KEY);
             CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.ENCAPSULATE_FIELDS);
             return;
           }
@@ -110,15 +110,20 @@ public class EncapsulateFieldsHandler implements RefactoringActionHandler {
     LOG.assertTrue(aClass != null);
     final PsiField[] fields = aClass.getFields();
     if (fields.length == 0) {
-      CommonRefactoringUtil.showErrorHint(project, dataContext.getData(CommonDataKeys.EDITOR), "Class has no fields to encapsulate",
-                                          REFACTORING_NAME, HelpID.ENCAPSULATE_FIELDS);
+      CommonRefactoringUtil.showErrorHint(
+        project,
+        dataContext.getData(Editor.KEY),
+        "Class has no fields to encapsulate",
+        REFACTORING_NAME,
+        HelpID.ENCAPSULATE_FIELDS
+      );
       return;
     }
 
     if (aClass.isInterface()) {
       String message = RefactoringBundle.getCannotRefactorMessage(
         RefactoringBundle.message("encapsulate.fields.refactoring.cannot.be.applied.to.interface"));
-      Editor editor = dataContext.getData(CommonDataKeys.EDITOR);
+      Editor editor = dataContext.getData(Editor.KEY);
       CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.ENCAPSULATE_FIELDS);
       return;
     }

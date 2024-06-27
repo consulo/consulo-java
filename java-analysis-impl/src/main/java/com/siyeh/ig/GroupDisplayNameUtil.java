@@ -23,7 +23,7 @@ import consulo.language.editor.inspection.InspectionsBundle;
 
 public class GroupDisplayNameUtil {
   @NonNls
-  private static final Map<String, String> packageGroupDisplayNameMap = new HashMap<String, String>();
+  private static final Map<String, String> packageGroupDisplayNameMap = new HashMap<>();
 
   static {
     packageGroupDisplayNameMap.put("abstraction", "group.names.abstraction.issues");

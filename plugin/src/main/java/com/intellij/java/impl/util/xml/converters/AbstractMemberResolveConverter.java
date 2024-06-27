@@ -21,16 +21,16 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PropertyMemberType;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import consulo.application.presentation.TypePresentationService;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.content.scope.ProjectScopes;
 import consulo.xml.util.xml.*;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -89,7 +89,7 @@ public abstract class AbstractMemberResolveConverter extends ResolvingConverter<
   public String getErrorMessage(final String s, final ConvertContext context) {
     final DomElement parent = context.getInvocationElement().getParent();
     assert parent != null;
-    return CodeInsightBundle.message("error.cannot.resolve.0.1", TypePresentationService.getInstance().getTypeName(parent), s);
+    return CodeInsightLocalize.errorCannotResolve01(TypePresentationService.getInstance().getTypeName(parent), s).get();
   }
 
   @Nonnull
@@ -97,7 +97,7 @@ public abstract class AbstractMemberResolveConverter extends ResolvingConverter<
     final PsiClass psiClass = getTargetClass(context);
     if (psiClass == null) return Collections.emptyList();
 
-    final ArrayList<PsiMember> list = new ArrayList<PsiMember>();
+    final ArrayList<PsiMember> list = new ArrayList<>();
     for (PsiField psiField : isLookDeep()? psiClass.getAllFields() : psiClass.getFields()) {
       if (fieldSuits(psiField)) {
         list.add(psiField);
@@ -128,7 +128,7 @@ public abstract class AbstractMemberResolveConverter extends ResolvingConverter<
 
     final PsiType psiType = getPsiType(context);
     final IntentionAction fix = QuickFixFactory.getInstance().createCreateFieldOrPropertyFix(targetClass, targetName, psiType, memberType);
-    return fix instanceof LocalQuickFix? new LocalQuickFix[] {(LocalQuickFix)fix} : super.getQuickFixes(context);
+    return fix instanceof LocalQuickFix localQuickFix ? new LocalQuickFix[] {localQuickFix} : super.getQuickFixes(context);
   }
 
   public void handleElementRename(final GenericDomValue<PsiMember> genericValue, final ConvertContext context, final String newElementName) {
@@ -136,8 +136,8 @@ public abstract class AbstractMemberResolveConverter extends ResolvingConverter<
   }
 
   public void bindReference(final GenericDomValue<PsiMember> genericValue, final ConvertContext context, final PsiElement newTarget) {
-    if (newTarget instanceof PsiMember) {
-      final String elementName = ((PsiMember)newTarget).getName();
+    if (newTarget instanceof PsiMember member) {
+      final String elementName = member.getName();
       genericValue.setStringValue(getPropertyName(elementName, context));
     }
   }

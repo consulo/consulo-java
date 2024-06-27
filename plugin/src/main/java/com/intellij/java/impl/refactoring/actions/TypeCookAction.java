@@ -22,7 +22,6 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.language.Language;
-import consulo.language.editor.CommonDataKeys;
 import consulo.dataContext.DataContext;
 import consulo.project.Project;
 import consulo.language.psi.PsiDirectory;
@@ -46,16 +45,15 @@ public class TypeCookAction extends BaseRefactoringAction {
 
   @Override
   public boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
-    Project project = DataManager.getInstance().getDataContext().getData(CommonDataKeys.PROJECT);
+    Project project = DataManager.getInstance().getDataContext().getData(Project.KEY);
 
     if (project == null) {
       return false;
     }
 
-    for (int i = 0; i < elements.length; i++) {
-      PsiElement element = elements[i];
-
-      if (!(element instanceof PsiClass || element instanceof PsiJavaFile || element instanceof PsiDirectory || element instanceof PsiJavaPackage)) {
+    for (PsiElement element : elements) {
+      if (!(element instanceof PsiClass || element instanceof PsiJavaFile
+        || element instanceof PsiDirectory || element instanceof PsiJavaPackage)) {
         return false;
       }
     }

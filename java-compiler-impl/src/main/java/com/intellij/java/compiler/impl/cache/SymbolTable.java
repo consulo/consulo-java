@@ -22,13 +22,13 @@
 package com.intellij.java.compiler.impl.cache;
 
 import consulo.compiler.CacheCorruptedException;
-import consulo.compiler.CompilerBundle;
+import consulo.compiler.localize.CompilerLocalize;
 import consulo.index.io.PersistentEnumerator;
 import consulo.index.io.PersistentStringEnumerator;
 import consulo.util.collection.SLRUCache;
 import consulo.util.io.FileUtil;
-
 import jakarta.annotation.Nonnull;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -38,11 +38,11 @@ public class SymbolTable {
   // both caches should have equal size
   private static final int STRING_CACHE_SIZE = 1024;
 
-  private final SLRUCache<Integer, String> myIndexStringCache = new SLRUCache<Integer, String>(STRING_CACHE_SIZE * 2, STRING_CACHE_SIZE) {
+  private final SLRUCache<Integer, String> myIndexStringCache = new SLRUCache<>(STRING_CACHE_SIZE * 2, STRING_CACHE_SIZE) {
     @Nonnull
     public String createValue(Integer key) {
       try {
-        return myTrie.valueOf(key.intValue());
+        return myTrie.valueOf(key);
       }
       catch (IOException e) {
         throw new RuntimeException(e);
@@ -50,7 +50,7 @@ public class SymbolTable {
     }
   };
 
-  private final SLRUCache<String, Integer> myStringIndexCache = new SLRUCache<String, Integer>(STRING_CACHE_SIZE * 2, STRING_CACHE_SIZE) {
+  private final SLRUCache<String, Integer> myStringIndexCache = new SLRUCache<>(STRING_CACHE_SIZE * 2, STRING_CACHE_SIZE) {
     @Nonnull
     public Integer createValue(String key) {
       try {
@@ -71,7 +71,7 @@ public class SymbolTable {
       myTrie = new PersistentStringEnumerator(file);
     }
     catch (PersistentEnumerator.CorruptedException e) {
-      throw new CacheCorruptedException(CompilerBundle.message("error.compiler.caches.corrupted"), e);
+      throw new CacheCorruptedException(CompilerLocalize.errorCompilerCachesCorrupted().get(), e);
     }
     catch (IOException e) {
       throw new CacheCorruptedException(e);

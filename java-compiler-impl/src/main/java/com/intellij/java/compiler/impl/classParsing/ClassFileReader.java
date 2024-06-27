@@ -21,11 +21,11 @@
 package com.intellij.java.compiler.impl.classParsing;
 
 import com.intellij.java.compiler.impl.cache.SymbolTable;
-import com.intellij.java.language.util.cls.ClsFormatException;
 import com.intellij.java.compiler.impl.util.cls.BytePointer;
 import com.intellij.java.compiler.impl.util.cls.ClsUtil;
+import com.intellij.java.language.util.cls.ClsFormatException;
 import consulo.compiler.CacheCorruptedException;
-import consulo.compiler.CompilerBundle;
+import consulo.compiler.localize.CompilerLocalize;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.util.collection.ArrayUtil;
 import jakarta.annotation.Nonnull;
@@ -87,8 +87,8 @@ public class ClassFileReader {
       return;
     }
     initConstantPool();
-    myMethods = new ArrayList<MethodInfo>();
-    myFields = new ArrayList<FieldInfo>();
+    myMethods = new ArrayList<>();
+    myFields = new ArrayList<>();
     BytePointer ptr = new BytePointer(getData(), getConstantPoolEnd());
     ptr.offset += 2; // access flags
     ptr.offset += 2; // this class
@@ -286,7 +286,7 @@ public class ClassFileReader {
     if (myReferences != null) {
       return;
     }
-    myReferences = new ArrayList<ReferenceInfo>();
+    myReferences = new ArrayList<>();
     initConstantPool();
     final BytePointer ptr = new BytePointer(getData(), 0);
     ConstantPoolIterator iterator = new ConstantPoolIterator(ptr);
@@ -370,7 +370,7 @@ public class ClassFileReader {
       int b2 = data[offset++] & 0xFF;
       return (b1 << 8) + b2;
     }
-    catch(ClsFormatException e){
+    catch (ClsFormatException e){
       return 0;
     }
   }
@@ -380,7 +380,7 @@ public class ClassFileReader {
       try{
         myData = Files.readAllBytes(myFile.toPath());
       }
-      catch(IOException e){
+      catch (IOException e){
         myData = ArrayUtil.EMPTY_BYTE_ARRAY;
       }
     }
@@ -421,7 +421,7 @@ public class ClassFileReader {
   private String readClassInfo(BytePointer ptr) throws ClsFormatException{
     final int tag = ClsUtil.readU1(ptr);
     if (tag != ClsUtil.CONSTANT_Class){
-      throw new ClsFormatException(CompilerBundle.message("class.parsing.error.wrong.record.tag.expected.another", tag, ClsUtil.CONSTANT_Class));
+      throw new ClsFormatException(CompilerLocalize.classParsingErrorWrongRecordTagExpectedAnother(tag, ClsUtil.CONSTANT_Class).get());
     }
     int index = ClsUtil.readU2(ptr);
     return ClsUtil.readUtf8Info(new BytePointer(ptr.bytes, getOffsetInConstantPool(index)), '/', '.');
@@ -433,32 +433,34 @@ public class ClassFileReader {
     final ClsAttributeTable attributes = new ClsAttributeTable();
     while (count-- > 0) {
       final String attrName = readAttributeName(ptr);
-      if ("Exceptions".equals(attrName)) {
-        attributes.exceptions = readExceptions(ptr);
-      }
-      else if ("Signature".equals(attrName)) {
-        attributes.genericSignature = readSignatureAttribute(ptr);
-      }
-      else if ("SourceFile".equals(attrName)) {
-        attributes.sourceFile = readSourceFileAttribute(ptr);
-      }
-      else if ("ConstantValue".equals(attrName)){
-        attributes.constantValue = readFieldConstantValue(ptr);
-      }
-      else if ("RuntimeVisibleAnnotations".equals(attrName)) {
-        attributes.runtimeVisibleAnnotations = readAnnotations(ptr);
-      }
-      else if ("RuntimeInvisibleAnnotations".equals(attrName)) {
-        attributes.runtimeInvisibleAnnotations = readAnnotations(ptr);
-      }
-      else if ("RuntimeVisibleParameterAnnotations".equals(attrName)) {
-        attributes.runtimeVisibleParameterAnnotations = readParameterAnnotations(ptr);
-      }
-      else if ("RuntimeInvisibleParameterAnnotations".equals(attrName)) {
-        attributes.runtimeInvisibleParameterAnnotations = readParameterAnnotations(ptr);
-      }
-      else if ("AnnotationDefault".equals(attrName)) {
-        attributes.annotationDefault = readAnnotationMemberValue(new BytePointer(ptr.bytes, ptr.offset + 6));
+      switch (attrName) {
+        case "Exceptions":
+          attributes.exceptions = readExceptions(ptr);
+          break;
+        case "Signature":
+          attributes.genericSignature = readSignatureAttribute(ptr);
+          break;
+        case "SourceFile":
+          attributes.sourceFile = readSourceFileAttribute(ptr);
+          break;
+        case "ConstantValue":
+          attributes.constantValue = readFieldConstantValue(ptr);
+          break;
+        case "RuntimeVisibleAnnotations":
+          attributes.runtimeVisibleAnnotations = readAnnotations(ptr);
+          break;
+        case "RuntimeInvisibleAnnotations":
+          attributes.runtimeInvisibleAnnotations = readAnnotations(ptr);
+          break;
+        case "RuntimeVisibleParameterAnnotations":
+          attributes.runtimeVisibleParameterAnnotations = readParameterAnnotations(ptr);
+          break;
+        case "RuntimeInvisibleParameterAnnotations":
+          attributes.runtimeInvisibleParameterAnnotations = readParameterAnnotations(ptr);
+          break;
+        case "AnnotationDefault":
+          attributes.annotationDefault = readAnnotationMemberValue(new BytePointer(ptr.bytes, ptr.offset + 6));
+          break;
       }
       gotoNextAttribute(ptr);
     }
@@ -497,7 +499,7 @@ public class ClassFileReader {
   private String[] readExceptions(BytePointer p) throws ClsFormatException{
     final BytePointer ptr = new BytePointer(p.bytes, p.offset + 6); // position to the count of exceptions
     int count = ClsUtil.readU2(ptr);
-    final ArrayList<String> array = new ArrayList<String>(count);
+    final ArrayList<String> array = new ArrayList<>(count);
     while (count-- > 0) {
       int idx = ClsUtil.readU2(ptr);
       if (idx != 0) {
@@ -591,7 +593,7 @@ public class ClassFileReader {
   private AnnotationConstantValue readAnnotation(BytePointer ptr) throws ClsFormatException {
     final int classInfoIndex = ClsUtil.readU2(ptr);
     final String qName = readAnnotationClassName(new BytePointer(ptr.bytes, getOffsetInConstantPool(classInfoIndex)));
-    final List<AnnotationNameValuePair> memberValues = new ArrayList<AnnotationNameValuePair>();
+    final List<AnnotationNameValuePair> memberValues = new ArrayList<>();
     final int numberOfPairs = ClsUtil.readU2(ptr);
     for (int idx = 0; idx < numberOfPairs; idx++) {
       final int memberNameIndex = ClsUtil.readU2(ptr);
@@ -614,7 +616,10 @@ public class ClassFileReader {
       return readClassInfo(ptr);
     }
     //noinspection HardCodedStringLiteral
-    throw new ClsFormatException(CompilerBundle.message("class.parsing.error.wrong.record.tag.expected.another", tag, "CONSTANT_Utf8(" + ClsUtil.CONSTANT_Utf8 + ") / CONSTANT_Class(" + ClsUtil.CONSTANT_Class + ")"));
+    throw new ClsFormatException(CompilerLocalize.classParsingErrorWrongRecordTagExpectedAnother(
+      tag,
+      "CONSTANT_Utf8(" + ClsUtil.CONSTANT_Utf8 + ") / CONSTANT_Class(" + ClsUtil.CONSTANT_Class + ")"
+    ).get());
   }
 
   private ConstantValue readAnnotationMemberValue(BytePointer ptr) throws ClsFormatException {
@@ -647,7 +652,9 @@ public class ClassFileReader {
         BytePointer p = new BytePointer(ptr.bytes, getOffsetInConstantPool(classInfoIndex));
         final int recordTag = ClsUtil.readU1(p);
         if (recordTag != ClsUtil.CONSTANT_Utf8) {
-          throw new ClsFormatException(CompilerBundle.message("class.parsing.error.wrong.record.tag.expected.another", recordTag, ClsUtil.CONSTANT_Utf8));
+          throw new ClsFormatException(
+            CompilerLocalize.classParsingErrorWrongRecordTagExpectedAnother(recordTag, ClsUtil.CONSTANT_Utf8).get()
+          );
         }
         p.offset += 2; //Skip length
         final String className = ClsUtil.getTypeText(p.bytes, p.offset);
@@ -664,7 +671,7 @@ public class ClassFileReader {
         }
         return new ConstantValueArray(values);
       }
-      default : throw new ClsFormatException(CompilerBundle.message("class.parsing.error.wrong.tag.annotation.member.value", tag));
+      default : throw new ClsFormatException(CompilerLocalize.classParsingErrorWrongTagAnnotationMemberValue(tag).get());
     }
   }
 

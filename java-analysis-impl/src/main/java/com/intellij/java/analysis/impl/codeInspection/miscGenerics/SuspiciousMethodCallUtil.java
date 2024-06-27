@@ -10,6 +10,7 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import consulo.application.util.NullableLazyValue;
 import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -29,9 +30,7 @@ public class SuspiciousMethodCallUtil {
   private static final CallMatcher.Simple SINGLETON_COLLECTION =
       CallMatcher.staticCall(CommonClassNames.JAVA_UTIL_COLLECTIONS, "singletonList", "singleton").parameterCount(1);
 
-  private static void setupPatternMethods(PsiManager manager,
-                                          GlobalSearchScope searchScope,
-                                          List<? super PatternMethod> patternMethods) {
+  private static void setupPatternMethods(PsiManager manager, GlobalSearchScope searchScope, List<? super PatternMethod> patternMethods) {
     final JavaPsiFacade javaPsiFacade = JavaPsiFacade.getInstance(manager.getProject());
     final PsiClass collectionClass = javaPsiFacade.findClass(CommonClassNames.JAVA_UTIL_COLLECTION, searchScope);
     PsiClassType object = PsiType.getJavaLangObject(manager, searchScope);
@@ -239,17 +238,19 @@ public class SuspiciousMethodCallUtil {
   }
 
   @Nullable
-  public static String getSuspiciousMethodCallMessage(PsiReferenceExpression methodExpression,
-                                                      PsiType argType,
-                                                      boolean reportConvertibleMethodCalls,
-                                                      @Nonnull List<PatternMethod> patternMethods,
-                                                      int argIdx) {
+  public static String getSuspiciousMethodCallMessage(
+    PsiReferenceExpression methodExpression,
+    PsiType argType,
+    boolean reportConvertibleMethodCalls,
+    @Nonnull List<PatternMethod> patternMethods,
+    int argIdx
+  ) {
     final PsiExpression qualifier = methodExpression.getQualifierExpression();
     if (qualifier == null || qualifier instanceof PsiThisExpression || qualifier instanceof PsiSuperExpression) {
       return null;
     }
-    if (argType instanceof PsiPrimitiveType) {
-      argType = ((PsiPrimitiveType) argType).getBoxedType(methodExpression);
+    if (argType instanceof PsiPrimitiveType primitiveType) {
+      argType = primitiveType.getBoxedType(methodExpression);
     }
 
     if (argType == null) {
@@ -262,7 +263,8 @@ public class SuspiciousMethodCallUtil {
       return null;
     }
     PsiMethod calleeMethod = (PsiMethod) element;
-    NullableLazyValue<PsiMethod> lazyContextMethod = NullableLazyValue.createValue(() -> PsiTreeUtil.getParentOfType(methodExpression, PsiMethod.class));
+    NullableLazyValue<PsiMethod> lazyContextMethod =
+      NullableLazyValue.createValue(() -> PsiTreeUtil.getParentOfType(methodExpression, PsiMethod.class));
 
     //noinspection SynchronizationOnLocalVariableOrMethodParameter
     synchronized (patternMethods) {
@@ -337,17 +339,18 @@ public class SuspiciousMethodCallUtil {
       }
 
       String message = null;
-      if (typeParamMapping instanceof PsiCapturedWildcardType) {
-        typeParamMapping = ((PsiCapturedWildcardType) typeParamMapping).getWildcard();
+      if (typeParamMapping instanceof PsiCapturedWildcardType capturedWildcardType) {
+        typeParamMapping = capturedWildcardType.getWildcard();
       }
       if (!typeParamMapping.isAssignableFrom(argType)) {
         if (typeParamMapping.isConvertibleFrom(argType)) {
           if (reportConvertibleMethodCalls) {
-            message = InspectionsBundle.message("inspection.suspicious.collections.method.calls.problem.descriptor1",
-                PsiFormatUtil.formatMethod(calleeMethod, substitutor,
-                    PsiFormatUtilBase.SHOW_NAME |
-                        PsiFormatUtilBase.SHOW_CONTAINING_CLASS,
-                    PsiFormatUtilBase.SHOW_TYPE));
+            message = InspectionLocalize.inspectionSuspiciousCollectionsMethodCallsProblemDescriptor1(PsiFormatUtil.formatMethod(
+              calleeMethod,
+              substitutor,
+              PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_CONTAINING_CLASS,
+              PsiFormatUtilBase.SHOW_TYPE
+            )).get();
           }
         } else {
           PsiType qualifierType = qualifier.getType();

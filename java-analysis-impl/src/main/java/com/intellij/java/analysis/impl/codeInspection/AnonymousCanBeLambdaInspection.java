@@ -16,7 +16,6 @@
 package com.intellij.java.analysis.impl.codeInspection;
 
 import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
-import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightControlFlowUtil;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
@@ -32,6 +31,7 @@ import consulo.component.util.text.UniqueNameGenerator;
 import consulo.document.util.TextRange;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.*;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.intention.HighPriorityAction;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.psi.PsiComment;
@@ -62,7 +62,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
   @Nonnull
   @Override
   public String getGroupDisplayName() {
-    return GroupNames.LANGUAGE_LEVEL_SPECIFIC_GROUP_NAME;
+    return InspectionLocalize.groupNamesLanguageLevelSpecificIssuesAndMigrationAids().get();
   }
 
   @Nls

@@ -26,7 +26,6 @@
 package com.intellij.java.analysis.impl.codeInspection.deadCode;
 
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
-import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.codeInspection.ex.EntryPointProvider;
 import com.intellij.java.analysis.codeInspection.ex.EntryPointState;
 import com.intellij.java.analysis.codeInspection.ex.EntryPointsManager;
@@ -49,6 +48,7 @@ import consulo.language.Language;
 import consulo.language.editor.ImplicitUsageProvider;
 import consulo.language.editor.impl.inspection.reference.RefElementImpl;
 import consulo.language.editor.inspection.*;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.reference.RefElement;
 import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.reference.RefManager;
@@ -86,7 +86,6 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
 
   private Set<RefElement> myProcessedSuspicious = null;
   private int myPhase;
-  public static final String DISPLAY_NAME = InspectionsBundle.message("inspection.dead.code.display.name");
   @NonNls
   public static final String SHORT_NAME = "unused";
   @NonNls
@@ -125,13 +124,13 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
   @Override
   @Nonnull
   public String getDisplayName() {
-    return DISPLAY_NAME;
+    return InspectionsBundle.message("inspection.dead.code.display.name");
   }
 
   @Override
   @Nonnull
   public String getGroupDisplayName() {
-    return GroupNames.DECLARATION_REDUNDANCY;
+    return InspectionLocalize.groupNamesDeclarationRedundancy().get();
   }
 
   @Override

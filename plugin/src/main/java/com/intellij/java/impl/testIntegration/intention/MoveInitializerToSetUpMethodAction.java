@@ -23,15 +23,15 @@ import com.intellij.java.language.testIntegration.JavaTestFramework;
 import com.intellij.java.language.testIntegration.TestFramework;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -47,7 +47,7 @@ public class MoveInitializerToSetUpMethodAction extends BaseMoveInitializerToMet
   @Override
   @Nonnull
   public String getText() {
-    return CodeInsightBundle.message("intention.move.initializer.to.set.up");
+    return CodeInsightLocalize.intentionMoveInitializerToSetUp().get();
   }
 
   @Override
@@ -60,9 +60,9 @@ public class MoveInitializerToSetUpMethodAction extends BaseMoveInitializerToMet
       LOG.assertTrue(aClass != null);
       final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(project);
       for (TestFramework framework : TestFramework.EXTENSION_NAME.getExtensionList()) {
-        if (framework instanceof JavaTestFramework && framework.isTestClass(aClass)) {
+        if (framework instanceof JavaTestFramework testFramework && framework.isTestClass(aClass)) {
           try {
-            ((JavaTestFramework)framework).createSetUpPatternMethod(elementFactory);
+            testFramework.createSetUpPatternMethod(elementFactory);
             return true;
           }
           catch (Exception e) {

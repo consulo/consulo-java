@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.refactoring.rename.naming;
 
-import consulo.application.ApplicationManager;
-import consulo.ide.IdeBundle;
+import consulo.application.Application;
 import consulo.ide.impl.idea.ui.components.panels.ValidatingComponent;
 import consulo.ide.impl.idea.util.ui.Table;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.logging.Logger;
+import consulo.platform.base.localize.IdeLocalize;
 import consulo.project.Project;
 import consulo.ui.ex.SimpleTextAttributes;
 import consulo.ui.ex.awt.ColoredTableCellRenderer;
@@ -28,16 +28,15 @@ import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.ScrollPaneFactory;
 import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.ui.ex.awt.util.TableUtil;
-
 import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.*;
+import javax.swing.event.DocumentEvent;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.List;
 
@@ -62,7 +61,7 @@ public class AutomaticUsageRenamingDialog<T> extends DialogWrapper {
     myRenamer = renamer;
     populateData();
     setTitle(myRenamer.getDialogTitle());
-    setOKButtonText(IdeBundle.message("button.ok"));
+    setOKButtonText(IdeLocalize.buttonOk().get());
     init();
   }
 
@@ -92,7 +91,7 @@ public class AutomaticUsageRenamingDialog<T> extends DialogWrapper {
   }
 
   public void show() {
-    if (ApplicationManager.getApplication().isUnitTestMode()) return;
+    if (Application.get().isUnitTestMode()) return;
     super.show();
   }
 
@@ -140,11 +139,7 @@ public class AutomaticUsageRenamingDialog<T> extends DialogWrapper {
     final Box box = Box.createVerticalBox();
     setupTable();
 
-    myTableModel.addTableModelListener(new TableModelListener() {
-      public void tableChanged(TableModelEvent e) {
-        handleChanges();
-      }
-    });
+    myTableModel.addTableModelListener(e -> handleChanges());
 
     setupCheckColumn();
     setupOldNameColumn();
@@ -166,23 +161,19 @@ public class AutomaticUsageRenamingDialog<T> extends DialogWrapper {
     buttonBox.add(Box.createHorizontalStrut(4));
     final JButton deselectAllButton = new JButton(RefactoringBundle.message("unselect.all.button"));
     buttonBox.add(deselectAllButton);
-    selectAllButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        for (int i = 0; i < getElementCount(); i++) {
-          myShouldRename[i] = true;
-        }
-        myTableModel.fireTableDataChanged();
+    selectAllButton.addActionListener(e -> {
+      for (int i = 0; i < getElementCount(); i++) {
+        myShouldRename[i] = true;
       }
+      myTableModel.fireTableDataChanged();
     });
     selectAllButton.setMnemonic('S');
 
-    deselectAllButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        for (int i = 0; i < getElementCount(); i++) {
-          myShouldRename[i] = false;
-        }
-        myTableModel.fireTableDataChanged();
+    deselectAllButton.addActionListener(e -> {
+      for (int i = 0; i < getElementCount(); i++) {
+        myShouldRename[i] = false;
       }
+      myTableModel.fireTableDataChanged();
     });
     deselectAllButton.setMnemonic('U');
     box.add(Box.createVerticalStrut(4));
@@ -197,11 +188,7 @@ public class AutomaticUsageRenamingDialog<T> extends DialogWrapper {
     myTableModel = new MyTableModel();
     myTable.setModel(myTableModel);
 
-    myTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-      public void valueChanged(ListSelectionEvent e) {
-        refreshValidatingComponent();
-      }
-    });
+    myTable.getSelectionModel().addListSelectionListener(e -> refreshValidatingComponent());
     myTable.setCellSelectionEnabled(false);
     myTable.setColumnSelectionAllowed(false);
     myTable.setRowSelectionAllowed(false);

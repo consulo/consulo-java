@@ -23,8 +23,6 @@ package com.intellij.java.compiler.impl.cache;
 
 import com.intellij.java.compiler.impl.classParsing.*;
 import com.intellij.java.compiler.impl.util.cls.ClsUtil;
-import consulo.application.ApplicationManager;
-import consulo.application.util.SystemInfo;
 import consulo.application.util.function.Computable;
 import consulo.compiler.CacheCorruptedException;
 import consulo.compiler.ModuleCompilerPathsManager;
@@ -33,11 +31,11 @@ import consulo.internal.org.objectweb.asm.Opcodes;
 import consulo.language.content.ProductionContentFolderTypeProvider;
 import consulo.logging.Logger;
 import consulo.module.Module;
+import consulo.platform.Platform;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
 
 public class JavaMakeUtil extends MakeUtil {
   private static final Logger LOGGER = Logger.getInstance(JavaMakeUtil.class);
@@ -53,7 +51,7 @@ public class JavaMakeUtil extends MakeUtil {
     if (index >= 0) {
       qName = qName.substring(0, index);
     }
-    if (SystemInfo.isFileSystemCaseSensitive) {
+    if (Platform.current().fs().isCaseSensitive()) {
       return qName;
     }
     // the name of a dir should be lowercased because javac seem to allow difference in case
@@ -76,7 +74,7 @@ public class JavaMakeUtil extends MakeUtil {
           Integer.parseInt(name.substring(index));
           return true;
         }
-        catch (NumberFormatException e) {
+        catch (NumberFormatException ignore) {
         }
       }
     }
@@ -110,10 +108,7 @@ public class JavaMakeUtil extends MakeUtil {
     if (ClsUtil.isPackageLocal(flags2)) {
       return ClsUtil.isProtected(flags1) || ClsUtil.isPublic(flags1);
     }
-    if (ClsUtil.isProtected(flags2)) {
-      return ClsUtil.isPublic(flags1);
-    }
-    return false;
+    return ClsUtil.isProtected(flags2) && ClsUtil.isPublic(flags1);
   }
 
   @Nullable
@@ -145,9 +140,8 @@ public class JavaMakeUtil extends MakeUtil {
 
   @SuppressWarnings({"HardCodedStringLiteral"})
   public static boolean isPrimitiveType(String descriptor) {
-    return "V".equals(descriptor) || "B".equals(descriptor) || "C".equals(descriptor) || "D".equals(descriptor) || "F".equals(descriptor) || "I"
-      .equals(descriptor) || "J".equals(descriptor) ||
-      "S".equals(descriptor) || "Z".equals(descriptor);
+    return "V".equals(descriptor) || "B".equals(descriptor) || "C".equals(descriptor) || "D".equals(descriptor) || "F".equals(descriptor)
+      || "I".equals(descriptor) || "J".equals(descriptor) || "S".equals(descriptor) || "Z".equals(descriptor);
   }
 
   public static boolean isArrayType(String descriptor) {
@@ -192,8 +186,8 @@ public class JavaMakeUtil extends MakeUtil {
     final ConstantValue[] targets = value.getValue();
     int annotationTargets = 0;
     for (final ConstantValue target : targets) {
-      if (target instanceof EnumConstantValue) {
-        final String constantName = symbolTable.getSymbol(((EnumConstantValue)target).getConstantName());
+      if (target instanceof EnumConstantValue enumConstantValue) {
+        final String constantName = symbolTable.getSymbol(enumConstantValue.getConstantName());
         if (AnnotationTargets.TYPE_STR.equals(constantName)) {
           annotationTargets |= AnnotationTargets.TYPE;
         }
@@ -223,9 +217,11 @@ public class JavaMakeUtil extends MakeUtil {
     return annotationTargets;
   }
 
-  public static int getAnnotationRetentionPolicy(final int annotationQName,
-                                                 final Cache cache,
-                                                 final SymbolTable symbolTable) throws CacheCorruptedException {
+  public static int getAnnotationRetentionPolicy(
+    final int annotationQName,
+    final Cache cache,
+    final SymbolTable symbolTable
+  ) throws CacheCorruptedException {
     final AnnotationConstantValue retentionPolicyAnnotation =
       findAnnotation("java.lang.annotation.Retention", cache.getRuntimeVisibleAnnotations(annotationQName), symbolTable);
     if (retentionPolicyAnnotation == null) {
@@ -247,9 +243,11 @@ public class JavaMakeUtil extends MakeUtil {
     return -1;
   }
 
-  public static AnnotationConstantValue findAnnotation(@NonNls final String annotationQName,
-                                                       AnnotationConstantValue[] annotations,
-                                                       final SymbolTable symbolTable) throws CacheCorruptedException {
+  public static AnnotationConstantValue findAnnotation(
+    @NonNls final String annotationQName,
+    AnnotationConstantValue[] annotations,
+    final SymbolTable symbolTable
+  ) throws CacheCorruptedException {
     for (final AnnotationConstantValue annotation : annotations) {
       if (annotationQName.equals(symbolTable.getSymbol(annotation.getAnnotationQName()))) {
         return annotation;
@@ -259,15 +257,13 @@ public class JavaMakeUtil extends MakeUtil {
   }
 
   public static String getModuleOutputDirPath(final Module module) {
-    return ApplicationManager.getApplication().runReadAction(new Computable<String>() {
-      public String compute() {
-        final String url =
-          ModuleCompilerPathsManager.getInstance(module).getCompilerOutputUrl(ProductionContentFolderTypeProvider.getInstance());
-        if (url == null) {
-          return null;
-        }
-        return VirtualFileUtil.urlToPath(url);
+    return module.getApplication().runReadAction((Computable<String>)() -> {
+      final String url =
+        ModuleCompilerPathsManager.getInstance(module).getCompilerOutputUrl(ProductionContentFolderTypeProvider.getInstance());
+      if (url == null) {
+        return null;
       }
+      return VirtualFileUtil.urlToPath(url);
     });
   }
 }

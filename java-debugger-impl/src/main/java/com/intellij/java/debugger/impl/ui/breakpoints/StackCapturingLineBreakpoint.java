@@ -173,8 +173,7 @@ public class StackCapturingLineBreakpoint extends WildcardMethodBreakpoint {
     DebuggerManagerThreadImpl.assertIsManagerThread();
     List<StackCapturingLineBreakpoint> bpts = debugProcess.getUserData(CAPTURE_BREAKPOINTS);
     if (!ContainerUtil.isEmpty(bpts)) {
-      bpts.forEach(b ->
-      {
+      bpts.forEach(b -> {
         b.myCaptureEvaluator.clearCache();
         b.myInsertEvaluator.clearCache();
       });
@@ -308,8 +307,7 @@ public class StackCapturingLineBreakpoint extends WildcardMethodBreakpoint {
         @SuppressWarnings("ConstantConditions") Location location = context.getFrameProxy().location();
         evaluator = myEvaluatorCache.get(location);
         if (evaluator == null && !StringUtil.isEmpty(myExpression)) {
-          evaluator = ApplicationManager.getApplication().runReadAction((ThrowableComputable<ExpressionEvaluator, EvaluateException>) () ->
-          {
+          evaluator = ApplicationManager.getApplication().runReadAction((ThrowableComputable<ExpressionEvaluator, EvaluateException>) () -> {
             SourcePosition sourcePosition = ContextUtil.getSourcePosition(context);
             PsiElement contextElement = ContextUtil.getContextElement(sourcePosition);
             return EvaluatorBuilderImpl.build(new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, myExpression), contextElement, sourcePosition, context.getProject());

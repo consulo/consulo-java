@@ -106,8 +106,7 @@ public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDeb
       debugProcess.putUserData(BatchEvaluator.REMOTE_SESSION_KEY, Boolean.TRUE);
     }
 
-    return XDebuggerManager.getInstance(env.getProject()).startSession(env, session ->
-    {
+    return XDebuggerManager.getInstance(env.getProject()).startSession(env, session -> {
       XDebugSessionImpl sessionImpl = (XDebugSessionImpl)session;
       ExecutionResult executionResult = debugProcess.getExecutionResult();
       sessionImpl.addExtraActions(executionResult.getActions());
