@@ -57,7 +57,6 @@ import java.util.List;
 public class RedundantThrows extends GlobalJavaInspectionTool
 {
 	private static final Logger LOG = Logger.getInstance(RedundantThrows.class);
-	private static final String DISPLAY_NAME = InspectionLocalize.inspectionRedundantThrowsDisplayName().get();
 	private final BidirectionalMap<String, QuickFix> myQuickFixes = new BidirectionalMap<>();
 	@NonNls
 	private static final String SHORT_NAME = "RedundantThrows";
@@ -204,7 +203,7 @@ public class RedundantThrows extends GlobalJavaInspectionTool
 	@Nonnull
 	public String getDisplayName()
 	{
-		return DISPLAY_NAME;
+		return InspectionLocalize.inspectionRedundantThrowsDisplayName().get();
 	}
 
 	@Override
