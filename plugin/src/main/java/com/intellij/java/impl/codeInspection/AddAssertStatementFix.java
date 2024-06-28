@@ -18,7 +18,7 @@ package com.intellij.java.impl.codeInspection;
 import com.intellij.java.analysis.impl.codeInspection.JavaSuppressionUtil;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import com.intellij.java.language.psi.*;
-import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
@@ -50,7 +50,7 @@ public class AddAssertStatementFix implements LocalQuickFix {
   }
 
   @Override
-  @RequiredReadAction
+  @RequiredWriteAction
   public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
     PsiElement element = descriptor.getPsiElement();
     PsiElement anchorElement = RefactoringUtil.getParentStatement(element, false);

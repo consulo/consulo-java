@@ -211,7 +211,6 @@ public class JavaDocInfoGenerator {
     return null;
   }
 
-  @RequiredReadAction
   private static DocTagLocator<PsiDocTag> exceptionLocator(String name) {
     return (owner, comment) -> {
       if (comment == null) {

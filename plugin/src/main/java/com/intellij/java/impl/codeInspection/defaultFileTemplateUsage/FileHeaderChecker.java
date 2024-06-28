@@ -17,7 +17,7 @@ package com.intellij.java.impl.codeInspection.defaultFileTemplateUsage;
 
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.impl.codeInsight.template.JavaTemplateUtil;
-import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.fileTemplate.FileTemplate;
 import consulo.fileTemplate.FileTemplateManager;
 import consulo.fileTemplate.FileTemplateUtil;
@@ -90,7 +90,7 @@ public class FileHeaderChecker {
 
     ReplaceWithFileTemplateFix replaceTemplateFix = new ReplaceWithFileTemplateFix() {
       @Override
-      @RequiredReadAction
+      @RequiredWriteAction
       public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
         PsiElement element = descriptor.getPsiElement();
         if (element == null) {

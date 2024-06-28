@@ -21,6 +21,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiExpressionTrimRenderer;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.fileEditor.FileEditorManager;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.inspection.LocalQuickFix;
@@ -46,7 +47,7 @@ public class RemoveInitializerFix implements LocalQuickFix
 	}
 
 	@Override
-	@RequiredReadAction
+	@RequiredWriteAction
 	public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 	{
 		final PsiElement psiInitializer = descriptor.getPsiElement();

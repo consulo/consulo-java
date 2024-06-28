@@ -15,33 +15,33 @@
  */
 package com.intellij.java.impl.codeInspection;
 
-import consulo.annotation.access.RequiredReadAction;
-import consulo.language.editor.inspection.InspectionsBundle;
-import consulo.language.editor.inspection.LocalQuickFix;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.analysis.impl.codeInspection.JavaSuppressionUtil;
 import com.intellij.java.impl.codeInsight.generation.surroundWith.JavaWithIfSurrounder;
 import com.intellij.java.impl.ipp.trivialif.MergeIfAndIntention;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import com.intellij.java.language.psi.*;
-import consulo.document.Document;
+import com.siyeh.ig.psiutils.ParenthesesUtils;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
-import consulo.language.editor.inspection.localize.InspectionLocalize;
-import consulo.project.Project;
+import consulo.document.Document;
 import consulo.document.util.TextRange;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
+import consulo.language.editor.util.PsiUtilBase;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.editor.util.PsiUtilBase;
 import consulo.language.util.IncorrectOperationException;
-import com.siyeh.ig.psiutils.ParenthesesUtils;
 import consulo.logging.Logger;
-import org.jetbrains.annotations.NonNls;
-
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 /**
  * @author ven
@@ -63,7 +63,7 @@ public class SurroundWithIfFix implements LocalQuickFix {
   }
 
   @Override
-  @RequiredReadAction
+  @RequiredWriteAction
   public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
     PsiElement element = descriptor.getPsiElement();
     PsiElement anchorStatement = RefactoringUtil.getParentStatement(element, false);

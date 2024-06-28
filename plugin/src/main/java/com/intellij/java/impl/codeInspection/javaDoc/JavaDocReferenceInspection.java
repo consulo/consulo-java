@@ -37,7 +37,10 @@ import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupElementBuilder;
 import consulo.language.editor.completion.lookup.LookupManager;
-import consulo.language.editor.inspection.*;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemDescriptorBase;
+import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
@@ -50,10 +53,10 @@ import consulo.project.Project;
 import consulo.ui.ex.awt.JBList;
 import consulo.util.concurrent.AsyncResult;
 import consulo.util.lang.StringUtil;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
 import javax.swing.*;
 import java.util.*;
 
@@ -298,7 +301,7 @@ public class JavaDocReferenceInspection extends BaseLocalInspectionTool {
     }
 
     @Override
-    @RequiredReadAction
+    @RequiredWriteAction
     public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor) {
       final PsiElement element = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiJavaCodeReferenceElement.class);
       if (element instanceof PsiJavaCodeReferenceElement) {
@@ -402,7 +405,7 @@ public class JavaDocReferenceInspection extends BaseLocalInspectionTool {
     }
 
     @Override
-    @RequiredReadAction
+    @RequiredWriteAction
     public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
       final PsiDocTag myTag = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiDocTag.class);
       if (myTag == null) {

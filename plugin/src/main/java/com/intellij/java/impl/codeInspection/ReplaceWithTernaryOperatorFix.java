@@ -21,6 +21,7 @@ import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.fileEditor.SelectInEditorManager;
 import consulo.java.analysis.impl.codeInsight.JavaInspectionsBundle;
 import consulo.language.codeStyle.CodeStyleManager;
@@ -58,7 +59,7 @@ public class ReplaceWithTernaryOperatorFix implements LocalQuickFix {
   }
 
   @Override
-  @RequiredReadAction
+  @RequiredWriteAction
   public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
     PsiElement element = descriptor.getPsiElement();
     while (true) {
@@ -135,7 +136,7 @@ public class ReplaceWithTernaryOperatorFix implements LocalQuickFix {
     }
 
     @Override
-    @RequiredReadAction
+    @RequiredWriteAction
     public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
       PsiMethodReferenceExpression element = ObjectUtil.tryCast(descriptor.getPsiElement(), PsiMethodReferenceExpression.class);
       if (element == null) {

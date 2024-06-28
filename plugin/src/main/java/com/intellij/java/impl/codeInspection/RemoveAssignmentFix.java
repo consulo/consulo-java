@@ -15,15 +15,14 @@
  */
 package com.intellij.java.impl.codeInspection;
 
-import consulo.annotation.access.RequiredReadAction;
-import consulo.language.editor.FileModificationService;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.project.Project;
-import consulo.language.psi.PsiElement;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.java.analysis.impl.codeInsight.JavaInspectionsBundle;
-
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 public class RemoveAssignmentFix extends RemoveInitializerFix {
@@ -33,8 +32,8 @@ public class RemoveAssignmentFix extends RemoveInitializerFix {
     return JavaInspectionsBundle.message("inspection.unused.assignment.remove.assignment.quickfix");
   }
 
-  @RequiredReadAction
   @Override
+  @RequiredWriteAction
   public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
     final PsiElement element = descriptor.getPsiElement();
     final PsiElement parent;
