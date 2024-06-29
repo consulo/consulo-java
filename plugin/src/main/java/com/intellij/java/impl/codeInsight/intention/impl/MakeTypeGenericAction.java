@@ -27,6 +27,7 @@ import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.lang.Pair;
 import jakarta.annotation.Nonnull;
 
@@ -92,7 +93,7 @@ public class MakeTypeGenericAction extends PsiElementBaseIntentionAction {
   }
 
   @Override
-  @RequiredReadAction
+  @RequiredUIAccess
   public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     Pair<PsiVariable, PsiType> pair = findVariable(element);
     if (pair == null) return;

@@ -161,7 +161,7 @@ public class BindFieldsFromParametersAction extends BaseIntentionAction implemen
   }
 
   @Override
-  @RequiredReadAction
+  @RequiredUIAccess
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
     invoke(project, editor, file, !project.getApplication().isUnitTestMode());
   }

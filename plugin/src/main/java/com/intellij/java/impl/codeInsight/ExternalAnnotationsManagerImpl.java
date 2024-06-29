@@ -224,7 +224,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
     return xmlFiles;
   }
 
-  @RequiredWriteAction
+  @RequiredUIAccess
   private boolean setupRootAndAnnotateExternally(
     @Nonnull final OrderEntry entry,
     @Nonnull final Project project,
