@@ -19,13 +19,13 @@ import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.template.*;
 import consulo.language.editor.template.context.TemplateContextType;
 import consulo.language.editor.template.macro.Macro;
 import consulo.language.psi.PsiElement;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +39,7 @@ public class MethodParametersMacro extends Macro {
 
   @Override
   public String getPresentableName() {
-    return CodeInsightBundle.message("macro.method.parameters");
+    return CodeInsightLocalize.macroMethodParameters().get();
   }
 
   @Override
@@ -51,10 +51,10 @@ public class MethodParametersMacro extends Macro {
   @Override
   public Result calculateResult(@Nonnull Expression[] params, final ExpressionContext context) {
     PsiElement place = context.getPsiElementAtStartOffset();
-    while(place != null){
-      if (place instanceof PsiMethod){
-        List<Result> result = new ArrayList<Result>();
-        for (PsiParameter parameter : ((PsiMethod)place).getParameterList().getParameters()) {
+    while (place != null){
+      if (place instanceof PsiMethod method) {
+        List<Result> result = new ArrayList<>();
+        for (PsiParameter parameter : method.getParameterList().getParameters()) {
           result.add(new TextResult(parameter.getName()));
         }
         return new ListResult(result);
@@ -68,5 +68,4 @@ public class MethodParametersMacro extends Macro {
   public boolean isAcceptableInContext(TemplateContextType context) {
     return context instanceof JavaCodeContextType;
   }
-
 }

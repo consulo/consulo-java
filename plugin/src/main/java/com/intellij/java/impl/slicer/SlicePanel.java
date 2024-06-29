@@ -397,7 +397,7 @@ public abstract class SlicePanel extends JPanel implements TypeSafeDataProvider,
 
   private final class MyRefreshAction extends RefreshAction {
     private MyRefreshAction(JComponent tree) {
-      super(IdeLocalize.actionRefresh().get(), IdeLocalize.actionRefresh().get(), AllIcons.Actions.Refresh);
+      super(IdeLocalize.actionRefresh(), IdeLocalize.actionRefresh(), AllIcons.Actions.Refresh);
       registerShortcutOn(tree);
     }
 

@@ -16,7 +16,7 @@
 package com.intellij.java.impl.codeInspection.defaultFileTemplateUsage;
 
 import consulo.language.editor.inspection.LocalQuickFix;
-import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import jakarta.annotation.Nonnull;
 
 /**
@@ -26,7 +26,7 @@ public abstract class ReplaceWithFileTemplateFix implements LocalQuickFix {
   @Override
   @Nonnull
   public String getName() {
-    return InspectionsBundle.message("default.file.template.replace.with.actual.file.template");
+    return InspectionLocalize.defaultFileTemplateReplaceWithActualFileTemplate().get();
   }
 
   @Override

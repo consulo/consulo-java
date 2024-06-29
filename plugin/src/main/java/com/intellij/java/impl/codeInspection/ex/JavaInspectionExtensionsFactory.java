@@ -47,7 +47,7 @@ public class JavaInspectionExtensionsFactory extends InspectionExtensionsFactory
 
   @Override
   public HTMLComposerExtension createHTMLComposerExtension(final HTMLComposer composer) {
-    return new HTMLJavaHTMLComposerImpl((HTMLComposerImpl) composer);
+    return new HTMLJavaHTMLComposerImpl((HTMLComposerBase) composer);
   }
 
   @Override

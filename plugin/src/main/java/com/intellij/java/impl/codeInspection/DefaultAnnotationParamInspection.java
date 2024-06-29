@@ -4,11 +4,13 @@ package com.intellij.java.impl.codeInspection;
 import com.intellij.java.analysis.codeInspection.AbstractBaseJavaLocalInspectionTool;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.Application;
 import consulo.codeEditor.Editor;
 import consulo.java.impl.JavaBundle;
 import consulo.language.editor.inspection.*;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiFile;
@@ -38,7 +40,7 @@ public final class DefaultAnnotationParamInspection extends AbstractBaseJavaLoca
   @Nonnull
   @Override
   public String getGroupDisplayName() {
-    return InspectionsBundle.message("group.names.declaration.redundancy");
+    return InspectionLocalize.groupNamesDeclarationRedundancy().get();
   }
 
   @Nonnull
@@ -49,12 +51,15 @@ public final class DefaultAnnotationParamInspection extends AbstractBaseJavaLoca
 
   @Nonnull
   @Override
-  public PsiElementVisitor buildVisitorImpl(@Nonnull ProblemsHolder holder,
-                                            boolean isOnTheFly,
-                                            LocalInspectionToolSession session,
-                                            Object o) {
+  public PsiElementVisitor buildVisitorImpl(
+    @Nonnull ProblemsHolder holder,
+    boolean isOnTheFly,
+    LocalInspectionToolSession session,
+    Object o
+  ) {
     return new JavaElementVisitor() {
       @Override
+      @RequiredReadAction
       public void visitNameValuePair(final @Nonnull PsiNameValuePair pair) {
         PsiAnnotationMemberValue value = pair.getValue();
         PsiReference reference = pair.getReference();
@@ -67,18 +72,22 @@ public final class DefaultAnnotationParamInspection extends AbstractBaseJavaLoca
 
         if (AnnotationUtil.equal(value, defaultValue)) {
           PsiElement elementParent = element.getParent();
-          if (elementParent instanceof PsiClass) {
-            final String qualifiedName = ((PsiClass)elementParent).getQualifiedName();
+          if (elementParent instanceof PsiClass psiClass) {
+            final String qualifiedName = psiClass.getQualifiedName();
             final String name = ((PsiAnnotationMethod)element).getName();
-            if (ContainerUtil.exists(Application.get().getExtensionList(DefaultAnnotationParamIgnoreFilter.class),
-                                     ext -> ext.ignoreAnnotationParam(qualifiedName, name))) {
+            if (ContainerUtil.exists(
+              Application.get().getExtensionList(DefaultAnnotationParamIgnoreFilter.class),
+              ext -> ext.ignoreAnnotationParam(qualifiedName, name)
+            )) {
               return;
             }
           }
-          holder.registerProblem(value,
-                                 JavaBundle.message("inspection.message.redundant.default.parameter.value.assignment"),
-                                 ProblemHighlightType.LIKE_UNUSED_SYMBOL,
-                                 createRemoveParameterFix(value));
+          holder.registerProblem(
+            value,
+            JavaBundle.message("inspection.message.redundant.default.parameter.value.assignment"),
+            ProblemHighlightType.LIKE_UNUSED_SYMBOL,
+            createRemoveParameterFix(value)
+          );
         }
       }
     };
@@ -94,11 +103,13 @@ public final class DefaultAnnotationParamInspection extends AbstractBaseJavaLoca
       }
 
       @Override
-      public void invoke(@Nonnull Project project,
-                         @Nonnull PsiFile psiFile,
-                         @Nullable Editor editor,
-                         @Nonnull PsiElement psiElement,
-                         @Nonnull PsiElement psiElement1) {
+      public void invoke(
+        @Nonnull Project project,
+        @Nonnull PsiFile psiFile,
+        @Nullable Editor editor,
+        @Nonnull PsiElement psiElement,
+        @Nonnull PsiElement psiElement1
+      ) {
         psiElement.getParent().delete();
       }
 

@@ -15,21 +15,21 @@
  */
 package com.intellij.java.impl.codeInspection;
 
-import consulo.language.editor.inspection.InspectionsBundle;
-import consulo.language.editor.inspection.LocalQuickFix;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.analysis.impl.codeInspection.JavaSuppressionUtil;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
+import consulo.annotation.access.RequiredWriteAction;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
-import org.jetbrains.annotations.NonNls;
-
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 
 /**
@@ -46,16 +46,17 @@ public class AddAssertStatementFix implements LocalQuickFix {
   @Override
   @Nonnull
   public String getName() {
-    return InspectionsBundle.message("inspection.assert.quickfix", myText);
+    return InspectionLocalize.inspectionAssertQuickfix(myText).get();
   }
 
   @Override
+  @RequiredWriteAction
   public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
     PsiElement element = descriptor.getPsiElement();
     PsiElement anchorElement = RefactoringUtil.getParentStatement(element, false);
     LOG.assertTrue(anchorElement != null);
     final PsiElement tempParent = anchorElement.getParent();
-    if (tempParent instanceof PsiForStatement && !PsiTreeUtil.isAncestor(((PsiForStatement) tempParent).getBody(), anchorElement, false)) {
+    if (tempParent instanceof PsiForStatement forStatement && !PsiTreeUtil.isAncestor(forStatement.getBody(), anchorElement, false)) {
       anchorElement = tempParent;
     }
     PsiElement prev = PsiTreeUtil.skipWhitespacesBackward(anchorElement);
@@ -82,6 +83,6 @@ public class AddAssertStatementFix implements LocalQuickFix {
   @Override
   @Nonnull
   public String getFamilyName() {
-    return InspectionsBundle.message("inspection.quickfix.assert.family");
+    return InspectionLocalize.inspectionQuickfixAssertFamily().get();
   }
 }

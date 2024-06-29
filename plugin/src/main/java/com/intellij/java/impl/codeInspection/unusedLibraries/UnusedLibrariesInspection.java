@@ -3,6 +3,8 @@ package com.intellij.java.impl.codeInspection.unusedLibraries;
 
 import com.intellij.java.analysis.JavaAnalysisBundle;
 import com.intellij.java.impl.codeInspection.AbstractDependencyVisitor;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.application.ReadAction;
 import consulo.application.util.graph.GraphAlgorithms;
 import consulo.component.util.graph.Graph;
@@ -15,6 +17,7 @@ import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
 import consulo.ide.impl.idea.util.containers.ContainerUtil;
 import consulo.java.deadCodeNotWorking.OldStyleInspection;
 import consulo.language.editor.inspection.*;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.reference.RefGraphAnnotator;
 import consulo.language.editor.inspection.reference.RefManager;
 import consulo.language.editor.inspection.reference.RefModule;
@@ -76,11 +79,14 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool imp
   }
 
   @Override
-  public void runInspection(@Nonnull AnalysisScope scope,
-                            @Nonnull InspectionManager manager,
-                            @Nonnull GlobalInspectionContext globalContext,
-                            @Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor,
-                            Object state) {
+  @RequiredReadAction
+  public void runInspection(
+    @Nonnull AnalysisScope scope,
+    @Nonnull InspectionManager manager,
+    @Nonnull GlobalInspectionContext globalContext,
+    @Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor,
+    @Nonnull Object state
+  ) {
     RefManager refManager = globalContext.getRefManager();
     for (Module module : ModuleManager.getInstance(globalContext.getProject()).getModules()) {
       if (scope.containsModule(module)) {
@@ -95,15 +101,14 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool imp
     }
   }
 
-  private CommonProblemDescriptor[] getDescriptors(@Nonnull InspectionManager manager,
-                                                   RefModule refModule,
-                                                   Module module) {
-    VirtualFile[] givenRoots =
-      ReadAction.compute(() -> OrderEnumerator.orderEntries(module).withoutSdk()
-                                              .withoutModuleSourceEntries()
-                                              .withoutDepModules()
-                                              .classes()
-                                              .getRoots());
+  private CommonProblemDescriptor[] getDescriptors(@Nonnull InspectionManager manager, RefModule refModule, Module module) {
+    VirtualFile[] givenRoots = ReadAction.compute(
+      () -> OrderEnumerator.orderEntries(module).withoutSdk()
+        .withoutModuleSourceEntries()
+        .withoutDepModules()
+        .classes()
+        .getRoots()
+    );
 
     if (givenRoots.length == 0) {
       return null;
@@ -119,10 +124,9 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool imp
     return ReadAction.compute(() -> {
       final List<CommonProblemDescriptor> result = new ArrayList<>();
       for (OrderEntry entry : moduleRootManager.getOrderEntries()) {
-        if (entry instanceof LibraryOrderEntry &&
-          !((LibraryOrderEntry)entry).isExported() &&
-          ((LibraryOrderEntry)entry).getScope() != DependencyScope.RUNTIME) {
-          final Set<VirtualFile> files = ContainerUtil.set(((LibraryOrderEntry)entry).getFiles(BinariesOrderRootType.getInstance()));
+        if (entry instanceof LibraryOrderEntry libraryOrderEntry &&
+          !libraryOrderEntry.isExported() && libraryOrderEntry.getScope() != DependencyScope.RUNTIME) {
+          final Set<VirtualFile> files = ContainerUtil.set(entry.getFiles(BinariesOrderRootType.getInstance()));
           boolean allRootsUnused = usedRoots == null || !files.removeAll(usedRoots);
           if (allRootsUnused) {
             String message = JavaAnalysisBundle.message("unused.library.problem.descriptor", entry.getPresentableName());
@@ -165,9 +169,9 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool imp
       public Iterator<VirtualFile> getIn(VirtualFile n) {
         Set<String> classesInCurrentRoot = fromClasses.get(n);
         return toClasses.entrySet().stream()
-                        .filter(entry -> ContainerUtil.intersects(entry.getValue(), classesInCurrentRoot))
-                        .map(entry -> entry.getKey())
-                        .collect(Collectors.toSet()).iterator();
+          .filter(entry -> ContainerUtil.intersects(entry.getValue(), classesInCurrentRoot))
+          .map(entry -> entry.getKey())
+          .collect(Collectors.toSet()).iterator();
       }
     });
 
@@ -223,7 +227,7 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool imp
   @Nls
   @Nonnull
   public String getGroupDisplayName() {
-    return InspectionsBundle.message("group.names.declaration.redundancy");
+    return InspectionLocalize.groupNamesDeclarationRedundancy().get();
   }
 
   @Override
@@ -243,10 +247,8 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool imp
   @Nullable
   @Override
   public String getHint(@Nonnull QuickFix fix) {
-    if (fix instanceof RemoveUnusedLibrary && ((RemoveUnusedLibrary)fix).myFiles == null) {
-      return ((RemoveUnusedLibrary)fix).myLibraryName;
-    }
-    return null;
+    return fix instanceof RemoveUnusedLibrary removeUnusedLibrary && removeUnusedLibrary.myFiles == null
+      ? removeUnusedLibrary.myLibraryName : null;
   }
 
   private static class RemoveUnusedLibrary implements QuickFix<ModuleProblemDescriptor> {
@@ -266,6 +268,7 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool imp
     }
 
     @Override
+    @RequiredWriteAction
     public void applyFix(@Nonnull final Project project, @Nonnull final ModuleProblemDescriptor descriptor) {
       final Module module = descriptor.getModule();
 
@@ -302,6 +305,7 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool imp
     }
 
     @Override
+    @RequiredReadAction
     public void onMarkReferenced(PsiElement what, PsiElement from, boolean referencedFromClassInitializer) {
       if (what != null && from != null) {
         final VirtualFile virtualFile = PsiUtilCore.getVirtualFile(what);

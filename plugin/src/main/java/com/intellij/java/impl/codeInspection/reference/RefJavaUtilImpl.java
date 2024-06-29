@@ -28,16 +28,17 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.util.VisibilityUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ServiceImpl;
 import consulo.language.editor.impl.inspection.reference.RefElementImpl;
-import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.reference.*;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
-import jakarta.inject.Singleton;
-
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import jakarta.inject.Singleton;
 
 @Singleton
 @ServiceImpl
@@ -50,10 +51,11 @@ public class RefJavaUtilImpl extends RefJavaUtil {
       findIn.accept(
           new JavaRecursiveElementWalkingVisitor() {
             @Override
-            public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
+            public void visitReferenceElement(@Nonnull PsiJavaCodeReferenceElement reference) {
             }
 
             @Override
+            @RequiredReadAction
             public void visitReferenceExpression(PsiReferenceExpression expression) {
               visitElement(expression);
 
@@ -76,13 +78,13 @@ public class RefJavaUtilImpl extends RefJavaUtil {
 
 
             @Override
-            public void visitEnumConstant(PsiEnumConstant enumConstant) {
+            public void visitEnumConstant(@Nonnull PsiEnumConstant enumConstant) {
               super.visitEnumConstant(enumConstant);
               processNewLikeConstruct(enumConstant.resolveConstructor(), enumConstant.getArgumentList());
             }
 
             @Override
-            public void visitNewExpression(PsiNewExpression newExpr) {
+            public void visitNewExpression(@Nonnull PsiNewExpression newExpr) {
               super.visitNewExpression(newExpr);
               PsiMethod psiConstructor = newExpr.resolveConstructor();
               final PsiExpressionList argumentList = newExpr.getArgumentList();
@@ -132,8 +134,7 @@ public class RefJavaUtilImpl extends RefJavaUtil {
             public void visitReturnStatement(PsiReturnStatement statement) {
               super.visitReturnStatement(statement);
 
-              if (refFrom instanceof RefMethodImpl) {
-                RefMethodImpl refMethod = (RefMethodImpl) refFrom;
+              if (refFrom instanceof RefMethodImpl refMethod) {
                 refMethod.updateReturnValueTemplate(statement.getReturnValue());
               }
             }
@@ -143,15 +144,17 @@ public class RefJavaUtilImpl extends RefJavaUtil {
               super.visitClassObjectAccessExpression(expression);
               final PsiTypeElement operand = expression.getOperand();
               final PsiType type = operand.getType();
-              if (type instanceof PsiClassType) {
-                processClassReference(((PsiClassType) type).resolve(), refFrom, psiFrom, false);
+              if (type instanceof PsiClassType classType) {
+                processClassReference(classType.resolve(), refFrom, psiFrom, false);
               }
             }
 
-            private void processClassReference(final PsiClass psiClass,
-                                               final RefJavaElementImpl refFrom,
-                                               final PsiModifierListOwner psiFrom,
-                                               boolean defaultConstructorOnly) {
+            private void processClassReference(
+              final PsiClass psiClass,
+              final RefJavaElementImpl refFrom,
+              final PsiModifierListOwner psiFrom,
+              boolean defaultConstructorOnly
+            ) {
               if (psiClass != null) {
                 RefClassImpl refClass = (RefClassImpl) refFrom.getRefManager().getReference(psiClass);
 
@@ -185,11 +188,13 @@ public class RefJavaUtilImpl extends RefJavaUtil {
     }
   }
 
-  private void updateRefMethod(PsiElement psiResolved,
-                               RefElement refResolved,
-                               PsiElement refExpression,
-                               final PsiElement psiFrom,
-                               final RefElement refFrom) {
+  private void updateRefMethod(
+    PsiElement psiResolved,
+    RefElement refResolved,
+    PsiElement refExpression,
+    final PsiElement psiFrom,
+    final RefElement refFrom
+  ) {
     PsiMethod psiMethod = (PsiMethod) psiResolved;
     RefMethodImpl refMethod = (RefMethodImpl) refResolved;
 
@@ -234,8 +239,8 @@ public class RefJavaUtilImpl extends RefJavaUtil {
   public RefClass getTopLevelClass(RefElement refElement) {
     RefEntity refParent = refElement.getOwner();
 
-    while (refParent != null && refParent instanceof RefElement && !(refParent instanceof RefFile)) {
-      refElement = (RefElementImpl) refParent;
+    while (refParent != null && refParent instanceof RefElement refParentElement && !(refParent instanceof RefFile)) {
+      refElement = refParentElement;
       refParent = refParent.getOwner();
     }
 
@@ -261,12 +266,14 @@ public class RefJavaUtilImpl extends RefJavaUtil {
     }
     RefPackage refPackage = getPackage(refEntity);
 
-    return refPackage == null ? InspectionsBundle.message("inspection.reference.default.package") : refPackage.getQualifiedName();
+    return refPackage == null ? InspectionLocalize.inspectionReferenceDefaultPackage().get() : refPackage.getQualifiedName();
   }
 
   @Override
   public String getAccessModifier(PsiModifierListOwner psiElement) {
-    if (psiElement instanceof PsiParameter) return PsiModifier.PACKAGE_LOCAL;
+    if (psiElement instanceof PsiParameter) {
+      return PsiModifier.PACKAGE_LOCAL;
+    }
 
     PsiModifierList list = psiElement.getModifierList();
     String result = PsiModifier.PACKAGE_LOCAL;
@@ -278,8 +285,8 @@ public class RefJavaUtilImpl extends RefJavaUtil {
         result = PsiModifier.PROTECTED;
       } else if (list.hasModifierProperty(PsiModifier.PUBLIC)) {
         result = PsiModifier.PUBLIC;
-      } else if (psiElement.getParent() instanceof PsiClass) {
-        PsiClass ownerClass = (PsiClass) psiElement.getParent();
+      } else if (psiElement.getParent() instanceof PsiClass parentClass) {
+        PsiClass ownerClass = parentClass;
         if (ownerClass.isInterface()) {
           result = PsiModifier.PUBLIC;
         }
@@ -308,9 +315,7 @@ public class RefJavaUtilImpl extends RefJavaUtil {
       parent = parent.getOwner();
     }
 
-    if (parent instanceof RefClass) return (RefClass) parent;
-
-    return null;
+    return parent instanceof RefClass refClass ? refClass : null;
   }
 
 
@@ -322,10 +327,10 @@ public class RefJavaUtilImpl extends RefJavaUtil {
       PsiStatement[] statements = body.getStatements();
       for (PsiStatement statement : statements) {
         boolean isCallToSameSuper = false;
-        if (statement instanceof PsiExpressionStatement) {
-          isCallToSameSuper = isCallToSuperMethod(((PsiExpressionStatement) statement).getExpression(), method);
-        } else if (statement instanceof PsiReturnStatement) {
-          PsiExpression expression = ((PsiReturnStatement) statement).getReturnValue();
+        if (statement instanceof PsiExpressionStatement expressionStatement) {
+          isCallToSameSuper = isCallToSuperMethod(expressionStatement.getExpression(), method);
+        } else if (statement instanceof PsiReturnStatement returnStatement) {
+          PsiExpression expression = returnStatement.getReturnValue();
           isCallToSameSuper = expression == null || isCallToSuperMethod(expression, method);
         }
 
@@ -347,9 +352,9 @@ public class RefJavaUtilImpl extends RefJavaUtil {
   }
 
   @Override
+  @RequiredReadAction
   public boolean isCallToSuperMethod(PsiExpression expression, PsiMethod method) {
-    if (expression instanceof PsiMethodCallExpression) {
-      PsiMethodCallExpression methodCall = (PsiMethodCallExpression) expression;
+    if (expression instanceof PsiMethodCallExpression methodCall) {
       if (methodCall.getMethodExpression().getQualifierExpression() instanceof PsiSuperExpression) {
         PsiMethod superMethod = (PsiMethod) methodCall.getMethodExpression().resolve();
         if (superMethod == null || !MethodSignatureUtil.areSignaturesEqual(method, superMethod)) return false;

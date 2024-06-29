@@ -27,10 +27,10 @@ import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.projectRoots.JavaVersionService;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.*;
-import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemsHolder;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
@@ -53,7 +53,6 @@ import java.util.function.Consumer;
 public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchLocalInspectionTool {
   @NonNls
   public static final String SHORT_NAME = "UNCHECKED_WARNING";
-  public static final String DISPLAY_NAME = InspectionsBundle.message("unchecked.warning");
   @NonNls
   private static final String ID = "unchecked";
   private static final Logger LOG = Logger.getInstance(UncheckedWarningLocalInspectionBase.class);
@@ -102,7 +101,7 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
   @Override
   @Nonnull
   public String getDisplayName() {
-    return DISPLAY_NAME;
+    return InspectionLocalize.uncheckedWarning().get();
   }
 
   @Override

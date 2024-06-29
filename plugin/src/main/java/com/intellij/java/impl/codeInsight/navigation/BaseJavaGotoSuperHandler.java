@@ -20,13 +20,14 @@ import com.intellij.java.language.impl.psi.impl.FindSuperElementsHelper;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorPopupHelper;
 import consulo.externalService.statistic.FeatureUsageTracker;
 import consulo.fileEditor.FileEditorManager;
 import consulo.ide.impl.idea.codeInsight.navigation.actions.GotoSuperAction;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.action.GotoSuperActionHander;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.ui.PopupNavigationUtil;
 import consulo.language.editor.ui.PsiElementListNavigator;
 import consulo.language.psi.PsiElement;
@@ -40,7 +41,6 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.popup.JBPopup;
 import consulo.virtualFileSystem.VirtualFile;
 import jakarta.annotation.Nonnull;
-
 import jakarta.annotation.Nullable;
 
 public abstract class BaseJavaGotoSuperHandler implements GotoSuperActionHander {
@@ -65,20 +65,23 @@ public abstract class BaseJavaGotoSuperHandler implements GotoSuperActionHander 
     else {
       if (superElements[0] instanceof PsiMethod) {
         boolean showMethodNames = !PsiUtil.allMethodsHaveSameSignature((PsiMethod[])superElements);
-        PsiElementListNavigator.openTargets(editor, (PsiMethod[])superElements,
-                                            CodeInsightBundle.message("goto.super.method.chooser.title"),
-                                            CodeInsightBundle.message("goto.super.method.findUsages.title",
-                                                                      ((PsiMethod)superElements[0]).getName()),
-                                            new MethodCellRenderer(showMethodNames));
+        PsiElementListNavigator.openTargets(
+          editor,
+          (PsiMethod[])superElements,
+          CodeInsightLocalize.gotoSuperMethodChooserTitle().get(),
+          CodeInsightLocalize.gotoSuperMethodFindusagesTitle(((PsiMethod)superElements[0]).getName()).get(),
+          new MethodCellRenderer(showMethodNames)
+        );
       }
       else {
-        JBPopup popup = PopupNavigationUtil.getPsiElementPopup(superElements, CodeInsightBundle.message("goto.super.class.chooser.title"));
+        JBPopup popup = PopupNavigationUtil.getPsiElementPopup(superElements, CodeInsightLocalize.gotoSuperClassChooserTitle().get());
         EditorPopupHelper.getInstance().showPopupInBestPositionFor(editor, popup);
       }
     }
   }
 
   @Nullable
+  @RequiredReadAction
   private PsiElement[] findSuperElements(PsiFile file, int offset) {
     PsiNameIdentifierOwner parent = getElement(file, offset);
     if (parent == null) return null;
@@ -86,6 +89,7 @@ public abstract class BaseJavaGotoSuperHandler implements GotoSuperActionHander 
     return FindSuperElementsHelper.findSuperElements(parent);
   }
 
+  @RequiredReadAction
   protected PsiNameIdentifierOwner getElement(PsiFile file, int offset) {
     PsiElement element = file.findElementAt(offset);
     if (element == null) return null;

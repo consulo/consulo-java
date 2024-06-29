@@ -18,7 +18,7 @@ package com.intellij.java.impl.codeInsight.template.macro;
 import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
 import com.intellij.java.language.psi.PsiJavaFile;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.template.Expression;
 import consulo.language.editor.template.ExpressionContext;
 import consulo.language.editor.template.Result;
@@ -28,7 +28,6 @@ import consulo.language.editor.template.macro.Macro;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiFile;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 
 /**
@@ -47,15 +46,14 @@ public class CurrentPackageMacro extends Macro {
 
   @Override
   public String getPresentableName() {
-    return CodeInsightBundle.message("macro.current.package");
+    return CodeInsightLocalize.macroCurrentPackage().get();
   }
 
   @Override
   public Result calculateResult(@Nonnull Expression[] params, ExpressionContext context) {
     Project project = context.getProject();
     PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(context.getEditor().getDocument());
-    if (!(file instanceof PsiJavaFile)) return new TextResult ("");
-    return new TextResult (((PsiJavaFile)file).getPackageName());
+    return file instanceof PsiJavaFile javaFile ? new TextResult(javaFile.getPackageName()) : new TextResult("");
   }
 
   @Override
@@ -67,6 +65,4 @@ public class CurrentPackageMacro extends Macro {
   public boolean isAcceptableInContext(TemplateContextType context) {
     return context instanceof JavaCodeContextType;
   }
-
-
 }

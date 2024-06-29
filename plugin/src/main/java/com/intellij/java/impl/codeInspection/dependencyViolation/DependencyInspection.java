@@ -23,29 +23,25 @@ import consulo.ide.impl.idea.packageDependencies.DependenciesBuilder;
 import consulo.ide.impl.idea.packageDependencies.ForwardDependenciesBuilder;
 import consulo.ide.impl.idea.packageDependencies.ui.DependencyConfigurable;
 import consulo.ide.setting.ShowSettingsUtil;
-import consulo.language.editor.CommonDataKeys;
-import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.packageDependency.DependencyRule;
 import consulo.language.editor.packageDependency.DependencyValidationManager;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.editor.scope.AnalysisScope;
-import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.project.Project;
 import consulo.project.ProjectManager;
+import consulo.ui.annotation.RequiredUIAccess;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 /**
@@ -56,7 +52,6 @@ import java.util.ArrayList;
 public class DependencyInspection extends BaseLocalInspectionTool {
 
   public static final String GROUP_DISPLAY_NAME = "";
-  public static final String DISPLAY_NAME = InspectionsBundle.message("illegal.package.dependencies");
   @NonNls public static final String SHORT_NAME = "Dependency";
 
   @Override
@@ -73,7 +68,7 @@ public class DependencyInspection extends BaseLocalInspectionTool {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return DependencyInspection.DISPLAY_NAME;
+    return InspectionLocalize.illegalPackageDependencies().get();
   }
 
   @Override
@@ -84,15 +79,12 @@ public class DependencyInspection extends BaseLocalInspectionTool {
 
   @Override
   public JComponent createOptionsPanel() {
-    final JButton editDependencies = new JButton(InspectionsBundle.message("inspection.dependency.configure.button.text"));
-    editDependencies.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        Project project = DataManager.getInstance().getDataContext(editDependencies).getData(CommonDataKeys.PROJECT);
+    final JButton editDependencies = new JButton(InspectionLocalize.inspectionDependencyConfigureButtonText().get());
+    editDependencies.addActionListener(e-> {
+        Project project = DataManager.getInstance().getDataContext(editDependencies).getData(Project.KEY);
         if (project == null) project = ProjectManager.getInstance().getDefaultProject();
         ShowSettingsUtil.getInstance().editConfigurable(editDependencies, new DependencyConfigurable(project));
-      }
-    });
+      });
 
     JPanel depPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
     depPanel.add(editDependencies);
@@ -107,22 +99,22 @@ public class DependencyInspection extends BaseLocalInspectionTool {
     final DependencyValidationManager validationManager = DependencyValidationManager.getInstance(file.getProject());
     if (!validationManager.hasRules()) return null;
     if (validationManager.getApplicableRules(file).length == 0) return null;
-    final ArrayList<ProblemDescriptor> problems =  new ArrayList<ProblemDescriptor>();
+    final ArrayList<ProblemDescriptor> problems =  new ArrayList<>();
     ForwardDependenciesBuilder builder = new ForwardDependenciesBuilder(file.getProject(), new AnalysisScope(file));
-        DependenciesBuilder.analyzeFileDependencies(file, new DependenciesBuilder.DependencyProcessor() {
-          @Override
-          public void process(PsiElement place, PsiElement dependency) {
-            PsiFile dependencyFile = dependency.getContainingFile();
-            if (dependencyFile != null && dependencyFile.isPhysical() && dependencyFile.getVirtualFile() != null) {
-              final DependencyRule[] rule = validationManager.getViolatorDependencyRules(file, dependencyFile);
-              for (DependencyRule dependencyRule : rule) {
-                StringBuffer message = new StringBuffer();
-                message
-                  .append(InspectionsBundle.message("inspection.dependency.violator.problem.descriptor", dependencyRule.getDisplayText()));
-                problems.add(manager.createProblemDescriptor(place, message.toString(), isOnTheFly,
-                                                             new LocalQuickFix[]{new EditDependencyRulesAction(dependencyRule)},
-                                                             ProblemHighlightType.GENERIC_ERROR_OR_WARNING));
-              }
+        DependenciesBuilder.analyzeFileDependencies(file, (place, dependency) -> {
+          PsiFile dependencyFile = dependency.getContainingFile();
+          if (dependencyFile != null && dependencyFile.isPhysical() && dependencyFile.getVirtualFile() != null) {
+            final DependencyRule[] rule = validationManager.getViolatorDependencyRules(file, dependencyFile);
+            for (DependencyRule dependencyRule : rule) {
+              StringBuilder message = new StringBuilder();
+              message.append(InspectionLocalize.inspectionDependencyViolatorProblemDescriptor(dependencyRule.getDisplayText()));
+              problems.add(manager.createProblemDescriptor(
+                place,
+                message.toString(),
+                isOnTheFly,
+                new LocalQuickFix[]{new EditDependencyRulesAction(dependencyRule)},
+                ProblemHighlightType.GENERIC_ERROR_OR_WARNING
+              ));
             }
           }
         });
@@ -144,15 +136,16 @@ public class DependencyInspection extends BaseLocalInspectionTool {
     @Override
     @Nonnull
     public String getName() {
-      return InspectionsBundle.message("edit.dependency.rules.text", myRule.getDisplayText());
+      return InspectionLocalize.editDependencyRulesText(myRule.getDisplayText()).get();
     }
 
     @Override
     @Nonnull
     public String getFamilyName() {
-      return InspectionsBundle.message("edit.dependency.rules.family");
+      return InspectionLocalize.editDependencyRulesFamily().get();
     }
 
+    @RequiredUIAccess
     @Override
     public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
       ShowSettingsUtil.getInstance().editConfigurable(project, new DependencyConfigurable(project));

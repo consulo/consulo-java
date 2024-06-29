@@ -16,15 +16,18 @@
 package com.intellij.java.impl.codeInsight.template.macro;
 
 import com.intellij.java.language.impl.codeInsight.template.macro.MacroUtil;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.CodeInsightBundle;
-import consulo.language.editor.template.Expression;
-import consulo.language.editor.template.ExpressionContext;
 import com.intellij.java.language.psi.PsiArrayType;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiVariable;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.localize.CodeInsightLocalize;
+import consulo.language.editor.template.Expression;
+import consulo.language.editor.template.ExpressionContext;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.project.Project;
-import consulo.language.psi.*;
 
 import java.util.ArrayList;
 
@@ -37,16 +40,17 @@ public class ArrayVariableMacro extends VariableTypeMacroBase {
 
   @Override
   public String getPresentableName() {
-    return CodeInsightBundle.message("macro.array.variable");
+    return CodeInsightLocalize.macroArrayVariable().get();
   }
 
   @Override
+  @RequiredReadAction
   protected PsiElement[] getVariables(Expression[] params, final ExpressionContext context) {
     if (params.length != 0) return null;
 
     Project project = context.getProject();
     final int offset = context.getStartOffset();
-    final ArrayList<PsiVariable> array = new ArrayList<PsiVariable>();
+    final ArrayList<PsiVariable> array = new ArrayList<>();
     PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(context.getEditor().getDocument());
     PsiElement place = file.findElementAt(offset);
     PsiVariable[] variables = MacroUtil.getVariablesVisibleAt(place, "");

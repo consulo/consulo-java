@@ -29,10 +29,11 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.document.Document;
 import consulo.document.util.TextRange;
 import consulo.language.editor.impl.inspection.reference.SmartRefElementPointerImpl;
-import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.reference.RefElement;
 import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.reference.RefFile;
@@ -52,13 +53,13 @@ public class XMLExportUtl {
   private XMLExportUtl() {
   }
 
+  @RequiredReadAction
   public static Element createElement(RefEntity refEntity, Element parentNode, int actualLine, final TextRange range) {
     refEntity = refEntity.getRefManager().getRefinedElement(refEntity);
 
     Element problem = new Element("problem");
 
-    if (refEntity instanceof RefElement) {
-      final RefElement refElement = (RefElement)refEntity;
+    if (refEntity instanceof RefElement refElement) {
       PsiElement psiElement = refElement.getElement();
       PsiFile psiFile = psiElement.getContainingFile();
 
@@ -81,8 +82,7 @@ public class XMLExportUtl {
       problem.addContent(lineElement);
       appendModule(problem, refElement.getModule());
     }
-    else if (refEntity instanceof RefModule) {
-      final RefModule refModule = (RefModule)refEntity;
+    else if (refEntity instanceof RefModule refModule) {
       final VirtualFile moduleDir = refModule.getModule().getModuleDir();
       final Element fileElement = new Element("file");
       fileElement.addContent(moduleDir != null ? moduleDir.getUrl() : refEntity.getName());
@@ -97,16 +97,13 @@ public class XMLExportUtl {
 
     new SmartRefElementPointerImpl(refEntity, true).writeExternal(problem);
 
-    if (refEntity instanceof RefMethod) {
-      RefMethod refMethod = (RefMethod)refEntity;
+    if (refEntity instanceof RefMethod refMethod) {
       appendMethod(refMethod, problem);
     }
-    else if (refEntity instanceof RefField) {
-      RefField refField = (RefField)refEntity;
+    else if (refEntity instanceof RefField refField) {
       appendField(refField, problem);
     }
-    else if (refEntity instanceof RefClass) {
-      RefClass refClass = (RefClass)refEntity;
+    else if (refEntity instanceof RefClass refClass) {
       appendClass(refClass, problem);
     } else if (refEntity instanceof RefFile) {
       appendFakePackage(problem);
@@ -126,20 +123,21 @@ public class XMLExportUtl {
 
   private static void appendFakePackage(final Element problem) {
     final Element fakePackage = new Element("package");
-    fakePackage.addContent(InspectionsBundle.message("inspection.export.results.default"));
+    fakePackage.addContent(InspectionLocalize.inspectionExportResultsDefault().get());
     problem.addContent(fakePackage);
   }
 
+  @RequiredReadAction
   private static void appendClass(RefClass refClass, Element parentNode) {
     PsiClass psiClass = refClass.getElement();
     PsiDocComment psiDocComment = psiClass.getDocComment();
 
     PsiFile psiFile = psiClass.getContainingFile();
 
-    if (psiFile instanceof PsiJavaFile) {
-      String packageName = ((PsiJavaFile)psiFile).getPackageName();
+    if (psiFile instanceof PsiJavaFile javaFile) {
+      String packageName = javaFile.getPackageName();
       Element packageElement = new Element("package");
-      packageElement.addContent(packageName.length() > 0 ? packageName : InspectionsBundle.message("inspection.export.results.default"));
+      packageElement.addContent(packageName.length() > 0 ? packageName : InspectionLocalize.inspectionExportResultsDefault().get());
       parentNode.addContent(packageElement);
     }
 
@@ -170,13 +168,17 @@ public class XMLExportUtl {
     }
   }
 
+  @RequiredReadAction
   private static void appendMethod(final RefMethod refMethod, Element parentNode) {
     Element methodElement = new Element(refMethod.isConstructor() ? "constructor" : "method");
 
     PsiMethod psiMethod = (PsiMethod)refMethod.getElement();
-    String name = PsiFormatUtil.formatMethod(psiMethod, PsiSubstitutor.EMPTY, PsiFormatUtil.SHOW_NAME | PsiFormatUtil.SHOW_FQ_NAME |
-                                                                              PsiFormatUtil.SHOW_TYPE | PsiFormatUtil.SHOW_PARAMETERS,
-                                                                              PsiFormatUtil.SHOW_NAME | PsiFormatUtil.SHOW_TYPE);
+    String name = PsiFormatUtil.formatMethod(
+      psiMethod,
+      PsiSubstitutor.EMPTY,
+      PsiFormatUtil.SHOW_NAME | PsiFormatUtil.SHOW_FQ_NAME | PsiFormatUtil.SHOW_TYPE | PsiFormatUtil.SHOW_PARAMETERS,
+      PsiFormatUtil.SHOW_NAME | PsiFormatUtil.SHOW_TYPE
+    );
 
     Element shortNameElement = new Element("name");
     shortNameElement.addContent(name);
@@ -191,6 +193,7 @@ public class XMLExportUtl {
     parentNode.addContent(methodElement);
   }
 
+  @RequiredReadAction
   private static void appendField(final RefField refField, Element parentNode) {
     Element fieldElement = new Element("field");
     PsiField psiField = refField.getElement();

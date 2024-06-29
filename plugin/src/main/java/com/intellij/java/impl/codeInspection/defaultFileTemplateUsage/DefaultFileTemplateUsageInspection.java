@@ -22,16 +22,15 @@ import consulo.fileTemplate.FileTemplateManager;
 import consulo.ide.impl.idea.ide.fileTemplates.impl.FileTemplateConfigurable;
 import consulo.ide.setting.ShowSettingsUtil;
 import consulo.language.editor.WriteCommandAction;
-import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.psi.PsiFile;
 import consulo.project.Project;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
 
 /**
  * @author cdr
@@ -55,7 +54,7 @@ public class DefaultFileTemplateUsageInspection extends BaseJavaLocalInspectionT
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionsBundle.message("default.file.template.display.name");
+    return InspectionLocalize.defaultFileTemplateDisplayName().get();
   }
 
   @Override
@@ -93,7 +92,7 @@ public class DefaultFileTemplateUsageInspection extends BaseJavaLocalInspectionT
     @Override
     @Nonnull
     public String getFamilyName() {
-      return InspectionsBundle.message("default.file.template.edit.template");
+      return InspectionLocalize.defaultFileTemplateEditTemplate().get();
     }
 
     @Override
@@ -105,13 +104,15 @@ public class DefaultFileTemplateUsageInspection extends BaseJavaLocalInspectionT
     public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor) {
       final FileTemplateConfigurable configurable = new FileTemplateConfigurable(project);
       configurable.setTemplate(myTemplateToEdit, null);
-      ShowSettingsUtil.getInstance().editConfigurable(project, configurable).doWhenDone(() -> {
-        WriteCommandAction.runWriteCommandAction(project, () ->
-        {
-          FileTemplateManager.getInstance(project).saveAllTemplates();
-          myReplaceTemplateFix.applyFix(project, descriptor);
-        });
-      });
+      ShowSettingsUtil.getInstance().editConfigurable(project, configurable).doWhenDone(
+        () -> WriteCommandAction.runWriteCommandAction(
+          project,
+          () -> {
+            FileTemplateManager.getInstance(project).saveAllTemplates();
+            myReplaceTemplateFix.applyFix(project, descriptor);
+          }
+        )
+      );
     }
   }
 }

@@ -20,8 +20,9 @@ import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiTypeParameter;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.template.Expression;
 import consulo.language.editor.template.ExpressionContext;
 import consulo.language.editor.template.Result;
@@ -29,7 +30,6 @@ import consulo.language.editor.template.TextResult;
 import consulo.language.editor.template.context.TemplateContextType;
 import consulo.language.editor.template.macro.Macro;
 import consulo.language.psi.PsiElement;
-
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -42,19 +42,20 @@ public class ClassNameMacro extends Macro {
 
   @Override
   public String getPresentableName() {
-    return CodeInsightBundle.message("macro.classname");
+    return CodeInsightLocalize.macroClassname().get();
   }
 
   @Override
+  @RequiredReadAction
   public Result calculateResult(@Nonnull Expression[] params, final ExpressionContext context) {
     int templateStartOffset = context.getTemplateStartOffset();
     int offset = templateStartOffset > 0 ? context.getTemplateStartOffset() - 1 : context.getTemplateStartOffset();
     PsiElement place = context.getPsiElementAtStartOffset();
     PsiClass aClass = null;
 
-    while(place != null){
-      if (place instanceof PsiClass && !(place instanceof PsiAnonymousClass) && !(place instanceof PsiTypeParameter)){
-        aClass = (PsiClass)place;
+    while (place != null) {
+      if (place instanceof PsiClass placeClass && !(place instanceof PsiAnonymousClass) && !(place instanceof PsiTypeParameter)) {
+        aClass = placeClass;
         // if className() is evaluated outside of the body of inner class, return name of its outer class instead (IDEADEV-19865)
         final PsiElement lBrace = aClass.getLBrace();
         if (lBrace != null && offset < lBrace.getTextOffset() && aClass.getContainingClass() != null) {
@@ -62,8 +63,8 @@ public class ClassNameMacro extends Macro {
         }
         break;
       }
-      if (place instanceof PsiJavaFile){
-        PsiClass[] classes = ((PsiJavaFile)place).getClasses();
+      if (place instanceof PsiJavaFile javaFile) {
+        PsiClass[] classes = javaFile.getClasses();
         aClass = classes.length != 0 ? classes[0] : null;
         break;
       }
@@ -83,6 +84,4 @@ public class ClassNameMacro extends Macro {
   public boolean isAcceptableInContext(TemplateContextType context) {
     return context instanceof JavaCodeContextType;
   }
-
-
 }

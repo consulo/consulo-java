@@ -19,10 +19,11 @@ import com.intellij.java.impl.codeInsight.template.ExpressionUtil;
 import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
 import com.intellij.java.language.impl.codeInsight.template.macro.MacroUtil;
 import com.intellij.java.language.psi.PsiVariable;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupItem;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.template.Expression;
 import consulo.language.editor.template.ExpressionContext;
 import consulo.language.editor.template.Result;
@@ -49,7 +50,7 @@ public class SuggestVariableNameMacro extends Macro {
 
   @Override
   public String getPresentableName() {
-    return CodeInsightBundle.message("macro.suggest.variable.name");
+    return CodeInsightLocalize.macroSuggestVariableName().get();
   }
 
   @Override
@@ -76,20 +77,21 @@ public class SuggestVariableNameMacro extends Macro {
     String[] names = getNames(context);
     if (names == null || names.length < 2) return null;
     LookupItem[] items = new LookupItem[names.length];
-    for(int i = 0; i < names.length; i++) {
+    for (int i = 0; i < names.length; i++) {
       String name = names[i];
       items[i] = LookupItem.fromString(name);
     }
     return items;
   }
 
+  @RequiredReadAction
   private static String[] getNames (final ExpressionContext context) {
     String[] names = ExpressionUtil.getNames(context);
     if (names == null || names.length == 0) return names;
     PsiFile file = PsiDocumentManager.getInstance(context.getProject()).getPsiFile(context.getEditor().getDocument());
     PsiElement e = file.findElementAt(context.getStartOffset());
     PsiVariable[] vars = MacroUtil.getVariablesVisibleAt(e, "");
-    LinkedList<String> namesList = new LinkedList<String>(Arrays.asList(names));
+    LinkedList<String> namesList = new LinkedList<>(Arrays.asList(names));
     for (PsiVariable var : vars) {
       if (e.equals(var.getNameIdentifier())) continue;
       namesList.remove(var.getName());
@@ -114,6 +116,4 @@ public class SuggestVariableNameMacro extends Macro {
   public boolean isAcceptableInContext(TemplateContextType context) {
     return context instanceof JavaCodeContextType;
   }
-
-
 }

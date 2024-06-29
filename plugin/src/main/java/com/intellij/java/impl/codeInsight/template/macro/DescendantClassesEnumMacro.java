@@ -23,9 +23,9 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiModifierList;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupElementBuilder;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.template.Expression;
 import consulo.language.editor.template.ExpressionContext;
 import consulo.language.editor.template.Result;
@@ -35,9 +35,9 @@ import consulo.language.psi.PsiManager;
 import consulo.language.psi.resolve.PsiElementProcessor;
 import consulo.language.psi.resolve.PsiElementProcessorAdapter;
 import consulo.language.psi.scope.GlobalSearchScope;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -52,7 +52,7 @@ public class DescendantClassesEnumMacro extends Macro {
 
   @Override
   public String getPresentableName() {
-    return CodeInsightBundle.message("macro.descendant.classes.enum");
+    return CodeInsightLocalize.macroDescendantClassesEnum().get();
   }
 
   @Override
@@ -90,17 +90,14 @@ public class DescendantClassesEnumMacro extends Macro {
       JavaPsiFacade.getInstance(instance.getProject()).findClass(paramResult, GlobalSearchScope.allScope(context.getProject()));
 
     if (myBaseClass != null) {
-      final List<PsiClass> classes = new ArrayList<PsiClass>();
+      final List<PsiClass> classes = new ArrayList<>();
 
-      ClassInheritorsSearch.search(myBaseClass, true).forEach(new PsiElementProcessorAdapter<PsiClass>(new PsiElementProcessor<PsiClass>() {
-          @Override
-          public boolean execute(@Nonnull PsiClass element) {
-            if (isAllowAbstract || !isAbstractOrInterface(element)) {
-              classes.add(element);
-            }
-            return true;
+      ClassInheritorsSearch.search(myBaseClass, true)
+        .forEach(new PsiElementProcessorAdapter<>((PsiElementProcessor<PsiClass>)element -> {
+          if (isAllowAbstract || !isAbstractOrInterface(element)) {
+            classes.add(element);
           }
-
+          return true;
         }));
 
       return classes;
@@ -123,7 +120,7 @@ public class DescendantClassesEnumMacro extends Macro {
     final List<PsiClass> classes = findDescendants(context, params);
     if (classes == null || classes.size() == 0) return null;
 
-    Set<LookupElement> set = new LinkedHashSet<LookupElement>();
+    Set<LookupElement> set = new LinkedHashSet<>();
     boolean isShortName = params.length > 1 && !Boolean.valueOf(params[1].calculateResult(context).toString());
 
     for (PsiClass object : classes) {
@@ -150,5 +147,4 @@ public class DescendantClassesEnumMacro extends Macro {
   public boolean isAcceptableInContext(TemplateContextType context) {
     return context instanceof JavaCodeContextType;
   }
-
 }

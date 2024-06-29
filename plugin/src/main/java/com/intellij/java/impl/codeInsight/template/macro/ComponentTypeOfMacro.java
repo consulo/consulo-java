@@ -17,23 +17,24 @@ package com.intellij.java.impl.codeInsight.template.macro;
 
 import com.intellij.java.impl.codeInsight.lookup.PsiTypeLookupItem;
 import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
-import com.intellij.java.language.impl.codeInsight.template.macro.PsiTypeResult;
 import com.intellij.java.language.impl.codeInsight.template.macro.MacroUtil;
+import com.intellij.java.language.impl.codeInsight.template.macro.PsiTypeResult;
 import com.intellij.java.language.psi.PsiArrayType;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiType;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.template.Expression;
 import consulo.language.editor.template.ExpressionContext;
 import consulo.language.editor.template.PsiElementResult;
 import consulo.language.editor.template.Result;
 import consulo.language.editor.template.context.TemplateContextType;
 import consulo.language.editor.template.macro.Macro;
-import consulo.util.collection.ContainerUtil;
-
 import jakarta.annotation.Nonnull;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @ExtensionImpl
@@ -45,7 +46,7 @@ public class ComponentTypeOfMacro extends Macro {
 
   @Override
   public String getPresentableName() {
-    return CodeInsightBundle.message("macro.component.type.of.array");
+    return CodeInsightLocalize.macroComponentTypeOfArray().get();
   }
 
   @Override
@@ -58,13 +59,13 @@ public class ComponentTypeOfMacro extends Macro {
       return null;
     }
 
-    List<LookupElement> result = ContainerUtil.newArrayList();
+    List<LookupElement> result = new ArrayList<>();
     for (LookupElement element : lookupItems) {
       PsiTypeLookupItem lookupItem = element.as(PsiTypeLookupItem.CLASS_CONDITION_KEY);
       if (lookupItem != null) {
         PsiType psiType = lookupItem.getType();
-        if (psiType instanceof PsiArrayType) {
-          result.add(PsiTypeLookupItem.createLookupItem(((PsiArrayType) psiType).getComponentType(), null));
+        if (psiType instanceof PsiArrayType arrayType) {
+          result.add(PsiTypeLookupItem.createLookupItem(arrayType.getComponentType(), null));
         }
       }
     }
@@ -73,6 +74,7 @@ public class ComponentTypeOfMacro extends Macro {
   }
 
   @Override
+  @RequiredReadAction
   public Result calculateResult(@Nonnull Expression[] params, final ExpressionContext context) {
     if (params.length != 1) {
       return null;
@@ -82,17 +84,17 @@ public class ComponentTypeOfMacro extends Macro {
       return null;
     }
 
-    if (result instanceof PsiTypeResult) {
-      PsiType type = ((PsiTypeResult) result).getType();
-      if (type instanceof PsiArrayType) {
-        return new PsiTypeResult(((PsiArrayType) type).getComponentType(), context.getProject());
+    if (result instanceof PsiTypeResult typeResult) {
+      PsiType type = typeResult.getType();
+      if (type instanceof PsiArrayType arrayType) {
+        return new PsiTypeResult(arrayType.getComponentType(), context.getProject());
       }
     }
 
     PsiExpression expr = MacroUtil.resultToPsiExpression(result, context);
     PsiType type = expr == null ? MacroUtil.resultToPsiType(result, context) : expr.getType();
-    if (type instanceof PsiArrayType) {
-      return new PsiTypeResult(((PsiArrayType) type).getComponentType(), context.getProject());
+    if (type instanceof PsiArrayType arrayType) {
+      return new PsiTypeResult(arrayType.getComponentType(), context.getProject());
     }
 
     LookupElement[] elements = params[0].calculateLookupItems(context);
@@ -101,8 +103,8 @@ public class ComponentTypeOfMacro extends Macro {
         PsiTypeLookupItem typeLookupItem = element.as(PsiTypeLookupItem.CLASS_CONDITION_KEY);
         if (typeLookupItem != null) {
           PsiType psiType = typeLookupItem.getType();
-          if (psiType instanceof PsiArrayType) {
-            return new PsiTypeResult(((PsiArrayType) psiType).getComponentType(), context.getProject());
+          if (psiType instanceof PsiArrayType arrayType) {
+            return new PsiTypeResult(arrayType.getComponentType(), context.getProject());
           }
         }
       }
@@ -116,4 +118,3 @@ public class ComponentTypeOfMacro extends Macro {
     return context instanceof JavaCodeContextType;
   }
 }
-
