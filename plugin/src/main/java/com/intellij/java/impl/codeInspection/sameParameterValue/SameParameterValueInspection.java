@@ -214,7 +214,6 @@ public class SameParameterValueInspection extends GlobalJavaInspectionTool
 		}
 
 		@Override
-		@RequiredReadAction
 		@RequiredUIAccess
 		public void applyFix(@Nonnull final Project project, @Nonnull ProblemDescriptor descriptor)
 		{

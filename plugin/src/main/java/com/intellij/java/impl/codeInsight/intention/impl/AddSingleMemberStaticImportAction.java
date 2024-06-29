@@ -23,12 +23,13 @@ import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiReferenceExp
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -37,7 +38,6 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.Comparing;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -48,7 +48,7 @@ public class AddSingleMemberStaticImportAction extends PsiElementBaseIntentionAc
   private static final Key<PsiElement> TEMP_REFERENT_USER_DATA = new Key<PsiElement>("TEMP_REFERENT_USER_DATA");
 
   public AddSingleMemberStaticImportAction() {
-    setText(CodeInsightBundle.message("intention.add.single.member.static.import.family"));
+    setText(CodeInsightLocalize.intentionAddSingleMemberStaticImportFamily().get());
   }
 
   /**
@@ -58,24 +58,23 @@ public class AddSingleMemberStaticImportAction extends PsiElementBaseIntentionAc
    * @return            not-null qualified name of the class which method may be statically imported if any; <code>null</code> otherwise
    */
   @Nullable
+  @RequiredReadAction
   public static String getStaticImportClass(@Nonnull PsiElement element) {
     if (!PsiUtil.isLanguageLevel5OrHigher(element)) return null;
     if (element instanceof PsiIdentifier) {
       final PsiElement parent = element.getParent();
       if (parent instanceof PsiMethodReferenceExpression) return null;
-      if (parent instanceof PsiJavaCodeReferenceElement && ((PsiJavaCodeReferenceElement)parent).getQualifier() != null) {
+      if (parent instanceof PsiJavaCodeReferenceElement refExpr && refExpr.getQualifier() != null) {
         if (PsiTreeUtil.getParentOfType(parent, PsiImportList.class) != null) return null;
-        PsiJavaCodeReferenceElement refExpr = (PsiJavaCodeReferenceElement)parent;
         if (checkParameterizedReference(refExpr)) return null;
         PsiElement resolved = refExpr.resolve();
-        if (resolved instanceof PsiMember && ((PsiModifierListOwner)resolved).hasModifierProperty(PsiModifier.STATIC)) {
-          PsiClass aClass = getResolvedClass(element, (PsiMember)resolved);
+        if (resolved instanceof PsiMember member && member.hasModifierProperty(PsiModifier.STATIC)) {
+          PsiClass aClass = getResolvedClass(element, member);
           if (aClass != null && !PsiTreeUtil.isAncestor(aClass, element, true) && !aClass.hasModifierProperty(PsiModifier.PRIVATE)) {
             if (findExistingImport(element.getContainingFile(), aClass, refExpr.getReferenceName()) == null) {
               String qName = aClass.getQualifiedName();
               if (qName != null && !Comparing.strEqual(qName, aClass.getName())) {
-                return qName + "." +refExpr.getReferenceName();
-
+                return qName + "." + refExpr.getReferenceName();
               }
             }
           }
@@ -87,8 +86,8 @@ public class AddSingleMemberStaticImportAction extends PsiElementBaseIntentionAc
   }
 
   private static PsiImportStatementBase findExistingImport(PsiFile file, PsiClass aClass, String refName) {
-    if (file instanceof PsiJavaFile) {
-      PsiImportList importList = ((PsiJavaFile)file).getImportList();
+    if (file instanceof PsiJavaFile javaFile) {
+      PsiImportList importList = javaFile.getImportList();
       if (importList != null) {
         for (PsiImportStaticStatement staticStatement : importList.getImportStaticStatements()) {
           if (staticStatement.isOnDemand()) {
@@ -100,7 +99,7 @@ public class AddSingleMemberStaticImportAction extends PsiElementBaseIntentionAc
 
         final PsiImportStatementBase importStatement = importList.findSingleImportStatement(refName);
         final PsiElement resolve = importStatement != null ? importStatement.resolve() : null;
-        if (resolve instanceof PsiMember && ((PsiMember)resolve).getContainingClass() == aClass) {
+        if (resolve instanceof PsiMember member && member.getContainingClass() == aClass) {
           return importStatement;
         }
       }
@@ -108,6 +107,7 @@ public class AddSingleMemberStaticImportAction extends PsiElementBaseIntentionAc
     return null;
   }
 
+  @RequiredReadAction
   private static boolean checkParameterizedReference(PsiJavaCodeReferenceElement refExpr) {
     PsiReferenceParameterList parameterList = refExpr instanceof PsiReferenceExpression ? refExpr.getParameterList() : null;
     return parameterList != null && parameterList.getFirstChild() != null;
@@ -118,10 +118,10 @@ public class AddSingleMemberStaticImportAction extends PsiElementBaseIntentionAc
     PsiClass aClass = resolved.getContainingClass();
     if (aClass != null && !PsiUtil.isAccessible(aClass, element, null)) {
       final PsiElement qualifier = ((PsiJavaCodeReferenceElement)element.getParent()).getQualifier();
-      if (qualifier instanceof PsiReferenceExpression) {
-        final PsiElement qResolved = ((PsiReferenceExpression)qualifier).resolve();
-        if (qResolved instanceof PsiVariable) {
-          aClass = PsiUtil.resolveClassInClassTypeOnly(((PsiVariable)qResolved).getType());
+      if (qualifier instanceof PsiReferenceExpression referenceExpression) {
+        final PsiElement qResolved = referenceExpression.resolve();
+        if (qResolved instanceof PsiVariable qVariable) {
+          aClass = PsiUtil.resolveClassInClassTypeOnly(qVariable.getType());
         }
       }
     }
@@ -132,7 +132,7 @@ public class AddSingleMemberStaticImportAction extends PsiElementBaseIntentionAc
   public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     String classQName = getStaticImportClass(element);
     if (classQName != null) {
-      setText(CodeInsightBundle.message("intention.add.single.member.static.import.text", classQName));
+      setText(CodeInsightLocalize.intentionAddSingleMemberStaticImportText(classQName).get());
     }
     return classQName != null;
   }
@@ -146,10 +146,12 @@ public class AddSingleMemberStaticImportAction extends PsiElementBaseIntentionAc
     bindAllClassRefs(file, resolved, referenceName, resolved != null ? getResolvedClass(element, (PsiMember)resolved) : null);
   }
 
-  public static void bindAllClassRefs(final PsiFile file,
-                                      final PsiElement resolved,
-                                      final String referenceName,
-                                      final PsiClass resolvedClass) {
+  public static void bindAllClassRefs(
+    final PsiFile file,
+    final PsiElement resolved,
+    final String referenceName,
+    final PsiClass resolvedClass
+  ) {
     file.accept(new JavaRecursiveElementWalkingVisitor() {
       @Override
       public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
@@ -170,12 +172,12 @@ public class AddSingleMemberStaticImportAction extends PsiElementBaseIntentionAc
 
     file.accept(new JavaRecursiveElementVisitor() {
       @Override
-      public void visitImportList(PsiImportList list) {
+      public void visitImportList(@Nonnull PsiImportList list) {
       }
 
       @Override
-      public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
-
+      @RequiredReadAction
+      public void visitReferenceElement(@Nonnull PsiJavaCodeReferenceElement reference) {
         try {
           if (checkParameterizedReference(reference)) return;
 
@@ -183,12 +185,13 @@ public class AddSingleMemberStaticImportAction extends PsiElementBaseIntentionAc
             final PsiElement qualifierExpression = reference.getQualifier();
             PsiElement referent = reference.getUserData(TEMP_REFERENT_USER_DATA);
             if (!reference.isQualified()) {
-              if (referent instanceof PsiMember && referent != reference.resolve()) {
+              if (referent instanceof PsiMember member && referent != reference.resolve()) {
                 PsiElementFactory factory = JavaPsiFacade.getInstance(reference.getProject()).getElementFactory();
                 try {
-                  final PsiClass containingClass = ((PsiMember)referent).getContainingClass();
+                  final PsiClass containingClass = member.getContainingClass();
                   if (containingClass != null) {
-                    PsiReferenceExpression copy = (PsiReferenceExpression)factory.createExpressionFromText("A." + reference.getReferenceName(), null);
+                    PsiReferenceExpression copy =
+                      (PsiReferenceExpression)factory.createExpressionFromText("A." + reference.getReferenceName(), null);
                     reference = (PsiReferenceExpression)reference.replace(copy);
                     ((PsiReferenceExpression)reference.getQualifier()).bindToElement(containingClass);
                   }
@@ -199,15 +202,15 @@ public class AddSingleMemberStaticImportAction extends PsiElementBaseIntentionAc
               }
               reference.putUserData(TEMP_REFERENT_USER_DATA, null);
             } else {
-              if (qualifierExpression instanceof PsiJavaCodeReferenceElement) {
-                PsiElement aClass = ((PsiJavaCodeReferenceElement)qualifierExpression).resolve();
-                if (aClass instanceof PsiVariable) {
-                  aClass = PsiUtil.resolveClassInClassTypeOnly(((PsiVariable)aClass).getType());
+              if (qualifierExpression instanceof PsiJavaCodeReferenceElement codeReference) {
+                PsiElement aClass = codeReference.resolve();
+                if (aClass instanceof PsiVariable variable) {
+                  aClass = PsiUtil.resolveClassInClassTypeOnly(variable.getType());
                 }
-                if (aClass instanceof PsiClass && InheritanceUtil.isInheritorOrSelf((PsiClass)aClass, resolvedClass, true)) {
+                if (aClass instanceof PsiClass psiClass && InheritanceUtil.isInheritorOrSelf(psiClass, resolvedClass, true)) {
                   boolean foundMemberByName = false;
-                  if (referent instanceof PsiMember) {
-                    final String memberName = ((PsiMember)referent).getName();
+                  if (referent instanceof PsiMember member) {
+                    final String memberName = member.getName();
                     final PsiClass containingClass = PsiTreeUtil.getParentOfType(reference, PsiClass.class);
                     if (containingClass != null) {
                       foundMemberByName |= containingClass.findFieldByName(memberName, true) != null;

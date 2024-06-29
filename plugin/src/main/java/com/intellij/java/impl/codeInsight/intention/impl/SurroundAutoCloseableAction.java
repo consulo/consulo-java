@@ -20,14 +20,14 @@ import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.util.function.Processor;
 import consulo.codeEditor.Editor;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -38,14 +38,15 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.project.content.scope.ProjectScopes;
 import consulo.util.collection.SmartList;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.List;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.SurroundAutoCloseableAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class SurroundAutoCloseableAction extends PsiElementBaseIntentionAction {
   @Override
+  @RequiredReadAction
   public boolean isAvailable(@Nonnull final Project project, final Editor editor, @Nonnull final PsiElement element) {
     if (!element.getLanguage().isKindOf(JavaLanguage.INSTANCE)) return false;
     if (!PsiUtil.getLanguageLevel(element).isAtLeast(LanguageLevel.JDK_1_7)) return false;
@@ -63,14 +64,15 @@ public class SurroundAutoCloseableAction extends PsiElementBaseIntentionAction {
     if (!(type instanceof PsiClassType)) return false;
     final PsiClass aClass = ((PsiClassType)type).resolve();
     final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
-    final PsiClass autoCloseable = facade.findClass(JavaClassNames.JAVA_LANG_AUTO_CLOSEABLE, (GlobalSearchScope) ProjectScopes.getLibrariesScope(project));
-    if (!InheritanceUtil.isInheritorOrSelf(aClass, autoCloseable, true)) return false;
-
-    return true;
+    final PsiClass autoCloseable =
+      facade.findClass(JavaClassNames.JAVA_LANG_AUTO_CLOSEABLE, (GlobalSearchScope) ProjectScopes.getLibrariesScope(project));
+    return InheritanceUtil.isInheritorOrSelf(aClass, autoCloseable, true);
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, final Editor editor, @Nonnull final PsiElement element) throws IncorrectOperationException {
+  @RequiredReadAction
+  public void invoke(@Nonnull final Project project, final Editor editor, @Nonnull final PsiElement element)
+    throws IncorrectOperationException {
     final PsiLocalVariable variable = PsiTreeUtil.getParentOfType(element, PsiLocalVariable.class);
     if (variable == null) return;
     final PsiExpression initializer = variable.getInitializer();
@@ -120,12 +122,13 @@ public class SurroundAutoCloseableAction extends PsiElementBaseIntentionAction {
     }
   }
 
+  @RequiredReadAction
   private static List<PsiElement> moveStatements(@Nonnull PsiElement first, PsiElement last, PsiTryStatement statement) {
     PsiCodeBlock tryBlock = statement.getTryBlock();
     assert tryBlock != null : statement.getText();
     PsiElement parent = statement.getParent();
 
-    List<PsiElement> toFormat = new SmartList<PsiElement>();
+    List<PsiElement> toFormat = new SmartList<>();
     PsiElement stopAt = last.getNextSibling();
     for (PsiElement child = first; child != null && child != stopAt; child = child.getNextSibling()) {
       if (!(child instanceof PsiDeclarationStatement)) continue;
@@ -135,12 +138,8 @@ public class SurroundAutoCloseableAction extends PsiElementBaseIntentionAction {
         if (!(declared instanceof PsiLocalVariable)) continue;
 
         final int endOffset = last.getTextRange().getEndOffset();
-        boolean contained = ReferencesSearch.search(declared, new LocalSearchScope(parent)).forEach(new Processor<PsiReference>() {
-          @Override
-          public boolean process(PsiReference reference) {
-            return reference.getElement().getTextOffset() <= endOffset;
-          }
-        });
+        boolean contained = ReferencesSearch.search(declared, new LocalSearchScope(parent))
+          .forEach(reference -> reference.getElement().getTextOffset() <= endOffset);
 
         if (!contained) {
           PsiLocalVariable var = (PsiLocalVariable)declared;
@@ -173,6 +172,6 @@ public class SurroundAutoCloseableAction extends PsiElementBaseIntentionAction {
   @Nonnull
   @Override
   public String getText() {
-    return CodeInsightBundle.message("intention.surround.resource.with.ARM.block");
+    return CodeInsightLocalize.intentionSurroundResourceWithArmBlock().get();
   }
 }

@@ -20,6 +20,7 @@ import com.intellij.java.language.impl.psi.controlFlow.*;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.inspection.LocalQuickFix;
@@ -132,12 +133,14 @@ public class LocalCanBeFinal extends BaseJavaBatchLocalInspectionTool {
     int start = flow.getStartOffset(body);
     int end = flow.getEndOffset(body);
 
-    final List<PsiVariable> writtenVariables = new ArrayList<>(ControlFlowUtil.getWrittenVariables(flow, start, end, false));
+    final List<PsiVariable> writtenVariables =
+      new ArrayList<>(ControlFlowUtil.getWrittenVariables(flow, start, end, false));
 
     final HashSet<PsiVariable> ssaVarsSet = new HashSet<>();
     body.accept(new JavaRecursiveElementWalkingVisitor() {
       @Override
-      public void visitCodeBlock(PsiCodeBlock block) {
+      @RequiredReadAction
+      public void visitCodeBlock(@Nonnull PsiCodeBlock block) {
         super.visitCodeBlock(block);
         PsiElement anchor = block;
         if (block.getParent() instanceof PsiSwitchStatement) {
@@ -209,8 +212,9 @@ public class LocalCanBeFinal extends BaseJavaBatchLocalInspectionTool {
 
     PsiVariable[] psiVariables = result.toArray(new PsiVariable[result.size()]);
     for (PsiVariable psiVariable : psiVariables) {
-      if (!isReportParameters() && psiVariable instanceof PsiParameter || !isReportVariables() && psiVariable instanceof PsiLocalVariable ||
-          psiVariable.hasModifierProperty(PsiModifier.FINAL)) {
+      if (!isReportParameters() && psiVariable instanceof PsiParameter
+        || !isReportVariables() && psiVariable instanceof PsiLocalVariable
+        || psiVariable.hasModifierProperty(PsiModifier.FINAL)) {
         result.remove(psiVariable);
       }
 
@@ -287,7 +291,7 @@ public class LocalCanBeFinal extends BaseJavaBatchLocalInspectionTool {
     }
 
     @Override
-    @RequiredReadAction
+    @RequiredWriteAction
     public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor problem) {
       if (!FileModificationService.getInstance().preparePsiElementForWrite(problem.getPsiElement())) return;
       PsiElement nameIdentifier = problem.getPsiElement();

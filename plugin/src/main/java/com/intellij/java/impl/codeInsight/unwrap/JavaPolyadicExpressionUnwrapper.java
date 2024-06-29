@@ -15,15 +15,15 @@
  */
 package com.intellij.java.impl.codeInsight.unwrap;
 
-import jakarta.annotation.Nullable;
-
-import consulo.language.editor.CodeInsightBundle;
-import consulo.document.util.TextRange;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiPolyadicExpression;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.document.util.TextRange;
+import consulo.language.editor.localize.CodeInsightLocalize;
+import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Danila Ponomarenko
@@ -35,7 +35,7 @@ public class JavaPolyadicExpressionUnwrapper extends JavaUnwrapper {
 
   @Override
   public String getDescription(PsiElement e) {
-    return CodeInsightBundle.message("unwrap.with.placeholder", e.getText());
+    return CodeInsightLocalize.unwrapWithPlaceholder(e.getText()).get();
   }
 
   @Override
@@ -66,6 +66,7 @@ public class JavaPolyadicExpressionUnwrapper extends JavaUnwrapper {
   }
 
   @Nullable
+  @RequiredReadAction
   private static PsiExpression findOperand(@Nonnull PsiElement e, @Nonnull PsiPolyadicExpression expression) {
     final TextRange elementTextRange = e.getTextRange();
 

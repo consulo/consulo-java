@@ -22,13 +22,13 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiFile;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -41,7 +41,7 @@ public class MoveInitializerToConstructorAction extends BaseMoveInitializerToMet
   @Override
   @Nonnull
   public String getText() {
-    return CodeInsightBundle.message("intention.move.initializer.to.constructor");
+    return CodeInsightLocalize.intentionMoveInitializerToConstructor().get();
   }
 
   @Nonnull
@@ -68,10 +68,12 @@ public class MoveInitializerToConstructorAction extends BaseMoveInitializerToMet
   }
 
   @Nonnull
-  private static Collection<PsiMethod> createConstructor(@Nonnull Project project,
-                                                         @Nonnull Editor editor,
-                                                         PsiFile file,
-                                                         @Nonnull PsiClass aClass) {
+  private static Collection<PsiMethod> createConstructor(
+    @Nonnull Project project,
+    @Nonnull Editor editor,
+    PsiFile file,
+    @Nonnull PsiClass aClass
+  ) {
     final IntentionAction addDefaultConstructorFix = QuickFixFactory.getInstance().createAddDefaultConstructorFix(aClass);
     final int offset = editor.getCaretModel().getOffset();
     addDefaultConstructorFix.invoke(project, editor, file);

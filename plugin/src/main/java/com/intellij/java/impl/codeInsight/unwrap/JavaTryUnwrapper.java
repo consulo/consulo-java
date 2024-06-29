@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.codeInsight.unwrap;
 
-import consulo.language.editor.CodeInsightBundle;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiTryStatement;
+import consulo.language.editor.localize.CodeInsightLocalize;
+import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 
 public class JavaTryUnwrapper extends JavaUnwrapper {
   public JavaTryUnwrapper() {
-    super(CodeInsightBundle.message("unwrap.try"));
+    super(CodeInsightLocalize.unwrapTry().get());
   }
 
   @Override

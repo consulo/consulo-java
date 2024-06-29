@@ -15,17 +15,17 @@
  */
 package com.intellij.java.impl.codeInsight.unwrap;
 
-import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.language.psi.PsiIfStatement;
 import com.intellij.java.language.psi.PsiStatement;
-import consulo.language.psi.*;
+import consulo.language.editor.localize.CodeInsightLocalize;
+import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 
 import java.util.List;
 
 public class JavaElseRemover extends JavaElseUnwrapperBase {
   public JavaElseRemover() {
-    super(CodeInsightBundle.message("remove.else"));
+    super(CodeInsightLocalize.removeElse().get());
   }
 
   @Override
@@ -36,8 +36,8 @@ public class JavaElseRemover extends JavaElseUnwrapperBase {
 
   @Override
   protected void unwrapElseBranch(PsiStatement branch, PsiElement parent, Context context) throws IncorrectOperationException {
-    if (branch instanceof PsiIfStatement) {
-      deleteSelectedElseIf((PsiIfStatement)branch, context);
+    if (branch instanceof PsiIfStatement ifStatement) {
+      deleteSelectedElseIf(ifStatement, context);
     }
     else {
       context.delete(branch);

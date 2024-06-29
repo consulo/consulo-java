@@ -19,14 +19,13 @@ import com.intellij.java.language.impl.psi.impl.JavaConstantExpressionEvaluator;
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -37,7 +36,7 @@ import jakarta.annotation.Nullable;
 @IntentionMetaData(ignoreId = "java.ConvertColorRepresentationIntentionAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class ConvertColorRepresentationIntentionAction extends BaseColorIntentionAction {
   public ConvertColorRepresentationIntentionAction() {
-    setText(CodeInsightBundle.message("intention.convert.color.representation.family"));
+    setText(CodeInsightLocalize.intentionConvertColorRepresentationFamily().get());
   }
 
   @Override
@@ -61,13 +60,17 @@ public class ConvertColorRepresentationIntentionAction extends BaseColorIntentio
       return false;
     }
 
-    final PsiExpressionList newArguments = createNewArguments(JavaPsiFacade.getElementFactory(project), constructor.getParameterList().getParameters(), arguments.getExpressions());
+    final PsiExpressionList newArguments = createNewArguments(
+      JavaPsiFacade.getElementFactory(project),
+      constructor.getParameterList().getParameters(),
+      arguments.getExpressions()
+    );
 
     if (newArguments == null) {
       return false;
     }
 
-    setText(CodeInsightBundle.message("intention.convert.color.representation.text", newArguments.getText()));
+    setText(CodeInsightLocalize.intentionConvertColorRepresentationText(newArguments.getText()).get());
 
     return true;
   }
@@ -105,9 +108,11 @@ public class ConvertColorRepresentationIntentionAction extends BaseColorIntentio
   }
 
   @Nullable
-  private static PsiExpressionList createNewArguments(@Nonnull PsiElementFactory factory,
-                                                      @Nonnull PsiParameter[] parameters,
-                                                      @Nonnull PsiExpression[] arguments) {
+  private static PsiExpressionList createNewArguments(
+    @Nonnull PsiElementFactory factory,
+    @Nonnull PsiParameter[] parameters,
+    @Nonnull PsiExpression[] arguments
+  ) {
     final String[] newValues = createArguments(parameters, arguments);
     if (newValues == null) {
       return null;
@@ -213,13 +218,13 @@ public class ConvertColorRepresentationIntentionAction extends BaseColorIntentio
   @Nullable
   public static Integer computeInteger(@Nonnull PsiExpression expr) {
     final Object result = compute(expr);
-    return result instanceof Integer ? (Integer)result : null;
+    return result instanceof Integer i ? i : null;
   }
 
   @Nullable
   public static Boolean computeBoolean(@Nonnull PsiExpression expr) {
     final Object result = compute(expr);
-    return result instanceof Boolean ? (Boolean)result : null;
+    return result instanceof Boolean b ? b : null;
   }
 
   @Nullable

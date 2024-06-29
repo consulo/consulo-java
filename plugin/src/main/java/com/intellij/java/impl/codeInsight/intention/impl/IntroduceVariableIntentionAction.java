@@ -22,15 +22,14 @@ import com.intellij.java.language.psi.PsiExpressionStatement;
 import com.intellij.java.language.psi.PsiType;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.refactoring.action.BaseRefactoringIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.SyntheticElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 
 /**
@@ -42,12 +41,12 @@ public class IntroduceVariableIntentionAction extends BaseRefactoringIntentionAc
   @Nonnull
   @Override
   public String getText() {
-    return CodeInsightBundle.message("intention.introduce.variable.text");
+    return CodeInsightLocalize.intentionIntroduceVariableText().get();
   }
 
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
-    if (element instanceof SyntheticElement){
+    if (element instanceof SyntheticElement) {
       return false;
     }
 

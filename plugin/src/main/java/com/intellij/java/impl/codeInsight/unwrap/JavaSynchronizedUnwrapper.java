@@ -15,15 +15,15 @@
  */
 package com.intellij.java.impl.codeInsight.unwrap;
 
-import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.language.psi.PsiCodeBlock;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiSynchronizedStatement;
+import consulo.language.editor.localize.CodeInsightLocalize;
+import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 
 public class JavaSynchronizedUnwrapper extends JavaUnwrapper {
   public JavaSynchronizedUnwrapper() {
-    super(CodeInsightBundle.message("unwrap.synchronized"));
+    super(CodeInsightLocalize.unwrapSynchronized().get());
   }
 
   @Override

@@ -20,22 +20,23 @@ import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiType;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.RemoveLiteralUnderscoresAction", categories = {"Java", "Numbers"}, fileExtensions = "java")
 public class RemoveLiteralUnderscoresAction extends PsiElementBaseIntentionAction {
   @Override
+  @RequiredReadAction
   public boolean isAvailable(@Nonnull final Project project, final Editor editor, @Nonnull final PsiElement element) {
     final PsiLiteralExpression literalExpression = PsiTreeUtil.getParentOfType(element, PsiLiteralExpression.class, false);
     if (literalExpression == null) return false;
@@ -49,7 +50,9 @@ public class RemoveLiteralUnderscoresAction extends PsiElementBaseIntentionActio
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, final Editor editor, @Nonnull final PsiElement element) throws IncorrectOperationException {
+  @RequiredReadAction
+  public void invoke(@Nonnull final Project project, final Editor editor, @Nonnull final PsiElement element)
+    throws IncorrectOperationException {
     final PsiLiteralExpression literalExpression = PsiTreeUtil.getParentOfType(element, PsiLiteralExpression.class, false);
     if (literalExpression == null) return;
 
@@ -64,6 +67,6 @@ public class RemoveLiteralUnderscoresAction extends PsiElementBaseIntentionActio
   @Nonnull
   @Override
   public String getText() {
-    return CodeInsightBundle.message("intention.remove.literal.underscores");
+    return CodeInsightLocalize.intentionRemoveLiteralUnderscores().get();
   }
 }

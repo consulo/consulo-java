@@ -27,15 +27,16 @@ package com.intellij.java.impl.codeInsight.intention.impl;
 import com.intellij.java.impl.codeInsight.CodeInsightServicesUtil;
 import com.intellij.java.language.impl.psi.controlFlow.*;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
 import consulo.ide.impl.idea.util.ArrayUtilRt;
 import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiWhiteSpace;
@@ -43,8 +44,8 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.List;
 
 @ExtensionImpl
@@ -61,8 +62,7 @@ public class InvertIfConditionAction extends PsiElementBaseIntentionAction {
     final PsiExpression condition = ifStatement.getCondition();
     if (condition == null) return false;
     if (ifStatement.getThenBranch() == null) return false;
-    if (element instanceof PsiKeyword) {
-      PsiKeyword keyword = (PsiKeyword) element;
+    if (element instanceof PsiKeyword keyword) {
       if ((keyword.getTokenType() == JavaTokenType.IF_KEYWORD || keyword.getTokenType() == JavaTokenType.ELSE_KEYWORD)
           && keyword.getParent() == ifStatement) {
         return true;
@@ -78,7 +78,7 @@ public class InvertIfConditionAction extends PsiElementBaseIntentionAction {
   @Override
   @Nonnull
   public String getText() {
-    return CodeInsightBundle.message("intention.invert.if.condition");
+    return CodeInsightLocalize.intentionInvertIfCondition().get();
   }
 
   @Override
@@ -158,9 +158,8 @@ public class InvertIfConditionAction extends PsiElementBaseIntentionAction {
 
   private static PsiElement findCodeBlock(PsiIfStatement ifStatement) {
     PsiElement e = PsiTreeUtil.getParentOfType(ifStatement, PsiMethod.class, PsiClassInitializer.class);
-    if (e instanceof PsiMethod) return ((PsiMethod) e).getBody();
-    if (e instanceof PsiClassInitializer) return ((PsiClassInitializer) e).getBody();
-    return null;
+    return e instanceof PsiMethod method ? method.getBody()
+      : e instanceof PsiClassInitializer classInitializer ? classInitializer.getBody() : null;
   }
 
   private static PsiElement findNearestCodeBlock(PsiIfStatement ifStatement) {
@@ -176,6 +175,7 @@ public class InvertIfConditionAction extends PsiElementBaseIntentionAction {
     }
   }
 
+  @RequiredReadAction
   private static void setupBranches(PsiIfStatement ifStatement, ControlFlow flow) throws IncorrectOperationException {
     PsiElementFactory factory = JavaPsiFacade.getInstance(ifStatement.getProject()).getElementFactory();
     Project project = ifStatement.getProject();
@@ -207,8 +207,8 @@ public class InvertIfConditionAction extends PsiElementBaseIntentionAction {
     if (endOffset >= flow.getSize()) {
       PsiStatement statement = factory.createStatementFromText("return;", null);
       statement = (PsiStatement) codeStyle.reformat(statement);
-      if (thenBranch instanceof PsiBlockStatement) {
-        PsiStatement[] statements = ((PsiBlockStatement) thenBranch).getCodeBlock().getStatements();
+      if (thenBranch instanceof PsiBlockStatement blockStatement) {
+        PsiStatement[] statements = blockStatement.getCodeBlock().getStatements();
         int len = statements.length;
         if (len > 0) {
           //if (statements[len - 1] instanceof PsiReturnStatement) len--;
@@ -231,8 +231,7 @@ public class InvertIfConditionAction extends PsiElementBaseIntentionAction {
     PsiElement element = flow.getElement(endOffset);
     while (element != null && !(element instanceof PsiStatement)) element = element.getParent();
 
-    if (element != null && element.getParent() instanceof PsiForStatement) {
-      PsiForStatement forStatement = (PsiForStatement) element.getParent();
+    if (element != null && element.getParent() instanceof PsiForStatement forStatement) {
       if (forStatement.getUpdate() == element) {
         PsiStatement statement = factory.createStatementFromText("continue;", null);
         statement = (PsiStatement) codeStyle.reformat(statement);
@@ -252,8 +251,7 @@ public class InvertIfConditionAction extends PsiElementBaseIntentionAction {
       return;
     }
 
-    if (element instanceof PsiReturnStatement) {
-      PsiReturnStatement returnStatement = (PsiReturnStatement) element;
+    if (element instanceof PsiReturnStatement returnStatement) {
       addAfter(ifStatement, thenBranch);
       ifStatement.getThenBranch().replace(returnStatement.copy());
 
@@ -283,10 +281,10 @@ public class InvertIfConditionAction extends PsiElementBaseIntentionAction {
           last = next;
           next = next.getNextSibling();
         }
-        while (first != last && (last instanceof PsiWhiteSpace ||
-            last instanceof PsiJavaToken && ((PsiJavaToken) last).getTokenType() == JavaTokenType.RBRACE))
+        while (first != last && (last instanceof PsiWhiteSpace
+          || last instanceof PsiJavaToken javaToken && javaToken.getTokenType() == JavaTokenType.RBRACE)) {
           last = last.getPrevSibling();
-
+        }
 
         PsiBlockStatement codeBlock = (PsiBlockStatement) factory.createStatementFromText("{}", null);
         codeBlock.getCodeBlock().addRange(first, last);
@@ -310,8 +308,8 @@ public class InvertIfConditionAction extends PsiElementBaseIntentionAction {
       final PsiLoopStatement loopStmt = PsiTreeUtil.getParentOfType(ifStatement, PsiLoopStatement.class);
       if (loopStmt != null) {
         final PsiStatement body = loopStmt.getBody();
-        if (body instanceof PsiBlockStatement) {
-          final PsiStatement[] statements = ((PsiBlockStatement) body).getCodeBlock().getStatements();
+        if (body instanceof PsiBlockStatement blockStatement) {
+          final PsiStatement[] statements = blockStatement.getCodeBlock().getStatements();
           if (statements.length > 0 && !PsiTreeUtil.isAncestor(statements[statements.length - 1], ifStatement, false) &&
               ArrayUtilRt.find(statements, ifStatement) < 0) {
             ifStatement.setElseBranch(thenBranch);
@@ -325,8 +323,8 @@ public class InvertIfConditionAction extends PsiElementBaseIntentionAction {
           elseBranch.delete();
         }
         return;
-      } else if (thenBranch instanceof PsiBlockStatement) {
-        PsiStatement[] statements = ((PsiBlockStatement) thenBranch).getCodeBlock().getStatements();
+      } else if (thenBranch instanceof PsiBlockStatement blockStatement) {
+        PsiStatement[] statements = blockStatement.getCodeBlock().getStatements();
         if (statements.length > 0 && statements[statements.length - 1] instanceof PsiContinueStatement) {
           statements[statements.length - 1].delete();
         }
@@ -336,8 +334,7 @@ public class InvertIfConditionAction extends PsiElementBaseIntentionAction {
   }
 
   private static void addAfter(PsiIfStatement ifStatement, PsiStatement thenBranch) throws IncorrectOperationException {
-    if (thenBranch instanceof PsiBlockStatement) {
-      PsiBlockStatement blockStatement = (PsiBlockStatement) thenBranch;
+    if (thenBranch instanceof PsiBlockStatement blockStatement) {
       PsiStatement[] statements = blockStatement.getCodeBlock().getStatements();
       if (statements.length > 0) {
         ifStatement.getParent().addRangeAfter(statements[0], statements[statements.length - 1], ifStatement);
@@ -364,14 +361,12 @@ public class InvertIfConditionAction extends PsiElementBaseIntentionAction {
       Instruction instruction = instructions.get(i);
       if (controlFlow.getElement(i) != ifStatement) continue;
 
-      if (instruction instanceof GoToInstruction) {
-        GoToInstruction goToInstruction = (GoToInstruction) instruction;
+      if (instruction instanceof GoToInstruction goToInstruction) {
         if (goToInstruction.role != BranchingInstruction.Role.END) continue;
 
         endOffset = goToInstruction.offset;
         break;
-      } else if (instruction instanceof ConditionalGoToInstruction) {
-        ConditionalGoToInstruction goToInstruction = (ConditionalGoToInstruction) instruction;
+      } else if (instruction instanceof ConditionalGoToInstruction goToInstruction) {
         if (goToInstruction.role != BranchingInstruction.Role.END) continue;
 
         endOffset = goToInstruction.offset;
@@ -381,11 +376,10 @@ public class InvertIfConditionAction extends PsiElementBaseIntentionAction {
     if (endOffset == -1) {
       endOffset = controlFlow.getSize();
     }
-    while (endOffset < instructions.size() && instructions.get(endOffset) instanceof GoToInstruction && !((GoToInstruction) instructions.get(endOffset)).isReturn) {
-      endOffset = ((BranchingInstruction) instructions.get(endOffset)).offset;
+    while (endOffset < instructions.size() && instructions.get(endOffset) instanceof GoToInstruction goTo && !goTo.isReturn) {
+      endOffset = goTo.offset;
     }
 
     return endOffset;
   }
-
 }

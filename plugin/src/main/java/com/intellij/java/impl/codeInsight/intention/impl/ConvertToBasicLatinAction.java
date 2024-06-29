@@ -22,18 +22,18 @@ import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.xml.util.XmlUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
 import consulo.language.ast.TokenSet;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
-import consulo.language.psi.resolve.PsiElementProcessor;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
@@ -43,9 +43,9 @@ import consulo.virtualFileSystem.VirtualFile;
 import consulo.xml.javaee.ExternalResourceManager;
 import consulo.xml.psi.xml.XmlEntityDecl;
 import consulo.xml.psi.xml.XmlFile;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
@@ -75,7 +75,7 @@ public class ConvertToBasicLatinAction extends PsiElementBaseIntentionAction {
   @Nonnull
   @Override
   public String getText() {
-    return CodeInsightBundle.message("intention.convert.to.basic.latin");
+    return CodeInsightLocalize.intentionConvertToBasicLatin().get();
   }
 
   @Override
@@ -110,6 +110,7 @@ public class ConvertToBasicLatinAction extends PsiElementBaseIntentionAction {
     @Nullable
     public abstract PsiElement findApplicable(final PsiElement element);
 
+    @RequiredReadAction
     public String processText(final PsiElement element) {
       final String text = element.getText();
       final StringBuilder sb = new StringBuilder();
@@ -138,10 +139,10 @@ public class ConvertToBasicLatinAction extends PsiElementBaseIntentionAction {
     @Override
     public PsiElement findApplicable(final PsiElement element) {
       final PsiElement parent = element.getParent();
-      return element instanceof PsiJavaToken &&
-             LITERALS.contains(((PsiJavaToken)element).getTokenType()) &&
-             parent instanceof PsiLiteralExpression
-             ? parent : null;
+      return element instanceof PsiJavaToken javaToken
+        && LITERALS.contains(javaToken.getTokenType())
+        && parent instanceof PsiLiteralExpression
+        ? parent : null;
     }
 
     @Override
@@ -164,6 +165,7 @@ public class ConvertToBasicLatinAction extends PsiElementBaseIntentionAction {
     }
 
     @Override
+    @RequiredReadAction
     public String processText(final PsiElement element) {
       loadEntities(element.getProject());
       return super.processText(element);
@@ -186,6 +188,7 @@ public class ConvertToBasicLatinAction extends PsiElementBaseIntentionAction {
       return JavaPsiFacade.getElementFactory(element.getProject()).createDocCommentFromText(newText);
     }
 
+    @RequiredReadAction
     private static void loadEntities(final Project project) {
       if (ourEntities != null) return;
 
@@ -203,24 +206,24 @@ public class ConvertToBasicLatinAction extends PsiElementBaseIntentionAction {
         LOG.error(e); return;
       }
 
-      ourEntities = new HashMap<Character, String>();
+      ourEntities = new HashMap<>();
       final Pattern pattern = Pattern.compile("&#(\\d+);");
-      XmlUtil.processXmlElements(file, new PsiElementProcessor() {
-        @Override
-        public boolean execute(@Nonnull PsiElement element) {
-          if (element instanceof XmlEntityDecl) {
-            final XmlEntityDecl entity = (XmlEntityDecl)element;
+      XmlUtil.processXmlElements(
+        file,
+        element -> {
+          if (element instanceof XmlEntityDecl entity) {
             final Matcher m = pattern.matcher(entity.getValueElement().getValue());
             if (m.matches()) {
-              final char i = (char)Integer.parseInt(m.group(1));
+              final char i = (char) Integer.parseInt(m.group(1));
               if (shouldConvert(i)) {
                 ourEntities.put(i, entity.getName());
               }
             }
           }
           return true;
-        }
-      }, true);
+        },
+        true
+      );
     }
   }
 

@@ -18,7 +18,7 @@ package com.intellij.java.analysis.impl.codeInspection.miscGenerics;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.impl.source.resolve.DefaultParameterTypeInferencePolicy;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -172,7 +172,7 @@ public class RedundantTypeArgsInspection extends GenericsInspectionToolBase {
     }
 
     @Override
-    @RequiredReadAction
+    @RequiredWriteAction
     public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
       final PsiReferenceParameterList typeArgumentList = (PsiReferenceParameterList) descriptor.getPsiElement();
       try {

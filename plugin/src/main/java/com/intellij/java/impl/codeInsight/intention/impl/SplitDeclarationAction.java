@@ -20,12 +20,13 @@ import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.siyeh.ig.psiutils.CommentTracker;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiCompiledElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
@@ -33,7 +34,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.lang.ref.Ref;
-
 import jakarta.annotation.Nonnull;
 
 /**
@@ -43,35 +43,32 @@ import jakarta.annotation.Nonnull;
 @IntentionMetaData(ignoreId = "java.SplitDeclarationAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class SplitDeclarationAction extends PsiElementBaseIntentionAction {
   public SplitDeclarationAction() {
-    setText(CodeInsightBundle.message("intention.split.declaration.family"));
+    setText(CodeInsightLocalize.intentionSplitDeclarationFamily().get());
   }
 
   @Override
+  @RequiredReadAction
   public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
-
-    if (element instanceof PsiCompiledElement) {
-      return false;
-    }
-    if (!element.getManager().isInProject(element)) {
-      return false;
-    }
-    if (!element.getLanguage().isKindOf(JavaLanguage.INSTANCE)) {
+    if (element instanceof PsiCompiledElement
+      || !element.getManager().isInProject(element)
+      || !element.getLanguage().isKindOf(JavaLanguage.INSTANCE)) {
       return false;
     }
 
     final PsiElement context = PsiTreeUtil.getParentOfType(element, PsiDeclarationStatement.class, PsiClass.class);
-    if (context instanceof PsiDeclarationStatement) {
-      return isAvailableOnDeclarationStatement((PsiDeclarationStatement)context, element);
+    if (context instanceof PsiDeclarationStatement declarationStatement) {
+      return isAvailableOnDeclarationStatement(declarationStatement, element);
     }
 
     PsiField field = PsiTreeUtil.getParentOfType(element, PsiField.class);
     if (field != null && PsiTreeUtil.getParentOfType(element, PsiDocComment.class) == null && isAvailableOnField(field)) {
-      setText(CodeInsightBundle.message("intention.split.declaration.text"));
+      setText(CodeInsightLocalize.intentionSplitDeclarationText().get());
       return true;
     }
     return false;
   }
 
+  @RequiredReadAction
   private static boolean isAvailableOnField(PsiField field) {
     final PsiTypeElement typeElement = field.getTypeElement();
     if (typeElement == null) {
@@ -86,27 +83,18 @@ public class SplitDeclarationAction extends PsiElementBaseIntentionAction {
       nextField = nextField.getNextSibling();
     }
 
-    if (nextField != null && ((PsiField)nextField).getTypeElement() == typeElement) {
-      return true;
-    }
-
-    return false;
+    return nextField != null && ((PsiField)nextField).getTypeElement() == typeElement;
   }
 
+  @RequiredReadAction
   private boolean isAvailableOnDeclarationStatement(PsiDeclarationStatement decl, PsiElement element) {
     PsiElement[] declaredElements = decl.getDeclaredElements();
-    if (declaredElements.length == 0) {
-      return false;
-    }
-    if (!(declaredElements[0] instanceof PsiLocalVariable)) {
+    if (declaredElements.length == 0 || !(declaredElements[0] instanceof PsiLocalVariable)) {
       return false;
     }
     if (declaredElements.length == 1) {
       PsiLocalVariable var = (PsiLocalVariable)declaredElements[0];
-      if (var.getInitializer() == null) {
-        return false;
-      }
-      if (var.getTypeElement().isInferredType()) {
+      if (var.getInitializer() == null || var.getTypeElement().isInferredType()) {
         return false;
       }
       PsiElement parent = decl.getParent();
@@ -121,11 +109,12 @@ public class SplitDeclarationAction extends PsiElementBaseIntentionAction {
           Ref<Boolean> conflictFound = new Ref<>(false);
           parent.accept(new JavaRecursiveElementWalkingVisitor() {
             @Override
-            public void visitClass(PsiClass aClass) {
+            public void visitClass(@Nonnull PsiClass aClass) {
             }
 
             @Override
-            public void visitVariable(PsiVariable variable) {
+            @RequiredReadAction
+            public void visitVariable(@Nonnull PsiVariable variable) {
               super.visitVariable(variable);
               if (varName.equals(variable.getName())) {
                 conflictFound.set(true);
@@ -139,7 +128,7 @@ public class SplitDeclarationAction extends PsiElementBaseIntentionAction {
           parent = parent.getNextSibling();
         }
       }
-      setText(CodeInsightBundle.message("intention.split.declaration.assignment.text"));
+      setText(CodeInsightLocalize.intentionSplitDeclarationAssignmentText().get());
       return true;
     }
     else {
@@ -147,12 +136,13 @@ public class SplitDeclarationAction extends PsiElementBaseIntentionAction {
         return false;
       }
 
-      setText(CodeInsightBundle.message("intention.split.declaration.text"));
+      setText(CodeInsightLocalize.intentionSplitDeclarationText().get());
       return true;
     }
   }
 
   @Override
+  @RequiredReadAction
   public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiDeclarationStatement decl = PsiTreeUtil.getParentOfType(element, PsiDeclarationStatement.class);
 
@@ -168,15 +158,18 @@ public class SplitDeclarationAction extends PsiElementBaseIntentionAction {
     }
   }
 
-  public static PsiAssignmentExpression invokeOnDeclarationStatement(PsiDeclarationStatement decl,
-                                                                     PsiManager psiManager,
-                                                                     Project project) throws IncorrectOperationException {
+  @RequiredReadAction
+  public static PsiAssignmentExpression invokeOnDeclarationStatement(
+    PsiDeclarationStatement decl,
+    PsiManager psiManager,
+    Project project
+  ) throws IncorrectOperationException {
     if (decl.getDeclaredElements().length == 1) {
       PsiLocalVariable var = (PsiLocalVariable)decl.getDeclaredElements()[0];
       var.normalizeDeclaration();
       PsiExpressionStatement statement = (PsiExpressionStatement)JavaPsiFacade.getInstance(psiManager.getProject())
-                                                                              .getElementFactory()
-                                                                              .createStatementFromText(var.getName() + "=xxx;", null);
+        .getElementFactory()
+        .createStatementFromText(var.getName() + "=xxx;", null);
       statement = (PsiExpressionStatement)CodeStyleManager.getInstance(project).reformat(statement);
       PsiAssignmentExpression assignment = (PsiAssignmentExpression)statement.getExpression();
       CommentTracker commentTracker = new CommentTracker();
@@ -189,14 +182,13 @@ public class SplitDeclarationAction extends PsiElementBaseIntentionAction {
       PsiElement block = decl.getParent();
       if (block instanceof PsiForStatement) {
         final PsiDeclarationStatement varDeclStatement = JavaPsiFacade.getInstance(psiManager.getProject())
-                                                                      .getElementFactory()
-                                                                      .createVariableDeclarationStatement(var.getName(), var.getType
-                                                                        (), null);
+          .getElementFactory()
+          .createVariableDeclarationStatement(var.getName(), var.getType(), null);
 
         // For index can't be final, right?
         for (PsiElement varDecl : varDeclStatement.getDeclaredElements()) {
-          if (varDecl instanceof PsiModifierListOwner) {
-            final PsiModifierList modList = ((PsiModifierListOwner)varDecl).getModifierList();
+          if (varDecl instanceof PsiModifierListOwner modifierListOwner) {
+            final PsiModifierList modList = modifierListOwner.getModifierList();
             assert modList != null;
             modList.setModifierProperty(PsiModifier.FINAL, false);
           }

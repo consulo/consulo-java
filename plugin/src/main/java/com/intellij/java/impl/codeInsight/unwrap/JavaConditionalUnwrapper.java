@@ -1,9 +1,9 @@
 package com.intellij.java.impl.codeInsight.unwrap;
 
-import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.language.psi.PsiConditionalExpression;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpressionList;
+import consulo.language.editor.localize.CodeInsightLocalize;
+import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class JavaConditionalUnwrapper extends JavaUnwrapper {
   public JavaConditionalUnwrapper() {
-    super(CodeInsightBundle.message("unwrap.conditional"));
+    super(CodeInsightLocalize.unwrapConditional().get());
   }
 
   @Override

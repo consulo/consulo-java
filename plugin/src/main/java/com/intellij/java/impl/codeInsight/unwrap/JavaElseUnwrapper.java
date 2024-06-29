@@ -15,17 +15,17 @@
  */
 package com.intellij.java.impl.codeInsight.unwrap;
 
-import consulo.language.editor.CodeInsightBundle;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiIfStatement;
 import com.intellij.java.language.psi.PsiStatement;
+import consulo.language.editor.localize.CodeInsightLocalize;
+import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 
 import java.util.List;
 
 public class JavaElseUnwrapper extends JavaElseUnwrapperBase {
   public JavaElseUnwrapper() {
-    super(CodeInsightBundle.message("unwrap.else"));
+    super(CodeInsightLocalize.unwrapElse().get());
   }
 
   @Override
@@ -37,8 +37,8 @@ public class JavaElseUnwrapper extends JavaElseUnwrapperBase {
   @Override
   protected void unwrapElseBranch(PsiStatement branch, PsiElement parent, Context context) throws IncorrectOperationException {
     // if we have 'else if' then we have to extract statements from the 'if' branch
-    if (branch instanceof PsiIfStatement) {
-      branch = ((PsiIfStatement)branch).getThenBranch();
+    if (branch instanceof PsiIfStatement ifStatement) {
+      branch = ifStatement.getThenBranch();
     }
 
     parent = findTopmostIfStatement(parent);

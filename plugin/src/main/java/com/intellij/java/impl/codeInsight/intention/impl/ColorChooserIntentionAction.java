@@ -25,13 +25,14 @@ package com.intellij.java.impl.codeInsight.intention.impl;
 import com.intellij.java.language.patterns.PsiJavaPatterns;
 import com.intellij.java.language.patterns.PsiMethodPattern;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -40,8 +41,8 @@ import consulo.project.Project;
 import consulo.ui.ex.JBColor;
 import consulo.ui.ex.awt.ColorChooser;
 import consulo.util.lang.StringUtil;
-
 import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -57,7 +58,7 @@ public class ColorChooserIntentionAction extends BaseColorIntentionAction {
   private static final PsiMethodPattern GET_COLOR_METHOD = PsiJavaPatterns.psiMethod().definedInClass(JAVA_AWT_COLOR).withName("getColor");
 
   public ColorChooserIntentionAction() {
-    setText(CodeInsightBundle.message("intention.color.chooser.dialog"));
+    setText(CodeInsightLocalize.intentionColorChooserDialog().get());
   }
 
   @Override
@@ -66,14 +67,16 @@ public class ColorChooserIntentionAction extends BaseColorIntentionAction {
   }
 
   public static boolean isInsideDecodeOrGetColorMethod(PsiElement element) {
-    if (element instanceof PsiJavaToken && ((PsiJavaToken) element).getTokenType() == JavaTokenType.STRING_LITERAL) {
+    if (element instanceof PsiJavaToken javaToken && javaToken.getTokenType() == JavaTokenType.STRING_LITERAL) {
       element = element.getParent();
     }
 
-    return PsiJavaPatterns.psiExpression().methodCallParameter(0, DECODE_METHOD).accepts(element) || PsiJavaPatterns.psiExpression().methodCallParameter(0, GET_COLOR_METHOD).accepts(element);
+    return PsiJavaPatterns.psiExpression().methodCallParameter(0, DECODE_METHOD).accepts(element)
+      || PsiJavaPatterns.psiExpression().methodCallParameter(0, GET_COLOR_METHOD).accepts(element);
   }
 
   @Override
+  @RequiredReadAction
   public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(element)) {
       return;
@@ -87,6 +90,7 @@ public class ColorChooserIntentionAction extends BaseColorIntentionAction {
     }
   }
 
+  @RequiredReadAction
   private void invokeForMethodParam(JComponent editorComponent, PsiElement element) {
     final PsiLiteralExpression literal = PsiTreeUtil.getParentOfType(element, PsiLiteralExpression.class);
     if (literal == null) {
@@ -141,13 +145,13 @@ public class ColorChooserIntentionAction extends BaseColorIntentionAction {
       int i = 0;
       int j = 0;
       for (final PsiExpression each : expressions) {
-        if (each instanceof PsiLiteralExpression) {
-          final Object o = ((PsiLiteralExpression) each).getValue();
-          if (o instanceof Integer) {
-            values[i] = ((Integer) o).intValue();
+        if (each instanceof PsiLiteralExpression literalExpression) {
+          final Object o = literalExpression.getValue();
+          if (o instanceof Integer intValue) {
+            values[i] = intValue;
             i++;
-          } else if (o instanceof Float) {
-            values2[j] = ((Float) o).floatValue();
+          } else if (o instanceof Float floatValue) {
+            values2[j] = floatValue;
             j++;
           }
         }

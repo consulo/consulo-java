@@ -21,7 +21,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiExpressionTrimRenderer;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.RedundantCastUtil;
-import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.InspectionToolState;
 import consulo.language.editor.inspection.LocalQuickFix;
@@ -70,10 +70,12 @@ public class RedundantCastInspection extends GenericsInspectionToolBase<Redundan
 
   @Override
   @Nullable
-  public ProblemDescriptor[] getDescriptions(@Nonnull PsiElement where,
-                                             @Nonnull InspectionManager manager,
-                                             boolean isOnTheFly,
-                                             RedundantCastInspectionState state) {
+  public ProblemDescriptor[] getDescriptions(
+    @Nonnull PsiElement where,
+    @Nonnull InspectionManager manager,
+    boolean isOnTheFly,
+    RedundantCastInspectionState state
+  ) {
     List<PsiTypeCastExpression> redundantCasts = RedundantCastUtil.getRedundantCastsInside(where);
     if (redundantCasts.isEmpty()) {
       return null;
@@ -92,18 +94,22 @@ public class RedundantCastInspection extends GenericsInspectionToolBase<Redundan
   }
 
   @Override
-  public ProblemDescriptor[] checkField(@Nonnull PsiField field,
-                                        @Nonnull InspectionManager manager,
-                                        boolean isOnTheFly,
-                                        RedundantCastInspectionState state) {
+  public ProblemDescriptor[] checkField(
+    @Nonnull PsiField field,
+    @Nonnull InspectionManager manager,
+    boolean isOnTheFly,
+    RedundantCastInspectionState state
+  ) {
     return getDescriptions(field, manager, isOnTheFly, state);
   }
 
   @Nullable
-  private ProblemDescriptor createDescription(@Nonnull PsiTypeCastExpression cast,
-                                              @Nonnull InspectionManager manager,
-                                              boolean onTheFly,
-                                              RedundantCastInspectionState state) {
+  private ProblemDescriptor createDescription(
+    @Nonnull PsiTypeCastExpression cast,
+    @Nonnull InspectionManager manager,
+    boolean onTheFly,
+    RedundantCastInspectionState state
+  ) {
     PsiExpression operand = cast.getOperand();
     PsiTypeElement castType = cast.getCastType();
     if (operand == null || castType == null) {
@@ -128,7 +134,6 @@ public class RedundantCastInspection extends GenericsInspectionToolBase<Redundan
     return manager.createProblemDescriptor(castType, message, myQuickFixAction, ProblemHighlightType.LIKE_UNUSED_SYMBOL, onTheFly);
   }
 
-
   private static class AcceptSuggested implements LocalQuickFix {
     @Override
     @Nonnull
@@ -137,7 +142,7 @@ public class RedundantCastInspection extends GenericsInspectionToolBase<Redundan
     }
 
     @Override
-    @RequiredReadAction
+    @RequiredWriteAction
     public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
       PsiElement castTypeElement = descriptor.getPsiElement();
       PsiTypeCastExpression cast = castTypeElement == null ? null : (PsiTypeCastExpression)castTypeElement.getParent();

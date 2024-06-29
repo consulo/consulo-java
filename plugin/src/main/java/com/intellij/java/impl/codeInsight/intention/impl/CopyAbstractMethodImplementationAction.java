@@ -18,8 +18,8 @@ package com.intellij.java.impl.codeInsight.intention.impl;
 import com.intellij.java.language.psi.PsiMethod;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.project.Project;
 
 /**
@@ -34,7 +34,7 @@ public class CopyAbstractMethodImplementationAction extends ImplementAbstractMet
 
   @Override
   protected String getIntentionName(final PsiMethod method) {
-    return CodeInsightBundle.message("copy.abstract.method.intention.name", method.getName());
+    return CodeInsightLocalize.copyAbstractMethodIntentionName(method.getName()).get();
   }
 
   @Override

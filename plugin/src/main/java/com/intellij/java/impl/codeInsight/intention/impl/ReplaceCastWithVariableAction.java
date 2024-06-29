@@ -17,19 +17,19 @@ package com.intellij.java.impl.codeInsight.intention.impl;
 
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.progress.ProgressIndicatorProvider;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.lang.ref.Ref;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -42,9 +42,10 @@ public class ReplaceCastWithVariableAction extends PsiElementBaseIntentionAction
   private String myReplaceVariableName = "";
 
   public ReplaceCastWithVariableAction() {
-    setText(CodeInsightBundle.message("intention.replace.cast.with.var.family"));
+    setText(CodeInsightLocalize.intentionReplaceCastWithVarFamily().get());
   }
 
+  @RequiredReadAction
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     final PsiTypeCastExpression typeCastExpression = PsiTreeUtil.getParentOfType(element, PsiTypeCastExpression.class);
@@ -71,7 +72,7 @@ public class ReplaceCastWithVariableAction extends PsiElementBaseIntentionAction
     }
 
     myReplaceVariableName = replacement.getName();
-    setText(CodeInsightBundle.message("intention.replace.cast.with.var.text", typeCastExpression.getText(), myReplaceVariableName));
+    setText(CodeInsightLocalize.intentionReplaceCastWithVarText(typeCastExpression.getText(), myReplaceVariableName).get());
 
     return true;
   }
@@ -84,15 +85,19 @@ public class ReplaceCastWithVariableAction extends PsiElementBaseIntentionAction
       return;
     }
 
-    final PsiElement toReplace = typeCastExpression.getParent() instanceof PsiParenthesizedExpression ? typeCastExpression.getParent() : typeCastExpression;
+    final PsiElement toReplace = typeCastExpression.getParent() instanceof PsiParenthesizedExpression parenthesizedExpression
+      ? parenthesizedExpression : typeCastExpression;
     final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
     toReplace.replace(factory.createExpressionFromText(myReplaceVariableName, toReplace));
   }
 
   @Nullable
-  private static PsiLocalVariable findReplacement(@Nonnull PsiMethod method,
-                                                  @Nonnull PsiVariable castedVar,
-                                                  @Nonnull PsiTypeCastExpression expression) {
+  @RequiredReadAction
+  private static PsiLocalVariable findReplacement(
+    @Nonnull PsiMethod method,
+    @Nonnull PsiVariable castedVar,
+    @Nonnull PsiTypeCastExpression expression
+  ) {
     final TextRange expressionTextRange = expression.getTextRange();
     for (PsiExpression occurrence : CodeInsightUtil.findExpressionOccurrences(method,expression)){
       ProgressIndicatorProvider.checkCanceled();
@@ -114,15 +119,17 @@ public class ReplaceCastWithVariableAction extends PsiElementBaseIntentionAction
     return null;
   }
 
-  private static boolean isChangedBetween(@Nonnull final PsiVariable variable,
-                                          @Nonnull final PsiElement scope,
-                                          @Nonnull final PsiElement start,
-                                          @Nonnull final PsiElement end) {
+  private static boolean isChangedBetween(
+    @Nonnull final PsiVariable variable,
+    @Nonnull final PsiElement scope,
+    @Nonnull final PsiElement start,
+    @Nonnull final PsiElement end
+  ) {
     if (variable.hasModifierProperty(PsiModifier.FINAL)) {
       return false;
     }
 
-    final Ref<Boolean> result = new Ref<Boolean>();
+    final Ref<Boolean> result = new Ref<>();
 
     scope.accept(
       new JavaRecursiveElementWalkingVisitor() {
@@ -142,9 +149,7 @@ public class ReplaceCastWithVariableAction extends PsiElementBaseIntentionAction
 
         @Override
         public void visitAssignmentExpression(PsiAssignmentExpression expression) {
-          if (inScope && expression.getLExpression() instanceof PsiReferenceExpression) {
-            final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)expression.getLExpression();
-
+          if (inScope && expression.getLExpression() instanceof PsiReferenceExpression referenceExpression) {
             if (variable.equals(referenceExpression.resolve())) {
               result.set(true);
               stopWalking();
@@ -161,17 +166,16 @@ public class ReplaceCastWithVariableAction extends PsiElementBaseIntentionAction
   private static PsiLocalVariable getVariable(@Nonnull PsiExpression occurrence) {
     final PsiElement parent = occurrence.getParent();
 
-    if (parent instanceof PsiLocalVariable) {
-      return (PsiLocalVariable)parent;
+    if (parent instanceof PsiLocalVariable localVariable) {
+      return localVariable;
     }
 
-    if (parent instanceof PsiAssignmentExpression) {
-      final PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression)parent;
+    if (parent instanceof PsiAssignmentExpression assignmentExpression) {
       if (assignmentExpression.getLExpression() instanceof PsiReferenceExpression) {
         final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)assignmentExpression.getLExpression();
         final PsiElement resolved = referenceExpression.resolve();
-        if (resolved instanceof PsiLocalVariable) {
-          return (PsiLocalVariable)resolved;
+        if (resolved instanceof PsiLocalVariable localVariable) {
+          return localVariable;
         }
       }
     }

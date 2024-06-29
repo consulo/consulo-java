@@ -20,18 +20,18 @@ import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 
 /**
@@ -45,10 +45,11 @@ public class AddOverrideAnnotationAction implements IntentionAction {
   @Override
   @Nonnull
   public String getText() {
-    return CodeInsightBundle.message("intention.add.override.annotation");
+    return CodeInsightLocalize.intentionAddOverrideAnnotation().get();
   }
 
   @Override
+  @RequiredReadAction
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!PsiUtil.isLanguageLevel5OrHigher(file)) return false;
     if (!file.getManager().isInProject(file)) return false;
@@ -67,6 +68,7 @@ public class AddOverrideAnnotationAction implements IntentionAction {
   }
 
   @Override
+  @RequiredReadAction
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     PsiMethod method = findMethod(file, editor.getCaretModel().getOffset());
     if (method != null) {
@@ -74,6 +76,7 @@ public class AddOverrideAnnotationAction implements IntentionAction {
     }
   }
 
+  @RequiredReadAction
   private static PsiMethod findMethod(PsiFile file, int offset) {
     PsiElement element = file.findElementAt(offset);
     PsiMethod res = PsiTreeUtil.getParentOfType(element, PsiMethod.class);

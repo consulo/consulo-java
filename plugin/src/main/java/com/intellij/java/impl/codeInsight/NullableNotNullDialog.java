@@ -3,7 +3,7 @@ package com.intellij.java.impl.codeInsight;
 
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import consulo.dataContext.DataManager;
-import consulo.language.editor.CommonDataKeys;
+import consulo.java.impl.JavaBundle;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.project.ProjectManager;
@@ -36,24 +36,29 @@ public class NullableNotNullDialog extends DialogWrapper {
     myShowInstrumentationOptions = showInstrumentationOptions;
 
     NullableNotNullManager manager = NullableNotNullManager.getInstance(myProject);
-    myNullablePanel = new AnnotationsPanel(project,
-                                           "Nullable",
-                                           manager.getDefaultNullable(),
-                                           manager.getNullables(),
-                                           manager.getDefaultNullables(),
-                                           Collections.emptySet(),
-                                           false,
-                                           true);
-    myNotNullPanel = new AnnotationsPanel(project,
-                                          "NotNull",
-                                          manager.getDefaultNotNull(),
-                                          manager.getNotNulls(),
-                                          manager.getDefaultNotNulls(),
-                                          new HashSet<>(manager.getInstrumentedNotNulls()),
-                                          showInstrumentationOptions, true);
+    myNullablePanel = new AnnotationsPanel(
+      project,
+      "Nullable",
+      manager.getDefaultNullable(),
+      manager.getNullables(),
+      manager.getDefaultNullables(),
+      Collections.emptySet(),
+      false,
+      true
+    );
+    myNotNullPanel = new AnnotationsPanel(
+      project,
+      "NotNull",
+      manager.getDefaultNotNull(),
+      manager.getNotNulls(),
+      manager.getDefaultNotNulls(),
+      new HashSet<>(manager.getInstrumentedNotNulls()),
+      showInstrumentationOptions,
+      true
+    );
 
     init();
-    setTitle("Nullable/NotNull Configuration");
+    setTitle(JavaBundle.message("nullable.notnull.configuration.dialog.title"));
   }
 
   @Nonnull
@@ -70,7 +75,7 @@ public class NullableNotNullDialog extends DialogWrapper {
 
   @RequiredUIAccess
   public static void showDialog(Component context, boolean showInstrumentationOptions) {
-    Project project = DataManager.getInstance().getDataContext(context).getData(CommonDataKeys.PROJECT);
+    Project project = DataManager.getInstance().getDataContext(context).getData(Project.KEY);
     if (project == null) {
       project = ProjectManager.getInstance().getDefaultProject();
     }

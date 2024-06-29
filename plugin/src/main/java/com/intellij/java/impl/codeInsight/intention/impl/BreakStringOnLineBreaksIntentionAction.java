@@ -19,17 +19,17 @@ import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.PsiJavaToken;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
-
 import jakarta.annotation.Nonnull;
 
 /**
@@ -39,6 +39,7 @@ import jakarta.annotation.Nonnull;
 @IntentionMetaData(ignoreId = "java.BreakStringOnLineBreaksIntentionAction", categories = {"Java", "Refactorings"}, fileExtensions = "java")
 public class BreakStringOnLineBreaksIntentionAction extends PsiElementBaseIntentionAction {
   @Override
+  @RequiredReadAction
   public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     if (!(element instanceof PsiJavaToken)) {
       return false;
@@ -61,11 +62,7 @@ public class BreakStringOnLineBreaksIntentionAction extends PsiElementBaseIntent
     }
 
     final int indexOfSlashNSlashR = text.indexOf("\\n\\r");
-    if (indexOfSlashNSlashR != -1 && Comparing.equal(text.substring(indexOfSlashNSlashR, text.length()), "\\n\\r\"")){
-      return false;
-    }
-
-    return true;
+    return indexOfSlashNSlashR == -1 || !Comparing.equal(text.substring(indexOfSlashNSlashR, text.length()), "\\n\\r\"");
   }
 
   @Override
@@ -107,6 +104,6 @@ public class BreakStringOnLineBreaksIntentionAction extends PsiElementBaseIntent
   @Nonnull
   @Override
   public String getText() {
-    return CodeInsightBundle.message("intention.break.string.on.line.breaks.text");
+    return CodeInsightLocalize.intentionBreakStringOnLineBreaksText().get();
   }
 }
