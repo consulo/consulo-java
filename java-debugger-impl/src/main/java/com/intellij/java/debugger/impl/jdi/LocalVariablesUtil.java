@@ -24,20 +24,19 @@ import com.intellij.java.debugger.impl.SimpleStackFrameContext;
 import com.intellij.java.debugger.impl.engine.ContextUtil;
 import com.intellij.java.language.psi.*;
 import consulo.application.ReadAction;
-import consulo.internal.com.sun.jdi.*;
+import consulo.internal.com.sun.jdi.InternalException;
+import consulo.internal.com.sun.jdi.Location;
+import consulo.internal.com.sun.jdi.StackFrame;
+import consulo.internal.com.sun.jdi.Value;
+import consulo.internal.com.sun.tools.jdi.*;
 import consulo.internal.org.objectweb.asm.MethodVisitor;
 import consulo.internal.org.objectweb.asm.Opcodes;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
 import consulo.util.collection.MultiMap;
-import consulo.util.lang.reflect.ReflectionUtil;
-
 import jakarta.annotation.Nonnull;
-import java.lang.reflect.Array;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+
 import java.util.*;
 
 /**
@@ -96,63 +95,6 @@ public class LocalVariablesUtil
 {
 	private static final Logger LOG = Logger.getInstance(LocalVariablesUtil.class);
 
-	private static final boolean ourInitializationOk;
-	private static Class<?> ourSlotInfoClass;
-	private static Constructor<?> slotInfoConstructor;
-	private static Method ourEnqueueMethod;
-	private static Method ourWaitForReplyMethod;
-
-	private static final boolean ourInitializationOkSet;
-	private static Class<?> ourSlotInfoClassSet;
-	private static Constructor<?> slotInfoConstructorSet;
-	private static Method ourEnqueueMethodSet;
-	private static Method ourWaitForReplyMethodSet;
-
-	static
-	{
-		// get values init
-		boolean success = false;
-		try
-		{
-			String GetValuesClassName = "consulo.internal.com.sun.tools.jdi.JDWP$StackFrame$GetValues";
-			ourSlotInfoClass = Class.forName(GetValuesClassName + "$SlotInfo");
-			slotInfoConstructor = ourSlotInfoClass.getDeclaredConstructor(int.class, byte.class);
-			slotInfoConstructor.setAccessible(true);
-
-			Class<?> ourGetValuesClass = Class.forName(GetValuesClassName);
-			ourEnqueueMethod = getDeclaredMethodByName(ourGetValuesClass, "enqueueCommand");
-			ourWaitForReplyMethod = getDeclaredMethodByName(ourGetValuesClass, "waitForReply");
-
-			success = true;
-		}
-		catch(Throwable e)
-		{
-			LOG.info(e);
-		}
-		ourInitializationOk = success;
-
-		// set value init
-		success = false;
-		try
-		{
-			String setValuesClassName = "consulo.internal.com.sun.tools.jdi.JDWP$StackFrame$SetValues";
-			ourSlotInfoClassSet = Class.forName(setValuesClassName + "$SlotInfo");
-			slotInfoConstructorSet = ourSlotInfoClassSet.getDeclaredConstructors()[0];
-			slotInfoConstructorSet.setAccessible(true);
-
-			Class<?> ourGetValuesClassSet = Class.forName(setValuesClassName);
-			ourEnqueueMethodSet = getDeclaredMethodByName(ourGetValuesClassSet, "enqueueCommand");
-			ourWaitForReplyMethodSet = getDeclaredMethodByName(ourGetValuesClassSet, "waitForReply");
-
-			success = true;
-		}
-		catch(Throwable e)
-		{
-			LOG.info(e);
-		}
-		ourInitializationOkSet = success;
-	}
-
 	public static Map<DecompiledLocalVariable, Value> fetchValues(@Nonnull StackFrameProxyImpl frameProxy, DebugProcess process, boolean full) throws Exception
 	{
 		Map<DecompiledLocalVariable, Value> map = new LinkedHashMap<>(); // LinkedHashMap for correct order
@@ -174,7 +116,7 @@ public class LocalVariablesUtil
 			slot += getTypeSlotSize(typeNames.get(i));
 		}
 
-		if(!full || !ourInitializationOk)
+		if(!full)
 		{
 			return map;
 		}
@@ -201,22 +143,20 @@ public class LocalVariablesUtil
 
 	private static Map<DecompiledLocalVariable, Value> fetchSlotValues(Map<DecompiledLocalVariable, Value> map, List<DecompiledLocalVariable> vars, StackFrame frame) throws Exception
 	{
-		final Long frameId = ReflectionUtil.getField(frame.getClass(), frame, long.class, "id");
-		final VirtualMachine vm = frame.virtualMachine();
-		final Method stateMethod = vm.getClass().getDeclaredMethod("state");
-		stateMethod.setAccessible(true);
+		final Long frameId = ((StackFrameImpl) frame).id();
+		final VirtualMachineImpl vm = (VirtualMachineImpl) frame.virtualMachine();
 
-		Object slotInfoArray = createSlotInfoArray(vars);
+		JDWP.StackFrame.GetValues.SlotInfo[] slotInfoArray = createSlotInfoArray(vars);
 
-		Object ps;
-		final Object vmState = stateMethod.invoke(vm);
+		PacketStream ps;
+		final VMState vmState = vm.state();
 		synchronized(vmState)
 		{
-			ps = ourEnqueueMethod.invoke(null, vm, frame.thread(), frameId, slotInfoArray);
+			ps = JDWP.StackFrame.GetValues.enqueueCommand(vm, (ThreadReferenceImpl) frame.thread(), frameId, slotInfoArray);
 		}
 
-		final Object reply = ourWaitForReplyMethod.invoke(null, vm, ps);
-		final Value[] values = ReflectionUtil.getField(reply.getClass(), reply, Value[].class, "values");
+		JDWP.StackFrame.GetValues reply = JDWP.StackFrame.GetValues.waitForReply(vm, ps);
+		final Value[] values = reply.values;
 		if(vars.size() != values.length)
 		{
 			throw new InternalException("Wrong number of values returned from target VM");
@@ -229,30 +169,24 @@ public class LocalVariablesUtil
 		return map;
 	}
 
-	public static boolean canSetValues()
-	{
-		return ourInitializationOkSet;
-	}
-
 	public static void setValue(StackFrame frame, int slot, Value value) throws EvaluateException
 	{
 		try
 		{
-			final Long frameId = ReflectionUtil.getField(frame.getClass(), frame, long.class, "id");
-			final VirtualMachine vm = frame.virtualMachine();
-			final Method stateMethod = vm.getClass().getDeclaredMethod("state");
-			stateMethod.setAccessible(true);
+			StackFrameImpl stackFrameImpl = (StackFrameImpl) frame;
+			final long frameId = stackFrameImpl.id();
+			final VirtualMachineImpl vm = (VirtualMachineImpl) frame.virtualMachine();
 
-			Object slotInfoArray = createSlotInfoArraySet(slot, value);
+			JDWP.StackFrame.SetValues.SlotInfo[] slotInfoArray = createSlotInfoArraySet(slot, value);
 
-			Object ps;
-			final Object vmState = stateMethod.invoke(vm);
+			PacketStream ps;
+			final VMState vmState = vm.state();
 			synchronized(vmState)
 			{
-				ps = ourEnqueueMethodSet.invoke(null, vm, frame.thread(), frameId, slotInfoArray);
+				ps = JDWP.StackFrame.SetValues.enqueueCommand(vm, (ThreadReferenceImpl) frame.thread(), frameId, slotInfoArray);
 			}
 
-			ourWaitForReplyMethodSet.invoke(null, vm, ps);
+			JDWP.StackFrame.SetValues.waitForReply(vm, ps);
 		}
 		catch(Exception e)
 		{
@@ -260,38 +194,23 @@ public class LocalVariablesUtil
 		}
 	}
 
-	private static Object createSlotInfoArraySet(int slot, Value value) throws IllegalAccessException, InvocationTargetException, InstantiationException
+	private static JDWP.StackFrame.SetValues.SlotInfo[] createSlotInfoArraySet(int slot, Value value)
 	{
-		Object arrayInstance = Array.newInstance(ourSlotInfoClassSet, 1);
-		Array.set(arrayInstance, 0, slotInfoConstructorSet.newInstance(slot, value));
-		return arrayInstance;
+		return new JDWP.StackFrame.SetValues.SlotInfo[]{new JDWP.StackFrame.SetValues.SlotInfo(slot, (ValueImpl) value)};
 	}
 
-	private static Object createSlotInfoArray(Collection<DecompiledLocalVariable> vars) throws Exception
+	private static JDWP.StackFrame.GetValues.SlotInfo[] createSlotInfoArray(List<DecompiledLocalVariable> vars)
 	{
-		final Object arrayInstance = Array.newInstance(ourSlotInfoClass, vars.size());
+		final JDWP.StackFrame.GetValues.SlotInfo[] slots = new JDWP.StackFrame.GetValues.SlotInfo[vars.size()];
 
-		int idx = 0;
-		for(DecompiledLocalVariable var : vars)
+		for(int i = 0; i < vars.size(); i++)
 		{
-			final Object info = slotInfoConstructor.newInstance(var.getSlot(), (byte) var.getSignature().charAt(0));
-			Array.set(arrayInstance, idx++, info);
+			DecompiledLocalVariable var = vars.get(i);
+
+			slots[i] = new JDWP.StackFrame.GetValues.SlotInfo(var.getSlot(), (byte) var.getSignature().charAt(0));
 		}
 
-		return arrayInstance;
-	}
-
-	private static Method getDeclaredMethodByName(Class aClass, String methodName) throws NoSuchMethodException
-	{
-		for(Method method : aClass.getDeclaredMethods())
-		{
-			if(methodName.equals(method.getName()))
-			{
-				method.setAccessible(true);
-				return method;
-			}
-		}
-		throw new NoSuchMethodException(aClass.getName() + "." + methodName);
+		return slots;
 	}
 
 	@Nonnull

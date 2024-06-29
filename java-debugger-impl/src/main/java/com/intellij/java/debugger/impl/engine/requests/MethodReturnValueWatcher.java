@@ -15,18 +15,9 @@
  */
 package com.intellij.java.debugger.impl.engine.requests;
 
-import java.lang.reflect.InvocationTargetException;
-
-import jakarta.annotation.Nullable;
 import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
-import consulo.util.lang.Comparing;
-import consulo.util.collection.ArrayUtil;
-import consulo.internal.com.sun.jdi.Method;
-import consulo.internal.com.sun.jdi.ObjectCollectedException;
-import consulo.internal.com.sun.jdi.ThreadReference;
-import consulo.internal.com.sun.jdi.VMDisconnectedException;
-import consulo.internal.com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.event.Event;
 import consulo.internal.com.sun.jdi.event.MethodEntryEvent;
 import consulo.internal.com.sun.jdi.event.MethodExitEvent;
@@ -36,7 +27,9 @@ import consulo.internal.com.sun.jdi.request.MethodEntryRequest;
 import consulo.internal.com.sun.jdi.request.MethodExitRequest;
 import consulo.java.debugger.impl.JavaRegistry;
 import consulo.logging.Logger;
+import consulo.util.lang.Comparing;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Eugene Zhuravlev
@@ -63,7 +56,6 @@ public class MethodReturnValueWatcher
 	@Nullable
 	MethodExitRequest myExitRequest;
 
-	private java.lang.reflect.Method myReturnValueMethod;
 	private volatile boolean myEnabled;
 	private boolean myFeatureEnabled;
 	private final EventRequestManager myRequestManager;
@@ -90,24 +82,14 @@ public class MethodReturnValueWatcher
 			}
 			final Method method = event.method();
 			//myLastMethodReturnValue = event.returnValue();
-			try
-			{
-				if(myReturnValueMethod == null)
-				{
-					//noinspection HardCodedStringLiteral
-					myReturnValueMethod = MethodExitEvent.class.getDeclaredMethod("returnValue", ArrayUtil.EMPTY_CLASS_ARRAY);
-				}
-				final Value retVal = (Value) myReturnValueMethod.invoke(event);
 
-				if(method == null || !"void".equals(method.returnTypeName()))
-				{
-					// remember methods with non-void return types only
-					myLastExecutedMethod = method;
-					myLastMethodReturnValue = retVal;
-				}
-			}
-			catch(NoSuchMethodException | InvocationTargetException | IllegalAccessException ignored)
+			final Value retVal = (Value) event.returnValue();
+
+			if(method == null || !"void".equals(method.returnTypeName()))
 			{
+				// remember methods with non-void return types only
+				myLastExecutedMethod = method;
+				myLastMethodReturnValue = retVal;
 			}
 		}
 		catch(UnsupportedOperationException ex)
