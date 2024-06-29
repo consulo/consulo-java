@@ -30,7 +30,6 @@ import com.intellij.java.language.psi.PsiModifierListOwner;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.AllIcons;
 import consulo.application.Application;
-import consulo.application.ApplicationManager;
 import consulo.application.util.DateFormatUtil;
 import consulo.codeEditor.Editor;
 import consulo.document.Document;
@@ -200,12 +199,14 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
     };
   }
 
-  private static final String DELETE_QUICK_FIX = InspectionLocalize.inspectionDeadCodeSafeDeleteQuickfix().get();
-
   class PermanentDeleteAction extends QuickFixAction {
     PermanentDeleteAction(@Nonnull InspectionToolWrapper toolWrapper) {
-      super(DELETE_QUICK_FIX, AllIcons.Actions.Cancel, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0),
-            toolWrapper);
+      super(
+        InspectionLocalize.inspectionDeadCodeSafeDeleteQuickfix().get(),
+        AllIcons.Actions.Cancel,
+        KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0),
+        toolWrapper
+      );
     }
 
     @Override
@@ -559,7 +560,7 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
     @Override
     @Nonnull
     public String getText() {
-      return DELETE_QUICK_FIX;
+      return InspectionLocalize.inspectionDeadCodeSafeDeleteQuickfix().get();
     }
 
     @Override
