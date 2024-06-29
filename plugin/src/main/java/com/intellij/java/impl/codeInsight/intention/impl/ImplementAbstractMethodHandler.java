@@ -24,28 +24,30 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
-import consulo.codeEditor.EditorPopupHelper;
-import consulo.language.editor.CodeInsightBundle;
-import consulo.language.editor.FileModificationService;
 import com.intellij.java.impl.codeInsight.generation.OverrideImplementUtil;
+import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.impl.codeInsight.PsiClassListCellRenderer;
-import consulo.language.editor.ui.PsiElementListCellRenderer;
 import com.intellij.java.language.psi.*;
-import consulo.application.ApplicationManager;
+import consulo.application.progress.ProgressManager;
+import consulo.application.util.function.Computable;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.EditorPopupHelper;
+import consulo.ide.impl.ui.impl.PopupChooserBuilder;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.localize.CodeInsightLocalize;
+import consulo.language.editor.ui.PsiElementListCellRenderer;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiUtilCore;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.ex.awt.JBList;
 import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.ex.popup.JBPopup;
 import consulo.undoRedo.CommandProcessor;
-import consulo.logging.Logger;
-import consulo.codeEditor.Editor;
-import consulo.application.progress.ProgressManager;
-import consulo.project.Project;
-import consulo.ide.impl.ui.impl.PopupChooserBuilder;
-import consulo.application.util.function.Computable;
-import consulo.language.psi.*;
-import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
-import consulo.language.psi.PsiUtilCore;
-import consulo.ui.ex.awt.JBList;
-import consulo.language.util.IncorrectOperationException;
 
 import javax.swing.*;
 import java.util.*;
@@ -68,47 +70,41 @@ public class ImplementAbstractMethodHandler {
     PsiDocumentManager.getInstance(myProject).commitAllDocuments();
 
     final PsiElement[][] result = new PsiElement[1][];
-    ProgressManager.getInstance().runProcessWithProgressSynchronously(new Runnable() {
-      @Override
-      public void run() {
-        ApplicationManager.getApplication().runReadAction(new Runnable() {
-          @Override
-          public void run() {
-            final PsiClass psiClass = myMethod.getContainingClass();
-            if (!psiClass.isValid()) return;
-            if (!psiClass.isEnum()) {
-              result[0] = getClassImplementations(psiClass);
+    ProgressManager.getInstance().runProcessWithProgressSynchronously(() -> myProject.getApplication().runReadAction(() -> {
+      final PsiClass psiClass = myMethod.getContainingClass();
+      if (!psiClass.isValid()) return;
+      if (!psiClass.isEnum()) {
+        result[0] = getClassImplementations(psiClass);
+      }
+      else {
+        final List<PsiElement> enumConstants = new ArrayList<>();
+        for (PsiField field : psiClass.getFields()) {
+          if (field instanceof PsiEnumConstant enumConstant) {
+            final PsiEnumConstantInitializer initializingClass = enumConstant.getInitializingClass();
+            if (initializingClass != null) {
+              PsiMethod method = initializingClass.findMethodBySignature(myMethod, true);
+              if (method == null || !method.getContainingClass().equals(initializingClass)) {
+                enumConstants.add(initializingClass);
+              }
             }
             else {
-              final List<PsiElement> enumConstants = new ArrayList<PsiElement>();
-              for (PsiField field : psiClass.getFields()) {
-                if (field instanceof PsiEnumConstant) {
-                  final PsiEnumConstantInitializer initializingClass = ((PsiEnumConstant)field).getInitializingClass();
-                  if (initializingClass != null) {
-                    PsiMethod method = initializingClass.findMethodBySignature(myMethod, true);
-                    if (method == null || !method.getContainingClass().equals(initializingClass)) {
-                      enumConstants.add(initializingClass);
-                    }
-                  }
-                  else {
-                    enumConstants.add(field);
-                  }
-                }
-              }
-              result[0] = PsiUtilCore.toPsiElementArray(enumConstants);
+              enumConstants.add(field);
             }
           }
-        });
+        }
+        result[0] = PsiUtilCore.toPsiElementArray(enumConstants);
       }
-    }, CodeInsightBundle.message("intention.implement.abstract.method.searching.for.descendants.progress"), true, myProject);
+    }), CodeInsightLocalize.intentionImplementAbstractMethodSearchingForDescendantsProgress().get(), true, myProject);
 
     if (result[0] == null) return;
 
     if (result[0].length == 0) {
-      Messages.showMessageDialog(myProject,
-                                 CodeInsightBundle.message("intention.implement.abstract.method.error.no.classes.message"),
-                                 CodeInsightBundle.message("intention.implement.abstract.method.error.no.classes.title"),
-                                 Messages.getInformationIcon());
+      Messages.showMessageDialog(
+        myProject,
+        CodeInsightLocalize.intentionImplementAbstractMethodErrorNoClassesMessage().get(),
+        CodeInsightLocalize.intentionImplementAbstractMethodErrorNoClassesTitle().get(),
+        UIUtil.getInformationIcon()
+      );
       return;
     }
 
@@ -121,40 +117,37 @@ public class ImplementAbstractMethodHandler {
     elementListCellRenderer.sort(result[0]);
     myList = new JBList(result[0]);
     myList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-    final Runnable runnable = new Runnable(){
-      @Override
-      public void run() {
-        int index = myList.getSelectedIndex();
-        if (index < 0) return;
-        implementInClass(myList.getSelectedValues());
-      }
+    final Runnable runnable = () -> {
+      int index = myList.getSelectedIndex();
+      if (index < 0) return;
+      implementInClass(myList.getSelectedValues());
     };
     myList.setCellRenderer(elementListCellRenderer);
     final PopupChooserBuilder builder = new PopupChooserBuilder(myList);
     elementListCellRenderer.installSpeedSearch(builder);
 
-    JBPopup popup = builder.
-        setTitle(CodeInsightBundle.message("intention.implement.abstract.method.class.chooser.title")).
-        setItemChoosenCallback(runnable).
-        createPopup();
+    JBPopup popup = builder.setTitle(CodeInsightLocalize.intentionImplementAbstractMethodClassChooserTitle().get())
+      .setItemChoosenCallback(runnable)
+      .createPopup();
 
     EditorPopupHelper.getInstance().showPopupInBestPositionFor(myEditor, popup);
   }
 
+  @RequiredUIAccess
   public void implementInClass(final Object[] selection) {
     for (Object o : selection) {
       if (!((PsiElement)o).isValid()) return;
     }
-    CommandProcessor.getInstance().executeCommand(myProject, new Runnable() {
-      @Override
-      public void run() {
-        final LinkedHashSet<PsiClass> classes = new LinkedHashSet<PsiClass>();
+    CommandProcessor.getInstance().executeCommand(
+      myProject,
+      () -> {
+        final LinkedHashSet<PsiClass> classes = new LinkedHashSet<>();
         for (final Object o : selection) {
-          if (o instanceof PsiEnumConstant) {
-            classes.add(ApplicationManager.getApplication().runWriteAction(new Computable<PsiClass>(){
+          if (o instanceof PsiEnumConstant enumConstant) {
+            classes.add(myProject.getApplication().runWriteAction(new Computable<>(){
               @Override
               public PsiClass compute() {
-                return ((PsiEnumConstant) o).getOrCreateInitializingClass();
+                return enumConstant.getOrCreateInitializingClass();
               }
             }));
           }
@@ -163,25 +156,24 @@ public class ImplementAbstractMethodHandler {
           }
         }
         if (!FileModificationService.getInstance().preparePsiElementsForWrite(classes)) return;
-        ApplicationManager.getApplication().runWriteAction(new Runnable() {
-          @Override
-          public void run() {
-            for (PsiClass psiClass : classes) {
-              try {
-                OverrideImplementUtil.overrideOrImplement(psiClass, myMethod);
-              }
-              catch (IncorrectOperationException e) {
-                LOG.error(e);
-              }
+        myProject.getApplication().runWriteAction(() -> {
+          for (PsiClass psiClass : classes) {
+            try {
+              OverrideImplementUtil.overrideOrImplement(psiClass, myMethod);
+            }
+            catch (IncorrectOperationException e) {
+              LOG.error(e);
             }
           }
         });
-      }
-    }, CodeInsightBundle.message("intention.implement.abstract.method.command.name"), null);
+      },
+      CodeInsightLocalize.intentionImplementAbstractMethodCommandName().get(),
+      null
+    );
   }
 
   private PsiClass[] getClassImplementations(final PsiClass psiClass) {
-    ArrayList<PsiClass> list = new ArrayList<PsiClass>();
+    ArrayList<PsiClass> list = new ArrayList<>();
     for (PsiClass inheritor : ClassInheritorsSearch.search(psiClass, true)) {
       if (!inheritor.isInterface()) {
         PsiMethod method = inheritor.findMethodBySignature(myMethod, true);
@@ -202,29 +194,26 @@ public class ImplementAbstractMethodHandler {
 
     void sort(PsiElement[] result) {
       final Comparator<PsiClass> comparator = myRenderer.getComparator();
-      Arrays.sort(result, new Comparator<PsiElement>() {
-        @Override
-        public int compare(PsiElement o1, PsiElement o2) {
-          if (o1 instanceof PsiEnumConstant && o2 instanceof PsiEnumConstant) {
-            return ((PsiEnumConstant)o1).getName().compareTo(((PsiEnumConstant)o2).getName());
-          }
-          if (o1 instanceof PsiEnumConstant) return -1;
-          if (o2 instanceof PsiEnumConstant) return 1;
-          return comparator.compare((PsiClass)o1, (PsiClass)o2);
+      Arrays.sort(result, (o1, o2) -> {
+        if (o1 instanceof PsiEnumConstant enumConstant1 && o2 instanceof PsiEnumConstant enumConstant2) {
+          return enumConstant1.getName().compareTo(enumConstant2.getName());
         }
+        if (o1 instanceof PsiEnumConstant) return -1;
+        if (o2 instanceof PsiEnumConstant) return 1;
+        return comparator.compare((PsiClass)o1, (PsiClass)o2);
       });
     }
 
     @Override
     public String getElementText(PsiElement element) {
-      return element instanceof PsiClass ? myRenderer.getElementText((PsiClass)element)
-                                         : ((PsiEnumConstant)element).getName();
+      return element instanceof PsiClass psiClass ? myRenderer.getElementText(psiClass) : ((PsiEnumConstant)element).getName();
     }
 
     @Override
     protected String getContainerText(PsiElement element, String name) {
-      return element instanceof PsiClass ? PsiClassListCellRenderer.getContainerTextStatic(element)
-                                         : ((PsiEnumConstant)element).getContainingClass().getQualifiedName();
+      return element instanceof PsiClass
+        ? PsiClassListCellRenderer.getContainerTextStatic(element)
+        : ((PsiEnumConstant)element).getContainingClass().getQualifiedName();
     }
 
     @Override

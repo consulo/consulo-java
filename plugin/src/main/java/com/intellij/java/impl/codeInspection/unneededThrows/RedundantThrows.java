@@ -23,6 +23,7 @@ import com.intellij.java.indexing.search.searches.AllOverridingMethodsSearch;
 import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.java.language.psi.*;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.query.Query;
 import consulo.language.editor.FileModificationService;
@@ -270,7 +271,7 @@ public class RedundantThrows extends GlobalJavaInspectionTool
 		}
 
 		@Override
-		@RequiredReadAction
+		@RequiredWriteAction
 		public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 		{
 			if (myProcessor != null)

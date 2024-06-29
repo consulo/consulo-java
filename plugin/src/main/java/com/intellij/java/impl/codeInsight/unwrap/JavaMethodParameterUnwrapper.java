@@ -15,9 +15,10 @@
  */
 package com.intellij.java.impl.codeInsight.unwrap;
 
-import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.language.psi.*;
-import consulo.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.language.editor.localize.CodeInsightLocalize;
+import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
@@ -31,10 +32,11 @@ public class JavaMethodParameterUnwrapper extends JavaUnwrapper {
   }
 
   @Override
+  @RequiredReadAction
   public String getDescription(PsiElement e) {
     String text = e.getText();
     if (text.length() > 20) text = text.substring(0, 17) + "...";
-    return CodeInsightBundle.message("unwrap.with.placeholder", text);
+    return CodeInsightLocalize.unwrapWithPlaceholder(text).get();
   }
 
   @Override
@@ -44,15 +46,15 @@ public class JavaMethodParameterUnwrapper extends JavaUnwrapper {
       if (parent instanceof PsiExpressionList) {
         return true;
       }
-      if (e instanceof PsiReferenceExpression && parent instanceof PsiCallExpression) {
-        final PsiExpressionList argumentList = ((PsiCall)parent).getArgumentList();
+      if (e instanceof PsiReferenceExpression && parent instanceof PsiCallExpression callExpression) {
+        final PsiExpressionList argumentList = callExpression.getArgumentList();
         if (argumentList != null && argumentList.getExpressions().length == 1) {
           return true;
         }
       }
     } else if (e instanceof PsiJavaCodeReferenceElement) {
-      if (parent instanceof PsiCall) {
-        final PsiExpressionList argumentList = ((PsiCall)parent).getArgumentList();
+      if (parent instanceof PsiCall call) {
+        final PsiExpressionList argumentList = call.getArgumentList();
         if (argumentList != null && argumentList.getExpressions().length == 1) {
           return true;
         }
@@ -68,8 +70,8 @@ public class JavaMethodParameterUnwrapper extends JavaUnwrapper {
   }
 
   private static boolean isTopLevelCall(PsiElement e) {
-    if (e instanceof PsiReferenceExpression && e.getParent() instanceof PsiCallExpression) return true;
-    return e instanceof PsiJavaCodeReferenceElement && !(e instanceof PsiExpression);
+    return e instanceof PsiReferenceExpression && e.getParent() instanceof PsiCallExpression
+      || e instanceof PsiJavaCodeReferenceElement && !(e instanceof PsiExpression);
   }
 
   @Override

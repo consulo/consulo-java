@@ -21,22 +21,23 @@ import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.InsertLiteralUnderscoresAction", categories = {"Java", "Numbers"}, fileExtensions = "java")
 public class InsertLiteralUnderscoresAction extends PsiElementBaseIntentionAction {
   @Override
+  @RequiredReadAction
   public boolean isAvailable(@Nonnull final Project project, final Editor editor, @Nonnull final PsiElement element) {
     if (!PsiUtil.isLanguageLevel7OrHigher(element)) return false;
 
@@ -55,6 +56,7 @@ public class InsertLiteralUnderscoresAction extends PsiElementBaseIntentionActio
   }
 
   @Override
+  @RequiredReadAction
   public void invoke(@Nonnull final Project project, final Editor editor, @Nonnull final PsiElement element) throws IncorrectOperationException {
     final PsiLiteralExpression literalExpression = PsiTreeUtil.getParentOfType(element, PsiLiteralExpression.class, false);
     if (literalExpression == null) return;
@@ -71,6 +73,6 @@ public class InsertLiteralUnderscoresAction extends PsiElementBaseIntentionActio
   @Nonnull
   @Override
   public String getText() {
-    return CodeInsightBundle.message("intention.insert.literal.underscores");
+    return CodeInsightLocalize.intentionInsertLiteralUnderscores().get();
   }
 }

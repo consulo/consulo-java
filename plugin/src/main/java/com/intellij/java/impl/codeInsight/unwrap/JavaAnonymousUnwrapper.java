@@ -15,9 +15,11 @@
  */
 package com.intellij.java.impl.codeInsight.unwrap;
 
-import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.language.psi.*;
-import consulo.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.language.editor.localize.CodeInsightLocalize;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 
@@ -25,13 +27,12 @@ import java.util.List;
 
 public class JavaAnonymousUnwrapper extends JavaUnwrapper {
   public JavaAnonymousUnwrapper() {
-    super(CodeInsightBundle.message("unwrap.anonymous"));
+    super(CodeInsightLocalize.unwrapAnonymous().get());
   }
 
   @Override
   public boolean isApplicableTo(PsiElement e) {
-    return e instanceof PsiAnonymousClass
-           && ((PsiAnonymousClass)e).getMethods().length <= 1;
+    return e instanceof PsiAnonymousClass anonymousClass && anonymousClass.getMethods().length <= 1;
   }
 
   @Override
@@ -40,6 +41,7 @@ public class JavaAnonymousUnwrapper extends JavaUnwrapper {
     return findElementToExtractFrom(e);
   }
 
+  @RequiredReadAction
   @Override
   protected void doUnwrap(PsiElement element, Context context) throws IncorrectOperationException {
     PsiElement from = findElementToExtractFrom(element);
@@ -49,7 +51,7 @@ public class JavaAnonymousUnwrapper extends JavaUnwrapper {
     }
 
     PsiElement next = from.getNextSibling();
-    if (next instanceof PsiJavaToken && ((PsiJavaToken)next).getTokenType() == JavaTokenType.SEMICOLON) {
+    if (next instanceof PsiJavaToken javaToken && javaToken.getTokenType() == JavaTokenType.SEMICOLON) {
       context.deleteExactly(from.getNextSibling());
     }
     context.deleteExactly(from);

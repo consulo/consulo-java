@@ -32,6 +32,7 @@ import com.intellij.java.analysis.impl.codeInspection.reference.RefClassImpl;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.deadCodeNotWorking.OldStyleInspection;
 import consulo.language.editor.FileModificationService;
@@ -701,7 +702,7 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
 		}
 
 		@Override
-		@RequiredReadAction
+		@RequiredWriteAction
 		public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 		{
 			if (!FileModificationService.getInstance().preparePsiElementForWrite(descriptor.getPsiElement()))

@@ -3,6 +3,7 @@ package com.intellij.java.analysis.impl.codeInspection;
 
 import com.intellij.java.analysis.codeInspection.AbstractBaseJavaLocalInspectionTool;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.application.AllIcons;
 import consulo.component.util.Iconable;
 import consulo.language.editor.inspection.LocalQuickFix;
@@ -22,7 +23,8 @@ import org.jetbrains.annotations.Nls;
 import jakarta.annotation.Nonnull;
 import java.util.function.BiConsumer;
 
-public class SetInspectionOptionFix<I extends AbstractBaseJavaLocalInspectionTool<State>, State> implements LocalQuickFix, LowPriorityAction, Iconable {
+public class SetInspectionOptionFix<I extends AbstractBaseJavaLocalInspectionTool<State>, State>
+  implements LocalQuickFix, LowPriorityAction, Iconable {
   private final String myID;
   private final BiConsumer<State, Boolean> myPropertySetter;
   private final String myMessage;
@@ -55,17 +57,19 @@ public class SetInspectionOptionFix<I extends AbstractBaseJavaLocalInspectionToo
   }
 
   @Override
-  @RequiredReadAction
+  @RequiredWriteAction
   public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
     VirtualFile vFile = descriptor.getPsiElement().getContainingFile().getVirtualFile();
     setOption(project, vFile, myValue);
     ProjectUndoManager.getInstance(project).undoableActionPerformed(new BasicUndoableAction(vFile) {
       @Override
+      @RequiredReadAction
       public void undo() {
         setOption(project, vFile, !myValue);
       }
 
       @Override
+      @RequiredReadAction
       public void redo() {
         setOption(project, vFile, myValue);
       }
@@ -83,9 +87,7 @@ public class SetInspectionOptionFix<I extends AbstractBaseJavaLocalInspectionToo
 
     InspectionProfile inspectionProfile = manager.getInspectionProfile();
 
-    inspectionProfile.<I, State>modifyToolSettings(myID, file, (inspectionTool, state) -> {
-      myPropertySetter.accept(state, value);
-    });
+    inspectionProfile.<I, State>modifyToolSettings(myID, file, (inspectionTool, state) -> myPropertySetter.accept(state, value));
   }
 
   @Override

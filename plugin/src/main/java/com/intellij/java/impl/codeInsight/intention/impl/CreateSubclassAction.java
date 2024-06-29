@@ -36,18 +36,19 @@ import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.ApplicationManager;
+import consulo.application.Application;
 import consulo.application.Result;
 import consulo.codeEditor.CaretModel;
 import consulo.codeEditor.Editor;
 import consulo.document.RangeMarker;
 import consulo.document.util.TextRange;
 import consulo.ide.impl.idea.openapi.fileEditor.ex.IdeDocumentHistory;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.template.Template;
 import consulo.language.editor.template.TemplateBuilder;
 import consulo.language.editor.template.TemplateBuilderFactory;
@@ -59,10 +60,10 @@ import consulo.language.util.ModuleUtilCore;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,7 +71,7 @@ import java.util.List;
 @IntentionMetaData(ignoreId = "java.CreateSubclassAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class CreateSubclassAction implements IntentionAction {
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.intention.impl.ImplementAbstractClassAction");
-  private String myText = CodeInsightBundle.message("intention.implement.abstract.class.family");
+  private String myText = CodeInsightLocalize.intentionImplementAbstractClassFamily().get();
   @NonNls
   private static final String IMPL_SUFFIX = "Impl";
 
@@ -119,16 +120,17 @@ public class CreateSubclassAction implements IntentionAction {
     return true;
   }
 
+  @RequiredReadAction
   protected boolean isSupportedLanguage(PsiClass aClass) {
     return aClass.getLanguage() == JavaLanguage.INSTANCE;
   }
 
   protected static String getTitle(PsiClass psiClass) {
     return psiClass.isInterface()
-        ? CodeInsightBundle.message("intention.implement.abstract.class.interface.text")
-        : psiClass.hasModifierProperty(PsiModifier.ABSTRACT)
-        ? CodeInsightBundle.message("intention.implement.abstract.class.default.text")
-        : CodeInsightBundle.message("intention.implement.abstract.class.subclass.text");
+      ? CodeInsightLocalize.intentionImplementAbstractClassInterfaceText().get()
+      : psiClass.hasModifierProperty(PsiModifier.ABSTRACT)
+      ? CodeInsightLocalize.intentionImplementAbstractClassDefaultText().get()
+      : CodeInsightLocalize.intentionImplementAbstractClassSubclassText().get();
   }
 
   @Override
@@ -147,6 +149,7 @@ public class CreateSubclassAction implements IntentionAction {
   public static void createInnerClass(final PsiClass aClass) {
     new WriteCommandAction(aClass.getProject(), getTitle(aClass), getTitle(aClass)) {
       @Override
+      @RequiredReadAction
       protected void run(Result result) throws Throwable {
         final PsiClass containingClass = aClass.getContainingClass();
         LOG.assertTrue(containingClass != null);
@@ -167,15 +170,20 @@ public class CreateSubclassAction implements IntentionAction {
   }
 
   @Nullable
+  @RequiredReadAction
   public static CreateClassDialog chooseSubclassToCreate(PsiClass psiClass) {
     final PsiDirectory sourceDir = psiClass.getContainingFile().getContainingDirectory();
 
     final PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(sourceDir);
     final CreateClassDialog dialog = new CreateClassDialog(
-        psiClass.getProject(), getTitle(psiClass),
-        psiClass.getName() + IMPL_SUFFIX,
-        aPackage != null ? aPackage.getQualifiedName() : "",
-        CreateClassKind.CLASS, true, ModuleUtilCore.findModuleForPsiElement(psiClass)) {
+      psiClass.getProject(),
+      getTitle(psiClass),
+      psiClass.getName() + IMPL_SUFFIX,
+      aPackage != null ? aPackage.getQualifiedName() : "",
+      CreateClassKind.CLASS,
+      true,
+      ModuleUtilCore.findModuleForPsiElement(psiClass)
+    ) {
       @Override
       protected PsiDirectory getBaseDir(String packageName) {
         return sourceDir;
@@ -193,6 +201,7 @@ public class CreateSubclassAction implements IntentionAction {
     return dialog;
   }
 
+  @RequiredReadAction
   public static PsiClass createSubclass(final PsiClass psiClass, final PsiDirectory targetDirectory, final String className) {
     final Project project = psiClass.getProject();
     final PsiClass[] targetClass = new PsiClass[1];
@@ -206,21 +215,18 @@ public class CreateSubclassAction implements IntentionAction {
         try {
           targetClass[0] = JavaDirectoryService.getInstance().createClass(targetDirectory, className);
         } catch (final IncorrectOperationException e) {
-          ApplicationManager.getApplication().invokeLater(new Runnable() {
-            @Override
-            public void run() {
-              Messages.showErrorDialog(project, CodeInsightBundle.message("intention.error.cannot.create.class.message", className) +
-                      "\n" + e.getLocalizedMessage(),
-                  CodeInsightBundle.message("intention.error.cannot.create.class.title"));
-            }
-          });
+          Application.get().invokeLater(() -> Messages.showErrorDialog(
+            project,
+            CodeInsightLocalize.intentionErrorCannotCreateClassMessage(className) + "\n" + e.getLocalizedMessage(),
+            CodeInsightLocalize.intentionErrorCannotCreateClassTitle().get()
+          ));
           return;
         }
         startTemplate(oldTypeParameterList, project, psiClass, targetClass[0], false);
       }
     }.execute();
     if (targetClass[0] == null) return null;
-    if (!ApplicationManager.getApplication().isUnitTestMode() && !psiClass.hasTypeParameters()) {
+    if (!Application.get().isUnitTestMode() && !psiClass.hasTypeParameters()) {
 
       final Editor editor = CodeInsightUtil.positionCursor(project, targetClass[0].getContainingFile(), targetClass[0].getLBrace());
       if (editor == null) return targetClass[0];
@@ -230,11 +236,14 @@ public class CreateSubclassAction implements IntentionAction {
     return targetClass[0];
   }
 
-  private static void startTemplate(PsiTypeParameterList oldTypeParameterList,
-                                    final Project project,
-                                    final PsiClass psiClass,
-                                    final PsiClass targetClass,
-                                    final boolean includeClassName) {
+  @RequiredReadAction
+  private static void startTemplate(
+    PsiTypeParameterList oldTypeParameterList,
+    final Project project,
+    final PsiClass psiClass,
+    final PsiClass targetClass,
+    final boolean includeClassName
+  ) {
     final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
     PsiJavaCodeReferenceElement ref = elementFactory.createClassReferenceElement(psiClass);
     try {
@@ -303,6 +312,7 @@ public class CreateSubclassAction implements IntentionAction {
     return typeParameterList.replace(oldTypeParameterList);
   }
 
+  @RequiredReadAction
   protected static void chooseAndImplement(PsiClass psiClass, Project project, @Nonnull PsiClass targetClass, Editor editor) {
     boolean hasNonTrivialConstructor = false;
     final PsiMethod[] constructors = psiClass.getConstructors();
@@ -314,7 +324,7 @@ public class CreateSubclassAction implements IntentionAction {
     }
     if (hasNonTrivialConstructor) {
       final PsiSubstitutor substitutor = TypeConversionUtil.getSuperClassSubstitutor(psiClass, targetClass, PsiSubstitutor.EMPTY);
-      final List<PsiMethodMember> baseConstructors = new ArrayList<PsiMethodMember>();
+      final List<PsiMethodMember> baseConstructors = new ArrayList<>();
       for (PsiMethod baseConstr : constructors) {
         if (PsiUtil.isAccessible(baseConstr, targetClass, targetClass)) {
           baseConstructors.add(new PsiMethodMember(baseConstr, substitutor));
@@ -334,5 +344,4 @@ public class CreateSubclassAction implements IntentionAction {
   public boolean startInWriteAction() {
     return false;
   }
-
 }

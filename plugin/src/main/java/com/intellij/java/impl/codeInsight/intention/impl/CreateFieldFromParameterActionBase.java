@@ -15,25 +15,25 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
-import consulo.language.editor.CodeInsightBundle;
-import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.BaseIntentionAction;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
-import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.ide.impl.idea.openapi.fileEditor.ex.IdeDocumentHistory;
-import consulo.project.Project;
-import consulo.language.psi.PsiFile;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.intention.BaseIntentionAction;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
+import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.util.collection.ArrayUtil;
 import consulo.language.util.IncorrectOperationException;
-import consulo.util.collection.ContainerUtil;
 import consulo.logging.Logger;
-
+import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.collection.ContainerUtil;
 import jakarta.annotation.Nonnull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -42,7 +42,7 @@ public abstract class CreateFieldFromParameterActionBase extends BaseIntentionAc
   private static final Logger LOG = Logger.getInstance(CreateFieldFromParameterActionBase.class);
 
   protected CreateFieldFromParameterActionBase() {
-    setText(CodeInsightBundle.message("intention.create.field.from.parameter.family"));
+    setText(CodeInsightLocalize.intentionCreateFieldFromParameterFamily().get());
   }
 
   @Override
@@ -51,7 +51,7 @@ public abstract class CreateFieldFromParameterActionBase extends BaseIntentionAc
     if (parameter == null || !isAvailable(parameter)) {
       return false;
     }
-    setText(CodeInsightBundle.message("intention.create.field.from.parameter.text", parameter.getName()));
+    setText(CodeInsightLocalize.intentionCreateFieldFromParameterText(parameter.getName()).get());
 
     return true;
   }
@@ -60,21 +60,25 @@ public abstract class CreateFieldFromParameterActionBase extends BaseIntentionAc
 
 
   @Override
+  @RequiredUIAccess
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
     final PsiParameter myParameter = FieldFromParameterUtils.findParameterAtCursor(file, editor);
     if (myParameter == null || !FileModificationService.getInstance().prepareFileForWrite(file)) return;
 
     IdeDocumentHistory.getInstance(project).includeCurrentPlaceAsChangePlace();
     try {
-      processParameter(project, myParameter, !ApplicationManager.getApplication().isUnitTestMode());
+      processParameter(project, myParameter, !project.getApplication().isUnitTestMode());
     } catch (IncorrectOperationException e) {
       LOG.error(e);
     }
   }
 
-  private void processParameter(final @Nonnull Project project,
-                                final @Nonnull PsiParameter myParameter,
-                                final boolean isInteractive) {
+  @RequiredUIAccess
+  private void processParameter(
+    final @Nonnull Project project,
+    final @Nonnull PsiParameter myParameter,
+    final boolean isInteractive
+  ) {
     final PsiType type = getSubstitutedType(myParameter);
     final JavaCodeStyleManager styleManager = JavaCodeStyleManager.getInstance(project);
     final String parameterName = myParameter.getName();
@@ -92,7 +96,7 @@ public abstract class CreateFieldFromParameterActionBase extends BaseIntentionAc
     String[] names = suggestedNameInfo.names;
 
     if (isInteractive) {
-      List<String> namesList = new ArrayList<String>();
+      List<String> namesList = new ArrayList<>();
       ContainerUtil.addAll(namesList, names);
       String defaultName = styleManager.propertyNameToVariableName(propertyName, kind);
       if (namesList.contains(defaultName)) {
@@ -102,13 +106,8 @@ public abstract class CreateFieldFromParameterActionBase extends BaseIntentionAc
       }
       names = ArrayUtil.toStringArray(namesList);
 
-      final CreateFieldFromParameterDialog dialog = new CreateFieldFromParameterDialog(
-          project,
-          names,
-          targetClass,
-          method.isConstructor(),
-          type
-      );
+      final CreateFieldFromParameterDialog dialog =
+        new CreateFieldFromParameterDialog(project, names, targetClass, method.isConstructor(), type);
       dialog.show();
 
       if (!dialog.isOK()) return;
@@ -123,28 +122,27 @@ public abstract class CreateFieldFromParameterActionBase extends BaseIntentionAc
 
     final boolean isFinal = isFinalToCalc;
     final String fieldName = fieldNameToCalc;
-    ApplicationManager.getApplication().runWriteAction(new Runnable() {
-      @Override
-      public void run() {
-        try {
-          performRefactoring(project, targetClass, method, myParameter, type, fieldName, isMethodStatic, isFinal);
-        } catch (IncorrectOperationException e) {
-          LOG.error(e);
-        }
+    project.getApplication().runWriteAction(() -> {
+      try {
+        performRefactoring(project, targetClass, method, myParameter, type, fieldName, isMethodStatic, isFinal);
+      } catch (IncorrectOperationException e) {
+        LOG.error(e);
       }
     });
   }
 
   protected abstract PsiType getSubstitutedType(PsiParameter parameter);
 
-  protected abstract void performRefactoring(Project project,
-                                             PsiClass targetClass,
-                                             PsiMethod method,
-                                             PsiParameter myParameter,
-                                             PsiType type,
-                                             String fieldName,
-                                             boolean methodStatic,
-                                             boolean isFinal);
+  protected abstract void performRefactoring(
+    Project project,
+    PsiClass targetClass,
+    PsiMethod method,
+    PsiParameter myParameter,
+    PsiType type,
+    String fieldName,
+    boolean methodStatic,
+    boolean isFinal
+  );
 
   @Override
   public boolean startInWriteAction() {

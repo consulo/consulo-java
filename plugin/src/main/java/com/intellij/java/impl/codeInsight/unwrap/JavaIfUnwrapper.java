@@ -15,16 +15,16 @@
  */
 package com.intellij.java.impl.codeInsight.unwrap;
 
-import consulo.language.editor.CodeInsightBundle;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiIfStatement;
 import com.intellij.java.language.psi.PsiStatement;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.language.editor.localize.CodeInsightLocalize;
+import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 
 public class JavaIfUnwrapper extends JavaUnwrapper {
   public JavaIfUnwrapper() {
-    super(CodeInsightBundle.message("unwrap.if"));
+    super(CodeInsightLocalize.unwrapIf().get());
   }
 
   @Override

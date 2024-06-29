@@ -18,14 +18,16 @@ package com.intellij.java.impl.codeInsight.intention.impl;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.lang.Pair;
 import jakarta.annotation.Nonnull;
 
@@ -41,32 +43,29 @@ public class MakeTypeGenericAction extends PsiElementBaseIntentionAction {
   @Override
   @Nonnull
   public String getText() {
-    if (variableName == null || newTypeName == null) {
-      return CodeInsightBundle.message("intention.make.type.generic.family");
-    }
-    return CodeInsightBundle.message("intention.make.type.generic.text", variableName, newTypeName);
+    return variableName == null || newTypeName == null
+      ? CodeInsightLocalize.intentionMakeTypeGenericFamily().get()
+      : CodeInsightLocalize.intentionMakeTypeGenericText(variableName, newTypeName).get();
   }
 
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
-    if (!PsiUtil.isLanguageLevel5OrHigher(element)) return false;
-    if (!element.isWritable()) return false;
-    return findVariable(element) != null;
+    return PsiUtil.isLanguageLevel5OrHigher(element) && element.isWritable() && findVariable(element) != null;
   }
 
+  @RequiredReadAction
   private Pair<PsiVariable,PsiType> findVariable(final PsiElement element) {
     PsiVariable variable = null;
     PsiElement elementParent = element.getParent();
     if (element instanceof PsiIdentifier) {
-      if (elementParent instanceof PsiVariable) {
-        variable = (PsiVariable)elementParent;
+      if (elementParent instanceof PsiVariable psiVariable) {
+        variable = psiVariable;
       }
     }
-    else if (element instanceof PsiJavaToken) {
-      final PsiJavaToken token = (PsiJavaToken)element;
+    else if (element instanceof PsiJavaToken token) {
       if (token.getTokenType() != JavaTokenType.EQ) return null;
-      if (elementParent instanceof PsiVariable) {
-        variable = (PsiVariable)elementParent;
+      if (elementParent instanceof PsiVariable psiVariable) {
+        variable = psiVariable;
       }
     }
     if (variable == null) return null;
@@ -94,6 +93,7 @@ public class MakeTypeGenericAction extends PsiElementBaseIntentionAction {
   }
 
   @Override
+  @RequiredUIAccess
   public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     Pair<PsiVariable, PsiType> pair = findVariable(element);
     if (pair == null) return;

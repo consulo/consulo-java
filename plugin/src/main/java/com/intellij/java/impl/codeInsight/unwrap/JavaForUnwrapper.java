@@ -15,17 +15,17 @@
  */
 package com.intellij.java.impl.codeInsight.unwrap;
 
-import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.language.psi.PsiForStatement;
 import com.intellij.java.language.psi.PsiForeachStatement;
 import com.intellij.java.language.psi.PsiLoopStatement;
 import com.intellij.java.language.psi.PsiStatement;
-import consulo.language.psi.*;
+import consulo.language.editor.localize.CodeInsightLocalize;
+import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 
 public class JavaForUnwrapper extends JavaUnwrapper {
   public JavaForUnwrapper() {
-    super(CodeInsightBundle.message("unwrap.for"));
+    super(CodeInsightLocalize.unwrapFor().get());
   }
 
   @Override

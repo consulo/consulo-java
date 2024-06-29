@@ -26,6 +26,7 @@ import com.intellij.java.indexing.search.searches.AllOverridingMethodsSearch;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.*;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.Application;
 import consulo.application.util.query.Query;
@@ -49,10 +50,10 @@ import consulo.util.collection.BidirectionalMap;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.Pair;
 import consulo.util.xml.serializer.JDOMExternalizableStringList;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -396,7 +397,7 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
 		}
 
 		@Override
-		@RequiredReadAction
+		@RequiredWriteAction
 		public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor)
 		{
 			final PsiMethod psiMethod = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiMethod.class, false);

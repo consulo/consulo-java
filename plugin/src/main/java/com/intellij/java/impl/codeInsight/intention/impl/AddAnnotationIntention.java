@@ -29,18 +29,17 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.codeEditor.Editor;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.intention.BaseIntentionAction;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.lang.Pair;
-
 import jakarta.annotation.Nonnull;
 
 public abstract class AddAnnotationIntention extends BaseIntentionAction {
   public AddAnnotationIntention() {
-    setText(CodeInsightBundle.message("intention.add.annotation.family"));
+    setText(CodeInsightLocalize.intentionAddAnnotationFamily().get());
   }
 
   @Nonnull
@@ -64,17 +63,13 @@ public abstract class AddAnnotationIntention extends BaseIntentionAction {
       return false;
     }
 
-    if (owner instanceof PsiMethod) {
-      PsiType returnType = ((PsiMethod)owner).getReturnType();
+    if (owner instanceof PsiMethod method) {
+      PsiType returnType = method.getReturnType();
 
       return returnType != null && !(returnType instanceof PsiPrimitiveType);
     }
 
-    if (owner instanceof PsiClass) {
-      return PsiUtil.isLanguageLevel8OrHigher(owner);
-    }
-
-    return true;
+    return !(owner instanceof PsiClass) || PsiUtil.isLanguageLevel8OrHigher(owner);
   }
 
   @Override

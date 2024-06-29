@@ -26,10 +26,10 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.application.Result;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorPopupHelper;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.util.LanguageUndoUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -42,7 +42,6 @@ import consulo.ui.ex.popup.JBPopupFactory;
 import consulo.ui.ex.popup.ListPopup;
 import consulo.ui.ex.popup.PopupStep;
 import consulo.virtualFileSystem.VirtualFile;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -57,7 +56,7 @@ public class DeannotateIntentionAction implements IntentionAction {
   @Override
   @Nonnull
   public String getText() {
-    return CodeInsightBundle.message("deannotate.intention.action.text") + (myAnnotationName != null ? " " + myAnnotationName : "");
+    return CodeInsightLocalize.deannotateIntentionActionText().get() + (myAnnotationName != null ? " " + myAnnotationName : "");
   }
 
   @Override
@@ -85,25 +84,25 @@ public class DeannotateIntentionAction implements IntentionAction {
     PsiModifierListOwner listOwner = PsiTreeUtil.getParentOfType(element, PsiParameter.class, false);
     if (listOwner == null) {
       final PsiIdentifier psiIdentifier = PsiTreeUtil.getParentOfType(element, PsiIdentifier.class, false);
-      if (psiIdentifier != null && psiIdentifier.getParent() instanceof PsiModifierListOwner) {
-        listOwner = (PsiModifierListOwner)psiIdentifier.getParent();
+      if (psiIdentifier != null && psiIdentifier.getParent() instanceof PsiModifierListOwner modifierListOwner) {
+        listOwner = modifierListOwner;
       } else {
         PsiExpression expression = PsiTreeUtil.getParentOfType(element, PsiExpression.class);
         if (expression != null) {
-          while (expression.getParent() instanceof PsiExpression) { //get top level expression
-            expression = (PsiExpression)expression.getParent();
+          while (expression.getParent() instanceof PsiExpression parentExpression) { //get top level expression
+            expression = parentExpression;
             if (expression instanceof PsiAssignmentExpression) break;
           }
-          if (expression instanceof PsiMethodCallExpression) {
-            final PsiMethod psiMethod = ((PsiMethodCallExpression)expression).resolveMethod();
+          if (expression instanceof PsiMethodCallExpression methodCallExpression) {
+            final PsiMethod psiMethod = methodCallExpression.resolveMethod();
             if (psiMethod != null) {
               return psiMethod;
             }
           }
           final PsiElement parent = expression.getParent();
-          if (parent instanceof PsiExpressionList) {  //try to find corresponding formal parameter
+          if (parent instanceof PsiExpressionList expressionList) {  //try to find corresponding formal parameter
             int idx = -1;
-            final PsiExpression[] args = ((PsiExpressionList)parent).getExpressions();
+            final PsiExpression[] args = expressionList.getExpressions();
             for (int i = 0; i < args.length; i++) {
               PsiExpression arg = args[i];
               if (PsiTreeUtil.isAncestor(arg, expression, false)) {
@@ -114,8 +113,8 @@ public class DeannotateIntentionAction implements IntentionAction {
 
             if (idx > -1) {
               PsiElement grParent = parent.getParent();
-              if (grParent instanceof PsiCall) {
-                PsiMethod method = ((PsiCall)grParent).resolveMethod();
+              if (grParent instanceof PsiCall call) {
+                PsiMethod method = call.resolveMethod();
                 if (method != null) {
                   final PsiParameter[] parameters = method.getParameterList().getParameters();
                   if (parameters.length > idx) {
@@ -142,7 +141,10 @@ public class DeannotateIntentionAction implements IntentionAction {
       deannotate(externalAnnotations[0], project, file, annotationsManager, listOwner);
       return;
     }
-    ListPopup popup = JBPopupFactory.getInstance().createListPopup(new BaseListPopupStep<PsiAnnotation>(CodeInsightBundle.message("deannotate.intention.chooser.title"), externalAnnotations) {
+    ListPopup popup = JBPopupFactory.getInstance().createListPopup(new BaseListPopupStep<PsiAnnotation>(
+      CodeInsightLocalize.deannotateIntentionChooserTitle().get(),
+      externalAnnotations
+    ) {
       @Override
       public PopupStep onChosen(final PsiAnnotation selectedValue, final boolean finalChoice) {
         deannotate(selectedValue, project, file, annotationsManager, listOwner);
@@ -161,11 +163,13 @@ public class DeannotateIntentionAction implements IntentionAction {
     EditorPopupHelper.getInstance().showPopupInBestPositionFor(editor, popup);
   }
 
-  private void deannotate(final PsiAnnotation annotation,
-                          final Project project,
-                          final PsiFile file,
-                          final ExternalAnnotationsManager annotationsManager,
-                          final PsiModifierListOwner listOwner) {
+  private void deannotate(
+    final PsiAnnotation annotation,
+    final Project project,
+    final PsiFile file,
+    final ExternalAnnotationsManager annotationsManager,
+    final PsiModifierListOwner listOwner
+  ) {
     new WriteCommandAction(project, getText()) {
       @Override
       protected void run(final Result result) throws Throwable {

@@ -25,6 +25,7 @@ import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.java.deadCodeNotWorking.OldStyleInspection;
@@ -197,7 +198,7 @@ public class UnusedReturnValue extends GlobalJavaInspectionTool implements OldSt
 		}
 
 		@Override
-		@RequiredReadAction
+		@RequiredWriteAction
 		public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 		{
 			PsiMethod psiMethod = null;

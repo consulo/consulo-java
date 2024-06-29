@@ -15,17 +15,17 @@
  */
 package com.intellij.java.impl.codeInsight.unwrap;
 
-import consulo.language.editor.CodeInsightBundle;
+import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiWhileStatementImpl;
 import com.intellij.java.language.psi.PsiDoWhileStatement;
 import com.intellij.java.language.psi.PsiLoopStatement;
 import com.intellij.java.language.psi.PsiStatement;
-import consulo.language.psi.*;
-import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiWhileStatementImpl;
+import consulo.language.editor.localize.CodeInsightLocalize;
+import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 
 public class JavaWhileUnwrapper extends JavaUnwrapper {
   public JavaWhileUnwrapper() {
-    super(CodeInsightBundle.message("unwrap.while"));
+    super(CodeInsightLocalize.unwrapWhile().get());
   }
 
   @Override

@@ -19,15 +19,16 @@ import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.ide.impl.idea.openapi.fileEditor.ex.IdeDocumentHistory;
 import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.BaseIntentionAction;
 import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -36,10 +37,9 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.AssignFieldFromParameterAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
@@ -47,7 +47,7 @@ public class AssignFieldFromParameterAction extends BaseIntentionAction {
   private static final Logger LOG = Logger.getInstance(AssignFieldFromParameterAction.class);
 
   public AssignFieldFromParameterAction() {
-    setText(CodeInsightBundle.message("intention.assign.field.from.parameter.family"));
+    setText(CodeInsightLocalize.intentionAssignFieldFromParameterFamily().get());
   }
 
   @Override
@@ -61,12 +61,13 @@ public class AssignFieldFromParameterAction extends BaseIntentionAction {
     final PsiField field = findFieldToAssign(project, myParameter);
     if (field == null) return false;
     if (!field.getLanguage().isKindOf(JavaLanguage.INSTANCE)) return false;
-    setText(CodeInsightBundle.message("intention.assign.field.from.parameter.text", field.getName()));
+    setText(CodeInsightLocalize.intentionAssignFieldFromParameterText(field.getName()).get());
 
     return true;
   }
 
   @Override
+  @RequiredReadAction
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
     final PsiParameter myParameter = FieldFromParameterUtils.findParameterAtCursor(file, editor);
     if (!FileModificationService.getInstance().prepareFileForWrite(myParameter.getContainingFile())) return;
@@ -91,7 +92,8 @@ public class AssignFieldFromParameterAction extends BaseIntentionAction {
 
     final boolean isMethodStatic = method.hasModifierProperty(PsiModifier.STATIC);
     final VariableKind kind = isMethodStatic ? VariableKind.STATIC_FIELD : VariableKind.FIELD;
-    final SuggestedNameInfo suggestedNameInfo = styleManager.suggestVariableName(kind, propertyName, null, FieldFromParameterUtils.getSubstitutedType(myParameter));
+    final SuggestedNameInfo suggestedNameInfo =
+      styleManager.suggestVariableName(kind, propertyName, null, FieldFromParameterUtils.getSubstitutedType(myParameter));
 
     final String fieldName = suggestedNameInfo.names[0];
 
@@ -104,10 +106,13 @@ public class AssignFieldFromParameterAction extends BaseIntentionAction {
     return field;
   }
 
-  public static void addFieldAssignmentStatement(@Nonnull Project project,
-                                                 @Nonnull PsiField field,
-                                                 @Nonnull PsiParameter parameter,
-                                                 @Nonnull Editor editor) throws IncorrectOperationException {
+  @RequiredReadAction
+  public static void addFieldAssignmentStatement(
+    @Nonnull Project project,
+    @Nonnull PsiField field,
+    @Nonnull PsiParameter parameter,
+    @Nonnull Editor editor
+  ) throws IncorrectOperationException {
     final PsiMethod method = (PsiMethod) parameter.getDeclarationScope();
     final PsiCodeBlock methodBody = method.getBody();
     if (methodBody == null) return;
@@ -119,7 +124,8 @@ public class AssignFieldFromParameterAction extends BaseIntentionAction {
     if (targetClass == null) return;
 
     String stmtText = fieldName + " = " + parameterName + ";";
-    if (Comparing.strEqual(fieldName, parameterName) || JavaPsiFacade.getInstance(project).getResolveHelper().resolveReferencedVariable(fieldName, methodBody) != field) {
+    if (Comparing.strEqual(fieldName, parameterName)
+      || JavaPsiFacade.getInstance(project).getResolveHelper().resolveReferencedVariable(fieldName, methodBody) != field) {
       @NonNls String prefix = isMethodStatic ? targetClass.getName() == null ? "" : targetClass.getName() + "." : "this.";
       stmtText = prefix + stmtText;
     }

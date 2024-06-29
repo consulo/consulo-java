@@ -24,31 +24,28 @@ import com.intellij.java.impl.refactoring.util.RefactoringMessageUtil;
 import com.intellij.java.impl.ui.ReferenceEditorComboWithBrowseButton;
 import com.intellij.java.language.impl.codeInsight.PackageUtil;
 import com.intellij.java.language.psi.PsiNameHelper;
-import consulo.application.ApplicationManager;
-import consulo.application.CommonBundle;
 import consulo.application.util.function.Computable;
-import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
 import consulo.module.Module;
 import consulo.module.content.ProjectRootManager;
+import consulo.platform.base.localize.CommonLocalize;
 import consulo.project.Project;
 import consulo.ui.ex.RecentsManager;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.action.CustomShortcutSet;
-import consulo.ui.ex.awt.DialogWrapper;
-import consulo.ui.ex.awt.JBLabel;
-import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awt.*;
 import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.undoRedo.CommandProcessor;
 import consulo.util.lang.StringUtil;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
@@ -57,7 +54,7 @@ import java.awt.event.KeyEvent;
 
 public class CreateClassDialog extends DialogWrapper {
   private final JLabel myInformationLabel = new JLabel("#");
-  private final JLabel myPackageLabel = new JLabel(CodeInsightBundle.message("dialog.create.class.destination.package.label"));
+  private final JLabel myPackageLabel = new JLabel(CodeInsightLocalize.dialogCreateClassDestinationPackageLabel().get());
   private final ReferenceEditorComboWithBrowseButton myPackageComponent;
   private final JTextField myTfClassName = new MyTextField();
   private final Project myProject;
@@ -83,28 +80,35 @@ public class CreateClassDialog extends DialogWrapper {
   };
   @NonNls private static final String RECENTS_KEY = "CreateClassDialog.RecentsKey";
 
-  public CreateClassDialog(@Nonnull Project project,
-                           @Nonnull String title,
-                           @Nonnull String targetClassName,
-                           @Nonnull String targetPackageName,
-                           @Nonnull ClassKind kind,
-                           boolean classNameEditable,
-                           @Nullable Module defaultModule) {
+  public CreateClassDialog(
+    @Nonnull Project project,
+    @Nonnull String title,
+    @Nonnull String targetClassName,
+    @Nonnull String targetPackageName,
+    @Nonnull ClassKind kind,
+    boolean classNameEditable,
+    @Nullable Module defaultModule
+  ) {
     super(project, true);
     myClassNameEditable = classNameEditable;
     myModule = defaultModule;
     myClassName = targetClassName;
     myProject = project;
-    myPackageComponent = new PackageNameReferenceEditorCombo(targetPackageName, myProject, RECENTS_KEY, CodeInsightBundle.message("dialog.create.class.package.chooser.title"));
+    myPackageComponent = new PackageNameReferenceEditorCombo(
+      targetPackageName,
+      myProject,
+      RECENTS_KEY,
+      CodeInsightLocalize.dialogCreateClassPackageChooserTitle().get()
+    );
     myPackageComponent.setTextFieldPreferredWidth(40);
 
     init();
 
     if (!myClassNameEditable) {
-      setTitle(CodeInsightBundle.message("dialog.create.class.name", StringUtil.capitalize(kind.getDescription()), targetClassName));
+      setTitle(CodeInsightLocalize.dialogCreateClassName(StringUtil.capitalize(kind.getDescription()), targetClassName));
     }
     else {
-      myInformationLabel.setText(CodeInsightBundle.message("dialog.create.class.label", kind.getDescription()));
+      myInformationLabel.setText(CodeInsightLocalize.dialogCreateClassLabel(kind.getDescription()).get());
       setTitle(title);
     }
 
@@ -141,7 +145,7 @@ public class CreateClassDialog extends DialogWrapper {
     JPanel panel = new JPanel(new GridBagLayout());
     GridBagConstraints gbConstraints = new GridBagConstraints();
 
-    gbConstraints.insets = new Insets(4, 8, 4, 8);
+    gbConstraints.insets = JBUI.insets(4, 8);
     gbConstraints.fill = GridBagConstraints.HORIZONTAL;
     gbConstraints.anchor = GridBagConstraints.WEST;
 
@@ -149,7 +153,7 @@ public class CreateClassDialog extends DialogWrapper {
       gbConstraints.weightx = 0;
       gbConstraints.gridwidth = 1;
       panel.add(myInformationLabel, gbConstraints);
-      gbConstraints.insets = new Insets(4, 8, 4, 8);
+      gbConstraints.insets = JBUI.insets(4, 8);
       gbConstraints.gridx = 1;
       gbConstraints.weightx = 1;
       gbConstraints.gridwidth = 1;
@@ -233,19 +237,15 @@ public class CreateClassDialog extends DialogWrapper {
     final String packageName = getPackageName();
 
     final String[] errorString = new String[1];
-    CommandProcessor.getInstance().executeCommand(myProject, new Runnable() {
-      @Override
-      public void run() {
+    CommandProcessor.getInstance().executeCommand(
+      myProject,
+      () -> {
         try {
           final PackageWrapper targetPackage = new PackageWrapper(PsiManager.getInstance(myProject), packageName);
           final MoveDestination destination = myDestinationCB.selectDirectory(targetPackage, false);
           if (destination == null) return;
-          myTargetDirectory = ApplicationManager.getApplication().runWriteAction(new Computable<PsiDirectory>() {
-            @Override
-            public PsiDirectory compute() {
-              return destination.getTargetDirectory(getBaseDir(packageName));
-            }
-          });
+          myTargetDirectory = myProject.getApplication()
+            .runWriteAction((Computable<PsiDirectory>)() -> destination.getTargetDirectory(getBaseDir(packageName)));
           if (myTargetDirectory == null) {
             errorString[0] = ""; // message already reported by PackageUtil
             return;
@@ -255,12 +255,14 @@ public class CreateClassDialog extends DialogWrapper {
         catch (IncorrectOperationException e) {
           errorString[0] = e.getMessage();
         }
-      }
-    }, CodeInsightBundle.message("create.directory.command"), null);
+      },
+      CodeInsightLocalize.createDirectoryCommand().get(),
+      null
+    );
 
     if (errorString[0] != null) {
       if (errorString[0].length() > 0) {
-        Messages.showMessageDialog(myProject, errorString[0], CommonBundle.getErrorTitle(), Messages.getErrorIcon());
+        Messages.showMessageDialog(myProject, errorString[0], CommonLocalize.titleError().get(), UIUtil.getErrorIcon());
       }
       return;
     }

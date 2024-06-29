@@ -26,12 +26,12 @@ package com.intellij.java.impl.codeInsight.intention.impl;
 
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.intention.BaseIntentionAction;
 import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.resolve.PsiElementProcessor;
@@ -39,7 +39,6 @@ import consulo.language.psi.resolve.PsiElementProcessorAdapter;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -47,10 +46,11 @@ import jakarta.annotation.Nullable;
 @IntentionMetaData(ignoreId = "java.ImplementAbstractMethodAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class ImplementAbstractMethodAction extends BaseIntentionAction {
   public ImplementAbstractMethodAction() {
-    setText(CodeInsightBundle.message("intention.implement.abstract.method.family"));
+    setText(CodeInsightLocalize.intentionImplementAbstractMethodFamily().get());
   }
 
   @Override
+  @RequiredReadAction
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     int offset = editor.getCaretModel().getOffset();
     final PsiMethod method = findMethod(file, offset);
@@ -68,8 +68,8 @@ public class ImplementAbstractMethodAction extends BaseIntentionAction {
       MyElementProcessor processor = new MyElementProcessor(method);
       if (containingClass.isEnum()) {
         for (PsiField field : containingClass.getFields()) {
-          if (field instanceof PsiEnumConstant) {
-            final PsiEnumConstantInitializer initializingClass = ((PsiEnumConstant)field).getInitializingClass();
+          if (field instanceof PsiEnumConstant enumConstant) {
+            final PsiEnumConstantInitializer initializingClass = enumConstant.getInitializingClass();
             if (initializingClass == null) {
               processor.myHasMissingImplementations = true;
             }
@@ -81,29 +81,23 @@ public class ImplementAbstractMethodAction extends BaseIntentionAction {
           }
         }
       }
-      ClassInheritorsSearch.search(containingClass, false).forEach(new PsiElementProcessorAdapter<PsiClass>(
-        processor));
+      ClassInheritorsSearch.search(containingClass, false).forEach(new PsiElementProcessorAdapter<PsiClass>(processor));
       return isAvailable(processor);
     }
 
     return false;
   }
 
+  @RequiredReadAction
   private static boolean isOnIdentifier(PsiFile file, int offset) {
     final PsiElement psiElement = file.findElementAt(offset);
-    if (psiElement instanceof PsiIdentifier) {
-      if (psiElement.getParent() instanceof PsiMethod) {
-        return true;
-      }
-    }
-    return false;
+    return psiElement instanceof PsiIdentifier && psiElement.getParent() instanceof PsiMethod;
   }
 
   protected String getIntentionName(final PsiMethod method) {
-    return method.hasModifierProperty(PsiModifier.ABSTRACT) ?
-      CodeInsightBundle.message("intention.implement.abstract.method.text", method.getName()) :
-      CodeInsightBundle.message("intention.override.method.text", method.getName())
-      ;
+    return method.hasModifierProperty(PsiModifier.ABSTRACT)
+      ? CodeInsightLocalize.intentionImplementAbstractMethodText(method.getName()).get()
+      : CodeInsightLocalize.intentionOverrideMethodText(method.getName()).get();
   }
 
   static class MyElementProcessor implements PsiElementProcessor {
@@ -159,6 +153,7 @@ public class ImplementAbstractMethodAction extends BaseIntentionAction {
     return null;
   }
 
+  @RequiredReadAction
   private static PsiMethod findMethod(PsiFile file, int offset) {
     PsiMethod method = _findMethod(file, offset);
     if (method == null) {
@@ -167,15 +162,17 @@ public class ImplementAbstractMethodAction extends BaseIntentionAction {
     return method;
   }
 
+  @RequiredReadAction
   private static PsiMethod _findMethod(PsiFile file, int offset) {
     return PsiTreeUtil.getParentOfType(file.findElementAt(offset), PsiMethod.class);
   }
 
   @Override
+  @RequiredReadAction
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     PsiMethod method = findMethod(file, editor.getCaretModel().getOffset());
     if (method == null) return;
-    if (!ApplicationManager.getApplication().isUnitTestMode() && !editor.getContentComponent().isShowing()) return;
+    if (!project.getApplication().isUnitTestMode() && !editor.getContentComponent().isShowing()) return;
     invokeHandler(project, editor, method);
   }
 

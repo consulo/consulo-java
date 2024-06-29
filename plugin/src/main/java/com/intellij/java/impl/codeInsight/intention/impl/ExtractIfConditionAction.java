@@ -17,19 +17,19 @@ package com.intellij.java.impl.codeInsight.intention.impl;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiExpressionTrimRenderer;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
 import consulo.language.ast.IElementType;
 import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -40,10 +40,11 @@ import jakarta.annotation.Nullable;
 @IntentionMetaData(ignoreId = "java.ExtractIfConditionAction", categories = {"Java", "Control Flow"}, fileExtensions = "java")
 public class ExtractIfConditionAction extends PsiElementBaseIntentionAction {
   public ExtractIfConditionAction() {
-    setText(CodeInsightBundle.message("intention.extract.if.condition.family"));
+    setText(CodeInsightLocalize.intentionExtractIfConditionFamily().get());
   }
 
   @Override
+  @RequiredReadAction
   public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     final PsiIfStatement ifStatement = PsiTreeUtil.getParentOfType(element, PsiIfStatement.class);
     if (ifStatement == null || ifStatement.getCondition() == null) {
@@ -73,11 +74,12 @@ public class ExtractIfConditionAction extends PsiElementBaseIntentionAction {
     if (operand == null) {
       return false;
     }
-    setText(CodeInsightBundle.message("intention.extract.if.condition.text", PsiExpressionTrimRenderer.render(operand)));
+    setText(CodeInsightLocalize.intentionExtractIfConditionText(PsiExpressionTrimRenderer.render(operand)).get());
     return true;
   }
 
   @Override
+  @RequiredReadAction
   public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     final PsiIfStatement ifStatement = PsiTreeUtil.getParentOfType(element, PsiIfStatement.class);
     if (ifStatement == null) {
@@ -96,10 +98,8 @@ public class ExtractIfConditionAction extends PsiElementBaseIntentionAction {
   }
 
   @Nullable
-  private static PsiStatement create(@Nonnull PsiElementFactory factory,
-                                     @Nonnull PsiIfStatement ifStatement,
-                                     @Nonnull PsiElement element) {
-
+  @RequiredReadAction
+  private static PsiStatement create(@Nonnull PsiElementFactory factory, @Nonnull PsiIfStatement ifStatement, @Nonnull PsiElement element) {
     final PsiExpression condition = ifStatement.getCondition();
 
     if (condition == null || !(condition instanceof PsiPolyadicExpression)) {
@@ -114,7 +114,6 @@ public class ExtractIfConditionAction extends PsiElementBaseIntentionAction {
       return null;
     }
 
-
     return create(
       factory,
       ifStatement.getThenBranch(), ifStatement.getElseBranch(),
@@ -125,9 +124,12 @@ public class ExtractIfConditionAction extends PsiElementBaseIntentionAction {
   }
 
   @Nonnull
-  private static PsiExpression removeOperand(@Nonnull PsiElementFactory factory,
-                                             @Nonnull PsiPolyadicExpression expression,
-                                             @Nonnull PsiExpression operand) {
+  @RequiredReadAction
+  private static PsiExpression removeOperand(
+    @Nonnull PsiElementFactory factory,
+    @Nonnull PsiPolyadicExpression expression,
+    @Nonnull PsiExpression operand
+  ) {
     final StringBuilder sb = new StringBuilder();
     for (PsiExpression e : expression.getOperands()) {
       if (e == operand) continue;
@@ -141,12 +143,15 @@ public class ExtractIfConditionAction extends PsiElementBaseIntentionAction {
   }
 
   @Nullable
-  private static PsiStatement create(@Nonnull PsiElementFactory factory,
-                                     @Nullable PsiStatement thenBranch,
-                                     @Nullable PsiStatement elseBranch,
-                                     @Nonnull PsiExpression extract,
-                                     @Nonnull PsiExpression leave,
-                                     @Nonnull IElementType operation) {
+  @RequiredReadAction
+  private static PsiStatement create(
+    @Nonnull PsiElementFactory factory,
+    @Nullable PsiStatement thenBranch,
+    @Nullable PsiStatement elseBranch,
+    @Nonnull PsiExpression extract,
+    @Nonnull PsiExpression leave,
+    @Nonnull IElementType operation
+  ) {
     if (thenBranch == null) {
       return null;
     }
@@ -162,88 +167,82 @@ public class ExtractIfConditionAction extends PsiElementBaseIntentionAction {
   }
 
   @Nonnull
-  private static PsiStatement createAndAnd(@Nonnull PsiElementFactory factory,
-                                           @Nonnull PsiStatement thenBranch,
-                                           @Nullable PsiStatement elseBranch,
-                                           @Nonnull PsiExpression extract,
-                                           @Nonnull PsiExpression leave) {
-
+  @RequiredReadAction
+  private static PsiStatement createAndAnd(
+    @Nonnull PsiElementFactory factory,
+    @Nonnull PsiStatement thenBranch,
+    @Nullable PsiStatement elseBranch,
+    @Nonnull PsiExpression extract,
+    @Nonnull PsiExpression leave
+  ) {
     return factory.createStatementFromText(
-      createIfString(extract,
-                     createIfString(leave, thenBranch, elseBranch),
-                     elseBranch
-      ),
+      createIfString(extract, createIfString(leave, thenBranch, elseBranch), elseBranch),
       thenBranch
     );
   }
 
   @Nonnull
-  private static PsiStatement createOrOr(@Nonnull PsiElementFactory factory,
-                                         @Nonnull PsiStatement thenBranch,
-                                         @Nullable PsiStatement elseBranch,
-                                         @Nonnull PsiExpression extract,
-                                         @Nonnull PsiExpression leave) {
-
+  @RequiredReadAction
+  private static PsiStatement createOrOr(
+    @Nonnull PsiElementFactory factory,
+    @Nonnull PsiStatement thenBranch,
+    @Nullable PsiStatement elseBranch,
+    @Nonnull PsiExpression extract,
+    @Nonnull PsiExpression leave
+  ) {
     return factory.createStatementFromText(
-      createIfString(extract, thenBranch,
-                     createIfString(leave, thenBranch, elseBranch)
-      ),
+      createIfString(extract, thenBranch, createIfString(leave, thenBranch, elseBranch)),
       thenBranch
     );
   }
 
   @Nonnull
-  private static String createIfString(@Nonnull PsiExpression condition,
-                                       @Nonnull PsiStatement thenBranch,
-                                       @Nullable PsiStatement elseBranch) {
+  @RequiredReadAction
+  private static String createIfString(
+    @Nonnull PsiExpression condition,
+    @Nonnull PsiStatement thenBranch,
+    @Nullable PsiStatement elseBranch
+  ) {
     return createIfString(condition.getText(), toThenBranchString(thenBranch), toElseBranchString(elseBranch));
   }
 
   @Nonnull
-  private static String createIfString(@Nonnull PsiExpression condition,
-                                       @Nonnull PsiStatement thenBranch,
-                                       @Nullable String elseBranch) {
+  @RequiredReadAction
+  private static String createIfString(@Nonnull PsiExpression condition, @Nonnull PsiStatement thenBranch, @Nullable String elseBranch) {
     return createIfString(condition.getText(), toThenBranchString(thenBranch), elseBranch);
   }
 
   @Nonnull
-  private static String createIfString(@Nonnull PsiExpression condition,
-                                       @Nonnull String thenBranch,
-                                       @Nullable PsiStatement elseBranch) {
+  @RequiredReadAction
+  private static String createIfString(@Nonnull PsiExpression condition, @Nonnull String thenBranch, @Nullable PsiStatement elseBranch) {
     return createIfString(condition.getText(), thenBranch, toElseBranchString(elseBranch));
   }
 
   @Nonnull
-  private static String createIfString(@Nonnull String condition,
-                                       @Nonnull String thenBranch,
-                                       @Nullable String elseBranch) {
+  private static String createIfString(@Nonnull String condition, @Nonnull String thenBranch, @Nullable String elseBranch) {
     final String elsePart = elseBranch != null ? " else " + elseBranch : "";
     return "if (" + condition + ")\n" + thenBranch + elsePart;
   }
 
   @Nonnull
+  @RequiredReadAction
   private static String toThenBranchString(@Nonnull PsiStatement statement) {
-    if (!(statement instanceof PsiBlockStatement)) {
-      return "{ " + statement.getText() + " }";
-    }
-
-    return statement.getText();
+    return statement instanceof PsiBlockStatement ? statement.getText() : "{ " + statement.getText() + " }";
   }
 
   @Nullable
+  @RequiredReadAction
   private static String toElseBranchString(@Nullable PsiStatement statement) {
     if (statement == null) {
       return null;
     }
 
-    if (statement instanceof PsiBlockStatement || statement instanceof PsiIfStatement) {
-      return statement.getText();
-    }
-
-    return "{ " + statement.getText() + " }";
+    return statement instanceof PsiBlockStatement || statement instanceof PsiIfStatement
+      ? statement.getText() : "{ " + statement.getText() + " }";
   }
 
   @Nullable
+  @RequiredReadAction
   private static PsiExpression findOperand(@Nonnull PsiElement e, @Nonnull PsiPolyadicExpression expression) {
     final TextRange elementTextRange = e.getTextRange();
 

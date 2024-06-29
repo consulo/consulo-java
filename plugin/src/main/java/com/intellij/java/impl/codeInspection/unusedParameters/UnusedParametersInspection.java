@@ -35,7 +35,7 @@ import com.intellij.java.impl.refactoring.changeSignature.ChangeSignatureProcess
 import com.intellij.java.impl.refactoring.changeSignature.ParameterInfoImpl;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.java.language.psi.*;
-import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.openapi.project.ProjectUtil;
 import consulo.java.deadCodeNotWorking.OldStyleInspection;
@@ -341,7 +341,7 @@ public class UnusedParametersInspection extends GlobalJavaBatchInspectionTool im
 		}
 
 		@Override
-		@RequiredReadAction
+		@RequiredWriteAction
 		public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 		{
 			if (!FileModificationService.getInstance().preparePsiElementForWrite(descriptor.getPsiElement()))

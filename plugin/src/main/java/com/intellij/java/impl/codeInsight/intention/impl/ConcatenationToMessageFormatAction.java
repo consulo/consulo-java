@@ -15,28 +15,29 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
-import com.intellij.java.language.psi.util.PsiConcatenationUtil;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.util.PsiConcatenationUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,17 +50,18 @@ public class ConcatenationToMessageFormatAction implements IntentionAction {
   @Override
   @Nonnull
   public String getText() {
-    return CodeInsightBundle.message("intention.replace.concatenation.with.formatted.output.text");
+    return CodeInsightLocalize.intentionReplaceConcatenationWithFormattedOutputText().get();
   }
 
   @Override
+  @RequiredReadAction
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
     final PsiElement element = findElementAtCaret(editor, file);
     PsiPolyadicExpression concatenation = getEnclosingLiteralConcatenation(element);
     if (concatenation == null) return;
     StringBuilder formatString = new StringBuilder();
-    List<PsiExpression> args = new ArrayList<PsiExpression>();
+    List<PsiExpression> args = new ArrayList<>();
     buildMessageFormatString(concatenation, formatString, args);
 
     final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
@@ -87,15 +89,19 @@ public class ConcatenationToMessageFormatAction implements IntentionAction {
     concatenation.replace(call);
   }
 
-  public static void buildMessageFormatString(PsiExpression expression,
-                                              StringBuilder formatString,
-                                              List<PsiExpression> args)
-    throws IncorrectOperationException {
+  public static void buildMessageFormatString(
+    PsiExpression expression,
+    StringBuilder formatString,
+    List<PsiExpression> args
+  ) throws IncorrectOperationException {
     PsiConcatenationUtil.buildFormatString(expression, formatString, args, false);
-
   }
 
-  private static void appendArgument(List<PsiExpression> args, PsiExpression argument, StringBuilder formatString) throws IncorrectOperationException {
+  private static void appendArgument(
+    List<PsiExpression> args,
+    PsiExpression argument,
+    StringBuilder formatString
+  ) throws IncorrectOperationException {
     formatString.append("{").append(args.size()).append("}");
     args.add(getBoxedArgument(argument));
   }
@@ -129,6 +135,7 @@ public class ConcatenationToMessageFormatAction implements IntentionAction {
   }
 
   @Override
+  @RequiredReadAction
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (PsiUtil.getLanguageLevel(file).compareTo(LanguageLevel.JDK_1_4) < 0) return false;
     final PsiElement element = findElementAtCaret(editor, file);
@@ -137,6 +144,7 @@ public class ConcatenationToMessageFormatAction implements IntentionAction {
   }
 
   @Nullable
+  @RequiredReadAction
   private static PsiElement findElementAtCaret(Editor editor, PsiFile file) {
     return file.findElementAt(editor.getCaretModel().getOffset());
   }

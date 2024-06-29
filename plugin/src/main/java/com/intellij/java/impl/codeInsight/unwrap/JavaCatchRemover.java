@@ -15,15 +15,15 @@
  */
 package com.intellij.java.impl.codeInsight.unwrap;
 
-import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.language.psi.PsiCatchSection;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiTryStatement;
+import consulo.language.editor.localize.CodeInsightLocalize;
+import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 
 public class JavaCatchRemover extends JavaUnwrapper {
   public JavaCatchRemover() {
-    super(CodeInsightBundle.message("remove.catch"));
+    super(CodeInsightLocalize.removeCatch().get());
   }
 
   @Override

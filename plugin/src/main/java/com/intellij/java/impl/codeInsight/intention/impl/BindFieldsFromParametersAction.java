@@ -19,16 +19,17 @@ import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.ide.impl.idea.ide.util.MemberChooser;
 import consulo.ide.impl.idea.openapi.fileEditor.ex.IdeDocumentHistory;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.BaseIntentionAction;
 import consulo.language.editor.intention.HighPriorityAction;
 import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -38,10 +39,10 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.Key;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -59,10 +60,11 @@ public class BindFieldsFromParametersAction extends BaseIntentionAction implemen
   private static final Object LOCK = new Object();
 
   public BindFieldsFromParametersAction() {
-    setText(CodeInsightBundle.message("intention.bind.fields.from.parameters.family"));
+    setText(CodeInsightLocalize.intentionBindFieldsFromParametersFamily().get());
   }
 
   @Override
+  @RequiredReadAction
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     PsiParameter psiParameter = FieldFromParameterUtils.findParameterAtCursor(file, editor);
     PsiMethod method = findMethod(psiParameter, editor, file);
@@ -83,26 +85,27 @@ public class BindFieldsFromParametersAction extends BaseIntentionAction implemen
         LOG.assertTrue(psiParameter != null);
       }
 
-      setText(CodeInsightBundle.message("intention.bind.fields.from.parameters.text", method.isConstructor() ? "Constructor" : "Method"));
+      setText(CodeInsightLocalize.intentionBindFieldsFromParametersText(method.isConstructor() ? "Constructor" : "Method").get());
     }
     return isAvailable(psiParameter);
   }
 
   @Nullable
+  @RequiredReadAction
   private static PsiMethod findMethod(@Nullable PsiParameter parameter, @Nonnull Editor editor, @Nonnull PsiFile file) {
     if (parameter == null) {
       final PsiElement elementAt = file.findElementAt(editor.getCaretModel().getOffset());
       if (elementAt instanceof PsiIdentifier) {
         final PsiElement parent = elementAt.getParent();
-        if (parent instanceof PsiMethod) {
-          return (PsiMethod)parent;
+        if (parent instanceof PsiMethod method) {
+          return method;
         }
       }
     }
     else {
       final PsiElement declarationScope = parameter.getDeclarationScope();
-      if (declarationScope instanceof PsiMethod) {
-        return (PsiMethod)declarationScope;
+      if (declarationScope instanceof PsiMethod method) {
+        return method;
       }
     }
 
@@ -110,8 +113,9 @@ public class BindFieldsFromParametersAction extends BaseIntentionAction implemen
   }
 
   @Nonnull
+  @RequiredReadAction
   private static List<PsiParameter> getAvailableParameters(@Nonnull PsiMethod method) {
-    final List<PsiParameter> parameters = new ArrayList<PsiParameter>();
+    final List<PsiParameter> parameters = new ArrayList<>();
     for (PsiParameter parameter : method.getParameterList().getParameters()) {
       if (isAvailable(parameter)) {
         parameters.add(parameter);
@@ -120,6 +124,7 @@ public class BindFieldsFromParametersAction extends BaseIntentionAction implemen
     return parameters;
   }
 
+  @RequiredReadAction
   private static boolean isAvailable(PsiParameter psiParameter) {
     final PsiType type = FieldFromParameterUtils.getSubstitutedType(psiParameter);
     final PsiClass targetClass = PsiTreeUtil.getParentOfType(psiParameter, PsiClass.class);
@@ -132,7 +137,7 @@ public class BindFieldsFromParametersAction extends BaseIntentionAction implemen
     Map<SmartPsiElementPointer<PsiParameter>, Boolean> params = psiMethod.getUserData(PARAMS);
     if (params == null) psiMethod.putUserData(PARAMS, params = ContainerUtil.createConcurrentWeakMap());
     final Map<SmartPsiElementPointer<PsiParameter>, Boolean> finalParams = params;
-    return new AbstractCollection<SmartPsiElementPointer<PsiParameter>>() {
+    return new AbstractCollection<>() {
       @Override
       public boolean add(SmartPsiElementPointer<PsiParameter> psiVariable) {
         return finalParams.put(psiVariable, Boolean.TRUE) == null;
@@ -156,30 +161,33 @@ public class BindFieldsFromParametersAction extends BaseIntentionAction implemen
   }
 
   @Override
+  @RequiredUIAccess
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
-    invoke(project, editor, file, !ApplicationManager.getApplication().isUnitTestMode());
+    invoke(project, editor, file, !project.getApplication().isUnitTestMode());
   }
 
+  @RequiredUIAccess
   private static void invoke(final Project project, Editor editor, PsiFile file, boolean isInteractive) {
     PsiParameter myParameter = FieldFromParameterUtils.findParameterAtCursor(file, editor);
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
-    final PsiMethod method =
-      myParameter != null ? (PsiMethod)myParameter.getDeclarationScope() : PsiTreeUtil.getParentOfType(file.findElementAt(editor.getCaretModel()
-                                                                                                                                .getOffset()),
-                                                                                                       PsiMethod.class);
+    final PsiMethod method = myParameter != null ? (PsiMethod)myParameter.getDeclarationScope()
+      : PsiTreeUtil.getParentOfType(file.findElementAt(editor.getCaretModel().getOffset()), PsiMethod.class);
     LOG.assertTrue(method != null);
 
-    final HashSet<String> usedNames = new HashSet<String>();
+    final HashSet<String> usedNames = new HashSet<>();
     for (PsiParameter selected : selectParameters(project, method, copyUnboundedParamsAndClearOriginal(method), isInteractive)) {
       processParameter(project, selected, usedNames);
     }
   }
 
   @Nonnull
-  private static Iterable<PsiParameter> selectParameters(@Nonnull Project project,
-                                                         @Nonnull PsiMethod method,
-                                                         @Nonnull Collection<SmartPsiElementPointer<PsiParameter>> unboundedParams,
-                                                         boolean isInteractive) {
+  @RequiredReadAction
+  private static Iterable<PsiParameter> selectParameters(
+    @Nonnull Project project,
+    @Nonnull PsiMethod method,
+    @Nonnull Collection<SmartPsiElementPointer<PsiParameter>> unboundedParams,
+    boolean isInteractive
+  ) {
     if (unboundedParams.size() < 2 || !isInteractive) {
       return revealPointers(unboundedParams);
     }
@@ -197,10 +205,12 @@ public class BindFieldsFromParametersAction extends BaseIntentionAction implemen
   }
 
   @Nonnull
-  private static MemberChooser<ParameterClassMember> showChooser(@Nonnull Project project,
-                                                                 @Nonnull PsiMethod method,
-                                                                 @Nonnull ParameterClassMember[] members) {
-    final MemberChooser<ParameterClassMember> chooser = new MemberChooser<ParameterClassMember>(members, false, true, project);
+  private static MemberChooser<ParameterClassMember> showChooser(
+    @Nonnull Project project,
+    @Nonnull PsiMethod method,
+    @Nonnull ParameterClassMember[] members
+  ) {
+    final MemberChooser<ParameterClassMember> chooser = new MemberChooser<>(members, false, true, project);
     chooser.selectElements(members);
     chooser.setTitle("Choose " + (method.isConstructor() ? "Constructor" : "Method") + " Parameters");
     chooser.show();
@@ -210,19 +220,17 @@ public class BindFieldsFromParametersAction extends BaseIntentionAction implemen
   @Nonnull
   private static ParameterClassMember[] sortByParameterIndex(@Nonnull ParameterClassMember[] members, @Nonnull PsiMethod method) {
     final PsiParameterList parameterList = method.getParameterList();
-    Arrays.sort(members, new Comparator<ParameterClassMember>() {
-      @Override
-      public int compare(ParameterClassMember o1, ParameterClassMember o2) {
-        return parameterList.getParameterIndex(o1.getParameter()) -
-          parameterList.getParameterIndex(o2.getParameter());
-      }
-    });
+    Arrays.sort(
+      members,
+      (o1, o2) -> parameterList.getParameterIndex(o1.getParameter()) - parameterList.getParameterIndex(o2.getParameter())
+    );
     return members;
   }
 
   @Nonnull
+  @RequiredReadAction
   private static <T extends PsiElement> List<T> revealPointers(@Nonnull Iterable<SmartPsiElementPointer<T>> pointers) {
-    final List<T> result = new ArrayList<T>();
+    final List<T> result = new ArrayList<>();
     for (SmartPsiElementPointer<T> pointer : pointers) {
       result.add(pointer.getElement());
     }
@@ -231,7 +239,7 @@ public class BindFieldsFromParametersAction extends BaseIntentionAction implemen
 
   @Nonnull
   private static List<PsiParameter> revealParameterClassMembers(@Nonnull Iterable<ParameterClassMember> parameterClassMembers) {
-    final List<PsiParameter> result = new ArrayList<PsiParameter>();
+    final List<PsiParameter> result = new ArrayList<>();
     for (ParameterClassMember parameterClassMember : parameterClassMembers) {
       result.add(parameterClassMember.getParameter());
     }
@@ -239,6 +247,7 @@ public class BindFieldsFromParametersAction extends BaseIntentionAction implemen
   }
 
   @Nonnull
+  @RequiredReadAction
   private static ParameterClassMember[] toClassMemberArray(@Nonnull Collection<SmartPsiElementPointer<PsiParameter>> unboundedParams) {
     final ParameterClassMember[] result = new ParameterClassMember[unboundedParams.size()];
     int i = 0;
@@ -252,15 +261,18 @@ public class BindFieldsFromParametersAction extends BaseIntentionAction implemen
   private static Collection<SmartPsiElementPointer<PsiParameter>> copyUnboundedParamsAndClearOriginal(@Nonnull PsiMethod method) {
     synchronized (LOCK) {
       final Collection<SmartPsiElementPointer<PsiParameter>> unboundedParams = getUnboundedParams(method);
-      final Collection<SmartPsiElementPointer<PsiParameter>> result = new ArrayList<SmartPsiElementPointer<PsiParameter>>(unboundedParams);
+      final Collection<SmartPsiElementPointer<PsiParameter>> result = new ArrayList<>(unboundedParams);
       unboundedParams.clear();
       return result;
     }
   }
 
-  private static void processParameter(final Project project,
-                                       final PsiParameter myParameter,
-                                       final Set<String> usedNames) {
+  @RequiredUIAccess
+  private static void processParameter(
+    final Project project,
+    final PsiParameter myParameter,
+    final Set<String> usedNames
+  ) {
     IdeDocumentHistory.getInstance(project).includeCurrentPlaceAsChangePlace();
     final PsiType type = FieldFromParameterUtils.getSubstitutedType(myParameter);
     final JavaCodeStyleManager styleManager = JavaCodeStyleManager.getInstance(project);
@@ -289,23 +301,20 @@ public class BindFieldsFromParametersAction extends BaseIntentionAction implemen
     final String fieldName = usedNames.add(name) ? name
       : JavaCodeStyleManager.getInstance(project).suggestUniqueVariableName(name, myParameter, true);
 
-    ApplicationManager.getApplication().runWriteAction(new Runnable() {
-      @Override
-      public void run() {
-        try {
-          FieldFromParameterUtils.createFieldAndAddAssignment(
-            project,
-            targetClass,
-            method,
-            myParameter,
-            type,
-            fieldName,
-            isMethodStatic,
-            isFinal);
-        }
-        catch (IncorrectOperationException e) {
-          LOG.error(e);
-        }
+    project.getApplication().runWriteAction(() -> {
+      try {
+        FieldFromParameterUtils.createFieldAndAddAssignment(
+          project,
+          targetClass,
+          method,
+          myParameter,
+          type,
+          fieldName,
+          isMethodStatic,
+          isFinal);
+      }
+      catch (IncorrectOperationException e) {
+        LOG.error(e);
       }
     });
   }

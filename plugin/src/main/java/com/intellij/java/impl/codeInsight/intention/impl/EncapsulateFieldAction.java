@@ -17,16 +17,16 @@ package com.intellij.java.impl.codeInsight.intention.impl;
 
 import com.intellij.java.impl.refactoring.encapsulateFields.EncapsulateFieldsHandler;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.refactoring.action.BaseRefactoringIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.SyntheticElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -40,12 +40,12 @@ public class EncapsulateFieldAction extends BaseRefactoringIntentionAction {
   @Nonnull
   @Override
   public String getText() {
-    return CodeInsightBundle.message("intention.encapsulate.field.text");
+    return CodeInsightLocalize.intentionEncapsulateFieldText().get();
   }
 
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
-    if (element instanceof SyntheticElement){
+    if (element instanceof SyntheticElement) {
       return false;
     }
 
@@ -63,8 +63,8 @@ public class EncapsulateFieldAction extends BaseRefactoringIntentionAction {
     new EncapsulateFieldsHandler().invoke(project, new PsiElement[]{field}, null);
   }
 
-
   @Nullable
+  @RequiredReadAction
   protected static PsiField getField(@Nullable PsiElement element) {
     if (element == null || !(element instanceof PsiIdentifier)) {
       return null;
@@ -81,9 +81,6 @@ public class EncapsulateFieldAction extends BaseRefactoringIntentionAction {
     }
 
     final PsiElement resolved = ref.resolve();
-    if (resolved == null || !(resolved instanceof PsiField)) {
-      return null;
-    }
-    return (PsiField)resolved;
+    return resolved instanceof PsiField field ? field : null;
   }
 }

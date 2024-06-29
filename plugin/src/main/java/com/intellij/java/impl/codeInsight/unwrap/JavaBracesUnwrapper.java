@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.codeInsight.unwrap;
 
-import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.language.psi.*;
-import consulo.language.psi.*;
+import consulo.language.editor.localize.CodeInsightLocalize;
+import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 
 public class JavaBracesUnwrapper extends JavaUnwrapper {
   public JavaBracesUnwrapper() {
-    super(CodeInsightBundle.message("unwrap.braces"));
+    super(CodeInsightLocalize.unwrapBraces().get());
   }
 
   @Override
@@ -34,9 +34,9 @@ public class JavaBracesUnwrapper extends JavaUnwrapper {
     PsiElement p = e.getParent();
 
     return p instanceof PsiIfStatement
-           || p instanceof PsiLoopStatement
-           || p instanceof PsiTryStatement
-           || p instanceof PsiCatchSection;
+      || p instanceof PsiLoopStatement
+      || p instanceof PsiTryStatement
+      || p instanceof PsiCatchSection;
   }
 
   @Override
