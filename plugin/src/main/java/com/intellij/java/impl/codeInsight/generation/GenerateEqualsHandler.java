@@ -19,20 +19,22 @@ import com.intellij.java.impl.codeInsight.generation.ui.GenerateEqualsWizard;
 import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import com.intellij.java.language.impl.codeInsight.generation.PsiElementClassMember;
 import com.intellij.java.language.psi.*;
-import consulo.application.ApplicationManager;
 import consulo.application.util.function.Computable;
 import consulo.codeEditor.Editor;
 import consulo.java.impl.codeInsight.JavaCodeInsightSettings;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.generation.ClassMember;
 import consulo.language.editor.hint.HintManager;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.Messages;
-
+import consulo.ui.ex.awt.UIUtil;
 import jakarta.annotation.Nonnull;
+
 import java.util.List;
 
 /**
@@ -50,11 +52,11 @@ public class GenerateEqualsHandler extends GenerateMembersHandlerBase {
   }
 
   @Override
+  @RequiredUIAccess
   protected ClassMember[] chooseOriginalMembers(PsiClass aClass, Project project, Editor editor) {
     myEqualsFields = null;
     myHashCodeFields = null;
     myNonNullFields = PsiField.EMPTY_ARRAY;
-
 
     GlobalSearchScope scope = aClass.getResolveScope();
     final PsiMethod equalsMethod = GenerateEqualsHelper.findMethod(aClass, GenerateEqualsHelper.getEqualsSignature(project, scope));
@@ -63,23 +65,27 @@ public class GenerateEqualsHandler extends GenerateMembersHandlerBase {
     boolean needEquals = equalsMethod == null;
     boolean needHashCode = hashCodeMethod == null;
     if (!needEquals && !needHashCode) {
-      String text = aClass instanceof PsiAnonymousClass ? CodeInsightBundle.message("generate.equals.and.hashcode.already.defined.warning.anonymous") : CodeInsightBundle.message("generate" +
-          ".equals.and.hashcode.already.defined.warning", aClass.getQualifiedName());
+      LocalizeValue text = aClass instanceof PsiAnonymousClass
+        ? CodeInsightLocalize.generateEqualsAndHashcodeAlreadyDefinedWarningAnonymous()
+        : CodeInsightLocalize.generateEqualsAndHashcodeAlreadyDefinedWarning(aClass.getQualifiedName());
 
-      if (Messages.showYesNoDialog(project, text, CodeInsightBundle.message("generate.equals.and.hashcode.already.defined.title"), Messages.getQuestionIcon()) == Messages.YES) {
-        if (!ApplicationManager.getApplication().runWriteAction(new Computable<Boolean>() {
-          @Override
-          public Boolean compute() {
-            try {
-              equalsMethod.delete();
-              hashCodeMethod.delete();
-              return Boolean.TRUE;
-            } catch (IncorrectOperationException e) {
-              LOG.error(e);
-              return Boolean.FALSE;
-            }
+      if (Messages.showYesNoDialog(
+        project,
+        text.get(),
+        CodeInsightLocalize.generateEqualsAndHashcodeAlreadyDefinedTitle().get(),
+        UIUtil.getQuestionIcon()
+      ) == Messages.YES) {
+        if (!project.getApplication().runWriteAction((Computable<Boolean>)() -> {
+          try {
+            equalsMethod.delete();
+            hashCodeMethod.delete();
+            return Boolean.TRUE;
           }
-        }).booleanValue()) {
+          catch (IncorrectOperationException e) {
+            LOG.error(e);
+            return Boolean.FALSE;
+          }
+        })) {
           return null;
         } else {
           needEquals = needHashCode = true;

@@ -25,6 +25,8 @@
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
@@ -50,9 +52,10 @@ public class ImportClassFix extends ImportClassFixBase<PsiJavaCodeReferenceEleme
   }
 
   @Override
+  @RequiredWriteAction
   protected void bindReference(PsiReference ref, PsiClass targetClass) {
-    if (ref instanceof PsiImportStaticReferenceElement) {
-      ((PsiImportStaticReferenceElement)ref).bindToTargetClass(targetClass);
+    if (ref instanceof PsiImportStaticReferenceElement importStaticReferenceElement) {
+      importStaticReferenceElement.bindToTargetClass(targetClass);
     }
     else {
       super.bindReference(ref, targetClass);
@@ -76,6 +79,7 @@ public class ImportClassFix extends ImportClassFixBase<PsiJavaCodeReferenceEleme
   }
 
   @Override
+  @RequiredReadAction
   protected boolean hasUnresolvedImportWhichCanImport(final PsiFile psiFile, final String name) {
     if (!(psiFile instanceof PsiJavaFile)) return false;
     PsiImportList importList = ((PsiJavaFile)psiFile).getImportList();
@@ -102,20 +106,18 @@ public class ImportClassFix extends ImportClassFixBase<PsiJavaCodeReferenceEleme
   @Override
   protected String getRequiredMemberName(PsiJavaCodeReferenceElement reference) {
     PsiElement parent = reference.getParent();
-    if (parent instanceof PsiJavaCodeReferenceElement) {
-      return ((PsiJavaCodeReferenceElement)parent).getReferenceName();
-    }
-
-    return super.getRequiredMemberName(reference);
+    return parent instanceof PsiJavaCodeReferenceElement javaCodeReferenceElement
+      ? javaCodeReferenceElement.getReferenceName() : super.getRequiredMemberName(reference);
   }
 
+  @Nonnull
   @Override
-  protected List<PsiClass> filterByContext(List<PsiClass> candidates, PsiJavaCodeReferenceElement ref) {
+  protected List<PsiClass> filterByContext(@Nonnull List<PsiClass> candidates, @Nonnull PsiJavaCodeReferenceElement ref) {
     PsiElement typeElement = ref.getParent();
     if (typeElement instanceof PsiTypeElement) {
       PsiElement var = typeElement.getParent();
-      if (var instanceof PsiVariable) {
-        PsiExpression initializer = ((PsiVariable)var).getInitializer();
+      if (var instanceof PsiVariable psiVariable) {
+        PsiExpression initializer = psiVariable.getInitializer();
         if (initializer != null) {
           return filterAssignableFrom(initializer.getType(), candidates);
         }

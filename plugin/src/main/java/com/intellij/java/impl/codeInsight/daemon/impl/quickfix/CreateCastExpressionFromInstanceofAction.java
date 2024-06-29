@@ -20,14 +20,14 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-
+import consulo.ui.annotation.RequiredUIAccess;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -38,7 +38,7 @@ import jakarta.annotation.Nullable;
 @IntentionMetaData(ignoreId = "java.CreateCastExpressionFromInstanceofAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class CreateCastExpressionFromInstanceofAction extends CreateLocalVarFromInstanceofAction {
   public CreateCastExpressionFromInstanceofAction() {
-    setText(CodeInsightBundle.message("cast.expression"));
+    setText(CodeInsightLocalize.castExpression().get());
   }
 
   @Override
@@ -51,11 +51,12 @@ public class CreateCastExpressionFromInstanceofAction extends CreateLocalVarFrom
     if (checkType == null) return false;
     PsiType type = checkType.getType();
     String castTo = type.getPresentableText();
-    setText(CodeInsightBundle.message("cast.to.0", castTo));
+    setText(CodeInsightLocalize.castTo0(castTo).get());
     return true;
   }
 
   @Override
+  @RequiredUIAccess
   public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
 

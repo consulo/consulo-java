@@ -20,17 +20,17 @@ import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import com.intellij.java.language.impl.codeInsight.generation.PropertyClassMember;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.java.analysis.codeInsight.JavaCodeInsightBundle;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.generation.ClassMember;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-
 import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 
 public class GenerateGetterHandler extends GenerateGetterSetterHandlerBase {
   public GenerateGetterHandler() {
-    super(CodeInsightBundle.message("generate.getter.fields.chooser.title"));
+    super(CodeInsightLocalize.generateGetterFieldsChooserTitle().get());
   }
 
   @Override
@@ -49,14 +49,12 @@ public class GenerateGetterHandler extends GenerateGetterSetterHandlerBase {
 
   @Override
   protected GenerationInfo[] generateMemberPrototypes(PsiClass aClass, ClassMember original) throws IncorrectOperationException {
-    if (original instanceof PropertyClassMember) {
-      final PropertyClassMember propertyClassMember = (PropertyClassMember) original;
+    if (original instanceof PropertyClassMember propertyClassMember) {
       final GenerationInfo[] getters = propertyClassMember.generateGetters(aClass);
       if (getters != null) {
         return getters;
       }
-    } else if (original instanceof EncapsulatableClassMember) {
-      final EncapsulatableClassMember encapsulatableClassMember = (EncapsulatableClassMember) original;
+    } else if (original instanceof EncapsulatableClassMember encapsulatableClassMember) {
       final GenerationInfo getter = encapsulatableClassMember.generateGetter();
       if (getter != null) {
         return new GenerationInfo[]{getter};

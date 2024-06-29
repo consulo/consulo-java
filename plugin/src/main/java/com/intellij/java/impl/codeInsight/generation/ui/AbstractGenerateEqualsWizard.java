@@ -1,13 +1,13 @@
 package com.intellij.java.impl.codeInsight.generation.ui;
 
-import consulo.language.editor.CodeInsightBundle;
 import consulo.ide.impl.idea.ide.wizard.AbstractWizard;
 import consulo.ide.impl.idea.ide.wizard.Step;
 import consulo.ide.impl.idea.ide.wizard.StepAdapter;
-import consulo.project.Project;
-import consulo.language.psi.PsiElement;
-import consulo.language.editor.refactoring.classMember.MemberInfoBase;
 import consulo.ide.impl.idea.refactoring.ui.AbstractMemberSelectionPanel;
+import consulo.language.editor.localize.CodeInsightLocalize;
+import consulo.language.editor.refactoring.classMember.MemberInfoBase;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
 
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
@@ -78,7 +78,7 @@ public abstract class AbstractGenerateEqualsWizard<C extends PsiElement, M exten
 
 	public AbstractGenerateEqualsWizard(Project project, Builder<C, M, I> builder)
 	{
-		super(CodeInsightBundle.message("generate.equals.hashcode.wizard.title"), project);
+		super(CodeInsightLocalize.generateEqualsHashcodeWizardTitle().get(), project);
 		myBuilder = builder;
 		myClass = builder.getPsiClass();
 		myClassFields = builder.getClassFields();
@@ -103,7 +103,7 @@ public abstract class AbstractGenerateEqualsWizard<C extends PsiElement, M exten
 
 	protected int addStepForPanel(AbstractMemberSelectionPanel<M, I> panel)
 	{
-		if(panel != null)
+		if (panel != null)
 		{
 			addStep(new MyStep(panel));
 			return getStepCount() - 1;
@@ -117,11 +117,11 @@ public abstract class AbstractGenerateEqualsWizard<C extends PsiElement, M exten
 	protected void addTableListeners()
 	{
 		final MyTableModelListener listener = new MyTableModelListener();
-		if(myEqualsPanel != null)
+		if (myEqualsPanel != null)
 		{
 			myEqualsPanel.getTable().getModel().addTableModelListener(listener);
 		}
-		if(myHashCodePanel != null)
+		if (myHashCodePanel != null)
 		{
 			myHashCodePanel.getTable().getModel().addTableModelListener(listener);
 		}
@@ -130,11 +130,11 @@ public abstract class AbstractGenerateEqualsWizard<C extends PsiElement, M exten
 	@Override
 	protected void doNextAction()
 	{
-		if(getCurrentStep() == getEqualsStepCode() && myEqualsPanel != null)
+		if (getCurrentStep() == getEqualsStepCode() && myEqualsPanel != null)
 		{
 			equalsFieldsSelected();
 		}
-		else if(getCurrentStep() == getHashCodeStepCode() && myHashCodePanel != null)
+		else if (getCurrentStep() == getHashCodeStepCode() && myHashCodePanel != null)
 		{
 			Collection<I> selectedMemberInfos = myEqualsPanel != null ? myEqualsPanel.getTable().getSelectedMemberInfos() : myHashCodePanel.getTable().getSelectedMemberInfos();
 			updateNonNullMemberInfos(selectedMemberInfos);
@@ -160,7 +160,7 @@ public abstract class AbstractGenerateEqualsWizard<C extends PsiElement, M exten
 	@Override
 	protected void doOKAction()
 	{
-		if(myEqualsPanel != null)
+		if (myEqualsPanel != null)
 		{
 			equalsFieldsSelected();
 		}
@@ -180,11 +180,11 @@ public abstract class AbstractGenerateEqualsWizard<C extends PsiElement, M exten
 	@Override
 	protected boolean canGoNext()
 	{
-		if(getCurrentStep() == myEqualsStepCode)
+		if (getCurrentStep() == myEqualsStepCode)
 		{
-			for(I classField : myClassFields)
+			for (I classField : myClassFields)
 			{
-				if(classField.isChecked())
+				if (classField.isChecked())
 				{
 					return true;
 				}
@@ -199,14 +199,7 @@ public abstract class AbstractGenerateEqualsWizard<C extends PsiElement, M exten
 	public JComponent getPreferredFocusedComponent()
 	{
 		final Component stepComponent = getCurrentStepComponent();
-		if(stepComponent instanceof AbstractMemberSelectionPanel)
-		{
-			return ((AbstractMemberSelectionPanel) stepComponent).getTable();
-		}
-		else
-		{
-			return null;
-		}
+		return stepComponent instanceof AbstractMemberSelectionPanel memberSelectionPanel ? memberSelectionPanel.getTable() : null;
 	}
 
 	private class MyTableModelListener implements TableModelListener

@@ -16,18 +16,18 @@
  */
 package com.intellij.java.impl.codeInsight.generation.surroundWith;
 
-import consulo.language.editor.CodeInsightBundle;
+import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableBase;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiParenthesizedExpression;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
 import consulo.document.util.TextRange;
-import consulo.language.psi.*;
 import consulo.language.codeStyle.CodeStyleManager;
-import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableBase;
+import consulo.language.editor.localize.CodeInsightLocalize;
+import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 
 class JavaWithParenthesesSurrounder extends JavaExpressionSurrounder{
   @Override
@@ -51,6 +51,6 @@ class JavaWithParenthesesSurrounder extends JavaExpressionSurrounder{
 
   @Override
   public String getTemplateDescription() {
-    return CodeInsightBundle.message("surround.with.parenthesis.template");
+    return CodeInsightLocalize.surroundWithParenthesisTemplate().get();
   }
 }

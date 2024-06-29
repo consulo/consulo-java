@@ -17,15 +17,17 @@ package com.intellij.java.impl.codeInsight.highlighting;
 
 import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Editor;
 import consulo.language.LangBundle;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.highlight.usage.HighlightUsagesHandlerBase;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiReference;
 import consulo.project.Project;
 import consulo.util.lang.function.Condition;
+import jakarta.annotation.Nonnull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,8 +39,14 @@ public class HighlightExceptionsHandler extends HighlightUsagesHandlerBase<PsiCl
   private final PsiElement myPlace;
   private final Condition<PsiType> myTypeFilter;
 
-  public HighlightExceptionsHandler(final Editor editor, final PsiFile file, final PsiElement target, final PsiClassType[] classTypes,
-                                    final PsiElement place, final Condition<PsiType> typeFilter) {
+  public HighlightExceptionsHandler(
+    final Editor editor,
+    final PsiFile file,
+    final PsiElement target,
+    final PsiClassType[] classTypes,
+    final PsiElement place,
+    final Condition<PsiType> typeFilter
+  ) {
     super(editor, file);
     myTarget = target;
     myClassTypes = classTypes;
@@ -53,7 +61,7 @@ public class HighlightExceptionsHandler extends HighlightUsagesHandlerBase<PsiCl
 
   @Override
   protected void selectTargets(final List<PsiClass> targets, final Consumer<List<PsiClass>> selectionConsumer) {
-    new ChooseClassAndDoHighlightRunnable(myClassTypes, myEditor, CodeInsightBundle.message("highlight.exceptions.thrown.chooser.title")) {
+    new ChooseClassAndDoHighlightRunnable(myClassTypes, myEditor, CodeInsightLocalize.highlightExceptionsThrownChooserTitle().get()) {
       @Override
       protected void selected(PsiClass... classes) {
         selectionConsumer.accept(Arrays.asList(classes));
@@ -62,6 +70,7 @@ public class HighlightExceptionsHandler extends HighlightUsagesHandlerBase<PsiCl
   }
 
   @Override
+  @RequiredReadAction
   public void computeUsages(final List<PsiClass> targets) {
     final Project project = myEditor.getProject();
     final PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
@@ -82,7 +91,8 @@ public class HighlightExceptionsHandler extends HighlightUsagesHandlerBase<PsiCl
         }
 
         @Override
-        public void visitThrowStatement(PsiThrowStatement statement) {
+        @RequiredReadAction
+        public void visitThrowStatement(@Nonnull PsiThrowStatement statement) {
           super.visitThrowStatement(statement);
           final List<PsiClassType> actualTypes = ExceptionUtil.getUnhandledExceptions(statement, myPlace);
           for (PsiClassType actualType : actualTypes) {
@@ -90,8 +100,8 @@ public class HighlightExceptionsHandler extends HighlightUsagesHandlerBase<PsiCl
               PsiExpression psiExpression = statement.getException();
               if (psiExpression instanceof PsiReferenceExpression) {
                 addOccurrence(psiExpression);
-              } else if (psiExpression instanceof PsiNewExpression) {
-                PsiJavaCodeReferenceElement ref = ((PsiNewExpression) psiExpression).getClassReference();
+              } else if (psiExpression instanceof PsiNewExpression newExpression) {
+                PsiJavaCodeReferenceElement ref = newExpression.getClassReference();
                 addOccurrence(ref);
               } else {
                 addOccurrence(statement.getException());
@@ -101,7 +111,8 @@ public class HighlightExceptionsHandler extends HighlightUsagesHandlerBase<PsiCl
         }
 
         @Override
-        public void visitMethodCallExpression(PsiMethodCallExpression expression) {
+        @RequiredReadAction
+        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
           super.visitMethodCallExpression(expression);
           PsiReference reference = expression.getMethodExpression().getReference();
           if (reference == null) return;
@@ -115,7 +126,8 @@ public class HighlightExceptionsHandler extends HighlightUsagesHandlerBase<PsiCl
         }
 
         @Override
-        public void visitNewExpression(PsiNewExpression expression) {
+        @RequiredReadAction
+        public void visitNewExpression(@Nonnull PsiNewExpression expression) {
           super.visitNewExpression(expression);
           PsiJavaCodeReferenceElement classReference = expression.getClassOrAnonymousClassReference();
           if (classReference == null) return;

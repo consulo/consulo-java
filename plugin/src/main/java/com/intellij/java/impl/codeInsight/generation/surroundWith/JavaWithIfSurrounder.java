@@ -17,11 +17,12 @@
 package com.intellij.java.impl.codeInsight.generation.surroundWith;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
 import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
@@ -31,11 +32,13 @@ import org.jetbrains.annotations.NonNls;
 public class JavaWithIfSurrounder extends JavaStatementsSurrounder{
   @Override
   public String getTemplateDescription() {
-    return CodeInsightBundle.message("surround.with.if.template");
+    return CodeInsightLocalize.surroundWithIfTemplate().get();
   }
 
   @Override
-  public TextRange surroundStatements(Project project, Editor editor, PsiElement container, PsiElement[] statements) throws IncorrectOperationException{
+  @RequiredReadAction
+  public TextRange surroundStatements(Project project, Editor editor, PsiElement container, PsiElement[] statements)
+    throws IncorrectOperationException {
     PsiManager manager = PsiManager.getInstance(project);
     PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
     CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);

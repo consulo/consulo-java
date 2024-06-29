@@ -17,8 +17,8 @@ package com.intellij.java.impl.codeInsight.generation;
 
 import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.generation.ClassMember;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.util.IncorrectOperationException;
 
 import java.util.ArrayList;
@@ -29,12 +29,12 @@ public class GenerateGetterAndSetterHandler extends GenerateGetterSetterHandlerB
   private final GenerateSetterHandler myGenerateSetterHandler = new GenerateSetterHandler();
 
   public GenerateGetterAndSetterHandler() {
-    super(CodeInsightBundle.message("generate.getter.setter.title"));
+    super(CodeInsightLocalize.generateGetterSetterTitle().get());
   }
 
   @Override
   public GenerationInfo[] generateMemberPrototypes(PsiClass aClass, ClassMember original) throws IncorrectOperationException {
-    ArrayList<GenerationInfo> array = new ArrayList<GenerationInfo>();
+    ArrayList<GenerationInfo> array = new ArrayList<>();
     GenerationInfo[] getters = myGenerateGetterHandler.generateMemberPrototypes(aClass, original);
     GenerationInfo[] setters = myGenerateSetterHandler.generateMemberPrototypes(aClass, original);
 

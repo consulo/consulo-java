@@ -21,7 +21,7 @@ import com.intellij.java.language.psi.*;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
 import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
@@ -48,6 +48,6 @@ class JavaWithNotSurrounder extends JavaExpressionSurrounder{
 
   @Override
   public String getTemplateDescription() {
-    return CodeInsightBundle.message("surround.with.not.template");
+    return CodeInsightLocalize.surroundWithNotTemplate().get();
   }
 }

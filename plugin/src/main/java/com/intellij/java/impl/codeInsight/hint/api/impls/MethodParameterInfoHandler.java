@@ -31,20 +31,21 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.dumb.DumbAware;
 import consulo.language.Language;
 import consulo.language.ast.IElementType;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.CodeInsightSettings;
 import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.parameterInfo.*;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.project.DumbService;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.*;
 
 /**
@@ -81,7 +82,8 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
   private PsiExpressionList findArgumentList(final PsiFile file, int offset, int parameterStart) {
     PsiExpressionList argumentList = ParameterInfoUtils.findArgumentList(file, offset, parameterStart, this);
     if (argumentList == null) {
-      final PsiMethodCallExpression methodCall = ParameterInfoUtils.findParentOfTypeWithStopElements(file, offset, PsiMethodCallExpression.class, PsiMethod.class);
+      final PsiMethodCallExpression methodCall =
+        ParameterInfoUtils.findParentOfTypeWithStopElements(file, offset, PsiMethodCallExpression.class, PsiMethod.class);
 
       if (methodCall != null) {
         argumentList = methodCall.getArgumentList();
@@ -100,6 +102,7 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
   }
 
   @Override
+  @RequiredReadAction
   public void showParameterInfo(@Nonnull final PsiExpressionList element, @Nonnull final CreateParameterInfoContext context) {
     context.showHint(element, element.getTextRange().getStartOffset(), this);
   }
@@ -110,6 +113,7 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
   }
 
   @Override
+  @RequiredReadAction
   public void updateParameterInfo(@Nonnull final PsiExpressionList o, @Nonnull final UpdateParameterInfoContext context) {
     PsiElement parameterOwner = context.getParameterOwner();
     if (parameterOwner != o) {
@@ -208,8 +212,9 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
   }
 
   private static PsiSubstitutor getCandidateInfoSubstitutor(CandidateInfo candidate) {
-    return candidate instanceof MethodCandidateInfo && ((MethodCandidateInfo) candidate).isInferencePossible() ? ((MethodCandidateInfo) candidate).inferTypeArguments
-        (CompletionParameterTypeInferencePolicy.INSTANCE, true) : candidate.getSubstitutor();
+    return candidate instanceof MethodCandidateInfo methodCandidateInfo && methodCandidateInfo.isInferencePossible()
+      ? methodCandidateInfo.inferTypeArguments(CompletionParameterTypeInferencePolicy.INSTANCE, true)
+      : candidate.getSubstitutor();
   }
 
   private static boolean isAssignableParametersBeforeGivenIndex(final PsiParameter[] parms, final PsiExpression[] args, int length, PsiSubstitutor substitutor) {
@@ -223,8 +228,8 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
       if (argType == null) {
         continue;
       }
-      if (parmType instanceof PsiEllipsisType && parmType.getArrayDimensions() == argType.getArrayDimensions() + 1) {
-        parmType = ((PsiEllipsisType) parmType).getComponentType();
+      if (parmType instanceof PsiEllipsisType ellipsisType && parmType.getArrayDimensions() == argType.getArrayDimensions() + 1) {
+        parmType = ellipsisType.getComponentType();
       }
       parmType = substitutor.substitute(parmType);
 
@@ -273,28 +278,27 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
 
   private static PsiCall getCall(PsiExpressionList list) {
     PsiElement listParent = list.getParent();
-    if (listParent instanceof PsiMethodCallExpression) {
-      return (PsiCall) listParent;
+    if (listParent instanceof PsiMethodCallExpression methodCallExpression) {
+      return methodCallExpression;
     }
-    if (listParent instanceof PsiNewExpression) {
-      return (PsiCall) listParent;
+    if (listParent instanceof PsiNewExpression newExpression) {
+      return newExpression;
     }
     if (listParent instanceof PsiAnonymousClass) {
       return (PsiCall) listParent.getParent();
     }
-    if (listParent instanceof PsiEnumConstant) {
-      return (PsiCall) listParent;
+    if (listParent instanceof PsiEnumConstant enumConstant) {
+      return enumConstant;
     }
     return null;
   }
-
 
   private static CandidateInfo[] getMethods(PsiExpressionList argList) {
     final PsiCall call = getCall(argList);
     PsiResolveHelper helper = JavaPsiFacade.getInstance(argList.getProject()).getResolveHelper();
 
-    if (call instanceof PsiCallExpression) {
-      CandidateInfo[] candidates = getCandidates((PsiCallExpression) call);
+    if (call instanceof PsiCallExpression callExpression) {
+      CandidateInfo[] candidates = getCandidates(callExpression);
       ArrayList<CandidateInfo> result = new ArrayList<>();
 
       if (!(argList.getParent() instanceof PsiAnonymousClass)) {
@@ -311,7 +315,8 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
             boolean accessible = candidate.isAccessible();
             if (!accessible && methodCandidate.getModifierList().hasModifierProperty(PsiModifier.PRIVATE)) {
               // privates are accessible within one file
-              accessible = JavaPsiFacade.getInstance(methodCandidate.getProject()).getResolveHelper().isAccessible(methodCandidate, methodCandidate.getModifierList(), call, null, null);
+              accessible = JavaPsiFacade.getInstance(methodCandidate.getProject())
+                .getResolveHelper().isAccessible(methodCandidate, methodCandidate.getModifierList(), call, null, null);
             }
             if (accessible) {
               result.add(candidate);
@@ -357,7 +362,12 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
     return results.toArray(new CandidateInfo[results.size()]);
   }
 
-  public static String updateMethodPresentation(@Nonnull PsiMethod method, @Nullable PsiSubstitutor substitutor, @Nonnull ParameterInfoUIContext context) {
+  @RequiredReadAction
+  public static String updateMethodPresentation(
+    @Nonnull PsiMethod method,
+    @Nullable PsiSubstitutor substitutor,
+    @Nonnull ParameterInfoUIContext context
+  ) {
     CodeInsightSettings settings = CodeInsightSettings.getInstance();
 
     if (!method.isValid() || substitutor != null && !substitutor.isValid()) {
@@ -423,7 +433,7 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
         }
       }
     } else {
-      buffer.append(CodeInsightBundle.message("parameter.info.no.parameters"));
+      buffer.append(CodeInsightLocalize.parameterInfoNoParameters().get());
     }
 
     if (settings.SHOW_FULL_SIGNATURES_IN_PARAMETER_INFO) {
@@ -434,6 +444,7 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
         .getDefaultParameterColor());
   }
 
+  @RequiredReadAction
   private static void appendModifierList(@Nonnull StringBuilder buffer, @Nonnull PsiModifierListOwner owner) {
     int lastSize = buffer.length();
 		Set<String> shownAnnotations = new HashSet<>();
@@ -441,8 +452,12 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
       final PsiJavaCodeReferenceElement element = annotation.getNameReferenceElement();
       if (element != null) {
         final PsiElement resolved = element.resolve();
-        if (resolved instanceof PsiClass && (!JavaDocInfoGenerator.isDocumentedAnnotationType(resolved) || AnnotationTargetUtil.findAnnotationTarget((PsiClass) resolved, PsiAnnotation
-            .TargetType.TYPE_USE) != null)) {
+        if (resolved instanceof PsiClass psiClass
+          && (
+            !JavaDocInfoGenerator.isDocumentedAnnotationType(resolved)
+              || AnnotationTargetUtil.findAnnotationTarget(psiClass, PsiAnnotation.TargetType.TYPE_USE) != null
+          )
+        ) {
           continue;
         }
 
@@ -460,10 +475,10 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
     }
   }
 
+  @RequiredReadAction
   @Override
   public void updateUI(final Object p, @Nonnull final ParameterInfoUIContext context) {
-    if (p instanceof CandidateInfo) {
-      CandidateInfo info = (CandidateInfo) p;
+    if (p instanceof CandidateInfo info) {
       PsiMethod method = (PsiMethod) info.getElement();
       if (!method.isValid()) {
         context.setUIComponentEnabled(false);

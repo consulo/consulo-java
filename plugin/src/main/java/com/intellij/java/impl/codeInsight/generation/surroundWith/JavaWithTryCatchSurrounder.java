@@ -22,7 +22,7 @@ import com.intellij.java.language.psi.codeStyle.VariableKind;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
 import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
@@ -38,7 +38,7 @@ public class JavaWithTryCatchSurrounder extends JavaStatementsSurrounder {
 
   @Override
   public String getTemplateDescription() {
-    return CodeInsightBundle.message("surround.with.try.catch.template");
+    return CodeInsightLocalize.surroundWithTryCatchTemplate().get();
   }
 
   @Override
@@ -90,8 +90,11 @@ public class JavaWithTryCatchSurrounder extends JavaStatementsSurrounder {
         catchSection = factory.createCatchSection(exception, name, null);
       }
       catch (IncorrectOperationException e) {
-        Messages.showErrorDialog(project, CodeInsightBundle.message("surround.with.try.catch.incorrect.template.message"),
-                                 CodeInsightBundle.message("surround.with.try.catch.incorrect.template.title"));
+        Messages.showErrorDialog(
+          project,
+          CodeInsightLocalize.surroundWithTryCatchIncorrectTemplateMessage().get(),
+          CodeInsightLocalize.surroundWithTryCatchIncorrectTemplateTitle().get()
+        );
         return null;
       }
       catchSection = (PsiCatchSection)catchSections[i].replace(catchSection);

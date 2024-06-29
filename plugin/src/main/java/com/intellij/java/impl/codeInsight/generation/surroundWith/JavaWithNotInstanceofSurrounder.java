@@ -17,25 +17,25 @@
 package com.intellij.java.impl.codeInsight.generation.surroundWith;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
 import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 
-class JavaWithNotInstanceofSurrounder extends JavaExpressionSurrounder{
+class JavaWithNotInstanceofSurrounder extends JavaExpressionSurrounder {
   @Override
   public boolean isApplicable(PsiExpression expr) {
     PsiType type = expr.getType();
-    if (type == null) return false;
-    if (!expr.isPhysical()) return false;
-    return !(type instanceof PsiPrimitiveType);
+    return type != null && expr.isPhysical() && !(type instanceof PsiPrimitiveType);
   }
 
   @Override
+  @RequiredReadAction
   public TextRange surroundExpression(Project project, Editor editor, PsiExpression expr) throws IncorrectOperationException {
     PsiManager manager = expr.getManager();
     PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
@@ -57,6 +57,6 @@ class JavaWithNotInstanceofSurrounder extends JavaExpressionSurrounder{
 
   @Override
   public String getTemplateDescription() {
-    return CodeInsightBundle.message("surround.with.not.instanceof.template");
+    return CodeInsightLocalize.surroundWithNotInstanceofTemplate().get();
   }
 }
