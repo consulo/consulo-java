@@ -24,6 +24,7 @@ import consulo.configurable.UnnamedConfigurable;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.JBUI;
 import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awt.UIUtil;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -73,35 +74,41 @@ public class ArrayRendererConfigurable implements UnnamedConfigurable, Configura
 		int newEndIndex = getInt(myEndIndex);
 		int newLimit = getInt(myEntriesLimit);
 
-		if(newStartIndex < 0)
+		if (newStartIndex < 0)
 		{
 			throw new ConfigurationException(DebuggerBundle.message("error.array.renderer.configurable.start.index.less.than.zero"));
 		}
 
-		if(newEndIndex < newStartIndex)
+		if (newEndIndex < newStartIndex)
 		{
 			throw new ConfigurationException(DebuggerBundle.message("error.array.renderer.configurable.end.index.less.than.start"));
 		}
 
-		if(newStartIndex >= 0 && newEndIndex >= 0)
+		if (newStartIndex >= 0 && newEndIndex >= 0)
 		{
-			if(newStartIndex > newEndIndex)
+			if (newStartIndex > newEndIndex)
 			{
 				int currentStartIndex = renderer.myStartIndex;
 				int currentEndIndex = renderer.myEndIndex;
 				newEndIndex = newStartIndex + (currentEndIndex - currentStartIndex);
 			}
 
-			if(newLimit <= 0)
+			if (newLimit <= 0)
 			{
 				newLimit = 1;
 			}
 
-			if(showBigRangeWarning && (newEndIndex - newStartIndex > 10000))
+			if (showBigRangeWarning && (newEndIndex - newStartIndex > 10000))
 			{
-				final int answer = Messages.showOkCancelDialog(myPanel.getRootPane(), DebuggerBundle.message("warning.range.too.big", Application.get().getName()),
-						DebuggerBundle.message("title.range.too.big"), Messages.getWarningIcon());
-				if(answer != Messages.OK)
+				final int answer =
+					Messages.showOkCancelDialog(
+						myPanel.getRootPane(), 
+						DebuggerBundle.message("warning.range.too.big", Application.get().getName()),
+						DebuggerBundle.message("title.range.too.big"), 
+						UIUtil.getWarningIcon()
+					);
+				
+				if (answer != Messages.OK)
 				{
 					return;
 				}
@@ -161,7 +168,7 @@ public class ArrayRendererConfigurable implements UnnamedConfigurable, Configura
 				myIndexUpdateEnabled = false;
 				try
 				{
-					if(myEntriesLimitUpdateEnabled)
+					if (myEntriesLimitUpdateEnabled)
 					{
 						myEntriesLimit.setText(String.valueOf(getInt(myEndIndex) - getInt(myStartIndex) + 1));
 					}
@@ -200,7 +207,7 @@ public class ArrayRendererConfigurable implements UnnamedConfigurable, Configura
 				myEntriesLimitUpdateEnabled = false;
 				try
 				{
-					if(myIndexUpdateEnabled)
+					if (myIndexUpdateEnabled)
 					{
 						myEndIndex.setText(String.valueOf(getInt(myEntriesLimit) + getInt(myStartIndex) - 1));
 					}
@@ -239,7 +246,7 @@ public class ArrayRendererConfigurable implements UnnamedConfigurable, Configura
 		{
 			newEndIndex = Integer.parseInt(textField.getText().trim());
 		}
-		catch(NumberFormatException exception)
+		catch (NumberFormatException exception)
 		{
 			// ignored
 		}
@@ -255,7 +262,7 @@ public class ArrayRendererConfigurable implements UnnamedConfigurable, Configura
 		{
 			applyTo(cloneRenderer, false);
 		}
-		catch(ConfigurationException e)
+		catch (ConfigurationException e)
 		{
 			return true;
 		}

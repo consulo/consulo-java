@@ -24,6 +24,7 @@ import java.util.Map;
 
 import consulo.logging.Logger;
 import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awt.UIUtil;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import com.intellij.java.impl.generate.element.ClassElement;
@@ -67,30 +68,46 @@ public class GenerationUtil
 	{
 		logger.info(e);
 
-		if(e instanceof GenerateCodeException)
+		if (e instanceof GenerateCodeException)
 		{
 			// code generation error - display velocity error in error dialog so user can identify problem quicker
-			Messages.showMessageDialog(project, "Velocity error generating code - see IDEA log for more details (stacktrace should be in idea.log):\n" + e.getMessage(), "Warning",
-					Messages.getWarningIcon());
+			Messages.showMessageDialog(project,
+				"Velocity error generating code - see IDEA log for more details (stacktrace should be in idea.log):\n" + e.getMessage(),
+				"Warning",
+				UIUtil.getWarningIcon()
+			);
 		}
-		else if(e instanceof PluginException)
+		else if (e instanceof PluginException)
 		{
 			// plugin related error - could be recoverable.
-			Messages.showMessageDialog(project, "A PluginException was thrown while performing the action - see IDEA log for details (stacktrace should be in idea.log):\n" + e.getMessage(),
-					"Warning", Messages.getWarningIcon());
+			Messages.showMessageDialog(project,
+				"A PluginException was thrown while performing the action" +
+					" - see IDEA log for details (stacktrace should be in idea.log):\n" + e.getMessage(),
+				"Warning",
+				UIUtil.getWarningIcon()
+			);
 		}
-		else if(e instanceof RuntimeException)
+		else if (e instanceof RuntimeException e1)
 		{
 			// unknown error (such as NPE) - not recoverable
-			Messages.showMessageDialog(project, "An unrecoverable exception was thrown while performing the action - see IDEA log for details (stacktrace should be in idea.log):\n" + e.getMessage(),
-					"Error", Messages.getErrorIcon());
-			throw (RuntimeException) e; // throw to make IDEA alert user
+			Messages.showMessageDialog(
+				project,
+				"An unrecoverable exception was thrown while performing the action" +
+					" - see IDEA log for details (stacktrace should be in idea.log):\n" + e.getMessage(),
+				"Error",
+				UIUtil.getErrorIcon()
+			);
+			throw e1; // throw to make IDEA alert user
 		}
 		else
 		{
 			// unknown error (such as NPE) - not recoverable
-			Messages.showMessageDialog(project, "An unrecoverable exception was thrown while performing the action - see IDEA log for details (stacktrace should be in idea.log):\n" + e.getMessage(),
-					"Error", Messages.getErrorIcon());
+			Messages.showMessageDialog(project,
+				"An unrecoverable exception was thrown while performing the action" +
+					" - see IDEA log for details (stacktrace should be in idea.log):\n" + e.getMessage(),
+				"Error",
+				UIUtil.getErrorIcon()
+			);
 			throw new RuntimeException(e); // rethrow as runtime to make IDEA alert user
 		}
 	}
@@ -107,13 +124,13 @@ public class GenerationUtil
 		PsiElementClassMember[] members = new PsiElementClassMember[filteredFields.length + filteredMethods.length];
 
 		// first add fields
-		for(int i = 0; i < filteredFields.length; i++)
+		for (int i = 0; i < filteredFields.length; i++)
 		{
 			members[i] = new PsiFieldMember(filteredFields[i]);
 		}
 
 		// then add methods
-		for(int i = 0; i < filteredMethods.length; i++)
+		for (int i = 0; i < filteredMethods.length; i++)
 		{
 			members[filteredFields.length + i] = new PsiMethodMember(filteredMethods[i]);
 		}
@@ -129,13 +146,13 @@ public class GenerationUtil
 	 */
 	public static List<PsiMember> convertClassMembersToPsiMembers(@Nullable List<PsiElementClassMember> classMemberList)
 	{
-		if(classMemberList == null || classMemberList.isEmpty())
+		if (classMemberList == null || classMemberList.isEmpty())
 		{
 			return Collections.emptyList();
 		}
-		List<PsiMember> psiMemberList = new ArrayList<PsiMember>();
+		List<PsiMember> psiMemberList = new ArrayList<>();
 
-		for(PsiElementClassMember classMember : classMemberList)
+		for (PsiElementClassMember classMember : classMemberList)
 		{
 			psiMemberList.add(classMember.getElement());
 		}
@@ -195,7 +212,7 @@ public class GenerationUtil
 			boolean useFullyQualifiedName,
 			boolean useAccessors) throws GenerateCodeException
 	{
-		if(templateMacro == null)
+		if (templateMacro == null)
 		{
 			return null;
 		}
@@ -209,7 +226,7 @@ public class GenerationUtil
 			logger.debug("Velocity Context - adding fields");
 			final List<FieldElement> fieldElements = ElementUtils.getOnlyAsFieldElements(selectedMembers, selectedNotNullMembers, useAccessors);
 			vc.put("fields", fieldElements);
-			if(fieldElements.size() == 1)
+			if (fieldElements.size() == 1)
 			{
 				vc.put("field", fieldElements.get(0));
 			}
@@ -224,18 +241,18 @@ public class GenerationUtil
 			logger.debug("Velocity Context - adding members (fields and methods)");
 			List<Element> elements = ElementUtils.getOnlyAsFieldAndMethodElements(selectedMembers, selectedNotNullMembers, useAccessors);
 			// sort elements if enabled and not using chooser dialog
-			if(sortElements != 0)
+			if (sortElements != 0)
 			{
 				Collections.sort(elements, new ElementComparator(sortElements));
 			}
 			vc.put("members", elements);
 
 			// class information
-			if(clazz != null)
+			if (clazz != null)
 			{
 				ClassElement ce = ElementFactory.newClassElement(clazz);
 				vc.put("class", ce);
-				if(logger.isDebugEnabled())
+				if (logger.isDebugEnabled())
 				{
 					logger.debug("Velocity Context - adding class: " + ce);
 				}
@@ -245,7 +262,7 @@ public class GenerationUtil
 				vc.put("FQClassname", ce.getQualifiedName());
 			}
 
-			if(member != null)
+			if (member != null)
 			{
 				vc.put("java_version", PsiAdapter.getJavaVersion(member));
 				final Project project = member.getProject();
@@ -256,12 +273,12 @@ public class GenerationUtil
 			vc.put("helper", GenerationHelper.class);
 			vc.put("StringUtil", StringUtil.class);
 
-			for(String paramName : contextMap.keySet())
+			for (String paramName : contextMap.keySet())
 			{
 				vc.put(paramName, contextMap.get(paramName));
 			}
 
-			if(logger.isDebugEnabled())
+			if (logger.isDebugEnabled())
 			{
 				logger.debug("Velocity Macro:\n" + templateMacro);
 			}
@@ -273,16 +290,16 @@ public class GenerationUtil
 			logger.debug("Executing velocity +++ END +++");
 
 			// any additional packages to import returned from velocity?
-			if(vc.get("autoImportPackages") != null)
+			if (vc.get("autoImportPackages") != null)
 			{
 				params.put("autoImportPackages", (String) vc.get("autoImportPackages"));
 			}
 		}
-		catch(ProcessCanceledException e)
+		catch (ProcessCanceledException e)
 		{
 			throw e;
 		}
-		catch(Exception e)
+		catch (Exception e)
 		{
 			throw new GenerateCodeException("Error in Velocity code generator", e);
 		}

@@ -20,19 +20,20 @@
  */
 package com.intellij.java.impl.analysis;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.scope.AnalysisScope;
-import consulo.ide.impl.idea.analysis.AnalysisScopeUtil;
-import consulo.dataContext.GetDataRule;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiJavaPackage;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.dataContext.DataProvider;
-import consulo.language.editor.LangDataKeys;
+import consulo.dataContext.GetDataRule;
+import consulo.ide.impl.idea.analysis.AnalysisScopeUtil;
+import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.module.Module;
 import consulo.util.dataholder.Key;
-
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -45,13 +46,12 @@ public class AnalysisScopeRule implements GetDataRule<AnalysisScope> {
 
   @Override
   public AnalysisScope getData(@Nonnull final DataProvider dataProvider) {
-    final Object psiFile = dataProvider.getDataUnchecked(LangDataKeys.PSI_FILE);
-    if (psiFile instanceof PsiJavaFile) {
-      return new JavaAnalysisScope((PsiJavaFile) psiFile);
+    final Object psiFile = dataProvider.getDataUnchecked(PsiFile.KEY);
+    if (psiFile instanceof PsiJavaFile javaFile) {
+      return new JavaAnalysisScope(javaFile);
     }
-    Object psiTarget = dataProvider.getDataUnchecked(LangDataKeys.PSI_ELEMENT);
-    if (psiTarget instanceof PsiJavaPackage) {
-      PsiJavaPackage pack = (PsiJavaPackage) psiTarget;
+    Object psiTarget = dataProvider.getDataUnchecked(PsiElement.KEY);
+    if (psiTarget instanceof PsiJavaPackage pack) {
       PsiManager manager = pack.getManager();
       if (!manager.isInProject(pack)) {
         return null;
@@ -60,7 +60,7 @@ public class AnalysisScopeRule implements GetDataRule<AnalysisScope> {
       if (dirs.length == 0) {
         return null;
       }
-      return new JavaAnalysisScope(pack, dataProvider.getDataUnchecked(LangDataKeys.MODULE));
+      return new JavaAnalysisScope(pack, dataProvider.getDataUnchecked(Module.KEY));
     }
     return null;
   }

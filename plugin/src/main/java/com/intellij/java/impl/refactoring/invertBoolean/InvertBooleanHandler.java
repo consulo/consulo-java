@@ -16,21 +16,21 @@
 package com.intellij.java.impl.refactoring.invertBoolean;
 
 import com.intellij.java.impl.ide.util.SuperMethodWarningUtil;
-import consulo.dataContext.DataContext;
-import consulo.language.editor.LangDataKeys;
-import consulo.codeEditor.Editor;
-import consulo.codeEditor.ScrollType;
-import consulo.project.Project;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiFile;
+import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiVariable;
-import com.intellij.java.impl.refactoring.HelpID;
-import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.ScrollType;
+import consulo.dataContext.DataContext;
 import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 /**
@@ -39,14 +39,15 @@ import jakarta.annotation.Nonnull;
 public class InvertBooleanHandler implements RefactoringActionHandler {
   static final String REFACTORING_NAME = RefactoringBundle.message("invert.boolean.title");
 
+  @RequiredReadAction
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
     editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
-    PsiElement element = dataContext.getData(LangDataKeys.PSI_ELEMENT);
-    if (element instanceof PsiMethod) {
-      invoke((PsiMethod)element, project, editor);
+    PsiElement element = dataContext.getData(PsiElement.KEY);
+    if (element instanceof PsiMethod method) {
+      invoke(method, project, editor);
     }
-    else if (element instanceof PsiVariable) {
-      invoke((PsiVariable)element, project, editor);
+    else if (element instanceof PsiVariable variable) {
+      invoke(variable, project, editor);
     }
     else {
       CommonRefactoringUtil.showErrorHint(project, editor, RefactoringBundle.getCannotRefactorMessage(
@@ -54,6 +55,7 @@ public class InvertBooleanHandler implements RefactoringActionHandler {
     }
   }
 
+  @RequiredReadAction
   private static void invoke(PsiVariable var, final Project project, Editor editor) {
     final PsiType returnType = var.getType();
     if (!PsiType.BOOLEAN.equals(returnType)) {
@@ -62,8 +64,7 @@ public class InvertBooleanHandler implements RefactoringActionHandler {
     }
 
     if (!CommonRefactoringUtil.checkReadOnlyStatus(project, var)) return;
-    if (var instanceof PsiParameter && ((PsiParameter)var).getDeclarationScope() instanceof PsiMethod) {
-      final PsiMethod method = (PsiMethod)((PsiParameter)var).getDeclarationScope();
+    if (var instanceof PsiParameter parameter && parameter.getDeclarationScope() instanceof PsiMethod method) {
       final PsiMethod superMethod = SuperMethodWarningUtil.checkSuperMethod(method, RefactoringBundle.message("to.refactor"));
        if (superMethod != null) {
          var = superMethod.getParameterList().getParameters()[method.getParameterList().getParameterIndex((PsiParameter)var)];
@@ -73,12 +74,14 @@ public class InvertBooleanHandler implements RefactoringActionHandler {
     new InvertBooleanDialog(var).show();
   }
 
+  @RequiredReadAction
   public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, @Nonnull DataContext dataContext) {
-    if (elements.length == 1 && elements[0] instanceof PsiMethod) {
-      invoke((PsiMethod)elements[0], project, null);
+    if (elements.length == 1 && elements[0] instanceof PsiMethod method) {
+      invoke(method, project, null);
     }
   }
 
+  @RequiredReadAction
   private static void invoke(PsiMethod method, final Project project, Editor editor) {
     final PsiType returnType = method.getReturnType();
     if (!PsiType.BOOLEAN.equals(returnType)) {

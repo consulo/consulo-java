@@ -30,7 +30,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.bookmark.ui.view.BookmarkNodeProvider;
 import consulo.dataContext.DataContext;
 import consulo.language.content.FileIndexFacade;
-import consulo.language.editor.LangDataKeys;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -55,7 +54,7 @@ public class PsiClassFavoriteNodeProvider implements BookmarkNodeProvider {
     if (project == null) return null;
     PsiElement[] elements = context.getData(PsiElement.KEY_OF_ARRAY);
     if (elements == null) {
-      final PsiElement element = context.getData(LangDataKeys.PSI_ELEMENT);
+      final PsiElement element = context.getData(PsiElement.KEY);
       if (element != null) {
         elements = new PsiElement[]{element};
       }

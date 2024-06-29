@@ -52,9 +52,10 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.project.ui.notification.NotificationType;
 import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awt.UIUtil;
 import consulo.util.lang.Pair;
-
 import jakarta.annotation.Nullable;
+
 import java.util.Objects;
 
 /**
@@ -76,15 +77,15 @@ public class DebugProcessEvents extends DebugProcessImpl {
     if (vm != null) {
       vmAttached();
       myEventThread = new DebuggerEventThread();
-      ApplicationManager.getApplication().executeOnPooledThread(myEventThread);
+      Application.get().executeOnPooledThread(myEventThread);
     }
   }
 
   private static void showStatusText(DebugProcessEvents debugProcess, Event event) {
     Requestor requestor = debugProcess.getRequestsManager().findRequestor(event.request());
     Breakpoint breakpoint = null;
-    if (requestor instanceof Breakpoint) {
-      breakpoint = (Breakpoint)requestor;
+    if (requestor instanceof Breakpoint requestorBreakpoint) {
+      breakpoint = requestorBreakpoint;
     }
     String text = debugProcess.getEventText(Pair.create(breakpoint, event));
     debugProcess.showStatusText(text);
@@ -94,10 +95,10 @@ public class DebugProcessEvents extends DebugProcessImpl {
     String text = "";
     final Event event = descriptor.getSecond();
     final Breakpoint breakpoint = descriptor.getFirst();
-    if (event instanceof LocatableEvent) {
+    if (event instanceof LocatableEvent locatableEvent) {
       try {
-        text = breakpoint != null ? breakpoint.getEventMessage(((LocatableEvent)event)) : DebuggerBundle.message(
-          "status.generic.breakpoint.reached");
+        text = breakpoint != null ? breakpoint.getEventMessage(locatableEvent)
+          : DebuggerBundle.message("status.generic.breakpoint.reached");
       }
       catch (InternalException e) {
         text = DebuggerBundle.message("status.generic.breakpoint.reached");
@@ -162,15 +163,15 @@ public class DebugProcessEvents extends DebugProcessImpl {
                       continue;
                     }
                   }
-                  if (event instanceof ThreadStartEvent) {
+                  if (event instanceof ThreadStartEvent threadStartEvent) {
                     processed++;
-                    ThreadReference thread = ((ThreadStartEvent)event).thread();
+                    ThreadReference thread = threadStartEvent.thread();
                     getVirtualMachineProxy().threadStarted(thread);
                     myDebugProcessDispatcher.getMulticaster().threadStarted(DebugProcessEvents.this, thread);
                   }
-                  else if (event instanceof ThreadDeathEvent) {
+                  else if (event instanceof ThreadDeathEvent threadDeathEvent) {
                     processed++;
-                    ThreadReference thread = ((ThreadDeathEvent)event).thread();
+                    ThreadReference thread = threadDeathEvent.thread();
                     getVirtualMachineProxy().threadStopped(thread);
                     myDebugProcessDispatcher.getMulticaster().threadStopped(DebugProcessEvents.this, thread);
                   }
@@ -224,23 +225,23 @@ public class DebugProcessEvents extends DebugProcessImpl {
                   //  LOG.debug("EVENT : " + event);
                   //}
                   try {
-                    if (event instanceof VMStartEvent) {
+                    if (event instanceof VMStartEvent vmStartEvent) {
                       //Sun WTK fails when J2ME when event set is resumed on VMStartEvent
-                      processVMStartEvent(suspendContext, (VMStartEvent)event);
+                      processVMStartEvent(suspendContext, vmStartEvent);
                     }
                     else if (event instanceof VMDeathEvent || event instanceof VMDisconnectEvent) {
                       processVMDeathEvent(suspendContext, event);
                     }
-                    else if (event instanceof ClassPrepareEvent) {
-                      processClassPrepareEvent(suspendContext, (ClassPrepareEvent)event);
+                    else if (event instanceof ClassPrepareEvent classPrepareEvent) {
+                      processClassPrepareEvent(suspendContext, classPrepareEvent);
                     }
                     //AccessWatchpointEvent, BreakpointEvent, ExceptionEvent, MethodEntryEvent, MethodExitEvent,
                     //ModificationWatchpointEvent, StepEvent, WatchpointEvent
-                    else if (event instanceof StepEvent) {
-                      processStepEvent(suspendContext, (StepEvent)event);
+                    else if (event instanceof StepEvent stepEvent) {
+                      processStepEvent(suspendContext, stepEvent);
                     }
-                    else if (event instanceof LocatableEvent) {
-                      processLocatableEvent(suspendContext, (LocatableEvent)event);
+                    else if (event instanceof LocatableEvent locatableEvent1) {
+                      processLocatableEvent(suspendContext, locatableEvent1);
                     }
                     else if (event instanceof ClassUnloadEvent) {
                       processDefaultEvent(suspendContext);
@@ -330,10 +331,9 @@ public class DebugProcessEvents extends DebugProcessImpl {
 
       // fill position managers
       ((DebuggerManagerImpl)DebuggerManager.getInstance(getProject())).getCustomPositionManagerFactories()
-                                                                      .map(factory -> factory.apply(this))
-                                                                      .filter(Objects::nonNull)
-                                                                      .forEach
-                                                                        (this::appendPositionManager);
+        .map(factory -> factory.apply(this))
+        .filter(Objects::nonNull)
+        .forEach(this::appendPositionManager);
       PositionManagerFactory.EP_NAME.getExtensionList(getProject()).stream().map(factory -> factory.createPositionManager
         (this)).filter(Objects::nonNull).forEach
         (this::appendPositionManager);
@@ -343,13 +343,12 @@ public class DebugProcessEvents extends DebugProcessImpl {
       createStackCapturingBreakpoints();
 
       // breakpoints should be initialized after all processAttached listeners work
-      ApplicationManager.getApplication().runReadAction(() ->
-                                                        {
-                                                          XDebugSession session = getSession().getXDebugSession();
-                                                          if (session != null) {
-                                                            session.initBreakpoints();
-                                                          }
-                                                        });
+      Application.get().runReadAction(() -> {
+        XDebugSession session = getSession().getXDebugSession();
+        if (session != null) {
+          session.initBreakpoints();
+        }
+      });
 
       final String addressDisplayName = DebuggerBundle.getAddressDisplayName(getConnection());
       final String transportName = DebuggerBundle.getTransportName(getConnection());
@@ -357,7 +356,7 @@ public class DebugProcessEvents extends DebugProcessImpl {
       LOG.debug("leave: processVMStartEvent()");
 
       XDebugSession session = getSession().getXDebugSession();
-      if(session != null) {
+      if (session != null) {
         session.setPauseActionSupported(true);
       }
     }
@@ -446,8 +445,8 @@ public class DebugProcessEvents extends DebugProcessImpl {
       getSuspendManager().voteSuspend(suspendContext);
       if (hint != null) {
         final MethodFilter methodFilter = hint.getMethodFilter();
-        if (methodFilter instanceof NamedMethodFilter && !hint.wasStepTargetMethodMatched()) {
-          final String message = "Method <b>" + ((NamedMethodFilter)methodFilter).getMethodName() + "()</b> has not been called";
+        if (methodFilter instanceof NamedMethodFilter namedMethodFilter && !hint.wasStepTargetMethodMatched()) {
+          final String message = "Method <b>" + namedMethodFilter.getMethodName() + "()</b> has not been called";
           XDebugSessionImpl.NOTIFICATION_GROUP.createNotification(message, NotificationType.INFORMATION).notify(project);
         }
         if (hint.wasStepTargetMethodMatched() && hint.isResetIgnoreFilters()) {
@@ -492,27 +491,26 @@ public class DebugProcessEvents extends DebugProcessImpl {
           DebuggerInvocationUtil.invokeAndWait(getProject(), () ->
           {
             final String displayName =
-              requestor instanceof Breakpoint ? ((Breakpoint)requestor).getDisplayName() : requestor.getClass().getSimpleName();
+              requestor instanceof Breakpoint breakpoint ? breakpoint.getDisplayName() : requestor.getClass().getSimpleName();
             final String message = DebuggerBundle.message("error.evaluating.breakpoint.condition.or.action", displayName, ex.getMessage());
             considerRequestHit[0] =
-              Messages.showYesNoDialog(getProject(), message, ex.getTitle(), Messages.getQuestionIcon()) == Messages.YES;
+              Messages.showYesNoDialog(getProject(), message, ex.getTitle(), UIUtil.getQuestionIcon()) == Messages.YES;
           }, Application.get().getNoneModalityState());
           requestHit = considerRequestHit[0];
           resumePreferred = !requestHit;
         }
 
-        if (requestHit && requestor instanceof Breakpoint) {
+        if (requestHit && requestor instanceof Breakpoint requestorBreakpoint) {
           // if requestor is a breakpoint and this breakpoint was hit, no matter its suspend policy
-          ApplicationManager.getApplication().runReadAction(() ->
-                                                            {
-                                                              XDebugSession session = getSession().getXDebugSession();
-                                                              if (session != null) {
-                                                                XBreakpoint breakpoint = ((Breakpoint)requestor).getXBreakpoint();
-                                                                if (breakpoint != null) {
-                                                                  ((XDebugSessionImpl)session).processDependencies(breakpoint);
-                                                                }
-                                                              }
-                                                            });
+          Application.get().runReadAction(() -> {
+            XDebugSession session = getSession().getXDebugSession();
+            if (session != null) {
+              XBreakpoint breakpoint = requestorBreakpoint.getXBreakpoint();
+              if (breakpoint != null) {
+                ((XDebugSessionImpl)session).processDependencies(breakpoint);
+              }
+            }
+          });
         }
 
         if (!requestHit || resumePreferred) {
@@ -537,8 +535,10 @@ public class DebugProcessEvents extends DebugProcessImpl {
   }
 
   private void notifySkippedBreakpoints(LocatableEvent event) {
-    XDebugSessionImpl.NOTIFICATION_GROUP.createNotification(DebuggerBundle.message("message.breakpoint.skipped", event.location()),
-                                                            NotificationType.INFORMATION).notify(getProject());
+    XDebugSessionImpl.NOTIFICATION_GROUP.createNotification(
+      DebuggerBundle.message("message.breakpoint.skipped", event.location()),
+      NotificationType.INFORMATION
+    ).notify(getProject());
   }
 
   @Nullable

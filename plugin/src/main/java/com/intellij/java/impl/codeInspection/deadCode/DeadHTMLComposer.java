@@ -28,6 +28,7 @@ import com.intellij.java.analysis.codeInspection.reference.*;
 import com.intellij.java.analysis.impl.codeInspection.reference.RefClassImpl;
 import com.intellij.java.analysis.impl.codeInspection.reference.RefMethodImpl;
 import com.intellij.java.impl.codeInspection.HTMLJavaHTMLComposer;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.ide.impl.idea.codeInspection.ex.DescriptorComposer;
 import consulo.ide.impl.idea.codeInspection.ui.InspectionToolPresentation;
 import consulo.ide.impl.idea.codeInspection.ui.InspectionTreeNode;
@@ -54,12 +55,13 @@ public class DeadHTMLComposer extends HTMLComposerBase {
   }
 
   @Override
+  @RequiredReadAction
   public void compose(final StringBuffer buf, RefEntity refEntity) {
     genPageHeader(buf, refEntity);
 
     if (refEntity instanceof RefElementImpl refElement) {
       if (refElement.isSuspicious() && !refElement.isEntry()) {
-        appendHeading(buf, InspectionLocalize.inspectionProblemSynopsis().get());
+        appendHeading(buf, InspectionLocalize.inspectionProblemSynopsis());
         //noinspection HardCodedStringLiteral
         buf.append("<br>");
         appendAfterHeaderIndention(buf);
@@ -69,7 +71,9 @@ public class DeadHTMLComposer extends HTMLComposerBase {
         buf.append("<br><br>");
         appendResolution(buf, refElement, DescriptorComposer.quickFixTexts(refElement, myToolPresentation));
         refElement.accept(new RefJavaVisitor() {
-          @Override public void visitClass(@Nonnull RefClass aClass) {
+          @Override
+          @RequiredReadAction
+          public void visitClass(@Nonnull RefClass aClass) {
             appendClassInstantiations(buf, aClass);
             myComposer.appendDerivedClasses(buf, aClass);
             myComposer.appendClassExtendsImplements(buf, aClass);
@@ -77,14 +81,18 @@ public class DeadHTMLComposer extends HTMLComposerBase {
             myComposer.appendTypeReferences(buf, aClass);
           }
 
-          @Override public void visitMethod(@Nonnull RefMethod method) {
+          @Override
+          @RequiredReadAction
+          public void visitMethod(@Nonnull RefMethod method) {
             appendElementInReferences(buf, method);
             appendElementOutReferences(buf, method);
             myComposer.appendDerivedMethods(buf, method);
             myComposer.appendSuperMethods(buf, method);
           }
 
-          @Override public void visitField(@Nonnull RefField field) {
+          @Override
+          @RequiredReadAction
+          public void visitField(@Nonnull RefField field) {
             appendElementInReferences(buf, field);
             appendElementOutReferences(buf, field);
           }
@@ -223,8 +231,7 @@ public class DeadHTMLComposer extends HTMLComposerBase {
 
     //noinspection HardCodedStringLiteral
     buf.append("<br>");
-    if (refElement instanceof RefClass) {
-      RefClassImpl refClass = (RefClassImpl)refElement;
+    if (refElement instanceof RefClassImpl refClass) {
       if (refClass.isSuspicious()) {
         if (refClass.isUtilityClass()) {
           // Append nothing.
@@ -310,11 +317,12 @@ public class DeadHTMLComposer extends HTMLComposerBase {
     return count;
   }
 
+  @RequiredReadAction
   private void appendClassInstantiations(StringBuffer buf, RefClass refClass) {
     if (!refClass.isInterface() && !refClass.isAbstract() && !refClass.isUtilityClass()) {
       boolean found = false;
 
-      appendHeading(buf, InspectionLocalize.inspectionDeadCodeExportResultsInstantiatedFromHeading().get());
+      appendHeading(buf, InspectionLocalize.inspectionDeadCodeExportResultsInstantiatedFromHeading());
 
       startList(buf);
       for (RefMethod refMethod : refClass.getConstructors()) {
@@ -334,11 +342,12 @@ public class DeadHTMLComposer extends HTMLComposerBase {
     }
   }
 
-  private void appendCallesList(RefElement element, StringBuffer buf, Set<RefElement> mentionedElements, boolean appendCallees){
+  @RequiredReadAction
+  private void appendCallesList(RefElement element, StringBuffer buf, Set<RefElement> mentionedElements, boolean appendCallees) {
     final Set<RefElement> possibleChildren = getPossibleChildren(new RefElementNode(element, myToolPresentation), element);
     if (!possibleChildren.isEmpty()) {
-      if (appendCallees){
-        appendHeading(buf, InspectionLocalize.inspectionExportResultsCallees().get());
+      if (appendCallees) {
+        appendHeading(buf, InspectionLocalize.inspectionExportResultsCallees());
       }
       @NonNls final String ul = "<ul>";
       buf.append(ul);

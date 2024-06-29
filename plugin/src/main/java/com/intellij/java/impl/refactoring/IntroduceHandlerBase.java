@@ -17,20 +17,18 @@ package com.intellij.java.impl.refactoring;
 
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLocalVariable;
-import consulo.dataContext.DataContext;
-import consulo.language.editor.PlatformDataKeys;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
+import consulo.dataContext.DataContext;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.introduce.inplace.AbstractInplaceIntroducer;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.editor.refactoring.action.RefactoringActionHandler;
-import consulo.language.editor.refactoring.introduce.inplace.AbstractInplaceIntroducer;
 import consulo.logging.Logger;
-import org.jetbrains.annotations.TestOnly;
-
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.TestOnly;
 
 /**
  * @author dsl
@@ -43,7 +41,7 @@ public abstract class IntroduceHandlerBase implements RefactoringActionHandler {
     final PsiElement tempExpr = elements[0];
     final Editor editor;
     if (dataContext != null) {
-      final Editor editorFromDC = dataContext.getData(PlatformDataKeys.EDITOR);
+      final Editor editorFromDC = dataContext.getData(Editor.KEY);
       final PsiFile cachedPsiFile = editorFromDC != null ? PsiDocumentManager.getInstance(project).getCachedPsiFile(editorFromDC.getDocument()) : null;
       if (cachedPsiFile != null && PsiTreeUtil.isAncestor(cachedPsiFile, tempExpr, false)) {
         editor = editorFromDC;
@@ -68,8 +66,7 @@ public abstract class IntroduceHandlerBase implements RefactoringActionHandler {
    * @param editor   editor to highlight stuff in. Should accept <code>null</code>
    * @return
    */
-  protected abstract boolean invokeImpl(Project project, PsiExpression tempExpr,
-                                        Editor editor);
+  protected abstract boolean invokeImpl(Project project, PsiExpression tempExpr, Editor editor);
 
   /**
    * @param project
@@ -77,8 +74,7 @@ public abstract class IntroduceHandlerBase implements RefactoringActionHandler {
    * @param editor        editor to highlight stuff in. Should accept <code>null</code>
    * @return
    */
-  protected abstract boolean invokeImpl(Project project, PsiLocalVariable localVariable,
-                                        Editor editor);
+  protected abstract boolean invokeImpl(Project project, PsiLocalVariable localVariable, Editor editor);
 
   @TestOnly
   public abstract AbstractInplaceIntroducer getInplaceIntroducer();

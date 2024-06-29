@@ -63,6 +63,7 @@ import consulo.process.ProcessHandler;
 import consulo.process.cmd.ParametersList;
 import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awt.UIUtil;
 import consulo.util.io.FileUtil;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
@@ -104,7 +105,7 @@ public class JavacCompiler implements BackendCompiler {
   @Override
   public boolean checkCompiler(final CompileScope scope) {
     final Module[] modules = scope.getAffectedModules();
-    final Set<Sdk> checkedJdks = new HashSet<Sdk>();
+    final Set<Sdk> checkedJdks = new HashSet<>();
     for (final Module module : modules) {
       JavaModuleExtension extension = ModuleUtilCore.getExtension(module, JavaModuleExtension.class);
       if (extension == null) {
@@ -112,10 +113,12 @@ public class JavacCompiler implements BackendCompiler {
       }
       final Sdk javaSdk = JavaCompilerUtil.getSdkForCompilation(module);
       if (javaSdk == null) {
-        Messages.showMessageDialog(myProject,
-                                   JavaCompilerBundle.message("javac.error.jdk.is.not.set.for.module", module.getName()),
-                                   JavaCompilerBundle.message("compiler.javac.name"),
-                                   Messages.getErrorIcon());
+        Messages.showMessageDialog(
+          myProject,
+          JavaCompilerBundle.message("javac.error.jdk.is.not.set.for.module", module.getName()),
+          JavaCompilerBundle.message("compiler.javac.name"),
+          UIUtil.getErrorIcon()
+        );
         return false;
       }
 
@@ -129,51 +132,56 @@ public class JavacCompiler implements BackendCompiler {
 
       final VirtualFile homeDirectory = javaSdk.getHomeDirectory();
       if (homeDirectory == null) {
-        Messages.showMessageDialog(myProject,
-                                   JavaCompilerBundle.message("javac.error.jdk.home.missing", javaSdk.getHomePath(), javaSdk.getName()),
-                                   JavaCompilerBundle.message("compiler" +
-                                                                "" +
-                                                                ".javac" + ".name"),
-                                   Messages.getErrorIcon());
+        Messages.showMessageDialog(
+          myProject,
+          JavaCompilerBundle.message("javac.error.jdk.home.missing", javaSdk.getHomePath(), javaSdk.getName()),
+          JavaCompilerBundle.message("compiler.javac.name"),
+          UIUtil.getErrorIcon()
+        );
         return false;
       }
       final String versionString = javaSdk.getVersionString();
       if (versionString == null) {
-        Messages.showMessageDialog(myProject,
-                                   JavaCompilerBundle.message("javac.error.unknown.jdk.version", javaSdk.getName()),
-                                   JavaCompilerBundle.message("compiler.javac.name"),
-                                   Messages
-                                     .getErrorIcon());
+        Messages.showMessageDialog(
+          myProject,
+          JavaCompilerBundle.message("javac.error.unknown.jdk.version", javaSdk.getName()),
+          JavaCompilerBundle.message("compiler.javac.name"),
+          UIUtil.getErrorIcon()
+        );
         return false;
       }
 
       JavaSdkVersion javaSdkVersion = JavaSdkVersion.fromVersionString(versionString);
       if (javaSdkVersion == null) {
-        Messages.showMessageDialog(myProject,
-                                   JavaCompilerBundle.message("javac.error.unknown.jdk.version", javaSdk.getName()),
-                                   JavaCompilerBundle.message("compiler.javac.name"),
-                                   Messages
-                                     .getErrorIcon());
+        Messages.showMessageDialog(
+          myProject,
+          JavaCompilerBundle.message("javac.error.unknown.jdk.version", javaSdk.getName()),
+          JavaCompilerBundle.message("compiler.javac.name"),
+          UIUtil.getErrorIcon()
+        );
         return false;
       }
 
       if (!javaSdkVersion.isAtLeast(JavaSdkVersion.JDK_1_9)) {
         final String toolsJarPath = ((JavaSdkType)sdkType).getToolsPath(javaSdk);
         if (toolsJarPath == null) {
-          Messages.showMessageDialog(myProject,
-                                     JavaCompilerBundle.message("javac.error.tools.jar.missing", javaSdk.getName()),
-                                     JavaCompilerBundle.message("compiler.javac.name"),
-                                     Messages
-                                       .getErrorIcon());
+          Messages.showMessageDialog(
+            myProject,
+            JavaCompilerBundle.message("javac.error.tools.jar.missing", javaSdk.getName()),
+            JavaCompilerBundle.message("compiler.javac.name"),
+            UIUtil.getErrorIcon()
+          );
           return false;
         }
       }
 
       if (!javaSdkVersion.isAtLeast(JavaSdkVersion.JDK_1_5)) {
-        Messages.showMessageDialog(myProject,
-                                   JavaCompilerBundle.message("javac.error.target.jdk.not.supported"),
-                                   JavaCompilerBundle.message("compiler.javac.name"),
-                                   Messages.getErrorIcon());
+        Messages.showMessageDialog(
+          myProject,
+          JavaCompilerBundle.message("javac.error.target.jdk.not.supported"),
+          JavaCompilerBundle.message("compiler.javac.name"),
+          UIUtil.getErrorIcon()
+        );
         return false;
       }
     }
@@ -188,9 +196,11 @@ public class JavacCompiler implements BackendCompiler {
   }
 
   @Override
-  public OutputParser createErrorParser(BackendCompilerProcessBuilder processBuilder,
-                                        @Nonnull final String outputDir,
-                                        ProcessHandler process) {
+  public OutputParser createErrorParser(
+    BackendCompilerProcessBuilder processBuilder,
+    @Nonnull final String outputDir,
+    ProcessHandler process
+  ) {
     if (processBuilder instanceof NewBackendCompilerProcessBuilder) {
       return null;
     }
@@ -312,16 +322,18 @@ public class JavacCompiler implements BackendCompiler {
   }
 
   @RequiredReadAction
-  public static void addCommandLineOptions(CompileContext compileContext,
-                                           ModuleChunk chunk,
-                                           ParametersList commandLine,
-                                           String outputPath,
-                                           Sdk jdk,
-                                           JavaSdkVersion version,
-                                           List<File> tempFiles,
-                                           boolean addSourcePath,
-                                           boolean isAnnotationProcessingMode,
-                                           boolean newCompiler) throws IOException {
+  public static void addCommandLineOptions(
+    CompileContext compileContext,
+    ModuleChunk chunk,
+    ParametersList commandLine,
+    String outputPath,
+    Sdk jdk,
+    JavaSdkVersion version,
+    List<File> tempFiles,
+    boolean addSourcePath,
+    boolean isAnnotationProcessingMode,
+    boolean newCompiler
+  ) throws IOException {
     JavaModuleExtension<?> extension = ModuleUtilCore.getExtension(chunk.getModule(), JavaModuleExtension.class);
     LanguageLevel languageLevel = JavaCompilerUtil.getLanguageLevelForCompilation(chunk);
     boolean isJava9Version = isAtLeast(version, languageLevel, JavaSdkVersion.JDK_1_9);
@@ -503,8 +515,8 @@ public class JavacCompiler implements BackendCompiler {
   @Nullable
   private static String findModuleName(@Nonnull Project project, @Nonnull VirtualFile moduleInfo) {
     PsiFile file = AccessRule.read(() -> PsiManager.getInstance(project).findFile(moduleInfo));
-    if (file instanceof PsiJavaFile) {
-      PsiJavaModule moduleDeclaration = AccessRule.read(((PsiJavaFile)file)::getModuleDeclaration);
+    if (file instanceof PsiJavaFile javaFile) {
+      PsiJavaModule moduleDeclaration = AccessRule.read(javaFile::getModuleDeclaration);
       if (moduleDeclaration != null) {
         return AccessRule.read(moduleDeclaration::getName);
       }
@@ -536,12 +548,14 @@ public class JavacCompiler implements BackendCompiler {
     return pathsList.getPathList();
   }
 
-  private static void addClassPathValue(final Sdk jdk,
-                                        final JavaSdkVersion version,
-                                        final ParametersList parametersList,
-                                        final List<String> cpString,
-                                        final String tempFileName,
-                                        List<File> tempFiles) throws IOException {
+  private static void addClassPathValue(
+    final Sdk jdk,
+    final JavaSdkVersion version,
+    final ParametersList parametersList,
+    final List<String> cpString,
+    final String tempFileName,
+    List<File> tempFiles
+  ) throws IOException {
     File cpFile = File.createTempFile(tempFileName, ".tmp");
     cpFile.deleteOnExit();
     tempFiles.add(cpFile);

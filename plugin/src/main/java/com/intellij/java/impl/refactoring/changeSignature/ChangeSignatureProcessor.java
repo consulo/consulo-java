@@ -25,27 +25,27 @@ import com.intellij.java.impl.refactoring.util.CanonicalTypes;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.*;
 import com.intellij.java.language.util.VisibilityUtil;
-import consulo.application.ApplicationManager;
-import consulo.project.Project;
-import consulo.ui.ex.awt.DialogWrapper;
-import consulo.ui.ex.awt.Messages;
-import consulo.util.lang.ref.Ref;
-import consulo.language.psi.PsiElement;
+import consulo.java.impl.refactoring.changeSignature.ChangeSignatureUsageProcessorEx;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.changeSignature.ChangeSignatureProcessorBase;
 import consulo.language.editor.refactoring.changeSignature.ChangeSignatureUsageProcessor;
 import consulo.language.editor.refactoring.rename.RenameUtil;
 import consulo.language.editor.refactoring.ui.ConflictsDialog;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awt.UIUtil;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
-import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.MultiMap;
-import consulo.java.impl.refactoring.changeSignature.ChangeSignatureUsageProcessorEx;
-import consulo.logging.Logger;
-
+import consulo.util.lang.ref.Ref;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.*;
 
 public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
@@ -76,11 +76,19 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
     LOG.assertTrue(myChangeInfo.getMethod().isValid());
   }
 
-  private static JavaChangeInfo generateChangeInfo(PsiMethod method, boolean generateDelegate, @PsiModifier.ModifierConstant String newVisibility,
-                                                   String newName, CanonicalTypes.Type newType, @Nonnull ParameterInfoImpl[] parameterInfo, ThrownExceptionInfo[] thrownExceptions,
-                                                   Set<PsiMethod> propagateParametersMethods, Set<PsiMethod> propagateExceptionsMethods) {
-    Set<PsiMethod> myPropagateParametersMethods = propagateParametersMethods != null ? propagateParametersMethods : new HashSet<PsiMethod>();
-    Set<PsiMethod> myPropagateExceptionsMethods = propagateExceptionsMethods != null ? propagateExceptionsMethods : new HashSet<PsiMethod>();
+  private static JavaChangeInfo generateChangeInfo(
+    PsiMethod method,
+    boolean generateDelegate,
+    @PsiModifier.ModifierConstant String newVisibility,
+    String newName,
+    CanonicalTypes.Type newType,
+    @Nonnull ParameterInfoImpl[] parameterInfo,
+    ThrownExceptionInfo[] thrownExceptions,
+    Set<PsiMethod> propagateParametersMethods,
+    Set<PsiMethod> propagateExceptionsMethods
+  ) {
+    Set<PsiMethod> myPropagateParametersMethods = propagateParametersMethods != null ? propagateParametersMethods : new HashSet<>();
+    Set<PsiMethod> myPropagateExceptionsMethods = propagateExceptionsMethods != null ? propagateExceptionsMethods : new HashSet<>();
 
     LOG.assertTrue(method.isValid());
     if (newVisibility == null) {
@@ -93,7 +101,7 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
 
   @Override
   @Nonnull
-  protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
+  protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
     return new ChangeSignatureViewDescriptor(getChangeInfo().getMethod());
   }
 
@@ -110,20 +118,20 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
   }
 
   @Override
-  protected boolean preprocessUsages(Ref<UsageInfo[]> refUsages) {
+  protected boolean preprocessUsages(@Nonnull Ref<UsageInfo[]> refUsages) {
     for (ChangeSignatureUsageProcessor processor : ChangeSignatureUsageProcessor.EP_NAME.getExtensions()) {
       if (processor instanceof ChangeSignatureUsageProcessorEx && ((ChangeSignatureUsageProcessorEx) processor).setupDefaultValues
           (myChangeInfo, refUsages, myProject)) {
         return false;
       }
     }
-    MultiMap<PsiElement, String> conflictDescriptions = new MultiMap<PsiElement, String>();
+    MultiMap<PsiElement, String> conflictDescriptions = new MultiMap<>();
     for (ChangeSignatureUsageProcessor usageProcessor : ChangeSignatureUsageProcessor.EP_NAME.getExtensions()) {
       final MultiMap<PsiElement, String> conflicts = usageProcessor.findConflicts(myChangeInfo, refUsages);
       for (PsiElement key : conflicts.keySet()) {
         Collection<String> collection = conflictDescriptions.get(key);
         if (collection.size() == 0) {
-          collection = new HashSet<String>();
+          collection = new HashSet<>();
         }
         collection.addAll(conflicts.get(key));
         conflictDescriptions.put(key, collection);
@@ -132,10 +140,10 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
 
     final UsageInfo[] usagesIn = refUsages.get();
     RenameUtil.addConflictDescriptions(usagesIn, conflictDescriptions);
-    Set<UsageInfo> usagesSet = new HashSet<UsageInfo>(Arrays.asList(usagesIn));
+    Set<UsageInfo> usagesSet = new HashSet<>(Arrays.asList(usagesIn));
     RenameUtil.removeConflictUsages(usagesSet);
     if (!conflictDescriptions.isEmpty()) {
-      if (ApplicationManager.getApplication().isUnitTestMode()) {
+      if (myProject.getApplication().isUnitTestMode()) {
         throw new ConflictsInTestsException(conflictDescriptions.values());
       }
       if (myPrepareSuccessfulSwingThreadCallback != null) {
@@ -161,7 +169,7 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
 
   private void askToRemoveCovariantOverriders(Set<UsageInfo> usages) {
     if (PsiUtil.isLanguageLevel5OrHigher(myChangeInfo.getMethod())) {
-      List<UsageInfo> covariantOverriderInfos = new ArrayList<UsageInfo>();
+      List<UsageInfo> covariantOverriderInfos = new ArrayList<>();
       for (UsageInfo usageInfo : usages) {
         if (usageInfo instanceof OverriderUsageInfo) {
           final OverriderUsageInfo info = (OverriderUsageInfo) usageInfo;
@@ -186,7 +194,7 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
       preprocessCovariantOverriders(covariantOverriderInfos);
 
       if (!covariantOverriderInfos.isEmpty()) {
-        if (ApplicationManager.getApplication().isUnitTestMode() || !isProcessCovariantOverriders()) {
+        if (myProject.getApplication().isUnitTestMode() || !isProcessCovariantOverriders()) {
           for (UsageInfo usageInfo : covariantOverriderInfos) {
             usages.remove(usageInfo);
           }
@@ -199,8 +207,12 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
   }
 
   protected boolean isProcessCovariantOverriders() {
-    return Messages.showYesNoDialog(myProject, RefactoringBundle.message("do.you.want.to.process.overriding.methods.with.covariant.return.type")
-        , JavaChangeSignatureHandler.REFACTORING_NAME, Messages.getQuestionIcon()) == DialogWrapper.OK_EXIT_CODE;
+    return Messages.showYesNoDialog(
+      myProject,
+      RefactoringBundle.message("do.you.want.to.process.overriding.methods.with.covariant.return.type"),
+      JavaChangeSignatureHandler.REFACTORING_NAME,
+      UIUtil.getQuestionIcon()
+    ) == DialogWrapper.OK_EXIT_CODE;
   }
 
   public static void makeEmptyBody(final PsiElementFactory factory, final PsiMethod delegate) throws IncorrectOperationException {

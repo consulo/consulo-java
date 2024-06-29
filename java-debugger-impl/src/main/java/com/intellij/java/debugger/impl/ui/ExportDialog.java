@@ -33,13 +33,9 @@ import consulo.application.ApplicationManager;
 import consulo.ui.ModalityState;
 import consulo.fileChooser.FileChooserDescriptorFactory;
 import consulo.application.HelpManager;
-import consulo.ui.ex.awt.CopyPasteManager;
+import consulo.ui.ex.awt.*;
 import consulo.project.Project;
-import consulo.ui.ex.awt.DialogWrapper;
-import consulo.ui.ex.awt.Messages;
-import consulo.ui.ex.awt.TextFieldWithBrowseButton;
 import consulo.util.lang.StringUtil;
-import consulo.ui.ex.awt.ScrollPaneFactory;
 import consulo.internal.com.sun.jdi.*;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
@@ -72,14 +68,14 @@ public class ExportDialog extends DialogWrapper {
     myCopyToClipboardAction.setEnabled(false);
 
     myTextArea.setText(MessageDescriptor.EVALUATING.getLabel());
-    debugProcess.getManagerThread().invoke(new ExportThreadsCommand(ApplicationManager.getApplication().getModalityStateForComponent(myTextArea)));
+    debugProcess.getManagerThread().invoke(new ExportThreadsCommand(myProject.getApplication().getModalityStateForComponent(myTextArea)));
 
     myTfFilePath.setText(destinationDirectory + File.separator + DEFAULT_REPORT_FILE_NAME);
     setHorizontalStretch(1.5f);
   }
 
   @Nonnull
-  protected Action[] createActions(){
+  protected Action[] createActions() {
     return new Action[]{getOKAction(), myCopyToClipboardAction, getCancelAction(), getHelpAction()};
   }
 
@@ -114,7 +110,7 @@ public class ExportDialog extends DialogWrapper {
         myProject,
         DebuggerBundle.message("error.threads.export.dialog.file.is.directory"),
         DebuggerBundle.message("threads.export.dialog.title"),
-        Messages.getErrorIcon()
+        UIUtil.getErrorIcon()
       );
     }
     else if (file.exists()) {
@@ -122,7 +118,7 @@ public class ExportDialog extends DialogWrapper {
         myProject,
         DebuggerBundle.message("error.threads.export.dialog.file.already.exists", path),
         DebuggerBundle.message("threads.export.dialog.title"),
-        Messages.getQuestionIcon()
+        UIUtil.getQuestionIcon()
       );
       if (answer == 0) {
         super.doOKAction();
@@ -141,12 +137,12 @@ public class ExportDialog extends DialogWrapper {
     return myTextArea.getText();
   }
 
-  protected String getDimensionServiceKey(){
+  protected String getDimensionServiceKey() {
     return "#com.intellij.debugger.ui.ExportDialog";
   }
 
   public static String getExportThreadsText(VirtualMachineProxyImpl vmProxy) {
-    final StringBuffer buffer = new StringBuffer(512);
+    final StringBuilder buffer = new StringBuilder(512);
     List<ThreadReference> threads = vmProxy.getVirtualMachine().allThreads();
     for (ThreadReference threadReference : threads) {
       final String name = threadName(threadReference);
@@ -269,13 +265,11 @@ public class ExportDialog extends DialogWrapper {
     }
 
     private void setText(final String text) {
-      DebuggerInvocationUtil.invokeLater(myProject, new Runnable() {
-          public void run() {
-            myTextArea.setText(text);
-            setOKActionEnabled(true);
-            myCopyToClipboardAction.setEnabled(true);
-          }
-        }, myModalityState);
+      DebuggerInvocationUtil.invokeLater(myProject, () -> {
+        myTextArea.setText(text);
+        setOKActionEnabled(true);
+        myCopyToClipboardAction.setEnabled(true);
+      }, myModalityState);
     }
 
     protected void action() {

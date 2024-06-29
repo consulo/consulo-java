@@ -15,38 +15,25 @@
  */
 package com.intellij.java.impl.refactoring.move.moveInstanceMethod;
 
-import java.awt.Component;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-
-import javax.swing.AbstractListModel;
-import javax.swing.Box;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JComponent;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
-import consulo.language.findUsage.DescriptiveNameUtil;
-import consulo.project.Project;
+import com.intellij.java.impl.refactoring.ui.JavaVisibilityPanel;
+import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.PsiVariable;
-import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.editor.refactoring.RefactoringBundle;
-import com.intellij.java.impl.refactoring.ui.JavaVisibilityPanel;
 import consulo.language.editor.refactoring.ui.RefactoringDialog;
-import consulo.ui.ex.awt.JBList;
-import consulo.ui.ex.awtUnsafe.TargetAWT;
+import consulo.language.findUsage.DescriptiveNameUtil;
 import consulo.language.icon.IconDescriptorUpdaters;
-import consulo.ui.ex.awt.Messages;
-import consulo.ui.ex.awt.ScrollPaneFactory;
+import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.ex.awt.*;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * @author dsl
@@ -55,6 +42,7 @@ public abstract class MoveInstanceMethodDialogBase extends RefactoringDialog {
   protected final PsiMethod myMethod;
   protected final PsiVariable[] myVariables;
 
+  @RequiredUIAccess
   public JComponent getPreferredFocusedComponent() {
     return myList;
   }
@@ -83,7 +71,7 @@ public abstract class MoveInstanceMethodDialogBase extends RefactoringDialog {
     gbConstraints.gridheight = 1;
     gbConstraints.gridx = 0;
     gbConstraints.gridy = 0;
-    gbConstraints.insets = new Insets(0, 0, 0, 0);
+    gbConstraints.insets = JBUI.emptyInsets();
     hBox.add(scrollPane, gbConstraints);
     hBox.add(Box.createHorizontalStrut(4));
     gbConstraints.weightx = 0;
@@ -100,11 +88,7 @@ public abstract class MoveInstanceMethodDialogBase extends RefactoringDialog {
     list.setCellRenderer(new MyListCellRenderer());
     list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     list.setSelectedIndex(0);
-    list.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-      public void valueChanged(ListSelectionEvent e) {
-        updateOnChanged(list);
-      }
-    });
+    list.getSelectionModel().addListSelectionListener(e -> updateOnChanged(list));
     return list;
   }
 
@@ -118,21 +102,26 @@ public abstract class MoveInstanceMethodDialogBase extends RefactoringDialog {
     return visibilityPanel;
   }
 
-  protected boolean verifyTargetClass (PsiClass targetClass) {
+  @RequiredReadAction
+  protected boolean verifyTargetClass(PsiClass targetClass) {
     if (targetClass.isInterface()) {
       final Project project = getProject();
       if (ClassInheritorsSearch.search(targetClass, false).findFirst() == null) {
-        final String message = RefactoringBundle.message("0.is.an.interface.that.has.no.implementing.classes", DescriptiveNameUtil.getDescriptiveName(targetClass));
+        final String message = RefactoringBundle.message(
+          "0.is.an.interface.that.has.no.implementing.classes",
+          DescriptiveNameUtil.getDescriptiveName(targetClass)
+        );
 
         Messages.showErrorDialog(project, message, myRefactoringName);
         return false;
       }
 
-      final String message = RefactoringBundle.message("0.is.an.interface.method.implementation.will.be.added.to.all.directly.implementing.classes",
-                                                       DescriptiveNameUtil.getDescriptiveName(targetClass));
+      final String message = RefactoringBundle.message(
+        "0.is.an.interface.method.implementation.will.be.added.to.all.directly.implementing.classes",
+        DescriptiveNameUtil.getDescriptiveName(targetClass)
+      );
 
-      final int result = Messages.showYesNoDialog(project, message, myRefactoringName,
-                                                  Messages.getQuestionIcon());
+      final int result = Messages.showYesNoDialog(project, message, myRefactoringName, UIUtil.getQuestionIcon());
       if (result != 0) return false;
     }
 
@@ -150,12 +139,15 @@ public abstract class MoveInstanceMethodDialogBase extends RefactoringDialog {
   }
 
   private static class MyListCellRenderer extends DefaultListCellRenderer {
+    @RequiredReadAction
     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
       super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
       final PsiVariable psiVariable = (PsiVariable)value;
-      final String text = PsiFormatUtil.formatVariable(psiVariable,
-                                                       PsiFormatUtil.SHOW_NAME | PsiFormatUtil.SHOW_TYPE,
-                                                       PsiSubstitutor.EMPTY);
+      final String text = PsiFormatUtil.formatVariable(
+        psiVariable,
+        PsiFormatUtil.SHOW_NAME | PsiFormatUtil.SHOW_TYPE,
+        PsiSubstitutor.EMPTY
+      );
       setIcon(TargetAWT.to(IconDescriptorUpdaters.getIcon(psiVariable, 0)));
       setText(text);
       return this;

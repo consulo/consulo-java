@@ -32,7 +32,6 @@ import consulo.ide.impl.psi.util.proximity.PsiProximityComparator;
 import consulo.ide.impl.ui.impl.PopupChooserBuilder;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.FileModificationService;
-import consulo.language.editor.PlatformDataKeys;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupElementBuilder;
@@ -307,8 +306,8 @@ public class JavaDocReferenceInspection extends BaseLocalInspectionTool {
       if (element instanceof PsiJavaCodeReferenceElement) {
         final PsiJavaCodeReferenceElement referenceElement = (PsiJavaCodeReferenceElement)element;
         Collections.sort(originalClasses, new PsiProximityComparator(referenceElement.getElement()));
-        final JList list = new JBList(originalClasses.toArray(new PsiClass[originalClasses.size()]));
-        list.setCellRenderer(new FQNameCellRenderer());
+        final JList<PsiClass> list = new JBList<>(originalClasses.toArray(new PsiClass[originalClasses.size()]));
+        list.setCellRenderer(new FQNameCellRenderer<>());
         final Runnable runnable = () -> {
           if (!element.isValid()) {
             return;
@@ -364,7 +363,7 @@ public class JavaDocReferenceInspection extends BaseLocalInspectionTool {
     public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor) {
       final AsyncResult<DataContext> asyncResult = DataManager.getInstance().getDataContextFromFocus();
       asyncResult.doWhenDone(dataContext -> {
-        final Editor editor = dataContext.getData(PlatformDataKeys.EDITOR);
+        final Editor editor = dataContext.getData(Editor.KEY);
         assert editor != null;
         final TextRange textRange = ((ProblemDescriptorBase)descriptor).getTextRange();
         editor.getSelectionModel().setSelection(textRange.getStartOffset(), textRange.getEndOffset());

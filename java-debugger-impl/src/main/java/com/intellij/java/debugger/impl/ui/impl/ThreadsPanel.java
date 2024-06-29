@@ -25,11 +25,10 @@ import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTree;
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.StackFrameDescriptorImpl;
-import com.intellij.java.debugger.impl.ui.tree.render.DescriptorLabelListener;
 import consulo.application.Application;
+import consulo.application.HelpManager;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
-import consulo.language.editor.PlatformDataKeys;
 import consulo.project.Project;
 import consulo.ui.ex.action.ActionManager;
 import consulo.ui.ex.action.ActionPopupMenu;
@@ -37,9 +36,9 @@ import consulo.ui.ex.action.DefaultActionGroup;
 import consulo.ui.ex.awt.ScrollPaneFactory;
 import consulo.ui.ex.awt.util.Alarm;
 import consulo.util.dataholder.Key;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -63,13 +62,13 @@ public class ThreadsPanel extends DebuggerTreePanel
 			@Override
 			public void keyPressed(KeyEvent e)
 			{
-				if(e.getKeyCode() == KeyEvent.VK_ENTER && getThreadsTree().getSelectionCount() == 1)
+				if (e.getKeyCode() == KeyEvent.VK_ENTER && getThreadsTree().getSelectionCount() == 1)
 				{
 					DebuggerTreeNodeImpl node = (DebuggerTreeNodeImpl) getThreadsTree().getLastSelectedPathComponent();
-					if(node != null)
+					if (node != null)
 					{
 						NodeDescriptorImpl descriptor = node.getDescriptor();
-						if(descriptor instanceof StackFrameDescriptorImpl)
+						if (descriptor instanceof StackFrameDescriptorImpl)
 						{
 							selectFrame(node);
 						}
@@ -83,15 +82,15 @@ public class ThreadsPanel extends DebuggerTreePanel
 			@Override
 			public void changeEvent(@Nonnull DebuggerContextImpl newContext, DebuggerSession.Event event)
 			{
-				if(DebuggerSession.Event.ATTACHED == event || DebuggerSession.Event.RESUME == event)
+				if (DebuggerSession.Event.ATTACHED == event || DebuggerSession.Event.RESUME == event)
 				{
 					startLabelsUpdate();
 				}
-				else if(DebuggerSession.Event.PAUSE == event || DebuggerSession.Event.DETACHED == event || DebuggerSession.Event.DISPOSE == event)
+				else if (DebuggerSession.Event.PAUSE == event || DebuggerSession.Event.DETACHED == event || DebuggerSession.Event.DISPOSE == event)
 				{
 					myUpdateLabelsAlarm.cancelAllRequests();
 				}
-				if(DebuggerSession.Event.DETACHED == event || DebuggerSession.Event.DISPOSE == event)
+				if (DebuggerSession.Event.DETACHED == event || DebuggerSession.Event.DISPOSE == event)
 				{
 					stateManager.removeListener(this);
 				}
@@ -102,7 +101,7 @@ public class ThreadsPanel extends DebuggerTreePanel
 
 	private void startLabelsUpdate()
 	{
-		if(myUpdateLabelsAlarm.isDisposed())
+		if (myUpdateLabelsAlarm.isDisposed())
 		{
 			return;
 		}
@@ -115,14 +114,14 @@ public class ThreadsPanel extends DebuggerTreePanel
 				boolean updateScheduled = false;
 				try
 				{
-					if(isUpdateEnabled())
+					if (isUpdateEnabled())
 					{
 						final ThreadsDebuggerTree tree = getThreadsTree();
 						final DebuggerTreeNodeImpl root = (DebuggerTreeNodeImpl) tree.getModel().getRoot();
-						if(root != null)
+						if (root != null)
 						{
 							final DebugProcessImpl process = getContext().getDebugProcess();
-							if(process != null)
+							if (process != null)
 							{
 								process.getManagerThread().invoke(new DebuggerCommandImpl()
 								{
@@ -152,7 +151,7 @@ public class ThreadsPanel extends DebuggerTreePanel
 				}
 				finally
 				{
-					if(!updateScheduled)
+					if (!updateScheduled)
 					{
 						reschedule();
 					}
@@ -162,7 +161,7 @@ public class ThreadsPanel extends DebuggerTreePanel
 			private void reschedule()
 			{
 				final DebuggerSession session = getContext().getDebuggerSession();
-				if(session != null && session.isAttached() && !session.isPaused() && !myUpdateLabelsAlarm.isDisposed())
+				if (session != null && session.isAttached() && !session.isPaused() && !myUpdateLabelsAlarm.isDisposed())
 				{
 					myUpdateLabelsAlarm.addRequest(this, LABELS_UPDATE_DELAY_MS, Application.get().getNoneModalityState());
 				}
@@ -181,17 +180,10 @@ public class ThreadsPanel extends DebuggerTreePanel
 	private static void updateNodeLabels(DebuggerTreeNodeImpl from)
 	{
 		final int childCount = from.getChildCount();
-		for(int idx = 0; idx < childCount; idx++)
+		for (int idx = 0; idx < childCount; idx++)
 		{
 			final DebuggerTreeNodeImpl child = (DebuggerTreeNodeImpl) from.getChildAt(idx);
-			child.getDescriptor().updateRepresentation(null, new DescriptorLabelListener()
-			{
-				@Override
-				public void labelChanged()
-				{
-					child.labelChanged();
-				}
-			});
+			child.getDescriptor().updateRepresentation(null, child::labelChanged);
 			updateNodeLabels(child);
 		}
 	}
@@ -212,11 +204,7 @@ public class ThreadsPanel extends DebuggerTreePanel
 	@Override
 	public Object getData(Key dataId)
 	{
-		if(PlatformDataKeys.HELP_ID == dataId)
-		{
-			return HELP_ID;
-		}
-		return super.getData(dataId);
+		return HelpManager.HELP_ID == dataId ? HELP_ID : super.getData(dataId);
 	}
 
 	private void selectFrame(DebuggerTreeNodeImpl node)

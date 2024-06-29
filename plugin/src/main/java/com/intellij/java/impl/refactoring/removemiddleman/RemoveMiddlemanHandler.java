@@ -15,27 +15,24 @@
  */
 package com.intellij.java.impl.refactoring.removemiddleman;
 
-import java.util.Set;
-
-import jakarta.annotation.Nonnull;
-
-import consulo.language.editor.PlatformDataKeys;
-import org.jetbrains.annotations.NonNls;
-import consulo.dataContext.DataContext;
-import consulo.language.editor.LangDataKeys;
+import com.intellij.java.impl.refactoring.HelpID;
+import com.intellij.java.impl.refactoring.RefactorJBundle;
+import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiMethod;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.codeEditor.ScrollingModel;
-import consulo.project.Project;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiField;
-import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.impl.refactoring.HelpID;
-import com.intellij.java.impl.refactoring.RefactorJBundle;
+import consulo.dataContext.DataContext;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
-import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
+
+import java.util.Set;
 
 public class RemoveMiddlemanHandler implements RefactoringActionHandler {
   private static final String REFACTORING_NAME = RefactorJBundle.message("remove.middleman");
@@ -52,22 +49,29 @@ public class RemoveMiddlemanHandler implements RefactoringActionHandler {
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
     final ScrollingModel scrollingModel = editor.getScrollingModel();
     scrollingModel.scrollToCaret(ScrollType.MAKE_VISIBLE);
-    final PsiElement element = dataContext.getData(LangDataKeys.PSI_ELEMENT);
-    if (!(element instanceof PsiField)) {
-      CommonRefactoringUtil.showErrorHint(project, editor, RefactorJBundle.message("cannot.perform.the.refactoring") + RefactorJBundle.message(
-          "the.caret.should.be.positioned.at.the.name.of.the.field.to.be.refactored"), null, getHelpID());
-      return;
+    final PsiElement element = dataContext.getData(PsiElement.KEY);
+    if (element instanceof PsiField field) {
+      invoke(field, editor);
     }
-    invoke((PsiField)element, editor);
+    else {
+      CommonRefactoringUtil.showErrorHint(
+        project,
+        editor,
+        RefactorJBundle.message("cannot.perform.the.refactoring") + RefactorJBundle.message(
+          "the.caret.should.be.positioned.at.the.name.of.the.field.to.be.refactored"),
+        null,
+        getHelpID()
+      );
+    }
   }
 
   public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
     if (elements.length != 1) {
       return;
     }
-    if (elements[0] instanceof PsiField) {
-      Editor editor = dataContext.getData(PlatformDataKeys.EDITOR);
-      invoke((PsiField)elements[0], editor);
+    if (elements[0] instanceof PsiField field) {
+      Editor editor = dataContext.getData(Editor.KEY);
+      invoke(field, editor);
     }
   }
 

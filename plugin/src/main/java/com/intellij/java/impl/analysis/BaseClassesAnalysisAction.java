@@ -15,20 +15,18 @@
  */
 package com.intellij.java.impl.analysis;
 
-import consulo.language.editor.scope.AnalysisScope;
-import consulo.language.editor.scope.AnalysisScopeBundle;
-import consulo.ide.impl.idea.analysis.BaseAnalysisAction;
-import consulo.application.ApplicationManager;
-import consulo.compiler.CompileContext;
-import consulo.compiler.CompileStatusNotification;
-import consulo.compiler.CompilerManager;
-import consulo.document.FileDocumentManager;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
 import consulo.application.progress.Task;
+import consulo.compiler.CompilerManager;
+import consulo.document.FileDocumentManager;
+import consulo.ide.impl.idea.analysis.BaseAnalysisAction;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.language.editor.scope.localize.AnalysisScopeLocalize;
 import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
-
+import consulo.ui.ex.awt.UIUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -43,35 +41,37 @@ public abstract class BaseClassesAnalysisAction extends BaseAnalysisAction {
   protected abstract void analyzeClasses(final Project project, final AnalysisScope scope, ProgressIndicator indicator);
 
   @Override
-  protected void analyze(@Nonnull final Project project, final AnalysisScope scope) {
+  protected void analyze(@Nonnull final Project project, @Nonnull final AnalysisScope scope) {
     FileDocumentManager.getInstance().saveAllDocuments();
 
-    ProgressManager.getInstance().run(new Task.Backgroundable(project, AnalysisScopeBundle.message("analyzing.project"), true) {
+    ProgressManager.getInstance().run(new Task.Backgroundable(project, AnalysisScopeLocalize.analyzingProject().get(), true) {
+      @RequiredReadAction
       @Override
       public void run(@Nonnull final ProgressIndicator indicator) {
         indicator.setIndeterminate(true);
-        indicator.setText(AnalysisScopeBundle.message("checking.class.files"));
+        indicator.setTextValue(AnalysisScopeLocalize.checkingClassFiles());
 
         final CompilerManager compilerManager = CompilerManager.getInstance((Project) getProject());
         final boolean upToDate = compilerManager.isUpToDate(compilerManager.createProjectCompileScope());
 
-        ApplicationManager.getApplication().invokeLater(new Runnable() {
-          @Override
-          public void run() {
-            if (!upToDate) {
-              final int i = Messages.showYesNoCancelDialog((Project) getProject(), AnalysisScopeBundle.message("recompile.confirmation.message"),
-                  AnalysisScopeBundle.message("project.is.out.of.date"), Messages.getWarningIcon());
+        project.getApplication().invokeLater(() -> {
+          if (!upToDate) {
+            final int i = Messages.showYesNoCancelDialog(
+              (Project) getProject(),
+              AnalysisScopeLocalize.recompileConfirmationMessage().get(),
+              AnalysisScopeLocalize.projectIsOutOfDate().get(),
+              UIUtil.getWarningIcon()
+            );
 
-              if (i == 2) return;
+            if (i == 2) return;
 
-              if (i == 0) {
-                compileAndAnalyze(project, scope);
-              } else {
-                doAnalyze(project, scope);
-              }
+            if (i == 0) {
+              compileAndAnalyze(project, scope);
             } else {
               doAnalyze(project, scope);
             }
+          } else {
+            doAnalyze(project, scope);
           }
         });
       }
@@ -79,7 +79,7 @@ public abstract class BaseClassesAnalysisAction extends BaseAnalysisAction {
   }
 
   private void doAnalyze(final Project project, final AnalysisScope scope) {
-    ProgressManager.getInstance().run(new Task.Backgroundable(project, AnalysisScopeBundle.message("analyzing.project"), true) {
+    ProgressManager.getInstance().run(new Task.Backgroundable(project, AnalysisScopeLocalize.analyzingProject().get(), true) {
       @Override
       @Nullable
       public NotificationInfo getNotificationInfo() {
@@ -93,19 +93,12 @@ public abstract class BaseClassesAnalysisAction extends BaseAnalysisAction {
     });
   }
 
+  @RequiredReadAction
   private void compileAndAnalyze(final Project project, final AnalysisScope scope) {
     final CompilerManager compilerManager = CompilerManager.getInstance(project);
-    compilerManager.make(compilerManager.createProjectCompileScope(), new CompileStatusNotification() {
-      @Override
-      public void finished(final boolean aborted, final int errors, final int warnings, final CompileContext compileContext) {
-        if (aborted || errors != 0) return;
-        ApplicationManager.getApplication().invokeLater(new Runnable() {
-          @Override
-          public void run() {
-            doAnalyze(project, scope);
-          }
-        });
-      }
+    compilerManager.make(compilerManager.createProjectCompileScope(), (aborted, errors, warnings, compileContext) -> {
+      if (aborted || errors != 0) return;
+      project.getApplication().invokeLater(() -> doAnalyze(project, scope));
     });
   }
 }

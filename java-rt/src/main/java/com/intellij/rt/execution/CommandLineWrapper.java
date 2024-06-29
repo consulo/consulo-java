@@ -35,7 +35,7 @@ public class CommandLineWrapper {
   public static void main(String[] args) throws Exception {
     final List urls = new ArrayList();
     final File file = new File(args[0]);
-    final StringBuffer buf = new StringBuffer();
+    final StringBuilder buf = new StringBuilder();
     final BufferedReader reader = new BufferedReader(new FileReader(file));
     try {
       while(reader.ready()) {

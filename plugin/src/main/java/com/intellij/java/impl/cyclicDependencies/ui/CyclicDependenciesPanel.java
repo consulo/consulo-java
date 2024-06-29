@@ -22,6 +22,7 @@ import com.intellij.java.impl.packageDependencies.ui.TreeModelBuilder;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.application.AllIcons;
+import consulo.application.HelpManager;
 import consulo.application.dumb.DumbAware;
 import consulo.dataContext.DataProvider;
 import consulo.disposer.Disposable;
@@ -31,10 +32,10 @@ import consulo.ide.impl.idea.packageDependencies.DependencyUISettings;
 import consulo.ide.impl.idea.packageDependencies.ui.*;
 import consulo.ide.impl.idea.ui.SmartExpander;
 import consulo.java.language.impl.JavaIcons;
-import consulo.language.editor.PlatformDataKeys;
 import consulo.language.editor.scope.localize.AnalysisScopeLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
+import consulo.navigation.Navigatable;
 import consulo.platform.base.localize.CommonLocalize;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
@@ -154,9 +155,9 @@ public class CyclicDependenciesPanel extends JPanel implements Disposable, DataP
     TreeUtil.selectFirstNode(myLeftTree);
   }
 
-  private static void getPackageNodesHierarchy(PackageNode node, Set<PackageNode> result){
+  private static void getPackageNodesHierarchy(PackageNode node, Set<PackageNode> result) {
     result.add(node);
-    for (int i = 0; i < node.getChildCount(); i++){
+    for (int i = 0; i < node.getChildCount(); i++) {
       final TreeNode child = node.getChildAt(i);
       if (child instanceof PackageNode packNode) {
         if (!result.contains(packNode)) {
@@ -185,7 +186,7 @@ public class CyclicDependenciesPanel extends JPanel implements Disposable, DataP
     return null;
   }
 
-  private static PackageDependenciesNode hideEmptyMiddlePackages(PackageDependenciesNode node, StringBuffer result){
+  private static PackageDependenciesNode hideEmptyMiddlePackages(PackageDependenciesNode node, StringBuffer result) {
     if (node.getChildCount() == 0 || node.getChildCount() > 1 || (node.getChildCount() == 1 && node.getChildAt(0) instanceof FileNode)) {
       result.append(result.length() != 0 ? "." : "").append(
         node.toString().equals(AnalysisScopeLocalize.dependenciesTreeNodeDefaultPackageAbbreviation().get()) ? "" : node.toString()
@@ -193,12 +194,12 @@ public class CyclicDependenciesPanel extends JPanel implements Disposable, DataP
     } else {
       if (node.getChildCount() == 1) {
         PackageDependenciesNode child = (PackageDependenciesNode)node.getChildAt(0);
-        if (!(node instanceof PackageNode)){  //e.g. modules node
+        if (!(node instanceof PackageNode)) {  //e.g. modules node
           node.removeAllChildren();
           child = hideEmptyMiddlePackages(child, result);
           node.add(child);
         } else {
-          if (child instanceof PackageNode){
+          if (child instanceof PackageNode) {
             node.removeAllChildren();
             result.append(result.length() != 0 ? "." : "")
               .append(node.toString().equals(AnalysisScopeLocalize.dependenciesTreeNodeDefaultPackageAbbreviation().get()) ? "" : node.toString());
@@ -347,10 +348,10 @@ public class CyclicDependenciesPanel extends JPanel implements Disposable, DataP
     if (node instanceof PackageNode packageNode) {
       return packageNode;
     }
-    if (node instanceof FileNode) {
+    if (node instanceof FileNode fileNode) {
       return (PackageNode)node.getParent();
     }
-    if (node instanceof ModuleNode){
+    if (node instanceof ModuleNode) {
       return (PackageNode)node.getChildAt(0);
     }
     return null;
@@ -376,8 +377,8 @@ public class CyclicDependenciesPanel extends JPanel implements Disposable, DataP
 
   @Nullable
   @NonNls
-  public Object getData(@NonNls Key<?> dataId) {
-    if (PlatformDataKeys.HELP_ID == dataId) {
+  public Object getData(@Nonnull @NonNls Key<?> dataId) {
+    if (HelpManager.HELP_ID == dataId) {
       return "dependency.viewer.tool.window";
     }
     return null;
@@ -391,7 +392,7 @@ public class CyclicDependenciesPanel extends JPanel implements Disposable, DataP
     }
 
     public void customizeCellRenderer(
-      JTree tree,
+      @Nonnull JTree tree,
       Object value,
       boolean selected,
       boolean expanded,
@@ -402,7 +403,7 @@ public class CyclicDependenciesPanel extends JPanel implements Disposable, DataP
       SimpleTextAttributes attributes = SimpleTextAttributes.REGULAR_ATTRIBUTES;
 
       final PackageDependenciesNode node;
-      if (value instanceof PackageDependenciesNode packageDependenciesNode){
+      if (value instanceof PackageDependenciesNode packageDependenciesNode) {
         node = packageDependenciesNode;
         if (myLeftTree && !mySettings.UI_FILTER_OUT_OF_CYCLE_PACKAGES) {
           final PsiElement element = node.getPsiElement();
@@ -426,6 +427,7 @@ public class CyclicDependenciesPanel extends JPanel implements Disposable, DataP
       super(CommonLocalize.actionClose(), AnalysisScopeLocalize.actionCloseDependencyDescription(), AllIcons.Actions.Cancel);
     }
 
+    @RequiredUIAccess
     public void actionPerformed(@Nonnull AnActionEvent e) {
       Disposer.dispose(myUsagesPanel);
       DependenciesToolWindow.getInstance(myProject).closeContent(myContent);
@@ -511,10 +513,7 @@ public class CyclicDependenciesPanel extends JPanel implements Disposable, DataP
   private static class MyTree extends Tree implements DataProvider {
     public Object getData(@Nonnull Key<?> dataId) {
       PackageDependenciesNode node = getSelectedNode();
-      if (PlatformDataKeys.NAVIGATABLE == dataId) {
-        return node;
-      }
-      return null;
+      return Navigatable.KEY == dataId ? node : null;
     }
 
     @Nullable

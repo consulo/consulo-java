@@ -24,22 +24,22 @@
  */
 package com.intellij.java.impl.refactoring.inheritanceToDelegation;
 
-import com.intellij.java.language.psi.*;
-import consulo.dataContext.DataContext;
-import consulo.language.editor.PlatformDataKeys;
-import consulo.codeEditor.Editor;
-import consulo.codeEditor.ScrollType;
-import consulo.project.Project;
-import consulo.language.psi.*;
 import com.intellij.java.impl.refactoring.HelpID;
-import consulo.language.editor.refactoring.action.RefactoringActionHandler;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import com.intellij.java.impl.refactoring.util.RefactoringHierarchyUtil;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfoStorage;
+import com.intellij.java.language.psi.*;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.ScrollType;
+import consulo.dataContext.DataContext;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.logging.Logger;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
@@ -52,18 +52,15 @@ public class InheritanceToDelegationHandler implements RefactoringActionHandler 
   private static final Logger LOG = Logger.getInstance(InheritanceToDelegationHandler.class);
   public static final String REFACTORING_NAME = RefactoringBundle.message("replace.inheritance.with.delegation.title");
 
-  private static final MemberInfo.Filter<PsiMember> MEMBER_INFO_FILTER = new MemberInfo.Filter<PsiMember>() {
-    public boolean includeMember(PsiMember element) {
-      if (element instanceof PsiMethod) {
-        final PsiMethod method = (PsiMethod)element;
-        return !method.hasModifierProperty(PsiModifier.STATIC)
-               && !method.hasModifierProperty(PsiModifier.PRIVATE);
-      }
-      else if (element instanceof PsiClass && ((PsiClass)element).isInterface()) {
-        return true;
-      }
-      return false;
+  private static final MemberInfo.Filter<PsiMember> MEMBER_INFO_FILTER = element -> {
+    if (element instanceof PsiMethod) {
+      final PsiMethod method = (PsiMethod)element;
+      return !method.hasModifierProperty(PsiModifier.STATIC) && !method.hasModifierProperty(PsiModifier.PRIVATE);
     }
+    else if (element instanceof PsiClass && ((PsiClass)element).isInterface()) {
+      return true;
+    }
+    return false;
   };
 
 
@@ -91,7 +88,7 @@ public class InheritanceToDelegationHandler implements RefactoringActionHandler 
 
     final PsiClass aClass = (PsiClass)elements[0];
 
-    Editor editor = dataContext.getData(PlatformDataKeys.EDITOR);
+    Editor editor = dataContext.getData(Editor.KEY);
     if (aClass.isInterface()) {
       String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("class.is.interface", aClass.getQualifiedName()));
       CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INHERITANCE_TO_DELEGATION);
@@ -113,15 +110,13 @@ public class InheritanceToDelegationHandler implements RefactoringActionHandler 
       return;
     }
 
-    final HashMap<PsiClass, Collection<MemberInfo>> basesToMemberInfos = new HashMap<PsiClass, Collection<MemberInfo>>();
+    final HashMap<PsiClass, Collection<MemberInfo>> basesToMemberInfos = new HashMap<>();
 
     for (PsiClass base : bases) {
       basesToMemberInfos.put(base, createBaseClassMemberInfos(base));
     }
 
-
-    new InheritanceToDelegationDialog(project, aClass,
-                                      bases, basesToMemberInfos).show();
+    new InheritanceToDelegationDialog(project, aClass, bases, basesToMemberInfos).show();
   }
 
   private static List<MemberInfo> createBaseClassMemberInfos(PsiClass baseClass) {
@@ -130,7 +125,7 @@ public class InheritanceToDelegationHandler implements RefactoringActionHandler 
 
     final MemberInfoStorage memberInfoStorage = new MemberInfoStorage(baseClass, MEMBER_INFO_FILTER);
 
-    ArrayList<MemberInfo> memberInfoList = new ArrayList<MemberInfo>(memberInfoStorage.getClassMemberInfos(deepestBase));
+    ArrayList<MemberInfo> memberInfoList = new ArrayList<>(memberInfoStorage.getClassMemberInfos(deepestBase));
     List<MemberInfo> memberInfos = memberInfoStorage.getIntermediateMemberInfosList(deepestBase);
     for (final MemberInfo memberInfo : memberInfos) {
       memberInfoList.add(memberInfo);

@@ -26,7 +26,6 @@ import consulo.codeEditor.Editor;
 import consulo.dataContext.DataContext;
 import consulo.ide.impl.idea.ide.hierarchy.MethodHierarchyBrowserBase;
 import consulo.language.Language;
-import consulo.language.editor.PlatformDataKeys;
 import consulo.language.editor.hierarchy.HierarchyBrowser;
 import consulo.language.editor.hierarchy.MethodHierarchyProvider;
 import consulo.language.psi.PsiDocumentManager;
@@ -70,7 +69,7 @@ public class JavaMethodHierarchyProvider implements MethodHierarchyProvider {
       return method;
     }
 
-    final Editor editor = dataContext.getData(PlatformDataKeys.EDITOR);
+    final Editor editor = dataContext.getData(Editor.KEY);
     if (editor == null) {
       return null;
     }
@@ -105,6 +104,7 @@ public class JavaMethodHierarchyProvider implements MethodHierarchyProvider {
     return new MethodHierarchyBrowser(target.getProject(), (PsiMethod) target);
   }
 
+  @RequiredReadAction
   public void browserActivated(@Nonnull final HierarchyBrowser hierarchyBrowser) {
     ((MethodHierarchyBrowser) hierarchyBrowser).changeView(MethodHierarchyBrowserBase.METHOD_TYPE);
   }

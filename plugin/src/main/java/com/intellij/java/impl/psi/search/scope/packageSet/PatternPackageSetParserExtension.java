@@ -21,12 +21,12 @@
 package com.intellij.java.impl.psi.search.scope.packageSet;
 
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.scope.AnalysisScopeBundle;
-import consulo.language.lexer.Lexer;
 import consulo.content.scope.PackageSet;
-import consulo.ide.impl.psi.search.scope.packageSet.PackageSetParserExtension;
 import consulo.content.scope.ParsingException;
+import consulo.ide.impl.psi.search.scope.packageSet.PackageSetParserExtension;
 import consulo.ide.impl.psi.search.scope.packageSet.lexer.ScopeTokenTypes;
+import consulo.language.editor.scope.localize.AnalysisScopeLocalize;
+import consulo.language.lexer.Lexer;
 
 @ExtensionImpl
 public class PatternPackageSetParserExtension implements PackageSetParserExtension {
@@ -78,7 +78,7 @@ public class PatternPackageSetParserExtension implements PackageSetParserExtensi
   }
 
   private static String parseAspectJPattern(Lexer lexer) throws ParsingException {
-    StringBuffer pattern = new StringBuffer();
+    StringBuilder pattern = new StringBuilder();
     boolean wasIdentifier = false;
     while (true) {
       if (lexer.getTokenType() == ScopeTokenTypes.DOT) {
@@ -89,7 +89,7 @@ public class PatternPackageSetParserExtension implements PackageSetParserExtensi
         wasIdentifier = false;
       } else if (lexer.getTokenType() == ScopeTokenTypes.IDENTIFIER) {
         if (wasIdentifier)
-          error(AnalysisScopeBundle.message("error.packageset.token.expectations", getTokenText(lexer)), lexer);
+          error(AnalysisScopeLocalize.errorPackagesetTokenExpectations(getTokenText(lexer)).get(), lexer);
         wasIdentifier = true;
         pattern.append(getTokenText(lexer));
       } else {
@@ -99,7 +99,7 @@ public class PatternPackageSetParserExtension implements PackageSetParserExtensi
     }
 
     if (pattern.length() == 0) {
-      error(AnalysisScopeBundle.message("error.packageset.pattern.expectations"), lexer);
+      error(AnalysisScopeLocalize.errorPackagesetPatternExpectations().get(), lexer);
     }
 
     return pattern.toString();
@@ -114,6 +114,6 @@ public class PatternPackageSetParserExtension implements PackageSetParserExtensi
 
   private static void error(String message, Lexer lexer) throws ParsingException {
     throw new ParsingException(
-        AnalysisScopeBundle.message("error.packageset.position.parsing.error", message, (lexer.getTokenStart() + 1)));
+      AnalysisScopeLocalize.errorPackagesetPositionParsingError(message, (lexer.getTokenStart() + 1)).get());
   }
 }

@@ -28,26 +28,27 @@ import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.ApplicationManager;
-import consulo.project.Project;
-import consulo.ui.ex.awt.Messages;
-import consulo.language.psi.PsiCompiledElement;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiReference;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.event.RefactoringElementListener;
 import consulo.language.editor.refactoring.rename.RenameProcessor;
+import consulo.language.psi.PsiCompiledElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awt.UIUtil;
 import consulo.usage.MoveRenameUsageInfo;
 import consulo.usage.UsageInfo;
-import consulo.language.util.IncorrectOperationException;
-import consulo.application.util.function.Processor;
 import consulo.util.collection.MultiMap;
-import consulo.logging.Logger;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -61,15 +62,18 @@ public class RenameJavaVariableProcessor extends RenameJavaMemberProcessor {
     return element instanceof PsiVariable;
   }
 
-  public void renameElement(final PsiElement psiElement,
-                            final String newName,
-                            final UsageInfo[] usages,
-                            @Nullable RefactoringElementListener listener) throws IncorrectOperationException {
+  @RequiredWriteAction
+  public void renameElement(
+    final PsiElement psiElement,
+    final String newName,
+    final UsageInfo[] usages,
+    @Nullable RefactoringElementListener listener
+  ) throws IncorrectOperationException {
     PsiVariable variable = (PsiVariable) psiElement;
-    List<MemberHidesOuterMemberUsageInfo> outerHides = new ArrayList<MemberHidesOuterMemberUsageInfo>();
-    List<MemberHidesStaticImportUsageInfo> staticImportHides = new ArrayList<MemberHidesStaticImportUsageInfo>();
+    List<MemberHidesOuterMemberUsageInfo> outerHides = new ArrayList<>();
+    List<MemberHidesStaticImportUsageInfo> staticImportHides = new ArrayList<>();
 
-    List<PsiElement> occurrencesToCheckForConflict = new ArrayList<PsiElement>();
+    List<PsiElement> occurrencesToCheckForConflict = new ArrayList<>();
     // rename all references
     for (UsageInfo usage : usages) {
       final PsiElement element = usage.getElement();
@@ -81,8 +85,8 @@ public class RenameJavaVariableProcessor extends RenameJavaMemberProcessor {
         PsiJavaCodeReferenceElement collidingRef = (PsiJavaCodeReferenceElement) element;
         PsiElement resolved = collidingRef.resolve();
 
-        if (resolved instanceof PsiField) {
-          qualifyMember((PsiField) resolved, collidingRef, newName);
+        if (resolved instanceof PsiField field) {
+          qualifyMember(field, collidingRef, newName);
         } else {
           // do nothing
         }
@@ -121,7 +125,9 @@ public class RenameJavaVariableProcessor extends RenameJavaMemberProcessor {
     qualifyStaticImportReferences(staticImportHides);
   }
 
-  private static void fixPossibleNameCollisionsForFieldRenaming(PsiField field, String newName, PsiElement replacedOccurence) throws IncorrectOperationException {
+  @RequiredReadAction
+  private static void fixPossibleNameCollisionsForFieldRenaming(PsiField field, String newName, PsiElement replacedOccurence)
+    throws IncorrectOperationException {
     if (!(replacedOccurence instanceof PsiReferenceExpression)) return;
     PsiElement elem = ((PsiReferenceExpression) replacedOccurence).resolve();
 
@@ -135,6 +141,7 @@ public class RenameJavaVariableProcessor extends RenameJavaMemberProcessor {
     }
   }
 
+  @RequiredReadAction
   public void prepareRenaming(final PsiElement element, final String newName, final Map<PsiElement, String> allRenames) {
     if (element instanceof PsiField && JavaLanguage.INSTANCE.equals(element.getLanguage())) {
       prepareFieldRenaming((PsiField) element, newName, allRenames);
@@ -223,9 +230,9 @@ public class RenameJavaVariableProcessor extends RenameJavaMemberProcessor {
   }
 
   private static boolean askToRenameAccesors(PsiMethod getter, PsiMethod setter, String newName, final Project project) {
-    if (ApplicationManager.getApplication().isUnitTestMode()) return false;
+    if (project.getApplication().isUnitTestMode()) return false;
     String text = RefactoringMessageUtil.getGetterSetterMessage(newName, RefactoringBundle.message("rename.title"), getter, setter);
-    return Messages.showYesNoDialog(project, text, RefactoringBundle.message("rename.title"), Messages.getQuestionIcon()) != 0;
+    return Messages.showYesNoDialog(project, text, RefactoringBundle.message("rename.title"), UIUtil.getQuestionIcon()) != 0;
   }
 
   private static void addOverriddenAndImplemented(PsiMethod methodPrototype, final String newName, final Map<PsiElement, String> allRenames) {
@@ -235,12 +242,10 @@ public class RenameJavaVariableProcessor extends RenameJavaMemberProcessor {
       methods = new PsiMethod[]{methodPrototype};
     }
     for (PsiMethod method : methods) {
-      OverridingMethodsSearch.search(method).forEach(new Processor<PsiMethod>() {
-        public boolean process(PsiMethod psiMethod) {
-          RenameProcessor.assertNonCompileElement(psiMethod);
-          allRenames.put(psiMethod, newName);
-          return true;
-        }
+      OverridingMethodsSearch.search(method).forEach(psiMethod -> {
+        RenameProcessor.assertNonCompileElement(psiMethod);
+        allRenames.put(psiMethod, newName);
+        return true;
       });
       allRenames.put(method, newName);
     }
@@ -343,6 +348,7 @@ public class RenameJavaVariableProcessor extends RenameJavaMemberProcessor {
     LOG.assertTrue(scopeElement != null);
     scopeElement.accept(new JavaRecursiveElementWalkingVisitor() {
       @Override
+      @RequiredReadAction
       public void visitReferenceExpression(PsiReferenceExpression expression) {
         super.visitReferenceExpression(expression);
         if (!expression.isQualified()) {

@@ -15,39 +15,36 @@
  */
 package com.intellij.java.impl.refactoring.move.moveInstanceMethod;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import jakarta.annotation.Nonnull;
-
+import com.intellij.java.impl.refactoring.HelpID;
+import com.intellij.java.impl.refactoring.makeStatic.MakeStaticHandler;
+import com.intellij.java.impl.refactoring.move.MoveInstanceMembersUtil;
+import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
-import consulo.dataContext.DataContext;
-import consulo.language.editor.LangDataKeys;
-import consulo.language.editor.PlatformDataKeys;
-import consulo.logging.Logger;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.codeStyle.VariableKind;
+import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
+import consulo.dataContext.DataContext;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
+import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.Messages;
-import consulo.language.psi.*;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
-import com.intellij.java.language.psi.codeStyle.VariableKind;
-import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
-import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.java.impl.refactoring.HelpID;
-import consulo.language.editor.refactoring.action.RefactoringActionHandler;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import com.intellij.java.impl.refactoring.makeStatic.MakeStaticHandler;
-import com.intellij.java.impl.refactoring.move.MoveInstanceMembersUtil;
-import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.ui.ex.awt.UIUtil;
 import consulo.util.collection.ContainerUtil;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
+import java.util.*;
 
 /**
  * @author ven
@@ -57,72 +54,74 @@ public class MoveInstanceMethodHandler implements RefactoringActionHandler
 	private static final Logger LOG = Logger.getInstance(MoveInstanceMethodHandler.class);
 	static final String REFACTORING_NAME = RefactoringBundle.message("move.instance.method.title");
 
+	@RequiredReadAction
 	public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext)
 	{
-		PsiElement element = dataContext.getData(LangDataKeys.PSI_ELEMENT);
+		PsiElement element = dataContext.getData(PsiElement.KEY);
 		editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
-		if(element == null)
+		if (element == null)
 		{
 			element = file.findElementAt(editor.getCaretModel().getOffset());
 		}
 
-		if(element == null)
+		if (element == null)
 		{
 			return;
 		}
-		if(element instanceof PsiIdentifier)
+		if (element instanceof PsiIdentifier)
 		{
 			element = element.getParent();
 		}
 
-		if(!(element instanceof PsiMethod))
+		if (!(element instanceof PsiMethod))
 		{
 			String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("error.wrong.caret.position.method"));
 			CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.MOVE_INSTANCE_METHOD);
 			return;
 		}
-		if(LOG.isDebugEnabled())
+		if (LOG.isDebugEnabled())
 		{
 			LOG.debug("Move Instance Method invoked");
 		}
 		invoke(project, new PsiElement[]{element}, dataContext);
 	}
 
+	@RequiredReadAction
 	public void invoke(@Nonnull final Project project, @Nonnull final PsiElement[] elements, final DataContext dataContext)
 	{
-		if(elements.length != 1 || !(elements[0] instanceof PsiMethod))
+		if (elements.length != 1 || !(elements[0] instanceof PsiMethod))
 		{
 			return;
 		}
 		final PsiMethod method = (PsiMethod) elements[0];
 		String message = null;
-		if(!method.getManager().isInProject(method))
+		if (!method.getManager().isInProject(method))
 		{
 			message = "Move method is not supported for non-project methods";
 		}
-		else if(method.isConstructor())
+		else if (method.isConstructor())
 		{
 			message = RefactoringBundle.message("move.method.is.not.supported.for.constructors");
 		}
-		else if(method.getLanguage() != JavaLanguage.INSTANCE)
+		else if (method.getLanguage() != JavaLanguage.INSTANCE)
 		{
 			message = RefactoringBundle.message("move.method.is.not.supported.for.0", method.getLanguage().getDisplayName());
 		}
 		else
 		{
 			final PsiClass containingClass = method.getContainingClass();
-			if(containingClass != null && PsiUtil.typeParametersIterator(containingClass).hasNext() && TypeParametersSearcher.hasTypeParameters(method))
+			if (containingClass != null && PsiUtil.typeParametersIterator(containingClass).hasNext() && TypeParametersSearcher.hasTypeParameters(method))
 			{
 				message = RefactoringBundle.message("move.method.is.not.supported.for.generic.classes");
 			}
-			else if(method.findSuperMethods().length > 0 || OverridingMethodsSearch.search(method, true).toArray(PsiMethod.EMPTY_ARRAY).length > 0)
+			else if (method.findSuperMethods().length > 0 || OverridingMethodsSearch.search(method, true).toArray(PsiMethod.EMPTY_ARRAY).length > 0)
 			{
 				message = RefactoringBundle.message("move.method.is.not.supported.when.method.is.part.of.inheritance.hierarchy");
 			}
 			else
 			{
 				final Set<PsiClass> classes = MoveInstanceMembersUtil.getThisClassesToMembers(method).keySet();
-				for(PsiClass aClass : classes)
+				for (PsiClass aClass : classes)
 				{
 		 /* if (aClass instanceof JspClass) {
             message = RefactoringBundle.message("synthetic.jsp.class.is.referenced.in.the.method");
@@ -133,25 +132,25 @@ public class MoveInstanceMethodHandler implements RefactoringActionHandler
 				}
 			}
 		}
-		if(message != null)
+		if (message != null)
 		{
 			showErrorHint(project, dataContext, message);
 			return;
 		}
 
-		final List<PsiVariable> suitableVariables = new ArrayList<PsiVariable>();
+		final List<PsiVariable> suitableVariables = new ArrayList<>();
 		message = collectSuitableVariables(method, suitableVariables);
-		if(message != null)
+		if (message != null)
 		{
 			final String unableToMakeStaticMessage = MakeStaticHandler.validateTarget(method);
-			if(unableToMakeStaticMessage != null)
+			if (unableToMakeStaticMessage != null)
 			{
 				showErrorHint(project, dataContext, message);
 			}
 			else
 			{
 				final String suggestToMakeStaticMessage = "Would you like to make method \'" + method.getName() + "\' static and then move?";
-				if(Messages.showYesNoCancelDialog(project, message + ". " + suggestToMakeStaticMessage, REFACTORING_NAME, Messages.getErrorIcon()) == DialogWrapper.OK_EXIT_CODE)
+				if (Messages.showYesNoCancelDialog(project, message + ". " + suggestToMakeStaticMessage, REFACTORING_NAME, UIUtil.getErrorIcon()) == DialogWrapper.OK_EXIT_CODE)
 				{
 					MakeStaticHandler.invoke(method);
 				}
@@ -164,31 +163,37 @@ public class MoveInstanceMethodHandler implements RefactoringActionHandler
 
 	private static void showErrorHint(Project project, DataContext dataContext, String message)
 	{
-		Editor editor = dataContext == null ? null : dataContext.getData(PlatformDataKeys.EDITOR);
-		CommonRefactoringUtil.showErrorHint(project, editor, RefactoringBundle.getCannotRefactorMessage(message), REFACTORING_NAME, HelpID.MOVE_INSTANCE_METHOD);
+		Editor editor = dataContext == null ? null : dataContext.getData(Editor.KEY);
+		CommonRefactoringUtil.showErrorHint(
+			project,
+			editor,
+			RefactoringBundle.getCannotRefactorMessage(message),
+			REFACTORING_NAME,
+			HelpID.MOVE_INSTANCE_METHOD
+		);
 	}
 
 	@Nullable
 	private static String collectSuitableVariables(final PsiMethod method, final List<PsiVariable> suitableVariables)
 	{
-		final List<PsiVariable> allVariables = new ArrayList<PsiVariable>();
+		final List<PsiVariable> allVariables = new ArrayList<>();
 		ContainerUtil.addAll(allVariables, method.getParameterList().getParameters());
 		ContainerUtil.addAll(allVariables, method.getContainingClass().getFields());
 		boolean classTypesFound = false;
 		boolean resolvableClassesFound = false;
 		boolean classesInProjectFound = false;
-		for(PsiVariable variable : allVariables)
+		for (PsiVariable variable : allVariables)
 		{
 			final PsiType type = variable.getType();
-			if(type instanceof PsiClassType && !((PsiClassType) type).hasParameters())
+			if (type instanceof PsiClassType classType && !classType.hasParameters())
 			{
 				classTypesFound = true;
-				final PsiClass psiClass = ((PsiClassType) type).resolve();
-				if(psiClass != null && !(psiClass instanceof PsiTypeParameter))
+				final PsiClass psiClass = classType.resolve();
+				if (psiClass != null && !(psiClass instanceof PsiTypeParameter))
 				{
 					resolvableClassesFound = true;
 					final boolean inProject = method.getManager().isInProject(psiClass);
-					if(inProject)
+					if (inProject)
 					{
 						classesInProjectFound = true;
 						suitableVariables.add(variable);
@@ -197,17 +202,17 @@ public class MoveInstanceMethodHandler implements RefactoringActionHandler
 			}
 		}
 
-		if(suitableVariables.isEmpty())
+		if (suitableVariables.isEmpty())
 		{
-			if(!classTypesFound)
+			if (!classTypesFound)
 			{
 				return RefactoringBundle.message("there.are.no.variables.that.have.reference.type");
 			}
-			else if(!resolvableClassesFound)
+			else if (!resolvableClassesFound)
 			{
 				return RefactoringBundle.message("all.candidate.variables.have.unknown.types");
 			}
-			else if(!classesInProjectFound)
+			else if (!classesInProjectFound)
 			{
 				return RefactoringBundle.message("all.candidate.variables.have.types.not.in.project");
 			}
@@ -226,12 +231,12 @@ public class MoveInstanceMethodHandler implements RefactoringActionHandler
 	public static Map<PsiClass, String> suggestParameterNames(final PsiMethod method, final PsiVariable targetVariable)
 	{
 		final Map<PsiClass, Set<PsiMember>> classesToMembers = MoveInstanceMembersUtil.getThisClassesToMembers(method);
-		Map<PsiClass, String> result = new LinkedHashMap<PsiClass, String>();
-		for(Map.Entry<PsiClass, Set<PsiMember>> entry : classesToMembers.entrySet())
+		Map<PsiClass, String> result = new LinkedHashMap<>();
+		for (Map.Entry<PsiClass, Set<PsiMember>> entry : classesToMembers.entrySet())
 		{
 			PsiClass aClass = entry.getKey();
 			final Set<PsiMember> members = entry.getValue();
-			if(members.size() == 1 && members.contains(targetVariable))
+			if (members.size() == 1 && members.contains(targetVariable))
 			{
 				continue;
 			}
@@ -249,7 +254,7 @@ public class MoveInstanceMethodHandler implements RefactoringActionHandler
 			element.accept(new JavaRecursiveElementWalkingVisitor()
 			{
 				@Override
-				public void visitTypeElement(PsiTypeElement type)
+				public void visitTypeElement(@Nonnull PsiTypeElement type)
 				{
 					super.visitTypeElement(type);
 					hasParameters[0] |= type.getType().accept(searcher);
@@ -262,22 +267,14 @@ public class MoveInstanceMethodHandler implements RefactoringActionHandler
 		public Boolean visitClassType(PsiClassType classType)
 		{
 			final PsiClass psiClass = PsiUtil.resolveClassInType(classType);
-			if(psiClass instanceof PsiTypeParameter)
-			{
-				return Boolean.TRUE;
-			}
-			return super.visitClassType(classType);
+			return psiClass instanceof PsiTypeParameter ? Boolean.TRUE : super.visitClassType(classType);
 		}
 
 		@Override
 		public Boolean visitWildcardType(PsiWildcardType wildcardType)
 		{
 			final PsiType bound = wildcardType.getBound();
-			if(PsiUtil.resolveClassInType(bound) instanceof PsiTypeParameter)
-			{
-				return Boolean.TRUE;
-			}
-			return super.visitWildcardType(wildcardType);
+			return PsiUtil.resolveClassInType(bound) instanceof PsiTypeParameter ? Boolean.TRUE : super.visitWildcardType(wildcardType);
 		}
 
 		@Override

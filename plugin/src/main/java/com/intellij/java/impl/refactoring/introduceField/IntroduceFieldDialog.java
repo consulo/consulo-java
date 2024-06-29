@@ -15,45 +15,35 @@
  */
 package com.intellij.java.impl.refactoring.introduceField;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-
-import javax.swing.Action;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.impl.codeInsight.completion.JavaCompletionUtil;
-import consulo.application.HelpManager;
-import consulo.project.Project;
-import consulo.ui.ex.awt.DialogWrapper;
-import consulo.ui.ex.awt.Messages;
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiField;
-import com.intellij.java.language.psi.PsiLocalVariable;
-import com.intellij.java.language.psi.PsiModifier;
-import com.intellij.java.language.psi.PsiNameHelper;
-import com.intellij.java.language.psi.PsiType;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
-import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import com.intellij.java.impl.refactoring.introduceParameter.AbstractJavaInplaceIntroducer;
-import consulo.language.editor.refactoring.ui.NameSuggestionsField;
 import com.intellij.java.impl.refactoring.ui.NameSuggestionsGenerator;
 import com.intellij.java.impl.refactoring.ui.NameSuggestionsManager;
 import com.intellij.java.impl.refactoring.ui.TypeSelector;
 import com.intellij.java.impl.refactoring.ui.TypeSelectorManager;
-import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import com.intellij.java.impl.refactoring.util.RefactoringMessageUtil;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.codeStyle.VariableKind;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.application.HelpManager;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
+import consulo.language.editor.refactoring.ui.NameSuggestionsField;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.JBUI;
+import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awt.UIUtil;
 import consulo.util.collection.ArrayUtil;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
+import javax.swing.*;
+import java.awt.*;
 
 class IntroduceFieldDialog extends DialogWrapper {
 
@@ -154,7 +144,7 @@ class IntroduceFieldDialog extends DialogWrapper {
     JPanel panel = new JPanel(new GridBagLayout());
     GridBagConstraints gbConstraints = new GridBagConstraints();
 
-    gbConstraints.insets = new Insets(4, 4, 4, 0);
+    gbConstraints.insets = JBUI.insets(4, 4, 4, 0);
     gbConstraints.anchor = GridBagConstraints.EAST;
     gbConstraints.fill = GridBagConstraints.BOTH;
 
@@ -169,12 +159,12 @@ class IntroduceFieldDialog extends DialogWrapper {
     panel.add(type, gbConstraints);
 
     gbConstraints.gridx++;
-    gbConstraints.insets = new Insets(4, 0, 4, 4);
+    gbConstraints.insets = JBUI.insets(4, 0, 4, 4);
     gbConstraints.weightx = 0;
     myTypeSelector = myTypeSelectorManager.getTypeSelector();
     panel.add(myTypeSelector.getComponent(), gbConstraints);
 
-    gbConstraints.insets = new Insets(4, 4, 4, 0);
+    gbConstraints.insets = JBUI.insets(4, 4, 4, 0);
     gbConstraints.gridwidth = 1;
     gbConstraints.weightx = 0;
     gbConstraints.weighty = 1;
@@ -183,23 +173,29 @@ class IntroduceFieldDialog extends DialogWrapper {
     JLabel namePrompt = new JLabel(RefactoringBundle.message("name.prompt"));
     panel.add(namePrompt, gbConstraints);
 
-    gbConstraints.insets = new Insets(4, 0, 4, 4);
+    gbConstraints.insets = JBUI.insets(4, 0, 4, 4);
     gbConstraints.gridwidth = 1;
     gbConstraints.weightx = 1;
     gbConstraints.gridx = 1;
     gbConstraints.gridy = 1;
     myNameField = new NameSuggestionsField(myProject);
     panel.add(myNameField.getComponent(), gbConstraints);
-    myNameField.addDataChangedListener(new NameSuggestionsField.DataChanged() {
-      public void dataChanged() {
-        updateButtons();
-      }
-    });
+    myNameField.addDataChangedListener(this::updateButtons);
     namePrompt.setLabelFor(myNameField.getFocusableComponent());
 
-    myNameSuggestionsManager = new NameSuggestionsManager(myTypeSelector, myNameField,
-                                                          createGenerator(myWillBeDeclaredStatic, myLocalVariable, myInitializerExpression, myIsInvokedOnDeclaration, myEnteredName,
-                                                                          myParentClass, myProject));
+    myNameSuggestionsManager = new NameSuggestionsManager(
+      myTypeSelector,
+      myNameField,
+      createGenerator(
+        myWillBeDeclaredStatic,
+        myLocalVariable,
+        myInitializerExpression,
+        myIsInvokedOnDeclaration,
+        myEnteredName,
+        myParentClass,
+        myProject
+      )
+    );
     myNameSuggestionsManager.setLabelsFor(type, namePrompt);
 
     return panel;
@@ -210,24 +206,27 @@ class IntroduceFieldDialog extends DialogWrapper {
   }
 
   private String getTypeLabel() {
-    return myWillBeDeclaredStatic ?
-           RefactoringBundle.message("introduce.field.static.field.of.type") :
-           RefactoringBundle.message("introduce.field.field.of.type");
+    return myWillBeDeclaredStatic
+      ? RefactoringBundle.message("introduce.field.static.field.of.type")
+      : RefactoringBundle.message("introduce.field.field.of.type");
   }
 
   protected JComponent createCenterPanel() {
     return myCentralPanel.createCenterPanel();
   }
 
-  static NameSuggestionsGenerator createGenerator(final boolean willBeDeclaredStatic,
-                                                  final PsiLocalVariable localVariable,
-                                                  final PsiExpression initializerExpression,
-                                                  final boolean isInvokedOnDeclaration,
-                                                  @Nullable final String enteredName,
-                                                  final PsiClass parentClass,
-                                                  final Project project) {
+  static NameSuggestionsGenerator createGenerator(
+    final boolean willBeDeclaredStatic,
+    final PsiLocalVariable localVariable,
+    final PsiExpression initializerExpression,
+    final boolean isInvokedOnDeclaration,
+    @Nullable final String enteredName,
+    final PsiClass parentClass,
+    final Project project
+  ) {
     return new NameSuggestionsGenerator() {
       private final JavaCodeStyleManager myCodeStyleManager = JavaCodeStyleManager.getInstance(project);
+      @RequiredReadAction
       public SuggestedNameInfo getSuggestedNameInfo(PsiType type) {
         VariableKind variableKind = willBeDeclaredStatic ? VariableKind.STATIC_FIELD : VariableKind.FIELD;
 
@@ -274,11 +273,11 @@ class IntroduceFieldDialog extends DialogWrapper {
 
     if (oldField != null) {
       int answer = Messages.showYesNoDialog(
-              myProject,
-              RefactoringBundle.message("field.exists", fieldName,
-                                   oldField.getContainingClass().getQualifiedName()),
-              IntroduceFieldHandler.REFACTORING_NAME,
-              Messages.getWarningIcon()
+        myProject,
+        RefactoringBundle.message("field.exists", fieldName,
+          oldField.getContainingClass().getQualifiedName()),
+        IntroduceFieldHandler.REFACTORING_NAME,
+        UIUtil.getWarningIcon()
       );
       if (answer != 0) {
         return;

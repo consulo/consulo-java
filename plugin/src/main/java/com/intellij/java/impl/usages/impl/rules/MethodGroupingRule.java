@@ -21,11 +21,11 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.language.psi.util.PsiFormatUtilBase;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.component.util.Iconable;
 import consulo.dataContext.DataSink;
 import consulo.dataContext.TypeSafeDataProvider;
 import consulo.document.util.Segment;
-import consulo.language.editor.LangDataKeys;
 import consulo.language.editor.util.NavigationItemFileStatus;
 import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.language.inject.InjectedLanguageManager;
@@ -43,7 +43,6 @@ import consulo.usage.rule.UsageGroupingRule;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.Comparing;
 import consulo.virtualFileSystem.status.FileStatus;
-
 import jakarta.annotation.Nonnull;
 
 /**
@@ -53,6 +52,7 @@ public class MethodGroupingRule implements UsageGroupingRule {
   private static final Logger LOG = Logger.getInstance(MethodGroupingRule.class);
 
   @Override
+  @RequiredReadAction
   public UsageGroup groupUsage(@Nonnull Usage usage) {
     if (!(usage instanceof PsiElementUsage)) return null;
     PsiElement psiElement = ((PsiElementUsage)usage).getElement();
@@ -61,8 +61,8 @@ public class MethodGroupingRule implements UsageGroupingRule {
     PsiFile topLevelFile = manager.getTopLevelFile(containingFile);
     if (topLevelFile instanceof PsiJavaFile) {
       PsiElement containingMethod = topLevelFile == containingFile ? psiElement : manager.getInjectionHost(containingFile);
-      if (usage instanceof UsageInfo2UsageAdapter && topLevelFile == containingFile) {
-        int offset = ((UsageInfo2UsageAdapter)usage).getUsageInfo().getNavigationOffset();
+      if (usage instanceof UsageInfo2UsageAdapter usageInfo2UsageAdapter && topLevelFile == containingFile) {
+        int offset = usageInfo2UsageAdapter.getUsageInfo().getNavigationOffset();
         containingMethod = containingFile.findElementAt(offset);
       }
       do {
@@ -86,6 +86,7 @@ public class MethodGroupingRule implements UsageGroupingRule {
     private final Image myIcon;
     private final Project myProject;
 
+    @RequiredReadAction
     public MethodUsageGroup(PsiMethod psiMethod) {
       myName = PsiFormatUtil.formatMethod(
           psiMethod,
@@ -103,6 +104,7 @@ public class MethodGroupingRule implements UsageGroupingRule {
     public void update() {
     }
 
+    @RequiredReadAction
     private static Image getIconImpl(PsiMethod psiMethod) {
       return IconDescriptorUpdaters.getIcon(psiMethod, Iconable.ICON_FLAG_VISIBILITY | Iconable.ICON_FLAG_READ_STATUS);
     }
@@ -125,6 +127,7 @@ public class MethodGroupingRule implements UsageGroupingRule {
       return myIcon;
     }
 
+    @RequiredReadAction
     private PsiMethod getMethod() {
       return myMethodPointer.getElement();
     }
@@ -136,17 +139,20 @@ public class MethodGroupingRule implements UsageGroupingRule {
     }
 
     @Override
+    @RequiredReadAction
     public FileStatus getFileStatus() {
       return isValid() ? NavigationItemFileStatus.get(getMethod()) : null;
     }
 
     @Override
+    @RequiredReadAction
     public boolean isValid() {
       final PsiMethod method = getMethod();
       return method != null && method.isValid();
     }
 
     @Override
+    @RequiredReadAction
     public void navigate(boolean focus) throws UnsupportedOperationException {
       if (canNavigate()) {
           getMethod().navigate(focus);
@@ -154,11 +160,13 @@ public class MethodGroupingRule implements UsageGroupingRule {
     }
 
     @Override
+    @RequiredReadAction
     public boolean canNavigate() {
       return isValid();
     }
 
     @Override
+    @RequiredReadAction
     public boolean canNavigateToSource() {
       return canNavigate();
     }
@@ -184,10 +192,11 @@ public class MethodGroupingRule implements UsageGroupingRule {
     }
 
     @Override
+    @RequiredReadAction
     public void calcData(final Key<?> key, final DataSink sink) {
       if (!isValid()) return;
-      if (LangDataKeys.PSI_ELEMENT == key) {
-        sink.put(LangDataKeys.PSI_ELEMENT, getMethod());
+      if (PsiElement.KEY == key) {
+        sink.put(PsiElement.KEY, getMethod());
       }
       if (UsageView.USAGE_INFO_KEY == key) {
         PsiMethod method = getMethod();

@@ -15,24 +15,23 @@
  */
 package com.intellij.java.impl.refactoring.convertToInstanceMethod;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import jakarta.annotation.Nonnull;
-
+import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.language.psi.*;
-import consulo.dataContext.DataContext;
-import consulo.language.editor.LangDataKeys;
-import consulo.language.editor.PlatformDataKeys;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import com.intellij.java.impl.refactoring.HelpID;
-import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.dataContext.DataContext;
 import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author dsl
@@ -41,8 +40,9 @@ public class ConvertToInstanceMethodHandler implements RefactoringActionHandler 
   private static final Logger LOG = Logger.getInstance(ConvertToInstanceMethodHandler.class);
   static final String REFACTORING_NAME = RefactoringBundle.message("convert.to.instance.method.title");
 
+  @RequiredReadAction
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
-    PsiElement element = dataContext.getData(LangDataKeys.PSI_ELEMENT);
+    PsiElement element = dataContext.getData(PsiElement.KEY);
     editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
     if (element == null) {
       element = file.findElementAt(editor.getCaretModel().getOffset());
@@ -51,12 +51,12 @@ public class ConvertToInstanceMethodHandler implements RefactoringActionHandler 
     if (element == null) return;
     if (element instanceof PsiIdentifier) element = element.getParent();
 
-    if(!(element instanceof PsiMethod)) {
+    if (!(element instanceof PsiMethod)) {
       String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("error.wrong.caret.position.method"));
       CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.CONVERT_TO_INSTANCE_METHOD);
       return;
     }
-    if(LOG.isDebugEnabled()) {
+    if (LOG.isDebugEnabled()) {
       LOG.debug("MakeMethodStaticHandler invoked");
     }
     invoke(project, new PsiElement[]{element}, dataContext);
@@ -67,20 +67,20 @@ public class ConvertToInstanceMethodHandler implements RefactoringActionHandler 
     final PsiMethod method = (PsiMethod)elements[0];
     if (!method.hasModifierProperty(PsiModifier.STATIC)) {
       String message = RefactoringBundle.message("convertToInstanceMethod.method.is.not.static", method.getName());
-      Editor editor = dataContext.getData(PlatformDataKeys.EDITOR);
+      Editor editor = dataContext.getData(Editor.KEY);
       CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.CONVERT_TO_INSTANCE_METHOD);
       return;
     }
     final PsiParameter[] parameters = method.getParameterList().getParameters();
-    List<PsiParameter> suitableParameters = new ArrayList<PsiParameter>();
+    List<PsiParameter> suitableParameters = new ArrayList<>();
     boolean classTypesFound = false;
     boolean resolvableClassesFound = false;
     boolean classesInProjectFound = false;
     for (final PsiParameter parameter : parameters) {
       final PsiType type = parameter.getType();
-      if (type instanceof PsiClassType) {
+      if (type instanceof PsiClassType classType) {
         classTypesFound = true;
-        final PsiClass psiClass = ((PsiClassType)type).resolve();
+        final PsiClass psiClass = classType.resolve();
         if (psiClass != null && !(psiClass instanceof PsiTypeParameter)) {
           resolvableClassesFound = true;
           final boolean inProject = method.getManager().isInProject(psiClass);
@@ -103,13 +103,20 @@ public class ConvertToInstanceMethodHandler implements RefactoringActionHandler 
         message = RefactoringBundle.message("convertToInstanceMethod.all.reference.type.parameters.are.not.in.project");
       }
       LOG.assertTrue(message != null);
-      Editor editor = dataContext.getData(PlatformDataKeys.EDITOR);
-      CommonRefactoringUtil.showErrorHint(project, editor, RefactoringBundle.getCannotRefactorMessage(message), REFACTORING_NAME, HelpID.CONVERT_TO_INSTANCE_METHOD);
+      Editor editor = dataContext.getData(Editor.KEY);
+      CommonRefactoringUtil.showErrorHint(
+        project,
+        editor,
+        RefactoringBundle.getCannotRefactorMessage(message),
+        REFACTORING_NAME,
+        HelpID.CONVERT_TO_INSTANCE_METHOD
+      );
       return;
     }
 
     new ConvertToInstanceMethodDialog(
       method,
-      suitableParameters.toArray(new PsiParameter[suitableParameters.size()])).show();
+      suitableParameters.toArray(new PsiParameter[suitableParameters.size()])
+    ).show();
   }
 }

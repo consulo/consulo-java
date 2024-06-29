@@ -19,6 +19,7 @@ import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.dataContext.DataContext;
 import consulo.codeEditor.Editor;
@@ -37,8 +38,7 @@ public class MoveInstanceMethodHandlerDelegate extends MoveHandlerDelegate {
     if (!(element instanceof PsiMethod)) return false;
     //if (element instanceof JspHolderMethod) return false;
     PsiMethod method = (PsiMethod) element;
-    if (method.hasModifierProperty(PsiModifier.STATIC)) return false;
-    return super.canMove(elements, targetContainer);
+    return !method.hasModifierProperty(PsiModifier.STATIC) && super.canMove(elements, targetContainer);
   }
 
   public boolean isValidTarget(final PsiElement psiElement, PsiElement[] sources) {
@@ -48,10 +48,15 @@ public class MoveInstanceMethodHandlerDelegate extends MoveHandlerDelegate {
     return psiElement instanceof PsiClass && !(psiElement instanceof PsiAnonymousClass);
   }
 
-  public boolean tryToMove(final PsiElement element, final Project project, final DataContext dataContext, final PsiReference reference,
-                           final Editor editor) {
-    if (element instanceof PsiMethod) {
-      PsiMethod method = (PsiMethod) element;
+  @RequiredReadAction
+  public boolean tryToMove(
+    final PsiElement element,
+    final Project project,
+    final DataContext dataContext,
+    final PsiReference reference,
+    final Editor editor
+  ) {
+    if (element instanceof PsiMethod method) {
       if (!method.hasModifierProperty(PsiModifier.STATIC))  {
         new MoveInstanceMethodHandler().invoke(project, new PsiElement[]{method}, dataContext);
         return true;

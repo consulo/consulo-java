@@ -21,13 +21,13 @@ import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.java.language.impl.psi.impl.PsiDiamondTypeUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.application.Application;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.dataContext.DataContext;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.editor.PlatformDataKeys;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
@@ -41,6 +41,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.undoRedo.CommandProcessor;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
@@ -68,7 +69,7 @@ public class AnonymousToInnerHandler implements RefactoringActionHandler {
 
   public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
     if (elements.length == 1 && elements[0] instanceof PsiAnonymousClass) {
-      invoke(project, dataContext.getData(PlatformDataKeys.EDITOR), (PsiAnonymousClass)elements[0]);
+      invoke(project, dataContext.getData(Editor.KEY), (PsiAnonymousClass)elements[0]);
     }
   }
 
@@ -118,30 +119,26 @@ public class AnonymousToInnerHandler implements RefactoringActionHandler {
 
     if (!CommonRefactoringUtil.checkReadOnlyStatus(project, myTargetClass)) return;
 
-    Map<PsiVariable,VariableInfo> variableInfoMap = new LinkedHashMap<PsiVariable, VariableInfo>();
+    Map<PsiVariable,VariableInfo> variableInfoMap = new LinkedHashMap<>();
     collectUsedVariables(variableInfoMap, myAnonClass);
     myVariableInfos = variableInfoMap.values().toArray(new VariableInfo[variableInfoMap.values().size()]);
     if (!showRefactoringDialog()) return;
 
     CommandProcessor.getInstance().executeCommand(
-        myProject, new Runnable() {
-              public void run() {
-                final Runnable action = new Runnable() {
-                  public void run() {
-                    try {
-                      doRefactoring();
-                    } catch (IncorrectOperationException e) {
-                      LOG.error(e);
-                    }
-                  }
-                };
-                ApplicationManager.getApplication().runWriteAction(action);
-              }
-            },
-        REFACTORING_NAME,
-        null
+      myProject,
+      () -> {
+        final Runnable action = () -> {
+          try {
+            doRefactoring();
+          } catch (IncorrectOperationException e) {
+            LOG.error(e);
+          }
+        };
+        myProject.getApplication().runWriteAction(action);
+      },
+      REFACTORING_NAME,
+      null
     );
-
   }
 
   protected boolean showRefactoringDialog() {
@@ -168,7 +165,7 @@ public class AnonymousToInnerHandler implements RefactoringActionHandler {
     myTargetClass.add(aClass);
 
     PsiNewExpression newExpr = (PsiNewExpression) myAnonClass.getParent();
-    @NonNls StringBuffer buf = new StringBuffer();
+    @NonNls StringBuilder buf = new StringBuilder();
     buf.append("new ");
     buf.append(aClass.getName());
     if (!myTypeParametersToCreate.isEmpty()) {

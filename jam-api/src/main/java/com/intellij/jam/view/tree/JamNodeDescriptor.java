@@ -16,21 +16,20 @@
 
 package com.intellij.jam.view.tree;
 
-import consulo.dataContext.DataManager;
-import consulo.language.editor.PlatformDataKeys;
-import consulo.ui.ex.DeleteProvider;
-import consulo.ui.ex.awt.tree.SimpleTree;
-import consulo.ui.ex.tree.NodeDescriptor;
-import consulo.ui.ex.awt.tree.ValidateableNode;
 import com.intellij.jam.JamMessages;
+import consulo.dataContext.DataManager;
 import consulo.dataContext.DataProvider;
 import consulo.project.Project;
 import consulo.ui.color.ColorValue;
+import consulo.ui.ex.DeleteProvider;
+import consulo.ui.ex.OpenSourceUtil;
+import consulo.ui.ex.awt.tree.SimpleNode;
+import consulo.ui.ex.awt.tree.SimpleTree;
+import consulo.ui.ex.awt.tree.ValidateableNode;
+import consulo.ui.ex.tree.NodeDescriptor;
+import consulo.ui.image.Image;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.StringUtil;
-import consulo.ui.ex.awt.tree.SimpleNode;
-import consulo.ui.ex.OpenSourceUtil;
-import consulo.ui.image.Image;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -113,10 +112,7 @@ public abstract class JamNodeDescriptor<P> extends SimpleNode implements DataPro
 
   @Nullable
   public final Object getDataForElement(Key<?> dataId) {
-    if (PlatformDataKeys.DELETE_ELEMENT_PROVIDER == dataId) {
-      return getDeleteProvider();
-    }
-    return getData(dataId);
+    return DeleteProvider.KEY == dataId ? getDeleteProvider() : getData(dataId);
   }
 
   public final P getElement() {

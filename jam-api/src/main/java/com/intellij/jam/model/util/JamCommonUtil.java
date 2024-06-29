@@ -30,6 +30,7 @@ import com.intellij.java.indexing.search.searches.AnnotatedElementsSearch;
 import com.intellij.java.indexing.search.searches.AnnotatedMembersSearch;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.application.progress.ProgressManager;
 import consulo.application.util.CachedValue;
 import consulo.application.util.CachedValueProvider;
@@ -38,7 +39,6 @@ import consulo.application.util.function.Processor;
 import consulo.dataContext.DataContext;
 import consulo.java.jam.util.JamCommonService;
 import consulo.java.language.module.util.JavaClassNames;
-import consulo.language.editor.PlatformDataKeys;
 import consulo.language.editor.util.PsiUtilBase;
 import consulo.language.pom.PomTarget;
 import consulo.language.pom.PomTargetPsiElement;
@@ -85,7 +85,7 @@ public class JamCommonUtil {
   @NonNls
   public static final String VALUE_PARAMETER = "value";
 
-  private static final HashingStrategy<PsiClass> HASHING_STRATEGY = new HashingStrategy<PsiClass>() {
+  private static final HashingStrategy<PsiClass> HASHING_STRATEGY = new HashingStrategy<>() {
     public int hashCode(final PsiClass object) {
       final String qualifiedName = object.getQualifiedName();
       return qualifiedName == null ? 0 : qualifiedName.hashCode();
@@ -101,9 +101,10 @@ public class JamCommonUtil {
     if (value == null) {
       return null;
     }
-    if (value instanceof XmlAttributeValue) {
-      final GenericAttributeValue genericValue = DomManager.getDomManager(value.getProject()).getDomElement((XmlAttribute) value.getParent());
-      return genericValue != null ? genericValue.getValue() : ((XmlAttributeValue) value).getValue();
+    if (value instanceof XmlAttributeValue xmlAttributeValue) {
+      final GenericAttributeValue genericValue =
+        DomManager.getDomManager(value.getProject()).getDomElement((XmlAttribute) value.getParent());
+      return genericValue != null ? genericValue.getValue() : xmlAttributeValue.getValue();
     }
 
     try {
@@ -116,25 +117,25 @@ public class JamCommonUtil {
   }
 
   public static boolean isSuperClass(@Nullable final PsiClass firstClass, final String superClassQName) {
-    return !processSuperClassList(firstClass, new SmartList<PsiClass>(), new Processor<PsiClass>() {
-      public boolean process(final PsiClass superClass) {
-        return !Comparing.equal(superClass.getQualifiedName(), superClassQName);
-      }
-    });
+    return !processSuperClassList(
+      firstClass,
+      new SmartList<>(),
+      superClass -> !Comparing.equal(superClass.getQualifiedName(), superClassQName)
+    );
   }
 
   @Nonnull
   public static List<PsiClass> getSuperClassList(@Nullable final PsiClass firstClass) {
-    final SmartList<PsiClass> list = new SmartList<PsiClass>();
-    processSuperClassList(firstClass, list, new Processor<PsiClass>() {
-      public boolean process(final PsiClass psiClass) {
-        return true;
-      }
-    });
+    final SmartList<PsiClass> list = new SmartList<>();
+    processSuperClassList(firstClass, list, psiClass -> true);
     return list;
   }
 
-  public static boolean processSuperClassList(@Nullable final PsiClass firstClass, @Nonnull final Collection<PsiClass> supers, final Processor<PsiClass> processor) {
+  public static boolean processSuperClassList(
+    @Nullable final PsiClass firstClass,
+    @Nonnull final Collection<PsiClass> supers,
+    final Processor<PsiClass> processor
+  ) {
     for (PsiClass curClass = firstClass; curClass != null && !JavaClassNames.JAVA_LANG_OBJECT.equals(curClass.getQualifiedName()) && !supers.contains(curClass); curClass = curClass.getSuperClass()) {
       ProgressManager.checkCanceled();
       if (!processor.process(curClass)) {
@@ -159,14 +160,14 @@ public class JamCommonUtil {
     if (!ReflectionUtil.isAssignable(domClass, root.getClass())) {
       return null;
     }
+    //noinspection unchecked
     return (T) root;
   }
 
 
   @Nullable
   public static String getDisplayName(final Object element) {
-    if (element instanceof CommonModelElement) {
-      final CommonModelElement modelElement = (CommonModelElement) element;
+    if (element instanceof CommonModelElement modelElement) {
       String name = getElementName(modelElement);
       if (name == null) {
         name = "";
@@ -186,6 +187,7 @@ public class JamCommonUtil {
   }
 
   @Nullable
+  @RequiredReadAction
   public static Module findModuleForPsiElement(final PsiElement element) {
     PsiFile psiFile = element.getContainingFile();
     if (psiFile == null) {
@@ -194,8 +196,9 @@ public class JamCommonUtil {
     }
 
     psiFile = psiFile.getOriginalFile();
-    if (psiFile instanceof XmlFile) {
-      final DomFileElement<CommonDomModelElement> domFileElement = DomManager.getDomManager(element.getProject()).getFileElement((XmlFile) psiFile, CommonDomModelElement.class);
+    if (psiFile instanceof XmlFile xmlFile) {
+      final DomFileElement<CommonDomModelElement> domFileElement =
+        DomManager.getDomManager(element.getProject()).getFileElement(xmlFile, CommonDomModelElement.class);
       if (domFileElement != null) {
         Module module = domFileElement.getRootElement().getModule();
         if (module != null) {
@@ -209,22 +212,21 @@ public class JamCommonUtil {
 
   @Nonnull
   public static PsiElement[] getTargetPsiElements(final CommonModelElement element) {
-    final ArrayList<PsiElement> list = new ArrayList<PsiElement>();
+    final ArrayList<PsiElement> list = new ArrayList<>();
     // todo add new JAM or drop this functionality
     for (CommonModelElement modelElement : ModelMergerUtil.getFilteredImplementations(element)) {
-      if (modelElement instanceof DomElement) {
-        final DomElement domModelElement = (DomElement) modelElement;
+      if (modelElement instanceof DomElement domModelElement) {
         if (domModelElement.getXmlTag() != null) {
           list.add(domModelElement.getXmlTag());
         }
-      } else if (modelElement instanceof JamChief) {
-        list.add(((JamChief) modelElement).getPsiElement());
+      } else if (modelElement instanceof JamChief jamChief) {
+        list.add(jamChief.getPsiElement());
       } else {
         ContainerUtil.addIfNotNull(list, modelElement.getIdentifyingPsiElement());
       }
     }
     final PsiElement[] result = list.isEmpty() ? PsiElement.EMPTY_ARRAY : PsiUtilCore.toPsiElementArray(list);
-    Arrays.sort(result, new Comparator<PsiElement>() {
+    Arrays.sort(result, new Comparator<>() {
       public int compare(final PsiElement o1, final PsiElement o2) {
         return getWeight(o1) - getWeight(o2);
       }
@@ -264,14 +266,17 @@ public class JamCommonUtil {
     return ProjectRootManager.getInstance(modelElement.getPsiManager().getProject()).getFileIndex().isInLibraryClasses(virtualFile);
   }
 
+  @RequiredReadAction
   public static boolean isKindOfJavaFile(final PsiElement element) {
     return element instanceof PsiJavaFile && element.getLanguage().isKindOf(JavaLanguage.INSTANCE);
   }
 
+  @RequiredReadAction
   public static boolean isPlainJavaFile(final PsiElement element) {
     return JamCommonService.getInstance().isPlainJavaFile(element);
   }
 
+  @RequiredReadAction
   public static boolean isPlainXmlFile(final PsiElement element) {
     return JamCommonService.getInstance().isPlainXmlFile(element);
   }
@@ -283,11 +288,9 @@ public class JamCommonUtil {
   public static Module[] getAllModuleDependencies(@Nonnull final Module module) {
     CachedValue<Module[]> value = module.getUserData(MODULE_DEPENDENCIES);
     if (value == null) {
-      module.putUserData(MODULE_DEPENDENCIES, value = CachedValuesManager.getManager(module.getProject()).createCachedValue(new CachedValueProvider<Module[]>() {
-        public Result<Module[]> compute() {
-          final Set<Module> result = addModuleDependencies(module, new HashSet<Module>(), false);
-          return new Result<Module[]>(result.toArray(new Module[result.size()]), ProjectRootManager.getInstance(module.getProject()));
-        }
+      module.putUserData(MODULE_DEPENDENCIES, value = CachedValuesManager.getManager(module.getProject()).createCachedValue(() -> {
+        final Set<Module> result = addModuleDependencies(module, new HashSet<>(), false);
+        return new CachedValueProvider.Result<>(result.toArray(new Module[result.size()]), ProjectRootManager.getInstance(module.getProject()));
       }, false));
     }
     return value.getValue();
@@ -297,12 +300,10 @@ public class JamCommonUtil {
   public static Module[] getAllDependentModules(@Nonnull final Module module) {
     CachedValue<Module[]> value = module.getUserData(MODULE_DEPENDENTS);
     if (value == null) {
-      module.putUserData(MODULE_DEPENDENTS, value = CachedValuesManager.getManager(module.getProject()).createCachedValue(new CachedValueProvider<Module[]>() {
-        public Result<Module[]> compute() {
-          final Module[] modules = ModuleManager.getInstance(module.getProject()).getModules();
-          final Set<Module> result = addModuleDependents(module, new HashSet<Module>(), modules);
-          return new Result<Module[]>(result.toArray(new Module[result.size()]), ProjectRootManager.getInstance(module.getProject()));
-        }
+      module.putUserData(MODULE_DEPENDENTS, value = CachedValuesManager.getManager(module.getProject()).createCachedValue(() -> {
+        final Module[] modules = ModuleManager.getInstance(module.getProject()).getModules();
+        final Set<Module> result = addModuleDependents(module, new HashSet<>(), modules);
+        return new CachedValueProvider.Result<>(result.toArray(new Module[result.size()]), ProjectRootManager.getInstance(module.getProject()));
       }, false));
     }
     return value.getValue();
@@ -314,8 +315,8 @@ public class JamCommonUtil {
     }
     final OrderEntry[] orderEntries = ModuleRootManager.getInstance(module).getOrderEntries();
     for (OrderEntry orderEntry : orderEntries) {
-      if (orderEntry.isValid() && orderEntry instanceof ModuleOrderEntry && (!exported || ((ModuleOrderEntry) orderEntry).isExported())) {
-        final Module exportedModule = ((ModuleOrderEntry) orderEntry).getModule();
+      if (orderEntry.isValid() && orderEntry instanceof ModuleOrderEntry moduleOrderEntry && (!exported || moduleOrderEntry.isExported())) {
+        final Module exportedModule = moduleOrderEntry.getModule();
         if (result.add(exportedModule)) {
           addModuleDependencies(exportedModule, result, true);
         }
@@ -331,10 +332,10 @@ public class JamCommonUtil {
     for (Module allModule : modules) {
       final OrderEntry[] orderEntries = ModuleRootManager.getInstance(allModule).getOrderEntries();
       for (OrderEntry orderEntry : orderEntries) {
-        if (orderEntry.isValid() && orderEntry instanceof ModuleOrderEntry) {
-          final Module exportedModule = ((ModuleOrderEntry) orderEntry).getModule();
+        if (orderEntry.isValid() && orderEntry instanceof ModuleOrderEntry moduleOrderEntry) {
+          final Module exportedModule = moduleOrderEntry.getModule();
           if (exportedModule == module && result.add(allModule)) {
-            if (((ModuleOrderEntry) orderEntry).isExported()) {
+            if (moduleOrderEntry.isExported()) {
               addModuleDependents(allModule, result, modules);
             }
           }
@@ -360,15 +361,20 @@ public class JamCommonUtil {
     return classes;
   }
 
-  public static Collection<PsiClass> getAnnotationTypesWithChildren(final Module module, final Key<CachedValue<Collection<PsiClass>>> key, final String annotationName) {
+  public static Collection<PsiClass> getAnnotationTypesWithChildren(
+    final Module module,
+    final Key<CachedValue<Collection<PsiClass>>> key,
+    final String annotationName
+  ) {
     CachedValue<Collection<PsiClass>> cachedValue = module.getUserData(key);
     if (cachedValue == null) {
-      cachedValue = CachedValuesManager.getManager(module.getProject()).createCachedValue(new CachedValueProvider<Collection<PsiClass>>() {
-        public Result<Collection<PsiClass>> compute() {
+      cachedValue = CachedValuesManager.getManager(module.getProject()).createCachedValue(
+        () -> {
           final Collection<PsiClass> classes = getAnnotationTypesWithChildren(annotationName, module);
-          return new Result<Collection<PsiClass>>(classes, PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT);
-        }
-      }, false);
+          return new CachedValueProvider.Result<>(classes, PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT);
+        },
+        false
+      );
 
       module.putUserData(key, cachedValue);
     }
@@ -387,23 +393,24 @@ public class JamCommonUtil {
     }
   }
 
-  public static Collection<PsiClass> getAnnotatedTypes(final Module module, final Key<CachedValue<Collection<PsiClass>>> key, final String annotationName) {
-
+  public static Collection<PsiClass> getAnnotatedTypes(
+    final Module module,
+    final Key<CachedValue<Collection<PsiClass>>> key,
+    final String annotationName
+  ) {
     CachedValue<Collection<PsiClass>> cachedValue = module.getUserData(key);
     if (cachedValue == null) {
-      cachedValue = CachedValuesManager.getManager(module.getProject()).createCachedValue(new CachedValueProvider<Collection<PsiClass>>() {
-        public Result<Collection<PsiClass>> compute() {
-          final GlobalSearchScope scope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module, false);
-          final PsiClass psiClass = JavaPsiFacade.getInstance(module.getProject()).findClass(annotationName, scope);
+      cachedValue = CachedValuesManager.getManager(module.getProject()).createCachedValue(() -> {
+        final GlobalSearchScope scope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module, false);
+        final PsiClass psiClass = JavaPsiFacade.getInstance(module.getProject()).findClass(annotationName, scope);
 
-          final Collection<PsiClass> classes;
-          if (psiClass == null || !psiClass.isAnnotationType()) {
-            classes = Collections.emptyList();
-          } else {
-            classes = getChildren(psiClass, scope);
-          }
-          return new Result<Collection<PsiClass>>(classes, PsiModificationTracker.OUT_OF_CODE_BLOCK_MODIFICATION_COUNT);
+        final Collection<PsiClass> classes;
+        if (psiClass == null || !psiClass.isAnnotationType()) {
+          classes = Collections.emptyList();
+        } else {
+          classes = getChildren(psiClass, scope);
         }
+        return new CachedValueProvider.Result<>(classes, PsiModificationTracker.OUT_OF_CODE_BLOCK_MODIFICATION_COUNT);
       }, false);
 
       module.putUserData(key, cachedValue);
@@ -425,13 +432,11 @@ public class JamCommonUtil {
 
     final Set<PsiClass> result = Sets.newHashSet(HASHING_STRATEGY);
 
-    AnnotatedMembersSearch.search(psiClass, scope).forEach(new Processor<PsiMember>() {
-      public boolean process(final PsiMember psiMember) {
-        if (psiMember instanceof PsiClass && ((PsiClass) psiMember).isAnnotationType()) {
-          result.add((PsiClass) psiMember);
-        }
-        return true;
+    AnnotatedMembersSearch.search(psiClass, scope).forEach(psiMember -> {
+      if (psiMember instanceof PsiClass aClass && aClass.isAnnotationType()) {
+        result.add(aClass);
       }
+      return true;
     });
 
     return result;
@@ -444,20 +449,17 @@ public class JamCommonUtil {
       return false;
     }
 
-    return !processObjectArrayValue(psiAnnotation, "value", new Processor<PsiAnnotationMemberValue>() {
-      @Override
-      public boolean process(PsiAnnotationMemberValue value) {
-        ElementType obj = getObjectValue(value, ElementType.class);
-        if (obj == null) {
-          return true;
-        }
-        for (ElementType type : elementTypes) {
-          if (type.equals(obj)) {
-            return false;
-          }
-        }
+    return !processObjectArrayValue(psiAnnotation, "value", value -> {
+      ElementType obj = getObjectValue(value, ElementType.class);
+      if (obj == null) {
         return true;
       }
+      for (ElementType type : elementTypes) {
+        if (type.equals(obj)) {
+          return false;
+        }
+      }
+      return true;
     });
   }
 
@@ -467,10 +469,15 @@ public class JamCommonUtil {
     return dom != null ? dom.getXmlTag() : null;
   }
 
-  public static <M extends PsiModifierListOwner, V extends JamElement> List<V> getElementsIncludingSingle(final M member, final JamAnnotationMeta multiMeta, final JamAnnotationAttributeMeta<V, List<V>> multiAttrMeta) {
+  public static <M extends PsiModifierListOwner, V extends JamElement> List<V> getElementsIncludingSingle(
+    final M member,
+    final JamAnnotationMeta multiMeta,
+    final JamAnnotationAttributeMeta<V, List<V>> multiAttrMeta
+  ) {
     final List<V> multiValue = multiMeta.getAttribute(member, multiAttrMeta);
     final PsiElementRef<PsiAnnotation> singleAnno = multiAttrMeta.getAnnotationMeta().getAnnotationRef(member);
-    return singleAnno.isImaginary() ? multiValue : ContainerUtil.concat(Collections.singletonList(multiAttrMeta.getInstantiator().instantiate(singleAnno)), multiValue);
+    return singleAnno.isImaginary() ? multiValue
+      : ContainerUtil.concat(Collections.singletonList(multiAttrMeta.getInstantiator().instantiate(singleAnno)), multiValue);
   }
 
   public static boolean isClassAvailable(final Project project, final String qName) {
@@ -488,17 +495,19 @@ public class JamCommonUtil {
       return null;
     }
     final PomTarget target = ((PomTargetPsiElement) element).getTarget();
-    return target instanceof CommonModelTarget ? ((CommonModelTarget) target).getCommonElement() : target instanceof JamPomTarget ? ((JamPomTarget) target).getJamElement() : target instanceof DomTarget ? ((DomTarget) target).getDomElement() : null;
+    return target instanceof CommonModelTarget modelTarget ? modelTarget.getCommonElement()
+      : target instanceof JamPomTarget jamPomTarget ? jamPomTarget.getJamElement()
+      : target instanceof DomTarget domTarget ? domTarget.getDomElement() : null;
   }
 
   @Nullable
   public static DeleteProvider createDeleteProvider(final AbstractTreeBuilder builder) {
-    final List<DeleteProvider> toRun = new ArrayList<DeleteProvider>();
-    final List<JamDeleteProvider> jamProviders = new ArrayList<JamDeleteProvider>();
+    final List<DeleteProvider> toRun = new ArrayList<>();
+    final List<JamDeleteProvider> jamProviders = new ArrayList<>();
     for (JamNodeDescriptor descriptor : builder.getSelectedElements(JamNodeDescriptor.class)) {
-      final DeleteProvider provider = descriptor.isValid() ? (DeleteProvider) descriptor.getDataForElement(PlatformDataKeys.DELETE_ELEMENT_PROVIDER) : null;
-      if (provider instanceof JamDeleteProvider) {
-        jamProviders.add((JamDeleteProvider) provider);
+      final DeleteProvider provider = descriptor.isValid() ? (DeleteProvider) descriptor.getDataForElement(DeleteProvider.KEY) : null;
+      if (provider instanceof JamDeleteProvider jamDeleteProvider) {
+        jamProviders.add(jamDeleteProvider);
       } else if (provider != null) {
         toRun.add(provider);
       }
@@ -534,41 +543,52 @@ public class JamCommonUtil {
     };
   }
 
-  public static <T extends JamElement> CachedValue<List<T>> createClassCachedValue(final Project project, final Supplier<GlobalSearchScope> scope, final JamClassMeta<? extends T>... meta) {
-    return CachedValuesManager.getManager(project).createCachedValue(new CachedValueProvider<List<T>>() {
-      @Override
-      public Result<List<T>> compute() {
-        GlobalSearchScope searchScope = scope.get();
-        final JamService jamService = JamService.getJamService(project);
-        List<T> result = new ArrayList<T>();
-        if (!DumbService.isDumb(project)) {
-          for (JamClassMeta<? extends T> classMeta : meta) {
-            for (JamAnnotationMeta annotationMeta : classMeta.getRootAnnotations()) {
-              result.addAll(jamService.getJamClassElements(classMeta, annotationMeta.getAnnoName(), searchScope));
-            }
+  public static <T extends JamElement> CachedValue<List<T>> createClassCachedValue(
+    final Project project,
+    final Supplier<GlobalSearchScope> scope,
+    final JamClassMeta<? extends T>... meta
+  ) {
+    return CachedValuesManager.getManager(project).createCachedValue(() -> {
+      GlobalSearchScope searchScope = scope.get();
+      final JamService jamService = JamService.getJamService(project);
+      List<T> result = new ArrayList<>();
+      if (!DumbService.isDumb(project)) {
+        for (JamClassMeta<? extends T> classMeta : meta) {
+          for (JamAnnotationMeta annotationMeta : classMeta.getRootAnnotations()) {
+            result.addAll(jamService.getJamClassElements(classMeta, annotationMeta.getAnnoName(), searchScope));
           }
         }
-        return new Result<List<T>>(result, PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT);
       }
+      return new CachedValueProvider.Result<>(result, PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT);
     }, false);
   }
 
   public static void setAnnotationAttributeValue(PsiAnnotation annotation, String attribute, String value) {
-    new JamStringAttributeElement<String>(PsiElementRef.real(annotation), attribute, JamConverter.DUMMY_CONVERTER).setStringValue(value);
+    new JamStringAttributeElement<>(PsiElementRef.real(annotation), attribute, JamConverter.DUMMY_CONVERTER).setStringValue(value);
   }
 
-  public static <T extends PsiModifierListOwner> void findAnnotatedElements(Class<T> elementClass, String annotationClass, PsiManager psiManager, GlobalSearchScope scope, Processor<T> processor) {
-    final PsiClass aClass = JavaPsiFacade.getInstance(psiManager.getProject()).findClass(annotationClass, GlobalSearchScope.allScope(psiManager.getProject()));
+  public static <T extends PsiModifierListOwner> void findAnnotatedElements(
+    Class<T> elementClass,
+    String annotationClass,
+    PsiManager psiManager,
+    GlobalSearchScope scope,
+    Processor<T> processor
+  ) {
+    final PsiClass aClass = JavaPsiFacade.getInstance(psiManager.getProject())
+      .findClass(annotationClass, GlobalSearchScope.allScope(psiManager.getProject()));
     if (aClass != null) {
       AnnotatedElementsSearch.<T>searchElements(aClass, scope, elementClass).forEach(processor);
     }
   }
 
-  public static boolean processObjectArrayValue(PsiAnnotation annotation, String attributeName, Processor<PsiAnnotationMemberValue> processor) {
+  public static boolean processObjectArrayValue(
+    PsiAnnotation annotation,
+    String attributeName,
+    Processor<PsiAnnotationMemberValue> processor
+  ) {
     if (annotation != null) {
       final PsiAnnotationMemberValue memberValue = annotation.findAttributeValue(attributeName);
-      if (memberValue instanceof PsiArrayInitializerMemberValue) {
-        PsiArrayInitializerMemberValue arrayValue = (PsiArrayInitializerMemberValue) memberValue;
+      if (memberValue instanceof PsiArrayInitializerMemberValue arrayValue) {
         for (PsiAnnotationMemberValue value : arrayValue.getInitializers()) {
           if (!processor.process(value)) {
             return false;
@@ -586,16 +606,17 @@ public class JamCommonUtil {
   @Nullable
   public static PsiClass getPsiClass(@Nullable PsiAnnotationMemberValue psiAnnotationMemberValue) {
     PsiClass psiClass = null;
-    if (psiAnnotationMemberValue instanceof PsiClassObjectAccessExpression) {
-      final PsiType type = ((PsiClassObjectAccessExpression) psiAnnotationMemberValue).getOperand().getType();
-      if (type instanceof PsiClassType) {
-        psiClass = ((PsiClassType) type).resolve();
+    if (psiAnnotationMemberValue instanceof PsiClassObjectAccessExpression classObjectAccessExpression) {
+      final PsiType type = classObjectAccessExpression.getOperand().getType();
+      if (type instanceof PsiClassType classType) {
+        psiClass = classType.resolve();
       }
     } else if (psiAnnotationMemberValue instanceof PsiExpression) {
       final Object value = computeMemberValue(psiAnnotationMemberValue);
-      if (value instanceof String) {
-        String className = StringUtil.stripQuotesAroundValue((String) value);
-        psiClass = JavaPsiFacade.getInstance(psiAnnotationMemberValue.getProject()).findClass(className, psiAnnotationMemberValue.getResolveScope());
+      if (value instanceof String stringValue) {
+        String className = StringUtil.stripQuotesAroundValue(stringValue);
+        psiClass = JavaPsiFacade.getInstance(psiAnnotationMemberValue.getProject())
+          .findClass(className, psiAnnotationMemberValue.getResolveScope());
       }
     }
     if (psiClass != null && JavaClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName())) {
@@ -606,6 +627,7 @@ public class JamCommonUtil {
 
   // we can consider using AnnotationUtil methods instead
   @Nullable
+  @SuppressWarnings("unchecked")
   public static <T> T getObjectValue(@Nullable PsiAnnotationMemberValue value, Class<T> clazz) {
     boolean isString = clazz == String.class;
     if (ReflectionUtil.isAssignable(Enum.class, clazz)) {
@@ -621,13 +643,13 @@ public class JamCommonUtil {
   }
 
   @Nullable
+  @RequiredReadAction
+  @SuppressWarnings("unchecked")
   public static <T extends Enum> T getEnumValue(PsiAnnotationMemberValue memberValue, Class<T> clazz) {
     assert ReflectionUtil.isAssignable(Enum.class, clazz);
-    if (memberValue instanceof PsiReferenceExpression) {
-      final PsiReferenceExpression psiReferenceExpression = (PsiReferenceExpression) memberValue;
+    if (memberValue instanceof PsiReferenceExpression psiReferenceExpression) {
       final PsiElement psiElement = psiReferenceExpression.resolve();
-      if (psiElement instanceof PsiField) {
-        final PsiField psiField = (PsiField) psiElement;
+      if (psiElement instanceof PsiField psiField) {
         return (T) Enum.valueOf(clazz, psiField.getName());
       }
     }

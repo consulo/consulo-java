@@ -31,6 +31,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.project.Project;
 import consulo.util.lang.ref.Ref;
 import consulo.language.psi.PsiElement;
@@ -282,6 +283,7 @@ public class InlineSuperClassRefactoringProcessor extends FixableUsagesRefactori
       }
 
       @Override
+      @RequiredReadAction
       protected void performRefactoring(UsageInfo[] pushDownUsages) {
         if (myCurrentInheritor != null) {
           encodeRefs();

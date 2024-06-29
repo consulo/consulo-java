@@ -11,12 +11,11 @@ import com.intellij.java.language.psi.*;
 import com.intellij.rt.coverage.data.JumpData;
 import com.intellij.rt.coverage.data.LineData;
 import com.intellij.rt.coverage.data.SwitchData;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.ApplicationManager;
+import consulo.application.Application;
 import consulo.application.util.function.Computable;
 import consulo.codeEditor.Editor;
-import consulo.compiler.CompileContext;
-import consulo.compiler.CompileStatusNotification;
 import consulo.compiler.CompilerManager;
 import consulo.compiler.ModuleCompilerPathsManager;
 import consulo.component.extension.Extensions;
@@ -40,13 +39,14 @@ import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awt.UIUtil;
 import consulo.util.io.FileUtil;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -100,12 +100,13 @@ public class JavaCoverageEngine extends CoverageEngine {
   }
 
   @Override
-  public CoverageSuite createCoverageSuite(@Nonnull final CoverageRunner covRunner,
-                                           @Nonnull final String name,
-                                           @Nonnull final CoverageFileProvider coverageDataFileProvider,
-                                           @Nonnull final CoverageEnabledConfiguration config) {
-    if (config instanceof JavaCoverageEnabledConfiguration) {
-      final JavaCoverageEnabledConfiguration javaConfig = (JavaCoverageEnabledConfiguration) config;
+  public CoverageSuite createCoverageSuite(
+    @Nonnull final CoverageRunner covRunner,
+    @Nonnull final String name,
+    @Nonnull final CoverageFileProvider coverageDataFileProvider,
+    @Nonnull final CoverageEnabledConfiguration config
+  ) {
+    if (config instanceof JavaCoverageEnabledConfiguration javaConfig) {
       return createSuite(covRunner, name, coverageDataFileProvider,
           javaConfig.getPatterns(),
           new Date().getTime(),
@@ -139,7 +140,7 @@ public class JavaCoverageEngine extends CoverageEngine {
       return false;
     }
     // let's show coverage only for module files
-    final Module module = ApplicationManager.getApplication().runReadAction(new Computable<Module>() {
+    final Module module = psiFile.getApplication().runReadAction(new Computable<Module>() {
       @Nullable
       public Module compute() {
         return ModuleUtilCore.findModuleForPsiElement(psiFile);
@@ -188,29 +189,29 @@ public class JavaCoverageEngine extends CoverageEngine {
       final Project project = module.getProject();
       if (suite.isModuleChecked(module)) return false;
       suite.checkModule(module);
-      final Runnable runnable = new Runnable() {
-        public void run() {
-          if (Messages.showOkCancelDialog(
-              "Project class files are out of date. Would you like to recompile? The refusal to do it will result in incomplete coverage information",
-              "Project is out of date", Messages.getWarningIcon()) == Messages.OK) {
-            final CompilerManager compilerManager = CompilerManager.getInstance(project);
-            compilerManager.make(compilerManager.createProjectCompileScope(), new CompileStatusNotification() {
-              public void finished(final boolean aborted, final int errors, final int warnings, final CompileContext compileContext) {
-                if (aborted || errors != 0) return;
-                ApplicationManager.getApplication().invokeLater(new Runnable() {
-                  public void run() {
-                    if (project.isDisposed()) return;
-                    CoverageDataManager.getInstance(project).chooseSuitesBundle(suite);
-                  }
-                });
-              }
-            });
-          } else if (!project.isDisposed()) {
-            CoverageDataManager.getInstance(project).chooseSuitesBundle(null);
-          }
+      final Runnable runnable = () -> {
+        if (Messages.showOkCancelDialog(
+          "Project class files are out of date. Would you like to recompile?" +
+            " The refusal to do it will result in incomplete coverage information",
+          "Project is out of date",
+          UIUtil.getWarningIcon()
+        ) == Messages.OK) {
+          final CompilerManager compilerManager = CompilerManager.getInstance(project);
+          compilerManager.make(
+            compilerManager.createProjectCompileScope(),
+            (aborted, errors, warnings, compileContext) -> {
+              if (aborted || errors != 0) return;
+              Application.get().invokeLater(() -> {
+                if (project.isDisposed()) return;
+                CoverageDataManager.getInstance(project).chooseSuitesBundle(suite);
+              });
+            }
+          );
+        } else if (!project.isDisposed()) {
+          CoverageDataManager.getInstance(project).chooseSuitesBundle(null);
         }
       };
-      ApplicationManager.getApplication().invokeLater(runnable);
+      project.getApplication().invokeLater(runnable);
       return true;
     }
     return false;
@@ -221,11 +222,7 @@ public class JavaCoverageEngine extends CoverageEngine {
   }
 
   public static boolean isUnderFilteredPackages(final PsiClassOwner javaFile, final List<PsiJavaPackage> packages) {
-    final String hisPackageName = ApplicationManager.getApplication().runReadAction(new Computable<String>() {
-      public String compute() {
-        return javaFile.getPackageName();
-      }
-    });
+    final String hisPackageName = Application.get().runReadAction((Computable<String>)javaFile::getPackageName);
     PsiPackage hisPackage = JavaPsiFacade.getInstance(javaFile.getProject()).findPackage(hisPackageName);
     if (hisPackage == null) return false;
     for (PsiPackage aPackage : packages) {
@@ -236,7 +233,7 @@ public class JavaCoverageEngine extends CoverageEngine {
 
   @Nullable
   public List<Integer> collectSrcLinesForUntouchedFile(@Nonnull final File classFile, @Nonnull final CoverageSuitesBundle suite) {
-    final List<Integer> uncoveredLines = new ArrayList<Integer>();
+    final List<Integer> uncoveredLines = new ArrayList<>();
 
     final byte[] content;
     try {
@@ -273,23 +270,16 @@ public class JavaCoverageEngine extends CoverageEngine {
   @Nonnull
   @Override
   public Set<String> getQualifiedNames(@Nonnull final PsiFile sourceFile) {
-    final PsiClass[] classes = ApplicationManager.getApplication().runReadAction(new Computable<PsiClass[]>() {
-      public PsiClass[] compute() {
-        return ((PsiClassOwner) sourceFile).getClasses();
-      }
-    });
-    final Set<String> qNames = new HashSet<String>();
+    Application application = sourceFile.getApplication();
+    final PsiClass[] classes = application.runReadAction((Computable<PsiClass[]>)((PsiClassOwner)sourceFile)::getClasses);
+    final Set<String> qNames = new HashSet<>();
     for (final JavaCoverageEngineExtension nameExtension : Extensions.getExtensions(JavaCoverageEngineExtension.EP_NAME)) {
-      if (ApplicationManager.getApplication().runReadAction(new Computable<Boolean>() {
-        public Boolean compute() {
-          return nameExtension.suggestQualifiedName(sourceFile, classes, qNames);
-        }
-      })) {
+      if (application.runReadAction((Computable<Boolean>)() -> nameExtension.suggestQualifiedName(sourceFile, classes, qNames))) {
         return qNames;
       }
     }
     for (final PsiClass aClass : classes) {
-      final String qName = ApplicationManager.getApplication().runReadAction(new Computable<String>() {
+      final String qName = application.runReadAction(new Computable<String>() {
         @Nullable
         public String compute() {
           return aClass.getQualifiedName();
@@ -302,15 +292,18 @@ public class JavaCoverageEngine extends CoverageEngine {
   }
 
   @Nonnull
-  public Set<File> getCorrespondingOutputFiles(@Nonnull final PsiFile srcFile,
-                                               @Nullable final Module module,
-                                               @Nonnull final CoverageSuitesBundle suite) {
+  public Set<File> getCorrespondingOutputFiles(
+    @Nonnull final PsiFile srcFile,
+    @Nullable final Module module,
+    @Nonnull final CoverageSuitesBundle suite
+  ) {
     if (module == null) {
       return Collections.emptySet();
     }
-    final Set<File> classFiles = new HashSet<File>();
-    final VirtualFile outputpath = ModuleCompilerPathsManager.getInstance(module).getCompilerOutput(ProductionContentFolderTypeProvider.getInstance());
-    final VirtualFile testOutputpath = ModuleCompilerPathsManager.getInstance(module).getCompilerOutput(TestContentFolderTypeProvider.getInstance());
+    final Set<File> classFiles = new HashSet<>();
+    final ModuleCompilerPathsManager pathsManager = ModuleCompilerPathsManager.getInstance(module);
+    final VirtualFile outputpath = pathsManager.getCompilerOutput(ProductionContentFolderTypeProvider.getInstance());
+    final VirtualFile testOutputpath = pathsManager.getCompilerOutput(TestContentFolderTypeProvider.getInstance());
 
     for (JavaCoverageEngineExtension extension : Extensions.getExtensions(JavaCoverageEngineExtension.EP_NAME)) {
       if (extension.collectOutputFiles(srcFile, outputpath, testOutputpath, suite, classFiles)) return classFiles;
@@ -319,7 +312,7 @@ public class JavaCoverageEngine extends CoverageEngine {
     final String packageFQName = getPackageName(srcFile);
     final String packageVmName = packageFQName.replace('.', '/');
 
-    final List<File> children = new ArrayList<File>();
+    final List<File> children = new ArrayList<>();
     final File vDir =
         outputpath == null
             ? null : packageVmName.length() > 0
@@ -338,17 +331,10 @@ public class JavaCoverageEngine extends CoverageEngine {
       }
     }
 
-    final PsiClass[] classes = ApplicationManager.getApplication().runReadAction(new Computable<PsiClass[]>() {
-      public PsiClass[] compute() {
-        return ((PsiClassOwner) srcFile).getClasses();
-      }
-    });
+    Application application = srcFile.getApplication();
+    final PsiClass[] classes = application.runReadAction((Computable<PsiClass[]>)((PsiClassOwner)srcFile)::getClasses);
     for (final PsiClass psiClass : classes) {
-      final String className = ApplicationManager.getApplication().runReadAction(new Computable<String>() {
-        public String compute() {
-          return psiClass.getName();
-        }
-      });
+      final String className = application.runReadAction((Computable<String>)psiClass::getName);
       for (File child : children) {
         if (FileUtil.extensionEquals(child.getName(), JavaClassFileType.INSTANCE.getDefaultExtension())) {
           final String childName = FileUtil.getNameWithoutExtension(child);
@@ -362,14 +348,16 @@ public class JavaCoverageEngine extends CoverageEngine {
     return classFiles;
   }
 
-  public String generateBriefReport(@Nonnull Editor editor,
-                                    @Nonnull PsiFile psiFile,
-                                    int lineNumber,
-                                    int startOffset,
-                                    int endOffset,
-                                    @Nullable LineData lineData) {
-
-    final StringBuffer buf = new StringBuffer();
+  @RequiredReadAction
+  public String generateBriefReport(
+    @Nonnull Editor editor,
+    @Nonnull PsiFile psiFile,
+    int lineNumber,
+    int startOffset,
+    int endOffset,
+    @Nullable LineData lineData
+  ) {
+    final StringBuilder buf = new StringBuilder();
     buf.append("Hits: ");
     if (lineData == null) {
       buf.append(0);
@@ -377,34 +365,34 @@ public class JavaCoverageEngine extends CoverageEngine {
     }
     buf.append(lineData.getHits()).append("\n");
 
-    final List<PsiExpression> expressions = new ArrayList<PsiExpression>();
+    final List<PsiExpression> expressions = new ArrayList<>();
 
     final Project project = editor.getProject();
     for (int offset = startOffset; offset < endOffset; offset++) {
       PsiElement parent = PsiTreeUtil.getParentOfType(psiFile.findElementAt(offset), PsiStatement.class);
       PsiElement condition = null;
-      if (parent instanceof PsiIfStatement) {
-        condition = ((PsiIfStatement) parent).getCondition();
-      } else if (parent instanceof PsiSwitchStatement) {
-        condition = ((PsiSwitchStatement) parent).getExpression();
-      } else if (parent instanceof PsiDoWhileStatement) {
-        condition = ((PsiDoWhileStatement) parent).getCondition();
-      } else if (parent instanceof PsiForStatement) {
-        condition = ((PsiForStatement) parent).getCondition();
-      } else if (parent instanceof PsiWhileStatement) {
-        condition = ((PsiWhileStatement) parent).getCondition();
-      } else if (parent instanceof PsiForeachStatement) {
-        condition = ((PsiForeachStatement) parent).getIteratedValue();
-      } else if (parent instanceof PsiAssertStatement) {
-        condition = ((PsiAssertStatement) parent).getAssertCondition();
+      if (parent instanceof PsiIfStatement ifStatement) {
+        condition = ifStatement.getCondition();
+      } else if (parent instanceof PsiSwitchStatement switchStatement) {
+        condition = switchStatement.getExpression();
+      } else if (parent instanceof PsiDoWhileStatement doWhileStatement) {
+        condition = doWhileStatement.getCondition();
+      } else if (parent instanceof PsiForStatement forStatement) {
+        condition = forStatement.getCondition();
+      } else if (parent instanceof PsiWhileStatement whileStatement) {
+        condition = whileStatement.getCondition();
+      } else if (parent instanceof PsiForeachStatement foreachStatement) {
+        condition = foreachStatement.getIteratedValue();
+      } else if (parent instanceof PsiAssertStatement assertStatement) {
+        condition = assertStatement.getAssertCondition();
       }
       if (condition != null && PsiTreeUtil.isAncestor(condition, psiFile.findElementAt(offset), false)) {
         try {
-          final ControlFlow controlFlow = ControlFlowFactory.getInstance(project).getControlFlow(
-              parent, AllVariablesControlFlowPolicy.getInstance());
+          final ControlFlow controlFlow = ControlFlowFactory.getInstance(project)
+            .getControlFlow(parent, AllVariablesControlFlowPolicy.getInstance());
           for (Instruction instruction : controlFlow.getInstructions()) {
-            if (instruction instanceof ConditionalBranchingInstruction) {
-              final PsiExpression expression = ((ConditionalBranchingInstruction) instruction).expression;
+            if (instruction instanceof ConditionalBranchingInstruction branchingInstruction) {
+              final PsiExpression expression = branchingInstruction.expression;
               if (!expressions.contains(expression)) {
                 expressions.add(expression);
               }
@@ -426,8 +414,8 @@ public class JavaCoverageEngine extends CoverageEngine {
           if (jumpData.getTrueHits() + jumpData.getFalseHits() > 0) {
             final PsiExpression expression = expressions.get(idx++);
             final PsiElement parentExpression = expression.getParent();
-            boolean reverse = parentExpression instanceof PsiPolyadicExpression && ((PsiPolyadicExpression) parentExpression).getOperationTokenType() == JavaTokenType.OROR
-                || parentExpression instanceof PsiDoWhileStatement || parentExpression instanceof PsiAssertStatement;
+            boolean reverse = parentExpression instanceof PsiPolyadicExpression polyExpr && polyExpr.getOperationTokenType() == JavaTokenType.OROR
+              || parentExpression instanceof PsiDoWhileStatement || parentExpression instanceof PsiAssertStatement;
             buf.append(indent).append(expression.getText()).append("\n");
             buf.append(indent).append(indent).append("true hits: ").append(reverse ? jumpData.getFalseHits() : jumpData.getTrueHits()).append("\n");
             buf.append(indent).append(indent).append("false hits: ").append(reverse ? jumpData.getTrueHits() : jumpData.getFalseHits()).append("\n");
@@ -472,15 +460,16 @@ public class JavaCoverageEngine extends CoverageEngine {
   }
 
   @Nullable
-  public String getTestMethodName(@Nonnull final PsiElement element,
-                                  @Nonnull final AbstractTestProxy testProxy) {
+  public String getTestMethodName(
+    @Nonnull final PsiElement element,
+    @Nonnull final AbstractTestProxy testProxy
+  ) {
     return testProxy.toString();
   }
 
-
   @Nonnull
   public List<PsiElement> findTestsByNames(@Nonnull String[] testNames, @Nonnull Project project) {
-    final List<PsiElement> elements = new ArrayList<PsiElement>();
+    final List<PsiElement> elements = new ArrayList<>();
     final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
     final GlobalSearchScope projectScope = GlobalSearchScope.projectScope(project);
     for (String testName : testNames) {
@@ -512,7 +501,6 @@ public class JavaCoverageEngine extends CoverageEngine {
     }
   }
 
-
   private static boolean hasDefaultLabel(final PsiElement conditionExpression) {
     boolean hasDefault = false;
     final PsiSwitchStatement switchStatement = PsiTreeUtil.getParentOfType(conditionExpression, PsiSwitchStatement.class);
@@ -532,24 +520,34 @@ public class JavaCoverageEngine extends CoverageEngine {
     return hasDefault;
   }
 
-  protected JavaCoverageSuite createSuite(CoverageRunner acceptedCovRunner,
-                                          String name, CoverageFileProvider coverageDataFileProvider,
-                                          String[] filters,
-                                          long lastCoverageTimeStamp,
-                                          boolean coverageByTestEnabled,
-                                          boolean tracingEnabled,
-                                          boolean trackTestFolders, Project project) {
-    return new JavaCoverageSuite(name, coverageDataFileProvider, filters, lastCoverageTimeStamp, coverageByTestEnabled, tracingEnabled,
-        trackTestFolders, acceptedCovRunner, this, project);
+  protected JavaCoverageSuite createSuite(
+    CoverageRunner acceptedCovRunner,
+    String name,
+    CoverageFileProvider coverageDataFileProvider,
+    String[] filters,
+    long lastCoverageTimeStamp,
+    boolean coverageByTestEnabled,
+    boolean tracingEnabled,
+    boolean trackTestFolders,
+    Project project
+  ) {
+    return new JavaCoverageSuite(
+      name,
+      coverageDataFileProvider,
+      filters,
+      lastCoverageTimeStamp,
+      coverageByTestEnabled,
+      tracingEnabled,
+      trackTestFolders,
+      acceptedCovRunner,
+      this,
+      project
+    );
   }
 
   @Nonnull
   protected static String getPackageName(final PsiFile sourceFile) {
-    return ApplicationManager.getApplication().runReadAction(new Computable<String>() {
-      public String compute() {
-        return ((PsiClassOwner) sourceFile).getPackageName();
-      }
-    });
+    return sourceFile.getApplication().runReadAction((Computable<String>)((PsiClassOwner)sourceFile)::getPackageName);
   }
 
   @Override
@@ -558,9 +556,11 @@ public class JavaCoverageEngine extends CoverageEngine {
   }
 
   @Override
-  public CoverageViewExtension createCoverageViewExtension(Project project,
-                                                           CoverageSuitesBundle suiteBundle,
-                                                           CoverageViewManager.StateBean stateBean) {
+  public CoverageViewExtension createCoverageViewExtension(
+    Project project,
+    CoverageSuitesBundle suiteBundle,
+    CoverageViewManager.StateBean stateBean
+  ) {
     return new JavaCoverageViewExtension((JavaCoverageAnnotator) getCoverageAnnotator(project), project, suiteBundle, stateBean);
   }
 }

@@ -18,7 +18,6 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.application.ApplicationManager;
 import consulo.application.WriteAction;
 import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
@@ -33,7 +32,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
-
+import consulo.ui.ex.awt.UIUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -82,11 +81,11 @@ public class AddExceptionToThrowsFix extends BaseIntentionAction implements Synt
 
     final boolean processSuperMethods;
     if (hasSuperMethodsWithoutExceptions && superMethods.length > 0) {
-      int result =
-        ApplicationManager.getApplication().isUnitTestMode() ? Messages.YES : Messages.showYesNoCancelDialog(JavaQuickFixBundle.message(
-          "add.exception.to.throws.inherited.method.warning" +
-            ".text",
-          targetMethod.getName()), JavaQuickFixBundle.message("method.is.inherited.warning.title"), Messages.getQuestionIcon());
+      int result = project.getApplication().isUnitTestMode() ? Messages.YES : Messages.showYesNoCancelDialog(
+        JavaQuickFixBundle.message("add.exception.to.throws.inherited.method.warning.text", targetMethod.getName()),
+        JavaQuickFixBundle.message("method.is.inherited.warning.title"),
+        UIUtil.getQuestionIcon()
+      );
 
       if (result == Messages.YES) {
         processSuperMethods = true;
@@ -110,16 +109,15 @@ public class AddExceptionToThrowsFix extends BaseIntentionAction implements Synt
     if (!FileModificationService.getInstance().preparePsiElementsForWrite(toModify)) {
       return;
     }
-    WriteAction.run(() ->
-                    {
-                      processMethod(project, targetMethod, unhandledExceptions);
+    WriteAction.run(() -> {
+      processMethod(project, targetMethod, unhandledExceptions);
 
-                      if (processSuperMethods) {
-                        for (PsiMethod superMethod : superMethods) {
-                          processMethod(project, superMethod, unhandledExceptions);
-                        }
-                      }
-                    });
+      if (processSuperMethods) {
+        for (PsiMethod superMethod : superMethods) {
+          processMethod(project, superMethod, unhandledExceptions);
+        }
+      }
+    });
   }
 
   @Nonnull
@@ -195,17 +193,14 @@ public class AddExceptionToThrowsFix extends BaseIntentionAction implements Synt
     PsiElement targetElement = null;
     PsiMethod targetMethod = null;
 
-    final PsiElement psiElement = myWrongElement instanceof PsiMethodReferenceExpression ? myWrongElement : PsiTreeUtil.getParentOfType(
-      myWrongElement,
-      PsiFunctionalExpression.class,
-      PsiMethod
-        .class);
+    final PsiElement psiElement = myWrongElement instanceof PsiMethodReferenceExpression ? myWrongElement
+      : PsiTreeUtil.getParentOfType(myWrongElement, PsiFunctionalExpression.class, PsiMethod.class);
     if (psiElement instanceof PsiFunctionalExpression) {
       targetMethod = LambdaUtil.getFunctionalInterfaceMethod(psiElement);
-      targetElement = psiElement instanceof PsiLambdaExpression ? ((PsiLambdaExpression)psiElement).getBody() : psiElement;
+      targetElement = psiElement instanceof PsiLambdaExpression lambda ? lambda.getBody() : psiElement;
     }
-    else if (psiElement instanceof PsiMethod) {
-      targetMethod = (PsiMethod)psiElement;
+    else if (psiElement instanceof PsiMethod method) {
+      targetMethod = method;
       targetElement = psiElement;
     }
 

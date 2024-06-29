@@ -32,27 +32,28 @@ public class JavacRunner
 	 *             1. javac main class
 	 *             2. javac parameters
 	 */
-	public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, ClassNotFoundException, IOException
+	public static void main(String[] args)
+		throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, ClassNotFoundException, IOException
 	{
-		if(!JavacResourcesReader.dumpPatterns())
+		if (!JavacResourcesReader.dumpPatterns())
 		{
 			throw new IOException("Unsupported compiler: " + System.getProperty("java.version"));
 		}
 
 		final String versionString = args[0];
-		final Class aClass = Class.forName(args[1]);
+		final Class<?> aClass = Class.forName(args[1]);
 		//noinspection HardCodedStringLiteral
 		final Method mainMethod = aClass.getMethod("main", new Class[]{String[].class});
 		String[] newArgs;
-		if(versionString.indexOf("1.1") > -1)
+		if (versionString.contains("1.1"))
 		{
 			// expand the file
-			final Vector arguments = new Vector();
+			final Vector<String> arguments = new Vector<String>();
 			boolean isClasspath = false;
-			for(int idx = 3; idx < args.length; idx++)
+			for (int idx = 3; idx < args.length; idx++)
 			{
 				final String arg = args[idx];
-				if(arg.startsWith("@") && !isClasspath)
+				if (arg.startsWith("@") && !isClasspath)
 				{
 					addFilesToCompile(arguments, arg);
 				}
@@ -63,9 +64,9 @@ public class JavacRunner
 				}
 			}
 			newArgs = new String[arguments.size()];
-			for(int idx = 0; idx < newArgs.length; idx++)
+			for (int idx = 0; idx < newArgs.length; idx++)
 			{
-				newArgs[idx] = (String) arguments.elementAt(idx);
+				newArgs[idx] = arguments.elementAt(idx);
 			}
 		}
 		else
@@ -78,14 +79,14 @@ public class JavacRunner
 		{
 			mainMethod.invoke(null, new Object[]{newArgs});
 		}
-		catch(Throwable e)
+		catch (Throwable e)
 		{
 			System.err.print(e.getMessage());
 			e.printStackTrace(System.err);
 		}
 	}
 
-	private static void addFilesToCompile(Vector arguments, String pathWithAt) throws IOException
+	private static void addFilesToCompile(Vector<String> arguments, String pathWithAt) throws IOException
 	{
 		String path = pathWithAt.substring(1);
 
@@ -93,14 +94,14 @@ public class JavacRunner
 		try
 		{
 			reader = new BufferedReader(new FileReader(new File(path)));
-			for(String filePath = reader.readLine(); filePath != null; filePath = reader.readLine())
+			for (String filePath = reader.readLine(); filePath != null; filePath = reader.readLine())
 			{
 				arguments.addElement(filePath.replace('/', File.separatorChar));
 			}
 		}
 		finally
 		{
-			if(reader != null)
+			if (reader != null)
 			{
 				reader.close();
 			}
@@ -109,14 +110,14 @@ public class JavacRunner
 
 	private static void expandClasspath(String[] args) throws IOException
 	{
-		for(int idx = 0; idx < args.length; idx++)
+		for (int idx = 0; idx < args.length; idx++)
 		{
 			final String arg = args[idx];
 			//noinspection HardCodedStringLiteral
-			if("-classpath".equals(arg) || "-cp".equals(arg) || "-bootclasspath".equals(arg) || "--module-path".equals(arg))
+			if ("-classpath".equals(arg) || "-cp".equals(arg) || "-bootclasspath".equals(arg) || "--module-path".equals(arg))
 			{
 				final String cpValue = args[idx + 1];
-				if(cpValue.startsWith("@"))
+				if (cpValue.startsWith("@"))
 				{
 					args[idx + 1] = readClassPathWithAt(cpValue);
 				}
@@ -126,20 +127,18 @@ public class JavacRunner
 
 	public static String readClassPathWithAt(String filePath) throws IOException
 	{
-		Vector elements = new Vector();
+		Vector<String> elements = new Vector<String>();
 
 		addFilesToCompile(elements, filePath);
 
-		StringBuffer builder = new StringBuffer();
+		StringBuilder builder = new StringBuilder();
 
-		for(int i = 0; i < elements.size(); i++)
-		{
-			if(i != 0)
-			{
+		for (String element : elements) {
+			if (builder.length() > 0) {
 				builder.append(File.pathSeparatorChar);
 			}
 
-			builder.append(elements.get(i));
+			builder.append(element);
 		}
 		return builder.toString();
 	}

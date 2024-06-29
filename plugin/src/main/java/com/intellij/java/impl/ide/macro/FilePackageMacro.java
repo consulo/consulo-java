@@ -20,7 +20,6 @@ import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.dataContext.DataContext;
-import consulo.language.editor.LangDataKeys;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiFile;
 import consulo.pathMacro.Macro;
@@ -46,7 +45,7 @@ public final class FilePackageMacro extends Macro {
 
   @Nullable
   static PsiJavaPackage getFilePackage(DataContext dataContext) {
-    PsiFile psiFile = dataContext.getData(LangDataKeys.PSI_FILE);
+    PsiFile psiFile = dataContext.getData(PsiFile.KEY);
     if (psiFile == null) return null;
     PsiDirectory containingDirectory = psiFile.getContainingDirectory();
     if (containingDirectory == null || !containingDirectory.isValid()) return null;
