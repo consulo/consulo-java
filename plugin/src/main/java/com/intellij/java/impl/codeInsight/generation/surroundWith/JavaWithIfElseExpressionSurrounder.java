@@ -17,19 +17,20 @@
 package com.intellij.java.impl.codeInsight.generation.surroundWith;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
 import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
 
-public class JavaWithIfElseExpressionSurrounder extends JavaWithIfExpressionSurrounder{
-
+public class JavaWithIfElseExpressionSurrounder extends JavaWithIfExpressionSurrounder {
   @Override
+  @RequiredReadAction
   public TextRange surroundExpression(Project project, Editor editor, PsiExpression expr) throws IncorrectOperationException {
     PsiManager manager = expr.getManager();
     PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
@@ -55,6 +56,6 @@ public class JavaWithIfElseExpressionSurrounder extends JavaWithIfExpressionSurr
 
   @Override
   public String getTemplateDescription() {
-    return CodeInsightBundle.message("surround.with.ifelse.expression.template");
+    return CodeInsightLocalize.surroundWithIfelseExpressionTemplate().get();
   }
 }

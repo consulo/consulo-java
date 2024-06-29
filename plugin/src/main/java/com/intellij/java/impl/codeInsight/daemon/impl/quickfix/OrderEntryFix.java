@@ -242,8 +242,7 @@ public abstract class OrderEntryFix implements SyntheticIntentionAction, LocalQu
   public static void importClass(@Nonnull Module currentModule, @Nullable Editor editor, @Nullable PsiReference reference, @Nullable String className) {
     Project project = currentModule.getProject();
     if (editor != null && reference != null && className != null) {
-      DumbService.getInstance(project).withAlternativeResolveEnabled(() ->
-      {
+      DumbService.getInstance(project).withAlternativeResolveEnabled(() -> {
         GlobalSearchScope scope = GlobalSearchScope.moduleWithLibrariesScope(currentModule);
         PsiClass aClass = JavaPsiFacade.getInstance(project).findClass(className, scope);
         if (aClass != null) {

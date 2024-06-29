@@ -17,10 +17,11 @@
 package com.intellij.java.impl.codeInsight.generation.surroundWith;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
 import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
@@ -30,10 +31,11 @@ import org.jetbrains.annotations.NonNls;
 class JavaWithWhileSurrounder extends JavaStatementsSurrounder{
   @Override
   public String getTemplateDescription() {
-    return CodeInsightBundle.message("surround.with.while.template");
+    return CodeInsightLocalize.surroundWithWhileTemplate().get();
   }
 
   @Override
+  @RequiredReadAction
   public TextRange surroundStatements(Project project, Editor editor, PsiElement container, PsiElement[] statements) throws IncorrectOperationException{
     PsiManager manager = PsiManager.getInstance(project);
     PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();

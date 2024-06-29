@@ -16,26 +16,24 @@
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import consulo.application.Application;
-import consulo.application.ApplicationManager;
-import consulo.application.CommonBundle;
 import consulo.disposer.Disposer;
 import consulo.fileChooser.FileChooserDescriptorFactory;
 import consulo.ide.impl.idea.openapi.util.io.FileUtil;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.module.Module;
+import consulo.platform.base.localize.CommonLocalize;
 import consulo.project.Project;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.JBRadioButton;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.TextFieldWithBrowseButton;
 import consulo.ui.ex.awt.event.DocumentAdapter;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
-import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.IOException;
@@ -65,12 +63,7 @@ public class LocateLibraryDialog extends DialogWrapper {
     myCopyToDir.addBrowseFolderListener(JavaQuickFixBundle.message("add.library.title.choose.folder"), JavaQuickFixBundle.message("add.library.description.choose.folder"), myProject,
         FileChooserDescriptorFactory.createSingleFolderDescriptor());
 
-    final ItemListener listener = new ItemListener() {
-      @Override
-      public void itemStateChanged(ItemEvent e) {
-        updateButtons();
-      }
-    };
+    final ItemListener listener = e -> updateButtons();
 
     myUseBundledRadioButton.addItemListener(listener);
     myCopyLibraryFilesRadioButton.addItemListener(listener);
@@ -88,7 +81,7 @@ public class LocateLibraryDialog extends DialogWrapper {
 
   @Nonnull
   public List<String> showAndGetResult() {
-    if (ApplicationManager.getApplication().isHeadlessEnvironment()) {
+    if (myProject.getApplication().isHeadlessEnvironment()) {
       Disposer.dispose(myDisposable);
       return myDefaultLibraryPaths;
     }
@@ -147,14 +140,22 @@ public class LocateLibraryDialog extends DialogWrapper {
     for (String path : myDefaultLibraryPaths) {
       final File srcFile = new File(path);
       if (!srcFile.exists()) {
-        Messages.showErrorDialog(myProject, JavaQuickFixBundle.message("add.library.error.not.found", srcFile.getPath()), CommonBundle.getErrorTitle());
+        Messages.showErrorDialog(
+          myProject,
+          JavaQuickFixBundle.message("add.library.error.not.found", srcFile.getPath()),
+          CommonLocalize.titleError().get()
+        );
         return Collections.emptyList();
       }
       File dstFile = new File(dstDir, srcFile.getName());
       try {
         FileUtil.copy(srcFile, dstFile);
       } catch (IOException e) {
-        Messages.showErrorDialog(myProject, JavaQuickFixBundle.message("add.library.error.cannot.copy", srcFile.getPath(), dstFile.getPath(), e.getMessage()), CommonBundle.getErrorTitle());
+        Messages.showErrorDialog(
+          myProject,
+          JavaQuickFixBundle.message("add.library.error.cannot.copy", srcFile.getPath(), dstFile.getPath(), e.getMessage()),
+          CommonLocalize.titleError().get()
+        );
         return Collections.emptyList();
       }
       result.add(FileUtil.toSystemIndependentName(dstFile.getAbsolutePath()));

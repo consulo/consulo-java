@@ -19,7 +19,7 @@ import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.codeInsight.ExpectedTypesProvider;
 import com.intellij.java.impl.codeInsight.intention.impl.TypeExpression;
 import com.intellij.java.language.psi.*;
-import consulo.application.ApplicationManager;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.template.TemplateBuilder;
 import consulo.language.psi.PsiElement;
@@ -30,8 +30,8 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
-
 import jakarta.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +51,7 @@ public class GuessTypeParameters {
     PsiType type = info.getType();
     int kind = info.getKind();
 
-    List<PsiType> result = new ArrayList<PsiType>();
+    List<PsiType> result = new ArrayList<>();
     for (int i = 0; i < paramVals.length; i++) {
       PsiType val = paramVals[i];
       if (val != null) {
@@ -72,14 +72,21 @@ public class GuessTypeParameters {
     return result;
   }
 
-  public void setupTypeElement (PsiTypeElement typeElement, ExpectedTypeInfo[] infos, PsiSubstitutor substitutor,
-                                TemplateBuilder builder, @Nullable PsiElement context, PsiClass targetClass) {
+  @RequiredWriteAction
+  public void setupTypeElement(
+    PsiTypeElement typeElement,
+    ExpectedTypeInfo[] infos,
+    PsiSubstitutor substitutor,
+    TemplateBuilder builder,
+    @Nullable PsiElement context,
+    PsiClass targetClass
+  ) {
     LOG.assertTrue(typeElement.isValid());
-    ApplicationManager.getApplication().assertWriteAccessAllowed();
 
     PsiManager manager = typeElement.getManager();
     GlobalSearchScope scope = typeElement.getResolveScope();
     Project project = manager.getProject();
+    project.getApplication().assertWriteAccessAllowed();
 
     if (infos.length == 1 && substitutor != null && substitutor != PsiSubstitutor.EMPTY) {
       ExpectedTypeInfo info = infos[0];
@@ -98,10 +105,12 @@ public class GuessTypeParameters {
         PsiType type = info.getType();
         PsiType defaultType = info.getDefaultType();
         try {
-          PsiTypeElement inplaceTypeElement = ((PsiVariable)factory.createVariableDeclarationStatement("foo", type, null).getDeclaredElements()[0]).getTypeElement();
+          PsiTypeElement inplaceTypeElement = ((PsiVariable)factory
+            .createVariableDeclarationStatement("foo", type, null).getDeclaredElements()[0]).getTypeElement();
 
           PsiSubstitutor rawingSubstitutor = getRawingSubstitutor (context, targetClass);
-          int substitionResult = substituteToTypeParameters(typeElement, inplaceTypeElement, vals, params, builder, rawingSubstitutor, true);
+          int substitionResult =
+            substituteToTypeParameters(typeElement, inplaceTypeElement, vals, params, builder, rawingSubstitutor, true);
           if (substitionResult != SUBSTITUTED_NONE) {
             if (substitionResult == SUBSTITUTED_IN_PARAMETERS) {
               PsiJavaCodeReferenceElement refElement = typeElement.getInnermostComponentReferenceElement();
@@ -110,13 +119,17 @@ public class GuessTypeParameters {
               LOG.assertTrue(type != null);
               defaultType = getComponentType(defaultType);
               LOG.assertTrue(defaultType != null);
-              ExpectedTypeInfo info1 = ExpectedTypesProvider.createInfo(((PsiClassType)defaultType).rawType(),
-                                                                   ExpectedTypeInfo.TYPE_STRICTLY,
-                                                                   ((PsiClassType)defaultType).rawType(),
-                                                                   info.getTailType());
+              ExpectedTypeInfo info1 = ExpectedTypesProvider.createInfo(
+                ((PsiClassType)defaultType).rawType(),
+                ExpectedTypeInfo.TYPE_STRICTLY,
+                ((PsiClassType)defaultType).rawType(),
+                info.getTailType()
+              );
               MyTypeVisitor visitor = new MyTypeVisitor(manager, scope);
-              builder.replaceElement(refElement.getReferenceNameElement(),
-                                     new TypeExpression(project, ExpectedTypesProvider.processExpectedTypes(new ExpectedTypeInfo[]{info1}, visitor, project)));
+              builder.replaceElement(
+                refElement.getReferenceNameElement(),
+                new TypeExpression(project, ExpectedTypesProvider.processExpectedTypes(new ExpectedTypeInfo[]{info1}, visitor, project))
+              );
             }
 
             return;
@@ -128,9 +141,9 @@ public class GuessTypeParameters {
       }
     }
 
-    PsiType[] types = infos.length == 0 ? new PsiType[] {typeElement.getType()} : ExpectedTypesProvider.processExpectedTypes(infos, new MyTypeVisitor(manager, scope), project);
-    builder.replaceElement(typeElement,
-                           new TypeExpression(project, types));
+    PsiType[] types = infos.length == 0 ? new PsiType[] {typeElement.getType()}
+      : ExpectedTypesProvider.processExpectedTypes(infos, new MyTypeVisitor(manager, scope), project);
+    builder.replaceElement(typeElement, new TypeExpression(project, types));
   }
 
   private static PsiSubstitutor getRawingSubstitutor(PsiElement context, PsiClass targetClass) {
@@ -151,24 +164,24 @@ public class GuessTypeParameters {
   @Nullable
   private static PsiClassType getComponentType (PsiType type) {
     type = type.getDeepComponentType();
-    if (type instanceof PsiClassType) return (PsiClassType)type;
-
-    return null;
+    return type instanceof PsiClassType classType ? classType : null;
   }
 
   private static final int SUBSTITUTED_NONE = 0;
   private static final int SUBSTITUTED_IN_REF = 1;
   private static final int SUBSTITUTED_IN_PARAMETERS = 2;
 
-  private int substituteToTypeParameters (PsiTypeElement typeElement,
-                                          PsiTypeElement inplaceTypeElement,
-                                          PsiType[] paramVals,
-                                          PsiTypeParameter[] params,
-                                          TemplateBuilder builder,
-                                          PsiSubstitutor rawingSubstitutor,
-                                          boolean toplevel) {
+  private int substituteToTypeParameters(
+    PsiTypeElement typeElement,
+    PsiTypeElement inplaceTypeElement,
+    PsiType[] paramVals,
+    PsiTypeParameter[] params,
+    TemplateBuilder builder,
+    PsiSubstitutor rawingSubstitutor,
+    boolean toplevel
+  ) {
     PsiType type = inplaceTypeElement.getType();
-    List<PsiType> types = new ArrayList<PsiType>();
+    List<PsiType> types = new ArrayList<>();
     for (int i = 0; i < paramVals.length; i++) {
       PsiType val = paramVals[i];
       if (val == null) return SUBSTITUTED_NONE;
@@ -196,8 +209,15 @@ public class GuessTypeParameters {
       PsiTypeElement[] innerTypeElements = ref.getParameterList().getTypeParameterElements();
       PsiTypeElement[] inplaceInnerTypeElements = inplaceRef.getParameterList().getTypeParameterElements();
       for (int i = 0; i < innerTypeElements.length; i++) {
-        substituted |= substituteToTypeParameters(innerTypeElements[i], inplaceInnerTypeElements[i], paramVals, params, builder,
-                                                  rawingSubstitutor, false) != SUBSTITUTED_NONE;
+        substituted |= substituteToTypeParameters(
+          innerTypeElements[i],
+          inplaceInnerTypeElements[i],
+          paramVals,
+          params,
+          builder,
+          rawingSubstitutor,
+          false
+        ) != SUBSTITUTED_NONE;
       }
     }
 

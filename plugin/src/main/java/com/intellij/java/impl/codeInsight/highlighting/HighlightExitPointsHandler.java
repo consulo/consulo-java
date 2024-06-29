@@ -21,8 +21,8 @@ import consulo.codeEditor.Editor;
 import consulo.externalService.statistic.FeatureUsageTracker;
 import consulo.ide.impl.idea.codeInsight.highlighting.HighlightUsagesHandler;
 import consulo.ide.impl.idea.featureStatistics.ProductivityFeatureNames;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.highlight.usage.HighlightUsagesHandlerBase;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -67,8 +67,8 @@ public class HighlightExitPointsHandler extends HighlightUsagesHandlerBase<PsiEl
     final PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(myTarget, PsiLambdaExpression.class);
     if (lambdaExpression != null) {
       final PsiElement lambdaBody = lambdaExpression.getBody();
-      if (lambdaBody instanceof PsiCodeBlock) {
-        body = (PsiCodeBlock) lambdaBody;
+      if (lambdaBody instanceof PsiCodeBlock codeBlock) {
+        body = codeBlock;
       }
     }
 
@@ -92,12 +92,12 @@ public class HighlightExitPointsHandler extends HighlightUsagesHandlerBase<PsiEl
   private static PsiElement getExitTarget(PsiStatement exitStatement) {
     if (exitStatement instanceof PsiReturnStatement) {
       return PsiTreeUtil.getParentOfType(exitStatement, PsiMethod.class);
-    } else if (exitStatement instanceof PsiBreakStatement) {
-      return ((PsiBreakStatement) exitStatement).findExitedStatement();
-    } else if (exitStatement instanceof PsiContinueStatement) {
-      return ((PsiContinueStatement) exitStatement).findContinuedStatement();
-    } else if (exitStatement instanceof PsiThrowStatement) {
-      final PsiExpression expr = ((PsiThrowStatement) exitStatement).getException();
+    } else if (exitStatement instanceof PsiBreakStatement breakStatement) {
+      return breakStatement.findExitedStatement();
+    } else if (exitStatement instanceof PsiContinueStatement continueStatement) {
+      return continueStatement.findContinuedStatement();
+    } else if (exitStatement instanceof PsiThrowStatement throwStatement) {
+      final PsiExpression expr = throwStatement.getException();
       if (expr == null) {
         return null;
       }
@@ -108,8 +108,7 @@ public class HighlightExitPointsHandler extends HighlightUsagesHandlerBase<PsiEl
 
       PsiElement target = exitStatement;
       while (!(target instanceof PsiMethod || target == null || target instanceof PsiClass || target instanceof PsiFile)) {
-        if (target instanceof PsiTryStatement) {
-          final PsiTryStatement tryStatement = (PsiTryStatement) target;
+        if (target instanceof PsiTryStatement tryStatement) {
           final PsiParameter[] params = tryStatement.getCatchBlockParameters();
           for (PsiParameter param : params) {
             if (param.getType().isAssignableFrom(exceptionType)) {
@@ -153,6 +152,7 @@ public class HighlightExitPointsHandler extends HighlightUsagesHandlerBase<PsiEl
     for (PsiElement e : exitStatements) {
       addOccurrence(e);
     }
-    myStatusText = CodeInsightBundle.message("status.bar.exit.points.highlighted.message", exitStatements.size(), HighlightUsagesHandler.getShortcutText());
+    myStatusText =
+      CodeInsightLocalize.statusBarExitPointsHighlightedMessage(exitStatements.size(), HighlightUsagesHandler.getShortcutText()).get();
   }
 }

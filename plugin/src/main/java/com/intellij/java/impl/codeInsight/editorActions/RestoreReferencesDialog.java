@@ -15,17 +15,12 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions;
 
-import consulo.application.CommonBundle;
-import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.impl.ide.util.FQNameCellRenderer;
+import com.intellij.java.language.psi.PsiClass;
+import consulo.language.editor.localize.CodeInsightLocalize;
+import consulo.platform.base.localize.CommonLocalize;
 import consulo.project.Project;
 import consulo.ui.ex.awt.*;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.ui.ex.awt.ScrollPaneFactory;
-import consulo.ui.ex.awt.JBLabel;
-import consulo.ui.ex.awt.JBList;
-import consulo.ui.ex.awt.UIUtil;
-import consulo.ui.ex.awt.DialogWrapper;
 
 import javax.swing.*;
 import java.awt.*;
@@ -49,10 +44,10 @@ class RestoreReferencesDialog extends DialogWrapper {
       }
     }
     if (myContainsClassesOnly) {
-      setTitle(CodeInsightBundle.message("dialog.import.on.paste.title"));
+      setTitle(CodeInsightLocalize.dialogImportOnPasteTitle());
     }
     else {
-      setTitle(CodeInsightBundle.message("dialog.import.on.paste.title2"));
+      setTitle(CodeInsightLocalize.dialogImportOnPasteTitle2());
     }
     init();
 
@@ -74,15 +69,22 @@ class RestoreReferencesDialog extends DialogWrapper {
     myList.setCellRenderer(new FQNameCellRenderer());
     panel.add(ScrollPaneFactory.createScrollPane(myList), BorderLayout.CENTER);
 
-    panel.add(new JBLabel(myContainsClassesOnly ?
-                          CodeInsightBundle.message("dialog.paste.on.import.text") :
-                          CodeInsightBundle.message("dialog.paste.on.import.text2"), SMALL, BRIGHTER), BorderLayout.NORTH);
+    panel.add(
+      new JBLabel(
+        myContainsClassesOnly ?
+          CodeInsightLocalize.dialogPasteOnImportText().get() :
+          CodeInsightLocalize.dialogPasteOnImportText2().get(),
+        SMALL,
+        BRIGHTER
+      ),
+      BorderLayout.NORTH
+    );
 
     final JPanel buttonPanel = new JPanel(new VerticalFlowLayout());
-    final JButton okButton = new JButton(CommonBundle.getOkButtonText());
+    final JButton okButton = new JButton(CommonLocalize.buttonOk().get());
     getRootPane().setDefaultButton(okButton);
     buttonPanel.add(okButton);
-    final JButton cancelButton = new JButton(CommonBundle.getCancelButtonText());
+    final JButton cancelButton = new JButton(CommonLocalize.buttonCancel().get());
     buttonPanel.add(cancelButton);
 
     panel.setPreferredSize(new Dimension(500, 400));

@@ -24,7 +24,7 @@ import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.application.CommonBundle;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.component.extension.ExtensionPoint;
 import consulo.ide.impl.idea.ide.util.MemberChooser;
 import consulo.java.language.module.util.JavaClassNames;
@@ -32,13 +32,16 @@ import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.ImplicitUsageProvider;
 import consulo.language.editor.generation.ClassMember;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiCompiledElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.platform.base.localize.CommonLocalize;
 import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awt.UIUtil;
 import consulo.util.collection.ContainerUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -53,7 +56,7 @@ public class GenerateConstructorHandler extends GenerateMembersHandlerBase {
   private boolean myCopyJavadoc;
 
   public GenerateConstructorHandler() {
-    super(CodeInsightBundle.message("generate.constructor.fields.chooser.title"));
+    super(CodeInsightLocalize.generateConstructorFieldsChooserTitle().get());
   }
 
   @Override
@@ -85,10 +88,12 @@ public class GenerateConstructorHandler extends GenerateMembersHandlerBase {
   @Nullable
   protected ClassMember[] chooseOriginalMembers(PsiClass aClass, Project project) {
     if (aClass instanceof PsiAnonymousClass) {
-      Messages.showMessageDialog(project,
-          CodeInsightBundle.message("error.attempt.to.generate.constructor.for.anonymous.class"),
-          CommonBundle.getErrorTitle(),
-          Messages.getErrorIcon());
+      Messages.showMessageDialog(
+        project,
+        CodeInsightLocalize.errorAttemptToGenerateConstructorForAnonymousClass().get(),
+        CommonLocalize.titleError().get(),
+        UIUtil.getErrorIcon()
+      );
       return null;
     }
 
@@ -109,7 +114,7 @@ public class GenerateConstructorHandler extends GenerateMembersHandlerBase {
           final PsiSubstitutor substitutor = TypeConversionUtil.getSuperClassSubstitutor(baseClass, aClass, PsiSubstitutor.EMPTY);
           PsiMethodMember[] constructors = ContainerUtil.map2Array(array, PsiMethodMember.class, s -> new PsiMethodMember(s, substitutor));
           MemberChooser<PsiMethodMember> chooser = new MemberChooser<>(constructors, false, true, project);
-          chooser.setTitle(CodeInsightBundle.message("generate.constructor.super.constructor.chooser.title"));
+          chooser.setTitle(CodeInsightLocalize.generateConstructorSuperConstructorChooserTitle());
           chooser.show();
           List<PsiMethodMember> elements = chooser.getSelectedElements();
           if (elements == null || elements.isEmpty()) {
@@ -148,10 +153,12 @@ public class GenerateConstructorHandler extends GenerateMembersHandlerBase {
   }
 
   @Override
-  protected MemberChooser<ClassMember> createMembersChooser(ClassMember[] members,
-                                                            boolean allowEmptySelection,
-                                                            boolean copyJavadocCheckbox,
-                                                            Project project) {
+  protected MemberChooser<ClassMember> createMembersChooser(
+    ClassMember[] members,
+    boolean allowEmptySelection,
+    boolean copyJavadocCheckbox,
+    Project project
+  ) {
     final MemberChooser<ClassMember> chooser = super.createMembersChooser(members, allowEmptySelection, copyJavadocCheckbox, project);
     final List<ClassMember> preselection = preselect(members);
     if (!preselection.isEmpty()) {
@@ -163,8 +170,8 @@ public class GenerateConstructorHandler extends GenerateMembersHandlerBase {
   protected static List<ClassMember> preselect(ClassMember[] members) {
     final List<ClassMember> preselection = new ArrayList<>();
     for (ClassMember member : members) {
-      if (member instanceof PsiFieldMember) {
-        final PsiField psiField = ((PsiFieldMember) member).getElement();
+      if (member instanceof PsiFieldMember fieldMember) {
+        final PsiField psiField = fieldMember.getElement();
         if (psiField != null && psiField.hasModifierProperty(PsiModifier.FINAL)) {
           preselection.add(member);
         }
@@ -180,8 +187,8 @@ public class GenerateConstructorHandler extends GenerateMembersHandlerBase {
     List<PsiField> fieldsVector = new ArrayList<>();
     for (ClassMember member1 : members) {
       PsiElement member = ((PsiElementClassMember) member1).getElement();
-      if (member instanceof PsiMethod) {
-        baseConstructors.add((PsiMethod) member);
+      if (member instanceof PsiMethod method) {
+        baseConstructors.add(method);
       } else {
         fieldsVector.add((PsiField) member);
       }
@@ -222,7 +229,13 @@ public class GenerateConstructorHandler extends GenerateMembersHandlerBase {
     return "Constructor already exist";
   }
 
-  public static PsiMethod generateConstructorPrototype(PsiClass aClass, PsiMethod baseConstructor, boolean copyJavaDoc, PsiField[] fields) throws IncorrectOperationException {
+  @RequiredReadAction
+  public static PsiMethod generateConstructorPrototype(
+    PsiClass aClass,
+    PsiMethod baseConstructor,
+    boolean copyJavaDoc,
+    PsiField[] fields
+  ) throws IncorrectOperationException {
     PsiManager manager = aClass.getManager();
     JVMElementFactory factory = JVMElementFactories.requireFactory(aClass.getLanguage(), aClass.getProject());
     CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(manager.getProject());
@@ -255,7 +268,8 @@ public class GenerateConstructorHandler extends GenerateMembersHandlerBase {
       if (!JavaClassNames.JAVA_LANG_ENUM.equals(superClass.getQualifiedName())) {
         isNotEnum = true;
         if (baseConstructor instanceof PsiCompiledElement) { // to get some parameter names
-          PsiClass dummyClass = JVMElementFactories.requireFactory(baseConstructor.getLanguage(), baseConstructor.getProject()).createClass("Dummy");
+          PsiClass dummyClass = JVMElementFactories.requireFactory(baseConstructor.getLanguage(), baseConstructor.getProject())
+            .createClass("Dummy");
           baseConstructor = (PsiMethod) dummyClass.add(baseConstructor);
         }
         PsiParameter[] params = baseConstructor.getParameterList().getParameters();

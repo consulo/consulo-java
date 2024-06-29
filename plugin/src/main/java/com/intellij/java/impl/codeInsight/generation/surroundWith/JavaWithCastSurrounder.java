@@ -15,32 +15,25 @@
  */
 package com.intellij.java.impl.codeInsight.generation.surroundWith;
 
+import com.intellij.java.analysis.codeInsight.guess.GuessManager;
+import com.intellij.java.impl.codeInsight.lookup.PsiTypeLookupItem;
+import com.intellij.java.impl.refactoring.introduceField.ElementToWorkOn;
+import com.intellij.java.language.impl.codeInsight.template.macro.PsiTypeResult;
+import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.ScrollType;
+import consulo.document.RangeMarker;
+import consulo.document.util.TextRange;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.localize.CodeInsightLocalize;
+import consulo.language.editor.template.*;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import org.jetbrains.annotations.NonNls;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
-
-import org.jetbrains.annotations.NonNls;
-import consulo.language.editor.CodeInsightBundle;
-import com.intellij.java.analysis.codeInsight.guess.GuessManager;
-import consulo.language.editor.completion.lookup.LookupElement;
-import com.intellij.java.impl.codeInsight.lookup.PsiTypeLookupItem;
-import consulo.language.editor.template.Expression;
-import consulo.language.editor.template.ExpressionContext;
-import com.intellij.java.language.impl.codeInsight.template.macro.PsiTypeResult;
-import consulo.language.editor.template.Result;
-import consulo.language.editor.template.Template;
-import consulo.language.editor.template.TemplateManager;
-import consulo.codeEditor.Editor;
-import consulo.document.RangeMarker;
-import consulo.codeEditor.ScrollType;
-import consulo.project.Project;
-import consulo.document.util.TextRange;
-import com.intellij.java.language.psi.PsiAssignmentExpression;
-import com.intellij.java.language.psi.PsiConditionalExpression;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiPolyadicExpression;
-import com.intellij.java.language.psi.PsiType;
-import com.intellij.java.impl.refactoring.introduceField.ElementToWorkOn;
-import consulo.language.util.IncorrectOperationException;
 
 public class JavaWithCastSurrounder extends JavaExpressionSurrounder {
   @NonNls private static final String TYPE_TEMPLATE_VARIABLE = "type";
@@ -51,12 +44,12 @@ public class JavaWithCastSurrounder extends JavaExpressionSurrounder {
   }
 
   @Override
+  @RequiredReadAction
   public TextRange surroundExpression(final Project project, final Editor editor, PsiExpression expr) throws IncorrectOperationException {
     assert expr.isValid();
     PsiType[] types = GuessManager.getInstance(project).guessTypeToCast(expr);
-    final boolean parenthesesNeeded = expr instanceof PsiPolyadicExpression ||
-                                      expr instanceof PsiConditionalExpression ||
-                                      expr instanceof PsiAssignmentExpression;
+    final boolean parenthesesNeeded =
+      expr instanceof PsiPolyadicExpression || expr instanceof PsiConditionalExpression || expr instanceof PsiAssignmentExpression;
     String exprText = parenthesesNeeded ? "(" + expr.getText() + ")" : expr.getText();
     final Template template = generateTemplate(project, exprText, types);
     TextRange range;
@@ -79,7 +72,7 @@ public class JavaWithCastSurrounder extends JavaExpressionSurrounder {
     final Template template = templateManager.createTemplate("", "");
     template.setToReformat(true);
 
-    Set<LookupElement> itemSet = new LinkedHashSet<LookupElement>();
+    Set<LookupElement> itemSet = new LinkedHashSet<>();
     for (PsiType type : suggestedTypes) {
       itemSet.add(PsiTypeLookupItem.createLookupItem(type, null));
     }
@@ -113,6 +106,6 @@ public class JavaWithCastSurrounder extends JavaExpressionSurrounder {
 
   @Override
   public String getTemplateDescription() {
-    return CodeInsightBundle.message("surround.with.cast.template");
+    return CodeInsightLocalize.surroundWithCastTemplate().get();
   }
 }

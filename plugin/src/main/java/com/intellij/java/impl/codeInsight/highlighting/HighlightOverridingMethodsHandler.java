@@ -17,12 +17,14 @@ package com.intellij.java.impl.codeInsight.highlighting;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.externalService.statistic.FeatureUsageTracker;
 import consulo.ide.impl.idea.codeInsight.highlighting.HighlightUsagesHandler;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.highlight.usage.HighlightUsagesHandlerBase;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.navigation.ItemPresentation;
@@ -43,6 +45,7 @@ public class HighlightOverridingMethodsHandler extends HighlightUsagesHandlerBas
   }
 
   @Override
+  @RequiredReadAction
   public List<PsiClass> getTargets() {
     PsiReferenceList list = PsiKeyword.EXTENDS.equals(myTarget.getText()) ? myClass.getExtendsList() : myClass.getImplementsList();
     if (list == null) return Collections.emptyList();
@@ -52,7 +55,7 @@ public class HighlightOverridingMethodsHandler extends HighlightUsagesHandlerBas
 
   @Override
   protected void selectTargets(final List<PsiClass> targets, final Consumer<List<PsiClass>> selectionConsumer) {
-    new ChooseClassAndDoHighlightRunnable(targets, myEditor, CodeInsightBundle.message("highlight.overridden.classes.chooser.title")) {
+    new ChooseClassAndDoHighlightRunnable(targets, myEditor, CodeInsightLocalize.highlightOverriddenClassesChooserTitle().get()) {
       @Override
       protected void selected(PsiClass... classes) {
         selectionConsumer.accept(Arrays.asList(classes));
@@ -61,6 +64,7 @@ public class HighlightOverridingMethodsHandler extends HighlightUsagesHandlerBas
   }
 
   @Override
+  @RequiredReadAction
   public void computeUsages(final List<PsiClass> classes) {
     FeatureUsageTracker.getInstance().triggerFeatureUsed("codeassists.highlight.implements");
     for (PsiMethod method : myClass.getMethods()) {
@@ -80,7 +84,7 @@ public class HighlightOverridingMethodsHandler extends HighlightUsagesHandlerBas
       }
     }
     if (myReadUsages.isEmpty()) {
-      if (ApplicationManager.getApplication().isUnitTestMode()) return;
+      if (myClass.getApplication().isUnitTestMode()) return;
       String name;
       if (classes.size() == 1) {
         final ItemPresentation presentation = classes.get(0).getPresentation();
@@ -92,8 +96,8 @@ public class HighlightOverridingMethodsHandler extends HighlightUsagesHandlerBas
     } else {
       addOccurrence(myTarget);
       final int methodCount = myReadUsages.size() - 1;  // exclude 'target' keyword
-      myStatusText = CodeInsightBundle.message("status.bar.overridden.methods.highlighted.message", methodCount,
-          HighlightUsagesHandler.getShortcutText());
+      myStatusText =
+        CodeInsightLocalize.statusBarOverriddenMethodsHighlightedMessage(methodCount, HighlightUsagesHandler.getShortcutText()).get();
     }
   }
 }

@@ -20,10 +20,11 @@ import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
 import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.refactoring.rename.inplace.VariableInplaceRenamer;
 import consulo.language.psi.*;
 import consulo.language.psi.scope.LocalSearchScope;
@@ -31,21 +32,22 @@ import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
-
-import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 
 public class JavaWithRunnableSurrounder extends JavaStatementsSurrounder{
   @Override
   public String getTemplateDescription() {
-    return CodeInsightBundle.message("surround.with.runnable.template");
+    return CodeInsightLocalize.surroundWithRunnableTemplate().get();
   }
 
   @Override
-  public TextRange surroundStatements(Project project, final Editor editor, PsiElement container, PsiElement[] statements) throws IncorrectOperationException{
+  @RequiredReadAction
+  public TextRange surroundStatements(Project project, final Editor editor, PsiElement container, PsiElement[] statements)
+    throws IncorrectOperationException{
     PsiManager manager = container.getManager();
     PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
     CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
@@ -85,6 +87,7 @@ public class JavaWithRunnableSurrounder extends JavaStatementsSurrounder{
       }
 
       @Override
+      @RequiredReadAction
       protected void moveOffsetAfter(boolean success) {
         super.moveOffsetAfter(success);
         if (success) {
@@ -105,13 +108,13 @@ public class JavaWithRunnableSurrounder extends JavaStatementsSurrounder{
     for (PsiElement child : children) {
       makeVariablesFinal(child, body);
 
-      if (child instanceof PsiReferenceExpression) {
+      if (child instanceof PsiReferenceExpression referenceExpression) {
         if (child.getParent() instanceof PsiMethodCallExpression) continue;
-        if (PsiUtil.isAccessedForWriting((PsiReferenceExpression) child)) {
+        if (PsiUtil.isAccessedForWriting(referenceExpression)) {
           continue;
         }
 
-        PsiElement refElement = ((PsiReferenceExpression)child).resolve();
+        PsiElement refElement = referenceExpression.resolve();
         if (refElement instanceof PsiLocalVariable || refElement instanceof PsiParameter) {
           PsiVariable variable = (PsiVariable) refElement;
           final PsiModifierList modifierList = variable.getModifierList();
@@ -124,8 +127,8 @@ public class JavaWithRunnableSurrounder extends JavaStatementsSurrounder{
 
           while (parent != null) {
             if (parent.equals(body)) break;
-            if (parent instanceof PsiMethod) {
-              enclosingMethod = (PsiMethod) parent;
+            if (parent instanceof PsiMethod method) {
+              enclosingMethod = method;
             }
             parent = parent.getParent();
           }
@@ -142,10 +145,10 @@ public class JavaWithRunnableSurrounder extends JavaStatementsSurrounder{
       return false;
     }
     final Collection<PsiReference> references = ReferencesSearch.search(variable, new LocalSearchScope(scope)).findAll();
-    boolean foundOnce = (variable instanceof PsiParameter) || (variable.getInitializer() != null);
+    boolean foundOnce = variable instanceof PsiParameter || variable.getInitializer() != null;
     for (PsiReference reference : references) {
-      if (reference instanceof PsiReferenceExpression) {
-        if (PsiUtil.isAccessedForWriting((PsiReferenceExpression) reference)) {
+      if (reference instanceof PsiReferenceExpression referenceExpression) {
+        if (PsiUtil.isAccessedForWriting(referenceExpression)) {
           if (foundOnce) {
             return false;
           }
