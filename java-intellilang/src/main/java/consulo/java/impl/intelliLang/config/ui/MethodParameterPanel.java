@@ -88,7 +88,6 @@ public class MethodParameterPanel extends AbstractInjectionPanel<MethodParameter
   @RequiredUIAccess
   public MethodParameterPanel(MethodParameterInjection injection, final Project project) {
     super(injection, project);
-    $$$setupUI$$$();
 
     myClassField = new ReferenceEditorWithBrowseButton(
       new BrowseClassListener(project),
