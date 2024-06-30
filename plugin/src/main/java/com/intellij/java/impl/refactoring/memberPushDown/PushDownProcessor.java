@@ -222,7 +222,7 @@ public class PushDownProcessor extends BaseRefactoringProcessor {
     }
   }
 
-  @RequiredWriteAction
+  @RequiredReadAction
   private void encodeRef(final PsiJavaCodeReferenceElement expression, final Set<PsiMember> movedMembers, final PsiElement toPut) {
     final PsiElement resolved = expression.resolve();
     if (resolved == null) return;
