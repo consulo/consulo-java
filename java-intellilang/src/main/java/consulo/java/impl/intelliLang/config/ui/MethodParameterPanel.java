@@ -419,7 +419,4 @@ public class MethodParameterPanel extends AbstractInjectionPanel<MethodParameter
       }
     }
   }
-
-  private void $$$setupUI$$$() {
-  }
 }
