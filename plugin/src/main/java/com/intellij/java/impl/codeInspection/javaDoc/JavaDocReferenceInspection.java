@@ -307,7 +307,7 @@ public class JavaDocReferenceInspection extends BaseLocalInspectionTool {
         final PsiJavaCodeReferenceElement referenceElement = (PsiJavaCodeReferenceElement)element;
         Collections.sort(originalClasses, new PsiProximityComparator(referenceElement.getElement()));
         final JList<PsiClass> list = new JBList<>(originalClasses.toArray(new PsiClass[originalClasses.size()]));
-        list.setCellRenderer(new FQNameCellRenderer<>());
+        list.setCellRenderer(new FQNameCellRenderer());
         final Runnable runnable = () -> {
           if (!element.isValid()) {
             return;

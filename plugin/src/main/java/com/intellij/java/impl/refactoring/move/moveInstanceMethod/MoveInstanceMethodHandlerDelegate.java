@@ -15,19 +15,20 @@
  */
 package com.intellij.java.impl.refactoring.move.moveInstanceMethod;
 
+import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.JavaMoveClassesOrPackagesHandler;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
-import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.dataContext.DataContext;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.language.psi.*;
+import consulo.dataContext.DataContext;
 import consulo.language.editor.refactoring.move.MoveCallback;
 import consulo.language.editor.refactoring.move.MoveHandlerDelegate;
-import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.JavaMoveClassesOrPackagesHandler;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import jakarta.annotation.Nullable;
 
 @ExtensionImpl
@@ -48,7 +49,7 @@ public class MoveInstanceMethodHandlerDelegate extends MoveHandlerDelegate {
     return psiElement instanceof PsiClass && !(psiElement instanceof PsiAnonymousClass);
   }
 
-  @RequiredReadAction
+  @RequiredUIAccess
   public boolean tryToMove(
     final PsiElement element,
     final Project project,
@@ -65,6 +66,7 @@ public class MoveInstanceMethodHandlerDelegate extends MoveHandlerDelegate {
     return false;
   }
 
+  @RequiredUIAccess
   public void doMove(final Project project, final PsiElement[] elements, final PsiElement targetContainer, final MoveCallback callback) {
     new MoveInstanceMethodHandler().invoke(project, elements, null);
   }

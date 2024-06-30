@@ -22,7 +22,6 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiParameterList;
-import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.CaretModel;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
@@ -36,12 +35,13 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import jakarta.annotation.Nonnull;
 
 public class IntroduceParameterObjectHandler implements RefactoringActionHandler {
   private static final String REFACTORING_NAME = RefactorJBundle.message("introduce.parameter.object");
 
-  @RequiredReadAction
+  @RequiredUIAccess
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
     final ScrollingModel scrollingModel = editor.getScrollingModel();
     scrollingModel.scrollToCaret(ScrollType.MAKE_VISIBLE);
@@ -77,7 +77,7 @@ public class IntroduceParameterObjectHandler implements RefactoringActionHandler
     invoke(project, selectedMethod, editor);
   }
 
-  @RequiredReadAction
+  @RequiredUIAccess
   public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
     if (elements.length != 1) {
       return;
@@ -90,7 +90,7 @@ public class IntroduceParameterObjectHandler implements RefactoringActionHandler
     invoke(project, method, editor);
   }
 
-  @RequiredReadAction
+  @RequiredUIAccess
   private static void invoke(final Project project, final PsiMethod selectedMethod, Editor editor) {
     PsiMethod newMethod = SuperMethodWarningUtil.checkSuperMethod(selectedMethod, RefactoringBundle.message("to.refactor"));
     if (newMethod == null) return;

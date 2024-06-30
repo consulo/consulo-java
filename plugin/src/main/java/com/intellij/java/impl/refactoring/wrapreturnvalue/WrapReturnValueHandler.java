@@ -15,32 +15,31 @@
  */
 package com.intellij.java.impl.refactoring.wrapreturnvalue;
 
-import consulo.annotation.access.RequiredReadAction;
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.impl.ide.util.SuperMethodWarningUtil;
-import consulo.dataContext.DataContext;
+import com.intellij.java.impl.refactoring.HelpID;
+import com.intellij.java.impl.refactoring.RefactorJBundle;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiType;
 import consulo.codeEditor.CaretModel;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.codeEditor.ScrollingModel;
-import consulo.project.Project;
+import consulo.dataContext.DataContext;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiCompiledElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiType;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.impl.refactoring.HelpID;
-import com.intellij.java.impl.refactoring.RefactorJBundle;
-import consulo.language.editor.refactoring.action.RefactoringActionHandler;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
+import jakarta.annotation.Nonnull;
 
 class WrapReturnValueHandler implements RefactoringActionHandler {
   public static final String REFACTORING_NAME = RefactorJBundle.message("wrap.return.value");
 
-  @RequiredReadAction
+  @RequiredUIAccess
   public void invoke(
     @Nonnull Project project,
     Editor editor,
@@ -82,7 +81,7 @@ class WrapReturnValueHandler implements RefactoringActionHandler {
     return HelpID.WrapReturnValue;
   }
 
-  @RequiredReadAction
+  @RequiredUIAccess
   public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
     if (elements.length != 1) {
       return;
@@ -95,7 +94,7 @@ class WrapReturnValueHandler implements RefactoringActionHandler {
     invoke(project, method, editor);
   }
 
-  @RequiredReadAction
+  @RequiredUIAccess
   private void invoke(final Project project, PsiMethod method, Editor editor) {
     if (method.isConstructor()) {
       CommonRefactoringUtil.showErrorHint(

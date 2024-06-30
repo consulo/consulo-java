@@ -31,7 +31,6 @@ import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
-import consulo.annotation.access.RequiredReadAction;
 import consulo.application.HelpManager;
 import consulo.document.event.DocumentAdapter;
 import consulo.document.event.DocumentEvent;
@@ -403,7 +402,7 @@ class IntroduceConstantDialog extends DialogWrapper {
     }
   }
 
-  @RequiredReadAction
+  @RequiredUIAccess
   protected void doOKAction() {
     final String targetClassName = getTargetClassName();
     PsiClass newClass = myParentClass;

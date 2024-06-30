@@ -29,7 +29,6 @@ import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import consulo.annotation.access.RequiredReadAction;
 import consulo.application.progress.ProgressManager;
 import consulo.ide.impl.idea.ide.util.DirectoryChooser;
 import consulo.ide.impl.idea.refactoring.rename.DirectoryAsPackageRenameHandlerBase;
@@ -51,6 +50,7 @@ import consulo.localHistory.LocalHistoryAction;
 import consulo.logging.Logger;
 import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.undoRedo.CommandProcessor;
@@ -68,10 +68,12 @@ import java.util.List;
 public class MoveClassesOrPackagesImpl {
   private static final Logger LOG = Logger.getInstance(MoveClassesOrPackagesImpl.class);
 
-  public static void doMove(final Project project,
-                            PsiElement[] adjustedElements,
-                            PsiElement initialTargetElement,
-                            final MoveCallback moveCallback) {
+  public static void doMove(
+    final Project project,
+    PsiElement[] adjustedElements,
+    PsiElement initialTargetElement,
+    final MoveCallback moveCallback
+  ) {
     if (!CommonRefactoringUtil.checkReadOnlyStatusRecursively(project, Arrays.asList(adjustedElements), true)) {
       return;
     }
@@ -199,8 +201,9 @@ public class MoveClassesOrPackagesImpl {
       if (curPackage.equals(srcPackage)) {
         if (showError) {
           CommonRefactoringUtil.showErrorMessage(RefactoringBundle.message("move.title"),
-                                                 RefactoringBundle.message("cannot.move.package.into.itself"),
-                                                 HelpID.getMoveHelpID(srcPackage), project);
+            RefactoringBundle.message("cannot.move.package.into.itself"),
+            HelpID.getMoveHelpID(srcPackage), project
+          );
         }
         return false;
       }
@@ -322,7 +325,7 @@ public class MoveClassesOrPackagesImpl {
     return null;
   }
 
-  @RequiredReadAction
+  @RequiredUIAccess
   public static void doRearrangePackage(final Project project, final PsiDirectory[] directories) {
     if (!CommonRefactoringUtil.checkReadOnlyStatusRecursively(project, Arrays.asList(directories), true)) {
       return;
@@ -375,7 +378,7 @@ public class MoveClassesOrPackagesImpl {
     }
   }
 
-  @RequiredReadAction
+  @RequiredUIAccess
   private static List<PsiDirectory> buildRearrangeTargetsList(final Project project, final PsiDirectory[] directories) {
     final VirtualFile[] sourceRoots = ProjectRootManager.getInstance(project).getContentSourceRoots();
     List<PsiDirectory> sourceRootDirectories = new ArrayList<>();
@@ -407,5 +410,4 @@ public class MoveClassesOrPackagesImpl {
       MoveClassesOrPackagesUtil.moveDirectoryRecursively(directory, moveTarget);
     }
   }
-
 }

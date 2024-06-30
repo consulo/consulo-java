@@ -28,7 +28,6 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
-import consulo.annotation.access.RequiredReadAction;
 import consulo.application.HelpManager;
 import consulo.application.util.function.Computable;
 import consulo.configurable.ConfigurationException;
@@ -131,7 +130,14 @@ public class MoveMembersDialog extends RefactoringDialog implements MoveMembersO
     }
     myMemberInfos = memberList;
     String fqName = initialTargetClass != null && !sourceClass.equals(initialTargetClass) ? initialTargetClass.getQualifiedName() : "";
-    myTfTargetClassName = new ReferenceEditorComboWithBrowseButton(new ChooseClassAction(), fqName, myProject, true, JavaCodeFragment.VisibilityChecker.PROJECT_SCOPE_VISIBLE, RECENTS_KEY);
+    myTfTargetClassName = new ReferenceEditorComboWithBrowseButton(
+      new ChooseClassAction(),
+      fqName,
+      myProject,
+      true,
+      JavaCodeFragment.VisibilityChecker.PROJECT_SCOPE_VISIBLE,
+      RECENTS_KEY
+    );
 
     init();
   }
@@ -228,10 +234,11 @@ public class MoveMembersDialog extends RefactoringDialog implements MoveMembersO
     if (message != null) {
       if (message.length() != 0) {
         CommonRefactoringUtil.showErrorMessage(
-                MoveMembersImpl.REFACTORING_NAME,
-                message,
-                HelpID.MOVE_MEMBERS,
-                myProject);
+          MoveMembersImpl.REFACTORING_NAME,
+          message,
+          HelpID.MOVE_MEMBERS,
+          myProject
+        );
       }
       return;
     }
@@ -263,7 +270,7 @@ public class MoveMembersDialog extends RefactoringDialog implements MoveMembersO
   }
 
   @Nullable
-  @RequiredReadAction
+  @RequiredUIAccess
   private String validateInputData() {
     final PsiManager manager = PsiManager.getInstance(myProject);
     final String fqName = getTargetClassName();
@@ -297,7 +304,12 @@ public class MoveMembersDialog extends RefactoringDialog implements MoveMembersO
         if (mySourceClass.equals(targetClass[0])) {
           return RefactoringBundle.message("source.and.destination.classes.should.be.different");
         } else if (!mySourceClass.getLanguage().equals(targetClass[0].getLanguage())) {
-          return RefactoringBundle.message("move.to.different.language", UsageViewUtil.getType(mySourceClass), mySourceClass.getQualifiedName(), targetClass[0].getQualifiedName());
+          return RefactoringBundle.message(
+            "move.to.different.language",
+            UsageViewUtil.getType(mySourceClass),
+            mySourceClass.getQualifiedName(),
+            targetClass[0].getQualifiedName()
+          );
         }
         else {
           for (MemberInfo info : myMemberInfos) {

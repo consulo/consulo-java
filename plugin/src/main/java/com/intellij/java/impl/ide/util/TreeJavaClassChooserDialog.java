@@ -22,7 +22,7 @@ import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.search.PsiShortNamesCache;
 import com.intellij.java.language.util.ClassFilter;
 import com.intellij.java.language.util.TreeClassChooser;
-import consulo.application.ApplicationManager;
+import consulo.application.Application;
 import consulo.application.util.function.Computable;
 import consulo.application.util.query.Query;
 import consulo.ide.impl.idea.ide.util.AbstractTreeClassChooserDialog;
@@ -31,11 +31,12 @@ import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
 import consulo.project.content.scope.ProjectAwareSearchScope;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.function.Conditions;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.util.List;
 import java.util.function.Predicate;
@@ -52,20 +53,25 @@ public class TreeJavaClassChooserDialog extends AbstractTreeClassChooserDialog<P
     super(title, project, PsiClass.class, initialClass);
   }
 
-  public TreeJavaClassChooserDialog(String title,
-                                    @Nonnull Project project,
-                                    GlobalSearchScope scope,
-                                    final ClassFilter classFilter, @Nullable PsiClass initialClass) {
+  public TreeJavaClassChooserDialog(
+    String title,
+    @Nonnull Project project,
+    GlobalSearchScope scope,
+    final ClassFilter classFilter,
+    @Nullable PsiClass initialClass
+  ) {
     super(title, project, scope, PsiClass.class, createFilter(classFilter), initialClass);
   }
 
-
-  public TreeJavaClassChooserDialog(String title,
-                                    @Nonnull Project project,
-                                    GlobalSearchScope scope,
-                                    @Nullable ClassFilter classFilter,
-                                    PsiClass baseClass,
-                                    @Nullable PsiClass initialClass, boolean isShowMembers) {
+  public TreeJavaClassChooserDialog(
+    String title,
+    @Nonnull Project project,
+    GlobalSearchScope scope,
+    @Nullable ClassFilter classFilter,
+    PsiClass baseClass,
+    @Nullable PsiClass initialClass,
+    boolean isShowMembers
+  ) {
     super(title, project, scope, PsiClass.class, createFilter(classFilter), baseClass, initialClass, isShowMembers, true);
   }
 
@@ -78,11 +84,13 @@ public class TreeJavaClassChooserDialog extends AbstractTreeClassChooserDialog<P
     return descriptor.getPsiClass();
   }
 
-  public static TreeJavaClassChooserDialog withInnerClasses(String title,
-                                                            @Nonnull Project project,
-                                                            GlobalSearchScope scope,
-                                                            final ClassFilter classFilter,
-                                                            @Nullable PsiClass initialClass) {
+  public static TreeJavaClassChooserDialog withInnerClasses(
+    String title,
+    @Nonnull Project project,
+    GlobalSearchScope scope,
+    final ClassFilter classFilter,
+    @Nullable PsiClass initialClass
+  ) {
     return new TreeJavaClassChooserDialog(title, project, scope, classFilter, null, initialClass, true);
   }
 
@@ -91,28 +99,23 @@ public class TreeJavaClassChooserDialog extends AbstractTreeClassChooserDialog<P
     if (classFilter == null) {
       return null;
     } else {
-      return new Predicate<PsiClass>() {
-        @Override
-        public boolean test(final PsiClass element) {
-          return ApplicationManager.getApplication().runReadAction(new Computable<Boolean>() {
-            @Override
-            public Boolean compute() {
-              return classFilter.isAccepted(element);
-            }
-          });
-        }
-      };
+      return element -> Application.get().runReadAction((Computable<Boolean>)() -> classFilter.isAccepted(element));
     }
   }
 
   @Nonnull
-  protected List<PsiClass> getClassesByName(final String name,
-                                            final boolean checkBoxState,
-                                            final String pattern,
-                                            final ProjectAwareSearchScope searchScope) {
+  protected List<PsiClass> getClassesByName(
+    final String name,
+    final boolean checkBoxState,
+    final String pattern,
+    final ProjectAwareSearchScope searchScope
+  ) {
     final PsiShortNamesCache cache = PsiShortNamesCache.getInstance(getProject());
-    PsiClass[] classes =
-        cache.getClassesByName(name, checkBoxState ? (GlobalSearchScope) searchScope : (GlobalSearchScope) GlobalSearchScope.projectScope(getProject()).intersectWith(searchScope));
+    PsiClass[] classes = cache.getClassesByName(
+      name,
+      checkBoxState ? (GlobalSearchScope) searchScope
+        : (GlobalSearchScope) GlobalSearchScope.projectScope(getProject()).intersectWith(searchScope)
+    );
     return ContainerUtil.newArrayList(classes);
   }
 
@@ -123,6 +126,7 @@ public class TreeJavaClassChooserDialog extends AbstractTreeClassChooserDialog<P
   }
 
   @Override
+  @RequiredUIAccess
   public void selectDirectory(PsiDirectory directory) {
     selectElementInTree(directory);
   }
@@ -158,10 +162,12 @@ public class TreeJavaClassChooserDialog extends AbstractTreeClassChooserDialog<P
     private final boolean myAcceptsInner;
     private final Predicate<? super PsiClass> myAdditionalCondition;
 
-    public InheritanceJavaClassFilterImpl(PsiClass base,
-                                          boolean acceptsSelf,
-                                          boolean acceptInner,
-                                          Predicate<? super PsiClass> additionalCondition) {
+    public InheritanceJavaClassFilterImpl(
+      PsiClass base,
+      boolean acceptsSelf,
+      boolean acceptInner,
+      Predicate<? super PsiClass> additionalCondition
+    ) {
       myAcceptsSelf = acceptsSelf;
       myAcceptsInner = acceptInner;
       if (additionalCondition == null) {

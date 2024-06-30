@@ -21,7 +21,6 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiVariable;
-import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.dataContext.DataContext;
@@ -31,6 +30,7 @@ import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import jakarta.annotation.Nonnull;
 
 /**
@@ -39,7 +39,7 @@ import jakarta.annotation.Nonnull;
 public class InvertBooleanHandler implements RefactoringActionHandler {
   static final String REFACTORING_NAME = RefactoringBundle.message("invert.boolean.title");
 
-  @RequiredReadAction
+  @RequiredUIAccess
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
     editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
     PsiElement element = dataContext.getData(PsiElement.KEY);
@@ -50,16 +50,27 @@ public class InvertBooleanHandler implements RefactoringActionHandler {
       invoke(variable, project, editor);
     }
     else {
-      CommonRefactoringUtil.showErrorHint(project, editor, RefactoringBundle.getCannotRefactorMessage(
-          RefactoringBundle.message("error.wrong.caret.position.method.or.variable.name")), REFACTORING_NAME, HelpID.INVERT_BOOLEAN);
+      CommonRefactoringUtil.showErrorHint(
+        project,
+        editor,
+        RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("error.wrong.caret.position.method.or.variable.name")),
+        REFACTORING_NAME,
+        HelpID.INVERT_BOOLEAN
+      );
     }
   }
 
-  @RequiredReadAction
+  @RequiredUIAccess
   private static void invoke(PsiVariable var, final Project project, Editor editor) {
     final PsiType returnType = var.getType();
     if (!PsiType.BOOLEAN.equals(returnType)) {
-      CommonRefactoringUtil.showErrorHint(project, editor, RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("invert.boolean.wrong.type")), REFACTORING_NAME, HelpID.INVERT_BOOLEAN);
+      CommonRefactoringUtil.showErrorHint(
+        project,
+        editor,
+        RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("invert.boolean.wrong.type")),
+        REFACTORING_NAME,
+        HelpID.INVERT_BOOLEAN
+      );
       return;
     }
 
@@ -74,18 +85,24 @@ public class InvertBooleanHandler implements RefactoringActionHandler {
     new InvertBooleanDialog(var).show();
   }
 
-  @RequiredReadAction
+  @RequiredUIAccess
   public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, @Nonnull DataContext dataContext) {
     if (elements.length == 1 && elements[0] instanceof PsiMethod method) {
       invoke(method, project, null);
     }
   }
 
-  @RequiredReadAction
+  @RequiredUIAccess
   private static void invoke(PsiMethod method, final Project project, Editor editor) {
     final PsiType returnType = method.getReturnType();
     if (!PsiType.BOOLEAN.equals(returnType)) {
-      CommonRefactoringUtil.showErrorHint(project, editor, RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("invert.boolean.wrong.type")), REFACTORING_NAME, HelpID.INVERT_BOOLEAN);
+      CommonRefactoringUtil.showErrorHint(
+        project,
+        editor,
+        RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("invert.boolean.wrong.type")),
+        REFACTORING_NAME,
+        HelpID.INVERT_BOOLEAN
+      );
       return;
     }
 

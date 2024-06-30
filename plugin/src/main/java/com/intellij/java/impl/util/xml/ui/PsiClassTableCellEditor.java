@@ -5,11 +5,11 @@ import com.intellij.java.language.impl.ui.JavaReferenceEditorUtil;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
-import consulo.annotation.access.RequiredReadAction;
 import consulo.document.Document;
 import consulo.language.editor.ui.awt.EditorTextField;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.AbstractTableCellEditor;
 import consulo.ui.ex.awt.FixedSizeButton;
 import consulo.ui.ex.localize.UILocalize;
@@ -47,7 +47,7 @@ public class PsiClassTableCellEditor extends AbstractTableCellEditor {
     return !(e instanceof MouseEvent) || ((MouseEvent)e).getClickCount() >= 2;
   }
 
-  @RequiredReadAction
+  @RequiredUIAccess
   public final Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
     final Document document = JavaReferenceEditorUtil.createDocument(value == null ? "" : (String)value, myProject, true);
     myEditor = new EditorTextField(document, myProject, JavaFileType.INSTANCE){

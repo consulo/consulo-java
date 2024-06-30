@@ -24,7 +24,6 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.dataContext.DataContext;
@@ -37,6 +36,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
@@ -54,7 +54,7 @@ public class MoveInstanceMethodHandler implements RefactoringActionHandler
 	private static final Logger LOG = Logger.getInstance(MoveInstanceMethodHandler.class);
 	static final String REFACTORING_NAME = RefactoringBundle.message("move.instance.method.title");
 
-	@RequiredReadAction
+	@RequiredUIAccess
 	public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext)
 	{
 		PsiElement element = dataContext.getData(PsiElement.KEY);
@@ -86,7 +86,7 @@ public class MoveInstanceMethodHandler implements RefactoringActionHandler
 		invoke(project, new PsiElement[]{element}, dataContext);
 	}
 
-	@RequiredReadAction
+	@RequiredUIAccess
 	public void invoke(@Nonnull final Project project, @Nonnull final PsiElement[] elements, final DataContext dataContext)
 	{
 		if (elements.length != 1 || !(elements[0] instanceof PsiMethod))
@@ -110,11 +110,13 @@ public class MoveInstanceMethodHandler implements RefactoringActionHandler
 		else
 		{
 			final PsiClass containingClass = method.getContainingClass();
-			if (containingClass != null && PsiUtil.typeParametersIterator(containingClass).hasNext() && TypeParametersSearcher.hasTypeParameters(method))
+			if (containingClass != null && PsiUtil.typeParametersIterator(containingClass).hasNext()
+				&& TypeParametersSearcher.hasTypeParameters(method))
 			{
 				message = RefactoringBundle.message("move.method.is.not.supported.for.generic.classes");
 			}
-			else if (method.findSuperMethods().length > 0 || OverridingMethodsSearch.search(method, true).toArray(PsiMethod.EMPTY_ARRAY).length > 0)
+			else if (method.findSuperMethods().length > 0
+				|| OverridingMethodsSearch.search(method, true).toArray(PsiMethod.EMPTY_ARRAY).length > 0)
 			{
 				message = RefactoringBundle.message("move.method.is.not.supported.when.method.is.part.of.inheritance.hierarchy");
 			}
@@ -150,7 +152,12 @@ public class MoveInstanceMethodHandler implements RefactoringActionHandler
 			else
 			{
 				final String suggestToMakeStaticMessage = "Would you like to make method \'" + method.getName() + "\' static and then move?";
-				if (Messages.showYesNoCancelDialog(project, message + ". " + suggestToMakeStaticMessage, REFACTORING_NAME, UIUtil.getErrorIcon()) == DialogWrapper.OK_EXIT_CODE)
+				if (Messages.showYesNoCancelDialog(
+					project,
+					message + ". " + suggestToMakeStaticMessage,
+					REFACTORING_NAME,
+					UIUtil.getErrorIcon()
+				) == DialogWrapper.OK_EXIT_CODE)
 				{
 					MakeStaticHandler.invoke(method);
 				}
@@ -224,7 +231,8 @@ public class MoveInstanceMethodHandler implements RefactoringActionHandler
 	{
 		PsiManager manager = thisClass.getManager();
 		PsiType type = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory().createType(thisClass);
-		final SuggestedNameInfo suggestedNameInfo = JavaCodeStyleManager.getInstance(manager.getProject()).suggestVariableName(VariableKind.PARAMETER, null, null, type);
+		final SuggestedNameInfo suggestedNameInfo =
+			JavaCodeStyleManager.getInstance(manager.getProject()).suggestVariableName(VariableKind.PARAMETER, null, null, type);
 		return suggestedNameInfo.names.length > 0 ? suggestedNameInfo.names[0] : "";
 	}
 

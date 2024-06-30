@@ -31,6 +31,7 @@ import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.search.PackageScope;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.application.Result;
 import consulo.document.Document;
 import consulo.document.util.TextRange;
@@ -90,7 +91,7 @@ public class GenerateVisitorByHierarchyAction extends AnAction {
         return super.doValidate();
       }
 
-      @RequiredReadAction
+      @RequiredUIAccess
       protected JComponent createCenterPanel() {
         final JPanel panel = new JPanel(new BorderLayout());
         panel.add(super.createCenterPanel(), BorderLayout.CENTER);
@@ -226,7 +227,7 @@ public class GenerateVisitorByHierarchyAction extends AnAction {
     }
     final int finalDetectedPrefix = detectClassPrefix(classes.keySet()).length();
     new WriteCommandAction(project, PsiUtilCore.toPsiFileArray(psiFiles)) {
-      @RequiredReadAction
+      @RequiredWriteAction
       protected void run(final Result result) throws Throwable {
         if (visitorClass == null) {
           final String shortClassName = PsiNameHelper.getShortClassName(visitorName);

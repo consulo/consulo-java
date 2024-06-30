@@ -17,7 +17,6 @@ package com.intellij.java.impl.refactoring.convertToInstanceMethod;
 
 import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.language.psi.*;
-import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.dataContext.DataContext;
@@ -28,6 +27,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ public class ConvertToInstanceMethodHandler implements RefactoringActionHandler 
   private static final Logger LOG = Logger.getInstance(ConvertToInstanceMethodHandler.class);
   static final String REFACTORING_NAME = RefactoringBundle.message("convert.to.instance.method.title");
 
-  @RequiredReadAction
+  @RequiredUIAccess
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
     PsiElement element = dataContext.getData(PsiElement.KEY);
     editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);

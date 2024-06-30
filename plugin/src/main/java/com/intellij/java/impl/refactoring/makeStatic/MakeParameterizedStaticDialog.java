@@ -28,11 +28,11 @@ import com.intellij.java.analysis.impl.refactoring.util.VariableData;
 import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.impl.refactoring.util.ParameterTablePanel;
 import com.intellij.java.language.psi.*;
-import consulo.annotation.access.RequiredReadAction;
 import consulo.application.HelpManager;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.findUsage.DescriptiveNameUtil;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.ComboBox;
 import consulo.ui.ex.awt.JBUI;
 import consulo.ui.ex.awt.Messages;
@@ -62,10 +62,12 @@ public class MakeParameterizedStaticDialog extends AbstractMakeStaticDialog {
   private final boolean myAnyNonFieldMembersUsed;
 
 
-  public MakeParameterizedStaticDialog(Project project,
-                                       PsiTypeParameterListOwner member,
-                                       String[] nameSuggestions,
-                                       InternalUsageInfo[] internalUsages) {
+  public MakeParameterizedStaticDialog(
+    Project project,
+    PsiTypeParameterListOwner member,
+    String[] nameSuggestions,
+    InternalUsageInfo[] internalUsages
+  ) {
     super(project, member);
     myProject = project;
     myNameSuggestions = nameSuggestions;
@@ -209,14 +211,12 @@ public class MakeParameterizedStaticDialog extends AbstractMakeStaticDialog {
     myMakeClassParameter.addActionListener(inputFieldValidator);
     myMakeFieldParameters.addActionListener(inputFieldValidator);
 
-
-
     updateControls();
 
     return panel;
   }
 
-  @RequiredReadAction
+  @RequiredUIAccess
   protected boolean validateData() {
     int ret = 0;
     if (isMakeClassParameter()) {
@@ -257,8 +257,9 @@ public class MakeParameterizedStaticDialog extends AbstractMakeStaticDialog {
         setOKActionEnabled(PsiNameHelper.getInstance(myProject).isIdentifier(classParameterName.trim()));
       }
     }
-    else
+    else {
       setOKActionEnabled(true);
+    }
 
     if (myClassParameterNameInputField != null) {
       myClassParameterNameInputField.setEnabled(isMakeClassParameter());

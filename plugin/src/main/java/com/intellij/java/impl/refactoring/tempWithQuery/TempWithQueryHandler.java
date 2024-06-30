@@ -25,7 +25,6 @@ import com.intellij.java.language.psi.PsiDeclarationStatement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLocalVariable;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorColors;
 import consulo.codeEditor.ScrollType;
@@ -62,8 +61,12 @@ public class TempWithQueryHandler implements RefactoringActionHandler {
 
   @RequiredUIAccess
   public void invoke(@Nonnull final Project project, final Editor editor, PsiFile file, DataContext dataContext) {
-    PsiElement element = TargetElementUtil.findTargetElement(editor, Set.of(TargetElementUtilExtender.ELEMENT_NAME_ACCEPTED,
-        TargetElementUtilExtender.REFERENCED_ELEMENT_ACCEPTED, TargetElementUtilExtender.LOOKUP_ITEM_ACCEPTED));
+    Set<String> flags = Set.of(
+      TargetElementUtilExtender.ELEMENT_NAME_ACCEPTED,
+      TargetElementUtilExtender.REFERENCED_ELEMENT_ACCEPTED,
+      TargetElementUtilExtender.LOOKUP_ITEM_ACCEPTED
+    );
+    PsiElement element = TargetElementUtil.findTargetElement(editor, flags);
     editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
     if (!(element instanceof PsiLocalVariable)) {
       String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("error.wrong.caret.position.local.name"));
@@ -74,7 +77,7 @@ public class TempWithQueryHandler implements RefactoringActionHandler {
     invokeOnVariable(file, project, (PsiLocalVariable) element, editor);
   }
 
-  @RequiredReadAction
+  @RequiredUIAccess
   private static void invokeOnVariable(final PsiFile file, final Project project, final PsiLocalVariable local, final Editor editor) {
     if (!CommonRefactoringUtil.checkReadOnlyStatus(project, file)) {
       return;
@@ -88,7 +91,8 @@ public class TempWithQueryHandler implements RefactoringActionHandler {
       return;
     }
 
-    final PsiReference[] refs = ReferencesSearch.search(local, GlobalSearchScope.projectScope(project), false).toArray(new PsiReference[0]);
+    final PsiReference[] refs = ReferencesSearch.search(local, GlobalSearchScope.projectScope(project), false)
+      .toArray(new PsiReference[0]);
 
     if (refs.length == 0) {
       String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("variable.is.never.used", localName));
@@ -135,7 +139,6 @@ public class TempWithQueryHandler implements RefactoringActionHandler {
       return;
     }
 
-
     if (processor.showDialog()) {
       CommandProcessor.getInstance().executeCommand(project, () -> {
         final Runnable action = () -> {
@@ -167,11 +170,10 @@ public class TempWithQueryHandler implements RefactoringActionHandler {
       }, REFACTORING_NAME, null);
     }
 
-
     WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringBundle.message("press.escape.to.remove.the.highlighting"));
   }
 
-  @RequiredReadAction
+  @RequiredUIAccess
   public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
     if (elements.length == 1 && elements[0] instanceof PsiLocalVariable) {
       if (dataContext != null) {

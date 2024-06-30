@@ -28,7 +28,7 @@ import consulo.language.icon.IconDescriptorUpdaters;
 import javax.swing.*;
 import java.awt.*;
 
-public class FQNameCellRenderer<T> extends SimpleColoredComponent implements ListCellRenderer<T> {
+public class FQNameCellRenderer extends SimpleColoredComponent implements ListCellRenderer<Object> {
   private final Font FONT;
   private static final Logger LOG = Logger.getInstance(FQNameCellRenderer.class);
 

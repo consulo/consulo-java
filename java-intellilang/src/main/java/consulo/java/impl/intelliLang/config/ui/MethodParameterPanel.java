@@ -85,7 +85,7 @@ public class MethodParameterPanel extends AbstractInjectionPanel<MethodParameter
 
   private final Map<PsiMethod, MethodParameterInjection.MethodInfo> myData = new HashMap<>();
 
-  @RequiredReadAction
+  @RequiredUIAccess
   public MethodParameterPanel(MethodParameterInjection injection, final Project project) {
     super(injection, project);
     $$$setupUI$$$();
@@ -422,5 +422,4 @@ public class MethodParameterPanel extends AbstractInjectionPanel<MethodParameter
 
   private void $$$setupUI$$$() {
   }
-
 }

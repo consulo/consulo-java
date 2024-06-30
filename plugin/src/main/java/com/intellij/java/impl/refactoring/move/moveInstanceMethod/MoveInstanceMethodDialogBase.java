@@ -22,7 +22,6 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.PsiVariable;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import consulo.annotation.access.RequiredReadAction;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.ui.RefactoringDialog;
 import consulo.language.findUsage.DescriptiveNameUtil;
@@ -102,7 +101,7 @@ public abstract class MoveInstanceMethodDialogBase extends RefactoringDialog {
     return visibilityPanel;
   }
 
-  @RequiredReadAction
+  @RequiredUIAccess
   protected boolean verifyTargetClass(PsiClass targetClass) {
     if (targetClass.isInterface()) {
       final Project project = getProject();
@@ -139,7 +138,7 @@ public abstract class MoveInstanceMethodDialogBase extends RefactoringDialog {
   }
 
   private static class MyListCellRenderer extends DefaultListCellRenderer {
-    @RequiredReadAction
+    @RequiredUIAccess
     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
       super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
       final PsiVariable psiVariable = (PsiVariable)value;

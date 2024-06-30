@@ -45,6 +45,7 @@ import consulo.localHistory.LocalHistory;
 import consulo.localHistory.LocalHistoryAction;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.undoRedo.CommandProcessor;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.MultiMap;
@@ -61,8 +62,7 @@ public class ExtractSuperclassHandler implements RefactoringActionHandler, Extra
   private PsiClass mySubclass;
   private Project myProject;
 
-
-  @RequiredReadAction
+  @RequiredUIAccess
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
     editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
     int offset = editor.getCaretModel().getOffset();
@@ -102,7 +102,6 @@ public class ExtractSuperclassHandler implements RefactoringActionHandler, Extra
       CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.EXTRACT_SUPERCLASS);
       return;
     }
-
 
     final List<MemberInfo> memberInfos = MemberInfo.extractClassMembers(mySubclass, element -> true, false);
 

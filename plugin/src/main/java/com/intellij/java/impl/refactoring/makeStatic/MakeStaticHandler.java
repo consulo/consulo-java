@@ -29,7 +29,6 @@ import com.intellij.java.indexing.search.searches.MethodReferencesSearch;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
-import consulo.annotation.access.RequiredReadAction;
 import consulo.application.progress.ProgressManager;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
@@ -41,6 +40,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -50,7 +50,7 @@ public class MakeStaticHandler implements RefactoringActionHandler
 	private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.makeMethodStatic.MakeMethodStaticHandler");
 
 	@Override
-	@RequiredReadAction
+	@RequiredUIAccess
 	public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext)
 	{
 		PsiElement element = dataContext.getData(PsiElement.KEY);
@@ -83,7 +83,7 @@ public class MakeStaticHandler implements RefactoringActionHandler
 	}
 
 	@Override
-	@RequiredReadAction
+	@RequiredUIAccess
 	public void invoke(@Nonnull final Project project, @Nonnull PsiElement[] elements, DataContext dataContext)
 	{
 		if (elements.length != 1 || !(elements[0] instanceof PsiTypeParameterListOwner))
@@ -108,7 +108,7 @@ public class MakeStaticHandler implements RefactoringActionHandler
 		invoke(member);
 	}
 
-	@RequiredReadAction
+	@RequiredUIAccess
 	public static void invoke(final PsiTypeParameterListOwner member)
 	{
 		final Project project = member.getProject();
