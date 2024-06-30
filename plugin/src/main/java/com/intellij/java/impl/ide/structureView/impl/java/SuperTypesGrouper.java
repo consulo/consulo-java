@@ -20,7 +20,7 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
 import consulo.application.AllIcons;
 import consulo.fileEditor.structureView.tree.*;
-import consulo.platform.base.localize.IdeLocalize;
+import consulo.ide.localize.IdeLocalize;
 import consulo.project.ui.view.tree.AbstractTreeNode;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.dataholder.Key;

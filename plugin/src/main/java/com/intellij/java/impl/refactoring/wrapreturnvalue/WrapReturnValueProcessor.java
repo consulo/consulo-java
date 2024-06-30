@@ -26,7 +26,7 @@ import com.intellij.java.impl.refactoring.wrapreturnvalue.usageInfo.UnwrapCall;
 import com.intellij.java.impl.refactoring.wrapreturnvalue.usageInfo.WrapReturnValue;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.java.language.impl.codeInsight.PackageUtil;
+import com.intellij.java.impl.codeInsight.PackageUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.PropertyUtil;

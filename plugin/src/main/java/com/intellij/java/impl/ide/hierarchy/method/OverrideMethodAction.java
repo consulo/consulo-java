@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ide.hierarchy.method;
 
-import consulo.platform.base.localize.IdeLocalize;
+import consulo.ide.localize.IdeLocalize;
 import consulo.ui.ex.action.Presentation;
 
 public final class OverrideMethodAction extends OverrideImplementMethodAction {

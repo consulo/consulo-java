@@ -56,7 +56,7 @@ public class ArgumentValueDescriptorImpl extends ValueDescriptorImpl
 	@Override
 	public boolean canSetValue()
 	{
-		return LocalVariablesUtil.canSetValues();
+		return true;
 	}
 
 	@Override

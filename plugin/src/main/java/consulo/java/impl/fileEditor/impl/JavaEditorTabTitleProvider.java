@@ -5,6 +5,7 @@ import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiJavaModule;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.application.ReadAction;
 import consulo.fileEditor.EditorTabTitleProvider;
 import consulo.language.psi.PsiManager;
 import consulo.project.Project;
@@ -21,10 +22,12 @@ public final class JavaEditorTabTitleProvider implements EditorTabTitleProvider 
   public String getEditorTabTitle(@Nonnull Project project, @Nonnull VirtualFile file) {
     String fileName = file.getName();
     if (!PsiJavaModule.MODULE_INFO_FILE.equals(fileName)) return null;
-    PsiJavaFile javaFile = ObjectUtil.tryCast(PsiManager.getInstance(project).findFile(file), PsiJavaFile.class);
-    if (javaFile == null) return null;
-    PsiJavaModule moduleDescriptor = javaFile.getModuleDeclaration();
-    if (moduleDescriptor == null) return null;
-    return fileName + " (" + moduleDescriptor.getName() + ")";
+    return ReadAction.compute(() -> {
+      PsiJavaFile javaFile = ObjectUtil.tryCast(PsiManager.getInstance(project).findFile(file), PsiJavaFile.class);
+      if (javaFile == null) return null;
+      PsiJavaModule moduleDescriptor = javaFile.getModuleDeclaration();
+      if (moduleDescriptor == null) return null;
+      return fileName + " (" + moduleDescriptor.getName() + ")";
+    });
   }
 }

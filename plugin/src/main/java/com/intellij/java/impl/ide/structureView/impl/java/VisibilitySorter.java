@@ -18,7 +18,7 @@ package com.intellij.java.impl.ide.structureView.impl.java;
 import consulo.application.AllIcons;
 import consulo.fileEditor.structureView.tree.ActionPresentation;
 import consulo.fileEditor.structureView.tree.Sorter;
-import consulo.platform.base.localize.IdeLocalize;
+import consulo.ide.localize.IdeLocalize;
 import consulo.ui.image.Image;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;

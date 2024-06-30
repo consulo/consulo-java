@@ -17,22 +17,20 @@
 package com.intellij.java.language.impl.ui;
 
 import com.intellij.java.language.psi.PsiJavaPackage;
-import consulo.project.Project;
-import consulo.ui.ex.awt.DialogWrapper;
+import jakarta.annotation.Nullable;
 
 import java.util.List;
 
 /**
  * @author ven
  */
-public abstract class PackageChooser extends DialogWrapper {
-  public PackageChooser(Project project, boolean canBeParent) {
-    super(project, canBeParent);
-  }
+public interface PackageChooser {
+  PsiJavaPackage getSelectedPackage();
 
-  public abstract PsiJavaPackage getSelectedPackage();
+  List<PsiJavaPackage> getSelectedPackages();
 
-  public abstract List<PsiJavaPackage> getSelectedPackages();
+  void selectPackage(String qualifiedName);
 
-  public abstract void selectPackage(String qualifiedName);
+  @Nullable
+  List<PsiJavaPackage> showAndSelect();
 }

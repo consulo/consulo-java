@@ -15,12 +15,11 @@
  */
 package com.intellij.java.impl.ide.macro;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.ide.IdeBundle;
-import consulo.pathMacro.Macro;
 import com.intellij.java.language.psi.PsiJavaPackage;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.dataContext.DataContext;
-import consulo.platform.base.localize.IdeLocalize;
+import consulo.ide.localize.IdeLocalize;
+import consulo.pathMacro.Macro;
 
 @ExtensionImpl
 public class FileFQPackage extends Macro {

@@ -27,19 +27,18 @@ import consulo.fileTemplate.FileTemplate;
 import consulo.fileTemplate.FileTemplateManager;
 import consulo.ide.IdeView;
 import consulo.ide.action.CreateFromTemplateActionBase;
+import consulo.ide.localize.IdeLocalize;
 import consulo.java.impl.JavaBundle;
 import consulo.language.content.LanguageContentFolderScopes;
 import consulo.language.psi.PsiDirectory;
 import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
 import consulo.platform.base.localize.CommonLocalize;
-import consulo.platform.base.localize.IdeLocalize;
 import consulo.project.Project;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.util.lang.StringUtil;
-
 import jakarta.annotation.Nullable;
 
 import static com.intellij.java.language.impl.codeInsight.template.JavaTemplateUtil.INTERNAL_PACKAGE_INFO_TEMPLATE_NAME;

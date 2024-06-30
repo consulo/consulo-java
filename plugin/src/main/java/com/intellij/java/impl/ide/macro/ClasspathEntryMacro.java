@@ -16,11 +16,11 @@
 package com.intellij.java.impl.ide.macro;
 
 import consulo.annotation.component.ExtensionImpl;
-import consulo.pathMacro.Macro;
 import consulo.dataContext.DataContext;
-import consulo.platform.base.localize.IdeLocalize;
-import consulo.project.Project;
+import consulo.ide.localize.IdeLocalize;
 import consulo.module.content.ProjectRootManager;
+import consulo.pathMacro.Macro;
+import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
 
 /**

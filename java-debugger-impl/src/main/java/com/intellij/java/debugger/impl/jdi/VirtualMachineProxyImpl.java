@@ -30,13 +30,10 @@ import consulo.internal.com.sun.jdi.request.EventRequestManager;
 import consulo.logging.Logger;
 import consulo.util.lang.ExceptionUtil;
 import consulo.util.lang.ThreeState;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
 
-import jakarta.annotation.Nonnull;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.*;
 
 public class VirtualMachineProxyImpl implements JdiTimer, VirtualMachineProxy
@@ -636,23 +633,7 @@ public class VirtualMachineProxyImpl implements JdiTimer, VirtualMachineProxy
 			{
 				return false;
 			}
-			try
-			{
-				final Method method = VirtualMachine.class.getMethod("canGetInstanceInfo");
-				return (Boolean) method.invoke(myVirtualMachine);
-			}
-			catch(NoSuchMethodException ignored)
-			{
-			}
-			catch(IllegalAccessException e)
-			{
-				LOG.error(e);
-			}
-			catch(InvocationTargetException e)
-			{
-				LOG.error(e);
-			}
-			return false;
+			return myVirtualMachine.canGetInstanceInfo();
 		}
 	};
 
@@ -700,27 +681,7 @@ public class VirtualMachineProxyImpl implements JdiTimer, VirtualMachineProxy
 		@Override
 		protected boolean calcValue()
 		{
-			if(myVersionHigher_15)
-			{
-				//return myVirtualMachine.canGetMethodReturnValues();
-				try
-				{
-					//noinspection HardCodedStringLiteral
-					final Method method = VirtualMachine.class.getDeclaredMethod("canGetMethodReturnValues");
-					final Boolean rv = (Boolean) method.invoke(myVirtualMachine);
-					return rv.booleanValue();
-				}
-				catch(NoSuchMethodException ignored)
-				{
-				}
-				catch(IllegalAccessException ignored)
-				{
-				}
-				catch(InvocationTargetException ignored)
-				{
-				}
-			}
-			return false;
+			return myVersionHigher_15 && myVirtualMachine.canGetMethodReturnValues();
 		}
 	};
 

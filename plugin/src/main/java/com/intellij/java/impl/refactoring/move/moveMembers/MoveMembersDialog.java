@@ -15,17 +15,27 @@
  */
 package com.intellij.java.impl.refactoring.move.moveMembers;
 
-import com.intellij.java.impl.refactoring.HelpID;
-import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
-import com.intellij.java.impl.refactoring.ui.JavaVisibilityPanel;
-import com.intellij.java.impl.refactoring.ui.MemberSelectionPanel;
-import com.intellij.java.impl.refactoring.ui.MemberSelectionTable;
-import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
-import com.intellij.java.impl.refactoring.util.classMembers.UsesAndInterfacesDependencyMemberInfoModel;
-import com.intellij.java.impl.ui.ReferenceEditorComboWithBrowseButton;
-import com.intellij.java.language.impl.codeInsight.PackageUtil;
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
+import javax.swing.Box;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
 import com.intellij.java.language.psi.*;
-import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.ui.ex.awt.Messages;
+import org.jetbrains.annotations.NonNls;
+import jakarta.annotation.Nullable;
+import com.intellij.java.language.util.ClassFilter;
+import com.intellij.java.impl.codeInsight.PackageUtil;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
 import consulo.application.HelpManager;
@@ -427,7 +437,7 @@ public class MoveMembersDialog extends RefactoringDialog implements MoveMembersO
     }
 
     public boolean isMemberEnabled(MemberInfo member) {
-      if(myTargetClass != null && myTargetClass.isInterface() && !PsiUtil.isLanguageLevel8OrHigher(myTargetClass)) {
+      if (myTargetClass != null && myTargetClass.isInterface() && !PsiUtil.isLanguageLevel8OrHigher(myTargetClass)) {
         return !(member.getMember() instanceof PsiMethod);
       }
       return super.isMemberEnabled(member);

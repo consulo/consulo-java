@@ -26,9 +26,9 @@ import consulo.colorScheme.TextAttributes;
 import consulo.component.util.Iconable;
 import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
 import consulo.ide.impl.idea.openapi.roots.ui.util.CompositeAppearance;
+import consulo.ide.localize.IdeLocalize;
 import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.language.psi.PsiElement;
-import consulo.platform.base.localize.IdeLocalize;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.image.Image;
@@ -39,7 +39,6 @@ import java.awt.*;
 
 public final class MethodHierarchyNodeDescriptor extends HierarchyNodeDescriptor
 {
-
 	private Image myRawIcon;
 	private Image myStateIcon;
 	private MethodHierarchyTreeStructure myTreeStructure;

@@ -33,7 +33,7 @@ import com.intellij.java.impl.refactoring.util.occurrences.OccurrenceManager;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.codeInsight.TestFrameworks;
 import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
-import com.intellij.java.language.impl.codeInsight.PackageUtil;
+import com.intellij.java.impl.codeInsight.PackageUtil;
 import com.intellij.java.language.impl.codeInsight.PsiClassListCellRenderer;
 import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import com.intellij.java.language.psi.PsiElementFactory;

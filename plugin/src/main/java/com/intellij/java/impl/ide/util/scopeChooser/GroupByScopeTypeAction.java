@@ -23,7 +23,7 @@ package com.intellij.java.impl.ide.util.scopeChooser;
 import consulo.application.AllIcons;
 import consulo.ide.impl.idea.packageDependencies.DependencyUISettings;
 import consulo.ide.impl.idea.packageDependencies.ui.ProjectPatternProvider;
-import consulo.platform.base.localize.IdeLocalize;
+import consulo.ide.localize.IdeLocalize;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.action.ToggleAction;
 import jakarta.annotation.Nonnull;

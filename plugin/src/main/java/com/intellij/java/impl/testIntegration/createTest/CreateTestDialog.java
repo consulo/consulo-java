@@ -25,7 +25,7 @@ import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import com.intellij.java.impl.testIntegration.TestIntegrationUtils;
 import com.intellij.java.impl.ui.ReferenceEditorComboWithBrowseButton;
-import com.intellij.java.language.impl.codeInsight.PackageUtil;
+import com.intellij.java.impl.codeInsight.PackageUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.testIntegration.TestFramework;
 import com.intellij.java.language.util.TreeClassChooser;

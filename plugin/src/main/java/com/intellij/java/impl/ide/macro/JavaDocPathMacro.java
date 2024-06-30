@@ -19,8 +19,8 @@ import com.intellij.java.impl.javadoc.JavadocConfiguration;
 import com.intellij.java.impl.javadoc.JavadocGenerationManager;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.dataContext.DataContext;
+import consulo.ide.localize.IdeLocalize;
 import consulo.pathMacro.Macro;
-import consulo.platform.base.localize.IdeLocalize;
 import consulo.project.Project;
 
 import java.io.File;

@@ -15,12 +15,11 @@
  */
 package com.intellij.java.language.impl;
 
-import consulo.virtualFileSystem.fileType.FileType;
-import consulo.java.language.impl.JavaIcons;
+import consulo.java.language.localize.JavaLanguageLocalize;
 import consulo.localize.LocalizeValue;
-import consulo.platform.base.localize.IdeLocalize;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.ui.image.Image;
-
+import consulo.virtualFileSystem.fileType.FileType;
 import jakarta.annotation.Nonnull;
 
 public class JavaClassFileType implements FileType {
@@ -39,7 +38,7 @@ public class JavaClassFileType implements FileType {
   @Override
   @Nonnull
   public LocalizeValue getDescription() {
-    return IdeLocalize.filetypeDescriptionClass();
+    return JavaLanguageLocalize.filetypeDescriptionClass();
   }
 
   @Override
@@ -50,7 +49,7 @@ public class JavaClassFileType implements FileType {
 
   @Override
   public Image getIcon() {
-    return JavaIcons.FileTypes.JavaClass;
+    return PlatformIconGroup.filetypesBinary();
   }
 
   @Override
