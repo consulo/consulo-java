@@ -16,14 +16,13 @@
 package com.intellij.java.language.impl;
 
 import com.intellij.java.language.JavaLanguage;
+import consulo.java.language.impl.icon.JavaPsiImplIconGroup;
+import consulo.java.language.localize.JavaLanguageLocalize;
 import consulo.language.file.LanguageFileType;
-import consulo.java.language.impl.JavaIcons;
 import consulo.localize.LocalizeValue;
-import consulo.platform.base.localize.IdeLocalize;
 import consulo.ui.image.Image;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 public class JavaFileType extends LanguageFileType {
   @NonNls public static final String DEFAULT_EXTENSION = "java";
@@ -43,7 +42,7 @@ public class JavaFileType extends LanguageFileType {
   @Override
   @Nonnull
   public LocalizeValue getDescription() {
-    return IdeLocalize.filetypeDescriptionJava();
+    return JavaLanguageLocalize.filetypeDescriptionJava();
   }
 
   @Override
@@ -54,6 +53,6 @@ public class JavaFileType extends LanguageFileType {
 
   @Override
   public Image getIcon() {
-    return JavaIcons.FileTypes.Java;
+    return JavaPsiImplIconGroup.filetypesJava();
   }
 }

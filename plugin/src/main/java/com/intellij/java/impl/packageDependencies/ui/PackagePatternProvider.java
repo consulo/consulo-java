@@ -26,23 +26,22 @@ import com.intellij.java.language.psi.PsiClassOwner;
 import com.intellij.java.language.psi.PsiNameHelper;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.content.scope.PackageSet;
-import consulo.ide.IdeBundle;
 import consulo.ide.impl.idea.packageDependencies.ui.*;
+import consulo.ide.localize.IdeLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.logging.Logger;
 import consulo.module.content.ProjectRootManager;
 import consulo.platform.base.icon.PlatformIconGroup;
-import consulo.platform.base.localize.IdeLocalize;
 import consulo.project.Project;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.image.Image;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nullable;
 import java.util.Set;
 
 @ExtensionImpl(id = "package", order = "before file")

@@ -35,7 +35,7 @@ import consulo.ui.ex.awt.Messages;
 import org.jetbrains.annotations.NonNls;
 import jakarta.annotation.Nullable;
 import com.intellij.java.language.util.ClassFilter;
-import com.intellij.java.language.impl.codeInsight.PackageUtil;
+import com.intellij.java.impl.codeInsight.PackageUtil;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
 import consulo.application.ApplicationManager;

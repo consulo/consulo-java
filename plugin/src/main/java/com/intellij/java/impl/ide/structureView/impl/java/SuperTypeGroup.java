@@ -22,10 +22,10 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.application.AllIcons;
 import consulo.fileEditor.structureView.tree.Group;
 import consulo.fileEditor.structureView.tree.TreeElement;
+import consulo.ide.localize.IdeLocalize;
 import consulo.language.psi.SmartPointerManager;
 import consulo.language.psi.SmartPsiElementPointer;
 import consulo.navigation.ItemPresentation;
-import consulo.platform.base.localize.IdeLocalize;
 import consulo.ui.image.Image;
 import jakarta.annotation.Nullable;
 

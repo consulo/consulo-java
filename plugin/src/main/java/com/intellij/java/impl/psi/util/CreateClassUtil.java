@@ -28,7 +28,7 @@ import consulo.fileTemplate.FileTemplate;
 import consulo.fileTemplate.FileTemplateManager;
 import com.intellij.java.impl.ide.fileTemplates.JavaCreateFromTemplateHandler;
 import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.java.language.impl.codeInsight.PackageUtil;
+import com.intellij.java.impl.codeInsight.PackageUtil;
 import consulo.application.ApplicationManager;
 import consulo.logging.Logger;
 import consulo.module.Module;

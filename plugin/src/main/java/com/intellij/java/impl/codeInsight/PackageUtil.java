@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.intellij.java.language.impl.codeInsight;
+package com.intellij.java.impl.codeInsight;
 
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.WriteAction;
-import consulo.application.util.function.Computable;
 import consulo.application.util.query.Query;
+import consulo.ide.localize.IdeLocalize;
 import consulo.ide.setting.ShowSettingsUtil;
 import consulo.ide.util.DirectoryChooserUtil;
 import consulo.language.psi.PsiDirectory;
@@ -36,7 +36,6 @@ import consulo.module.content.ModuleRootManager;
 import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
 import consulo.module.content.layer.OrderEnumerator;
-import consulo.platform.base.localize.IdeLocalize;
 import consulo.project.Project;
 import consulo.project.ProjectBundle;
 import consulo.ui.annotation.RequiredUIAccess;

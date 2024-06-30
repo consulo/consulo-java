@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.intellij.java.language.impl.codeInsight;
+package com.intellij.java.impl.codeInsight;
 
 import com.intellij.java.language.impl.ui.PackageChooser;
 import com.intellij.java.language.psi.JavaDirectoryService;
@@ -21,6 +21,7 @@ import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.AllIcons;
 import consulo.content.FileIndex;
+import consulo.ide.localize.IdeLocalize;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.PsiNamedElement;
@@ -31,11 +32,11 @@ import consulo.module.content.ModuleRootManager;
 import consulo.module.content.ProjectRootManager;
 import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.platform.base.localize.CommonLocalize;
-import consulo.platform.base.localize.IdeLocalize;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.InputValidator;
 import consulo.ui.ex.action.*;
+import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.ScrollPaneFactory;
 import consulo.ui.ex.awt.UIUtil;
@@ -57,7 +58,7 @@ import java.awt.*;
 import java.util.Enumeration;
 import java.util.List;
 
-public class PackageChooserDialog extends PackageChooser {
+public class PackageChooserDialog extends DialogWrapper implements PackageChooser {
   private static final Logger LOG = Logger.getInstance(PackageChooserDialog.class);
 
   private Tree myTree;
@@ -168,7 +169,7 @@ public class PackageChooserDialog extends PackageChooser {
   }
 
   public String getDimensionServiceKey(){
-    return "#com.intellij.java.language.impl.codeInsight.PackageChooserDialog";
+    return "#com.intellij.java.impl.codeInsight.PackageChooserDialog";
   }
 
   public JComponent getPreferredFocusedComponent(){
@@ -231,6 +232,14 @@ public class PackageChooserDialog extends PackageChooser {
         return element1.getName().compareToIgnoreCase(element2.getName());
       }
     );
+  }
+
+  @Nullable
+  @Override
+  public List<PsiJavaPackage> showAndSelect() {
+    show();
+    if (!isOK()) return null;
+    return getSelectedPackages();
   }
 
   @Nonnull

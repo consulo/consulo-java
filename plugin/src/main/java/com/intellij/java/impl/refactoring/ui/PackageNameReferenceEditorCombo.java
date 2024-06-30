@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.refactoring.ui;
 
-import com.intellij.java.language.impl.codeInsight.PackageChooserDialog;
+import com.intellij.java.impl.codeInsight.PackageChooserDialog;
 import consulo.project.Project;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.java.impl.ui.ReferenceEditorComboWithBrowseButton;

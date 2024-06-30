@@ -22,7 +22,7 @@ import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.Destination
 import com.intellij.java.impl.refactoring.ui.PackageNameReferenceEditorCombo;
 import com.intellij.java.impl.refactoring.util.RefactoringMessageUtil;
 import com.intellij.java.impl.ui.ReferenceEditorComboWithBrowseButton;
-import com.intellij.java.language.impl.codeInsight.PackageUtil;
+import com.intellij.java.impl.codeInsight.PackageUtil;
 import com.intellij.java.language.psi.PsiNameHelper;
 import consulo.application.util.function.Computable;
 import consulo.language.editor.localize.CodeInsightLocalize;

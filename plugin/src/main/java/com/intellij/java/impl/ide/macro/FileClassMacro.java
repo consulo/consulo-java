@@ -20,10 +20,10 @@ import com.intellij.java.language.psi.PsiJavaFile;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.dataContext.DataContext;
+import consulo.ide.localize.IdeLocalize;
 import consulo.language.editor.LangDataKeys;
 import consulo.language.psi.PsiFile;
 import consulo.pathMacro.Macro;
-import consulo.platform.base.localize.IdeLocalize;
 
 @ExtensionImpl
 public final class FileClassMacro extends Macro {

@@ -17,11 +17,11 @@ package com.intellij.java.impl.ide.util;
 
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.ide.localize.IdeLocalize;
 import consulo.language.editor.refactoring.util.DeleteTypeDescriptionLocation;
 import consulo.language.psi.ElementDescriptionLocation;
 import consulo.language.psi.ElementDescriptionProvider;
 import consulo.language.psi.PsiElement;
-import consulo.platform.base.localize.IdeLocalize;
 import jakarta.annotation.Nonnull;
 
 /**

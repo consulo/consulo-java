@@ -24,7 +24,7 @@ import com.intellij.java.impl.refactoring.util.FixableUsagesRefactoringProcessor
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.java.language.impl.codeInsight.PackageUtil;
+import com.intellij.java.impl.codeInsight.PackageUtil;
 import com.intellij.java.language.impl.psi.impl.source.javadoc.PsiDocParamRef;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;

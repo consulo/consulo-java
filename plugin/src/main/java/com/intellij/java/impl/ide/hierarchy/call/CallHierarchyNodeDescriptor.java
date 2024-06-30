@@ -33,9 +33,9 @@ import consulo.colorScheme.TextAttributes;
 import consulo.component.util.Iconable;
 import consulo.document.util.TextRange;
 import consulo.fileEditor.FileEditorManager;
-import consulo.ide.IdeBundle;
 import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
 import consulo.ide.impl.idea.openapi.roots.ui.util.CompositeAppearance;
+import consulo.ide.localize.IdeLocalize;
 import consulo.language.editor.highlight.HighlightManager;
 import consulo.language.editor.util.PsiUtilBase;
 import consulo.language.icon.IconDescriptorUpdaters;
@@ -45,15 +45,14 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.SyntheticElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.navigation.Navigatable;
-import consulo.platform.base.localize.IdeLocalize;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.image.Image;
 import consulo.ui.image.ImageEffects;
 import consulo.util.lang.Comparing;
-
 import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;

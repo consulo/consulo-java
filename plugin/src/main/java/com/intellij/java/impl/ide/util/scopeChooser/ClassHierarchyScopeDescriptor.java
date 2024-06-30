@@ -27,11 +27,11 @@ import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
 import consulo.content.scope.ScopeDescriptor;
 import consulo.content.scope.SearchScope;
+import consulo.ide.localize.IdeLocalize;
 import consulo.java.impl.JavaBundle;
 import consulo.language.editor.util.PsiUtilBase;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.LocalSearchScope;
-import consulo.platform.base.localize.IdeLocalize;
 import consulo.project.Project;
 import jakarta.annotation.Nullable;
 

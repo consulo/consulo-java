@@ -19,8 +19,8 @@ package com.intellij.java.coverage;
 import com.intellij.java.debugger.impl.classFilter.ClassFilterEditor;
 import com.intellij.java.execution.CommonJavaRunConfigurationParameters;
 import com.intellij.java.execution.impl.util.JreVersionDetector;
-import com.intellij.java.language.impl.codeInsight.PackageChooserDialog;
 import com.intellij.java.language.impl.ui.PackageChooser;
+import com.intellij.java.language.impl.ui.PackageChooserFactory;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.application.AllIcons;
 import consulo.component.extension.Extensions;
@@ -79,11 +79,10 @@ public class CoverageConfigurable extends SettingsEditor<RunConfigurationBase> {
     }
 
     protected void addPatternFilter() {
-      PackageChooser chooser =
-        new PackageChooserDialog(CodeInsightLocalize.coveragePatternFilterEditorChoosePackageTitle().get(), myProject);
-      chooser.show();
-      if (chooser.isOK()) {
-        List<PsiJavaPackage> packages = chooser.getSelectedPackages();
+      PackageChooser packageChooser = myProject.getInstance(PackageChooserFactory.class).create();
+
+      List<PsiJavaPackage> packages = packageChooser.showAndSelect();
+      if (packages != null) {
         if (!packages.isEmpty()) {
           for (final PsiJavaPackage aPackage : packages) {
             final String fqName = aPackage.getQualifiedName();
