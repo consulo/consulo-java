@@ -24,14 +24,17 @@ import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.impl.refactoring.extractInterface.ExtractClassUtil;
 import com.intellij.java.impl.refactoring.memberPullUp.PullUpConflictsUtil;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
-import com.intellij.java.language.psi.*;
-import consulo.application.ApplicationManager;
+import com.intellij.java.language.psi.JavaDirectoryService;
+import com.intellij.java.language.psi.PsiAnonymousClass;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiJavaPackage;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.application.progress.ProgressManager;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.dataContext.DataContext;
 import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
-import consulo.language.editor.PlatformDataKeys;
 import consulo.language.editor.refactoring.ElementsHandler;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
@@ -43,11 +46,12 @@ import consulo.localHistory.LocalHistory;
 import consulo.localHistory.LocalHistoryAction;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.undoRedo.CommandProcessor;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.MultiMap;
-
 import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 import java.util.List;
 
@@ -59,7 +63,7 @@ public class ExtractSuperclassHandler implements RefactoringActionHandler, Extra
   private PsiClass mySubclass;
   private Project myProject;
 
-
+  @RequiredUIAccess
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
     editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
     int offset = editor.getCaretModel().getOffset();
@@ -86,7 +90,7 @@ public class ExtractSuperclassHandler implements RefactoringActionHandler, Extra
 
     if (!CommonRefactoringUtil.checkReadOnlyStatus(project, mySubclass)) return;
 
-    Editor editor = dataContext != null ? dataContext.getData(PlatformDataKeys.EDITOR) : null;
+    Editor editor = dataContext != null ? dataContext.getData(Editor.KEY) : null;
     if (mySubclass.isInterface()) {
       String message =
         RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("superclass.cannot.be.extracted.from.an.interface"));
@@ -100,29 +104,19 @@ public class ExtractSuperclassHandler implements RefactoringActionHandler, Extra
       return;
     }
 
-
-    final List<MemberInfo> memberInfos = MemberInfo.extractClassMembers(mySubclass, new MemberInfo.Filter<PsiMember>() {
-      public boolean includeMember(PsiMember element) {
-        return true;
-      }
-    }, false);
+    final List<MemberInfo> memberInfos = MemberInfo.extractClassMembers(mySubclass, element -> true, false);
 
     final ExtractSuperclassDialog dialog =
       new ExtractSuperclassDialog(project, mySubclass, memberInfos, ExtractSuperclassHandler.this);
     dialog.show();
     if (!dialog.isOK() || !dialog.isExtractSuperclass()) return;
 
-    CommandProcessor.getInstance().executeCommand(myProject, new Runnable() {
-      public void run() {
-        final Runnable action = new Runnable() {
-          public void run() {
-            doRefactoring(project, mySubclass, dialog);
-          }
-        };
-        ApplicationManager.getApplication().runWriteAction(action);
-      }
-    }, REFACTORING_NAME, null);
-
+    CommandProcessor.getInstance().executeCommand(
+      myProject,
+      () -> myProject.getApplication().runWriteAction(() -> doRefactoring(project, mySubclass, dialog)),
+      REFACTORING_NAME,
+      null
+    );
   }
 
   public boolean checkConflicts(final ExtractSuperclassDialog dialog) {
@@ -135,18 +129,32 @@ public class ExtractSuperclassHandler implements RefactoringActionHandler, Extra
     else {
       targetPackage = null;
     }
-    final MultiMap<PsiElement,String> conflicts = new MultiMap<PsiElement, String>();
-    if (!ProgressManager.getInstance().runProcessWithProgressSynchronously(new Runnable() {
-      public void run() {
+    final MultiMap<PsiElement,String> conflicts = new MultiMap<>();
+    if (!ProgressManager.getInstance().runProcessWithProgressSynchronously(
+      () -> {
         final PsiClass superClass = mySubclass.getExtendsListTypes().length > 0 ? mySubclass.getSuperClass() : null;
-        conflicts.putAllValues(PullUpConflictsUtil.checkConflicts(infos, mySubclass, superClass, targetPackage, targetDirectory, dialog.getContainmentVerifier(), false));
-      }
-    }, RefactoringBundle.message("detecting.possible.conflicts"), true, myProject)) return false;
+        conflicts.putAllValues(PullUpConflictsUtil.checkConflicts(
+          infos,
+          mySubclass,
+          superClass,
+          targetPackage,
+          targetDirectory,
+          dialog.getContainmentVerifier(),
+          false
+        ));
+      },
+      RefactoringBundle.message("detecting.possible.conflicts"),
+      true,
+      myProject
+    )) {
+      return false;
+    }
     ExtractSuperClassUtil.checkSuperAccessible(targetDirectory, conflicts, mySubclass);
     return ExtractSuperClassUtil.showConflicts(dialog, conflicts, myProject);
   }
 
   // invoked inside Command and Atomic action
+  @RequiredWriteAction
   private void doRefactoring(final Project project, final PsiClass subclass, final ExtractSuperclassDialog dialog) {
     final String superclassName = dialog.getExtractedSuperName();
     final PsiDirectory targetDirectory = dialog.getTargetDirectory();
@@ -166,22 +174,18 @@ public class ExtractSuperclassHandler implements RefactoringActionHandler, Extra
 
       // ask whether to search references to subclass and turn them into refs to superclass if possible
       if (superclass != null) {
-        final SmartPsiElementPointer<PsiClass> classPointer = SmartPointerManager.getInstance(project).createSmartPsiElementPointer(subclass);
-        final SmartPsiElementPointer<PsiClass> interfacePointer = SmartPointerManager.getInstance(project).createSmartPsiElementPointer(superclass);
-        final Runnable turnRefsToSuperRunnable = new Runnable() {
-          public void run() {
-            ExtractClassUtil.askAndTurnRefsToSuper(project, classPointer, interfacePointer);
-          }
-        };
-        SwingUtilities.invokeLater(turnRefsToSuperRunnable);
+        SmartPointerManager pointerManager = SmartPointerManager.getInstance(project);
+        final SmartPsiElementPointer<PsiClass> classPointer = pointerManager.createSmartPsiElementPointer(subclass);
+        final SmartPsiElementPointer<PsiClass> interfacePointer = pointerManager.createSmartPsiElementPointer(superclass);
+        SwingUtilities.invokeLater(() -> ExtractClassUtil.askAndTurnRefsToSuper(project, classPointer, interfacePointer));
       }
     }
     catch (IncorrectOperationException e) {
       LOG.error(e);
     }
-
   }
 
+  @RequiredReadAction
   private String getCommandName(final PsiClass subclass, String newName) {
     return RefactoringBundle.message("extract.superclass.command.name", newName, DescriptiveNameUtil.getDescriptiveName(subclass));
   }

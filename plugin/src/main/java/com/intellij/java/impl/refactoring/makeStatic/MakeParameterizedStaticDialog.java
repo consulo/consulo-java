@@ -24,42 +24,30 @@
  */
 package com.intellij.java.impl.refactoring.makeStatic;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
+import com.intellij.java.analysis.impl.refactoring.util.VariableData;
+import com.intellij.java.impl.refactoring.HelpID;
+import com.intellij.java.impl.refactoring.util.ParameterTablePanel;
+import com.intellij.java.language.psi.*;
+import consulo.application.HelpManager;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.findUsage.DescriptiveNameUtil;
+import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.ex.awt.ComboBox;
+import consulo.ui.ex.awt.JBUI;
+import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awt.UIUtil;
+import consulo.ui.ex.awt.event.DocumentAdapter;
+import consulo.usage.UsageViewUtil;
+import consulo.util.lang.StringUtil;
+
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import java.awt.*;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-
-import consulo.language.findUsage.DescriptiveNameUtil;
-import consulo.application.HelpManager;
-import consulo.project.Project;
-import consulo.ui.ex.awt.ComboBox;
-import consulo.ui.ex.awt.Messages;
-import consulo.util.lang.StringUtil;
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiNameHelper;
-import com.intellij.java.language.psi.PsiParameter;
-import com.intellij.java.language.psi.PsiParameterList;
-import com.intellij.java.language.psi.PsiTypeParameterListOwner;
-import com.intellij.java.impl.refactoring.HelpID;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import com.intellij.java.impl.refactoring.util.ParameterTablePanel;
-import com.intellij.java.analysis.impl.refactoring.util.VariableData;
-import consulo.ui.ex.awt.event.DocumentAdapter;
-import consulo.usage.UsageViewUtil;
 
 public class MakeParameterizedStaticDialog extends AbstractMakeStaticDialog {
   private final Project myProject;
@@ -74,10 +62,12 @@ public class MakeParameterizedStaticDialog extends AbstractMakeStaticDialog {
   private final boolean myAnyNonFieldMembersUsed;
 
 
-  public MakeParameterizedStaticDialog(Project project,
-                                       PsiTypeParameterListOwner member,
-                                       String[] nameSuggestions,
-                                       InternalUsageInfo[] internalUsages) {
+  public MakeParameterizedStaticDialog(
+    Project project,
+    PsiTypeParameterListOwner member,
+    String[] nameSuggestions,
+    InternalUsageInfo[] internalUsages
+  ) {
     super(project, member);
     myProject = project;
     myNameSuggestions = nameSuggestions;
@@ -89,7 +79,7 @@ public class MakeParameterizedStaticDialog extends AbstractMakeStaticDialog {
   }
 
   private boolean buildVariableData(InternalUsageInfo[] internalUsages) {
-    ArrayList<VariableData> variableDatum = new ArrayList<VariableData>();
+    ArrayList<VariableData> variableDatum = new ArrayList<>();
     boolean nonFieldUsages = MakeStaticUtil.collectVariableData(myMember, internalUsages, variableDatum);
 
     myVariableData = variableDatum.toArray(new VariableData[0]);
@@ -101,10 +91,7 @@ public class MakeParameterizedStaticDialog extends AbstractMakeStaticDialog {
   }
 
   public boolean isMakeClassParameter() {
-    if (myMakeClassParameter != null)
-      return myMakeClassParameter.isSelected();
-    else
-      return false;
+    return myMakeClassParameter != null && myMakeClassParameter.isSelected();
   }
 
   public String getClassParameterName() {
@@ -112,7 +99,7 @@ public class MakeParameterizedStaticDialog extends AbstractMakeStaticDialog {
       if (myClassParameterNameInputField instanceof JTextField) {
         return ((JTextField)myClassParameterNameInputField).getText();
       }
-      else if(myClassParameterNameInputField instanceof JComboBox) {
+      else if (myClassParameterNameInputField instanceof JComboBox) {
         return (String)(((JComboBox)myClassParameterNameInputField).getEditor().getItem());
       }
       else
@@ -128,7 +115,7 @@ public class MakeParameterizedStaticDialog extends AbstractMakeStaticDialog {
    * @return null if field parameters are not selected
    */
   public VariableData[] getVariableData() {
-    if(myMakeFieldParameters != null && myMakeFieldParameters.isSelected()) {
+    if (myMakeFieldParameters != null && myMakeFieldParameters.isSelected()) {
       return myVariableData;
     }
     else {
@@ -145,7 +132,7 @@ public class MakeParameterizedStaticDialog extends AbstractMakeStaticDialog {
 
     JPanel panel = new JPanel(new GridBagLayout());
 
-    gbConstraints.insets = new Insets(4, 8, 4, 8);
+    gbConstraints.insets = JBUI.insets(4, 8);
     gbConstraints.weighty = 0;
     gbConstraints.weightx = 0;
     gbConstraints.gridx = 0;
@@ -165,13 +152,13 @@ public class MakeParameterizedStaticDialog extends AbstractMakeStaticDialog {
     panel.add(myMakeClassParameter, gbConstraints);
     myMakeClassParameter.setSelected(myAnyNonFieldMembersUsed);
 
-    gbConstraints.insets = new Insets(0, 8, 4, 8);
+    gbConstraints.insets = JBUI.insets(0, 8, 4, 8);
     gbConstraints.weighty = 0;
     gbConstraints.weightx = 1;
     gbConstraints.gridwidth = 2;
     gbConstraints.fill = GridBagConstraints.HORIZONTAL;
     gbConstraints.anchor = GridBagConstraints.NORTHWEST;
-    if(myNameSuggestions.length > 1) {
+    if (myNameSuggestions.length > 1) {
       myClassParameterNameInputField = createComboBoxForName();
     }
     else {
@@ -188,8 +175,8 @@ public class MakeParameterizedStaticDialog extends AbstractMakeStaticDialog {
 
     gbConstraints.gridwidth = GridBagConstraints.REMAINDER;
 
-    if(myVariableData.length > 0) {
-      gbConstraints.insets = new Insets(4, 8, 4, 8);
+    if (myVariableData.length > 0) {
+      gbConstraints.insets = JBUI.insets(4, 8);
       gbConstraints.weighty = 0;
       gbConstraints.weightx = 0;
       gbConstraints.gridheight = 1;
@@ -212,38 +199,32 @@ public class MakeParameterizedStaticDialog extends AbstractMakeStaticDialog {
         }
       };
 
-      gbConstraints.insets = new Insets(0, 8, 4, 8);
+      gbConstraints.insets = JBUI.insets(0, 8, 4, 8);
       gbConstraints.gridwidth = 2;
       gbConstraints.fill = GridBagConstraints.BOTH;
       gbConstraints.weighty = 1;
       panel.add(myParameterPanel, gbConstraints);
     }
 
-    ActionListener inputFieldValidator = new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        updateControls();
-      }
-    };
+    ActionListener inputFieldValidator = e -> updateControls();
 
     myMakeClassParameter.addActionListener(inputFieldValidator);
     myMakeFieldParameters.addActionListener(inputFieldValidator);
-
-
 
     updateControls();
 
     return panel;
   }
 
+  @RequiredUIAccess
   protected boolean validateData() {
     int ret = 0;
     if (isMakeClassParameter()) {
       final PsiMethod methodWithParameter = checkParameterDoesNotExist();
       if (methodWithParameter != null) {
-        String who = methodWithParameter == myMember ? RefactoringBundle.message("this.method") : DescriptiveNameUtil
-          .getDescriptiveName(methodWithParameter);
+        String who = methodWithParameter == myMember ? RefactoringBundle.message("this.method") : DescriptiveNameUtil.getDescriptiveName(methodWithParameter);
         String message = RefactoringBundle.message("0.already.has.parameter.named.1.use.this.name.anyway", who, getClassParameterName());
-        ret = Messages.showYesNoDialog(myProject, message, RefactoringBundle.message("warning.title"), Messages.getWarningIcon());
+        ret = Messages.showYesNoDialog(myProject, message, RefactoringBundle.message("warning.title"), UIUtil.getWarningIcon());
         myClassParameterNameInputField.requestFocusInWindow();
       }
     }
@@ -252,11 +233,11 @@ public class MakeParameterizedStaticDialog extends AbstractMakeStaticDialog {
 
   private PsiMethod checkParameterDoesNotExist() {
     String parameterName = getClassParameterName();
-    if(parameterName == null) return null;
+    if (parameterName == null) return null;
     PsiMethod[] methods = myMember instanceof PsiMethod ? new PsiMethod[]{(PsiMethod)myMember} : ((PsiClass)myMember).getConstructors();
     for (PsiMethod method : methods) {
       PsiParameterList parameterList = method.getParameterList();
-      if(parameterList == null) continue;
+      if (parameterList == null) continue;
       PsiParameter[] parameters = parameterList.getParameters();
       for (PsiParameter parameter : parameters) {
         if (parameterName.equals(parameter.getName())) return method;
@@ -276,32 +257,27 @@ public class MakeParameterizedStaticDialog extends AbstractMakeStaticDialog {
         setOKActionEnabled(PsiNameHelper.getInstance(myProject).isIdentifier(classParameterName.trim()));
       }
     }
-    else
+    else {
       setOKActionEnabled(true);
+    }
 
-    if(myClassParameterNameInputField != null) {
+    if (myClassParameterNameInputField != null) {
       myClassParameterNameInputField.setEnabled(isMakeClassParameter());
     }
 
-    if(myParameterPanel != null) {
+    if (myParameterPanel != null) {
       myParameterPanel.setEnabled(myMakeFieldParameters.isSelected());
     }
   }
 
   private JComboBox createComboBoxForName() {
-    final ComboBox combobox = new ComboBox(myNameSuggestions,-1);
+    final ComboBox<String> combobox = new ComboBox<>(myNameSuggestions,-1);
 
     combobox.setEditable(true);
     combobox.setSelectedIndex(0);
     combobox.setMaximumRowCount(8);
 
-    combobox.addItemListener(
-      new ItemListener() {
-        public void itemStateChanged(ItemEvent e) {
-          updateControls();
-        }
-      }
-    );
+    combobox.addItemListener(e -> updateControls());
     combobox.getEditor().getEditorComponent().addKeyListener(
       new KeyAdapter() {
         public void keyPressed(KeyEvent e) {

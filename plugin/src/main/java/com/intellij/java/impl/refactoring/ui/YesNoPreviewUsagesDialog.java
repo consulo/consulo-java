@@ -21,14 +21,13 @@
 package com.intellij.java.impl.refactoring.ui;
 
 import consulo.application.HelpManager;
+import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.project.Project;
 import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.ex.awt.internal.laf.MultiLineLabelUI;
-import consulo.ui.ex.awt.Messages;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.image.Image;
-
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
@@ -40,8 +39,7 @@ public class YesNoPreviewUsagesDialog extends DialogWrapper {
   private final String myMessage;
   private final String myHelpID;
 
-  public YesNoPreviewUsagesDialog(String title, String message, boolean previewUsages,
-                                  String helpID, Project project) {
+  public YesNoPreviewUsagesDialog(String title, String message, boolean previewUsages, String helpID, Project project) {
     super(project, false);
     myHelpID = helpID;
     setTitle(title);
@@ -58,7 +56,7 @@ public class YesNoPreviewUsagesDialog extends DialogWrapper {
     label.setUI(new MultiLineLabelUI());
     JPanel panel = new JPanel(new BorderLayout());
     panel.add(label, BorderLayout.CENTER);
-    Image icon = Messages.getQuestionIcon();
+    Image icon = UIUtil.getQuestionIcon();
     if (icon != null) {
       label.setIcon(TargetAWT.to(icon));
       label.setIconTextGap(7);
@@ -86,7 +84,7 @@ public class YesNoPreviewUsagesDialog extends DialogWrapper {
 
   @Nonnull
   protected Action[] createActions() {
-    if(myHelpID != null){
+    if (myHelpID != null) {
       return new Action[]{getOKAction(), getCancelAction(), getHelpAction()};
     }
     else {

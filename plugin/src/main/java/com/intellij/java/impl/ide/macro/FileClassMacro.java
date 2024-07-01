@@ -21,7 +21,6 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.dataContext.DataContext;
 import consulo.ide.localize.IdeLocalize;
-import consulo.language.editor.LangDataKeys;
 import consulo.language.psi.PsiFile;
 import consulo.pathMacro.Macro;
 
@@ -49,7 +48,7 @@ public final class FileClassMacro extends Macro {
     //if (!(psiFile instanceof PsiJavaFile)) {
     //  return null;
     //}
-    final PsiFile javaFile = dataContext.getData(LangDataKeys.PSI_FILE);
+    final PsiFile javaFile = dataContext.getData(PsiFile.KEY);
     if (!(javaFile instanceof PsiJavaFile)) return null;
     PsiClass[] classes = ((PsiJavaFile) javaFile).getClasses();
     if (classes.length == 1) {

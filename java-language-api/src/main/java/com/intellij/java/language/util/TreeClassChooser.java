@@ -18,19 +18,25 @@ package com.intellij.java.language.util;
 import consulo.language.editor.ui.TreeChooser;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.language.psi.PsiDirectory;
+import consulo.ui.annotation.RequiredUIAccess;
 
 /**
  * User: anna
  * Date: Jan 24, 2005
  */
 public interface TreeClassChooser extends TreeChooser<PsiClass> {
+  @RequiredUIAccess
   PsiClass getSelected();
 
+  @RequiredUIAccess
   void select(final PsiClass aClass);
 
+  @RequiredUIAccess
   void selectDirectory(final PsiDirectory directory);
 
+  @RequiredUIAccess
   void showDialog();
 
+  @RequiredUIAccess
   void showPopup();
 }

@@ -18,13 +18,13 @@ package com.intellij.java.execution.impl.filters;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.java.language.psi.search.PsiShortNamesCache;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorPopupHelper;
 import consulo.dataContext.DataManager;
 import consulo.execution.ui.console.Filter;
 import consulo.execution.ui.console.HyperlinkInfo;
 import consulo.execution.ui.console.OpenFileHyperlinkInfo;
-import consulo.language.editor.PlatformDataKeys;
 import consulo.language.editor.ui.PsiElementListCellRenderer;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
@@ -33,6 +33,7 @@ import consulo.language.psi.util.EditSourceUtil;
 import consulo.logging.Logger;
 import consulo.navigation.Navigatable;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.JBList;
 import consulo.ui.ex.awt.popup.AWTPopupChooserBuilder;
 import consulo.ui.ex.awt.popup.AWTPopupFactory;
@@ -77,9 +78,9 @@ public class YourkitFilter implements Filter {
         if (psiFiles.length == 0) return null;
 
 
-        final HyperlinkInfo info = psiFiles.length == 1 ?
-            new OpenFileHyperlinkInfo(myProject, psiFiles[0].getVirtualFile(), lineNumber - 1) :
-            new MyHyperlinkInfo(psiFiles);
+        final HyperlinkInfo info = psiFiles.length == 1
+          ? new OpenFileHyperlinkInfo(myProject, psiFiles[0].getVirtualFile(), lineNumber - 1)
+          : new MyHyperlinkInfo(psiFiles);
 
         return new Result(textStartOffset + matcher.start(2), textStartOffset + matcher.end(3), info);
       }
@@ -97,30 +98,29 @@ public class YourkitFilter implements Filter {
       myPsiFiles = psiFiles;
     }
 
+    @RequiredUIAccess
     public void navigate(final Project project) {
       DefaultPsiElementListCellRenderer renderer = new DefaultPsiElementListCellRenderer();
 
-      final JList list = new JBList(myPsiFiles);
+      final JList<PsiFile> list = new JBList<>(myPsiFiles);
       list.setCellRenderer(renderer);
 
       final AWTPopupChooserBuilder builder = ((AWTPopupFactory) JBPopupFactory.getInstance()).createListPopupBuilder(list);
       renderer.installSpeedSearch(builder);
 
-      final Runnable runnable = new Runnable() {
-        public void run() {
-          int[] ids = list.getSelectedIndices();
-          if (ids == null || ids.length == 0) return;
-          Object[] selectedElements = list.getSelectedValues();
-          for (Object element : selectedElements) {
-            Navigatable descriptor = EditSourceUtil.getDescriptor((PsiElement) element);
-            if (descriptor != null && descriptor.canNavigate()) {
-              descriptor.navigate(true);
-            }
+      final Runnable runnable = () -> {
+        int[] ids = list.getSelectedIndices();
+        if (ids == null || ids.length == 0) return;
+        Object[] selectedElements = list.getSelectedValues();
+        for (Object element : selectedElements) {
+          Navigatable descriptor = EditSourceUtil.getDescriptor((PsiElement) element);
+          if (descriptor != null && descriptor.canNavigate()) {
+            descriptor.navigate(true);
           }
         }
       };
 
-      final Editor editor = DataManager.getInstance().getDataContext().getData(PlatformDataKeys.EDITOR);
+      final Editor editor = DataManager.getInstance().getDataContext().getData(Editor.KEY);
 
       JBPopup popup = builder.setItemChoosenCallback(runnable).
           setTitle("Choose file").
@@ -130,15 +130,15 @@ public class YourkitFilter implements Filter {
     }
   }
 
-
-  private static class DefaultPsiElementListCellRenderer extends PsiElementListCellRenderer {
-    public String getElementText(final PsiElement element) {
+  private static class DefaultPsiElementListCellRenderer extends PsiElementListCellRenderer<PsiFile> {
+    @RequiredReadAction
+    public String getElementText(final PsiFile element) {
       return element.getContainingFile().getName();
     }
 
     @Nullable
-    protected String getContainerText(final PsiElement element, final String name) {
-      final PsiDirectory parent = ((PsiFile) element).getParent();
+    protected String getContainerText(final PsiFile element, final String name) {
+      final PsiDirectory parent = element.getParent();
       if (parent == null) return null;
       final PsiJavaPackage psiPackage = JavaDirectoryService.getInstance().getPackage(parent);
       if (psiPackage == null) return null;

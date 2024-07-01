@@ -20,12 +20,12 @@ import com.intellij.java.impl.lang.java.JavaRefactoringSupportProvider;
 import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.impl.refactoring.changeClassSignature.ChangeClassSignatureDialog;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.dataContext.DataContext;
-import consulo.language.editor.LangDataKeys;
-import consulo.language.editor.PlatformDataKeys;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -39,22 +39,23 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 public class JavaChangeSignatureHandler implements ChangeSignatureHandler {
-
   @Override
+  @RequiredUIAccess
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
     editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
     PsiElement element = findTargetMember(file, editor);
     if (element == null) {
-      element = dataContext.getData(LangDataKeys.PSI_ELEMENT);
+      element = dataContext.getData(PsiElement.KEY);
     }
     invokeOnElement(project, editor, element);
   }
 
+  @RequiredUIAccess
   private static void invokeOnElement(Project project, Editor editor, PsiElement element) {
-    if (element instanceof PsiMethod && ((PsiMethod) element).getNameIdentifier() != null) {
-      invoke((PsiMethod) element, project, editor);
-    } else if (element instanceof PsiClass) {
-      invoke((PsiClass) element, editor);
+    if (element instanceof PsiMethod method && method.getNameIdentifier() != null) {
+      invoke(method, project, editor);
+    } else if (element instanceof PsiClass psiClass) {
+      invoke(psiClass, editor);
     } else {
       String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("error.wrong.caret.position.method.or.class" + ".name"));
       CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.CHANGE_SIGNATURE);
@@ -62,11 +63,12 @@ public class JavaChangeSignatureHandler implements ChangeSignatureHandler {
   }
 
   @Override
+  @RequiredUIAccess
   public void invoke(@Nonnull final Project project, @Nonnull final PsiElement[] elements, @Nullable final DataContext dataContext) {
     if (elements.length != 1) {
       return;
     }
-    Editor editor = dataContext != null ? dataContext.getData(PlatformDataKeys.EDITOR) : null;
+    Editor editor = dataContext != null ? dataContext.getData(Editor.KEY) : null;
     invokeOnElement(project, editor, elements[0]);
   }
 
@@ -76,6 +78,7 @@ public class JavaChangeSignatureHandler implements ChangeSignatureHandler {
     return RefactoringBundle.message("error.wrong.caret.position.method.or.class.name");
   }
 
+  @RequiredUIAccess
   private static void invoke(final PsiMethod method, final Project project, @Nullable final Editor editor) {
     PsiMethod newMethod = SuperMethodWarningUtil.checkSuperMethod(method, RefactoringBundle.message("to.refactor"));
     if (newMethod == null) {
@@ -111,29 +114,25 @@ public class JavaChangeSignatureHandler implements ChangeSignatureHandler {
     }
 
     ChangeClassSignatureDialog dialog = new ChangeClassSignatureDialog(aClass, true);
-    //if (!ApplicationManager.getApplication().isUnitTestMode()){
     dialog.show();
-    //}else {
-    //  dialog.showAndGetOk()
-    //}
   }
 
   @Override
   @Nullable
+  @RequiredUIAccess
   public PsiElement findTargetMember(PsiFile file, Editor editor) {
     PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
     return findTargetMember(element);
   }
 
   @Override
+  @RequiredReadAction
   public PsiElement findTargetMember(PsiElement element) {
     PsiElement target = findTargetImpl(element);
-    if (JavaRefactoringSupportProvider.isDisableRefactoringForLightElement(target)) {
-      return null;
-    }
-    return target;
+    return JavaRefactoringSupportProvider.isDisableRefactoringForLightElement(target) ? null : target;
   }
 
+  @RequiredReadAction
   private PsiElement findTargetImpl(PsiElement element) {
     if (PsiTreeUtil.getParentOfType(element, PsiParameterList.class) != null) {
       return PsiTreeUtil.getParentOfType(element, PsiMethod.class);
@@ -145,27 +144,24 @@ public class JavaChangeSignatureHandler implements ChangeSignatureHandler {
     }
 
     final PsiElement elementParent = element.getParent();
-    if (elementParent instanceof PsiMethod && ((PsiMethod) elementParent).getNameIdentifier() == element) {
-      final PsiClass containingClass = ((PsiMethod) elementParent).getContainingClass();
+    if (elementParent instanceof PsiMethod method && method.getNameIdentifier() == element) {
+      final PsiClass containingClass = method.getContainingClass();
       if (containingClass != null && containingClass.isAnnotationType()) {
         return null;
       }
       return elementParent;
     }
-    if (elementParent instanceof PsiClass && ((PsiClass) elementParent).getNameIdentifier() == element) {
-      if (((PsiClass) elementParent).isAnnotationType()) {
-        return null;
-      }
-      return elementParent;
+    if (elementParent instanceof PsiClass psiClass && psiClass.getNameIdentifier() == element) {
+      return psiClass.isAnnotationType() ? null : elementParent;
     }
 
     final PsiCallExpression expression = PsiTreeUtil.getParentOfType(element, PsiCallExpression.class);
     if (expression != null) {
       final PsiExpression qualifierExpression;
-      if (expression instanceof PsiMethodCallExpression) {
-        qualifierExpression = ((PsiMethodCallExpression) expression).getMethodExpression().getQualifierExpression();
-      } else if (expression instanceof PsiNewExpression) {
-        qualifierExpression = ((PsiNewExpression) expression).getQualifier();
+      if (expression instanceof PsiMethodCallExpression methodCall) {
+        qualifierExpression = methodCall.getMethodExpression().getQualifierExpression();
+      } else if (expression instanceof PsiNewExpression newExpression) {
+        qualifierExpression = newExpression.getQualifier();
       } else {
         qualifierExpression = null;
       }
@@ -173,8 +169,8 @@ public class JavaChangeSignatureHandler implements ChangeSignatureHandler {
         final PsiExpressionList expressionList = PsiTreeUtil.getParentOfType(qualifierExpression, PsiExpressionList.class);
         if (expressionList != null) {
           final PsiElement parent = expressionList.getParent();
-          if (parent instanceof PsiCallExpression) {
-            return ((PsiCallExpression) parent).resolveMethod();
+          if (parent instanceof PsiCallExpression call) {
+            return call.resolveMethod();
           }
         }
       } else {

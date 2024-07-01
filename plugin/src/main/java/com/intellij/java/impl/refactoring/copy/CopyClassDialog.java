@@ -85,7 +85,7 @@ class CopyClassDialog extends DialogWrapper {
   }
 
   @Nonnull
-  protected Action[] createActions(){
+  protected Action[] createActions() {
     return new Action[]{getOKAction(),getCancelAction(),getHelpAction()};
   }
 
@@ -143,7 +143,7 @@ class CopyClassDialog extends DialogWrapper {
     return myNameField.getText();
   }
 
-  protected void doOKAction(){
+  protected void doOKAction() {
     final String packageName = myTfPackage.getText();
     final String className = getClassName();
 
@@ -173,7 +173,7 @@ class CopyClassDialog extends DialogWrapper {
 
     if (errorString[0] != null) {
       if (errorString[0].length() > 0) {
-        Messages.showMessageDialog(myProject, errorString[0], RefactoringBundle.message("error.title"), Messages.getErrorIcon());
+        Messages.showMessageDialog(myProject, errorString[0], RefactoringBundle.message("error.title"), UIUtil.getErrorIcon());
       }
       myNameField.requestFocusInWindow();
       return;

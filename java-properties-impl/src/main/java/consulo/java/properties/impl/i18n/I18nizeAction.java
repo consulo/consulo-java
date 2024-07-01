@@ -17,6 +17,7 @@ package consulo.java.properties.impl.i18n;
 
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.lang.properties.psi.PropertiesFile;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ActionImpl;
 import consulo.annotation.component.ActionParentRef;
 import consulo.annotation.component.ActionRef;
@@ -24,8 +25,6 @@ import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
 import consulo.java.analysis.impl.util.JavaI18nUtil;
 import consulo.language.editor.FileModificationService;
-import consulo.language.editor.LangDataKeys;
-import consulo.language.editor.PlatformDataKeys;
 import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiElement;
@@ -50,7 +49,8 @@ public class I18nizeAction extends AnAction {
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.i18n.I18nizeAction");
 
   @Override
-  public void update(AnActionEvent e) {
+  @RequiredUIAccess
+  public void update(@Nonnull AnActionEvent e) {
     boolean active = getHandler(e) != null;
     if (ActionPlaces.isPopupPlace(e.getPlace())) {
       e.getPresentation().setVisible(active);
@@ -61,11 +61,12 @@ public class I18nizeAction extends AnAction {
   }
 
   @Nullable
+  @RequiredReadAction
   public static I18nQuickFixHandler getHandler(final AnActionEvent e) {
     final Editor editor = getEditor(e);
     if (editor == null) return null;
 
-    PsiFile psiFile = e.getData(LangDataKeys.PSI_FILE);
+    PsiFile psiFile = e.getData(PsiFile.KEY);
     if (psiFile == null) return null;
 
     TextRange range = JavaI18nUtil.getSelectedRange(editor, psiFile);
@@ -93,6 +94,7 @@ public class I18nizeAction extends AnAction {
 
 
   @Nullable
+  @RequiredReadAction
   public static PsiLiteralExpression getEnclosingStringLiteral(final PsiFile psiFile, final Editor editor) {
     PsiElement psiElement = psiFile.findElementAt(editor.getCaretModel().getOffset());
     if (psiElement == null) return null;
@@ -102,7 +104,7 @@ public class I18nizeAction extends AnAction {
   }
 
   private static Editor getEditor(final AnActionEvent e) {
-    return e.getData(PlatformDataKeys.EDITOR);
+    return e.getData(Editor.KEY);
   }
 
   @RequiredUIAccess
@@ -162,7 +164,7 @@ public class I18nizeAction extends AnAction {
     final Editor editor = getEditor(e);
     final Project project = editor.getProject();
     assert project != null;
-    final PsiFile psiFile = e.getData(LangDataKeys.PSI_FILE);
+    final PsiFile psiFile = e.getData(PsiFile.KEY);
     if (psiFile == null) return;
     final I18nQuickFixHandler handler = getHandler(e);
     if (handler == null) return;

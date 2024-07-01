@@ -124,7 +124,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionsBundle.message("inspection.dead.code.display.name");
+    return InspectionLocalize.inspectionDeadCodeDisplayName().get();
   }
 
   @Override
@@ -281,11 +281,13 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
   }
 
   @Override
-  public void runInspection(@Nonnull final AnalysisScope scope,
-                            @Nonnull InspectionManager manager,
-                            @Nonnull final GlobalInspectionContext globalContext,
-                            @Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor,
-                            Object state) {
+  public void runInspection(
+    @Nonnull final AnalysisScope scope,
+    @Nonnull InspectionManager manager,
+    @Nonnull final GlobalInspectionContext globalContext,
+    @Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor,
+    @Nonnull Object state
+  ) {
     UnusedDeclarationInspectionState inspectionState = (UnusedDeclarationInspectionState)state;
 
     globalContext.getRefManager().iterate(new RefJavaVisitor() {
@@ -509,13 +511,9 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
                 getEntryPointsManager().addEntryPoint(refField, false);
               }
               else {
-                getJavaContext().enqueueFieldUsagesProcessor(refField, new GlobalJavaInspectionContext
-                  .UsagesProcessor() {
-                  @Override
-                  public boolean process(PsiReference psiReference) {
-                    getEntryPointsManager().addEntryPoint(refField, false);
-                    return false;
-                  }
+                getJavaContext().enqueueFieldUsagesProcessor(refField, psiReference -> {
+                  getEntryPointsManager().addEntryPoint(refField, false);
+                  return false;
                 });
                 requestAdded[0] = true;
               }
@@ -549,23 +547,21 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
             public void visitClass(@Nonnull final RefClass refClass) {
               myProcessedSuspicious.add(refClass);
               if (!refClass.isAnonymous()) {
-                getJavaContext().enqueueDerivedClassesProcessor(refClass,
-                                                                new GlobalJavaInspectionContext.DerivedClassesProcessor() {
-                                                                  @Override
-                                                                  public boolean process(PsiClass inheritor) {
-                                                                    getEntryPointsManager().addEntryPoint(refClass, false);
-                                                                    return false;
-                                                                  }
-                                                                });
-
-                getJavaContext().enqueueClassUsagesProcessor(refClass, new GlobalJavaInspectionContext
-                  .UsagesProcessor() {
-                  @Override
-                  public boolean process(PsiReference psiReference) {
+                getJavaContext().enqueueDerivedClassesProcessor(
+                  refClass,
+                  inheritor -> {
                     getEntryPointsManager().addEntryPoint(refClass, false);
                     return false;
                   }
-                });
+                );
+
+                getJavaContext().enqueueClassUsagesProcessor(
+                  refClass,
+                  psiReference -> {
+                    getEntryPointsManager().addEntryPoint(refClass, false);
+                    return false;
+                  }
+                );
                 requestAdded[0] = true;
               }
             }
@@ -596,12 +592,9 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
 
   private void enqueueMethodUsages(final RefMethod refMethod) {
     if (refMethod.getSuperMethods().isEmpty()) {
-      getJavaContext().enqueueMethodUsagesProcessor(refMethod, new GlobalJavaInspectionContext.UsagesProcessor() {
-        @Override
-        public boolean process(PsiReference psiReference) {
-          getEntryPointsManager().addEntryPoint(refMethod, false);
-          return false;
-        }
+      getJavaContext().enqueueMethodUsagesProcessor(refMethod, psiReference -> {
+        getEntryPointsManager().addEntryPoint(refMethod, false);
+        return false;
       });
     }
     else {
@@ -782,7 +775,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
 
   @Override
   @SuppressWarnings("unchecked")
-  public void initialize(@Nonnull GlobalInspectionContext context, Object state) {
+  public void initialize(@Nonnull GlobalInspectionContext context, @Nonnull Object state) {
     super.initialize(context, state);
     myContext = context;
     UnusedDeclarationInspectionState inspectionState = (UnusedDeclarationInspectionState)state;

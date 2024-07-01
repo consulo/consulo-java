@@ -30,7 +30,6 @@ import consulo.compiler.scope.FileSetCompileScope;
 import consulo.compiler.scope.ModuleCompileScope;
 import consulo.dataContext.DataContext;
 import consulo.language.editor.LangDataKeys;
-import consulo.language.editor.PlatformDataKeys;
 import consulo.language.file.FileTypeManager;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
@@ -69,7 +68,7 @@ public class ProcessAnnotationsAction extends CompileActionBase {
     if (module != null) {
       CompilerManager.getInstance(project).make(new ModuleCompileScope(module, false, true), filter, null);
     } else {
-      final FileSetCompileScope scope = getCompilableFiles(project, dataContext.getData(PlatformDataKeys.VIRTUAL_FILE_ARRAY));
+      final FileSetCompileScope scope = getCompilableFiles(project, dataContext.getData(VirtualFile.KEY_OF_ARRAY));
       if (scope != null) {
         CompilerManager.getInstance(project).make(scope, filter, null);
       }
@@ -109,7 +108,7 @@ public class ProcessAnnotationsAction extends CompileActionBase {
 
     presentation.setVisible(true);
     presentation.setTextValue(createPresentationText(""));
-    final FileSetCompileScope scope = getCompilableFiles(project, event.getData(PlatformDataKeys.VIRTUAL_FILE_ARRAY));
+    final FileSetCompileScope scope = getCompilableFiles(project, event.getData(VirtualFile.KEY_OF_ARRAY));
     if (moduleContext == null && scope == null) {
       presentation.setEnabled(false);
       return;
@@ -127,7 +126,7 @@ public class ProcessAnnotationsAction extends CompileActionBase {
           aPackage = JavaDirectoryService.getInstance().getPackage(directory);
         }
       } else {
-        PsiElement element = event.getData(LangDataKeys.PSI_ELEMENT);
+        PsiElement element = event.getData(PsiElement.KEY);
         if (element instanceof PsiJavaPackage javaPackage) {
           aPackage = javaPackage;
         }

@@ -31,6 +31,7 @@ import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
 import consulo.module.ModuleManager;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.action.Presentation;
@@ -55,6 +56,7 @@ public class CyclicDependenciesAction extends AnAction{
     myTitle = AnalysisScopeLocalize.actionCyclicDependencyTitle().get();
   }
 
+  @RequiredUIAccess
   public void update(AnActionEvent event) {
     Presentation presentation = event.getPresentation();
     presentation.setEnabled(
@@ -127,7 +129,7 @@ public class CyclicDependenciesAction extends AnAction{
       return new AnalysisScope(modulesArray);
     }
 
-    PsiElement psiTarget = dataContext.getData(LangDataKeys.PSI_ELEMENT);
+    PsiElement psiTarget = dataContext.getData(PsiElement.KEY);
     if (psiTarget instanceof PsiDirectory psiDirectory) {
       if (!psiDirectory.getManager().isInProject(psiDirectory)) return null;
       return new AnalysisScope(psiDirectory);

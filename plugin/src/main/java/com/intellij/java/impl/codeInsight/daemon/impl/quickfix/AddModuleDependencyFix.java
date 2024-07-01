@@ -19,6 +19,7 @@ import com.intellij.java.impl.codeInsight.daemon.impl.actions.AddImportAction;
 import com.intellij.java.impl.openapi.roots.JavaProjectModelModificationService;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorPopupHelper;
 import consulo.compiler.util.ModuleCompilerUtil;
@@ -37,6 +38,7 @@ import consulo.module.ui.awt.ModuleListCellRenderer;
 import consulo.project.Project;
 import consulo.ui.ex.awt.JBList;
 import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.ex.awt.popup.AWTPopupFactory;
 import consulo.ui.ex.popup.JBPopup;
 import consulo.ui.ex.popup.JBPopupFactory;
@@ -64,6 +66,7 @@ class AddModuleDependencyFix extends AddOrderEntryFix {
   private final List<PsiClass> myClasses;
   private final Set<Module> myModules;
 
+  @RequiredReadAction
   public AddModuleDependencyFix(Module currentModule, VirtualFile refVFile, List<PsiClass> classes, PsiReference reference) {
     super(reference);
     myCurrentModule = currentModule;
@@ -165,7 +168,7 @@ class AddModuleDependencyFix extends AddOrderEntryFix {
   private static boolean showCircularWarning(Project project, Pair<Module, Module> circle, Module classModule) {
     String message = JavaQuickFixBundle.message("orderEntry.fix.circular.dependency.warning", classModule.getName(), circle.getFirst().getName(), circle.getSecond().getName());
     String title = JavaQuickFixBundle.message("orderEntry.fix.title.circular.dependency.warning");
-    return Messages.showOkCancelDialog(project, message, title, Messages.getWarningIcon()) == Messages.OK;
+    return Messages.showOkCancelDialog(project, message, title, UIUtil.getWarningIcon()) == Messages.OK;
   }
 
   @Override

@@ -15,19 +15,20 @@
  */
 package com.intellij.java.impl.ide.util;
 
+import com.intellij.java.language.psi.PsiClass;
 import consulo.application.AllIcons;
-import consulo.logging.Logger;
 import consulo.colorScheme.EditorColorsManager;
 import consulo.colorScheme.EditorColorsScheme;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.ui.ex.awt.SimpleColoredComponent;
-import consulo.ui.ex.SimpleTextAttributes;
 import consulo.language.icon.IconDescriptorUpdaters;
+import consulo.logging.Logger;
+import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.ex.SimpleTextAttributes;
+import consulo.ui.ex.awt.SimpleColoredComponent;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class FQNameCellRenderer extends SimpleColoredComponent implements ListCellRenderer {
+public class FQNameCellRenderer extends SimpleColoredComponent implements ListCellRenderer<Object> {
   private final Font FONT;
   private static final Logger LOG = Logger.getInstance(FQNameCellRenderer.class);
 
@@ -37,17 +38,17 @@ public class FQNameCellRenderer extends SimpleColoredComponent implements ListCe
     setOpaque(true);
   }
 
+  @RequiredUIAccess
   public Component getListCellRendererComponent(
     JList list,
     Object value,
     int index,
     boolean isSelected,
-    boolean cellHasFocus){
-
+    boolean cellHasFocus
+  ) {
     clear();
 
-    if (value instanceof PsiClass) {
-      PsiClass aClass = (PsiClass)value;
+    if (value instanceof PsiClass aClass) {
       setIcon(IconDescriptorUpdaters.getIcon(aClass, 0));
       if (aClass.getQualifiedName() != null) {
         SimpleTextAttributes attributes;

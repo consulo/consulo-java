@@ -1,34 +1,24 @@
 package com.intellij.java.impl.util.xml.ui;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.util.EventObject;
-
-import javax.swing.AbstractAction;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JTable;
-import javax.swing.KeyStroke;
-
 import com.intellij.java.language.impl.JavaFileType;
+import com.intellij.java.language.impl.ui.JavaReferenceEditorUtil;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
 import consulo.document.Document;
-import consulo.project.Project;
-import consulo.ui.ex.UIBundle;
-import consulo.ui.ex.awt.FixedSizeButton;
-import consulo.util.lang.function.Conditions;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.editor.ui.awt.EditorTextField;
-import com.intellij.java.language.impl.ui.JavaReferenceEditorUtil;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.AbstractTableCellEditor;
+import consulo.ui.ex.awt.FixedSizeButton;
+import consulo.ui.ex.localize.UILocalize;
+import consulo.util.lang.function.Conditions;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.EventObject;
 
 /**
  * @author peter
@@ -57,6 +47,7 @@ public class PsiClassTableCellEditor extends AbstractTableCellEditor {
     return !(e instanceof MouseEvent) || ((MouseEvent)e).getClickCount() >= 2;
   }
 
+  @RequiredUIAccess
   public final Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
     final Document document = JavaReferenceEditorUtil.createDocument(value == null ? "" : (String)value, myProject, true);
     myEditor = new EditorTextField(document, myProject, JavaFileType.INSTANCE){
@@ -80,15 +71,19 @@ public class PsiClassTableCellEditor extends AbstractTableCellEditor {
     panel.add(myEditor);
     final FixedSizeButton button = new FixedSizeButton(myEditor);
     panel.add(button, BorderLayout.EAST);
-    button.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        TreeClassChooser chooser = TreeClassChooserFactory.getInstance(myProject)
-          .createInheritanceClassChooser(UIBundle.message("choose.class"), mySearchScope, null, true, true, Conditions.alwaysTrue());
-        chooser.showDialog();
-        final PsiClass psiClass = chooser.getSelected();
-        if (psiClass != null) {
-          myEditor.setText(psiClass.getQualifiedName());
-        }
+    button.addActionListener(e -> {
+      TreeClassChooser chooser = TreeClassChooserFactory.getInstance(myProject).createInheritanceClassChooser(
+        UILocalize.chooseClass().get(),
+        mySearchScope,
+        null,
+        true,
+        true,
+        Conditions.alwaysTrue()
+      );
+      chooser.showDialog();
+      final PsiClass psiClass = chooser.getSelected();
+      if (psiClass != null) {
+        myEditor.setText(psiClass.getQualifiedName());
       }
     });
     panel.addFocusListener(new FocusListener() {

@@ -30,17 +30,13 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
-import consulo.ui.ex.UIBundle;
-import consulo.ui.ex.awt.DialogWrapper;
-import consulo.ui.ex.awt.JBLabel;
-import consulo.ui.ex.awt.Messages;
-import consulo.ui.ex.awt.TextFieldWithBrowseButton;
-
+import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.ex.awt.*;
+import consulo.ui.ex.localize.UILocalize;
 import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 class ClassFilterEditorAddDialog extends DialogWrapper {
   private final Project myProject;
@@ -52,39 +48,59 @@ class ClassFilterEditorAddDialog extends DialogWrapper {
     super(project, true);
     myProject = project;
     myHelpId = helpId;
-    setTitle(UIBundle.message("class.filter.editor.add.dialog.title"));
+    setTitle(UILocalize.classFilterEditorAddDialogTitle());
     init();
   }
 
   protected JComponent createCenterPanel() {
     final JPanel panel = new JPanel(new GridBagLayout());
-    final JLabel header = new JLabel(UIBundle.message("label.class.filter.editor.add.dialog.filter.pattern"));
+    final JLabel header = new JLabel(UILocalize.labelClassFilterEditorAddDialogFilterPattern().get());
     myClassName = new TextFieldWithBrowseButton(new JTextField(35));
-    final JLabel iconLabel = new JBLabel(Messages.getQuestionIcon());
+    final JLabel iconLabel = new JBLabel(UIUtil.getQuestionIcon());
     
-    panel.add(header, new GridBagConstraints(1, 0, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(5, 10, 0, 0), 0, 0));
-    panel.add(myClassName, new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(5, 10, 0, 0), 0, 0));
-    panel.add(iconLabel, new GridBagConstraints(0, 0, 1, 2, 0.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(15, 0, 0, 0), 0, 0));
+    panel.add(
+      header,
+      new GridBagConstraints(
+        1, 0, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+        JBUI.insets(5, 10, 0, 0), 0, 0
+      )
+    );
+    panel.add(
+      myClassName,
+      new GridBagConstraints(
+        1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+        JBUI.insets(5, 10, 0, 0), 0, 0
+      )
+    );
+    panel.add(
+      iconLabel,
+      new GridBagConstraints(
+        0, 0, 1, 2, 0.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+        JBUI.insetsTop(15), 0, 0
+      )
+    );
 
-    myClassName.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        PsiClass currentClass = getSelectedClass();
-        TreeClassChooser chooser = TreeClassChooserFactory.getInstance(myProject).createNoInnerClassesScopeChooser(
-          UIBundle.message("class.filter.editor.choose.class.title"), GlobalSearchScope.allScope(myProject), null, null);
-        if (currentClass != null) {
-          PsiFile containingFile = currentClass.getContainingFile();
-          if (containingFile != null) {
-            PsiDirectory containingDirectory = containingFile.getContainingDirectory();
-            if (containingDirectory != null) {
-              chooser.selectDirectory(containingDirectory);
-            }
+    myClassName.addActionListener(e -> {
+      PsiClass currentClass = getSelectedClass();
+      TreeClassChooser chooser = TreeClassChooserFactory.getInstance(myProject).createNoInnerClassesScopeChooser(
+        UILocalize.classFilterEditorChooseClassTitle().get(),
+        GlobalSearchScope.allScope(myProject),
+        null,
+        null
+      );
+      if (currentClass != null) {
+        PsiFile containingFile = currentClass.getContainingFile();
+        if (containingFile != null) {
+          PsiDirectory containingDirectory = containingFile.getContainingDirectory();
+          if (containingDirectory != null) {
+            chooser.selectDirectory(containingDirectory);
           }
         }
-        chooser.showDialog();
-        PsiClass selectedClass = chooser.getSelected();
-        if (selectedClass != null) {
-          myClassName.setText(selectedClass.getQualifiedName());
-        }
+      }
+      chooser.showDialog();
+      PsiClass selectedClass = chooser.getSelected();
+      if (selectedClass != null) {
+        myClassName.setText(selectedClass.getQualifiedName());
       }
     });
 
@@ -102,6 +118,7 @@ class ClassFilterEditorAddDialog extends DialogWrapper {
     return JavaPsiFacade.getInstance(psiManager.getProject()).findClass(classQName, GlobalSearchScope.allScope(myProject));
   }
 
+  @RequiredUIAccess
   public JComponent getPreferredFocusedComponent() {
     return myClassName.getTextField();
   }
@@ -110,7 +127,7 @@ class ClassFilterEditorAddDialog extends DialogWrapper {
     return myClassName.getText();
   }
 
-  protected String getDimensionServiceKey(){
+  protected String getDimensionServiceKey() {
     return "#com.intellij.debugger.ui.breakpoints.BreakpointsConfigurationDialogFactory.BreakpointsConfigurationDialog.AddFieldBreakpointDialog";
   }
 

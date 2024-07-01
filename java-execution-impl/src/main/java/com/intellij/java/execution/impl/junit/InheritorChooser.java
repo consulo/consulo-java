@@ -15,8 +15,6 @@
  */
 package com.intellij.java.execution.impl.junit;
 
-import consulo.execution.action.ConfigurationContext;
-import consulo.execution.action.Location;
 import com.intellij.java.execution.impl.junit2.PsiMemberParameterizedLocation;
 import com.intellij.java.execution.impl.junit2.info.MethodLocation;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
@@ -26,20 +24,22 @@ import com.intellij.java.language.psi.PsiClassOwner;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.util.PsiClassUtil;
-import consulo.fileEditor.TextEditor;
-import consulo.language.editor.PlatformDataKeys;
 import consulo.application.ReadAction;
-import consulo.document.Document;
-import consulo.fileEditor.FileEditor;
 import consulo.application.progress.ProgressManager;
+import consulo.document.Document;
+import consulo.execution.action.ConfigurationContext;
+import consulo.execution.action.Location;
+import consulo.fileEditor.FileEditor;
+import consulo.fileEditor.TextEditor;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiFile;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.ColoredListCellRenderer;
 import consulo.ui.ex.awt.JBList;
 import consulo.ui.ex.awt.popup.AWTPopupFactory;
 import consulo.ui.ex.popup.JBPopupFactory;
-import consulo.util.lang.function.Condition;
-import consulo.language.psi.PsiDocumentManager;
-import consulo.language.psi.PsiFile;
 import consulo.util.collection.ArrayUtil;
+import consulo.util.lang.function.Condition;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -57,19 +57,28 @@ public class InheritorChooser {
     performRunnable.run();
   }
 
-  public boolean runMethodInAbstractClass(final ConfigurationContext context, final Runnable performRunnable, final PsiMethod psiMethod, final PsiClass containingClass) {
+  @RequiredUIAccess
+  public boolean runMethodInAbstractClass(
+    final ConfigurationContext context,
+    final Runnable performRunnable,
+    final PsiMethod psiMethod,
+    final PsiClass containingClass
+  ) {
     return runMethodInAbstractClass(context, performRunnable, psiMethod, containingClass, psiClass -> psiClass.hasModifierProperty(PsiModifier.ABSTRACT));
   }
 
-  public boolean runMethodInAbstractClass(final ConfigurationContext context,
-                                          final Runnable performRunnable,
-                                          final PsiMethod psiMethod,
-                                          final PsiClass containingClass,
-                                          final Condition<PsiClass> acceptAbstractCondition) {
+  @RequiredUIAccess
+  public boolean runMethodInAbstractClass(
+    final ConfigurationContext context,
+    final Runnable performRunnable,
+    final PsiMethod psiMethod,
+    final PsiClass containingClass,
+    final Condition<PsiClass> acceptAbstractCondition
+  ) {
     if (containingClass != null && acceptAbstractCondition.value(containingClass)) {
       final Location location = context.getLocation();
-      if (location instanceof MethodLocation) {
-        final PsiClass aClass = ((MethodLocation) location).getContainingClass();
+      if (location instanceof MethodLocation methodLocation) {
+        final PsiClass aClass = methodLocation.getContainingClass();
         if (aClass != null && !aClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
           return false;
         }
@@ -83,7 +92,8 @@ public class InheritorChooser {
         final boolean isJUnit5 = ReadAction.compute(() -> JUnitUtil.isJUnit5(containingClass));
         ClassInheritorsSearch.search(containingClass).forEach(aClass ->
         {
-          if (isJUnit5 && JUnitUtil.isJUnit5TestClass(aClass, true) || PsiClassUtil.isRunnableClass(aClass, true, true)) {
+          if (isJUnit5 && JUnitUtil.isJUnit5TestClass(aClass, true)
+            || PsiClassUtil.isRunnableClass(aClass, true, true)) {
             classes.add(aClass);
           }
           return true;
@@ -99,12 +109,12 @@ public class InheritorChooser {
       if (classes.isEmpty()) {
         return false;
       }
-      final FileEditor fileEditor = context.getDataContext().getData(PlatformDataKeys.FILE_EDITOR);
-      if (fileEditor instanceof TextEditor) {
-        final Document document = ((TextEditor) fileEditor).getEditor().getDocument();
+      final FileEditor fileEditor = context.getDataContext().getData(FileEditor.KEY);
+      if (fileEditor instanceof TextEditor textEditor) {
+        final Document document = textEditor.getEditor().getDocument();
         final PsiFile containingFile = PsiDocumentManager.getInstance(context.getProject()).getPsiFile(document);
-        if (containingFile instanceof PsiClassOwner) {
-          final List<PsiClass> psiClasses = new ArrayList<>(Arrays.asList(((PsiClassOwner) containingFile).getClasses()));
+        if (containingFile instanceof PsiClassOwner classOwner) {
+          final List<PsiClass> psiClasses = new ArrayList<>(Arrays.asList(classOwner.getClasses()));
           psiClasses.retainAll(classes);
           if (psiClasses.size() == 1) {
             runForClass(psiClasses.get(0), psiMethod, context, performRunnable);
@@ -127,7 +137,7 @@ public class InheritorChooser {
 
       //suggest to run all inherited tests
       classes.add(0, null);
-      final JBList list = new JBList(classes);
+      final JBList<PsiClass> list = new JBList<>(classes);
       list.setCellRenderer(renderer);
       ((AWTPopupFactory) JBPopupFactory.getInstance()).createListPopupBuilder(list)
           .setItemChoosenCallback(() ->
@@ -149,8 +159,8 @@ public class InheritorChooser {
     classes.remove(null);
     if (values.length == 1) {
       final Object value = values[0];
-      if (value instanceof PsiClass) {
-        runForClass((PsiClass) value, psiMethod, context, performRunnable);
+      if (value instanceof PsiClass psiClass) {
+        runForClass(psiClass, psiMethod, context, performRunnable);
       } else {
         runForClasses(classes, psiMethod, context, performRunnable);
       }

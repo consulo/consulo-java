@@ -31,11 +31,11 @@ import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.search.PackageScope;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.application.Result;
 import consulo.document.Document;
 import consulo.document.util.TextRange;
 import consulo.ide.IdeView;
-import consulo.language.editor.LangDataKeys;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.action.SelectWordUtil;
 import consulo.language.editor.ui.awt.EditorTextField;
@@ -43,6 +43,7 @@ import consulo.language.psi.*;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.awt.DialogWrapper;
@@ -66,6 +67,7 @@ public class GenerateVisitorByHierarchyAction extends AnAction {
     super("Generate Hierarchy Visitor");
   }
 
+  @RequiredUIAccess
   public void actionPerformed(AnActionEvent e) {
     final Ref<String> visitorNameRef = Ref.create("MyVisitor");
     final Ref<PsiClass> parentClassRef = Ref.create(null);
@@ -73,8 +75,8 @@ public class GenerateVisitorByHierarchyAction extends AnAction {
     assert project != null;
     final PsiNameHelper helper = PsiNameHelper.getInstance(project);
     final PackageChooserDialog dialog = new PackageChooserDialog("Choose Target Package and Hierarchy Root Class", project) {
-
       @Override
+      @RequiredUIAccess
       protected ValidationInfo doValidate() {
         PsiDocumentManager.getInstance(project).commitAllDocuments();
         if (!helper.isQualifiedName(visitorNameRef.get())) {
@@ -89,6 +91,7 @@ public class GenerateVisitorByHierarchyAction extends AnAction {
         return super.doValidate();
       }
 
+      @RequiredUIAccess
       protected JComponent createCenterPanel() {
         final JPanel panel = new JPanel(new BorderLayout());
         panel.add(super.createCenterPanel(), BorderLayout.CENTER);
@@ -134,7 +137,7 @@ public class GenerateVisitorByHierarchyAction extends AnAction {
         return labeledComponent;
       }
     };
-    final PsiElement element = e.getData(LangDataKeys.PSI_ELEMENT);
+    final PsiElement element = e.getData(PsiElement.KEY);
     if (element instanceof PsiJavaPackage javaPackage) {
       dialog.selectPackage(javaPackage.getQualifiedName());
     }
@@ -172,6 +175,7 @@ public class GenerateVisitorByHierarchyAction extends AnAction {
     return visitorQName;
   }
 
+  @RequiredUIAccess
   public void update(final AnActionEvent e) {
     e.getPresentation().setEnabled(e.getData(Project.KEY) != null);
   }
@@ -223,6 +227,7 @@ public class GenerateVisitorByHierarchyAction extends AnAction {
     }
     final int finalDetectedPrefix = detectClassPrefix(classes.keySet()).length();
     new WriteCommandAction(project, PsiUtilCore.toPsiFileArray(psiFiles)) {
+      @RequiredWriteAction
       protected void run(final Result result) throws Throwable {
         if (visitorClass == null) {
           final String shortClassName = PsiNameHelper.getShortClassName(visitorName);
@@ -244,6 +249,7 @@ public class GenerateVisitorByHierarchyAction extends AnAction {
   }
 
   @Nonnull
+  @RequiredReadAction
   private static String detectClassPrefix(Collection<PsiClass> classes) {
     String detectedPrefix = "";
     List<TextRange> range = new SmartList<>();
@@ -288,7 +294,8 @@ public class GenerateVisitorByHierarchyAction extends AnAction {
       toProcess.addAll(pathClasses);
       final StringBuilder methodText = new StringBuilder();
 
-      methodText.append("public void visit").append(psiClass.getName().substring(classPrefix)).append("(final ").append(psiClass.getQualifiedName()).append(" o) {");
+      methodText.append("public void visit").append(psiClass.getName().substring(classPrefix))
+        .append("(final ").append(psiClass.getQualifiedName()).append(" o) {");
       boolean first = true;
       for (PsiClass pathClass : pathClasses) {
         if (first) {
@@ -313,7 +320,11 @@ public class GenerateVisitorByHierarchyAction extends AnAction {
       accept.replace(method);
     }
     else {
-      GenerateMembersUtil.insertMembersAtOffset(implementor.getContainingFile(), implementor.getLastChild().getTextOffset(), Collections.<GenerationInfo>singletonList(new PsiGenerationInfo<>(method)));
+      GenerateMembersUtil.insertMembersAtOffset(
+        implementor.getContainingFile(),
+        implementor.getLastChild().getTextOffset(),
+        Collections.<GenerationInfo>singletonList(new PsiGenerationInfo<>(method))
+      );
     }
   }
 }

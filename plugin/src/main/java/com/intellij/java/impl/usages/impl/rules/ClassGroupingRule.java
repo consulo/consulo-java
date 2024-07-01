@@ -18,12 +18,12 @@ package com.intellij.java.impl.usages.impl.rules;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiImportList;
 import com.intellij.java.language.psi.PsiJavaFile;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.dataContext.TypeSafeDataProvider;
 import consulo.ide.impl.idea.usages.impl.rules.FileGroupingRule;
 import consulo.language.inject.InjectedLanguageManager;
 import consulo.language.editor.util.NavigationItemFileStatus;
 import consulo.dataContext.DataSink;
-import consulo.language.editor.LangDataKeys;
 import consulo.component.util.Iconable;
 import consulo.usage.Usage;
 import consulo.usage.rule.PsiElementUsage;
@@ -48,6 +48,7 @@ import jakarta.annotation.Nonnull;
  * @author max
  */
 public class ClassGroupingRule implements UsageGroupingRule {
+  @RequiredReadAction
   @Override
   public UsageGroup groupUsage(@Nonnull Usage usage) {
     if (!(usage instanceof PsiElementUsage)) {
@@ -99,6 +100,7 @@ public class ClassGroupingRule implements UsageGroupingRule {
     return null;
   }
 
+  @RequiredReadAction
   private static String getFileNameWithoutExtension(final PsiFile file) {
     final String name = file.getName();
     final int index = name.lastIndexOf('.');
@@ -111,6 +113,7 @@ public class ClassGroupingRule implements UsageGroupingRule {
     private final String myQName;
     private final Image myIcon;
 
+    @RequiredReadAction
     public ClassUsageGroup(@Nonnull PsiClass aClass) {
       myQName = aClass.getQualifiedName();
       myText = createText(aClass);
@@ -122,6 +125,7 @@ public class ClassGroupingRule implements UsageGroupingRule {
     public void update() {
     }
 
+    @RequiredReadAction
     private static String createText(PsiClass aClass) {
       String text = aClass.getName();
       PsiClass containingClass = aClass.getContainingClass();
@@ -144,15 +148,18 @@ public class ClassGroupingRule implements UsageGroupingRule {
     }
 
     @Override
+    @RequiredReadAction
     public FileStatus getFileStatus() {
       return isValid() ? NavigationItemFileStatus.get(getPsiClass()) : null;
     }
 
+    @RequiredReadAction
     private PsiClass getPsiClass() {
       return (PsiClass) myClassPointer.getElement();
     }
 
     @Override
+    @RequiredReadAction
     public boolean isValid() {
       PsiClass psiClass = getPsiClass();
       return psiClass != null && psiClass.isValid();
@@ -163,10 +170,11 @@ public class ClassGroupingRule implements UsageGroupingRule {
     }
 
     public boolean equals(Object object) {
-      return object instanceof ClassUsageGroup && myQName.equals(((ClassUsageGroup) object).myQName);
+      return object instanceof ClassUsageGroup classUsageGroup && myQName.equals(classUsageGroup.myQName);
     }
 
     @Override
+    @RequiredReadAction
     public void navigate(boolean focus) throws UnsupportedOperationException {
       if (canNavigate()) {
         getPsiClass().navigate(focus);
@@ -174,11 +182,13 @@ public class ClassGroupingRule implements UsageGroupingRule {
     }
 
     @Override
+    @RequiredReadAction
     public boolean canNavigate() {
       return isValid();
     }
 
     @Override
+    @RequiredReadAction
     public boolean canNavigateToSource() {
       return canNavigate();
     }
@@ -189,10 +199,11 @@ public class ClassGroupingRule implements UsageGroupingRule {
     }
 
     @Override
+    @RequiredReadAction
     public void calcData(final Key<?> key, final DataSink sink) {
       if (!isValid()) return;
-      if (LangDataKeys.PSI_ELEMENT == key) {
-        sink.put(LangDataKeys.PSI_ELEMENT, getPsiClass());
+      if (PsiElement.KEY == key) {
+        sink.put(PsiElement.KEY, getPsiClass());
       }
       if (UsageView.USAGE_INFO_KEY == key) {
         PsiClass psiClass = getPsiClass();

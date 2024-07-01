@@ -31,7 +31,7 @@ import consulo.language.editor.ui.awt.ReferenceEditorWithBrowseButton;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
-import consulo.ui.ex.UIBundle;
+import consulo.ui.ex.localize.UILocalize;
 import consulo.xml.util.xml.DomElement;
 import consulo.xml.util.xml.GenericDomValue;
 import consulo.xml.util.xml.ui.DomWrapper;
@@ -40,8 +40,6 @@ import consulo.xml.util.xml.ui.PsiClassPanel;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * @author peter
@@ -64,7 +62,8 @@ public class PsiClassControl extends EditorTextFieldControl<PsiClassPanel> {
     if (boundedComponent == null) {
       boundedComponent = new PsiClassPanel();
     }
-    ReferenceEditorWithBrowseButton editor = JavaReferenceEditorUtil.createReferenceEditorWithBrowseButton(null, "", project, true);
+    ReferenceEditorWithBrowseButton editor =
+      JavaReferenceEditorUtil.createReferenceEditorWithBrowseButton(null, "", project, true);
     Document document = editor.getChildComponent().getDocument();
     PsiCodeFragmentImpl fragment = (PsiCodeFragmentImpl) PsiDocumentManager.getInstance(project).getPsiFile(document);
     assert fragment != null;
@@ -73,43 +72,41 @@ public class PsiClassControl extends EditorTextFieldControl<PsiClassPanel> {
     return initReferenceEditorWithBrowseButton(boundedComponent, editor, this);
   }
 
-  protected static <T extends JPanel> T initReferenceEditorWithBrowseButton(final T boundedComponent,
-                                                                            final ReferenceEditorWithBrowseButton editor,
-                                                                            final EditorTextFieldControl control) {
+  protected static <T extends JPanel> T initReferenceEditorWithBrowseButton(
+    final T boundedComponent,
+    final ReferenceEditorWithBrowseButton editor,
+    final EditorTextFieldControl control
+  ) {
     boundedComponent.removeAll();
     boundedComponent.add(editor);
     final GlobalSearchScope resolveScope = control.getDomWrapper().getResolveScope();
-    editor.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-
-        final DomElement domElement = control.getDomElement();
-        ExtendClass extend = domElement.getAnnotation(ExtendClass.class);
-        PsiClass baseClass = null;
-        ClassFilter filter = null;
-        if (extend != null) {
-          baseClass = JavaPsiFacade.getInstance(control.getProject()).findClass(extend.value(), resolveScope);
-          if (extend.instantiatable()) {
-            filter = ClassFilter.INSTANTIABLE;
-          }
+    editor.addActionListener(e -> {
+      final DomElement domElement = control.getDomElement();
+      ExtendClass extend = domElement.getAnnotation(ExtendClass.class);
+      PsiClass baseClass = null;
+      ClassFilter filter = null;
+      if (extend != null) {
+        baseClass = JavaPsiFacade.getInstance(control.getProject()).findClass(extend.value(), resolveScope);
+        if (extend.instantiatable()) {
+          filter = ClassFilter.INSTANTIABLE;
         }
+      }
 
-        PsiClass initialClass = null;
-        if (domElement instanceof GenericDomValue) {
-          final Object value = ((GenericDomValue) domElement).getValue();
-          if (value instanceof PsiClass)
-            initialClass = (PsiClass) value;
-        }
+      PsiClass initialClass = null;
+      if (domElement instanceof GenericDomValue) {
+        final Object value = ((GenericDomValue) domElement).getValue();
+        if (value instanceof PsiClass)
+          initialClass = (PsiClass) value;
+      }
 
-        TreeClassChooser chooser = TreeClassChooserFactory.getInstance(control.getProject())
-            .createInheritanceClassChooser(UIBundle.message("choose.class"), resolveScope, baseClass, initialClass, filter);
-        chooser.showDialog();
-        final PsiClass psiClass = chooser.getSelected();
-        if (psiClass != null) {
-          control.setValue(psiClass.getQualifiedName());
-        }
+      TreeClassChooser chooser = TreeClassChooserFactory.getInstance(control.getProject())
+          .createInheritanceClassChooser(UILocalize.chooseClass().get(), resolveScope, baseClass, initialClass, filter);
+      chooser.showDialog();
+      final PsiClass psiClass = chooser.getSelected();
+      if (psiClass != null) {
+        control.setValue(psiClass.getQualifiedName());
       }
     });
     return boundedComponent;
   }
-
 }

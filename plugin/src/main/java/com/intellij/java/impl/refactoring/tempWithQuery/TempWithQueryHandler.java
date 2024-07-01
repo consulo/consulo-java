@@ -25,7 +25,6 @@ import com.intellij.java.language.psi.PsiDeclarationStatement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLocalVariable;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorColors;
 import consulo.codeEditor.ScrollType;
@@ -33,8 +32,6 @@ import consulo.colorScheme.EditorColorsManager;
 import consulo.colorScheme.TextAttributes;
 import consulo.dataContext.DataContext;
 import consulo.language.codeStyle.PostprocessReformattingAspect;
-import consulo.language.editor.LangDataKeys;
-import consulo.language.editor.PlatformDataKeys;
 import consulo.language.editor.TargetElementUtil;
 import consulo.language.editor.TargetElementUtilExtender;
 import consulo.language.editor.highlight.HighlightManager;
@@ -52,8 +49,8 @@ import consulo.project.Project;
 import consulo.project.ui.wm.WindowManager;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.undoRedo.CommandProcessor;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -64,8 +61,12 @@ public class TempWithQueryHandler implements RefactoringActionHandler {
 
   @RequiredUIAccess
   public void invoke(@Nonnull final Project project, final Editor editor, PsiFile file, DataContext dataContext) {
-    PsiElement element = TargetElementUtil.findTargetElement(editor, Set.of(TargetElementUtilExtender.ELEMENT_NAME_ACCEPTED,
-        TargetElementUtilExtender.REFERENCED_ELEMENT_ACCEPTED, TargetElementUtilExtender.LOOKUP_ITEM_ACCEPTED));
+    Set<String> flags = Set.of(
+      TargetElementUtilExtender.ELEMENT_NAME_ACCEPTED,
+      TargetElementUtilExtender.REFERENCED_ELEMENT_ACCEPTED,
+      TargetElementUtilExtender.LOOKUP_ITEM_ACCEPTED
+    );
+    PsiElement element = TargetElementUtil.findTargetElement(editor, flags);
     editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
     if (!(element instanceof PsiLocalVariable)) {
       String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("error.wrong.caret.position.local.name"));
@@ -76,6 +77,7 @@ public class TempWithQueryHandler implements RefactoringActionHandler {
     invokeOnVariable(file, project, (PsiLocalVariable) element, editor);
   }
 
+  @RequiredUIAccess
   private static void invokeOnVariable(final PsiFile file, final Project project, final PsiLocalVariable local, final Editor editor) {
     if (!CommonRefactoringUtil.checkReadOnlyStatus(project, file)) {
       return;
@@ -89,7 +91,8 @@ public class TempWithQueryHandler implements RefactoringActionHandler {
       return;
     }
 
-    final PsiReference[] refs = ReferencesSearch.search(local, GlobalSearchScope.projectScope(project), false).toArray(new PsiReference[0]);
+    final PsiReference[] refs = ReferencesSearch.search(local, GlobalSearchScope.projectScope(project), false)
+      .toArray(new PsiReference[0]);
 
     if (refs.length == 0) {
       String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("variable.is.never.used", localName));
@@ -98,7 +101,7 @@ public class TempWithQueryHandler implements RefactoringActionHandler {
     }
 
     final HighlightManager highlightManager = HighlightManager.getInstance(project);
-    ArrayList<PsiReference> array = new ArrayList<PsiReference>();
+    ArrayList<PsiReference> array = new ArrayList<>();
     EditorColorsManager manager = EditorColorsManager.getInstance();
     final TextAttributes attributes = manager.getGlobalScheme().getAttributes(EditorColors.SEARCH_RESULT_ATTRIBUTES);
     for (PsiReference ref : refs) {
@@ -136,53 +139,46 @@ public class TempWithQueryHandler implements RefactoringActionHandler {
       return;
     }
 
-
     if (processor.showDialog()) {
-      CommandProcessor.getInstance().executeCommand(project, new Runnable() {
-        public void run() {
-          final Runnable action = new Runnable() {
-            public void run() {
-              try {
-                processor.doRefactoring();
+      CommandProcessor.getInstance().executeCommand(project, () -> {
+        final Runnable action = () -> {
+          try {
+            processor.doRefactoring();
 
-                local.normalizeDeclaration();
+            local.normalizeDeclaration();
 
-                PsiExpression initializer = local.getInitializer();
+            PsiExpression initializer1 = local.getInitializer();
 
-                PsiExpression[] exprs = new PsiExpression[refs.length];
-                for (int idx = 0; idx < refs.length; idx++) {
-                  PsiElement ref = refs[idx].getElement();
-                  exprs[idx] = (PsiExpression) ref.replace(initializer);
-                }
-                PsiDeclarationStatement declaration = (PsiDeclarationStatement) local.getParent();
-                declaration.delete();
-
-                highlightManager.addOccurrenceHighlights(editor, exprs, attributes, true, null);
-              } catch (IncorrectOperationException e) {
-                LOG.error(e);
-              }
+            PsiExpression[] exprs = new PsiExpression[refs.length];
+            for (int idx = 0; idx < refs.length; idx++) {
+              PsiElement ref = refs[idx].getElement();
+              exprs[idx] = (PsiExpression) ref.replace(initializer1);
             }
-          };
+            PsiDeclarationStatement declaration = (PsiDeclarationStatement) local.getParent();
+            declaration.delete();
 
-          PostprocessReformattingAspect.getInstance(project).postponeFormattingInside(new Runnable() {
-            public void run() {
-              ApplicationManager.getApplication().runWriteAction(action);
-              DuplicatesImpl.processDuplicates(processor, project, editor);
-            }
-          });
-        }
+            highlightManager.addOccurrenceHighlights(editor, exprs, attributes, true, null);
+          } catch (IncorrectOperationException e) {
+            LOG.error(e);
+          }
+        };
+
+        PostprocessReformattingAspect.getInstance(project).postponeFormattingInside(() -> {
+          project.getApplication().runWriteAction(action);
+          DuplicatesImpl.processDuplicates(processor, project, editor);
+        });
       }, REFACTORING_NAME, null);
     }
-
 
     WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringBundle.message("press.escape.to.remove.the.highlighting"));
   }
 
+  @RequiredUIAccess
   public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
     if (elements.length == 1 && elements[0] instanceof PsiLocalVariable) {
       if (dataContext != null) {
-        final PsiFile file = dataContext.getData(LangDataKeys.PSI_FILE);
-        final Editor editor = dataContext.getData(PlatformDataKeys.EDITOR);
+        final PsiFile file = dataContext.getData(PsiFile.KEY);
+        final Editor editor = dataContext.getData(Editor.KEY);
         if (file != null && editor != null) {
           invokeOnVariable(file, project, (PsiLocalVariable) elements[0], editor);
         }

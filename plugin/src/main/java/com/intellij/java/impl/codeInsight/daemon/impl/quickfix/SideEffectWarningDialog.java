@@ -15,11 +15,12 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
+import consulo.annotation.access.RequiredReadAction;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.project.Project;
 import consulo.ui.ex.awt.DialogWrapper;
-import consulo.ui.ex.awt.Messages;
 import com.intellij.java.language.psi.PsiVariable;
 import consulo.ui.ex.awt.UIUtil;
 
@@ -53,13 +54,12 @@ public class SideEffectWarningDialog extends DialogWrapper {
     myCanCopeWithSideEffects = canCopeWithSideEffects;
     setTitle(JavaQuickFixBundle.message("side.effects.warning.dialog.title"));
     init();
-
   }
 
   @Nonnull
   @Override
   protected Action[] createActions() {
-    List<AbstractAction> actions = new ArrayList<AbstractAction>();
+    List<AbstractAction> actions = new ArrayList<>();
     myRemoveAllAction = new AbstractAction() {
       {
         UIUtil.setActionNameAndMnemonic(JavaQuickFixBundle.message("side.effect.action.remove"), this);
@@ -119,22 +119,26 @@ public class SideEffectWarningDialog extends DialogWrapper {
   }
 
   @Override
+  @RequiredUIAccess
   protected JComponent createCenterPanel() {
     final JPanel panel = new JPanel(new BorderLayout());
     final String text = sideEffectsDescription();
     final JLabel label = new JLabel(text);
-    label.setIcon(TargetAWT.to(Messages.getWarningIcon()));
+    label.setIcon(TargetAWT.to(UIUtil.getWarningIcon()));
     panel.add(label, BorderLayout.NORTH);
     return panel;
   }
 
+  @RequiredReadAction
   protected String sideEffectsDescription() {
     if (myCanCopeWithSideEffects) {
-      return JavaQuickFixBundle.message("side.effect.message2",
-                                    myVariable.getName(),
-                                    myVariable.getType().getPresentableText(),
-                                    myBeforeText,
-                                    myAfterText);
+      return JavaQuickFixBundle.message(
+        "side.effect.message2",
+        myVariable.getName(),
+        myVariable.getType().getPresentableText(),
+        myBeforeText,
+        myAfterText
+      );
     }
     else {
       return JavaQuickFixBundle.message("side.effect.message1", myVariable.getName());

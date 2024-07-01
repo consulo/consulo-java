@@ -21,6 +21,7 @@ import com.intellij.java.debugger.ui.classFilter.ClassFilter;
 import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.image.Image;
 
 /**
@@ -34,15 +35,18 @@ public class InstanceFilterEditor extends ClassFilterEditor {
   }
 
   protected void addClassFilter() {
-    String idString = Messages.showInputDialog(myProject, DebuggerBundle.message("add.instance.filter.dialog.prompt"), DebuggerBundle.message("add.instance.filter.dialog.title"), Messages.getQuestionIcon());
+    String idString = Messages.showInputDialog(myProject,
+      DebuggerBundle.message("add.instance.filter.dialog.prompt"),
+      DebuggerBundle.message("add.instance.filter.dialog.title"),
+      UIUtil.getQuestionIcon()
+    );
     if (idString != null) {
       ClassFilter filter = createFilter(idString);
-      if(filter != null){
+      if (filter != null) {
         myTableModel.addRow(filter);
         int row = myTableModel.getRowCount() - 1;
         myTable.getSelectionModel().setSelectionInterval(row, row);
         myTable.scrollRectToVisible(myTable.getCellRect(row, 0, true));
-
       }
       myTable.requestFocus();
     }
@@ -67,7 +71,11 @@ public class InstanceFilterEditor extends ClassFilterEditor {
       Long.parseLong(pattern);
       return super.createFilter(pattern);
     } catch (NumberFormatException e) {
-      Messages.showMessageDialog(this, DebuggerBundle.message("add.instance.filter.dialog.error.numeric.value.expected"), DebuggerBundle.message("add.instance.filter.dialog.title"), Messages.getErrorIcon());
+      Messages.showMessageDialog(this,
+        DebuggerBundle.message("add.instance.filter.dialog.error.numeric.value.expected"),
+        DebuggerBundle.message("add.instance.filter.dialog.title"),
+        UIUtil.getErrorIcon()
+      );
       return null;
     }
   }

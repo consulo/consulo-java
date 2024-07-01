@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.cyclicDependencies.actions;
 
-import consulo.language.editor.scope.AnalysisScope;
-import consulo.language.editor.scope.AnalysisScopeBundle;
-import consulo.ide.impl.idea.analysis.PerformAnalysisInBackgroundOption;
 import com.intellij.java.impl.cyclicDependencies.CyclicDependenciesBuilder;
 import com.intellij.java.impl.cyclicDependencies.ui.CyclicDependenciesPanel;
 import consulo.application.progress.ProgressManager;
-import consulo.project.Project;
+import consulo.ide.impl.idea.analysis.PerformAnalysisInBackgroundOption;
 import consulo.ide.impl.idea.packageDependencies.DependenciesToolWindow;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.language.editor.scope.localize.AnalysisScopeLocalize;
+import consulo.project.Project;
 import consulo.ui.ex.content.Content;
 import consulo.ui.ex.content.ContentFactory;
 
@@ -43,27 +43,25 @@ public class CyclicDependenciesHandler {
 
   public void analyze() {
     final CyclicDependenciesBuilder builder = new CyclicDependenciesBuilder(myProject, myScope);
-    final Runnable process = new Runnable() {
-      public void run() {
-        builder.analyze();
-      }
-    };
-    final Runnable successRunnable = new Runnable() {
-      public void run() {
-        SwingUtilities.invokeLater(new Runnable() {
-          public void run() {
-            CyclicDependenciesPanel panel = new CyclicDependenciesPanel(myProject, builder);
-            Content content = ContentFactory.SERVICE.getInstance().createContent(panel, AnalysisScopeBundle.message(
-              "action.analyzing.cyclic.dependencies.in.scope", builder.getScope().getDisplayName()), false);
-            content.setDisposer(panel);
-            panel.setContent(content);
-            DependenciesToolWindow.getInstance(myProject).addContent(content);
-          }
-        });
-      }
-    };
-    ProgressManager.getInstance()
-      .runProcessWithProgressAsynchronously(myProject, AnalysisScopeBundle.message("package.dependencies.progress.title"),
-                                            process, successRunnable, null, new PerformAnalysisInBackgroundOption(myProject));
+    final Runnable process = builder::analyze;
+    final Runnable successRunnable = () -> SwingUtilities.invokeLater(() -> {
+      CyclicDependenciesPanel panel = new CyclicDependenciesPanel(myProject, builder);
+      Content content = ContentFactory.SERVICE.getInstance().createContent(
+        panel,
+        AnalysisScopeLocalize.actionAnalyzingCyclicDependenciesInScope(builder.getScope().getDisplayName()).get(),
+        false
+      );
+      content.setDisposer(panel);
+      panel.setContent(content);
+      DependenciesToolWindow.getInstance(myProject).addContent(content);
+    });
+    ProgressManager.getInstance().runProcessWithProgressAsynchronously(
+      myProject,
+      AnalysisScopeLocalize.packageDependenciesProgressTitle().get(),
+      process,
+      successRunnable,
+      null,
+      new PerformAnalysisInBackgroundOption(myProject)
+    );
   }
 }

@@ -24,20 +24,22 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.util.ClassFilter;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
-import consulo.ui.ex.UIBundle;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.awt.*;
 import consulo.ui.ex.awt.table.JBTable;
 import consulo.ui.ex.awt.util.TableUtil;
+import consulo.ui.ex.localize.UILocalize;
 import consulo.ui.image.Image;
 import consulo.util.collection.ContainerUtil;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.*;
@@ -69,7 +71,8 @@ public class ClassFilterEditor extends JPanel implements ComponentWithEmptyText 
     final ToolbarDecorator decorator = ToolbarDecorator.createDecorator(myTable)
       .addExtraAction(new AnActionButton(getAddButtonText(), getAddButtonIcon()) {
         @Override
-        public void actionPerformed(AnActionEvent e) {
+        @RequiredUIAccess
+        public void actionPerformed(@Nonnull AnActionEvent e) {
           addClassFilter();
         }
 
@@ -82,7 +85,8 @@ public class ClassFilterEditor extends JPanel implements ComponentWithEmptyText 
     if (addPatternButtonVisible()) {
       decorator.addExtraAction(new AnActionButton(getAddPatternButtonText(), getAddPatternButtonIcon()) {
         @Override
-        public void actionPerformed(AnActionEvent e) {
+        @RequiredUIAccess
+        public void actionPerformed(@Nonnull AnActionEvent e) {
           addPatternFilter();
         }
 
@@ -93,13 +97,13 @@ public class ClassFilterEditor extends JPanel implements ComponentWithEmptyText 
         }
       });
     }
-    add(decorator.setRemoveAction(new AnActionButtonRunnable() {
-      @Override
-      public void run(AnActionButton button) {
-        TableUtil.removeSelectedItems(myTable);
-      }
-    }).setButtonComparator(getAddButtonText(), getAddPatternButtonText(), "Remove")
-          .disableUpDownActions().createPanel(), BorderLayout.CENTER);
+    add(
+      decorator.setRemoveAction(button -> TableUtil.removeSelectedItems(myTable))
+        .setButtonComparator(getAddButtonText(), getAddPatternButtonText(), "Remove")
+        .disableUpDownActions()
+        .createPanel(),
+      BorderLayout.CENTER
+    );
 
     myChooserFilter = classFilter;
     myProject = project;
@@ -121,7 +125,7 @@ public class ClassFilterEditor extends JPanel implements ComponentWithEmptyText 
     column.setCellRenderer(new EnabledCellRenderer(myTable.getDefaultRenderer(Boolean.class)));
     columnModel.getColumn(FilterTableModel.FILTER).setCellRenderer(new FilterCellRenderer());
 
-    getEmptyText().setText(UIBundle.message("no.patterns"));
+    getEmptyText().setText(UILocalize.noPatterns().get());
   }
 
   @Nonnull
@@ -131,11 +135,11 @@ public class ClassFilterEditor extends JPanel implements ComponentWithEmptyText 
   }
 
   protected String getAddButtonText() {
-    return UIBundle.message("button.add.class");
+    return UILocalize.buttonAddClass().get();
   }
 
   protected String getAddPatternButtonText() {
-    return UIBundle.message("button.add.pattern");
+    return UILocalize.buttonAddPattern().get();
   }
 
   protected Image getAddButtonIcon() {
@@ -173,7 +177,7 @@ public class ClassFilterEditor extends JPanel implements ComponentWithEmptyText 
   }
 
   protected final class FilterTableModel extends AbstractTableModel implements ItemRemovable {
-    private final List<com.intellij.java.debugger.ui.classFilter.ClassFilter> myFilters = new LinkedList<com.intellij.java.debugger.ui.classFilter.ClassFilter>();
+    private final List<com.intellij.java.debugger.ui.classFilter.ClassFilter> myFilters = new LinkedList<>();
     public static final int CHECK_MARK = 0;
     public static final int FILTER = 1;
 
@@ -235,7 +239,7 @@ public class ClassFilterEditor extends JPanel implements ComponentWithEmptyText 
         filter.setPattern(aValue != null ? aValue.toString() : "");
       }
       else if (columnIndex == CHECK_MARK) {
-        filter.setEnabled(aValue == null || ((Boolean)aValue).booleanValue());
+        filter.setEnabled(aValue == null || (Boolean)aValue);
       }
 //      fireTableCellUpdated(rowIndex, columnIndex);
       fireTableRowsUpdated(rowIndex, rowIndex);
@@ -259,8 +263,14 @@ public class ClassFilterEditor extends JPanel implements ComponentWithEmptyText 
   }
 
   private class FilterCellRenderer extends DefaultTableCellRenderer {
-    public Component getTableCellRendererComponent(JTable table, Object value,
-                                                   boolean isSelected, boolean hasFocus, int row, int column) {
+    public Component getTableCellRendererComponent(
+      JTable table,
+      Object value,
+      boolean isSelected,
+      boolean hasFocus,
+      int row,
+      int column
+    ) {
       Color color = UIUtil.getTableFocusCellBackground();
       UIManager.put(UIUtil.TABLE_FOCUS_CELL_BACKGROUND_PROPERTY, table.getSelectionBackground());
       Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
@@ -312,9 +322,14 @@ public class ClassFilterEditor extends JPanel implements ComponentWithEmptyText 
     }
   }
 
+  @RequiredReadAction
   protected void addClassFilter() {
     TreeClassChooser chooser = TreeClassChooserFactory.getInstance(myProject).createNoInnerClassesScopeChooser(
-      UIBundle.message("class.filter.editor.choose.class.title"), GlobalSearchScope.allScope(myProject), myChooserFilter, null);
+      UILocalize.classFilterEditorChooseClassTitle().get(),
+      GlobalSearchScope.allScope(myProject),
+      myChooserFilter,
+      null
+    );
     chooser.showDialog();
     PsiClass selectedClass = chooser.getSelected();
     if (selectedClass != null) {
@@ -329,6 +344,7 @@ public class ClassFilterEditor extends JPanel implements ComponentWithEmptyText 
   }
 
   @Nullable
+  @RequiredReadAction
   private static String getJvmClassName(PsiClass aClass) {
     PsiClass parentClass = PsiTreeUtil.getParentOfType(aClass, PsiClass.class, true);
     if (parentClass != null) {

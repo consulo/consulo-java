@@ -24,28 +24,25 @@
 */
 package com.intellij.java.impl.refactoring.makeStatic;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-
+import com.intellij.java.impl.refactoring.HelpID;
+import com.intellij.java.indexing.search.searches.MethodReferencesSearch;
 import com.intellij.java.language.psi.*;
-import consulo.dataContext.DataContext;
-import consulo.language.editor.LangDataKeys;
-import consulo.language.editor.PlatformDataKeys;
-import consulo.application.ApplicationManager;
-import consulo.logging.Logger;
-import consulo.codeEditor.Editor;
-import consulo.codeEditor.ScrollType;
-import consulo.application.progress.ProgressManager;
-import consulo.project.Project;
-import consulo.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
-import com.intellij.java.indexing.search.searches.MethodReferencesSearch;
-import com.intellij.java.impl.refactoring.HelpID;
-import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.application.progress.ProgressManager;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.ScrollType;
+import consulo.dataContext.DataContext;
 import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
-import consulo.application.util.function.Processor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class MakeStaticHandler implements RefactoringActionHandler
 {
@@ -53,31 +50,32 @@ public class MakeStaticHandler implements RefactoringActionHandler
 	private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.makeMethodStatic.MakeMethodStaticHandler");
 
 	@Override
+	@RequiredUIAccess
 	public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext)
 	{
-		PsiElement element = dataContext.getData(LangDataKeys.PSI_ELEMENT);
+		PsiElement element = dataContext.getData(PsiElement.KEY);
 		editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
-		if(element == null)
+		if (element == null)
 		{
 			element = file.findElementAt(editor.getCaretModel().getOffset());
 		}
 
-		if(element == null)
+		if (element == null)
 		{
 			return;
 		}
-		if(element instanceof PsiIdentifier)
+		if (element instanceof PsiIdentifier)
 		{
 			element = element.getParent();
 		}
 
-		if(!(element instanceof PsiTypeParameterListOwner))
+		if (!(element instanceof PsiTypeParameterListOwner))
 		{
 			String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("error.wrong.caret.position.method.or.class.name"));
 			CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.MAKE_METHOD_STATIC);
 			return;
 		}
-		if(LOG.isDebugEnabled())
+		if (LOG.isDebugEnabled())
 		{
 			LOG.debug("MakeStaticHandler invoked");
 		}
@@ -85,23 +83,24 @@ public class MakeStaticHandler implements RefactoringActionHandler
 	}
 
 	@Override
+	@RequiredUIAccess
 	public void invoke(@Nonnull final Project project, @Nonnull PsiElement[] elements, DataContext dataContext)
 	{
-		if(elements.length != 1 || !(elements[0] instanceof PsiTypeParameterListOwner))
+		if (elements.length != 1 || !(elements[0] instanceof PsiTypeParameterListOwner))
 		{
 			return;
 		}
 
 		final PsiTypeParameterListOwner member = (PsiTypeParameterListOwner) elements[0];
-		if(!CommonRefactoringUtil.checkReadOnlyStatus(project, member))
+		if (!CommonRefactoringUtil.checkReadOnlyStatus(project, member))
 		{
 			return;
 		}
 
 		String error = validateTarget(member);
-		if(error != null)
+		if (error != null)
 		{
-			Editor editor = dataContext.getData(PlatformDataKeys.EDITOR);
+			Editor editor = dataContext.getData(Editor.KEY);
 			CommonRefactoringUtil.showErrorHint(project, editor, error, REFACTORING_NAME, HelpID.MAKE_METHOD_STATIC);
 			return;
 		}
@@ -109,6 +108,7 @@ public class MakeStaticHandler implements RefactoringActionHandler
 		invoke(member);
 	}
 
+	@RequiredUIAccess
 	public static void invoke(final PsiTypeParameterListOwner member)
 	{
 		final Project project = member.getProject();
@@ -120,46 +120,32 @@ public class MakeStaticHandler implements RefactoringActionHandler
 
     */
 		AbstractMakeStaticDialog dialog;
-		if(!ApplicationManager.getApplication().isUnitTestMode())
+		if (project.getApplication().isUnitTestMode())
 		{
-
 			final boolean[] hasMethodReferenceOnInstance = new boolean[]{false};
-			if(member instanceof PsiMethod)
+			if (member instanceof PsiMethod method)
 			{
-				if(!ProgressManager.getInstance().runProcessWithProgressSynchronously(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						hasMethodReferenceOnInstance[0] = !MethodReferencesSearch.search((PsiMethod) member).forEach(new Processor<PsiReference>()
-						{
-							@Override
-							public boolean process(PsiReference reference)
-							{
-								final PsiElement element = reference.getElement();
-								if(element instanceof PsiMethodReferenceExpression)
-								{
-									return false;
-								}
-								return true;
-							}
-						});
-					}
-				}, "Search for method references", true, project))
+				if (!ProgressManager.getInstance().runProcessWithProgressSynchronously(
+					(Runnable)() ->
+						hasMethodReferenceOnInstance[0] = !MethodReferencesSearch.search(method)
+							.forEach(reference -> !(reference.getElement() instanceof PsiMethodReferenceExpression)),
+					"Search for method references",
+					true,
+					project
+				))
 				{
 					return;
 				}
 			}
 
-			if(classRefsInMember.length > 0 || hasMethodReferenceOnInstance[0])
+			if (classRefsInMember.length > 0 || hasMethodReferenceOnInstance[0])
 			{
 				final PsiType type = JavaPsiFacade.getInstance(project).getElementFactory().createType(member.getContainingClass());
 				//TODO: callback
-				String[] nameSuggestions = JavaCodeStyleManager.getInstance(project).suggestVariableName(VariableKind.PARAMETER, null, null, type).names;
+				String[] nameSuggestions = JavaCodeStyleManager.getInstance(project)
+					.suggestVariableName(VariableKind.PARAMETER, null, null, type).names;
 
 				dialog = new MakeParameterizedStaticDialog(project, member, nameSuggestions, classRefsInMember);
-
-
 			}
 			else
 			{
@@ -176,27 +162,28 @@ public class MakeStaticHandler implements RefactoringActionHandler
 		final PsiClass containingClass = member.getContainingClass();
 
 		// Checking various preconditions
-		if(member instanceof PsiMethod && ((PsiMethod) member).isConstructor())
+		if (member instanceof PsiMethod && ((PsiMethod) member).isConstructor())
 		{
 			return RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("constructor.cannot.be.made.static"));
 		}
 
-		if(member.getContainingClass() == null)
+		if (member.getContainingClass() == null)
 		{
 			return RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("this.member.does.not.seem.to.belong.to.any.class"));
 		}
 
-		if(member.hasModifierProperty(PsiModifier.STATIC))
+		if (member.hasModifierProperty(PsiModifier.STATIC))
 		{
 			return RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("member.is.already.static"));
 		}
 
-		if(member instanceof PsiMethod && member.hasModifierProperty(PsiModifier.ABSTRACT))
+		if (member instanceof PsiMethod && member.hasModifierProperty(PsiModifier.ABSTRACT))
 		{
 			return RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("cannot.make.abstract.method.static"));
 		}
 
-		if(containingClass instanceof PsiAnonymousClass || (containingClass.getContainingClass() != null && !containingClass.hasModifierProperty(PsiModifier.STATIC)))
+		if (containingClass instanceof PsiAnonymousClass
+			|| (containingClass.getContainingClass() != null && !containingClass.hasModifierProperty(PsiModifier.STATIC)))
 		{
 			return RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("inner.classes.cannot.have.static.members"));
 		}

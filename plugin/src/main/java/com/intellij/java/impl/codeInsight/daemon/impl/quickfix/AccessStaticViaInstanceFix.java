@@ -20,7 +20,7 @@ import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.Highligh
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiExpressionTrimRenderer;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.application.ApplicationManager;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorColors;
 import consulo.colorScheme.EditorColorsManager;
@@ -76,11 +76,14 @@ public class AccessStaticViaInstanceFix extends LocalQuickFixAndIntentionActionO
   }
 
   @Override
-  public void invoke(@Nonnull Project project,
-                     @Nonnull PsiFile file,
-                     @Nullable Editor editor,
-                     @Nonnull PsiElement startElement,
-                     @Nonnull PsiElement endElement) {
+  @RequiredReadAction
+  public void invoke(
+    @Nonnull Project project,
+    @Nonnull PsiFile file,
+    @Nullable Editor editor,
+    @Nonnull PsiElement startElement,
+    @Nonnull PsiElement endElement
+  ) {
     final PsiReferenceExpression myExpression = (PsiReferenceExpression)startElement;
 
     if (!myExpression.isValid()) return;
@@ -110,16 +113,19 @@ public class AccessStaticViaInstanceFix extends LocalQuickFixAndIntentionActionO
     }
   }
 
-  private boolean checkSideEffects(final Project project,
-                                   PsiClass containingClass,
-                                   final PsiExpression qualifierExpression,
-                                   PsiElementFactory factory,
-                                   final PsiElement myExpression,
-                                   Editor editor) {
-    final List<PsiElement> sideEffects = new ArrayList<PsiElement>();
+  @RequiredReadAction
+  private boolean checkSideEffects(
+    final Project project,
+    PsiClass containingClass,
+    final PsiExpression qualifierExpression,
+    PsiElementFactory factory,
+    final PsiElement myExpression,
+    Editor editor
+  ) {
+    final List<PsiElement> sideEffects = new ArrayList<>();
     boolean hasSideEffects = RemoveUnusedVariableUtil.checkSideEffects(qualifierExpression, null, sideEffects);
     if (hasSideEffects && !myOnTheFly) return false;
-    if (!hasSideEffects || ApplicationManager.getApplication().isUnitTestMode()) {
+    if (!hasSideEffects || project.getApplication().isUnitTestMode()) {
       return true;
     }
     if (editor == null) {
@@ -137,30 +143,37 @@ public class AccessStaticViaInstanceFix extends LocalQuickFixAndIntentionActionO
     qualifiedWithClassName.setQualifierExpression(factory.createReferenceExpression(containingClass));
     final boolean canCopeWithSideEffects = hasSideEffects;
     final SideEffectWarningDialog dialog =
-      new SideEffectWarningDialog(project, false, null, sideEffects.get(0).getText(), PsiExpressionTrimRenderer.render(qualifierExpression),
-                                  canCopeWithSideEffects){
+      new SideEffectWarningDialog(
+        project,
+        false,
+        null,
+        sideEffects.get(0).getText(),
+        PsiExpressionTrimRenderer.render(qualifierExpression),
+        canCopeWithSideEffects
+      ) {
         @Override
+        @RequiredReadAction
         protected String sideEffectsDescription() {
           if (canCopeWithSideEffects) {
             return "<html><body>" +
-                   "  There are possible side effects found in expression '" +
-                   qualifierExpression.getText() +
-                   "'<br>" +
-                   "  You can:<ul><li><b>Remove</b> class reference along with whole expressions involved, or</li>" +
-                   "  <li><b>Transform</b> qualified expression into the statement on its own.<br>" +
-                   "  That is,<br>" +
-                   "  <table border=1><tr><td><code>" +
-                   myExpression.getText() +
-                   "</code></td></tr></table><br> becomes: <br>" +
-                   "  <table border=1><tr><td><code>" +
-                   qualifierExpression.getText() +
-                   ";<br>" +
-                   qualifiedWithClassName.getText() +
-                   "       </code></td></tr></table></li>" +
-                   "  </body></html>";
+              "  There are possible side effects found in expression '" +
+              qualifierExpression.getText() +
+              "'<br>" +
+              "  You can:<ul><li><b>Remove</b> class reference along with whole expressions involved, or</li>" +
+              "  <li><b>Transform</b> qualified expression into the statement on its own.<br>" +
+              "  That is,<br>" +
+              "  <table border=1><tr><td><code>" +
+              myExpression.getText() +
+              "</code></td></tr></table><br> becomes: <br>" +
+              "  <table border=1><tr><td><code>" +
+              qualifierExpression.getText() +
+              ";<br>" +
+              qualifiedWithClassName.getText() +
+              "       </code></td></tr></table></li>" +
+              "  </body></html>";
           }
           return "<html><body>  There are possible side effects found in expression '" + qualifierExpression.getText() + "'<br>" +
-                 "You can:<ul><li><b>Remove</b> class reference along with whole expressions involved, or</li></body></html>";
+            "You can:<ul><li><b>Remove</b> class reference along with whole expressions involved, or</li></body></html>";
         }
       };
     dialog.show();

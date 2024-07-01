@@ -30,7 +30,7 @@ import static consulo.ui.ex.awt.UIUtil.FontColor.BRIGHTER;
 
 class RestoreReferencesDialog extends DialogWrapper {
   private final Object[] myNamedElements;
-  private JList myList;
+  private JList<Object> myList;
   private Object[] mySelectedElements = PsiClass.EMPTY_ARRAY;
   private boolean myContainsClassesOnly = true;
 
@@ -65,7 +65,7 @@ class RestoreReferencesDialog extends DialogWrapper {
   @Override
   protected JComponent createCenterPanel() {
     final JPanel panel = new JPanel(new BorderLayout(UIUtil.DEFAULT_HGAP, UIUtil.DEFAULT_VGAP));
-    myList = new JBList(myNamedElements);
+    myList = new JBList<>(myNamedElements);
     myList.setCellRenderer(new FQNameCellRenderer());
     panel.add(ScrollPaneFactory.createScrollPane(myList), BorderLayout.CENTER);
 
@@ -91,7 +91,6 @@ class RestoreReferencesDialog extends DialogWrapper {
 
     return panel;
   }
-
 
   @Override
   protected String getDimensionServiceKey(){

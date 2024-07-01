@@ -15,11 +15,12 @@
  */
 package com.intellij.java.impl.generate.view;
 
-import consulo.ui.ex.awt.Messages;
 import com.intellij.java.impl.generate.config.CancelPolicy;
 import com.intellij.java.impl.generate.config.ConflictResolutionPolicy;
 import com.intellij.java.impl.generate.config.DuplicatePolicy;
 import com.intellij.java.impl.generate.config.ReplacePolicy;
+import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awt.UIUtil;
 
 /**
  * This is a dialog when the <code>toString()</code> method already exists.
@@ -52,16 +53,20 @@ public class MethodExistsDialog
 	 */
 	public static ConflictResolutionPolicy showDialog(String targetMethodName)
 	{
-		int exit = Messages.showYesNoCancelDialog("Replace existing " + targetMethodName + " method", "Method Already Exists", Messages.getQuestionIcon());
-		if(exit == Messages.CANCEL)
+		int exit = Messages.showYesNoCancelDialog(
+			"Replace existing " + targetMethodName + " method", 
+			"Method Already Exists",
+			UIUtil.getQuestionIcon()
+		);
+		if (exit == Messages.CANCEL)
 		{
 			return CancelPolicy.getInstance();
 		}
-		if(exit == Messages.YES)
+		if (exit == Messages.YES)
 		{
 			return ReplacePolicy.getInstance();
 		}
-		if(exit == Messages.NO)
+		if (exit == Messages.NO)
 		{
 			return DuplicatePolicy.getInstance();
 		}

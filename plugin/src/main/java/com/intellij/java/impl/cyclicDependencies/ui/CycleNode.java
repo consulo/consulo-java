@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.cyclicDependencies.ui;
 
-import consulo.language.editor.scope.AnalysisScopeBundle;
-import consulo.project.Project;
 import consulo.ide.impl.idea.packageDependencies.ui.PackageDependenciesNode;
+import consulo.language.editor.scope.localize.AnalysisScopeLocalize;
+import consulo.project.Project;
 
 /**
  * User: anna
@@ -29,7 +29,6 @@ public class CycleNode extends PackageDependenciesNode{
   }
 
   public String toString() {
-    return AnalysisScopeBundle.message("cyclic.dependencies.tree.cycle.node.text");
+    return AnalysisScopeLocalize.cyclicDependenciesTreeCycleNodeText().get();
   }
-
 }

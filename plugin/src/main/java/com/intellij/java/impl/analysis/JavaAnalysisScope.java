@@ -22,11 +22,10 @@ package com.intellij.java.impl.analysis;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.search.PackageScope;
-import consulo.application.ApplicationManager;
 import consulo.application.util.function.Processor;
 import consulo.content.scope.SearchScope;
 import consulo.language.editor.scope.AnalysisScope;
-import consulo.language.editor.scope.AnalysisScopeBundle;
+import consulo.language.editor.scope.localize.AnalysisScopeLocalize;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiPackage;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -36,8 +35,8 @@ import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.virtualFileSystem.VirtualFile;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -59,7 +58,7 @@ public class JavaAnalysisScope extends AnalysisScope {
   @Nonnull
   public AnalysisScope getNarrowedComplementaryScope(@Nonnull Project defaultProject) {
     final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(defaultProject).getFileIndex();
-    final HashSet<Module> modules = new HashSet<Module>();
+    final HashSet<Module> modules = new HashSet<>();
     if (myType == FILE) {
       if (myElement instanceof PsiJavaFile/* && !FileTypeUtils.isInServerPageFile(myElement)*/) {
         PsiJavaFile psiJavaFile = (PsiJavaFile) myElement;
@@ -92,25 +91,23 @@ public class JavaAnalysisScope extends AnalysisScope {
   @Nonnull
   @Override
   public String getShortenName() {
-    if (myType == PACKAGE) {
-      return AnalysisScopeBundle.message("scope.package", ((PsiPackage) myElement).getQualifiedName());
-    }
-    return super.getShortenName();
+    return myType == PACKAGE
+      ? AnalysisScopeLocalize.scopePackage(((PsiPackage)myElement).getQualifiedName()).get()
+      : super.getShortenName();
   }
 
   @Nonnull
   @Override
   public String getDisplayName() {
-    if (myType == PACKAGE) {
-      return AnalysisScopeBundle.message("scope.package", ((PsiPackage) myElement).getQualifiedName());
-    }
-    return super.getDisplayName();
+    return myType == PACKAGE
+      ? AnalysisScopeLocalize.scopePackage(((PsiPackage)myElement).getQualifiedName()).get()
+      : super.getDisplayName();
   }
 
   @Override
   protected void initFilesSet() {
     if (myType == PACKAGE) {
-      myFilesSet = new HashSet<VirtualFile>();
+      myFilesSet = new HashSet<>();
       accept(createFileSearcher());
       return;
     }
@@ -119,15 +116,10 @@ public class JavaAnalysisScope extends AnalysisScope {
 
   @Override
   public boolean accept(@Nonnull Processor<VirtualFile> processor) {
-    if (myElement instanceof PsiJavaPackage) {
-      final PsiJavaPackage pack = (PsiJavaPackage) myElement;
-      final Set<PsiDirectory> dirs = new HashSet<PsiDirectory>();
-      ApplicationManager.getApplication().runReadAction(new Runnable() {
-        @Override
-        public void run() {
-          ContainerUtil.addAll(dirs, pack.getDirectories(GlobalSearchScope.projectScope(myElement.getProject
-              ())));
-        }
+    if (myElement instanceof PsiJavaPackage pack) {
+      final Set<PsiDirectory> dirs = new HashSet<>();
+      pack.getApplication().runReadAction(() -> {
+        ContainerUtil.addAll(dirs, pack.getDirectories(GlobalSearchScope.projectScope(myElement.getProject())));
       });
       for (PsiDirectory dir : dirs) {
         if (!accept(dir, processor)) {

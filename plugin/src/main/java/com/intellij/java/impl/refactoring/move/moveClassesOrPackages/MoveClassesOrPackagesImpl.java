@@ -29,7 +29,6 @@ import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import consulo.application.ApplicationManager;
 import consulo.application.progress.ProgressManager;
 import consulo.ide.impl.idea.ide.util.DirectoryChooser;
 import consulo.ide.impl.idea.refactoring.rename.DirectoryAsPackageRenameHandlerBase;
@@ -51,15 +50,17 @@ import consulo.localHistory.LocalHistoryAction;
 import consulo.logging.Logger;
 import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awt.UIUtil;
 import consulo.undoRedo.CommandProcessor;
 import consulo.usage.UsageInfo;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.ref.Ref;
 import consulo.virtualFileSystem.VirtualFile;
-
 import jakarta.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -67,10 +68,12 @@ import java.util.List;
 public class MoveClassesOrPackagesImpl {
   private static final Logger LOG = Logger.getInstance(MoveClassesOrPackagesImpl.class);
 
-  public static void doMove(final Project project,
-                            PsiElement[] adjustedElements,
-                            PsiElement initialTargetElement,
-                            final MoveCallback moveCallback) {
+  public static void doMove(
+    final Project project,
+    PsiElement[] adjustedElements,
+    PsiElement initialTargetElement,
+    final MoveCallback moveCallback
+  ) {
     if (!CommonRefactoringUtil.checkReadOnlyStatusRecursively(project, Arrays.asList(adjustedElements), true)) {
       return;
     }
@@ -99,8 +102,8 @@ public class MoveClassesOrPackagesImpl {
     List<String> names = new ArrayList<String>();
     for (int idx = 0; idx < elements.length; idx++) {
       PsiElement element = elements[idx];
-      if (element instanceof PsiDirectory) {
-        PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage((PsiDirectory)element);
+      if (element instanceof PsiDirectory directory) {
+        PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(directory);
         LOG.assertTrue(aPackage != null);
         if (aPackage.getQualifiedName().length() == 0) { //is default package
           String message = RefactoringBundle.message("move.package.refactoring.cannot.be.applied.to.default.package");
@@ -111,13 +114,13 @@ public class MoveClassesOrPackagesImpl {
         if (!isAlreadyChecked(psiElements, idx, aPackage) && !checkMovePackage(project, aPackage)) return null;
         element = aPackage;
       }
-      else if (element instanceof PsiJavaPackage) {
-        final PsiJavaPackage psiPackage = (PsiJavaPackage)element;
-        if (!checkNesting(project, psiPackage, targetElement, true)) return null;
-        if (!checkMovePackage(project, psiPackage)) return null;
+      else if (element instanceof PsiJavaPackage psiPackage) {
+        if (!checkNesting(project, psiPackage, targetElement, true)
+          || !checkMovePackage(project, psiPackage)) {
+          return null;
+        }
       }
-      else if (element instanceof PsiClass) {
-        PsiClass aClass = (PsiClass)element;
+      else if (element instanceof PsiClass aClass) {
         if (aClass instanceof PsiAnonymousClass) {
           String message = RefactoringBundle.message("move.class.refactoring.cannot.be.applied.to.anonymous.classes");
           CommonRefactoringUtil.showErrorMessage(RefactoringBundle.message("move.title"), message, HelpID.getMoveHelpID(element), project);
@@ -180,7 +183,7 @@ public class MoveClassesOrPackagesImpl {
       message.append("\n");
       message.append(RefactoringBundle.message("do.you.wish.to.continue"));
       int ret =
-        Messages.showYesNoDialog(project, message.toString(), RefactoringBundle.message("warning.title"), Messages.getWarningIcon());
+        Messages.showYesNoDialog(project, message.toString(), RefactoringBundle.message("warning.title"), UIUtil.getWarningIcon());
       if (ret != 0) {
         return false;
       }
@@ -189,16 +192,18 @@ public class MoveClassesOrPackagesImpl {
   }
 
   static boolean checkNesting(final Project project, final PsiJavaPackage srcPackage, final PsiElement targetElement, boolean showError) {
-    final PsiJavaPackage targetPackage = targetElement instanceof PsiJavaPackage
-                                     ? (PsiJavaPackage)targetElement
-                                     : targetElement instanceof PsiDirectory ? JavaDirectoryService.getInstance()
-                                       .getPackage((PsiDirectory)targetElement) : null;
+    final PsiJavaPackage targetPackage = targetElement instanceof PsiJavaPackage javaPackage
+      ? javaPackage
+      : targetElement instanceof PsiDirectory directory
+      ? JavaDirectoryService.getInstance().getPackage(directory)
+      : null;
     for (PsiJavaPackage curPackage = targetPackage; curPackage != null; curPackage = curPackage.getParentPackage()) {
       if (curPackage.equals(srcPackage)) {
         if (showError) {
           CommonRefactoringUtil.showErrorMessage(RefactoringBundle.message("move.title"),
-                                                 RefactoringBundle.message("cannot.move.package.into.itself"),
-                                                 HelpID.getMoveHelpID(srcPackage), project);
+            RefactoringBundle.message("cannot.move.package.into.itself"),
+            HelpID.getMoveHelpID(srcPackage), project
+          );
         }
         return false;
       }
@@ -254,11 +259,11 @@ public class MoveClassesOrPackagesImpl {
   }
 
   private static String getContainerPackageName(final PsiElement psiElement) {
-    if (psiElement instanceof PsiJavaPackage) {
-      return ((PsiJavaPackage)psiElement).getQualifiedName();
+    if (psiElement instanceof PsiJavaPackage javaPackage) {
+      return javaPackage.getQualifiedName();
     }
-    else if (psiElement instanceof PsiDirectory) {
-      PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage((PsiDirectory)psiElement);
+    else if (psiElement instanceof PsiDirectory directory) {
+      PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(directory);
       return aPackage != null ? aPackage.getQualifiedName() : "";
     }
     else if (psiElement != null) {
@@ -271,13 +276,12 @@ public class MoveClassesOrPackagesImpl {
   }
 
   private static String getTargetPackageNameForMovedElement(final PsiElement psiElement) {
-    if (psiElement instanceof PsiJavaPackage) {
-      final PsiJavaPackage psiPackage = (PsiJavaPackage)psiElement;
+    if (psiElement instanceof PsiJavaPackage psiPackage) {
       final PsiJavaPackage parentPackage = psiPackage.getParentPackage();
       return parentPackage != null ? parentPackage.getQualifiedName() : "";
     }
-    else if (psiElement instanceof PsiDirectory) {
-      PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage((PsiDirectory)psiElement);
+    else if (psiElement instanceof PsiDirectory directory) {
+      PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(directory);
       return aPackage != null ? getTargetPackageNameForMovedElement(aPackage) : "";
     }
     else if (psiElement != null) {
@@ -308,12 +312,12 @@ public class MoveClassesOrPackagesImpl {
 
   @Nullable
   public static PsiDirectory getContainerDirectory(final PsiElement psiElement) {
-    if (psiElement instanceof PsiJavaPackage) {
-      final PsiDirectory[] directories = ((PsiJavaPackage)psiElement).getDirectories();
+    if (psiElement instanceof PsiJavaPackage javaPackage) {
+      final PsiDirectory[] directories = javaPackage.getDirectories();
       return directories.length == 1 ? directories[0] : null; //??
     }
-    if (psiElement instanceof PsiDirectory) {
-      return (PsiDirectory)psiElement;
+    if (psiElement instanceof PsiDirectory directory) {
+      return directory;
     }
     if (psiElement != null) {
       return psiElement.getContainingFile().getContainingDirectory();
@@ -321,6 +325,7 @@ public class MoveClassesOrPackagesImpl {
     return null;
   }
 
+  @RequiredUIAccess
   public static void doRearrangePackage(final Project project, final PsiDirectory[] directories) {
     if (!CommonRefactoringUtil.checkReadOnlyStatusRecursively(project, Arrays.asList(directories), true)) {
       return;
@@ -334,17 +339,15 @@ public class MoveClassesOrPackagesImpl {
     if (!chooser.isOK()) return;
     final PsiDirectory selectedTarget = chooser.getSelectedDirectory();
     if (selectedTarget == null) return;
-    final MultiMap<PsiElement, String> conflicts = new MultiMap<PsiElement, String>();
-    final Runnable analyzeConflicts = new Runnable() {
-      public void run() {
-        RefactoringConflictsUtil.analyzeModuleConflicts(project, Arrays.asList(directories), UsageInfo.EMPTY_ARRAY, selectedTarget, conflicts);
-      }
-    };
-    if (!ProgressManager.getInstance().runProcessWithProgressSynchronously(analyzeConflicts, "Analyze Module Conflicts...", true, project)) {
+    final MultiMap<PsiElement, String> conflicts = new MultiMap<>();
+    final Runnable analyzeConflicts = () ->
+      RefactoringConflictsUtil.analyzeModuleConflicts(project, Arrays.asList(directories), UsageInfo.EMPTY_ARRAY, selectedTarget, conflicts);
+    if (!ProgressManager.getInstance()
+      .runProcessWithProgressSynchronously(analyzeConflicts, "Analyze Module Conflicts...", true, project)) {
       return;
     }
     if (!conflicts.isEmpty()) {
-      if (ApplicationManager.getApplication().isUnitTestMode()) {
+      if (project.getApplication().isUnitTestMode()) {
         throw new BaseRefactoringProcessor.ConflictsInTestsException(conflicts.values());
       }
       else {
@@ -357,33 +360,28 @@ public class MoveClassesOrPackagesImpl {
     }
     final Ref<IncorrectOperationException> ex = Ref.create(null);
     final String commandDescription = RefactoringBundle.message("moving.directories.command");
-    Runnable runnable = new Runnable() {
-      public void run() {
-        ApplicationManager.getApplication().runWriteAction(new Runnable() {
-          public void run() {
-            LocalHistoryAction a = LocalHistory.getInstance().startAction(commandDescription);
-            try {
-              rearrangeDirectoriesToTarget(directories, selectedTarget);
-            }
-            catch (IncorrectOperationException e) {
-              ex.set(e);
-            }
-            finally {
-              a.finish();
-            }
-          }
-        });
+    Runnable runnable = () -> project.getApplication().runWriteAction(() -> {
+      LocalHistoryAction a = LocalHistory.getInstance().startAction(commandDescription);
+      try {
+        rearrangeDirectoriesToTarget(directories, selectedTarget);
       }
-    };
+      catch (IncorrectOperationException e) {
+        ex.set(e);
+      }
+      finally {
+        a.finish();
+      }
+    });
     CommandProcessor.getInstance().executeCommand(project, runnable, commandDescription, null);
     if (ex.get() != null) {
       RefactoringUIUtil.processIncorrectOperation(project, ex.get());
     }
   }
 
+  @RequiredUIAccess
   private static List<PsiDirectory> buildRearrangeTargetsList(final Project project, final PsiDirectory[] directories) {
     final VirtualFile[] sourceRoots = ProjectRootManager.getInstance(project).getContentSourceRoots();
-    List<PsiDirectory> sourceRootDirectories = new ArrayList<PsiDirectory>();
+    List<PsiDirectory> sourceRootDirectories = new ArrayList<>();
     sourceRoots:
     for (final VirtualFile sourceRoot : sourceRoots) {
       PsiDirectory sourceRootDirectory = PsiManager.getInstance(project).findDirectory(sourceRoot);
@@ -412,5 +410,4 @@ public class MoveClassesOrPackagesImpl {
       MoveClassesOrPackagesUtil.moveDirectoryRecursively(directory, moveTarget);
     }
   }
-
 }

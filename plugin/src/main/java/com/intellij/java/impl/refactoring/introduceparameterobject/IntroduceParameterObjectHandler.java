@@ -15,44 +15,43 @@
  */
 package com.intellij.java.impl.refactoring.introduceparameterobject;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.impl.ide.util.SuperMethodWarningUtil;
-import consulo.dataContext.DataContext;
-import consulo.language.editor.LangDataKeys;
-import consulo.language.editor.PlatformDataKeys;
-import consulo.codeEditor.CaretModel;
-import consulo.codeEditor.Editor;
-import consulo.codeEditor.ScrollType;
-import consulo.codeEditor.ScrollingModel;
-import consulo.project.Project;
-import consulo.language.psi.PsiCompiledElement;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiFile;
+import com.intellij.java.impl.refactoring.HelpID;
+import com.intellij.java.impl.refactoring.RefactorJBundle;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiParameterList;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.impl.refactoring.HelpID;
-import com.intellij.java.impl.refactoring.RefactorJBundle;
-import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.codeEditor.CaretModel;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.ScrollType;
+import consulo.codeEditor.ScrollingModel;
+import consulo.dataContext.DataContext;
 import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.psi.PsiCompiledElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
+import jakarta.annotation.Nonnull;
 
 public class IntroduceParameterObjectHandler implements RefactoringActionHandler {
   private static final String REFACTORING_NAME = RefactorJBundle.message("introduce.parameter.object");
 
+  @RequiredUIAccess
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
     final ScrollingModel scrollingModel = editor.getScrollingModel();
     scrollingModel.scrollToCaret(ScrollType.MAKE_VISIBLE);
-    final PsiElement element = dataContext.getData(LangDataKeys.PSI_ELEMENT);
+    final PsiElement element = dataContext.getData(PsiElement.KEY);
     PsiMethod selectedMethod = null;
     if (element instanceof PsiMethod) {
       selectedMethod = (PsiMethod)element;
     }
-    else if (element instanceof PsiParameter && ((PsiParameter)element).getDeclarationScope() instanceof PsiMethod){
-      selectedMethod = (PsiMethod)((PsiParameter)element).getDeclarationScope();
+    else if (element instanceof PsiParameter parameter && parameter.getDeclarationScope() instanceof PsiMethod methodScope) {
+      selectedMethod = methodScope;
     }
     else {
       final CaretModel caretModel = editor.getCaretModel();
@@ -78,6 +77,7 @@ public class IntroduceParameterObjectHandler implements RefactoringActionHandler
     invoke(project, selectedMethod, editor);
   }
 
+  @RequiredUIAccess
   public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
     if (elements.length != 1) {
       return;
@@ -86,10 +86,11 @@ public class IntroduceParameterObjectHandler implements RefactoringActionHandler
     if (method == null) {
       return;
     }
-    Editor editor = dataContext.getData(PlatformDataKeys.EDITOR);
+    Editor editor = dataContext.getData(Editor.KEY);
     invoke(project, method, editor);
   }
 
+  @RequiredUIAccess
   private static void invoke(final Project project, final PsiMethod selectedMethod, Editor editor) {
     PsiMethod newMethod = SuperMethodWarningUtil.checkSuperMethod(selectedMethod, RefactoringBundle.message("to.refactor"));
     if (newMethod == null) return;

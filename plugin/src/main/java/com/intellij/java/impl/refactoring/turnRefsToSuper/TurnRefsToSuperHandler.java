@@ -20,29 +20,28 @@
  */
 package com.intellij.java.impl.refactoring.turnRefsToSuper;
 
-import java.util.ArrayList;
-
-import jakarta.annotation.Nonnull;
-
-import consulo.dataContext.DataContext;
-import consulo.language.editor.PlatformDataKeys;
-import consulo.codeEditor.Editor;
-import consulo.codeEditor.ScrollType;
-import consulo.project.Project;
+import com.intellij.java.impl.refactoring.HelpID;
+import com.intellij.java.impl.refactoring.util.RefactoringHierarchyUtil;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.ScrollType;
+import consulo.dataContext.DataContext;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import com.intellij.java.impl.refactoring.HelpID;
-import consulo.language.editor.refactoring.action.RefactoringActionHandler;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
-import com.intellij.java.impl.refactoring.util.RefactoringHierarchyUtil;
+import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
+import jakarta.annotation.Nonnull;
+
+import java.util.ArrayList;
 
 public class TurnRefsToSuperHandler implements RefactoringActionHandler {
   public static final String REFACTORING_NAME = RefactoringBundle.message("use.interface.where.possible.title");
 
-
+  @RequiredUIAccess
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
     int offset = editor.getCaretModel().getOffset();
     editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
@@ -62,20 +61,24 @@ public class TurnRefsToSuperHandler implements RefactoringActionHandler {
   }
 
   public void invoke(@Nonnull final Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
-    if (elements.length != 1) return;
+    if (elements.length != 1) {
+      return;
+    }
 
-        PsiClass subClass = (PsiClass) elements[0];
+    PsiClass subClass = (PsiClass) elements[0];
 
     ArrayList basesList = RefactoringHierarchyUtil.createBasesList(subClass, true, true);
 
     if (basesList.isEmpty()) {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("interface.does.not.have.base.interfaces", subClass.getQualifiedName()));
-      Editor editor = dataContext.getData(PlatformDataKeys.EDITOR);
+      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message(
+        "interface.does.not.have.base.interfaces",
+        subClass.getQualifiedName()
+      ));
+      Editor editor = dataContext.getData(Editor.KEY);
       CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.TURN_REFS_TO_SUPER);
       return;
     }
 
     new TurnRefsToSuperDialog(project, subClass, basesList).show();
   }
-
 }

@@ -29,7 +29,6 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.java.language.util.ClassFilter;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
 import consulo.application.HelpManager;
@@ -47,6 +46,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.RecentsManager;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.Messages;
@@ -62,8 +62,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -105,14 +103,16 @@ class IntroduceConstantDialog extends DialogWrapper {
   private final JavaVisibilityPanel myVPanel;
   private final JCheckBox myIntroduceEnumConstantCb = new JCheckBox(RefactoringBundle.message("introduce.constant.enum.cb"), true);
 
-  IntroduceConstantDialog(Project project,
-                          PsiClass parentClass,
-                          PsiExpression initializerExpression,
-                          PsiLocalVariable localVariable,
-                          boolean isInvokedOnDeclaration,
-                          PsiExpression[] occurrences,
-                          PsiClass targetClass,
-                          TypeSelectorManager typeSelectorManager, String enteredName) {
+  IntroduceConstantDialog(
+    Project project,
+    PsiClass parentClass,
+    PsiExpression initializerExpression,
+    PsiLocalVariable localVariable,
+    boolean isInvokedOnDeclaration,
+    PsiExpression[] occurrences,
+    PsiClass targetClass,
+    TypeSelectorManager typeSelectorManager, String enteredName
+  ) {
     super(project, true);
     myProject = project;
     myParentClass = parentClass;
@@ -185,15 +185,11 @@ class IntroduceConstantDialog extends DialogWrapper {
 
     myNameField = new NameSuggestionsField(myProject);
     myNameSuggestionPanel.setLayout(new BorderLayout());
-    myNameField.addDataChangedListener(new NameSuggestionsField.DataChanged() {
-      public void dataChanged() {
-        updateButtons();
-      }
-    });
+    myNameField.addDataChangedListener(this::updateButtons);
     myNameSuggestionPanel.add(myNameField.getComponent(), BorderLayout.CENTER);
     myNameSuggestionLabel.setLabelFor(myNameField.getFocusableComponent());
 
-    Set<String> possibleClassNames = new LinkedHashSet<String>();
+    Set<String> possibleClassNames = new LinkedHashSet<>();
     for (final PsiExpression occurrence : myOccurrences) {
       final PsiClass parentClass = new IntroduceConstantHandlerImpl().getParentClass(occurrence);
       if (parentClass != null && parentClass.getQualifiedName() != null) {
@@ -214,11 +210,7 @@ class IntroduceConstantDialog extends DialogWrapper {
         enableEnumDependant(introduceEnumConstant());
       }
     });
-    myIntroduceEnumConstantCb.addActionListener(new ActionListener() {
-      public void actionPerformed(final ActionEvent e) {
-        enableEnumDependant(introduceEnumConstant());
-      }
-    });
+    myIntroduceEnumConstantCb.addActionListener(e -> enableEnumDependant(introduceEnumConstant()));
     final JPanel enumPanel = new JPanel(new BorderLayout());
     enumPanel.add(myIntroduceEnumConstantCb, BorderLayout.EAST);
     myTargetClassNamePanel.add(enumPanel, BorderLayout.SOUTH);
@@ -237,12 +229,10 @@ class IntroduceConstantDialog extends DialogWrapper {
     nameSuggestionsManager.setLabelsFor(myTypeLabel, myNameSuggestionLabel);
     //////////
     if (myOccurrencesCount > 1) {
-      myCbReplaceAll.addItemListener(new ItemListener() {
-        public void itemStateChanged(ItemEvent e) {
-          updateTypeSelector();
+      myCbReplaceAll.addItemListener(e -> {
+        updateTypeSelector();
 
-          myNameField.requestFocusInWindow();
-        }
+        myNameField.requestFocusInWindow();
       });
       myCbReplaceAll.setText(RefactoringBundle.message("replace.all.occurences", myOccurrencesCount));
     }
@@ -257,12 +247,7 @@ class IntroduceConstantDialog extends DialogWrapper {
       }
       else if (myCbReplaceAll != null) {
         updateCbDeleteVariable();
-        myCbReplaceAll.addItemListener(
-          new ItemListener() {
-          public void itemStateChanged(ItemEvent e) {
-            updateCbDeleteVariable();
-          }
-        });
+        myCbReplaceAll.addItemListener(e -> updateCbDeleteVariable());
       }
     }
     else {
@@ -270,16 +255,17 @@ class IntroduceConstantDialog extends DialogWrapper {
     }
 
     final PsiManager psiManager = PsiManager.getInstance(myProject);
-    if ((myTypeSelectorManager.isSuggestedType(JavaClassNames.JAVA_LANG_STRING) || (myLocalVariable != null && AnnotationUtil.isAnnotated(myLocalVariable,
-        AnnotationUtil.NON_NLS, false, false)))&& PsiUtil.isLanguageLevel5OrHigher(myParentClass) &&
-        JavaPsiFacade.getInstance(psiManager.getProject()).findClass(AnnotationUtil.NON_NLS, myParentClass.getResolveScope()) != null) {
+    if (
+      (
+        myTypeSelectorManager.isSuggestedType(JavaClassNames.JAVA_LANG_STRING)
+          || (myLocalVariable != null && AnnotationUtil.isAnnotated(myLocalVariable, AnnotationUtil.NON_NLS, false, false))
+      )
+      && PsiUtil.isLanguageLevel5OrHigher(myParentClass)
+      && JavaPsiFacade.getInstance(psiManager.getProject()).findClass(AnnotationUtil.NON_NLS, myParentClass.getResolveScope()) != null
+    ) {
       final PropertiesComponent component = PropertiesComponent.getInstance(myProject);
       myCbNonNls.setSelected(component.isTrueValue(NONNLS_SELECTED_PROPERTY));
-      myCbNonNls.addItemListener(new ItemListener() {
-        public void itemStateChanged(ItemEvent e) {
-          component.setValue(NONNLS_SELECTED_PROPERTY, Boolean.toString(myCbNonNls.isSelected()));
-        }
-      });
+      myCbNonNls.addItemListener(e -> component.setValue(NONNLS_SELECTED_PROPERTY, Boolean.toString(myCbNonNls.isSelected())));
     } else {
       myCbNonNls.setVisible(false);
     }
@@ -296,28 +282,29 @@ class IntroduceConstantDialog extends DialogWrapper {
     }
   }
 
-  protected static NameSuggestionsGenerator createNameSuggestionGenerator(final String propertyName,
-                                                                          final PsiExpression psiExpression,
-                                                                          final JavaCodeStyleManager codeStyleManager,
-                                                                          final String enteredName, final PsiClass parentClass) {
-    return new NameSuggestionsGenerator() {
-      public SuggestedNameInfo getSuggestedNameInfo(PsiType type) {
-        SuggestedNameInfo nameInfo =
-            codeStyleManager.suggestVariableName(VariableKind.STATIC_FINAL_FIELD, propertyName, psiExpression, type);
-        if (psiExpression != null) {
-          String[] names = nameInfo.names;
-          for (int i = 0, namesLength = names.length; i < namesLength; i++) {
-            String name = names[i];
-            if (parentClass.findFieldByName(name, false) != null) {
-              names[i] = codeStyleManager.suggestUniqueVariableName(name, psiExpression, true);
-            }
+  protected static NameSuggestionsGenerator createNameSuggestionGenerator(
+    final String propertyName,
+    final PsiExpression psiExpression,
+    final JavaCodeStyleManager codeStyleManager,
+    final String enteredName, final PsiClass parentClass
+  ) {
+    return type -> {
+      SuggestedNameInfo nameInfo =
+          codeStyleManager.suggestVariableName(VariableKind.STATIC_FINAL_FIELD, propertyName, psiExpression, type);
+      if (psiExpression != null) {
+        String[] names = nameInfo.names;
+        for (int i = 0, namesLength = names.length; i < namesLength; i++) {
+          String name = names[i];
+          if (parentClass.findFieldByName(name, false) != null) {
+            names[i] = codeStyleManager.suggestUniqueVariableName(name, psiExpression, true);
           }
         }
-        final String[] strings = AbstractJavaInplaceIntroducer.appendUnresolvedExprName(JavaCompletionUtil
-          .completeVariableNameForRefactoring(codeStyleManager, type, VariableKind.LOCAL_VARIABLE, nameInfo), psiExpression);
-        return new SuggestedNameInfo.Delegate(enteredName != null ? ArrayUtil.mergeArrays(new String[]{enteredName}, strings): strings, nameInfo);
       }
-
+      final String[] strings = AbstractJavaInplaceIntroducer.appendUnresolvedExprName(
+        JavaCompletionUtil.completeVariableNameForRefactoring(codeStyleManager, type, VariableKind.LOCAL_VARIABLE, nameInfo),
+        psiExpression
+      );
+      return new SuggestedNameInfo.Delegate(enteredName != null ? ArrayUtil.mergeArrays(new String[]{enteredName}, strings): strings, nameInfo);
     };
   }
 
@@ -384,7 +371,7 @@ class IntroduceConstantDialog extends DialogWrapper {
     else {
       UIUtil.setEnabled(myVisibilityPanel, true, true);
       // exclude all modifiers not visible from all occurences
-      final Set<String> visible = new HashSet<String>();
+      final Set<String> visible = new HashSet<>();
       visible.add(PsiModifier.PRIVATE);
       visible.add(PsiModifier.PROTECTED);
       visible.add(PsiModifier.PACKAGE_LOCAL);
@@ -415,6 +402,7 @@ class IntroduceConstantDialog extends DialogWrapper {
     }
   }
 
+  @RequiredUIAccess
   protected void doOKAction() {
     final String targetClassName = getTargetClassName();
     PsiClass newClass = myParentClass;
@@ -422,7 +410,12 @@ class IntroduceConstantDialog extends DialogWrapper {
     if (!"".equals (targetClassName) && !Comparing.strEqual(targetClassName, myParentClass.getQualifiedName())) {
       newClass = JavaPsiFacade.getInstance(myProject).findClass(targetClassName, GlobalSearchScope.projectScope(myProject));
       if (newClass == null) {
-        if (Messages.showOkCancelDialog(myProject, RefactoringBundle.message("class.does.not.exist.in.the.project"), IntroduceConstantHandlerImpl.REFACTORING_NAME, Messages.getErrorIcon()) != OK_EXIT_CODE) {
+        if (Messages.showOkCancelDialog(
+          myProject,
+          RefactoringBundle.message("class.does.not.exist.in.the.project"),
+          IntroduceConstantHandlerImpl.REFACTORING_NAME,
+          UIUtil.getErrorIcon()
+        ) != OK_EXIT_CODE) {
           return;
         }
         myDestinationClass = new BaseExpressionToFieldHandler.TargetDestination(targetClassName, myParentClass);
@@ -454,10 +447,10 @@ class IntroduceConstantDialog extends DialogWrapper {
 
       if (oldField != null) {
         int answer = Messages.showYesNoDialog(
-                myProject,
-                RefactoringBundle.message("field.exists", fieldName, oldField.getContainingClass().getQualifiedName()),
-                IntroduceFieldHandler.REFACTORING_NAME,
-                Messages.getWarningIcon()
+          myProject,
+          RefactoringBundle.message("field.exists", fieldName, oldField.getContainingClass().getQualifiedName()),
+          IntroduceFieldHandler.REFACTORING_NAME,
+          UIUtil.getWarningIcon()
         );
         if (answer != 0) {
           return;
@@ -471,17 +464,19 @@ class IntroduceConstantDialog extends DialogWrapper {
     super.doOKAction();
   }
 
+  @RequiredUIAccess
   public JComponent getPreferredFocusedComponent() {
     return myNameField.getFocusableComponent();
   }
 
   private class ChooseClassAction implements ActionListener {
     public void actionPerformed(ActionEvent e) {
-      TreeClassChooser chooser = TreeClassChooserFactory.getInstance(myProject).createWithInnerClassesScopeChooser(RefactoringBundle.message("choose.destination.class"), GlobalSearchScope.projectScope(myProject), new ClassFilter() {
-        public boolean isAccepted(PsiClass aClass) {
-          return aClass.getParent() instanceof PsiJavaFile || aClass.hasModifierProperty(PsiModifier.STATIC);
-        }
-      }, null);
+      TreeClassChooser chooser = TreeClassChooserFactory.getInstance(myProject).createWithInnerClassesScopeChooser(
+        RefactoringBundle.message("choose.destination.class"),
+        GlobalSearchScope.projectScope(myProject),
+        aClass -> aClass.getParent() instanceof PsiJavaFile || aClass.hasModifierProperty(PsiModifier.STATIC),
+        null
+      );
       if (myTargetClass != null) {
         chooser.selectDirectory(myTargetClass.getContainingFile().getContainingDirectory());
       }

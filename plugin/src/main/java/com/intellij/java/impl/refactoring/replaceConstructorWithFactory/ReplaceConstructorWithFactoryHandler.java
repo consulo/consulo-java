@@ -15,11 +15,11 @@
  */
 package com.intellij.java.impl.refactoring.replaceConstructorWithFactory;
 
+import consulo.ui.ex.awt.UIUtil;
 import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import consulo.dataContext.DataContext;
-import consulo.language.editor.PlatformDataKeys;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.project.Project;
@@ -93,20 +93,18 @@ public class ReplaceConstructorWithFactoryHandler
     if (elements.length != 1) return;
 
     myProject = project;
-    Editor editor = dataContext.getData(PlatformDataKeys.EDITOR);
-    if (elements[0] instanceof PsiMethod) {
-      final PsiMethod method = (PsiMethod)elements[0];
+    Editor editor = dataContext.getData(Editor.KEY);
+    if (elements[0] instanceof PsiMethod method) {
       invoke(method, editor);
     }
-    else if (elements[0] instanceof PsiClass) {
-      invoke((PsiClass)elements[0], editor);
+    else if (elements[0] instanceof PsiClass psiClass) {
+      invoke(psiClass, editor);
     }
-
   }
 
   private void invoke(PsiClass aClass, Editor editor) {
     String qualifiedName = aClass.getQualifiedName();
-    if(qualifiedName == null) {
+    if (qualifiedName == null) {
       showJspOrLocalClassMessage(editor);
       return;
     }
@@ -118,9 +116,11 @@ public class ReplaceConstructorWithFactoryHandler
       CommonRefactoringUtil.showErrorHint(myProject, editor, message, REFACTORING_NAME, HelpID.REPLACE_CONSTRUCTOR_WITH_FACTORY);
       return;
     }
-    final int answer = Messages.showYesNoDialog(myProject,
-                                                RefactoringBundle.message("would.you.like.to.replace.default.constructor.of.0.with.factory.method", aClass.getQualifiedName()),
-                                                REFACTORING_NAME, Messages.getQuestionIcon()
+    final int answer = Messages.showYesNoDialog(
+      myProject,
+      RefactoringBundle.message("would.you.like.to.replace.default.constructor.of.0.with.factory.method", aClass.getQualifiedName()),
+      REFACTORING_NAME,
+      UIUtil.getQuestionIcon()
     );
     if (answer != 0) return;
     if (!CommonRefactoringUtil.checkReadOnlyStatus(myProject, aClass)) return;
@@ -148,7 +148,7 @@ public class ReplaceConstructorWithFactoryHandler
     }
 
     PsiClass aClass = method.getContainingClass();
-    if(aClass == null || aClass.getQualifiedName() == null) {
+    if (aClass == null || aClass.getQualifiedName() == null) {
       showJspOrLocalClassMessage(editor);
       return;
     }
