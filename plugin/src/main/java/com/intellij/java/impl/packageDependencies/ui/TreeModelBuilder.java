@@ -17,7 +17,6 @@ package com.intellij.java.impl.packageDependencies.ui;
 
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import consulo.annotation.access.RequiredReadAction;
 import consulo.application.AllIcons;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
@@ -39,6 +38,7 @@ import consulo.module.content.layer.orderEntry.ModuleExtensionWithSdkOrderEntry;
 import consulo.module.content.layer.orderEntry.OrderEntry;
 import consulo.project.Project;
 import consulo.project.ui.view.tree.ModuleGroup;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.tree.TreeUtil;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.Comparing;
@@ -92,7 +92,7 @@ public class TreeModelBuilder {
   public static final String TEST_NAME = AnalysisScopeBundle.message("package.dependencies.test.node.text");
   public static final String LIBRARY_NAME = AnalysisScopeBundle.message("package.dependencies.library.node.text");
 
-  @RequiredReadAction
+  @RequiredUIAccess
   public TreeModelBuilder(Project project, boolean showIndividualLibs, Marker marker, DependenciesPanel.DependencyPanelSettings settings) {
     myProject = project;
     final boolean multiModuleProject = ModuleManager.getInstance(project).getModules().length > 1;
@@ -130,7 +130,7 @@ public class TreeModelBuilder {
     myLibraryNodes.put(scopeType, new HashMap<>());
   }
 
-  @RequiredReadAction
+  @RequiredUIAccess
   public static synchronized TreeModel createTreeModel(
     Project project,
     boolean showProgress,
@@ -141,12 +141,12 @@ public class TreeModelBuilder {
     return new TreeModelBuilder(project, true, marker, settings).build(files, showProgress);
   }
 
-  @RequiredReadAction
+  @RequiredUIAccess
   public static synchronized TreeModel createTreeModel(Project project, Marker marker, DependenciesPanel.DependencyPanelSettings settings) {
     return new TreeModelBuilder(project, true, marker, settings).build(project);
   }
 
-  @RequiredReadAction
+  @RequiredUIAccess
   public static synchronized TreeModel createTreeModel(
     Project project,
     boolean showIndividualLibs,
@@ -312,7 +312,7 @@ public class TreeModelBuilder {
   }
 
   @Nullable
-  @RequiredReadAction
+  @RequiredUIAccess
   public PackageDependenciesNode getFileParentNode(VirtualFile vFile) {
     LOG.assertTrue(vFile != null);
     final VirtualFile containingDirectory = vFile.getParent();
@@ -380,7 +380,7 @@ public class TreeModelBuilder {
     return node;
   }
 
-  @RequiredReadAction
+  @RequiredUIAccess
   private PackageDependenciesNode getModuleDirNode(PsiJavaPackage aPackage, Module module, ScopeType scopeType) {
     if (aPackage == null) {
       return getModuleNode(module, scopeType);
@@ -405,7 +405,7 @@ public class TreeModelBuilder {
   }
 
   @Nullable
-  @RequiredReadAction
+  @RequiredUIAccess
   private PackageDependenciesNode getModuleNode(Module module, ScopeType scopeType) {
     if (module == null || !myShowModules) {
       return getRootNode(scopeType);

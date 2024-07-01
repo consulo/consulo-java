@@ -29,6 +29,7 @@ import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.application.progress.ProgressManager;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
@@ -153,7 +154,7 @@ public class ExtractSuperclassHandler implements RefactoringActionHandler, Extra
   }
 
   // invoked inside Command and Atomic action
-  @RequiredReadAction
+  @RequiredWriteAction
   private void doRefactoring(final Project project, final PsiClass subclass, final ExtractSuperclassDialog dialog) {
     final String superclassName = dialog.getExtractedSuperName();
     final PsiDirectory targetDirectory = dialog.getTargetDirectory();

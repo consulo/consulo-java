@@ -15,15 +15,15 @@
  */
 package com.intellij.java.impl.ide.util;
 
-import consulo.annotation.access.RequiredReadAction;
+import com.intellij.java.language.psi.PsiClass;
 import consulo.application.AllIcons;
-import consulo.logging.Logger;
 import consulo.colorScheme.EditorColorsManager;
 import consulo.colorScheme.EditorColorsScheme;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.ui.ex.awt.SimpleColoredComponent;
-import consulo.ui.ex.SimpleTextAttributes;
 import consulo.language.icon.IconDescriptorUpdaters;
+import consulo.logging.Logger;
+import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.ex.SimpleTextAttributes;
+import consulo.ui.ex.awt.SimpleColoredComponent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -38,7 +38,7 @@ public class FQNameCellRenderer extends SimpleColoredComponent implements ListCe
     setOpaque(true);
   }
 
-  @RequiredReadAction
+  @RequiredUIAccess
   public Component getListCellRendererComponent(
     JList list,
     Object value,

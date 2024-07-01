@@ -16,6 +16,7 @@
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import consulo.annotation.access.RequiredReadAction;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.project.Project;
@@ -118,7 +119,7 @@ public class SideEffectWarningDialog extends DialogWrapper {
   }
 
   @Override
-  @RequiredReadAction
+  @RequiredUIAccess
   protected JComponent createCenterPanel() {
     final JPanel panel = new JPanel(new BorderLayout());
     final String text = sideEffectsDescription();

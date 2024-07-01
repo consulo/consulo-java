@@ -25,6 +25,7 @@ import consulo.dataContext.DataContext;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -39,7 +40,7 @@ import jakarta.annotation.Nullable;
 
 public class JavaChangeSignatureHandler implements ChangeSignatureHandler {
   @Override
-  @RequiredReadAction
+  @RequiredUIAccess
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
     editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
     PsiElement element = findTargetMember(file, editor);
@@ -49,7 +50,7 @@ public class JavaChangeSignatureHandler implements ChangeSignatureHandler {
     invokeOnElement(project, editor, element);
   }
 
-  @RequiredReadAction
+  @RequiredUIAccess
   private static void invokeOnElement(Project project, Editor editor, PsiElement element) {
     if (element instanceof PsiMethod method && method.getNameIdentifier() != null) {
       invoke(method, project, editor);
@@ -62,7 +63,7 @@ public class JavaChangeSignatureHandler implements ChangeSignatureHandler {
   }
 
   @Override
-  @RequiredReadAction
+  @RequiredUIAccess
   public void invoke(@Nonnull final Project project, @Nonnull final PsiElement[] elements, @Nullable final DataContext dataContext) {
     if (elements.length != 1) {
       return;
@@ -77,7 +78,7 @@ public class JavaChangeSignatureHandler implements ChangeSignatureHandler {
     return RefactoringBundle.message("error.wrong.caret.position.method.or.class.name");
   }
 
-  @RequiredReadAction
+  @RequiredUIAccess
   private static void invoke(final PsiMethod method, final Project project, @Nullable final Editor editor) {
     PsiMethod newMethod = SuperMethodWarningUtil.checkSuperMethod(method, RefactoringBundle.message("to.refactor"));
     if (newMethod == null) {
@@ -118,7 +119,7 @@ public class JavaChangeSignatureHandler implements ChangeSignatureHandler {
 
   @Override
   @Nullable
-  @RequiredReadAction
+  @RequiredUIAccess
   public PsiElement findTargetMember(PsiFile file, Editor editor) {
     PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
     return findTargetMember(element);

@@ -112,7 +112,7 @@ public class MoveClassesOrPackagesProcessor extends BaseRefactoringProcessor {
   }
 
   @Nonnull
-  protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
+  protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
     PsiElement[] elements = new PsiElement[myElementsToMove.length];
     System.arraycopy(myElementsToMove, 0, elements, 0, myElementsToMove.length);
     return new MoveMultipleElementsViewDescriptor(elements, MoveClassesOrPackagesUtil.getPackageName(myTargetPackage));
@@ -213,7 +213,6 @@ public class MoveClassesOrPackagesProcessor extends BaseRefactoringProcessor {
     }
   }
 
-
   protected boolean preprocessUsages(Ref<UsageInfo[]> refUsages) {
     final UsageInfo[] usages = refUsages.get();
     final MultiMap<PsiElement, String> conflicts = new MultiMap<>();
@@ -244,8 +243,7 @@ public class MoveClassesOrPackagesProcessor extends BaseRefactoringProcessor {
     PackageLocalsUsageCollector visitor = new PackageLocalsUsageCollector(myElementsToMove, myTargetPackage, conflicts);
 
     for (PsiElement element : myElementsToMove) {
-      if (element instanceof PsiClass) {
-        PsiClass aClass = (PsiClass) element;
+      if (element instanceof PsiClass aClass) {
         aClass.accept(visitor);
       }
     }
@@ -337,6 +335,7 @@ public class MoveClassesOrPackagesProcessor extends BaseRefactoringProcessor {
       return Comparing.equal(myElement.getName(), wrapper.myElement.getName());
     }
 
+    @RequiredReadAction
     public int hashCode() {
       final String name = myElement.getName();
       if (name != null) {
@@ -431,15 +430,14 @@ public class MoveClassesOrPackagesProcessor extends BaseRefactoringProcessor {
 
   protected boolean isPreviewUsages(@Nonnull UsageInfo[] usages) {
     if (UsageViewUtil.hasNonCodeUsages(usages)) {
-      WindowManager.getInstance().getStatusBar(myProject)
-        .setInfo(RefactoringBundle.message("occurrences.found.in.comments.strings.and.non.java.files"));
+      WindowManager.getInstance().getStatusBar(myProject).setInfo(RefactoringBundle.message("occurrences.found.in.comments.strings.and.non.java.files"));
       return true;
     } else {
       return super.isPreviewUsages(usages);
     }
   }
 
-  protected void performRefactoring(UsageInfo[] usages) {
+  protected void performRefactoring(@Nonnull UsageInfo[] usages) {
     // If files are being moved then I need to collect some information to delete these
     // filese from CVS. I need to know all common parents of the moved files and releative
     // paths.
@@ -517,6 +515,7 @@ public class MoveClassesOrPackagesProcessor extends BaseRefactoringProcessor {
     }
   }
 
+  @Nonnull
   protected String getCommandName() {
     String elements = RefactoringUIUtil.calculatePsiElementDescriptionList(myElementsToMove);
     String target = myTargetPackage.getQualifiedName();

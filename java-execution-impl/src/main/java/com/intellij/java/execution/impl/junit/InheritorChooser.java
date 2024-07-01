@@ -15,9 +15,6 @@
  */
 package com.intellij.java.execution.impl.junit;
 
-import consulo.annotation.access.RequiredReadAction;
-import consulo.execution.action.ConfigurationContext;
-import consulo.execution.action.Location;
 import com.intellij.java.execution.impl.junit2.PsiMemberParameterizedLocation;
 import com.intellij.java.execution.impl.junit2.info.MethodLocation;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
@@ -27,19 +24,22 @@ import com.intellij.java.language.psi.PsiClassOwner;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.util.PsiClassUtil;
-import consulo.fileEditor.TextEditor;
 import consulo.application.ReadAction;
-import consulo.document.Document;
-import consulo.fileEditor.FileEditor;
 import consulo.application.progress.ProgressManager;
+import consulo.document.Document;
+import consulo.execution.action.ConfigurationContext;
+import consulo.execution.action.Location;
+import consulo.fileEditor.FileEditor;
+import consulo.fileEditor.TextEditor;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiFile;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.ColoredListCellRenderer;
 import consulo.ui.ex.awt.JBList;
 import consulo.ui.ex.awt.popup.AWTPopupFactory;
 import consulo.ui.ex.popup.JBPopupFactory;
-import consulo.util.lang.function.Condition;
-import consulo.language.psi.PsiDocumentManager;
-import consulo.language.psi.PsiFile;
 import consulo.util.collection.ArrayUtil;
+import consulo.util.lang.function.Condition;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -57,7 +57,7 @@ public class InheritorChooser {
     performRunnable.run();
   }
 
-  @RequiredReadAction
+  @RequiredUIAccess
   public boolean runMethodInAbstractClass(
     final ConfigurationContext context,
     final Runnable performRunnable,
@@ -67,7 +67,7 @@ public class InheritorChooser {
     return runMethodInAbstractClass(context, performRunnable, psiMethod, containingClass, psiClass -> psiClass.hasModifierProperty(PsiModifier.ABSTRACT));
   }
 
-  @RequiredReadAction
+  @RequiredUIAccess
   public boolean runMethodInAbstractClass(
     final ConfigurationContext context,
     final Runnable performRunnable,
