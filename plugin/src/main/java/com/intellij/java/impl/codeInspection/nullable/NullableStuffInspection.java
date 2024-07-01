@@ -21,9 +21,8 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ReadAction;
-import consulo.application.util.function.Processor;
 import consulo.ide.impl.find.PsiElement2UsageTargetAdapter;
-import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.java.analysis.impl.localize.JavaInspectionsLocalize;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.LocalQuickFixOnPsiElement;
 import consulo.language.psi.PsiElement;
@@ -63,7 +62,7 @@ public class NullableStuffInspection extends NullableStuffInspectionBase {
     @Nonnull
     @Override
     public String getFamilyName() {
-      return InspectionsBundle.message("nullable.stuff.inspection.navigate.null.argument.usages.fix.family.name");
+      return JavaInspectionsLocalize.nullableStuffInspectionNavigateNullArgumentUsagesFixFamilyName().get();
     }
 
     @Override
@@ -79,21 +78,22 @@ public class NullableStuffInspection extends NullableStuffInspectionBase {
       }
 
       UsageViewPresentation presentation = new UsageViewPresentation();
-      String title = InspectionsBundle.message("nullable.stuff.inspection.navigate.null.argument.usages.view.name", p.getName());
+      String title = JavaInspectionsLocalize.nullableStuffInspectionNavigateNullArgumentUsagesViewName(p.getName()).get();
       presentation.setUsagesString(title);
       presentation.setTabName(title);
       presentation.setTabText(title);
       UsageViewManager.getInstance(project).searchAndShowUsages(
         new UsageTarget[]{new PsiElement2UsageTargetAdapter(method.getParameterList().getParameters()[parameterIdx])},
-        () -> new UsageSearcher() {
-          @Override
-          public void generate(@Nonnull final Processor<Usage> processor) {
-            ReadAction.run(() -> JavaNullMethodArgumentUtil.searchNullArgument(method,
-                                                                               parameterIdx,
-                                                                               (arg) -> processor.process(new UsageInfo2UsageAdapter(new UsageInfo(
-                                                                                 arg)))));
-          }
-        }, false, false, presentation, null);
+        () -> processor -> ReadAction.run(() -> JavaNullMethodArgumentUtil.searchNullArgument(
+          method,
+          parameterIdx,
+          (arg) -> processor.process(new UsageInfo2UsageAdapter(new UsageInfo(arg)))
+        )),
+        false,
+        false,
+        presentation,
+        null
+      );
     }
 
     @Override

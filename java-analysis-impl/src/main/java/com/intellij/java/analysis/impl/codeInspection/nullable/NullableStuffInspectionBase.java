@@ -18,6 +18,7 @@ import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.*;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.util.registry.Registry;
+import consulo.java.analysis.impl.localize.JavaInspectionsLocalize;
 import consulo.language.editor.inspection.*;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiElement;
@@ -874,11 +875,12 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
         PsiAnnotation notNullAnnotation = info.getAnnotation();
         boolean physical = PsiTreeUtil.isAncestor(parameter, notNullAnnotation, true);
         final LocalQuickFix fix = physical ? new RemoveAnnotationQuickFix(notNullAnnotation, parameter) : null;
-        holder.registerProblem(physical ? notNullAnnotation : parameter.getNameIdentifier(),
-                               InspectionsBundle.message("inspection.nullable.problems.NotNull.parameter.overrides.not.annotated",
-                                                         getPresentableAnnoName(parameter)),
-                               ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
-                               fix);
+        holder.registerProblem(
+          physical ? notNullAnnotation : parameter.getNameIdentifier(),
+          JavaInspectionsLocalize.inspectionNullableProblemsNotnullParameterOverridesNotAnnotated(getPresentableAnnoName(parameter)).get(),
+          ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
+          fix
+        );
       }
 
       checkNullLiteralArgumentOfNotNullParameterUsages(method, holder, nullableManager, isOnFly, i, parameter, state);
@@ -955,11 +957,12 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
       return;
     }
 
-    holder.registerProblem(elementToHighlight,
-                           InspectionsBundle.message("inspection.nullable.problems.NotNull.parameter.receives.null.literal",
-                                                     getPresentableAnnoName(parameter)),
-                           ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
-                           createNavigateToNullParameterUsagesFix(parameter));
+    holder.registerProblem(
+      elementToHighlight,
+      InspectionsBundle.message("inspection.nullable.problems.NotNull.parameter.receives.null.literal", getPresentableAnnoName(parameter)),
+      ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
+      createNavigateToNullParameterUsagesFix(parameter)
+    );
   }
 
   private void checkOverriders(
