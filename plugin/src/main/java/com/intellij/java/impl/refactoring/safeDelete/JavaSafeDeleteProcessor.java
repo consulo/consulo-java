@@ -151,7 +151,7 @@ public class JavaSafeDeleteProcessor extends SafeDeleteProcessorDelegateBase {
         if (Messages.showYesNoDialog(
           project,
           message,
-          SafeDeleteHandler.REFACTORING_NAME,
+          SafeDeleteHandler.REFACTORING_NAME.get(),
           UIUtil.getQuestionIcon()
         ) != DialogWrapper.OK_EXIT_CODE) {
           return null;

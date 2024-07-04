@@ -210,7 +210,7 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
     return Messages.showYesNoDialog(
       myProject,
       RefactoringBundle.message("do.you.want.to.process.overriding.methods.with.covariant.return.type"),
-      JavaChangeSignatureHandler.REFACTORING_NAME,
+      JavaChangeSignatureHandler.REFACTORING_NAME.get(),
       UIUtil.getQuestionIcon()
     ) == DialogWrapper.OK_EXIT_CODE;
   }
