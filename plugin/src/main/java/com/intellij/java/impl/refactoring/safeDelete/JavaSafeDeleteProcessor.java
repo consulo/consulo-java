@@ -34,7 +34,7 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.document.util.TextRange;
 import consulo.ide.impl.find.PsiElement2UsageTargetAdapter;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.safeDelete.NonCodeUsageSearchInfo;
 import consulo.language.editor.refactoring.safeDelete.SafeDeleteHandler;
 import consulo.language.editor.refactoring.safeDelete.SafeDeleteProcessor;
@@ -45,6 +45,7 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.project.Project;
@@ -120,7 +121,7 @@ public class JavaSafeDeleteProcessor extends SafeDeleteProcessorDelegateBase {
     } else if (element instanceof PsiMethod method) {
       final PsiMethod[] methods = SuperMethodWarningUtil.checkSuperMethods(
         method,
-        RefactoringBundle.message("to.delete.with.usage.search"),
+        RefactoringLocalize.toDeleteWithUsageSearch().get(),
         allElementsToDelete
       );
       if (methods.length == 0) return null;
@@ -144,14 +145,12 @@ public class JavaSafeDeleteProcessor extends SafeDeleteProcessorDelegateBase {
       }
 
       if (parametersToDelete.size() > 1 && !project.getApplication().isUnitTestMode()) {
-        String message = RefactoringBundle.message(
-          "0.is.a.part.of.method.hierarchy.do.you.want.to.delete.multiple.parameters",
-          UsageViewUtil.getLongName(method)
-        );
+        LocalizeValue message =
+          RefactoringLocalize.zeroIsAPartOfMethodHierarchyDoYouWantToDeleteMultipleParameters(UsageViewUtil.getLongName(method));
         if (Messages.showYesNoDialog(
           project,
-          message,
-          SafeDeleteHandler.REFACTORING_NAME,
+          message.get(),
+          SafeDeleteHandler.REFACTORING_NAME.get(),
           UIUtil.getQuestionIcon()
         ) != DialogWrapper.OK_EXIT_CODE) {
           return null;
@@ -191,6 +190,7 @@ public class JavaSafeDeleteProcessor extends SafeDeleteProcessorDelegateBase {
     );
   }
 
+  @RequiredUIAccess
   public Collection<PsiElement> getAdditionalElementsToDelete(
     final PsiElement element,
     final Collection<PsiElement> allElementsToDelete,
@@ -218,9 +218,14 @@ public class JavaSafeDeleteProcessor extends SafeDeleteProcessorDelegateBase {
         if (allElementsToDelete.contains(setter) || setter != null && !setter.isPhysical()) setter = null;
         if (askUser && (getters != null || setter != null)) {
           final String message =
-              RefactoringMessageUtil.getGetterSetterMessage(field.getName(), RefactoringBundle.message("delete.title"), getters != null ? getters[0] : null, setter);
+            RefactoringMessageUtil.getGetterSetterMessage(
+              field.getName(),
+              RefactoringLocalize.deleteTitle().get(),
+              getters != null ? getters[0] : null,
+              setter
+            );
           if (!project.getApplication().isUnitTestMode()
-            && Messages.showYesNoDialog(project, message, RefactoringBundle.message("safe.delete.title"), UIUtil.getQuestionIcon()) != 0) {
+            && Messages.showYesNoDialog(project, message, RefactoringLocalize.safeDeleteTitle().get(), UIUtil.getQuestionIcon()) != 0) {
             getters = null;
             setter = null;
           }
@@ -243,9 +248,11 @@ public class JavaSafeDeleteProcessor extends SafeDeleteProcessorDelegateBase {
         for (PsiMethod superMethod : superMethods) {
           if (isInside(superMethod, allElementsToDelete)) continue;
           if (superMethod.hasModifierProperty(PsiModifier.ABSTRACT)) {
-            String message = RefactoringBundle.message("0.implements.1", RefactoringUIUtil.getDescription(element, true),
-                RefactoringUIUtil.getDescription(superMethod, true));
-            return Collections.singletonList(message);
+            LocalizeValue message = RefactoringLocalize.zeroImplements1(
+              RefactoringUIUtil.getDescription(element, true),
+              RefactoringUIUtil.getDescription(superMethod, true)
+            );
+            return Collections.singletonList(message.get());
           }
         }
       }
@@ -254,6 +261,7 @@ public class JavaSafeDeleteProcessor extends SafeDeleteProcessorDelegateBase {
   }
 
   @Nullable
+  @RequiredUIAccess
   public UsageInfo[] preprocessUsages(final Project project, final UsageInfo[] usages) {
     ArrayList<UsageInfo> result = new ArrayList<>();
     ArrayList<UsageInfo> overridingMethods = new ArrayList<>();
@@ -438,7 +446,11 @@ public class JavaSafeDeleteProcessor extends SafeDeleteProcessorDelegateBase {
 
   @Nullable
   @RequiredReadAction
-  private static Condition<PsiElement> findMethodUsages(PsiMethod psiMethod, final PsiElement[] allElementsToDelete, List<UsageInfo> usages) {
+  private static Condition<PsiElement> findMethodUsages(
+    PsiMethod psiMethod,
+    final PsiElement[] allElementsToDelete,
+    List<UsageInfo> usages
+  ) {
     final Collection<PsiReference> references = ReferencesSearch.search(psiMethod).findAll();
 
     if (psiMethod.isConstructor()) {

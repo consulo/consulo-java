@@ -47,7 +47,7 @@ import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.completion.CompletionResultSet;
 import consulo.language.editor.completion.lookup.LookupElementBuilder;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.editor.ui.awt.EditorTextField;
 import consulo.language.editor.ui.awt.TextFieldCompletionProvider;
@@ -57,6 +57,7 @@ import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnActionEvent;
@@ -228,7 +229,7 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
     table.setSurrendersFocusOnKeystroke(true);
 
     myPropExceptionsButton = new AnActionButton(
-      RefactoringBundle.message("changeSignature.propagate.exceptions.title"),
+      RefactoringLocalize.changesignaturePropagateExceptionsTitle().get(),
       null,
       ImageEffects.layered(AllIcons.Nodes.ExceptionClass, AllIcons.Actions.New)
     ) {
@@ -244,7 +245,7 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
         chooser.set(new JavaCallerChooser(
           method,
           myProject,
-          RefactoringBundle.message("changeSignature.exception.caller.chooser"),
+          RefactoringLocalize.changesignatureExceptionCallerChooser().get(),
           myExceptionPropagationTree,
           callback
         ));
@@ -259,8 +260,8 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
     myExceptionsModel.addTableModelListener(getSignatureUpdater());
 
     final ArrayList<Pair<String, JPanel>> result = new ArrayList<>();
-    final String message = RefactoringBundle.message("changeSignature.exceptions.panel.border.title");
-    result.add(Pair.create(message, panel));
+    final LocalizeValue message = RefactoringLocalize.changesignatureExceptionsPanelBorderTitle();
+    result.add(Pair.create(message.get(), panel));
     return result;
   }
 
@@ -501,9 +502,10 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
   }
 
   @Override
+  @RequiredUIAccess
   protected void invokeRefactoring(final BaseRefactoringProcessor processor) {
     if (myMethodsToPropagateExceptions != null && !mayPropagateExceptions()) {
-      Messages.showWarningDialog(myProject, RefactoringBundle.message("changeSignature.exceptions.wont.propagate"), REFACTORING_NAME);
+      Messages.showWarningDialog(myProject, RefactoringLocalize.changesignatureExceptionsWontPropagate().get(), REFACTORING_NAME.get());
       myMethodsToPropagateExceptions = null;
     }
     super.invokeRefactoring(processor);
@@ -565,10 +567,10 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
         ((PsiTypeCodeFragment) myReturnTypeCodeFragment).getType();
       } catch (PsiTypeCodeFragment.TypeSyntaxException e) {
         myReturnTypeField.requestFocus();
-        return RefactoringBundle.message("changeSignature.wrong.return.type", myReturnTypeCodeFragment.getText());
+        return RefactoringLocalize.changesignatureWrongReturnType(myReturnTypeCodeFragment.getText()).get();
       } catch (PsiTypeCodeFragment.NoTypeException e) {
         myReturnTypeField.requestFocus();
-        return RefactoringBundle.message("changeSignature.no.return.type");
+        return RefactoringLocalize.changesignatureNoReturnType().get();
       }
     }
 
@@ -586,16 +588,15 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
       try {
         type = ((PsiTypeCodeFragment) parameterInfos.get(i).typeCodeFragment).getType();
       } catch (PsiTypeCodeFragment.TypeSyntaxException e) {
-        return RefactoringBundle.message("changeSignature.wrong.type.for.parameter", item.typeCodeFragment.getText(),
-            item.parameter.getName());
+        return RefactoringLocalize.changesignatureWrongTypeForParameter(item.typeCodeFragment.getText(), item.parameter.getName()).get();
       } catch (PsiTypeCodeFragment.NoTypeException e) {
-        return RefactoringBundle.message("changeSignature.no.type.for.parameter", item.parameter.getName());
+        return RefactoringLocalize.changesignatureNoTypeForParameter(item.parameter.getName()).get();
       }
 
       item.parameter.setType(type);
 
       if (type instanceof PsiEllipsisType && i != newParametersNumber - 1) {
-        return RefactoringBundle.message("changeSignature.vararg.not.last");
+        return RefactoringLocalize.changesignatureVarargNotLast().get();
       }
 
       if (item.parameter.oldParameterIndex < 0) {
@@ -625,19 +626,19 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
       try {
         PsiType type = typeCodeFragment.getType();
         if (!(type instanceof PsiClassType)) {
-          return RefactoringBundle.message("changeSignature.wrong.type.for.exception", typeCodeFragment.getText());
+          return RefactoringLocalize.changesignatureWrongTypeForException(typeCodeFragment.getText()).get();
         }
 
         PsiClassType throwable = JavaPsiFacade.getInstance(myProject).getElementFactory()
           .createTypeByFQClassName("java.lang.Throwable", type.getResolveScope());
         if (!throwable.isAssignableFrom(type)) {
-          return RefactoringBundle.message("changeSignature.not.throwable.type", typeCodeFragment.getText());
+          return RefactoringLocalize.changesignatureNotThrowableType(typeCodeFragment.getText()).get();
         }
         exceptionInfo.setType((PsiClassType) type);
       } catch (PsiTypeCodeFragment.TypeSyntaxException e) {
-        return RefactoringBundle.message("changeSignature.wrong.type.for.exception", typeCodeFragment.getText());
+        return RefactoringLocalize.changesignatureWrongTypeForException(typeCodeFragment.getText()).get();
       } catch (PsiTypeCodeFragment.NoTypeException e) {
-        return RefactoringBundle.message("changeSignature.no.type.for.exception");
+        return RefactoringLocalize.changesignatureNoTypeForException().get();
       }
     }
 
@@ -647,11 +648,8 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
         if (!RefactoringUtil.isResolvableType(((PsiTypeCodeFragment) myReturnTypeCodeFragment).getType())) {
           if (Messages.showOkCancelDialog(
             myProject,
-            RefactoringBundle.message(
-              "changeSignature.cannot.resolve.return.type",
-              myReturnTypeCodeFragment.getText()
-            ),
-            RefactoringBundle.message("changeSignature.refactoring.name"),
+            RefactoringLocalize.changesignatureCannotResolveReturnType(myReturnTypeCodeFragment.getText()).get(),
+            RefactoringLocalize.changesignatureRefactoringName().get(),
             UIUtil.getWarningIcon()
           ) != 0) {
             return EXIT_SILENTLY;
@@ -662,12 +660,8 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
         if (!RefactoringUtil.isResolvableType(((PsiTypeCodeFragment) item.typeCodeFragment).getType())) {
           if (Messages.showOkCancelDialog(
             myProject,
-            RefactoringBundle.message(
-              "changeSignature.cannot.resolve.parameter.type",
-              item.typeCodeFragment.getText(),
-              item.parameter.getName()
-            ),
-            RefactoringBundle.message("changeSignature.refactoring.name"),
+            RefactoringLocalize.changesignatureCannotResolveParameterType(item.typeCodeFragment.getText(), item.parameter.getName()).get(),
+            RefactoringLocalize.changesignatureRefactoringName().get(),
             UIUtil.getWarningIcon()
           ) != 0) {
             return EXIT_SILENTLY;
@@ -700,6 +694,7 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
   }
 
   @Override
+  @RequiredUIAccess
   protected String calculateSignature() {
     return doCalculateSignature(myMethod.getMethod());
   }

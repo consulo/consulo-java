@@ -24,6 +24,7 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.dataContext.DataContext;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.DialogWrapper;
@@ -57,8 +58,8 @@ public class JavaChangeSignatureHandler implements ChangeSignatureHandler {
     } else if (element instanceof PsiClass psiClass) {
       invoke(psiClass, editor);
     } else {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("error.wrong.caret.position.method.or.class" + ".name"));
-      CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.CHANGE_SIGNATURE);
+      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.errorWrongCaretPositionMethodOrClassName().get());
+      CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME.get(), HelpID.CHANGE_SIGNATURE);
     }
   }
 
@@ -75,12 +76,12 @@ public class JavaChangeSignatureHandler implements ChangeSignatureHandler {
   @Nullable
   @Override
   public String getTargetNotFoundMessage() {
-    return RefactoringBundle.message("error.wrong.caret.position.method.or.class.name");
+    return RefactoringLocalize.errorWrongCaretPositionMethodOrClassName().get();
   }
 
   @RequiredUIAccess
   private static void invoke(final PsiMethod method, final Project project, @Nullable final Editor editor) {
-    PsiMethod newMethod = SuperMethodWarningUtil.checkSuperMethod(method, RefactoringBundle.message("to.refactor"));
+    PsiMethod newMethod = SuperMethodWarningUtil.checkSuperMethod(method, RefactoringLocalize.toRefactor().get());
     if (newMethod == null) {
       return;
     }
@@ -101,12 +102,13 @@ public class JavaChangeSignatureHandler implements ChangeSignatureHandler {
     dialog.show();
   }
 
+  @RequiredUIAccess
   private static void invoke(final PsiClass aClass, Editor editor) {
     final PsiTypeParameterList typeParameterList = aClass.getTypeParameterList();
     Project project = aClass.getProject();
     if (typeParameterList == null) {
-      final String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("changeClassSignature.no.type.parameters"));
-      CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.CHANGE_CLASS_SIGNATURE);
+      final String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.changeclasssignatureNoTypeParameters().get());
+      CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME.get(), HelpID.CHANGE_CLASS_SIGNATURE);
       return;
     }
     if (!CommonRefactoringUtil.checkReadOnlyStatus(project, aClass)) {

@@ -27,15 +27,16 @@ import com.intellij.java.language.psi.util.*;
 import com.intellij.java.language.util.VisibilityUtil;
 import consulo.java.impl.refactoring.changeSignature.ChangeSignatureUsageProcessorEx;
 import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.changeSignature.ChangeSignatureProcessorBase;
 import consulo.language.editor.refactoring.changeSignature.ChangeSignatureUsageProcessor;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.RenameUtil;
 import consulo.language.editor.refactoring.ui.ConflictsDialog;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
@@ -51,24 +52,79 @@ import java.util.*;
 public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
   private static final Logger LOG = Logger.getInstance(ChangeSignatureProcessor.class);
 
-  public ChangeSignatureProcessor(Project project, PsiMethod method, final boolean generateDelegate,
-                                  @PsiModifier.ModifierConstant String newVisibility, String newName, PsiType newType, @Nonnull ParameterInfoImpl[] parameterInfo) {
-    this(project, method, generateDelegate, newVisibility, newName, newType != null ? CanonicalTypes.createTypeWrapper(newType) : null,
-        parameterInfo, null, null, null);
+  public ChangeSignatureProcessor(
+    Project project,
+    PsiMethod method,
+    final boolean generateDelegate,
+    @PsiModifier.ModifierConstant String newVisibility,
+    String newName,
+    PsiType newType,
+    @Nonnull ParameterInfoImpl[] parameterInfo
+  ) {
+    this(
+      project,
+      method,
+      generateDelegate,
+      newVisibility,
+      newName,
+      newType != null ? CanonicalTypes.createTypeWrapper(newType) : null,
+      parameterInfo,
+      null,
+      null,
+      null
+    );
   }
 
-  public ChangeSignatureProcessor(Project project, PsiMethod method, final boolean generateDelegate,
-                                  @PsiModifier.ModifierConstant String newVisibility, String newName, PsiType newType, ParameterInfoImpl[] parameterInfo,
-                                  ThrownExceptionInfo[] exceptionInfos) {
-    this(project, method, generateDelegate, newVisibility, newName, newType != null ? CanonicalTypes.createTypeWrapper(newType) : null,
-        parameterInfo, exceptionInfos, null, null);
+  public ChangeSignatureProcessor(
+    Project project,
+    PsiMethod method,
+    final boolean generateDelegate,
+    @PsiModifier.ModifierConstant String newVisibility,
+    String newName,
+    PsiType newType,
+    ParameterInfoImpl[] parameterInfo,
+    ThrownExceptionInfo[] exceptionInfos
+  ) {
+    this(
+      project,
+      method,
+      generateDelegate,
+      newVisibility,
+      newName,
+      newType != null ? CanonicalTypes.createTypeWrapper(newType) : null,
+      parameterInfo,
+      exceptionInfos,
+      null,
+      null
+    );
   }
 
-  public ChangeSignatureProcessor(Project project, PsiMethod method, boolean generateDelegate, @PsiModifier.ModifierConstant String newVisibility,
-                                  String newName, CanonicalTypes.Type newType, @Nonnull ParameterInfoImpl[] parameterInfo, ThrownExceptionInfo[] thrownExceptions,
-                                  Set<PsiMethod> propagateParametersMethods, Set<PsiMethod> propagateExceptionsMethods) {
-    this(project, generateChangeInfo(method, generateDelegate, newVisibility, newName, newType, parameterInfo, thrownExceptions,
-        propagateParametersMethods, propagateExceptionsMethods));
+  public ChangeSignatureProcessor(
+    Project project,
+    PsiMethod method,
+    boolean generateDelegate,
+    @PsiModifier.ModifierConstant String newVisibility,
+    String newName,
+    CanonicalTypes.Type newType,
+    @Nonnull ParameterInfoImpl[] parameterInfo,
+    ThrownExceptionInfo[] thrownExceptions,
+    Set<PsiMethod> propagateParametersMethods,
+    Set<PsiMethod> propagateExceptionsMethods
+  ) {
+    this(
+      project,
+      generateChangeInfo(
+        method,
+        generateDelegate,
+        newVisibility,
+        newName,
+        newType,
+        parameterInfo,
+        thrownExceptions,
+        propagateParametersMethods,
+        propagateExceptionsMethods
+      )
+    );
   }
 
   public ChangeSignatureProcessor(Project project, final JavaChangeInfo changeInfo) {
@@ -95,8 +151,17 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
       newVisibility = VisibilityUtil.getVisibilityModifier(method.getModifierList());
     }
 
-    return new JavaChangeInfoImpl(newVisibility, method, newName, newType, parameterInfo, thrownExceptions, generateDelegate,
-        myPropagateParametersMethods, myPropagateExceptionsMethods);
+    return new JavaChangeInfoImpl(
+      newVisibility,
+      method,
+      newName,
+      newType,
+      parameterInfo,
+      thrownExceptions,
+      generateDelegate,
+      myPropagateParametersMethods,
+      myPropagateExceptionsMethods
+    );
   }
 
   @Override
@@ -118,6 +183,7 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
   }
 
   @Override
+  @RequiredUIAccess
   protected boolean preprocessUsages(@Nonnull Ref<UsageInfo[]> refUsages) {
     for (ChangeSignatureUsageProcessor processor : ChangeSignatureUsageProcessor.EP_NAME.getExtensions()) {
       if (processor instanceof ChangeSignatureUsageProcessorEx && ((ChangeSignatureUsageProcessorEx) processor).setupDefaultValues
@@ -167,6 +233,7 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
     return true;
   }
 
+  @RequiredUIAccess
   private void askToRemoveCovariantOverriders(Set<UsageInfo> usages) {
     if (PsiUtil.isLanguageLevel5OrHigher(myChangeInfo.getMethod())) {
       List<UsageInfo> covariantOverriderInfos = new ArrayList<>();
@@ -206,11 +273,12 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
   protected void preprocessCovariantOverriders(final List<UsageInfo> covariantOverriderInfos) {
   }
 
+  @RequiredUIAccess
   protected boolean isProcessCovariantOverriders() {
     return Messages.showYesNoDialog(
       myProject,
-      RefactoringBundle.message("do.you.want.to.process.overriding.methods.with.covariant.return.type"),
-      JavaChangeSignatureHandler.REFACTORING_NAME,
+      RefactoringLocalize.doYouWantToProcessOverridingMethodsWithCovariantReturnType().get(),
+      JavaChangeSignatureHandler.REFACTORING_NAME.get(),
       UIUtil.getQuestionIcon()
     ) == DialogWrapper.OK_EXIT_CODE;
   }
