@@ -206,7 +206,7 @@ public class RefactoringConflictsUtil {
         VisibilityUtil.getVisibilityStringToDisplay(refMember),
         RefactoringUIUtil.getDescription(member, false)
       );
-      conflicts.putValue(refMember, CommonRefactoringUtil.capitalize(message.get());
+      conflicts.putValue(refMember, CommonRefactoringUtil.capitalize(message.get()));
     }
     else if (newContext instanceof PsiClass && refMember instanceof PsiField && refMember.getContainingClass() == member.getContainingClass()) {
       final PsiField fieldInSubClass = ((PsiClass)newContext).findFieldByName(refMember.getName(), false);
