@@ -15,17 +15,17 @@
  */
 package com.intellij.java.impl.refactoring.typeCook;
 
-import consulo.project.Project;
-import consulo.project.ui.wm.WindowManager;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiTypeCastExpression;
-import consulo.language.editor.refactoring.BaseRefactoringProcessor;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import com.intellij.java.impl.refactoring.typeCook.deductive.builder.ReductionSystem;
 import com.intellij.java.impl.refactoring.typeCook.deductive.builder.Result;
 import com.intellij.java.impl.refactoring.typeCook.deductive.builder.SystemBuilder;
 import com.intellij.java.impl.refactoring.typeCook.deductive.resolver.Binding;
 import com.intellij.java.impl.refactoring.typeCook.deductive.resolver.ResolverTree;
+import com.intellij.java.language.psi.PsiTypeCastExpression;
+import consulo.language.editor.refactoring.BaseRefactoringProcessor;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
+import consulo.project.ui.wm.WindowManager;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
 import jakarta.annotation.Nonnull;
@@ -117,7 +117,7 @@ public class TypeCookProcessor extends BaseRefactoringProcessor {
   }
 
   protected String getCommandName() {
-    return RefactoringBundle.message("type.cook.command");
+    return RefactoringLocalize.typeCookCommand().get();
   }
 
   public List<PsiElement> getElements() {

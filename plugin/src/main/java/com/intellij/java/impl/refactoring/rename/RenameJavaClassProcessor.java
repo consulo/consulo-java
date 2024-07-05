@@ -23,33 +23,32 @@ import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.ClassUtil;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.project.Project;
-import consulo.util.lang.Comparing;
-import consulo.util.lang.Pair;
-import consulo.language.psi.*;
-import consulo.language.impl.psi.LightElement;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.psi.scope.LocalSearchScope;
+import consulo.application.util.function.Processor;
 import consulo.content.scope.SearchScope;
-import consulo.language.psi.search.ReferencesSearch;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.psi.PsiUtilCore;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.event.RefactoringElementListener;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.RenamePsiElementProcessor;
 import consulo.language.editor.refactoring.rename.UnresolvableCollisionUsageInfo;
-import consulo.usage.MoveRenameUsageInfo;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
+import consulo.language.impl.psi.LightElement;
+import consulo.language.psi.*;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.scope.LocalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.usage.MoveRenameUsageInfo;
 import consulo.usage.UsageInfo;
 import consulo.util.collection.ArrayUtil;
-import consulo.language.util.IncorrectOperationException;
-import consulo.application.util.function.Processor;
 import consulo.util.collection.MultiMap;
-import consulo.logging.Logger;
-import org.jetbrains.annotations.NonNls;
-
+import consulo.util.lang.Comparing;
+import consulo.util.lang.Pair;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -300,7 +299,9 @@ public class RenameJavaClassProcessor extends RenamePsiElementProcessor {
       PsiClass[] innerClasses = containingClass.getInnerClasses();
       for (PsiClass innerClass : innerClasses) {
         if (newName.equals(innerClass.getName())) {
-          conflicts.putValue(innerClass, RefactoringBundle.message("inner.class.0.is.already.defined.in.class.1", newName, containingClass.getQualifiedName()));
+          conflicts.putValue(innerClass,
+            RefactoringLocalize.innerClass0IsAlreadyDefinedInClass1(newName, containingClass.getQualifiedName()).get()
+          );
           break;
         }
       }
@@ -310,7 +311,7 @@ public class RenameJavaClassProcessor extends RenamePsiElementProcessor {
       final PsiClass conflictingClass =
           JavaPsiFacade.getInstance(project).findClass(qualifiedNameAfterRename, GlobalSearchScope.allScope(project));
       if (conflictingClass != null) {
-        conflicts.putValue(conflictingClass, RefactoringBundle.message("class.0.already.exists", qualifiedNameAfterRename));
+        conflicts.putValue(conflictingClass, RefactoringLocalize.class0AlreadyExists(qualifiedNameAfterRename).get());
       }
     }
   }

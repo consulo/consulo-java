@@ -21,7 +21,7 @@
 package com.intellij.java.impl.refactoring.ui;
 
 import consulo.application.HelpManager;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.project.Project;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.UIUtil;
@@ -45,8 +45,8 @@ public class YesNoPreviewUsagesDialog extends DialogWrapper {
     setTitle(title);
     myMessage = message;
     myToPreviewUsages = previewUsages;
-    setOKButtonText(RefactoringBundle.message("yes.button"));
-    setCancelButtonText(RefactoringBundle.message("no.button"));
+    setOKButtonText(RefactoringLocalize.yesButton().get());
+    setCancelButtonText(RefactoringLocalize.noButton().get());
     setButtonsAlignment(SwingUtilities.CENTER);
     init();
   }
@@ -75,7 +75,7 @@ public class YesNoPreviewUsagesDialog extends DialogWrapper {
   protected JComponent createSouthPanel() {
     myCbPreviewResults = new JCheckBox();
     myCbPreviewResults.setSelected(myToPreviewUsages);
-    myCbPreviewResults.setText(RefactoringBundle.message("preview.usages.to.be.changed"));
+    myCbPreviewResults.setText(RefactoringLocalize.previewUsagesToBeChanged().get());
     JPanel panel = new JPanel(new BorderLayout());
     panel.add(super.createSouthPanel(), BorderLayout.CENTER);
     panel.add(myCbPreviewResults, BorderLayout.WEST);

@@ -20,6 +20,7 @@ import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import consulo.language.ast.ASTNode;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.util.lang.StringUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiNamedElement;
@@ -109,15 +110,15 @@ public class AutomaticVariableRenamer extends AutomaticRenamer {
   }
 
   public String getDialogTitle() {
-    return RefactoringBundle.message("rename.variables.title");
+    return RefactoringLocalize.renameVariablesTitle().get();
   }
 
   public String getDialogDescription() {
-    return RefactoringBundle.message("rename.variables.with.the.following.names.to");
+    return RefactoringLocalize.renameVariablesWithTheFollowingNamesTo().get();
   }
 
   public String entityName() {
-    return RefactoringBundle.message("entity.name.variable");
+    return RefactoringLocalize.entityNameVariable().get();
   }
 
   public String nameToCanonicalName(String name, PsiNamedElement psiVariable) {

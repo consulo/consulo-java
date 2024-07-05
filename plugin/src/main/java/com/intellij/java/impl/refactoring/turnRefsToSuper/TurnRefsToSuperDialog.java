@@ -16,6 +16,7 @@
 package com.intellij.java.impl.refactoring.turnRefsToSuper;
 
 import consulo.application.HelpManager;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.impl.refactoring.HelpID;
@@ -90,7 +91,7 @@ public class TurnRefsToSuperDialog extends RefactoringDialog {
     mySuperClassesList = new JBList(mySuperClasses.toArray());
     mySuperClassesList.setCellRenderer(new ClassCellRenderer(mySuperClassesList.getCellRenderer()));
     mySuperClassesList.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    classListLabel.setText(RefactoringBundle.message("turnRefsToSuper.change.usages.to", mySubClass.getQualifiedName()));
+    classListLabel.setText(RefactoringLocalize.turnrefstosuperChangeUsagesTo(mySubClass.getQualifiedName()).get());
 
     PsiClass nearestBase = RefactoringHierarchyUtil.getNearestBaseClass(mySubClass, true);
     int indexToSelect = 0;
@@ -100,7 +101,7 @@ public class TurnRefsToSuperDialog extends RefactoringDialog {
     mySuperClassesList.setSelectedIndex(indexToSelect);
     panel.add(ScrollPaneFactory.createScrollPane(mySuperClassesList), BorderLayout.CENTER);
 
-    myCbReplaceInstanceOf.setText(RefactoringBundle.message("turnRefsToSuper.use.superclass.in.instanceof"));
+    myCbReplaceInstanceOf.setText(RefactoringLocalize.turnrefstosuperUseSuperclassInInstanceof().get());
     myCbReplaceInstanceOf.setSelected(false);
     myCbReplaceInstanceOf.setFocusable(false);
     panel.add(myCbReplaceInstanceOf, BorderLayout.SOUTH);

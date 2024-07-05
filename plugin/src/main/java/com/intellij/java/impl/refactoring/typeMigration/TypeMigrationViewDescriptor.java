@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.refactoring.typeMigration;
 
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.PsiElement;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.usage.UsageViewBundle;
 import consulo.usage.UsageViewDescriptor;
 import jakarta.annotation.Nonnull;
@@ -46,7 +46,7 @@ class TypeMigrationViewDescriptor implements UsageViewDescriptor
 	@Override
 	public String getCodeReferencesText(int usagesCount, int filesCount)
 	{
-		return RefactoringBundle.message("occurences.to.be.migrated", UsageViewBundle.getReferencesString(usagesCount, filesCount));
+		return RefactoringLocalize.occurencesToBeMigrated(UsageViewBundle.getReferencesString(usagesCount, filesCount)).get();
 	}
 
 	@Override

@@ -16,9 +16,9 @@
 package com.intellij.java.impl.refactoring.util.classMembers;
 
 import com.intellij.java.language.psi.*;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.classMember.MemberDependencyGraph;
 import consulo.language.editor.refactoring.classMember.MemberInfoBase;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -94,8 +94,7 @@ public class InterfaceMemberDependencyGraph<T extends PsiMember, M extends Membe
 			return null;
 		}
 		StringBuilder buffer = new StringBuilder();
-		buffer.append(RefactoringBundle.message("interface.member.dependency.required.by.interfaces",
-				dependencies.size()));
+		buffer.append(RefactoringLocalize.interfaceMemberDependencyRequiredByInterfaces(dependencies.size()));
 		buffer.append(" ");
 		for(Iterator<? extends PsiMember> iterator = dependencies.iterator(); iterator.hasNext(); )
 		{

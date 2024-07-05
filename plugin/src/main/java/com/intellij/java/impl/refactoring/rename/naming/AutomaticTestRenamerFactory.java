@@ -19,12 +19,12 @@ import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.project.Project;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.AutomaticRenamer;
 import consulo.language.editor.refactoring.rename.AutomaticRenamerFactory;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.project.Project;
 import consulo.usage.UsageInfo;
 
 import java.util.Collection;
@@ -45,7 +45,7 @@ public class AutomaticTestRenamerFactory implements AutomaticRenamerFactory {
   }
 
   public String getOptionName() {
-    return RefactoringBundle.message("rename.tests");
+    return RefactoringLocalize.renameTests().get();
   }
 
   public boolean isEnabled() {
@@ -79,15 +79,15 @@ public class AutomaticTestRenamerFactory implements AutomaticRenamerFactory {
     }
 
     public String getDialogTitle() {
-      return RefactoringBundle.message("rename.tests.title");
+      return RefactoringLocalize.renameTestsTitle().get();
     }
 
     public String getDialogDescription() {
-      return RefactoringBundle.message("rename.tests.with.the.following.names.to");
+      return RefactoringLocalize.renameTestsWithTheFollowingNamesTo().get();
     }
 
     public String entityName() {
-      return RefactoringBundle.message("entity.name.test");
+      return RefactoringLocalize.entityNameTest().get();
     }
   }
 }

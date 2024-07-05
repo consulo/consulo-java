@@ -24,16 +24,16 @@ import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.application.util.function.Processor;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.findUsage.DescriptiveNameUtil;
+import consulo.language.psi.FileContextUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import consulo.language.psi.FileContextUtil;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
-import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
-import consulo.application.util.function.Processor;
+import consulo.localize.LocalizeValue;
 import consulo.util.collection.MultiMap;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -71,11 +71,9 @@ public class ConflictsUtil {
     if (method != null && method != refactoredMethod) {
       if (aClass.equals(method.getContainingClass())) {
         final String classDescr = aClass instanceof PsiAnonymousClass ?
-                                  RefactoringBundle.message("current.class") :
+          RefactoringLocalize.currentClass().get() :
                                   RefactoringUIUtil.getDescription(aClass, false);
-        conflicts.putValue(method, RefactoringBundle.message("method.0.is.already.defined.in.the.1",
-                                                getMethodPrototypeString(prototype),
-                                                classDescr));
+        conflicts.putValue(method, RefactoringLocalize.method0IsAlreadyDefinedInThe1(getMethodPrototypeString(prototype), classDescr).get());
       }
       else { // method somewhere in base class
         if (JavaPsiFacade.getInstance(method.getProject()).getResolveHelper().isAccessible(method, aClass, null)) {
@@ -83,14 +81,13 @@ public class ConflictsUtil {
           if (PsiUtil.getAccessLevel(prototype.getModifierList()) >= PsiUtil.getAccessLevel(method.getModifierList()) ) {
             boolean isMethodAbstract = method.hasModifierProperty(PsiModifier.ABSTRACT);
             boolean isMyMethodAbstract = refactoredMethod != null && refactoredMethod.hasModifierProperty(PsiModifier.ABSTRACT);
-            final String conflict = isMethodAbstract != isMyMethodAbstract ?
-                                    RefactoringBundle.message("method.0.will.implement.method.of.the.base.class", protoMethodInfo, className) :
-                                    RefactoringBundle.message("method.0.will.override.a.method.of.the.base.class", protoMethodInfo, className);
+            final String conflict = isMethodAbstract != isMyMethodAbstract
+              ? RefactoringLocalize.method0WillImplementMethodOfTheBaseClass(protoMethodInfo, className).get()
+              : RefactoringLocalize.method0WillOverrideAMethodOfTheBaseClass(protoMethodInfo, className).get();
             conflicts.putValue(method, conflict);
           }
           else { // prototype is private, will be compile-error
-            conflicts.putValue(method, RefactoringBundle.message("method.0.will.hide.method.of.the.base.class",
-                                                    protoMethodInfo, className));
+            conflicts.putValue(method, RefactoringLocalize.method0WillHideMethodOfTheBaseClass(protoMethodInfo, className).get());
           }
         }
       }
@@ -121,20 +118,18 @@ public class ConflictsUtil {
     PsiField existingField = aClass != null ? aClass.findFieldByName(newName, true) : null;
     if (existingField != null) {
       if (aClass.equals(existingField.getContainingClass())) {
-        String className = aClass instanceof PsiAnonymousClass ?
-                           RefactoringBundle.message("current.class") :
-                           RefactoringUIUtil.getDescription(aClass, false);
-        final String conflict = RefactoringBundle.message("field.0.is.already.defined.in.the.1",
-                                                          existingField.getName(), className);
-        conflicts.putValue(existingField, conflict);
+        String className = aClass instanceof PsiAnonymousClass
+          ? RefactoringLocalize.currentClass().get()
+          : RefactoringUIUtil.getDescription(aClass, false);
+        final LocalizeValue conflict = RefactoringLocalize.field0IsAlreadyDefinedInThe1(existingField.getName(), className);
+        conflicts.putValue(existingField, conflict.get());
       }
       else { // method somewhere in base class
         if (!existingField.hasModifierProperty(PsiModifier.PRIVATE)) {
           String fieldInfo = PsiFormatUtil.formatVariable(existingField, PsiFormatUtil.SHOW_NAME | PsiFormatUtil.SHOW_TYPE | PsiFormatUtil.TYPE_AFTER, PsiSubstitutor.EMPTY);
           String className = RefactoringUIUtil.getDescription(existingField.getContainingClass(), false);
-          final String descr = RefactoringBundle.message("field.0.will.hide.field.1.of.the.base.class",
-                                                         newName, fieldInfo, className);
-          conflicts.putValue(existingField, descr);
+          final LocalizeValue descr = RefactoringLocalize.field0WillHideField1OfTheBaseClass(newName, fieldInfo, className);
+          conflicts.putValue(existingField, descr.get());
         }
       }
     }

@@ -25,11 +25,12 @@
 package com.intellij.java.impl.refactoring.rename;
 
 import com.intellij.java.language.psi.PsiMethod;
-import consulo.language.psi.PsiElement;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.UnresolvableCollisionUsageInfo;
-import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import consulo.usage.UsageViewUtil;
 
 public class SubmemberHidesMemberUsageInfo extends UnresolvableCollisionUsageInfo {
@@ -38,16 +39,16 @@ public class SubmemberHidesMemberUsageInfo extends UnresolvableCollisionUsageInf
   }
 
   public String getDescription() {
-    String descr;
-    if (!(getElement() instanceof PsiMethod)) {
-      descr = RefactoringBundle.message("0.will.hide.renamed.1",
-          RefactoringUIUtil.getDescription(getElement(), true),
-          UsageViewUtil.getType(getElement()));
-    } else {
-      descr = RefactoringBundle.message("0.will.override.renamed.1",
-          RefactoringUIUtil.getDescription(getElement(), true),
-          UsageViewUtil.getType(getElement()));
-    }
-    return CommonRefactoringUtil.capitalize(descr);
+    PsiElement element = getElement();
+    LocalizeValue descr = element instanceof PsiMethod
+      ? RefactoringLocalize.zeroWillOverrideRenamed1(
+        RefactoringUIUtil.getDescription(element, true),
+        UsageViewUtil.getType(element)
+      )
+      : RefactoringLocalize.zeroWillHideRenamed1(
+        RefactoringUIUtil.getDescription(element, true),
+        UsageViewUtil.getType(element)
+      );
+    return CommonRefactoringUtil.capitalize(descr.get());
   }
 }

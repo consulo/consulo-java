@@ -24,7 +24,7 @@ import consulo.application.HelpManager;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
 import consulo.ide.impl.idea.util.ui.Table;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.project.Project;
 import consulo.ui.ex.awt.BooleanTableCellRenderer;
 import consulo.ui.ex.awt.DialogWrapper;
@@ -78,7 +78,7 @@ class OverridingMethodsDialog extends DialogWrapper {
               | PsiFormatUtilBase.SHOW_TYPE, PsiFormatUtilBase.SHOW_TYPE);
     }
     myUsagePreviewPanel = UsagePreviewPanelFactory.getInstance().createPreviewPanel(project, new UsageViewPresentation());
-    setTitle(RefactoringBundle.message("unused.overriding.methods.title"));
+    setTitle(RefactoringLocalize.unusedOverridingMethodsTitle());
     init();
   }
 
@@ -115,8 +115,8 @@ class OverridingMethodsDialog extends DialogWrapper {
   protected JComponent createNorthPanel() {
     JPanel panel = new JPanel();
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-    panel.add(new JLabel(RefactoringBundle.message("there.are.unused.methods.that.override.methods.you.delete")));
-    panel.add(new JLabel(RefactoringBundle.message("choose.the.ones.you.want.to.be.deleted")));
+    panel.add(new JLabel(RefactoringLocalize.thereAreUnusedMethodsThatOverrideMethodsYouDelete().get()));
+    panel.add(new JLabel(RefactoringLocalize.chooseTheOnesYouWantToBeDeleted().get()));
     return panel;
   }
 
@@ -228,7 +228,7 @@ class OverridingMethodsDialog extends DialogWrapper {
         case CHECK_COLUMN:
           return " ";
         default:
-          return RefactoringBundle.message("method.column");
+          return RefactoringLocalize.methodColumn().get();
       }
     }
 

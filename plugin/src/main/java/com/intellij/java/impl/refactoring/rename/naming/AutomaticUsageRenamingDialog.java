@@ -20,6 +20,7 @@ import consulo.ide.impl.idea.ui.components.panels.ValidatingComponent;
 import consulo.ide.impl.idea.util.ui.Table;
 import consulo.ide.localize.IdeLocalize;
 import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.ex.SimpleTextAttributes;
@@ -156,10 +157,10 @@ public class AutomaticUsageRenamingDialog<T> extends DialogWrapper {
     box.add(myValidatingComponent);
     final Box buttonBox = Box.createHorizontalBox();
     buttonBox.add(Box.createHorizontalGlue());
-    final JButton selectAllButton = new JButton(RefactoringBundle.message("select.all.button"));
+    final JButton selectAllButton = new JButton(RefactoringLocalize.selectAllButton().get());
     buttonBox.add(selectAllButton);
     buttonBox.add(Box.createHorizontalStrut(4));
-    final JButton deselectAllButton = new JButton(RefactoringBundle.message("unselect.all.button"));
+    final JButton deselectAllButton = new JButton(RefactoringLocalize.unselectAllButton().get());
     buttonBox.add(deselectAllButton);
     selectAllButton.addActionListener(e -> {
       for (int i = 0; i < getElementCount(); i++) {
@@ -378,9 +379,9 @@ public class AutomaticUsageRenamingDialog<T> extends DialogWrapper {
     public String getColumnName(int column) {
       switch(column) {
         case OLD_NAME_COLUMN:
-          return RefactoringBundle.message("automatic.renamer.enity.name.column", myRenamer.getEntityName());
+          return RefactoringLocalize.automaticRenamerEnityNameColumn(myRenamer.getEntityName()).get();
         case NEW_NAME_COLUMN:
-          return RefactoringBundle.message("automatic.renamer.rename.to.column");
+          return RefactoringLocalize.automaticRenamerRenameToColumn().get();
         default:
           return " ";
       }

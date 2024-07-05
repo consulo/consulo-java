@@ -30,6 +30,7 @@ import javax.swing.JPanel;
 
 import consulo.application.HelpManager;
 import consulo.configurable.ConfigurationException;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
@@ -113,7 +114,7 @@ public class ReplaceConstructorWithFactoryDialog extends RefactoringDialog {
     gbc.gridwidth = 1;
     gbc.gridx = 0;
     gbc.gridy = 0;
-    panel.add(new JLabel(RefactoringBundle.message("factory.method.name.label")), gbc);
+    panel.add(new JLabel(RefactoringLocalize.factoryMethodNameLabel().get()), gbc);
 
     gbc.gridx++;
     gbc.weightx = 1.0;
@@ -147,7 +148,7 @@ public class ReplaceConstructorWithFactoryDialog extends RefactoringDialog {
   private JPanel createTargetPanel() {
     JPanel targetClassPanel = new JPanel(new BorderLayout());
     if (!myIsInner) {
-      JLabel label = new JLabel(RefactoringBundle.message("replace.constructor.with.factory.target.fq.name"));
+      JLabel label = new JLabel(RefactoringLocalize.replaceConstructorWithFactoryTargetFqName().get());
       label.setLabelFor(myTfTargetClassName);
       targetClassPanel.add(label, BorderLayout.NORTH);
       targetClassPanel.add(myTfTargetClassName, BorderLayout.CENTER);
@@ -162,7 +163,7 @@ public class ReplaceConstructorWithFactoryDialog extends RefactoringDialog {
       }
 
       myTargetClassNameCombo = new JComboBox(ArrayUtil.toStringArray(list));
-      JLabel label = new JLabel(RefactoringBundle.message("replace.constructor.with.factory.target.fq.name"));
+      JLabel label = new JLabel(RefactoringLocalize.replaceConstructorWithFactoryTargetFqName().get());
       label.setLabelFor(myTargetClassNameCombo.getEditor().getEditorComponent());
       targetClassPanel.add(label, BorderLayout.NORTH);
       targetClassPanel.add(myTargetClassNameCombo, BorderLayout.CENTER);
@@ -176,8 +177,8 @@ public class ReplaceConstructorWithFactoryDialog extends RefactoringDialog {
 
   private class ChooseClassAction implements ActionListener {
     public void actionPerformed(ActionEvent e) {
-      TreeClassChooser chooser = TreeClassChooserFactory.getInstance(getProject()).createProjectScopeChooser(
-        RefactoringBundle.message("choose.destination.class"));
+      TreeClassChooser chooser = TreeClassChooserFactory.getInstance(getProject())
+        .createProjectScopeChooser(RefactoringLocalize.chooseDestinationClass().get());
       chooser.selectDirectory(myContainingClass.getContainingFile().getContainingDirectory());
       chooser.showDialog();
       PsiClass aClass = chooser.getSelected();
@@ -199,7 +200,7 @@ public class ReplaceConstructorWithFactoryDialog extends RefactoringDialog {
     final PsiClass targetClass =
       JavaPsiFacade.getInstance(manager.getProject()).findClass(targetClassName, GlobalSearchScope.allScope(project));
     if (targetClass == null) {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("class.0.not.found", targetClassName));
+      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.class0NotFound(targetClassName).get());
       CommonRefactoringUtil.showErrorMessage(ReplaceConstructorWithFactoryHandler.REFACTORING_NAME,
                                               message, HelpID.REPLACE_CONSTRUCTOR_WITH_FACTORY, project);
       return;

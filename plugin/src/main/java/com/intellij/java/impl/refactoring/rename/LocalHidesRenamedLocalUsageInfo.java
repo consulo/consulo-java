@@ -24,11 +24,12 @@
  */
 package com.intellij.java.impl.refactoring.rename;
 
-import consulo.language.psi.PsiElement;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.UnresolvableCollisionUsageInfo;
-import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import consulo.usage.UsageViewUtil;
 
 public class LocalHidesRenamedLocalUsageInfo extends UnresolvableCollisionUsageInfo {
@@ -40,12 +41,10 @@ public class LocalHidesRenamedLocalUsageInfo extends UnresolvableCollisionUsageI
   }
 
   public String getDescription() {
-
     PsiElement element = getElement();
     String type = element == null ? "element" : UsageViewUtil.getType(element);
-    final String descr = RefactoringBundle.message("there.is.already.a.0.it.will.conflict.with.the.renamed.1",
-        RefactoringUIUtil.getDescription(myConflictingElement, true),
-        type);
-    return CommonRefactoringUtil.capitalize(descr);
+    String elemDescr = RefactoringUIUtil.getDescription(myConflictingElement, true);
+    final LocalizeValue descr = RefactoringLocalize.thereIsAlreadyA0ItWillConflictWithTheRenamed1(elemDescr, type);
+    return CommonRefactoringUtil.capitalize(descr.get());
   }
 }

@@ -19,6 +19,7 @@ import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.rename.AutomaticRenamer;
@@ -37,7 +38,7 @@ public class AutomaticVariableRenamerFactory implements AutomaticRenamerFactory 
   }
 
   public String getOptionName() {
-    return RefactoringBundle.message("rename.variables");
+    return RefactoringLocalize.renameVariables().get();
   }
 
   public boolean isEnabled() {

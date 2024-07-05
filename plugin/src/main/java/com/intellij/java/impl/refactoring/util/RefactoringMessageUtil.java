@@ -20,18 +20,19 @@ import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.virtualFileSystem.VirtualFile;
-import consulo.language.psi.PsiDirectory;
 import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.psi.PsiDirectory;
+import consulo.project.Project;
 import consulo.usage.UsageViewUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import org.jetbrains.annotations.NonNls;
 
 public class RefactoringMessageUtil {
 
   public static String getIncorrectIdentifierMessage(String identifierName) {
-    return RefactoringBundle.message("0.is.not.a.legal.java.identifier", identifierName);
+    return RefactoringLocalize.zeroIsNotALegalJavaIdentifier(identifierName).get();
   }
 
   /**
@@ -43,8 +44,11 @@ public class RefactoringMessageUtil {
     VirtualFile file = destinationDirectory.getVirtualFile();
     for (PsiClass aClass : classes) {
       if (className.equals(aClass.getName())) {
-        return RefactoringBundle.message("directory.0.already.contains.1.named.2",
-            file.getPresentableUrl(), UsageViewUtil.getType(aClass), className);
+        return RefactoringLocalize.directory0AlreadyContains1Named2(
+            file.getPresentableUrl(),
+            UsageViewUtil.getType(aClass),
+            className
+          ).get();
       }
     }
     @NonNls String fileName = className + ".java";
@@ -55,26 +59,23 @@ public class RefactoringMessageUtil {
     VirtualFile file = destinationDirectory.getVirtualFile();
     VirtualFile child = file.findChild(fileName);
     if (child != null) {
-      return RefactoringBundle.message("directory.0.already.contains.a.file.named.1",
-          file.getPresentableUrl(), fileName);
+      return RefactoringLocalize.directory0AlreadyContainsAFileNamed1(file.getPresentableUrl(), fileName).get();
     }
     return null;
   }
 
   public static String getGetterSetterMessage(String newName, String action, PsiMethod getter, PsiMethod setter) {
-    String text;
     if (getter != null && setter != null) {
-      text = RefactoringBundle.message("getter.and.setter.methods.found.for.the.field.0", newName, action);
+      return RefactoringLocalize.getterAndSetterMethodsFoundForTheField0(newName, action).get();
     } else if (getter != null) {
-      text = RefactoringBundle.message("getter.method.found.for.the.field.0", newName, action);
+      return RefactoringLocalize.getterMethodFoundForTheField0(newName, action).get();
     } else {
-      text = RefactoringBundle.message("setter.method.found.for.the.field.0", newName, action);
+      return RefactoringLocalize.setterMethodFoundForTheField0(newName, action).get();
     }
-    return text;
   }
 
   public static void showNotSupportedForJspClassesError(final Project project, Editor editor, final String refactoringName, final String helpId) {
-    String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("refactoring.is.not.supported.for.jsp.classes"));
+    String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.refactoringIsNotSupportedForJspClasses().get());
     CommonRefactoringUtil.showErrorHint(project, editor, message, refactoringName, helpId);
   }
 }

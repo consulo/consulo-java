@@ -31,6 +31,7 @@ import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.folding.CodeFoldingManager;
 import consulo.language.editor.highlight.HighlightManager;
 import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiFile;
@@ -224,15 +225,14 @@ public class DuplicatesImpl {
       }
       final int answer = project.getApplication().isUnitTestMode() || hasDuplicates == null ? Messages.YES
         : Messages.showYesNoDialog(
-          project,
-          RefactoringBundle.message(
-            "0.has.detected.1.code.fragments.in.this.file.that.can.be.replaced.with.a.call.to.extracted.method",
-            Application.get().getName(),
-            duplicates.size()
-          ),
-          "Process Duplicates",
-          UIUtil.getQuestionIcon()
-        );
+        project,
+        RefactoringLocalize.zeroHasDetected1CodeFragmentsInThisFileThatCanBeReplacedWithACallToExtractedMethod(
+          Application.get().getName(),
+          duplicates.size()
+        ).get(),
+        "Process Duplicates",
+        UIUtil.getQuestionIcon()
+      );
       if (answer == Messages.YES) {
         PsiDocumentManager.getInstance(project).commitAllDocuments();
         invoke(project, editor, provider, hasDuplicates != null);

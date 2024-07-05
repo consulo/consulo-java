@@ -18,6 +18,7 @@ package com.intellij.java.impl.refactoring.typeCook.deductive.builder;
 import com.intellij.java.language.impl.psi.Bottom;
 import com.intellij.java.language.impl.psi.PsiTypeVariable;
 import com.intellij.java.language.psi.*;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.logging.Logger;
 import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
@@ -165,7 +166,6 @@ public class Result {
   }
 
   public String getReport() {
-    return RefactoringBundle.message("type.cook.report", getRatio(myCookedNumber, myVictims.size()),
-                                     getRatio(myCastsRemoved, myCastsNumber));
+    return RefactoringLocalize.typeCookReport(getRatio(myCookedNumber, myVictims.size()), getRatio(myCastsRemoved, myCastsNumber)).get();
   }
 }

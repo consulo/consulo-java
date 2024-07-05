@@ -29,6 +29,7 @@ import consulo.codeEditor.ScrollType;
 import consulo.dataContext.DataContext;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -48,7 +49,7 @@ public class TurnRefsToSuperHandler implements RefactoringActionHandler {
     PsiElement element = file.findElementAt(offset);
     while (true) {
       if (element == null || element instanceof PsiFile) {
-        String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("error.wrong.caret.position.class"));
+        String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.errorWrongCaretPositionClass().get());
         CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.TURN_REFS_TO_SUPER);
         return;
       }
@@ -70,10 +71,8 @@ public class TurnRefsToSuperHandler implements RefactoringActionHandler {
     ArrayList basesList = RefactoringHierarchyUtil.createBasesList(subClass, true, true);
 
     if (basesList.isEmpty()) {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message(
-        "interface.does.not.have.base.interfaces",
-        subClass.getQualifiedName()
-      ));
+      String message =
+        RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.interfaceDoesNotHaveBaseInterfaces(subClass.getQualifiedName()).get());
       Editor editor = dataContext.getData(Editor.KEY);
       CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.TURN_REFS_TO_SUPER);
       return;

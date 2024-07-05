@@ -24,7 +24,7 @@ import com.intellij.java.language.psi.util.RedundantCastUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.application.progress.ProgressManager;
 import consulo.application.util.function.Processor;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.PsiReference;
@@ -35,9 +35,9 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import java.util.*;
 
 /**
@@ -294,7 +294,7 @@ public class InlineUtil {
           }
         });
       }
-    }, RefactoringBundle.message("inline.method.checking.tail.calls.progress"), true, method.getProject());
+    }, RefactoringLocalize.inlineMethodCheckingTailCallsProgress().get(), true, method.getProject());
     return result && nonTailCallUsages.isEmpty();
   }
 

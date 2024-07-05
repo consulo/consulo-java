@@ -31,8 +31,8 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.function.Processor;
 import consulo.codeEditor.Editor;
 import consulo.content.scope.SearchScope;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.event.RefactoringElementListener;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.PsiElementRenameHandler;
 import consulo.language.editor.refactoring.rename.RenameProcessor;
 import consulo.language.editor.refactoring.rename.UnresolvableCollisionUsageInfo;
@@ -47,10 +47,10 @@ import consulo.usage.MoveRenameUsageInfo;
 import consulo.usage.UsageInfo;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.Comparing;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -312,7 +312,7 @@ public class RenameJavaMethodProcessor extends RenameJavaMemberProcessor {
         return element;
       }
     }
-    return SuperMethodWarningUtil.checkSuperMethod(psiMethod, RefactoringBundle.message("to.rename"));
+    return SuperMethodWarningUtil.checkSuperMethod(psiMethod, RefactoringLocalize.toRename().get());
   }
 
   @Override

@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.refactoring.replaceConstructorWithFactory;
 
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.ui.ex.awt.UIUtil;
 import jakarta.annotation.Nonnull;
 
@@ -44,7 +45,7 @@ public class ReplaceConstructorWithFactoryHandler
     PsiElement element = file.findElementAt(offset);
     while (true) {
       if (element == null || element instanceof PsiFile) {
-        String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("error.wrong.caret.position.constructor"));
+        String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.errorWrongCaretPositionConstructor().get());
         CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.REPLACE_CONSTRUCTOR_WITH_FACTORY);
         return;
       }
@@ -112,13 +113,13 @@ public class ReplaceConstructorWithFactoryHandler
     final PsiMethod[] constructors = aClass.getConstructors();
     if (constructors.length > 0) {
       String message =
-              RefactoringBundle.message("class.does.not.have.implicit.default.constructor", aClass.getQualifiedName()) ;
+        RefactoringLocalize.classDoesNotHaveImplicitDefaultConstructor(aClass.getQualifiedName()).get();
       CommonRefactoringUtil.showErrorHint(myProject, editor, message, REFACTORING_NAME, HelpID.REPLACE_CONSTRUCTOR_WITH_FACTORY);
       return;
     }
     final int answer = Messages.showYesNoDialog(
       myProject,
-      RefactoringBundle.message("would.you.like.to.replace.default.constructor.of.0.with.factory.method", aClass.getQualifiedName()),
+      RefactoringLocalize.wouldYouLikeToReplaceDefaultConstructorOf0WithFactoryMethod(aClass.getQualifiedName()).get(),
       REFACTORING_NAME,
       UIUtil.getQuestionIcon()
     );
@@ -128,21 +129,21 @@ public class ReplaceConstructorWithFactoryHandler
   }
 
   private void showJspOrLocalClassMessage(Editor editor) {
-    String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("refactoring.is.not.supported.for.local.and.jsp.classes"));
+    String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.refactoringIsNotSupportedForLocalAndJspClasses().get());
     CommonRefactoringUtil.showErrorHint(myProject, editor, message, REFACTORING_NAME, HelpID.REPLACE_CONSTRUCTOR_WITH_FACTORY);
   }
   private boolean checkAbstractClassOrInterfaceMessage(PsiClass aClass, Editor editor) {
     if (!aClass.hasModifierProperty(PsiModifier.ABSTRACT)) return true;
-    String message = RefactoringBundle.getCannotRefactorMessage(aClass.isInterface() ?
-                                                                RefactoringBundle.message("class.is.interface", aClass.getQualifiedName()) :
-                                                                RefactoringBundle.message("class.is.abstract", aClass.getQualifiedName()));
+    String message = RefactoringBundle.getCannotRefactorMessage(aClass.isInterface()
+      ? RefactoringLocalize.classIsInterface(aClass.getQualifiedName()).get()
+      : RefactoringLocalize.classIsAbstract(aClass.getQualifiedName()).get());
     CommonRefactoringUtil.showErrorHint(myProject, editor, message, REFACTORING_NAME, HelpID.REPLACE_CONSTRUCTOR_WITH_FACTORY);
     return false;
   }
 
   private void invoke(final PsiMethod method, Editor editor) {
     if (!method.isConstructor()) {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("method.is.not.a.constructor"));
+      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.methodIsNotAConstructor().get());
       CommonRefactoringUtil.showErrorHint(myProject, editor, message, REFACTORING_NAME, HelpID.REPLACE_CONSTRUCTOR_WITH_FACTORY);
       return;
     }

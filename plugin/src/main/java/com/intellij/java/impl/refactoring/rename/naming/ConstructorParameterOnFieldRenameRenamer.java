@@ -21,6 +21,7 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.util.lang.Comparing;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiMirrorElement;
@@ -80,14 +81,14 @@ public class ConstructorParameterOnFieldRenameRenamer extends AutomaticRenamer {
   }
 
   public String getDialogTitle() {
-    return RefactoringBundle.message("rename.constructor.parameters.title");
+    return RefactoringLocalize.renameConstructorParametersTitle().get();
   }
 
   public String getDialogDescription() {
-    return RefactoringBundle.message("rename.constructor.parameters.with.the.following.names.to");
+    return RefactoringLocalize.renameConstructorParametersWithTheFollowingNamesTo().get();
   }
 
   public String entityName() {
-    return RefactoringBundle.message("entity.name.constructor.parameter");
+    return RefactoringLocalize.entityNameConstructorParameter().get();
   }
 }

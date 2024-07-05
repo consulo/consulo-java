@@ -21,7 +21,7 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.util.VisibilityUtil;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import consulo.language.findUsage.DescriptiveNameUtil;
 import consulo.language.psi.PsiElement;
@@ -31,15 +31,16 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.ref.Ref;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -137,10 +138,11 @@ public class ReplaceConstructorWithFactoryProcessor extends BaseRefactoringProce
     final PsiResolveHelper helper = JavaPsiFacade.getInstance(myProject).getResolveHelper();
     final PsiClass constructorContainingClass = getConstructorContainingClass();
     if (!helper.isAccessible(constructorContainingClass, myTargetClass, null)) {
-      String message = RefactoringBundle.message("class.0.is.not.accessible.from.target.1",
-          RefactoringUIUtil.getDescription(constructorContainingClass, true),
-          RefactoringUIUtil.getDescription(myTargetClass, true));
-      conflicts.putValue(constructorContainingClass, message);
+      LocalizeValue message = RefactoringLocalize.class0IsNotAccessibleFromTarget1(
+        RefactoringUIUtil.getDescription(constructorContainingClass, true),
+        RefactoringUIUtil.getDescription(myTargetClass, true)
+      );
+      conflicts.putValue(constructorContainingClass, message.get());
     }
 
     HashSet<PsiElement> reportedContainers = new HashSet<PsiElement>();
@@ -150,10 +152,11 @@ public class ReplaceConstructorWithFactoryProcessor extends BaseRefactoringProce
       if (!reportedContainers.contains(container)) {
         reportedContainers.add(container);
         if (!helper.isAccessible(myTargetClass, usage.getElement(), null)) {
-          String message = RefactoringBundle.message("target.0.is.not.accessible.from.1",
-              targetClassDescription,
-              RefactoringUIUtil.getDescription(container, true));
-          conflicts.putValue(myTargetClass, message);
+          LocalizeValue message = RefactoringLocalize.target0IsNotAccessibleFrom1(
+            targetClassDescription,
+            RefactoringUIUtil.getDescription(container, true)
+          );
+          conflicts.putValue(myTargetClass, message.get());
         }
       }
     }
@@ -165,10 +168,11 @@ public class ReplaceConstructorWithFactoryProcessor extends BaseRefactoringProce
           final PsiClass containingClass = field.getContainingClass();
 
           if (PsiTreeUtil.isAncestor(containingClass, myTargetClass, true)) {
-            String message = RefactoringBundle.message("constructor.being.refactored.is.used.in.initializer.of.0",
-                RefactoringUIUtil.getDescription(field, true), RefactoringUIUtil.getDescription(
-                    constructorContainingClass, false));
-            conflicts.putValue(field, message);
+            LocalizeValue message = RefactoringLocalize.constructorBeingRefactoredIsUsedInInitializerOf0(
+              RefactoringUIUtil.getDescription(field, true),
+              RefactoringUIUtil.getDescription(constructorContainingClass, false)
+            );
+            conflicts.putValue(field, message.get());
           }
         }
       }
@@ -297,11 +301,9 @@ public class ReplaceConstructorWithFactoryProcessor extends BaseRefactoringProce
 
   protected String getCommandName() {
     if (myConstructor != null) {
-      return RefactoringBundle.message("replace.constructor.0.with.a.factory.method",
-          DescriptiveNameUtil.getDescriptiveName(myConstructor));
+      return RefactoringLocalize.replaceConstructor0WithAFactoryMethod(DescriptiveNameUtil.getDescriptiveName(myConstructor)).get();
     } else {
-      return RefactoringBundle.message("replace.default.constructor.of.0.with.a.factory.method",
-          DescriptiveNameUtil.getDescriptiveName(myOriginalClass));
+      return RefactoringLocalize.replaceDefaultConstructorOf0WithAFactoryMethod(DescriptiveNameUtil.getDescriptiveName(myOriginalClass)).get();
     }
   }
 

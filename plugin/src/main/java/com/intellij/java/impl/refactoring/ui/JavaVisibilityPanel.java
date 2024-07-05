@@ -28,6 +28,7 @@ import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.util.VisibilityUtil;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.ide.impl.idea.refactoring.ui.VisibilityPanelBase;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.ui.ex.awt.IdeBorderFactory;
 import consulo.ui.ex.awt.UIUtil;
 import jakarta.annotation.Nullable;
@@ -47,11 +48,16 @@ public class JavaVisibilityPanel extends VisibilityPanelBase<String> {
   private final JRadioButton myRbPublic;
 
   public JavaVisibilityPanel(boolean hasAsIs, final boolean hasEscalate) {
-    setBorder(IdeBorderFactory.createTitledBorder(RefactoringBundle.message("visibility.border.title"), true,
-        new Insets(IdeBorderFactory.TITLED_BORDER_TOP_INSET,
-            UIUtil.DEFAULT_HGAP,
-            IdeBorderFactory.TITLED_BORDER_BOTTOM_INSET,
-            IdeBorderFactory.TITLED_BORDER_RIGHT_INSET)));
+    setBorder(IdeBorderFactory.createTitledBorder(
+      RefactoringLocalize.visibilityBorderTitle().get(),
+      true,
+      new Insets(
+        IdeBorderFactory.TITLED_BORDER_TOP_INSET,
+        UIUtil.DEFAULT_HGAP,
+        IdeBorderFactory.TITLED_BORDER_BOTTOM_INSET,
+        IdeBorderFactory.TITLED_BORDER_RIGHT_INSET
+      )
+    ));
     setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     ButtonGroup bg = new ButtonGroup();
 
@@ -65,7 +71,7 @@ public class JavaVisibilityPanel extends VisibilityPanelBase<String> {
 
     if (hasEscalate) {
       myRbEscalate = new JRadioButton();
-      myRbEscalate.setText(RefactoringBundle.getEscalateVisibility());
+      myRbEscalate.setText(RefactoringLocalize.visibilityEscalate().get());
       myRbEscalate.addItemListener(listener);
       add(myRbEscalate);
       bg.add(myRbEscalate);
@@ -73,7 +79,7 @@ public class JavaVisibilityPanel extends VisibilityPanelBase<String> {
 
     if (hasAsIs) {
       myRbAsIs = new JRadioButton();
-      myRbAsIs.setText(RefactoringBundle.getVisibilityAsIs());
+      myRbAsIs.setText(RefactoringLocalize.visibilityAsIs().get());
       myRbAsIs.addItemListener(listener);
       add(myRbAsIs);
       bg.add(myRbAsIs);
@@ -81,28 +87,28 @@ public class JavaVisibilityPanel extends VisibilityPanelBase<String> {
 
 
     myRbPrivate = new JRadioButton();
-    myRbPrivate.setText(RefactoringBundle.getVisibilityPrivate());
+    myRbPrivate.setText(RefactoringLocalize.visibilityPrivate().get());
     myRbPrivate.addItemListener(listener);
     myRbPrivate.setFocusable(false);
     add(myRbPrivate);
     bg.add(myRbPrivate);
 
     myRbPackageLocal = new JRadioButton();
-    myRbPackageLocal.setText(RefactoringBundle.getVisibilityPackageLocal());
+    myRbPackageLocal.setText(RefactoringLocalize.visibilityPackageLocal().get());
     myRbPackageLocal.addItemListener(listener);
     myRbPackageLocal.setFocusable(false);
     add(myRbPackageLocal);
     bg.add(myRbPackageLocal);
 
     myRbProtected = new JRadioButton();
-    myRbProtected.setText(RefactoringBundle.getVisibilityProtected());
+    myRbProtected.setText(RefactoringLocalize.visibilityProtected().get());
     myRbProtected.addItemListener(listener);
     myRbProtected.setFocusable(false);
     add(myRbProtected);
     bg.add(myRbProtected);
 
     myRbPublic = new JRadioButton();
-    myRbPublic.setText(RefactoringBundle.getVisibilityPublic());
+    myRbPublic.setText(RefactoringLocalize.visibilityPublic().get());
     myRbPublic.addItemListener(listener);
     myRbPublic.setFocusable(false);
     add(myRbPublic);

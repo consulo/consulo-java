@@ -22,7 +22,7 @@ import com.intellij.java.language.psi.PsiNameHelper;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.refactoring.rename.DirectoryAsPackageRenameHandlerBase;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.PsiDirectory;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
@@ -72,7 +72,9 @@ public class DirectoryAsPackageRenameHandler extends DirectoryAsPackageRenameHan
 
       @Override
       protected String getCommandName() {
-        return RefactoringBundle.message(dirsToRename.length == 1 ? "rename.directory.command.name" : "rename.directories.command.name");
+        return dirsToRename.length == 1
+          ? RefactoringLocalize.renameDirectoryCommandName().get()
+          : RefactoringLocalize.renameDirectoriesCommandName().get();
       }
     };
   }

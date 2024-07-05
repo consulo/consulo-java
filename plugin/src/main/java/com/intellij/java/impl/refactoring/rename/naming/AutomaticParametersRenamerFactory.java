@@ -25,10 +25,10 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiParameter;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.PsiElement;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.AutomaticRenamer;
 import consulo.language.editor.refactoring.rename.AutomaticRenamerFactory;
+import consulo.language.psi.PsiElement;
 import consulo.usage.UsageInfo;
 
 import java.util.Collection;
@@ -46,7 +46,7 @@ public class AutomaticParametersRenamerFactory implements AutomaticRenamerFactor
   }
 
   public String getOptionName() {
-    return RefactoringBundle.message("rename.parameters.hierarchy");
+    return RefactoringLocalize.renameParametersHierarchy().get();
   }
 
   public boolean isEnabled() {

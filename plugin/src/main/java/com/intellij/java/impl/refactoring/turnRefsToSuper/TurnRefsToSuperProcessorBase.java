@@ -35,7 +35,7 @@ import consulo.application.progress.ProgressManager;
 import consulo.application.util.function.Processor;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.AutomaticRenamingDialog;
 import consulo.language.psi.*;
 import consulo.language.psi.scope.LocalSearchScope;
@@ -100,7 +100,7 @@ public abstract class TurnRefsToSuperProcessorBase extends BaseRefactoringProces
       };
 
       if (!ProgressManager.getInstance()
-        .runProcessWithProgressSynchronously(runnable, RefactoringBundle.message("searching.for.variables"), true, myProject)) {
+        .runProcessWithProgressSynchronously(runnable, RefactoringLocalize.searchingForVariables().get(), true, myProject)) {
         return false;
       }
     }
