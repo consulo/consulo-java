@@ -18,10 +18,10 @@ package com.intellij.java.impl.refactoring.rename;
 import com.intellij.java.impl.refactoring.util.ConflictsUtil;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
-import consulo.language.psi.PsiElement;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.UnresolvableCollisionUsageInfo;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
+import consulo.language.psi.PsiElement;
 
 /**
  * @author dsl
@@ -36,7 +36,9 @@ public class ClassHidesUnqualifiableClassUsageInfo extends UnresolvableCollision
 
   public String getDescription() {
     final PsiElement container = ConflictsUtil.getContainer(myHiddenClass);
-    return RefactoringBundle.message("renamed.class.will.hide.0.in.1", RefactoringUIUtil.getDescription(myHiddenClass, false),
-        RefactoringUIUtil.getDescription(container, false));
+    return RefactoringLocalize.renamedClassWillHide0In1(
+      RefactoringUIUtil.getDescription(myHiddenClass, false),
+      RefactoringUIUtil.getDescription(container, false)
+    ).get();
   }
 }

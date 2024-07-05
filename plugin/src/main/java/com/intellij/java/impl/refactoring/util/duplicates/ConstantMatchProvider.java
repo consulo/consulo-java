@@ -15,19 +15,19 @@
  */
 package com.intellij.java.impl.refactoring.util.duplicates;
 
-import java.util.List;
-
 import com.intellij.java.analysis.impl.refactoring.util.duplicates.Match;
-import consulo.logging.Logger;
-import consulo.project.Project;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMember;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.project.Project;
+
+import java.util.List;
 
 /**
  * User: anna
@@ -82,6 +82,6 @@ class ConstantMatchProvider implements MatchProvider
 	@Override
 	public String getReplaceDuplicatesTitle(int idx, int size)
 	{
-		return RefactoringBundle.message("process.duplicates.title", idx, size);
+		return RefactoringLocalize.processDuplicatesTitle(idx, size).get();
 	}
 }

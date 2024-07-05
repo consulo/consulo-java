@@ -15,24 +15,26 @@
  */
 package com.intellij.java.impl.refactoring.turnRefsToSuper;
 
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.*;
-import consulo.language.findUsage.DescriptiveNameUtil;
+import com.intellij.java.language.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.application.ApplicationManager;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.language.findUsage.DescriptiveNameUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
-import consulo.util.lang.ref.Ref;
-import com.intellij.java.language.LanguageLevel;
-import consulo.language.psi.*;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.psi.search.ReferencesSearch;
-import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
 import consulo.usage.UsageViewUtil;
-import consulo.language.util.IncorrectOperationException;
+import consulo.util.lang.ref.Ref;
 import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
@@ -53,8 +55,10 @@ public class TurnRefsToSuperProcessor extends TurnRefsToSuperProcessorBase {
   }
 
   protected String getCommandName() {
-    return RefactoringBundle.message("turn.refs.to.super.command",
-                                     DescriptiveNameUtil.getDescriptiveName(myClass), DescriptiveNameUtil.getDescriptiveName(mySuper));
+    return RefactoringLocalize.turnRefsToSuperCommand(
+      DescriptiveNameUtil.getDescriptiveName(myClass),
+      DescriptiveNameUtil.getDescriptiveName(mySuper)
+    ).get();
   }
 
   @Nonnull
@@ -84,7 +88,7 @@ public class TurnRefsToSuperProcessor extends TurnRefsToSuperProcessorBase {
 
   protected boolean preprocessUsages(@Nonnull Ref<UsageInfo[]> refUsages) {
     if (!ApplicationManager.getApplication().isUnitTestMode() && refUsages.get().length == 0) {
-      String message = RefactoringBundle.message("no.usages.can.be.replaced", myClass.getQualifiedName(), mySuper.getQualifiedName());
+      String message = RefactoringLocalize.noUsagesCanBeReplaced(myClass.getQualifiedName(), mySuper.getQualifiedName()).get();
       Messages.showInfoMessage(myProject, message, TurnRefsToSuperHandler.REFACTORING_NAME);
       return false;
     }

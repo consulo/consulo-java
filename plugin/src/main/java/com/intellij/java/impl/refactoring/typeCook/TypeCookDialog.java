@@ -15,16 +15,17 @@
  */
 package com.intellij.java.impl.refactoring.typeCook;
 
-import consulo.language.findUsage.DescriptiveNameUtil;
-import consulo.application.HelpManager;
-import consulo.project.Project;
-import consulo.util.lang.StringUtil;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
+import consulo.application.HelpManager;
 import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.RefactoringDialog;
+import consulo.language.findUsage.DescriptiveNameUtil;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
 import consulo.usage.UsageViewUtil;
+import consulo.util.lang.StringUtil;
 import consulo.util.lang.xml.XmlStringUtil;
 
 import javax.swing.*;
@@ -113,12 +114,12 @@ public class TypeCookDialog extends RefactoringDialog {
         JavaRefactoringSettings.getInstance().TYPE_COOK_PRODUCE_WILDCARDS);
     }
 
-    myCbDropCasts.setText(RefactoringBundle.message("type.cook.drop.obsolete.casts"));
-    myCbPreserveRawArrays.setText(RefactoringBundle.message("type.cook.preserve.raw.arrays"));
-    myCbLeaveObjectParameterizedTypesRaw.setText(RefactoringBundle.message("type.cook.leave.object.parameterized.types.raw"));
-    myCbExhaustive.setText(RefactoringBundle.message("type.cook.perform.exhaustive.search"));
-    myCbCookObjects.setText(RefactoringBundle.message("type.cook.generify.objects"));
-    myCbCookToWildcards.setText(RefactoringBundle.message("type.cook.produce.wildcard.types"));
+    myCbDropCasts.setText(RefactoringLocalize.typeCookDropObsoleteCasts().get());
+    myCbPreserveRawArrays.setText(RefactoringLocalize.typeCookPreserveRawArrays().get());
+    myCbLeaveObjectParameterizedTypesRaw.setText(RefactoringLocalize.typeCookLeaveObjectParameterizedTypesRaw().get());
+    myCbExhaustive.setText(RefactoringLocalize.typeCookPerformExhaustiveSearch().get());
+    myCbCookObjects.setText(RefactoringLocalize.typeCookGenerifyObjects().get());
+    myCbCookToWildcards.setText(RefactoringLocalize.typeCookProduceWildcardTypes().get());
 
     gbConstraints.insets = new Insets(4, 8, 4, 8);
 

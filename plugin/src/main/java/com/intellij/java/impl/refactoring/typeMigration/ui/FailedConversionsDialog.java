@@ -15,25 +15,18 @@
  */
 package com.intellij.java.impl.refactoring.typeMigration.ui;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-
-import jakarta.annotation.Nonnull;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.JComponent;
-import javax.swing.JEditorPane;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-
-import org.jetbrains.annotations.NonNls;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.project.Project;
 import consulo.ui.ex.awt.DialogWrapper;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import consulo.ui.ex.awt.ScrollPaneFactory;
 import consulo.ui.ex.awt.JBUI;
+import consulo.ui.ex.awt.ScrollPaneFactory;
 import consulo.ui.ex.awt.UIUtil;
+import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
 
 /**
  * created at Sep 12, 2001
@@ -49,9 +42,9 @@ public class FailedConversionsDialog extends DialogWrapper
 	{
 		super(project, true);
 		myConflictDescriptions = conflictDescriptions;
-		setTitle(RefactoringBundle.message("usages.detected.title"));
-		setOKButtonText(RefactoringBundle.message("ignore.button"));
-		getOKAction().putValue(Action.MNEMONIC_KEY, new Integer('I'));
+		setTitle(RefactoringLocalize.usagesDetectedTitle());
+		setOKButtonText(RefactoringLocalize.ignoreButton().get());
+		getOKAction().putValue(Action.MNEMONIC_KEY, (int)'I');
 		init();
 	}
 
@@ -74,7 +67,7 @@ public class FailedConversionsDialog extends DialogWrapper
 		messagePane.setEditable(false);
 		JScrollPane scrollPane = ScrollPaneFactory.createScrollPane(messagePane);
 		scrollPane.setPreferredSize(JBUI.size(500, 400));
-		panel.add(new JLabel(RefactoringBundle.message("the.following.problems.were.found")), BorderLayout.NORTH);
+		panel.add(new JLabel(RefactoringLocalize.theFollowingProblemsWereFound().get()), BorderLayout.NORTH);
 		panel.add(scrollPane, BorderLayout.CENTER);
 
 		@NonNls StringBuilder buf = new StringBuilder();
@@ -97,7 +90,7 @@ public class FailedConversionsDialog extends DialogWrapper
 	{
 		public CancelAction()
 		{
-			super(RefactoringBundle.message("cancel.button"));
+			super(RefactoringLocalize.cancelButton().get());
 		}
 
 		@Override
@@ -111,8 +104,8 @@ public class FailedConversionsDialog extends DialogWrapper
 	{
 		public ViewUsagesAction()
 		{
-			super(RefactoringBundle.message("view.usages"));
-			putValue(Action.MNEMONIC_KEY, new Integer('V'));
+			super(RefactoringLocalize.viewUsages().get());
+			putValue(Action.MNEMONIC_KEY, (int)'V');
 			putValue(DialogWrapper.DEFAULT_ACTION, Boolean.TRUE);
 		}
 

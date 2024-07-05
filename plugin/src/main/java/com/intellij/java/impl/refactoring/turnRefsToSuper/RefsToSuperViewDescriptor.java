@@ -17,11 +17,10 @@
 package com.intellij.java.impl.refactoring.turnRefsToSuper;
 
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.usage.UsageViewBundle;
 import consulo.usage.UsageViewDescriptor;
-
 import jakarta.annotation.Nonnull;
 
 class RefsToSuperViewDescriptor implements UsageViewDescriptor {
@@ -47,8 +46,7 @@ class RefsToSuperViewDescriptor implements UsageViewDescriptor {
 
   public String getCodeReferencesText(int usagesCount, int filesCount) {
     StringBuilder buffer = new StringBuilder();
-    buffer.append(RefactoringBundle.message("references.to.0.to.be.replaced.with.references.to.1",
-                                            myClass.getName(), mySuper.getName()));
+    buffer.append(RefactoringLocalize.referencesTo0ToBeReplacedWithReferencesTo1(myClass.getName(), mySuper.getName()).get());
     buffer.append(" ");
     buffer.append(UsageViewBundle.getReferencesString(usagesCount, filesCount));
     return buffer.toString();

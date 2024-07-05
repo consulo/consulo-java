@@ -30,7 +30,7 @@ import com.intellij.java.language.util.TreeClassChooserFactory;
 import consulo.application.ui.wm.ApplicationIdeFocusManager;
 import consulo.configurable.ConfigurationException;
 import consulo.ide.impl.idea.util.ui.Table;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.RefactoringDialog;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -226,8 +226,12 @@ public class ReplaceConstructorWithBuilderDialog extends RefactoringDialog {
       }
     };
 
-    myPackageTextField =
-        new PackageNameReferenceEditorCombo(((PsiJavaFile) myConstructors[0].getContainingFile()).getPackageName(), myProject, RECENT_KEYS, RefactoringBundle.message("choose.destination.package"));
+    myPackageTextField = new PackageNameReferenceEditorCombo(
+      ((PsiJavaFile) myConstructors[0].getContainingFile()).getPackageName(),
+      myProject,
+      RECENT_KEYS,
+      RefactoringLocalize.chooseDestinationPackage().get()
+    );
     myPackageTextField.getChildComponent().getDocument().addDocumentListener(adapter);
 
     myDestinationCb = new DestinationFolderComboBox() {

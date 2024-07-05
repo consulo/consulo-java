@@ -22,7 +22,10 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.language.psi.util.PsiFormatUtilBase;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.application.*;
+import consulo.application.Application;
+import consulo.application.HelpManager;
+import consulo.application.ReadAction;
+import consulo.application.Result;
 import consulo.application.progress.ProgressManager;
 import consulo.dataContext.DataProvider;
 import consulo.disposer.Disposable;
@@ -31,11 +34,12 @@ import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
 import consulo.ide.impl.idea.ui.DuplicateNodeRenderer;
 import consulo.ide.impl.idea.ui.SmartExpander;
 import consulo.language.editor.WriteCommandAction;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.PsiBundle;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.psi.util.SymbolPresentationUtil;
+import consulo.localize.LocalizeValue;
 import consulo.platform.base.localize.CommonLocalize;
 import consulo.project.Project;
 import consulo.project.ui.view.tree.AbstractTreeNode;
@@ -51,10 +55,9 @@ import consulo.usage.*;
 import consulo.util.dataholder.Key;
 import consulo.virtualFileSystem.ReadonlyStatusHandler;
 import consulo.virtualFileSystem.VirtualFile;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
-
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -157,7 +160,7 @@ public class MigrationPanel extends JPanel implements Disposable {
       GridBagConstraints.RELATIVE, 0, 1, 1, 0, 1, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
       JBUI.insets(5, 10, 5, 0), 0, 0
     );
-    final JButton performButton = new JButton(RefactoringBundle.message("type.migration.migrate.button.text"));
+    final JButton performButton = new JButton(RefactoringLocalize.typeMigrationMigrateButtonText().get());
     performButton.addActionListener(new ActionListener() {
       private void expandTree(MigrationNode migrationNode) {
         if (!migrationNode.getInfo().isExcluded() || migrationNode.areChildrenInitialized()) {
@@ -222,7 +225,7 @@ public class MigrationPanel extends JPanel implements Disposable {
     final JButton closeButton = new JButton(CommonLocalize.buttonCancel().get());
     closeButton.addActionListener(e -> UsageViewContentManager.getInstance(myProject).closeContent(myContent));
     panel.add(closeButton, gc);
-    final JButton rerunButton = new JButton(RefactoringBundle.message("type.migration.rerun.button.text"));
+    final JButton rerunButton = new JButton(RefactoringLocalize.typeMigrationRerunButtonText().get());
     rerunButton.addActionListener(e -> {
       UsageViewContentManager.getInstance(myProject).closeContent(myContent);
       final TypeMigrationDialog.MultipleElements dialog = new TypeMigrationDialog.MultipleElements(
@@ -322,7 +325,7 @@ public class MigrationPanel extends JPanel implements Disposable {
 
   private class ExcludeAction extends ExcludeIncludeActionBase {
     public ExcludeAction() {
-      super(RefactoringBundle.message("type.migration.exclude.action.text"));
+      super(RefactoringLocalize.typeMigrationExcludeActionText());
       registerCustomShortcutSet(CommonShortcuts.getDelete(), myRootsTree);
     }
 
@@ -333,7 +336,7 @@ public class MigrationPanel extends JPanel implements Disposable {
 
   private class IncludeAction extends ExcludeIncludeActionBase {
     public IncludeAction() {
-      super(RefactoringBundle.message("type.migration.include.action.text"));
+      super(RefactoringLocalize.typeMigrationIncludeActionText());
       registerCustomShortcutSet(CommonShortcuts.INSERT, myRootsTree);
     }
 
@@ -363,7 +366,7 @@ public class MigrationPanel extends JPanel implements Disposable {
   private abstract class ExcludeIncludeActionBase extends AnAction {
     protected abstract void processUsage(TypeMigrationUsageInfo usageInfo);
 
-    ExcludeIncludeActionBase(final String text) {
+    ExcludeIncludeActionBase(final LocalizeValue text) {
       super(text);
     }
 

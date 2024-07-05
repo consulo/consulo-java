@@ -30,7 +30,7 @@ import consulo.application.ui.wm.ApplicationIdeFocusManager;
 import consulo.application.ui.wm.IdeFocusManager;
 import consulo.component.util.Iconable;
 import consulo.configurable.ConfigurationException;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.RefactoringDialog;
 import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.language.psi.PsiFile;
@@ -42,8 +42,8 @@ import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.util.lang.StringUtil;
-
 import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -266,7 +266,7 @@ class WrapReturnValueDialog extends RefactoringDialog {
     };
 
     packageTextField =
-      new PackageNameReferenceEditorCombo("", myProject, RECENT_KEYS, RefactoringBundle.message("choose.destination.package"));
+      new PackageNameReferenceEditorCombo("", myProject, RECENT_KEYS, RefactoringLocalize.chooseDestinationPackage().get());
     packageTextField.getChildComponent().getDocument().addDocumentListener(adapter);
 
     existingClassField = new ReferenceEditorComboWithBrowseButton(new ActionListener() {

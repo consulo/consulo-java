@@ -17,7 +17,7 @@ package com.intellij.java.impl.refactoring.rename.naming;
 
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.AutomaticRenamer;
 
 /**
@@ -35,14 +35,14 @@ public class InheritorRenamer extends AutomaticRenamer {
   }
 
   public String getDialogTitle() {
-    return RefactoringBundle.message("rename.inheritors.title");
+    return RefactoringLocalize.renameInheritorsTitle().get();
   }
 
   public String getDialogDescription() {
-    return RefactoringBundle.message("rename.inheritors.with.the.following.names.to");
+    return RefactoringLocalize.renameInheritorsWithTheFollowingNamesTo().get();
   }
 
   public String entityName() {
-    return RefactoringBundle.message("entity.name.inheritor");
+    return RefactoringLocalize.entityNameInheritor().get();
   }
 }

@@ -16,10 +16,10 @@
 package com.intellij.java.impl.refactoring.replaceConstructorWithFactory;
 
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.UsageViewDescriptorAdapter;
+import consulo.language.psi.PsiElement;
 import jakarta.annotation.Nonnull;
 
 /**
@@ -52,10 +52,8 @@ class ReplaceConstructorWithFactoryViewDescriptor extends UsageViewDescriptorAda
   }
 
   public String getProcessedElementsHeader() {
-    if (myConstructor != null) {
-      return RefactoringBundle.message("replace.constructor.with.factory.method");
-    } else {
-      return RefactoringBundle.message("replace.default.constructor.with.factory.method");
-    }
+    return myConstructor != null
+      ? RefactoringLocalize.replaceConstructorWithFactoryMethod().get()
+      : RefactoringLocalize.replaceDefaultConstructorWithFactoryMethod().get();
   }
 }

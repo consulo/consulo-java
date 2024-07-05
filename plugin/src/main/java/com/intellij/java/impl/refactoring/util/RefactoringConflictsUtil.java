@@ -18,6 +18,8 @@ package com.intellij.java.impl.refactoring.util;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.util.VisibilityUtil;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.localize.LocalizeValue;
 import consulo.module.Module;
 import consulo.ide.impl.idea.openapi.module.ModuleUtil;
 import consulo.project.Project;
@@ -119,21 +121,21 @@ public class RefactoringConflictsUtil {
     if (!RefactoringHierarchyUtil.willBeInTargetClass(ref, membersToMove, targetClass, false)) {
       // check for target class accessibility
       if (targetClass != null && !manager.getResolveHelper().isAccessible(targetClass, targetClass.getModifierList(), ref, null, null)) {
-        String message = RefactoringBundle.message("0.is.1.and.will.not.be.accessible.from.2.in.the.target.class",
-                                                   RefactoringUIUtil.getDescription(targetClass, true),
-                                                   VisibilityUtil.getVisibilityStringToDisplay(targetClass),
-                                                   RefactoringUIUtil.getDescription(ConflictsUtil.getContainer(ref), true));
-        message = CommonRefactoringUtil.capitalize(message);
-        conflicts.putValue(targetClass, message);
+        LocalizeValue message = RefactoringLocalize.zeroIs1AndWillNotBeAccessibleFrom2InTheTargetClass(
+          RefactoringUIUtil.getDescription(targetClass, true),
+          VisibilityUtil.getVisibilityStringToDisplay(targetClass),
+          RefactoringUIUtil.getDescription(ConflictsUtil.getContainer(ref), true)
+        );
+        conflicts.putValue(targetClass, CommonRefactoringUtil.capitalize(message.get()));
       }
       // check for member accessibility
       else if (!manager.getResolveHelper().isAccessible(member, modifierListCopy, ref, targetClass, null)) {
-        String message = RefactoringBundle.message("0.is.1.and.will.not.be.accessible.from.2.in.the.target.class",
-                                                   RefactoringUIUtil.getDescription(member, true),
-                                                   VisibilityUtil.toPresentableText(VisibilityUtil.getVisibilityModifier(modifierListCopy)),
-                                                   RefactoringUIUtil.getDescription(ConflictsUtil.getContainer(ref), true));
-        message = CommonRefactoringUtil.capitalize(message);
-        conflicts.putValue(member, message);
+        LocalizeValue message = RefactoringLocalize.zeroIs1AndWillNotBeAccessibleFrom2InTheTargetClass(
+          RefactoringUIUtil.getDescription(member, true),
+          VisibilityUtil.toPresentableText(VisibilityUtil.getVisibilityModifier(modifierListCopy)),
+          RefactoringUIUtil.getDescription(ConflictsUtil.getContainer(ref), true)
+        );
+        conflicts.putValue(member, CommonRefactoringUtil.capitalize(message.get()));
       }
     }
   }
@@ -199,12 +201,12 @@ public class RefactoringConflictsUtil {
                                         PsiMember member,
                                         MultiMap<PsiElement, String> conflicts) {
     if (!PsiUtil.isAccessible(refMember, newContext, accessClass)) {
-      String message = RefactoringBundle.message("0.is.1.and.will.not.be.accessible.from.2.in.the.target.class",
-                                                 RefactoringUIUtil.getDescription(refMember, true),
-                                                 VisibilityUtil.getVisibilityStringToDisplay(refMember),
-                                                 RefactoringUIUtil.getDescription(member, false));
-      message = CommonRefactoringUtil.capitalize(message);
-      conflicts.putValue(refMember, message);
+      LocalizeValue message = RefactoringLocalize.zeroIs1AndWillNotBeAccessibleFrom2InTheTargetClass(
+        RefactoringUIUtil.getDescription(refMember, true),
+        VisibilityUtil.getVisibilityStringToDisplay(refMember),
+        RefactoringUIUtil.getDescription(member, false)
+      );
+      conflicts.putValue(refMember, CommonRefactoringUtil.capitalize(message.get()));
     }
     else if (newContext instanceof PsiClass && refMember instanceof PsiField && refMember.getContainingClass() == member.getContainingClass()) {
       final PsiField fieldInSubClass = ((PsiClass)newContext).findFieldByName(refMember.getName(), false);
@@ -253,11 +255,12 @@ public class RefactoringConflictsUtil {
               !PsiSearchScopeUtil.isInScope(resolveScope, resolved) && 
               !(resolved instanceof LightElement)) {
             final String scopeDescription = RefactoringUIUtil.getDescription(ConflictsUtil.getContainer(reference), true);
-            final String message = RefactoringBundle.message("0.referenced.in.1.will.not.be.accessible.in.module.2",
-                                                             RefactoringUIUtil.getDescription(resolved, true),
-                                                             scopeDescription,
-                                                             CommonRefactoringUtil.htmlEmphasize(targetModule.getName()));
-            conflicts.putValue(resolved, CommonRefactoringUtil.capitalize(message));
+            final LocalizeValue message = RefactoringLocalize.zeroReferencedIn1WillNotBeAccessibleInModule2(
+                RefactoringUIUtil.getDescription(resolved, true),
+                scopeDescription,
+                CommonRefactoringUtil.htmlEmphasize(targetModule.getName())
+              );
+            conflicts.putValue(resolved, CommonRefactoringUtil.capitalize(message.get()));
             reported.add(resolved);
           }
         }
@@ -298,17 +301,18 @@ public class RefactoringConflictsUtil {
                 referencedElement = usage.getElement();
               }
               assert referencedElement != null : usage;
+              String description = RefactoringUIUtil.getDescription(referencedElement, true);
+              String emphasizedName = CommonRefactoringUtil.htmlEmphasize(module.getName());
               if (module == targetModule && isInTestSources) {
-                message = RefactoringBundle.message("0.referenced.in.1.will.not.be.accessible.from.production.of.module.2",
-                                                    RefactoringUIUtil.getDescription(referencedElement, true),
-                                                    scopeDescription,
-                                                    CommonRefactoringUtil.htmlEmphasize(module.getName()));
+                message = RefactoringLocalize.zeroReferencedIn1WillNotBeAccessibleFromProductionOfModule2(description, scopeDescription, emphasizedName
+                ).get();
               }
               else {
-                message = RefactoringBundle.message("0.referenced.in.1.will.not.be.accessible.from.module.2",
-                                                    RefactoringUIUtil.getDescription(referencedElement, true),
-                                                    scopeDescription,
-                                                    CommonRefactoringUtil.htmlEmphasize(module.getName()));
+                message = RefactoringLocalize.zeroReferencedIn1WillNotBeAccessibleFromModule2(
+                  description,
+                  scopeDescription,
+                  emphasizedName
+                ).get();
               }
               conflicts.putValue(referencedElement, CommonRefactoringUtil.capitalize(message));
             }

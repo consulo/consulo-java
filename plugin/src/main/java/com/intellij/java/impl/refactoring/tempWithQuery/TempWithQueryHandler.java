@@ -37,6 +37,7 @@ import consulo.language.editor.TargetElementUtilExtender;
 import consulo.language.editor.highlight.HighlightManager;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -44,6 +45,7 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.project.ui.wm.WindowManager;
@@ -69,7 +71,7 @@ public class TempWithQueryHandler implements RefactoringActionHandler {
     PsiElement element = TargetElementUtil.findTargetElement(editor, flags);
     editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
     if (!(element instanceof PsiLocalVariable)) {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("error.wrong.caret.position.local.name"));
+      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.errorWrongCaretPositionLocalName().get());
       CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.REPLACE_TEMP_WITH_QUERY);
       return;
     }
@@ -86,7 +88,7 @@ public class TempWithQueryHandler implements RefactoringActionHandler {
     String localName = local.getName();
     final PsiExpression initializer = local.getInitializer();
     if (initializer == null) {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("variable.has.no.initializer", localName));
+      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.variableHasNoInitializer(localName).get());
       CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.REPLACE_TEMP_WITH_QUERY);
       return;
     }
@@ -95,7 +97,7 @@ public class TempWithQueryHandler implements RefactoringActionHandler {
       .toArray(new PsiReference[0]);
 
     if (refs.length == 0) {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("variable.is.never.used", localName));
+      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.variableIsNeverUsed(localName).get());
       CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.REPLACE_TEMP_WITH_QUERY);
       return;
     }
@@ -112,10 +114,9 @@ public class TempWithQueryHandler implements RefactoringActionHandler {
       if (!array.isEmpty()) {
         PsiReference[] refsForWriting = array.toArray(new PsiReference[array.size()]);
         highlightManager.addOccurrenceHighlights(editor, refsForWriting, attributes, true, null);
-        String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("variable.is.accessed.for.writing",
-            localName));
+        String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.variableIsAccessedForWriting(localName).get());
         CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.REPLACE_TEMP_WITH_QUERY);
-        WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringBundle.message("press.escape.to.remove.the.highlighting"));
+        WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringLocalize.pressEscapeToRemoveTheHighlighting().get());
         return;
       }
     }
@@ -134,8 +135,8 @@ public class TempWithQueryHandler implements RefactoringActionHandler {
     }
     final PsiClass targetClass = processor.getTargetClass();
     if (targetClass != null && targetClass.isInterface()) {
-      String message = RefactoringBundle.message("cannot.replace.temp.with.query.in.interface");
-      CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.REPLACE_TEMP_WITH_QUERY);
+      LocalizeValue message = RefactoringLocalize.cannotReplaceTempWithQueryInInterface();
+      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.REPLACE_TEMP_WITH_QUERY);
       return;
     }
 
@@ -170,7 +171,7 @@ public class TempWithQueryHandler implements RefactoringActionHandler {
       }, REFACTORING_NAME, null);
     }
 
-    WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringBundle.message("press.escape.to.remove.the.highlighting"));
+    WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringLocalize.pressEscapeToRemoveTheHighlighting().get());
   }
 
   @RequiredUIAccess

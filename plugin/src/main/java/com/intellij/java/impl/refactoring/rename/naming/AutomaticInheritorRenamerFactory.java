@@ -18,10 +18,10 @@ package com.intellij.java.impl.refactoring.rename.naming;
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.PsiElement;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.AutomaticRenamer;
 import consulo.language.editor.refactoring.rename.AutomaticRenamerFactory;
+import consulo.language.psi.PsiElement;
 import consulo.usage.UsageInfo;
 
 import java.util.Collection;
@@ -36,7 +36,7 @@ public class AutomaticInheritorRenamerFactory implements AutomaticRenamerFactory
   }
 
   public String getOptionName() {
-    return RefactoringBundle.message("rename.inheritors");
+    return RefactoringLocalize.renameInheritors().get();
   }
 
   public boolean isEnabled() {

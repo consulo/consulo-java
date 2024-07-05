@@ -15,16 +15,15 @@
  */
 package com.intellij.java.impl.refactoring.ui;
 
-import javax.swing.JList;
-import javax.swing.ListCellRenderer;
-
-import consulo.component.util.Iconable;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.component.util.Iconable;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.ui.ex.awt.ListCellRendererWrapper;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
-import consulo.language.icon.IconDescriptorUpdaters;
 import jakarta.annotation.Nonnull;
+
+import javax.swing.*;
 
 /**
  * Renders a list cell which contains a class.
@@ -72,6 +71,6 @@ public class ClassCellRenderer extends ListCellRendererWrapper<PsiClass>
 			return name;
 		}
 
-		return RefactoringBundle.message("anonymous.class.text");
+		return RefactoringLocalize.anonymousClassText().get();
 	}
 }

@@ -26,11 +26,11 @@ package com.intellij.java.impl.refactoring.util.classMembers;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.classMember.MemberInfoBase;
-import java.util.HashSet;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -73,11 +73,11 @@ public class MemberInfo extends MemberInfoBase<PsiMember> {
 
       if(isSuperClass) {
         if (aClass.isInterface()) {
-          displayName = RefactoringBundle.message("member.info.implements.0", aClass.getName());
+          displayName = RefactoringLocalize.memberInfoImplements0(aClass.getName()).get();
           overrides = Boolean.FALSE;
         }
         else {
-          displayName = RefactoringBundle.message("member.info.extends.0", aClass.getName());
+          displayName = RefactoringLocalize.memberInfoExtends0(aClass.getName()).get();
           overrides = Boolean.TRUE;
         }
       }

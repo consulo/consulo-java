@@ -3,26 +3,26 @@
 // found in the LICENSE file.
 package com.intellij.java.impl.refactoring.typeMigration;
 
+import com.intellij.java.impl.refactoring.typeMigration.ui.TypeMigrationDialog;
+import com.intellij.java.language.psi.*;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.ScrollType;
+import consulo.dataContext.DataContext;
+import consulo.language.editor.TargetElementUtil;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import jakarta.annotation.Nonnull;
-
-import com.intellij.java.language.psi.*;
-import consulo.dataContext.DataContext;
-import consulo.logging.Logger;
-import consulo.codeEditor.Editor;
-import consulo.codeEditor.ScrollType;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.editor.refactoring.action.RefactoringActionHandler;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import com.intellij.java.impl.refactoring.typeMigration.ui.TypeMigrationDialog;
-import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
-import consulo.language.editor.TargetElementUtil;
-import jakarta.annotation.Nullable;
 
 public class ChangeTypeSignatureHandler implements RefactoringActionHandler
 {
@@ -104,8 +104,13 @@ public class ChangeTypeSignatureHandler implements RefactoringActionHandler
 			return;
 		}
 
-		CommonRefactoringUtil.showErrorHint(project, editor, RefactoringBundle.message("only.fields.variables.of.methods.of.valid.type.can.be.considered"), RefactoringBundle.message("unable.to.start" +
-				".type.migration"), null);
+		CommonRefactoringUtil.showErrorHint(
+			project,
+			editor,
+			RefactoringLocalize.onlyFieldsVariablesOfMethodsOfValidTypeCanBeConsidered().get(),
+			RefactoringLocalize.unableToStartTypeMigration().get(),
+			null
+		);
 	}
 
 	@Nonnull

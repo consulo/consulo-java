@@ -37,6 +37,7 @@ import consulo.language.codeStyle.PostprocessReformattingAspect;
 import consulo.language.editor.refactoring.ContextAwareActionHandler;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.psi.PsiElement;
@@ -47,14 +48,15 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.ModuleUtilCore;
 import consulo.localHistory.LocalHistory;
 import consulo.localHistory.LocalHistoryAction;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.project.Project;
 import consulo.project.ui.wm.WindowManager;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.Messages;
 import consulo.undoRedo.CommandProcessor;
 import consulo.virtualFileSystem.VirtualFile;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -74,6 +76,7 @@ public class MethodDuplicatesHandler implements RefactoringActionHandler, Contex
   }
 
   @Override
+  @RequiredUIAccess
   public void invoke(@Nonnull final Project project, final Editor editor, PsiFile file, DataContext dataContext) {
     final int offset = editor.getCaretModel().getOffset();
     final PsiElement element = file.findElementAt(offset);
@@ -87,9 +90,16 @@ public class MethodDuplicatesHandler implements RefactoringActionHandler, Contex
 
     final AnalysisScope scope = new AnalysisScope(file);
     final Module module = ModuleUtilCore.findModuleForPsiElement(file);
-    final BaseAnalysisActionDialog dlg = new BaseAnalysisActionDialog(RefactoringBundle.message("replace.method.duplicates.scope.chooser.title", REFACTORING_NAME),
-        RefactoringBundle.message("replace.method.duplicates.scope.chooser.message"), project, scope, module != null ? module.getName() : null, false, AnalysisUIOptions.getInstance(project),
-        element);
+    final BaseAnalysisActionDialog dlg = new BaseAnalysisActionDialog(
+      RefactoringLocalize.replaceMethodDuplicatesScopeChooserTitle(REFACTORING_NAME).get(),
+      RefactoringLocalize.replaceMethodDuplicatesScopeChooserMessage().get(),
+      project,
+      scope,
+      module != null ? module.getName() : null,
+      false,
+      AnalysisUIOptions.getInstance(project),
+      element
+    );
     if (dlg.showAndGet()) {
       ProgressManager.getInstance().run(new Task.Backgroundable(project, "Locate duplicates", true) {
         @Override
@@ -104,22 +114,21 @@ public class MethodDuplicatesHandler implements RefactoringActionHandler, Contex
   @Nullable
   private static String getCannotRefactorMessage(PsiMember member) {
     if (member == null) {
-      return RefactoringBundle.message("locate.caret.inside.a.method");
+      return RefactoringLocalize.locateCaretInsideAMethod().get();
     }
-    if (member instanceof PsiMethod) {
-      if (((PsiMethod) member).isConstructor()) {
-        return RefactoringBundle.message("replace.with.method.call.does.not.work.for.constructors");
+    if (member instanceof PsiMethod method) {
+      if (method.isConstructor()) {
+        return RefactoringLocalize.replaceWithMethodCallDoesNotWorkForConstructors().get();
       }
-      final PsiCodeBlock body = ((PsiMethod) member).getBody();
+      final PsiCodeBlock body = method.getBody();
       if (body == null) {
-        return RefactoringBundle.message("method.does.not.have.a.body", member.getName());
+        return RefactoringLocalize.methodDoesNotHaveABody(member.getName()).get();
       }
       final PsiStatement[] statements = body.getStatements();
       if (statements.length == 0) {
-        return RefactoringBundle.message("method.has.an.empty.body", member.getName());
+        return RefactoringLocalize.methodHasAnEmptyBody(member.getName()).get();
       }
-    } else if (member instanceof PsiField) {
-      final PsiField field = (PsiField) member;
+    } else if (member instanceof PsiField field) {
       if (field.getInitializer() == null) {
         return "Field " + member.getName() + " doesn't have initializer";
       }
@@ -216,12 +225,9 @@ public class MethodDuplicatesHandler implements RefactoringActionHandler, Contex
     });
     if (duplicates.isEmpty()) {
       if (!silent) {
-        final Runnable nothingFoundRunnable = new Runnable() {
-          @Override
-          public void run() {
-            final String message = RefactoringBundle.message("idea.has.not.found.any.code.that.can.be.replaced.with.method.call", Application.get().getName().get());
-            Messages.showInfoMessage(project, message, REFACTORING_NAME);
-          }
+        final Runnable nothingFoundRunnable = () -> {
+          LocalizeValue message = RefactoringLocalize.ideaHasNotFoundAnyCodeThatCanBeReplacedWithMethodCall(Application.get().getName());
+          Messages.showInfoMessage(project, message.get(), REFACTORING_NAME);
         };
         if (ApplicationManager.getApplication().isUnitTestMode()) {
           nothingFoundRunnable.run();
@@ -325,7 +331,7 @@ public class MethodDuplicatesHandler implements RefactoringActionHandler, Contex
   }
 
   static String getStatusMessage(final int duplicatesNo) {
-    return RefactoringBundle.message("method.duplicates.found.message", duplicatesNo);
+    return RefactoringLocalize.methodDuplicatesFoundMessage(duplicatesNo).get();
   }
 
   private static void showErrorMessage(String message, Project project, Editor editor) {

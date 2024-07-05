@@ -25,8 +25,8 @@ import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.codeEditor.ScrollingModel;
 import consulo.dataContext.DataContext;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiCompiledElement;
 import consulo.language.psi.PsiElement;
@@ -117,7 +117,7 @@ class WrapReturnValueHandler implements RefactoringActionHandler {
       );
       return;
     }
-    method = SuperMethodWarningUtil.checkSuperMethod(method, RefactoringBundle.message("to.refactor"));
+    method = SuperMethodWarningUtil.checkSuperMethod(method, RefactoringLocalize.toRefactor().get());
     if (method == null) return;
 
     if (method instanceof PsiCompiledElement) {

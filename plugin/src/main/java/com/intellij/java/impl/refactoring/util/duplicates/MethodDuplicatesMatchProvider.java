@@ -24,14 +24,14 @@ import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.util.VisibilityUtil;
 import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -170,22 +170,23 @@ class MethodDuplicatesMatchProvider implements MatchProvider {
     final boolean shouldBeStatic = isEssentialStaticContextAbsent(match);
     final String signature = MatchUtil.getChangedSignature(match, myMethod, myMethod.hasModifierProperty(PsiModifier.STATIC) || shouldBeStatic, visibility);
     if (signature != null) {
-      return RefactoringBundle.message("replace.this.code.fragment.and.change.signature", signature);
+      return RefactoringLocalize.replaceThisCodeFragmentAndChangeSignature(signature).get();
     }
     final boolean needToEscalateVisibility = !PsiUtil.isAccessible(myMethod, matchStart, null);
     if (needToEscalateVisibility) {
       final String visibilityPresentation = VisibilityUtil.toPresentableText(visibility);
-      return shouldBeStatic ? RefactoringBundle.message("replace.this.code.fragment.and.make.method.static.visible", visibilityPresentation) : RefactoringBundle.message("replace.this.code" +
-          ".fragment.and.make.method.visible", visibilityPresentation);
+      return shouldBeStatic
+        ? RefactoringLocalize.replaceThisCodeFragmentAndMakeMethodStaticVisible(visibilityPresentation).get()
+        : RefactoringLocalize.replaceThisCodeFragmentAndMakeMethodVisible(visibilityPresentation).get();
     }
     if (shouldBeStatic) {
-      return RefactoringBundle.message("replace.this.code.fragment.and.make.method.static");
+      return RefactoringLocalize.replaceThisCodeFragmentAndMakeMethodStatic().get();
     }
     return null;
   }
 
   @Override
   public String getReplaceDuplicatesTitle(int idx, int size) {
-    return RefactoringBundle.message("process.methods.duplicates.title", idx, size, myMethod.getName());
+    return RefactoringLocalize.processMethodsDuplicatesTitle(idx, size, myMethod.getName()).get();
   }
 }
