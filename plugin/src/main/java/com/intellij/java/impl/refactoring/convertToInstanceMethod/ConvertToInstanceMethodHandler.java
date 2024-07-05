@@ -22,9 +22,11 @@ import consulo.codeEditor.ScrollType;
 import consulo.dataContext.DataContext;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
@@ -52,7 +54,7 @@ public class ConvertToInstanceMethodHandler implements RefactoringActionHandler 
     if (element instanceof PsiIdentifier) element = element.getParent();
 
     if (!(element instanceof PsiMethod)) {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("error.wrong.caret.position.method"));
+      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.errorWrongCaretPositionMethod().get());
       CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.CONVERT_TO_INSTANCE_METHOD);
       return;
     }
@@ -62,13 +64,14 @@ public class ConvertToInstanceMethodHandler implements RefactoringActionHandler 
     invoke(project, new PsiElement[]{element}, dataContext);
   }
 
+  @RequiredUIAccess
   public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
     if (elements.length != 1 || !(elements[0] instanceof PsiMethod)) return;
     final PsiMethod method = (PsiMethod)elements[0];
     if (!method.hasModifierProperty(PsiModifier.STATIC)) {
-      String message = RefactoringBundle.message("convertToInstanceMethod.method.is.not.static", method.getName());
+      LocalizeValue message = RefactoringLocalize.converttoinstancemethodMethodIsNotStatic(method.getName());
       Editor editor = dataContext.getData(Editor.KEY);
-      CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.CONVERT_TO_INSTANCE_METHOD);
+      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.CONVERT_TO_INSTANCE_METHOD);
       return;
     }
     final PsiParameter[] parameters = method.getParameterList().getParameters();
@@ -92,22 +95,22 @@ public class ConvertToInstanceMethodHandler implements RefactoringActionHandler 
       }
     }
     if (suitableParameters.isEmpty()) {
-      String message = null;
+      LocalizeValue message = null;
       if (!classTypesFound) {
-        message = RefactoringBundle.message("convertToInstanceMethod.no.parameters.with.reference.type");
+        message = RefactoringLocalize.converttoinstancemethodNoParametersWithReferenceType();
       }
       else if (!resolvableClassesFound) {
-        message = RefactoringBundle.message("convertToInstanceMethod.all.reference.type.parametres.have.unknown.types");
+        message = RefactoringLocalize.converttoinstancemethodAllReferenceTypeParametresHaveUnknownTypes();
       }
       else if (!classesInProjectFound) {
-        message = RefactoringBundle.message("convertToInstanceMethod.all.reference.type.parameters.are.not.in.project");
+        message = RefactoringLocalize.converttoinstancemethodAllReferenceTypeParametersAreNotInProject();
       }
       LOG.assertTrue(message != null);
       Editor editor = dataContext.getData(Editor.KEY);
       CommonRefactoringUtil.showErrorHint(
         project,
         editor,
-        RefactoringBundle.getCannotRefactorMessage(message),
+        RefactoringBundle.getCannotRefactorMessage(message.get()),
         REFACTORING_NAME,
         HelpID.CONVERT_TO_INSTANCE_METHOD
       );

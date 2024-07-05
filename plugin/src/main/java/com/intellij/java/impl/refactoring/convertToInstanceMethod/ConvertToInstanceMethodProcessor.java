@@ -28,7 +28,7 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.language.util.VisibilityUtil;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiElement;
@@ -39,6 +39,7 @@ import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localHistory.LocalHistory;
 import consulo.localHistory.LocalHistoryAction;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.usage.UsageInfo;
@@ -47,8 +48,8 @@ import consulo.util.collection.MultiMap;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.ref.Ref;
 import jakarta.annotation.Nonnull;
-
 import jakarta.annotation.Nullable;
+
 import java.util.*;
 
 /**
@@ -161,10 +162,10 @@ public class ConvertToInstanceMethodProcessor extends BaseRefactoringProcessor {
           PsiExpression instanceValue = expressions[index];
           instanceValue = RefactoringUtil.unparenthesizeExpression(instanceValue);
           if (instanceValue instanceof PsiLiteralExpression && ((PsiLiteralExpression) instanceValue).getValue() == null) {
-            String message = RefactoringBundle.message("0.contains.call.with.null.argument.for.parameter.1",
-                RefactoringUIUtil.getDescription(ConflictsUtil.getContainer(methodCall), true),
-                CommonRefactoringUtil.htmlEmphasize(myTargetParameter.getName()));
-            conflicts.putValue(methodCall, message);
+            LocalizeValue message = RefactoringLocalize.zeroContainsCallWithNullArgumentForParameter1(
+              RefactoringUIUtil.getDescription(ConflictsUtil.getContainer(methodCall), true),
+              CommonRefactoringUtil.htmlEmphasize(myTargetParameter.getName()));
+            conflicts.putValue(methodCall, message.get());
           }
         }
       }

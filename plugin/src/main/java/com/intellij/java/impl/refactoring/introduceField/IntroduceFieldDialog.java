@@ -30,6 +30,7 @@ import com.intellij.java.language.psi.codeStyle.VariableKind;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.HelpManager;
 import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.editor.refactoring.ui.NameSuggestionsField;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
@@ -170,7 +171,7 @@ class IntroduceFieldDialog extends DialogWrapper {
     gbConstraints.weighty = 1;
     gbConstraints.gridx = 0;
     gbConstraints.gridy = 1;
-    JLabel namePrompt = new JLabel(RefactoringBundle.message("name.prompt"));
+    JLabel namePrompt = new JLabel(RefactoringLocalize.namePrompt().get());
     panel.add(namePrompt, gbConstraints);
 
     gbConstraints.insets = JBUI.insets(4, 0, 4, 4);
@@ -207,8 +208,8 @@ class IntroduceFieldDialog extends DialogWrapper {
 
   private String getTypeLabel() {
     return myWillBeDeclaredStatic
-      ? RefactoringBundle.message("introduce.field.static.field.of.type")
-      : RefactoringBundle.message("introduce.field.field.of.type");
+      ? RefactoringLocalize.introduceFieldStaticFieldOfType().get()
+      : RefactoringLocalize.introduceFieldFieldOfType().get();
   }
 
   protected JComponent createCenterPanel() {
@@ -255,7 +256,7 @@ class IntroduceFieldDialog extends DialogWrapper {
     String fieldName = getEnteredName();
     String errorString = null;
     if ("".equals(fieldName)) {
-      errorString = RefactoringBundle.message("no.field.name.specified");
+      errorString = RefactoringLocalize.noFieldNameSpecified().get();
     } else if (!PsiNameHelper.getInstance(myProject).isIdentifier(fieldName)) {
       errorString = RefactoringMessageUtil.getIncorrectIdentifierMessage(fieldName);
     }
@@ -274,8 +275,7 @@ class IntroduceFieldDialog extends DialogWrapper {
     if (oldField != null) {
       int answer = Messages.showYesNoDialog(
         myProject,
-        RefactoringBundle.message("field.exists", fieldName,
-          oldField.getContainingClass().getQualifiedName()),
+        RefactoringLocalize.fieldExists(fieldName, oldField.getContainingClass().getQualifiedName()).get(),
         IntroduceFieldHandler.REFACTORING_NAME,
         UIUtil.getWarningIcon()
       );

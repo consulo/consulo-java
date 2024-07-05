@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import jakarta.annotation.Nonnull;
 
 import consulo.annotation.component.ExtensionImpl;
@@ -129,10 +130,13 @@ public class ProtectedMemberInFinalClassInspection extends BaseInspection {
           if (!JavaResolveUtil.isAccessible(member, member.getContainingClass(), modifierListCopy, element, null, null)) {
             final PsiElement context =
               PsiTreeUtil.getParentOfType(element, PsiMethod.class, PsiField.class, PsiClass.class, PsiFile.class);
-            conflicts.putValue(element, RefactoringBundle.message("0.with.1.visibility.is.not.accessible.from.2",
-                                                                  RefactoringUIUtil.getDescription(member, false),
-                                                                  PsiBundle.visibilityPresentation(PsiModifier.PRIVATE),
-                                                                  RefactoringUIUtil.getDescription(context, true)));
+            conflicts.putValue(
+              element,
+              RefactoringLocalize.zeroWith1VisibilityIsNotAccessibleFrom2(RefactoringUIUtil.getDescription(member, false),
+                PsiBundle.visibilityPresentation(PsiModifier.PRIVATE),
+                RefactoringUIUtil.getDescription(context, true)
+              ).get()
+            );
           }
           return true;
         }

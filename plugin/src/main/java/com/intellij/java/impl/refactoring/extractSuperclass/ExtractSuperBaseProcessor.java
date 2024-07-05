@@ -15,26 +15,29 @@
  */
 package com.intellij.java.impl.refactoring.extractSuperclass;
 
-import com.intellij.java.language.psi.*;
-import consulo.logging.Logger;
-import consulo.project.Project;
-import consulo.util.lang.Comparing;
-import consulo.language.psi.*;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.psi.search.ReferencesSearch;
-import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.intellij.java.language.psi.util.MethodSignatureUtil;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import com.intellij.java.impl.refactoring.turnRefsToSuper.TurnRefsToSuperProcessorBase;
-import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
-import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.MethodSignatureUtil;
+import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.project.Project;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
 import consulo.usage.UsageViewUtil;
-import consulo.language.util.IncorrectOperationException;
+import consulo.util.lang.Comparing;
 import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
@@ -173,7 +176,7 @@ public abstract class ExtractSuperBaseProcessor extends TurnRefsToSuperProcessor
   }
 
   protected String getCommandName() {
-    return RefactoringBundle.message("extract.subclass.command");
+    return RefactoringLocalize.extractSubclassCommand().get();
   }
 
   @Nonnull

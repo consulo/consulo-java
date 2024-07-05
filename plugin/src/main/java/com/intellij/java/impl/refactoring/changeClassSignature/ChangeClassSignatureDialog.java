@@ -22,12 +22,14 @@ import com.intellij.java.language.psi.*;
 import consulo.ide.impl.idea.refactoring.ui.CodeFragmentTableCellRenderer;
 import consulo.ide.impl.idea.ui.TableColumnAnimator;
 import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.RefactoringDialog;
 import consulo.language.editor.refactoring.ui.StringTableCellEditor;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.findUsage.DescriptiveNameUtil;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.ColoredTableCellRenderer;
 import consulo.ui.ex.awt.EditableModel;
 import consulo.ui.ex.awt.SeparatorFactory;
@@ -35,7 +37,6 @@ import consulo.ui.ex.awt.ToolbarDecorator;
 import consulo.ui.ex.awt.table.JBTable;
 import consulo.ui.ex.awt.util.TableUtil;
 import consulo.util.collection.ContainerUtil;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -122,7 +123,7 @@ public class ChangeClassSignatureDialog extends RefactoringDialog {
   }
 
   protected JComponent createNorthPanel() {
-    return new JLabel(RefactoringBundle.message("changeClassSignature.class.label.text", DescriptiveNameUtil.getDescriptiveName(myClass)));
+    return new JLabel(RefactoringLocalize.changeclasssignatureClassLabelText(DescriptiveNameUtil.getDescriptiveName(myClass)).get());
   }
 
   @Override
@@ -177,16 +178,17 @@ public class ChangeClassSignatureDialog extends RefactoringDialog {
     }
 
     final JPanel panel = new JPanel(new BorderLayout());
-    panel.add(SeparatorFactory.createSeparator(RefactoringBundle.message("changeClassSignature.parameters.panel.border.title"), myTable), BorderLayout.NORTH);
+    panel.add(SeparatorFactory.createSeparator(RefactoringLocalize.changeclasssignatureParametersPanelBorderTitle().get(), myTable), BorderLayout.NORTH);
     panel.add(ToolbarDecorator.createDecorator(myTable).createPanel(), BorderLayout.CENTER);
     return panel;
   }
 
+  @RequiredUIAccess
   protected void doAction() {
     TableUtil.stopEditing(myTable);
     String message = validateAndCommitData();
     if (message != null) {
-      CommonRefactoringUtil.showErrorMessage(RefactoringBundle.message("error.incorrect.data"), message, HelpID.CHANGE_SIGNATURE, myClass.getProject());
+      CommonRefactoringUtil.showErrorMessage(RefactoringLocalize.errorIncorrectData().get(), message, HelpID.CHANGE_SIGNATURE, myClass.getProject());
       return;
     }
     ChangeClassSignatureProcessor processor =
@@ -201,7 +203,7 @@ public class ChangeClassSignatureDialog extends RefactoringDialog {
     for (final TypeParameterInfo info : myTypeParameterInfos) {
       if (!info.isForExistingParameter() &&
           !PsiNameHelper.getInstance(myClass.getProject()).isIdentifier(info.getNewName())) {
-        return RefactoringBundle.message("error.wrong.name.input", info.getNewName());
+        return RefactoringLocalize.errorWrongNameInput(info.getNewName()).get();
       }
       final String newName = info.isForExistingParameter() ? parameters[info.getOldParameterIndex()].getName() : info.getNewName();
       TypeParameterInfo existing = infos.get(newName);
@@ -223,10 +225,10 @@ public class ChangeClassSignatureDialog extends RefactoringDialog {
         }
       }
       catch (PsiTypeCodeFragment.TypeSyntaxException e) {
-        return RefactoringBundle.message("changeClassSignature.bad.default.value", codeFragment.getText(), info.getNewName());
+        return RefactoringLocalize.changeclasssignatureBadDefaultValue(codeFragment.getText(), info.getNewName()).get();
       }
       catch (PsiTypeCodeFragment.NoTypeException e) {
-        return RefactoringBundle.message("changeSignature.no.type.for.parameter", info.getNewName());
+        return RefactoringLocalize.changesignatureNoTypeForParameter(info.getNewName()).get();
       }
       info.setDefaultValue(type);
     }
@@ -271,9 +273,9 @@ public class ChangeClassSignatureDialog extends RefactoringDialog {
     public String getColumnName(int column) {
       switch (column) {
         case NAME_COLUMN:
-          return RefactoringBundle.message("column.name.name");
+          return RefactoringLocalize.columnNameName().get();
         case VALUE_COLUMN:
-          return RefactoringBundle.message("changeSignature.default.value.column");
+          return RefactoringLocalize.changesignatureDefaultValueColumn().get();
         default:
           LOG.assertTrue(false);
       }

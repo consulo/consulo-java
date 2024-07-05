@@ -25,7 +25,7 @@ import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.application.HelpManager;
 import consulo.java.language.module.util.JavaClassNames;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.NameSuggestionsField;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiElement;
@@ -37,8 +37,8 @@ import consulo.ui.ex.awt.FormBuilder;
 import consulo.ui.ex.awt.IdeBorderFactory;
 import consulo.ui.ex.awt.NonFocusableCheckBox;
 import consulo.util.lang.StringUtil;
-
 import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
@@ -150,7 +150,7 @@ class AnonymousToInnerDialog extends DialogWrapper{
     final String innerClassName = getClassName();
     final PsiManager manager = PsiManager.getInstance(myProject);
     if ("".equals(innerClassName)) {
-      errorString = RefactoringBundle.message("anonymousToInner.no.inner.class.name");
+      errorString = RefactoringLocalize.anonymoustoinnerNoInnerClassName().get();
     }
     else {
       if (!PsiNameHelper.getInstance(manager.getProject()).isIdentifier(innerClassName)) {
@@ -163,7 +163,7 @@ class AnonymousToInnerDialog extends DialogWrapper{
           PsiClass[] innerClasses = targetClass.getInnerClasses();
           for (PsiClass innerClass : innerClasses) {
             if (innerClassName.equals(innerClass.getName())) {
-              errorString = RefactoringBundle.message("inner.class.exists", innerClassName, targetClass.getName());
+              errorString = RefactoringLocalize.innerClassExists(innerClassName, targetClass.getName()).get();
               break;
             }
           }
@@ -191,10 +191,10 @@ class AnonymousToInnerDialog extends DialogWrapper{
     myNameField = new NameSuggestionsField(myProject);
 
     FormBuilder formBuilder = FormBuilder.createFormBuilder()
-      .addLabeledComponent(RefactoringBundle.message("anonymousToInner.class.name.label.text"), myNameField);
+      .addLabeledComponent(RefactoringLocalize.anonymoustoinnerClassNameLabelText().get(), myNameField);
 
     if(!myShowCanBeStatic) {
-      myCbMakeStatic = new NonFocusableCheckBox(RefactoringBundle.message("anonymousToInner.make.class.static.checkbox.text"));
+      myCbMakeStatic = new NonFocusableCheckBox(RefactoringLocalize.anonymoustoinnerMakeClassStaticCheckboxText().get());
       myCbMakeStatic.setSelected(true);
       formBuilder.addComponent(myCbMakeStatic);
     }
@@ -216,7 +216,7 @@ class AnonymousToInnerDialog extends DialogWrapper{
       }
     };
     panel.setBorder(IdeBorderFactory.createTitledBorder(
-      RefactoringBundle.message("anonymousToInner.parameters.panel.border.title"), false));
+      RefactoringLocalize.anonymoustoinnerParametersPanelBorderTitle().get(), false));
     return panel;
   }
 

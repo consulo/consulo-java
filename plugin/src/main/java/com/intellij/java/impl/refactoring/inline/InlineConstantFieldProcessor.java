@@ -21,7 +21,7 @@ import com.intellij.java.language.impl.psi.impl.source.javadoc.PsiDocMethodOrFie
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.NonCodeUsageInfoFactory;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import consulo.language.editor.refactoring.util.NonCodeSearchDescriptionLocation;
@@ -34,6 +34,7 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.usage.NonCodeUsageInfo;
@@ -42,8 +43,8 @@ import consulo.usage.UsageInfoFactory;
 import consulo.usage.UsageViewDescriptor;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.ref.Ref;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.*;
 
 /**
@@ -92,13 +93,13 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor
 	@Override
 	protected boolean isPreviewUsages(@Nonnull UsageInfo[] usages)
 	{
-		if(super.isPreviewUsages(usages))
+		if (super.isPreviewUsages(usages))
 		{
 			return true;
 		}
-		for(UsageInfo info : usages)
+		for (UsageInfo info : usages)
 		{
-			if(info instanceof NonCodeUsageInfo)
+			if (info instanceof NonCodeUsageInfo)
 			{
 				return true;
 			}
@@ -118,18 +119,18 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor
 	@Nonnull
 	protected UsageInfo[] findUsages()
 	{
-		if(myInlineThisOnly)
+		if (myInlineThisOnly)
 		{
 			return new UsageInfo[]{new UsageInfo(myRefExpr)};
 		}
 
 		List<UsageInfo> usages = new ArrayList<UsageInfo>();
-		for(PsiReference ref : ReferencesSearch.search(myField, GlobalSearchScope.projectScope(myProject), false))
+		for (PsiReference ref : ReferencesSearch.search(myField, GlobalSearchScope.projectScope(myProject), false))
 		{
 			PsiElement element = ref.getElement();
 			UsageInfo info = new UsageInfo(element);
 
-			if(!(element instanceof PsiExpression) && PsiTreeUtil.getParentOfType(element,
+			if (!(element instanceof PsiExpression) && PsiTreeUtil.getParentOfType(element,
 					PsiImportStaticStatement.class) == null)
 			{
 				info = new UsageFromJavaDoc(element);
@@ -137,21 +138,21 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor
 
 			usages.add(info);
 		}
-		if(mySearchInCommentsAndStrings || mySearchForTextOccurrences)
+		if (mySearchInCommentsAndStrings || mySearchForTextOccurrences)
 		{
 			UsageInfoFactory nonCodeUsageFactory = new NonCodeUsageInfoFactory(myField, myField.getName())
 			{
 				@Override
 				public UsageInfo createUsageInfo(@Nonnull PsiElement usage, int startOffset, int endOffset)
 				{
-					if(PsiTreeUtil.isAncestor(myField, usage, false))
+					if (PsiTreeUtil.isAncestor(myField, usage, false))
 					{
 						return null;
 					}
 					return super.createUsageInfo(usage, startOffset, endOffset);
 				}
 			};
-			if(mySearchInCommentsAndStrings)
+			if (mySearchInCommentsAndStrings)
 			{
 				String stringToSearch = ElementDescriptionUtil.getElementDescription(myField,
 						NonCodeSearchDescriptionLocation.STRINGS_AND_COMMENTS);
@@ -159,7 +160,7 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor
 						nonCodeUsageFactory);
 			}
 
-			if(mySearchForTextOccurrences)
+			if (mySearchForTextOccurrences)
 			{
 				String stringToSearch = ElementDescriptionUtil.getElementDescription(myField,
 						NonCodeSearchDescriptionLocation.NON_JAVA);
@@ -184,24 +185,24 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor
 		LOG.assertTrue(initializer != null);
 
 		initializer = normalize((PsiExpression) initializer.copy());
-		for(UsageInfo info : usages)
+		for (UsageInfo info : usages)
 		{
-			if(info instanceof UsageFromJavaDoc)
+			if (info instanceof UsageFromJavaDoc)
 			{
 				continue;
 			}
-			if(info instanceof NonCodeUsageInfo)
+			if (info instanceof NonCodeUsageInfo)
 			{
 				continue;
 			}
 			final PsiElement element = info.getElement();
-			if(element == null)
+			if (element == null)
 			{
 				continue;
 			}
 			try
 			{
-				if(element instanceof PsiExpression)
+				if (element instanceof PsiExpression)
 				{
 					inlineExpressionUsage((PsiExpression) element, initializer);
 				}
@@ -213,19 +214,19 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor
 					importStaticStatement.delete();
 				}
 			}
-			catch(IncorrectOperationException e)
+			catch (IncorrectOperationException e)
 			{
 				LOG.error(e);
 			}
 		}
 
-		if(!myInlineThisOnly)
+		if (!myInlineThisOnly)
 		{
 			try
 			{
 				myField.delete();
 			}
-			catch(IncorrectOperationException e)
+			catch (IncorrectOperationException e)
 			{
 				LOG.error(e);
 			}
@@ -251,25 +252,25 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor
 	private void inlineExpressionUsage(PsiExpression expr,
 			PsiExpression initializer1) throws IncorrectOperationException
 	{
-		if(myField.isWritable())
+		if (myField.isWritable())
 		{
 			myField.normalizeDeclaration();
 		}
-		if(expr instanceof PsiReferenceExpression)
+		if (expr instanceof PsiReferenceExpression)
 		{
 			PsiExpression qExpression = ((PsiReferenceExpression) expr).getQualifierExpression();
-			if(qExpression != null)
+			if (qExpression != null)
 			{
 				PsiReferenceExpression referenceExpression = null;
-				if(initializer1 instanceof PsiReferenceExpression)
+				if (initializer1 instanceof PsiReferenceExpression)
 				{
 					referenceExpression = (PsiReferenceExpression) initializer1;
 				}
-				else if(initializer1 instanceof PsiMethodCallExpression)
+				else if (initializer1 instanceof PsiMethodCallExpression)
 				{
 					referenceExpression = ((PsiMethodCallExpression) initializer1).getMethodExpression();
 				}
-				if(referenceExpression != null &&
+				if (referenceExpression != null &&
 						referenceExpression.getQualifierExpression() == null &&
 						!(referenceExpression.advancedResolve(false).getCurrentFileResolveScope() instanceof
 								PsiImportStaticStatement))
@@ -284,13 +285,13 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor
 
 	private static PsiExpression normalize(PsiExpression expression)
 	{
-		if(expression instanceof PsiArrayInitializerExpression)
+		if (expression instanceof PsiArrayInitializerExpression)
 		{
 			PsiElementFactory factory = JavaPsiFacade.getInstance(expression.getProject()).getElementFactory();
 			try
 			{
 				final PsiType type = expression.getType();
-				if(type != null)
+				if (type != null)
 				{
 					String typeString = type.getCanonicalText();
 					PsiNewExpression result = (PsiNewExpression) factory.createExpressionFromText("new " + typeString
@@ -299,7 +300,7 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor
 					return result;
 				}
 			}
-			catch(IncorrectOperationException e)
+			catch (IncorrectOperationException e)
 			{
 				LOG.error(e);
 				return expression;
@@ -312,7 +313,7 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor
 	@Override
 	protected String getCommandName()
 	{
-		return RefactoringBundle.message("inline.field.command", DescriptiveNameUtil.getDescriptiveName(myField));
+		return RefactoringLocalize.inlineFieldCommand(DescriptiveNameUtil.getDescriptiveName(myField)).get();
 	}
 
 	@Override
@@ -328,37 +329,39 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor
 		HashSet<PsiMember> referencedWithVisibility = collector.myReferencedMembers;
 
 		PsiResolveHelper resolveHelper = JavaPsiFacade.getInstance(myField.getProject()).getResolveHelper();
-		for(UsageInfo info : usagesIn)
+		for (UsageInfo info : usagesIn)
 		{
 			PsiElement element = info.getElement();
-			if(element instanceof PsiExpression && isAccessedForWriting((PsiExpression) element))
+			if (element instanceof PsiExpression expression && isAccessedForWriting(expression))
 			{
-				String message = RefactoringBundle.message("0.is.used.for.writing.in.1",
-						RefactoringUIUtil.getDescription(myField, true), RefactoringUIUtil.getDescription
-						(ConflictsUtil.getContainer(element), true));
-				conflicts.putValue(element, message);
+				LocalizeValue message = RefactoringLocalize.zeroIsUsedForWritingIn1(
+					RefactoringUIUtil.getDescription(myField, true), 
+					RefactoringUIUtil.getDescription(ConflictsUtil.getContainer(element), true)
+				);
+				conflicts.putValue(element, message.get());
 			}
 
-			for(PsiMember member : referencedWithVisibility)
+			for (PsiMember member : referencedWithVisibility)
 			{
-				if(!resolveHelper.isAccessible(member, element, null))
+				if (!resolveHelper.isAccessible(member, element, null))
 				{
-					String message = RefactoringBundle.message("0.will.not.be.accessible.from.1.after.inlining",
-							RefactoringUIUtil.getDescription(member, true), RefactoringUIUtil.getDescription
-							(ConflictsUtil.getContainer(element), true));
-					conflicts.putValue(member, message);
+					LocalizeValue message = RefactoringLocalize.zeroWillNotBeAccessibleFrom1AfterInlining(
+						RefactoringUIUtil.getDescription(member, true),
+						RefactoringUIUtil.getDescription(ConflictsUtil.getContainer(element), true)
+					);
+					conflicts.putValue(member, message.get());
 				}
 			}
 		}
 
-		if(!myInlineThisOnly)
+		if (!myInlineThisOnly)
 		{
-			for(UsageInfo info : usagesIn)
+			for (UsageInfo info : usagesIn)
 			{
-				if(info instanceof UsageFromJavaDoc)
+				if (info instanceof UsageFromJavaDoc)
 				{
 					final PsiElement element = info.getElement();
-					if(element instanceof PsiDocMethodOrFieldRef && !PsiTreeUtil.isAncestor(myField, element, false))
+					if (element instanceof PsiDocMethodOrFieldRef && !PsiTreeUtil.isAncestor(myField, element, false))
 					{
 						conflicts.putValue(element, "Inlined method is used in javadoc");
 					}
@@ -371,7 +374,7 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor
 
 	private static boolean isAccessedForWriting(PsiExpression expr)
 	{
-		while(expr.getParent() instanceof PsiArrayAccessExpression)
+		while (expr.getParent() instanceof PsiArrayAccessExpression)
 		{
 			expr = (PsiExpression) expr.getParent();
 		}
@@ -383,7 +386,7 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor
 	@Nonnull
 	protected Collection<? extends PsiElement> getElementsToWrite(@Nonnull final UsageViewDescriptor descriptor)
 	{
-		if(myInlineThisOnly)
+		if (myInlineThisOnly)
 		{
 			return Collections.singletonList(myRefExpr);
 		}

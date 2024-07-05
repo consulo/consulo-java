@@ -15,18 +15,18 @@
  */
 package com.intellij.java.impl.refactoring.extractInterface;
 
-import com.intellij.java.language.psi.*;
-import consulo.project.Project;
 import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import consulo.language.editor.refactoring.classMember.DelegatingMemberInfoModel;
-import consulo.language.editor.refactoring.classMember.MemberInfoBase;
 import com.intellij.java.impl.refactoring.extractSuperclass.ExtractSuperBaseProcessor;
 import com.intellij.java.impl.refactoring.extractSuperclass.JavaExtractSuperBaseDialog;
 import com.intellij.java.impl.refactoring.ui.MemberSelectionPanel;
-import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
+import com.intellij.java.language.psi.*;
+import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
+import consulo.language.editor.refactoring.classMember.DelegatingMemberInfoModel;
+import consulo.language.editor.refactoring.classMember.MemberInfoBase;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
 
 import javax.swing.*;
@@ -45,12 +45,12 @@ class ExtractInterfaceDialog extends JavaExtractSuperBaseDialog {
       public boolean includeMember(PsiMember element) {
         if (element instanceof PsiMethod) {
           return element.hasModifierProperty(PsiModifier.PUBLIC)
-                 && !element.hasModifierProperty(PsiModifier.STATIC);
+            && !element.hasModifierProperty(PsiModifier.STATIC);
         }
         else if (element instanceof PsiField) {
           return element.hasModifierProperty(PsiModifier.FINAL)
-                 && element.hasModifierProperty(PsiModifier.STATIC)
-                 && element.hasModifierProperty(PsiModifier.PUBLIC);
+            && element.hasModifierProperty(PsiModifier.STATIC)
+            && element.hasModifierProperty(PsiModifier.PUBLIC);
         }
         else if (element instanceof PsiClass) {
           return ((PsiClass)element).isInterface() || element.hasModifierProperty(PsiModifier.STATIC);
@@ -62,32 +62,33 @@ class ExtractInterfaceDialog extends JavaExtractSuperBaseDialog {
 
   protected String getClassNameLabelText() {
     return isExtractSuperclass()
-           ? RefactoringBundle.message("interface.name.prompt")
-           : RefactoringBundle.message("rename.implementation.class.to");
+      ? RefactoringLocalize.interfaceNamePrompt().get()
+      : RefactoringLocalize.renameImplementationClassTo().get();
   }
 
   @Override
   protected String getPackageNameLabelText() {
     return isExtractSuperclass()
-           ? RefactoringBundle.message("package.for.new.interface")
-           : RefactoringBundle.message("package.for.original.class");
+      ? RefactoringLocalize.packageForNewInterface().get()
+      : RefactoringLocalize.packageForOriginalClass().get();
   }
 
   protected String getEntityName() {
-    return RefactoringBundle.message("extractSuperInterface.interface");
+    return RefactoringLocalize.extractsuperinterfaceInterface().get();
   }
 
   @Override
   protected String getTopLabelText() {
-    return RefactoringBundle.message("extract.interface.from");
+    return RefactoringLocalize.extractInterfaceFrom().get();
   }
 
   protected JComponent createCenterPanel() {
     JPanel panel = new JPanel(new BorderLayout());
-    final MemberSelectionPanel memberSelectionPanel = new MemberSelectionPanel(RefactoringBundle.message("members.to.form.interface"),
-                                                                               myMemberInfos, null);
+    final MemberSelectionPanel memberSelectionPanel = new MemberSelectionPanel(RefactoringLocalize.membersToFormInterface().get(),
+      myMemberInfos, null
+    );
     memberSelectionPanel.getTable()
-      .setMemberInfoModel(new DelegatingMemberInfoModel<PsiMember, MemberInfo>(memberSelectionPanel.getTable().getMemberInfoModel()) {
+      .setMemberInfoModel(new DelegatingMemberInfoModel<>(memberSelectionPanel.getTable().getMemberInfoModel()) {
         public Boolean isFixedAbstract(MemberInfo member) {
           return Boolean.TRUE;
         }
@@ -101,12 +102,12 @@ class ExtractInterfaceDialog extends JavaExtractSuperBaseDialog {
 
   @Override
   protected String getDocCommentPanelName() {
-    return RefactoringBundle.message("extractSuperInterface.javadoc");
+    return RefactoringLocalize.extractsuperinterfaceJavadoc().get();
   }
 
   @Override
   protected String getExtractedSuperNameNotSpecifiedMessage() {
-    return RefactoringBundle.message("no.interface.name.specified");
+    return RefactoringLocalize.noInterfaceNameSpecified().get();
   }
 
   @Override
@@ -122,8 +123,9 @@ class ExtractInterfaceDialog extends JavaExtractSuperBaseDialog {
   @Override
   protected ExtractSuperBaseProcessor createProcessor() {
     return new ExtractInterfaceProcessor(myProject, false, getTargetDirectory(), getExtractedSuperName(),
-                                         mySourceClass, ArrayUtil.toObjectArray(getSelectedMemberInfos(), MemberInfo.class),
-                                         new DocCommentPolicy(getDocCommentPolicy()));
+      mySourceClass, ArrayUtil.toObjectArray(getSelectedMemberInfos(), MemberInfo.class),
+      new DocCommentPolicy(getDocCommentPolicy())
+    );
   }
 
   @Override

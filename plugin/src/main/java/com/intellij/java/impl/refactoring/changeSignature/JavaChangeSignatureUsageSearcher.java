@@ -24,9 +24,9 @@ import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.changeSignature.ParameterInfo;
 import consulo.language.editor.refactoring.changeSignature.PsiCallReference;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.UnresolvableCollisionUsageInfo;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import consulo.language.psi.PsiElement;
@@ -308,9 +308,10 @@ class JavaChangeSignatureUsageSearcher {
     }
 
     public String getDescription() {
-      return RefactoringBundle.message("there.is.already.a.0.in.the.1.it.will.conflict.with.the.renamed.parameter",
-          RefactoringUIUtil.getDescription(myCollidingElement, true),
-          RefactoringUIUtil.getDescription(myMethod, true));
+      return RefactoringLocalize.thereIsAlreadyA0InThe1ItWillConflictWithTheRenamedParameter(
+        RefactoringUIUtil.getDescription(myCollidingElement, true),
+        RefactoringUIUtil.getDescription(myMethod, true)
+      ).get();
     }
   }
 }

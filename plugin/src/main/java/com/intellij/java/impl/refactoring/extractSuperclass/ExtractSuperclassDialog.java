@@ -21,6 +21,7 @@ import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMember;
@@ -63,30 +64,33 @@ class ExtractSuperclassDialog extends JavaExtractSuperBaseDialog {
 
   protected String getClassNameLabelText() {
     return isExtractSuperclass()
-           ? RefactoringBundle.message("superclass.name")
-           : RefactoringBundle.message("extractSuper.rename.original.class.to");
+      ? RefactoringLocalize.superclassName().get()
+      : RefactoringLocalize.extractsuperRenameOriginalClassTo().get();
   }
 
   @Override
   protected String getPackageNameLabelText() {
     return isExtractSuperclass()
-           ? RefactoringBundle.message("package.for.new.superclass")
-           : RefactoringBundle.message("package.for.original.class");
+      ? RefactoringLocalize.packageForNewSuperclass().get()
+      : RefactoringLocalize.packageForOriginalClass().get();
   }
 
   protected String getEntityName() {
-    return RefactoringBundle.message("ExtractSuperClass.superclass");
+    return RefactoringLocalize.extractsuperclassSuperclass().get();
   }
 
   @Override
   protected String getTopLabelText() {
-    return RefactoringBundle.message("extract.superclass.from");
+    return RefactoringLocalize.extractSuperclassFrom().get();
   }
 
   protected JComponent createCenterPanel() {
     JPanel panel = new JPanel(new BorderLayout());
-    final MemberSelectionPanel memberSelectionPanel = new MemberSelectionPanel(RefactoringBundle.message("members.to.form.superclass"),
-                                                                               myMemberInfos, RefactoringBundle.message("make.abstract"));
+    final MemberSelectionPanel memberSelectionPanel = new MemberSelectionPanel(
+      RefactoringLocalize.membersToFormSuperclass().get(),
+      myMemberInfos,
+      RefactoringLocalize.makeAbstract().get()
+    );
     panel.add(memberSelectionPanel, BorderLayout.CENTER);
     final MemberInfoModel<PsiMember, MemberInfo> memberInfoModel =
       new UsesAndInterfacesDependencyMemberInfoModel(mySourceClass, null, false, myContainmentVerifier) {
@@ -105,12 +109,12 @@ class ExtractSuperclassDialog extends JavaExtractSuperBaseDialog {
 
   @Override
   protected String getDocCommentPanelName() {
-    return RefactoringBundle.message("javadoc.for.abstracts");
+    return RefactoringLocalize.javadocForAbstracts().get();
   }
 
   @Override
   protected String getExtractedSuperNameNotSpecifiedMessage() {
-    return RefactoringBundle.message("no.superclass.name.specified");
+    return RefactoringLocalize.noSuperclassNameSpecified().get();
   }
 
   @Override

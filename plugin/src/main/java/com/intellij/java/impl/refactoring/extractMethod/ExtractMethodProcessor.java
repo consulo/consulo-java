@@ -54,7 +54,6 @@ import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.*;
 import com.intellij.java.language.util.VisibilityUtil;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.application.ApplicationManager;
 import consulo.application.progress.ProgressManager;
 import consulo.codeEditor.*;
 import consulo.colorScheme.EditorColorsManager;
@@ -67,6 +66,7 @@ import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.editor.highlight.HighlightManager;
 import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.editor.refactoring.util.RefactoringMessageDialog;
@@ -1685,9 +1685,11 @@ public class ExtractMethodProcessor implements MatchProvider {
       EditorColorsManager manager = EditorColorsManager.getInstance();
       TextAttributes attributes = manager.getGlobalScheme().getAttributes(EditorColors.SEARCH_RESULT_ATTRIBUTES);
       highlightManager.addOccurrenceHighlights(myEditor, exitStatementsArray, attributes, true, null);
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("there.are.multiple.exit.points.in.the.selected.code.fragment"));
+      String message = RefactoringBundle.getCannotRefactorMessage(
+        RefactoringLocalize.thereAreMultipleExitPointsInTheSelectedCodeFragment().get()
+      );
       CommonRefactoringUtil.showErrorHint(myProject, myEditor, message, myRefactoringName, myHelpId);
-      WindowManager.getInstance().getStatusBar(myProject).setInfo(RefactoringBundle.message("press.escape.to.remove.the.highlighting"));
+      WindowManager.getInstance().getStatusBar(myProject).setInfo(RefactoringLocalize.pressEscapeToRemoveTheHighlighting().get());
     }
   }
 
@@ -1695,15 +1697,17 @@ public class ExtractMethodProcessor implements MatchProvider {
   private void showMultipleOutputMessage(PsiType expressionType) {
     if (myShowErrorDialogs) {
       StringBuilder buffer = new StringBuilder();
-      buffer.append(RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("there.are.multiple.output.values.for.the.selected.code.fragment")));
+      buffer.append(
+        RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.thereAreMultipleOutputValuesForTheSelectedCodeFragment().get())
+      );
       buffer.append("\n");
       if (myHasExpressionOutput) {
-        buffer.append("    ").append(RefactoringBundle.message("expression.result")).append(": ");
+        buffer.append("    ").append(RefactoringLocalize.expressionResult()).append(": ");
         buffer.append(PsiFormatUtil.formatType(expressionType, 0, PsiSubstitutor.EMPTY));
         buffer.append(",\n");
       }
       if (myGenerateConditionalExit) {
-        buffer.append("    ").append(RefactoringBundle.message("boolean.method.result"));
+        buffer.append("    ").append(RefactoringLocalize.booleanMethodResult());
         buffer.append(",\n");
       }
       for (int i = 0; i < myOutputVariables.length; i++) {
@@ -1794,17 +1798,17 @@ public class ExtractMethodProcessor implements MatchProvider {
     final boolean needToBeStatic = RefactoringUtil.isInStaticContext(match.getMatchStart(), myExtractedMethod.getContainingClass());
     final String changedSignature = MatchUtil.getChangedSignature(match, myExtractedMethod, needToBeStatic, VisibilityUtil.getVisibilityStringToDisplay(myExtractedMethod));
     if (changedSignature != null) {
-      return RefactoringBundle.message("replace.this.code.fragment.and.change.signature", changedSignature);
+      return RefactoringLocalize.replaceThisCodeFragmentAndChangeSignature(changedSignature).get();
     }
     if (needToBeStatic && !myExtractedMethod.hasModifierProperty(PsiModifier.STATIC)) {
-      return RefactoringBundle.message("replace.this.code.fragment.and.make.method.static");
+      return RefactoringLocalize.replaceThisCodeFragmentAndMakeMethodStatic().get();
     }
     return null;
   }
 
   @Override
   public String getReplaceDuplicatesTitle(int idx, int size) {
-    return RefactoringBundle.message("process.duplicates.title", idx, size);
+    return RefactoringLocalize.processDuplicatesTitle(idx, size).get();
   }
 
   public InputVariables getInputVariables() {

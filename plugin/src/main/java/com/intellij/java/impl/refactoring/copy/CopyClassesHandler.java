@@ -25,11 +25,11 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.externalService.statistic.FeatureUsageTracker;
 import consulo.ide.impl.idea.codeInsight.actions.OptimizeImportsProcessor;
 import consulo.java.impl.util.JavaProjectRootsUtil;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.copy.CopyFilesOrDirectoriesDialog;
 import consulo.language.editor.refactoring.copy.CopyFilesOrDirectoriesHandler;
 import consulo.language.editor.refactoring.copy.CopyHandler;
 import consulo.language.editor.refactoring.copy.CopyHandlerDelegateBase;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.util.EditorHelper;
 import consulo.language.psi.*;
 import consulo.language.psi.scope.LocalSearchScope;
@@ -39,6 +39,7 @@ import consulo.logging.Logger;
 import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
 import consulo.project.ui.wm.ToolWindowManager;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.undoRedo.CommandProcessor;
@@ -209,7 +210,7 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
           return super.getQualifiedName();
         }
       };
-      dialog.setTitle(RefactoringBundle.message("copy.handler.copy.class"));
+      dialog.setTitle(RefactoringLocalize.copyHandlerCopyClass().get());
       dialog.show();
       if (dialog.isOK()) {
         targetDirectory = dialog.getTargetDirectory();
@@ -239,8 +240,16 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
       }
     }
     if (targetDirectory != null) {
-      copyClassesImpl(className, project, classes, relativePathsMap, targetDirectory, defaultTargetDirectory, RefactoringBundle.message(
-          "copy.handler.copy.class"), false);
+      copyClassesImpl(
+        className,
+        project,
+        classes,
+        relativePathsMap,
+        targetDirectory,
+        defaultTargetDirectory,
+        RefactoringLocalize.copyHandlerCopyClass().get(),
+        false
+      );
     }
   }
 
@@ -252,7 +261,7 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
     return false;
   }
 
-  @RequiredReadAction
+  @RequiredUIAccess
   public void doClone(PsiElement element) {
     FeatureUsageTracker.getInstance().triggerFeatureUsed("refactoring.copyClass");
     PsiClass[] classes = getTopLevelClasses(element);
@@ -263,13 +272,21 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
     Project project = element.getProject();
 
     CopyClassDialog dialog = new CopyClassDialog(classes[0], null, project, true);
-    dialog.setTitle(RefactoringBundle.message("copy.handler.clone.class"));
+    dialog.setTitle(RefactoringLocalize.copyHandlerCloneClass());
     dialog.show();
     if (dialog.isOK()) {
       String className = dialog.getClassName();
       PsiDirectory targetDirectory = element.getContainingFile().getContainingDirectory();
-      copyClassesImpl(className, project, Collections.singletonMap(classes[0].getContainingFile(), classes), null, targetDirectory,
-          targetDirectory, RefactoringBundle.message("copy.handler.clone.class"), true);
+      copyClassesImpl(
+        className,
+        project,
+        Collections.singletonMap(classes[0].getContainingFile(), classes),
+        null,
+        targetDirectory,
+        targetDirectory,
+        RefactoringLocalize.copyHandlerCloneClass().get(),
+        true
+      );
     }
   }
 
@@ -300,7 +317,7 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
           project.getApplication().invokeLater(() -> Messages.showMessageDialog(
             project,
             ex.getMessage(),
-            RefactoringBundle.message("error.title"),
+            RefactoringLocalize.errorTitle().get(),
             UIUtil.getErrorIcon()
           ));
         }

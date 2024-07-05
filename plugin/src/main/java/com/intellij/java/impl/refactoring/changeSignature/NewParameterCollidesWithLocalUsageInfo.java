@@ -15,12 +15,13 @@
  */
 package com.intellij.java.impl.refactoring.changeSignature;
 
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.UnresolvableCollisionUsageInfo;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 
 /**
  *  @author dsl
@@ -37,10 +38,11 @@ public class NewParameterCollidesWithLocalUsageInfo extends UnresolvableCollisio
   }
 
   public String getDescription() {
-    String buffer = RefactoringBundle.message("there.is.already.a.0.in.1.it.will.conflict.with.the.new.parameter",
-                                     RefactoringUIUtil.getDescription(myConflictingElement, true),
-                                     RefactoringUIUtil.getDescription(myMethod, true));
+    LocalizeValue buffer = RefactoringLocalize.thereIsAlreadyA0In1ItWillConflictWithTheNewParameter(
+      RefactoringUIUtil.getDescription(myConflictingElement, true),
+      RefactoringUIUtil.getDescription(myMethod, true)
+    );
 
-    return CommonRefactoringUtil.capitalize(buffer);
+    return CommonRefactoringUtil.capitalize(buffer.get());
   }
 }

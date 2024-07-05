@@ -30,6 +30,7 @@ import consulo.codeEditor.Editor;
 import consulo.language.editor.PsiEquivalenceUtil;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.editor.refactoring.util.RefactoringMessageDialog;
 import consulo.language.psi.PsiElement;
@@ -37,6 +38,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
@@ -79,7 +81,7 @@ public class InlineParameterHandler extends JavaInlineActionHandler {
 
     String errorMessage = getCannotInlineMessage(psiParameter, method);
     if (errorMessage != null) {
-      CommonRefactoringUtil.showErrorHint(project, editor, errorMessage, RefactoringBundle.message("inline.parameter.refactoring"), null);
+      CommonRefactoringUtil.showErrorHint(project, editor, errorMessage, RefactoringLocalize.inlineParameterRefactoring().get(), null);
       return;
     }
 
@@ -148,11 +150,17 @@ public class InlineParameterHandler extends JavaInlineActionHandler {
     }
     if (occurrences.isEmpty()) {
       CommonRefactoringUtil
-        .showErrorHint(project, editor, "Method has no usages", RefactoringBundle.message("inline.parameter.refactoring"), null);
+        .showErrorHint(project, editor, "Method has no usages", RefactoringLocalize.inlineParameterRefactoring().get(), null);
       return;
     }
     if (!result) {
-      CommonRefactoringUtil.showErrorHint(project, editor, "Cannot find constant initializer for parameter", RefactoringBundle.message("inline.parameter.refactoring"), null);
+      CommonRefactoringUtil.showErrorHint(
+        project,
+        editor,
+        "Cannot find constant initializer for parameter",
+        RefactoringLocalize.inlineParameterRefactoring().get(),
+        null
+      );
       return;
     }
     if (!refInitializer.isNull()) {
@@ -175,7 +183,13 @@ public class InlineParameterHandler extends JavaInlineActionHandler {
       return;
     }
     if (refConstantInitializer.isNull()) {
-      CommonRefactoringUtil.showErrorHint(project, editor, "Cannot find constant initializer for parameter", RefactoringBundle.message("inline.parameter.refactoring"), null);
+      CommonRefactoringUtil.showErrorHint(
+        project,
+        editor,
+        "Cannot find constant initializer for parameter",
+        RefactoringLocalize.inlineParameterRefactoring().get(),
+        null
+      );
       return;
     }
 
@@ -197,7 +211,7 @@ public class InlineParameterHandler extends JavaInlineActionHandler {
         project,
         editor,
         "Constant initializer is not accessible in method body",
-        RefactoringBundle.message("inline.parameter.refactoring"),
+        RefactoringLocalize.inlineParameterRefactoring().get(),
         null
       );
       return;
@@ -210,7 +224,7 @@ public class InlineParameterHandler extends JavaInlineActionHandler {
           project,
           editor,
           "Inline parameter which has write usages is not supported",
-          RefactoringBundle.message("inline.parameter.refactoring"),
+          RefactoringLocalize.inlineParameterRefactoring().get(),
           null
         );
         return;
@@ -218,9 +232,9 @@ public class InlineParameterHandler extends JavaInlineActionHandler {
     }
 
     if (!project.getApplication().isUnitTestMode()) {
-      String occurencesString = RefactoringBundle.message("occurences.string", occurrences.size());
-      String question = RefactoringBundle.message("inline.parameter.confirmation", psiParameter.getName(),
-                                                  constantExpression.getText()) + " " + occurencesString;
+      LocalizeValue occurencesString = RefactoringLocalize.occurencesString(occurrences.size());
+      String question = RefactoringLocalize.inlineParameterConfirmation(psiParameter.getName(), constantExpression.getText()).get()
+        + " " + occurencesString;
       RefactoringMessageDialog dialog = new RefactoringMessageDialog(
         REFACTORING_NAME,
         question,
@@ -284,11 +298,11 @@ public class InlineParameterHandler extends JavaInlineActionHandler {
   @Nullable
   private static String getCannotInlineMessage(final PsiParameter psiParameter, final PsiMethod method) {
     if (psiParameter.isVarArgs()) {
-      return RefactoringBundle.message("inline.parameter.error.varargs");
+      return RefactoringLocalize.inlineParameterErrorVarargs().get();
     }
     if (method.findSuperMethods().length > 0 ||
         OverridingMethodsSearch.search(method, true).toArray(PsiMethod.EMPTY_ARRAY).length > 0) {
-      return RefactoringBundle.message("inline.parameter.error.hierarchy");
+      return RefactoringLocalize.inlineParameterErrorHierarchy().get();
     }
     return null;
   }

@@ -20,6 +20,7 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLocalVariable;
 import com.intellij.java.language.psi.PsiMethod;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
 import consulo.language.editor.refactoring.RefactoringBundle;
@@ -138,23 +139,21 @@ public class IntroduceFieldDialogPanel extends IntroduceFieldCentralPanel {
     mainPanel.setLayout(new BorderLayout());
 
     JPanel initializationPanel = new JPanel();
-    initializationPanel.setBorder(IdeBorderFactory.createTitledBorder(RefactoringBundle.message("initialize.in.border.title"),
-                                                                      true));
+    initializationPanel.setBorder(IdeBorderFactory.createTitledBorder(RefactoringLocalize.initializeInBorderTitle().get(), true));
     initializationPanel.setLayout(new BoxLayout(initializationPanel, BoxLayout.Y_AXIS));
-
 
     myRbInCurrentMethod = new JRadioButton();
     myRbInCurrentMethod.setFocusable(false);
-    myRbInCurrentMethod.setText(RefactoringBundle.message("current.method.radio"));
+    myRbInCurrentMethod.setText(RefactoringLocalize.currentMethodRadio().get());
     myRbInCurrentMethod.setEnabled(myAllowInitInMethod);
 
     myRbInFieldDeclaration = new JRadioButton();
     myRbInFieldDeclaration.setFocusable(false);
-    myRbInFieldDeclaration.setText(RefactoringBundle.message("field.declaration.radio"));
+    myRbInFieldDeclaration.setText(RefactoringLocalize.fieldDeclarationRadio().get());
 
     myRbInConstructor = new JRadioButton();
     myRbInConstructor.setFocusable(false);
-    myRbInConstructor.setText(RefactoringBundle.message("class.constructors.radio"));
+    myRbInConstructor.setText(RefactoringLocalize.classConstructorsRadio().get());
 
 
 
@@ -165,7 +164,7 @@ public class IntroduceFieldDialogPanel extends IntroduceFieldCentralPanel {
     if (TestFrameworks.getInstance().isTestClass(myParentClass)) {
       myRbInSetUp = new JRadioButton();
       myRbInSetUp.setFocusable(false);
-      myRbInSetUp.setText(RefactoringBundle.message("setup.method.radio"));
+      myRbInSetUp.setText(RefactoringLocalize.setupMethodRadio().get());
       initializationPanel.add(myRbInSetUp);
     }
 

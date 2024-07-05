@@ -15,37 +15,41 @@
  */
 package com.intellij.java.impl.refactoring.extractInterface;
 
-import consulo.application.Application;
-import consulo.project.Project;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.SmartPsiElementPointer;
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import com.intellij.java.impl.refactoring.turnRefsToSuper.TurnRefsToSuperProcessor;
 import com.intellij.java.impl.refactoring.ui.YesNoPreviewUsagesDialog;
+import com.intellij.java.language.psi.PsiClass;
+import consulo.application.Application;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.SmartPsiElementPointer;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 
 /**
  * @author dsl
  */
 public class ExtractClassUtil {
-  public static void askAndTurnRefsToSuper(final Project project,
-                                           final SmartPsiElementPointer classPointer, 
-                                           final SmartPsiElementPointer interfacePointer) {
+  @RequiredUIAccess
+  public static void askAndTurnRefsToSuper(
+    final Project project,
+    final SmartPsiElementPointer classPointer,
+    final SmartPsiElementPointer interfacePointer
+  ) {
     final PsiElement classElement = classPointer.getElement();
     final PsiElement interfaceElement = interfacePointer.getElement();
-    if (classElement instanceof PsiClass && classElement.isValid() && interfaceElement instanceof PsiClass && interfaceElement.isValid()) {
-      final PsiClass superClass = (PsiClass) interfaceElement;
+    if (classElement instanceof PsiClass psiClass && classElement.isValid()
+      && interfaceElement instanceof PsiClass superClass && interfaceElement.isValid()) {
       String superClassName = superClass.getName();
-      String className = ((PsiClass) classElement).getName();
-      String createdString = superClass.isInterface() ?
-                             RefactoringBundle.message("interface.has.been.successfully.created", superClassName) :
-                             RefactoringBundle.message("class.has.been.successfully.created", superClassName);
+      String className = psiClass.getName();
+      LocalizeValue createdString = superClass.isInterface()
+        ? RefactoringLocalize.interfaceHasBeenSuccessfullyCreated(superClassName)
+        : RefactoringLocalize.classHasBeenSuccessfullyCreated(superClassName);
       String message = createdString + "\n" +
-                       RefactoringBundle.message("use.super.references.prompt",
-                           Application.get().getName().get(), className, superClassName);
+        RefactoringLocalize.useSuperReferencesPrompt(Application.get().getName().get(), className, superClassName);
       YesNoPreviewUsagesDialog dialog = new YesNoPreviewUsagesDialog(
-        RefactoringBundle.message("analyze.and.replace.usages"),
+        RefactoringLocalize.analyzeAndReplaceUsages().get(),
         message,
         JavaRefactoringSettings.getInstance().EXTRACT_INTERFACE_PREVIEW_USAGES,
         /*HelpID.TURN_REFS_TO_SUPER*/null, project);

@@ -37,6 +37,7 @@ import consulo.ide.impl.idea.util.SequentialModalProgressTask;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.editor.scope.localize.AnalysisScopeLocalize;
 import consulo.language.file.FileViewProvider;
@@ -305,7 +306,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
     presentation.setTabText("Infer Nullity Preview");
     presentation.setShowReadOnlyStatusAsRed(true);
     presentation.setShowCancelButton(true);
-    presentation.setUsagesString(RefactoringBundle.message("usageView.usagesText"));
+    presentation.setUsagesString(RefactoringLocalize.usageviewUsagestext().get());
 
     final UsageView usageView = UsageViewManager.getInstance(project).showUsages(targets, usages, presentation, rerunFactory(project, scope));
 

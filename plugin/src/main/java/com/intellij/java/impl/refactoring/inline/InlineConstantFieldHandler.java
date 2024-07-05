@@ -24,11 +24,13 @@ import consulo.application.progress.ProgressManager;
 import consulo.codeEditor.Editor;
 import consulo.language.editor.TargetElementUtil;
 import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiCompiledElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.project.content.scope.ProjectScopes;
 import consulo.util.lang.ref.Ref;
@@ -49,8 +51,8 @@ public class InlineConstantFieldHandler extends JavaInlineActionHandler {
     final PsiField field = (PsiField)(navigationElement instanceof PsiField ? navigationElement : element);
 
     if (!field.hasInitializer()) {
-      String message = RefactoringBundle.message("no.initializer.present.for.the.field");
-      CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INLINE_FIELD);
+      LocalizeValue message = RefactoringLocalize.noInitializerPresentForTheField();
+      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.INLINE_FIELD);
       return;
     }
 
@@ -61,8 +63,8 @@ public class InlineConstantFieldHandler extends JavaInlineActionHandler {
     }
 
     if (ReferencesSearch.search(field, ProjectScopes.getProjectScope(project), false).findFirst() == null) {
-      String message = RefactoringBundle.message("field.0.is.never.used", field.getName());
-      CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INLINE_FIELD);
+      LocalizeValue message = RefactoringLocalize.field0IsNeverUsed(field.getName());
+      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.INLINE_FIELD);
       return;
     }
 
@@ -83,8 +85,8 @@ public class InlineConstantFieldHandler extends JavaInlineActionHandler {
         return;
       }
       if (hasWriteUsages.get()) {
-        String message = RefactoringBundle.message("0.refactoring.is.supported.only.for.final.fields", REFACTORING_NAME);
-        CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INLINE_FIELD);
+        LocalizeValue message = RefactoringLocalize.zeroRefactoringIsSupportedOnlyForFinalFields(REFACTORING_NAME);
+        CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.INLINE_FIELD);
         return;
       }
     }

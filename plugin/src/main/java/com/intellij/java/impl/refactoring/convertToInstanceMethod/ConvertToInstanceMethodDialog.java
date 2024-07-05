@@ -16,6 +16,7 @@
 package com.intellij.java.impl.refactoring.convertToInstanceMethod;
 
 import consulo.application.HelpManager;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.logging.Logger;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
@@ -56,7 +57,7 @@ public class ConvertToInstanceMethodDialog  extends MoveInstanceMethodDialogBase
 
   protected JComponent createCenterPanel() {
     JPanel panel = new JPanel(new BorderLayout(UIUtil.DEFAULT_HGAP, UIUtil.DEFAULT_VGAP));
-    final JLabel label = new JLabel(RefactoringBundle.message("moveInstanceMethod.select.an.instance.parameter"));
+    final JLabel label = new JLabel(RefactoringLocalize.moveinstancemethodSelectAnInstanceParameter().get());
     panel.add(label, BorderLayout.NORTH);
     panel.add(createListAndVisibilityPanels(), BorderLayout.CENTER);
     return panel;

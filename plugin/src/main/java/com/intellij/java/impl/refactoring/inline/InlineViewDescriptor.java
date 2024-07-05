@@ -16,16 +16,15 @@
  */
 package com.intellij.java.impl.refactoring.inline;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiVariable;
-import consulo.language.psi.*;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.language.psi.PsiElement;
 import consulo.usage.UsageViewBundle;
 import consulo.usage.UsageViewDescriptor;
+import jakarta.annotation.Nonnull;
 
 class InlineViewDescriptor implements UsageViewDescriptor{
 
@@ -42,27 +41,25 @@ class InlineViewDescriptor implements UsageViewDescriptor{
 
   public String getProcessedElementsHeader() {
     if (myElement instanceof PsiField) {
-      return RefactoringBundle.message("inline.field.elements.header");
+      return RefactoringLocalize.inlineFieldElementsHeader().get();
     }
     if (myElement instanceof PsiVariable) {
-      return RefactoringBundle.message("inline.vars.elements.header");
+      return RefactoringLocalize.inlineVarsElementsHeader().get();
     }
     if (myElement instanceof PsiClass) {
-      return RefactoringBundle.message("inline.class.elements.header");
+      return RefactoringLocalize.inlineClassElementsHeader().get();
     }
     if (myElement instanceof PsiMethod) {
-      return RefactoringBundle.message("inline.method.elements.header");
+      return RefactoringLocalize.inlineMethodElementsHeader().get();
     }
     return "Unknown element";
   }
 
   public String getCodeReferencesText(int usagesCount, int filesCount) {
-    return RefactoringBundle.message("invocations.to.be.inlined", UsageViewBundle.getReferencesString(usagesCount, filesCount));
+    return RefactoringLocalize.invocationsToBeInlined(UsageViewBundle.getReferencesString(usagesCount, filesCount)).get();
   }
 
   public String getCommentReferencesText(int usagesCount, int filesCount) {
-    return RefactoringBundle.message("comments.elements.header",
-                                     UsageViewBundle.getOccurencesString(usagesCount, filesCount));
+    return RefactoringLocalize.commentsElementsHeader(UsageViewBundle.getOccurencesString(usagesCount, filesCount)).get();
   }
-
 }

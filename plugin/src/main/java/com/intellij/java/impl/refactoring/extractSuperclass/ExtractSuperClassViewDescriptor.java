@@ -15,17 +15,17 @@
  */
 package com.intellij.java.impl.refactoring.extractSuperclass;
 
+import com.intellij.java.impl.refactoring.util.classMembers.ClassMembersUtil;
+import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import com.intellij.java.language.psi.PsiClass;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.language.editor.refactoring.ui.UsageViewDescriptorAdapter;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import consulo.language.editor.refactoring.ui.UsageViewDescriptorAdapter;
-import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
-import com.intellij.java.impl.refactoring.util.classMembers.ClassMembersUtil;
 import jakarta.annotation.Nonnull;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author dsl
@@ -63,6 +63,6 @@ public class ExtractSuperClassViewDescriptor extends UsageViewDescriptorAdapter 
   }
 
   public String getProcessedElementsHeader() {
-    return RefactoringBundle.message("extract.superclass.elements.header");
+    return RefactoringLocalize.extractSuperclassElementsHeader().get();
   }
 }
