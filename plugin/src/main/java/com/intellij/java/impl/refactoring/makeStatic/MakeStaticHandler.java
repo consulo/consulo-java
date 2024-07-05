@@ -35,6 +35,7 @@ import consulo.codeEditor.ScrollType;
 import consulo.dataContext.DataContext;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -71,7 +72,7 @@ public class MakeStaticHandler implements RefactoringActionHandler
 
 		if (!(element instanceof PsiTypeParameterListOwner))
 		{
-			String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("error.wrong.caret.position.method.or.class.name"));
+			String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.errorWrongCaretPositionMethodOrClassName().get());
 			CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.MAKE_METHOD_STATIC);
 			return;
 		}
@@ -164,28 +165,28 @@ public class MakeStaticHandler implements RefactoringActionHandler
 		// Checking various preconditions
 		if (member instanceof PsiMethod && ((PsiMethod) member).isConstructor())
 		{
-			return RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("constructor.cannot.be.made.static"));
+			return RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.constructorCannotBeMadeStatic().get());
 		}
 
 		if (member.getContainingClass() == null)
 		{
-			return RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("this.member.does.not.seem.to.belong.to.any.class"));
+			return RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.thisMemberDoesNotSeemToBelongToAnyClass().get());
 		}
 
 		if (member.hasModifierProperty(PsiModifier.STATIC))
 		{
-			return RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("member.is.already.static"));
+			return RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.memberIsAlreadyStatic().get());
 		}
 
 		if (member instanceof PsiMethod && member.hasModifierProperty(PsiModifier.ABSTRACT))
 		{
-			return RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("cannot.make.abstract.method.static"));
+			return RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.cannotMakeAbstractMethodStatic().get());
 		}
 
 		if (containingClass instanceof PsiAnonymousClass
 			|| (containingClass.getContainingClass() != null && !containingClass.hasModifierProperty(PsiModifier.STATIC)))
 		{
-			return RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("inner.classes.cannot.have.static.members"));
+			return RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.innerClassesCannotHaveStaticMembers().get());
 		}
 		return null;
 	}

@@ -60,6 +60,7 @@ import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.RefactoringSupportProvider;
 import consulo.language.editor.refactoring.introduce.inplace.AbstractInplaceIntroducer;
 import consulo.language.editor.refactoring.introduce.inplace.OccurrencesChooser;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import consulo.language.editor.refactoring.unwrap.ScopeHighlighter;
@@ -69,6 +70,7 @@ import consulo.language.psi.*;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.project.ui.wm.WindowManager;
@@ -547,8 +549,7 @@ public abstract class IntroduceVariableBase extends IntroduceHandlerBase {
         return false;
       }
       if (expr == null) {
-        String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("selected.block.should.represent.an" +
-            ".expression"));
+        String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.selectedBlockShouldRepresentAnExpression().get());
         showErrorMessage(project, editor, message);
         return false;
       }
@@ -557,13 +558,13 @@ public abstract class IntroduceVariableBase extends IntroduceHandlerBase {
 
     final PsiType originalType = RefactoringUtil.getTypeByExpressionWithExpectedType(expr);
     if (originalType == null || LambdaUtil.notInferredType(originalType)) {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("unknown.expression.type"));
+      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.unknownExpressionType().get());
       showErrorMessage(project, editor, message);
       return false;
     }
 
     if (PsiType.VOID.equals(originalType)) {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("selected.expression.has.void.type"));
+      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.selectedExpressionHasVoidType().get());
       showErrorMessage(project, editor, message);
       return false;
     }
@@ -584,14 +585,13 @@ public abstract class IntroduceVariableBase extends IntroduceHandlerBase {
 
     if (!(tempContainer instanceof PsiCodeBlock) && !RefactoringUtil.isLoopOrIf(tempContainer) && (tempContainer.getParent() instanceof
         PsiLambdaExpression)) {
-      String message = RefactoringBundle.message("refactoring.is.not.supported.in.the.current.context", REFACTORING_NAME);
+      String message = RefactoringLocalize.refactoringIsNotSupportedInTheCurrentContext(REFACTORING_NAME).get();
       showErrorMessage(project, editor, message);
       return false;
     }
 
     if (!NotInSuperCallOccurrenceFilter.INSTANCE.isOK(expr)) {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("cannot.introduce.variable.in.super.constructor" +
-          ".call"));
+      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.cannotIntroduceVariableInSuperConstructorCall().get());
       showErrorMessage(project, editor, message);
       return false;
     }
@@ -1022,8 +1022,8 @@ public abstract class IntroduceVariableBase extends IntroduceHandlerBase {
   }
 
   private boolean parentStatementNotFound(final Project project, Editor editor) {
-    String message = RefactoringBundle.message("refactoring.is.not.supported.in.the.current.context", REFACTORING_NAME);
-    showErrorMessage(project, editor, message);
+    LocalizeValue message = RefactoringLocalize.refactoringIsNotSupportedInTheCurrentContext(REFACTORING_NAME);
+    showErrorMessage(project, editor, message.get());
     return false;
   }
 
@@ -1060,7 +1060,7 @@ public abstract class IntroduceVariableBase extends IntroduceHandlerBase {
     EditorColorsManager colorsManager = EditorColorsManager.getInstance();
     TextAttributes attributes = colorsManager.getGlobalScheme().getAttributes(EditorColors.SEARCH_RESULT_ATTRIBUTES);
     highlightManager.addOccurrenceHighlights(editor, replacedOccurences, attributes, true, null);
-    WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringBundle.message("press.escape.to.remove.the.highlighting"));
+    WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringLocalize.pressEscapeToRemoveTheHighlighting().get());
   }
 
   protected abstract void showErrorMessage(Project project, Editor editor, String message);
@@ -1126,7 +1126,7 @@ public abstract class IntroduceVariableBase extends IntroduceHandlerBase {
         PsiMethod method = ((PsiMethodCallExpression) enclosingExpr).resolveMethod();
         if (method != null && method.isConstructor()) {
           //This is either 'this' or 'super', both must be the first in the respective contructor
-          String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("invalid.expression.context"));
+          String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.invalidExpressionContext().get());
           CommonRefactoringUtil.showErrorHint(project, editor, message, refactoringName, helpID);
           return true;
         }
@@ -1154,10 +1154,10 @@ public abstract class IntroduceVariableBase extends IntroduceHandlerBase {
 
     if (!modifiedInBody.isEmpty()) {
       for (PsiVariable variable : modifiedInBody) {
-        final String message = RefactoringBundle.message("is.modified.in.loop.body", RefactoringUIUtil.getDescription(variable, false));
-        conflicts.putValue(variable, CommonRefactoringUtil.capitalize(message));
+        final LocalizeValue message = RefactoringLocalize.isModifiedInLoopBody(RefactoringUIUtil.getDescription(variable, false));
+        conflicts.putValue(variable, CommonRefactoringUtil.capitalize(message.get()));
       }
-      conflicts.putValue(occurence, RefactoringBundle.message("introducing.variable.may.break.code.logic"));
+      conflicts.putValue(occurence, RefactoringLocalize.introducingVariableMayBreakCodeLogic().get());
     }
   }
 

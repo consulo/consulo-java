@@ -34,6 +34,7 @@ import consulo.ide.impl.idea.ide.util.DirectoryChooser;
 import consulo.ide.impl.idea.refactoring.rename.DirectoryAsPackageRenameHandlerBase;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.move.MoveCallback;
 import consulo.language.editor.refactoring.rename.RenameUtil;
 import consulo.language.editor.refactoring.ui.ConflictsDialog;
@@ -47,6 +48,7 @@ import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localHistory.LocalHistory;
 import consulo.localHistory.LocalHistoryAction;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
@@ -97,6 +99,7 @@ public class MoveClassesOrPackagesImpl {
   }
 
   @Nullable
+  @RequiredUIAccess
   public static PsiElement[] adjustForMove(final Project project, final PsiElement[] elements, final PsiElement targetElement) {
     final PsiElement[] psiElements = new PsiElement[elements.length];
     List<String> names = new ArrayList<String>();
@@ -106,8 +109,8 @@ public class MoveClassesOrPackagesImpl {
         PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(directory);
         LOG.assertTrue(aPackage != null);
         if (aPackage.getQualifiedName().length() == 0) { //is default package
-          String message = RefactoringBundle.message("move.package.refactoring.cannot.be.applied.to.default.package");
-          CommonRefactoringUtil.showErrorMessage(RefactoringBundle.message("move.title"), message, HelpID.getMoveHelpID(element), project);
+          String message = RefactoringLocalize.movePackageRefactoringCannotBeAppliedToDefaultPackage().get();
+          CommonRefactoringUtil.showErrorMessage(RefactoringLocalize.moveTitle().get(), message, HelpID.getMoveHelpID(element), project);
           return null;
         }
         if (!checkNesting(project, aPackage, targetElement, true)) return null;
@@ -122,13 +125,13 @@ public class MoveClassesOrPackagesImpl {
       }
       else if (element instanceof PsiClass aClass) {
         if (aClass instanceof PsiAnonymousClass) {
-          String message = RefactoringBundle.message("move.class.refactoring.cannot.be.applied.to.anonymous.classes");
-          CommonRefactoringUtil.showErrorMessage(RefactoringBundle.message("move.title"), message, HelpID.getMoveHelpID(element), project);
+          String message = RefactoringLocalize.moveClassRefactoringCannotBeAppliedToAnonymousClasses().get();
+          CommonRefactoringUtil.showErrorMessage(RefactoringLocalize.moveTitle().get(), message, HelpID.getMoveHelpID(element), project);
           return null;
         }
         if (isClassInnerOrLocal(aClass)) {
-          String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("moving.local.classes.is.not.supported"));
-          CommonRefactoringUtil.showErrorMessage(RefactoringBundle.message("move.title"), message, HelpID.getMoveHelpID(element), project);
+          String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.movingLocalClassesIsNotSupported().get());
+          CommonRefactoringUtil.showErrorMessage(RefactoringLocalize.moveTitle().get(), message, HelpID.getMoveHelpID(element), project);
           return null;
         }
 
@@ -141,8 +144,8 @@ public class MoveClassesOrPackagesImpl {
 
         if (names.contains(name)) {
           String message = RefactoringBundle
-            .getCannotRefactorMessage(RefactoringBundle.message("there.are.going.to.be.multiple.destination.files.with.the.same.name"));
-          CommonRefactoringUtil.showErrorMessage(RefactoringBundle.message("move.title"), message, HelpID.getMoveHelpID(element), project);
+            .getCannotRefactorMessage(RefactoringLocalize.thereAreGoingToBeMultipleDestinationFilesWithTheSameName().get());
+          CommonRefactoringUtil.showErrorMessage(RefactoringLocalize.moveTitle().get(), message, HelpID.getMoveHelpID(element), project);
           return null;
         }
 
@@ -167,6 +170,7 @@ public class MoveClassesOrPackagesImpl {
     return false;
   }
 
+  @RequiredUIAccess
   private static boolean checkMovePackage(Project project, PsiJavaPackage aPackage) {
     final PsiDirectory[] directories = aPackage.getDirectories();
     final VirtualFile[] virtualFiles = aPackage.occursInPackagePrefixes();
@@ -176,14 +180,13 @@ public class MoveClassesOrPackagesImpl {
       if (directories.length > 1) {
         DirectoryAsPackageRenameHandlerBase.buildMultipleDirectoriesInPackageMessage(message, aPackage.getQualifiedName(), directories);
         message.append("\n\n");
-        String report = RefactoringBundle
-          .message("all.these.directories.will.be.moved.and.all.references.to.0.will.be.changed", aPackage.getQualifiedName());
-        message.append(report);
+        LocalizeValue report =
+          RefactoringLocalize.allTheseDirectoriesWillBeMovedAndAllReferencesTo0WillBeChanged(aPackage.getQualifiedName());
+        message.append(report.get());
       }
       message.append("\n");
-      message.append(RefactoringBundle.message("do.you.wish.to.continue"));
-      int ret =
-        Messages.showYesNoDialog(project, message.toString(), RefactoringBundle.message("warning.title"), UIUtil.getWarningIcon());
+      message.append(RefactoringLocalize.doYouWishToContinue());
+      int ret = Messages.showYesNoDialog(project, message.toString(), RefactoringLocalize.warningTitle().get(), UIUtil.getWarningIcon());
       if (ret != 0) {
         return false;
       }
@@ -191,6 +194,7 @@ public class MoveClassesOrPackagesImpl {
     return true;
   }
 
+  @RequiredUIAccess
   static boolean checkNesting(final Project project, final PsiJavaPackage srcPackage, final PsiElement targetElement, boolean showError) {
     final PsiJavaPackage targetPackage = targetElement instanceof PsiJavaPackage javaPackage
       ? javaPackage
@@ -200,8 +204,9 @@ public class MoveClassesOrPackagesImpl {
     for (PsiJavaPackage curPackage = targetPackage; curPackage != null; curPackage = curPackage.getParentPackage()) {
       if (curPackage.equals(srcPackage)) {
         if (showError) {
-          CommonRefactoringUtil.showErrorMessage(RefactoringBundle.message("move.title"),
-            RefactoringBundle.message("cannot.move.package.into.itself"),
+          CommonRefactoringUtil.showErrorMessage(
+            RefactoringLocalize.moveTitle().get(),
+            RefactoringLocalize.cannotMovePackageIntoItself().get(),
             HelpID.getMoveHelpID(srcPackage), project
           );
         }
@@ -333,7 +338,7 @@ public class MoveClassesOrPackagesImpl {
 
     List<PsiDirectory> sourceRootDirectories = buildRearrangeTargetsList(project, directories);
     DirectoryChooser chooser = new DirectoryChooser(project);
-    chooser.setTitle(RefactoringBundle.message("select.source.root.chooser.title"));
+    chooser.setTitle(RefactoringLocalize.selectSourceRootChooserTitle());
     chooser.fillList(sourceRootDirectories.toArray(new PsiDirectory[sourceRootDirectories.size()]), null, project, "");
     chooser.show();
     if (!chooser.isOK()) return;
@@ -359,7 +364,7 @@ public class MoveClassesOrPackagesImpl {
       }
     }
     final Ref<IncorrectOperationException> ex = Ref.create(null);
-    final String commandDescription = RefactoringBundle.message("moving.directories.command");
+    final String commandDescription = RefactoringLocalize.movingDirectoriesCommand().get();
     Runnable runnable = () -> project.getApplication().runWriteAction(() -> {
       LocalHistoryAction a = LocalHistory.getInstance().startAction(commandDescription);
       try {

@@ -54,6 +54,7 @@ import consulo.dataContext.DataContext;
 import consulo.document.util.TextRange;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.introduce.inplace.AbstractInplaceIntroducer;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiDocumentManager;
@@ -140,7 +141,7 @@ public class IntroduceParameterHandler extends IntroduceHandlerBase {
     }
 
     if (expr == null && localVar == null) {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("selected.block.should.represent.an.expression"));
+      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.selectedBlockShouldRepresentAnExpression().get());
       showErrorMessage(project, message, editor);
       return false;
     }
@@ -148,14 +149,16 @@ public class IntroduceParameterHandler extends IntroduceHandlerBase {
     if (localVar != null) {
       final PsiElement parent = localVar.getParent();
       if (!(parent instanceof PsiDeclarationStatement)) {
-        String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("error.wrong.caret.position.local.or.expression.name"));
+        String message =
+          RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.errorWrongCaretPositionLocalOrExpressionName().get());
         showErrorMessage(project, message, editor);
         return false;
       }
     }
 
     if (method == null) {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("is.not.supported.in.the.current.context", REFACTORING_NAME));
+      String message =
+        RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.isNotSupportedInTheCurrentContext(REFACTORING_NAME).get());
       showErrorMessage(project, message, editor);
       return false;
     }
@@ -164,13 +167,13 @@ public class IntroduceParameterHandler extends IntroduceHandlerBase {
 
     final PsiType typeByExpression = invokedOnDeclaration ? null : RefactoringUtil.getTypeByExpressionWithExpectedType(expr);
     if (!invokedOnDeclaration && (typeByExpression == null || LambdaUtil.notInferredType(typeByExpression))) {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("type.of.the.selected.expression.cannot.be.determined"));
+      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.typeOfTheSelectedExpressionCannotBeDetermined().get());
       showErrorMessage(project, message, editor);
       return false;
     }
 
     if (!invokedOnDeclaration && PsiType.VOID.equals(typeByExpression)) {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("selected.expression.has.void.type"));
+      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.selectedExpressionHasVoidType().get());
       showErrorMessage(project, message, editor);
       return false;
     }

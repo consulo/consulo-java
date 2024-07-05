@@ -26,7 +26,7 @@ import com.intellij.java.language.util.VisibilityUtil;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
 import consulo.language.editor.highlight.ReadWriteAccessDetector;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiElement;
@@ -37,11 +37,12 @@ import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.MultiMap;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.*;
 
 /**
@@ -100,9 +101,12 @@ public class MoveJavaMemberHandler implements MoveMemberHandler {
 
       if (!JavaResolveUtil.isAccessible(member, targetClass, modifierListCopy, element, accessObjectClass, null)) {
         String visibility = newVisibility != null ? newVisibility : VisibilityUtil.getVisibilityStringToDisplay(member);
-        String message = RefactoringBundle.message("0.with.1.visibility.is.not.accessible.from.2", RefactoringUIUtil.getDescription(member,
-            false), visibility, RefactoringUIUtil.getDescription(ConflictsUtil.getContainer(element), true));
-        conflicts.putValue(member, CommonRefactoringUtil.capitalize(message));
+        LocalizeValue message = RefactoringLocalize.zeroWith1VisibilityIsNotAccessibleFrom2(
+          RefactoringUIUtil.getDescription(member, false),
+          visibility,
+          RefactoringUIUtil.getDescription(ConflictsUtil.getContainer(element), true)
+        );
+        conflicts.putValue(member, CommonRefactoringUtil.capitalize(message.get()));
       }
     }
 
@@ -128,8 +132,9 @@ public class MoveJavaMemberHandler implements MoveMemberHandler {
                                      @Nonnull PsiClass targetClass, @Nonnull Set<PsiMember> membersToMove, @Nonnull MultiMap<PsiElement, String> conflicts) {
     if (member instanceof PsiMethod && hasMethod(targetClass, (PsiMethod) member) || member instanceof PsiField && hasField(targetClass,
         (PsiField) member)) {
-      String message = RefactoringBundle.message("0.already.exists.in.the.target.class", RefactoringUIUtil.getDescription(member, false));
-      conflicts.putValue(member, CommonRefactoringUtil.capitalize(message));
+      LocalizeValue message =
+        RefactoringLocalize.zeroAlreadyExistsInTheTargetClass(RefactoringUIUtil.getDescription(member, false));
+      conflicts.putValue(member, CommonRefactoringUtil.capitalize(message.get()));
     }
 
     RefactoringConflictsUtil.checkUsedElements(member, member, membersToMove, null, targetClass, targetClass, conflicts);

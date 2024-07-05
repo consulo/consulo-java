@@ -16,15 +16,15 @@
 package com.intellij.java.impl.refactoring.memberPushDown;
 
 import com.intellij.java.language.psi.PsiClass;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.PsiElement;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.usage.UsageViewBundle;
 import consulo.usage.UsageViewDescriptor;
 import jakarta.annotation.Nonnull;
 
 class PushDownUsageViewDescriptor implements UsageViewDescriptor {
   private final PsiClass myClass;
-  private final String myProcessedElementsHeader = RefactoringBundle.message("push.down.members.elements.header");
+  private final String myProcessedElementsHeader = RefactoringLocalize.pushDownMembersElementsHeader().get();
 
   public PushDownUsageViewDescriptor(PsiClass aClass) {
     myClass = aClass;
@@ -40,11 +40,10 @@ class PushDownUsageViewDescriptor implements UsageViewDescriptor {
   }
 
   public String getCodeReferencesText(int usagesCount, int filesCount) {
-    return RefactoringBundle.message("classes.to.push.down.members.to", UsageViewBundle.getReferencesString(usagesCount, filesCount));
+    return RefactoringLocalize.classesToPushDownMembersTo(UsageViewBundle.getReferencesString(usagesCount, filesCount)).get();
   }
 
   public String getCommentReferencesText(int usagesCount, int filesCount) {
     return null;
   }
-
 }

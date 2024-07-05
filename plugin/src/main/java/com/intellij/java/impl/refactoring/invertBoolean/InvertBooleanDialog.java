@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.refactoring.invertBoolean;
 
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.findUsage.DescriptiveNameUtil;
 import consulo.project.Project;
 import consulo.application.HelpManager;
@@ -45,10 +46,8 @@ public class InvertBooleanDialog extends RefactoringDialog {
     myNameField.setText(name);
     myLabel.setLabelFor(myNameField);
     final String typeString = UsageViewUtil.getType(myElement);
-    myLabel.setText(RefactoringBundle.message("invert.boolean.name.of.inverted.element", typeString));
-    myCaptionLabel.setText(RefactoringBundle.message("invert.0.1",
-                                                     typeString,
-                                                     DescriptiveNameUtil.getDescriptiveName(myElement)));
+    myLabel.setText(RefactoringLocalize.invertBooleanNameOfInvertedElement(typeString).get());
+    myCaptionLabel.setText(RefactoringLocalize.invert01(typeString, DescriptiveNameUtil.getDescriptiveName(myElement)).get());
 
     setTitle(InvertBooleanHandler.REFACTORING_NAME);
     init();
@@ -62,10 +61,12 @@ public class InvertBooleanDialog extends RefactoringDialog {
     Project project = myElement.getProject();
     final String name = myNameField.getText().trim();
     if (name.length() == 0) {
-      CommonRefactoringUtil.showErrorMessage(InvertBooleanHandler.REFACTORING_NAME,
-                                             RefactoringBundle.message("please.enter.a.valid.name.for.inverted.element",
-                                                                       UsageViewUtil.getType(myElement)),
-                                             HelpID.INVERT_BOOLEAN, project);
+      CommonRefactoringUtil.showErrorMessage(
+        InvertBooleanHandler.REFACTORING_NAME,
+        RefactoringLocalize.pleaseEnterAValidNameForInvertedElement(UsageViewUtil.getType(myElement)).get(),
+        HelpID.INVERT_BOOLEAN,
+        project
+      );
       return;
     }
 

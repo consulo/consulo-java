@@ -15,16 +15,18 @@
  */
 package com.intellij.java.impl.refactoring.introduceVariable;
 
-import consulo.project.Project;
-import consulo.language.psi.PsiElement;
+import com.intellij.java.impl.refactoring.rename.JavaUnresolvableLocalCollisionDetector;
+import com.intellij.java.impl.refactoring.util.occurrences.ExpressionOccurrenceManager;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiVariable;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import com.intellij.java.impl.refactoring.rename.JavaUnresolvableLocalCollisionDetector;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
-import com.intellij.java.impl.refactoring.util.occurrences.ExpressionOccurrenceManager;
-import java.util.HashSet;
+import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
 import consulo.util.collection.MultiMap;
+
+import java.util.HashSet;
 
 public class InputValidator implements IntroduceVariableBase.Validator {
   private final Project myProject;
@@ -50,8 +52,9 @@ public class InputValidator implements IntroduceVariableBase.Validator {
       public void visitCollidingElement(PsiVariable collidingVariable) {
         if (!reportedVariables.contains(collidingVariable)) {
           reportedVariables.add(collidingVariable);
-          String message = RefactoringBundle.message("introduced.variable.will.conflict.with.0", RefactoringUIUtil.getDescription(collidingVariable, true));
-          conflicts.putValue(collidingVariable, message);
+          LocalizeValue message =
+            RefactoringLocalize.introducedVariableWillConflictWith0(RefactoringUIUtil.getDescription(collidingVariable, true));
+          conflicts.putValue(collidingVariable, message.get());
         }
       }
     };

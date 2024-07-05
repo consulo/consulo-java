@@ -36,6 +36,7 @@ import consulo.application.HelpManager;
 import consulo.configurable.ConfigurationException;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.NameSuggestionsField;
 import consulo.language.editor.refactoring.ui.RefactoringDialog;
 import consulo.project.Project;
@@ -148,7 +149,7 @@ public class IntroduceParameterDialog extends RefactoringDialog {
     gbConstraints.weightx = 0;
     gbConstraints.weighty = 0;
     gbConstraints.gridy = 0;
-    JLabel type = new JLabel(RefactoringBundle.message("parameter.of.type"));
+    JLabel type = new JLabel(RefactoringLocalize.parameterOfType().get());
     panel.add(type, gbConstraints);
 
     gbConstraints.insets = new Insets(4, 4, 4, 8);
@@ -167,7 +168,7 @@ public class IntroduceParameterDialog extends RefactoringDialog {
     gbConstraints.fill = GridBagConstraints.NONE;
 
     myParameterNameField = new NameSuggestionsField(myProject);
-    final JLabel nameLabel = new JLabel(RefactoringBundle.message("name.prompt"));
+    final JLabel nameLabel = new JLabel(RefactoringLocalize.namePrompt().get());
     nameLabel.setLabelFor(myParameterNameField.getComponent());
     panel.add(nameLabel, gbConstraints);
 
@@ -212,7 +213,7 @@ public class IntroduceParameterDialog extends RefactoringDialog {
     gbConstraints.insets =  new Insets(4, 0, 4, 8);
 
     gbConstraints.gridy++;
-    myCbDeclareFinal = new NonFocusableCheckBox(RefactoringBundle.message("declare.final"));
+    myCbDeclareFinal = new NonFocusableCheckBox(RefactoringLocalize.declareFinal().get());
 
     final Boolean settingsFinals = settings.INTRODUCE_PARAMETER_CREATE_FINALS;
     myCbDeclareFinal.setSelected(settingsFinals == null ?

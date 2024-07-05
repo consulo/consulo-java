@@ -24,10 +24,10 @@
  */
 package com.intellij.java.impl.refactoring.introduceParameter;
 
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.UsageViewDescriptorAdapter;
+import consulo.language.psi.PsiElement;
 import jakarta.annotation.Nonnull;
 
 class IntroduceParameterViewDescriptor extends UsageViewDescriptorAdapter {
@@ -49,8 +49,7 @@ class IntroduceParameterViewDescriptor extends UsageViewDescriptorAdapter {
     return new PsiElement[]{myMethodToSearchFor};
   }
 
-
   public String getProcessedElementsHeader() {
-    return RefactoringBundle.message("introduce.parameter.elements.header");
+    return RefactoringLocalize.introduceParameterElementsHeader().get();
   }
 }

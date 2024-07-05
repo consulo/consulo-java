@@ -24,14 +24,13 @@
  */
 package com.intellij.java.impl.refactoring.introduceParameter;
 
+import com.intellij.java.impl.refactoring.ui.MethodCellRenderer;
+import com.intellij.java.language.psi.PsiMethod;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.project.Project;
 import consulo.ui.ex.awt.DialogWrapper;
-import com.intellij.java.language.psi.PsiMethod;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import com.intellij.java.impl.refactoring.ui.MethodCellRenderer;
-import consulo.ui.ex.awt.ScrollPaneFactory;
 import consulo.ui.ex.awt.JBList;
-
+import consulo.ui.ex.awt.ScrollPaneFactory;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
@@ -42,8 +41,8 @@ public class EnclosingMethodSelectionDialog extends DialogWrapper {
   private final List<PsiMethod> myEnclosingMethods;
 
   private JList myEnclosingMethodsList = null;
-  private final JCheckBox myCbReplaceInstanceOf = new JCheckBox(RefactoringBundle.message("use.interface.superclass.in.instanceof"));
-  private static final String REFACTORING_NAME = RefactoringBundle.message("introduce.parameter.title");
+  private final JCheckBox myCbReplaceInstanceOf = new JCheckBox(RefactoringLocalize.useInterfaceSuperclassInInstanceof().get());
+  private static final String REFACTORING_NAME = RefactoringLocalize.introduceParameterTitle().get();
 
   EnclosingMethodSelectionDialog(Project project, List<PsiMethod> enclosingMethods) {
     super(project, true);
@@ -86,7 +85,7 @@ public class EnclosingMethodSelectionDialog extends DialogWrapper {
     gbConstraints.gridheight = 1;
     gbConstraints.fill = GridBagConstraints.BOTH;
     gbConstraints.anchor = GridBagConstraints.WEST;
-    panel.add(new JLabel(RefactoringBundle.message("introduce.parameter.to.method")), gbConstraints);
+    panel.add(new JLabel(RefactoringLocalize.introduceParameterToMethod().get()), gbConstraints);
 
     gbConstraints.weighty = 1;
     myEnclosingMethodsList = new JBList(myEnclosingMethods.toArray());

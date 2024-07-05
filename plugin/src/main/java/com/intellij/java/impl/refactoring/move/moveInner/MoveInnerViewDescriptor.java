@@ -21,6 +21,7 @@
 package com.intellij.java.impl.refactoring.move.moveInner;
 
 import com.intellij.java.language.psi.PsiClass;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.usage.UsageViewBundle;
@@ -41,15 +42,14 @@ class MoveInnerViewDescriptor implements UsageViewDescriptor {
   }
 
   public String getProcessedElementsHeader() {
-    return RefactoringBundle.message("move.inner.class.to.be.moved");
+    return RefactoringLocalize.moveInnerClassToBeMoved().get();
   }
 
   public String getCodeReferencesText(int usagesCount, int filesCount) {
-    return RefactoringBundle.message("references.to.be.changed", UsageViewBundle.getReferencesString(usagesCount, filesCount));
+    return RefactoringLocalize.referencesToBeChanged(UsageViewBundle.getReferencesString(usagesCount, filesCount)).get();
   }
 
   public String getCommentReferencesText(int usagesCount, int filesCount) {
     return null;
   }
-
 }

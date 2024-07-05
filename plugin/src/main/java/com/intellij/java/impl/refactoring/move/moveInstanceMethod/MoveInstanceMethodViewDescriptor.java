@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.refactoring.move.moveInstanceMethod;
 
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiClass;
@@ -48,7 +49,6 @@ public class MoveInstanceMethodViewDescriptor extends UsageViewDescriptorAdapter
   }
 
   public String getProcessedElementsHeader() {
-    return RefactoringBundle.message("move.instance.method.elements.header");
+    return RefactoringLocalize.moveInstanceMethodElementsHeader().get();
   }
-
 }

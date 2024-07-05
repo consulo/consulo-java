@@ -25,6 +25,7 @@ import consulo.document.event.DocumentEvent;
 import consulo.document.event.DocumentListener;
 import consulo.language.Language;
 import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.ui.awt.EditorTextField;
 import consulo.language.editor.ui.awt.LanguageTextField;
 import consulo.language.psi.PsiDocumentManager;
@@ -48,7 +49,7 @@ public class EditMigrationEntryDialog extends DialogWrapper {
   public EditMigrationEntryDialog(Project project) {
     super(project, true);
     myProject = project;
-    setTitle(RefactoringBundle.message("edit.migration.entry.title"));
+    setTitle(RefactoringLocalize.editMigrationEntryTitle());
     setHorizontalStretch(1.2f);
     init();
   }
@@ -73,13 +74,13 @@ public class EditMigrationEntryDialog extends DialogWrapper {
     gbConstraints.gridwidth = GridBagConstraints.RELATIVE;
     gbConstraints.fill = GridBagConstraints.BOTH;
     gbConstraints.weightx = 0;
-    myRbPackage = new JRadioButton(RefactoringBundle.message("migration.entry.package"));
+    myRbPackage = new JRadioButton(RefactoringLocalize.migrationEntryPackage().get());
     panel.add(myRbPackage, gbConstraints);
 
     gbConstraints.gridwidth = GridBagConstraints.RELATIVE;
     gbConstraints.fill = GridBagConstraints.BOTH;
     gbConstraints.weightx = 0;
-    myRbClass = new JRadioButton(RefactoringBundle.message("migration.entry.class"));
+    myRbClass = new JRadioButton(RefactoringLocalize.migrationEntryClass().get());
     panel.add(myRbClass, gbConstraints);
 
     gbConstraints.gridwidth = GridBagConstraints.REMAINDER;
@@ -94,7 +95,7 @@ public class EditMigrationEntryDialog extends DialogWrapper {
     gbConstraints.weightx = 0;
     gbConstraints.gridwidth = GridBagConstraints.RELATIVE;
     gbConstraints.fill = GridBagConstraints.NONE;
-    JLabel oldNamePrompt = new JLabel(RefactoringBundle.message("migration.entry.old.name"));
+    JLabel oldNamePrompt = new JLabel(RefactoringLocalize.migrationEntryOldName().get());
     panel.add(oldNamePrompt, gbConstraints);
 
     gbConstraints.gridwidth = GridBagConstraints.REMAINDER;
@@ -114,7 +115,7 @@ public class EditMigrationEntryDialog extends DialogWrapper {
     gbConstraints.weightx = 0;
     gbConstraints.gridwidth = GridBagConstraints.RELATIVE;
     gbConstraints.fill = GridBagConstraints.NONE;
-    JLabel newNamePrompt = new JLabel(RefactoringBundle.message("migration.entry.new.name"));
+    JLabel newNamePrompt = new JLabel(RefactoringLocalize.migrationEntryNewName().get());
     panel.add(newNamePrompt, gbConstraints);
 
     gbConstraints.gridwidth = GridBagConstraints.REMAINDER;

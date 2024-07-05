@@ -29,7 +29,7 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.util.VisibilityUtil;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiElement;
@@ -39,6 +39,7 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.usage.UsageInfo;
@@ -47,9 +48,9 @@ import consulo.usage.UsageViewUtil;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.ref.Ref;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import java.util.*;
 
 /**
@@ -120,9 +121,11 @@ public class MoveInstanceMethodProcessor extends BaseRefactoringProcessor {
               PsiExpression instanceValue = expressions[index];
               instanceValue = RefactoringUtil.unparenthesizeExpression(instanceValue);
               if (instanceValue instanceof PsiLiteralExpression && ((PsiLiteralExpression) instanceValue).getValue() == null) {
-                String message = RefactoringBundle.message("0.contains.call.with.null.argument.for.parameter.1", RefactoringUIUtil.getDescription(ConflictsUtil.getContainer
-                    (methodCall), true), CommonRefactoringUtil.htmlEmphasize(parameter.getName()));
-                conflicts.putValue(instanceValue, message);
+                LocalizeValue message = RefactoringLocalize.zeroContainsCallWithNullArgumentForParameter1(
+                  RefactoringUIUtil.getDescription(ConflictsUtil.getContainer(methodCall), true),
+                  CommonRefactoringUtil.htmlEmphasize(parameter.getName())
+                );
+                conflicts.putValue(instanceValue, message.get());
               }
             }
           } else if (methodCall instanceof PsiMethodReferenceExpression) {
@@ -209,7 +212,7 @@ public class MoveInstanceMethodProcessor extends BaseRefactoringProcessor {
   }
 
   protected String getCommandName() {
-    return RefactoringBundle.message("move.instance.method.command");
+    return RefactoringLocalize.moveInstanceMethodCommand().get();
   }
 
   public PsiClass getTargetClass() {

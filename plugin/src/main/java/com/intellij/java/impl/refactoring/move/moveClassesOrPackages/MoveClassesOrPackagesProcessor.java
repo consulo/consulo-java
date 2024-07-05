@@ -29,8 +29,8 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.util.VisibilityUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.event.RefactoringElementListener;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.move.MoveCallback;
 import consulo.language.editor.refactoring.rename.RenameUtil;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
@@ -40,9 +40,11 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.project.ui.wm.WindowManager;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.usage.*;
@@ -118,6 +120,7 @@ public class MoveClassesOrPackagesProcessor extends BaseRefactoringProcessor {
     return new MoveMultipleElementsViewDescriptor(elements, MoveClassesOrPackagesUtil.getPackageName(myTargetPackage));
   }
 
+  @RequiredUIAccess
   public boolean verifyValidPackageName() {
     String qName = myTargetPackage.getQualifiedName();
     if (!StringUtil.isEmpty(qName)) {
@@ -125,7 +128,7 @@ public class MoveClassesOrPackagesProcessor extends BaseRefactoringProcessor {
       if (!helper.isQualifiedName(qName)) {
         Messages.showMessageDialog(
           myProject,
-          RefactoringBundle.message("invalid.target.package.name.specified"),
+          RefactoringLocalize.invalidTargetPackageNameSpecified().get(),
           "Invalid Package Name",
           UIUtil.getErrorIcon()
         );
@@ -282,12 +285,11 @@ public class MoveClassesOrPackagesProcessor extends BaseRefactoringProcessor {
                 PsiJavaPackage usagePackage = JavaDirectoryService.getInstance().getPackage(directory);
                 if (aPackage != null && usagePackage != null && !aPackage.equalToPackage(usagePackage)) {
 
-                  final String message = RefactoringBundle.message(
-                    "a.package.local.class.0.will.no.longer.be.accessible.from.1",
+                  final LocalizeValue message = RefactoringLocalize.aPackageLocalClass0WillNoLongerBeAccessibleFrom1(
                     CommonRefactoringUtil.htmlEmphasize(aClass.getName()),
                     RefactoringUIUtil.getDescription(container, true)
                   );
-                  conflicts.putValue(aClass, message);
+                  conflicts.putValue(aClass, message.get());
                 }
               }
             }
@@ -430,7 +432,8 @@ public class MoveClassesOrPackagesProcessor extends BaseRefactoringProcessor {
 
   protected boolean isPreviewUsages(@Nonnull UsageInfo[] usages) {
     if (UsageViewUtil.hasNonCodeUsages(usages)) {
-      WindowManager.getInstance().getStatusBar(myProject).setInfo(RefactoringBundle.message("occurrences.found.in.comments.strings.and.non.java.files"));
+      WindowManager.getInstance().getStatusBar(myProject)
+        .setInfo(RefactoringLocalize.occurrencesFoundInCommentsStringsAndNonJavaFiles().get());
       return true;
     } else {
       return super.isPreviewUsages(usages);
@@ -519,7 +522,7 @@ public class MoveClassesOrPackagesProcessor extends BaseRefactoringProcessor {
   protected String getCommandName() {
     String elements = RefactoringUIUtil.calculatePsiElementDescriptionList(myElementsToMove);
     String target = myTargetPackage.getQualifiedName();
-    return RefactoringBundle.message("move.classes.command", elements, target);
+    return RefactoringLocalize.moveClassesCommand(elements, target).get();
   }
 
   private class MyClassInstanceReferenceVisitor implements ClassInstanceScanner.ClassInstanceReferenceVisitor {
@@ -591,9 +594,11 @@ public class MoveClassesOrPackagesProcessor extends BaseRefactoringProcessor {
             if (directory != null) {
               PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(directory);
               if (!myTargetPackage.equalToPackage(aPackage)) {
-                String message = RefactoringBundle.message("0.will.be.inaccessible.from.1", RefactoringUIUtil.getDescription(member, true),
-                    RefactoringUIUtil.getDescription(container, true));
-                myConflicts.putValue(member, CommonRefactoringUtil.capitalize(message));
+                LocalizeValue message = RefactoringLocalize.zeroWillBeInaccessibleFrom1(
+                  RefactoringUIUtil.getDescription(member, true),
+                  RefactoringUIUtil.getDescription(container, true)
+                );
+                myConflicts.putValue(member, CommonRefactoringUtil.capitalize(message.get()));
               }
             }
           }

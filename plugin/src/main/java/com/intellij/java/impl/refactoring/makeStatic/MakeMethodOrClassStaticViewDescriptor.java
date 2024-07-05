@@ -24,15 +24,14 @@
  */
 package com.intellij.java.impl.refactoring.makeStatic;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMember;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.language.psi.PsiElement;
 import consulo.usage.UsageViewBundle;
 import consulo.usage.UsageViewDescriptor;
 import consulo.usage.UsageViewUtil;
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
 
 public class MakeMethodOrClassStaticViewDescriptor implements UsageViewDescriptor {
 
@@ -43,7 +42,7 @@ public class MakeMethodOrClassStaticViewDescriptor implements UsageViewDescripto
   ) {
     myMember = member;
     String who = StringUtil.capitalize(UsageViewUtil.getType(myMember));
-    myProcessedElementsHeader = RefactoringBundle.message("make.static.elements.header", who);
+    myProcessedElementsHeader = RefactoringLocalize.makeStaticElementsHeader(who).get();
   }
 
   @Nonnull
@@ -57,11 +56,10 @@ public class MakeMethodOrClassStaticViewDescriptor implements UsageViewDescripto
   }
 
   public String getCodeReferencesText(int usagesCount, int filesCount) {
-    return RefactoringBundle.message("references.to.be.changed", UsageViewBundle.getReferencesString(usagesCount, filesCount));
+    return RefactoringLocalize.referencesToBeChanged(UsageViewBundle.getReferencesString(usagesCount, filesCount)).get();
   }
 
   public String getCommentReferencesText(int usagesCount, int filesCount) {
     return null;
   }
-
 }

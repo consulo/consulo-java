@@ -16,8 +16,8 @@
 
 package com.intellij.java.impl.refactoring.migration;
 
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.PsiElement;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.usage.UsageViewBundle;
 import consulo.usage.UsageViewDescriptor;
 import jakarta.annotation.Nonnull;
@@ -54,7 +54,10 @@ class MigrationUsagesViewDescriptor implements UsageViewDescriptor
 	@Override
 	public String getCodeReferencesText(int usagesCount, int filesCount)
 	{
-		return RefactoringBundle.message("references.in.code.to.elements.from.migration.map", myMigrationMap.getName(), UsageViewBundle.getReferencesString(usagesCount, filesCount));
+		return RefactoringLocalize.referencesInCodeToElementsFromMigrationMap(
+			myMigrationMap.getName(),
+			UsageViewBundle.getReferencesString(usagesCount, filesCount)
+		).get();
 	}
 
 	@Override
@@ -65,7 +68,6 @@ class MigrationUsagesViewDescriptor implements UsageViewDescriptor
 
 	public String getInfo()
 	{
-		return RefactoringBundle.message("press.the.do.migrate.button", myMigrationMap.getName());
+		return RefactoringLocalize.pressTheDoMigrateButton(myMigrationMap.getName()).get();
 	}
-
 }

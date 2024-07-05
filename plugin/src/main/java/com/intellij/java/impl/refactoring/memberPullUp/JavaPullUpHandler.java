@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import consulo.application.Application;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
@@ -70,8 +71,8 @@ public class JavaPullUpHandler implements RefactoringActionHandler, PullUpDialog
 		{
 			if (element == null || element instanceof PsiFile)
 			{
-				String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("the.caret" +
-						".should.be.positioned.inside.a.class.to.pull.members.from"));
+				String message =
+					RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.theCaretShouldBePositionedInsideAClassToPullMembersFrom().get());
 				CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME,
 						HelpID.MEMBERS_PULL_UP);
 				return;
@@ -131,8 +132,8 @@ public class JavaPullUpHandler implements RefactoringActionHandler, PullUpDialog
 		final Editor editor = dataContext != null ? dataContext.getData(Editor.KEY) : null;
 		if (aClass == null)
 		{
-			String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("is.not.supported.in" +
-					".the.current.context", REFACTORING_NAME));
+			String message =
+				RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.isNotSupportedInTheCurrentContext(REFACTORING_NAME).get());
 			CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.MEMBERS_PULL_UP);
 			return;
 		}
@@ -147,8 +148,9 @@ public class JavaPullUpHandler implements RefactoringActionHandler, PullUpDialog
 				invoke(project, dataContext, containingClass, aClass);
 				return;
 			}
-			String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("class.does.not.have" +
-					".base.classes.interfaces.in.current.project", aClass.getQualifiedName()));
+			String message = RefactoringBundle.getCannotRefactorMessage(
+				RefactoringLocalize.classDoesNotHaveBaseClassesInterfacesInCurrentProject(aClass.getQualifiedName()).get()
+			);
 			CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.MEMBERS_PULL_UP);
 			return;
 		}
@@ -198,7 +200,7 @@ public class JavaPullUpHandler implements RefactoringActionHandler, PullUpDialog
 					dialog.getContainmentVerifier()
 				));
 			}),
-			RefactoringBundle.message("detecting.possible.conflicts"),
+			RefactoringLocalize.detectingPossibleConflicts().get(),
 			true,
 			myProject
 		))

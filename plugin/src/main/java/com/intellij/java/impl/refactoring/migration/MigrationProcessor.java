@@ -23,12 +23,14 @@ import consulo.application.WriteAction;
 import consulo.content.scope.SearchScope;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.SmartPsiElementPointer;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.localHistory.LocalHistory;
 import consulo.localHistory.LocalHistoryAction;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.Messages;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
@@ -79,10 +81,10 @@ public class MigrationProcessor extends BaseRefactoringProcessor
 
 	private void findOrCreateEntries(Project project, final PsiMigration migration)
 	{
-		for(int i = 0; i < myMigrationMap.getEntryCount(); i++)
+		for (int i = 0; i < myMigrationMap.getEntryCount(); i++)
 		{
 			MigrationMapEntry entry = myMigrationMap.getEntryAt(i);
-			if(entry.getType() == MigrationMapEntry.PACKAGE)
+			if (entry.getType() == MigrationMapEntry.PACKAGE)
 			{
 				MigrationUtil.findOrCreatePackage(project, migration, entry.getOldName());
 			}
@@ -106,15 +108,15 @@ public class MigrationProcessor extends BaseRefactoringProcessor
 		ArrayList<UsageInfo> usagesVector = new ArrayList<>();
 		try
 		{
-			if(myMigrationMap == null)
+			if (myMigrationMap == null)
 			{
 				return UsageInfo.EMPTY_ARRAY;
 			}
-			for(int i = 0; i < myMigrationMap.getEntryCount(); i++)
+			for (int i = 0; i < myMigrationMap.getEntryCount(); i++)
 			{
 				MigrationMapEntry entry = myMigrationMap.getEntryAt(i);
 				UsageInfo[] usages;
-				if(entry.getType() == MigrationMapEntry.PACKAGE)
+				if (entry.getType() == MigrationMapEntry.PACKAGE)
 				{
 					usages = MigrationUtil.findPackageUsages(myProject, myPsiMigration, entry.getOldName(), mySearchScope);
 				}
@@ -123,7 +125,7 @@ public class MigrationProcessor extends BaseRefactoringProcessor
 					usages = MigrationUtil.findClassUsages(myProject, myPsiMigration, entry.getOldName(), mySearchScope);
 				}
 
-				for(UsageInfo usage : usages)
+				for (UsageInfo usage : usages)
 				{
 					usagesVector.add(new MigrationUsageInfo(usage, entry));
 				}
@@ -140,7 +142,7 @@ public class MigrationProcessor extends BaseRefactoringProcessor
 
 	private void finishFindMigration()
 	{
-		if(myPsiMigration != null)
+		if (myPsiMigration != null)
 		{
 			myPsiMigration.finish();
 			myPsiMigration = null;
@@ -148,11 +150,12 @@ public class MigrationProcessor extends BaseRefactoringProcessor
 	}
 
 	@Override
+	@RequiredUIAccess
 	protected boolean preprocessUsages(@Nonnull Ref<UsageInfo[]> refUsages)
 	{
-		if(refUsages.get().length == 0)
+		if (refUsages.get().length == 0)
 		{
-			Messages.showInfoMessage(myProject, RefactoringBundle.message("migration.no.usages.found.in.the.project"), REFACTORING_NAME);
+			Messages.showInfoMessage(myProject, RefactoringLocalize.migrationNoUsagesFoundInTheProject().get(), REFACTORING_NAME);
 			return false;
 		}
 		setPreviewUsages(true);
@@ -170,20 +173,20 @@ public class MigrationProcessor extends BaseRefactoringProcessor
 		try
 		{
 			boolean sameShortNames = false;
-			for(int i = 0; i < myMigrationMap.getEntryCount(); i++)
+			for (int i = 0; i < myMigrationMap.getEntryCount(); i++)
 			{
 				MigrationMapEntry entry = myMigrationMap.getEntryAt(i);
 				String newName = entry.getNewName();
 				PsiElement element = entry.getType() == MigrationMapEntry.PACKAGE ? MigrationUtil.findOrCreatePackage(myProject, psiMigration, newName) : MigrationUtil.findOrCreateClass(myProject,
 						psiMigration, newName);
 				MigrationUtil.doMigration(element, newName, usages, myRefsToShorten);
-				if(!sameShortNames && Comparing.strEqual(StringUtil.getShortName(entry.getOldName()), StringUtil.getShortName(entry.getNewName())))
+				if (!sameShortNames && Comparing.strEqual(StringUtil.getShortName(entry.getOldName()), StringUtil.getShortName(entry.getNewName())))
 				{
 					sameShortNames = true;
 				}
 			}
 
-			if(!sameShortNames)
+			if (!sameShortNames)
 			{
 				myRefsToShorten.clear();
 			}
@@ -199,10 +202,10 @@ public class MigrationProcessor extends BaseRefactoringProcessor
 	protected void performPsiSpoilingRefactoring()
 	{
 		JavaCodeStyleManager styleManager = JavaCodeStyleManager.getInstance(myProject);
-		for(SmartPsiElementPointer<PsiElement> pointer : myRefsToShorten)
+		for (SmartPsiElementPointer<PsiElement> pointer : myRefsToShorten)
 		{
 			PsiElement element = pointer.getElement();
-			if(element != null)
+			if (element != null)
 			{
 				styleManager.shortenClassReferences(element);
 			}

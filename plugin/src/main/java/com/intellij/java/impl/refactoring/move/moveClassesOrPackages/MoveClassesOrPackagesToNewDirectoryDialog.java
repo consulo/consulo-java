@@ -27,7 +27,7 @@ import consulo.fileChooser.FileChooserDescriptor;
 import consulo.fileChooser.FileChooserDescriptorFactory;
 import consulo.fileChooser.IdeaFileChooser;
 import consulo.ide.impl.idea.openapi.util.io.FileUtil;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.move.MoveCallback;
 import consulo.language.editor.refactoring.move.MoveHandler;
 import consulo.language.editor.refactoring.util.DirectoryUtil;
@@ -40,13 +40,13 @@ import consulo.module.Module;
 import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.TextFieldWithBrowseButton;
 import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.usage.UsageViewUtil;
 import consulo.virtualFileSystem.VirtualFile;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -92,13 +92,17 @@ public class MoveClassesOrPackagesToNewDirectoryDialog extends DialogWrapper {
     });
     if (elementsToMove.length == 1) {
       PsiElement firstElement = elementsToMove[0];
-      myNameLabel.setText(RefactoringBundle.message("move.single.class.or.package.name.label", UsageViewUtil.getType(firstElement),
-                                                    UsageViewUtil.getLongName(firstElement)));
+      myNameLabel.setText(RefactoringLocalize.moveSingleClassOrPackageNameLabel(
+        UsageViewUtil.getType(firstElement),
+        UsageViewUtil.getLongName(firstElement)
+      ).get());
     }
     else if (elementsToMove.length > 1) {
-      myNameLabel.setText(elementsToMove[0] instanceof PsiClass
-                          ? RefactoringBundle.message("move.specified.classes")
-                          : RefactoringBundle.message("move.specified.packages"));
+      myNameLabel.setText(
+        elementsToMove[0] instanceof PsiClass
+          ? RefactoringLocalize.moveSpecifiedClasses().get()
+          : RefactoringLocalize.moveSpecifiedPackages().get()
+      );
     }
     final JavaRefactoringSettings refactoringSettings = JavaRefactoringSettings.getInstance();
     mySearchInCommentsAndStringsCheckBox.setSelected(refactoringSettings.MOVE_SEARCH_IN_COMMENTS);
@@ -155,6 +159,7 @@ public class MoveClassesOrPackagesToNewDirectoryDialog extends DialogWrapper {
     return myRootPanel;
   }
 
+  @RequiredUIAccess
   protected void doOKAction() {
     final String path = FileUtil.toSystemIndependentName(myDestDirectoryField.getText());
     final Project project = myDirectory.getProject();
@@ -170,16 +175,22 @@ public class MoveClassesOrPackagesToNewDirectoryDialog extends DialogWrapper {
       }
     });
     if (directory == null) {
-      Messages.showErrorDialog(project, RefactoringBundle.message("cannot.find.or.create.destination.directory"),
-                               RefactoringBundle.message("cannot.move"));
+      Messages.showErrorDialog(
+        project,
+        RefactoringLocalize.cannotFindOrCreateDestinationDirectory().get(),
+        RefactoringLocalize.cannotMove().get()
+      );
       return;
     }
 
     super.doOKAction();
     final PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(directory);
     if (aPackage == null) {
-      Messages.showErrorDialog(project, RefactoringBundle.message("destination.directory.does.not.correspond.to.any.package"),
-                               RefactoringBundle.message("cannot.move"));
+      Messages.showErrorDialog(
+        project,
+        RefactoringLocalize.destinationDirectoryDoesNotCorrespondToAnyPackage().get(),
+        RefactoringLocalize.cannotMove().get()
+      );
       return;
     }
 
@@ -197,13 +208,19 @@ public class MoveClassesOrPackagesToNewDirectoryDialog extends DialogWrapper {
     return myDestDirectoryField.getTextField();
   }
 
-  protected void performRefactoring(Project project, PsiDirectory directory, PsiJavaPackage aPackage,
-                                    boolean searchInComments,
-                                    boolean searchForTextOccurences) {
+  @RequiredUIAccess
+  protected void performRefactoring(
+    Project project, PsiDirectory directory, PsiJavaPackage aPackage,
+    boolean searchInComments,
+    boolean searchForTextOccurences
+  ) {
     final VirtualFile sourceRoot = ProjectRootManager.getInstance(project).getFileIndex().getSourceRootForFile(directory.getVirtualFile());
     if (sourceRoot == null) {
-      Messages.showErrorDialog(project, RefactoringBundle.message("destination.directory.does.not.correspond.to.any.package"),
-                               RefactoringBundle.message("cannot.move"));
+      Messages.showErrorDialog(
+        project,
+        RefactoringLocalize.destinationDirectoryDoesNotCorrespondToAnyPackage().get(),
+        RefactoringLocalize.cannotMove().get()
+      );
       return;
     }
     final JavaRefactoringFactory factory = JavaRefactoringFactory.getInstance(project);

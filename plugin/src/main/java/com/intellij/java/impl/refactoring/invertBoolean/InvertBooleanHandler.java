@@ -26,6 +26,7 @@ import consulo.codeEditor.ScrollType;
 import consulo.dataContext.DataContext;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -53,7 +54,7 @@ public class InvertBooleanHandler implements RefactoringActionHandler {
       CommonRefactoringUtil.showErrorHint(
         project,
         editor,
-        RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("error.wrong.caret.position.method.or.variable.name")),
+        RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.errorWrongCaretPositionMethodOrVariableName().get()),
         REFACTORING_NAME,
         HelpID.INVERT_BOOLEAN
       );
@@ -67,7 +68,7 @@ public class InvertBooleanHandler implements RefactoringActionHandler {
       CommonRefactoringUtil.showErrorHint(
         project,
         editor,
-        RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("invert.boolean.wrong.type")),
+        RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.invertBooleanWrongType().get()),
         REFACTORING_NAME,
         HelpID.INVERT_BOOLEAN
       );
@@ -76,7 +77,7 @@ public class InvertBooleanHandler implements RefactoringActionHandler {
 
     if (!CommonRefactoringUtil.checkReadOnlyStatus(project, var)) return;
     if (var instanceof PsiParameter parameter && parameter.getDeclarationScope() instanceof PsiMethod method) {
-      final PsiMethod superMethod = SuperMethodWarningUtil.checkSuperMethod(method, RefactoringBundle.message("to.refactor"));
+      final PsiMethod superMethod = SuperMethodWarningUtil.checkSuperMethod(method, RefactoringLocalize.toRefactor().get());
        if (superMethod != null) {
          var = superMethod.getParameterList().getParameters()[method.getParameterList().getParameterIndex((PsiParameter)var)];
        }
@@ -99,14 +100,14 @@ public class InvertBooleanHandler implements RefactoringActionHandler {
       CommonRefactoringUtil.showErrorHint(
         project,
         editor,
-        RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("invert.boolean.wrong.type")),
+        RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.invertBooleanWrongType().get()),
         REFACTORING_NAME,
         HelpID.INVERT_BOOLEAN
       );
       return;
     }
 
-    final PsiMethod superMethod = SuperMethodWarningUtil.checkSuperMethod(method, RefactoringBundle.message("to.refactor"));
+    final PsiMethod superMethod = SuperMethodWarningUtil.checkSuperMethod(method, RefactoringLocalize.toRefactor().get());
     if (superMethod != null) method = superMethod;
 
     if (!CommonRefactoringUtil.checkReadOnlyStatus(project, method)) return;

@@ -30,18 +30,18 @@ import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.application.HelpManager;
-import consulo.ide.impl.psi.statistics.StatisticsManager;
-import consulo.project.Project;
-import consulo.util.lang.Comparing;
-import consulo.language.psi.PsiElement;
-import consulo.ide.impl.psi.statistics.StatisticsInfo;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import consulo.language.editor.refactoring.classMember.MemberInfoModel;
 import consulo.ide.impl.idea.refactoring.memberPullUp.PullUpDialogBase;
 import consulo.ide.impl.idea.refactoring.ui.AbstractMemberSelectionTable;
 import consulo.ide.impl.idea.refactoring.ui.DocCommentPanel;
 import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
+import consulo.ide.impl.psi.statistics.StatisticsInfo;
+import consulo.ide.impl.psi.statistics.StatisticsManager;
+import consulo.language.editor.refactoring.classMember.MemberInfoModel;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
 import consulo.ui.ex.awt.UIUtil;
+import consulo.util.lang.Comparing;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
@@ -154,7 +154,7 @@ public class PullUpDialog extends PullUpDialogBase<MemberInfoStorage, MemberInfo
 
   @Override
   protected void addCustomElementsToCentralPanel(JPanel panel) {
-    myJavaDocPanel = new DocCommentPanel(RefactoringBundle.message("javadoc.for.abstracts"));
+    myJavaDocPanel = new DocCommentPanel(RefactoringLocalize.javadocForAbstracts().get());
     myJavaDocPanel.setPolicy(JavaRefactoringSettings.getInstance().PULL_UP_MEMBERS_JAVADOC);
     boolean hasJavadoc = false;
     for (MemberInfo info : myMemberInfos) {
@@ -174,7 +174,7 @@ public class PullUpDialog extends PullUpDialogBase<MemberInfoStorage, MemberInfo
 
   @Override
   protected AbstractMemberSelectionTable<PsiMember, MemberInfo> createMemberSelectionTable(List<MemberInfo> infos) {
-    return new MemberSelectionTable(infos, RefactoringBundle.message("make.abstract"));
+    return new MemberSelectionTable(infos, RefactoringLocalize.makeAbstract().get());
   }
 
   @Override

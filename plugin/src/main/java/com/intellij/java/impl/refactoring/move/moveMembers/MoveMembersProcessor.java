@@ -22,6 +22,7 @@ import com.intellij.java.language.util.VisibilityUtil;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.event.RefactoringElementListener;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.move.MoveCallback;
 import consulo.language.editor.refactoring.move.MoveHandler;
 import consulo.language.editor.refactoring.move.MoveMemberViewDescriptor;
@@ -32,8 +33,10 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.usage.MoveRenameUsageInfo;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
@@ -353,10 +356,11 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
     }
   }
 
+  @RequiredUIAccess
   public void doRun() {
     if (myMembersToMove.isEmpty()) {
-      String message = RefactoringBundle.message("no.members.selected");
-      CommonRefactoringUtil.showErrorMessage(MoveMembersImpl.REFACTORING_NAME, message, HelpID.MOVE_MEMBERS, myProject);
+      LocalizeValue message = RefactoringLocalize.noMembersSelected();
+      CommonRefactoringUtil.showErrorMessage(MoveMembersImpl.REFACTORING_NAME, message.get(), HelpID.MOVE_MEMBERS, myProject);
       return;
     }
     super.doRun();

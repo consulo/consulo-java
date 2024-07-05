@@ -22,10 +22,11 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.PsiVariable;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.RefactoringDialog;
 import consulo.language.findUsage.DescriptiveNameUtil;
 import consulo.language.icon.IconDescriptorUpdaters;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.*;
@@ -106,21 +107,18 @@ public abstract class MoveInstanceMethodDialogBase extends RefactoringDialog {
     if (targetClass.isInterface()) {
       final Project project = getProject();
       if (ClassInheritorsSearch.search(targetClass, false).findFirst() == null) {
-        final String message = RefactoringBundle.message(
-          "0.is.an.interface.that.has.no.implementing.classes",
-          DescriptiveNameUtil.getDescriptiveName(targetClass)
-        );
+        final LocalizeValue message =
+          RefactoringLocalize.zeroIsAnInterfaceThatHasNoImplementingClasses(DescriptiveNameUtil.getDescriptiveName(targetClass));
 
-        Messages.showErrorDialog(project, message, myRefactoringName);
+        Messages.showErrorDialog(project, message.get(), myRefactoringName);
         return false;
       }
 
-      final String message = RefactoringBundle.message(
-        "0.is.an.interface.method.implementation.will.be.added.to.all.directly.implementing.classes",
+      final LocalizeValue message = RefactoringLocalize.zeroIsAnInterfaceMethodImplementationWillBeAddedToAllDirectlyImplementingClasses(
         DescriptiveNameUtil.getDescriptiveName(targetClass)
       );
 
-      final int result = Messages.showYesNoDialog(project, message, myRefactoringName, UIUtil.getQuestionIcon());
+      final int result = Messages.showYesNoDialog(project, message.get(), myRefactoringName, UIUtil.getQuestionIcon());
       if (result != 0) return false;
     }
 
