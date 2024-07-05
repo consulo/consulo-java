@@ -26,11 +26,12 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.ide.impl.idea.refactoring.introduce.inplace.KeyboardComboSwitcher;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
+import consulo.ui.ex.action.Presentation;
 import consulo.ui.ex.awt.IdeBorderFactory;
 import consulo.ui.ex.awt.LabeledComponent;
 import consulo.ui.ex.awt.ListCellRendererWrapper;
-import consulo.ui.ex.awt.UIUtil;
 import consulo.util.collection.primitive.ints.IntList;
 
 import javax.swing.*;
@@ -79,16 +80,13 @@ public abstract class InplaceIntroduceParameterUI extends IntroduceParameterSett
     myReplaceFieldsCb.setRenderer(new ListCellRendererWrapper<Integer>() {
       @Override
       public void customize(JList list, Integer value, int index, boolean selected, boolean hasFocus) {
-        switch (value) {
-          case IntroduceParameterRefactoring.REPLACE_FIELDS_WITH_GETTERS_NONE:
-            setText(UIUtil.removeMnemonic(RefactoringLocalize.doNotReplace().get()));
-            break;
-          case IntroduceParameterRefactoring.REPLACE_FIELDS_WITH_GETTERS_INACCESSIBLE:
-            setText(UIUtil.removeMnemonic(RefactoringLocalize.replaceFieldsInaccessibleInUsageContext().get()));
-            break;
-          default:
-            setText(UIUtil.removeMnemonic(RefactoringLocalize.replaceAllFields().get()));
-        }
+        LocalizeValue text = switch (value) {
+          case IntroduceParameterRefactoring.REPLACE_FIELDS_WITH_GETTERS_NONE -> RefactoringLocalize.doNotReplace();
+          case IntroduceParameterRefactoring.REPLACE_FIELDS_WITH_GETTERS_INACCESSIBLE ->
+            RefactoringLocalize.replaceFieldsInaccessibleInUsageContext();
+          default -> RefactoringLocalize.replaceAllFields();
+        };
+        setText(text.map(Presentation.NO_MNEMONIC).get());
       }
     });
     myReplaceFieldsCb.setSelectedItem(JavaRefactoringSettings.getInstance().INTRODUCE_PARAMETER_REPLACE_FIELDS_WITH_GETTERS);
