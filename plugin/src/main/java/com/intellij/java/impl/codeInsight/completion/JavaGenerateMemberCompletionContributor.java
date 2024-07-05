@@ -24,7 +24,7 @@ import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.language.psi.util.PsiFormatUtilBase;
 import com.intellij.java.language.util.VisibilityUtil;
-import consulo.application.AllIcons;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.editor.completion.CompletionParameters;
 import consulo.language.editor.completion.CompletionResultSet;
 import consulo.language.editor.completion.CompletionType;
@@ -38,7 +38,6 @@ import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.ui.image.Image;
-import consulo.ui.image.ImageEffects;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.ObjectUtil;
 
@@ -52,6 +51,8 @@ import static consulo.language.pattern.PlatformPatterns.psiElement;
 public class JavaGenerateMemberCompletionContributor {
   static final Key<Boolean> GENERATE_ELEMENT = Key.create("GENERATE_ELEMENT");
 
+  @RequiredReadAction
+  @SuppressWarnings("unchecked")
   public static void fillCompletionVariants(CompletionParameters parameters, CompletionResultSet result) {
     if (parameters.getCompletionType() != CompletionType.BASIC && parameters.getCompletionType() != CompletionType.SMART) {
       return;
@@ -93,13 +94,10 @@ public class JavaGenerateMemberCompletionContributor {
       for (final PsiMethod prototype : prototypes) {
         if (parent.findMethodBySignature(prototype, false) == null && addedSignatures.add(prototype.getSignature(PsiSubstitutor.EMPTY))) {
           Image icon = IconDescriptorUpdaters.getIcon(prototype, 0);
-          result.addElement(createGenerateMethodElement(prototype, PsiSubstitutor.EMPTY, icon, "", new InsertHandler<LookupElement>() {
-            @Override
-            public void handleInsert(InsertionContext context, LookupElement item) {
-              removeLookupString(context);
+          result.addElement(createGenerateMethodElement(prototype, PsiSubstitutor.EMPTY, icon, "", (context, item) -> {
+            removeLookupString(context);
 
-              insertGenerationInfos(context, Collections.singletonList(new PsiGenerationInfo<PsiMethod>(prototype)));
-            }
+            insertGenerationInfos(context, Collections.singletonList(new PsiGenerationInfo<>(prototype)));
           }));
 
           if (count++ > 100) {
@@ -121,33 +119,32 @@ public class JavaGenerateMemberCompletionContributor {
       PsiClass baseClass = baseMethod.getContainingClass();
       PsiSubstitutor substitutor = candidate.getSubstitutor();
       if (!baseMethod.isConstructor() && baseClass != null && addedSignatures.add(baseMethod.getSignature(substitutor))) {
-        result.addElement(createOverridingLookupElement(implemented, baseMethod, baseClass, substitutor));
+        result.addElement(createOverridingLookupElement(baseMethod, baseClass, substitutor));
       }
     }
   }
 
-  private static LookupElementBuilder createOverridingLookupElement(boolean implemented, final PsiMethod baseMethod, PsiClass baseClass, PsiSubstitutor substitutor) {
-    Image icon = ImageEffects.appendRight(IconDescriptorUpdaters.getIcon(baseMethod, 0), implemented ? AllIcons.Gutter.ImplementingMethod : AllIcons.Gutter.OverridingMethod);
-    return createGenerateMethodElement(baseMethod, substitutor, icon, baseClass.getName(), new InsertHandler<LookupElement>() {
-      @Override
-      public void handleInsert(InsertionContext context, LookupElement item) {
-        removeLookupString(context);
+  private static LookupElementBuilder createOverridingLookupElement(final PsiMethod baseMethod,
+                                                                    PsiClass baseClass,
+                                                                    PsiSubstitutor substitutor) {
+    Image icon = IconDescriptorUpdaters.getIcon(baseMethod, 0);
+    return createGenerateMethodElement(baseMethod, substitutor, icon, baseClass.getName(), (context, item) -> {
+      removeLookupString(context);
 
-        final PsiClass parent = PsiTreeUtil.findElementOfClassAtOffset(context.getFile(), context.getStartOffset(), PsiClass.class, false);
-        if (parent == null) {
-          return;
-        }
-
-        List<PsiMethod> prototypes = OverrideImplementUtil.overrideOrImplementMethod(parent, baseMethod, false);
-        insertGenerationInfos(context, OverrideImplementUtil.convert2GenerationInfos(prototypes));
+      final PsiClass parent = PsiTreeUtil.findElementOfClassAtOffset(context.getFile(), context.getStartOffset(), PsiClass.class, false);
+      if (parent == null) {
+        return;
       }
+
+      List<PsiMethod> prototypes = OverrideImplementUtil.overrideOrImplementMethod(parent, baseMethod, false);
+      insertGenerationInfos(context, OverrideImplementUtil.convert2GenerationInfos(prototypes));
     });
   }
 
   private static void insertGenerationInfos(InsertionContext context, List<PsiGenerationInfo<PsiMethod>> infos) {
     List<PsiGenerationInfo<PsiMethod>> newInfos = GenerateMembersUtil.insertMembersAtOffset(context.getFile(), context.getStartOffset(), infos);
     if (!newInfos.isEmpty()) {
-      final List<PsiElement> elements = new ArrayList<PsiElement>();
+      final List<PsiElement> elements = new ArrayList<>();
       for (GenerationInfo member : newInfos) {
         if (!(member instanceof TemplateGenerationInfo)) {
           final PsiMember psiMember = member.getPsiMember();
