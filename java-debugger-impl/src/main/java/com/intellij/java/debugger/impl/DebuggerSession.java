@@ -59,8 +59,8 @@ import consulo.process.ProcessOutputTypes;
 import consulo.project.Project;
 import consulo.project.ui.notification.NotificationType;
 import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.ex.action.Presentation;
 import consulo.ui.ex.awt.Messages;
-import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.ex.awt.util.Alarm;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.Pair;
@@ -440,7 +440,7 @@ public class DebuggerSession implements AbstractDebuggerSession
 		}
 		catch (EvaluateException e)
 		{
-			Messages.showErrorDialog(e.getMessage(), UIUtil.removeMnemonic(ActionLocalize.actionRuntocursorText().get()));
+			Messages.showErrorDialog(e.getMessage(), ActionLocalize.actionRuntocursorText().map(Presentation.NO_MNEMONIC).get());
 		}
 	}
 
