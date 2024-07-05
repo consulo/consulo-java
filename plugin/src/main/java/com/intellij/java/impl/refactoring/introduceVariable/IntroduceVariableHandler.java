@@ -15,25 +15,24 @@
  */
 package com.intellij.java.impl.refactoring.introduceVariable;
 
-import consulo.language.editor.highlight.HighlightManager;
+import com.intellij.java.impl.refactoring.HelpID;
+import com.intellij.java.impl.refactoring.ui.TypeSelectorManagerImpl;
+import com.intellij.java.language.psi.PsiExpression;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorColors;
-import consulo.colorScheme.EditorColorsManager;
 import consulo.codeEditor.markup.RangeHighlighter;
+import consulo.colorScheme.EditorColorsManager;
 import consulo.colorScheme.TextAttributes;
-import consulo.project.Project;
-import consulo.ui.ex.awt.DialogWrapper;
-import consulo.project.ui.wm.WindowManager;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.impl.refactoring.HelpID;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.highlight.HighlightManager;
 import consulo.language.editor.refactoring.introduce.inplace.OccurrencesChooser;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.ConflictsDialog;
-import com.intellij.java.impl.refactoring.ui.TypeSelectorManagerImpl;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
+import consulo.project.ui.wm.WindowManager;
+import consulo.ui.ex.awt.DialogWrapper;
 import consulo.util.collection.MultiMap;
-
 import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
@@ -74,7 +73,7 @@ public class IntroduceVariableHandler extends IntroduceVariableBase implements J
     dialog.show();
     if (!dialog.isOK()) {
       if (occurrences.length > 1) {
-        WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringBundle.message("press.escape.to.remove.the.highlighting"));
+        WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringLocalize.pressEscapeToRemoveTheHighlighting().get());
       }
     } else {
       if (editor != null) {

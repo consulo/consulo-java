@@ -23,8 +23,8 @@ package com.intellij.java.impl.refactoring.move.moveClassesOrPackages;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.event.RefactoringElementListener;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.move.FileReferenceContextUtil;
 import consulo.language.editor.refactoring.move.MoveCallback;
 import consulo.language.editor.refactoring.move.MoveFileHandler;
@@ -234,7 +234,7 @@ public class MoveDirectoryWithClassesProcessor extends BaseRefactoringProcessor 
 
   @Override
   protected String getCommandName() {
-    return RefactoringBundle.message("moving.directories.command");
+    return RefactoringLocalize.movingDirectoriesCommand().get();
   }
 
   public TargetDirectoryWrapper getTargetDirectory(PsiDirectory dir) {

@@ -15,7 +15,8 @@
  */
 package com.intellij.java.impl.refactoring.migration;
 
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.ex.awt.*;
 import consulo.ui.ex.awt.event.DocumentAdapter;
@@ -39,7 +40,7 @@ public class EditMigrationDialog extends DialogWrapper {
     myProject = project;
     myMigrationMap = migrationMap;
     setHorizontalStretch(1.2f);
-    setTitle(RefactoringBundle.message("edit.migration.map.title"));
+    setTitle(RefactoringLocalize.editMigrationMapTitle());
     init();
     validateOKButton();
   }
@@ -90,8 +91,11 @@ public class EditMigrationDialog extends DialogWrapper {
     JScrollPane scrollPane = ScrollPaneFactory.createScrollPane(myDescriptionTextArea);
     scrollPane.setBorder(myNameField.getBorder());
 
-    return FormBuilder.createFormBuilder().addLabeledComponent(new JLabel(RefactoringBundle.message("migration.map.name.prompt")), myNameField).addLabeledComponent(new JLabel(RefactoringBundle
-        .message("migration.map.description.label")), scrollPane).addVerticalGap(UIUtil.LARGE_VGAP).getPanel();
+    return FormBuilder.createFormBuilder()
+      .addLabeledComponent(new JLabel(RefactoringLocalize.migrationMapNamePrompt().get()), myNameField)
+      .addLabeledComponent(new JLabel(RefactoringLocalize.migrationMapDescriptionLabel().get()), scrollPane)
+      .addVerticalGap(UIUtil.LARGE_VGAP)
+      .getPanel();
   }
 
   @Override
@@ -201,10 +205,10 @@ public class EditMigrationDialog extends DialogWrapper {
   }
 
   private JBTable createTable() {
-    final String[] names = {
-        RefactoringBundle.message("migration.type.column.header"),
-        RefactoringBundle.message("migration.old.name.column.header"),
-        RefactoringBundle.message("migration.new.name.column.header")
+    final LocalizeValue[] names = {
+      RefactoringLocalize.migrationTypeColumnHeader(),
+      RefactoringLocalize.migrationOldNameColumnHeader(),
+      RefactoringLocalize.migrationNewNameColumnHeader()
     };
 
     // Create a model of the data.
@@ -224,11 +228,11 @@ public class EditMigrationDialog extends DialogWrapper {
         MigrationMapEntry entry = myMigrationMap.getEntryAt(row);
         if (col == 0) {
           if (entry.getType() == MigrationMapEntry.PACKAGE && entry.isRecursive()) {
-            return RefactoringBundle.message("migration.package.with.subpackages");
+            return RefactoringLocalize.migrationPackageWithSubpackages().get();
           } else if (entry.getType() == MigrationMapEntry.PACKAGE && !entry.isRecursive()) {
-            return RefactoringBundle.message("migration.package");
+            return RefactoringLocalize.migrationPackage().get();
           } else {
-            return RefactoringBundle.message("migration.class");
+            return RefactoringLocalize.migrationClass().get();
           }
         }
 
@@ -242,7 +246,7 @@ public class EditMigrationDialog extends DialogWrapper {
 
       @Override
       public String getColumnName(int column) {
-        return names[column];
+        return names[column].get();
       }
 
       @Override

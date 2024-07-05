@@ -15,22 +15,23 @@
  */
 package com.intellij.java.impl.refactoring.introduceParameter;
 
-import consulo.project.Project;
-import consulo.ui.ex.awt.LabeledComponent;
+import com.intellij.java.impl.refactoring.IntroduceParameterRefactoring;
+import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
+import com.intellij.java.impl.refactoring.ui.TypeSelectorManager;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLocalVariable;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
-import consulo.language.codeStyle.CodeStyleSettingsManager;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.java.impl.refactoring.IntroduceParameterRefactoring;
-import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.ide.impl.idea.refactoring.introduce.inplace.KeyboardComboSwitcher;
-import com.intellij.java.impl.refactoring.ui.TypeSelectorManager;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
+import consulo.ui.ex.action.Presentation;
 import consulo.ui.ex.awt.IdeBorderFactory;
+import consulo.ui.ex.awt.LabeledComponent;
 import consulo.ui.ex.awt.ListCellRendererWrapper;
-import consulo.ui.ex.awt.UIUtil;
 import consulo.util.collection.primitive.ints.IntList;
 
 import javax.swing.*;
@@ -79,22 +80,19 @@ public abstract class InplaceIntroduceParameterUI extends IntroduceParameterSett
     myReplaceFieldsCb.setRenderer(new ListCellRendererWrapper<Integer>() {
       @Override
       public void customize(JList list, Integer value, int index, boolean selected, boolean hasFocus) {
-        switch (value) {
-          case IntroduceParameterRefactoring.REPLACE_FIELDS_WITH_GETTERS_NONE:
-            setText(UIUtil.removeMnemonic(RefactoringBundle.message("do.not.replace")));
-            break;
-          case IntroduceParameterRefactoring.REPLACE_FIELDS_WITH_GETTERS_INACCESSIBLE:
-            setText(UIUtil.removeMnemonic(RefactoringBundle.message("replace.fields.inaccessible.in.usage.context")));
-            break;
-          default:
-            setText(UIUtil.removeMnemonic(RefactoringBundle.message("replace.all.fields")));
-        }
+        LocalizeValue text = switch (value) {
+          case IntroduceParameterRefactoring.REPLACE_FIELDS_WITH_GETTERS_NONE -> RefactoringLocalize.doNotReplace();
+          case IntroduceParameterRefactoring.REPLACE_FIELDS_WITH_GETTERS_INACCESSIBLE ->
+            RefactoringLocalize.replaceFieldsInaccessibleInUsageContext();
+          default -> RefactoringLocalize.replaceAllFields();
+        };
+        setText(text.map(Presentation.NO_MNEMONIC).get());
       }
     });
     myReplaceFieldsCb.setSelectedItem(JavaRefactoringSettings.getInstance().INTRODUCE_PARAMETER_REPLACE_FIELDS_WITH_GETTERS);
     KeyboardComboSwitcher.setupActions(myReplaceFieldsCb, myProject);
     component.setComponent(myReplaceFieldsCb);
-    component.setText(RefactoringBundle.message("replace.fields.used.in.expressions.with.their.getters"));
+    component.setText(RefactoringLocalize.replaceFieldsUsedInExpressionsWithTheirGetters().get());
     component.getLabel().setDisplayedMnemonic('u');
     component.setLabelLocation(BorderLayout.NORTH);
     component.setBorder(IdeBorderFactory.createEmptyBorder(3, 3, 2, 2));

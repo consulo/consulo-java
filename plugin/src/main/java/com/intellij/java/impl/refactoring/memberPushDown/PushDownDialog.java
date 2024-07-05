@@ -15,21 +15,21 @@
  */
 package com.intellij.java.impl.refactoring.memberPushDown;
 
-import consulo.application.HelpManager;
-import consulo.project.Project;
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import com.intellij.java.impl.refactoring.ui.MemberSelectionPanel;
+import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiMember;
+import consulo.application.HelpManager;
+import consulo.ide.impl.idea.refactoring.ui.DocCommentPanel;
+import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
 import consulo.language.editor.refactoring.classMember.MemberInfoChange;
 import consulo.language.editor.refactoring.classMember.MemberInfoModel;
 import consulo.language.editor.refactoring.classMember.UsedByDependencyMemberInfoModel;
-import consulo.ide.impl.idea.refactoring.ui.DocCommentPanel;
-import com.intellij.java.impl.refactoring.ui.MemberSelectionPanel;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.RefactoringDialog;
-import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
-import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
+import consulo.project.Project;
 
 import javax.swing.*;
 import java.awt.*;
@@ -87,26 +87,26 @@ public class PushDownDialog extends RefactoringDialog {
     gbConstraints.gridwidth = GridBagConstraints.REMAINDER;
     gbConstraints.fill = GridBagConstraints.BOTH;
     gbConstraints.anchor = GridBagConstraints.WEST;
-    panel.add(new JLabel(RefactoringBundle.message("push.members.from.0.down.label",
-                                                   myClass.getQualifiedName())), gbConstraints);
+    panel.add(new JLabel(RefactoringLocalize.pushMembersFrom0DownLabel(myClass.getQualifiedName()).get()), gbConstraints);
     return panel;
   }
 
   protected JComponent createCenterPanel() {
     JPanel panel = new JPanel(new BorderLayout());
     final MemberSelectionPanel memberSelectionPanel = new MemberSelectionPanel(
-      RefactoringBundle.message("members.to.be.pushed.down.panel.title"),
+      RefactoringLocalize.membersToBePushedDownPanelTitle().get(),
       myMemberInfos,
-      RefactoringBundle.message("keep.abstract.column.header"));
+      RefactoringLocalize.keepAbstractColumnHeader().get()
+    );
     panel.add(memberSelectionPanel, BorderLayout.CENTER);
 
     myMemberInfoModel = new MyMemberInfoModel();
-    myMemberInfoModel.memberInfoChanged(new MemberInfoChange<PsiMember, MemberInfo>(myMemberInfos));
+    myMemberInfoModel.memberInfoChanged(new MemberInfoChange<>(myMemberInfos));
     memberSelectionPanel.getTable().setMemberInfoModel(myMemberInfoModel);
     memberSelectionPanel.getTable().addMemberInfoChangeListener(myMemberInfoModel);
 
 
-    myJavaDocPanel = new DocCommentPanel(RefactoringBundle.message("push.down.javadoc.panel.title"));
+    myJavaDocPanel = new DocCommentPanel(RefactoringLocalize.pushDownJavadocPanelTitle().get());
     myJavaDocPanel.setPolicy(JavaRefactoringSettings.getInstance().PULL_UP_MEMBERS_JAVADOC);
     panel.add(myJavaDocPanel, BorderLayout.EAST);
     return panel;

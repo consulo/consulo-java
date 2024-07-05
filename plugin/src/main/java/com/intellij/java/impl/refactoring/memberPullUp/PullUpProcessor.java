@@ -39,8 +39,8 @@ import consulo.application.util.query.Query;
 import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
 import consulo.language.Language;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.classMember.MemberInfoBase;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.findUsage.DescriptiveNameUtil;
@@ -54,8 +54,8 @@ import consulo.project.Project;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
 import consulo.virtualFileSystem.VirtualFile;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.*;
 
 public class PullUpProcessor extends BaseRefactoringProcessor implements PullUpData {
@@ -194,7 +194,7 @@ public class PullUpProcessor extends BaseRefactoringProcessor implements PullUpD
 
   @Override
   protected String getCommandName() {
-    return RefactoringBundle.message("pullUp.command", DescriptiveNameUtil.getDescriptiveName(mySourceClass));
+    return RefactoringLocalize.pullupCommand(DescriptiveNameUtil.getDescriptiveName(mySourceClass)).get();
   }
 
   public void moveMembersToBase() throws IncorrectOperationException {

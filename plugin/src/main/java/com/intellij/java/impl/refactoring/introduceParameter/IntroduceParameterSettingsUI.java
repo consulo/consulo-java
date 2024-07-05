@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.refactoring.introduceParameter;
 
+import com.intellij.java.impl.refactoring.IntroduceParameterRefactoring;
+import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
+import com.intellij.java.impl.refactoring.ui.TypeSelectorManager;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLocalVariable;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
-import com.intellij.java.impl.refactoring.IntroduceParameterRefactoring;
-import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import com.intellij.java.impl.refactoring.ui.TypeSelectorManager;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.ui.ex.awt.NonFocusableCheckBox;
 import consulo.ui.ex.awt.StateRestoringCheckBox;
 import consulo.util.collection.primitive.ints.IntList;
@@ -127,16 +127,16 @@ public abstract class IntroduceParameterSettingsUI
 		gbConstraints.fill = GridBagConstraints.BOTH;
 		gbConstraints.anchor = GridBagConstraints.WEST;
 		radioButtonPanel.add(
-				new JLabel(RefactoringBundle.message("replace.fields.used.in.expressions.with.their.getters")), gbConstraints);
+				new JLabel(RefactoringLocalize.replaceFieldsUsedInExpressionsWithTheirGetters().get()), gbConstraints);
 
 		myReplaceFieldsWithGettersNoneRadio = new JRadioButton();
-		myReplaceFieldsWithGettersNoneRadio.setText(RefactoringBundle.message("do.not.replace"));
+		myReplaceFieldsWithGettersNoneRadio.setText(RefactoringLocalize.doNotReplace().get());
 
 		myReplaceFieldsWithGettersInaccessibleRadio = new JRadioButton();
-		myReplaceFieldsWithGettersInaccessibleRadio.setText(RefactoringBundle.message("replace.fields.inaccessible.in.usage.context"));
+		myReplaceFieldsWithGettersInaccessibleRadio.setText(RefactoringLocalize.replaceFieldsInaccessibleInUsageContext().get());
 
 		myReplaceFieldsWithGettersAllRadio = new JRadioButton();
-		myReplaceFieldsWithGettersAllRadio.setText(RefactoringBundle.message("replace.all.fields"));
+		myReplaceFieldsWithGettersAllRadio.setText(RefactoringLocalize.replaceAllFields().get());
 
 		gbConstraints.gridy++;
 		radioButtonPanel.add(myReplaceFieldsWithGettersNoneRadio, gbConstraints);
@@ -240,8 +240,7 @@ public abstract class IntroduceParameterSettingsUI
 			{
 				continue;
 			}
-			final NonFocusableCheckBox cb = new NonFocusableCheckBox(RefactoringBundle.message("remove.parameter.0.no.longer.used",
-					parameter.getName()));
+			final NonFocusableCheckBox cb = new NonFocusableCheckBox(RefactoringLocalize.removeParameter0NoLongerUsed(parameter.getName()).get());
 			removeParamsCb[i] = cb;
 			cb.setSelected(true);
 			gbConstraints.gridy++;
@@ -288,7 +287,7 @@ public abstract class IntroduceParameterSettingsUI
 		if(myIsLocalVariable && !myIsInvokedOnDeclaration)
 		{
 			myCbDeleteLocalVariable = new StateRestoringCheckBox();
-			myCbDeleteLocalVariable.setText(RefactoringBundle.message("delete.variable.declaration"));
+			myCbDeleteLocalVariable.setText(RefactoringLocalize.deleteVariableDeclaration().get());
 			myCbDeleteLocalVariable.setFocusable(false);
 
 			gbConstraints.gridy++;
@@ -299,7 +298,7 @@ public abstract class IntroduceParameterSettingsUI
 			if(myHasInitializer)
 			{
 				myCbUseInitializer = new StateRestoringCheckBox();
-				myCbUseInitializer.setText(RefactoringBundle.message("use.variable.initializer.to.initialize.parameter"));
+				myCbUseInitializer.setText(RefactoringLocalize.useVariableInitializerToInitializeParameter().get());
 				myCbUseInitializer.setSelected(settings.INTRODUCE_PARAMETER_USE_INITIALIZER);
 				myCbUseInitializer.setFocusable(false);
 
@@ -312,14 +311,14 @@ public abstract class IntroduceParameterSettingsUI
 
 	protected void createDelegateCb(GridBagConstraints gbConstraints, JPanel panel)
 	{
-		myCbGenerateDelegate = new NonFocusableCheckBox(RefactoringBundle.message("delegation.panel.delegate.via.overloading.method"));
+		myCbGenerateDelegate = new NonFocusableCheckBox(RefactoringLocalize.delegationPanelDelegateViaOverloadingMethod().get());
 		panel.add(myCbGenerateDelegate, gbConstraints);
 	}
 
 	protected void createOccurrencesCb(GridBagConstraints gbConstraints, JPanel panel, final int occurenceNumber)
 	{
 		myCbReplaceAllOccurences = new NonFocusableCheckBox();
-		myCbReplaceAllOccurences.setText(RefactoringBundle.message("replace.all.occurences", occurenceNumber));
+		myCbReplaceAllOccurences.setText(RefactoringLocalize.replaceAllOccurences(occurenceNumber).get());
 
 		panel.add(myCbReplaceAllOccurences, gbConstraints);
 		myCbReplaceAllOccurences.setSelected(false);

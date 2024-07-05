@@ -15,17 +15,17 @@
  */
 package com.intellij.java.impl.refactoring.move.moveClassesOrPackages;
 
-import consulo.module.content.ProjectFileIndex;
-import consulo.module.content.ProjectRootManager;
-import consulo.virtualFileSystem.VirtualFile;
+import com.intellij.java.impl.refactoring.MoveDestination;
+import com.intellij.java.impl.refactoring.PackageWrapper;
+import com.intellij.java.impl.refactoring.util.RefactoringUtil;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
-import com.intellij.java.impl.refactoring.MoveDestination;
-import com.intellij.java.impl.refactoring.PackageWrapper;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.virtualFileSystem.VirtualFile;
 import jakarta.annotation.Nullable;
 
 /**
@@ -53,8 +53,7 @@ public abstract class AutocreatingMoveDestination implements MoveDestination {
     final String targetQName = myPackage.getQualifiedName();
     final String sourceRootPackage = myFileIndex.getPackageNameByDirectory(targetSourceRoot);
     if (!RefactoringUtil.canCreateInSourceRoot(sourceRootPackage, targetQName)) {
-      return RefactoringBundle.message("source.folder.0.has.package.prefix.1", targetSourceRoot.getPresentableUrl(),
-                                       sourceRootPackage, targetQName);
+      return RefactoringLocalize.sourceFolder0HasPackagePrefix1(targetSourceRoot.getPresentableUrl(), sourceRootPackage, targetQName).get();
     }
     return null;
   }

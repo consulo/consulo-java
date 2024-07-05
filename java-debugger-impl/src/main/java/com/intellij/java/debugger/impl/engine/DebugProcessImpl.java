@@ -92,6 +92,7 @@ import consulo.project.ui.wm.ToolWindowId;
 import consulo.proxy.EventDispatcher;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.ActionsBundle;
+import consulo.ui.ex.action.Presentation;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.ex.awt.util.Alarm;
@@ -1689,7 +1690,9 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
       }
       applyThreadFilter(getContextThread());
       final SuspendContextImpl context = getSuspendContext();
-      myRunToCursorBreakpoint.setSuspendPolicy(context.getSuspendPolicy() == EventRequest.SUSPEND_EVENT_THREAD ? DebuggerSettings.SUSPEND_THREAD : DebuggerSettings.SUSPEND_ALL);
+      myRunToCursorBreakpoint.setSuspendPolicy(
+        context.getSuspendPolicy() == EventRequest.SUSPEND_EVENT_THREAD ? DebuggerSettings.SUSPEND_THREAD : DebuggerSettings.SUSPEND_ALL
+      );
       final DebugProcessImpl debugProcess = context.getDebugProcess();
       myRunToCursorBreakpoint.createRequest(debugProcess);
       setRunToCursorBreakpoint(myRunToCursorBreakpoint);
@@ -1706,7 +1709,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
               myRunToCursorBreakpoint.getSourcePosition().getFile().getName(),
               myRunToCursorBreakpoint.getLineIndex() + 1
             ),
-            UIUtil.removeMnemonic(ActionLocalize.actionRuntocursorText().get())
+            ActionLocalize.actionRuntocursorText().map(Presentation.NO_MNEMONIC).get()
           );
           DebuggerSession session = debugProcess.getSession();
           session.getContextManager().setState(

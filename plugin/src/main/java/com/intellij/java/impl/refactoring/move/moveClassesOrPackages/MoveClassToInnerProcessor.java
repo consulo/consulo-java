@@ -22,35 +22,35 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.util.VisibilityUtil;
 import consulo.application.ApplicationManager;
-import consulo.project.Project;
-import consulo.util.lang.Comparing;
-import consulo.util.lang.ref.Ref;
-import consulo.util.lang.StringUtil;
+import consulo.application.util.function.Processor;
+import consulo.language.editor.refactoring.BaseRefactoringProcessor;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.language.editor.refactoring.move.MoveCallback;
+import consulo.language.editor.refactoring.rename.RenameUtil;
+import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.editor.util.PsiUtilBase;
 import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiNamedElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiElementFilter;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.editor.util.PsiUtilBase;
-import consulo.language.editor.refactoring.BaseRefactoringProcessor;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import consulo.language.editor.refactoring.move.MoveCallback;
-import consulo.language.editor.refactoring.rename.RenameUtil;
-import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.project.Project;
 import consulo.usage.MoveRenameUsageInfo;
 import consulo.usage.NonCodeUsageInfo;
-import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
-import consulo.language.util.IncorrectOperationException;
-import consulo.application.util.function.Processor;
 import consulo.util.collection.MultiMap;
-import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.ref.Ref;
 import jakarta.annotation.Nonnull;
 
 import java.util.*;
-import java.util.function.Function;
 
 /**
  * @author yole
@@ -227,14 +227,16 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
     }
   }
 
+  @Nonnull
   protected String getCommandName() {
-    return RefactoringBundle.message("move.class.to.inner.command.name",
-        (myClassesToMove.length > 1 ? "classes " : "class ") + StringUtil.join(myClassesToMove, new Function<PsiClass, String>() {
-          public String apply(PsiClass psiClass) {
-            return psiClass.getName();
-          }
-        }, ", "),
-        myTargetClass.getQualifiedName());
+    return RefactoringLocalize.moveClassToInnerCommandName(
+      (myClassesToMove.length > 1 ? "classes " : "class ") + StringUtil.join(
+        myClassesToMove,
+        PsiNamedElement::getName,
+        ", "
+      ),
+      myTargetClass.getQualifiedName()
+    ).get();
   }
 
   @Nonnull
@@ -251,9 +253,13 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
     for (PsiClass classToMove : myClassesToMove) {
       final PsiClass innerClass = myTargetClass.findInnerClassByName(classToMove.getName(), false);
       if (innerClass != null) {
-        conflicts.putValue(innerClass, RefactoringBundle.message("move.to.inner.duplicate.inner.class",
+        conflicts.putValue(
+          innerClass,
+          RefactoringLocalize.moveToInnerDuplicateInnerClass(
             CommonRefactoringUtil.htmlEmphasize(myTargetClass.getQualifiedName()),
-            CommonRefactoringUtil.htmlEmphasize(classToMove.getName())));
+            CommonRefactoringUtil.htmlEmphasize(classToMove.getName())
+          ).get()
+        );
       }
     }
 
@@ -348,9 +354,10 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
         String targetDescription = (targetElement == myClassToMove)
             ? "Class " + CommonRefactoringUtil.htmlEmphasize(myClassToMove.getName())
             : StringUtil.capitalize(RefactoringUIUtil.getDescription(targetElement, true));
-        final String message = RefactoringBundle.message("element.will.no.longer.be.accessible",
-            targetDescription,
-            RefactoringUIUtil.getDescription(container, true));
+        final String message = RefactoringLocalize.elementWillNoLongerBeAccessible(
+          targetDescription,
+          RefactoringUIUtil.getDescription(container, true)
+        ).get();
         myConflicts.putValue(targetElement, message);
       }
     }

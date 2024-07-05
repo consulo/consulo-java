@@ -33,8 +33,8 @@ import consulo.application.util.function.Computable;
 import consulo.configurable.ConfigurationException;
 import consulo.document.event.DocumentAdapter;
 import consulo.document.event.DocumentEvent;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.classMember.MemberInfoChange;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.move.MoveCallback;
 import consulo.language.editor.refactoring.ui.RefactoringDialog;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
@@ -44,6 +44,7 @@ import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.RecentsManager;
@@ -77,7 +78,7 @@ public class MoveMembersDialog extends RefactoringDialog implements MoveMembersO
   private final MoveCallback myMoveCallback;
 
   JavaVisibilityPanel myVisibilityPanel;
-  private final JCheckBox myIntroduceEnumConstants = new JCheckBox(RefactoringBundle.message("move.enum.constant.cb"), true);
+  private final JCheckBox myIntroduceEnumConstants = new JCheckBox(RefactoringLocalize.moveEnumConstantCb().get(), true);
 
   public MoveMembersDialog(
     Project project,
@@ -165,14 +166,14 @@ public class MoveMembersDialog extends RefactoringDialog implements MoveMembersO
     JTextField sourceClassField = new JTextField();
     sourceClassField.setText(mySourceClassName);
     sourceClassField.setEditable(false);
-    _panel.add(new JLabel(RefactoringBundle.message("move.members.move.members.from.label")), BorderLayout.NORTH);
+    _panel.add(new JLabel(RefactoringLocalize.moveMembersMoveMembersFromLabel().get()), BorderLayout.NORTH);
     _panel.add(sourceClassField, BorderLayout.CENTER);
     box.add(_panel);
 
     box.add(Box.createVerticalStrut(10));
 
     _panel = new JPanel(new BorderLayout());
-    JLabel label = new JLabel(RefactoringBundle.message("move.members.to.fully.qualified.name.label"));
+    JLabel label = new JLabel(RefactoringLocalize.moveMembersToFullyQualifiedNameLabel().get());
     label.setLabelFor(myTfTargetClassName);
     _panel.add(label, BorderLayout.NORTH);
     _panel.add(myTfTargetClassName, BorderLayout.CENTER);
@@ -195,8 +196,8 @@ public class MoveMembersDialog extends RefactoringDialog implements MoveMembersO
 
   protected JComponent createCenterPanel() {
     JPanel panel = new JPanel(new BorderLayout());
-    final String title = RefactoringBundle.message("move.members.members.to.be.moved.border.title");
-    final MemberSelectionPanel selectionPanel = new MemberSelectionPanel(title, myMemberInfos, null);
+    final LocalizeValue title = RefactoringLocalize.moveMembersMembersToBeMovedBorderTitle();
+    final MemberSelectionPanel selectionPanel = new MemberSelectionPanel(title.get(), myMemberInfos, null);
     myTable = selectionPanel.getTable();
     myMemberInfoModel = new MyMemberInfoModel();
     myMemberInfoModel.memberInfoChanged(new MemberInfoChange<>(myMemberInfos));
@@ -275,11 +276,11 @@ public class MoveMembersDialog extends RefactoringDialog implements MoveMembersO
     final PsiManager manager = PsiManager.getInstance(myProject);
     final String fqName = getTargetClassName();
     if (fqName != null && fqName.isEmpty()) {
-      return RefactoringBundle.message("no.destination.class.specified");
+      return RefactoringLocalize.noDestinationClassSpecified().get();
     }
     else {
       if (!PsiNameHelper.getInstance(manager.getProject()).isQualifiedName(fqName)) {
-        return RefactoringBundle.message("0.is.not.a.legal.fq.name", fqName);
+        return RefactoringLocalize.zeroIsNotALegalFqName(fqName).get();
       }
       else {
         RecentsManager.getInstance(myProject).registerRecentEntry(RECENTS_KEY, fqName);
@@ -295,27 +296,26 @@ public class MoveMembersDialog extends RefactoringDialog implements MoveMembersO
               HelpID.MOVE_MEMBERS,
               myProject);
           }
-        }, RefactoringBundle.message("create.class.command", fqName), null);
+        }, RefactoringLocalize.createClassCommand(fqName).get(), null);
 
         if (targetClass[0] == null) {
           return "";
         }
 
         if (mySourceClass.equals(targetClass[0])) {
-          return RefactoringBundle.message("source.and.destination.classes.should.be.different");
+          return RefactoringLocalize.sourceAndDestinationClassesShouldBeDifferent().get();
         } else if (!mySourceClass.getLanguage().equals(targetClass[0].getLanguage())) {
-          return RefactoringBundle.message(
-            "move.to.different.language",
+          return RefactoringLocalize.moveToDifferentLanguage(
             UsageViewUtil.getType(mySourceClass),
             mySourceClass.getQualifiedName(),
             targetClass[0].getQualifiedName()
-          );
+          ).get();
         }
         else {
           for (MemberInfo info : myMemberInfos) {
             if (!info.isChecked()) continue;
             if (PsiTreeUtil.isAncestor(info.getMember(), targetClass[0], false)) {
-              return RefactoringBundle.message("cannot.move.inner.class.0.into.itself", info.getDisplayName());
+              return RefactoringLocalize.cannotMoveInnerClass0IntoItself(info.getDisplayName()).get();
             }
           }
 
@@ -361,7 +361,7 @@ public class MoveMembersDialog extends RefactoringDialog implements MoveMembersO
 
     int answer = Messages.showYesNoDialog(
       myProject,
-      RefactoringBundle.message("class.0.does.not.exist", fqName),
+      RefactoringLocalize.class0DoesNotExist(fqName).get(),
       MoveMembersImpl.REFACTORING_NAME,
       UIUtil.getQuestionIcon()
     );
@@ -387,7 +387,7 @@ public class MoveMembersDialog extends RefactoringDialog implements MoveMembersO
   private class ChooseClassAction implements ActionListener {
     public void actionPerformed(ActionEvent e) {
       TreeClassChooser chooser = TreeClassChooserFactory.getInstance(myProject).createWithInnerClassesScopeChooser(
-        RefactoringBundle.message("choose.destination.class"),
+        RefactoringLocalize.chooseDestinationClass().get(),
         GlobalSearchScope.projectScope(myProject),
         aClass -> aClass.getParent() instanceof PsiFile || aClass.hasModifierProperty(PsiModifier.STATIC),
         null

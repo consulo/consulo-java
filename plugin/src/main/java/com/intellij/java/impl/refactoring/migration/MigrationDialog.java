@@ -21,12 +21,11 @@ import consulo.content.scope.SearchScope;
 import consulo.disposer.Disposer;
 import consulo.find.FindSettings;
 import consulo.find.ui.ScopeChooserCombo;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.DialogWrapper;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -66,9 +65,9 @@ public class MigrationDialog extends DialogWrapper
 		Disposer.register(myDisposable, myScopeChooserCombo);
 		myScopePanel.add(myScopeChooserCombo, BorderLayout.CENTER);
 
-		setTitle(RefactoringBundle.message("migration.dialog.title"));
+		setTitle(RefactoringLocalize.migrationDialogTitle());
 		setHorizontalStretch(1.2f);
-		setOKButtonText(RefactoringBundle.message("migration.dialog.ok.button.text"));
+		setOKButtonText(RefactoringLocalize.migrationDialogOkButtonText().get());
 		init();
 	}
 

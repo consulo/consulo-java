@@ -19,13 +19,14 @@ import com.intellij.java.impl.refactoring.PackageWrapper;
 import com.intellij.java.impl.refactoring.util.ConflictsUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.util.VisibilityUtil;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.util.collection.MultiMap;
 
 import java.util.HashMap;
@@ -71,10 +72,11 @@ class PackageLocalsUsageCollector extends JavaRecursiveElementWalkingVisitor {
               }
               PsiElement container = ConflictsUtil.getContainer(reference);
               if (!reportedRefs.contains(container)) {
-                final String message = RefactoringBundle.message("0.uses.a.package.local.1",
-                                                                 RefactoringUIUtil.getDescription(container, true),
-                                                                 RefactoringUIUtil.getDescription(resolved, true));
-                myConflicts.putValue(resolved, CommonRefactoringUtil.capitalize(message));
+                final LocalizeValue message = RefactoringLocalize.zeroUsesAPackageLocal1(
+                  RefactoringUIUtil.getDescription(container, true),
+                  RefactoringUIUtil.getDescription(resolved, true)
+                );
+                myConflicts.putValue(resolved, CommonRefactoringUtil.capitalize(message.get()));
                 reportedRefs.add(container);
               }
             }

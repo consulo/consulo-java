@@ -32,7 +32,7 @@ import consulo.document.Document;
 import consulo.document.event.DocumentAdapter;
 import consulo.document.event.DocumentEvent;
 import consulo.language.Language;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.move.MoveCallback;
 import consulo.language.editor.refactoring.move.MoveHandler;
 import consulo.language.editor.refactoring.move.fileOrDirectory.MoveFilesOrDirectoriesUtil;
@@ -203,7 +203,7 @@ public class MoveClassesOrPackagesDialog extends RefactoringDialog {
 
   private ReferenceEditorComboWithBrowseButton createPackageChooser() {
     final ReferenceEditorComboWithBrowseButton packageChooser =
-        new PackageNameReferenceEditorCombo("", myProject, RECENTS_KEY, RefactoringBundle.message("choose.destination.package"));
+      new PackageNameReferenceEditorCombo("", myProject, RECENTS_KEY, RefactoringLocalize.chooseDestinationPackage().get());
     final Document document = packageChooser.getChildComponent().getDocument();
     document.addDocumentListener(new DocumentAdapter() {
       public void documentChanged(DocumentEvent e) {
@@ -260,13 +260,16 @@ public class MoveClassesOrPackagesDialog extends RefactoringDialog {
         LOG.assertTrue(parent != null);
       }
       myNameLabel.setText(
-        RefactoringBundle.message("move.single.class.or.package.name.label", UsageViewUtil.getType(firstElement), UsageViewUtil.getLongName(firstElement))
+        RefactoringLocalize.moveSingleClassOrPackageNameLabel(
+          UsageViewUtil.getType(firstElement),
+          UsageViewUtil.getLongName(firstElement)
+        ).get()
       );
     } else if (psiElements.length > 1) {
       myNameLabel.setText(
         psiElements[0] instanceof PsiClass
-          ? RefactoringBundle.message("move.specified.classes")
-          : RefactoringBundle.message("move.specified.packages")
+          ? RefactoringLocalize.moveSpecifiedClasses().get()
+          : RefactoringLocalize.moveSpecifiedPackages().get()
       );
     }
     selectInitialCard();
@@ -359,6 +362,7 @@ public class MoveClassesOrPackagesDialog extends RefactoringDialog {
     }
   }
 
+  @RequiredUIAccess
   private void invokeMoveToPackage() {
     final MoveDestination destination = selectDestination();
     if (destination == null) return;
@@ -368,7 +372,7 @@ public class MoveClassesOrPackagesDialog extends RefactoringDialog {
       String message = verifyDestinationForElement(element, destination);
       if (message != null) {
         String helpId = HelpID.getMoveHelpID(myElementsToMove[0]);
-        CommonRefactoringUtil.showErrorMessage(RefactoringBundle.message("error.title"), message, helpId, getProject());
+        CommonRefactoringUtil.showErrorMessage(RefactoringLocalize.errorTitle().get(), message, helpId, getProject());
         return;
       }
     }
@@ -397,13 +401,15 @@ public class MoveClassesOrPackagesDialog extends RefactoringDialog {
       }
     } catch (IncorrectOperationException e) {
       String helpId = HelpID.getMoveHelpID(myElementsToMove[0]);
-      CommonRefactoringUtil.showErrorMessage(RefactoringBundle.message("error.title"), e.getMessage(), helpId, getProject());
+      CommonRefactoringUtil.showErrorMessage(RefactoringLocalize.errorTitle().get(), e.getMessage(), helpId, getProject());
     }
   }
 
   //for scala plugin
-  protected MoveClassesOrPackagesProcessor createMoveToPackageProcessor(MoveDestination destination, final PsiElement[] elementsToMove,
-                                                                        final MoveCallback callback) {
+  protected MoveClassesOrPackagesProcessor createMoveToPackageProcessor(
+    MoveDestination destination, final PsiElement[] elementsToMove,
+    final MoveCallback callback
+  ) {
     return new MoveClassesOrPackagesProcessor(getProject(), elementsToMove, destination, isSearchInComments(), isSearchInNonJavaFiles(), callback);
   }
 
@@ -424,22 +430,21 @@ public class MoveClassesOrPackagesDialog extends RefactoringDialog {
 
     for (PsiElement element : myElementsToMove) {
       if (PsiTreeUtil.isAncestor(element, targetClass, false)) {
-        return RefactoringBundle.message("move.class.to.inner.move.to.self.error");
+        return RefactoringLocalize.moveClassToInnerMoveToSelfError().get();
       }
       final Language targetClassLanguage = targetClass.getLanguage();
       if (!element.getLanguage().equals(targetClassLanguage)) {
-        return RefactoringBundle.message(
-          "move.to.different.language",
+        return RefactoringLocalize.moveToDifferentLanguage(
           UsageViewUtil.getType(element),
-          ((PsiClass) element).getQualifiedName(),
+          ((PsiClass)element).getQualifiedName(),
           targetClass.getQualifiedName()
-        );
+        ).get();
       }
     }
 
     while (targetClass != null) {
       if (targetClass.getContainingClass() != null && !targetClass.hasModifierProperty(PsiModifier.STATIC)) {
-        return RefactoringBundle.message("move.class.to.inner.nonstatic.error");
+        return RefactoringLocalize.moveClassToInnerNonstaticError().get();
       }
       targetClass = targetClass.getContainingClass();
     }
@@ -467,13 +472,14 @@ public class MoveClassesOrPackagesDialog extends RefactoringDialog {
   }
 
   @Nullable
+  @RequiredUIAccess
   private MoveDestination selectDestination() {
     final String packageName = getTargetPackage().trim();
     if (packageName.length() > 0 && !PsiNameHelper.getInstance(myManager.getProject()).isQualifiedName(packageName)) {
       Messages.showErrorDialog(
         myProject,
-        RefactoringBundle.message("please.enter.a.valid.target.package.name"),
-        RefactoringBundle.message("move.title")
+        RefactoringLocalize.pleaseEnterAValidTargetPackageName().get(),
+        RefactoringLocalize.moveTitle().get()
       );
       return null;
     }
@@ -482,8 +488,8 @@ public class MoveClassesOrPackagesDialog extends RefactoringDialog {
     if (!targetPackage.exists()) {
       final int ret = Messages.showYesNoDialog(
         myProject,
-        RefactoringBundle.message("package.does.not.exist", packageName),
-        RefactoringBundle.message("move.title"),
+        RefactoringLocalize.packageDoesNotExist(packageName).get(),
+        RefactoringLocalize.moveTitle().get(),
         UIUtil.getQuestionIcon()
       );
       if (ret != 0) return null;

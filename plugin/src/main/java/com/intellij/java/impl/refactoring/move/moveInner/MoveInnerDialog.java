@@ -20,46 +20,44 @@
  */
 package com.intellij.java.impl.refactoring.move.moveInner;
 
+import com.intellij.java.impl.refactoring.HelpID;
+import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
+import com.intellij.java.impl.refactoring.PackageWrapper;
+import com.intellij.java.impl.refactoring.move.MoveInstanceMembersUtil;
+import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesUtil;
+import com.intellij.java.impl.refactoring.ui.PackageNameReferenceEditorCombo;
+import com.intellij.java.impl.refactoring.util.RefactoringMessageUtil;
+import com.intellij.java.impl.refactoring.util.RefactoringUtil;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.codeStyle.VariableKind;
+import com.intellij.java.language.psi.util.InheritanceUtil;
+import consulo.application.ApplicationManager;
+import consulo.application.HelpManager;
+import consulo.ide.impl.idea.openapi.util.NullableComputable;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
+import consulo.language.editor.refactoring.ui.NameSuggestionsField;
+import consulo.language.editor.refactoring.ui.RefactoringDialog;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.editor.ui.awt.EditorTextField;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.util.IncorrectOperationException;
+import consulo.module.content.ProjectRootManager;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
+import consulo.virtualFileSystem.VirtualFile;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
+import javax.swing.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.Map;
 import java.util.Set;
-
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
-import com.intellij.java.language.psi.*;
-import consulo.application.HelpManager;
-import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import consulo.application.ApplicationManager;
-import consulo.project.Project;
-import consulo.module.content.ProjectRootManager;
-import consulo.util.lang.Comparing;
-import consulo.ide.impl.idea.openapi.util.NullableComputable;
-import consulo.virtualFileSystem.VirtualFile;
-import consulo.language.psi.*;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
-import com.intellij.java.language.psi.codeStyle.VariableKind;
-import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.intellij.java.impl.refactoring.HelpID;
-import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
-import com.intellij.java.impl.refactoring.PackageWrapper;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import com.intellij.java.impl.refactoring.move.MoveInstanceMembersUtil;
-import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesUtil;
-import consulo.language.editor.refactoring.ui.NameSuggestionsField;
-import com.intellij.java.impl.refactoring.ui.PackageNameReferenceEditorCombo;
-import consulo.language.editor.refactoring.ui.RefactoringDialog;
-import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
-import com.intellij.java.impl.refactoring.util.RefactoringMessageUtil;
-import com.intellij.java.impl.refactoring.util.RefactoringUtil;
-import consulo.language.editor.ui.awt.EditorTextField;
-import consulo.language.util.IncorrectOperationException;
 
 public class MoveInnerDialog extends RefactoringDialog {
   private final Project myProject;
@@ -247,7 +245,7 @@ public class MoveInnerDialog extends RefactoringDialog {
     final String parameterName = getParameterName();
     PsiManager manager = PsiManager.getInstance(myProject);
     if ("".equals(className)) {
-      message = RefactoringBundle.message("no.class.name.specified");
+      message = RefactoringLocalize.noClassNameSpecified().get();
     }
     else {
       if (!PsiNameHelper.getInstance(manager.getProject()).isIdentifier(className)) {
@@ -256,7 +254,7 @@ public class MoveInnerDialog extends RefactoringDialog {
       else {
         if (myCbPassOuterClass.isSelected()) {
           if ("".equals(parameterName)) {
-            message = RefactoringBundle.message("no.parameter.name.specified");
+            message = RefactoringLocalize.noParameterNameSpecified().get();
           }
           else {
             if (!PsiNameHelper.getInstance(manager.getProject()).isIdentifier(parameterName)) {
@@ -270,7 +268,7 @@ public class MoveInnerDialog extends RefactoringDialog {
             PsiClass[] classes = targetClass.getInnerClasses();
             for (PsiClass aClass : classes) {
               if (className.equals(aClass.getName())) {
-                message = RefactoringBundle.message("inner.class.exists", className, targetClass.getName());
+                message = RefactoringLocalize.innerClassExists(className, targetClass.getName()).get();
                 break;
               }
             }
@@ -320,8 +318,12 @@ public class MoveInnerDialog extends RefactoringDialog {
       myParameterField.getComponent().setEnabled(false);
     }
 
-    myPackageNameField = new PackageNameReferenceEditorCombo("", myProject, RECENTS_KEY,
-                                                             RefactoringBundle.message("choose.destination.package"));
+    myPackageNameField = new PackageNameReferenceEditorCombo(
+      "",
+      myProject,
+      RECENTS_KEY,
+      RefactoringLocalize.chooseDestinationPackage().get()
+    );
     PsiJavaPackage psiPackage = getTargetPackage();
     if (psiPackage != null) {
       myPackageNameField.prependItem(psiPackage.getQualifiedName());

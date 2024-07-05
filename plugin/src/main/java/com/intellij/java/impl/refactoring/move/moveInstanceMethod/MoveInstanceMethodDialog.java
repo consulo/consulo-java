@@ -15,42 +15,27 @@
  */
 package com.intellij.java.impl.refactoring.move.moveInstanceMethod;
 
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import com.intellij.java.impl.refactoring.HelpID;
+import com.intellij.java.impl.refactoring.move.MoveInstanceMembersUtil;
+import com.intellij.java.language.impl.JavaFileType;
+import com.intellij.java.language.psi.*;
+import consulo.application.HelpManager;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.language.editor.ui.awt.EditorTextField;
+import consulo.localize.LocalizeValue;
+import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.ex.awt.*;
+import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
-
-import jakarta.annotation.Nullable;
-import javax.swing.BorderFactory;
-import javax.swing.JComponent;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
-import consulo.application.HelpManager;
-import consulo.ui.ex.awt.*;
-import org.jetbrains.annotations.NonNls;
-import com.intellij.java.language.impl.JavaFileType;
-import consulo.ui.ex.awt.Messages;
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiClassType;
-import com.intellij.java.language.psi.PsiField;
-import com.intellij.java.language.psi.PsiMember;
-import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiNameHelper;
-import com.intellij.java.language.psi.PsiVariable;
-import com.intellij.java.impl.refactoring.HelpID;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import com.intellij.java.impl.refactoring.move.MoveInstanceMembersUtil;
-import consulo.language.editor.ui.awt.EditorTextField;
-import consulo.ui.ex.awt.TitledSeparator;
-import java.util.HashMap;
-import consulo.ui.ex.awt.UIUtil;
 
 /**
  * @author ven
@@ -85,7 +70,7 @@ public class MoveInstanceMethodDialog extends MoveInstanceMethodDialogBase {
       }
     });
 
-    separator.setText(RefactoringBundle.message("moveInstanceMethod.select.an.instance.parameter"));
+    separator.setText(RefactoringLocalize.moveinstancemethodSelectAnInstanceParameter().get());
 
     final JScrollPane scrollPane = ScrollPaneFactory.createScrollPane(myList);
     mainPanel.add(scrollPane, new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0,0,0,0), 0,0));
@@ -128,8 +113,8 @@ public class MoveInstanceMethodDialog extends MoveInstanceMethodDialogBase {
     if (myThisClassesMap.size() == 0) return null;
     JPanel panel = new JPanel(new VerticalFlowLayout(VerticalFlowLayout.TOP, 0, 0, true, true));
     for (PsiClass aClass : myThisClassesMap.keySet()) {
-      final String text = RefactoringBundle.message("move.method.this.parameter.label", aClass.getName());
-      panel.add(new TitledSeparator(text, null));
+      final LocalizeValue text = RefactoringLocalize.moveMethodThisParameterLabel(aClass.getName());
+      panel.add(new TitledSeparator(text.get(), null));
 
       String suggestedName = MoveInstanceMethodHandler.suggestParameterNameForThisClass(aClass);
       final EditorTextField field = new EditorTextField(suggestedName, getProject(), JavaFileType.INSTANCE);
@@ -141,6 +126,7 @@ public class MoveInstanceMethodDialog extends MoveInstanceMethodDialogBase {
     return panel;
   }
 
+  @RequiredUIAccess
   protected void doAction() {
     Map<PsiClass, String> parameterNames = new LinkedHashMap<PsiClass, String>();
     for (final PsiClass aClass : myThisClassesMap.keySet()) {
@@ -148,8 +134,7 @@ public class MoveInstanceMethodDialog extends MoveInstanceMethodDialogBase {
       if (field.isEnabled()) {
         String parameterName = field.getText().trim();
         if (!PsiNameHelper.getInstance(myMethod.getProject()).isIdentifier(parameterName)) {
-          Messages
-            .showErrorDialog(getProject(), RefactoringBundle.message("move.method.enter.a.valid.name.for.parameter"), myRefactoringName);
+          Messages.showErrorDialog(getProject(), RefactoringLocalize.moveMethodEnterAValidNameForParameter().get(), myRefactoringName);
           return;
         }
         parameterNames.put(aClass, parameterName);

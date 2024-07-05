@@ -25,6 +25,7 @@ import com.intellij.java.language.psi.PsiClass;
 import consulo.ide.impl.idea.refactoring.inline.InlineOptionsDialog;
 import consulo.ide.impl.idea.refactoring.ui.DocCommentPanel;
 import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.project.Project;
 import consulo.ui.ex.awt.IdeBorderFactory;
 import consulo.util.lang.StringUtil;
@@ -101,12 +102,12 @@ public class InlineSuperClassRefactoringDialog extends InlineOptionsDialog {
 
   @Override
   protected String getInlineAllText() {
-    return RefactoringBundle.message("all.references.and.remove.super.class");
+    return RefactoringLocalize.allReferencesAndRemoveSuperClass().get();
   }
 
   @Override
   protected String getInlineThisText() {
-    return RefactoringBundle.message("this.reference.only.and.keep.super.class");
+    return RefactoringLocalize.thisReferenceOnlyAndKeepSuperClass().get();
   }
 
   @Override

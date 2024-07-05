@@ -41,7 +41,7 @@ import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.findUsage.DescriptiveNameUtil;
@@ -51,6 +51,7 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.usage.UsageInfo;
@@ -60,9 +61,9 @@ import consulo.util.collection.MultiMap;
 import consulo.util.collection.primitive.ints.IntList;
 import consulo.util.lang.Pair;
 import consulo.util.lang.ref.Ref;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -287,8 +288,12 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
 					{
 						if(!PsiTreeUtil.isAncestor(myMethodToReplaceIn.getContainingClass(), usageInfo.getElement(), false))
 						{
-							conflicts.putValue(myParameterInitializer, RefactoringBundle.message("parameter.initializer.contains.0.but.not.all.calls.to.method.are.in.its.class",
-									CommonRefactoringUtil.htmlEmphasize(PsiKeyword.SUPER)));
+							conflicts.putValue(
+								myParameterInitializer,
+								RefactoringLocalize.parameterInitializerContains0ButNotAllCallsToMethodAreInItsClass(
+									CommonRefactoringUtil.htmlEmphasize(PsiKeyword.SUPER)
+								).get()
+							);
 							break;
 						}
 					}
@@ -334,12 +339,11 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
 							if(element instanceof PsiMember &&
 									!JavaPsiFacade.getInstance(myProject).getResolveHelper().isAccessible((PsiMember) element, place, null))
 							{
-								String message =
-										RefactoringBundle.message(
-												"0.is.not.accessible.from.1.value.for.introduced.parameter.in.that.method.call.will.be.incorrect",
-												RefactoringUIUtil.getDescription(element, true),
-												RefactoringUIUtil.getDescription(ConflictsUtil.getContainer(place), true));
-								conflicts.putValue(element, message);
+								LocalizeValue message = RefactoringLocalize.zeroIsNotAccessibleFrom1ValueForIntroducedParameterInThatMethodCallWillBeIncorrect(
+									RefactoringUIUtil.getDescription(element, true),
+									RefactoringUIUtil.getDescription(ConflictsUtil.getContainer(place), true)
+								);
+								conflicts.putValue(element, message.get());
 							}
 						}
 					}
@@ -388,10 +392,11 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
 			}
 			if(myParameterName.equals(variable.getName()))
 			{
-				String descr = RefactoringBundle.message("there.is.already.a.0.it.will.conflict.with.an.introduced.parameter",
-						RefactoringUIUtil.getDescription(variable, true));
+				LocalizeValue descr = RefactoringLocalize.thereIsAlreadyA0ItWillConflictWithAnIntroducedParameter(
+					RefactoringUIUtil.getDescription(variable, true)
+				);
 
-				conflict = Pair.<PsiElement, String>create(variable, CommonRefactoringUtil.capitalize(descr));
+				conflict = Pair.<PsiElement, String>create(variable, CommonRefactoringUtil.capitalize(descr.get()));
 			}
 		}
 
@@ -674,7 +679,7 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
 
 	protected String getCommandName()
 	{
-		return RefactoringBundle.message("introduce.parameter.command", DescriptiveNameUtil.getDescriptiveName(myMethodToReplaceIn));
+		return RefactoringLocalize.introduceParameterCommand(DescriptiveNameUtil.getDescriptiveName(myMethodToReplaceIn)).get();
 	}
 
 	@Nullable

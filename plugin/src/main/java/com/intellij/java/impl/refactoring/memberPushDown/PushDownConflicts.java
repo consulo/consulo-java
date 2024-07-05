@@ -15,17 +15,19 @@
  */
 package com.intellij.java.impl.refactoring.memberPushDown;
 
-import com.intellij.java.language.psi.*;
-import consulo.application.progress.ProgressManager;
-import consulo.language.psi.*;
-import consulo.language.psi.search.ReferencesSearch;
-import com.intellij.java.language.psi.util.InheritanceUtil;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import com.intellij.java.impl.refactoring.util.RefactoringConflictsUtil;
-import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import com.intellij.java.impl.refactoring.util.classMembers.ClassMemberReferencesVisitor;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.InheritanceUtil;
+import consulo.application.progress.ProgressManager;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.localize.LocalizeValue;
 import consulo.util.collection.MultiMap;
 
 import java.util.HashSet;
@@ -125,7 +127,7 @@ public class PushDownConflicts {
                 }
 
                 if (!InheritanceUtil.isInheritorOrSelf(aClass, targetClass, true)) {
-                  myConflicts.putValue(referenceExpression, RefactoringBundle.message("pushed.members.will.not.be.visible.from.certain.call.sites"));
+                  myConflicts.putValue(referenceExpression, RefactoringLocalize.pushedMembersWillNotBeVisibleFromCertainCallSites().get());
                   break Members;
                 }
               }
@@ -135,7 +137,12 @@ public class PushDownConflicts {
         RefactoringConflictsUtil.analyzeAccessibilityConflicts(myMovedMembers, targetClass, myConflicts, null, context, myAbstractMembers);
       }
     };
-    return !ProgressManager.getInstance().runProcessWithProgressSynchronously(searchConflictsRunnable, RefactoringBundle.message("detecting.possible.conflicts"), false, context.getProject());
+    return !ProgressManager.getInstance().runProcessWithProgressSynchronously(
+      searchConflictsRunnable,
+      RefactoringLocalize.detectingPossibleConflicts().get(),
+      false,
+      context.getProject()
+    );
   }
 
   public void checkMemberPlacementInTargetClassConflict(final PsiClass targetClass, final PsiMember movedMember) {
@@ -143,8 +150,11 @@ public class PushDownConflicts {
       String name = movedMember.getName();
       final PsiField field = targetClass.findFieldByName(name, false);
       if (field != null) {
-        String message = RefactoringBundle.message("0.already.contains.field.1", RefactoringUIUtil.getDescription(targetClass, false), CommonRefactoringUtil.htmlEmphasize(name));
-        myConflicts.putValue(field, CommonRefactoringUtil.capitalize(message));
+        LocalizeValue message = RefactoringLocalize.zeroAlreadyContainsField1(
+          RefactoringUIUtil.getDescription(targetClass, false),
+          CommonRefactoringUtil.htmlEmphasize(name)
+        );
+        myConflicts.putValue(field, CommonRefactoringUtil.capitalize(message.get()));
       }
     }
     else if (movedMember instanceof PsiMethod) {
@@ -154,9 +164,11 @@ public class PushDownConflicts {
         PsiMethod method = (PsiMethod)movedMember;
         final PsiMethod overrider = targetClass.findMethodBySignature(method, false);
         if (overrider != null) {
-          String message = RefactoringBundle.message("0.is.already.overridden.in.1",
-                                                     RefactoringUIUtil.getDescription(method, true), RefactoringUIUtil.getDescription(targetClass, false));
-          myConflicts.putValue(overrider, CommonRefactoringUtil.capitalize(message));
+          LocalizeValue message = RefactoringLocalize.zeroIsAlreadyOverriddenIn1(
+            RefactoringUIUtil.getDescription(method, true),
+            RefactoringUIUtil.getDescription(targetClass, false)
+          );
+          myConflicts.putValue(overrider, CommonRefactoringUtil.capitalize(message.get()));
         }
       }
     }
@@ -168,9 +180,11 @@ public class PushDownConflicts {
         if (innerClass.equals(movedMember)) continue;
 
         if (name.equals(innerClass.getName())) {
-          String message = RefactoringBundle.message("0.already.contains.inner.class.named.1", RefactoringUIUtil.getDescription(targetClass, false),
-                                                CommonRefactoringUtil.htmlEmphasize(name));
-          myConflicts.putValue(innerClass, message);
+          LocalizeValue message = RefactoringLocalize.zeroAlreadyContainsInnerClassNamed1(
+            RefactoringUIUtil.getDescription(targetClass, false),
+            CommonRefactoringUtil.htmlEmphasize(name)
+          );
+          myConflicts.putValue(innerClass, message.get());
         }
       }
     }
@@ -186,10 +200,11 @@ public class PushDownConflicts {
 
     protected void visitClassMemberReferenceElement(PsiMember classMember, PsiJavaCodeReferenceElement classMemberReference) {
       if(myMovedMembers.contains(classMember) && !myAbstractMembers.contains(classMember)) {
-        String message = RefactoringBundle.message("0.uses.1.which.is.pushed.down", RefactoringUIUtil.getDescription(mySource, false),
-                                              RefactoringUIUtil.getDescription(classMember, false));
-        message = CommonRefactoringUtil.capitalize(message);
-        myConflicts.putValue(mySource, message);
+        LocalizeValue message = RefactoringLocalize.zeroUses1WhichIsPushedDown(
+          RefactoringUIUtil.getDescription(mySource, false),
+          RefactoringUIUtil.getDescription(classMember, false)
+        );
+        myConflicts.putValue(mySource, CommonRefactoringUtil.capitalize(message.get()));
       }
     }
   }

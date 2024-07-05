@@ -33,7 +33,7 @@ import consulo.application.ui.wm.ApplicationIdeFocusManager;
 import consulo.application.ui.wm.IdeFocusManager;
 import consulo.configurable.ConfigurationException;
 import consulo.document.Document;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.RefactoringDialog;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
@@ -46,8 +46,8 @@ import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-
 import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -289,8 +289,12 @@ public class IntroduceParameterObjectDialog extends RefactoringDialog {
 
   private void createUIComponents() {
     final PsiFile file = sourceMethod.getContainingFile();
-    packageTextField =
-        new PackageNameReferenceEditorCombo(file instanceof PsiJavaFile ? ((PsiJavaFile) file).getPackageName() : "", myProject, RECENTS_KEY, RefactoringBundle.message("choose.destination.package"));
+    packageTextField = new PackageNameReferenceEditorCombo(
+      file instanceof PsiJavaFile javaFile ? javaFile.getPackageName() : "",
+      myProject,
+      RECENTS_KEY,
+      RefactoringLocalize.chooseDestinationPackage().get()
+    );
     final Document document = packageTextField.getChildComponent().getDocument();
     final consulo.document.event.DocumentAdapter adapter = new consulo.document.event.DocumentAdapter() {
       public void documentChanged(consulo.document.event.DocumentEvent e) {

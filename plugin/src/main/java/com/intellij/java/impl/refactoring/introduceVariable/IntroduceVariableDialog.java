@@ -28,6 +28,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import consulo.application.HelpManager;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.project.Project;
 import consulo.ui.ex.awt.DialogWrapper;
 import com.intellij.java.language.psi.PsiExpression;
@@ -151,7 +152,7 @@ class IntroduceVariableDialog extends DialogWrapper implements IntroduceVariable
     gbConstraints.weighty = 0;
     gbConstraints.gridx = 0;
     gbConstraints.gridy = 0;
-    JLabel type = new JLabel(RefactoringBundle.message("variable.of.type"));
+    JLabel type = new JLabel(RefactoringLocalize.variableOfType().get());
     panel.add(type, gbConstraints);
 
     gbConstraints.gridx++;
@@ -163,7 +164,7 @@ class IntroduceVariableDialog extends DialogWrapper implements IntroduceVariable
     gbConstraints.weighty = 0;
     gbConstraints.gridx = 0;
     gbConstraints.gridy = 1;
-    JLabel namePrompt = new JLabel(RefactoringBundle.message("name.prompt"));
+    JLabel namePrompt = new JLabel(RefactoringLocalize.namePrompt().get());
     namePrompt.setLabelFor(myNameField.getComponent());
     panel.add(namePrompt, gbConstraints);
 
@@ -197,19 +198,15 @@ class IntroduceVariableDialog extends DialogWrapper implements IntroduceVariable
 
     if (myOccurrencesCount > 1) {
       myCbReplaceAll = new NonFocusableCheckBox();
-      myCbReplaceAll.setText(RefactoringBundle.message("replace.all.occurences", myOccurrencesCount));
+      myCbReplaceAll.setText(RefactoringLocalize.replaceAllOccurences(myOccurrencesCount).get());
 
       panel.add(myCbReplaceAll, gbConstraints);
-      myReplaceAllListener = new ItemListener() {
-        public void itemStateChanged(ItemEvent e) {
-          updateControls();
-        }
-      };
+      myReplaceAllListener = e -> updateControls();
       myCbReplaceAll.addItemListener(myReplaceAllListener);
 
       if (myAnyLValueOccurences) {
         myCbReplaceWrite = new StateRestoringCheckBox();
-        myCbReplaceWrite.setText(RefactoringBundle.message("replace.write.access.occurrences"));
+        myCbReplaceWrite.setText(RefactoringLocalize.replaceWriteAccessOccurrences().get());
         gbConstraints.insets = new Insets(0, 8, 0, 0);
         gbConstraints.gridy++;
         panel.add(myCbReplaceWrite, gbConstraints);
@@ -218,7 +215,7 @@ class IntroduceVariableDialog extends DialogWrapper implements IntroduceVariable
     }
 
     myCbFinal = new NonFocusableCheckBox();
-    myCbFinal.setText(RefactoringBundle.message("declare.final"));
+    myCbFinal.setText(RefactoringLocalize.declareFinal().get());
     final Boolean createFinals = JavaRefactoringSettings.getInstance().INTRODUCE_LOCAL_CREATE_FINALS;
     myCbFinalState = createFinals == null ?
                      CodeStyleSettingsManager.getSettings(myProject).GENERATE_FINAL_LOCALS :

@@ -24,14 +24,14 @@
  */
 package com.intellij.java.impl.refactoring.makeStatic;
 
-import consulo.application.HelpManager;
-import consulo.project.Project;
-import consulo.util.lang.StringUtil;
-import com.intellij.java.language.psi.PsiTypeParameterListOwner;
-import com.intellij.java.impl.refactoring.HelpID;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import com.intellij.java.analysis.impl.refactoring.util.VariableData;
+import com.intellij.java.impl.refactoring.HelpID;
+import com.intellij.java.language.psi.PsiTypeParameterListOwner;
+import consulo.application.HelpManager;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.project.Project;
 import consulo.usage.UsageViewUtil;
+import consulo.util.lang.StringUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,7 +42,7 @@ public class SimpleMakeStaticDialog extends AbstractMakeStaticDialog {
   public SimpleMakeStaticDialog(Project project, PsiTypeParameterListOwner member) {
     super(project, member);
     String type = UsageViewUtil.getType(myMember);
-    setTitle(RefactoringBundle.message("make.0.static", StringUtil.capitalize(type)));
+    setTitle(RefactoringLocalize.make0Static(StringUtil.capitalize(type)).get());
     init();
   }
 
@@ -84,7 +84,7 @@ public class SimpleMakeStaticDialog extends AbstractMakeStaticDialog {
     panel.add(createDescriptionLabel(), gbConstraints);
 
     gbConstraints.gridy++;
-    myCbReplaceUsages = new JCheckBox(RefactoringBundle.message("replace.instance.qualifiers.with.class.references"));
+    myCbReplaceUsages = new JCheckBox(RefactoringLocalize.replaceInstanceQualifiersWithClassReferences().get());
     panel.add(myCbReplaceUsages, gbConstraints);
     myCbReplaceUsages.setSelected(true);
     return panel;

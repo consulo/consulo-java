@@ -28,8 +28,8 @@ import consulo.fileEditor.FileEditorManager;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.event.RefactoringElementListener;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.move.MoveCallback;
 import consulo.language.editor.refactoring.rename.RenameUtil;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
@@ -39,6 +39,7 @@ import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.navigation.OpenFileDescriptor;
 import consulo.navigation.OpenFileDescriptorFactory;
@@ -49,10 +50,9 @@ import consulo.usage.UsageViewDescriptor;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.Ref;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
-
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 import java.util.function.Function;
@@ -94,7 +94,7 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
   }
 
   protected String getCommandName() {
-    return RefactoringBundle.message("move.inner.class.command", myDescriptiveName);
+    return RefactoringLocalize.moveInnerClassCommand(myDescriptiveName).get();
   }
 
   @Nonnull
@@ -380,10 +380,9 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
           }
         }, "</li><li>") + "</li></ol>";
       }
-      String message = RefactoringBundle.message("0.will.become.inaccessible.from.1",
-          placesDescription,
-          RefactoringUIUtil.getDescription(container, true));
-      conflicts.put(container, Collections.singletonList(message));
+      LocalizeValue message =
+        RefactoringLocalize.zeroWillBecomeInaccessibleFrom1(placesDescription, RefactoringUIUtil.getDescription(container, true));
+      conflicts.put(container, Collections.singletonList(message.get()));
     }
   }
 

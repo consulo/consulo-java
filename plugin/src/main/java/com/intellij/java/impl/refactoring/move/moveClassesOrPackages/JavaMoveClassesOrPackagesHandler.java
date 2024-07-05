@@ -26,7 +26,7 @@ import consulo.codeEditor.Editor;
 import consulo.dataContext.DataContext;
 import consulo.java.impl.util.JavaProjectRootsUtil;
 import consulo.language.editor.LangDataKeys;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.move.MoveCallback;
 import consulo.language.editor.refactoring.move.MoveHandlerDelegate;
 import consulo.language.editor.refactoring.move.fileOrDirectory.MoveFilesOrDirectoriesUtil;
@@ -39,12 +39,14 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
 import consulo.language.util.ModuleUtilCore;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
 import consulo.platform.base.localize.CommonLocalize;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
@@ -167,7 +169,7 @@ public class JavaMoveClassesOrPackagesHandler extends MoveHandlerDelegate {
     MoveClassesOrPackagesImpl.doMove(project, adjustedElements, targetContainer, callback);
   }
 
-  @RequiredReadAction
+  @RequiredUIAccess
   private static void moveDirectoriesLibrariesSafe(
     Project project,
     PsiElement targetContainer,
@@ -182,9 +184,9 @@ public class JavaMoveClassesOrPackagesHandler extends MoveHandlerDelegate {
       int ret = Messages.showYesNoCancelDialog(
         project,
         prompt + " or all directories in project?",
-        RefactoringBundle.message("warning.title"),
-        RefactoringBundle.message("move.current.directory"),
-        RefactoringBundle.message("move.directories"),
+        RefactoringLocalize.warningTitle().get(),
+        RefactoringLocalize.moveCurrentDirectory().get(),
+        RefactoringLocalize.moveDirectories().get(),
         CommonLocalize.buttonCancel().get(),
         UIUtil.getWarningIcon()
       );
@@ -196,7 +198,7 @@ public class JavaMoveClassesOrPackagesHandler extends MoveHandlerDelegate {
     } else if (Messages.showOkCancelDialog(
       project,
       prompt + "?",
-      RefactoringBundle.message("warning.title"),
+      RefactoringLocalize.warningTitle().get(),
       UIUtil.getWarningIcon()
     ) == DialogWrapper.OK_EXIT_CODE) {
       moveAsDirectory(project, targetContainer, callback, directories);
@@ -230,8 +232,8 @@ public class JavaMoveClassesOrPackagesHandler extends MoveHandlerDelegate {
         false,
         callback
       ) {
-        @RequiredReadAction
         @Override
+        @RequiredUIAccess
         protected void performRefactoring(
           Project project,
           final PsiDirectory targetDirectory,
@@ -244,7 +246,7 @@ public class JavaMoveClassesOrPackagesHandler extends MoveHandlerDelegate {
               MoveFilesOrDirectoriesUtil.checkIfMoveIntoSelf(dir, targetDirectory);
             }
           } catch (IncorrectOperationException e) {
-            Messages.showErrorDialog(project, e.getMessage(), RefactoringBundle.message("cannot.move"));
+            Messages.showErrorDialog(project, e.getMessage(), RefactoringLocalize.cannotMove().get());
             return;
           }
           final MoveDirectoryWithClassesProcessor processor = new MoveDirectoryWithClassesProcessor(
@@ -399,12 +401,12 @@ public class JavaMoveClassesOrPackagesHandler extends MoveHandlerDelegate {
       super(project, true);
       myDirectories = directories;
       myRearrangePackagesEnabled = rearrangePackagesEnabled;
-      setTitle(RefactoringBundle.message("select.refactoring.title"));
+      setTitle(RefactoringLocalize.selectRefactoringTitle());
       init();
     }
 
     protected JComponent createNorthPanel() {
-      return new JLabel(RefactoringBundle.message("what.would.you.like.to.do"));
+      return new JLabel(RefactoringLocalize.whatWouldYouLikeToDo().get());
     }
 
     public JComponent getPreferredFocusedComponent() {
@@ -423,36 +425,26 @@ public class JavaMoveClassesOrPackagesHandler extends MoveHandlerDelegate {
       for (PsiDirectory directory : myDirectories) {
         packages.add(JavaDirectoryService.getInstance().getPackage(directory).getQualifiedName());
       }
-      final String moveDescription;
       LOG.assertTrue(myDirectories.length > 0);
       LOG.assertTrue(packages.size() > 0);
-      if (packages.size() > 1) {
-        moveDescription = RefactoringBundle.message("move.packages.to.another.package", packages.size());
-      } else {
-        final String qName = packages.iterator().next();
-        moveDescription = RefactoringBundle.message("move.package.to.another.package", qName);
-      }
+      final LocalizeValue moveDescription = packages.size() > 1
+        ? RefactoringLocalize.movePackagesToAnotherPackage(packages.size())
+        : RefactoringLocalize.movePackageToAnotherPackage(packages.iterator().next());
 
       myRbMovePackage = new JRadioButton();
-      myRbMovePackage.setText(moveDescription);
+      myRbMovePackage.setText(moveDescription.get());
       myRbMovePackage.setSelected(true);
 
-      final String rearrangeDescription;
-      if (myDirectories.length > 1) {
-        rearrangeDescription = RefactoringBundle.message("move.directories.to.another.source.root", myDirectories.length);
-      } else {
-        rearrangeDescription = RefactoringBundle.message("move.directory.to.another.source.root", myDirectories[0].getVirtualFile().getPresentableUrl());
-      }
+      final LocalizeValue rearrangeDescription = myDirectories.length > 1
+        ? RefactoringLocalize.moveDirectoriesToAnotherSourceRoot(myDirectories.length)
+        : RefactoringLocalize.moveDirectoryToAnotherSourceRoot(myDirectories[0].getVirtualFile().getPresentableUrl());
       myRbRearrangePackage = new JRadioButton();
-      myRbRearrangePackage.setText(rearrangeDescription);
+      myRbRearrangePackage.setText(rearrangeDescription.get());
       myRbRearrangePackage.setVisible(myRearrangePackagesEnabled);
 
-      final String moveDirectoryDescription;
-      if (myDirectories.length > 1) {
-        moveDirectoryDescription = "Move everything from " + myDirectories.length + " directories to another directory";
-      } else {
-        moveDirectoryDescription = "Move everything from " + myDirectories[0].getVirtualFile().getPresentableUrl() + " to another directory";
-      }
+      final String moveDirectoryDescription = myDirectories.length > 1
+        ? "Move everything from " + myDirectories.length + " directories to another directory"
+        : "Move everything from " + myDirectories[0].getVirtualFile().getPresentableUrl() + " to another directory";
       myRbMoveDirectory = new JRadioButton();
       myRbMoveDirectory.setMnemonic('e');
       myRbMoveDirectory.setText(moveDirectoryDescription);

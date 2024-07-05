@@ -31,16 +31,16 @@ import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.annotation.access.RequiredWriteAction;
 import consulo.application.progress.ProgressManager;
 import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
@@ -115,10 +115,10 @@ public class PushDownProcessor extends BaseRefactoringProcessor {
           return false;
         }
       } else {
-        String noInheritors = myClass.isInterface() ?
-          RefactoringBundle.message("interface.0.does.not.have.inheritors", myClass.getQualifiedName()) :
-          RefactoringBundle.message("class.0.does.not.have.inheritors", myClass.getQualifiedName());
-        final String message = noInheritors + "\n" + RefactoringBundle.message("push.down.will.delete.members");
+        LocalizeValue noInheritors = myClass.isInterface()
+          ? RefactoringLocalize.interface0DoesNotHaveInheritors(myClass.getQualifiedName())
+          : RefactoringLocalize.class0DoesNotHaveInheritors(myClass.getQualifiedName());
+        final String message = noInheritors + "\n" + RefactoringLocalize.pushDownWillDeleteMembers();
         final int answer = Messages.showYesNoCancelDialog(message, JavaPushDownHandler.REFACTORING_NAME, UIUtil.getWarningIcon());
         if (answer == DialogWrapper.OK_EXIT_CODE) {
           myCreateClassDlg = CreateSubclassAction.chooseSubclassToCreate(myClass);
@@ -142,7 +142,7 @@ public class PushDownProcessor extends BaseRefactoringProcessor {
 
     boolean processFinished = ProgressManager.getInstance().runProcessWithProgressSynchronously(
       runnable,
-      RefactoringBundle.message("detecting.possible.conflicts"),
+      RefactoringLocalize.detectingPossibleConflicts().get(),
       true,
       myProject
     );

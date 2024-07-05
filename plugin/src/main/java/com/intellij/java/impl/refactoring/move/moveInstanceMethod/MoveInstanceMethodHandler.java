@@ -29,6 +29,7 @@ import consulo.codeEditor.ScrollType;
 import consulo.dataContext.DataContext;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiElement;
@@ -75,7 +76,7 @@ public class MoveInstanceMethodHandler implements RefactoringActionHandler
 
 		if (!(element instanceof PsiMethod))
 		{
-			String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("error.wrong.caret.position.method"));
+			String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.errorWrongCaretPositionMethod().get());
 			CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.MOVE_INSTANCE_METHOD);
 			return;
 		}
@@ -101,11 +102,11 @@ public class MoveInstanceMethodHandler implements RefactoringActionHandler
 		}
 		else if (method.isConstructor())
 		{
-			message = RefactoringBundle.message("move.method.is.not.supported.for.constructors");
+			message = RefactoringLocalize.moveMethodIsNotSupportedForConstructors().get();
 		}
 		else if (method.getLanguage() != JavaLanguage.INSTANCE)
 		{
-			message = RefactoringBundle.message("move.method.is.not.supported.for.0", method.getLanguage().getDisplayName());
+			message = RefactoringLocalize.moveMethodIsNotSupportedFor0(method.getLanguage().getDisplayName()).get();
 		}
 		else
 		{
@@ -113,12 +114,12 @@ public class MoveInstanceMethodHandler implements RefactoringActionHandler
 			if (containingClass != null && PsiUtil.typeParametersIterator(containingClass).hasNext()
 				&& TypeParametersSearcher.hasTypeParameters(method))
 			{
-				message = RefactoringBundle.message("move.method.is.not.supported.for.generic.classes");
+				message = RefactoringLocalize.moveMethodIsNotSupportedForGenericClasses().get();
 			}
 			else if (method.findSuperMethods().length > 0
 				|| OverridingMethodsSearch.search(method, true).toArray(PsiMethod.EMPTY_ARRAY).length > 0)
 			{
-				message = RefactoringBundle.message("move.method.is.not.supported.when.method.is.part.of.inheritance.hierarchy");
+				message = RefactoringLocalize.moveMethodIsNotSupportedWhenMethodIsPartOfInheritanceHierarchy().get();
 			}
 			else
 			{
@@ -213,15 +214,15 @@ public class MoveInstanceMethodHandler implements RefactoringActionHandler
 		{
 			if (!classTypesFound)
 			{
-				return RefactoringBundle.message("there.are.no.variables.that.have.reference.type");
+				return RefactoringLocalize.thereAreNoVariablesThatHaveReferenceType().get();
 			}
 			else if (!resolvableClassesFound)
 			{
-				return RefactoringBundle.message("all.candidate.variables.have.unknown.types");
+				return RefactoringLocalize.allCandidateVariablesHaveUnknownTypes().get();
 			}
 			else if (!classesInProjectFound)
 			{
-				return RefactoringBundle.message("all.candidate.variables.have.types.not.in.project");
+				return RefactoringLocalize.allCandidateVariablesHaveTypesNotInProject().get();
 			}
 		}
 		return null;

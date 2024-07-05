@@ -24,13 +24,13 @@
  */
 package com.intellij.java.impl.refactoring.makeStatic;
 
-import consulo.project.Project;
+import com.intellij.java.analysis.impl.refactoring.util.VariableData;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiTypeParameterListOwner;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.RefactoringDialog;
-import com.intellij.java.analysis.impl.refactoring.util.VariableData;
+import consulo.project.Project;
 import consulo.usage.UsageViewUtil;
 
 import javax.swing.*;
@@ -74,6 +74,6 @@ public abstract class AbstractMakeStaticDialog extends RefactoringDialog {
 
   protected JLabel createDescriptionLabel() {
     String type = UsageViewUtil.getType(myMember);
-    return new JLabel(RefactoringBundle.message("make.static.description.label", type, myMemberName));
+    return new JLabel(RefactoringLocalize.makeStaticDescriptionLabel(type, myMemberName).get());
   }
 }

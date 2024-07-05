@@ -22,8 +22,8 @@
 package com.intellij.java.impl.refactoring.move.moveClassesOrPackages;
 
 import consulo.ide.impl.idea.openapi.util.text.StringUtil;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.PsiElement;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.usage.UsageViewBundle;
 import consulo.usage.UsageViewDescriptor;
 import consulo.usage.UsageViewUtil;
@@ -39,16 +39,17 @@ public class MoveMultipleElementsViewDescriptor implements UsageViewDescriptor {
     myPsiElements = psiElements;
     if (psiElements.length == 1) {
       myProcessedElementsHeader = StringUtil.capitalize(
-          RefactoringBundle.message("move.single.element.elements.header", UsageViewUtil.getType(psiElements[0]), targetName));
-      myCodeReferencesText = RefactoringBundle
-          .message("references.in.code.to.0.1", UsageViewUtil.getType(psiElements[0]), UsageViewUtil.getLongName(psiElements[0]));
+        RefactoringLocalize.moveSingleElementElementsHeader(UsageViewUtil.getType(psiElements[0]), targetName).get()
+      );
+      myCodeReferencesText =
+        RefactoringLocalize.referencesInCodeTo01(UsageViewUtil.getType(psiElements[0]), UsageViewUtil.getLongName(psiElements[0])).get();
     } else {
       if (psiElements.length > 0) {
-        myProcessedElementsHeader = StringUtil.capitalize(
-            RefactoringBundle
-                .message("move.single.element.elements.header", StringUtil.pluralize(UsageViewUtil.getType(psiElements[0])), targetName));
+        myProcessedElementsHeader = StringUtil.capitalize(RefactoringLocalize.moveSingleElementElementsHeader(
+          StringUtil.pluralize(UsageViewUtil.getType(psiElements[0])), targetName
+        ).get());
       }
-      myCodeReferencesText = RefactoringBundle.message("references.found.in.code");
+      myCodeReferencesText = RefactoringLocalize.referencesFoundInCode().get();
     }
   }
 
@@ -70,8 +71,6 @@ public class MoveMultipleElementsViewDescriptor implements UsageViewDescriptor {
 
   @Override
   public String getCommentReferencesText(int usagesCount, int filesCount) {
-    return RefactoringBundle.message("comments.elements.header",
-        UsageViewBundle.getOccurencesString(usagesCount, filesCount));
+    return RefactoringLocalize.commentsElementsHeader(UsageViewBundle.getOccurencesString(usagesCount, filesCount)).get();
   }
-
 }

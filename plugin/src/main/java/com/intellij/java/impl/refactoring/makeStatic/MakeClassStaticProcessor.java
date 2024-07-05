@@ -26,7 +26,7 @@ import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
@@ -34,6 +34,7 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.usage.UsageInfo;
@@ -365,9 +366,11 @@ public class MakeClassStaticProcessor extends MakeMethodOrClassStaticProcessor<P
       final String fieldName = convertToFieldName(mySettings.getClassParameterName());
       final PsiField existing = myMember.findFieldByName(fieldName, false);
       if (existing != null) {
-        String message = RefactoringBundle.message("there.is.already.a.0.in.1", RefactoringUIUtil.getDescription(existing, false),
-                                              RefactoringUIUtil.getDescription(myMember, false));
-              conflicts.putValue(existing, message);
+        LocalizeValue message = RefactoringLocalize.thereIsAlreadyA0In1(
+          RefactoringUIUtil.getDescription(existing, false),
+          RefactoringUIUtil.getDescription(myMember, false)
+        );
+        conflicts.putValue(existing, message.get());
       }
     }
 
@@ -378,9 +381,11 @@ public class MakeClassStaticProcessor extends MakeMethodOrClassStaticProcessor<P
         final PsiField existing = myMember.findFieldByName(fieldName, false);
 
         if (existing != null) {
-          String message = RefactoringBundle.message("there.is.already.a.0.in.1", RefactoringUIUtil.getDescription(existing, false),
-                                                RefactoringUIUtil.getDescription(myMember, false));
-          conflicts.putValue(existing, message);
+          LocalizeValue message = RefactoringLocalize.thereIsAlreadyA0In1(
+            RefactoringUIUtil.getDescription(existing, false),
+            RefactoringUIUtil.getDescription(myMember, false)
+          );
+          conflicts.putValue(existing, message.get());
         }
       }
     }

@@ -15,24 +15,24 @@
  */
 package com.intellij.java.impl.refactoring.move.moveInner;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.externalService.statistic.FeatureUsageTracker;
-import consulo.dataContext.DataContext;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.ui.ex.awt.DialogWrapper;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiModifier;
-import consulo.language.psi.PsiReference;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import consulo.language.editor.refactoring.move.MoveCallback;
-import consulo.language.editor.refactoring.move.MoveHandlerDelegate;
 import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.JavaMoveClassesOrPackagesHandler;
 import com.intellij.java.impl.refactoring.move.moveMembers.MoveMembersHandler;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiModifier;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.codeEditor.Editor;
+import consulo.dataContext.DataContext;
+import consulo.externalService.statistic.FeatureUsageTracker;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.language.editor.refactoring.move.MoveCallback;
+import consulo.language.editor.refactoring.move.MoveHandlerDelegate;
 import consulo.language.editor.refactoring.ui.RadioUpDownListener;
-
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
 import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -87,13 +87,13 @@ public class MoveInnerToUpperOrMembersHandler extends MoveHandlerDelegate {
 
     public SelectInnerOrMembersRefactoringDialog(final PsiClass innerClass, Project project) {
       super(project, true);
-      setTitle(RefactoringBundle.message("select.refactoring.title"));
+      setTitle(RefactoringLocalize.selectRefactoringTitle());
       myClassName = innerClass.getName();
       init();
     }
 
     protected JComponent createNorthPanel() {
-      return new JLabel(RefactoringBundle.message("what.would.you.like.to.do"));
+      return new JLabel(RefactoringLocalize.whatWouldYouLikeToDo().get());
     }
 
     public JComponent getPreferredFocusedComponent() {
@@ -107,10 +107,10 @@ public class MoveInnerToUpperOrMembersHandler extends MoveHandlerDelegate {
     protected JComponent createCenterPanel() {
       JPanel panel = new JPanel(new BorderLayout());
       myRbMoveInner = new JRadioButton();
-      myRbMoveInner.setText(RefactoringBundle.message("move.inner.class.to.upper.level", myClassName));
+      myRbMoveInner.setText(RefactoringLocalize.moveInnerClassToUpperLevel(myClassName).get());
       myRbMoveInner.setSelected(true);
       myRbMoveMembers = new JRadioButton();
-      myRbMoveMembers.setText(RefactoringBundle.message("move.inner.class.to.another.class", myClassName));
+      myRbMoveMembers.setText(RefactoringLocalize.moveInnerClassToAnotherClass(myClassName).get());
 
 
       ButtonGroup gr = new ButtonGroup();

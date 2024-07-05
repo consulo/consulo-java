@@ -29,8 +29,9 @@ import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.impl.refactoring.util.ParameterTablePanel;
 import com.intellij.java.language.psi.*;
 import consulo.application.HelpManager;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.findUsage.DescriptiveNameUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.ComboBox;
@@ -73,7 +74,7 @@ public class MakeParameterizedStaticDialog extends AbstractMakeStaticDialog {
     myNameSuggestions = nameSuggestions;
 
     String type = UsageViewUtil.getType(myMember);
-    setTitle(RefactoringBundle.message("make.0.static", StringUtil.capitalize(type)));
+    setTitle(RefactoringLocalize.make0Static(StringUtil.capitalize(type)));
     myAnyNonFieldMembersUsed = buildVariableData(internalUsages);
     init();
   }
@@ -147,8 +148,10 @@ public class MakeParameterizedStaticDialog extends AbstractMakeStaticDialog {
     gbConstraints.gridwidth = GridBagConstraints.REMAINDER;
     gbConstraints.fill = GridBagConstraints.NONE;
     gbConstraints.anchor = GridBagConstraints.WEST;
-    String text = myMember instanceof PsiMethod ? RefactoringBundle.message("add.object.as.a.parameter.with.name") : RefactoringBundle.message("add.object.as.a.parameter.to.constructors.with.name");
-    myMakeClassParameter.setText(text);
+    LocalizeValue text = myMember instanceof PsiMethod
+      ? RefactoringLocalize.addObjectAsAParameterWithName()
+      : RefactoringLocalize.addObjectAsAParameterToConstructorsWithName();
+    myMakeClassParameter.setText(text.get());
     panel.add(myMakeClassParameter, gbConstraints);
     myMakeClassParameter.setSelected(myAnyNonFieldMembersUsed);
 
@@ -182,8 +185,10 @@ public class MakeParameterizedStaticDialog extends AbstractMakeStaticDialog {
       gbConstraints.gridheight = 1;
       gbConstraints.fill = GridBagConstraints.NONE;
       gbConstraints.anchor = GridBagConstraints.WEST;
-      text = myMember instanceof PsiMethod ? RefactoringBundle.message("add.parameters.for.fields") : RefactoringBundle.message("add.parameters.for.fields.to.constructors");
-      myMakeFieldParameters.setText(text);
+      text = myMember instanceof PsiMethod
+        ? RefactoringLocalize.addParametersForFields()
+        : RefactoringLocalize.addParametersForFieldsToConstructors();
+      myMakeFieldParameters.setText(text.get());
       panel.add(myMakeFieldParameters, gbConstraints);
       myMakeFieldParameters.setSelected(!myAnyNonFieldMembersUsed);
 
@@ -222,9 +227,11 @@ public class MakeParameterizedStaticDialog extends AbstractMakeStaticDialog {
     if (isMakeClassParameter()) {
       final PsiMethod methodWithParameter = checkParameterDoesNotExist();
       if (methodWithParameter != null) {
-        String who = methodWithParameter == myMember ? RefactoringBundle.message("this.method") : DescriptiveNameUtil.getDescriptiveName(methodWithParameter);
-        String message = RefactoringBundle.message("0.already.has.parameter.named.1.use.this.name.anyway", who, getClassParameterName());
-        ret = Messages.showYesNoDialog(myProject, message, RefactoringBundle.message("warning.title"), UIUtil.getWarningIcon());
+        String who = methodWithParameter == myMember
+          ? RefactoringLocalize.thisMethod().get()
+          : DescriptiveNameUtil.getDescriptiveName(methodWithParameter);
+        LocalizeValue message = RefactoringLocalize.zeroAlreadyHasParameterNamed1UseThisNameAnyway(who, getClassParameterName());
+        ret = Messages.showYesNoDialog(myProject, message.get(), RefactoringLocalize.warningTitle().get(), UIUtil.getWarningIcon());
         myClassParameterNameInputField.requestFocusInWindow();
       }
     }

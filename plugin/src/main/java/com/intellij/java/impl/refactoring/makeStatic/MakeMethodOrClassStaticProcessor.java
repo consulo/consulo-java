@@ -30,7 +30,7 @@ import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.ConflictsDialog;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
@@ -41,6 +41,7 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.usage.UsageInfo;
@@ -137,22 +138,25 @@ public abstract class MakeMethodOrClassStaticProcessor<T extends PsiTypeParamete
             PsiField field = (PsiField) referencedElement;
 
             if (mySettings.getNameForField(field) == null) {
-              String message = RefactoringBundle.message("0.uses.non.static.1.which.is.not.passed.as.a.parameter", typeString,
-                  RefactoringUIUtil.getDescription(field, true));
-              conflicts.putValue(field, message);
+              String description = RefactoringUIUtil.getDescription(field, true);
+              LocalizeValue message = RefactoringLocalize.zeroUsesNonStatic1WhichIsNotPassedAsAParameter(typeString, description);
+              conflicts.putValue(field, message.get());
             }
           } else {
-            String message = RefactoringBundle.message("0.uses.1.which.needs.class.instance", typeString, RefactoringUIUtil.getDescription(referencedElement, true));
-            conflicts.putValue(referencedElement, message);
+            String description = RefactoringUIUtil.getDescription(referencedElement, true);
+            LocalizeValue message = RefactoringLocalize.zeroUses1WhichNeedsClassInstance(typeString, description);
+            conflicts.putValue(referencedElement, message.get());
           }
         }
       }
       if (usageInfo instanceof OverridingMethodUsageInfo) {
         LOG.assertTrue(myMember instanceof PsiMethod);
-        final PsiMethod overridingMethod = ((PsiMethod) usageInfo.getElement());
-        String message = RefactoringBundle.message("method.0.is.overridden.by.1", RefactoringUIUtil.getDescription(myMember, false),
-            RefactoringUIUtil.getDescription(overridingMethod, true));
-        conflicts.putValue(overridingMethod, message);
+        final PsiMethod overridingMethod = (PsiMethod) usageInfo.getElement();
+        LocalizeValue message = RefactoringLocalize.method0IsOverriddenBy1(
+          RefactoringUIUtil.getDescription(myMember, false),
+          RefactoringUIUtil.getDescription(overridingMethod, true)
+        );
+        conflicts.putValue(overridingMethod, message.get());
       } else {
         PsiElement element = usageInfo.getElement();
         PsiElement container = ConflictsUtil.getContainer(element);
@@ -179,18 +183,22 @@ public abstract class MakeMethodOrClassStaticProcessor<T extends PsiTypeParamete
                                                                   MultiMap<PsiElement, String> conflicts) {
     if (inaccessible.size() == 1) {
       final PsiField field = inaccessible.get(0);
-      conflicts.putValue(field, RefactoringBundle.message("field.0.is.not.accessible",
+      conflicts.putValue(
+        field,
+        RefactoringLocalize.field0IsNotAccessible(
           CommonRefactoringUtil.htmlEmphasize(field.getName()),
-          RefactoringUIUtil.getDescription(container, true)));
+          RefactoringUIUtil.getDescription(container, true)
+        ).get()
+      );
     } else {
-
-      for (int j = 0; j < inaccessible.size(); j++) {
-        PsiField field = inaccessible.get(j);
-        conflicts.putValue(field, RefactoringBundle.message("field.0.is.not.accessible",
+      for (PsiField field : inaccessible) {
+        conflicts.putValue(
+          field,
+          RefactoringLocalize.field0IsNotAccessible(
             CommonRefactoringUtil.htmlEmphasize(field.getName()),
-            RefactoringUIUtil.getDescription(container, true)));
-
-
+            RefactoringUIUtil.getDescription(container, true)
+          ).get()
+        );
       }
     }
   }
@@ -276,7 +284,7 @@ public abstract class MakeMethodOrClassStaticProcessor<T extends PsiTypeParamete
   }
 
   protected String getCommandName() {
-    return RefactoringBundle.message("make.static.command", DescriptiveNameUtil.getDescriptiveName(myMember));
+    return RefactoringLocalize.makeStaticCommand(DescriptiveNameUtil.getDescriptiveName(myMember)).get();
   }
 
   public T getMember() {

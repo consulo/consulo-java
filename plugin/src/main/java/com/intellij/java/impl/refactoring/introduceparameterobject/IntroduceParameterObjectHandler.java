@@ -27,8 +27,8 @@ import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.codeEditor.ScrollingModel;
 import consulo.dataContext.DataContext;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiCompiledElement;
 import consulo.language.psi.PsiElement;
@@ -92,7 +92,7 @@ public class IntroduceParameterObjectHandler implements RefactoringActionHandler
 
   @RequiredUIAccess
   private static void invoke(final Project project, final PsiMethod selectedMethod, Editor editor) {
-    PsiMethod newMethod = SuperMethodWarningUtil.checkSuperMethod(selectedMethod, RefactoringBundle.message("to.refactor"));
+    PsiMethod newMethod = SuperMethodWarningUtil.checkSuperMethod(selectedMethod, RefactoringLocalize.toRefactor().get());
     if (newMethod == null) return;
     if (!CommonRefactoringUtil.checkReadOnlyStatus(project, newMethod)) return;
 

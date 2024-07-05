@@ -20,14 +20,17 @@
  */
 package com.intellij.java.impl.refactoring.move.moveMembers;
 
-import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.impl.refactoring.HelpID;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
 import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.move.MoveCallback;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -41,6 +44,7 @@ public class MoveMembersImpl {
    * or PsiField of a non-anonymous PsiClass
    * or Inner PsiClass
    */
+  @RequiredUIAccess
   public static void doMove(final Project project, PsiElement[] elements, PsiElement targetContainer, MoveCallback moveCallback) {
     if (elements.length == 0) {
       return;
@@ -58,7 +62,7 @@ public class MoveMembersImpl {
     for (PsiElement element : elements) {
       if (element instanceof PsiMember && !sourceClass.equals(((PsiMember)element).getContainingClass())) {
         String message = RefactoringBundle.getCannotRefactorMessage(
-          RefactoringBundle.message("members.to.be.moved.should.belong.to.the.same.class"));
+          RefactoringLocalize.membersToBeMovedShouldBelongToTheSameClass().get());
         CommonRefactoringUtil.showErrorMessage(REFACTORING_NAME, message, HelpID.MOVE_MEMBERS, project);
         return;
       }
@@ -69,9 +73,8 @@ public class MoveMembersImpl {
             field,
             PsiFormatUtil.SHOW_NAME | PsiFormatUtil.SHOW_TYPE | PsiFormatUtil.TYPE_AFTER,
             PsiSubstitutor.EMPTY);
-          String message = RefactoringBundle.message("field.0.is.not.static", fieldName,
-                                                          REFACTORING_NAME);
-          CommonRefactoringUtil.showErrorMessage(REFACTORING_NAME, message, HelpID.MOVE_MEMBERS, project);
+          LocalizeValue message = RefactoringLocalize.field0IsNotStatic(fieldName, REFACTORING_NAME);
+          CommonRefactoringUtil.showErrorMessage(REFACTORING_NAME, message.get(), HelpID.MOVE_MEMBERS, project);
           return;
         }
         preselectMembers.add(field);
@@ -84,14 +87,13 @@ public class MoveMembersImpl {
           PsiFormatUtil.SHOW_TYPE
         );
         if (method.isConstructor()) {
-          String message = RefactoringBundle.message("0.refactoring.cannot.be.applied.to.constructors", REFACTORING_NAME);
-          CommonRefactoringUtil.showErrorMessage(REFACTORING_NAME, message, HelpID.MOVE_MEMBERS, project);
+          LocalizeValue message = RefactoringLocalize.zeroRefactoringCannotBeAppliedToConstructors(REFACTORING_NAME);
+          CommonRefactoringUtil.showErrorMessage(REFACTORING_NAME, message.get(), HelpID.MOVE_MEMBERS, project);
           return;
         }
         if (!method.hasModifierProperty(PsiModifier.STATIC)) {
-          String message = RefactoringBundle.message("method.0.is.not.static", methodName,
-                                                REFACTORING_NAME);
-          CommonRefactoringUtil.showErrorMessage(REFACTORING_NAME, message, HelpID.MOVE_MEMBERS, project);
+          LocalizeValue message = RefactoringLocalize.method0IsNotStatic(methodName, REFACTORING_NAME);
+          CommonRefactoringUtil.showErrorMessage(REFACTORING_NAME, message.get(), HelpID.MOVE_MEMBERS, project);
           return;
         }
         preselectMembers.add(method);
@@ -99,9 +101,8 @@ public class MoveMembersImpl {
       else if (element instanceof PsiClass) {
         PsiClass aClass = (PsiClass)element;
         if (!aClass.hasModifierProperty(PsiModifier.STATIC)) {
-          String message = RefactoringBundle.message("inner.class.0.is.not.static", aClass.getQualifiedName(),
-                                                REFACTORING_NAME);
-          CommonRefactoringUtil.showErrorMessage(REFACTORING_NAME, message, HelpID.MOVE_MEMBERS, project);
+          LocalizeValue message = RefactoringLocalize.innerClass0IsNotStatic(aClass.getQualifiedName(), REFACTORING_NAME);
+          CommonRefactoringUtil.showErrorMessage(REFACTORING_NAME, message.get(), HelpID.MOVE_MEMBERS, project);
           return;
         }
         preselectMembers.add(aClass);
