@@ -31,7 +31,7 @@ import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.java.impl.codeInsight.JavaTargetElementUtilEx;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.SyntheticIntentionAction;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.editor.util.LanguageUndoUtil;
 import consulo.language.psi.PsiElement;
@@ -43,10 +43,9 @@ import consulo.undoRedo.CommandProcessor;
 import consulo.usage.UsageInfo;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
-
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -180,7 +179,7 @@ public class ChangeMethodSignatureFromUsageFix implements SyntheticIntentionActi
       return;
     }
 
-    final PsiMethod method = SuperMethodWarningUtil.checkSuperMethod(myTargetMethod, RefactoringBundle.message("to.refactor"));
+    final PsiMethod method = SuperMethodWarningUtil.checkSuperMethod(myTargetMethod, RefactoringLocalize.toRefactor().get());
     if (method == null) {
       return;
     }

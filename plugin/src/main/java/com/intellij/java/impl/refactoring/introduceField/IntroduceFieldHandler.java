@@ -25,6 +25,7 @@ import consulo.codeEditor.Editor;
 import consulo.dataContext.DataContext;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.introduce.inplace.AbstractInplaceIntroducer;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
@@ -53,7 +54,7 @@ public class IntroduceFieldHandler extends BaseExpressionToFieldHandler implemen
 
   protected boolean validClass(PsiClass parentClass, Editor editor) {
     if (parentClass.isInterface()) {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("cannot.introduce.field.in.interface"));
+      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.cannotIntroduceFieldInInterface().get());
       CommonRefactoringUtil.showErrorHint(parentClass.getProject(), editor, message, REFACTORING_NAME, getHelpID());
       return false;
     }
@@ -150,7 +151,7 @@ public class IntroduceFieldHandler extends BaseExpressionToFieldHandler implemen
 
     if (!dialog.isOK()) {
       if (occurrencesNumber > 1) {
-        WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringBundle.message("press.escape.to.remove.the.highlighting"));
+        WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringLocalize.pressEscapeToRemoveTheHighlighting().get());
       }
       return null;
     }
@@ -200,7 +201,7 @@ public class IntroduceFieldHandler extends BaseExpressionToFieldHandler implemen
     final PsiElement parent = localVariable.getParent();
     if (!(parent instanceof PsiDeclarationStatement)) {
       String message =
-        RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("error.wrong.caret.position.local.or.expression.name"));
+        RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.errorWrongCaretPositionLocalOrExpressionName().get());
       CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, getHelpID());
       return false;
     }

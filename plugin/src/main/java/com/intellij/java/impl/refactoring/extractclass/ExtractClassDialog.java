@@ -28,11 +28,11 @@ import com.intellij.java.impl.ui.ReferenceEditorComboWithBrowseButton;
 import com.intellij.java.language.psi.*;
 import consulo.application.HelpManager;
 import consulo.configurable.ConfigurationException;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.classMember.DelegatingMemberInfoModel;
 import consulo.language.editor.refactoring.classMember.MemberInfoBase;
 import consulo.language.editor.refactoring.classMember.MemberInfoChange;
 import consulo.language.editor.refactoring.classMember.MemberInfoChangeListener;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.RefactoringDialog;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
@@ -45,7 +45,6 @@ import consulo.ui.ex.awt.JBLabelDecorator;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.ex.awt.event.DocumentAdapter;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -259,7 +258,7 @@ class ExtractClassDialog extends RefactoringDialog implements MemberInfoChangeLi
       .addLabeledComponent(RefactorJBundle.message("package.for.new.class.label"), packageTextField);
 
     if (ProjectRootManager.getInstance(myProject).getContentSourceRoots().length > 1) {
-      builder.addLabeledComponent(RefactoringBundle.message("target.destination.folder"), myDestinationFolderComboBox);
+      builder.addLabeledComponent(RefactoringLocalize.targetDestinationFolder().get(), myDestinationFolderComboBox);
     }
 
     return builder.addVerticalGap(5).getPanel();

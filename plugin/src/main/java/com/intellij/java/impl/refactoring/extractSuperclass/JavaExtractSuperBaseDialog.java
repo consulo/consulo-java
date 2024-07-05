@@ -23,27 +23,26 @@ import com.intellij.java.impl.refactoring.util.RefactoringMessageUtil;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import com.intellij.java.language.psi.*;
 import consulo.application.ApplicationManager;
-import consulo.project.Project;
-import consulo.module.content.ProjectFileIndex;
-import consulo.module.content.ProjectRootManager;
-import consulo.ui.ex.awt.ComponentWithBrowseButton;
-import consulo.ui.ex.awt.JBLabel;
-import consulo.util.lang.Comparing;
 import consulo.application.util.function.Computable;
-import consulo.util.lang.StringUtil;
-import consulo.virtualFileSystem.VirtualFile;
+import consulo.ide.impl.idea.refactoring.extractSuperclass.ExtractSuperBaseDialog;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.language.editor.ui.awt.EditorComboBox;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import consulo.ide.impl.idea.refactoring.extractSuperclass.ExtractSuperBaseDialog;
-import consulo.language.editor.ui.awt.EditorComboBox;
-
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.project.Project;
+import consulo.ui.ex.awt.ComponentWithBrowseButton;
+import consulo.ui.ex.awt.JBLabel;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * @author dsl
@@ -69,8 +68,12 @@ public abstract class JavaExtractSuperBaseDialog extends ExtractSuperBaseDialog<
     if (file instanceof PsiJavaFile) {
       name = ((PsiJavaFile) file).getPackageName();
     }
-    return new PackageNameReferenceEditorCombo(name, myProject, DESTINATION_PACKAGE_RECENT_KEY,
-        RefactoringBundle.message("choose.destination.package"));
+    return new PackageNameReferenceEditorCombo(
+      name,
+      myProject,
+      DESTINATION_PACKAGE_RECENT_KEY,
+      RefactoringLocalize.chooseDestinationPackage().get()
+    );
   }
 
   @Override
@@ -79,14 +82,15 @@ public abstract class JavaExtractSuperBaseDialog extends ExtractSuperBaseDialog<
     if (sourceRoots.length <= 1) return super.createDestinationRootPanel();
     final JPanel panel = new JPanel(new BorderLayout());
     panel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
-    final JBLabel label = new JBLabel(RefactoringBundle.message("target.destination.folder"));
+    final JBLabel label = new JBLabel(RefactoringLocalize.targetDestinationFolder().get());
     panel.add(label, BorderLayout.NORTH);
     label.setLabelFor(myDestinationFolderComboBox);
-    myDestinationFolderComboBox.setData(myProject, myTargetDirectory, new Consumer<String>() {
-      @Override
-      public void accept(String s) {
-      }
-    }, ((PackageNameReferenceEditorCombo) myPackageNameField).getChildComponent());
+    myDestinationFolderComboBox.setData(
+      myProject,
+      myTargetDirectory,
+      s -> {},
+      ((PackageNameReferenceEditorCombo) myPackageNameField).getChildComponent()
+    );
     panel.add(myDestinationFolderComboBox, BorderLayout.CENTER);
     return panel;
   }

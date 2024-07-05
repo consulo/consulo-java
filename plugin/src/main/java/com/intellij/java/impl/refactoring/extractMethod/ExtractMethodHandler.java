@@ -39,6 +39,7 @@ import consulo.language.editor.highlight.HighlightManager;
 import consulo.language.editor.refactoring.IntroduceTargetChooser;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
@@ -166,7 +167,9 @@ public class ExtractMethodHandler implements RefactoringActionHandler {
   ) {
     if (elements == null || elements.length == 0) {
       if (showErrorMessages) {
-        String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("selected.block.should.represent.a.set.of.statements.or.an.expression"));
+        String message = RefactoringBundle.getCannotRefactorMessage(
+          RefactoringLocalize.selectedBlockShouldRepresentASetOfStatementsOrAnExpression().get()
+        );
         CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.EXTRACT_METHOD);
       }
       return null;
@@ -175,7 +178,9 @@ public class ExtractMethodHandler implements RefactoringActionHandler {
     for (PsiElement element : elements) {
       if (element instanceof PsiStatement statement && JavaHighlightUtil.isSuperOrThisCall(statement, true, true)) {
         if (showErrorMessages) {
-          String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("selected.block.contains.invocation.of.another.class.constructor"));
+          String message = RefactoringBundle.getCannotRefactorMessage(
+            RefactoringLocalize.selectedBlockContainsInvocationOfAnotherClassConstructor().get()
+          );
           CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.EXTRACT_METHOD);
         }
         return null;
@@ -207,7 +212,7 @@ public class ExtractMethodHandler implements RefactoringActionHandler {
       highlightManager.addRangeHighlight(editor, textRange.getStartOffset(), textRange.getEndOffset(), attributes, true, null);
       final LogicalPosition logicalPosition = editor.offsetToLogicalPosition(textRange.getStartOffset());
       editor.getScrollingModel().scrollTo(logicalPosition, ScrollType.MAKE_VISIBLE);
-      WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringBundle.message("press.escape.to.remove.the.highlighting"));
+      WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringLocalize.pressEscapeToRemoveTheHighlighting().get());
     }
   }
 

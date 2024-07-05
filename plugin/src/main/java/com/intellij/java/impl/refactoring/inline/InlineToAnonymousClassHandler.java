@@ -24,13 +24,12 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.ApplicationManager;
 import consulo.application.progress.ProgressManager;
 import consulo.application.util.function.Processor;
 import consulo.codeEditor.Editor;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.TargetElementUtil;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.pattern.ElementPattern;
 import consulo.language.pattern.PlatformPatterns;
@@ -38,6 +37,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.ref.Ref;
@@ -134,9 +134,10 @@ public class InlineToAnonymousClassHandler extends JavaInlineActionHandler
 		PsiCall callToInline = findCallToInline(editor);
 
 		final PsiClassType superType = InlineToAnonymousClassProcessor.getSuperType(psiClass);
+		LocalizeValue title = RefactoringLocalize.inlineToAnonymousRefactoring();
 		if (superType == null)
 		{
-			CommonRefactoringUtil.showErrorHint(project, editor, "java.lang.Object is not found", RefactoringBundle.message("inline.to.anonymous.refactoring"), null);
+			CommonRefactoringUtil.showErrorHint(project, editor, "java.lang.Object is not found", title.get(), null);
 			return;
 		}
 
@@ -152,7 +153,7 @@ public class InlineToAnonymousClassHandler extends JavaInlineActionHandler
 		}
 		if (errorMessage.get() != null)
 		{
-			CommonRefactoringUtil.showErrorHint(project, editor, errorMessage.get(), RefactoringBundle.message("inline.to.anonymous.refactoring"), null);
+			CommonRefactoringUtil.showErrorHint(project, editor, errorMessage.get(), title.get(), null);
 			return;
 		}
 
@@ -255,7 +256,7 @@ public class InlineToAnonymousClassHandler extends JavaInlineActionHandler
 		}
 		if (psiClass.hasModifierProperty(PsiModifier.ABSTRACT))
 		{
-			return RefactoringBundle.message("inline.to.anonymous.no.abstract");
+			return RefactoringLocalize.inlineToAnonymousNoAbstract().get();
 		}
 		if (!psiClass.getManager().isInProject(psiClass))
 		{
@@ -275,7 +276,7 @@ public class InlineToAnonymousClassHandler extends JavaInlineActionHandler
 		final PsiClassType[] interfaces = psiClass.getImplementsListTypes();
 		if (interfaces.length > 1)
 		{
-			return RefactoringBundle.message("inline.to.anonymous.no.multiple.interfaces");
+			return RefactoringLocalize.inlineToAnonymousNoMultipleInterfaces().get();
 		}
 		if (interfaces.length == 1)
 		{
@@ -289,7 +290,7 @@ public class InlineToAnonymousClassHandler extends JavaInlineActionHandler
 				PsiClassType interfaceType = interfaces[0];
 				if (!isRedundantImplements(superClass, interfaceType))
 				{
-					return RefactoringBundle.message("inline.to.anonymous.no.superclass.and.interface");
+					return RefactoringLocalize.inlineToAnonymousNoSuperclassAndInterface().get();
 				}
 			}
 		}
@@ -446,7 +447,7 @@ public class InlineToAnonymousClassHandler extends JavaInlineActionHandler
 		}
 		if (!hasUsages)
 		{
-			return RefactoringBundle.message("class.is.never.used");
+			return RefactoringLocalize.classIsNeverUsed().get();
 		}
 		return null;
 	}

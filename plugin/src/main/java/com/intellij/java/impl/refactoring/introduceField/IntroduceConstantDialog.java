@@ -36,7 +36,7 @@ import consulo.document.event.DocumentAdapter;
 import consulo.document.event.DocumentEvent;
 import consulo.ide.impl.idea.ide.util.PropertiesComponent;
 import consulo.java.language.module.util.JavaClassNames;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.editor.refactoring.ui.NameSuggestionsField;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
@@ -101,7 +101,7 @@ class IntroduceConstantDialog extends DialogWrapper {
   private JCheckBox myCbNonNls;
   private JPanel myVisibilityPanel;
   private final JavaVisibilityPanel myVPanel;
-  private final JCheckBox myIntroduceEnumConstantCb = new JCheckBox(RefactoringBundle.message("introduce.constant.enum.cb"), true);
+  private final JCheckBox myIntroduceEnumConstantCb = new JCheckBox(RefactoringLocalize.introduceConstantEnumCb().get(), true);
 
   IntroduceConstantDialog(
     Project project,
@@ -234,7 +234,7 @@ class IntroduceConstantDialog extends DialogWrapper {
 
         myNameField.requestFocusInWindow();
       });
-      myCbReplaceAll.setText(RefactoringBundle.message("replace.all.occurences", myOccurrencesCount));
+      myCbReplaceAll.setText(RefactoringLocalize.replaceAllOccurences(myOccurrencesCount).get());
     }
     else {
       myCbReplaceAll.setVisible(false);
@@ -412,7 +412,7 @@ class IntroduceConstantDialog extends DialogWrapper {
       if (newClass == null) {
         if (Messages.showOkCancelDialog(
           myProject,
-          RefactoringBundle.message("class.does.not.exist.in.the.project"),
+          RefactoringLocalize.classDoesNotExistInTheProject().get(),
           IntroduceConstantHandlerImpl.REFACTORING_NAME,
           UIUtil.getErrorIcon()
         ) != OK_EXIT_CODE) {
@@ -427,12 +427,14 @@ class IntroduceConstantDialog extends DialogWrapper {
     String fieldName = getEnteredName();
     String errorString = null;
     if ("".equals(fieldName)) {
-      errorString = RefactoringBundle.message("no.field.name.specified");
+      errorString = RefactoringLocalize.noFieldNameSpecified().get();
     } else if (!PsiNameHelper.getInstance(myProject).isIdentifier(fieldName)) {
       errorString = RefactoringMessageUtil.getIncorrectIdentifierMessage(fieldName);
     } else if (newClass != null && !myParentClass.getLanguage().equals(newClass.getLanguage())) {
-      errorString = RefactoringBundle.message("move.to.different.language", UsageViewUtil.getType(myParentClass),
-                                              myParentClass.getQualifiedName(), newClass.getQualifiedName());
+      errorString = RefactoringLocalize.moveToDifferentLanguage(UsageViewUtil.getType(myParentClass),
+        myParentClass.getQualifiedName(),
+        newClass.getQualifiedName()
+      ).get();
     }
     if (errorString != null) {
       CommonRefactoringUtil.showErrorMessage(
@@ -448,7 +450,7 @@ class IntroduceConstantDialog extends DialogWrapper {
       if (oldField != null) {
         int answer = Messages.showYesNoDialog(
           myProject,
-          RefactoringBundle.message("field.exists", fieldName, oldField.getContainingClass().getQualifiedName()),
+          RefactoringLocalize.fieldExists(fieldName, oldField.getContainingClass().getQualifiedName()).get(),
           IntroduceFieldHandler.REFACTORING_NAME,
           UIUtil.getWarningIcon()
         );
@@ -472,7 +474,7 @@ class IntroduceConstantDialog extends DialogWrapper {
   private class ChooseClassAction implements ActionListener {
     public void actionPerformed(ActionEvent e) {
       TreeClassChooser chooser = TreeClassChooserFactory.getInstance(myProject).createWithInnerClassesScopeChooser(
-        RefactoringBundle.message("choose.destination.class"),
+        RefactoringLocalize.chooseDestinationClass().get(),
         GlobalSearchScope.projectScope(myProject),
         aClass -> aClass.getParent() instanceof PsiJavaFile || aClass.hasModifierProperty(PsiModifier.STATIC),
         null

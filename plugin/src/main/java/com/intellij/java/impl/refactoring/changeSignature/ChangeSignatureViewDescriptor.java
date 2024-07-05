@@ -20,6 +20,7 @@
  */
 package com.intellij.java.impl.refactoring.changeSignature;
 
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.util.lang.StringUtil;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
@@ -36,7 +37,7 @@ public class ChangeSignatureViewDescriptor implements UsageViewDescriptor {
 
   public ChangeSignatureViewDescriptor(PsiMethod method) {
     myMethod = method;
-    myProcessedElementsHeader = StringUtil.capitalize(RefactoringBundle.message("0.to.change.signature", UsageViewUtil.getType(method)));
+    myProcessedElementsHeader = StringUtil.capitalize(RefactoringLocalize.zeroToChangeSignature(UsageViewUtil.getType(method)).get());
   }
 
   @Nonnull
@@ -49,8 +50,7 @@ public class ChangeSignatureViewDescriptor implements UsageViewDescriptor {
   }
 
   public String getCodeReferencesText(int usagesCount, int filesCount) {
-    return RefactoringBundle.message("references.to.be.changed",
-                                     UsageViewBundle.getReferencesString(usagesCount, filesCount));
+    return RefactoringLocalize.referencesToBeChanged(UsageViewBundle.getReferencesString(usagesCount, filesCount)).get();
   }
 
   public String getCommentReferencesText(int usagesCount, int filesCount) {

@@ -26,6 +26,7 @@ import consulo.language.editor.TargetElementUtil;
 import consulo.language.editor.TargetElementUtilExtender;
 import consulo.language.editor.refactoring.IntroduceTargetChooser;
 import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -194,8 +195,7 @@ public class ElementToWorkOn {
         }
       }
       if (expr == null) {
-        String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("error.wrong.caret.position.local.or" +
-            ".expression.name"));
+        String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.errorWrongCaretPositionLocalOrExpressionName().get());
         CommonRefactoringUtil.showErrorHint(project, editor, message, refactoringName, helpId);
         return null;
       }

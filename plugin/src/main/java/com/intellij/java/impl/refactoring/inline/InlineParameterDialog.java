@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.refactoring.inline;
 
+import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.language.psi.PsiCallExpression;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
-import com.intellij.java.impl.refactoring.HelpID;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.RefactoringDialog;
 
 import javax.swing.*;
@@ -51,14 +51,21 @@ public class InlineParameterDialog extends RefactoringDialog {
   @Override
   protected JComponent createNorthPanel() {
     final JPanel panel = new JPanel(new BorderLayout());
-    panel.add(new JLabel(RefactoringBundle.message("inline.parameter.confirmation", myParameter.getName(), myInitializer.getText()), UIManager.getIcon("OptionPane.questionIcon"), 2), BorderLayout.NORTH);
+    panel.add(
+      new JLabel(
+        RefactoringLocalize.inlineParameterConfirmation(myParameter.getName(), myInitializer.getText()).get(),
+        UIManager.getIcon("OptionPane.questionIcon"),
+        2
+      ),
+      BorderLayout.NORTH
+    );
     return panel;
   }
 
   @Override
   protected JComponent createCenterPanel() {
     JPanel panel = new JPanel(new BorderLayout());
-    myCreateLocalCheckbox = new JCheckBox(RefactoringBundle.message("inline.parameter.replace.with.local.checkbox"));
+    myCreateLocalCheckbox = new JCheckBox(RefactoringLocalize.inlineParameterReplaceWithLocalCheckbox().get());
     panel.add(myCreateLocalCheckbox, BorderLayout.SOUTH);
     return panel;
   }

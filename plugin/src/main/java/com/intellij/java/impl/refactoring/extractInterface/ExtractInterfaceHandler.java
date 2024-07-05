@@ -28,6 +28,7 @@ import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
 import consulo.language.editor.refactoring.ElementsHandler;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.findUsage.DescriptiveNameUtil;
 import consulo.language.psi.*;
@@ -63,7 +64,7 @@ public class ExtractInterfaceHandler implements RefactoringActionHandler, Elemen
     PsiElement element = file.findElementAt(offset);
     while (true) {
       if (element == null || element instanceof PsiFile) {
-        String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("error.wrong.caret.position.class"));
+        String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.errorWrongCaretPositionClass().get());
         CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.EXTRACT_INTERFACE);
         return;
       }
@@ -149,7 +150,7 @@ public class ExtractInterfaceHandler implements RefactoringActionHandler, Elemen
   }
 
   private String getCommandName() {
-    return RefactoringBundle.message("extract.interface.command.name", myInterfaceName, DescriptiveNameUtil.getDescriptiveName(myClass));
+    return RefactoringLocalize.extractInterfaceCommandName(myInterfaceName, DescriptiveNameUtil.getDescriptiveName(myClass)).get();
   }
 
   public boolean isEnabledOnElements(PsiElement[] elements) {

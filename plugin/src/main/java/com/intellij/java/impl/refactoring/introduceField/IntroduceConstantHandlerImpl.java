@@ -35,6 +35,7 @@ import consulo.document.util.TextRange;
 import consulo.language.editor.highlight.HighlightManager;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.introduce.inplace.AbstractInplaceIntroducer;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
@@ -43,8 +44,8 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import consulo.project.ui.wm.WindowManager;
 import jakarta.annotation.Nonnull;
-
 import jakarta.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,7 +80,7 @@ public class IntroduceConstantHandlerImpl extends BaseExpressionToFieldHandler i
   protected boolean invokeImpl(final Project project, final PsiLocalVariable localVariable, final Editor editor) {
     final PsiElement parent = localVariable.getParent();
     if (!(parent instanceof PsiDeclarationStatement)) {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("error.wrong.caret.position.local.or.expression.name"));
+      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.errorWrongCaretPositionLocalOrExpressionName().get());
       CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, getHelpID());
       return false;
     }
@@ -144,7 +145,7 @@ public class IntroduceConstantHandlerImpl extends BaseExpressionToFieldHandler i
       final PsiElement errorElement = isStaticFinalInitializer(expr);
       if (errorElement != null) {
         String message =
-          RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("selected.expression.cannot.be.a.constant.initializer"));
+          RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.selectedExpressionCannotBeAConstantInitializer().get());
         CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, getHelpID());
         highlightError(project, editor, errorElement);
         return null;
@@ -153,15 +154,16 @@ public class IntroduceConstantHandlerImpl extends BaseExpressionToFieldHandler i
     else {
       final PsiExpression initializer = localVariable.getInitializer();
       if (initializer == null) {
-        String message = RefactoringBundle
-          .getCannotRefactorMessage(RefactoringBundle.message("variable.does.not.have.an.initializer", localVariable.getName()));
+        String message = RefactoringBundle.getCannotRefactorMessage(
+          RefactoringLocalize.variableDoesNotHaveAnInitializer(localVariable.getName()).get()
+        );
         CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, getHelpID());
         return null;
       }
       final PsiElement errorElement = isStaticFinalInitializer(initializer);
       if (errorElement != null) {
         String message = RefactoringBundle.getCannotRefactorMessage(
-          RefactoringBundle.message("initializer.for.variable.cannot.be.a.constant.initializer", localVariable.getName()));
+          RefactoringLocalize.initializerForVariableCannotBeAConstantInitializer(localVariable.getName()).get());
         CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, getHelpID());
         highlightError(project, editor, errorElement);
         return null;
@@ -190,7 +192,7 @@ public class IntroduceConstantHandlerImpl extends BaseExpressionToFieldHandler i
     dialog.show();
     if (!dialog.isOK()) {
       if (occurrences.length > 1) {
-        WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringBundle.message("press.escape.to.remove.the.highlighting"));
+        WindowManager.getInstance().getStatusBar(project).setInfo(RefactoringLocalize.pressEscapeToRemoveTheHighlighting().get());
       }
       return null;
     }

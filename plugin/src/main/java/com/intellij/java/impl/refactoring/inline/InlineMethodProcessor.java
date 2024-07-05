@@ -39,8 +39,8 @@ import consulo.ide.impl.idea.refactoring.inline.GenericInlineHandler;
 import consulo.language.Language;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.inline.InlineHandler;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.NonCodeUsageInfoFactory;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
@@ -56,6 +56,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localHistory.LocalHistory;
 import consulo.localHistory.LocalHistoryAction;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.usage.NonCodeUsageInfo;
@@ -65,10 +66,10 @@ import consulo.util.collection.MultiMap;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.Ref;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
 import java.util.*;
 
 public class InlineMethodProcessor extends BaseRefactoringProcessor {
@@ -123,7 +124,7 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
   }
 
   protected String getCommandName() {
-    return RefactoringBundle.message("inline.method.command", myDescriptiveName);
+    return RefactoringLocalize.inlineMethodCommand(myDescriptiveName).get();
   }
 
   @Nonnull
@@ -189,10 +190,10 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
     if (!myInlineThisOnly) {
       final PsiMethod[] superMethods = myMethod.findSuperMethods();
       for (PsiMethod method : superMethods) {
-        final String message = method.hasModifierProperty(PsiModifier.ABSTRACT) ? RefactoringBundle
-            .message("inlined.method.implements.method.from.0", method.getContainingClass().getQualifiedName()) : RefactoringBundle
-            .message("inlined.method.overrides.method.from.0", method.getContainingClass().getQualifiedName());
-        conflicts.putValue(method, message);
+        final LocalizeValue message = method.hasModifierProperty(PsiModifier.ABSTRACT)
+          ? RefactoringLocalize.inlinedMethodImplementsMethodFrom0(method.getContainingClass().getQualifiedName())
+          : RefactoringLocalize.inlinedMethodOverridesMethodFrom0(method.getContainingClass().getQualifiedName());
+        conflicts.putValue(method, message.get());
       }
 
       for (UsageInfo info : usagesIn) {
@@ -325,9 +326,9 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
       for (PsiMember referenced : referencedInaccessible) {
         final String referencedDescription = RefactoringUIUtil.getDescription(referenced, true);
         final String containerDescription = RefactoringUIUtil.getDescription(container, true);
-        String message = RefactoringBundle.message("0.that.is.used.in.inlined.method.is.not.accessible.from.call.site.s.in.1",
-            referencedDescription, containerDescription);
-        conflicts.putValue(container, CommonRefactoringUtil.capitalize(message));
+        LocalizeValue message =
+          RefactoringLocalize.zeroThatIsUsedInInlinedMethodIsNotAccessibleFromCallSiteSIn1(referencedDescription, containerDescription);
+        conflicts.putValue(container, CommonRefactoringUtil.capitalize(message.get()));
       }
     }
   }

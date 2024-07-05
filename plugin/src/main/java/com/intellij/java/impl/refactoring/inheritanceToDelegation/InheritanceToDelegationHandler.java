@@ -35,6 +35,7 @@ import consulo.dataContext.DataContext;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -50,7 +51,7 @@ import java.util.List;
 
 public class InheritanceToDelegationHandler implements RefactoringActionHandler {
   private static final Logger LOG = Logger.getInstance(InheritanceToDelegationHandler.class);
-  public static final String REFACTORING_NAME = RefactoringBundle.message("replace.inheritance.with.delegation.title");
+  public static final String REFACTORING_NAME = RefactoringLocalize.replaceInheritanceWithDelegationTitle().get();
 
   private static final MemberInfo.Filter<PsiMember> MEMBER_INFO_FILTER = element -> {
     if (element instanceof PsiMethod) {
@@ -70,7 +71,7 @@ public class InheritanceToDelegationHandler implements RefactoringActionHandler 
     PsiElement element = file.findElementAt(offset);
     while (true) {
       if (element == null || element instanceof PsiFile) {
-        String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("error.wrong.caret.position.class"));
+        String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.errorWrongCaretPositionClass().get());
         CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INHERITANCE_TO_DELEGATION);
         return;
       }
@@ -90,7 +91,7 @@ public class InheritanceToDelegationHandler implements RefactoringActionHandler 
 
     Editor editor = dataContext.getData(Editor.KEY);
     if (aClass.isInterface()) {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("class.is.interface", aClass.getQualifiedName()));
+      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.classIsInterface(aClass.getQualifiedName()).get());
       CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INHERITANCE_TO_DELEGATION);
       return;
     }
@@ -105,7 +106,9 @@ public class InheritanceToDelegationHandler implements RefactoringActionHandler 
     final PsiClass[] bases = aClass.getSupers();
     @NonNls final String javaLangObject = JavaClassNames.JAVA_LANG_OBJECT;
     if (bases.length == 0 || bases.length == 1 && javaLangObject.equals(bases[0].getQualifiedName())) {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("class.does.not.have.base.classes.or.interfaces", aClass.getQualifiedName()));
+      String message = RefactoringBundle.getCannotRefactorMessage(
+        RefactoringLocalize.classDoesNotHaveBaseClassesOrInterfaces(aClass.getQualifiedName()).get()
+      );
       CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INHERITANCE_TO_DELEGATION);
       return;
     }

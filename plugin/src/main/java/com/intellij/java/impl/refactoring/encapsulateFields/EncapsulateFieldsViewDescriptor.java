@@ -16,6 +16,7 @@
  */
 package com.intellij.java.impl.refactoring.encapsulateFields;
 
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiField;
 import consulo.language.editor.refactoring.RefactoringBundle;
@@ -34,7 +35,7 @@ class EncapsulateFieldsViewDescriptor implements UsageViewDescriptor {
   }
 
   public String getProcessedElementsHeader() {
-    return RefactoringBundle.message("encapsulate.fields.fields.to.be.encapsulated");
+    return RefactoringLocalize.encapsulateFieldsFieldsToBeEncapsulated().get();
   }
 
   @Nonnull
@@ -43,11 +44,10 @@ class EncapsulateFieldsViewDescriptor implements UsageViewDescriptor {
   }
 
   public String getCodeReferencesText(int usagesCount, int filesCount) {
-    return RefactoringBundle.message("references.to.be.changed", UsageViewBundle.getReferencesString(usagesCount, filesCount));
+    return RefactoringLocalize.referencesToBeChanged(UsageViewBundle.getReferencesString(usagesCount, filesCount)).get();
   }
 
   public String getCommentReferencesText(int usagesCount, int filesCount) {
     return null;
   }
-
 }

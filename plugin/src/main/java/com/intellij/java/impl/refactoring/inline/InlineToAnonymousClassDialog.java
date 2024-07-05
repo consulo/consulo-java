@@ -21,8 +21,8 @@ import com.intellij.java.language.psi.PsiCall;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import consulo.application.HelpManager;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.project.Project;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.ide.impl.idea.refactoring.inline.InlineOptionsWithSearchSettingsDialog;
 
 /**
@@ -37,25 +37,25 @@ public class InlineToAnonymousClassDialog extends InlineOptionsWithSearchSetting
     myClass = psiClass;
     myCallToInline = callToInline;
     myInvokedOnReference = isInvokeOnReference;
-    setTitle(RefactoringBundle.message("inline.to.anonymous.refactoring"));
+    setTitle(RefactoringLocalize.inlineToAnonymousRefactoring());
     init();
   }
 
   protected String getNameLabelText() {
     String className = PsiFormatUtil.formatClass(myClass, PsiFormatUtil.SHOW_NAME);
-    return RefactoringBundle.message("inline.to.anonymous.name.label", className);
+    return RefactoringLocalize.inlineToAnonymousNameLabel(className).get();
   }
 
   protected String getBorderTitle() {
-    return RefactoringBundle.message("inline.to.anonymous.border.title");
+    return RefactoringLocalize.inlineToAnonymousBorderTitle().get();
   }
 
   protected String getInlineAllText() {
-    return RefactoringBundle.message("all.references.and.remove.the.class");
+    return RefactoringLocalize.allReferencesAndRemoveTheClass().get();
   }
 
   protected String getInlineThisText() {
-    return RefactoringBundle.message("this.reference.only.and.keep.the.class");
+    return RefactoringLocalize.thisReferenceOnlyAndKeepTheClass().get();
   }
 
   protected boolean isInlineThis() {

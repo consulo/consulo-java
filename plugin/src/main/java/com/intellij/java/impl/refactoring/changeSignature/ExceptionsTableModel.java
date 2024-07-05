@@ -15,13 +15,13 @@
  */
 package com.intellij.java.impl.refactoring.changeSignature;
 
+import com.intellij.java.impl.refactoring.util.CanonicalTypes;
 import com.intellij.java.language.psi.JavaCodeFragmentFactory;
 import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiTypeCodeFragment;
-import consulo.language.psi.*;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import com.intellij.java.impl.refactoring.util.CanonicalTypes;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.language.psi.PsiElement;
 import consulo.ui.ex.awt.EditableModel;
 
 import javax.swing.table.AbstractTableModel;
@@ -92,7 +92,7 @@ public class ExceptionsTableModel extends AbstractTableModel implements Editable
   public String getColumnName(int column) {
     switch (column) {
       case 0:
-        return RefactoringBundle.message("column.name.type");
+        return RefactoringLocalize.columnNameType().get();
       default:
         throw new IllegalArgumentException();
     }

@@ -38,6 +38,7 @@ import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
 import consulo.language.editor.refactoring.ElementsHandler;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.findUsage.DescriptiveNameUtil;
 import consulo.language.psi.*;
@@ -70,7 +71,7 @@ public class ExtractSuperclassHandler implements RefactoringActionHandler, Extra
     PsiElement element = file.findElementAt(offset);
     while (true) {
       if (element == null || element instanceof PsiFile) {
-        String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("error.wrong.caret.position.class"));
+        String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.errorWrongCaretPositionClass().get());
         CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.EXTRACT_SUPERCLASS);
         return;
       }
@@ -93,13 +94,13 @@ public class ExtractSuperclassHandler implements RefactoringActionHandler, Extra
     Editor editor = dataContext != null ? dataContext.getData(Editor.KEY) : null;
     if (mySubclass.isInterface()) {
       String message =
-        RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("superclass.cannot.be.extracted.from.an.interface"));
+        RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.superclassCannotBeExtractedFromAnInterface().get());
       CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.EXTRACT_SUPERCLASS);
       return;
     }
 
     if (mySubclass.isEnum()) {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("superclass.cannot.be.extracted.from.an.enum"));
+      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.superclassCannotBeExtractedFromAnEnum().get());
       CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.EXTRACT_SUPERCLASS);
       return;
     }
@@ -143,7 +144,7 @@ public class ExtractSuperclassHandler implements RefactoringActionHandler, Extra
           false
         ));
       },
-      RefactoringBundle.message("detecting.possible.conflicts"),
+      RefactoringLocalize.detectingPossibleConflicts().get(),
       true,
       myProject
     )) {
@@ -187,7 +188,7 @@ public class ExtractSuperclassHandler implements RefactoringActionHandler, Extra
 
   @RequiredReadAction
   private String getCommandName(final PsiClass subclass, String newName) {
-    return RefactoringBundle.message("extract.superclass.command.name", newName, DescriptiveNameUtil.getDescriptiveName(subclass));
+    return RefactoringLocalize.extractSuperclassCommandName(newName, DescriptiveNameUtil.getDescriptiveName(subclass)).get();
   }
 
   public boolean isEnabledOnElements(PsiElement[] elements) {

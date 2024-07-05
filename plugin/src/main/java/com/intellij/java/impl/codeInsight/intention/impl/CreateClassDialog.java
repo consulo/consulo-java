@@ -16,17 +16,17 @@
 package com.intellij.java.impl.codeInsight.intention.impl;
 
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.ClassKind;
+import com.intellij.java.impl.codeInsight.PackageUtil;
 import com.intellij.java.impl.refactoring.MoveDestination;
 import com.intellij.java.impl.refactoring.PackageWrapper;
 import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.DestinationFolderComboBox;
 import com.intellij.java.impl.refactoring.ui.PackageNameReferenceEditorCombo;
 import com.intellij.java.impl.refactoring.util.RefactoringMessageUtil;
 import com.intellij.java.impl.ui.ReferenceEditorComboWithBrowseButton;
-import com.intellij.java.impl.codeInsight.PackageUtil;
 import com.intellij.java.language.psi.PsiNameHelper;
 import consulo.application.util.function.Computable;
 import consulo.language.editor.localize.CodeInsightLocalize;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
@@ -196,7 +196,7 @@ public class CreateClassDialog extends DialogWrapper {
     gbConstraints.insets.top = 12;
     gbConstraints.anchor = GridBagConstraints.WEST;
     gbConstraints.fill = GridBagConstraints.NONE;
-    final JBLabel label = new JBLabel(RefactoringBundle.message("target.destination.folder"));
+    final JBLabel label = new JBLabel(RefactoringLocalize.targetDestinationFolder().get());
     panel.add(label, gbConstraints);
 
     gbConstraints.gridy = 4;

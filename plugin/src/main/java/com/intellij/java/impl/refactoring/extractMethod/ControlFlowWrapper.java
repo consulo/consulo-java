@@ -20,6 +20,7 @@ import com.intellij.java.language.impl.psi.controlFlow.*;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.document.util.TextRange;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.scope.LocalSearchScope;
@@ -49,7 +50,7 @@ public class ControlFlowWrapper {
     try {
       myControlFlow = ControlFlowFactory.getControlFlow(codeFragment, new LocalsControlFlowPolicy(codeFragment), ControlFlowOptions.NO_CONST_EVALUATE);
     } catch (AnalysisCanceledException e) {
-      throw new PrepareFailedException(RefactoringBundle.message("extract.method.control.flow.analysis.failed"), e.getErrorElement());
+      throw new PrepareFailedException(RefactoringLocalize.extractMethodControlFlowAnalysisFailed().get(), e.getErrorElement());
     }
 
     if (LOG.isDebugEnabled()) {

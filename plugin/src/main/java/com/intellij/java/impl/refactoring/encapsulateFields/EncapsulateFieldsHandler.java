@@ -18,6 +18,7 @@ package com.intellij.java.impl.refactoring.encapsulateFields;
 import java.util.HashSet;
 
 import consulo.annotation.access.RequiredReadAction;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import jakarta.annotation.Nonnull;
 
 import consulo.dataContext.DataContext;
@@ -45,13 +46,13 @@ public class EncapsulateFieldsHandler implements RefactoringActionHandler {
     PsiElement element = file.findElementAt(offset);
     while (true) {
       if (element == null || element instanceof PsiFile) {
-        String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("error.wrong.caret.position.class"));
+        String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.errorWrongCaretPositionClass().get());
         CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.ENCAPSULATE_FIELDS);
         return;
       }
       if (element instanceof PsiField field) {
         if (field.getContainingClass() == null) {
-          String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("the.field.should.be.declared.in.a.class"));
+          String message = RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.theFieldShouldBeDeclaredInAClass().get());
           CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.ENCAPSULATE_FIELDS);
           return;
         }
@@ -98,7 +99,7 @@ public class EncapsulateFieldsHandler implements RefactoringActionHandler {
           }
           else {
             String message = RefactoringBundle.getCannotRefactorMessage(
-              RefactoringBundle.message("fields.to.be.refactored.should.belong.to.the.same.class"));
+              RefactoringLocalize.fieldsToBeRefactoredShouldBelongToTheSameClass().get());
             Editor editor = dataContext.getData(Editor.KEY);
             CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.ENCAPSULATE_FIELDS);
             return;
@@ -122,7 +123,7 @@ public class EncapsulateFieldsHandler implements RefactoringActionHandler {
 
     if (aClass.isInterface()) {
       String message = RefactoringBundle.getCannotRefactorMessage(
-        RefactoringBundle.message("encapsulate.fields.refactoring.cannot.be.applied.to.interface"));
+        RefactoringLocalize.encapsulateFieldsRefactoringCannotBeAppliedToInterface().get());
       Editor editor = dataContext.getData(Editor.KEY);
       CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.ENCAPSULATE_FIELDS);
       return;

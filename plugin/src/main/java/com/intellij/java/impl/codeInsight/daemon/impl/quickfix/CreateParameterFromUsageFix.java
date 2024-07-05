@@ -28,7 +28,7 @@ import consulo.application.ApplicationManager;
 import consulo.application.Result;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.WriteCommandAction;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -66,8 +66,8 @@ public class CreateParameterFromUsageFix extends CreateVarFromUsageFix {
     while (true);
   }
 
-    @Override
-    public String getText(String varName) {
+  @Override
+  public String getText(String varName) {
     return JavaQuickFixBundle.message("create.parameter.from.usage.text", varName);
   }
 
@@ -86,7 +86,7 @@ public class CreateParameterFromUsageFix extends CreateVarFromUsageFix {
     method = IntroduceParameterHandler.chooseEnclosingMethod(method);
     if (method == null) return;
 
-    method = SuperMethodWarningUtil.checkSuperMethod(method, RefactoringBundle.message("to.refactor"));
+    method = SuperMethodWarningUtil.checkSuperMethod(method, RefactoringLocalize.toRefactor().get());
     if (method == null) return;
 
     final List<ParameterInfoImpl> parameterInfos =

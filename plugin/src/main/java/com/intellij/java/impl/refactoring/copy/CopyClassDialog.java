@@ -27,22 +27,24 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.java.language.psi.PsiNameHelper;
 import consulo.application.HelpManager;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.ui.awt.EditorTextField;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.RecentsManager;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.FormBuilder;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.usage.UsageViewUtil;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 
@@ -73,9 +75,10 @@ class CopyClassDialog extends DialogWrapper {
     myProject = project;
     myDefaultTargetDirectory = defaultTargetDirectory;
     myDoClone = doClone;
-    String text = myDoClone ? RefactoringBundle.message("copy.class.clone.0.1", UsageViewUtil.getType(aClass), UsageViewUtil.getLongName(aClass)) :
-                  RefactoringBundle.message("copy.class.copy.0.1", UsageViewUtil.getType(aClass), UsageViewUtil.getLongName(aClass));
-    myInformationLabel.setText(text);
+    LocalizeValue text = myDoClone
+      ? RefactoringLocalize.copyClassClone01(UsageViewUtil.getType(aClass), UsageViewUtil.getLongName(aClass))
+      : RefactoringLocalize.copyClassCopy01(UsageViewUtil.getType(aClass), UsageViewUtil.getLongName(aClass));
+    myInformationLabel.setText(text.get());
     myInformationLabel.setFont(myInformationLabel.getFont().deriveFont(Font.BOLD));
     init();
     myDestinationCB.setData(myProject, defaultTargetDirectory,
@@ -101,16 +104,21 @@ class CopyClassDialog extends DialogWrapper {
     myNameField = new EditorTextField("");
 
     String qualifiedName = getQualifiedName();
-    myTfPackage = new PackageNameReferenceEditorCombo(qualifiedName, myProject, RECENTS_KEY, RefactoringBundle.message("choose.destination.package"));
+    myTfPackage = new PackageNameReferenceEditorCombo(
+      qualifiedName,
+      myProject,
+      RECENTS_KEY,
+      RefactoringLocalize.chooseDestinationPackage().get()
+    );
     myTfPackage.setTextFieldPreferredWidth(Math.max(qualifiedName.length() + 5, 40));
-    myPackageLabel.setText(RefactoringBundle.message("destination.package"));
+    myPackageLabel.setText(RefactoringLocalize.destinationPackage().get());
     myPackageLabel.setLabelFor(myTfPackage);
     if (myDoClone) {
       myTfPackage.setVisible(false);
       myPackageLabel.setVisible(false);
     }
 
-    final JLabel label = new JLabel(RefactoringBundle.message("target.destination.folder"));
+    final JLabel label = new JLabel(RefactoringLocalize.targetDestinationFolder().get());
     final boolean isMultipleSourceRoots = ProjectRootManager.getInstance(myProject).getContentSourceRoots().length > 1;
     myDestinationCB.setVisible(!myDoClone && isMultipleSourceRoots);
     label.setVisible(!myDoClone && isMultipleSourceRoots);
@@ -118,7 +126,7 @@ class CopyClassDialog extends DialogWrapper {
 
     return FormBuilder.createFormBuilder()
       .addComponent(myInformationLabel)
-      .addLabeledComponent(RefactoringBundle.message("copy.files.new.name.label"), myNameField, UIUtil.LARGE_VGAP)
+      .addLabeledComponent(RefactoringLocalize.copyFilesNewNameLabel().get(), myNameField, UIUtil.LARGE_VGAP)
       .addLabeledComponent(myPackageLabel, myTfPackage)
       .addLabeledComponent(label, myDestinationCB)
       .getPanel();
@@ -143,6 +151,7 @@ class CopyClassDialog extends DialogWrapper {
     return myNameField.getText();
   }
 
+  @RequiredUIAccess
   protected void doOKAction() {
     final String packageName = myTfPackage.getText();
     final String className = getClassName();
@@ -151,9 +160,9 @@ class CopyClassDialog extends DialogWrapper {
     final PsiManager manager = PsiManager.getInstance(myProject);
     final PsiNameHelper nameHelper = PsiNameHelper.getInstance(manager.getProject());
     if (packageName.length() > 0 && !nameHelper.isQualifiedName(packageName)) {
-      errorString[0] = RefactoringBundle.message("invalid.target.package.name.specified");
+      errorString[0] = RefactoringLocalize.invalidTargetPackageNameSpecified().get();
     } else if (className != null && className.isEmpty()) {
-      errorString[0] = RefactoringBundle.message("no.class.name.specified");
+      errorString[0] = RefactoringLocalize.noClassNameSpecified().get();
     } else {
       if (!nameHelper.isIdentifier(className)) {
         errorString[0] = RefactoringMessageUtil.getIncorrectIdentifierMessage(className);
@@ -173,7 +182,7 @@ class CopyClassDialog extends DialogWrapper {
 
     if (errorString[0] != null) {
       if (errorString[0].length() > 0) {
-        Messages.showMessageDialog(myProject, errorString[0], RefactoringBundle.message("error.title"), UIUtil.getErrorIcon());
+        Messages.showMessageDialog(myProject, errorString[0], RefactoringLocalize.errorTitle().get(), UIUtil.getErrorIcon());
       }
       myNameField.requestFocusInWindow();
       return;

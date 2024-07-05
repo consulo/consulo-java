@@ -115,7 +115,6 @@ public class HighlightExitPointsHandler extends HighlightUsagesHandlerBase<PsiEl
               break;
             }
           }
-
         }
         target = target.getParent();
       }
@@ -130,11 +129,22 @@ public class HighlightExitPointsHandler extends HighlightUsagesHandlerBase<PsiEl
 
   private void highlightExitPoints(final PsiStatement parent, final PsiCodeBlock body) throws AnalysisCanceledException {
     final Project project = myTarget.getProject();
-    ControlFlow flow = ControlFlowFactory.getInstance(project).getControlFlow(body, LocalsOrMyInstanceFieldsControlFlowPolicy.getInstance(),
-        false);
+    ControlFlow flow = ControlFlowFactory.getInstance(project).getControlFlow(
+      body,
+      LocalsOrMyInstanceFieldsControlFlowPolicy.getInstance(),
+      false
+    );
 
-    Collection<PsiStatement> exitStatements = ControlFlowUtil.findExitPointsAndStatements(flow, 0, flow.getSize(), IntLists.newArrayList(),
-        PsiReturnStatement.class, PsiBreakStatement.class, PsiContinueStatement.class, PsiThrowStatement.class);
+    Collection<PsiStatement> exitStatements = ControlFlowUtil.findExitPointsAndStatements(
+      flow,
+      0,
+      flow.getSize(),
+      IntLists.newArrayList(),
+      PsiReturnStatement.class,
+      PsiBreakStatement.class,
+      PsiContinueStatement.class,
+      PsiThrowStatement.class
+    );
     if (!exitStatements.contains(parent)) {
       return;
     }

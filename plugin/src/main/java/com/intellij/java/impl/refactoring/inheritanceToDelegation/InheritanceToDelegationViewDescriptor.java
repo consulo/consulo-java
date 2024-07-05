@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.refactoring.inheritanceToDelegation;
 
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiClass;
@@ -35,10 +36,10 @@ public class InheritanceToDelegationViewDescriptor extends UsageViewDescriptorAd
 
   @Nonnull
   public PsiElement[] getElements() {
-    return new PsiElement[] { myClass };
+    return new PsiElement[]{myClass};
   }
 
   public String getProcessedElementsHeader() {
-    return RefactoringBundle.message("replace.inheritance.with.delegation.elements.header");
+    return RefactoringLocalize.replaceInheritanceWithDelegationElementsHeader().get();
   }
 }

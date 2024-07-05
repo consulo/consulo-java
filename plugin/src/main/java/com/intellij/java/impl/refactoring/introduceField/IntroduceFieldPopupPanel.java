@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.refactoring.introduceField;
 
+import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
+import com.intellij.java.impl.refactoring.ui.TypeSelectorManager;
 import com.intellij.java.language.codeInsight.TestFrameworks;
 import com.intellij.java.language.psi.*;
-import consulo.ui.ex.awt.ListCellRendererWrapper;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.ide.impl.idea.refactoring.introduce.inplace.KeyboardComboSwitcher;
-import com.intellij.java.impl.refactoring.ui.TypeSelectorManager;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.ui.ex.awt.ListCellRendererWrapper;
 import jakarta.annotation.Nullable;
 
 import javax.swing.*;
@@ -139,7 +139,7 @@ public class IntroduceFieldPopupPanel extends IntroduceFieldCentralPanel {
     }
     initializeInitializerPlace(myInitializerExpression, InplaceIntroduceFieldPopup.ourLastInitializerPlace);
     if (myInitialisersPlaceModel.getSize() > 1) {
-      final JLabel initLabel = new JLabel(RefactoringBundle.message("initialize.in.border.title") + ":");
+      final JLabel initLabel = new JLabel(RefactoringLocalize.initializeInBorderTitle() + ":");
       initLabel.setDisplayedMnemonic('i');
       gridBagConstraints.insets.left = 5;
       gridBagConstraints.anchor = GridBagConstraints.WEST;

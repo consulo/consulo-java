@@ -26,6 +26,7 @@ import consulo.application.HelpManager;
 import consulo.component.util.Iconable;
 import consulo.ide.impl.idea.refactoring.ui.DocCommentPanel;
 import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.RefactoringDialog;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.icon.IconDescriptorUpdaters;
@@ -229,17 +230,17 @@ public class EncapsulateFieldsDialog extends RefactoringDialog implements Encaps
     JPanel panel = new JPanel(new BorderLayout());
     panel.add(createTable(), BorderLayout.CENTER);
 
-    myCbEncapsulateGet.setText(RefactoringBundle.message("encapsulate.fields.get.access.checkbox"));
-    myCbEncapsulateSet.setText(RefactoringBundle.message("encapsulate.fields.set.access.checkbox"));
-    myCbUseAccessorsWhenAccessible.setText(RefactoringBundle.message("encapsulate.fields.use.accessors.even.when.field.is.accessible.checkbox"));
-    myRbFieldPrivate.setText(RefactoringBundle.message("encapsulate.fields.private.radio"));
-    myRbFieldProtected.setText(RefactoringBundle.message("encapsulate.fields.protected.radio"));
-    myRbFieldPackageLocal.setText(RefactoringBundle.message("encapsulate.fields..package.local.radio"));
-    myRbFieldAsIs.setText(RefactoringBundle.getVisibilityAsIs());
-    myRbAccessorPublic.setText(RefactoringBundle.getVisibilityPublic());
-    myRbAccessorProtected.setText(RefactoringBundle.getVisibilityProtected());
-    myRbAccessorPrivate.setText(RefactoringBundle.getVisibilityPrivate());
-    myRbAccessorPackageLocal.setText(RefactoringBundle.getVisibilityPackageLocal());
+    myCbEncapsulateGet.setText(RefactoringLocalize.encapsulateFieldsGetAccessCheckbox().get());
+    myCbEncapsulateSet.setText(RefactoringLocalize.encapsulateFieldsSetAccessCheckbox().get());
+    myCbUseAccessorsWhenAccessible.setText(RefactoringLocalize.encapsulateFieldsUseAccessorsEvenWhenFieldIsAccessibleCheckbox().get());
+    myRbFieldPrivate.setText(RefactoringLocalize.encapsulateFieldsPrivateRadio().get());
+    myRbFieldProtected.setText(RefactoringLocalize.encapsulateFieldsProtectedRadio().get());
+    myRbFieldPackageLocal.setText(RefactoringLocalize.encapsulateFieldsPackageLocalRadio().get());
+    myRbFieldAsIs.setText(RefactoringLocalize.visibilityAsIs().get());
+    myRbAccessorPublic.setText(RefactoringLocalize.visibilityPublic().get());
+    myRbAccessorProtected.setText(RefactoringLocalize.visibilityProtected().get());
+    myRbAccessorPrivate.setText(RefactoringLocalize.visibilityPrivate().get());
+    myRbAccessorPackageLocal.setText(RefactoringLocalize.visibilityPackageLocal().get());
 
     ButtonGroup fieldGroup = new ButtonGroup();
     fieldGroup.add(myRbFieldAsIs);
@@ -305,7 +306,9 @@ public class EncapsulateFieldsDialog extends RefactoringDialog implements Encaps
     leftBox.add(myCbUseAccessorsWhenAccessible);
     JPanel leftPanel = new JPanel(new BorderLayout());
     leftPanel.setBorder(IdeBorderFactory.createTitledBorder(
-      RefactoringBundle.message("encapsulate.fields.encapsulate.border.title"), true));
+      RefactoringLocalize.encapsulateFieldsEncapsulateBorderTitle().get(),
+      true
+    ));
     leftPanel.add(leftBox, BorderLayout.CENTER);
     leftPanel.add(Box.createHorizontalStrut(5), BorderLayout.WEST);
 
@@ -329,7 +332,9 @@ public class EncapsulateFieldsDialog extends RefactoringDialog implements Encaps
     fieldsBox.add(myRbFieldAsIs);
     JPanel fieldsVisibilityPanel = new JPanel(new BorderLayout());
     fieldsVisibilityPanel.setBorder(IdeBorderFactory.createTitledBorder(
-      RefactoringBundle.message("encapsulate.fields..encapsulated.fields.visibility.border.title"), true));
+      RefactoringLocalize.encapsulateFieldsEncapsulatedFieldsVisibilityBorderTitle().get(),
+      true
+    ));
     fieldsVisibilityPanel.add(fieldsBox, BorderLayout.CENTER);
     fieldsVisibilityPanel.add(Box.createHorizontalStrut(5), BorderLayout.WEST);
 
@@ -340,7 +345,9 @@ public class EncapsulateFieldsDialog extends RefactoringDialog implements Encaps
     methodsBox.add(myRbAccessorPrivate);
     JPanel methodsVisibilityPanel = new JPanel(new BorderLayout());
     methodsVisibilityPanel.setBorder(IdeBorderFactory.createTitledBorder(
-      RefactoringBundle.message("encapsulate.fields.accessors.visibility.border.title"), true));
+      RefactoringLocalize.encapsulateFieldsAccessorsVisibilityBorderTitle().get(),
+      true
+    ));
     methodsVisibilityPanel.add(methodsBox, BorderLayout.CENTER);
     methodsVisibilityPanel.add(Box.createHorizontalStrut(5), BorderLayout.WEST);
 
@@ -382,7 +389,9 @@ public class EncapsulateFieldsDialog extends RefactoringDialog implements Encaps
 //    CompTitledBorder titledBorder = new CompTitledBorder(label);
     JPanel panel = new JPanel(new BorderLayout());
     Border border = IdeBorderFactory.createTitledBorder(
-      RefactoringBundle.message("encapsulate.fields.fields.to.encapsulate.border.title"), false);
+      RefactoringLocalize.encapsulateFieldsFieldsToEncapsulateBorderTitle().get(),
+      false
+    );
     panel.setBorder(border);
     panel.add(scrollPane);
 
@@ -553,11 +562,11 @@ public class EncapsulateFieldsDialog extends RefactoringDialog implements Encaps
         case CHECKED_COLUMN:
           return " ";
         case FIELD_COLUMN:
-          return RefactoringBundle.message("encapsulate.fields.field.column.name");
+          return RefactoringLocalize.encapsulateFieldsFieldColumnName().get();
         case GETTER_COLUMN:
-          return RefactoringBundle.message("encapsulate.fields.getter.column.name");
+          return RefactoringLocalize.encapsulateFieldsGetterColumnName().get();
         case SETTER_COLUMN:
-          return RefactoringBundle.message("encapsulate.fields.setter.column.name");
+          return RefactoringLocalize.encapsulateFieldsSetterColumnName().get();
         default:
           throw new RuntimeException("Incorrect column index");
       }

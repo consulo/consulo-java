@@ -18,7 +18,7 @@ package com.intellij.java.impl.refactoring.inline;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.NonCodeUsageInfoFactory;
 import consulo.language.editor.refactoring.util.TextOccurrencesUtil;
 import consulo.language.psi.PsiElement;
@@ -35,9 +35,9 @@ import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.ref.Ref;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.*;
 
 /**
@@ -110,7 +110,8 @@ public class InlineToAnonymousClassProcessor extends BaseRefactoringProcessor {
     if (super.isPreviewUsages(usages)) return true;
     for(UsageInfo usage: usages) {
       if (isForcePreview(usage)) {
-        WindowManager.getInstance().getStatusBar(myProject).setInfo(RefactoringBundle.message("occurrences.found.in.comments.strings.and.non.java.files"));
+        WindowManager.getInstance().getStatusBar(myProject)
+          .setInfo(RefactoringLocalize.occurrencesFoundInCommentsStringsAndNonJavaFiles().get());
         return true;
       }
     }
@@ -313,7 +314,6 @@ public class InlineToAnonymousClassProcessor extends BaseRefactoringProcessor {
   }
 
   protected String getCommandName() {
-    return RefactoringBundle.message("inline.to.anonymous.command.name", myClass.getQualifiedName());
+    return RefactoringLocalize.inlineToAnonymousCommandName(myClass.getQualifiedName()).get();
   }
-
 }
