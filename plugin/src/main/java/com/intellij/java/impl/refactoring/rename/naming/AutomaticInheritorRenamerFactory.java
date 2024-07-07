@@ -22,6 +22,7 @@ import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.AutomaticRenamer;
 import consulo.language.editor.refactoring.rename.AutomaticRenamerFactory;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import consulo.usage.UsageInfo;
 
 import java.util.Collection;
@@ -35,8 +36,8 @@ public class AutomaticInheritorRenamerFactory implements AutomaticRenamerFactory
     return element instanceof PsiClass;
   }
 
-  public String getOptionName() {
-    return RefactoringLocalize.renameInheritors().get();
+  public LocalizeValue getOptionName() {
+    return RefactoringLocalize.renameInheritors();
   }
 
   public boolean isEnabled() {

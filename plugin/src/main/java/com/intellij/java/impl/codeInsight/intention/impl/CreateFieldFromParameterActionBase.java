@@ -19,7 +19,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import consulo.codeEditor.Editor;
-import consulo.ide.impl.idea.openapi.fileEditor.ex.IdeDocumentHistory;
+import consulo.fileEditor.history.IdeDocumentHistory;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.BaseIntentionAction;
 import consulo.language.editor.localize.CodeInsightLocalize;

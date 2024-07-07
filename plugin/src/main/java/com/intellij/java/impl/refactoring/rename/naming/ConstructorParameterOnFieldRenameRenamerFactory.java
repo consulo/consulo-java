@@ -17,12 +17,13 @@ package com.intellij.java.impl.refactoring.rename.naming;
 
 import com.intellij.java.language.psi.PsiField;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.rename.AutomaticRenamer;
 import consulo.language.editor.refactoring.rename.AutomaticRenamerFactory;
+import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import consulo.usage.UsageInfo;
+import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
 import java.util.Collection;
 
 @ExtensionImpl
@@ -31,9 +32,9 @@ public class ConstructorParameterOnFieldRenameRenamerFactory implements Automati
     return element instanceof PsiField;
   }
 
-  @Nullable
-  public String getOptionName() {
-    return null;
+  @Nonnull
+  public LocalizeValue getOptionName() {
+    return LocalizeValue.of();
   }
 
   public boolean isEnabled() {

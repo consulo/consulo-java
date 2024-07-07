@@ -26,10 +26,10 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
-import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
-import consulo.ide.impl.idea.openapi.fileEditor.ex.IdeDocumentHistory;
+import consulo.fileEditor.history.IdeDocumentHistory;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.intention.HighPriorityAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
@@ -246,7 +246,7 @@ public class CreatePropertyFromUsageFix extends CreateFromUsageBaseFix implement
     builder.replaceElement(fieldReference, FIELD_VARIABLE, new FieldExpression(field, targetClass, expectedTypes), true);
     builder.setEndVariableAfter(body.getLBrace());
 
-    accessor = CodeInsightUtilBase.forcePsiPostprocessAndRestoreElement(accessor);
+    accessor = CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(accessor);
     LOG.assertTrue(accessor != null);
     targetClass = accessor.getContainingClass();
     LOG.assertTrue(targetClass != null);

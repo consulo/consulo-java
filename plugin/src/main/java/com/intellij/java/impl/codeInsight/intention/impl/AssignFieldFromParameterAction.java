@@ -23,7 +23,7 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
-import consulo.ide.impl.idea.openapi.fileEditor.ex.IdeDocumentHistory;
+import consulo.fileEditor.history.IdeDocumentHistory;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.BaseIntentionAction;

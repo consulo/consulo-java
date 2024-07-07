@@ -22,9 +22,8 @@ import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.testIntegration.TestFramework;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.util.function.Computable;
 import consulo.codeEditor.Editor;
-import consulo.ide.impl.idea.openapi.fileEditor.ex.IdeDocumentHistory;
+import consulo.fileEditor.history.IdeDocumentHistory;
 import consulo.language.Language;
 import consulo.language.codeStyle.PostprocessReformattingAspect;
 import consulo.language.editor.localize.CodeInsightLocalize;
@@ -38,6 +37,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.util.Collection;
+import java.util.function.Supplier;
 
 @ExtensionImpl
 public class JavaTestGenerator implements TestGenerator {
@@ -46,8 +46,8 @@ public class JavaTestGenerator implements TestGenerator {
 
   public PsiElement generateTest(final Project project, final CreateTestDialog d) {
     return PostprocessReformattingAspect.getInstance(project).postponeFormattingInside(
-      () -> project.getApplication().runWriteAction(new Computable<PsiElement>() {
-        public PsiElement compute() {
+      () -> project.getApplication().runWriteAction(new Supplier<PsiElement>() {
+        public PsiElement get() {
           try {
             IdeDocumentHistory.getInstance(project).includeCurrentPlaceAsChangePlace();
 

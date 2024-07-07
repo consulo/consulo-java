@@ -27,6 +27,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.rename.AutomaticRenamer;
 import consulo.language.editor.refactoring.rename.AutomaticRenamerFactory;
+import consulo.localize.LocalizeValue;
 import consulo.usage.UsageInfo;
 import consulo.java.impl.refactoring.JavaRefactoringBundle;
 
@@ -45,8 +46,8 @@ public class AutomaticOverloadsRenamerFactory implements AutomaticRenamerFactory
   }
 
   @Override
-  public String getOptionName() {
-    return JavaRefactoringBundle.message("rename.overloads");
+  public LocalizeValue getOptionName() {
+    return LocalizeValue.localizeTODO(JavaRefactoringBundle.message("rename.overloads"));
   }
 
   @Override

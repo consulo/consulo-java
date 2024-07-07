@@ -20,11 +20,12 @@ import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
-import consulo.language.psi.PsiElement;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.rename.AutomaticRenamer;
 import consulo.language.editor.refactoring.rename.AutomaticRenamerFactory;
+import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import consulo.usage.UsageInfo;
+import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 
@@ -37,8 +38,9 @@ public class AutomaticVariableRenamerFactory implements AutomaticRenamerFactory 
     return element instanceof PsiClass && !(element instanceof PsiAnonymousClass);
   }
 
-  public String getOptionName() {
-    return RefactoringLocalize.renameVariables().get();
+  @Nonnull
+  public LocalizeValue getOptionName() {
+    return RefactoringLocalize.renameVariables();
   }
 
   public boolean isEnabled() {

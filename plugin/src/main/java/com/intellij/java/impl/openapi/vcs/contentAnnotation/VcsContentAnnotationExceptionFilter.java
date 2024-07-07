@@ -27,12 +27,12 @@ import consulo.codeEditor.DefaultLanguageHighlighterColors;
 import consulo.colorScheme.EditorColorsManager;
 import consulo.colorScheme.EditorColorsScheme;
 import consulo.colorScheme.TextAttributes;
+import consulo.diff.DiffColors;
 import consulo.document.Document;
 import consulo.document.FileDocumentManager;
 import consulo.document.util.TextRange;
 import consulo.execution.ui.console.Filter;
 import consulo.execution.ui.console.FilterMixin;
-import consulo.ide.impl.idea.openapi.diff.DiffColors;
 import consulo.ide.impl.idea.openapi.localVcs.UpToDateLineNumberProvider;
 import consulo.ide.impl.idea.openapi.vcs.contentAnnotation.VcsContentAnnotation;
 import consulo.ide.impl.idea.openapi.vcs.contentAnnotation.VcsContentAnnotationImpl;
@@ -53,6 +53,7 @@ import jakarta.annotation.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * Created by IntelliJ IDEA.
@@ -227,7 +228,7 @@ public class VcsContentAnnotationExceptionFilter implements Filter, FilterMixin 
   }
 
   private static Document getDocumentForFile(final ExceptionWorker worker) {
-    return Application.get().runReadAction((Computable<Document>)() -> {
+    return Application.get().runReadAction((Supplier<Document>)() -> {
       final Document document = FileDocumentManager.getInstance().getDocument(worker.getFile().getVirtualFile());
       if (document == null) {
         LOG.info("can not get document for file: " + worker.getFile().getVirtualFile());
@@ -239,7 +240,7 @@ public class VcsContentAnnotationExceptionFilter implements Filter, FilterMixin 
 
   // line numbers
   private static List<TextRange> findMethodRange(final ExceptionWorker worker, final Document document, final Trinity<PsiClass, PsiFile, String> previousLineResult) {
-    return Application.get().runReadAction((Computable<List<TextRange>>)() -> {
+    return Application.get().runReadAction((Supplier<List<TextRange>>)() -> {
       List<TextRange> ranges = getTextRangeForMethod(worker, previousLineResult);
       if (ranges == null) {
         return null;

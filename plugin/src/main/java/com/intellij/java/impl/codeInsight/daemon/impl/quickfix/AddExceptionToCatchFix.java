@@ -24,7 +24,7 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.document.util.TextRange;
-import consulo.ide.impl.idea.openapi.fileEditor.ex.IdeDocumentHistory;
+import consulo.fileEditor.history.IdeDocumentHistory;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.BaseIntentionAction;

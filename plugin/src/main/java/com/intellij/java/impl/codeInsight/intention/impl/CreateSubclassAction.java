@@ -44,7 +44,7 @@ import consulo.codeEditor.CaretModel;
 import consulo.codeEditor.Editor;
 import consulo.document.RangeMarker;
 import consulo.document.util.TextRange;
-import consulo.ide.impl.idea.openapi.fileEditor.ex.IdeDocumentHistory;
+import consulo.fileEditor.history.IdeDocumentHistory;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.IntentionMetaData;

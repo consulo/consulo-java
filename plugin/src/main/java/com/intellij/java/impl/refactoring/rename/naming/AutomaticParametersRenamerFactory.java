@@ -29,6 +29,7 @@ import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.AutomaticRenamer;
 import consulo.language.editor.refactoring.rename.AutomaticRenamerFactory;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import consulo.usage.UsageInfo;
 
 import java.util.Collection;
@@ -45,8 +46,8 @@ public class AutomaticParametersRenamerFactory implements AutomaticRenamerFactor
     return false;
   }
 
-  public String getOptionName() {
-    return RefactoringLocalize.renameParametersHierarchy().get();
+  public LocalizeValue getOptionName() {
+    return RefactoringLocalize.renameParametersHierarchy();
   }
 
   public boolean isEnabled() {

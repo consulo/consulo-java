@@ -24,6 +24,7 @@ import consulo.language.editor.refactoring.rename.AutomaticRenamer;
 import consulo.language.editor.refactoring.rename.AutomaticRenamerFactory;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.usage.UsageInfo;
 
@@ -44,8 +45,8 @@ public class AutomaticTestRenamerFactory implements AutomaticRenamerFactory {
     return false;
   }
 
-  public String getOptionName() {
-    return RefactoringLocalize.renameTests().get();
+  public LocalizeValue getOptionName() {
+    return RefactoringLocalize.renameTests();
   }
 
   public boolean isEnabled() {

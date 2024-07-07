@@ -15,21 +15,21 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import consulo.language.editor.FileModificationService;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.fileEditor.FileEditorManager;
+import consulo.fileEditor.history.IdeDocumentHistory;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.SyntheticIntentionAction;
+import consulo.language.psi.PsiFile;
+import consulo.language.util.IncorrectOperationException;
 import consulo.navigation.OpenFileDescriptor;
-import consulo.ide.impl.idea.openapi.fileEditor.ex.IdeDocumentHistory;
 import consulo.navigation.OpenFileDescriptorFactory;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
-import consulo.language.util.IncorrectOperationException;
 import jakarta.annotation.Nonnull;
 
 /**
