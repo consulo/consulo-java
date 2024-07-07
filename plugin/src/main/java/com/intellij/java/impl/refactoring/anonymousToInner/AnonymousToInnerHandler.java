@@ -30,6 +30,7 @@ import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -39,6 +40,7 @@ import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
@@ -80,7 +82,7 @@ public class AnonymousToInnerHandler implements RefactoringActionHandler {
     editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
     final PsiAnonymousClass anonymousClass = findAnonymousClass(file, offset);
     if (anonymousClass == null) {
-      showErrorMessage(editor, RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("error.wrong.caret.position.anonymous")));
+      showErrorMessage(editor, RefactoringBundle.getCannotRefactorMessage(RefactoringLocalize.errorWrongCaretPositionAnonymous().get()));
       return;
     }
     final PsiElement parent = anonymousClass.getParent();
@@ -104,8 +106,8 @@ public class AnonymousToInnerHandler implements RefactoringActionHandler {
     PsiClassType baseRef = myAnonClass.getBaseClassType();
 
     if (baseRef.resolve() == null) {
-      String message = RefactoringBundle.message("error.cannot.resolve", baseRef.getCanonicalText());
-      showErrorMessage(editor, message);
+      LocalizeValue message = RefactoringLocalize.errorCannotResolve(baseRef.getCanonicalText());
+      showErrorMessage(editor, message.get());
       return;
     }
     PsiElement targetContainer = findTargetContainer(myAnonClass);

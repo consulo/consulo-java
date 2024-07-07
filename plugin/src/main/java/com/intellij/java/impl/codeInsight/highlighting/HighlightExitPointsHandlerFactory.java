@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.highlighting;
 
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.highlight.usage.HighlightUsagesHandlerBase;
 import consulo.language.editor.highlight.usage.HighlightUsagesHandlerFactory;
@@ -30,13 +31,13 @@ import consulo.language.editor.TargetElementUtil;
 @ExtensionImpl
 public class HighlightExitPointsHandlerFactory implements HighlightUsagesHandlerFactory {
   @Override
+  @RequiredReadAction
   public HighlightUsagesHandlerBase createHighlightUsagesHandler(final Editor editor, final PsiFile file) {
     int offset = TargetElementUtil.adjustOffset(file, editor.getDocument(), editor.getCaretModel().getOffset());
     PsiElement target = file.findElementAt(offset);
-    if (target instanceof PsiKeyword) {
-      if (PsiKeyword.RETURN.equals(target.getText()) || PsiKeyword.THROW.equals(target.getText())) {
-        return new HighlightExitPointsHandler(editor, file, target);
-      }
+    if (target instanceof PsiKeyword
+      && (PsiKeyword.RETURN.equals(target.getText()) || PsiKeyword.THROW.equals(target.getText()))) {
+      return new HighlightExitPointsHandler(editor, file, target);
     }
     return null;
   }

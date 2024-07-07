@@ -41,10 +41,10 @@ import consulo.ide.impl.idea.refactoring.changeSignature.DefaultValueChooser;
 import consulo.java.impl.refactoring.changeSignature.ChangeSignatureUsageProcessorEx;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.ResolveSnapshotProvider;
 import consulo.language.editor.refactoring.changeSignature.ChangeInfo;
 import consulo.language.editor.refactoring.changeSignature.ParameterInfo;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.RenameUtil;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import consulo.language.psi.PsiElement;
@@ -54,6 +54,7 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.usage.MoveRenameUsageInfo;
@@ -64,9 +65,9 @@ import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.function.Condition;
 import consulo.util.lang.ref.Ref;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.*;
 
 /**
@@ -959,9 +960,12 @@ public class JavaChangeSignatureUsageProcessor implements ChangeSignatureUsagePr
             }
 
             if (!JavaPsiFacade.getInstance(element.getProject()).getResolveHelper().isAccessible(method, modifierList, element, accessObjectClass, null)) {
-              String message = RefactoringBundle.message("0.with.1.visibility.is.not.accessible.from.2", RefactoringUIUtil.getDescription(method, true), VisibilityUtil
-                  .toPresentableText(myChangeInfo.getNewVisibility()), RefactoringUIUtil.getDescription(ConflictsUtil.getContainer(element), true));
-              conflictDescriptions.putValue(method, message);
+              LocalizeValue message = RefactoringLocalize.zeroWith1VisibilityIsNotAccessibleFrom2(
+                RefactoringUIUtil.getDescription(method, true),
+                VisibilityUtil.toPresentableText(myChangeInfo.getNewVisibility()),
+                RefactoringUIUtil.getDescription(ConflictsUtil.getContainer(element), true)
+              );
+              conflictDescriptions.putValue(method, message.get());
               if (!needToChangeCalls()) {
                 iterator.remove();
               }

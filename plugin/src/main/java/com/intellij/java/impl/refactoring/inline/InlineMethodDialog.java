@@ -23,6 +23,7 @@ import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import consulo.application.HelpManager;
 import consulo.codeEditor.Editor;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.project.Project;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.ide.impl.idea.refactoring.inline.InlineOptionsWithSearchSettingsDialog;
@@ -54,22 +55,24 @@ public class InlineMethodDialog extends InlineOptionsWithSearchSettingsDialog {
   protected String getNameLabelText() {
     String methodText = PsiFormatUtil.formatMethod(myMethod,
         PsiSubstitutor.EMPTY, PsiFormatUtil.SHOW_NAME | PsiFormatUtil.SHOW_PARAMETERS, PsiFormatUtil.SHOW_TYPE);
-    return RefactoringBundle.message("inline.method.method.label", methodText);
+    return RefactoringLocalize.inlineMethodMethodLabel(methodText).get();
   }
 
   protected String getBorderTitle() {
-    return RefactoringBundle.message("inline.method.border.title");
+    return RefactoringLocalize.inlineMethodBorderTitle().get();
   }
 
   protected String getInlineThisText() {
-    return RefactoringBundle.message("this.invocation.only.and.keep.the.method");
+    return RefactoringLocalize.thisInvocationOnlyAndKeepTheMethod().get();
   }
 
   protected String getInlineAllText() {
     final String occurrencesString = myOccurrencesNumber > -1 ? " (" + myOccurrencesNumber + " occurrence" + (myOccurrencesNumber == 1 ? ")" : "s)") : "";
-    return (myMethod.isWritable()
-        ? RefactoringBundle.message("all.invocations.and.remove.the.method")
-        : RefactoringBundle.message("all.invocations.in.project")) + occurrencesString;
+    return (
+      myMethod.isWritable()
+        ? RefactoringLocalize.allInvocationsAndRemoveTheMethod().get()
+        : RefactoringLocalize.allInvocationsInProject().get()
+    ) + occurrencesString;
   }
 
   protected void doAction() {

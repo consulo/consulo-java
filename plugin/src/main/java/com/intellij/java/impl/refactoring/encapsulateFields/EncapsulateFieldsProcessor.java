@@ -26,7 +26,7 @@ import com.intellij.java.language.psi.util.PsiFormatUtilBase;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.findUsage.DescriptiveNameUtil;
@@ -36,6 +36,7 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.usage.UsageInfo;
@@ -44,8 +45,8 @@ import consulo.usage.UsageViewUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.ref.Ref;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.*;
 
 public class EncapsulateFieldsProcessor extends BaseRefactoringProcessor {
@@ -86,7 +87,7 @@ public class EncapsulateFieldsProcessor extends BaseRefactoringProcessor {
   }
 
   protected String getCommandName() {
-    return RefactoringBundle.message("encapsulate.fields.command.name", DescriptiveNameUtil.getDescriptiveName(myClass));
+    return RefactoringLocalize.encapsulateFieldsCommandName(DescriptiveNameUtil.getDescriptiveName(myClass)).get();
   }
 
   protected boolean preprocessUsages(Ref<UsageInfo[]> refUsages) {
@@ -164,12 +165,16 @@ public class EncapsulateFieldsProcessor extends BaseRefactoringProcessor {
                                                           PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_PARAMETERS | PsiFormatUtilBase.SHOW_TYPE,
                                                           PsiFormatUtilBase.SHOW_TYPE
           );
-          String message = isGetter ?
-                           RefactoringBundle.message("encapsulate.fields.getter.exists", CommonRefactoringUtil.htmlEmphasize(descr),
-                                                     CommonRefactoringUtil.htmlEmphasize(prototype.getName())) :
-                           RefactoringBundle.message("encapsulate.fields.setter.exists", CommonRefactoringUtil.htmlEmphasize(descr),
-                                                     CommonRefactoringUtil.htmlEmphasize(prototype.getName()));
-          conflicts.putValue(existing, message);
+          LocalizeValue message = isGetter
+            ? RefactoringLocalize.encapsulateFieldsGetterExists(
+              CommonRefactoringUtil.htmlEmphasize(descr),
+              CommonRefactoringUtil.htmlEmphasize(prototype.getName())
+            )
+            : RefactoringLocalize.encapsulateFieldsSetterExists(
+              CommonRefactoringUtil.htmlEmphasize(descr),
+              CommonRefactoringUtil.htmlEmphasize(prototype.getName())
+            );
+          conflicts.putValue(existing, message.get());
         }
       } else {
         PsiClass containingClass = myClass.getContainingClass();

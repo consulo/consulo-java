@@ -22,6 +22,7 @@ import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import consulo.application.HelpManager;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.project.Project;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.ide.impl.idea.refactoring.inline.InlineOptionsWithSearchSettingsDialog;
@@ -46,20 +47,20 @@ public class InlineFieldDialog extends InlineOptionsWithSearchSettingsDialog {
 
   protected String getNameLabelText() {
     String fieldText = PsiFormatUtil.formatVariable(myField, PsiFormatUtil.SHOW_NAME | PsiFormatUtil.SHOW_TYPE, PsiSubstitutor.EMPTY);
-    return RefactoringBundle.message("inline.field.field.name.label", fieldText);
+    return RefactoringLocalize.inlineFieldFieldNameLabel(fieldText).get();
   }
 
   protected String getBorderTitle() {
-    return RefactoringBundle.message("inline.field.border.title");
+    return RefactoringLocalize.inlineFieldBorderTitle().get();
   }
 
   protected String getInlineThisText() {
-    return RefactoringBundle.message("this.reference.only.and.keep.the.field");
+    return RefactoringLocalize.thisReferenceOnlyAndKeepTheField().get();
   }
 
   protected String getInlineAllText() {
     final String occurrencesString = myOccurrencesNumber > -1 ? " (" + myOccurrencesNumber + " occurrence" + (myOccurrencesNumber == 1 ? ")" : "s)") : "";
-    return RefactoringBundle.message("all.references.and.remove.the.field") + occurrencesString;
+    return RefactoringLocalize.allReferencesAndRemoveTheField() + occurrencesString;
   }
 
   protected boolean isInlineThis() {

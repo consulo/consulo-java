@@ -23,14 +23,16 @@ import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
+import consulo.language.editor.TargetElementUtil;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.virtualFileSystem.ReadonlyStatusHandler;
 import consulo.virtualFileSystem.VirtualFile;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiReference;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
-import consulo.language.editor.TargetElementUtil;
 
 @ExtensionImpl
 public class InlineMethodHandler extends JavaInlineActionHandler {
@@ -44,13 +46,10 @@ public class InlineMethodHandler extends JavaInlineActionHandler {
     PsiMethod method = (PsiMethod) element.getNavigationElement();
     final PsiCodeBlock methodBody = method.getBody();
     if (methodBody == null) {
-      String message;
-      if (method.hasModifierProperty(PsiModifier.ABSTRACT)) {
-        message = RefactoringBundle.message("refactoring.cannot.be.applied.to.abstract.methods", REFACTORING_NAME);
-      } else {
-        message = RefactoringBundle.message("refactoring.cannot.be.applied.no.sources.attached", REFACTORING_NAME);
-      }
-      CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INLINE_METHOD);
+      LocalizeValue message = method.hasModifierProperty(PsiModifier.ABSTRACT)
+        ? RefactoringLocalize.refactoringCannotBeAppliedToAbstractMethods(REFACTORING_NAME)
+        : RefactoringLocalize.refactoringCannotBeAppliedNoSourcesAttached(REFACTORING_NAME);
+      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.INLINE_METHOD);
       return;
     }
 
@@ -58,9 +57,9 @@ public class InlineMethodHandler extends JavaInlineActionHandler {
     if (reference != null) {
       final PsiElement refElement = reference.getElement();
       if (refElement != null && !isEnabledForLanguage(refElement.getLanguage())) {
-        String message = RefactoringBundle
-            .message("refactoring.is.not.supported.for.language", "Inline of Java method", refElement.getLanguage().getDisplayName());
-        CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INLINE_METHOD);
+        LocalizeValue message =
+          RefactoringLocalize.refactoringIsNotSupportedForLanguage("Inline of Java method", refElement.getLanguage().getDisplayName());
+        CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.INLINE_METHOD);
         return;
       }
     }
@@ -69,15 +68,15 @@ public class InlineMethodHandler extends JavaInlineActionHandler {
       if (reference != null && InlineUtil.getTailCallType(reference) != InlineUtil.TailCallType.None) {
         allowInlineThisOnly = true;
       } else {
-        String message = RefactoringBundle.message("refactoring.is.not.supported.when.return.statement.interrupts.the.execution.flow", REFACTORING_NAME);
-        CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INLINE_METHOD);
+        LocalizeValue message = RefactoringLocalize.refactoringIsNotSupportedWhenReturnStatementInterruptsTheExecutionFlow(REFACTORING_NAME);
+        CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.INLINE_METHOD);
         return;
       }
     }
 
     if (reference == null && checkRecursive(method)) {
-      String message = RefactoringBundle.message("refactoring.is.not.supported.for.recursive.methods", REFACTORING_NAME);
-      CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INLINE_METHOD);
+      LocalizeValue message = RefactoringLocalize.refactoringIsNotSupportedForRecursiveMethods(REFACTORING_NAME);
+      CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.INLINE_METHOD);
       return;
     }
 
@@ -96,15 +95,15 @@ public class InlineMethodHandler extends JavaInlineActionHandler {
 
     if (method.isConstructor()) {
       if (method.isVarArgs()) {
-        String message = RefactoringBundle.message("refactoring.cannot.be.applied.to.vararg.constructors", REFACTORING_NAME);
-        CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INLINE_CONSTRUCTOR);
+        LocalizeValue message = RefactoringLocalize.refactoringCannotBeAppliedToVarargConstructors(REFACTORING_NAME);
+        CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.INLINE_CONSTRUCTOR);
         return;
       }
       final boolean chainingConstructor = isChainingConstructor(method);
       if (!chainingConstructor) {
         if (!isThisReference(reference)) {
-          String message = RefactoringBundle.message("refactoring.cannot.be.applied.to.inline.non.chaining.constructors", REFACTORING_NAME);
-          CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INLINE_CONSTRUCTOR);
+          LocalizeValue message = RefactoringLocalize.refactoringCannotBeAppliedToInlineNonChainingConstructors(REFACTORING_NAME);
+          CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.INLINE_CONSTRUCTOR);
           return;
         }
         allowInlineThisOnly = true;

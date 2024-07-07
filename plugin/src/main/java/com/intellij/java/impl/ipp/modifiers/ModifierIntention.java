@@ -15,29 +15,32 @@
  */
 package com.intellij.java.impl.ipp.modifiers;
 
-import consulo.language.editor.intention.LowPriorityAction;
-import com.intellij.java.language.psi.*;
-import consulo.application.AccessToken;
-import consulo.application.WriteAction;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
-import consulo.language.psi.*;
-import com.intellij.java.language.impl.psi.impl.source.resolve.JavaResolveUtil;
-import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
-import consulo.language.psi.search.ReferencesSearch;
-import com.intellij.java.language.psi.search.searches.SuperMethodsSearch;
-import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import consulo.language.editor.refactoring.ui.ConflictsDialog;
-import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
-import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
-import consulo.language.util.IncorrectOperationException;
-import consulo.application.util.function.Processor;
-import consulo.application.util.query.Query;
-import consulo.util.collection.MultiMap;
-import com.siyeh.IntentionPowerPackBundle;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
+import com.intellij.java.language.impl.psi.impl.source.resolve.JavaResolveUtil;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.search.searches.SuperMethodsSearch;
+import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
+import com.siyeh.IntentionPowerPackBundle;
+import consulo.application.AccessToken;
+import consulo.application.WriteAction;
+import consulo.application.util.function.Processor;
+import consulo.application.util.query.Query;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.language.editor.intention.LowPriorityAction;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.language.editor.refactoring.ui.ConflictsDialog;
+import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.psi.PsiBundle;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.MultiMap;
 import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.MagicConstant;
 
@@ -160,10 +163,14 @@ abstract class ModifierIntention extends Intention implements LowPriorityAction 
         if (context == null) {
           return true;
         }
-        conflicts.putValue(element, RefactoringBundle.message("0.with.1.visibility.is.not.accessible.from.2",
-                                                              RefactoringUIUtil.getDescription(member, false),
-                                                              PsiBundle.visibilityPresentation(getModifier()),
-                                                              RefactoringUIUtil.getDescription(context, true)));
+        conflicts.putValue(
+          element,
+          RefactoringLocalize.zeroWith1VisibilityIsNotAccessibleFrom2(
+            RefactoringUIUtil.getDescription(member, false),
+            PsiBundle.visibilityPresentation(getModifier()),
+            RefactoringUIUtil.getDescription(context, true)
+          ).get()
+        );
         return true;
       }
     });

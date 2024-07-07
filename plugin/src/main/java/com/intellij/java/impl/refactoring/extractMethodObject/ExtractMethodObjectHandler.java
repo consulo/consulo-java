@@ -33,6 +33,7 @@ import consulo.document.util.TextRange;
 import consulo.language.codeStyle.PostprocessReformattingAspect;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
@@ -59,7 +60,7 @@ public class ExtractMethodObjectHandler implements RefactoringActionHandler {
   private void invokeOnElements(@Nonnull final Project project, @Nonnull final Editor editor, @Nonnull PsiFile file, @Nonnull PsiElement[] elements) {
     if (elements.length == 0) {
       String message = RefactoringBundle
-          .getCannotRefactorMessage(RefactoringBundle.message("selected.block.should.represent.a.set.of.statements.or.an.expression"));
+        .getCannotRefactorMessage(RefactoringLocalize.selectedBlockShouldRepresentASetOfStatementsOrAnExpression().get());
       CommonRefactoringUtil.showErrorHint(project, editor, message, ExtractMethodObjectProcessor.REFACTORING_NAME, HelpID.EXTRACT_METHOD_OBJECT);
       return;
     }

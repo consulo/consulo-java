@@ -26,7 +26,7 @@ import consulo.document.util.TextRange;
 import consulo.ide.impl.idea.refactoring.changeSignature.inplace.InplaceChangeSignature;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.findUsage.DescriptiveNameUtil;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.util.IncorrectOperationException;
@@ -36,8 +36,8 @@ import consulo.usage.UsageInfo;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.Comparing;
 import jakarta.annotation.Nonnull;
-
 import jakarta.annotation.Nullable;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -295,11 +295,20 @@ class DetectedJavaChangeInfo extends JavaChangeInfoImpl {
 
       @Override
       protected void invokeRefactoring(final BaseRefactoringProcessor processor) {
-        CommandProcessor.getInstance().executeCommand(myProject, () ->
-        {
-          InplaceChangeSignature.temporallyRevertChanges(JavaChangeSignatureDetector.getSignatureRange(currentMethod), document, oldText, project);
-          doRefactor(processor);
-        }, RefactoringBundle.message("changing.signature.of.0", DescriptiveNameUtil.getDescriptiveName(currentMethod)), null);
+        CommandProcessor.getInstance().executeCommand(
+          myProject,
+          () -> {
+            InplaceChangeSignature.temporallyRevertChanges(
+              JavaChangeSignatureDetector.getSignatureRange(currentMethod),
+              document,
+              oldText,
+              project
+            );
+            doRefactor(processor);
+          },
+          RefactoringLocalize.changingSignatureOf0(DescriptiveNameUtil.getDescriptiveName(currentMethod)).get(),
+          null
+        );
       }
 
       private void doRefactor(BaseRefactoringProcessor processor) {
