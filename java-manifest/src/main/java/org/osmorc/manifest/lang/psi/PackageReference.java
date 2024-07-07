@@ -27,7 +27,6 @@ package org.osmorc.manifest.lang.psi;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.document.util.TextRange;
-import consulo.language.psi.EmptyResolveMessageProvider;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReferenceBase;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -35,16 +34,16 @@ import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.Comparing;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)
  */
-public class PackageReference extends PsiReferenceBase<PsiElement> implements EmptyResolveMessageProvider {
+public class PackageReference extends PsiReferenceBase<PsiElement> {
   private final PackageReferenceSet myReferenceSet;
   private final int myIndex;
+  private final GlobalSearchScope _moduleWithLibrariesScope;
 
   public PackageReference(final PackageReferenceSet set, final TextRange range, final int index) {
     super(set.getElement(), range);
@@ -93,12 +92,4 @@ public class PackageReference extends PsiReferenceBase<PsiElement> implements Em
     System.arraycopy(psiPackages, 0, variants, 0, variants.length);
     return variants;
   }
-
-
-  @Nonnull
-  public String getUnresolvedMessagePattern() {
-    return "Cannot resolve symbol";
-  }
-
-  private final GlobalSearchScope _moduleWithLibrariesScope;
 }

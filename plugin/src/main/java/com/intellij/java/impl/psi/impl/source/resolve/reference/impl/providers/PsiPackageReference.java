@@ -16,110 +16,90 @@
 
 package com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers;
 
+import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
+import com.intellij.java.language.psi.PsiJavaPackage;
+import consulo.document.util.TextRange;
+import consulo.language.psi.*;
+import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
+import jakarta.annotation.Nonnull;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import jakarta.annotation.Nonnull;
+public class PsiPackageReference extends PsiPolyVariantReferenceBase<PsiElement> implements EmptyResolveMessageProvider {
 
-import consulo.language.psi.EmptyResolveMessageProvider;
-import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
-import consulo.document.util.TextRange;
-import consulo.language.psi.ElementManipulator;
-import consulo.language.psi.ElementManipulators;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiElementResolveResult;
-import com.intellij.java.language.psi.PsiJavaPackage;
-import consulo.language.psi.PsiPolyVariantReferenceBase;
-import consulo.language.psi.ResolveResult;
-import consulo.language.util.IncorrectOperationException;
+  private final PackageReferenceSet myReferenceSet;
+  private final int myIndex;
 
-public class PsiPackageReference extends PsiPolyVariantReferenceBase<PsiElement> implements EmptyResolveMessageProvider
-{
+  public PsiPackageReference(final PackageReferenceSet set, final TextRange range, final int index) {
+    super(set.getElement(), range, set.isSoft());
+    myReferenceSet = set;
+    myIndex = index;
+  }
 
-	private final PackageReferenceSet myReferenceSet;
-	private final int myIndex;
+  @Nonnull
+  private Set<PsiJavaPackage> getContext() {
+    if (myIndex == 0) {
+      return myReferenceSet.getInitialContext();
+    }
+    Set<PsiJavaPackage> psiPackages = new HashSet<>();
+    for (ResolveResult resolveResult : myReferenceSet.getReference(myIndex - 1).doMultiResolve()) {
+      PsiElement psiElement = resolveResult.getElement();
+      if (psiElement instanceof PsiJavaPackage) {
+        psiPackages.add((PsiJavaPackage)psiElement);
+      }
+    }
+    return psiPackages;
+  }
 
-	public PsiPackageReference(final PackageReferenceSet set, final TextRange range, final int index)
-	{
-		super(set.getElement(), range, set.isSoft());
-		myReferenceSet = set;
-		myIndex = index;
-	}
+  @Override
+  @Nonnull
+  public Object[] getVariants() {
+    Set<PsiJavaPackage> subPackages = new HashSet<>();
+    for (PsiJavaPackage psiPackage : getContext()) {
+      subPackages.addAll(Arrays.asList(psiPackage.getSubPackages(myReferenceSet.getResolveScope())));
+    }
 
-	@Nonnull
-	private Set<PsiJavaPackage> getContext()
-	{
-		if(myIndex == 0)
-		{
-			return myReferenceSet.getInitialContext();
-		}
-		Set<PsiJavaPackage> psiPackages = new HashSet<PsiJavaPackage>();
-		for(ResolveResult resolveResult : myReferenceSet.getReference(myIndex - 1).doMultiResolve())
-		{
-			PsiElement psiElement = resolveResult.getElement();
-			if(psiElement instanceof PsiJavaPackage)
-			{
-				psiPackages.add((PsiJavaPackage) psiElement);
-			}
-		}
-		return psiPackages;
-	}
+    return subPackages.toArray();
+  }
 
-	@Override
-	@Nonnull
-	public Object[] getVariants()
-	{
-		Set<PsiJavaPackage> subPackages = new HashSet<PsiJavaPackage>();
-		for(PsiJavaPackage psiPackage : getContext())
-		{
-			subPackages.addAll(Arrays.asList(psiPackage.getSubPackages(myReferenceSet.getResolveScope())));
-		}
+  @Nonnull
+  @Override
+  public LocalizeValue buildUnresolvedMessaged(@Nonnull String referenceText) {
+    return LocalizeValue.localizeTODO(JavaErrorBundle.message("cannot.resolve.package", referenceText));
+  }
 
-		return subPackages.toArray();
-	}
+  @Override
+  @Nonnull
+  public ResolveResult[] multiResolve(final boolean incompleteCode) {
+    return doMultiResolve();
+  }
 
-	@Nonnull
-	@Override
-	public String getUnresolvedMessagePattern()
-	{
-		return JavaErrorBundle.message("cannot.resolve.package");
-	}
+  @Nonnull
+  protected ResolveResult[] doMultiResolve() {
+    final Collection<PsiJavaPackage> packages = new HashSet<>();
+    for (PsiJavaPackage parentPackage : getContext()) {
+      packages.addAll(myReferenceSet.resolvePackageName(parentPackage, getValue()));
+    }
+    return PsiElementResolveResult.createResults(packages);
+  }
 
-	@Override
-	@Nonnull
-	public ResolveResult[] multiResolve(final boolean incompleteCode)
-	{
-		return doMultiResolve();
-	}
+  @Override
+  public PsiElement bindToElement(@Nonnull final PsiElement element) throws IncorrectOperationException {
+    if (!(element instanceof PsiJavaPackage)) {
+      throw new IncorrectOperationException("Cannot bind to " + element);
+    }
+    final String newName = ((PsiJavaPackage)element).getQualifiedName();
+    final TextRange range =
+      new TextRange(getReferenceSet().getReference(0).getRangeInElement().getStartOffset(), getRangeInElement().getEndOffset());
+    final ElementManipulator<PsiElement> manipulator = ElementManipulators.getManipulator(getElement());
+    return manipulator.handleContentChange(getElement(), range, newName);
+  }
 
-	@Nonnull
-	protected ResolveResult[] doMultiResolve()
-	{
-		final Collection<PsiJavaPackage> packages = new HashSet<PsiJavaPackage>();
-		for(PsiJavaPackage parentPackage : getContext())
-		{
-			packages.addAll(myReferenceSet.resolvePackageName(parentPackage, getValue()));
-		}
-		return PsiElementResolveResult.createResults(packages);
-	}
-
-	@Override
-	public PsiElement bindToElement(@Nonnull final PsiElement element) throws IncorrectOperationException
-	{
-		if(!(element instanceof PsiJavaPackage))
-		{
-			throw new IncorrectOperationException("Cannot bind to " + element);
-		}
-		final String newName = ((PsiJavaPackage) element).getQualifiedName();
-		final TextRange range = new TextRange(getReferenceSet().getReference(0).getRangeInElement().getStartOffset(), getRangeInElement().getEndOffset());
-		final ElementManipulator<PsiElement> manipulator = ElementManipulators.getManipulator(getElement());
-		return manipulator.handleContentChange(getElement(), range, newName);
-	}
-
-	public PackageReferenceSet getReferenceSet()
-	{
-		return myReferenceSet;
-	}
+  public PackageReferenceSet getReferenceSet() {
+    return myReferenceSet;
+  }
 }

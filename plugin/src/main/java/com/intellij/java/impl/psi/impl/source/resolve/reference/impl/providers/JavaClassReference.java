@@ -47,6 +47,7 @@ import consulo.language.psi.resolve.ResolveState;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
 import consulo.language.util.ModuleUtilCore;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.project.Project;
@@ -596,8 +597,8 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
 
   @Nonnull
   @Override
-  public String getUnresolvedMessagePattern() {
-    return myJavaClassReferenceSet.getUnresolvedMessagePattern(myIndex);
+  public LocalizeValue buildUnresolvedMessaged(@Nonnull String referenceText) {
+    return myJavaClassReferenceSet.buildUnresolvedMessaged(referenceText, myIndex);
   }
 
   private static class MyResolver implements ResolveCache.PolyVariantContextResolver<JavaClassReference> {

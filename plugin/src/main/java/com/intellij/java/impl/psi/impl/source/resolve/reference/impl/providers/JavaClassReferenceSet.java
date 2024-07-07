@@ -21,9 +21,9 @@ import consulo.document.util.TextRange;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.path.CustomizableReferenceProvider;
+import consulo.localize.LocalizeValue;
 import consulo.util.collection.ArrayUtil;
 import consulo.xml.lang.xml.XMLLanguage;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -255,12 +255,11 @@ public class JavaClassReferenceSet {
     return myProvider.getOptions();
   }
 
-  @SuppressWarnings({"UnresolvedPropertyKey"})
   @Nonnull
-  public String getUnresolvedMessagePattern(int index) {
+  public LocalizeValue buildUnresolvedMessaged(@Nonnull String referenceText, int index) {
     if (canReferencePackage(index)) {
-      return JavaErrorBundle.message("error.cannot.resolve.class.or.package");
+      return LocalizeValue.localizeTODO(JavaErrorBundle.message("error.cannot.resolve.class.or.package", referenceText));
     }
-    return JavaErrorBundle.message("error.cannot.resolve.class");
+    return LocalizeValue.localizeTODO(JavaErrorBundle.message("error.cannot.resolve.class", referenceText));
   }
 }
