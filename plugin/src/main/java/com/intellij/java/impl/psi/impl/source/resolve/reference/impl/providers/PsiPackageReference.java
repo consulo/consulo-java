@@ -68,7 +68,7 @@ public class PsiPackageReference extends PsiPolyVariantReferenceBase<PsiElement>
 
   @Nonnull
   @Override
-  public LocalizeValue buildUnresolvedMessaged(@Nonnull String referenceText) {
+  public LocalizeValue buildUnresolvedMessage(@Nonnull String referenceText) {
     return LocalizeValue.localizeTODO(JavaErrorBundle.message("cannot.resolve.package", referenceText));
   }
 

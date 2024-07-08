@@ -597,8 +597,8 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
 
   @Nonnull
   @Override
-  public LocalizeValue buildUnresolvedMessaged(@Nonnull String referenceText) {
-    return myJavaClassReferenceSet.buildUnresolvedMessaged(referenceText, myIndex);
+  public LocalizeValue buildUnresolvedMessage(@Nonnull String referenceText) {
+    return myJavaClassReferenceSet.buildUnresolvedMessage(referenceText, myIndex);
   }
 
   private static class MyResolver implements ResolveCache.PolyVariantContextResolver<JavaClassReference> {

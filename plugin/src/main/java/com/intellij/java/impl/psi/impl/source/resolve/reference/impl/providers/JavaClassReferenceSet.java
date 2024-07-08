@@ -256,7 +256,7 @@ public class JavaClassReferenceSet {
   }
 
   @Nonnull
-  public LocalizeValue buildUnresolvedMessaged(@Nonnull String referenceText, int index) {
+  public LocalizeValue buildUnresolvedMessage(@Nonnull String referenceText, int index) {
     if (canReferencePackage(index)) {
       return LocalizeValue.localizeTODO(JavaErrorBundle.message("error.cannot.resolve.class.or.package", referenceText));
     }
