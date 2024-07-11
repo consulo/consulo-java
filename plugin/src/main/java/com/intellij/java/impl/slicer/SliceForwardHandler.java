@@ -16,12 +16,11 @@
 package com.intellij.java.impl.slicer;
 
 import consulo.language.editor.scope.AnalysisScope;
-import consulo.ide.impl.idea.analysis.AnalysisUIOptions;
-import consulo.ide.impl.idea.analysis.BaseAnalysisActionDialog;
-import consulo.module.Module;
-import consulo.language.util.ModuleUtilCore;
-import consulo.project.Project;
+import consulo.language.editor.ui.awt.scope.BaseAnalysisActionDialog;
+import consulo.language.editor.ui.scope.AnalysisUIOptions;
 import consulo.language.psi.PsiElement;
+import consulo.module.Module;
+import consulo.project.Project;
 
 import javax.swing.*;
 
@@ -36,7 +35,7 @@ public class SliceForwardHandler extends SliceHandler {
   @Override
   public SliceAnalysisParams askForParams(PsiElement element, boolean dataFlowToThis, SliceManager.StoredSettingsBean storedSettingsBean, String dialogTitle) {
     AnalysisScope analysisScope = new AnalysisScope(element.getContainingFile());
-    Module module = ModuleUtilCore.findModuleForPsiElement(element);
+    Module module = element.getModule();
     String name = module == null ? null : module.getName();
 
     Project myProject = element.getProject();
@@ -60,7 +59,7 @@ public class SliceForwardHandler extends SliceHandler {
     storedSettingsBean.analysisUIOptions.save(analysisUIOptions);
     storedSettingsBean.showDereferences  = form.isToShowDerefs();
 
-    AnalysisScope scope = dialog.getScope(analysisUIOptions, analysisScope, myProject, module);
+    AnalysisScope scope = dialog.getScope(analysisScope);
 
     SliceAnalysisParams params = new SliceAnalysisParams();
     params.scope = scope;

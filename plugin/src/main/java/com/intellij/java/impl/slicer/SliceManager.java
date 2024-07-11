@@ -29,8 +29,8 @@ import consulo.component.persist.StoragePathMacros;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
 import consulo.ide.ServiceManager;
-import consulo.ide.impl.idea.analysis.AnalysisUIOptions;
 import consulo.language.editor.refactoring.util.RefactoringDescriptionLocation;
+import consulo.language.editor.ui.scope.AnalysisUIOptions;
 import consulo.language.psi.ElementDescriptionUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
@@ -45,10 +45,10 @@ import consulo.ui.ex.toolWindow.ContentManagerWatcher;
 import consulo.ui.ex.toolWindow.ToolWindow;
 import consulo.ui.ex.toolWindow.ToolWindowAnchor;
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import jakarta.annotation.Nonnull;
 import java.awt.*;
 import java.util.regex.Pattern;
 

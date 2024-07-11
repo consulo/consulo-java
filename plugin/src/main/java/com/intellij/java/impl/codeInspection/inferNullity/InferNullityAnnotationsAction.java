@@ -29,32 +29,31 @@ import consulo.application.util.function.Processor;
 import consulo.content.library.Library;
 import consulo.document.Document;
 import consulo.ide.impl.idea.analysis.BaseAnalysisAction;
-import consulo.ide.impl.idea.analysis.BaseAnalysisActionDialog;
 import consulo.ide.impl.idea.ide.util.PropertiesComponent;
 import consulo.ide.impl.idea.openapi.project.ProjectUtil;
 import consulo.ide.impl.idea.openapi.roots.libraries.LibraryUtil;
 import consulo.ide.impl.idea.util.SequentialModalProgressTask;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.WriteCommandAction;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.editor.scope.localize.AnalysisScopeLocalize;
+import consulo.language.editor.ui.awt.scope.BaseAnalysisActionDialog;
 import consulo.language.file.FileViewProvider;
 import consulo.language.psi.*;
 import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.util.ModuleUtilCore;
 import consulo.localHistory.LocalHistory;
 import consulo.localHistory.LocalHistoryAction;
+import consulo.localize.LocalizeValue;
 import consulo.module.Module;
 import consulo.module.content.util.ModuleRootModificationUtil;
 import consulo.project.DumbService;
 import consulo.project.Project;
+import consulo.ui.CheckBox;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.Messages;
-import consulo.ui.ex.awt.TitledSeparator;
 import consulo.ui.ex.awt.UIUtil;
-import consulo.ui.ex.awt.VerticalFlowLayout;
+import consulo.ui.layout.VerticalLayout;
 import consulo.usage.*;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.ObjectUtil;
@@ -65,16 +64,14 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import javax.swing.*;
 import java.util.*;
 import java.util.function.Supplier;
 
 public class InferNullityAnnotationsAction extends BaseAnalysisAction {
-  @NonNls
   private static final String INFER_NULLITY_ANNOTATIONS = "Infer Nullity Annotations";
-  @NonNls
   private static final String ANNOTATE_LOCAL_VARIABLES = "annotate.local.variables";
-  private JCheckBox myAnnotateLocalVariablesCb;
+
+  private CheckBox myAnnotateLocalVariablesCb;
 
   public InferNullityAnnotationsAction() {
     super("Infer Nullity", INFER_NULLITY_ANNOTATIONS);
@@ -83,7 +80,9 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
   @Override
   @RequiredUIAccess
   protected void analyze(@Nonnull final Project project, @Nonnull final AnalysisScope scope) {
-    PropertiesComponent.getInstance().setValue(ANNOTATE_LOCAL_VARIABLES, myAnnotateLocalVariablesCb.isSelected());
+    boolean annotateLocaVars = myAnnotateLocalVariablesCb.getValueOrError();
+    PropertiesComponent.getInstance().setValue(ANNOTATE_LOCAL_VARIABLES, annotateLocaVars);
+    myAnnotateLocalVariablesCb = null;
 
     final ProgressManager progressManager = ProgressManager.getInstance();
     final Set<Module> modulesWithoutAnnotations = new HashSet<>();
@@ -109,11 +108,12 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
         if (!(file instanceof PsiJavaFile)) {
           return;
         }
-        final Module module = ModuleUtilCore.findModuleForPsiElement(file);
+        final Module module = file.getModule();
         if (module != null && processed.add(module)) {
           if (PsiUtil.getLanguageLevel(file).compareTo(LanguageLevel.JDK_1_5) < 0) {
             modulesWithLL.add(module);
-          } else if (javaPsiFacade.findClass(defaultNullable, GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module)) == null) {
+          }
+          else if (javaPsiFacade.findClass(defaultNullable, GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module)) == null) {
             modulesWithoutAnnotations.add(module);
           }
         }
@@ -136,19 +136,20 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
       return;
     }
     PsiDocumentManager.getInstance(project).commitAllDocuments();
-    final UsageInfo[] usageInfos = findUsages(project, scope, fileCount[0]);
+    final UsageInfo[] usageInfos = findUsages(annotateLocaVars, project, scope, fileCount[0]);
     if (usageInfos == null) {
       return;
     }
 
-    processUsages(project, scope, usageInfos);
+    processUsages(annotateLocaVars, project, scope, usageInfos);
   }
 
-  protected void processUsages(@Nonnull Project project, @Nonnull AnalysisScope scope, @Nonnull UsageInfo[] usageInfos) {
+  protected void processUsages(boolean annotateLocaVars, @Nonnull Project project, @Nonnull AnalysisScope scope, @Nonnull UsageInfo[] usageInfos) {
     if (usageInfos.length < 5) {
       applyRunnable(project, () -> usageInfos).run();
-    } else {
-      showUsageView(project, usageInfos, scope);
+    }
+    else {
+      showUsageView(annotateLocaVars, project, usageInfos, scope);
     }
   }
 
@@ -170,11 +171,11 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
       message += (modulesWithoutAnnotations.size() == 1 ? "y" : "ies") + " now?";
       if (Messages.showOkCancelDialog(project, message, title, UIUtil.getErrorIcon()) == Messages.OK) {
         project.getApplication().runWriteAction(() ->
-        {
-          for (Module module : modulesWithoutAnnotations) {
-            ModuleRootModificationUtil.addDependency(module, annotationsLib);
-          }
-        });
+                                                {
+                                                  for (Module module : modulesWithoutAnnotations) {
+                                                    ModuleRootModificationUtil.addDependency(module, annotationsLib);
+                                                  }
+                                                });
         return true;
       }
       return false;
@@ -193,8 +194,8 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
   }
 
   @Nullable
-  protected UsageInfo[] findUsages(@Nonnull final Project project, @Nonnull final AnalysisScope scope, final int fileCount) {
-    final NullityInferrer inferrer = new NullityInferrer(isAnnotateLocalVariables(), project);
+  protected UsageInfo[] findUsages(boolean annotateLocaVars, @Nonnull final Project project, @Nonnull final AnalysisScope scope, final int fileCount) {
+    final NullityInferrer inferrer = new NullityInferrer(annotateLocaVars, project);
     final PsiManager psiManager = PsiManager.getInstance(project);
     final Runnable searchForUsages = () -> scope.accept(new PsiElementVisitor() {
       int myFileCount;
@@ -211,7 +212,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
         final ProgressIndicator progressIndicator = ProgressManager.getInstance().getProgressIndicator();
         if (progressIndicator != null) {
           progressIndicator.setText2(ProjectUtil.calcRelativeToProjectPath(virtualFile, project));
-          progressIndicator.setFraction(((double) myFileCount) / fileCount);
+          progressIndicator.setFraction(((double)myFileCount) / fileCount);
         }
         if (file instanceof PsiJavaFile) {
           inferrer.collect(file);
@@ -220,20 +221,17 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
     });
     if (project.getApplication().isDispatchThread()) {
       if (!ProgressManager.getInstance()
-        .runProcessWithProgressSynchronously(searchForUsages, INFER_NULLITY_ANNOTATIONS, true, project)) {
+                          .runProcessWithProgressSynchronously(searchForUsages, INFER_NULLITY_ANNOTATIONS, true, project)) {
         return null;
       }
-    } else {
+    }
+    else {
       searchForUsages.run();
     }
 
     final List<UsageInfo> usages = new ArrayList<>();
     inferrer.collect(usages);
     return usages.toArray(new UsageInfo[usages.size()]);
-  }
-
-  protected boolean isAnnotateLocalVariables() {
-    return myAnnotateLocalVariablesCb.isSelected();
   }
 
   private static Runnable applyRunnable(final Project project, final Computable<UsageInfo[]> computable) {
@@ -262,12 +260,14 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
               progressTask.setMinIterationTime(200);
               progressTask.setTask(new AnnotateTask(project, progressTask, infos));
               ProgressManager.getInstance().run(progressTask);
-            } else {
+            }
+            else {
               NullityInferrer.nothingFoundMessage(project);
             }
           }
         }.execute();
-      } finally {
+      }
+      finally {
         action.finish();
       }
     };
@@ -285,7 +285,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
     });
   }
 
-  private void showUsageView(@Nonnull Project project, final UsageInfo[] usageInfos, @Nonnull AnalysisScope scope) {
+  private void showUsageView(boolean annotateLocaVars, @Nonnull Project project, final UsageInfo[] usageInfos, @Nonnull AnalysisScope scope) {
     final UsageTarget[] targets = UsageTarget.EMPTY_ARRAY;
     final Ref<Usage[]> convertUsagesRef = new Ref<>();
     if (!ProgressManager.getInstance().runProcessWithProgressSynchronously(
@@ -308,7 +308,8 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
     presentation.setShowCancelButton(true);
     presentation.setUsagesString(RefactoringLocalize.usageviewUsagestext().get());
 
-    final UsageView usageView = UsageViewManager.getInstance(project).showUsages(targets, usages, presentation, rerunFactory(project, scope));
+    final UsageView usageView =
+      UsageViewManager.getInstance(project).showUsages(targets, usages, presentation, rerunFactory(annotateLocaVars, project, scope));
 
     final Runnable refactoringRunnable = applyRunnable(project, () ->
     {
@@ -316,18 +317,20 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
       return infos.toArray(new UsageInfo[infos.size()]);
     });
 
-    String canNotMakeString = "Cannot perform operation.\nThere were changes in code after usages have been found.\nPlease perform operation search again.";
+    String canNotMakeString =
+      "Cannot perform operation.\nThere were changes in code after usages have been found.\nPlease perform operation search again.";
 
     usageView.addPerformOperationAction(refactoringRunnable, INFER_NULLITY_ANNOTATIONS, canNotMakeString, INFER_NULLITY_ANNOTATIONS, false);
   }
 
   @Nonnull
-  private Supplier<UsageSearcher> rerunFactory(@Nonnull final Project project, @Nonnull final AnalysisScope scope) {
+  private Supplier<UsageSearcher> rerunFactory(boolean annotateLocaVars, @Nonnull final Project project, @Nonnull final AnalysisScope scope) {
     return () -> new UsageInfoSearcherAdapter() {
       @Nonnull
       @Override
       protected UsageInfo[] findUsages() {
-        return ObjectUtil.notNull(InferNullityAnnotationsAction.this.findUsages(project, scope, scope.getFileCount()), UsageInfo.EMPTY_ARRAY);
+        return ObjectUtil.notNull(InferNullityAnnotationsAction.this.findUsages(annotateLocaVars, project, scope, scope.getFileCount()),
+                                  UsageInfo.EMPTY_ARRAY);
       }
 
       @Override
@@ -337,14 +340,13 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
     };
   }
 
+  @RequiredUIAccess
   @Override
-  protected JComponent getAdditionalActionSettings(Project project, BaseAnalysisActionDialog dialog) {
-    final JPanel panel = new JPanel(new VerticalFlowLayout());
-    panel.add(new TitledSeparator());
+  protected void extendMainLayout(BaseAnalysisActionDialog dialog, VerticalLayout layout, Project project) {
     myAnnotateLocalVariablesCb =
-      new JCheckBox("Annotate local variables", PropertiesComponent.getInstance().getBoolean(ANNOTATE_LOCAL_VARIABLES));
-    panel.add(myAnnotateLocalVariablesCb);
-    return panel;
+      CheckBox.create(LocalizeValue.localizeTODO("Annotate local variables"));
+    myAnnotateLocalVariablesCb.setValue(PropertiesComponent.getInstance().getBoolean(ANNOTATE_LOCAL_VARIABLES));
+    layout.add(myAnnotateLocalVariablesCb);
   }
 
   @Override

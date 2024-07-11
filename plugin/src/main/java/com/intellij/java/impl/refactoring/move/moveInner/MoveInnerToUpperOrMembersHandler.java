@@ -26,7 +26,7 @@ import consulo.externalService.statistic.FeatureUsageTracker;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.move.MoveCallback;
 import consulo.language.editor.refactoring.move.MoveHandlerDelegate;
-import consulo.language.editor.refactoring.ui.RadioUpDownListener;
+import consulo.language.editor.ui.RadioUpDownListener;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.project.Project;

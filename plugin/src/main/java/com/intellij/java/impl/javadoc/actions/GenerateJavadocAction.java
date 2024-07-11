@@ -19,10 +19,13 @@ import com.intellij.java.impl.javadoc.JavadocConfigurable;
 import com.intellij.java.impl.javadoc.JavadocGenerationManager;
 import com.intellij.java.language.JavadocBundle;
 import consulo.ide.impl.idea.analysis.BaseAnalysisAction;
-import consulo.ide.impl.idea.analysis.BaseAnalysisActionDialog;
 import consulo.language.editor.scope.AnalysisScope;
+import consulo.language.editor.ui.awt.scope.BaseAnalysisActionDialog;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.event.DocumentAdapter;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
+import consulo.ui.layout.VerticalLayout;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
@@ -42,8 +45,9 @@ public final class GenerateJavadocAction extends BaseAnalysisAction {
     dispose();
   }
 
+  @RequiredUIAccess
   @Override
-  protected JComponent getAdditionalActionSettings(Project project, final BaseAnalysisActionDialog dialog) {
+  protected void extendMainLayout(BaseAnalysisActionDialog dialog, VerticalLayout layout, Project project) {
     myConfigurable = new JavadocConfigurable(JavadocGenerationManager.getInstance(project).getConfiguration());
     final JComponent component = myConfigurable.createComponent();
     myConfigurable.reset();
@@ -54,7 +58,8 @@ public final class GenerateJavadocAction extends BaseAnalysisAction {
       }
     });
     updateAvailability(dialog);
-    return component;
+
+    layout.add(TargetAWT.wrap(component));
   }
 
   private void updateAvailability(BaseAnalysisActionDialog dialog) {

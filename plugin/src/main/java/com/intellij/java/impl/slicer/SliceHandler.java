@@ -15,26 +15,25 @@
  */
 package com.intellij.java.impl.slicer;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-
-import consulo.language.editor.hint.HintManager;
-import consulo.language.editor.scope.AnalysisScope;
-import consulo.ide.impl.idea.analysis.AnalysisUIOptions;
-import consulo.ide.impl.idea.analysis.BaseAnalysisActionDialog;
-import consulo.language.editor.action.CodeInsightActionHandler;
-import consulo.language.editor.TargetElementUtil;
-import consulo.codeEditor.Editor;
-import consulo.module.Module;
-import consulo.language.util.ModuleUtilCore;
-import consulo.project.Project;
-import consulo.language.psi.PsiDocumentManager;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
-import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiVariable;
+import consulo.codeEditor.Editor;
+import consulo.language.editor.TargetElementUtil;
+import consulo.language.editor.action.CodeInsightActionHandler;
+import consulo.language.editor.hint.HintManager;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.language.editor.ui.awt.scope.BaseAnalysisActionDialog;
+import consulo.language.editor.ui.scope.AnalysisUIOptions;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.ModuleUtilCore;
+import consulo.module.Module;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author cdr
@@ -51,12 +50,14 @@ public class SliceHandler implements CodeInsightActionHandler {
     PsiDocumentManager.getInstance(project).commitAllDocuments(); // prevents problems with smart pointers creation
     PsiElement expression = getExpressionAtCaret(editor, file);
     if (expression == null) {
-      HintManager.getInstance().showErrorHint(editor, "Cannot find what to analyze. Please stand on the expression or variable or method parameter and try again.");
+      HintManager.getInstance()
+                 .showErrorHint(editor,
+                                "Cannot find what to analyze. Please stand on the expression or variable or method parameter and try again.");
       return;
     }
 
     SliceManager sliceManager = SliceManager.getInstance(project);
-    sliceManager.slice(expression,myDataFlowToThis, this);
+    sliceManager.slice(expression, myDataFlowToThis, this);
   }
 
   @Override
@@ -77,7 +78,10 @@ public class SliceHandler implements CodeInsightActionHandler {
     return element;
   }
 
-  public SliceAnalysisParams askForParams(PsiElement element, boolean dataFlowToThis, SliceManager.StoredSettingsBean storedSettingsBean, String dialogTitle) {
+  public SliceAnalysisParams askForParams(PsiElement element,
+                                          boolean dataFlowToThis,
+                                          SliceManager.StoredSettingsBean storedSettingsBean,
+                                          String dialogTitle) {
     AnalysisScope analysisScope = new AnalysisScope(element.getContainingFile());
     Module module = ModuleUtilCore.findModuleForPsiElement(element);
     String name = module == null ? null : module.getName();
@@ -86,8 +90,9 @@ public class SliceHandler implements CodeInsightActionHandler {
     AnalysisUIOptions analysisUIOptions = new AnalysisUIOptions();
     analysisUIOptions.save(storedSettingsBean.analysisUIOptions);
 
-    BaseAnalysisActionDialog dialog = new BaseAnalysisActionDialog(dialogTitle, "Analyze scope", myProject, analysisScope, name, true, analysisUIOptions,
-                                                                   element);
+    BaseAnalysisActionDialog
+      dialog = new BaseAnalysisActionDialog(dialogTitle, "Analyze scope", myProject, analysisScope, name, true, analysisUIOptions,
+                                            element);
     dialog.show();
     if (!dialog.isOK()) return null;
 

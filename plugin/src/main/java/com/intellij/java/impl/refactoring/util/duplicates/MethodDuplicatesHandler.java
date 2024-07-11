@@ -30,8 +30,6 @@ import consulo.application.progress.Task;
 import consulo.application.util.function.Computable;
 import consulo.codeEditor.Editor;
 import consulo.dataContext.DataContext;
-import consulo.ide.impl.idea.analysis.AnalysisUIOptions;
-import consulo.ide.impl.idea.analysis.BaseAnalysisActionDialog;
 import consulo.ide.impl.idea.openapi.project.ProjectUtil;
 import consulo.language.codeStyle.PostprocessReformattingAspect;
 import consulo.language.editor.refactoring.ContextAwareActionHandler;
@@ -40,6 +38,8 @@ import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.editor.scope.AnalysisScope;
+import consulo.language.editor.ui.awt.scope.BaseAnalysisActionDialog;
+import consulo.language.editor.ui.scope.AnalysisUIOptions;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiRecursiveElementVisitor;
@@ -105,7 +105,7 @@ public class MethodDuplicatesHandler implements RefactoringActionHandler, Contex
         @Override
         public void run(@Nonnull ProgressIndicator indicator) {
           indicator.setIndeterminate(true);
-          invokeOnScope(project, member, dlg.getScope(AnalysisUIOptions.getInstance(project), scope, project, module));
+          invokeOnScope(project, member, dlg.getScope(scope));
         }
       });
     }
