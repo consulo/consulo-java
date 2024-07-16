@@ -15,33 +15,33 @@
  */
 package com.intellij.java.debugger.impl;
 
-import consulo.execution.debug.XDebugSession;
-import consulo.fileEditor.FileEditorManager;
-import consulo.ide.impl.idea.codeInsight.daemon.impl.IdentifierHighlighterPass;
 import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.debugger.impl.engine.SuspendContextImpl;
 import com.intellij.java.debugger.impl.engine.SuspendManagerUtil;
 import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.ThreadDescriptorImpl;
-import consulo.application.ApplicationManager;
+import com.intellij.java.language.psi.PsiMethod;
 import consulo.codeEditor.Editor;
-import consulo.ide.impl.idea.openapi.fileEditor.impl.FileEditorManagerImpl;
-import consulo.util.lang.Couple;
 import consulo.document.util.TextRange;
+import consulo.execution.debug.XDebugSession;
+import consulo.execution.debug.XSourcePosition;
+import consulo.fileEditor.FileEditorManager;
+import consulo.ide.impl.idea.codeInsight.daemon.impl.IdentifierHighlighterPass;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiMethod;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.execution.debug.XSourcePosition;
-
+import consulo.ui.UIAccess;
+import consulo.util.lang.Couple;
 import jakarta.annotation.Nonnull;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class DebuggerContextUtil {
   public static void setStackFrame(DebuggerStateManager manager, final StackFrameProxyImpl stackFrame) {
-    ApplicationManager.getApplication().assertIsDispatchThread();
+    UIAccess.assertIsUIThread();
+
     final DebuggerContextImpl context = manager.getContext();
 
     final DebuggerSession session = context.getDebuggerSession();
@@ -52,7 +52,7 @@ public class DebuggerContextUtil {
   }
 
   public static void setThread(DebuggerStateManager contextManager, ThreadDescriptorImpl item) {
-    ApplicationManager.getApplication().assertIsDispatchThread();
+    UIAccess.assertIsUIThread();
 
     final DebuggerSession session = contextManager.getContext().getDebuggerSession();
     final DebuggerContextImpl newContext = DebuggerContextImpl.createDebuggerContext(session, item.getSuspendContext(), item.getThreadReference(), null);
@@ -72,7 +72,7 @@ public class DebuggerContextUtil {
         final XDebugSession debugSession = session.getXDebugSession();
         if (debugSession != null) {
           final XSourcePosition position = debugSession.getCurrentPosition();
-          Editor editor = ((FileEditorManagerImpl) FileEditorManager.getInstance(file.getProject())).getSelectedTextEditor(true);
+          Editor editor = FileEditorManager.getInstance(file.getProject()).getSelectedTextEditor(true);
 
           //final Editor editor = fileEditor instanceof TextEditorImpl ? ((TextEditorImpl)fileEditor).getEditor() : null;
           if (editor != null && position != null && file.getVirtualFile().equals(position.getFile())) {
