@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiClass;
@@ -30,14 +31,12 @@ public class ConstantDeclaredInAbstractClassInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "constant.declared.in.abstract.class.display.name");
+    return InspectionGadgetsLocalize.constantDeclaredInAbstractClassDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "constant.declared.in.abstract.class.problem.descriptor");
+    return InspectionGadgetsLocalize.constantDeclaredInAbstractClassProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

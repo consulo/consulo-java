@@ -15,18 +15,19 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import org.jetbrains.annotations.NonNls;
-import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.EquivalenceChecker;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class CollectionAddedToSelfInspection extends BaseInspection {
@@ -34,8 +35,7 @@ public class CollectionAddedToSelfInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "collection.added.to.self.display.name");
+    return InspectionGadgetsLocalize.collectionAddedToSelfDisplayName().get();
   }
 
   @Override

@@ -18,17 +18,18 @@ package com.intellij.java.impl.ig.dependency;
 import com.intellij.java.analysis.codeInspection.reference.RefClass;
 import com.intellij.java.impl.ig.BaseGlobalInspection;
 import com.intellij.java.language.psi.PsiClass;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.psiutils.ClassUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.deadCodeNotWorking.impl.SingleIntegerFieldOptionsPanel;
 import consulo.language.editor.inspection.CommonProblemDescriptor;
 import consulo.language.editor.inspection.GlobalInspectionContext;
 import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.scheme.InspectionManager;
-import consulo.deadCodeNotWorking.impl.SingleIntegerFieldOptionsPanel;
 import consulo.language.editor.scope.AnalysisScope;
-
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 import java.util.Set;
 
@@ -40,8 +41,7 @@ public abstract class ClassWithTooManyDependentsInspection extends BaseGlobalIns
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "class.with.too.many.dependents.display.name");
+    return InspectionGadgetsLocalize.classWithTooManyDependentsDisplayName().get();
   }
 
   @Nullable
@@ -64,9 +64,8 @@ public abstract class ClassWithTooManyDependentsInspection extends BaseGlobalIns
     if (numDependents <= limit) {
       return null;
     }
-    final String errorString = InspectionGadgetsBundle.message(
-      "class.with.too.many.dependents.problem.descriptor",
-      refEntity.getName(), numDependents, limit);
+    final String errorString =
+        InspectionGadgetsLocalize.classWithTooManyDependentsProblemDescriptor(refEntity.getName(), numDependents, limit).get();
 
     return new CommonProblemDescriptor[]{
       inspectionManager.createProblemDescriptor(errorString)
@@ -74,9 +73,7 @@ public abstract class ClassWithTooManyDependentsInspection extends BaseGlobalIns
   }
 
   public JComponent createOptionsPanel() {
-    return new SingleIntegerFieldOptionsPanel(
-      InspectionGadgetsBundle.message(
-        "class.with.too.many.dependents.max.option"),
-      this, "limit");
+    LocalizeValue message = InspectionGadgetsLocalize.classWithTooManyDependentsMaxOption();
+    return new SingleIntegerFieldOptionsPanel(message.get(), this, "limit");
   }
 }

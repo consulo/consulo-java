@@ -16,9 +16,9 @@
 package com.intellij.java.impl.ig.controlflow;
 
 import com.intellij.java.language.psi.PsiContinueStatement;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 
@@ -27,26 +27,21 @@ public class ContinueStatementInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "continue.statement.display.name");
+    return InspectionGadgetsLocalize.continueStatementDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "statement.problem.descriptor");
+    return InspectionGadgetsLocalize.statementProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {
     return new ContinueStatementVisitor();
   }
 
-  private static class ContinueStatementVisitor
-    extends BaseInspectionVisitor {
-
+  private static class ContinueStatementVisitor extends BaseInspectionVisitor {
     @Override
-    public void visitContinueStatement(
-      @Nonnull PsiContinueStatement statement) {
+    public void visitContinueStatement(@Nonnull PsiContinueStatement statement) {
       super.visitContinueStatement(statement);
       registerStatementError(statement);
     }

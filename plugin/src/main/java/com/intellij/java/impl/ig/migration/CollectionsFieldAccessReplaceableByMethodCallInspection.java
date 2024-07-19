@@ -17,22 +17,21 @@ package com.intellij.java.impl.ig.migration;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpectedTypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-
-import jakarta.annotation.Nonnull;
 
 public abstract class CollectionsFieldAccessReplaceableByMethodCallInspection extends BaseInspection {
 
@@ -40,25 +39,20 @@ public abstract class CollectionsFieldAccessReplaceableByMethodCallInspection ex
   @Nls
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-        "collections.field.access.replaceable.by.method.call.display.name");
+    return InspectionGadgetsLocalize.collectionsFieldAccessReplaceableByMethodCallDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-        "collections.field.access.replaceable.by.method.call.problem.descriptor",
-        infos[1]);
+    return InspectionGadgetsLocalize.collectionsFieldAccessReplaceableByMethodCallProblemDescriptor(infos[1]).get();
   }
 
   @Override
   @Nullable
   protected InspectionGadgetsFix buildFix(Object... infos) {
-    final PsiReferenceExpression expression =
-        (PsiReferenceExpression) infos[0];
-    return new CollectionsFieldAccessReplaceableByMethodCallFix(
-        expression.getReferenceName());
+    final PsiReferenceExpression expression = (PsiReferenceExpression) infos[0];
+    return new CollectionsFieldAccessReplaceableByMethodCallFix(expression.getReferenceName());
   }
 
   private static class CollectionsFieldAccessReplaceableByMethodCallFix
@@ -73,9 +67,7 @@ public abstract class CollectionsFieldAccessReplaceableByMethodCallInspection ex
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-          "collections.field.access.replaceable.by.method.call.quickfix",
-          replacementText);
+      return InspectionGadgetsLocalize.collectionsFieldAccessReplaceableByMethodCallQuickfix(replacementText).get();
     }
 
     @NonNls

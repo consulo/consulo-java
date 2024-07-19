@@ -16,16 +16,16 @@
 package com.intellij.java.impl.ig.performance;
 
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -36,16 +36,14 @@ public class CollectionContainsUrlInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "collection.contains.url.display.name");
+    return InspectionGadgetsLocalize.collectionContainsUrlDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
     final ClassType type = (ClassType)infos[0];
-    return InspectionGadgetsBundle.message(
-      "collection.contains.url.problem.decriptor", type);
+    return InspectionGadgetsLocalize.collectionContainsUrlProblemDecriptor(type).get();
   }
 
   @Override

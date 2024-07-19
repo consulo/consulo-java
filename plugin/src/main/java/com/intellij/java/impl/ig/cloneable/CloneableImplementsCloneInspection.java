@@ -16,19 +16,20 @@
 package com.intellij.java.impl.ig.cloneable;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.CloneUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 
 @ExtensionImpl
@@ -48,19 +49,19 @@ public class CloneableImplementsCloneInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("cloneable.class.without.clone.display.name");
+    return InspectionGadgetsLocalize.cloneableClassWithoutCloneDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("cloneable.class.without.clone.problem.descriptor");
+    return InspectionGadgetsLocalize.cloneableClassWithoutCloneProblemDescriptor().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message(
-      "cloneable.class.without.clone.ignore.option"), this, "m_ignoreCloneableDueToInheritance");
+    LocalizeValue message = InspectionGadgetsLocalize.cloneableClassWithoutCloneIgnoreOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "m_ignoreCloneableDueToInheritance");
   }
 
   @Override
@@ -72,7 +73,7 @@ public class CloneableImplementsCloneInspection extends BaseInspection {
     @Nonnull
     @Override
     public String getName() {
-      return InspectionGadgetsBundle.message("cloneable.class.without.clone.quickfix");
+      return InspectionGadgetsLocalize.cloneableClassWithoutCloneQuickfix().get();
     }
 
     @Override

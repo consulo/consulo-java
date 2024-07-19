@@ -17,11 +17,10 @@ package com.intellij.java.impl.ig.classlayout;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -29,14 +28,12 @@ public class ConstantDeclaredInInterfaceInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "constant.declared.in.interface.display.name");
+    return InspectionGadgetsLocalize.constantDeclaredInInterfaceDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "constant.declared.in.interface.problem.descriptor");
+    return InspectionGadgetsLocalize.constantDeclaredInInterfaceProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

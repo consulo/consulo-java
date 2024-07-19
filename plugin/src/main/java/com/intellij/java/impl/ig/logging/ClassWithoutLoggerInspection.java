@@ -18,19 +18,19 @@ package com.intellij.java.impl.ig.logging;
 import com.intellij.java.impl.ig.ui.UiUtils;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
 import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
+import jakarta.annotation.Nonnull;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -61,13 +61,13 @@ public class ClassWithoutLoggerInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("no.logger.display.name");
+    return InspectionGadgetsLocalize.noLoggerDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("no.logger.problem.descriptor");
+    return InspectionGadgetsLocalize.noLoggerProblemDescriptor().get();
   }
 
   @Override
@@ -85,9 +85,9 @@ public class ClassWithoutLoggerInspection extends BaseInspection {
   @Override
   public JComponent createOptionsPanel() {
     final JComponent panel = new JPanel(new BorderLayout());
-    final ListTable table = new ListTable(new ListWrappingTableModel(loggerNames, InspectionGadgetsBundle.message("logger.class.name")));
-    final JPanel tablePanel = UiUtils.createAddRemoveTreeClassChooserPanel(table, InspectionGadgetsBundle.message("choose.logger.class"));
-    final CheckBox checkBox = new CheckBox(InspectionGadgetsBundle.message("super.class.logger.option"), this, "ignoreSuperLoggers");
+    final ListTable table = new ListTable(new ListWrappingTableModel(loggerNames, InspectionGadgetsLocalize.loggerClassName().get()));
+    final JPanel tablePanel = UiUtils.createAddRemoveTreeClassChooserPanel(table, InspectionGadgetsLocalize.chooseLoggerClass().get());
+    final CheckBox checkBox = new CheckBox(InspectionGadgetsLocalize.superClassLoggerOption().get(), this, "ignoreSuperLoggers");
     panel.add(tablePanel, BorderLayout.CENTER);
     panel.add(checkBox, BorderLayout.SOUTH);
     return panel;

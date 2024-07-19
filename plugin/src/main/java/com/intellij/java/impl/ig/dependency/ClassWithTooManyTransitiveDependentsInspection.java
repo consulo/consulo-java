@@ -18,14 +18,15 @@ package com.intellij.java.impl.ig.dependency;
 import com.intellij.java.analysis.codeInspection.reference.RefClass;
 import com.intellij.java.impl.ig.BaseGlobalInspection;
 import com.intellij.java.language.psi.PsiClass;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.psiutils.ClassUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.deadCodeNotWorking.impl.SingleIntegerFieldOptionsPanel;
 import consulo.language.editor.inspection.CommonProblemDescriptor;
 import consulo.language.editor.inspection.GlobalInspectionContext;
 import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.scheme.InspectionManager;
-import consulo.deadCodeNotWorking.impl.SingleIntegerFieldOptionsPanel;
 import consulo.language.editor.scope.AnalysisScope;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -41,8 +42,7 @@ public abstract class ClassWithTooManyTransitiveDependentsInspection
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "class.with.too.many.transitive.dependents.display.name");
+    return InspectionGadgetsLocalize.classWithTooManyTransitiveDependentsDisplayName().get();
   }
 
   @Nullable
@@ -66,18 +66,15 @@ public abstract class ClassWithTooManyTransitiveDependentsInspection
     if (numDependents <= limit) {
       return null;
     }
-    final String errorString = InspectionGadgetsBundle.message(
-      "class.with.too.many.transitive.dependents.problem.descriptor",
-      refEntity.getName(), numDependents, limit);
+    final String errorString =
+        InspectionGadgetsLocalize.classWithTooManyTransitiveDependentsProblemDescriptor(refEntity.getName(), numDependents, limit).get();
     return new CommonProblemDescriptor[]{
       inspectionManager.createProblemDescriptor(errorString)
     };
   }
 
   public JComponent createOptionsPanel() {
-    return new SingleIntegerFieldOptionsPanel(
-      InspectionGadgetsBundle.message(
-        "class.with.too.many.transitive.dependents.max.option"),
-      this, "limit");
+    LocalizeValue message = InspectionGadgetsLocalize.classWithTooManyTransitiveDependentsMaxOption();
+    return new SingleIntegerFieldOptionsPanel(message.get(), this, "limit");
   }
 }

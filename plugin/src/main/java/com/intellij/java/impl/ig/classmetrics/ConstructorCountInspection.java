@@ -17,13 +17,13 @@ package com.intellij.java.impl.ig.classmetrics;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.ui.ex.awt.GridBag;
 import consulo.ui.ex.awt.UIUtil;
-
 import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -40,7 +40,7 @@ public abstract class ConstructorCountInspection extends ClassMetricInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("too.many.constructors.display.name");
+    return InspectionGadgetsLocalize.tooManyConstructorsDisplayName().get();
   }
 
   protected int getDefaultLimit() {
@@ -48,15 +48,18 @@ public abstract class ConstructorCountInspection extends ClassMetricInspection {
   }
 
   protected String getConfigurationLabel() {
-    return InspectionGadgetsBundle.message("too.many.constructors.count.limit.option");
+    return InspectionGadgetsLocalize.tooManyConstructorsCountLimitOption().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
     final JLabel label = new JLabel(getConfigurationLabel());
     final JFormattedTextField valueField = prepareNumberEditor(() -> m_limit, i -> m_limit = i);
-    final CheckBox includeCheckBox =
-      new CheckBox(InspectionGadgetsBundle.message("too.many.constructors.ignore.deprecated.option"), this, "ignoreDeprecatedConstructors");
+    final CheckBox includeCheckBox = new CheckBox(
+      InspectionGadgetsLocalize.tooManyConstructorsIgnoreDeprecatedOption().get(),
+      this,
+      "ignoreDeprecatedConstructors"
+    );
 
     final GridBag bag = new GridBag();
     bag.setDefaultInsets(0, 0, 0, UIUtil.DEFAULT_HGAP);
@@ -71,7 +74,7 @@ public abstract class ConstructorCountInspection extends ClassMetricInspection {
   @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer count = (Integer)infos[0];
-    return InspectionGadgetsBundle.message("too.many.constructors.problem.descriptor", count);
+    return InspectionGadgetsLocalize.tooManyConstructorsProblemDescriptor(count).get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

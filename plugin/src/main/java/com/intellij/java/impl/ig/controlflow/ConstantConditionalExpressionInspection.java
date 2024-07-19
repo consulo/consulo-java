@@ -15,19 +15,18 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
 import com.intellij.java.language.psi.PsiConditionalExpression;
 import com.intellij.java.language.psi.PsiExpression;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.BoolUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ConstantConditionalExpressionInspection
@@ -36,8 +35,7 @@ public class ConstantConditionalExpressionInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "constant.conditional.expression.display.name");
+    return InspectionGadgetsLocalize.constantConditionalExpressionDisplayName().get();
   }
 
   @Override
@@ -48,11 +46,8 @@ public class ConstantConditionalExpressionInspection
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final PsiConditionalExpression expression =
-      (PsiConditionalExpression)infos[0];
-    return InspectionGadgetsBundle.message(
-      "constant.conditional.expression.problem.descriptor",
-      calculateReplacementExpression(expression));
+    final PsiConditionalExpression expression = (PsiConditionalExpression)infos[0];
+    return InspectionGadgetsLocalize.constantConditionalExpressionProblemDescriptor(calculateReplacementExpression(expression)).get();
   }
 
   static String calculateReplacementExpression(
@@ -79,17 +74,14 @@ public class ConstantConditionalExpressionInspection
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "constant.conditional.expression.simplify.quickfix");
+      return InspectionGadgetsLocalize.constantConditionalExpressionSimplifyQuickfix().get();
     }
 
     @Override
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiConditionalExpression expression =
-        (PsiConditionalExpression)descriptor.getPsiElement();
-      final String newExpression =
-        calculateReplacementExpression(expression);
+      final PsiConditionalExpression expression = (PsiConditionalExpression)descriptor.getPsiElement();
+      final String newExpression = calculateReplacementExpression(expression);
       replaceExpression(expression, newExpression);
     }
   }
@@ -99,12 +91,9 @@ public class ConstantConditionalExpressionInspection
     return new ConstantConditionalExpressionVisitor();
   }
 
-  private static class ConstantConditionalExpressionVisitor
-    extends BaseInspectionVisitor {
-
+  private static class ConstantConditionalExpressionVisitor extends BaseInspectionVisitor {
     @Override
-    public void visitConditionalExpression(
-      PsiConditionalExpression expression) {
+    public void visitConditionalExpression(PsiConditionalExpression expression) {
       super.visitConditionalExpression(expression);
       final PsiExpression condition = expression.getCondition();
       final PsiExpression thenExpression = expression.getThenExpression();

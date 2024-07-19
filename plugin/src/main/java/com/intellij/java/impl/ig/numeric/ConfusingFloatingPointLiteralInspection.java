@@ -15,20 +15,19 @@
  */
 package com.intellij.java.impl.ig.numeric;
 
-import jakarta.annotation.Nullable;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiType;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class ConfusingFloatingPointLiteralInspection
@@ -37,15 +36,13 @@ public class ConfusingFloatingPointLiteralInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "confusing.floating.point.literal.display.name");
+    return InspectionGadgetsLocalize.confusingFloatingPointLiteralDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "confusing.floating.point.literal.problem.descriptor");
+    return InspectionGadgetsLocalize.confusingFloatingPointLiteralProblemDescriptor().get();
   }
 
   @Override
@@ -58,23 +55,20 @@ public class ConfusingFloatingPointLiteralInspection
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "confusing.floating.point.literal.change.quickfix");
+      return InspectionGadgetsLocalize.confusingFloatingPointLiteralChangeQuickfix().get();
     }
 
     @Override
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiExpression literalExpression =
-        (PsiExpression)descriptor.getPsiElement();
+      final PsiExpression literalExpression = (PsiExpression)descriptor.getPsiElement();
       final String text = literalExpression.getText();
       final String newText = getCanonicalForm(text);
       replaceExpression(literalExpression, newText);
     }
 
     private static String getCanonicalForm(String text) {
-      final boolean isHexadecimal =
-        text.startsWith("0x") || text.startsWith("0X");
+      final boolean isHexadecimal = text.startsWith("0x") || text.startsWith("0X");
       int breakPoint = text.indexOf((int)'e');
       if (breakPoint < 0) {
         breakPoint = text.indexOf((int)'E');

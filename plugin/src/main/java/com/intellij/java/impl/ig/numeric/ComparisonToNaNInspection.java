@@ -15,22 +15,21 @@
  */
 package com.intellij.java.impl.ig.numeric;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.ast.IElementType;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
@@ -38,19 +37,15 @@ public class ComparisonToNaNInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("comparison.to.nan.display.name");
+    return InspectionGadgetsLocalize.comparisonToNanDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiBinaryExpression comparison = (PsiBinaryExpression)infos[0];
-    final IElementType tokenType = comparison.getOperationTokenType();
-    if (tokenType.equals(JavaTokenType.EQEQ)) {
-      return InspectionGadgetsBundle.message("comparison.to.nan.problem.descriptor1");
-    }
-    else {
-      return InspectionGadgetsBundle.message("comparison.to.nan.problem.descriptor2");
-    }
+    return JavaTokenType.EQEQ.equals(comparison.getOperationTokenType())
+      ? InspectionGadgetsLocalize.comparisonToNanProblemDescriptor1().get()
+      : InspectionGadgetsLocalize.comparisonToNanProblemDescriptor2().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {
@@ -65,7 +60,7 @@ public class ComparisonToNaNInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("comparison.to.nan.replace.quickfix");
+      return InspectionGadgetsLocalize.comparisonToNanReplaceQuickfix().get();
     }
 
     public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
