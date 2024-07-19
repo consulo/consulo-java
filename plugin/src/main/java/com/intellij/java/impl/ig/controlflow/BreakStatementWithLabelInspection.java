@@ -17,9 +17,9 @@ package com.intellij.java.impl.ig.controlflow;
 
 import com.intellij.java.language.psi.PsiBreakStatement;
 import com.intellij.java.language.psi.PsiIdentifier;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 
@@ -28,14 +28,12 @@ public class BreakStatementWithLabelInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "break.statement.with.label.display.name");
+    return InspectionGadgetsLocalize.breakStatementWithLabelDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "break.statement.with.label.problem.descriptor");
+    return InspectionGadgetsLocalize.breakStatementWithLabelProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

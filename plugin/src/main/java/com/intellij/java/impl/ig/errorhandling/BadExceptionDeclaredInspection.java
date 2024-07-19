@@ -15,32 +15,30 @@
  */
 package com.intellij.java.impl.ig.errorhandling;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.util.List;
-
-import consulo.deadCodeNotWorking.impl.CheckBox;
-import jakarta.annotation.Nonnull;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-
+import com.intellij.java.impl.ig.psiutils.LibraryUtil;
+import com.intellij.java.impl.ig.ui.UiUtils;
 import com.intellij.java.language.codeInsight.TestFrameworks;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.ide.impl.idea.codeInspection.ui.ListTable;
-import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
-import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiReferenceList;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import com.intellij.java.impl.ig.psiutils.LibraryUtil;
 import com.siyeh.ig.psiutils.TestUtils;
 import com.siyeh.ig.ui.ExternalizableStringSet;
-import com.intellij.java.impl.ig.ui.UiUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.CheckBox;
+import consulo.ide.impl.idea.codeInspection.ui.ListTable;
+import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
+import consulo.language.psi.PsiElement;
+import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.List;
 
 @ExtensionImpl
 public class BadExceptionDeclaredInspection extends BaseInspection {
@@ -91,22 +89,25 @@ public class BadExceptionDeclaredInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("bad.exception.declared.display.name");
+    return InspectionGadgetsLocalize.badExceptionDeclaredDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("bad.exception.declared.problem.descriptor");
+    return InspectionGadgetsLocalize.badExceptionDeclaredProblemDescriptor().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
     final JComponent panel = new JPanel(new GridBagLayout());
     final ListTable table =
-      new ListTable(new ListWrappingTableModel(exceptions, InspectionGadgetsBundle.message("exception.class.column.name")));
-    JPanel tablePanel =
-      UiUtils.createAddRemoveTreeClassChooserPanel(table, InspectionGadgetsBundle.message("choose.exception.class"), "java.lang.Throwable");
+      new ListTable(new ListWrappingTableModel(exceptions, InspectionGadgetsLocalize.exceptionClassColumnName().get()));
+    JPanel tablePanel = UiUtils.createAddRemoveTreeClassChooserPanel(
+      table,
+      InspectionGadgetsLocalize.chooseExceptionClass().get(),
+      "java.lang.Throwable"
+    );
     final GridBagConstraints constraints = new GridBagConstraints();
     constraints.gridx = 0;
     constraints.gridy = 0;
@@ -122,9 +123,11 @@ public class BadExceptionDeclaredInspection extends BaseInspection {
     constraints.weighty = 0.0;
     panel.add(checkBox1, constraints);
 
-    final CheckBox checkBox2 =
-      new CheckBox(InspectionGadgetsBundle.message("ignore.exceptions.declared.on.library.override.option"), this,
-                   "ignoreLibraryOverrides");
+    final CheckBox checkBox2 = new CheckBox(
+      InspectionGadgetsLocalize.ignoreExceptionsDeclaredOnLibraryOverrideOption().get(),
+      this,
+      "ignoreLibraryOverrides"
+    );
     constraints.gridy = 2;
     panel.add(checkBox2, constraints);
     return panel;

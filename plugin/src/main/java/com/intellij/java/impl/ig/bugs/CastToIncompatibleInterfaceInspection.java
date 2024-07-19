@@ -15,13 +15,12 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
+import com.intellij.java.impl.ig.psiutils.InheritanceUtil;
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import com.intellij.java.impl.ig.psiutils.InheritanceUtil;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -29,14 +28,12 @@ public class CastToIncompatibleInterfaceInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "casting.to.incompatible.interface.display.name");
+    return InspectionGadgetsLocalize.castingToIncompatibleInterfaceDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "casting.to.incompatible.interface.problem.descriptor");
+    return InspectionGadgetsLocalize.castingToIncompatibleInterfaceProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

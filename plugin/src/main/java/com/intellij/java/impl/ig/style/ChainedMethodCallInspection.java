@@ -17,19 +17,19 @@ package com.intellij.java.impl.ig.style;
 
 import com.intellij.java.impl.ig.fixes.IntroduceVariableFix;
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 
 @ExtensionImpl
@@ -44,20 +44,20 @@ public class ChainedMethodCallInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("chained.method.call.display.name");
+    return InspectionGadgetsLocalize.chainedMethodCallDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("chained.method.call.problem.descriptor");
+    return InspectionGadgetsLocalize.chainedMethodCallProblemDescriptor().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
-    panel.addCheckbox(InspectionGadgetsBundle.message("chained.method.call.ignore.option"), "m_ignoreFieldInitializations");
-    panel.addCheckbox(InspectionGadgetsBundle.message("chained.method.call.ignore.this.super.option"), "m_ignoreThisSuperCalls");
+    panel.addCheckbox(InspectionGadgetsLocalize.chainedMethodCallIgnoreOption().get(), "m_ignoreFieldInitializations");
+    panel.addCheckbox(InspectionGadgetsLocalize.chainedMethodCallIgnoreThisSuperOption().get(), "m_ignoreThisSuperCalls");
     return panel;
   }
 

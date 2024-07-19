@@ -17,14 +17,15 @@ package com.intellij.java.impl.ig.j2me;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.ConstantExpressionUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.deadCodeNotWorking.impl.SingleIntegerFieldOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
-
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 
 public abstract class CheckForOutOfMemoryOnLargeArrayAllocationInspection
@@ -37,21 +38,17 @@ public abstract class CheckForOutOfMemoryOnLargeArrayAllocationInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "large.array.allocation.no.outofmemoryerror.display.name");
+    return InspectionGadgetsLocalize.largeArrayAllocationNoOutofmemoryerrorDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "large.array.allocation.no.outofmemoryerror.problem.descriptor");
+    return InspectionGadgetsLocalize.largeArrayAllocationNoOutofmemoryerrorProblemDescriptor().get();
   }
 
   public JComponent createOptionsPanel() {
-    return new SingleIntegerFieldOptionsPanel(
-      InspectionGadgetsBundle.message(
-        "large.array.allocation.no.outofmemoryerror.maximum.number.of.elements.option"),
-      this, "m_limit");
+    LocalizeValue message = InspectionGadgetsLocalize.largeArrayAllocationNoOutofmemoryerrorMaximumNumberOfElementsOption();
+    return new SingleIntegerFieldOptionsPanel(message.get(), this, "m_limit");
   }
 
   public BaseInspectionVisitor buildVisitor() {

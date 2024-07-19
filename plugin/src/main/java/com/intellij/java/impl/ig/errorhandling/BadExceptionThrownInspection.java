@@ -15,18 +15,18 @@
  */
 package com.intellij.java.impl.ig.errorhandling;
 
+import com.intellij.java.impl.ig.ui.UiUtils;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiThrowStatement;
+import com.intellij.java.language.psi.PsiType;
+import com.siyeh.ig.BaseInspection;
+import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.ig.ui.ExternalizableStringSet;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
 import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
 import consulo.util.lang.StringUtil;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiThrowStatement;
-import com.intellij.java.language.psi.PsiType;
-import com.siyeh.InspectionGadgetsBundle;
-import com.siyeh.ig.BaseInspection;
-import com.siyeh.ig.BaseInspectionVisitor;
-import com.siyeh.ig.ui.ExternalizableStringSet;
-import com.intellij.java.impl.ig.ui.UiUtils;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
@@ -73,14 +73,17 @@ public class BadExceptionThrownInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "bad.exception.thrown.display.name");
+    return InspectionGadgetsLocalize.badExceptionThrownDisplayName().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    final ListTable table = new ListTable(new ListWrappingTableModel(exceptions, InspectionGadgetsBundle.message( "exception.class.column.name")));
-    return UiUtils.createAddRemoveTreeClassChooserPanel(table, InspectionGadgetsBundle.message("choose.exception.class"), "java.lang.Throwable");
+    final ListTable table = new ListTable(new ListWrappingTableModel(exceptions, InspectionGadgetsLocalize.exceptionClassColumnName().get()));
+    return UiUtils.createAddRemoveTreeClassChooserPanel(
+      table,
+      InspectionGadgetsLocalize.chooseExceptionClass().get(),
+      "java.lang.Throwable"
+    );
   }
 
   @Override
@@ -88,8 +91,7 @@ public class BadExceptionThrownInspection extends BaseInspection {
   public String buildErrorString(Object... infos) {
     final PsiType type = (PsiType)infos[0];
     final String exceptionName = type.getPresentableText();
-    return InspectionGadgetsBundle.message(
-      "bad.exception.thrown.problem.descriptor", exceptionName);
+    return InspectionGadgetsLocalize.badExceptionThrownProblemDescriptor(exceptionName).get();
   }
 
   @Override

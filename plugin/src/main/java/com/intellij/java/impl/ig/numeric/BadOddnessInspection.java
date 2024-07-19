@@ -15,32 +15,30 @@
  */
 package com.intellij.java.impl.ig.numeric;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiBinaryExpression;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiType;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.ConstantExpressionUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ComparisonUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.ast.IElementType;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class BadOddnessInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("bad.oddness.display.name");
+    return InspectionGadgetsLocalize.badOddnessDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "bad.oddness.problem.descriptor");
+    return InspectionGadgetsLocalize.badOddnessProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {
