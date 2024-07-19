@@ -15,17 +15,17 @@
  */
 package com.intellij.java.impl.ig.assignment;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
+import com.intellij.java.impl.ig.psiutils.WellFormednessUtils;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.psiutils.WellFormednessUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -33,14 +33,12 @@ public class AssignmentUsedAsConditionInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "assignment.used.as.condition.display.name");
+    return InspectionGadgetsLocalize.assignmentUsedAsConditionDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "assignment.used.as.condition.problem.descriptor");
+    return InspectionGadgetsLocalize.assignmentUsedAsConditionProblemDescriptor().get();
   }
 
   public InspectionGadgetsFix buildFix(Object... infos) {
@@ -52,8 +50,7 @@ public class AssignmentUsedAsConditionInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "assignment.used.as.condition.replace.quickfix");
+      return InspectionGadgetsLocalize.assignmentUsedAsConditionReplaceQuickfix().get();
     }
 
     public void doFix(Project project, ProblemDescriptor descriptor)

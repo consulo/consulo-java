@@ -17,15 +17,15 @@ package com.intellij.java.impl.ig.assignment;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
-import org.jetbrains.annotations.Nls;
-
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.Nls;
 
 /**
  * @author Bas Leijdekkers
@@ -37,16 +37,19 @@ public class AssignmentToSuperclassFieldInspection extends BaseInspection {
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("assignment.to.superclass.field.display.name");
+    return InspectionGadgetsLocalize.assignmentToSuperclassFieldDisplayName().get();
   }
 
   @Nonnull
   @Override
+  @RequiredReadAction
   protected String buildErrorString(Object... infos) {
     final PsiReferenceExpression referenceExpression = (PsiReferenceExpression) infos[0];
     final PsiClass superclass = (PsiClass) infos[1];
-    return InspectionGadgetsBundle.message("assignment.to.superclass.field.problem.descriptor",
-        referenceExpression.getReferenceName(), superclass.getName());
+    return InspectionGadgetsLocalize.assignmentToSuperclassFieldProblemDescriptor(
+        referenceExpression.getReferenceName(),
+        superclass.getName()
+    ).get();
   }
 
   @Override

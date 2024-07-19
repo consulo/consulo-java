@@ -17,9 +17,9 @@ package com.intellij.java.impl.ig.assignment;
 
 import com.intellij.java.impl.ig.psiutils.WellFormednessUtils;
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
@@ -33,14 +33,12 @@ public class AssignmentToStaticFieldFromInstanceMethodInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "assignment.to.static.field.from.instance.method.display.name");
+    return InspectionGadgetsLocalize.assignmentToStaticFieldFromInstanceMethodDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "assignment.to.static.field.from.instance.method.problem.descriptor");
+    return InspectionGadgetsLocalize.assignmentToStaticFieldFromInstanceMethodProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

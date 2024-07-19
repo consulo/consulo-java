@@ -15,17 +15,17 @@
  */
 package com.intellij.java.impl.ig.fixes;
 
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
@@ -33,7 +33,7 @@ public class AddThisQualifierFix extends InspectionGadgetsFix {
 
   @Nonnull
   public String getName() {
-    return InspectionGadgetsBundle.message("add.this.qualifier.quickfix");
+    return InspectionGadgetsLocalize.addThisQualifierQuickfix().get();
   }
 
   @Override

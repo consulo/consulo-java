@@ -15,16 +15,15 @@
  */
 package com.intellij.java.impl.ig.inheritance;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.java.language.module.util.JavaClassNames;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class AbstractMethodOverridesConcreteMethodInspection
@@ -33,15 +32,13 @@ public class AbstractMethodOverridesConcreteMethodInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "abstract.method.overrides.concrete.method.display.name");
+    return InspectionGadgetsLocalize.abstractMethodOverridesConcreteMethodDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "abstract.method.overrides.concrete.method.problem.descriptor");
+    return InspectionGadgetsLocalize.abstractMethodOverridesConcreteMethodProblemDescriptor().get();
   }
 
   @Override

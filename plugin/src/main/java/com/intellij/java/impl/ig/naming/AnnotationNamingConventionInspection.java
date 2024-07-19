@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.naming;
 
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiClass;
@@ -32,8 +33,7 @@ public class AnnotationNamingConventionInspection extends ConventionInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "annotation.naming.convention.display.name");
+    return InspectionGadgetsLocalize.annotationNamingConventionDisplayName().get();
   }
 
   protected InspectionGadgetsFix buildFix(Object... infos) {

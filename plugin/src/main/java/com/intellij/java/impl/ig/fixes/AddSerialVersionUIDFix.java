@@ -19,8 +19,8 @@ import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.PsiField;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
@@ -32,7 +32,7 @@ public class AddSerialVersionUIDFix extends InspectionGadgetsFix {
 
   @Nonnull
   public String getName() {
-    return InspectionGadgetsBundle.message("add.serialversionuidfield.quickfix");
+    return InspectionGadgetsLocalize.addSerialversionuidfieldQuickfix().get();
   }
 
   public void doFix(Project project, ProblemDescriptor descriptor)

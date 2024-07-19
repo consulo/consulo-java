@@ -19,10 +19,10 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
@@ -71,7 +71,7 @@ public abstract class AbsoluteAlignmentInUserInterfaceInspection extends BaseIns
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("absolute.alignment.in.user.interface.display.name");
+    return InspectionGadgetsLocalize.absoluteAlignmentInUserInterfaceDisplayName().get();
   }
 
   @Nonnull
@@ -79,7 +79,7 @@ public abstract class AbsoluteAlignmentInUserInterfaceInspection extends BaseIns
   protected String buildErrorString(Object... infos) {
     final String className = (String)infos[0];
     final String shortClassName = className.substring(className.lastIndexOf('.') + 1);
-    return InspectionGadgetsBundle.message("absolute.alignment.in.user.interface.problem.descriptor", shortClassName);
+    return InspectionGadgetsLocalize.absoluteAlignmentInUserInterfaceProblemDescriptor(shortClassName).get();
   }
 
   @Override
@@ -101,7 +101,7 @@ public abstract class AbsoluteAlignmentInUserInterfaceInspection extends BaseIns
     @Override
     public String getName() {
       final String shortClassName = myClassName.substring(myClassName.lastIndexOf('.') + 1);
-      return InspectionGadgetsBundle.message("absolute.alignment.in.user.interface.quickfix", shortClassName, myReplacement);
+      return InspectionGadgetsLocalize.absoluteAlignmentInUserInterfaceQuickfix(shortClassName, myReplacement).get();
     }
 
     @Override

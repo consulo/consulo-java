@@ -19,7 +19,6 @@ import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -27,6 +26,7 @@ import com.siyeh.ig.PsiReplacementUtil;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.ExpectedTypeUtils;
 import com.siyeh.ig.psiutils.MethodCallUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.query.Query;
 import consulo.java.language.module.util.JavaClassNames;
@@ -39,10 +39,9 @@ import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
-
-import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -72,13 +71,13 @@ public class AutoUnboxingInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("auto.unboxing.display.name");
+    return InspectionGadgetsLocalize.autoUnboxingDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("auto.unboxing.problem.descriptor");
+    return InspectionGadgetsLocalize.autoUnboxingProblemDescriptor().get();
   }
 
   @Override
@@ -125,11 +124,10 @@ public class AutoUnboxingInspection extends BaseInspection {
   }
 
   private static class AutoUnboxingFix extends InspectionGadgetsFix {
-
     @Override
     @Nonnull
     public String getFamilyName() {
-      return InspectionGadgetsBundle.message("auto.unboxing.make.unboxing.explicit.quickfix");
+      return InspectionGadgetsLocalize.autoUnboxingMakeUnboxingExplicitQuickfix().get();
     }
 
     @Override
@@ -139,7 +137,8 @@ public class AutoUnboxingInspection extends BaseInspection {
       if (type == null) {
         return;
       }
-      final PsiPrimitiveType unboxedType = (PsiPrimitiveType) ExpectedTypeUtils.findExpectedType(expression, false, true);
+      final PsiPrimitiveType unboxedType =
+          (PsiPrimitiveType) ExpectedTypeUtils.findExpectedType(expression, false, true);
       if (unboxedType == null) {
         return;
       }

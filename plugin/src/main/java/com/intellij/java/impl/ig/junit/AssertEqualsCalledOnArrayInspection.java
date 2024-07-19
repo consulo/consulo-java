@@ -15,21 +15,22 @@
  */
 package com.intellij.java.impl.ig.junit;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
+import com.intellij.java.impl.ig.psiutils.ImportUtils;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.psiutils.ImportUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class AssertEqualsCalledOnArrayInspection extends BaseInspection {
@@ -37,13 +38,13 @@ public class AssertEqualsCalledOnArrayInspection extends BaseInspection {
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("assertequals.called.on.arrays.display.name");
+    return InspectionGadgetsLocalize.assertequalsCalledOnArraysDisplayName().get();
   }
 
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("assertequals.called.on.arrays.problem.descriptor");
+    return InspectionGadgetsLocalize.assertequalsCalledOnArraysProblemDescriptor().get();
   }
 
   @Override

@@ -16,11 +16,10 @@
 package com.intellij.java.impl.ig.jdk;
 
 import com.intellij.java.language.psi.PsiAssertStatement;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -28,14 +27,12 @@ public class AssertStatementInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "assert.statement.display.name");
+    return InspectionGadgetsLocalize.assertStatementDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "statement.problem.descriptor");
+    return InspectionGadgetsLocalize.statementProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

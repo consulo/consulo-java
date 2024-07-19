@@ -17,10 +17,10 @@ package com.intellij.java.impl.ig.junit;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
@@ -34,7 +34,7 @@ public class AssertsWithoutMessagesInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("asserts.without.messages.display.name");
+    return InspectionGadgetsLocalize.assertsWithoutMessagesDisplayName().get();
   }
 
   @Override
@@ -46,7 +46,7 @@ public class AssertsWithoutMessagesInspection extends BaseInspection {
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("asserts.without.messages.problem.descriptor");
+    return InspectionGadgetsLocalize.assertsWithoutMessagesProblemDescriptor().get();
   }
 
   @Override

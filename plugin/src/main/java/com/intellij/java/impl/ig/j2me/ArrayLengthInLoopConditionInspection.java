@@ -15,29 +15,27 @@
  */
 package com.intellij.java.impl.ig.j2me;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ArrayLengthInLoopConditionInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "array.length.in.loop.condition.display.name");
+    return InspectionGadgetsLocalize.arrayLengthInLoopConditionDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "array.length.in.loop.condition.problem.descriptor");
+    return InspectionGadgetsLocalize.arrayLengthInLoopConditionProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

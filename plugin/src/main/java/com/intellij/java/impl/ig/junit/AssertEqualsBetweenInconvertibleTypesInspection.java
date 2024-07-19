@@ -15,18 +15,17 @@
  */
 package com.intellij.java.impl.ig.junit;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
@@ -35,7 +34,7 @@ public class AssertEqualsBetweenInconvertibleTypesInspection extends BaseInspect
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("assertequals.between.inconvertible.types.display.name");
+    return InspectionGadgetsLocalize.assertequalsBetweenInconvertibleTypesDisplayName().get();
   }
 
   @Override
@@ -45,9 +44,10 @@ public class AssertEqualsBetweenInconvertibleTypesInspection extends BaseInspect
     final PsiType comparisonType = (PsiType)infos[1];
     final String comparedTypeText = comparedType.getPresentableText();
     final String comparisonTypeText = comparisonType.getPresentableText();
-    return InspectionGadgetsBundle.message("assertequals.between.inconvertible.types.problem.descriptor",
-                                           StringUtil.escapeXml(comparedTypeText),
-                                           StringUtil.escapeXml(comparisonTypeText));
+    return InspectionGadgetsLocalize.assertequalsBetweenInconvertibleTypesProblemDescriptor(
+      StringUtil.escapeXml(comparedTypeText),
+      StringUtil.escapeXml(comparisonTypeText)
+    ).get();
   }
 
   @Override

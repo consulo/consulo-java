@@ -16,15 +16,18 @@
 package com.intellij.java.impl.ig.assignment;
 
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
-import consulo.language.ast.IElementType;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.CollectionUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -46,33 +49,24 @@ public class AssignmentToCollectionFieldFromParameterInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "assignment.collection.array.field.from.parameter.display.name");
+    return InspectionGadgetsLocalize.assignmentCollectionArrayFieldFromParameterDisplayName().get();
   }
 
   @Nonnull
+  @RequiredReadAction
   public String buildErrorString(Object... infos) {
     final PsiExpression rhs = (PsiExpression)infos[0];
     final PsiField field = (PsiField)infos[1];
     final PsiType type = field.getType();
-    if (type instanceof PsiArrayType) {
-      return InspectionGadgetsBundle.message(
-        "assignment.collection.array.field.from.parameter.problem.descriptor.array",
-        rhs.getText());
-    }
-    else {
-      return InspectionGadgetsBundle.message(
-        "assignment.collection.array.field.from.parameter.problem.descriptor.collection",
-        rhs.getText());
-    }
+    return type instanceof PsiArrayType
+      ? InspectionGadgetsLocalize.assignmentCollectionArrayFieldFromParameterProblemDescriptorArray(rhs.getText()).get()
+      : InspectionGadgetsLocalize.assignmentCollectionArrayFieldFromParameterProblemDescriptorCollection(rhs.getText()).get();
   }
 
   @Nullable
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(
-      InspectionGadgetsBundle.message(
-        "assignment.collection.array.field.option"), this,
-      "ignorePrivateMethods");
+    LocalizeValue message = InspectionGadgetsLocalize.assignmentCollectionArrayFieldOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignorePrivateMethods");
   }
 
   public BaseInspectionVisitor buildVisitor() {

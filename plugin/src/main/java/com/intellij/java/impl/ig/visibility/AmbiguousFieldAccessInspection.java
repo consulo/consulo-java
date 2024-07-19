@@ -15,21 +15,22 @@
  */
 package com.intellij.java.impl.ig.visibility;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
-import org.jetbrains.annotations.Nls;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.Nls;
 
 @ExtensionImpl
 public class AmbiguousFieldAccessInspection extends BaseInspection {
@@ -38,22 +39,23 @@ public class AmbiguousFieldAccessInspection extends BaseInspection {
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("ambiguous.field.access.display.name");
+    return InspectionGadgetsLocalize.ambiguousFieldAccessDisplayName().get();
   }
 
   @Nonnull
   @Override
+  @RequiredReadAction
   protected String buildErrorString(Object... infos) {
     final PsiClass fieldClass = (PsiClass)infos[0];
     final PsiVariable variable = (PsiVariable)infos[1];
     if (variable instanceof PsiLocalVariable) {
-      return InspectionGadgetsBundle.message("ambiguous.field.access.hides.local.variable.problem.descriptor", fieldClass.getName());
+      return InspectionGadgetsLocalize.ambiguousFieldAccessHidesLocalVariableProblemDescriptor(fieldClass.getName()).get();
     }
     else if (variable instanceof PsiParameter) {
-      return InspectionGadgetsBundle.message("ambiguous.field.access.hides.parameter.problem.descriptor", fieldClass.getName());
+      return InspectionGadgetsLocalize.ambiguousFieldAccessHidesParameterProblemDescriptor(fieldClass.getName()).get();
     }
     else {
-      return InspectionGadgetsBundle.message("ambiguous.field.access.hides.field.problem.descriptor", fieldClass.getName());
+      return InspectionGadgetsLocalize.ambiguousFieldAccessHidesFieldProblemDescriptor(fieldClass.getName()).get();
     }
   }
 
@@ -63,10 +65,9 @@ public class AmbiguousFieldAccessInspection extends BaseInspection {
   }
 
   private static class AmbiguousMethodCallFix extends InspectionGadgetsFix {
-
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("ambiguous.field.access.quickfix");
+      return InspectionGadgetsLocalize.ambiguousFieldAccessQuickfix().get();
     }
 
     protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
