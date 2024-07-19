@@ -15,25 +15,26 @@
  */
 package com.intellij.java.impl.ig.jdk;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.*;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.java.language.module.util.JavaClassNames;
-import org.jetbrains.annotations.NonNls;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
-
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
 import javax.swing.*;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -73,7 +74,7 @@ public class AutoBoxingInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("auto.boxing.display.name");
+    return InspectionGadgetsLocalize.autoBoxingDisplayName().get();
   }
 
   @Override
@@ -84,14 +85,14 @@ public class AutoBoxingInspection extends BaseInspection {
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("auto.boxing.problem.descriptor");
+    return InspectionGadgetsLocalize.autoBoxingProblemDescriptor().get();
   }
 
   @Override
   @Nullable
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message("auto.boxing.ignore.added.to.collection.option"), this,
-                                          "ignoreAddedToCollection");
+    LocalizeValue message = InspectionGadgetsLocalize.autoBoxingIgnoreAddedToCollectionOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreAddedToCollection");
   }
 
   @Override
@@ -108,7 +109,7 @@ public class AutoBoxingInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("auto.boxing.make.boxing.explicit.quickfix");
+      return InspectionGadgetsLocalize.autoBoxingMakeBoxingExplicitQuickfix().get();
     }
 
     @Override

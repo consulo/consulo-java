@@ -17,17 +17,16 @@ package com.intellij.java.impl.ig.bugs;
 
 import com.intellij.java.language.psi.*;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class ArrayEqualsInspection extends BaseInspection {
@@ -35,15 +34,13 @@ public class ArrayEqualsInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "equals.called.on.array.display.name");
+    return InspectionGadgetsLocalize.equalsCalledOnArrayDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "equals.called.on.array.problem.descriptor");
+    return InspectionGadgetsLocalize.equalsCalledOnArrayProblemDescriptor().get();
   }
 
   @Override
@@ -73,26 +70,18 @@ public class ArrayEqualsInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      if (deepEquals) {
-        return InspectionGadgetsBundle.message(
-          "replace.with.arrays.deep.equals");
-      }
-      else {
-        return InspectionGadgetsBundle.message(
-          "replace.with.arrays.equals");
-      }
+      return deepEquals
+        ? InspectionGadgetsLocalize.replaceWithArraysDeepEquals().get()
+        : InspectionGadgetsLocalize.replaceWithArraysEquals().get();
     }
 
     @Override
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiIdentifier name =
-        (PsiIdentifier)descriptor.getPsiElement();
-      final PsiReferenceExpression expression =
-        (PsiReferenceExpression)name.getParent();
+      final PsiIdentifier name = (PsiIdentifier)descriptor.getPsiElement();
+      final PsiReferenceExpression expression = (PsiReferenceExpression)name.getParent();
       assert expression != null;
-      final PsiMethodCallExpression call =
-        (PsiMethodCallExpression)expression.getParent();
+      final PsiMethodCallExpression call = (PsiMethodCallExpression)expression.getParent();
       final PsiExpression qualifier = expression.getQualifierExpression();
       assert qualifier != null;
       final String qualifierText = qualifier.getText();
@@ -121,7 +110,6 @@ public class ArrayEqualsInspection extends BaseInspection {
   }
 
   private static class ArrayEqualsVisitor extends BaseInspectionVisitor {
-
     @Override
     public void visitMethodCallExpression(
       @Nonnull PsiMethodCallExpression expression) {

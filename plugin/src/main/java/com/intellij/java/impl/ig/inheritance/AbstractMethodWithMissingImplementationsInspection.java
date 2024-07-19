@@ -15,19 +15,19 @@
  */
 package com.intellij.java.impl.ig.inheritance;
 
-import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.application.progress.ProgressManager;
-import consulo.util.lang.Pair;
-import consulo.language.psi.*;
-import consulo.content.scope.SearchScope;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.application.progress.ProgressManager;
+import consulo.content.scope.SearchScope;
+import consulo.language.psi.PsiManager;
+import consulo.util.lang.Pair;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -40,14 +40,12 @@ public class AbstractMethodWithMissingImplementationsInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "abstract.method.with.missing.implementations.display.name");
+    return InspectionGadgetsLocalize.abstractMethodWithMissingImplementationsDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "abstract.method.with.missing.implementations.problem.descriptor");
+    return InspectionGadgetsLocalize.abstractMethodWithMissingImplementationsProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

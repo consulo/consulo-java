@@ -15,17 +15,18 @@
  */
 package com.intellij.java.impl.ig.assignment;
 
+import com.intellij.java.impl.ig.fixes.ExtractParameterAsLocalVariableFix;
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
-import consulo.language.ast.IElementType;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.ExtractParameterAsLocalVariableFix;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -41,23 +42,20 @@ public class AssignmentToMethodParameterInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "assignment.to.method.parameter.display.name");
+    return InspectionGadgetsLocalize.assignmentToMethodParameterDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "assignment.to.method.parameter.problem.descriptor");
+    return InspectionGadgetsLocalize.assignmentToMethodParameterProblemDescriptor().get();
   }
 
   @Override
   @Nullable
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message(
-      "assignment.to.method.parameter.ignore.transformation.option"), this,
-                                          "ignoreTransformationOfOriginalParameter");
+    LocalizeValue message = InspectionGadgetsLocalize.assignmentToMethodParameterIgnoreTransformationOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreTransformationOfOriginalParameter");
   }
 
   @Override

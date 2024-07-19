@@ -15,28 +15,27 @@
  */
 package com.intellij.java.impl.ig.j2me;
 
-import jakarta.annotation.Nonnull;
-
+import com.intellij.java.impl.ig.psiutils.InheritanceUtil;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiTypeParameter;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import com.intellij.java.impl.ig.psiutils.InheritanceUtil;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class AbstractClassWithOnlyOneDirectInheritorInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("abstract.class.with.only.one.direct.inheritor.display.name");
+    return InspectionGadgetsLocalize.abstractClassWithOnlyOneDirectInheritorDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("abstract.class.with.only.one.direct.inheritor.problem.descriptor");
+    return InspectionGadgetsLocalize.abstractClassWithOnlyOneDirectInheritorProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

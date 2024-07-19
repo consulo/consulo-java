@@ -16,12 +16,14 @@
 package com.intellij.java.impl.ig.threading;
 
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.util.PsiTreeUtil;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -29,68 +31,44 @@ public class AwaitWithoutCorrespondingSignalInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "await.without.corresponding.signal.display.name");
+    return InspectionGadgetsLocalize.awaitWithoutCorrespondingSignalDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "await.without.corresponding.signal.problem.descriptor");
+    return InspectionGadgetsLocalize.awaitWithoutCorrespondingSignalProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {
     return new AwaitWithoutCorrespondingSignalVisitor();
   }
 
-  private static class AwaitWithoutCorrespondingSignalVisitor
-    extends BaseInspectionVisitor {
-
+  private static class AwaitWithoutCorrespondingSignalVisitor extends BaseInspectionVisitor {
     @Override
-    public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+    @RequiredReadAction
+    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!ThreadingUtils.isAwaitCall(expression)) {
         return;
       }
 
-      final PsiReferenceExpression methodExpression =
-        expression.getMethodExpression();
-      final PsiExpression qualifier =
-        methodExpression.getQualifierExpression();
-      if (!(qualifier instanceof PsiReferenceExpression)) {
-        return;
+      if (expression.getMethodExpression().getQualifierExpression() instanceof PsiReferenceExpression referenceExpression
+          && referenceExpression.resolve() instanceof PsiField field) {
+        final PsiClass fieldClass = field.getContainingClass();
+        if (fieldClass != null && PsiTreeUtil.isAncestor(fieldClass, expression, true) && !containsSignalCall(fieldClass, field)) {
+          registerMethodCallError(expression);
+        }
       }
-      final PsiElement referent = ((PsiReference)qualifier).resolve();
-      if (!(referent instanceof PsiField)) {
-        return;
-      }
-      final PsiField field = (PsiField)referent;
-      final PsiClass fieldClass = field.getContainingClass();
-      if (fieldClass == null) {
-        return;
-      }
-      if (!PsiTreeUtil.isAncestor(fieldClass, expression, true)) {
-        return;
-      }
-      if (containsSignalCall(fieldClass, field)) {
-        return;
-      }
-      registerMethodCallError(expression);
     }
 
-    private static boolean containsSignalCall(PsiClass fieldClass,
-                                              PsiField field) {
-      final ContainsSignalVisitor visitor =
-        new ContainsSignalVisitor(field);
+    private static boolean containsSignalCall(PsiClass fieldClass, PsiField field) {
+      final ContainsSignalVisitor visitor = new ContainsSignalVisitor(field);
       fieldClass.accept(visitor);
       return visitor.containsSignal();
     }
   }
 
-  private static class ContainsSignalVisitor
-    extends JavaRecursiveElementVisitor {
-
+  private static class ContainsSignalVisitor extends JavaRecursiveElementVisitor {
     private final PsiField target;
     private boolean containsSignal = false;
 

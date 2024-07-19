@@ -15,37 +15,34 @@
  */
 package com.intellij.java.impl.ig.j2me;
 
-import jakarta.annotation.Nonnull;
-
+import com.intellij.java.impl.ig.fixes.MoveAnonymousToInnerClassFix;
+import com.intellij.java.impl.ig.performance.InnerClassReferenceVisitor;
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.MoveAnonymousToInnerClassFix;
-import com.intellij.java.impl.ig.performance.InnerClassReferenceVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.util.PsiTreeUtil;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class AnonymousInnerClassMayBeStaticInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "anonymous.inner.may.be.named.static.inner.class.display.name");
+    return InspectionGadgetsLocalize.anonymousInnerMayBeNamedStaticInnerClassDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "anonymous.inner.may.be.named.static.inner.class.problem.descriptor");
+    return InspectionGadgetsLocalize.anonymousInnerMayBeNamedStaticInnerClassProblemDescriptor().get();
   }
 
   protected InspectionGadgetsFix buildFix(Object... infos) {
     return new MoveAnonymousToInnerClassFix(
-      InspectionGadgetsBundle.message(
-        "anonymous.inner.may.be.named.static.inner.class.quickfix"));
+      InspectionGadgetsLocalize.anonymousInnerMayBeNamedStaticInnerClassQuickfix().get()
+    );
   }
 
   public BaseInspectionVisitor buildVisitor() {

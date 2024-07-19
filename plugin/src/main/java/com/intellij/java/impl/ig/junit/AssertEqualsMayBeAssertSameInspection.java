@@ -15,20 +15,22 @@
  */
 package com.intellij.java.impl.ig.junit;
 
+import com.intellij.java.impl.ig.psiutils.ImportUtils;
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
-import consulo.project.Project;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.psiutils.ImportUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
-import org.jetbrains.annotations.NonNls;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class AssertEqualsMayBeAssertSameInspection extends BaseInspection {
@@ -36,13 +38,13 @@ public class AssertEqualsMayBeAssertSameInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("assertequals.may.be.assertsame.display.name");
+    return InspectionGadgetsLocalize.assertequalsMayBeAssertsameDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("assertequals.may.be.assertsame.problem.descriptor");
+    return InspectionGadgetsLocalize.assertequalsMayBeAssertsameProblemDescriptor().get();
   }
 
   @Override

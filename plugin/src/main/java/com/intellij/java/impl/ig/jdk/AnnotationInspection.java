@@ -15,13 +15,12 @@
  */
 package com.intellij.java.impl.ig.jdk;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiAnnotation;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class AnnotationInspection extends BaseInspection {
@@ -29,13 +28,13 @@ public class AnnotationInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("annotation.display.name");
+    return InspectionGadgetsLocalize.annotationDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("annotation.problem.descriptor");
+    return InspectionGadgetsLocalize.annotationProblemDescriptor().get();
   }
 
   @Override

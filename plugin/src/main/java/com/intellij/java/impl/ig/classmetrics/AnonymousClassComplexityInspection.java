@@ -15,13 +15,12 @@
  */
 package com.intellij.java.impl.ig.classmetrics;
 
+import com.intellij.java.impl.ig.fixes.MoveAnonymousToInnerClassFix;
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.MoveAnonymousToInnerClassFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -39,8 +38,7 @@ public class AnonymousClassComplexityInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "overly.complex.anonymous.inner.class.display.name");
+    return InspectionGadgetsLocalize.overlyComplexAnonymousInnerClassDisplayName().get();
   }
 
   @Override
@@ -50,8 +48,7 @@ public class AnonymousClassComplexityInspection
 
   @Override
   protected String getConfigurationLabel() {
-    return InspectionGadgetsBundle.message(
-      "cyclomatic.complexity.limit.option");
+    return InspectionGadgetsLocalize.cyclomaticComplexityLimitOption().get();
   }
 
   @Override
@@ -68,9 +65,7 @@ public class AnonymousClassComplexityInspection
   @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer totalComplexity = (Integer)infos[0];
-    return InspectionGadgetsBundle.message(
-      "overly.complex.anonymous.inner.class.problem.descriptor",
-      totalComplexity);
+    return InspectionGadgetsLocalize.overlyComplexAnonymousInnerClassProblemDescriptor(totalComplexity).get();
   }
 
   @Override

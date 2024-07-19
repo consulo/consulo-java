@@ -15,14 +15,13 @@
  */
 package com.intellij.java.impl.ig.inheritance;
 
+import com.intellij.java.impl.ig.psiutils.InheritanceUtil;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiModifier;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import com.intellij.java.impl.ig.psiutils.InheritanceUtil;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -30,14 +29,12 @@ public class AbstractClassNeverImplementedInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "abstract.class.never.implemented.display.name");
+    return InspectionGadgetsLocalize.abstractClassNeverImplementedDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "abstract.class.never.implemented.problem.descriptor");
+    return InspectionGadgetsLocalize.abstractClassNeverImplementedProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

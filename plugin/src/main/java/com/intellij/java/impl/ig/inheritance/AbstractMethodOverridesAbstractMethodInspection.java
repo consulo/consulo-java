@@ -18,12 +18,12 @@ package com.intellij.java.impl.ig.inheritance;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import consulo.language.editor.inspection.ProblemDescriptor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
@@ -46,7 +46,7 @@ public abstract class AbstractMethodOverridesAbstractMethodInspection extends Ba
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("abstract.method.overrides.abstract.method.display.name");
+    return InspectionGadgetsLocalize.abstractMethodOverridesAbstractMethodDisplayName().get();
   }
 
   @Override
@@ -57,16 +57,20 @@ public abstract class AbstractMethodOverridesAbstractMethodInspection extends Ba
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("abstract.method.overrides.abstract.method.problem.descriptor");
+    return InspectionGadgetsLocalize.abstractMethodOverridesAbstractMethodProblemDescriptor().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
-    panel.addCheckbox(InspectionGadgetsBundle.message(
-      "abstract.method.overrides.abstract.method.ignore.different.javadoc.option"), "ignoreJavaDoc");
-    panel.addCheckbox(InspectionGadgetsBundle.message(
-      "abstract.method.overrides.abstract.method.ignore.different.annotations.option"), "ignoreAnnotations");
+    panel.addCheckbox(
+      InspectionGadgetsLocalize.abstractMethodOverridesAbstractMethodIgnoreDifferentJavadocOption().get(),
+      "ignoreJavaDoc"
+    );
+    panel.addCheckbox(
+      InspectionGadgetsLocalize.abstractMethodOverridesAbstractMethodIgnoreDifferentAnnotationsOption().get(),
+      "ignoreAnnotations"
+    );
     return panel;
   }
 
@@ -75,7 +79,7 @@ public abstract class AbstractMethodOverridesAbstractMethodInspection extends Ba
     @Override
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("abstract.method.overrides.abstract.method.remove.quickfix");
+      return InspectionGadgetsLocalize.abstractMethodOverridesAbstractMethodRemoveQuickfix().get();
     }
 
     @Override

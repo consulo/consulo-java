@@ -22,6 +22,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.RenameFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 
@@ -31,23 +32,19 @@ public class AnonymousClassVariableHidesContainingMethodVariableInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "anonymous.class.variable.hides.containing.method.variable.display.name");
+    return InspectionGadgetsLocalize.anonymousClassVariableHidesContainingMethodVariableDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
     final Object info = infos[0];
     if (info instanceof PsiParameter) {
-      return InspectionGadgetsBundle.message(
-        "anonymous.class.parameter.hides.containing.method.variable.problem.descriptor");
+      return InspectionGadgetsLocalize.anonymousClassParameterHidesContainingMethodVariableProblemDescriptor().get();
     }
     else if (info instanceof PsiField) {
-      return InspectionGadgetsBundle.message(
-        "anonymous.class.field.hides.containing.method.variable.problem.descriptor");
+      return InspectionGadgetsLocalize.anonymousClassFieldHidesContainingMethodVariableProblemDescriptor().get();
     }
-    return InspectionGadgetsBundle.message(
-      "anonymous.class.variable.hides.containing.method.variable.problem.descriptor");
+    return InspectionGadgetsLocalize.anonymousClassVariableHidesContainingMethodVariableProblemDescriptor().get();
   }
 
   protected InspectionGadgetsFix buildFix(Object... infos) {

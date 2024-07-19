@@ -15,18 +15,19 @@
  */
 package com.intellij.java.impl.ig.assignment;
 
-import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationFix;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import com.intellij.java.impl.ig.DelegatingFix;
+import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.language.psi.*;
-import consulo.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import com.intellij.java.impl.ig.DelegatingFix;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
@@ -40,14 +41,13 @@ public class AssignmentToNullInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("assignment.to.null.display.name");
+    return InspectionGadgetsLocalize.assignmentToNullDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "assignment.to.null.problem.descriptor");
+    return InspectionGadgetsLocalize.assignmentToNullProblemDescriptor().get();
   }
 
   @Override
@@ -66,9 +66,8 @@ public class AssignmentToNullInspection extends BaseInspection {
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message(
-      "assignment.to.null.option"), this,
-                                          "ignoreAssignmentsToFields");
+    LocalizeValue message = InspectionGadgetsLocalize.assignmentToNullOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreAssignmentsToFields");
   }
 
   @Override

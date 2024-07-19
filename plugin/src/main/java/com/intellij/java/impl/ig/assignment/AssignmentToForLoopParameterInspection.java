@@ -18,18 +18,19 @@ package com.intellij.java.impl.ig.assignment;
 import com.intellij.java.impl.ig.fixes.ExtractParameterAsLocalVariableFix;
 import com.intellij.java.impl.ig.psiutils.WellFormednessUtils;
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.ast.IElementType;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
-
 import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 
 @ExtensionImpl
@@ -44,24 +45,20 @@ public class AssignmentToForLoopParameterInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "assignment.to.for.loop.parameter.display.name");
+    return InspectionGadgetsLocalize.assignmentToForLoopParameterDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "assignment.to.for.loop.parameter.problem.descriptor");
+    return InspectionGadgetsLocalize.assignmentToForLoopParameterProblemDescriptor().get();
   }
 
   @Override
   @Nullable
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(
-      InspectionGadgetsBundle.message(
-        "assignment.to.for.loop.parameter.check.foreach.option"),
-      this, "m_checkForeachParameters");
+    LocalizeValue message = InspectionGadgetsLocalize.assignmentToForLoopParameterCheckForeachOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "m_checkForeachParameters");
   }
 
   @Override
