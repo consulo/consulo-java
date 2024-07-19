@@ -29,12 +29,15 @@ import consulo.configurable.ConfigurationException;
 import consulo.execution.configuration.ui.SettingsEditor;
 import consulo.execution.localize.ExecutionLocalize;
 import consulo.java.execution.JavaExecutionBundle;
+import consulo.java.execution.localize.JavaExecutionLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.module.ui.awt.ModuleDescriptionsComboBox;
 import consulo.project.Project;
+import consulo.ui.CheckBox;
 import consulo.ui.ex.awt.JBCheckBox;
 import consulo.ui.ex.awt.LabeledComponent;
 import consulo.ui.ex.awt.UIUtil;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
@@ -49,7 +52,7 @@ public class ApplicationConfigurable extends SettingsEditor<ApplicationConfigura
   private CommonJavaParametersPanel myCommonJavaParametersPanel;
   private EditorTextFieldWithBrowseButton myMainClassField;
   private JBCheckBox myIncludeProviderDepsBox;
-  private JBCheckBox myShowSwingInspectorBox;
+  private CheckBox myShowSwingInspectorBox;
   private JrePathEditor myJrePathEditor;
 
   public ApplicationConfigurable(final Project project) {
@@ -79,7 +82,7 @@ public class ApplicationConfigurable extends SettingsEditor<ApplicationConfigura
     myModuleSelector = new ConfigurationModuleSelector(project, myModuleDescriptionsComboBox);
     myModuleDescriptionsComboBox.addActionListener(e -> myCommonJavaParametersPanel.setModuleContext(myModuleSelector.getModule()));
 
-    myShowSwingInspectorBox = new JBCheckBox(JavaExecutionBundle.message("show.swing.inspector"));
+    myShowSwingInspectorBox = CheckBox.create(JavaExecutionLocalize.showSwingInspector());
 
     myCommonJavaParametersPanel = new CommonJavaParametersPanel(false) {
       private LabeledComponent myClassFieldLabel;
@@ -100,7 +103,7 @@ public class ApplicationConfigurable extends SettingsEditor<ApplicationConfigura
 
         add(myShortenLabel = LabeledComponent.create(myShortenCommandLineModeCombo, JavaExecutionBundle.message("application.configuration.shorten.command.line.label")));
 
-        add(myShowSwingInspectorBox);
+        add(TargetAWT.to(myShowSwingInspectorBox));
       }
 
       @Override
@@ -126,7 +129,7 @@ public class ApplicationConfigurable extends SettingsEditor<ApplicationConfigura
         app.ALTERNATIVE_JRE_PATH = myJrePathEditor.getJrePathOrName();
         app.ALTERNATIVE_JRE_PATH_ENABLED = myJrePathEditor.isAlternativeJreSelected();
         app.ENABLE_SWING_INSPECTOR = (myVersionDetector.isJre50Configured(configuration) || myVersionDetector.isModuleJre50Configured(app)) && myShowSwingInspectorBox
-            .isSelected();
+            .getValue();
         app.setShortenCommandLine((ShortenCommandLine) myShortenCommandLineModeCombo.getSelectedItem());
         app.setIncludeProvidedScope(myIncludeProviderDepsBox.isSelected());
 
@@ -173,12 +176,12 @@ public class ApplicationConfigurable extends SettingsEditor<ApplicationConfigura
   private void updateShowSwingInspector(final ApplicationConfiguration configuration) {
     if (myVersionDetector.isJre50Configured(configuration) || myVersionDetector.isModuleJre50Configured(configuration)) {
       myShowSwingInspectorBox.setEnabled(true);
-      myShowSwingInspectorBox.setSelected(configuration.ENABLE_SWING_INSPECTOR);
-      myShowSwingInspectorBox.setText(ExecutionLocalize.showSwingInspector().get());
+      myShowSwingInspectorBox.setValue(configuration.ENABLE_SWING_INSPECTOR);
+      myShowSwingInspectorBox.setLabelText(ExecutionLocalize.showSwingInspector());
     } else {
       myShowSwingInspectorBox.setEnabled(false);
-      myShowSwingInspectorBox.setSelected(false);
-      myShowSwingInspectorBox.setText(ExecutionLocalize.showSwingInspectorDisabled().get());
+      myShowSwingInspectorBox.setValue(false);
+      myShowSwingInspectorBox.setLabelText(ExecutionLocalize.showSwingInspectorDisabled());
     }
   }
 
