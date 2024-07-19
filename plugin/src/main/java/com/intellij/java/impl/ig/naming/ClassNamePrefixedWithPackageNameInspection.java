@@ -15,13 +15,13 @@
  */
 package com.intellij.java.impl.ig.naming;
 
+import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.psi.PsiClass;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 
@@ -33,8 +33,7 @@ public class ClassNamePrefixedWithPackageNameInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "class.name.prefixed.with.package.name.display.name");
+    return InspectionGadgetsLocalize.classNamePrefixedWithPackageNameDisplayName().get();
   }
 
   protected InspectionGadgetsFix buildFix(Object... infos) {
@@ -43,8 +42,7 @@ public class ClassNamePrefixedWithPackageNameInspection
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "class.name.prefixed.with.package.name.problem.descriptor");
+    return InspectionGadgetsLocalize.classNamePrefixedWithPackageNameProblemDescriptor().get();
   }
 
   protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {

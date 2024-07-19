@@ -15,19 +15,19 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.util.FileTypeUtils;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.RenameFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class ClassNameDiffersFromFileNameInspection extends BaseInspection
@@ -37,14 +37,14 @@ public class ClassNameDiffersFromFileNameInspection extends BaseInspection
 	@Nonnull
 	public String getDisplayName()
 	{
-		return InspectionGadgetsBundle.message("class.name.differs.from.file.name.display.name");
+		return InspectionGadgetsLocalize.classNameDiffersFromFileNameDisplayName().get();
 	}
 
 	@Override
 	@Nonnull
 	protected String buildErrorString(Object... infos)
 	{
-		return InspectionGadgetsBundle.message("class.name.differs.from.file.name.problem.descriptor");
+		return InspectionGadgetsLocalize.classNameDiffersFromFileNameProblemDescriptor().get();
 	}
 
 	@Override

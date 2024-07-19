@@ -15,16 +15,16 @@
  */
 package com.intellij.java.impl.ig.fixes;
 
+import com.intellij.java.analysis.impl.codeInspection.util.SpecialAnnotationsUtilBase;
+import com.intellij.java.impl.ig.DelegatingFix;
+import com.intellij.java.language.psi.PsiModifierListOwner;
+import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.application.util.function.Processor;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import consulo.java.analysis.impl.JavaQuickFixBundle;
-import com.intellij.java.analysis.impl.codeInspection.util.SpecialAnnotationsUtilBase;
-import com.intellij.java.language.psi.PsiModifierListOwner;
-import consulo.application.util.function.Processor;
-import com.siyeh.InspectionGadgetsBundle;
-import com.intellij.java.impl.ig.DelegatingFix;
-import com.siyeh.ig.InspectionGadgetsFix;
 
 /**
  * @author Bas Leijdekkers
@@ -49,8 +49,13 @@ public class AddToIgnoreIfAnnotatedByListQuickFix
 			@Override
 			public boolean process(String qualifiedName)
 			{
-				fixes.add(new DelegatingFix(SpecialAnnotationsUtilBase.createAddToSpecialAnnotationsListQuickFix(InspectionGadgetsBundle.message("add.0.to.ignore.if.annotated.by.list.quickfix",
-						qualifiedName), JavaQuickFixBundle.message("fix.add.special.annotation.family"), configurationList, qualifiedName, modifierListOwner)));
+				fixes.add(new DelegatingFix(SpecialAnnotationsUtilBase.createAddToSpecialAnnotationsListQuickFix(
+					InspectionGadgetsLocalize.add0ToIgnoreIfAnnotatedByListQuickfix(qualifiedName).get(),
+					JavaQuickFixBundle.message("fix.add.special.annotation.family"),
+					configurationList,
+					qualifiedName,
+					modifierListOwner
+				)));
 				return true;
 			}
 		});

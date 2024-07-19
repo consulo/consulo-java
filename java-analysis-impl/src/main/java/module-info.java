@@ -84,6 +84,7 @@ open module consulo.java.analysis.impl {
   exports com.siyeh.ig.numeric;
   exports com.siyeh.ig.psiutils;
   exports com.siyeh.ig.ui;
+  exports com.siyeh.localize;
   exports consulo.java.analysis.impl;
   exports consulo.java.analysis.impl.codeInsight;
   exports consulo.java.analysis.impl.codeInsight.completion;

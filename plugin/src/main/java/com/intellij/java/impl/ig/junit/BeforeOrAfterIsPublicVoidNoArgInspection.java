@@ -15,18 +15,13 @@
  */
 package com.intellij.java.impl.ig.junit;
 
-import jakarta.annotation.Nonnull;
-
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiModifier;
-import com.intellij.java.language.psi.PsiParameterList;
-import com.intellij.java.language.psi.PsiType;
-import com.siyeh.InspectionGadgetsBundle;
+import com.intellij.java.language.psi.*;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TestUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class BeforeOrAfterIsPublicVoidNoArgInspection extends BaseInspection {
@@ -39,15 +34,13 @@ public class BeforeOrAfterIsPublicVoidNoArgInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "before.or.after.is.public.void.no.arg.display.name");
+    return InspectionGadgetsLocalize.beforeOrAfterIsPublicVoidNoArgDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "before.or.after.is.public.void.no.arg.problem.descriptor");
+    return InspectionGadgetsLocalize.beforeOrAfterIsPublicVoidNoArgProblemDescriptor().get();
   }
 
   @Override

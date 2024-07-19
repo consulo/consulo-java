@@ -15,15 +15,14 @@
  */
 package com.intellij.java.impl.ig.errorhandling;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.java.language.module.util.JavaClassNames;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class CheckedExceptionClassInspection extends BaseInspection {
@@ -31,15 +30,13 @@ public class CheckedExceptionClassInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "checked.exception.class.display.name");
+    return InspectionGadgetsLocalize.checkedExceptionClassDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "checked.exception.class.problem.descriptor");
+    return InspectionGadgetsLocalize.checkedExceptionClassProblemDescriptor().get();
   }
 
   @Override

@@ -16,15 +16,14 @@
 package com.intellij.java.impl.ig.bugs;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
-import org.jetbrains.annotations.Nls;
-
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.Nls;
 
 @ExtensionImpl
 public class AssertWithSideEffectsInspection extends BaseInspection {
@@ -33,15 +32,13 @@ public class AssertWithSideEffectsInspection extends BaseInspection {
   @Nls
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "assert.with.side.effects.display.name");
+    return InspectionGadgetsLocalize.assertWithSideEffectsDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "assert.with.side.effects.problem.descriptor");
+    return InspectionGadgetsLocalize.assertWithSideEffectsProblemDescriptor().get();
   }
 
   @Override

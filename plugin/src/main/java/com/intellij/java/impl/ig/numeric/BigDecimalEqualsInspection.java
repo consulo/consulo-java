@@ -15,18 +15,18 @@
  */
 package com.intellij.java.impl.ig.numeric;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.MethodCallUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -35,13 +35,13 @@ public class BigDecimalEqualsInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("big.decimal.equals.display.name");
+    return InspectionGadgetsLocalize.bigDecimalEqualsDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("big.decimal.equals.problem.descriptor");
+    return InspectionGadgetsLocalize.bigDecimalEqualsProblemDescriptor().get();
   }
 
   @Override
@@ -52,7 +52,7 @@ public class BigDecimalEqualsInspection extends BaseInspection {
   private static class BigDecimalEqualsFix extends InspectionGadgetsFix {
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("big.decimal.equals.replace.quickfix");
+      return InspectionGadgetsLocalize.bigDecimalEqualsReplaceQuickfix().get();
     }
 
     @Override

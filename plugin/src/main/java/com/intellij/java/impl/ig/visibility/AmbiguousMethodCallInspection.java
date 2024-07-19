@@ -20,12 +20,13 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
-import com.siyeh.InspectionGadgetsBundle;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
-import consulo.project.Project;
 import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -34,14 +35,15 @@ public class AmbiguousMethodCallInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("ambiguous.method.call.display.name");
+    return InspectionGadgetsLocalize.ambiguousMethodCallDisplayName().get();
   }
 
   @Nonnull
+  @RequiredReadAction
   protected String buildErrorString(Object... infos) {
     final PsiClass superClass = (PsiClass)infos[0];
     final PsiClass outerClass = (PsiClass)infos[1];
-    return InspectionGadgetsBundle.message("ambiguous.method.call.problem.descriptor", superClass.getName(), outerClass.getName());
+    return InspectionGadgetsLocalize.ambiguousMethodCallProblemDescriptor(superClass.getName(), outerClass.getName()).get();
   }
 
   @Nullable
@@ -53,7 +55,7 @@ public class AmbiguousMethodCallInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("ambiguous.method.call.quickfix");
+      return InspectionGadgetsLocalize.ambiguousMethodCallQuickfix().get();
     }
 
     protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {

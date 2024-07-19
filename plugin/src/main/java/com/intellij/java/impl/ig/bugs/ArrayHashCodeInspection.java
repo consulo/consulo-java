@@ -17,19 +17,18 @@ package com.intellij.java.impl.ig.bugs;
 
 import com.intellij.java.language.psi.*;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ArrayHashCodeInspection extends BaseInspection {
@@ -38,14 +37,13 @@ public class ArrayHashCodeInspection extends BaseInspection {
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("array.hash.code.display.name");
+    return InspectionGadgetsLocalize.arrayHashCodeDisplayName().get();
   }
 
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "array.hash.code.problem.descriptor");
+    return InspectionGadgetsLocalize.arrayHashCodeProblemDescriptor().get();
   }
 
   @Override
@@ -72,14 +70,9 @@ public class ArrayHashCodeInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      if (deepHashCode) {
-        return InspectionGadgetsBundle.message(
-          "arrays.deep.hash.code.quickfix");
-      }
-      else {
-        return InspectionGadgetsBundle.message(
-          "arrays.hash.code.quickfix");
-      }
+      return deepHashCode
+        ? InspectionGadgetsLocalize.arraysDeepHashCodeQuickfix().get()
+        : InspectionGadgetsLocalize.arraysHashCodeQuickfix().get();
     }
 
     @Override

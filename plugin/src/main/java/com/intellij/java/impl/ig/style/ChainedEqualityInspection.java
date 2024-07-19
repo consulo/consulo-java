@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.ig.style;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiPolyadicExpression;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ComparisonUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElement;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -35,12 +35,12 @@ public class ChainedEqualityInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("chained.equality.comparisons.display.name");
+    return InspectionGadgetsLocalize.chainedEqualityComparisonsDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("chained.equality.comparisons.problem.descriptor");
+    return InspectionGadgetsLocalize.chainedEqualityComparisonsProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

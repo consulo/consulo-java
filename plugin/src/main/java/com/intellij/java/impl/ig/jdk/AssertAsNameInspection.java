@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.ig.jdk;
 
+import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.RenameFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 
@@ -36,15 +36,13 @@ public class AssertAsNameInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "use.assert.as.identifier.display.name");
+    return InspectionGadgetsLocalize.useAssertAsIdentifierDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "use.assert.as.identifier.problem.descriptor");
+    return InspectionGadgetsLocalize.useAssertAsIdentifierProblemDescriptor().get();
   }
 
   @Override

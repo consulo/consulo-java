@@ -15,13 +15,12 @@
  */
 package com.intellij.java.impl.ig.classmetrics;
 
+import com.intellij.java.impl.ig.psiutils.LibraryUtil;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiTypeParameter;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
-import com.intellij.java.impl.ig.psiutils.LibraryUtil;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-
 import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
@@ -40,7 +39,7 @@ public class ClassInheritanceDepthInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("class.too.deep.display.name");
+    return InspectionGadgetsLocalize.classTooDeepDisplayName().get();
   }
 
   protected int getDefaultLimit() {
@@ -48,15 +47,13 @@ public class ClassInheritanceDepthInspection
   }
 
   protected String getConfigurationLabel() {
-    return InspectionGadgetsBundle.message(
-      "class.too.deep.inheritance.depth.limit.option");
+    return InspectionGadgetsLocalize.classTooDeepInheritanceDepthLimitOption().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer count = (Integer)infos[0];
-    return InspectionGadgetsBundle.message(
-      "class.too.deep.problem.descriptor", count);
+    return InspectionGadgetsLocalize.classTooDeepProblemDescriptor(count).get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

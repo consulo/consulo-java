@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.performance;
 
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
@@ -62,15 +63,13 @@ public class BoxingBoxedValueInspection extends BaseInspection {
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "boxing.boxed.value.display.name");
+    return InspectionGadgetsLocalize.boxingBoxedValueDisplayName().get();
   }
 
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "boxing.boxed.value.problem.descriptor");
+    return InspectionGadgetsLocalize.boxingBoxedValueProblemDescriptor().get();
   }
 
   @Override
@@ -82,8 +81,7 @@ public class BoxingBoxedValueInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "boxing.boxed.value.quickfix");
+      return InspectionGadgetsLocalize.boxingBoxedValueQuickfix().get();
     }
 
     @Override

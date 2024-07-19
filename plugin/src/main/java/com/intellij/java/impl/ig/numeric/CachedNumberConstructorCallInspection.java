@@ -15,19 +15,18 @@
  */
 package com.intellij.java.impl.ig.numeric;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
-
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
@@ -49,15 +48,13 @@ public class CachedNumberConstructorCallInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "cached.number.constructor.call.display.name");
+    return InspectionGadgetsLocalize.cachedNumberConstructorCallDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "cached.number.constructor.call.problem.descriptor");
+    return InspectionGadgetsLocalize.cachedNumberConstructorCallProblemDescriptor().get();
   }
 
   @Override
@@ -86,14 +83,12 @@ public class CachedNumberConstructorCallInspection
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "cached.number.constructor.call.quickfix", className);
+      return InspectionGadgetsLocalize.cachedNumberConstructorCallQuickfix(className).get();
     }
 
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiNewExpression expression =
-        (PsiNewExpression)descriptor.getPsiElement();
+      final PsiNewExpression expression = (PsiNewExpression)descriptor.getPsiElement();
       final PsiExpressionList argList = expression.getArgumentList();
       assert argList != null;
       final PsiExpression[] args = argList.getExpressions();

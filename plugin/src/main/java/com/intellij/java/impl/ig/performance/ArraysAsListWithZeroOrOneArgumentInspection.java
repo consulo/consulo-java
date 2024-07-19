@@ -15,16 +15,16 @@
  */
 package com.intellij.java.impl.ig.performance;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Nls;
@@ -39,26 +39,23 @@ public class ArraysAsListWithZeroOrOneArgumentInspection extends BaseInspection 
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("arrays.as.list.with.zero.or.one.argument.display.name");
+    return InspectionGadgetsLocalize.arraysAsListWithZeroOrOneArgumentDisplayName().get();
   }
 
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     final Boolean isEmpty = (Boolean)infos[0];
-    if (isEmpty.booleanValue()) {
-      return InspectionGadgetsBundle.message("arrays.as.list.with.zero.arguments.problem.descriptor");
-    }
-    else {
-      return InspectionGadgetsBundle.message("arrays.as.list.with.one.argument.problem.descriptor");
-    }
+    return isEmpty
+      ? InspectionGadgetsLocalize.arraysAsListWithZeroArgumentsProblemDescriptor().get()
+      : InspectionGadgetsLocalize.arraysAsListWithOneArgumentProblemDescriptor().get();
   }
 
   @Nullable
   @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {
     final Boolean isEmpty = (Boolean)infos[0];
-    return new ArraysAsListWithOneArgumentFix(isEmpty.booleanValue());
+    return new ArraysAsListWithOneArgumentFix(isEmpty);
   }
 
   private static class ArraysAsListWithOneArgumentFix extends InspectionGadgetsFix {
@@ -72,12 +69,9 @@ public class ArraysAsListWithZeroOrOneArgumentInspection extends BaseInspection 
     @Nonnull
     @Override
     public String getName() {
-      if (myEmpty) {
-        return InspectionGadgetsBundle.message("arrays.as.list.with.zero.arguments.quickfix");
-      }
-      else {
-        return InspectionGadgetsBundle.message("arrays.as.list.with.one.argument.quickfix");
-      }
+      return myEmpty
+        ? InspectionGadgetsLocalize.arraysAsListWithZeroArgumentsQuickfix().get()
+        : InspectionGadgetsLocalize.arraysAsListWithOneArgumentQuickfix().get();
     }
 
     @Override

@@ -15,20 +15,20 @@
  */
 package com.intellij.java.impl.ig.errorhandling;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.ide.impl.idea.codeInspection.ui.ListTable;
-import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
-import consulo.util.lang.StringUtil;
+import com.intellij.java.impl.ig.ui.UiUtils;
 import com.intellij.java.language.psi.PsiCatchSection;
 import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiTypeElement;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.ui.ExternalizableStringSet;
-import com.intellij.java.impl.ig.ui.UiUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.ide.impl.idea.codeInspection.ui.ListTable;
+import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
@@ -71,21 +71,24 @@ public class BadExceptionCaughtInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("bad.exception.caught.display.name");
+    return InspectionGadgetsLocalize.badExceptionCaughtDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("bad.exception.caught.problem.descriptor");
+    return InspectionGadgetsLocalize.badExceptionCaughtProblemDescriptor().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
     final ListTable table =
-      new ListTable(new ListWrappingTableModel(exceptions, InspectionGadgetsBundle.message("exception.class.column.name")));
-    return UiUtils.createAddRemoveTreeClassChooserPanel(table, InspectionGadgetsBundle.message("choose.exception.class"),
-                                                        "java.lang.Throwable");
+      new ListTable(new ListWrappingTableModel(exceptions, InspectionGadgetsLocalize.exceptionClassColumnName().get()));
+    return UiUtils.createAddRemoveTreeClassChooserPanel(
+      table,
+      InspectionGadgetsLocalize.chooseExceptionClass().get(),
+      "java.lang.Throwable"
+    );
   }
 
   @Override

@@ -17,11 +17,11 @@ package com.intellij.java.impl.ig.errorhandling;
 
 import com.intellij.java.impl.ig.psiutils.VariableSearchUtils;
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.function.Processor;
 import consulo.application.util.query.Query;
@@ -33,10 +33,10 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.lang.ref.Ref;
-import org.jetbrains.annotations.Nls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.Nls;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -47,13 +47,13 @@ public class CaughtExceptionImmediatelyRethrownInspection extends BaseInspection
   @Nls
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("caught.exception.immediately.rethrown.display.name");
+    return InspectionGadgetsLocalize.caughtExceptionImmediatelyRethrownDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("caught.exception.immediately.rethrown.problem.descriptor");
+    return InspectionGadgetsLocalize.caughtExceptionImmediatelyRethrownProblemDescriptor().get();
   }
 
   @Override
@@ -81,10 +81,10 @@ public class CaughtExceptionImmediatelyRethrownInspection extends BaseInspection
     @Nonnull
     public String getName() {
       if (removeTryCatch) {
-        return InspectionGadgetsBundle.message("remove.try.catch.quickfix");
+        return InspectionGadgetsLocalize.removeTryCatchQuickfix().get();
       }
       else {
-        return InspectionGadgetsBundle.message("delete.catch.section.quickfix");
+        return InspectionGadgetsLocalize.deleteCatchSectionQuickfix().get();
       }
     }
 
@@ -210,12 +210,9 @@ public class CaughtExceptionImmediatelyRethrownInspection extends BaseInspection
       }
       final PsiType type = parameter.getType();
       final Set<PsiClass> parameterClasses = new HashSet();
-      processExceptionClasses(type, new Processor<PsiClass>() {
-        @Override
-        public boolean process(PsiClass aClass) {
-          parameterClasses.add(aClass);
-          return true;
-        }
+      processExceptionClasses(type, aClass -> {
+        parameterClasses.add(aClass);
+        return true;
       });
       if (parameterClasses.isEmpty()) {
         return false;

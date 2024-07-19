@@ -18,11 +18,10 @@ package com.intellij.java.impl.ig.inheritance;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-
 import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
@@ -34,14 +33,12 @@ public class AbstractClassWithoutAbstractMethodsInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "abstract.class.without.abstract.methods.display.name");
+    return InspectionGadgetsLocalize.abstractClassWithoutAbstractMethodsDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "abstract.class.without.abstract.methods.problem.descriptor");
+    return InspectionGadgetsLocalize.abstractClassWithoutAbstractMethodsProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

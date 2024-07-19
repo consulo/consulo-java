@@ -15,16 +15,15 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
-import jakarta.annotation.Nonnull;
-
+import com.intellij.java.impl.ig.fixes.ChangeModifierFix;
 import com.intellij.java.language.psi.PsiClassInitializer;
 import com.intellij.java.language.psi.PsiModifier;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.ChangeModifierFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 @ExtensionImpl
@@ -37,14 +36,12 @@ public class ClassInitializerInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "class.initializer.display.name");
+    return InspectionGadgetsLocalize.classInitializerDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "class.initializer.problem.descriptor");
+    return InspectionGadgetsLocalize.classInitializerProblemDescriptor().get();
   }
 
   @Override

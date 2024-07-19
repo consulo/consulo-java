@@ -15,16 +15,15 @@
  */
 package com.intellij.java.impl.ig.classmetrics;
 
-import jakarta.annotation.Nonnull;
-
+import com.intellij.java.impl.ig.fixes.MoveAnonymousToInnerClassFix;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiEnumConstantInitializer;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.MoveAnonymousToInnerClassFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class AnonymousClassMethodCountInspection
@@ -41,8 +40,7 @@ public class AnonymousClassMethodCountInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "anonymous.inner.class.with.too.many.methods.display.name");
+    return InspectionGadgetsLocalize.anonymousInnerClassWithTooManyMethodsDisplayName().get();
   }
 
   @Override
@@ -52,7 +50,7 @@ public class AnonymousClassMethodCountInspection
 
   @Override
   protected String getConfigurationLabel() {
-    return InspectionGadgetsBundle.message("method.count.limit.option");
+    return InspectionGadgetsLocalize.methodCountLimitOption().get();
   }
 
   @Override
@@ -69,9 +67,7 @@ public class AnonymousClassMethodCountInspection
   @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer count = (Integer)infos[0];
-    return InspectionGadgetsBundle.message(
-      "anonymous.inner.class.with.too.many.methods.problem.descriptor",
-      count);
+    return InspectionGadgetsLocalize.anonymousInnerClassWithTooManyMethodsProblemDescriptor(count).get();
   }
 
   @Override

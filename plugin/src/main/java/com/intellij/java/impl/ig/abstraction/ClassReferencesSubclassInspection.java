@@ -20,9 +20,9 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ClassUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiNamedElement;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -31,8 +31,7 @@ public class ClassReferencesSubclassInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "class.references.subclass.display.name");
+    return InspectionGadgetsLocalize.classReferencesSubclassDisplayName().get();
   }
 
   @Nonnull
@@ -45,9 +44,7 @@ public class ClassReferencesSubclassInspection extends BaseInspection {
         "class.references.subclass.problem.descriptor.anonymous",
         containingClassName);
     }
-    return InspectionGadgetsBundle.message(
-      "class.references.subclass.problem.descriptor",
-      containingClassName);
+    return InspectionGadgetsLocalize.classReferencesSubclassProblemDescriptor(containingClassName).get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

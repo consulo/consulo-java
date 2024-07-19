@@ -22,6 +22,7 @@ import com.intellij.java.impl.ig.dependency.DependencyUtils;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.siyeh.InspectionGadgetsBundle;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.language.editor.inspection.CommonProblemDescriptor;
 import consulo.language.editor.inspection.GlobalInspectionContext;
 import consulo.language.editor.inspection.ProblemHighlightType;
@@ -38,48 +39,46 @@ import java.util.Set;
 
 public abstract class ClassOnlyUsedInOneModuleInspection extends BaseGlobalInspection
 {
-
 	@Nls
 	@Nonnull
 	@Override
 	public String getDisplayName()
 	{
-		return InspectionGadgetsBundle.message(
-				"class.only.used.in.one.module.display.name");
+		return InspectionGadgetsLocalize.classOnlyUsedInOneModuleDisplayName().get();
 	}
 
 	@Nullable
 	@Override
 	public CommonProblemDescriptor[] checkElement(
-			RefEntity refEntity,
-			AnalysisScope scope,
-			InspectionManager manager,
-			GlobalInspectionContext globalContext,
-			Object state)
+		RefEntity refEntity,
+		AnalysisScope scope,
+		InspectionManager manager,
+		GlobalInspectionContext globalContext,
+		Object state
+	)
 	{
-		if(!(refEntity instanceof RefClass))
+		if (!(refEntity instanceof RefClass))
 		{
 			return null;
 		}
 		final RefClass refClass = (RefClass) refEntity;
 		final RefEntity owner = refClass.getOwner();
-		if(!(owner instanceof RefPackage))
+		if (!(owner instanceof RefPackage))
 		{
 			return null;
 		}
-		final Set<RefClass> dependencies =
-				DependencyUtils.calculateDependenciesForClass(refClass);
+		final Set<RefClass> dependencies = DependencyUtils.calculateDependenciesForClass(refClass);
 		RefModule otherModule = null;
-		for(RefClass dependency : dependencies)
+		for (RefClass dependency : dependencies)
 		{
 			final RefModule module = dependency.getModule();
-			if(refClass.getModule() == module)
+			if (refClass.getModule() == module)
 			{
 				return null;
 			}
-			if(otherModule != module)
+			if (otherModule != module)
 			{
-				if(otherModule == null)
+				if (otherModule == null)
 				{
 					otherModule = module;
 				}
@@ -89,18 +88,17 @@ public abstract class ClassOnlyUsedInOneModuleInspection extends BaseGlobalInspe
 				}
 			}
 		}
-		final Set<RefClass> dependents =
-				DependencyUtils.calculateDependentsForClass(refClass);
-		for(RefClass dependent : dependents)
+		final Set<RefClass> dependents = DependencyUtils.calculateDependentsForClass(refClass);
+		for (RefClass dependent : dependents)
 		{
 			final RefModule module = dependent.getModule();
-			if(refClass.getModule() == module)
+			if (refClass.getModule() == module)
 			{
 				return null;
 			}
-			if(otherModule != module)
+			if (otherModule != module)
 			{
-				if(otherModule == null)
+				if (otherModule == null)
 				{
 					otherModule = module;
 				}
@@ -110,23 +108,25 @@ public abstract class ClassOnlyUsedInOneModuleInspection extends BaseGlobalInspe
 				}
 			}
 		}
-		if(otherModule == null)
+		if (otherModule == null)
 		{
 			return null;
 		}
 		final PsiClass aClass = refClass.getElement();
 		final PsiIdentifier identifier = aClass.getNameIdentifier();
-		if(identifier == null)
+		if (identifier == null)
 		{
 			return null;
 		}
 		final String moduleName = otherModule.getName();
 		return new CommonProblemDescriptor[]{
-				manager.createProblemDescriptor(identifier,
-						InspectionGadgetsBundle.message(
-								"class.only.used.in.one.module.problem.descriptor",
-								moduleName),
-						true, ProblemHighlightType.GENERIC_ERROR_OR_WARNING, false)
+			manager.createProblemDescriptor(
+				identifier,
+				InspectionGadgetsLocalize.classOnlyUsedInOneModuleProblemDescriptor(moduleName).get(),
+				true,
+				ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
+				false
+			)
 		};
 	}
 }

@@ -15,16 +15,17 @@
  */
 package com.intellij.java.impl.ig.numeric;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
@@ -61,21 +62,20 @@ public class CastThatLosesPrecisionInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "cast.that.loses.precision.display.name");
+    return InspectionGadgetsLocalize.castThatLosesPrecisionDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiType operandType = (PsiType)infos[0];
-    return InspectionGadgetsBundle.message("cast.that.loses.precision.problem.descriptor", operandType.getPresentableText());
+    return InspectionGadgetsLocalize.castThatLosesPrecisionProblemDescriptor(operandType.getPresentableText()).get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message("cast.that.loses.precision.option"),
-                                          this, "ignoreIntegerCharCasts");
+    LocalizeValue message = InspectionGadgetsLocalize.castThatLosesPrecisionOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreIntegerCharCasts");
   }
 
   @Override
