@@ -21,11 +21,11 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassInitializer;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiModifier;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.analysis.codeInspection.CantBeStaticCondition;
 import consulo.java.analysis.codeInspection.JavaExtensionPoints;
@@ -46,7 +46,7 @@ public class ClassInitializerMayBeStaticInspection extends BaseInspection {
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("class.initializer.may.be.static.problem.descriptor");
+    return InspectionGadgetsLocalize.classInitializerMayBeStaticProblemDescriptor().get();
   }
 
   @Override
@@ -58,7 +58,7 @@ public class ClassInitializerMayBeStaticInspection extends BaseInspection {
   @Nls
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("class.initializer.may.be.static.display.name");
+    return InspectionGadgetsLocalize.classInitializerMayBeStaticDisplayName().get();
   }
 
   @Override

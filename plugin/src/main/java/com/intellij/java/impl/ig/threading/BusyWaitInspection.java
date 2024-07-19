@@ -15,28 +15,27 @@
  */
 package com.intellij.java.impl.ig.threading;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiType;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.ig.psiutils.MethodCallUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class BusyWaitInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("busy.wait.display.name");
+    return InspectionGadgetsLocalize.busyWaitDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("busy.wait.problem.descriptor");
+    return InspectionGadgetsLocalize.busyWaitProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

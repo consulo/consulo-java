@@ -19,6 +19,7 @@ import com.intellij.java.language.psi.PsiBlockStatement;
 import com.intellij.java.language.psi.PsiBreakStatement;
 import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiSwitchStatement;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -32,13 +33,12 @@ public class BreakStatementInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("break.statement.display.name");
+    return InspectionGadgetsLocalize.breakStatementDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "statement.problem.descriptor");
+    return InspectionGadgetsLocalize.statementProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

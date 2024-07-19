@@ -16,13 +16,13 @@
 package com.intellij.java.impl.ig.abstraction;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.util.PsiTreeUtil;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
@@ -41,21 +41,21 @@ public class CastToConcreteClassInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("cast.to.concrete.class.display.name");
+    return InspectionGadgetsLocalize.castToConcreteClassDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
     final PsiType type= (PsiType)infos[0];
-    return InspectionGadgetsBundle.message("cast.to.concrete.class.problem.descriptor", type.getPresentableText());
+    return InspectionGadgetsLocalize.castToConcreteClassProblemDescriptor(type.getPresentableText()).get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
-    panel.addCheckbox(InspectionGadgetsBundle.message("cast.to.concrete.class.option"), "ignoreAbstractClasses");
-    panel.addCheckbox(InspectionGadgetsBundle.message("cast.to.concrete.class.ignore.equals.option"), "ignoreInEquals");
+    panel.addCheckbox(InspectionGadgetsLocalize.castToConcreteClassOption().get(), "ignoreAbstractClasses");
+    panel.addCheckbox(InspectionGadgetsLocalize.castToConcreteClassIgnoreEqualsOption().get(), "ignoreInEquals");
     return panel;
   }
 

@@ -15,14 +15,13 @@
  */
 package com.intellij.java.impl.ig.classmetrics;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiTypeParameter;
+import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiTypeParameter;
-import com.siyeh.InspectionGadgetsBundle;
-import com.siyeh.ig.BaseInspectionVisitor;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ClassNestingDepthInspection
@@ -37,8 +36,7 @@ public class ClassNestingDepthInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "inner.class.too.deeply.nested.display.name");
+    return InspectionGadgetsLocalize.innerClassTooDeeplyNestedDisplayName().get();
   }
 
   protected int getDefaultLimit() {
@@ -46,16 +44,13 @@ public class ClassNestingDepthInspection
   }
 
   protected String getConfigurationLabel() {
-    return InspectionGadgetsBundle.message(
-      "inner.class.too.deeply.nested.nesting.limit.option");
+    return InspectionGadgetsLocalize.innerClassTooDeeplyNestedNestingLimitOption().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer nestingLevel = (Integer)infos[0];
-    return InspectionGadgetsBundle.message(
-      "inner.class.too.deeply.nested.problem.descriptor",
-      nestingLevel);
+    return InspectionGadgetsLocalize.innerClassTooDeeplyNestedProblemDescriptor(nestingLevel).get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

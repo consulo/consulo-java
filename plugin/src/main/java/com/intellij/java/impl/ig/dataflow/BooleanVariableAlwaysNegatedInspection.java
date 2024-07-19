@@ -15,22 +15,23 @@
  */
 package com.intellij.java.impl.ig.dataflow;
 
-import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.ast.IElementType;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.impl.refactoring.invertBoolean.InvertBooleanDialog;
-import consulo.language.util.IncorrectOperationException;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.Nls;
 
 @ExtensionImpl
 public class BooleanVariableAlwaysNegatedInspection extends BaseInspection {
@@ -39,8 +40,7 @@ public class BooleanVariableAlwaysNegatedInspection extends BaseInspection {
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "boolean.variable.always.inverted.display.name");
+    return InspectionGadgetsLocalize.booleanVariableAlwaysInvertedDisplayName().get();
   }
 
   @Nonnull

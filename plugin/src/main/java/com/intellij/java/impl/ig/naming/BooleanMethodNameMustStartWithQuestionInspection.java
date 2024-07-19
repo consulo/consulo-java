@@ -21,11 +21,11 @@ import com.intellij.java.impl.ig.ui.UiUtils;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiType;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.MethodUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
@@ -33,10 +33,10 @@ import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
+import jakarta.annotation.Nonnull;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -69,13 +69,13 @@ public class BooleanMethodNameMustStartWithQuestionInspection extends BaseInspec
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("boolean.method.name.must.start.with.question.display.name");
+    return InspectionGadgetsLocalize.booleanMethodNameMustStartWithQuestionDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("boolean.method.name.must.start.with.question.problem.descriptor");
+    return InspectionGadgetsLocalize.booleanMethodNameMustStartWithQuestionProblemDescriptor().get();
   }
 
   @Override
@@ -93,8 +93,10 @@ public class BooleanMethodNameMustStartWithQuestionInspection extends BaseInspec
   @Override
   public JComponent createOptionsPanel() {
     final JPanel panel = new JPanel(new GridBagLayout());
-    final ListTable table = new ListTable(new ListWrappingTableModel(questionList, InspectionGadgetsBundle
-        .message("boolean.method.name.must.start.with.question.table.column.name")));
+    final ListTable table = new ListTable(new ListWrappingTableModel(
+      questionList,
+      InspectionGadgetsLocalize.booleanMethodNameMustStartWithQuestionTableColumnName().get()
+    ));
     final JPanel tablePanel = UiUtils.createAddRemovePanel(table);
 
     final GridBagConstraints constraints = new GridBagConstraints();
@@ -106,18 +108,18 @@ public class BooleanMethodNameMustStartWithQuestionInspection extends BaseInspec
     panel.add(tablePanel, constraints);
 
     final CheckBox checkBox1 =
-        new CheckBox(InspectionGadgetsBundle.message("ignore.methods.with.boolean.return.type.option"), this, "ignoreBooleanMethods");
+      new CheckBox(InspectionGadgetsLocalize.ignoreMethodsWithBooleanReturnTypeOption().get(), this, "ignoreBooleanMethods");
     constraints.gridy = 1;
     constraints.weighty = 0.0;
     panel.add(checkBox1, constraints);
 
     final CheckBox checkBox2 =
-        new CheckBox(InspectionGadgetsBundle.message("ignore.boolean.methods.in.an.interface.option"), this, "ignoreInAnnotationInterface");
+      new CheckBox(InspectionGadgetsLocalize.ignoreBooleanMethodsInAnInterfaceOption().get(), this, "ignoreInAnnotationInterface");
     constraints.gridy = 2;
     panel.add(checkBox2, constraints);
 
     final CheckBox checkBox3 =
-        new CheckBox(InspectionGadgetsBundle.message("ignore.methods.overriding.super.method"), this, "onlyWarnOnBaseMethods");
+      new CheckBox(InspectionGadgetsLocalize.ignoreMethodsOverridingSuperMethod().get(), this, "onlyWarnOnBaseMethods");
     constraints.gridy = 3;
     panel.add(checkBox3, constraints);
     return panel;

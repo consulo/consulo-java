@@ -18,21 +18,21 @@ package com.intellij.java.impl.ig.performance;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PropertyUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.query.Query;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 
 @ExtensionImpl
@@ -53,23 +53,24 @@ public class CallToSimpleGetterInClassInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("call.to.simple.getter.in.class.display.name");
+    return InspectionGadgetsLocalize.callToSimpleGetterInClassDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("call.to.simple.getter.in.class.problem.descriptor");
+    return InspectionGadgetsLocalize.callToSimpleGetterInClassProblemDescriptor().get();
   }
 
   @Override
   @Nullable
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message("call.to.simple.getter.in.class.ignore.option"),
-                             "ignoreGetterCallsOnOtherObjects");
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message("call.to.private.simple.getter.in.class.option"),
-                             "onlyReportPrivateGetter");
+    optionsPanel.addCheckbox(
+      InspectionGadgetsLocalize.callToSimpleGetterInClassIgnoreOption().get(),
+      "ignoreGetterCallsOnOtherObjects"
+    );
+    optionsPanel.addCheckbox(InspectionGadgetsLocalize.callToPrivateSimpleGetterInClassOption().get(), "onlyReportPrivateGetter");
     return optionsPanel;
   }
 
@@ -79,10 +80,9 @@ public class CallToSimpleGetterInClassInspection extends BaseInspection {
   }
 
   private static class InlineCallFix extends InspectionGadgetsFix {
-
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("call.to.simple.getter.in.class.inline.quickfix");
+      return InspectionGadgetsLocalize.callToSimpleGetterInClassInlineQuickfix().get();
     }
 
     @Override
@@ -146,7 +146,6 @@ public class CallToSimpleGetterInClassInspection extends BaseInspection {
   }
 
   private class CallToSimpleGetterInClassVisitor extends BaseInspectionVisitor {
-
     @Override
     public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression call) {
       super.visitMethodCallExpression(call);

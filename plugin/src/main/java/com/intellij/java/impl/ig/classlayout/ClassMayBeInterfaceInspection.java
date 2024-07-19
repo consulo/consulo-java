@@ -17,10 +17,10 @@ package com.intellij.java.impl.ig.classlayout;
 
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.content.scope.SearchScope;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -28,7 +28,6 @@ import consulo.language.psi.PsiManager;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -37,14 +36,12 @@ public class ClassMayBeInterfaceInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "class.may.be.interface.display.name");
+    return InspectionGadgetsLocalize.classMayBeInterfaceDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "class.may.be.interface.problem.descriptor");
+    return InspectionGadgetsLocalize.classMayBeInterfaceProblemDescriptor().get();
   }
 
   protected InspectionGadgetsFix buildFix(Object... infos) {
@@ -55,16 +52,13 @@ public class ClassMayBeInterfaceInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "class.may.be.interface.convert.quickfix");
+      return InspectionGadgetsLocalize.classMayBeInterfaceConvertQuickfix().get();
     }
 
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiIdentifier classNameIdentifier =
-        (PsiIdentifier)descriptor.getPsiElement();
-      final PsiClass interfaceClass =
-        (PsiClass)classNameIdentifier.getParent();
+      final PsiIdentifier classNameIdentifier = (PsiIdentifier)descriptor.getPsiElement();
+      final PsiClass interfaceClass = (PsiClass)classNameIdentifier.getParent();
       moveSubClassExtendsToImplements(interfaceClass);
       changeClassToInterface(interfaceClass);
       moveImplementsToExtends(interfaceClass);
@@ -76,13 +70,10 @@ public class ClassMayBeInterfaceInspection extends BaseInspection {
       if (nameIdentifier == null) {
         return;
       }
-      final PsiKeyword classKeyword =
-        PsiTreeUtil.getPrevSiblingOfType(nameIdentifier,
-                                         PsiKeyword.class);
+      final PsiKeyword classKeyword = PsiTreeUtil.getPrevSiblingOfType(nameIdentifier, PsiKeyword.class);
       final PsiManager manager = aClass.getManager();
       final PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
-      final PsiKeyword interfaceKeyword =
-        factory.createKeyword(PsiKeyword.INTERFACE);
+      final PsiKeyword interfaceKeyword = factory.createKeyword(PsiKeyword.INTERFACE);
       if (classKeyword == null) {
         return;
       }
@@ -100,15 +91,12 @@ public class ClassMayBeInterfaceInspection extends BaseInspection {
       if (extendsList == null) {
         return;
       }
-      final PsiReferenceList implementsList =
-        anInterface.getImplementsList();
+      final PsiReferenceList implementsList = anInterface.getImplementsList();
       if (implementsList == null) {
         return;
       }
-      final PsiJavaCodeReferenceElement[] referenceElements =
-        implementsList.getReferenceElements();
-      for (final PsiJavaCodeReferenceElement referenceElement :
-        referenceElements) {
+      final PsiJavaCodeReferenceElement[] referenceElements = implementsList.getReferenceElements();
+      for (final PsiJavaCodeReferenceElement referenceElement : referenceElements) {
         extendsList.add(referenceElement);
         referenceElement.delete();
       }
@@ -117,16 +105,14 @@ public class ClassMayBeInterfaceInspection extends BaseInspection {
     private static void moveSubClassExtendsToImplements(PsiClass oldClass)
       throws IncorrectOperationException {
       final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(oldClass.getProject()).getElementFactory();
-      final PsiJavaCodeReferenceElement classReference =
-        elementFactory.createClassReferenceElement(oldClass);
+      final PsiJavaCodeReferenceElement classReference = elementFactory.createClassReferenceElement(oldClass);
       final SearchScope searchScope = oldClass.getUseScope();
       for (final PsiClass inheritor : ClassInheritorsSearch.search(oldClass, searchScope, false)) {
         final PsiReferenceList extendsList = inheritor.getExtendsList();
         if (extendsList == null) {
           continue;
         }
-        final PsiReferenceList implementsList =
-          inheritor.getImplementsList();
+        final PsiReferenceList implementsList = inheritor.getImplementsList();
         moveReference(extendsList, implementsList, classReference);
       }
     }
@@ -134,15 +120,12 @@ public class ClassMayBeInterfaceInspection extends BaseInspection {
     private static void moveReference(
       @Nonnull PsiReferenceList source,
       @Nullable PsiReferenceList target,
-      @Nonnull PsiJavaCodeReferenceElement reference)
-      throws IncorrectOperationException {
-      final PsiJavaCodeReferenceElement[] sourceReferences =
-        source.getReferenceElements();
+      @Nonnull PsiJavaCodeReferenceElement reference
+    ) throws IncorrectOperationException {
+      final PsiJavaCodeReferenceElement[] sourceReferences = source.getReferenceElements();
       final String fqName = reference.getQualifiedName();
-      for (final PsiJavaCodeReferenceElement sourceReference :
-        sourceReferences) {
-        final String implementsReferenceFqName =
-          sourceReference.getQualifiedName();
+      for (final PsiJavaCodeReferenceElement sourceReference : sourceReferences) {
+        final String implementsReferenceFqName = sourceReference.getQualifiedName();
         if (fqName.equals(implementsReferenceFqName)) {
           if (target != null) {
             target.add(sourceReference);
@@ -157,18 +140,15 @@ public class ClassMayBeInterfaceInspection extends BaseInspection {
     return new ClassMayBeInterfaceVisitor();
   }
 
-  private static class ClassMayBeInterfaceVisitor
-    extends BaseInspectionVisitor {
+  private static class ClassMayBeInterfaceVisitor extends BaseInspectionVisitor {
 
     @Override
     public void visitClass(@Nonnull PsiClass aClass) {
       // no call to super, so that it doesn't drill down to inner classes
-      if (aClass.isInterface() || aClass.isAnnotationType() ||
-          aClass.isEnum()) {
+      if (aClass.isInterface() || aClass.isAnnotationType() || aClass.isEnum()) {
         return;
       }
-      if (aClass instanceof PsiTypeParameter ||
-          aClass instanceof PsiAnonymousClass) {
+      if (aClass instanceof PsiTypeParameter || aClass instanceof PsiAnonymousClass) {
         return;
       }
       if (!mayBeInterface(aClass)) {
@@ -180,8 +160,7 @@ public class ClassMayBeInterfaceInspection extends BaseInspection {
     public static boolean mayBeInterface(PsiClass aClass) {
       final PsiReferenceList extendsList = aClass.getExtendsList();
       if (extendsList != null) {
-        final PsiJavaCodeReferenceElement[] extendsElements =
-          extendsList.getReferenceElements();
+        final PsiJavaCodeReferenceElement[] extendsElements = extendsList.getReferenceElements();
         if (extendsElements.length > 0) {
           return false;
         }

@@ -15,13 +15,12 @@
  */
 package com.intellij.java.impl.ig.visibility;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ClassEscapesItsScopeInspection extends BaseInspection {
@@ -33,22 +32,19 @@ public class ClassEscapesItsScopeInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "class.escapes.defined.scope.display.name");
+    return InspectionGadgetsLocalize.classEscapesDefinedScopeDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "class.escapes.defined.scope.problem.descriptor");
+    return InspectionGadgetsLocalize.classEscapesDefinedScopeProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {
     return new ClassEscapesItsScopeVisitor();
   }
 
-  private static class ClassEscapesItsScopeVisitor
-    extends BaseInspectionVisitor {
+  private static class ClassEscapesItsScopeVisitor extends BaseInspectionVisitor {
 
     @Override
     public void visitMethod(@Nonnull PsiMethod method) {
@@ -67,8 +63,7 @@ public class ClassEscapesItsScopeInspection extends BaseInspection {
       if (!(componentType instanceof PsiClassType)) {
         return;
       }
-      final PsiClass returnClass =
-        ((PsiClassType)componentType).resolve();
+      final PsiClass returnClass = ((PsiClassType)componentType).resolve();
       if (returnClass == null) {
         return;
       }
@@ -82,8 +77,7 @@ public class ClassEscapesItsScopeInspection extends BaseInspection {
       if (typeElement == null) {
         return;
       }
-      final PsiJavaCodeReferenceElement baseTypeElement =
-        typeElement.getInnermostComponentReferenceElement();
+      final PsiJavaCodeReferenceElement baseTypeElement = typeElement.getInnermostComponentReferenceElement();
       if (baseTypeElement == null) {
         return;
       }
@@ -129,8 +123,7 @@ public class ClassEscapesItsScopeInspection extends BaseInspection {
     }
 
 
-    private static boolean isLessRestrictiveScope(PsiMethod method,
-                                                  PsiClass aClass) {
+    private static boolean isLessRestrictiveScope(PsiMethod method, PsiClass aClass) {
       final int methodScopeOrder = getScopeOrder(method);
       final int classScopeOrder = getScopeOrder(aClass);
       final PsiClass containingClass = method.getContainingClass();
@@ -149,14 +142,12 @@ public class ClassEscapesItsScopeInspection extends BaseInspection {
       return true;
     }
 
-    private static boolean fieldHasLessRestrictiveScope(PsiField field,
-                                                        PsiClass aClass) {
+    private static boolean fieldHasLessRestrictiveScope(PsiField field, PsiClass aClass) {
       final int fieldScopeOrder = getScopeOrder(field);
       final PsiClass containingClass = field.getContainingClass();
       final int containingClassScopeOrder = getScopeOrder(containingClass);
       final int classScopeOrder = getScopeOrder(aClass);
-      return fieldScopeOrder > classScopeOrder &&
-             containingClassScopeOrder > classScopeOrder;
+      return fieldScopeOrder > classScopeOrder && containingClassScopeOrder > classScopeOrder;
     }
 
     private static int getScopeOrder(PsiModifierListOwner element) {

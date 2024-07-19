@@ -15,22 +15,22 @@
  */
 package com.intellij.java.impl.ig.style;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.MethodCallUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class CallToStringConcatCanBeReplacedByOperatorInspection
@@ -40,15 +40,13 @@ public class CallToStringConcatCanBeReplacedByOperatorInspection
   @Nls
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "call.to.string.concat.can.be.replaced.by.operator.display.name");
+    return InspectionGadgetsLocalize.callToStringConcatCanBeReplacedByOperatorDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "call.to.string.concat.can.be.replaced.by.operator.problem.descriptor");
+    return InspectionGadgetsLocalize.callToStringConcatCanBeReplacedByOperatorProblemDescriptor().get();
   }
 
   @Override
@@ -67,7 +65,7 @@ public class CallToStringConcatCanBeReplacedByOperatorInspection
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("call.to.string.concat.can.be.replaced.by.operator.quickfix");
+      return InspectionGadgetsLocalize.callToStringConcatCanBeReplacedByOperatorQuickfix().get();
     }
 
     @Override

@@ -18,22 +18,21 @@ package com.intellij.java.impl.ig.performance;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PropertyUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.query.Query;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
-
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -53,21 +52,25 @@ public class CallToSimpleSetterInClassInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("call.to.simple.setter.in.class.display.name");
+    return InspectionGadgetsLocalize.callToSimpleSetterInClassDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("call.to.simple.setter.in.class.problem.descriptor");
+    return InspectionGadgetsLocalize.callToSimpleSetterInClassProblemDescriptor().get();
   }
 
   @Nullable
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message("call.to.simple.setter.in.class.ignore.option"),
-                             "ignoreSetterCallsOnOtherObjects");
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message("call.to.private.setter.in.class.option"),
-                             "onlyReportPrivateSetter");
+    optionsPanel.addCheckbox(
+      InspectionGadgetsLocalize.callToSimpleSetterInClassIgnoreOption().get(),
+      "ignoreSetterCallsOnOtherObjects"
+    );
+    optionsPanel.addCheckbox(
+      InspectionGadgetsLocalize.callToPrivateSetterInClassOption().get(),
+      "onlyReportPrivateSetter"
+    );
     return optionsPanel;
   }
 
@@ -79,7 +82,7 @@ public class CallToSimpleSetterInClassInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("call.to.simple.setter.in.class.inline.quickfix");
+      return InspectionGadgetsLocalize.callToSimpleSetterInClassInlineQuickfix().get();
     }
 
     public void doFix(Project project, ProblemDescriptor descriptor)

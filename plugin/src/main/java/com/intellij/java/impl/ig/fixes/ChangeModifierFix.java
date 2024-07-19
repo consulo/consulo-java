@@ -15,18 +15,18 @@
  */
 package com.intellij.java.impl.ig.fixes;
 
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiModifierList;
 import com.intellij.java.language.psi.PsiModifierListOwner;
-import consulo.project.Project;
-import consulo.language.psi.*;
+import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
-import com.siyeh.ig.InspectionGadgetsFix;
-import org.jetbrains.annotations.NonNls;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 public class ChangeModifierFix extends InspectionGadgetsFix {
 
@@ -38,8 +38,7 @@ public class ChangeModifierFix extends InspectionGadgetsFix {
 
   @Nonnull
   public String getName() {
-    return InspectionGadgetsBundle.message("change.modifier.quickfix",
-                                           modifierText);
+    return InspectionGadgetsLocalize.changeModifierQuickfix(modifierText).get();
   }
 
   public void doFix(Project project, ProblemDescriptor descriptor)

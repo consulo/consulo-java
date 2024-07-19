@@ -16,12 +16,11 @@
 package com.intellij.java.impl.ig.security;
 
 import com.intellij.java.language.psi.PsiNewExpression;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -29,14 +28,12 @@ public class ClassLoaderInstantiationInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "class.loader.instantiation.display.name");
+    return InspectionGadgetsLocalize.classLoaderInstantiationDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "class.loader.instantiation.problem.descriptor");
+    return InspectionGadgetsLocalize.classLoaderInstantiationProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

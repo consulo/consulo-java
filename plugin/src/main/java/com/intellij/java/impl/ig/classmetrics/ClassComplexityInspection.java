@@ -15,14 +15,13 @@
  */
 package com.intellij.java.impl.ig.classmetrics;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassInitializer;
 import com.intellij.java.language.psi.PsiMethod;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ClassComplexityInspection
@@ -37,8 +36,7 @@ public class ClassComplexityInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "overly.complex.class.display.name");
+    return InspectionGadgetsLocalize.overlyComplexClassDisplayName().get();
   }
 
   protected int getDefaultLimit() {
@@ -46,15 +44,13 @@ public class ClassComplexityInspection
   }
 
   protected String getConfigurationLabel() {
-    return InspectionGadgetsBundle.message(
-      "cyclomatic.complexity.limit.option");
+    return InspectionGadgetsLocalize.cyclomaticComplexityLimitOption().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer totalComplexity = (Integer)infos[0];
-    return InspectionGadgetsBundle.message(
-      "overly.complex.class.problem.descriptor", totalComplexity);
+    return InspectionGadgetsLocalize.overlyComplexClassProblemDescriptor(totalComplexity).get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

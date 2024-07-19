@@ -15,22 +15,22 @@
  */
 package com.intellij.java.impl.ig.performance;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import com.intellij.java.language.psi.*;
-import consulo.project.Project;
 import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
-import org.jetbrains.annotations.NonNls;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class BooleanConstructorInspection extends BaseInspection {
@@ -44,7 +44,7 @@ public class BooleanConstructorInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("boolean.constructor.display.name");
+    return InspectionGadgetsLocalize.booleanConstructorDisplayName().get();
   }
 
   @Override
@@ -55,7 +55,7 @@ public class BooleanConstructorInspection extends BaseInspection {
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("boolean.constructor.problem.descriptor");
+    return InspectionGadgetsLocalize.booleanConstructorProblemDescriptor().get();
   }
 
   @Override
@@ -76,7 +76,7 @@ public class BooleanConstructorInspection extends BaseInspection {
     @Override
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("boolean.constructor.simplify.quickfix");
+      return InspectionGadgetsLocalize.booleanConstructorSimplifyQuickfix().get();
     }
 
     @Override
