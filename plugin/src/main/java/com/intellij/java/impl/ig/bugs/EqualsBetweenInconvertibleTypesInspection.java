@@ -17,10 +17,10 @@ package com.intellij.java.impl.ig.bugs;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodCallUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 
@@ -30,18 +30,17 @@ public class EqualsBetweenInconvertibleTypesInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "equals.between.inconvertible.types.display.name");
+    return InspectionGadgetsLocalize.equalsBetweenInconvertibleTypesDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiType comparedType = (PsiType)infos[0];
     final PsiType comparisonType = (PsiType)infos[1];
-    return InspectionGadgetsBundle.message(
-      "equals.between.inconvertible.types.problem.descriptor",
+    return InspectionGadgetsLocalize.equalsBetweenInconvertibleTypesProblemDescriptor(
       comparedType.getPresentableText(),
-      comparisonType.getPresentableText());
+      comparisonType.getPresentableText()
+    ).get();
   }
 
   public boolean isEnabledByDefault() {

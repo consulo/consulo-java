@@ -23,6 +23,7 @@ import com.siyeh.ig.psiutils.EquivalenceChecker;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.SideEffectChecker;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import org.jetbrains.annotations.Nls;
 
 import jakarta.annotation.Nonnull;
@@ -35,13 +36,13 @@ public abstract class EqualsWithItselfInspection extends BaseInspection {
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("equals.with.itself.display.name");
+    return InspectionGadgetsLocalize.equalsWithItselfDisplayName().get();
   }
 
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("equals.with.itself.problem.descriptor");
+    return InspectionGadgetsLocalize.equalsWithItselfProblemDescriptor().get();
   }
 
   @Override

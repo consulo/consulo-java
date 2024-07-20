@@ -16,26 +16,24 @@
 
 package com.intellij.java.impl.ig.security;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class DesignForExtensionInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("design.for.extension.display.name");
+    return InspectionGadgetsLocalize.designForExtensionDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "design.for.extension.problem.descriptor");
+    return InspectionGadgetsLocalize.designForExtensionProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

@@ -15,25 +15,26 @@
  */
 package com.intellij.java.impl.ig.threading;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import javax.swing.JComponent;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.ast.IElementType;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.ig.psiutils.EquivalenceChecker;
 import com.siyeh.ig.psiutils.SideEffectChecker;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
+import javax.swing.*;
 
 @ExtensionImpl
 public class DoubleCheckedLockingInspection extends BaseInspection {
@@ -46,24 +47,20 @@ public class DoubleCheckedLockingInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "double.checked.locking.display.name");
+    return InspectionGadgetsLocalize.doubleCheckedLockingDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "double.checked.locking.problem.descriptor");
+    return InspectionGadgetsLocalize.doubleCheckedLockingProblemDescriptor().get();
   }
 
   @Override
   @Nullable
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message(
-      "double.checked.locking.ignore.on.volatiles.option"), this,
-                                          "ignoreOnVolatileVariables"
-    );
+    LocalizeValue message = InspectionGadgetsLocalize.doubleCheckedLockingIgnoreOnVolatilesOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreOnVolatileVariables");
   }
 
   @Override
@@ -85,8 +82,7 @@ public class DoubleCheckedLockingInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "double.checked.locking.quickfix", field.getName());
+      return InspectionGadgetsLocalize.doubleCheckedLockingQuickfix(field.getName()).get();
     }
 
     @Override

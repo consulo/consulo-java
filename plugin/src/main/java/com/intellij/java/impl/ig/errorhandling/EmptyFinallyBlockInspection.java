@@ -16,10 +16,10 @@
 package com.intellij.java.impl.ig.errorhandling;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -35,7 +35,7 @@ public class EmptyFinallyBlockInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("empty.finally.block.display.name");
+    return InspectionGadgetsLocalize.emptyFinallyBlockDisplayName().get();
   }
 
   @Override
@@ -46,13 +46,13 @@ public class EmptyFinallyBlockInspection extends BaseInspection {
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("empty.finally.block.problem.descriptor");
+    return InspectionGadgetsLocalize.emptyFinallyBlockProblemDescriptor().get();
   }
 
   @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {
     final Integer count = (Integer)infos[0];
-    if (count.intValue() == 0) {
+    if (count == 0) {
       return new RemoveTryFinallyBlockFix();
     }
     else {
@@ -63,7 +63,7 @@ public class EmptyFinallyBlockInspection extends BaseInspection {
   private static class RemoveTryFinallyBlockFix extends InspectionGadgetsFix {
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("remove.try.finally.block.quickfix");
+      return InspectionGadgetsLocalize.removeTryFinallyBlockQuickfix().get();
     }
 
     @Override
@@ -104,7 +104,7 @@ public class EmptyFinallyBlockInspection extends BaseInspection {
   private static class RemoveFinallyBlockFix extends InspectionGadgetsFix {
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("remove.finally.block.quickfix");
+      return InspectionGadgetsLocalize.removeFinallyBlockQuickfix().get();
     }
 
     @Override

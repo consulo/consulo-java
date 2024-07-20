@@ -17,11 +17,10 @@ package com.intellij.java.impl.ig.bugs;
 
 import com.intellij.java.impl.ig.psiutils.InheritanceUtil;
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -30,14 +29,12 @@ public class InstanceofIncompatibleInterfaceInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "instanceof.with.incompatible.interface.display.name");
+    return InspectionGadgetsLocalize.instanceofWithIncompatibleInterfaceDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "instanceof.with.incompatible.interface.problem.descriptor");
+    return InspectionGadgetsLocalize.instanceofWithIncompatibleInterfaceProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

@@ -16,16 +16,16 @@
 package com.intellij.java.impl.ig.errorhandling;
 
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
-
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -40,14 +40,13 @@ public class ErrorRethrownInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("error.rethrown.display.name");
+    return InspectionGadgetsLocalize.errorRethrownDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "error.rethrown.problem.descriptor");
+    return InspectionGadgetsLocalize.errorRethrownProblemDescriptor().get();
   }
 
   @Override

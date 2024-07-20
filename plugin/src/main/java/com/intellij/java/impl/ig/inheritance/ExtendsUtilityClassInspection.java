@@ -15,14 +15,16 @@
  */
 package com.intellij.java.impl.ig.inheritance;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import com.intellij.java.impl.ig.psiutils.UtilityClassUtil;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiModifier;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import com.intellij.java.impl.ig.psiutils.UtilityClassUtil;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -37,22 +39,23 @@ public class ExtendsUtilityClassInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("class.extends.utility.class.display.name");
+    return InspectionGadgetsLocalize.classExtendsUtilityClassDisplayName().get();
   }
 
   @Override
   @Nonnull
+  @RequiredReadAction
   protected String buildErrorString(Object... infos) {
     final PsiClass superClass = (PsiClass)infos[0];
     final String superClassName = superClass.getName();
-    return InspectionGadgetsBundle.message("class.extends.utility.class.problem.descriptor", superClassName);
+    return InspectionGadgetsLocalize.classExtendsUtilityClassProblemDescriptor(superClassName).get();
   }
 
   @Nullable
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message("class.extends.utility.class.ignore.utility.class.option"),
-                                          this, "ignoreUtilityClasses");
+    LocalizeValue message = InspectionGadgetsLocalize.classExtendsUtilityClassIgnoreUtilityClassOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreUtilityClasses");
   }
 
   @Override

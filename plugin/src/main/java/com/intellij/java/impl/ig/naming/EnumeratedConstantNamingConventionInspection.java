@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.ig.naming;
 
-import jakarta.annotation.Nonnull;
-
+import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.psi.PsiEnumConstant;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.RenameFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class EnumeratedConstantNamingConventionInspection extends ConventionInspection {
@@ -33,7 +33,7 @@ public class EnumeratedConstantNamingConventionInspection extends ConventionInsp
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("enumerated.constant.naming.convention.display.name");
+    return InspectionGadgetsLocalize.enumeratedConstantNamingConventionDisplayName().get();
   }
 
   @Override

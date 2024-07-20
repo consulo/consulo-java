@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.ig.naming;
 
+import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiVariable;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.RenameFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 
@@ -31,8 +31,7 @@ public class DollarSignInNameInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "dollar.sign.in.name.display.name");
+    return InspectionGadgetsLocalize.dollarSignInNameDisplayName().get();
   }
 
   protected InspectionGadgetsFix buildFix(Object... infos) {
@@ -41,8 +40,7 @@ public class DollarSignInNameInspection extends BaseInspection {
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "dollar.sign.in.name.problem.descriptor");
+    return InspectionGadgetsLocalize.dollarSignInNameProblemDescriptor().get();
   }
 
   protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {

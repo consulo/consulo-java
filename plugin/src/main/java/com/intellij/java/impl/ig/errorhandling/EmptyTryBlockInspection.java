@@ -15,21 +15,20 @@
  */
 package com.intellij.java.impl.ig.errorhandling;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiTryStatement;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class EmptyTryBlockInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("empty.try.block.display.name");
+    return InspectionGadgetsLocalize.emptyTryBlockDisplayName().get();
   }
 
   public boolean isEnabledByDefault() {
@@ -38,8 +37,7 @@ public class EmptyTryBlockInspection extends BaseInspection {
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "empty.try.block.problem.descriptor");
+    return InspectionGadgetsLocalize.emptyTryBlockProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

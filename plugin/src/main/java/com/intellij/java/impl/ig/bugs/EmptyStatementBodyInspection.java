@@ -16,12 +16,14 @@
 package com.intellij.java.impl.ig.bugs;
 
 import com.intellij.java.language.psi.*;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
@@ -41,12 +43,12 @@ public class EmptyStatementBodyInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("statement.with.empty.body.display.name");
+    return InspectionGadgetsLocalize.statementWithEmptyBodyDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("statement.with.empty.body.problem.descriptor");
+    return InspectionGadgetsLocalize.statementWithEmptyBodyProblemDescriptor().get();
   }
 
   public boolean isEnabledByDefault() {
@@ -54,8 +56,8 @@ public class EmptyStatementBodyInspection extends BaseInspection {
   }
 
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message("statement.with.empty.body.include.option"),
-                                          this, "m_reportEmptyBlocks");
+    LocalizeValue message = InspectionGadgetsLocalize.statementWithEmptyBodyIncludeOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "m_reportEmptyBlocks");
   }
 
   public BaseInspectionVisitor buildVisitor() {
@@ -63,7 +65,6 @@ public class EmptyStatementBodyInspection extends BaseInspection {
   }
 
   private class EmptyStatementVisitor extends BaseInspectionVisitor {
-
     @Override
     public void visitDoWhileStatement(@Nonnull PsiDoWhileStatement statement) {
       super.visitDoWhileStatement(statement);
