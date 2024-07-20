@@ -21,14 +21,13 @@ import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.util.ConstantExpressionUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
-
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -43,8 +42,7 @@ public class IncompatibleMaskInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "incompatible.mask.operation.display.name");
+    return InspectionGadgetsLocalize.incompatibleMaskOperationDisplayName().get();
   }
 
   @Override
@@ -53,14 +51,9 @@ public class IncompatibleMaskInspection extends BaseInspection {
     final PsiBinaryExpression binaryExpression =
       (PsiBinaryExpression)infos[0];
     final IElementType tokenType = binaryExpression.getOperationTokenType();
-    if (tokenType.equals(JavaTokenType.EQEQ)) {
-      return InspectionGadgetsBundle.message(
-        "incompatible.mask.operation.problem.descriptor.always.false");
-    }
-    else {
-      return InspectionGadgetsBundle.message(
-        "incompatible.mask.operation.problem.descriptor.always.true");
-    }
+    return JavaTokenType.EQEQ.equals(tokenType)
+      ? InspectionGadgetsLocalize.incompatibleMaskOperationProblemDescriptorAlwaysFalse().get()
+      : InspectionGadgetsLocalize.incompatibleMaskOperationProblemDescriptorAlwaysTrue().get();
   }
 
   @Override
@@ -74,7 +67,6 @@ public class IncompatibleMaskInspection extends BaseInspection {
   }
 
   private static class IncompatibleMaskVisitor extends BaseInspectionVisitor {
-
     @Override
     public void visitBinaryExpression(
       @Nonnull PsiBinaryExpression expression) {
@@ -87,28 +79,22 @@ public class IncompatibleMaskInspection extends BaseInspection {
       if (expressionType == null) {
         return;
       }
-      final PsiExpression strippedRhs =
-        ParenthesesUtils.stripParentheses(rhs);
+      final PsiExpression strippedRhs = ParenthesesUtils.stripParentheses(rhs);
       if (strippedRhs == null) {
         return;
       }
       final PsiExpression lhs = expression.getLOperand();
-      final PsiExpression strippedLhs =
-        ParenthesesUtils.stripParentheses(lhs);
+      final PsiExpression strippedLhs = ParenthesesUtils.stripParentheses(lhs);
       if (strippedLhs == null) {
         return;
       }
-      if (isConstantMask(strippedLhs) &&
-          PsiUtil.isConstantExpression(strippedRhs)) {
-        if (isIncompatibleMask((PsiBinaryExpression)strippedLhs,
-                               strippedRhs)) {
+      if (isConstantMask(strippedLhs) && PsiUtil.isConstantExpression(strippedRhs)) {
+        if (isIncompatibleMask((PsiBinaryExpression)strippedLhs, strippedRhs)) {
           registerError(expression, expression);
         }
       }
-      else if (isConstantMask(strippedRhs) &&
-               PsiUtil.isConstantExpression(strippedLhs)) {
-        if (isIncompatibleMask((PsiBinaryExpression)strippedRhs,
-                               strippedLhs)) {
+      else if (isConstantMask(strippedRhs) && PsiUtil.isConstantExpression(strippedLhs)) {
+        if (isIncompatibleMask((PsiBinaryExpression)strippedRhs, strippedLhs)) {
           registerError(expression, expression);
         }
       }

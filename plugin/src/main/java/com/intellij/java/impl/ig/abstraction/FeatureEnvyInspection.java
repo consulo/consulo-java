@@ -15,23 +15,23 @@
  */
 package com.intellij.java.impl.ig.abstraction;
 
-import java.util.Set;
-
-import javax.swing.JComponent;
-
-import jakarta.annotation.Nullable;
 import com.intellij.java.language.codeInsight.TestFrameworks;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.java.language.psi.PsiMethod;
-import consulo.language.psi.PsiNamedElement;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TestUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.psi.PsiNamedElement;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
+import javax.swing.*;
+import java.util.Set;
 
 @ExtensionImpl
 public class FeatureEnvyInspection extends BaseInspection {
@@ -42,7 +42,7 @@ public class FeatureEnvyInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("feature.envy.display.name");
+    return InspectionGadgetsLocalize.featureEnvyDisplayName().get();
   }
 
   @Override
@@ -50,8 +50,7 @@ public class FeatureEnvyInspection extends BaseInspection {
   public String buildErrorString(Object... infos) {
     final PsiNamedElement element = (PsiNamedElement)infos[0];
     final String className = element.getName();
-    return InspectionGadgetsBundle.message(
-      "feature.envy.problem.descriptor", className);
+    return InspectionGadgetsLocalize.featureEnvyProblemDescriptor(className).get();
   }
 
   @Override

@@ -15,23 +15,23 @@
  */
 package com.intellij.java.impl.ig.javadoc;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
 import com.intellij.java.language.psi.JavaDocTokenType;
 import com.intellij.java.language.psi.JavaPsiFacade;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocToken;
-import consulo.language.ast.IElementType;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
@@ -43,13 +43,13 @@ public class HtmlTagCanBeJavadocTagInspection extends BaseInspection {
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("html.tag.can.be.javadoc.tag.display.name");
+    return InspectionGadgetsLocalize.htmlTagCanBeJavadocTagDisplayName().get();
   }
 
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("html.tag.can.be.javadoc.tag.problem.descriptor");
+    return InspectionGadgetsLocalize.htmlTagCanBeJavadocTagProblemDescriptor().get();
   }
 
   @Override
@@ -69,8 +69,7 @@ public class HtmlTagCanBeJavadocTagInspection extends BaseInspection {
     @Override
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "html.tag.can.be.javadoc.tag.quickfix");
+      return InspectionGadgetsLocalize.htmlTagCanBeJavadocTagQuickfix().get();
     }
 
     @Override

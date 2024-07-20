@@ -15,34 +15,28 @@
  */
 package com.intellij.java.impl.ig.fixes;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
+import com.intellij.java.impl.ig.psiutils.HighlightUtils;
+import com.intellij.java.language.psi.*;
+import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.application.util.query.Query;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.java.language.psi.PsiArrayInitializerExpression;
 import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiElementFactory;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiLocalVariable;
-import com.intellij.java.language.psi.PsiMember;
 import consulo.language.psi.PsiReference;
-import com.intellij.java.language.psi.PsiType;
 import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.application.util.query.Query;
-import com.siyeh.InspectionGadgetsBundle;
-import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.psiutils.HighlightUtils;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class InlineVariableFix extends InspectionGadgetsFix {
 
   @Nonnull
   public String getName() {
-    return InspectionGadgetsBundle.message("inline.variable.quickfix");
+    return InspectionGadgetsLocalize.inlineVariableQuickfix().get();
   }
 
   @Override

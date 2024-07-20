@@ -15,22 +15,23 @@
  */
 package com.intellij.java.impl.ig.portability;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import com.intellij.java.impl.ig.portability.mediatype.*;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiType;
-import consulo.language.psi.PsiElement;
-import consulo.util.collection.ContainerUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
+import consulo.util.collection.ContainerUtil;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -122,21 +123,17 @@ public class HardcodedFileSeparatorsInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-        "hardcoded.file.separator.display.name");
+    return InspectionGadgetsLocalize.hardcodedFileSeparatorDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-        "hardcoded.file.separator.problem.descriptor");
+    return InspectionGadgetsLocalize.hardcodedFileSeparatorProblemDescriptor().get();
   }
 
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(
-        InspectionGadgetsBundle.message(
-            "hardcoded.file.separator.include.option"),
-        this, "m_recognizeExampleMediaType");
+    LocalizeValue message = InspectionGadgetsLocalize.hardcodedFileSeparatorIncludeOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "m_recognizeExampleMediaType");
   }
 
   public BaseInspectionVisitor buildVisitor() {

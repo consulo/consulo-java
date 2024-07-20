@@ -16,24 +16,23 @@
 
 package com.intellij.java.impl.ig.migration;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
@@ -49,8 +48,7 @@ public class IndexOfReplaceableByContainsInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "indexof.replaceable.by.contains.display.name");
+    return InspectionGadgetsLocalize.indexofReplaceableByContainsDisplayName().get();
   }
 
   @Override
@@ -72,8 +70,7 @@ public class IndexOfReplaceableByContainsInspection
       text = createContainsExpressionText(callExpression, true,
                                           expression.getOperationTokenType());
     }
-    return InspectionGadgetsBundle.message(
-      "expression.can.be.replaced.problem.descriptor", text);
+    return InspectionGadgetsLocalize.expressionCanBeReplacedProblemDescriptor(text).get();
   }
 
   @Override
@@ -119,8 +116,7 @@ public class IndexOfReplaceableByContainsInspection
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "replace.indexof.with.contains.quickfix");
+      return InspectionGadgetsLocalize.replaceIndexofWithContainsQuickfix().get();
     }
   }
 

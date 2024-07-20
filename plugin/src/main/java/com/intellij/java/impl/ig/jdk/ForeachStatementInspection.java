@@ -19,11 +19,11 @@ import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
@@ -31,21 +31,20 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class ForeachStatementInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("extended.for.statement.display.name");
+    return InspectionGadgetsLocalize.extendedForStatementDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("extended.for.statement.problem.descriptor");
+    return InspectionGadgetsLocalize.extendedForStatementProblemDescriptor().get();
   }
 
   protected InspectionGadgetsFix buildFix(Object... infos) {
@@ -56,7 +55,7 @@ public class ForeachStatementInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("extended.for.statement.replace.quickfix");
+      return InspectionGadgetsLocalize.extendedForStatementReplaceQuickfix().get();
     }
 
     public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {

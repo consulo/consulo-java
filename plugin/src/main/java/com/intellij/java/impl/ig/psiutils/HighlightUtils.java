@@ -16,7 +16,7 @@
 package com.intellij.java.impl.ig.psiutils;
 
 import com.intellij.java.impl.codeInsight.template.macro.SuggestVariableNameMacro;
-import com.siyeh.InspectionGadgetsBundle;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.Application;
 import consulo.codeEditor.Editor;
@@ -78,7 +78,7 @@ public class HighlightUtils {
       highlightManager.addOccurrenceHighlights(editor, elements, textattributes, true, null);
       final WindowManager windowManager = WindowManager.getInstance();
       final StatusBar statusBar = windowManager.getStatusBar(project);
-      statusBar.setInfo(InspectionGadgetsBundle.message("press.escape.to.remove.highlighting.message"));
+      statusBar.setInfo(InspectionGadgetsLocalize.pressEscapeToRemoveHighlightingMessage().get());
       final FindManager findmanager = FindManager.getInstance(project);
       FindModel findmodel = findmanager.getFindNextModel();
       if (findmodel == null) {

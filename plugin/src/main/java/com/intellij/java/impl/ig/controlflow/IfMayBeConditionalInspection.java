@@ -15,26 +15,27 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import javax.swing.JComponent;
-
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nullable;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.ig.psiutils.EquivalenceChecker;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NonNls;
+
+import javax.swing.*;
 
 @ExtensionImpl
 public class IfMayBeConditionalInspection extends BaseInspection {
@@ -46,21 +47,19 @@ public class IfMayBeConditionalInspection extends BaseInspection {
   @Nls
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "if.may.be.conditional.display.name");
+    return InspectionGadgetsLocalize.ifMayBeConditionalDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "if.may.be.conditional.problem.descriptor");
+    return InspectionGadgetsLocalize.ifMayBeConditionalProblemDescriptor().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message("if.may.be.conditional.report.method.calls.option"),
-                                          this, "reportMethodCalls");
+    LocalizeValue message = InspectionGadgetsLocalize.ifMayBeConditionalReportMethodCallsOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "reportMethodCalls");
   }
 
   @Override
@@ -72,8 +71,7 @@ public class IfMayBeConditionalInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "if.may.be.conditional.quickfix");
+      return InspectionGadgetsLocalize.ifMayBeConditionalQuickfix().get();
     }
 
     @Override

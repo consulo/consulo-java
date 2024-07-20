@@ -17,12 +17,11 @@ package com.intellij.java.impl.ig.portability;
 
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiType;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-
 import jakarta.annotation.Nonnull;
 
 import java.util.regex.Matcher;
@@ -35,7 +34,7 @@ public class HardcodedLineSeparatorsInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("hardcoded.line.separator.display.name");
+    return InspectionGadgetsLocalize.hardcodedLineSeparatorDisplayName().get();
   }
 
   @Nonnull
@@ -45,7 +44,7 @@ public class HardcodedLineSeparatorsInspection extends BaseInspection {
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("hardcoded.line.separator.problem.descriptor");
+    return InspectionGadgetsLocalize.hardcodedLineSeparatorProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

@@ -16,21 +16,22 @@
 package com.intellij.java.impl.ig.style;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 
 @ExtensionImpl
@@ -42,15 +43,13 @@ public class ImplicitCallToSuperInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "implicit.call.to.super.display.name");
+    return InspectionGadgetsLocalize.implicitCallToSuperDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "implicit.call.to.super.problem.descriptor");
+    return InspectionGadgetsLocalize.implicitCallToSuperProblemDescriptor().get();
   }
 
   @Override
@@ -60,17 +59,15 @@ public class ImplicitCallToSuperInspection extends BaseInspection {
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message(
-      "implicit.call.to.super.ignore.option"),
-                                          this, "m_ignoreForObjectSubclasses");
+    LocalizeValue message = InspectionGadgetsLocalize.implicitCallToSuperIgnoreOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "m_ignoreForObjectSubclasses");
   }
 
   private static class AddExplicitSuperCall extends InspectionGadgetsFix {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "implicit.call.to.super.make.explicit.quickfix");
+      return InspectionGadgetsLocalize.implicitCallToSuperMakeExplicitQuickfix().get();
     }
 
     @Override

@@ -20,11 +20,10 @@ import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.util.PropertyUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -33,15 +32,13 @@ public class FieldHasSetterButNoGetterInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "field.has.setter.but.no.getter.display.name");
+    return InspectionGadgetsLocalize.fieldHasSetterButNoGetterDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "field.has.setter.but.no.getter.problem.descriptor");
+    return InspectionGadgetsLocalize.fieldHasSetterButNoGetterProblemDescriptor().get();
   }
 
   @Override
@@ -49,9 +46,7 @@ public class FieldHasSetterButNoGetterInspection extends BaseInspection {
     return new FieldHasSetterButNoGetterVisitor();
   }
 
-  private static class FieldHasSetterButNoGetterVisitor
-    extends BaseInspectionVisitor {
-
+  private static class FieldHasSetterButNoGetterVisitor extends BaseInspectionVisitor {
     @Override
     public void visitField(@Nonnull PsiField field) {
       final String propertyName = PropertyUtil.suggestPropertyName(field);
