@@ -16,17 +16,16 @@
 package com.intellij.java.impl.ig.javabeans;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -35,15 +34,13 @@ public class ClassWithoutConstructorInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "class.without.constructor.display.name");
+    return InspectionGadgetsLocalize.classWithoutConstructorDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "class.without.constructor.problem.descriptor");
+    return InspectionGadgetsLocalize.classWithoutConstructorProblemDescriptor().get();
   }
 
   @Override
@@ -56,8 +53,7 @@ public class ClassWithoutConstructorInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "class.without.constructor.create.quickfix");
+      return InspectionGadgetsLocalize.classWithoutConstructorCreateQuickfix().get();
     }
 
     @Override

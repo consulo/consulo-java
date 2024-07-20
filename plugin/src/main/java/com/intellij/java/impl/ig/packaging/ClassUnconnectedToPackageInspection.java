@@ -21,16 +21,16 @@ import com.intellij.java.impl.ig.BaseGlobalInspection;
 import com.intellij.java.impl.ig.dependency.DependencyUtils;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiIdentifier;
-import com.siyeh.InspectionGadgetsBundle;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.language.editor.inspection.CommonProblemDescriptor;
 import consulo.language.editor.inspection.GlobalInspectionContext;
 import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.scope.AnalysisScope;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.Set;
 
 public abstract class ClassUnconnectedToPackageInspection extends BaseGlobalInspection
@@ -39,8 +39,7 @@ public abstract class ClassUnconnectedToPackageInspection extends BaseGlobalInsp
 	@Override
 	public String getDisplayName()
 	{
-		return InspectionGadgetsBundle.message(
-				"class.unconnected.to.package.display.name");
+		return InspectionGadgetsLocalize.classUnconnectedToPackageDisplayName().get();
 	}
 
 	@Override
@@ -88,10 +87,13 @@ public abstract class ClassUnconnectedToPackageInspection extends BaseGlobalInsp
 			return null;
 		}
 		return new CommonProblemDescriptor[]{
-				manager.createProblemDescriptor(identifier,
-						InspectionGadgetsBundle.message(
-								"class.unconnected.to.package.problem.descriptor"),
-						true, ProblemHighlightType.GENERIC_ERROR_OR_WARNING, false)
+			manager.createProblemDescriptor(
+				identifier,
+				InspectionGadgetsLocalize.classUnconnectedToPackageProblemDescriptor().get(),
+				true,
+				ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
+				false
+			)
 		};
 	}
 

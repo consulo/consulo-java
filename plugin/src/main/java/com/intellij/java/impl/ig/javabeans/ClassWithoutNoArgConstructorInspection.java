@@ -19,11 +19,12 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameterList;
 import com.intellij.java.language.psi.PsiTypeParameter;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
@@ -38,21 +39,17 @@ public class ClassWithoutNoArgConstructorInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "class.without.no.arg.constructor.display.name");
+    return InspectionGadgetsLocalize.classWithoutNoArgConstructorDisplayName().get();
   }
 
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(
-      InspectionGadgetsBundle.message(
-        "class.without.no.arg.constructor.ignore.option"),
-      this, "m_ignoreClassesWithNoConstructors");
+    LocalizeValue message = InspectionGadgetsLocalize.classWithoutNoArgConstructorIgnoreOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "m_ignoreClassesWithNoConstructors");
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "class.without.no.arg.constructor.problem.descriptor");
+    return InspectionGadgetsLocalize.classWithoutNoArgConstructorProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

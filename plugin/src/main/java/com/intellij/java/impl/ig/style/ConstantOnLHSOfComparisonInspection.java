@@ -15,19 +15,19 @@
  */
 package com.intellij.java.impl.ig.style;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
 import com.intellij.java.language.psi.PsiBinaryExpression;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -42,13 +42,13 @@ public class ConstantOnLHSOfComparisonInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("constant.on.lhs.of.comparison.display.name");
+    return InspectionGadgetsLocalize.constantOnLhsOfComparisonDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("constant.on.lhs.of.comparison.problem.descriptor");
+    return InspectionGadgetsLocalize.constantOnLhsOfComparisonProblemDescriptor().get();
   }
 
   @Override
@@ -65,7 +65,7 @@ public class ConstantOnLHSOfComparisonInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("flip.comparison.quickfix");
+      return InspectionGadgetsLocalize.flipComparisonQuickfix().get();
     }
 
     @Override

@@ -15,16 +15,15 @@
  */
 package com.intellij.java.impl.ig.errorhandling;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiBreakStatement;
 import com.intellij.java.language.psi.PsiContinueStatement;
 import com.intellij.java.language.psi.PsiStatement;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ContinueOrBreakFromFinallyBlockInspection
@@ -32,8 +31,7 @@ public class ContinueOrBreakFromFinallyBlockInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "continue.or.break.from.finally.block.display.name");
+    return InspectionGadgetsLocalize.continueOrBreakFromFinallyBlockDisplayName().get();
   }
 
   public boolean isEnabledByDefault() {
@@ -42,8 +40,7 @@ public class ContinueOrBreakFromFinallyBlockInspection
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "continue.or.break.from.finally.block.problem.descriptor");
+    return InspectionGadgetsLocalize.continueOrBreakFromFinallyBlockProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

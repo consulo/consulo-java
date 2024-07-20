@@ -15,28 +15,27 @@
  */
 package com.intellij.java.impl.ig.numeric;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiBinaryExpression;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiType;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ComparisonUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ComparisonOfShortAndCharInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("comparison.of.short.and.char.display.name");
+    return InspectionGadgetsLocalize.comparisonOfShortAndCharDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("comparison.of.short.and.char.problem.descriptor");
+    return InspectionGadgetsLocalize.comparisonOfShortAndCharProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

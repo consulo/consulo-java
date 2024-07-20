@@ -16,12 +16,13 @@
 package com.intellij.java.impl.ig.controlflow;
 
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
@@ -35,22 +36,19 @@ public class ConditionalExpressionInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "conditional.expression.display.name");
+    return InspectionGadgetsLocalize.conditionalExpressionDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "conditional.expression.problem.descriptor");
+    return InspectionGadgetsLocalize.conditionalExpressionProblemDescriptor().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(
-      InspectionGadgetsBundle.message("conditional.expression.option"),
-      this, "ignoreSimpleAssignmentsAndReturns");
+    LocalizeValue message = InspectionGadgetsLocalize.conditionalExpressionOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreSimpleAssignmentsAndReturns");
   }
 
   @Override

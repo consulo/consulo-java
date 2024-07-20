@@ -18,13 +18,13 @@ package com.intellij.java.impl.ig.junit;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -33,7 +33,7 @@ import java.util.Set;
 public class ConstantJUnitAssertArgumentInspection extends BaseInspection {
 
   @NonNls
-  private static final Set<String> ASSERT_METHODS = new HashSet();
+  private static final Set<String> ASSERT_METHODS = new HashSet<>();
 
   static {
     ASSERT_METHODS.add("assertTrue");
@@ -46,15 +46,13 @@ public class ConstantJUnitAssertArgumentInspection extends BaseInspection {
   @Nls
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "constant.junit.assert.argument.display.name");
+    return InspectionGadgetsLocalize.constantJunitAssertArgumentDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "constant.junit.assert.argument.problem.descriptor");
+    return InspectionGadgetsLocalize.constantJunitAssertArgumentProblemDescriptor().get();
   }
 
   @Override
@@ -62,16 +60,12 @@ public class ConstantJUnitAssertArgumentInspection extends BaseInspection {
     return new ConstantJUnitAssertArgumentVisitor();
   }
 
-  private static class ConstantJUnitAssertArgumentVisitor
-    extends BaseInspectionVisitor {
+  private static class ConstantJUnitAssertArgumentVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethodCallExpression(
-      PsiMethodCallExpression expression) {
-      final PsiReferenceExpression methodExpression =
-        expression.getMethodExpression();
-      @NonNls final String methodName =
-        methodExpression.getReferenceName();
+    public void visitMethodCallExpression(PsiMethodCallExpression expression) {
+      final PsiReferenceExpression methodExpression = expression.getMethodExpression();
+      @NonNls final String methodName = methodExpression.getReferenceName();
       if (!ASSERT_METHODS.contains(methodName)) {
         return;
       }
@@ -80,10 +74,8 @@ public class ConstantJUnitAssertArgumentInspection extends BaseInspection {
         return;
       }
       final PsiClass containingClass = method.getContainingClass();
-      if (!InheritanceUtil.isInheritor(containingClass,
-                                       "junit.framework.Assert") &&
-          !InheritanceUtil.isInheritor(containingClass,
-                                       "org.junit.Assert")) {
+      if (!InheritanceUtil.isInheritor(containingClass, "junit.framework.Assert") &&
+          !InheritanceUtil.isInheritor(containingClass, "org.junit.Assert")) {
         return;
       }
       final PsiExpressionList argumentList = expression.getArgumentList();

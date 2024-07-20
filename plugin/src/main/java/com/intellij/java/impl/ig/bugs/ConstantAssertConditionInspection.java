@@ -18,11 +18,11 @@ package com.intellij.java.impl.ig.bugs;
 import com.intellij.java.language.psi.PsiAssertStatement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.BoolUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
@@ -34,15 +34,13 @@ public class ConstantAssertConditionInspection extends BaseInspection {
   @Nls
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "constant.assert.condition.display.name");
+    return InspectionGadgetsLocalize.constantAssertConditionDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "constant.assert.condition.problem.descriptor");
+    return InspectionGadgetsLocalize.constantAssertConditionProblemDescriptor().get();
   }
 
   @Override

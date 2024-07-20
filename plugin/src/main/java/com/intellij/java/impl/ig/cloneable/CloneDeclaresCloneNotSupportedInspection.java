@@ -15,23 +15,23 @@
  */
 package com.intellij.java.impl.ig.cloneable;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
-import consulo.project.Project;
-import consulo.language.psi.*;
 import com.intellij.java.language.psi.search.searches.SuperMethodsSearch;
 import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.CloneUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -46,13 +46,13 @@ public class CloneDeclaresCloneNotSupportedInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("clone.doesnt.declare.clonenotsupportedexception.display.name");
+    return InspectionGadgetsLocalize.cloneDoesntDeclareClonenotsupportedexceptionDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("clone.doesnt.declare.clonenotsupportedexception.problem.descriptor");
+    return InspectionGadgetsLocalize.cloneDoesntDeclareClonenotsupportedexceptionProblemDescriptor().get();
   }
 
   @Override
@@ -70,7 +70,7 @@ public class CloneDeclaresCloneNotSupportedInspection extends BaseInspection {
     @Override
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("clone.doesnt.declare.clonenotsupportedexception.declare.quickfix");
+      return InspectionGadgetsLocalize.cloneDoesntDeclareClonenotsupportedexceptionDeclareQuickfix().get();
     }
 
     @Override

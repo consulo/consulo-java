@@ -15,14 +15,13 @@
  */
 package com.intellij.java.impl.ig.style;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiLiteralExpression;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ConfusingOctalEscapeInspection extends BaseInspection {
@@ -36,13 +35,13 @@ public class ConfusingOctalEscapeInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("confusing.octal.escape.sequence.display.name");
+    return InspectionGadgetsLocalize.confusingOctalEscapeSequenceDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("confusing.octal.escape.sequence.problem.descriptor");
+    return InspectionGadgetsLocalize.confusingOctalEscapeSequenceProblemDescriptor().get();
   }
 
   @Override

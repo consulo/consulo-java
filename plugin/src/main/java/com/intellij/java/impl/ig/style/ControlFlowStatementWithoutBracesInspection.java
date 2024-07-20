@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.style;
 
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
@@ -29,14 +30,11 @@ import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
-public class ControlFlowStatementWithoutBracesInspection
-  extends BaseInspection {
-
+public class ControlFlowStatementWithoutBracesInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "control.flow.statement.without.braces.display.name");
+    return InspectionGadgetsLocalize.controlFlowStatementWithoutBracesDisplayName().get();
   }
 
   @Override
@@ -55,13 +53,11 @@ public class ControlFlowStatementWithoutBracesInspection
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "control.flow.statement.without.braces.add.quickfix");
+      return InspectionGadgetsLocalize.controlFlowStatementWithoutBracesAddQuickfix().get();
     }
 
     @Override
-    protected void doFix(Project project, ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
+    protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
       final PsiElement element = descriptor.getPsiElement();
       final PsiElement parent = element.getParent();
       if (!(parent instanceof PsiStatement)) {
@@ -71,8 +67,7 @@ public class ControlFlowStatementWithoutBracesInspection
       @NonNls final String elementText = element.getText();
       final PsiStatement statementWithoutBraces;
       if (statement instanceof PsiLoopStatement) {
-        final PsiLoopStatement loopStatement =
-          (PsiLoopStatement)statement;
+        final PsiLoopStatement loopStatement = (PsiLoopStatement)statement;
         statementWithoutBraces = loopStatement.getBody();
       }
       else if (statement instanceof PsiIfStatement) {
@@ -82,8 +77,7 @@ public class ControlFlowStatementWithoutBracesInspection
           if (statementWithoutBraces == null) {
             return;
           }
-          final PsiElement nextSibling =
-            statementWithoutBraces.getNextSibling();
+          final PsiElement nextSibling = statementWithoutBraces.getNextSibling();
           if (nextSibling instanceof PsiWhiteSpace) {
             // to avoid "else" on new line
             nextSibling.delete();
@@ -99,8 +93,7 @@ public class ControlFlowStatementWithoutBracesInspection
       if (statementWithoutBraces == null) {
         return;
       }
-      final String newStatementText =
-        "{\n" + statementWithoutBraces.getText() + "\n}";
+      final String newStatementText = "{\n" + statementWithoutBraces.getText() + "\n}";
       replaceStatement(statementWithoutBraces, newStatementText);
     }
   }

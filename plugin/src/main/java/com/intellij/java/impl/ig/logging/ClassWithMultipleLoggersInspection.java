@@ -15,19 +15,19 @@
  */
 package com.intellij.java.impl.ig.logging;
 
+import com.intellij.java.impl.ig.ui.UiUtils;
+import com.intellij.java.language.psi.*;
+import com.siyeh.ig.BaseInspection;
+import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
 import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
-import com.intellij.java.language.psi.*;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import com.siyeh.InspectionGadgetsBundle;
-import com.siyeh.ig.BaseInspection;
-import com.siyeh.ig.BaseInspectionVisitor;
-import com.intellij.java.impl.ig.ui.UiUtils;
+import jakarta.annotation.Nonnull;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -53,14 +53,13 @@ public class ClassWithMultipleLoggersInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("multiple.loggers.display.name");
+    return InspectionGadgetsLocalize.multipleLoggersDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "multiple.loggers.problem.descriptor");
+    return InspectionGadgetsLocalize.multipleLoggersProblemDescriptor().get();
   }
 
   @Override
@@ -77,8 +76,8 @@ public class ClassWithMultipleLoggersInspection extends BaseInspection {
 
   @Override
   public JComponent createOptionsPanel() {
-    final ListTable table = new ListTable(new ListWrappingTableModel(loggerNames, InspectionGadgetsBundle.message("logger.class.name")));
-    return UiUtils.createAddRemoveTreeClassChooserPanel(table, InspectionGadgetsBundle.message("choose.logger.class"));
+    final ListTable table = new ListTable(new ListWrappingTableModel(loggerNames, InspectionGadgetsLocalize.loggerClassName().get()));
+    return UiUtils.createAddRemoveTreeClassChooserPanel(table, InspectionGadgetsLocalize.chooseLoggerClass().get());
   }
 
   @Override

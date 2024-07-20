@@ -15,22 +15,22 @@
  */
 package com.intellij.java.impl.ig.dataflow;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
-
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.SmartPointerManager;
+import consulo.language.psi.SmartPsiElementPointer;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 @ExtensionImpl
@@ -39,15 +39,13 @@ public class ConstantValueVariableUseInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "constant.value.variable.use.display.name");
+    return InspectionGadgetsLocalize.constantValueVariableUseDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "constant.value.variable.use.problem.descriptor");
+    return InspectionGadgetsLocalize.constantValueVariableUseProblemDescriptor().get();
   }
 
   @Override
@@ -70,9 +68,7 @@ public class ConstantValueVariableUseInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "replace.reference.with.expression.quickfix",
-        myText);
+      return InspectionGadgetsLocalize.replaceReferenceWithExpressionQuickfix(myText).get();
     }
 
     @Override

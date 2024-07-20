@@ -15,21 +15,9 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import javax.swing.JComponent;
-
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.CleanupLocalInspectionTool;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
-import consulo.project.Project;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiConditionalExpression;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
-import consulo.language.psi.SmartPointerManager;
-import consulo.language.psi.SmartPsiElementPointer;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -37,7 +25,19 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.PsiReplacementUtil;
 import com.siyeh.ig.psiutils.EquivalenceChecker;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.CleanupLocalInspectionTool;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.SmartPointerManager;
+import consulo.language.psi.SmartPsiElementPointer;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
+import javax.swing.*;
 
 @ExtensionImpl
 public class ConditionalExpressionWithIdenticalBranchesInspection extends BaseInspection implements CleanupLocalInspectionTool
@@ -55,7 +55,7 @@ public class ConditionalExpressionWithIdenticalBranchesInspection extends BaseIn
 	@Nonnull
 	public String getDisplayName()
 	{
-		return InspectionGadgetsBundle.message("conditional.expression.with.identical.branches.display.name");
+		return InspectionGadgetsLocalize.conditionalExpressionWithIdenticalBranchesDisplayName().get();
 	}
 
 	@Override
@@ -63,8 +63,9 @@ public class ConditionalExpressionWithIdenticalBranchesInspection extends BaseIn
 	protected String buildErrorString(Object... infos)
 	{
 		final EquivalenceChecker.Decision decision = (EquivalenceChecker.Decision) infos[1];
-		return InspectionGadgetsBundle.message(decision.isExact() ? "conditional.expression.with.identical.branches.problem.descriptor" : "conditional.expression.with.similar.branches.problem" +
-				".descriptor");
+		return decision.isExact()
+			? InspectionGadgetsLocalize.conditionalExpressionWithIdenticalBranchesProblemDescriptor().get()
+			: InspectionGadgetsBundle.message("conditional.expression.with.similar.branches.problem.descriptor");
 	}
 
 	@Override

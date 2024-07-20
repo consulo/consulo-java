@@ -20,15 +20,14 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -38,15 +37,13 @@ public class ComparableImplementedButEqualsNotOverriddenInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "comparable.implemented.but.equals.not.overridden.display.name");
+    return InspectionGadgetsLocalize.comparableImplementedButEqualsNotOverriddenDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "comparable.implemented.but.equals.not.overridden.problem.descriptor");
+    return InspectionGadgetsLocalize.comparableImplementedButEqualsNotOverriddenProblemDescriptor().get();
   }
 
   @Override
