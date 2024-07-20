@@ -15,14 +15,13 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElement;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ForLoopThatDoesntUseLoopVariableInspection
@@ -30,8 +29,7 @@ public class ForLoopThatDoesntUseLoopVariableInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "for.loop.not.use.loop.variable.display.name");
+    return InspectionGadgetsLocalize.forLoopNotUseLoopVariableDisplayName().get();
   }
 
   @Nonnull
@@ -39,15 +37,12 @@ public class ForLoopThatDoesntUseLoopVariableInspection
     final boolean condition = ((Boolean)infos[0]).booleanValue();
     final boolean update = ((Boolean)infos[1]).booleanValue();
     if (condition && update) {
-      return InspectionGadgetsBundle.message(
-        "for.loop.not.use.loop.variable.problem.descriptor.both.condition.and.update");
+      return InspectionGadgetsLocalize.forLoopNotUseLoopVariableProblemDescriptorBothConditionAndUpdate().get();
     }
     if (condition) {
-      return InspectionGadgetsBundle.message(
-        "for.loop.not.use.loop.variable.problem.descriptor.condition");
+      return InspectionGadgetsLocalize.forLoopNotUseLoopVariableProblemDescriptorCondition().get();
     }
-    return InspectionGadgetsBundle.message(
-      "for.loop.not.use.loop.variable.problem.descriptor.update");
+    return InspectionGadgetsLocalize.forLoopNotUseLoopVariableProblemDescriptorUpdate().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

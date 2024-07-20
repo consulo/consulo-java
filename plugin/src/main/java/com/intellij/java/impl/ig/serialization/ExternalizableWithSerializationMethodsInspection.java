@@ -15,14 +15,13 @@
  */
 package com.intellij.java.impl.ig.serialization;
 
-import jakarta.annotation.Nonnull;
-
+import com.intellij.java.impl.ig.psiutils.SerializationUtils;
 import com.intellij.java.language.psi.PsiClass;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import com.intellij.java.impl.ig.psiutils.SerializationUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ExternalizableWithSerializationMethodsInspection
@@ -35,8 +34,7 @@ public class ExternalizableWithSerializationMethodsInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "externalizable.with.serialization.methods.display.name");
+    return InspectionGadgetsLocalize.externalizableWithSerializationMethodsDisplayName().get();
   }
 
   @Nonnull
@@ -44,16 +42,13 @@ public class ExternalizableWithSerializationMethodsInspection
     final boolean hasReadObject = ((Boolean)infos[0]).booleanValue();
     final boolean hasWriteObject = ((Boolean)infos[1]).booleanValue();
     if (hasReadObject && hasWriteObject) {
-      return InspectionGadgetsBundle.message(
-        "externalizable.with.serialization.methods.problem.descriptor.both");
+      return InspectionGadgetsLocalize.externalizableWithSerializationMethodsProblemDescriptorBoth().get();
     }
     else if (hasWriteObject) {
-      return InspectionGadgetsBundle.message(
-        "externalizable.with.serialization.methods.problem.descriptor.write");
+      return InspectionGadgetsLocalize.externalizableWithSerializationMethodsProblemDescriptorWrite().get();
     }
     else {
-      return InspectionGadgetsBundle.message(
-        "externalizable.with.serialization.methods.problem.descriptor.read");
+      return InspectionGadgetsLocalize.externalizableWithSerializationMethodsProblemDescriptorRead().get();
     }
   }
 

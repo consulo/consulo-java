@@ -17,8 +17,8 @@ package com.intellij.java.impl.ig.fixes;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.application.util.query.Query;
 import consulo.content.scope.SearchScope;
 import consulo.language.ast.IElementType;
@@ -31,20 +31,16 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
-public class ExtractParameterAsLocalVariableFix
-  extends InspectionGadgetsFix {
-
+public class ExtractParameterAsLocalVariableFix extends InspectionGadgetsFix {
   @Nonnull
   public String getName() {
-    return InspectionGadgetsBundle.message(
-      "extract.parameter.as.local.variable.quickfix");
+    return InspectionGadgetsLocalize.extractParameterAsLocalVariableQuickfix().get();
   }
 
   @Override
   public void doFix(Project project, ProblemDescriptor descriptor)
     throws IncorrectOperationException {
-    final PsiReferenceExpression parameterReference =
-      (PsiReferenceExpression)descriptor.getPsiElement();
+    final PsiReferenceExpression parameterReference = (PsiReferenceExpression)descriptor.getPsiElement();
     final PsiElement target = parameterReference.resolve();
     if (!(target instanceof PsiParameter)) {
       return;
@@ -52,22 +48,18 @@ public class ExtractParameterAsLocalVariableFix
     final PsiParameter parameter = (PsiParameter)target;
     final PsiElement declarationScope = parameter.getDeclarationScope();
     final PsiElement body;
-    if (declarationScope instanceof PsiMethod) {
-      final PsiMethod method = (PsiMethod)declarationScope;
+    if (declarationScope instanceof PsiMethod method) {
       body = method.getBody();
     }
     else if (declarationScope instanceof PsiCatchSection) {
-      final PsiCatchSection catchSection =
-        (PsiCatchSection)declarationScope;
+      final PsiCatchSection catchSection = (PsiCatchSection)declarationScope;
       body = catchSection.getCatchBlock();
     }
     else if (declarationScope instanceof PsiLoopStatement) {
-      final PsiLoopStatement forStatement =
-        (PsiLoopStatement)declarationScope;
+      final PsiLoopStatement forStatement = (PsiLoopStatement)declarationScope;
       final PsiStatement forBody = forStatement.getBody();
       if (forBody instanceof PsiBlockStatement) {
-        final PsiBlockStatement blockStatement =
-          (PsiBlockStatement)forBody;
+        final PsiBlockStatement blockStatement = (PsiBlockStatement)forBody;
         body = blockStatement.getCodeBlock();
       }
       else {
@@ -80,17 +72,12 @@ public class ExtractParameterAsLocalVariableFix
     if (body == null) {
       return;
     }
-    final CodeStyleManager codeStyleManager =
-      CodeStyleManager.getInstance(project);
+    final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
     final String parameterName = parameterReference.getText();
-    final JavaCodeStyleManager javaCodeStyleManager =
-      JavaCodeStyleManager.getInstance(project);
-    final String variableName =
-      javaCodeStyleManager.suggestUniqueVariableName(
-        parameterName, parameterReference, true);
+    final JavaCodeStyleManager javaCodeStyleManager = JavaCodeStyleManager.getInstance(project);
+    final String variableName = javaCodeStyleManager.suggestUniqueVariableName(parameterName, parameterReference, true);
     final SearchScope scope = parameter.getUseScope();
-    final Query<PsiReference> search =
-      ReferencesSearch.search(parameter, scope);
+    final Query<PsiReference> search = ReferencesSearch.search(parameter, scope);
     final PsiReference reference = search.findFirst();
     if (reference == null) {
       return;
@@ -99,8 +86,7 @@ public class ExtractParameterAsLocalVariableFix
     if (!(element instanceof PsiReferenceExpression)) {
       return;
     }
-    final PsiReferenceExpression firstReference =
-      (PsiReferenceExpression)element;
+    final PsiReferenceExpression firstReference = (PsiReferenceExpression)element;
     final PsiElement[] children = body.getChildren();
     final int startIndex;
     final int endIndex;
@@ -116,9 +102,7 @@ public class ExtractParameterAsLocalVariableFix
     final StringBuilder buffer = new StringBuilder();
     for (int i = startIndex; i < endIndex; i++) {
       final PsiElement child = children[i];
-      newDeclarationCreated |=
-        replaceVariableName(child, firstReference,
-                            variableName, parameterName, buffer);
+      newDeclarationCreated |= replaceVariableName(child, firstReference, variableName, parameterName, buffer);
     }
     final String replacementText;
     if (newDeclarationCreated) {
@@ -130,14 +114,10 @@ public class ExtractParameterAsLocalVariableFix
         return;
       }
       final String className = type.getCanonicalText();
-      replacementText = '{' + className + ' ' + variableName + " = " +
-                        parameterName + ';' + buffer + '}';
+      replacementText = '{' + className + ' ' + variableName + " = " + parameterName + ';' + buffer + '}';
     }
-    final PsiElementFactory elementFactory =
-      JavaPsiFacade.getInstance(project).getElementFactory();
-    final PsiCodeBlock block =
-      elementFactory.createCodeBlockFromText(
-        replacementText, null);
+    final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
+    final PsiCodeBlock block = elementFactory.createCodeBlockFromText(replacementText, null);
     body.replace(block);
     codeStyleManager.reformat(declarationScope);
   }
@@ -149,10 +129,8 @@ public class ExtractParameterAsLocalVariableFix
     PsiElement element, PsiReferenceExpression firstReference,
     String newName, String originalName, StringBuilder out) {
     if (element instanceof PsiReferenceExpression) {
-      final PsiReferenceExpression referenceExpression =
-        (PsiReferenceExpression)element;
-      if (element.equals(firstReference) &&
-          isLeftSideOfSimpleAssignment(referenceExpression)) {
+      final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)element;
+      if (element.equals(firstReference) && isLeftSideOfSimpleAssignment(referenceExpression)) {
         final PsiType type = firstReference.getType();
         if (type != null) {
           out.append(type.getCanonicalText());
@@ -179,8 +157,7 @@ public class ExtractParameterAsLocalVariableFix
           out.append(child.getText());
         }
         else {
-          result = replaceVariableName(child, firstReference,
-                                       newName, originalName, out);
+          result = replaceVariableName(child, firstReference, newName, originalName, out);
         }
       }
       return result;
@@ -188,8 +165,7 @@ public class ExtractParameterAsLocalVariableFix
     return false;
   }
 
-  private static boolean isLeftSideOfSimpleAssignment(
-    PsiReferenceExpression reference) {
+  private static boolean isLeftSideOfSimpleAssignment(PsiReferenceExpression reference) {
     if (reference == null) {
       return false;
     }
@@ -197,20 +173,16 @@ public class ExtractParameterAsLocalVariableFix
     if (!(parent instanceof PsiAssignmentExpression)) {
       return false;
     }
-    final PsiAssignmentExpression assignmentExpression =
-      (PsiAssignmentExpression)parent;
-    final IElementType tokenType =
-      assignmentExpression.getOperationTokenType();
+    final PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression)parent;
+    final IElementType tokenType = assignmentExpression.getOperationTokenType();
     if (!JavaTokenType.EQ.equals(tokenType)) {
       return false;
     }
-    final PsiExpression lExpression =
-      assignmentExpression.getLExpression();
+    final PsiExpression lExpression = assignmentExpression.getLExpression();
     if (!reference.equals(lExpression)) {
       return false;
     }
-    final PsiExpression rExpression =
-      assignmentExpression.getRExpression();
+    final PsiExpression rExpression = assignmentExpression.getRExpression();
     if (rExpression instanceof PsiAssignmentExpression) {
       return false;
     }

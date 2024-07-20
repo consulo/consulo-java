@@ -18,26 +18,26 @@ package com.intellij.java.impl.ig.numeric;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.ExpectedTypeUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 import consulo.util.collection.primitive.objects.ObjectIntMap;
 import consulo.util.collection.primitive.objects.ObjectMaps;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nullable;
 import javax.swing.*;
 
 @ExtensionImpl
@@ -70,18 +70,23 @@ public class ImplicitNumericConversionInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("implicit.numeric.conversion.display.name");
+    return InspectionGadgetsLocalize.implicitNumericConversionDisplayName().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message("implicit.numeric.conversion.ignore.widening.conversion.option"),
-                             "ignoreWideningConversions");
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message("implicit.numeric.conversion.ignore.char.conversion.option"),
-                             "ignoreCharConversions");
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message("implicit.numeric.conversion.ignore.constant.conversion.option"),
-                             "ignoreConstantConversions");
+    optionsPanel.addCheckbox(
+      InspectionGadgetsLocalize.implicitNumericConversionIgnoreWideningConversionOption().get(),
+      "ignoreWideningConversions"
+    );
+    optionsPanel.addCheckbox(
+      InspectionGadgetsLocalize.implicitNumericConversionIgnoreCharConversionOption().get(),
+      "ignoreCharConversions");
+    optionsPanel.addCheckbox(
+      InspectionGadgetsLocalize.implicitNumericConversionIgnoreConstantConversionOption().get(),
+      "ignoreConstantConversions"
+    );
     return optionsPanel;
   }
 
@@ -90,8 +95,10 @@ public class ImplicitNumericConversionInspection extends BaseInspection {
   public String buildErrorString(Object... infos) {
     final PsiType type = (PsiType)infos[1];
     final PsiType expectedType = (PsiType)infos[2];
-    return InspectionGadgetsBundle.message("implicit.numeric.conversion.problem.descriptor",
-      type.getPresentableText(), expectedType.getPresentableText());
+    return InspectionGadgetsLocalize.implicitNumericConversionProblemDescriptor(
+        type.getPresentableText(),
+        expectedType.getPresentableText()
+    ).get();
   }
 
   @Override
@@ -109,12 +116,9 @@ public class ImplicitNumericConversionInspection extends BaseInspection {
     private final String m_name;
 
     ImplicitNumericConversionFix(PsiExpression expression, PsiType expectedType) {
-      if (isConvertible(expression, expectedType)) {
-        m_name = InspectionGadgetsBundle.message("implicit.numeric.conversion.convert.quickfix", expectedType.getCanonicalText());
-      }
-      else {
-        m_name = InspectionGadgetsBundle.message("implicit.numeric.conversion.make.explicit.quickfix");
-      }
+      m_name = isConvertible(expression, expectedType)
+        ? InspectionGadgetsLocalize.implicitNumericConversionConvertQuickfix(expectedType.getCanonicalText()).get()
+        : InspectionGadgetsLocalize.implicitNumericConversionMakeExplicitQuickfix().get();
     }
 
     @Nonnull

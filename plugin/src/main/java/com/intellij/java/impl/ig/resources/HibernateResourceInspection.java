@@ -15,14 +15,16 @@
  */
 package com.intellij.java.impl.ig.resources;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
-import consulo.language.psi.*;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
@@ -42,8 +44,7 @@ public class HibernateResourceInspection extends ResourceInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "hibernate.resource.opened.not.closed.display.name");
+    return InspectionGadgetsLocalize.hibernateResourceOpenedNotClosedDisplayName().get();
   }
 
   @Override
@@ -60,9 +61,8 @@ public class HibernateResourceInspection extends ResourceInspection {
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message(
-      "allow.resource.to.be.opened.inside.a.try.block"),
-                                          this, "insideTryAllowed");
+    LocalizeValue message = InspectionGadgetsLocalize.allowResourceToBeOpenedInsideATryBlock();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "insideTryAllowed");
   }
 
   @Override

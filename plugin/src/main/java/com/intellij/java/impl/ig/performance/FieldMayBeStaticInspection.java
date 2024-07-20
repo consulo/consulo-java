@@ -15,15 +15,15 @@
  */
 package com.intellij.java.impl.ig.performance;
 
+import com.intellij.java.impl.ig.fixes.ChangeModifierFix;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.ChangeModifierFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.SideEffectChecker;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 
@@ -32,8 +32,7 @@ public class FieldMayBeStaticInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "field.may.be.static.display.name");
+    return InspectionGadgetsLocalize.fieldMayBeStaticDisplayName().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {
@@ -42,8 +41,7 @@ public class FieldMayBeStaticInspection extends BaseInspection {
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "field.may.be.static.problem.descriptor");
+    return InspectionGadgetsLocalize.fieldMayBeStaticProblemDescriptor().get();
   }
 
   public InspectionGadgetsFix buildFix(Object... infos) {

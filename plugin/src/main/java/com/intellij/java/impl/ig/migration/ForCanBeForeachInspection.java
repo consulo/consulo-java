@@ -23,27 +23,27 @@ import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.*;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
 import javax.swing.*;
 
 @ExtensionImpl
@@ -63,8 +63,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "for.can.be.foreach.display.name");
+    return InspectionGadgetsLocalize.forCanBeForeachDisplayName().get();
   }
 
   @Override
@@ -75,8 +74,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "for.can.be.foreach.problem.descriptor");
+    return InspectionGadgetsLocalize.forCanBeForeachProblemDescriptor().get();
   }
 
   @Override
@@ -87,25 +85,20 @@ public class ForCanBeForeachInspection extends BaseInspection {
   @Override
   @Nullable
   public JComponent createOptionsPanel() {
-    final MultipleCheckboxOptionsPanel panel =
-      new MultipleCheckboxOptionsPanel(this);
-    panel.addCheckbox(InspectionGadgetsBundle.message(
-      "for.can.be.foreach.option"), "REPORT_INDEXED_LOOP");
-    panel.addCheckbox(InspectionGadgetsBundle.message(
-      "for.can.be.foreach.option2"), "ignoreUntypedCollections");
+    final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
+    panel.addCheckbox(InspectionGadgetsLocalize.forCanBeForeachOption().get(), "REPORT_INDEXED_LOOP");
+    panel.addCheckbox(InspectionGadgetsLocalize.forCanBeForeachOption2().get(), "ignoreUntypedCollections");
     return panel;
   }
 
   private class ForCanBeForeachFix extends InspectionGadgetsFix {
-
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("foreach.replace.quickfix");
+      return InspectionGadgetsLocalize.foreachReplaceQuickfix().get();
     }
 
     @Override
-    public void doFix(Project project, ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
+    public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
       final PsiElement forElement = descriptor.getPsiElement();
       final PsiElement parent = forElement.getParent();
       if (!(parent instanceof PsiForStatement)) {
@@ -134,9 +127,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
     @Nullable
     private String createListIterationText(
       @Nonnull PsiForStatement forStatement) {
-      final PsiBinaryExpression condition =
-        (PsiBinaryExpression)ParenthesesUtils.stripParentheses(
-          forStatement.getCondition());
+      final PsiBinaryExpression condition = (PsiBinaryExpression)ParenthesesUtils.stripParentheses(forStatement.getCondition());
       if (condition == null) {
         return null;
       }

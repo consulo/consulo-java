@@ -15,17 +15,16 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
-import jakarta.annotation.Nonnull;
-
+import com.intellij.java.impl.ig.fixes.RemoveModifierFix;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.RemoveModifierFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class FinalPrivateMethodInspection extends BaseInspection {
@@ -33,15 +32,13 @@ public class FinalPrivateMethodInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "final.private.method.display.name");
+    return InspectionGadgetsLocalize.finalPrivateMethodDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "final.private.method.problem.descriptor");
+    return InspectionGadgetsLocalize.finalPrivateMethodProblemDescriptor().get();
   }
 
   @Override

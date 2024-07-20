@@ -16,12 +16,14 @@
 package com.intellij.java.impl.ig.junit;
 
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiNamedElement;
+import consulo.language.psi.util.PsiTreeUtil;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
@@ -32,24 +34,17 @@ public class IgnoredJUnitTestInspection extends BaseInspection {
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "ignored.junit.test.display.name");
+    return InspectionGadgetsLocalize.ignoredJunitTestDisplayName().get();
   }
 
   @Nonnull
   @Override
+  @RequiredReadAction
   protected String buildErrorString(Object... infos) {
     final PsiNamedElement info = (PsiNamedElement)infos[0];
-    if (info instanceof PsiClass) {
-      return InspectionGadgetsBundle.message(
-        "ignored.junit.test.classproblem.descriptor",
-        info.getName());
-    }
-    else {
-      return InspectionGadgetsBundle.message(
-        "ignored.junit.test.method.problem.descriptor",
-        info.getName());
-    }
+    return info instanceof PsiClass
+      ? InspectionGadgetsLocalize.ignoredJunitTestClassproblemDescriptor(info.getName()).get()
+      : InspectionGadgetsLocalize.ignoredJunitTestMethodProblemDescriptor(info.getName()).get();
   }
 
   @Override

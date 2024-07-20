@@ -19,9 +19,9 @@ import com.intellij.java.impl.ig.psiutils.LibraryUtil;
 import com.intellij.java.impl.ig.ui.UiUtils;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
@@ -80,7 +80,7 @@ public class IgnoreResultOfCallInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("result.of.method.call.ignored.display.name");
+    return InspectionGadgetsLocalize.resultOfMethodCallIgnoredDisplayName().get();
   }
 
   @Override
@@ -88,7 +88,7 @@ public class IgnoreResultOfCallInspection extends BaseInspection {
   public String buildErrorString(Object... infos) {
     final PsiClass containingClass = (PsiClass)infos[0];
     final String className = containingClass.getName();
-    return InspectionGadgetsBundle.message("result.of.method.call.ignored.problem.descriptor", className);
+    return InspectionGadgetsLocalize.resultOfMethodCallIgnoredProblemDescriptor(className).get();
   }
 
   @Override
@@ -107,11 +107,16 @@ public class IgnoreResultOfCallInspection extends BaseInspection {
   public JComponent createOptionsPanel() {
     final JPanel panel = new JPanel(new BorderLayout());
     final ListTable table = new ListTable(new ListWrappingTableModel(
-      Arrays.asList(classNames, methodNamePatterns), InspectionGadgetsBundle.message("result.of.method.call.ignored.class.column.title"),
-      InspectionGadgetsBundle.message("result.of.method.call.ignored.method.column.title")));
+      Arrays.asList(classNames, methodNamePatterns),
+      InspectionGadgetsLocalize.resultOfMethodCallIgnoredClassColumnTitle().get(),
+      InspectionGadgetsLocalize.resultOfMethodCallIgnoredMethodColumnTitle().get()
+    ));
     final JPanel tablePanel = UiUtils.createAddRemovePanel(table);
-    final CheckBox checkBox =
-      new CheckBox(InspectionGadgetsBundle.message("result.of.method.call.ignored.non.library.option"), this, "m_reportAllNonLibraryCalls");
+    final CheckBox checkBox = new CheckBox(
+      InspectionGadgetsLocalize.resultOfMethodCallIgnoredNonLibraryOption().get(),
+      this,
+      "m_reportAllNonLibraryCalls"
+    );
     panel.add(tablePanel, BorderLayout.CENTER);
     panel.add(checkBox, BorderLayout.SOUTH);
     return panel;

@@ -15,14 +15,15 @@
  */
 package com.intellij.java.impl.ig.finalization;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
@@ -40,21 +41,18 @@ public class FinalizeInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "finalize.declaration.display.name");
+    return InspectionGadgetsLocalize.finalizeDeclarationDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "finalize.declaration.problem.descriptor");
+    return InspectionGadgetsLocalize.finalizeDeclarationProblemDescriptor().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(
-      InspectionGadgetsBundle.message("ignore.trivial.finalizers.option"), this,
-      "ignoreTrivialFinalizers");
+    LocalizeValue message = InspectionGadgetsLocalize.ignoreTrivialFinalizersOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreTrivialFinalizers");
   }
 
   public BaseInspectionVisitor buildVisitor() {

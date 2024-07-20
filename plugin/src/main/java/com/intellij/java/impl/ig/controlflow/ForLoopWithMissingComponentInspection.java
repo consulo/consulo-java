@@ -15,17 +15,17 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
-import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.java.language.module.util.JavaClassNames;
-
+import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -42,56 +42,47 @@ public class ForLoopWithMissingComponentInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "for.loop.with.missing.component.display.name");
+    return InspectionGadgetsLocalize.forLoopWithMissingComponentDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final boolean hasInitializer = ((Boolean)infos[0]).booleanValue();
-    final boolean hasCondition = ((Boolean)infos[1]).booleanValue();
-    final boolean hasUpdate = ((Boolean)infos[2]).booleanValue();
+    final boolean hasInitializer = (Boolean)infos[0];
+    final boolean hasCondition = (Boolean)infos[1];
+    final boolean hasUpdate = (Boolean)infos[2];
     if (hasInitializer) {
       if (hasCondition) {
-        return InspectionGadgetsBundle.message(
-          "for.loop.with.missing.component.problem.descriptor3");
+        return InspectionGadgetsLocalize.forLoopWithMissingComponentProblemDescriptor3().get();
       }
       else if (hasUpdate) {
-        return InspectionGadgetsBundle.message(
-          "for.loop.with.missing.component.problem.descriptor2");
+        return InspectionGadgetsLocalize.forLoopWithMissingComponentProblemDescriptor2().get();
       }
       else {
-        return InspectionGadgetsBundle.message(
-          "for.loop.with.missing.component.problem.descriptor6");
+        return InspectionGadgetsLocalize.forLoopWithMissingComponentProblemDescriptor6().get();
       }
     }
     else if (hasCondition) {
       if (hasUpdate) {
-        return InspectionGadgetsBundle.message(
-          "for.loop.with.missing.component.problem.descriptor1");
+        return InspectionGadgetsLocalize.forLoopWithMissingComponentProblemDescriptor1().get();
       }
       else {
-        return InspectionGadgetsBundle.message(
-          "for.loop.with.missing.component.problem.descriptor5");
+        return InspectionGadgetsLocalize.forLoopWithMissingComponentProblemDescriptor5().get();
       }
     }
     else if (hasUpdate) {
-      return InspectionGadgetsBundle.message(
-        "for.loop.with.missing.component.problem.descriptor4");
+      return InspectionGadgetsLocalize.forLoopWithMissingComponentProblemDescriptor4().get();
     }
     else {
-      return InspectionGadgetsBundle.message(
-        "for.loop.with.missing.component.problem.descriptor7");
+      return InspectionGadgetsLocalize.forLoopWithMissingComponentProblemDescriptor7().get();
     }
   }
 
   @Override
   @Nullable
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message(
-      "for.loop.with.missing.component.collection.loop.option"),
-                                          this, "ignoreCollectionLoops");
+    LocalizeValue message = InspectionGadgetsLocalize.forLoopWithMissingComponentCollectionLoopOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreCollectionLoops");
   }
 
   @Override
@@ -99,12 +90,9 @@ public class ForLoopWithMissingComponentInspection extends BaseInspection {
     return new ForLoopWithMissingComponentVisitor();
   }
 
-  private class ForLoopWithMissingComponentVisitor
-    extends BaseInspectionVisitor {
-
+  private class ForLoopWithMissingComponentVisitor extends BaseInspectionVisitor {
     @Override
-    public void visitForStatement(
-      @Nonnull PsiForStatement statement) {
+    public void visitForStatement(@Nonnull PsiForStatement statement) {
       super.visitForStatement(statement);
       final boolean hasCondition = hasCondition(statement);
       final boolean hasInitializer = hasInitializer(statement);
@@ -115,8 +103,7 @@ public class ForLoopWithMissingComponentInspection extends BaseInspection {
       if (ignoreCollectionLoops && isCollectionLoopStatement(statement)) {
         return;
       }
-      registerStatementError(statement, Boolean.valueOf(hasInitializer),
-                             Boolean.valueOf(hasCondition), Boolean.valueOf(hasUpdate));
+      registerStatementError(statement, hasInitializer, hasCondition, hasUpdate);
     }
 
     private boolean hasCondition(PsiForStatement statement) {
@@ -125,8 +112,7 @@ public class ForLoopWithMissingComponentInspection extends BaseInspection {
 
     private boolean hasInitializer(PsiForStatement statement) {
       final PsiStatement initialization = statement.getInitialization();
-      return initialization != null &&
-             !(initialization instanceof PsiEmptyStatement);
+      return initialization != null && !(initialization instanceof PsiEmptyStatement);
     }
 
     private boolean hasUpdate(PsiForStatement statement) {
@@ -135,15 +121,12 @@ public class ForLoopWithMissingComponentInspection extends BaseInspection {
     }
 
     private boolean isCollectionLoopStatement(PsiForStatement forStatement) {
-      final PsiStatement initialization =
-        forStatement.getInitialization();
+      final PsiStatement initialization = forStatement.getInitialization();
       if (!(initialization instanceof PsiDeclarationStatement)) {
         return false;
       }
-      final PsiDeclarationStatement declaration =
-        (PsiDeclarationStatement)initialization;
-      final PsiElement[] declaredElements =
-        declaration.getDeclaredElements();
+      final PsiDeclarationStatement declaration = (PsiDeclarationStatement)initialization;
+      final PsiElement[] declaredElements = declaration.getDeclaredElements();
       for (PsiElement declaredElement : declaredElements) {
         if (!(declaredElement instanceof PsiVariable)) {
           continue;
@@ -158,8 +141,7 @@ public class ForLoopWithMissingComponentInspection extends BaseInspection {
         if (declaredClass == null) {
           continue;
         }
-        if (!InheritanceUtil.isInheritor(declaredClass,
-                                         JavaClassNames.JAVA_UTIL_ITERATOR)) {
+        if (!InheritanceUtil.isInheritor(declaredClass, JavaClassNames.JAVA_UTIL_ITERATOR)) {
           continue;
         }
         final PsiExpression initialValue = variable.getInitializer();
@@ -169,12 +151,9 @@ public class ForLoopWithMissingComponentInspection extends BaseInspection {
         if (!(initialValue instanceof PsiMethodCallExpression)) {
           continue;
         }
-        final PsiMethodCallExpression initialCall =
-          (PsiMethodCallExpression)initialValue;
-        final PsiReferenceExpression initialMethodExpression =
-          initialCall.getMethodExpression();
-        final String initialCallName =
-          initialMethodExpression.getReferenceName();
+        final PsiMethodCallExpression initialCall = (PsiMethodCallExpression)initialValue;
+        final PsiReferenceExpression initialMethodExpression = initialCall.getMethodExpression();
+        final String initialCallName = initialMethodExpression.getReferenceName();
         if (!HardcodedMethodConstants.ITERATOR.equals(initialCallName)) {
           continue;
         }
@@ -186,11 +165,9 @@ public class ForLoopWithMissingComponentInspection extends BaseInspection {
       return false;
     }
 
-    private boolean isHasNext(PsiExpression condition,
-                              PsiVariable iterator) {
+    private boolean isHasNext(PsiExpression condition, PsiVariable iterator) {
       if (condition instanceof PsiBinaryExpression) {
-        final PsiBinaryExpression binaryExpression =
-          (PsiBinaryExpression)condition;
+        final PsiBinaryExpression binaryExpression = (PsiBinaryExpression)condition;
         final PsiExpression lhs = binaryExpression.getLOperand();
         final PsiExpression rhs = binaryExpression.getROperand();
         return isHasNext(lhs, iterator) || isHasNext(rhs, iterator);
@@ -198,26 +175,22 @@ public class ForLoopWithMissingComponentInspection extends BaseInspection {
       if (!(condition instanceof PsiMethodCallExpression)) {
         return false;
       }
-      final PsiMethodCallExpression call =
-        (PsiMethodCallExpression)condition;
+      final PsiMethodCallExpression call = (PsiMethodCallExpression)condition;
       final PsiExpressionList argumentList = call.getArgumentList();
       final PsiExpression[] arguments = argumentList.getExpressions();
       if (arguments.length != 0) {
         return false;
       }
-      final PsiReferenceExpression methodExpression =
-        call.getMethodExpression();
+      final PsiReferenceExpression methodExpression = call.getMethodExpression();
       final String methodName = methodExpression.getReferenceName();
       if (!HardcodedMethodConstants.HAS_NEXT.equals(methodName)) {
         return false;
       }
-      final PsiExpression qualifier =
-        methodExpression.getQualifierExpression();
+      final PsiExpression qualifier = methodExpression.getQualifierExpression();
       if (!(qualifier instanceof PsiReferenceExpression)) {
         return true;
       }
-      final PsiReferenceExpression referenceExpression =
-        (PsiReferenceExpression)qualifier;
+      final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)qualifier;
       final PsiElement target = referenceExpression.resolve();
       return iterator.equals(target);
     }

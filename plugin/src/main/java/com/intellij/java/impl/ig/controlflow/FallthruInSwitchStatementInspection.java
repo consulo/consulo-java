@@ -16,11 +16,11 @@
 package com.intellij.java.impl.ig.controlflow;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiComment;
@@ -28,7 +28,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -39,7 +38,7 @@ public class FallthruInSwitchStatementInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("fallthru.in.switch.statement.display.name");
+    return InspectionGadgetsLocalize.fallthruInSwitchStatementDisplayName().get();
   }
 
   @Nonnull
@@ -49,7 +48,7 @@ public class FallthruInSwitchStatementInspection extends BaseInspection {
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("fallthru.in.switch.statement.problem.descriptor");
+    return InspectionGadgetsLocalize.fallthruInSwitchStatementProblemDescriptor().get();
   }
 
   @Nullable
@@ -65,7 +64,7 @@ public class FallthruInSwitchStatementInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("fallthru.in.switch.statement.quickfix");
+      return InspectionGadgetsLocalize.fallthruInSwitchStatementQuickfix().get();
     }
 
     protected void doFix(Project project, ProblemDescriptor descriptor) {
