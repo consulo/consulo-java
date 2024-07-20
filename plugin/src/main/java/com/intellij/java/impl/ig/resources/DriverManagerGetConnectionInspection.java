@@ -20,9 +20,9 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 
@@ -36,14 +36,12 @@ public class DriverManagerGetConnectionInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "drivermanager.call.display.name");
+    return InspectionGadgetsLocalize.drivermanagerCallDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "drivermanager.call.problem.descriptor");
+    return InspectionGadgetsLocalize.drivermanagerCallProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

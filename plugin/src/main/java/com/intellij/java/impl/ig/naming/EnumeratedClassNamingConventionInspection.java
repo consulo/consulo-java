@@ -15,11 +15,12 @@
  */
 package com.intellij.java.impl.ig.naming;
 
+import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.psi.PsiClass;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.RenameFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 
@@ -32,8 +33,7 @@ public class EnumeratedClassNamingConventionInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "enumerated.class.naming.convention.display.name");
+    return InspectionGadgetsLocalize.enumeratedClassNamingConventionDisplayName().get();
   }
 
   protected InspectionGadgetsFix buildFix(Object... infos) {

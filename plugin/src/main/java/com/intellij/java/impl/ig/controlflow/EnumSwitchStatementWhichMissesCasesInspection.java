@@ -16,11 +16,12 @@
 package com.intellij.java.impl.ig.controlflow;
 
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -33,8 +34,7 @@ public class EnumSwitchStatementWhichMissesCasesInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "enum.switch.statement.which.misses.cases.display.name");
+    return InspectionGadgetsLocalize.enumSwitchStatementWhichMissesCasesDisplayName().get();
   }
 
   /**
@@ -56,18 +56,14 @@ public class EnumSwitchStatementWhichMissesCasesInspection
     assert switchStatementType != null;
     final String switchStatementTypeText =
       switchStatementType.getPresentableText();
-    return InspectionGadgetsBundle.message(
-      "enum.switch.statement.which.misses.cases.problem.descriptor",
-      switchStatementTypeText);
+    return InspectionGadgetsLocalize.enumSwitchStatementWhichMissesCasesProblemDescriptor(switchStatementTypeText).get();
   }
 
   @Override
   @Nullable
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(
-      InspectionGadgetsBundle.message(
-        "enum.switch.statement.which.misses.cases.option"),
-      this, "ignoreSwitchStatementsWithDefault");
+    LocalizeValue message = InspectionGadgetsLocalize.enumSwitchStatementWhichMissesCasesOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreSwitchStatementsWithDefault");
   }
 
   @Override

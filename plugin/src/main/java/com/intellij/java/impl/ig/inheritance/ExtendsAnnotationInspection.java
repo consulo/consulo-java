@@ -15,17 +15,17 @@
  */
 package com.intellij.java.impl.ig.inheritance;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiClass;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiReferenceList;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElement;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ExtendsAnnotationInspection extends BaseInspection {
@@ -37,8 +37,7 @@ public class ExtendsAnnotationInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "extends.annotation.display.name");
+    return InspectionGadgetsLocalize.extendsAnnotationDisplayName().get();
   }
 
   public boolean isEnabledByDefault() {
@@ -46,11 +45,10 @@ public class ExtendsAnnotationInspection extends BaseInspection {
   }
 
   @Nonnull
+  @RequiredReadAction
   public String buildErrorString(Object... infos) {
     final PsiClass containingClass = (PsiClass)infos[0];
-    return InspectionGadgetsBundle.message(
-      "extends.annotation.problem.descriptor",
-      containingClass.getName());
+    return InspectionGadgetsLocalize.extendsAnnotationProblemDescriptor(containingClass.getName()).get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

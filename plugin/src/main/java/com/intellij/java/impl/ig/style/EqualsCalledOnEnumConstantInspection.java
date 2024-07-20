@@ -15,22 +15,21 @@
  */
 package com.intellij.java.impl.ig.style;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
-import consulo.language.ast.IElementType;
-import consulo.project.Project;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
-import com.siyeh.InspectionGadgetsBundle;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 
 @ExtensionImpl
@@ -40,15 +39,13 @@ public class EqualsCalledOnEnumConstantInspection extends BaseInspection {
   @Nls
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "equals.called.on.enum.constant.display.name");
+    return InspectionGadgetsLocalize.equalsCalledOnEnumConstantDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "equals.called.on.enum.constant.problem.descriptor");
+    return InspectionGadgetsLocalize.equalsCalledOnEnumConstantProblemDescriptor().get();
   }
 
   @Override
@@ -66,8 +63,7 @@ public class EqualsCalledOnEnumConstantInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "equals.called.on.enum.constant.quickfix");
+      return InspectionGadgetsLocalize.equalsCalledOnEnumConstantQuickfix().get();
     }
 
     @Override

@@ -15,19 +15,16 @@
  */
 package com.intellij.java.impl.ig.threading;
 
-import jakarta.annotation.Nonnull;
-
+import com.intellij.java.impl.ig.fixes.ReplaceInheritanceWithDelegationFix;
 import com.intellij.java.impl.ig.inheritance.ExtendsConcreteCollectionInspection;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.ReplaceInheritanceWithDelegationFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-
-import java.lang.Object;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ExtendsThreadInspection extends BaseInspection {
@@ -41,18 +38,16 @@ public class ExtendsThreadInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("extends.thread.display.name");
+    return InspectionGadgetsLocalize.extendsThreadDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
     final PsiClass aClass = (PsiClass)infos[0];
-    if (aClass instanceof PsiAnonymousClass) {
-      return InspectionGadgetsBundle.message("anonymous.extends.thread.problem.descriptor");
-    } else {
-      return InspectionGadgetsBundle.message("extends.thread.problem.descriptor");
-    }
+    return aClass instanceof PsiAnonymousClass
+      ? InspectionGadgetsLocalize.anonymousExtendsThreadProblemDescriptor().get()
+      : InspectionGadgetsLocalize.extendsThreadProblemDescriptor().get();
   }
 
   /**

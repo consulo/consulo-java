@@ -15,16 +15,17 @@
  */
 package com.intellij.java.impl.ig.abstraction;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.PsiInstanceOfExpression;
 import com.intellij.java.language.psi.PsiTypeElement;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
-import javax.swing.JComponent;
+import javax.swing.*;
 
 @ExtensionImpl
 public class InstanceofInterfacesInspection extends BaseInspection {
@@ -35,22 +36,19 @@ public class InstanceofInterfacesInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "instanceof.concrete.class.display.name");
+    return InspectionGadgetsLocalize.instanceofConcreteClassDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "instanceof.concrete.class.problem.descriptor");
+    return InspectionGadgetsLocalize.instanceofConcreteClassProblemDescriptor().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(
-      InspectionGadgetsBundle.message("instanceof.interfaces.option"),
-      this, "ignoreAbstractClasses");
+    LocalizeValue message = InspectionGadgetsLocalize.instanceofInterfacesOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreAbstractClasses");
   }
 
   @Override

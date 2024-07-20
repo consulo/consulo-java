@@ -15,36 +15,31 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import jakarta.annotation.Nonnull;
-
-import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.java.language.psi.PsiBinaryExpression;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiParenthesizedExpression;
-import com.intellij.java.language.psi.PsiPolyadicExpression;
-import consulo.language.ast.IElementType;
-import com.siyeh.InspectionGadgetsBundle;
+import com.intellij.java.language.psi.*;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.EquivalenceChecker;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
+import jakarta.annotation.Nonnull;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 @ExtensionImpl
 public class DuplicateBooleanBranchInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("duplicate.boolean.branch.display.name");
+    return InspectionGadgetsLocalize.duplicateBooleanBranchDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("duplicate.boolean.branch.problem.descriptor");
+    return InspectionGadgetsLocalize.duplicateBooleanBranchProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

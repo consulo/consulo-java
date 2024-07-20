@@ -18,11 +18,11 @@ package com.intellij.java.impl.ig.performance;
 import com.intellij.java.impl.ig.psiutils.HighlightUtils;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import consulo.java.language.module.util.JavaClassNames;
@@ -31,10 +31,10 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiNameIdentifierOwner;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -55,15 +55,13 @@ public class DynamicRegexReplaceableByCompiledPatternInspection extends BaseInsp
   @Nls
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-        "dynamic.regex.replaceable.by.compiled.pattern.display.name");
+    return InspectionGadgetsLocalize.dynamicRegexReplaceableByCompiledPatternDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-        "dynamic.regex.replaceable.by.compiled.pattern.problem.descriptor");
+    return InspectionGadgetsLocalize.dynamicRegexReplaceableByCompiledPatternProblemDescriptor().get();
   }
 
   @Override
@@ -80,8 +78,7 @@ public class DynamicRegexReplaceableByCompiledPatternInspection extends BaseInsp
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-          "dynamic.regex.replaceable.by.compiled.pattern.quickfix");
+      return InspectionGadgetsLocalize.dynamicRegexReplaceableByCompiledPatternQuickfix().get();
     }
 
     @Override

@@ -22,17 +22,18 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TestUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nullable;
 import javax.swing.*;
 
 @ExtensionImpl
@@ -54,15 +55,13 @@ public class EmptyCatchBlockInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "empty.catch.block.display.name");
+    return InspectionGadgetsLocalize.emptyCatchBlockDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "empty.catch.block.problem.descriptor");
+    return InspectionGadgetsLocalize.emptyCatchBlockProblemDescriptor().get();
   }
 
   @Override
@@ -74,13 +73,10 @@ public class EmptyCatchBlockInspection extends BaseInspection {
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel optionsPanel =
       new MultipleCheckboxOptionsPanel(this);
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message(
-      "empty.catch.block.comments.option"), "m_includeComments");
+    optionsPanel.addCheckbox(InspectionGadgetsLocalize.emptyCatchBlockCommentsOption().get(), "m_includeComments");
     optionsPanel.addCheckbox(InspectionGadgetsBundle.message(
       "empty.catch.block.ignore.option"), "m_ignoreTestCases");
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message(
-      "empty.catch.block.ignore.ignore.option"),
-                             "m_ignoreIgnoreParameter");
+    optionsPanel.addCheckbox(InspectionGadgetsLocalize.emptyCatchBlockIgnoreIgnoreOption().get(), "m_ignoreIgnoreParameter");
     return optionsPanel;
   }
 
@@ -94,8 +90,7 @@ public class EmptyCatchBlockInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "rename.catch.parameter.to.ignored");
+      return InspectionGadgetsLocalize.renameCatchParameterToIgnored().get();
     }
 
     @Override

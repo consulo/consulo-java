@@ -16,12 +16,11 @@
 package com.siyeh.ig.inheritance;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.CollectionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
-
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import jakarta.annotation.Nonnull;
 
 public abstract class ExtendsConcreteCollectionInspectionBase extends BaseInspection {
@@ -34,7 +33,7 @@ public abstract class ExtendsConcreteCollectionInspectionBase extends BaseInspec
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("extends.concrete.collection.display.name");
+    return InspectionGadgetsLocalize.extendsConcreteCollectionDisplayName().get();
   }
 
   @Override
@@ -42,11 +41,9 @@ public abstract class ExtendsConcreteCollectionInspectionBase extends BaseInspec
   public String buildErrorString(Object... infos) {
     final PsiClass superClass = (PsiClass) infos[0];
     final PsiClass aClass = (PsiClass) infos[1];
-    if (aClass instanceof PsiAnonymousClass) {
-      return InspectionGadgetsBundle.message("anonymous.extends.concrete.collection.problem.descriptor", superClass.getQualifiedName());
-    } else {
-      return InspectionGadgetsBundle.message("extends.concrete.collection.problem.descriptor", superClass.getQualifiedName());
-    }
+    return aClass instanceof PsiAnonymousClass
+      ? InspectionGadgetsLocalize.anonymousExtendsConcreteCollectionProblemDescriptor(superClass.getQualifiedName()).get()
+      : InspectionGadgetsLocalize.extendsConcreteCollectionProblemDescriptor(superClass.getQualifiedName()).get();
   }
 
   @Override
@@ -55,7 +52,6 @@ public abstract class ExtendsConcreteCollectionInspectionBase extends BaseInspec
   }
 
   private static class ExtendsConcreteCollectionVisitor extends BaseInspectionVisitor {
-
     @Override
     public void visitClass(@Nonnull PsiClass aClass) {
       if (aClass.isInterface() || aClass.isAnnotationType() || aClass.isEnum()) {

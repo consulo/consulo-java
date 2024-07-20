@@ -16,12 +16,13 @@
 package com.intellij.java.impl.ig.packaging;
 
 import com.intellij.java.impl.ig.BaseGlobalInspection;
-import com.siyeh.InspectionGadgetsBundle;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.application.Application;
 import consulo.application.ApplicationManager;
 import consulo.application.util.function.Computable;
 import consulo.content.ContentIterator;
 import consulo.content.scope.SearchScope;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
 import consulo.language.editor.inspection.CommonProblemDescriptor;
 import consulo.language.editor.inspection.GlobalInspectionContext;
@@ -29,11 +30,11 @@ import consulo.language.editor.inspection.ProblemDescriptionsProcessor;
 import consulo.language.editor.inspection.QuickFix;
 import consulo.language.editor.inspection.reference.RefElement;
 import consulo.language.editor.inspection.scheme.InspectionManager;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.localize.LocalizeValue;
 import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
@@ -54,20 +55,23 @@ public abstract class EmptyDirectoryInspection extends BaseGlobalInspection {
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("empty.directory.display.name");
+    return InspectionGadgetsLocalize.emptyDirectoryDisplayName().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message(
-      "empty.directories.only.under.source.roots.option"), this,
-                                          "onlyReportDirectoriesUnderSourceRoots");
+    LocalizeValue message = InspectionGadgetsLocalize.emptyDirectoriesOnlyUnderSourceRootsOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "onlyReportDirectoriesUnderSourceRoots");
   }
 
   @Override
-  public void runInspection(final AnalysisScope scope, final InspectionManager manager,
+  public void runInspection(
+    final AnalysisScope scope,
+    @Nonnull final InspectionManager manager,
     final GlobalInspectionContext context,
-    final ProblemDescriptionsProcessor processor, Object state) {
+    @Nonnull final ProblemDescriptionsProcessor processor,
+    @Nonnull Object state
+  ) {
     final Project project = context.getProject();
     final ProjectFileIndex index = ProjectRootManager.getInstance(project).getFileIndex();
     final SearchScope searchScope = scope.toSearchScope();
@@ -108,8 +112,13 @@ public abstract class EmptyDirectoryInspection extends BaseGlobalInspection {
         if (relativePath == null) {
           return true;
         }
-        processor.addProblemElement(refDirectory, manager.createProblemDescriptor(InspectionGadgetsBundle.message(
-          "empty.directories.problem.descriptor", relativePath), new EmptyPackageFix(fileOrDir.getUrl(), fileOrDir.getName())));
+        processor.addProblemElement(
+          refDirectory,
+          manager.createProblemDescriptor(
+            InspectionGadgetsLocalize.emptyDirectoriesProblemDescriptor(relativePath).get(),
+            new EmptyPackageFix(fileOrDir.getUrl(), fileOrDir.getName())
+          )
+        );
         return true;
       }
     });
@@ -147,8 +156,7 @@ public abstract class EmptyDirectoryInspection extends BaseGlobalInspection {
     @Nonnull
     @Override
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "empty.directories.delete.quickfix", name);
+      return InspectionGadgetsLocalize.emptyDirectoriesDeleteQuickfix(name).get();
     }
 
     @Nonnull

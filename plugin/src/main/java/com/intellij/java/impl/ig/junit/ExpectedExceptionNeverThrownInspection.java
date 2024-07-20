@@ -15,17 +15,17 @@
  */
 package com.intellij.java.impl.ig.junit;
 
+import com.intellij.java.impl.ig.psiutils.ExceptionUtils;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import com.intellij.java.impl.ig.psiutils.ExceptionUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
-import org.jetbrains.annotations.Nls;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.Nls;
 
 import java.util.Set;
 
@@ -36,17 +36,14 @@ public class ExpectedExceptionNeverThrownInspection
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "expected.exception.never.thrown.display.name");
+    return InspectionGadgetsLocalize.expectedExceptionNeverThrownDisplayName().get();
   }
 
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     final PsiMethod method = (PsiMethod)infos[0];
-    return InspectionGadgetsBundle.message(
-      "expected.exception.never.thrown.problem.descriptor",
-      method.getName());
+    return InspectionGadgetsLocalize.expectedExceptionNeverThrownProblemDescriptor(method.getName()).get();
   }
 
   @Override

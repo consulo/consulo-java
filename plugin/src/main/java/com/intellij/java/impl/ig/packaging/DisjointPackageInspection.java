@@ -21,8 +21,8 @@ import com.intellij.java.analysis.codeInspection.reference.RefPackage;
 import com.intellij.java.impl.ig.BaseGlobalInspection;
 import com.intellij.java.impl.ig.dependency.DependencyUtils;
 import com.intellij.java.language.psi.PsiClass;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.psiutils.ClassUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.language.editor.inspection.CommonProblemDescriptor;
 import consulo.language.editor.inspection.GlobalInspectionContext;
 import consulo.language.editor.inspection.reference.RefEntity;
@@ -43,7 +43,7 @@ public abstract class DisjointPackageInspection extends BaseGlobalInspection
 	@Override
 	public String getDisplayName()
 	{
-		return InspectionGadgetsBundle.message("disjoint.package.display.name");
+		return InspectionGadgetsLocalize.disjointPackageDisplayName().get();
 	}
 
 	@Override
@@ -88,10 +88,10 @@ public abstract class DisjointPackageInspection extends BaseGlobalInspection
 		{
 			return null;
 		}
-		final String errorString = InspectionGadgetsBundle
-				.message("disjoint.package.problem.descriptor",
-						refPackage.getQualifiedName(),
-						Integer.valueOf(components.size()));
+		final String errorString = InspectionGadgetsLocalize.disjointPackageProblemDescriptor(
+			refPackage.getQualifiedName(),
+			components.size()
+		).get();
 
 		return new CommonProblemDescriptor[]{
 				inspectionManager.createProblemDescriptor(errorString)

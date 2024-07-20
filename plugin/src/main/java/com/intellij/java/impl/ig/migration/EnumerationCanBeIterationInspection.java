@@ -26,6 +26,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.query.Query;
 import consulo.java.language.module.util.JavaClassNames;
@@ -69,15 +70,13 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "enumeration.can.be.iteration.display.name");
+    return InspectionGadgetsLocalize.enumerationCanBeIterationDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "enumeration.can.be.iteration.problem.descriptor", infos[0]);
+    return InspectionGadgetsLocalize.enumerationCanBeIterationProblemDescriptor(infos[0]).get();
   }
 
   @Override
@@ -91,8 +90,7 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "enumeration.can.be.iteration.quickfix");
+      return InspectionGadgetsLocalize.enumerationCanBeIterationQuickfix().get();
     }
 
     @Override
