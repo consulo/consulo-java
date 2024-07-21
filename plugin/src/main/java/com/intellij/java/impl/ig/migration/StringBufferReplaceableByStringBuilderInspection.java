@@ -17,12 +17,12 @@ package com.intellij.java.impl.ig.migration;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -30,10 +30,10 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -55,13 +55,13 @@ public class StringBufferReplaceableByStringBuilderInspection extends BaseInspec
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("string.buffer.replaceable.by.string.builder.display.name");
+    return InspectionGadgetsLocalize.stringBufferReplaceableByStringBuilderDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("string.buffer.replaceable.by.string.builder.problem.descriptor");
+    return InspectionGadgetsLocalize.stringBufferReplaceableByStringBuilderProblemDescriptor().get();
   }
 
   @Override
@@ -94,7 +94,7 @@ public class StringBufferReplaceableByStringBuilderInspection extends BaseInspec
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("string.buffer.replaceable.by.string.builder.replace.quickfix");
+      return InspectionGadgetsLocalize.stringBufferReplaceableByStringBuilderReplaceQuickfix().get();
     }
 
     @Override

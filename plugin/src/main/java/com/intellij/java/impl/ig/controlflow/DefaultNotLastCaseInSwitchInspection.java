@@ -15,30 +15,27 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiStatement;
 import com.intellij.java.language.psi.PsiSwitchLabelStatement;
 import com.intellij.java.language.psi.PsiSwitchStatement;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class DefaultNotLastCaseInSwitchInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "default.not.last.case.in.switch.display.name");
+    return InspectionGadgetsLocalize.defaultNotLastCaseInSwitchDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "default.not.last.case.in.switch.problem.descriptor");
+    return InspectionGadgetsLocalize.defaultNotLastCaseInSwitchProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

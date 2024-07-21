@@ -18,9 +18,9 @@ package com.intellij.java.impl.ig.inheritance;
 import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.application.Application;
 import consulo.application.ApplicationManager;
 import consulo.application.Result;
@@ -38,9 +38,9 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 
 /**
@@ -56,9 +56,8 @@ class StaticInheritanceFix extends InspectionGadgetsFix {
 
   @Nonnull
   public String getName() {
-    String scope =
-      myReplaceInWholeProject ? InspectionGadgetsBundle.message("the.whole.project") : InspectionGadgetsBundle.message("this.class");
-    return InspectionGadgetsBundle.message("static.inheritance.replace.quickfix", scope);
+    LocalizeValue scope = myReplaceInWholeProject ? InspectionGadgetsLocalize.theWholeProject() : InspectionGadgetsLocalize.thisClass();
+    return InspectionGadgetsLocalize.staticInheritanceReplaceQuickfix(scope).get();
   }
 
   public void doFix(final Project project, final ProblemDescriptor descriptor) throws IncorrectOperationException {

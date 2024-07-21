@@ -15,18 +15,18 @@
  */
 package com.intellij.java.impl.ig.fixes;
 
+import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
-import com.siyeh.ig.InspectionGadgetsFix;
-import com.siyeh.InspectionGadgetsBundle;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 public class DeleteImportFix extends InspectionGadgetsFix {
   @Nonnull
   public String getName() {
-    return InspectionGadgetsBundle.message("delete.import.quickfix");
+    return InspectionGadgetsLocalize.deleteImportQuickfix().get();
   }
 
   public void doFix(Project project, ProblemDescriptor descriptor)

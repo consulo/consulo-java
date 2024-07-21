@@ -19,21 +19,21 @@ import com.intellij.java.impl.ig.psiutils.LibraryUtil;
 import com.intellij.java.impl.ig.psiutils.WeakestTypeFinder;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.CollectionUtils;
 import com.siyeh.ig.psiutils.DeclarationSearchUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -63,7 +63,7 @@ public class DeclareCollectionAsInterfaceInspection extends BaseInspection
 	@Nonnull
 	public String getDisplayName()
 	{
-		return InspectionGadgetsBundle.message("collection.declared.by.class.display.name");
+		return InspectionGadgetsLocalize.collectionDeclaredByClassDisplayName().get();
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class DeclareCollectionAsInterfaceInspection extends BaseInspection
 	public String buildErrorString(Object... infos)
 	{
 		final String type = (String) infos[0];
-		return InspectionGadgetsBundle.message("collection.declared.by.class.problem.descriptor", type);
+		return InspectionGadgetsLocalize.collectionDeclaredByClassProblemDescriptor(type).get();
 	}
 
 	@Override
@@ -79,8 +79,14 @@ public class DeclareCollectionAsInterfaceInspection extends BaseInspection
 	public JComponent createOptionsPanel()
 	{
 		final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
-		optionsPanel.addCheckbox(InspectionGadgetsBundle.message("collection.declared.by.class.ignore.locals.option"), "ignoreLocalVariables");
-		optionsPanel.addCheckbox(InspectionGadgetsBundle.message("collection.declared.by.class.ignore.private.members.option"), "ignorePrivateMethodsAndFields");
+		optionsPanel.addCheckbox(
+			InspectionGadgetsLocalize.collectionDeclaredByClassIgnoreLocalsOption().get(),
+			"ignoreLocalVariables"
+		);
+		optionsPanel.addCheckbox(
+			InspectionGadgetsLocalize.collectionDeclaredByClassIgnorePrivateMembersOption().get(),
+			"ignorePrivateMethodsAndFields"
+		);
 		return optionsPanel;
 	}
 
@@ -104,7 +110,7 @@ public class DeclareCollectionAsInterfaceInspection extends BaseInspection
 		@Nonnull
 		public String getName()
 		{
-			return InspectionGadgetsBundle.message("declare.collection.as.interface.quickfix", typeString);
+			return InspectionGadgetsLocalize.declareCollectionAsInterfaceQuickfix(typeString).get();
 		}
 
 		@Nonnull

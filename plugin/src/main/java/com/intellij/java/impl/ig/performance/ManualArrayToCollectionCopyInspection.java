@@ -26,6 +26,7 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.SideEffectChecker;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
@@ -44,8 +45,7 @@ public class ManualArrayToCollectionCopyInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "manual.array.to.collection.copy.display.name");
+    return InspectionGadgetsLocalize.manualArrayToCollectionCopyDisplayName().get();
   }
 
   @Override
@@ -56,8 +56,7 @@ public class ManualArrayToCollectionCopyInspection extends BaseInspection {
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "manual.array.to.collection.copy.problem.descriptor");
+    return InspectionGadgetsLocalize.manualArrayToCollectionCopyProblemDescriptor().get();
   }
 
   @Override
@@ -70,8 +69,7 @@ public class ManualArrayToCollectionCopyInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "manual.array.to.collection.copy.replace.quickfix");
+      return InspectionGadgetsLocalize.manualArrayToCollectionCopyReplaceQuickfix().get();
     }
 
     @Override

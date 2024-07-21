@@ -16,7 +16,6 @@
 package com.intellij.java.impl.ig.performance;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -24,16 +23,16 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.SideEffectChecker;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class ManualArrayCopyInspection extends BaseInspection {
@@ -41,8 +40,7 @@ public class ManualArrayCopyInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "manual.array.copy.display.name");
+    return InspectionGadgetsLocalize.manualArrayCopyDisplayName().get();
   }
 
   @Override
@@ -53,8 +51,7 @@ public class ManualArrayCopyInspection extends BaseInspection {
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "manual.array.copy.problem.descriptor");
+    return InspectionGadgetsLocalize.manualArrayCopyProblemDescriptor().get();
   }
 
   @Override
@@ -79,7 +76,7 @@ public class ManualArrayCopyInspection extends BaseInspection {
     @Override
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("manual.array.copy.replace.quickfix");
+      return InspectionGadgetsLocalize.manualArrayCopyReplaceQuickfix().get();
     }
 
     @Override

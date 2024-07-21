@@ -15,21 +15,20 @@
  */
 package com.intellij.java.impl.ig.performance;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class StringBufferToStringInConcatenationInspection
@@ -38,15 +37,13 @@ public class StringBufferToStringInConcatenationInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "string.buffer.to.string.in.concatenation.display.name");
+    return InspectionGadgetsLocalize.stringBufferToStringInConcatenationDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "string.buffer.to.string.in.concatenation.problem.descriptor");
+    return InspectionGadgetsLocalize.stringBufferToStringInConcatenationProblemDescriptor().get();
   }
 
   @Override
@@ -63,8 +60,7 @@ public class StringBufferToStringInConcatenationInspection
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "string.buffer.to.string.in.concatenation.remove.quickfix");
+      return InspectionGadgetsLocalize.stringBufferToStringInConcatenationRemoveQuickfix().get();
     }
 
     @Override

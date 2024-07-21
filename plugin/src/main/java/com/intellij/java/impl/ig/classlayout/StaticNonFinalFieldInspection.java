@@ -15,16 +15,15 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
-import jakarta.annotation.Nonnull;
-
+import com.intellij.java.impl.ig.fixes.MakeFieldFinalFix;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.MakeFieldFinalFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 @ExtensionImpl
@@ -32,14 +31,12 @@ public class StaticNonFinalFieldInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "static.non.final.field.display.name");
+    return InspectionGadgetsLocalize.staticNonFinalFieldDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "static.non.final.field.problem.descriptor");
+    return InspectionGadgetsLocalize.staticNonFinalFieldProblemDescriptor().get();
   }
 
   @Nullable

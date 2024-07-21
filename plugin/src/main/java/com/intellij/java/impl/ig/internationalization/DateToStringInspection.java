@@ -15,19 +15,18 @@
  */
 package com.intellij.java.impl.ig.internationalization;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import com.intellij.java.language.psi.PsiExpressionList;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiType;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.java.language.module.util.JavaClassNames;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class DateToStringInspection extends BaseInspection {
@@ -41,15 +40,13 @@ public class DateToStringInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "call.to.date.tostring.display.name");
+    return InspectionGadgetsLocalize.callToDateTostringDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "call.to.date.tostring.problem.descriptor");
+    return InspectionGadgetsLocalize.callToDateTostringProblemDescriptor().get();
   }
 
   @Override

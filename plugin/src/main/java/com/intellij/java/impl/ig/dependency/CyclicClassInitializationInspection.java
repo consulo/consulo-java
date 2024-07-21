@@ -18,12 +18,13 @@ package com.intellij.java.impl.ig.dependency;
 import com.intellij.java.analysis.codeInspection.reference.RefClass;
 import com.intellij.java.impl.ig.BaseGlobalInspection;
 import com.intellij.java.language.psi.PsiClass;
-import com.siyeh.InspectionGadgetsBundle;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.language.editor.inspection.CommonProblemDescriptor;
 import consulo.language.editor.inspection.GlobalInspectionContext;
 import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.scope.AnalysisScope;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -31,12 +32,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 public abstract class CyclicClassInitializationInspection extends BaseGlobalInspection {
-
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-        "cyclic.class.initialization.display.name");
+    return InspectionGadgetsLocalize.cyclicClassInitializationDisplayName().get();
   }
 
   @Nullable
@@ -44,7 +43,8 @@ public abstract class CyclicClassInitializationInspection extends BaseGlobalInsp
       RefEntity refEntity,
       AnalysisScope analysisScope,
       InspectionManager inspectionManager,
-      GlobalInspectionContext globalInspectionContext) {
+      GlobalInspectionContext globalInspectionContext
+  ) {
     if (!(refEntity instanceof RefClass)) {
       return null;
     }
@@ -64,11 +64,10 @@ public abstract class CyclicClassInitializationInspection extends BaseGlobalInsp
     if (numMutualDependents == 0) {
       return null;
     }
-    final String errorString = InspectionGadgetsBundle.message(
-        "cyclic.class.initialization.problem.descriptor",
-        refEntity.getName(), numMutualDependents);
+    final LocalizeValue errorString =
+      InspectionGadgetsLocalize.cyclicClassInitializationProblemDescriptor(refEntity.getName(), numMutualDependents);
     return new CommonProblemDescriptor[]{
-        inspectionManager.createProblemDescriptor(errorString)
+      inspectionManager.createProblemDescriptor(errorString.get())
     };
   }
 }

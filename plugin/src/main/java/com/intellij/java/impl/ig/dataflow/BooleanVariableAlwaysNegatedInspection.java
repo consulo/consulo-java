@@ -47,14 +47,9 @@ public class BooleanVariableAlwaysNegatedInspection extends BaseInspection {
   @Override
   protected String buildErrorString(Object... infos) {
     final PsiVariable variable = (PsiVariable)infos[0];
-    if (variable instanceof PsiField) {
-      return InspectionGadgetsBundle.message(
-        "boolean.field.always.inverted.problem.descriptor");
-    }
-    else {
-      return InspectionGadgetsBundle.message(
-        "boolean.variable.always.inverted.problem.descriptor");
-    }
+    return variable instanceof PsiField
+        ? InspectionGadgetsLocalize.booleanFieldAlwaysInvertedProblemDescriptor().get()
+        : InspectionGadgetsLocalize.booleanVariableAlwaysInvertedProblemDescriptor().get();
   }
 
   @Override

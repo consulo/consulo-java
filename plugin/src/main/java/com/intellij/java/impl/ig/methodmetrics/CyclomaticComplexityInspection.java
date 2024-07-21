@@ -16,8 +16,8 @@
 package com.intellij.java.impl.ig.methodmetrics;
 
 import com.intellij.java.language.psi.PsiMethod;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import jakarta.annotation.Nonnull;
 
 public abstract class CyclomaticComplexityInspection extends MethodMetricInspection {
@@ -29,8 +29,7 @@ public abstract class CyclomaticComplexityInspection extends MethodMetricInspect
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "cyclomatic.complexity.display.name");
+    return InspectionGadgetsLocalize.cyclomaticComplexityDisplayName().get();
   }
 
   protected int getDefaultLimit() {
@@ -38,15 +37,13 @@ public abstract class CyclomaticComplexityInspection extends MethodMetricInspect
   }
 
   protected String getConfigurationLabel() {
-    return InspectionGadgetsBundle.message(
-      "method.complexity.limit.option");
+    return InspectionGadgetsLocalize.methodComplexityLimitOption().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer complexity = (Integer)infos[0];
-    return InspectionGadgetsBundle.message(
-      "cyclomatic.complexity.problem.descriptor", complexity);
+    return InspectionGadgetsLocalize.cyclomaticComplexityProblemDescriptor(complexity).get();
   }
 
   public BaseInspectionVisitor buildVisitor() {
