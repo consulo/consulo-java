@@ -15,15 +15,15 @@
  */
 package com.intellij.java.impl.ig.errorhandling;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ThreadDeathRethrownInspection extends BaseInspection {
@@ -35,14 +35,12 @@ public class ThreadDeathRethrownInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "thread.death.rethrown.display.name");
+    return InspectionGadgetsLocalize.threadDeathRethrownDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "thread.death.rethrown.problem.descriptor");
+    return InspectionGadgetsLocalize.threadDeathRethrownProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

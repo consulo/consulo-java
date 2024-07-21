@@ -15,17 +15,16 @@
  */
 package com.intellij.java.impl.ig.security;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiReferenceExpression;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
@@ -40,28 +39,22 @@ public class SystemPropertiesInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "system.properties.display.name");
+    return InspectionGadgetsLocalize.systemPropertiesDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final boolean isGetSystemProperty =
-      ((Boolean)infos[0]).booleanValue();
-    final boolean isIntegerGetInteger =
-      ((Boolean)infos[1]).booleanValue();
+    final boolean isGetSystemProperty = (Boolean)infos[0];
+    final boolean isIntegerGetInteger = (Boolean)infos[1];
     if (isGetSystemProperty) {
-      return InspectionGadgetsBundle.message(
-        "system.set.problem.descriptor");
+      return InspectionGadgetsLocalize.systemSetProblemDescriptor().get();
     }
     else if (isIntegerGetInteger) {
-      return InspectionGadgetsBundle.message(
-        "system.properties.problem.descriptor");
+      return InspectionGadgetsLocalize.systemPropertiesProblemDescriptor().get();
     }
     else {
-      return InspectionGadgetsBundle.message(
-        "system.properties.problem.descriptor1");
+      return InspectionGadgetsLocalize.systemPropertiesProblemDescriptor1().get();
     }
   }
 

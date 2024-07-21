@@ -15,24 +15,22 @@
  */
 package com.intellij.java.impl.ig.threading;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElement;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ThreadWithDefaultRunMethodInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "thread.with.default.run.method.display.name");
+    return InspectionGadgetsLocalize.threadWithDefaultRunMethodDisplayName().get();
   }
 
   @Nonnull
@@ -42,8 +40,7 @@ public class ThreadWithDefaultRunMethodInspection extends BaseInspection {
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "thread.with.default.run.method.problem.descriptor");
+    return InspectionGadgetsLocalize.threadWithDefaultRunMethodProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

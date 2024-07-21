@@ -18,10 +18,11 @@ package com.intellij.java.impl.ig.controlflow;
 import com.intellij.java.impl.ig.psiutils.SwitchUtils;
 import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiSwitchStatement;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.deadCodeNotWorking.impl.SingleIntegerFieldOptionsPanel;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
@@ -38,35 +39,27 @@ public abstract class SwitchStatementWithTooManyBranchesInspection extends BaseI
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "switch.statement.with.too.many.branches.display.name");
+    return InspectionGadgetsLocalize.switchStatementWithTooManyBranchesDisplayName().get();
   }
 
   public JComponent createOptionsPanel() {
-    return new SingleIntegerFieldOptionsPanel(
-      InspectionGadgetsBundle.message(
-        "if.statement.with.too.many.branches.max.option"),
-      this, "m_limit");
+    LocalizeValue message = InspectionGadgetsLocalize.ifStatementWithTooManyBranchesMaxOption();
+    return new SingleIntegerFieldOptionsPanel(message.get(), this, "m_limit");
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
     final Integer branchCount = (Integer)infos[0];
-    return InspectionGadgetsBundle.message(
-      "if.statement.with.too.many.branches.problem.descriptor",
-      branchCount);
+    return InspectionGadgetsLocalize.ifStatementWithTooManyBranchesProblemDescriptor(branchCount).get();
   }
 
   public BaseInspectionVisitor buildVisitor() {
     return new SwitchStatementWithTooManyBranchesVisitor();
   }
 
-  private class SwitchStatementWithTooManyBranchesVisitor
-    extends BaseInspectionVisitor {
-
+  private class SwitchStatementWithTooManyBranchesVisitor extends BaseInspectionVisitor {
     @Override
-    public void visitSwitchStatement(
-      @Nonnull PsiSwitchStatement statement) {
+    public void visitSwitchStatement(@Nonnull PsiSwitchStatement statement) {
       final PsiCodeBlock body = statement.getBody();
       if (body == null) {
         return;
@@ -75,7 +68,7 @@ public abstract class SwitchStatementWithTooManyBranchesInspection extends BaseI
       if (branchCount <= m_limit) {
         return;
       }
-      registerStatementError(statement, Integer.valueOf(branchCount));
+      registerStatementError(statement, branchCount);
     }
   }
 }

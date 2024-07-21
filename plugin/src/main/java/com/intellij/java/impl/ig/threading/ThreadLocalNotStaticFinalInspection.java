@@ -15,13 +15,13 @@
  */
 package com.intellij.java.impl.ig.threading;
 
+import com.intellij.java.impl.ig.fixes.MakeFieldStaticFinalFix;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.MakeFieldStaticFinalFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
@@ -33,15 +33,13 @@ public class ThreadLocalNotStaticFinalInspection extends BaseInspection {
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "thread.local.not.static.final.display.name");
+    return InspectionGadgetsLocalize.threadLocalNotStaticFinalDisplayName().get();
   }
 
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "thread.local.not.static.final.problem.descriptor");
+    return InspectionGadgetsLocalize.threadLocalNotStaticFinalProblemDescriptor().get();
   }
 
   @Override

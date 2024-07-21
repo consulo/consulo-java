@@ -22,10 +22,12 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.CommentTracker;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.deadCodeNotWorking.impl.SingleIntegerFieldOptionsPanel;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import org.jetbrains.annotations.Nls;
 
@@ -43,13 +45,13 @@ public abstract class SwitchStatementWithTooFewBranchesInspection extends BaseIn
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("switch.statement.with.too.few.branches.display.name");
+    return InspectionGadgetsLocalize.switchStatementWithTooFewBranchesDisplayName().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleIntegerFieldOptionsPanel(InspectionGadgetsBundle.message("switch.statement.with.too.few.branches.min.option"),
-        this, "m_limit");
+    LocalizeValue message = InspectionGadgetsLocalize.switchStatementWithTooFewBranchesMinOption();
+    return new SingleIntegerFieldOptionsPanel(message.get(), this, "m_limit");
   }
 
   @Override
@@ -59,12 +61,12 @@ public abstract class SwitchStatementWithTooFewBranchesInspection extends BaseIn
     final PsiSwitchBlock block = (PsiSwitchBlock) infos[1];
     if (block instanceof PsiSwitchExpression) {
       return branchCount == 0
-          ? InspectionGadgetsBundle.message("switch.expression.with.single.default.message")
-          : InspectionGadgetsBundle.message("switch.expression.with.too.few.branches.problem.descriptor", branchCount);
+        ? InspectionGadgetsBundle.message("switch.expression.with.single.default.message")
+        : InspectionGadgetsBundle.message("switch.expression.with.too.few.branches.problem.descriptor", branchCount);
     }
     return branchCount == 0
-        ? InspectionGadgetsBundle.message("switch.statement.with.single.default.message")
-        : InspectionGadgetsBundle.message("switch.statement.with.too.few.branches.problem.descriptor", branchCount);
+      ? InspectionGadgetsBundle.message("switch.statement.with.single.default.message")
+      : InspectionGadgetsLocalize.switchStatementWithTooFewBranchesProblemDescriptor(branchCount).get();
   }
 
   @Nullable

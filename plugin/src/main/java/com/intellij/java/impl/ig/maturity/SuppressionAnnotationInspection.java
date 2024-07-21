@@ -19,30 +19,27 @@ import com.intellij.java.analysis.codeInspection.BatchSuppressManager;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.SuppressionUtil;
 import consulo.language.psi.PsiComment;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class SuppressionAnnotationInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "inspection.suppression.annotation.display.name");
+    return InspectionGadgetsLocalize.inspectionSuppressionAnnotationDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "inspection.suppression.annotation.problem.descriptor");
+    return InspectionGadgetsLocalize.inspectionSuppressionAnnotationProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

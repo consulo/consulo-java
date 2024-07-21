@@ -15,15 +15,14 @@
  */
 package com.intellij.java.impl.ig.threading;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import com.siyeh.InspectionGadgetsBundle;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 
 @ExtensionImpl
@@ -37,7 +36,7 @@ public class SynchronizationOnLocalVariableOrMethodParameterInspection extends B
   @Nls
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("synchronization.on.local.variable.or.method.parameter.display.name");
+    return InspectionGadgetsLocalize.synchronizationOnLocalVariableOrMethodParameterDisplayName().get();
   }
 
   public boolean isEnabledByDefault() {
@@ -47,12 +46,9 @@ public class SynchronizationOnLocalVariableOrMethodParameterInspection extends B
   @Nonnull
   protected String buildErrorString(Object... infos) {
     final Boolean localVariable = (Boolean)infos[0];
-    if (localVariable.booleanValue()) {
-      return InspectionGadgetsBundle.message("synchronization.on.local.variable.problem.descriptor");
-    }
-    else {
-      return InspectionGadgetsBundle.message("synchronization.on.method.parameter.problem.descriptor");
-    }
+    return localVariable
+      ? InspectionGadgetsLocalize.synchronizationOnLocalVariableProblemDescriptor().get()
+      : InspectionGadgetsLocalize.synchronizationOnMethodParameterProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

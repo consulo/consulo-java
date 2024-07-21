@@ -15,14 +15,13 @@
  */
 package com.intellij.java.impl.ig.junit;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TestUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 @ExtensionImpl
@@ -35,29 +34,21 @@ public class TestCaseWithConstructorInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "test.case.with.constructor.display.name");
+    return InspectionGadgetsLocalize.testCaseWithConstructorDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    if (Boolean.TRUE.equals(infos[0])) {
-      return InspectionGadgetsBundle.message(
-        "test.case.with.constructor.problem.descriptor.initializer");
-    }
-    else {
-      return InspectionGadgetsBundle.message(
-        "test.case.with.constructor.problem.descriptor");
-    }
+    return Boolean.TRUE.equals(infos[0])
+      ? InspectionGadgetsLocalize.testCaseWithConstructorProblemDescriptorInitializer().get()
+      : InspectionGadgetsLocalize.testCaseWithConstructorProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {
     return new TestCaseWithConstructorVisitor();
   }
 
-  private static class TestCaseWithConstructorVisitor
-    extends BaseInspectionVisitor {
-
+  private static class TestCaseWithConstructorVisitor extends BaseInspectionVisitor {
     @Override
     public void visitMethod(@Nonnull PsiMethod method) {
       if (!method.isConstructor()) {

@@ -16,13 +16,13 @@
 package com.intellij.java.impl.ig.threading;
 
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import org.jetbrains.annotations.NonNls;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElement;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class ThreadPriorityInspection extends BaseInspection {
@@ -34,13 +34,12 @@ public class ThreadPriorityInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("thread.priority.display.name");
+    return InspectionGadgetsLocalize.threadPriorityDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "thread.priority.problem.descriptor");
+    return InspectionGadgetsLocalize.threadPriorityProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

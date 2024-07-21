@@ -15,16 +15,15 @@
  */
 package com.intellij.java.impl.ig.threading;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiReferenceExpression;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
@@ -37,23 +36,19 @@ public class SystemRunFinalizersOnExitInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "system.run.finalizers.on.exit.display.name");
+    return InspectionGadgetsLocalize.systemRunFinalizersOnExitDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "system.run.finalizers.on.exit.problem.descriptor");
+    return InspectionGadgetsLocalize.systemRunFinalizersOnExitProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {
     return new SystemRunFinalizersOnExitVisitor();
   }
 
-  private static class SystemRunFinalizersOnExitVisitor
-    extends BaseInspectionVisitor {
-
+  private static class SystemRunFinalizersOnExitVisitor extends BaseInspectionVisitor {
     @Override
     public void visitMethodCallExpression(
       @Nonnull PsiMethodCallExpression expression) {

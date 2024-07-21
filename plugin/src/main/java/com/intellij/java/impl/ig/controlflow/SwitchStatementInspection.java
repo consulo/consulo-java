@@ -15,38 +15,33 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiSwitchStatement;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class SwitchStatementInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("switch.statement.display.name");
+    return InspectionGadgetsLocalize.switchStatementDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "statement.problem.descriptor");
+    return InspectionGadgetsLocalize.statementProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {
     return new SwitchStatementVisitor();
   }
 
-  private static class SwitchStatementVisitor
-    extends BaseInspectionVisitor {
-
+  private static class SwitchStatementVisitor extends BaseInspectionVisitor {
     @Override
-    public void visitSwitchStatement(
-      @Nonnull PsiSwitchStatement statement) {
+    public void visitSwitchStatement(@Nonnull PsiSwitchStatement statement) {
       super.visitSwitchStatement(statement);
       registerStatementError(statement);
     }

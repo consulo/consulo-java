@@ -15,15 +15,14 @@
  */
 package com.intellij.java.impl.ig.threading;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiSynchronizedStatement;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class SynchronizeOnLockInspection extends BaseInspection {
@@ -37,16 +36,14 @@ public class SynchronizeOnLockInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "synchronize.on.lock.display.name");
+    return InspectionGadgetsLocalize.synchronizeOnLockDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
     final String type = (String)infos[0];
-    return InspectionGadgetsBundle.message(
-      "synchronize.on.lock.problem.descriptor", type);
+    return InspectionGadgetsLocalize.synchronizeOnLockProblemDescriptor(type).get();
   }
 
   @Override

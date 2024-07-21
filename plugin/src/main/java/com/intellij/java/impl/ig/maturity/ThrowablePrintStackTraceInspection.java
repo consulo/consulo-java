@@ -18,12 +18,11 @@ package com.intellij.java.impl.ig.maturity;
 import com.intellij.java.language.psi.PsiExpressionList;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodCallUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -36,14 +35,12 @@ public class ThrowablePrintStackTraceInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "printstacktrace.call.display.name");
+    return InspectionGadgetsLocalize.printstacktraceCallDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "printstacktrace.call.problem.descriptor");
+    return InspectionGadgetsLocalize.printstacktraceCallProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

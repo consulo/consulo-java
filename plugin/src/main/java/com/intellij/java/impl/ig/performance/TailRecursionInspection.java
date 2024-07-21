@@ -22,6 +22,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -36,18 +37,16 @@ import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class TailRecursionInspection extends BaseInspection {
-
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("tail.recursion.display.name");
+    return InspectionGadgetsLocalize.tailRecursionDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "tail.recursion.problem.descriptor");
+    return InspectionGadgetsLocalize.tailRecursionProblemDescriptor().get();
   }
 
   @Override
@@ -60,10 +59,8 @@ public class TailRecursionInspection extends BaseInspection {
     return new RemoveTailRecursionFix();
   }
 
-  private static boolean mayBeReplacedByIterativeMethod(
-    PsiMethod containingMethod) {
-    final PsiParameterList parameterList =
-      containingMethod.getParameterList();
+  private static boolean mayBeReplacedByIterativeMethod(PsiMethod containingMethod) {
+    final PsiParameterList parameterList = containingMethod.getParameterList();
     final PsiParameter[] parameters = parameterList.getParameters();
     for (final PsiParameter parameter : parameters) {
       if (parameter.hasModifierProperty(PsiModifier.FINAL)) {
@@ -77,17 +74,13 @@ public class TailRecursionInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "tail.recursion.replace.quickfix");
+      return InspectionGadgetsLocalize.tailRecursionReplaceQuickfix().get();
     }
 
     @Override
-    public void doFix(Project project, ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
+    public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
       final PsiElement tailCallToken = descriptor.getPsiElement();
-      final PsiMethod method =
-        PsiTreeUtil.getParentOfType(tailCallToken,
-                                    PsiMethod.class);
+      final PsiMethod method = PsiTreeUtil.getParentOfType(tailCallToken, PsiMethod.class);
       if (method == null) {
         return;
       }
@@ -102,22 +95,17 @@ public class TailRecursionInspection extends BaseInspection {
         return;
       }
       final String thisVariableName;
-      final JavaCodeStyleManager styleManager =
-        JavaCodeStyleManager.getInstance(project);
+      final JavaCodeStyleManager styleManager = JavaCodeStyleManager.getInstance(project);
       if (methodReturnsContainingClassType(method, containingClass)) {
         builder.append(containingClass.getName());
-        thisVariableName =
-          styleManager.suggestUniqueVariableName(
-            "result", method, false);
+        thisVariableName = styleManager.suggestUniqueVariableName("result", method, false);
         builder.append(' ');
         builder.append(thisVariableName);
         builder.append(" = this;");
       }
       else if (methodContainsCallOnOtherInstance(method)) {
         builder.append(containingClass.getName());
-        thisVariableName =
-          styleManager.suggestUniqueVariableName(
-            "other", method, false);
+        thisVariableName = styleManager.suggestUniqueVariableName("other", method, false);
         builder.append(' ');
         builder.append(thisVariableName);
         builder.append(" = this;");
@@ -135,18 +123,13 @@ public class TailRecursionInspection extends BaseInspection {
         tailCallIsContainedInLoop = false;
       }
       builder.append("while(true)");
-      final CodeStyleManager codeStyleManager =
-        CodeStyleManager.getInstance(project);
-      replaceTailCalls(body, method, thisVariableName,
-                       tailCallIsContainedInLoop, builder);
+      final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
+      replaceTailCalls(body, method, thisVariableName, tailCallIsContainedInLoop, builder);
       builder.append('}');
       @NonNls final String replacementText = builder.toString();
       final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-      final PsiElementFactory elementFactory =
-        psiFacade.getElementFactory();
-      final PsiCodeBlock block =
-        elementFactory.createCodeBlockFromText(replacementText,
-                                               method);
+      final PsiElementFactory elementFactory = psiFacade.getElementFactory();
+      final PsiCodeBlock block = elementFactory.createCodeBlockFromText(replacementText, method);
       body.replace(block);
       codeStyleManager.reformat(method);
     }
@@ -178,15 +161,12 @@ public class TailRecursionInspection extends BaseInspection {
         return false;
       }
       final PsiClass aClass = method.getContainingClass();
-      final MethodContainsCallOnOtherInstanceVisitor visitor =
-        new MethodContainsCallOnOtherInstanceVisitor(aClass);
+      final MethodContainsCallOnOtherInstanceVisitor visitor = new MethodContainsCallOnOtherInstanceVisitor(aClass);
       body.accept(visitor);
       return visitor.containsCallOnOtherInstance();
     }
 
-    private static class MethodContainsCallOnOtherInstanceVisitor
-      extends JavaRecursiveElementVisitor {
-
+    private static class MethodContainsCallOnOtherInstanceVisitor extends JavaRecursiveElementVisitor {
       private boolean containsCallOnOtherInstance = false;
       private final PsiClass aClass;
 
@@ -202,10 +182,8 @@ public class TailRecursionInspection extends BaseInspection {
           return;
         }
         super.visitMethodCallExpression(expression);
-        final PsiReferenceExpression methodExpression =
-          expression.getMethodExpression();
-        final PsiExpression qualifier =
-          methodExpression.getQualifierExpression();
+        final PsiReferenceExpression methodExpression = expression.getMethodExpression();
+        final PsiExpression qualifier = methodExpression.getQualifierExpression();
         if (qualifier == null) {
           return;
         }
@@ -225,9 +203,12 @@ public class TailRecursionInspection extends BaseInspection {
     }
 
     private static void replaceTailCalls(
-      PsiElement element, PsiMethod method,
+      PsiElement element,
+      PsiMethod method,
       @Nullable String thisVariableName,
-      boolean tailCallIsContainedInLoop, @NonNls StringBuilder out) {
+      boolean tailCallIsContainedInLoop,
+      @NonNls StringBuilder out
+    ) {
       final String text = element.getText();
       if (isImplicitCallOnThis(element, method)) {
         if (thisVariableName != null) {
@@ -236,8 +217,7 @@ public class TailRecursionInspection extends BaseInspection {
         }
         out.append(text);
       }
-      else if (element instanceof PsiThisExpression ||
-               element instanceof PsiSuperExpression) {
+      else if (element instanceof PsiThisExpression || element instanceof PsiSuperExpression) {
         if (thisVariableName == null) {
           out.append(text);
         }
@@ -246,18 +226,14 @@ public class TailRecursionInspection extends BaseInspection {
         }
       }
       else if (isTailCallReturn(element, method)) {
-        final PsiReturnStatement returnStatement =
-          (PsiReturnStatement)element;
-        final PsiMethodCallExpression call = (PsiMethodCallExpression)
-          returnStatement.getReturnValue();
+        final PsiReturnStatement returnStatement = (PsiReturnStatement)element;
+        final PsiMethodCallExpression call = (PsiMethodCallExpression)returnStatement.getReturnValue();
         assert call != null;
         final PsiExpressionList argumentList = call.getArgumentList();
         final PsiExpression[] arguments = argumentList.getExpressions();
-        final PsiParameterList parameterList =
-          method.getParameterList();
+        final PsiParameterList parameterList = method.getParameterList();
         final PsiParameter[] parameters = parameterList.getParameters();
-        final boolean isInBlock =
-          returnStatement.getParent() instanceof PsiCodeBlock;
+        final boolean isInBlock = returnStatement.getParent() instanceof PsiCodeBlock;
         if (!isInBlock) {
           out.append('{');
         }
@@ -278,22 +254,18 @@ public class TailRecursionInspection extends BaseInspection {
           out.append(';');
         }
         if (thisVariableName != null) {
-          final PsiReferenceExpression methodExpression =
-            call.getMethodExpression();
-          final PsiExpression qualifier =
-            methodExpression.getQualifierExpression();
+          final PsiReferenceExpression methodExpression = call.getMethodExpression();
+          final PsiExpression qualifier = methodExpression.getQualifierExpression();
           if (qualifier != null) {
             out.append(thisVariableName);
             out.append(" = ");
-            replaceTailCalls(qualifier, method, thisVariableName,
-                             tailCallIsContainedInLoop, out);
+            replaceTailCalls(qualifier, method, thisVariableName, tailCallIsContainedInLoop, out);
             out.append(';');
           }
         }
         final PsiCodeBlock body = method.getBody();
         assert body != null;
-        if (ControlFlowUtils.blockCompletesWithStatement(body,
-                                                         returnStatement)) {
+        if (ControlFlowUtils.blockCompletesWithStatement(body, returnStatement)) {
           //don't do anything, as the continue is unnecessary
         }
         else if (tailCallIsContainedInLoop) {
@@ -316,36 +288,29 @@ public class TailRecursionInspection extends BaseInspection {
         }
         else {
           for (final PsiElement child : children) {
-            replaceTailCalls(child, method, thisVariableName,
-                             tailCallIsContainedInLoop, out);
+            replaceTailCalls(child, method, thisVariableName, tailCallIsContainedInLoop, out);
           }
         }
       }
     }
 
-    private static boolean isImplicitCallOnThis(PsiElement element,
-                                                PsiMethod containingMethod) {
+    private static boolean isImplicitCallOnThis(PsiElement element, PsiMethod containingMethod) {
       if (containingMethod.hasModifierProperty(PsiModifier.STATIC)) {
         return false;
       }
       if (element instanceof PsiMethodCallExpression) {
-        final PsiMethodCallExpression methodCallExpression =
-          (PsiMethodCallExpression)element;
-        final PsiReferenceExpression methodExpression =
-          methodCallExpression.getMethodExpression();
-        final PsiExpression qualifierExpression =
-          methodExpression.getQualifierExpression();
+        final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)element;
+        final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
+        final PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
         return qualifierExpression == null;
       }
       else if (element instanceof PsiReferenceExpression) {
-        final PsiReferenceExpression referenceExpression =
-          (PsiReferenceExpression)element;
+        final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)element;
         final PsiElement parent = referenceExpression.getParent();
         if (parent instanceof PsiMethodCallExpression) {
           return false;
         }
-        final PsiExpression qualifier =
-          referenceExpression.getQualifierExpression();
+        final PsiExpression qualifier = referenceExpression.getQualifierExpression();
         if (qualifier != null) {
           return false;
         }
@@ -357,19 +322,16 @@ public class TailRecursionInspection extends BaseInspection {
       }
     }
 
-    private static boolean isTailCallReturn(PsiElement element,
-                                            PsiMethod containingMethod) {
+    private static boolean isTailCallReturn(PsiElement element, PsiMethod containingMethod) {
       if (!(element instanceof PsiReturnStatement)) {
         return false;
       }
-      final PsiReturnStatement returnStatement =
-        (PsiReturnStatement)element;
+      final PsiReturnStatement returnStatement = (PsiReturnStatement)element;
       final PsiExpression returnValue = returnStatement.getReturnValue();
       if (!(returnValue instanceof PsiMethodCallExpression)) {
         return false;
       }
-      final PsiMethodCallExpression call =
-        (PsiMethodCallExpression)returnValue;
+      final PsiMethodCallExpression call = (PsiMethodCallExpression)returnValue;
       final PsiMethod method = call.resolveMethod();
       return containingMethod.equals(method);
     }
@@ -381,25 +343,19 @@ public class TailRecursionInspection extends BaseInspection {
   }
 
   private static class TailRecursionVisitor extends BaseInspectionVisitor {
-
     @Override
-    public void visitReturnStatement(
-      @Nonnull PsiReturnStatement statement) {
+    public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
       super.visitReturnStatement(statement);
       final PsiExpression returnValue = statement.getReturnValue();
       if (!(returnValue instanceof PsiMethodCallExpression)) {
         return;
       }
-      final PsiMethodCallExpression returnCall =
-        (PsiMethodCallExpression)returnValue;
-      final PsiMethod containingMethod =
-        PsiTreeUtil.getParentOfType(statement,
-                                    PsiMethod.class);
+      final PsiMethodCallExpression returnCall = (PsiMethodCallExpression)returnValue;
+      final PsiMethod containingMethod = PsiTreeUtil.getParentOfType(statement, PsiMethod.class);
       if (containingMethod == null) {
         return;
       }
-      final PsiReferenceExpression methodExpression =
-        returnCall.getMethodExpression();
+      final PsiReferenceExpression methodExpression = returnCall.getMethodExpression();
       final String name = containingMethod.getName();
       if (!name.equals(methodExpression.getReferenceName())) {
         return;

@@ -15,19 +15,20 @@
  */
 package com.intellij.java.impl.ig.threading;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
-import consulo.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
-
 import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 
 @ExtensionImpl
@@ -38,21 +39,21 @@ public class SynchronizedOnLiteralObjectInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("synchronized.on.literal.object.name");
+    return InspectionGadgetsLocalize.synchronizedOnLiteralObjectName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
     final String typeText = ((PsiType)infos[0]).getPresentableText();
-    final int message = ((Integer)infos[1]).intValue();
+    final int message = (Integer)infos[1];
     switch (message) {
       case 1:
-        return InspectionGadgetsBundle.message("synchronized.on.literal.object.problem.descriptor", typeText);
+        return InspectionGadgetsLocalize.synchronizedOnLiteralObjectProblemDescriptor(typeText).get();
       case 2:
-        return InspectionGadgetsBundle.message("synchronized.on.direct.literal.object.problem.descriptor", typeText);
+        return InspectionGadgetsLocalize.synchronizedOnDirectLiteralObjectProblemDescriptor(typeText).get();
       case 3:
-        return InspectionGadgetsBundle.message("synchronized.on.possibly.literal.object.problem.descriptor", typeText);
+        return InspectionGadgetsLocalize.synchronizedOnPossiblyLiteralObjectProblemDescriptor(typeText).get();
       default:
         throw new AssertionError();
     }
@@ -61,8 +62,8 @@ public class SynchronizedOnLiteralObjectInspection extends BaseInspection {
   @Nullable
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message("synchronized.on.literal.object.warn.on.all.option"),
-                                          this, "warnOnAllPossiblyLiterals");
+    LocalizeValue message = InspectionGadgetsLocalize.synchronizedOnLiteralObjectWarnOnAllOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "warnOnAllPossiblyLiterals");
   }
 
   @Override
