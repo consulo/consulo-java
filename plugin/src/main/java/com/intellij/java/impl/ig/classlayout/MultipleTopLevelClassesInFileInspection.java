@@ -15,15 +15,15 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
+import com.intellij.java.impl.ig.fixes.MoveClassFix;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiJavaFile;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.MoveClassFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElement;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -31,14 +31,12 @@ public class MultipleTopLevelClassesInFileInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "multiple.top.level.classes.in.file.display.name");
+    return InspectionGadgetsLocalize.multipleTopLevelClassesInFileDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "multiple.top.level.classes.in.file.problem.descriptor");
+    return InspectionGadgetsLocalize.multipleTopLevelClassesInFileProblemDescriptor().get();
   }
 
   protected InspectionGadgetsFix buildFix(Object... infos) {

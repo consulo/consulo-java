@@ -15,20 +15,18 @@
  */
 package com.intellij.java.impl.ig.threading;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 @ExtensionImpl
@@ -36,14 +34,12 @@ public class MethodMayBeSynchronizedInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "method.may.be.synchronized.display.name");
+    return InspectionGadgetsLocalize.methodMayBeSynchronizedDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "method.may.be.synchronized.problem.descriptor");
+    return InspectionGadgetsLocalize.methodMayBeSynchronizedProblemDescriptor().get();
   }
 
   @Nullable
@@ -60,8 +56,7 @@ public class MethodMayBeSynchronizedInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "method.may.be.synchronized.quickfix");
+      return InspectionGadgetsLocalize.methodMayBeSynchronizedQuickfix().get();
     }
 
     protected void doFix(Project project, ProblemDescriptor descriptor)

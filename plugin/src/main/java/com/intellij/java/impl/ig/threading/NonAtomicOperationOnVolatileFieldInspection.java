@@ -15,15 +15,15 @@
  */
 package com.intellij.java.impl.ig.threading;
 
+import com.intellij.java.impl.ig.psiutils.SynchronizationUtil;
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
-import consulo.language.ast.IElementType;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import com.intellij.java.impl.ig.psiutils.SynchronizationUtil;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -34,15 +34,13 @@ public class NonAtomicOperationOnVolatileFieldInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "non.atomic.operation.on.volatile.field.display.name");
+    return InspectionGadgetsLocalize.nonAtomicOperationOnVolatileFieldDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "non.atomic.operation.on.volatile.field.problem.descriptor");
+    return InspectionGadgetsLocalize.nonAtomicOperationOnVolatileFieldProblemDescriptor().get();
   }
 
   @Override
@@ -50,12 +48,9 @@ public class NonAtomicOperationOnVolatileFieldInspection
     return new NonAtomicOperationOnVolatileFieldVisitor();
   }
 
-  private static class NonAtomicOperationOnVolatileFieldVisitor
-    extends BaseInspectionVisitor {
-
+  private static class NonAtomicOperationOnVolatileFieldVisitor extends BaseInspectionVisitor {
     @Override
-    public void visitAssignmentExpression(
-      @Nonnull PsiAssignmentExpression expression) {
+    public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression expression) {
       super.visitAssignmentExpression(expression);
       final PsiExpression rhs = expression.getRExpression();
       if (rhs == null) {
@@ -99,8 +94,7 @@ public class NonAtomicOperationOnVolatileFieldInspection
       if (operand == null) {
         return;
       }
-      final PsiField volatileField =
-        findNonSynchronizedVolatileField(operand);
+      final PsiField volatileField = findNonSynchronizedVolatileField(operand);
       if (volatileField == null) {
         return;
       }
@@ -111,8 +105,7 @@ public class NonAtomicOperationOnVolatileFieldInspection
     public void visitPostfixExpression(PsiPostfixExpression expression) {
       super.visitPostfixExpression(expression);
       final PsiExpression operand = expression.getOperand();
-      final PsiField volatileField =
-        findNonSynchronizedVolatileField(operand);
+      final PsiField volatileField = findNonSynchronizedVolatileField(operand);
       if (volatileField == null) {
         return;
       }
@@ -120,13 +113,11 @@ public class NonAtomicOperationOnVolatileFieldInspection
     }
 
     @Nullable
-    private static PsiField findNonSynchronizedVolatileField(
-      PsiExpression expression) {
+    private static PsiField findNonSynchronizedVolatileField(PsiExpression expression) {
       if (!(expression instanceof PsiReferenceExpression)) {
         return null;
       }
-      final PsiReferenceExpression reference =
-        (PsiReferenceExpression)expression;
+      final PsiReferenceExpression reference = (PsiReferenceExpression)expression;
       if (SynchronizationUtil.isInSynchronizedContext(reference)) {
         return null;
       }

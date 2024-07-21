@@ -15,12 +15,11 @@
  */
 package com.intellij.java.impl.ig.methodmetrics;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiMethod;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NestingDepthInspection extends MethodMetricInspection {
@@ -32,7 +31,7 @@ public class NestingDepthInspection extends MethodMetricInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("nesting.depth.display.name");
+    return InspectionGadgetsLocalize.nestingDepthDisplayName().get();
   }
 
   protected int getDefaultLimit() {
@@ -40,14 +39,13 @@ public class NestingDepthInspection extends MethodMetricInspection {
   }
 
   protected String getConfigurationLabel() {
-    return InspectionGadgetsBundle.message("nesting.depth.limit.option");
+    return InspectionGadgetsLocalize.nestingDepthLimitOption().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer nestingDepth = (Integer)infos[0];
-    return InspectionGadgetsBundle.message(
-      "nesting.depth.problem.descriptor", nestingDepth);
+    return InspectionGadgetsLocalize.nestingDepthProblemDescriptor(nestingDepth).get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

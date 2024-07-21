@@ -15,28 +15,25 @@
  */
 package com.intellij.java.impl.ig.methodmetrics;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiMethod;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class MethodWithMultipleLoopsInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "method.with.multiple.loops.display.name");
+    return InspectionGadgetsLocalize.methodWithMultipleLoopsDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer negationCount = (Integer)infos[0];
-    return InspectionGadgetsBundle.message(
-      "method.with.multiple.loops.problem.descriptor", negationCount);
+    return InspectionGadgetsLocalize.methodWithMultipleLoopsProblemDescriptor(negationCount).get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

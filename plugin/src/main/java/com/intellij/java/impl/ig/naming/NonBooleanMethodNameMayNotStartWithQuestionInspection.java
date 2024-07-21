@@ -15,27 +15,27 @@
  */
 package com.intellij.java.impl.ig.naming;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.ide.impl.idea.codeInspection.ui.ListTable;
-import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
-import consulo.deadCodeNotWorking.impl.CheckBox;
-import consulo.ui.ex.awt.FormBuilder;
-import consulo.util.xml.serializer.InvalidDataException;
-import consulo.util.xml.serializer.WriteExternalException;
-import consulo.java.language.module.util.JavaClassNames;
+import com.intellij.java.impl.ig.fixes.RenameFix;
+import com.intellij.java.impl.ig.psiutils.LibraryUtil;
+import com.intellij.java.impl.ig.ui.UiUtils;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiType;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.RenameFix;
-import com.intellij.java.impl.ig.psiutils.LibraryUtil;
 import com.siyeh.ig.psiutils.MethodUtils;
-import com.intellij.java.impl.ig.ui.UiUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.CheckBox;
+import consulo.ide.impl.idea.codeInspection.ui.ListTable;
+import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.ui.ex.awt.FormBuilder;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.WriteExternalException;
+import jakarta.annotation.Nonnull;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -65,13 +65,13 @@ public class NonBooleanMethodNameMayNotStartWithQuestionInspection extends BaseI
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("non.boolean.method.name.must.not.start.with.question.display.name");
+    return InspectionGadgetsLocalize.nonBooleanMethodNameMustNotStartWithQuestionDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("non.boolean.method.name.must.not.start.with.question.problem.descriptor");
+    return InspectionGadgetsLocalize.nonBooleanMethodNameMustNotStartWithQuestionProblemDescriptor().get();
   }
 
   @Override
@@ -89,14 +89,16 @@ public class NonBooleanMethodNameMayNotStartWithQuestionInspection extends BaseI
   @Override
   public JComponent createOptionsPanel() {
     final JPanel panel = new JPanel(new BorderLayout());
-    final ListTable table = new ListTable(new ListWrappingTableModel(questionList, InspectionGadgetsBundle
-      .message("boolean.method.name.must.start.with.question.table.column.name")));
+    final ListTable table = new ListTable(new ListWrappingTableModel(
+      questionList,
+      InspectionGadgetsLocalize.booleanMethodNameMustStartWithQuestionTableColumnName().get()
+    ));
     final JPanel tablePanel = UiUtils.createAddRemovePanel(table);
 
     final CheckBox checkBox1 =
-      new CheckBox(InspectionGadgetsBundle.message("ignore.methods.with.boolean.return.type.option"), this, "ignoreBooleanMethods");
+      new CheckBox(InspectionGadgetsLocalize.ignoreMethodsWithBooleanReturnTypeOption().get(), this, "ignoreBooleanMethods");
     final CheckBox checkBox2 =
-      new CheckBox(InspectionGadgetsBundle.message("ignore.methods.overriding.super.method"), this, "onlyWarnOnBaseMethods");
+      new CheckBox(InspectionGadgetsLocalize.ignoreMethodsOverridingSuperMethod().get(), this, "onlyWarnOnBaseMethods");
 
     panel.add(tablePanel, BorderLayout.CENTER);
     panel.add(FormBuilder.createFormBuilder().addComponent(checkBox1).addComponent(checkBox2).getPanel(), BorderLayout.SOUTH);

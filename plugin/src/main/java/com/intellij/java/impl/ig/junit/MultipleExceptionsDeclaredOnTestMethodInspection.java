@@ -15,29 +15,24 @@
  */
 package com.intellij.java.impl.ig.junit;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import org.jetbrains.annotations.Nls;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
-import consulo.java.language.module.util.JavaClassNames;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiElementFactory;
-import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
-import com.intellij.java.language.psi.PsiMethod;
-import consulo.language.psi.PsiReference;
-import com.intellij.java.language.psi.PsiReferenceList;
-import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.indexing.search.searches.MethodReferencesSearch;
-import consulo.language.util.IncorrectOperationException;
-import consulo.application.util.query.Query;
-import com.siyeh.InspectionGadgetsBundle;
+import com.intellij.java.language.psi.*;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TestUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.application.util.query.Query;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.Nls;
 
 @ExtensionImpl
 public class MultipleExceptionsDeclaredOnTestMethodInspection
@@ -47,15 +42,13 @@ public class MultipleExceptionsDeclaredOnTestMethodInspection
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "multiple.exceptions.declared.on.test.method.display.name");
+    return InspectionGadgetsLocalize.multipleExceptionsDeclaredOnTestMethodDisplayName().get();
   }
 
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "multiple.exceptions.declared.on.test.method.problem.descriptor");
+    return InspectionGadgetsLocalize.multipleExceptionsDeclaredOnTestMethodProblemDescriptor().get();
   }
 
   @Override
@@ -63,13 +56,10 @@ public class MultipleExceptionsDeclaredOnTestMethodInspection
     return new MultipleExceptionsDeclaredOnTestMethodFix();
   }
 
-  private static class MultipleExceptionsDeclaredOnTestMethodFix
-    extends InspectionGadgetsFix {
-
+  private static class MultipleExceptionsDeclaredOnTestMethodFix extends InspectionGadgetsFix {
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "multiple.exceptions.declared.on.test.method.quickfix");
+      return InspectionGadgetsLocalize.multipleExceptionsDeclaredOnTestMethodQuickfix().get();
     }
 
     @Override

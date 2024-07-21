@@ -18,12 +18,12 @@ package com.intellij.java.impl.ig.classmetrics;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.util.PropertyUtil;
+import com.siyeh.ig.BaseInspection;
+import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.ui.ex.awt.UIUtil;
-import com.siyeh.InspectionGadgetsBundle;
-import com.siyeh.ig.BaseInspection;
-import com.siyeh.ig.BaseInspectionVisitor;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
@@ -49,14 +49,13 @@ public class MethodCountInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("too.many.methods.display.name");
+    return InspectionGadgetsLocalize.tooManyMethodsDisplayName().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
     final JComponent panel = new JPanel(new GridBagLayout());
-    final Component label = new JLabel(
-      InspectionGadgetsBundle.message("method.count.limit.option"));
+    final Component label = new JLabel(InspectionGadgetsLocalize.methodCountLimitOption().get());
     final JFormattedTextField valueField = prepareNumberEditor(() -> m_limit, i -> m_limit = i);
 
     final GridBagConstraints constraints = new GridBagConstraints();
@@ -71,9 +70,10 @@ public class MethodCountInspection extends BaseInspection {
     panel.add(valueField, constraints);
 
     final CheckBox gettersSettersCheckBox = new CheckBox(
-      InspectionGadgetsBundle.message(
-        "method.count.ignore.getters.setters.option"),
-      this, "ignoreGettersAndSetters");
+      InspectionGadgetsLocalize.methodCountIgnoreGettersSettersOption().get(),
+      this,
+      "ignoreGettersAndSetters"
+    );
 
     constraints.gridx = 0;
     constraints.gridy = 1;
@@ -90,8 +90,7 @@ public class MethodCountInspection extends BaseInspection {
   @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer count = (Integer)infos[0];
-    return InspectionGadgetsBundle.message(
-      "too.many.methods.problem.descriptor", count);
+    return InspectionGadgetsLocalize.tooManyMethodsProblemDescriptor(count).get();
   }
 
   @Override

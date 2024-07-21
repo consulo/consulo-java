@@ -15,23 +15,22 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiBinaryExpression;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiPrefixExpression;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.ast.IElementType;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author Bas Leijdekkers
@@ -42,13 +41,13 @@ public class NegatedEqualityExpressionInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("negated.equality.expression.display.name");
+    return InspectionGadgetsLocalize.negatedEqualityExpressionDisplayName().get();
   }
 
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("negated.equality.expression.problem.descriptor", infos[0]);
+    return InspectionGadgetsLocalize.negatedEqualityExpressionProblemDescriptor(infos[0]).get();
   }
 
   @Override
@@ -61,7 +60,7 @@ public class NegatedEqualityExpressionInspection extends BaseInspection {
     @Nonnull
     @Override
     public String getName() {
-      return InspectionGadgetsBundle.message("negated.equality.expression.quickfix");
+      return InspectionGadgetsLocalize.negatedEqualityExpressionQuickfix().get();
     }
 
     @Override

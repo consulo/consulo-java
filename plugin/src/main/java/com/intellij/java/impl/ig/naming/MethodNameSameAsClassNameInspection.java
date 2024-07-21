@@ -15,21 +15,20 @@
  */
 package com.intellij.java.impl.ig.naming;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
+import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiTypeElement;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.RenameFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class MethodNameSameAsClassNameInspection extends BaseInspection {
@@ -37,15 +36,13 @@ public class MethodNameSameAsClassNameInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "method.name.same.as.class.name.display.name");
+    return InspectionGadgetsLocalize.methodNameSameAsClassNameDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "method.name.same.as.class.name.problem.descriptor");
+    return InspectionGadgetsLocalize.methodNameSameAsClassNameProblemDescriptor().get();
   }
 
   @Override
@@ -73,7 +70,7 @@ public class MethodNameSameAsClassNameInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("make.method.ctr.quickfix");
+      return InspectionGadgetsLocalize.makeMethodCtrQuickfix().get();
     }
 
     @Override
