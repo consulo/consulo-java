@@ -15,17 +15,17 @@
  */
 package com.intellij.java.impl.ig.fixes;
 
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.dataContext.DataManager;
-import consulo.dataContext.DataContext;
-import consulo.application.ApplicationManager;
-import consulo.project.Project;
-import com.intellij.java.language.psi.PsiAnonymousClass;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.analysis.refactoring.JavaRefactoringActionHandlerFactory;
-import consulo.language.editor.refactoring.action.RefactoringActionHandler;
-import com.siyeh.InspectionGadgetsBundle;
+import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.application.ApplicationManager;
+import consulo.dataContext.DataContext;
+import consulo.dataContext.DataManager;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 public class MoveAnonymousToInnerClassFix extends InspectionGadgetsFix {
@@ -37,8 +37,7 @@ public class MoveAnonymousToInnerClassFix extends InspectionGadgetsFix {
   }
 
   public MoveAnonymousToInnerClassFix() {
-    name = InspectionGadgetsBundle.message(
-      "move.anonymous.to.inner.quickfix");
+    name = InspectionGadgetsLocalize.moveAnonymousToInnerQuickfix().get();
   }
 
   @Nonnull
@@ -48,10 +47,8 @@ public class MoveAnonymousToInnerClassFix extends InspectionGadgetsFix {
 
   public void doFix(@Nonnull final Project project, ProblemDescriptor descriptor) {
     final PsiElement nameElement = descriptor.getPsiElement();
-    final PsiAnonymousClass aClass =
-      (PsiAnonymousClass)nameElement.getParent();
-    final JavaRefactoringActionHandlerFactory factory =
-      JavaRefactoringActionHandlerFactory.getInstance();
+    final PsiAnonymousClass aClass = (PsiAnonymousClass)nameElement.getParent();
+    final JavaRefactoringActionHandlerFactory factory = JavaRefactoringActionHandlerFactory.getInstance();
     final RefactoringActionHandler anonymousToInner =
       factory.createAnonymousToInnerHandler();
     final DataManager dataManager = DataManager.getInstance();

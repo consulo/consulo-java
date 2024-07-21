@@ -18,14 +18,14 @@ package com.intellij.java.impl.ig.finalization;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiType;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.util.PsiTreeUtil;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -38,14 +38,12 @@ public class NoExplicitFinalizeCallsInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "finalize.called.explicitly.display.name");
+    return InspectionGadgetsLocalize.finalizeCalledExplicitlyDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "finalize.called.explicitly.problem.descriptor");
+    return InspectionGadgetsLocalize.finalizeCalledExplicitlyProblemDescriptor().get();
   }
 
   public boolean isEnabledByDefault() {

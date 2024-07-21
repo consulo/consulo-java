@@ -19,14 +19,14 @@ import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiStatement;
 import com.intellij.java.language.psi.PsiType;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-
 import consulo.deadCodeNotWorking.impl.CheckBox;
 import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -49,8 +49,7 @@ public class MultipleReturnPointsPerMethodInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "multiple.return.points.per.method.display.name");
+    return InspectionGadgetsLocalize.multipleReturnPointsPerMethodDisplayName().get();
   }
 
   @Override
@@ -60,32 +59,25 @@ public class MultipleReturnPointsPerMethodInspection
 
   @Override
   protected String getConfigurationLabel() {
-    return InspectionGadgetsBundle.message("return.point.limit.option");
+    return InspectionGadgetsLocalize.returnPointLimitOption().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer returnPointCount = (Integer)infos[0];
-    return InspectionGadgetsBundle.message(
-      "multiple.return.points.per.method.problem.descriptor",
-      returnPointCount);
+    return InspectionGadgetsLocalize.multipleReturnPointsPerMethodProblemDescriptor(returnPointCount).get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
     final JPanel panel = new JPanel(new GridBagLayout());
-    final JLabel label = new JLabel(InspectionGadgetsBundle.message(
-      "return.point.limit.option"));
+    final JLabel label = new JLabel(InspectionGadgetsLocalize.returnPointLimitOption().get());
     final JFormattedTextField termLimitTextField = prepareNumberEditor(() -> m_limit, i -> m_limit = i);
     final CheckBox ignoreGuardClausesCheckBox =
-      new CheckBox(InspectionGadgetsBundle.message(
-        "ignore.guard.clauses.option"),
-                   this, "ignoreGuardClauses");
+      new CheckBox(InspectionGadgetsLocalize.ignoreGuardClausesOption().get(), this, "ignoreGuardClauses");
     final CheckBox ignoreEqualsMethodCheckBox =
-      new CheckBox(InspectionGadgetsBundle.message(
-        "ignore.for.equals.methods.option"),
-                   this, "ignoreEqualsMethod");
+      new CheckBox(InspectionGadgetsLocalize.ignoreForEqualsMethodsOption().get(), this, "ignoreEqualsMethod");
 
     final GridBagConstraints constraints = new GridBagConstraints();
 

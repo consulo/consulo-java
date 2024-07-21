@@ -16,21 +16,21 @@
 package com.intellij.java.impl.ig.bugs;
 
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
-import consulo.language.ast.IElementType;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -61,21 +61,17 @@ public class MismatchedStringBuilderQueryUpdateInspection extends BaseInspection
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "mismatched.string.builder.query.update.display.name");
+    return InspectionGadgetsLocalize.mismatchedStringBuilderQueryUpdateDisplayName().get();
   }
 
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
-    final boolean updated = ((Boolean)infos[0]).booleanValue();
+    final boolean updated = (Boolean)infos[0];
     final PsiType type = (PsiType)infos[1]; //"StringBuilder";
-    if (updated) {
-      return InspectionGadgetsBundle.message("mismatched.string.builder.updated.problem.descriptor", type.getPresentableText());
-    }
-    else {
-      return InspectionGadgetsBundle.message("mismatched.string.builder.queried.problem.descriptor", type.getPresentableText());
-    }
+    return updated
+      ? InspectionGadgetsLocalize.mismatchedStringBuilderUpdatedProblemDescriptor(type.getPresentableText()).get()
+      : InspectionGadgetsLocalize.mismatchedStringBuilderQueriedProblemDescriptor(type.getPresentableText()).get();
   }
 
   @Override

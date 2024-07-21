@@ -15,15 +15,16 @@
  */
 package com.intellij.java.impl.ig.visibility;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.siyeh.ig.psiutils.MethodUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -46,7 +47,7 @@ public class MethodOverloadsParentMethodInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("method.overloads.display.name");
+    return InspectionGadgetsLocalize.methodOverloadsDisplayName().get();
   }
 
   @Override
@@ -62,14 +63,14 @@ public class MethodOverloadsParentMethodInspection extends BaseInspection {
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("method.overloads.problem.descriptor");
+    return InspectionGadgetsLocalize.methodOverloadsProblemDescriptor().get();
   }
 
   @Nullable
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message("method.overloads.report.incompatible.option"),
-                                          this, "reportIncompatibleParameters");
+    LocalizeValue message = InspectionGadgetsLocalize.methodOverloadsReportIncompatibleOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "reportIncompatibleParameters");
   }
 
   @Override
@@ -78,7 +79,6 @@ public class MethodOverloadsParentMethodInspection extends BaseInspection {
   }
 
   private class MethodOverloadsParentMethodVisitor extends BaseInspectionVisitor {
-
     @Override
     public void visitMethod(@Nonnull PsiMethod method) {
       if (method.hasModifierProperty(PsiModifier.PRIVATE) || method.hasModifierProperty(PsiModifier.STATIC)) {

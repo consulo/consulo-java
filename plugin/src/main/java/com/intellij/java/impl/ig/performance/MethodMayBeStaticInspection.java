@@ -18,19 +18,19 @@ package com.intellij.java.impl.ig.performance;
 import com.intellij.java.impl.ig.fixes.ChangeModifierFix;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.function.Processor;
 import consulo.application.util.query.Query;
+import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.java.analysis.codeInspection.CantBeStaticCondition;
 import consulo.java.analysis.codeInspection.JavaExtensionPoints;
 import consulo.java.language.module.util.JavaClassNames;
-import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
@@ -51,13 +51,13 @@ public class MethodMayBeStaticInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("method.may.be.static.display.name");
+    return InspectionGadgetsLocalize.methodMayBeStaticDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("method.may.be.static.problem.descriptor");
+    return InspectionGadgetsLocalize.methodMayBeStaticProblemDescriptor().get();
   }
 
   @Override
@@ -68,8 +68,8 @@ public class MethodMayBeStaticInspection extends BaseInspection {
   @Override
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message("method.may.be.static.only.option"), "m_onlyPrivateOrFinal");
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message("method.may.be.static.empty.option"), "m_ignoreEmptyMethods");
+    optionsPanel.addCheckbox(InspectionGadgetsLocalize.methodMayBeStaticOnlyOption().get(), "m_onlyPrivateOrFinal");
+    optionsPanel.addCheckbox(InspectionGadgetsLocalize.methodMayBeStaticEmptyOption().get(), "m_ignoreEmptyMethods");
     return optionsPanel;
   }
 

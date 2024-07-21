@@ -15,20 +15,21 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
-import consulo.project.Project;
 import com.intellij.java.language.psi.PsiConditionalExpression;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.BoolUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
@@ -44,8 +45,7 @@ public class NegatedConditionalInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "negated.conditional.display.name");
+    return InspectionGadgetsLocalize.negatedConditionalDisplayName().get();
   }
 
   @Override
@@ -57,8 +57,7 @@ public class NegatedConditionalInspection extends BaseInspection {
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "negated.conditional.problem.descriptor");
+    return InspectionGadgetsLocalize.negatedConditionalProblemDescriptor().get();
   }
 
   @Override
@@ -68,8 +67,8 @@ public class NegatedConditionalInspection extends BaseInspection {
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message("negated.conditional.ignore.option"), this,
-                                          "m_ignoreNegatedNullComparison");
+    LocalizeValue message = InspectionGadgetsLocalize.negatedConditionalIgnoreOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "m_ignoreNegatedNullComparison");
   }
 
   @Override
@@ -82,7 +81,7 @@ public class NegatedConditionalInspection extends BaseInspection {
     @Override
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("negated.conditional.invert.quickfix");
+      return InspectionGadgetsLocalize.negatedConditionalInvertQuickfix().get();
     }
 
     @Override

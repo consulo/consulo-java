@@ -15,18 +15,18 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Nls;
@@ -38,15 +38,13 @@ public class NewStringBufferWithCharArgumentInspection extends BaseInspection {
   @Nls
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "new.string.buffer.with.char.argument.display.name");
+    return InspectionGadgetsLocalize.newStringBufferWithCharArgumentDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "new.string.buffer.with.char.argument.problem.descriptor");
+    return InspectionGadgetsLocalize.newStringBufferWithCharArgumentProblemDescriptor().get();
   }
 
   @Override
@@ -69,18 +67,14 @@ public class NewStringBufferWithCharArgumentInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "new.string.buffer.with.char.argument.quickfix");
+      return InspectionGadgetsLocalize.newStringBufferWithCharArgumentQuickfix().get();
     }
 
     @Override
-    protected void doFix(Project project, ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
+    protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
       final PsiElement element = descriptor.getPsiElement();
-      final PsiNewExpression newExpression =
-        (PsiNewExpression)element.getParent();
-      final PsiExpressionList argumentList =
-        newExpression.getArgumentList();
+      final PsiNewExpression newExpression = (PsiNewExpression)element.getParent();
+      final PsiExpressionList argumentList = newExpression.getArgumentList();
       if (argumentList == null) {
         return;
       }
@@ -90,8 +84,7 @@ public class NewStringBufferWithCharArgumentInspection extends BaseInspection {
       }
       final PsiExpression argument = arguments[0];
       final String text = argument.getText();
-      final String newArgument =
-        '"' + text.substring(1, text.length() - 1) + '"';
+      final String newArgument = '"' + text.substring(1, text.length() - 1) + '"';
       replaceExpression(argument, newArgument);
     }
   }
@@ -125,8 +118,7 @@ public class NewStringBufferWithCharArgumentInspection extends BaseInspection {
         return;
       }
       final PsiClass aClass = constructor.getContainingClass();
-      if (!InheritanceUtil.isInheritor(aClass,
-                                       JavaClassNames.JAVA_LANG_ABSTRACT_STRING_BUILDER)) {
+      if (!InheritanceUtil.isInheritor(aClass, JavaClassNames.JAVA_LANG_ABSTRACT_STRING_BUILDER)) {
         return;
       }
       registerNewExpressionError(expression, argument);

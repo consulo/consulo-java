@@ -15,43 +15,38 @@
  */
 package com.intellij.java.impl.ig.fixes;
 
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
-import consulo.application.ApplicationManager;
-import consulo.application.Application;
-import consulo.dataContext.DataContext;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
+import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.application.Application;
+import consulo.application.ApplicationManager;
+import consulo.dataContext.DataContext;
+import consulo.dataContext.DataManager;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.action.RefactoringActionHandlerFactory;
-import consulo.dataContext.DataManager;
-import com.siyeh.ig.InspectionGadgetsFix;
-import com.siyeh.InspectionGadgetsBundle;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 public class MoveClassFix extends InspectionGadgetsFix {
-
   @Nonnull
   public String getName() {
-    return InspectionGadgetsBundle.message("move.class.quickfix");
+    return InspectionGadgetsLocalize.moveClassQuickfix().get();
   }
 
-  public void doFix(@Nonnull final Project project,
-                    ProblemDescriptor descriptor) {
+  public void doFix(@Nonnull final Project project, ProblemDescriptor descriptor) {
     final PsiElement nameElement = descriptor.getPsiElement();
     final PsiClass aClass = (PsiClass)nameElement.getParent();
     final Application application = ApplicationManager.getApplication();
     application.invokeLater(new Runnable() {
 
       public void run() {
-        final RefactoringActionHandlerFactory factory =
-          RefactoringActionHandlerFactory.getInstance();
-        final RefactoringActionHandler moveHandler =
-          factory.createMoveHandler();
+        final RefactoringActionHandlerFactory factory = RefactoringActionHandlerFactory.getInstance();
+        final RefactoringActionHandler moveHandler = factory.createMoveHandler();
         final DataManager dataManager = DataManager.getInstance();
         final DataContext dataContext = dataManager.getDataContext();
-        moveHandler.invoke(project, new PsiElement[]{aClass},
-                           dataContext);
+        moveHandler.invoke(project, new PsiElement[]{aClass}, dataContext);
       }
     });
   }

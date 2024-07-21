@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.visibility;
 
+import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
@@ -22,9 +23,8 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.RenameFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-
 import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
@@ -46,8 +46,7 @@ public class MethodOverridesPrivateMethodInspection extends BaseInspection {
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "method.overrides.private.display.name.problem.descriptor");
+    return InspectionGadgetsLocalize.methodOverridesPrivateDisplayNameProblemDescriptor().get();
   }
 
   protected InspectionGadgetsFix buildFix(Object... infos) {

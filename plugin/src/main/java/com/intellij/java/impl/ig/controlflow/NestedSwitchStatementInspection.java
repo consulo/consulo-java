@@ -15,39 +15,34 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiSwitchStatement;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NestedSwitchStatementInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "nested.switch.statement.display.name");
+    return InspectionGadgetsLocalize.nestedSwitchStatementDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "nested.switch.statement.problem.descriptor");
+    return InspectionGadgetsLocalize.nestedSwitchStatementProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {
     return new NestedSwitchStatementVisitor();
   }
 
-  private static class NestedSwitchStatementVisitor
-    extends BaseInspectionVisitor {
-
+  private static class NestedSwitchStatementVisitor extends BaseInspectionVisitor {
     @Override
     public void visitSwitchStatement(
       @Nonnull PsiSwitchStatement statement) {

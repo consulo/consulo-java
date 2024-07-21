@@ -20,7 +20,7 @@ import com.intellij.java.impl.ig.BaseGlobalInspection;
 import com.intellij.java.impl.ig.psiutils.MethodInheritanceUtils;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.language.editor.inspection.CommonProblemDescriptor;
 import consulo.language.editor.inspection.GlobalInspectionContext;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -29,27 +29,27 @@ import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.util.dataholder.Key;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 public abstract class MethodReturnAlwaysConstantInspection extends BaseGlobalInspection {
-
-  private static final Key<Boolean> ALWAYS_CONSTANT =
-      Key.create("ALWAYS_CONSTANT");
+  private static final Key<Boolean> ALWAYS_CONSTANT = Key.create("ALWAYS_CONSTANT");
 
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-        "method.return.always.constant.display.name");
+    return InspectionGadgetsLocalize.methodReturnAlwaysConstantDisplayName().get();
   }
 
   public CommonProblemDescriptor[] checkElement(
-      RefEntity refEntity, AnalysisScope scope, InspectionManager manager,
-      GlobalInspectionContext globalContext) {
+    RefEntity refEntity,
+    AnalysisScope scope,
+    InspectionManager manager,
+    GlobalInspectionContext globalContext
+  ) {
     if (!(refEntity instanceof RefMethod)) {
       return null;
     }
@@ -68,11 +68,9 @@ public abstract class MethodReturnAlwaysConstantInspection extends BaseGlobalIns
     if (!alwaysReturnsConstant(method)) {
       return null;
     }
-    final Set<RefMethod> siblingMethods =
-        MethodInheritanceUtils.calculateSiblingMethods(refMethod);
+    final Set<RefMethod> siblingMethods = MethodInheritanceUtils.calculateSiblingMethods(refMethod);
     for (RefMethod siblingMethod : siblingMethods) {
-      final PsiMethod siblingPsiMethod =
-          (PsiMethod) siblingMethod.getElement();
+      final PsiMethod siblingPsiMethod = (PsiMethod) siblingMethod.getElement();
       if (method.getBody() != null &&
           !alwaysReturnsConstant(siblingPsiMethod)) {
         return null;
@@ -80,18 +78,19 @@ public abstract class MethodReturnAlwaysConstantInspection extends BaseGlobalIns
     }
     final List<ProblemDescriptor> out = new ArrayList<ProblemDescriptor>();
     for (RefMethod siblingRefMethod : siblingMethods) {
-      final PsiMethod siblingMethod =
-          (PsiMethod) siblingRefMethod.getElement();
+      final PsiMethod siblingMethod = (PsiMethod) siblingRefMethod.getElement();
       final PsiIdentifier identifier = siblingMethod.getNameIdentifier();
       if (identifier == null) {
         continue;
       }
-      out.add(manager.createProblemDescriptor(identifier,
-          InspectionGadgetsBundle.message(
-              "method.return.always.constant.problem.descriptor"), false, null,
-          ProblemHighlightType.GENERIC_ERROR_OR_WARNING));
-      siblingRefMethod.putUserData(ALWAYS_CONSTANT,
-          Boolean.valueOf(true));
+      out.add(manager.createProblemDescriptor(
+        identifier,
+        InspectionGadgetsLocalize.methodReturnAlwaysConstantProblemDescriptor().get(),
+        false,
+        null,
+        ProblemHighlightType.GENERIC_ERROR_OR_WARNING
+      ));
+      siblingRefMethod.putUserData(ALWAYS_CONSTANT, Boolean.TRUE);
     }
     return out.toArray(new ProblemDescriptor[out.size()]);
   }
@@ -109,8 +108,7 @@ public abstract class MethodReturnAlwaysConstantInspection extends BaseGlobalIns
     if (!(statement instanceof PsiReturnStatement)) {
       return false;
     }
-    final PsiReturnStatement returnStatement =
-        (PsiReturnStatement) statement;
+    final PsiReturnStatement returnStatement = (PsiReturnStatement) statement;
     final PsiExpression value = returnStatement.getReturnValue();
     return value != null && PsiUtil.isConstantExpression(value);
   }

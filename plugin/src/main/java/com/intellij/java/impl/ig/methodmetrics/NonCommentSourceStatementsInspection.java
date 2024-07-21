@@ -16,8 +16,8 @@
 package com.intellij.java.impl.ig.methodmetrics;
 
 import com.intellij.java.language.psi.PsiMethod;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 
@@ -34,8 +34,7 @@ public class NonCommentSourceStatementsInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "non.comment.source.statements.display.name");
+    return InspectionGadgetsLocalize.nonCommentSourceStatementsDisplayName().get();
   }
 
   protected int getDefaultLimit() {
@@ -43,16 +42,13 @@ public class NonCommentSourceStatementsInspection
   }
 
   protected String getConfigurationLabel() {
-    return InspectionGadgetsBundle.message(
-      "non.comment.source.statements.limit.option");
+    return InspectionGadgetsLocalize.nonCommentSourceStatementsLimitOption().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer statementCount = (Integer)infos[0];
-    return InspectionGadgetsBundle.message(
-      "non.comment.source.statements.problem.descriptor",
-      statementCount);
+    return InspectionGadgetsLocalize.nonCommentSourceStatementsProblemDescriptor(statementCount).get();
   }
 
   public BaseInspectionVisitor buildVisitor() {
