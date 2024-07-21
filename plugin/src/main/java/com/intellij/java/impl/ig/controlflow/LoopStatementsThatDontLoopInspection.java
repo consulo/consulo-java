@@ -15,14 +15,13 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class LoopStatementsThatDontLoopInspection extends BaseInspection {
@@ -34,14 +33,12 @@ public class LoopStatementsThatDontLoopInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "loop.statements.that.dont.loop.display.name");
+    return InspectionGadgetsLocalize.loopStatementsThatDontLoopDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "loop.statements.that.dont.loop.problem.descriptor");
+    return InspectionGadgetsLocalize.loopStatementsThatDontLoopProblemDescriptor().get();
   }
 
   public boolean isEnabledByDefault() {
@@ -52,9 +49,7 @@ public class LoopStatementsThatDontLoopInspection extends BaseInspection {
     return new LoopStatementsThatDontLoopVisitor();
   }
 
-  private static class LoopStatementsThatDontLoopVisitor
-    extends BaseInspectionVisitor {
-
+  private static class LoopStatementsThatDontLoopVisitor extends BaseInspectionVisitor {
     @Override
     public void visitForStatement(@Nonnull PsiForStatement statement) {
       super.visitForStatement(statement);

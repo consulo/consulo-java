@@ -15,32 +15,32 @@
  */
 package com.intellij.java.impl.ig.logging;
 
-import consulo.deadCodeNotWorking.impl.TextField;
 import com.intellij.java.impl.ig.ui.UiUtils;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.CheckBox;
+import consulo.deadCodeNotWorking.impl.TextField;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
 import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import consulo.ui.ex.awt.FormBuilder;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -71,28 +71,36 @@ public class LogStatementGuardedByLogConditionInspection extends BaseInspection 
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("log.statement.guarded.by.log.condition.display.name");
+    return InspectionGadgetsLocalize.logStatementGuardedByLogConditionDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("log.statement.guarded.by.log.condition.problem.descriptor");
+    return InspectionGadgetsLocalize.logStatementGuardedByLogConditionProblemDescriptor().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
     final JPanel panel = new JPanel(new BorderLayout());
-    final JLabel classNameLabel = new JLabel(InspectionGadgetsBundle.message("logger.name.option"));
+    final JLabel classNameLabel = new JLabel(InspectionGadgetsLocalize.loggerNameOption().get());
     classNameLabel.setHorizontalAlignment(SwingConstants.TRAILING);
     final TextField loggerClassNameField = new TextField(this, "loggerClassName");
-    final ListTable table = new ListTable(new ListWrappingTableModel(Arrays.asList(logMethodNameList, logConditionMethodNameList),
-                                                                     InspectionGadgetsBundle.message("log.method.name"),
-                                                                     InspectionGadgetsBundle.message("log.condition.text")));
+    final ListTable table = new ListTable(new ListWrappingTableModel(
+      Arrays.asList(logMethodNameList, logConditionMethodNameList),
+      InspectionGadgetsLocalize.logMethodName().get(),
+      InspectionGadgetsLocalize.logConditionText().get()
+    ));
     panel.add(UiUtils.createAddRemovePanel(table), BorderLayout.CENTER);
     panel.add(FormBuilder.createFormBuilder().addLabeledComponent(classNameLabel, loggerClassNameField).getPanel(), BorderLayout.NORTH);
-    panel.add(new CheckBox(InspectionGadgetsBundle.message("log.statement.guarded.by.log.condition.flag.all.unguarded.option"),
-                           this, "flagAllUnguarded"), BorderLayout.SOUTH);
+    panel.add(
+      new CheckBox(
+        InspectionGadgetsLocalize.logStatementGuardedByLogConditionFlagAllUnguardedOption().get(),
+        this,
+        "flagAllUnguarded"
+      ),
+      BorderLayout.SOUTH
+    );
     return panel;
   }
 
@@ -106,7 +114,7 @@ public class LogStatementGuardedByLogConditionInspection extends BaseInspection 
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("log.statement.guarded.by.log.condition.quickfix");
+      return InspectionGadgetsLocalize.logStatementGuardedByLogConditionQuickfix().get();
     }
 
     @Override

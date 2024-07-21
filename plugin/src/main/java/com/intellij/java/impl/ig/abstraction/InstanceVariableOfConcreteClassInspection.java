@@ -15,45 +15,40 @@
  */
 package com.intellij.java.impl.ig.abstraction;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiTypeElement;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
-import javax.swing.JComponent;
+import javax.swing.*;
 
 @ExtensionImpl
 public class InstanceVariableOfConcreteClassInspection extends BaseInspection {
-
   @SuppressWarnings("PublicField")
   public boolean ignoreAbstractClasses = false;
 
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "instance.variable.of.concrete.class.display.name");
+    return InspectionGadgetsLocalize.instanceVariableOfConcreteClassDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "instance.variable.of.concrete.class.problem.descriptor",
-      infos);
+    return InspectionGadgetsLocalize.instanceVariableOfConcreteClassProblemDescriptor(infos).get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(
-      InspectionGadgetsBundle.message(
-        "instance.variable.of.concrete.class.option"),
-      this, "ignoreAbstractClasses");
+    LocalizeValue message = InspectionGadgetsLocalize.instanceVariableOfConcreteClassOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreAbstractClasses");
   }
 
   @Override
@@ -61,9 +56,7 @@ public class InstanceVariableOfConcreteClassInspection extends BaseInspection {
     return new InstanceVariableOfConcreteClassVisitor();
   }
 
-  private class InstanceVariableOfConcreteClassVisitor
-    extends BaseInspectionVisitor {
-
+  private class InstanceVariableOfConcreteClassVisitor extends BaseInspectionVisitor {
     @Override
     public void visitField(@Nonnull PsiField field) {
       super.visitField(field);
@@ -74,8 +67,7 @@ public class InstanceVariableOfConcreteClassInspection extends BaseInspection {
       if (typeElement == null) {
         return;
       }
-      if (!ConcreteClassUtil.typeIsConcreteClass(typeElement,
-                                                 ignoreAbstractClasses)) {
+      if (!ConcreteClassUtil.typeIsConcreteClass(typeElement, ignoreAbstractClasses)) {
         return;
       }
       final String variableName = field.getName();

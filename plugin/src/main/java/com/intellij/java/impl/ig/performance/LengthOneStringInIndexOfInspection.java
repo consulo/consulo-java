@@ -15,22 +15,21 @@
  */
 package com.intellij.java.impl.ig.performance;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.util.lang.StringUtil;
-import consulo.language.psi.*;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
@@ -40,8 +39,7 @@ public class LengthOneStringInIndexOfInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "length.one.string.in.indexof.display.name");
+    return InspectionGadgetsLocalize.lengthOneStringInIndexofDisplayName().get();
   }
 
   @Override
@@ -55,9 +53,7 @@ public class LengthOneStringInIndexOfInspection
   public String buildErrorString(Object... infos) {
     final String string = (String)infos[0];
     final String escapedString = StringUtil.escapeStringCharacters(string);
-    return InspectionGadgetsBundle.message(
-      "expression.can.be.replaced.problem.descriptor",
-      escapedString);
+    return InspectionGadgetsLocalize.expressionCanBeReplacedProblemDescriptor(escapedString).get();
   }
 
   @Override
@@ -75,15 +71,13 @@ public class LengthOneStringInIndexOfInspection
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "length.one.strings.in.concatenation.replace.quickfix");
+      return InspectionGadgetsLocalize.lengthOneStringsInConcatenationReplaceQuickfix().get();
     }
 
     @Override
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiExpression expression =
-        (PsiExpression)descriptor.getPsiElement();
+      final PsiExpression expression = (PsiExpression)descriptor.getPsiElement();
       final String text = expression.getText();
       final int length = text.length();
       final String character = text.substring(1, length - 1);

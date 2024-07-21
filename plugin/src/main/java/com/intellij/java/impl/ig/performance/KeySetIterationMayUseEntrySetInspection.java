@@ -18,12 +18,12 @@ package com.intellij.java.impl.ig.performance;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -32,11 +32,11 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -48,15 +48,13 @@ public class KeySetIterationMayUseEntrySetInspection extends BaseInspection {
   @Nonnull
   @Nls
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-        "key.set.iteration.may.use.entry.set.display.name");
+    return InspectionGadgetsLocalize.keySetIterationMayUseEntrySetDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-        "key.set.iteration.may.use.entry.set.problem.descriptor");
+    return InspectionGadgetsLocalize.keySetIterationMayUseEntrySetProblemDescriptor().get();
   }
 
   @Override
@@ -69,8 +67,7 @@ public class KeySetIterationMayUseEntrySetInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-          "key.set.iteration.may.use.entry.set.quickfix");
+      return InspectionGadgetsLocalize.keySetIterationMayUseEntrySetQuickfix().get();
     }
 
     @Override

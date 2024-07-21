@@ -15,17 +15,19 @@
  */
 package com.intellij.java.impl.ig.abstraction;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.PsiLocalVariable;
-import consulo.language.psi.PsiNamedElement;
 import com.intellij.java.language.psi.PsiTypeElement;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.psi.PsiNamedElement;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
-import javax.swing.JComponent;
+import javax.swing.*;
 
 @ExtensionImpl
 public class LocalVariableOfConcreteClassInspection
@@ -37,25 +39,22 @@ public class LocalVariableOfConcreteClassInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "local.variable.of.concrete.class.display.name");
+    return InspectionGadgetsLocalize.localVariableOfConcreteClassDisplayName().get();
   }
 
   @Override
   @Nonnull
+  @RequiredReadAction
   public String buildErrorString(Object... arg) {
     final PsiNamedElement variable = (PsiNamedElement)arg[0];
     final String name = variable.getName();
-    return InspectionGadgetsBundle.message(
-      "local.variable.of.concrete.class.problem.descriptor", name);
+    return InspectionGadgetsLocalize.localVariableOfConcreteClassProblemDescriptor(name).get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(
-      InspectionGadgetsBundle.message(
-        "local.variable.of.concrete.class.option"),
-      this, "ignoreAbstractClasses");
+    LocalizeValue message = InspectionGadgetsLocalize.localVariableOfConcreteClassOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreAbstractClasses");
   }
 
   @Override

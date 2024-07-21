@@ -15,22 +15,21 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.BoolUtils;
-import org.jetbrains.annotations.Nls;
-
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiWhiteSpace;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.Nls;
 
 @ExtensionImpl
 public class LoopWithImplicitTerminationConditionInspection
@@ -39,18 +38,14 @@ public class LoopWithImplicitTerminationConditionInspection
   @Nls
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "loop.with.implicit.termination.condition.display.name");
+    return InspectionGadgetsLocalize.loopWithImplicitTerminationConditionDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    if (Boolean.TRUE.equals(infos[0])) {
-      return InspectionGadgetsBundle.message(
-        "loop.with.implicit.termination.condition.dowhile.problem.descriptor");
-    }
-    return InspectionGadgetsBundle.message(
-      "loop.with.implicit.termination.condition.problem.descriptor");
+    return Boolean.TRUE.equals(infos[0])
+      ? InspectionGadgetsLocalize.loopWithImplicitTerminationConditionDowhileProblemDescriptor().get()
+      : InspectionGadgetsLocalize.loopWithImplicitTerminationConditionProblemDescriptor().get();
   }
 
   @Nullable
@@ -63,8 +58,7 @@ public class LoopWithImplicitTerminationConditionInspection
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "loop.with.implicit.termination.condition.quickfix");
+      return InspectionGadgetsLocalize.loopWithImplicitTerminationConditionQuickfix().get();
     }
 
     protected void doFix(Project project, ProblemDescriptor descriptor)

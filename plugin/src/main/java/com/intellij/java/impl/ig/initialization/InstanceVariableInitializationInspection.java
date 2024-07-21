@@ -18,15 +18,16 @@ package com.intellij.java.impl.ig.initialization;
 import com.intellij.java.impl.ig.fixes.MakeInitializerExplicitFix;
 import com.intellij.java.impl.ig.psiutils.InitializationUtils;
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.TestUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.editor.ImplicitUsageProvider;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -48,25 +49,20 @@ public class InstanceVariableInitializationInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "instance.variable.may.not.be.initialized.display.name");
+    return InspectionGadgetsLocalize.instanceVariableMayNotBeInitializedDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
     final Boolean junitTestCase = (Boolean)infos[0];
-    if (junitTestCase.booleanValue()) {
-      return InspectionGadgetsBundle.message(
-        "instance.Variable.may.not.be.initialized.problem.descriptor.junit");
-    }
-    return InspectionGadgetsBundle.message(
-      "instance.variable.may.not.be.initialized.problem.descriptor");
+    return junitTestCase
+      ? InspectionGadgetsLocalize.instanceVariableMayNotBeInitializedProblemDescriptorJunit().get()
+      : InspectionGadgetsLocalize.instanceVariableMayNotBeInitializedProblemDescriptor().get();
   }
 
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(
-      InspectionGadgetsBundle.message("primitive.fields.ignore.option"),
-      this, "m_ignorePrimitives");
+    LocalizeValue message = InspectionGadgetsLocalize.primitiveFieldsIgnoreOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "m_ignorePrimitives");
   }
 
   public InspectionGadgetsFix buildFix(Object... infos) {
@@ -77,13 +73,10 @@ public class InstanceVariableInitializationInspection extends BaseInspection {
     return new InstanceVariableInitializationVisitor();
   }
 
-  private class InstanceVariableInitializationVisitor
-    extends BaseInspectionVisitor {
-
+  private class InstanceVariableInitializationVisitor extends BaseInspectionVisitor {
     @Override
     public void visitField(@Nonnull PsiField field) {
-      if (field.hasModifierProperty(PsiModifier.STATIC) ||
-          field.hasModifierProperty(PsiModifier.FINAL)) {
+      if (field.hasModifierProperty(PsiModifier.STATIC) || field.hasModifierProperty(PsiModifier.FINAL)) {
         return;
       }
       if (field.getInitializer() != null) {
@@ -123,23 +116,19 @@ public class InstanceVariableInitializationInspection extends BaseInspection {
       }
     }
 
-    private boolean isInitializedInSetup(PsiField field,
-                                         PsiClass aClass) {
+    private boolean isInitializedInSetup(PsiField field, PsiClass aClass) {
       final PsiMethod setupMethod = getSetupMethod(aClass);
-      return InitializationUtils.methodAssignsVariableOrFails(setupMethod,
-                                                              field);
+      return InitializationUtils.methodAssignsVariableOrFails(setupMethod, field);
     }
 
     @Nullable
     private PsiMethod getSetupMethod(@Nonnull PsiClass aClass) {
-      final PsiMethod[] methods =
-        aClass.findMethodsByName("setUp", false);
+      final PsiMethod[] methods = aClass.findMethodsByName("setUp", false);
       for (PsiMethod method : methods) {
         if (method.hasModifierProperty(PsiModifier.STATIC)) {
           continue;
         }
-        final PsiParameterList parameterList =
-          method.getParameterList();
+        final PsiParameterList parameterList = method.getParameterList();
         if (parameterList.getParametersCount() != 0) {
           continue;
         }

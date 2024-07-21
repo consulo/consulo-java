@@ -20,22 +20,21 @@ import com.intellij.java.impl.ig.fixes.AddToIgnoreIfAnnotatedByListQuickFix;
 import com.intellij.java.impl.ig.psiutils.UninitializedReadCollector;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.component.extension.Extensions;
 import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.language.editor.ImplicitUsageProvider;
 import consulo.project.Project;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
+import jakarta.annotation.Nonnull;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -69,13 +68,13 @@ public class InstanceVariableUninitializedUseInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("instance.variable.used.before.initialized.display.name");
+    return InspectionGadgetsLocalize.instanceVariableUsedBeforeInitializedDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("instance.variable.used.before.initialized.problem.descriptor");
+    return InspectionGadgetsLocalize.instanceVariableUsedBeforeInitializedProblemDescriptor().get();
   }
 
   @Override
@@ -95,8 +94,11 @@ public class InstanceVariableUninitializedUseInspection extends BaseInspection {
     final JComponent panel = new JPanel(new GridBagLayout());
 
     final JPanel annotationsPanel = SpecialAnnotationsUtil.createSpecialAnnotationsListControl(
-      annotationNames, InspectionGadgetsBundle.message("ignore.if.annotated.by"));
-    final CheckBox checkBox = new CheckBox(InspectionGadgetsBundle.message("primitive.fields.ignore.option"), this, "m_ignorePrimitives");
+      annotationNames,
+      InspectionGadgetsLocalize.ignoreIfAnnotatedBy().get()
+    );
+    final CheckBox checkBox =
+      new CheckBox(InspectionGadgetsLocalize.primitiveFieldsIgnoreOption().get(), this, "m_ignorePrimitives");
 
     final GridBagConstraints constraints = new GridBagConstraints();
     constraints.gridx = 0;

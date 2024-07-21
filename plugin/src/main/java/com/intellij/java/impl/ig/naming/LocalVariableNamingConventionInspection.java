@@ -15,17 +15,18 @@
  */
 package com.intellij.java.impl.ig.naming;
 
+import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.deadCodeNotWorking.impl.CheckBox;
-import consulo.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.RenameFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.CheckBox;
+import consulo.language.psi.PsiElement;
 import jakarta.annotation.Nonnull;
 
-import javax.swing.JComponent;
+import javax.swing.*;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -48,8 +49,7 @@ public class LocalVariableNamingConventionInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "local.variable.naming.convention.display.name");
+    return InspectionGadgetsLocalize.localVariableNamingConventionDisplayName().get();
   }
 
   @Override
@@ -162,11 +162,16 @@ public class LocalVariableNamingConventionInspection
   @Override
   public Collection<? extends JComponent> createExtraOptions() {
     return Arrays.asList(
-      new CheckBox(InspectionGadgetsBundle.message(
-        "local.variable.naming.convention.ignore.option"),
-                   this, "m_ignoreForLoopParameters"),
-      new CheckBox(InspectionGadgetsBundle.message(
-        "local.variable.naming.convention.ignore.catch.option"),
-                   this, "m_ignoreCatchParameters"));
+      new CheckBox(
+        InspectionGadgetsLocalize.localVariableNamingConventionIgnoreOption().get(),
+        this,
+        "m_ignoreForLoopParameters"
+      ),
+      new CheckBox(
+        InspectionGadgetsLocalize.localVariableNamingConventionIgnoreCatchOption().get(),
+        this,
+        "m_ignoreCatchParameters"
+      )
+    );
   }
 }

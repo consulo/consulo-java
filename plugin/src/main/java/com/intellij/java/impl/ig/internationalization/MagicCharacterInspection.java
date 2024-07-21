@@ -15,17 +15,16 @@
  */
 package com.intellij.java.impl.ig.internationalization;
 
-import jakarta.annotation.Nonnull;
-
+import com.intellij.java.impl.ig.fixes.IntroduceConstantFix;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiType;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.IntroduceConstantFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class MagicCharacterInspection extends BaseInspection {
@@ -33,14 +32,13 @@ public class MagicCharacterInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("magic.character.display.name");
+    return InspectionGadgetsLocalize.magicCharacterDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "magic.character.problem.descriptor");
+    return InspectionGadgetsLocalize.magicCharacterProblemDescriptor().get();
   }
 
   @Override

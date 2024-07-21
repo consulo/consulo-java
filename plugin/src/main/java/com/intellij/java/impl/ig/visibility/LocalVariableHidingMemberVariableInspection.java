@@ -17,18 +17,18 @@ package com.intellij.java.impl.ig.visibility;
 
 import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 
 @ExtensionImpl
@@ -47,7 +47,7 @@ public class LocalVariableHidingMemberVariableInspection extends BaseInspection 
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("local.variable.hides.member.variable.display.name");
+    return InspectionGadgetsLocalize.localVariableHidesMemberVariableDisplayName().get();
   }
 
   protected InspectionGadgetsFix buildFix(Object... infos) {
@@ -61,13 +61,13 @@ public class LocalVariableHidingMemberVariableInspection extends BaseInspection 
   @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiClass aClass = (PsiClass)infos[0];
-    return InspectionGadgetsBundle.message("local.variable.hides.member.variable.problem.descriptor", aClass.getName());
+    return InspectionGadgetsLocalize.localVariableHidesMemberVariableProblemDescriptor(aClass.getName()).get();
   }
 
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message("field.name.hides.in.superclass.ignore.option"), "m_ignoreInvisibleFields");
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message("local.variable.hides.member.variable.ignore.option"), "m_ignoreStaticMethods");
+    optionsPanel.addCheckbox(InspectionGadgetsLocalize.fieldNameHidesInSuperclassIgnoreOption().get(), "m_ignoreInvisibleFields");
+    optionsPanel.addCheckbox(InspectionGadgetsLocalize.localVariableHidesMemberVariableIgnoreOption().get(), "m_ignoreStaticMethods");
     return optionsPanel;
   }
 

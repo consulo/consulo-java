@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.bugs;
 
 import com.intellij.java.language.psi.*;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
 import com.siyeh.HardcodedMethodConstants;
@@ -44,15 +45,13 @@ public class IteratorNextDoesNotThrowNoSuchElementExceptionInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "iterator.next.does.not.throw.nosuchelementexception.display.name");
+    return InspectionGadgetsLocalize.iteratorNextDoesNotThrowNosuchelementexceptionDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "iterator.next.does.not.throw.nosuchelementexception.problem.descriptor");
+    return InspectionGadgetsLocalize.iteratorNextDoesNotThrowNosuchelementexceptionProblemDescriptor().get();
   }
 
   @Override

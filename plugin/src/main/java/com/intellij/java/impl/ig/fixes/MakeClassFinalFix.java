@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.fixes;
 
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import jakarta.annotation.Nonnull;
 
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -50,8 +51,7 @@ public class MakeClassFinalFix extends InspectionGadgetsFix {
   @Override
   @Nonnull
   public String getName() {
-    return InspectionGadgetsBundle.message(
-      "make.class.final.fix.name", className);
+    return InspectionGadgetsLocalize.makeClassFinalFixName(className).get();
   }
 
   @Override
@@ -78,9 +78,13 @@ public class MakeClassFinalFix extends InspectionGadgetsFix {
     search.forEach(new Processor<PsiClass>() {
       @Override
       public boolean process(PsiClass aClass) {
-        conflicts.putValue(containingClass, InspectionGadgetsBundle
-          .message("0.will.no.longer.be.overridable.by.1", RefactoringUIUtil.getDescription(containingClass, false),
-                   RefactoringUIUtil.getDescription(aClass, false)));
+        conflicts.putValue(
+          containingClass,
+          InspectionGadgetsLocalize.zeroWillNoLongerBeOverridableBy1(
+            RefactoringUIUtil.getDescription(containingClass, false),
+            RefactoringUIUtil.getDescription(aClass, false)
+          ).get()
+        );
         return true;
       }
     });

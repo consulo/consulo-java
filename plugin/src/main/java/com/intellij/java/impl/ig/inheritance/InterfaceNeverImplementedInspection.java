@@ -15,13 +15,14 @@
  */
 package com.intellij.java.impl.ig.inheritance;
 
+import com.intellij.java.impl.ig.psiutils.InheritanceUtil;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import com.intellij.java.impl.ig.psiutils.InheritanceUtil;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -37,31 +38,25 @@ public class InterfaceNeverImplementedInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "interface.never.implemented.display.name");
+    return InspectionGadgetsLocalize.interfaceNeverImplementedDisplayName().get();
   }
 
   @Nullable
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(
-      InspectionGadgetsBundle.message(
-        "interface.never.implemented.option"), this,
-      "ignoreInterfacesThatOnlyDeclareConstants");
+    LocalizeValue message = InspectionGadgetsLocalize.interfaceNeverImplementedOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreInterfacesThatOnlyDeclareConstants");
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "interface.never.implemented.problem.descriptor");
+    return InspectionGadgetsLocalize.interfaceNeverImplementedProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {
     return new InterfaceNeverImplementedVisitor();
   }
 
-  private class InterfaceNeverImplementedVisitor
-    extends BaseInspectionVisitor {
-
+  private class InterfaceNeverImplementedVisitor extends BaseInspectionVisitor {
     @Override
     public void visitClass(@Nonnull PsiClass aClass) {
       if (!aClass.isInterface() || aClass.isAnnotationType()) {

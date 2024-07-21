@@ -15,20 +15,20 @@
  */
 package com.intellij.java.impl.ig.fixes;
 
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.dataContext.DataManager;
-import consulo.dataContext.DataContext;
-import consulo.project.Project;
-import consulo.util.concurrent.AsyncResult;
-import consulo.language.psi.PsiElement;
+import com.intellij.java.analysis.refactoring.JavaRefactoringActionHandlerFactory;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.analysis.refactoring.JavaRefactoringActionHandlerFactory;
-import consulo.language.editor.refactoring.action.RefactoringActionHandler;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.dataContext.DataContext;
+import consulo.dataContext.DataManager;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.util.concurrent.AsyncResult;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -49,14 +49,9 @@ public class IntroduceVariableFix extends InspectionGadgetsFix
 	@Override
 	public String getName()
 	{
-		if(myMayChangeSemantics)
-		{
-			return InspectionGadgetsBundle.message("introduce.variable.may.change.semantics.quickfix");
-		}
-		else
-		{
-			return InspectionGadgetsBundle.message("introduce.variable.quickfix");
-		}
+		return myMayChangeSemantics
+			? InspectionGadgetsLocalize.introduceVariableMayChangeSemanticsQuickfix().get()
+			: InspectionGadgetsLocalize.introduceVariableQuickfix().get();
 	}
 
 	@Nullable

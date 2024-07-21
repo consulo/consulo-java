@@ -15,27 +15,27 @@
  */
 package com.intellij.java.impl.ig.logging;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.ide.impl.idea.codeInspection.ui.ListTable;
-import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
+import com.intellij.java.impl.ig.ui.UiUtils;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.util.xml.serializer.InvalidDataException;
-import consulo.util.xml.serializer.WriteExternalException;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.ui.UiUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.ide.impl.idea.codeInspection.ui.ListTable;
+import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.WriteExternalException;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,21 +60,22 @@ public class LoggerInitializedWithForeignClassInspection extends BaseInspection 
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("logger.initialized.with.foreign.class.display.name");
+    return InspectionGadgetsLocalize.loggerInitializedWithForeignClassDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("logger.initialized.with.foreign.class.problem.descriptor");
+    return InspectionGadgetsLocalize.loggerInitializedWithForeignClassProblemDescriptor().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    final ListTable table = new ListTable(
-      new ListWrappingTableModel(Arrays.asList(loggerFactoryClassNames, loggerFactoryMethodNames),
-                                 InspectionGadgetsBundle.message("logger.factory.class.name"),
-                                 InspectionGadgetsBundle.message("logger.factory.method.name")));
+    final ListTable table = new ListTable(new ListWrappingTableModel(
+      Arrays.asList(loggerFactoryClassNames, loggerFactoryMethodNames),
+      InspectionGadgetsLocalize.loggerFactoryClassName().get(),
+      InspectionGadgetsLocalize.loggerFactoryMethodName().get()
+    ));
     return UiUtils.createAddRemovePanel(table);
   }
 
@@ -95,9 +96,7 @@ public class LoggerInitializedWithForeignClassInspection extends BaseInspection 
     @Override
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "logger.initialized.with.foreign.class.quickfix",
-        newClassName);
+      return InspectionGadgetsLocalize.loggerInitializedWithForeignClassQuickfix(newClassName).get();
     }
 
     @Override

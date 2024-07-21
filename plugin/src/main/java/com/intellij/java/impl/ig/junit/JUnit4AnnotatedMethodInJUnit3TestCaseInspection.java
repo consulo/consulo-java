@@ -19,19 +19,19 @@ import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TestUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,16 +44,16 @@ public class JUnit4AnnotatedMethodInJUnit3TestCaseInspection extends BaseInspect
   @Nls
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("junit4.test.method.in.class.extending.junit3.testcase.display.name");
+    return InspectionGadgetsLocalize.junit4TestMethodInClassExtendingJunit3TestcaseDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
     if (AnnotationUtil.isAnnotated((PsiMethod)infos[1], IGNORE, false)) {
-      return InspectionGadgetsBundle.message("ignore.test.method.in.class.extending.junit3.testcase.problem.descriptor");
+      return InspectionGadgetsLocalize.ignoreTestMethodInClassExtendingJunit3TestcaseProblemDescriptor().get();
     }
-    return InspectionGadgetsBundle.message("junit4.test.method.in.class.extending.junit3.testcase.problem.descriptor");
+    return InspectionGadgetsLocalize.junit4TestMethodInClassExtendingJunit3TestcaseProblemDescriptor().get();
   }
 
   @Override
@@ -105,7 +105,7 @@ public class JUnit4AnnotatedMethodInJUnit3TestCaseInspection extends BaseInspect
     @Nonnull
     @Override
     public String getName() {
-      return InspectionGadgetsBundle.message("ignore.test.method.in.class.extending.junit3.testcase.quickfix", getTargetName());
+      return InspectionGadgetsLocalize.ignoreTestMethodInClassExtendingJunit3TestcaseQuickfix(getTargetName()).get();
     }
 
     @Override
@@ -126,7 +126,7 @@ public class JUnit4AnnotatedMethodInJUnit3TestCaseInspection extends BaseInspect
     @Override
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("convert.junit3.test.class.quickfix", className);
+      return InspectionGadgetsLocalize.convertJunit3TestClassQuickfix(className).get();
     }
 
     @Override
@@ -262,7 +262,7 @@ public class JUnit4AnnotatedMethodInJUnit3TestCaseInspection extends BaseInspect
     @Override
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("remove.junit4.test.annotation.quickfix");
+      return InspectionGadgetsLocalize.removeJunit4TestAnnotationQuickfix().get();
     }
 
     @Override
