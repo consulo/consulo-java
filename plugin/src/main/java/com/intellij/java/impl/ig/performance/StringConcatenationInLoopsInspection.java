@@ -15,22 +15,23 @@
  */
 package com.intellij.java.impl.ig.performance;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
-import consulo.language.psi.*;
-import consulo.language.ast.IElementType;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
-import javax.swing.JComponent;
+import javax.swing.*;
 
 @ExtensionImpl
 public class StringConcatenationInLoopsInspection extends BaseInspection {
@@ -47,19 +48,19 @@ public class StringConcatenationInLoopsInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("string.concatenation.in.loops.display.name");
+    return InspectionGadgetsLocalize.stringConcatenationInLoopsDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("string.concatenation.in.loops.problem.descriptor");
+    return InspectionGadgetsLocalize.stringConcatenationInLoopsProblemDescriptor().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message("string.concatenation.in.loops.only.option"),
-                                          this, "m_ignoreUnlessAssigned");
+    LocalizeValue message = InspectionGadgetsLocalize.stringConcatenationInLoopsOnlyOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "m_ignoreUnlessAssigned");
   }
 
   @Override

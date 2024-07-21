@@ -15,25 +15,25 @@
  */
 package com.intellij.java.impl.ig.logging;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.util.lang.StringUtil;
-import consulo.language.psi.*;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -59,13 +59,13 @@ public class StringConcatenationArgumentToLogCallInspection extends BaseInspecti
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("string.concatenation.argument.to.log.call.display.name");
+    return InspectionGadgetsLocalize.stringConcatenationArgumentToLogCallDisplayName().get();
   }
 
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("string.concatenation.argument.to.log.call.problem.descriptor");
+    return InspectionGadgetsLocalize.stringConcatenationArgumentToLogCallProblemDescriptor().get();
   }
 
   @Nullable
@@ -85,7 +85,7 @@ public class StringConcatenationArgumentToLogCallInspection extends BaseInspecti
     @Nonnull
     @Override
     public String getName() {
-      return InspectionGadgetsBundle.message("string.concatenation.in.format.call.quickfix");
+      return InspectionGadgetsLocalize.stringConcatenationInFormatCallQuickfix().get();
     }
 
     @Override

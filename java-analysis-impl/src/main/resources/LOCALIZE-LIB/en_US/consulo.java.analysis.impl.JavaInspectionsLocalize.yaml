@@ -47,7 +47,7 @@ inspection.can.be.final.option1:
 inspection.can.be.final.option2:
   text: Report fields
 inspection.data.flow.display.name:
-  text: Constant conditions \& exceptions
+  text: Constant conditions & exceptions
 inspection.contract.display.name:
   text: Contract issues
 inspection.data.flow.nullable.quickfix.option:

@@ -20,11 +20,11 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.FileTypeUtils;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.CommentTracker;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
@@ -33,8 +33,8 @@ import consulo.language.psi.PsiManager;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.*;
 
 @ExtensionImpl
@@ -54,13 +54,13 @@ public class StaticImportInspectionBase extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("static.import.display.name");
+    return InspectionGadgetsLocalize.staticImportDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("static.import.problem.descriptor");
+    return InspectionGadgetsLocalize.staticImportProblemDescriptor().get();
   }
 
   @Override
@@ -83,7 +83,7 @@ public class StaticImportInspectionBase extends BaseInspection {
     @Override
     @Nonnull
     public String getFamilyName() {
-      return InspectionGadgetsBundle.message("static.import.replace.quickfix");
+      return InspectionGadgetsLocalize.staticImportReplaceQuickfix().get();
     }
 
     @Override

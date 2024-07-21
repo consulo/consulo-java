@@ -19,13 +19,12 @@ import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiExpressionList;
 import com.intellij.java.language.psi.PsiNewExpression;
 import com.intellij.java.language.psi.PsiType;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
-
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -41,15 +40,13 @@ public class StringBufferMustHaveInitialCapacityInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "string.buffer.must.have.initial.capacity.display.name");
+    return InspectionGadgetsLocalize.stringBufferMustHaveInitialCapacityDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "string.buffer.must.have.initial.capacity.problem.descriptor");
+    return InspectionGadgetsLocalize.stringBufferMustHaveInitialCapacityProblemDescriptor().get();
   }
 
   @Override

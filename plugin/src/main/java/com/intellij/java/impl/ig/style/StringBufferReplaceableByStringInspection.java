@@ -15,24 +15,23 @@
  */
 package com.intellij.java.impl.ig.style;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.util.lang.StringUtil;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
@@ -42,7 +41,7 @@ public class StringBufferReplaceableByStringInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("string.buffer.replaceable.by.string.display.name");
+    return InspectionGadgetsLocalize.stringBufferReplaceableByStringDisplayName().get();
   }
 
   @Override
@@ -50,10 +49,10 @@ public class StringBufferReplaceableByStringInspection extends BaseInspection {
   public String buildErrorString(Object... infos) {
     final PsiElement element = (PsiElement)infos[0];
     if (element instanceof PsiNewExpression) {
-      return InspectionGadgetsBundle.message("new.string.buffer.replaceable.by.string.problem.descriptor");
+      return InspectionGadgetsLocalize.newStringBufferReplaceableByStringProblemDescriptor().get();
     }
     final String typeText = ((PsiType)infos[1]).getPresentableText();
-    return InspectionGadgetsBundle.message("string.buffer.replaceable.by.string.problem.descriptor", typeText);
+    return InspectionGadgetsLocalize.stringBufferReplaceableByStringProblemDescriptor(typeText).get();
   }
 
   @Override
@@ -73,12 +72,9 @@ public class StringBufferReplaceableByStringInspection extends BaseInspection {
     @Nonnull
     @Override
     public String getName() {
-      if (isStringBuilder) {
-        return InspectionGadgetsBundle.message("string.builder.replaceable.by.string.quickfix");
-      }
-      else {
-        return InspectionGadgetsBundle.message("string.buffer.replaceable.by.string.quickfix");
-      }
+      return isStringBuilder
+        ? InspectionGadgetsLocalize.stringBuilderReplaceableByStringQuickfix().get()
+        : InspectionGadgetsLocalize.stringBufferReplaceableByStringQuickfix().get();
     }
 
     @Override

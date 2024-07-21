@@ -18,12 +18,11 @@ package com.intellij.java.impl.ig.inheritance;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiReferenceList;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-
 import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
@@ -34,14 +33,12 @@ public class StaticInheritanceInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "static.inheritance.display.name");
+    return InspectionGadgetsLocalize.staticInheritanceDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "static.inheritance.problem.descriptor");
+    return InspectionGadgetsLocalize.staticInheritanceProblemDescriptor().get();
   }
 
   @Nonnull

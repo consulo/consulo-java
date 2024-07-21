@@ -16,16 +16,15 @@
 package com.siyeh.ig.fixes;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.CommentTracker;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 public class DeleteUnnecessaryStatementFix extends InspectionGadgetsFix {
 
@@ -38,8 +37,7 @@ public class DeleteUnnecessaryStatementFix extends InspectionGadgetsFix {
   @Override
   @Nonnull
   public String getName() {
-    return InspectionGadgetsBundle.message(
-        "smth.unnecessary.remove.quickfix", name);
+    return InspectionGadgetsLocalize.smthUnnecessaryRemoveQuickfix(name).get();
   }
 
   @Nonnull

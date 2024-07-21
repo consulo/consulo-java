@@ -15,19 +15,19 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.ast.IElementType;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
@@ -37,7 +37,7 @@ public class MathRandomCastToIntInspection extends BaseInspection {
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("math.random.cast.to.int.display.name");
+    return InspectionGadgetsLocalize.mathRandomCastToIntDisplayName().get();
   }
 
   @Nonnull
@@ -69,8 +69,7 @@ public class MathRandomCastToIntInspection extends BaseInspection {
   private static class MathRandomCastToIntegerFix extends InspectionGadgetsFix {
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "math.random.cast.to.int.quickfix");
+      return InspectionGadgetsLocalize.mathRandomCastToIntQuickfix().get();
     }
 
     @Override

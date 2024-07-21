@@ -23,14 +23,15 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 
-import jakarta.annotation.Nonnull;
 import javax.swing.*;
 
 @ExtensionImpl
@@ -46,22 +47,26 @@ public class MethodCanBeVariableArityMethodInspection extends BaseInspection {
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("method.can.be.variable.arity.method.display.name");
+    return InspectionGadgetsLocalize.methodCanBeVariableArityMethodDisplayName().get();
   }
 
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("method.can.be.variable.arity.method.problem.descriptor");
+    return InspectionGadgetsLocalize.methodCanBeVariableArityMethodProblemDescriptor().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
-    panel.addCheckbox(InspectionGadgetsBundle.message("method.can.be.variable.arity.method.ignore.byte.short.option"),
-                      "ignoreByteAndShortArrayParameters");
-    panel.addCheckbox(InspectionGadgetsBundle.message("method.can.be.variable.arity.method.ignore.overriding.methods"),
-                      "ignoreOverridingMethods");
+    panel.addCheckbox(
+      InspectionGadgetsLocalize.methodCanBeVariableArityMethodIgnoreByteShortOption().get(),
+      "ignoreByteAndShortArrayParameters"
+    );
+    panel.addCheckbox(
+      InspectionGadgetsBundle.message("method.can.be.variable.arity.method.ignore.overriding.methods"),
+      "ignoreOverridingMethods"
+    );
     return panel;
   }
 
@@ -75,7 +80,7 @@ public class MethodCanBeVariableArityMethodInspection extends BaseInspection {
     @Nonnull
     @Override
     public String getName() {
-      return InspectionGadgetsBundle.message("convert.to.variable.arity.method.quickfix");
+      return InspectionGadgetsLocalize.convertToVariableArityMethodQuickfix().get();
     }
 
     @Override

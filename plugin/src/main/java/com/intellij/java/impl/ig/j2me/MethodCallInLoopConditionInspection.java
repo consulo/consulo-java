@@ -15,17 +15,16 @@
  */
 package com.intellij.java.impl.ig.j2me;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-
+import com.intellij.java.impl.ig.fixes.IntroduceVariableFix;
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.IntroduceVariableFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElementVisitor;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class MethodCallInLoopConditionInspection extends BaseInspection {
@@ -33,13 +32,13 @@ public class MethodCallInLoopConditionInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("method.call.in.loop.condition.display.name");
+    return InspectionGadgetsLocalize.methodCallInLoopConditionDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("method.call.in.loop.condition.problem.descriptor");
+    return InspectionGadgetsLocalize.methodCallInLoopConditionProblemDescriptor().get();
   }
 
   @Override

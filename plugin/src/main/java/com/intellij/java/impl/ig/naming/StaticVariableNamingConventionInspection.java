@@ -15,20 +15,21 @@
  */
 package com.intellij.java.impl.ig.naming;
 
+import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiType;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.CheckBox;
-
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
-import javax.swing.JComponent;
+import javax.swing.*;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -45,8 +46,7 @@ public class StaticVariableNamingConventionInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "static.variable.naming.convention.display.name");
+    return InspectionGadgetsLocalize.staticVariableNamingConventionDisplayName().get();
   }
 
   @Override
@@ -93,10 +93,8 @@ public class StaticVariableNamingConventionInspection
 
   @Override
   public Collection<? extends JComponent> createExtraOptions() {
-    return Arrays.asList(
-      new CheckBox(InspectionGadgetsBundle.message(
-        "static.variable.naming.convention.mutable.option"),
-                   this, "checkMutableFinals"));
+    LocalizeValue message = InspectionGadgetsLocalize.staticVariableNamingConventionMutableOption();
+    return Arrays.asList(new CheckBox(message.get(), this, "checkMutableFinals"));
   }
 
   @Override

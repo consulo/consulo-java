@@ -18,6 +18,7 @@ package com.intellij.java.impl.ig.fixes;
 import com.intellij.java.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
@@ -30,8 +31,7 @@ public class MakeInitializerExplicitFix extends InspectionGadgetsFix {
 
   @Nonnull
   public String getName() {
-    return InspectionGadgetsBundle.message(
-      "make.initialization.explicit.quickfix");
+    return InspectionGadgetsLocalize.makeInitializationExplicitQuickfix().get();
   }
 
   public void doFix(Project project, ProblemDescriptor descriptor)

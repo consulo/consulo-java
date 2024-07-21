@@ -87,8 +87,9 @@ public class ConditionalExpressionWithIdenticalBranchesInspection extends BaseIn
 		@Nonnull
 		public String getName()
 		{
-			return InspectionGadgetsBundle.message(getEquivalenceDecision().getExactlyMatches() ? "conditional.expression.with.identical.branches.collapse.quickfix" : "conditional.expression.with" +
-					".identical.branches.push.inside.quickfix");
+			return getEquivalenceDecision().getExactlyMatches()
+				? InspectionGadgetsLocalize.conditionalExpressionWithIdenticalBranchesCollapseQuickfix().get()
+				: InspectionGadgetsBundle.message("conditional.expression.with.identical.branches.push.inside.quickfix");
 		}
 
 		@Override
