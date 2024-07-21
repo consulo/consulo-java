@@ -15,15 +15,15 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
+import com.intellij.java.impl.ig.psiutils.IteratorUtils;
 import com.intellij.java.language.psi.PsiMethod;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import com.intellij.java.impl.ig.psiutils.IteratorUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
@@ -33,14 +33,12 @@ public class IteratorHasNextCallsIteratorNextInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "iterator.hasnext.which.calls.next.display.name");
+    return InspectionGadgetsLocalize.iteratorHasnextWhichCallsNextDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "iterator.hasnext.which.calls.next.problem.descriptor");
+    return InspectionGadgetsLocalize.iteratorHasnextWhichCallsNextProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

@@ -15,18 +15,17 @@
  */
 package com.intellij.java.impl.ig.numeric;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 
 @ExtensionImpl
@@ -36,28 +35,21 @@ public class IntLiteralMayBeLongLiteralInspection extends BaseInspection {
   @Nls
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "int.literal.may.be.long.literal.display.name");
+    return InspectionGadgetsLocalize.intLiteralMayBeLongLiteralDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    final PsiTypeCastExpression typeCastExpression =
-      (PsiTypeCastExpression)infos[0];
-    final StringBuilder replacementText =
-      buildReplacementText(typeCastExpression, new StringBuilder());
-    return InspectionGadgetsBundle.message(
-      "int.literal.may.be.long.literal.problem.descriptor",
-      replacementText);
+    final PsiTypeCastExpression typeCastExpression = (PsiTypeCastExpression)infos[0];
+    final StringBuilder replacementText = buildReplacementText(typeCastExpression, new StringBuilder());
+    return InspectionGadgetsLocalize.intLiteralMayBeLongLiteralProblemDescriptor(replacementText).get();
   }
 
   @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {
-    final PsiTypeCastExpression typeCastExpression =
-      (PsiTypeCastExpression)infos[0];
-    final StringBuilder replacementText =
-      buildReplacementText(typeCastExpression, new StringBuilder());
+    final PsiTypeCastExpression typeCastExpression = (PsiTypeCastExpression)infos[0];
+    final StringBuilder replacementText = buildReplacementText(typeCastExpression, new StringBuilder());
     return new IntLiteralMayBeLongLiteralFix(replacementText.toString());
   }
 
@@ -105,9 +97,7 @@ public class IntLiteralMayBeLongLiteralInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "int.literal.may.be.long.literal.quickfix",
-        replacementString);
+      return InspectionGadgetsLocalize.intLiteralMayBeLongLiteralQuickfix(replacementString).get();
     }
 
     @Override

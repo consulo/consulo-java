@@ -15,19 +15,19 @@
  */
 package com.intellij.java.impl.ig.numeric;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiType;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class LongLiteralsEndingWithLowercaseLInspection
@@ -40,14 +40,12 @@ public class LongLiteralsEndingWithLowercaseLInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "long.literals.ending.with.lowercase.l.display.name");
+    return InspectionGadgetsLocalize.longLiteralsEndingWithLowercaseLDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "long.literals.ending.with.lowercase.l.problem.descriptor");
+    return InspectionGadgetsLocalize.longLiteralsEndingWithLowercaseLProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {
@@ -59,27 +57,23 @@ public class LongLiteralsEndingWithLowercaseLInspection
   }
 
   private static class LongLiteralFix extends InspectionGadgetsFix {
-
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "long.literals.ending.with.lowercase.l.replace.quickfix");
+      return InspectionGadgetsLocalize.longLiteralsEndingWithLowercaseLReplaceQuickfix().get();
     }
 
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiExpression literal =
-        (PsiExpression)descriptor.getPsiElement();
+      final PsiExpression literal = (PsiExpression)descriptor.getPsiElement();
       final String text = literal.getText();
       final String newText = text.replace('l', 'L');
       replaceExpression(literal, newText);
     }
   }
 
-  private static class LongLiteralWithLowercaseLVisitor
-    extends BaseInspectionVisitor {
-
+  private static class LongLiteralWithLowercaseLVisitor extends BaseInspectionVisitor {
     @Override
+    @RequiredReadAction
     public void visitLiteralExpression(
       @Nonnull PsiLiteralExpression expression) {
       super.visitLiteralExpression(expression);

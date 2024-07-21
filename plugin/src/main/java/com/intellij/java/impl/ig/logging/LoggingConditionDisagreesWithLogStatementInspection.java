@@ -16,13 +16,13 @@
 package com.intellij.java.impl.ig.logging;
 
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -52,13 +52,13 @@ public class LoggingConditionDisagreesWithLogStatementInspection extends BaseIns
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("logging.condition.disagrees.with.log.statement.display.name");
+    return InspectionGadgetsLocalize.loggingConditionDisagreesWithLogStatementDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("logging.condition.disagrees.with.log.statement.problem.descriptor", infos[0]);
+    return InspectionGadgetsLocalize.loggingConditionDisagreesWithLogStatementProblemDescriptor(infos[0]).get();
   }
 
   @Override

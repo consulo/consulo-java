@@ -15,20 +15,19 @@
  */
 package com.intellij.java.impl.ig.junit;
 
-import jakarta.annotation.Nonnull;
-
-import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.Nls;
 import com.intellij.java.analysis.impl.codeInspection.AnnotateMethodFix;
-import consulo.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
+import com.intellij.java.impl.ig.DelegatingFix;
+import com.intellij.java.language.psi.*;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import com.intellij.java.impl.ig.DelegatingFix;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TestUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElement;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.Nls;
 
 /**
  * @author Bas Leijdekkers
@@ -40,13 +39,13 @@ public class JUnit3StyleTestMethodInJUnit4ClassInspection extends BaseInspection
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("junit3.style.test.method.in.junit4.class.display.name");
+    return InspectionGadgetsLocalize.junit3StyleTestMethodInJunit4ClassDisplayName().get();
   }
 
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("junit3.style.test.method.in.junit4.class.problem.descriptor");
+    return InspectionGadgetsLocalize.junit3StyleTestMethodInJunit4ClassProblemDescriptor().get();
   }
 
   @Nullable

@@ -20,20 +20,19 @@ import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Nls;
-
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -52,7 +51,7 @@ public class JUnitRuleInspection extends BaseInspection {
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("junit.rule.display.name");
+    return InspectionGadgetsLocalize.junitRuleDisplayName().get();
   }
 
   @Nullable
@@ -115,10 +114,15 @@ public class JUnitRuleInspection extends BaseInspection {
             }
           }
           if (errorMessage != null) {
-            registerError(field.getNameIdentifier(), InspectionGadgetsBundle.message("junit.rule.problem.descriptor", annotation, errorMessage), "Make field " + errorMessage, annotation);
+            registerError(
+              field.getNameIdentifier(),
+              InspectionGadgetsLocalize.junitRuleProblemDescriptor(annotation, errorMessage).get(),
+              "Make field " + errorMessage,
+              annotation
+            );
           }
           if (!InheritanceUtil.isInheritor(PsiUtil.resolveClassInClassTypeOnly(field.getType()), false, "org.junit.rules.TestRule")) {
-            registerError(field.getNameIdentifier(), InspectionGadgetsBundle.message("junit.rule.type.problem.descriptor"));
+            registerError(field.getNameIdentifier(), InspectionGadgetsLocalize.junitRuleTypeProblemDescriptor().get());
           }
         }
       }

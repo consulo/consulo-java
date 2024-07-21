@@ -15,44 +15,38 @@
  */
 package com.intellij.java.impl.ig.fixes;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.dataContext.DataManager;
-import consulo.dataContext.DataContext;
+import com.intellij.java.analysis.refactoring.JavaRefactoringActionHandlerFactory;
+import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.application.Application;
 import consulo.application.ApplicationManager;
-import consulo.project.Project;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.analysis.refactoring.JavaRefactoringActionHandlerFactory;
+import consulo.dataContext.DataContext;
+import consulo.dataContext.DataManager;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
-import com.siyeh.InspectionGadgetsBundle;
-import com.siyeh.ig.InspectionGadgetsFix;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 
 public class IntroduceConstantFix extends InspectionGadgetsFix {
 
   @Nonnull
   public String getName() {
-    return InspectionGadgetsBundle.message("introduce.constant.quickfix");
+    return InspectionGadgetsLocalize.introduceConstantQuickfix().get();
   }
 
-  public void doFix(@Nonnull final Project project,
-                    ProblemDescriptor descriptor) {
-
+  public void doFix(@Nonnull final Project project, ProblemDescriptor descriptor) {
     final PsiElement constant = descriptor.getPsiElement();
     final Application application = ApplicationManager.getApplication();
     application.invokeLater(new Runnable() {
 
       public void run() {
         if (!constant.isValid()) return;
-        final JavaRefactoringActionHandlerFactory factory =
-          JavaRefactoringActionHandlerFactory.getInstance();
-        final RefactoringActionHandler introduceHandler =
-          factory.createIntroduceConstantHandler();
+        final JavaRefactoringActionHandlerFactory factory = JavaRefactoringActionHandlerFactory.getInstance();
+        final RefactoringActionHandler introduceHandler = factory.createIntroduceConstantHandler();
         final DataManager dataManager = DataManager.getInstance();
         final DataContext dataContext = dataManager.getDataContext();
-        introduceHandler.invoke(project, new PsiElement[]{constant},
-                                dataContext);
+        introduceHandler.invoke(project, new PsiElement[]{constant}, dataContext);
       }
     }, project.getDisposed());
   }

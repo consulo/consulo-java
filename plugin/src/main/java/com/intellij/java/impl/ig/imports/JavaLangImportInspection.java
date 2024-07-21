@@ -15,17 +15,16 @@
  */
 package com.intellij.java.impl.ig.imports;
 
-import jakarta.annotation.Nonnull;
-
+import com.intellij.java.impl.ig.fixes.DeleteImportFix;
+import com.intellij.java.impl.ig.psiutils.ImportUtils;
 import com.intellij.java.language.psi.*;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.DeleteImportFix;
-import com.intellij.java.impl.ig.psiutils.ImportUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class JavaLangImportInspection extends BaseInspection {
@@ -33,15 +32,13 @@ public class JavaLangImportInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "java.lang.import.display.name");
+    return InspectionGadgetsLocalize.javaLangImportDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "java.lang.import.problem.descriptor");
+    return InspectionGadgetsLocalize.javaLangImportProblemDescriptor().get();
   }
 
   @Override

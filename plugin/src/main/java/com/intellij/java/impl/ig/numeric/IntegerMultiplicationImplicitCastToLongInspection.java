@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.numeric;
 
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
@@ -26,6 +27,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpectedTypeUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import consulo.localize.LocalizeValue;
 import org.jetbrains.annotations.NonNls;
 import jakarta.annotation.Nonnull;
 
@@ -56,22 +58,19 @@ public class IntegerMultiplicationImplicitCastToLongInspection extends
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "integer.multiplication.implicit.cast.to.long.display.name");
+    return InspectionGadgetsLocalize.integerMultiplicationImplicitCastToLongDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "integer.multiplication.implicit.cast.to.long.problem.descriptor");
+    return InspectionGadgetsLocalize.integerMultiplicationImplicitCastToLongProblemDescriptor().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message(
-      "integer.multiplication.implicit.cast.to.long.option"),
-                                          this, "ignoreNonOverflowingCompileTimeConstants");
+    LocalizeValue message = InspectionGadgetsLocalize.integerMultiplicationImplicitCastToLongOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreNonOverflowingCompileTimeConstants");
   }
 
   @Override
@@ -79,9 +78,7 @@ public class IntegerMultiplicationImplicitCastToLongInspection extends
     return new IntegerMultiplicationImplicitlyCastToLongVisitor();
   }
 
-  private class IntegerMultiplicationImplicitlyCastToLongVisitor
-    extends BaseInspectionVisitor {
-
+  private class IntegerMultiplicationImplicitlyCastToLongVisitor extends BaseInspectionVisitor {
     @Override
     public void visitBinaryExpression(
       @Nonnull PsiBinaryExpression expression) {
