@@ -18,16 +18,16 @@ package com.intellij.java.impl.ig.packaging;
 import com.intellij.java.analysis.codeInspection.reference.RefClass;
 import com.intellij.java.analysis.codeInspection.reference.RefPackage;
 import com.intellij.java.impl.ig.BaseGlobalInspection;
-import com.siyeh.InspectionGadgetsBundle;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.language.editor.inspection.CommonProblemDescriptor;
 import consulo.language.editor.inspection.GlobalInspectionContext;
 import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.reference.RefModule;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.scope.AnalysisScope;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -39,8 +39,7 @@ public abstract class PackageInMultipleModulesInspection extends BaseGlobalInspe
 	@Override
 	public String getDisplayName()
 	{
-		return InspectionGadgetsBundle.message(
-				"package.in.multiple.modules.display.name");
+		return InspectionGadgetsLocalize.packageInMultipleModulesDisplayName().get();
 	}
 
 	@Override
@@ -76,9 +75,7 @@ public abstract class PackageInMultipleModulesInspection extends BaseGlobalInspe
 			return null;
 		}
 		final String errorString =
-				InspectionGadgetsBundle.message(
-						"package.in.multiple.modules.problem.descriptor",
-						refEntity.getQualifiedName());
+			InspectionGadgetsLocalize.packageInMultipleModulesProblemDescriptor(refEntity.getQualifiedName()).get();
 
 		return new CommonProblemDescriptor[]{
 				inspectionManager.createProblemDescriptor(errorString)

@@ -18,13 +18,14 @@ package com.intellij.java.impl.ig.packaging;
 import com.intellij.java.analysis.codeInspection.reference.RefClass;
 import com.intellij.java.analysis.codeInspection.reference.RefPackage;
 import com.intellij.java.impl.ig.BaseGlobalInspection;
-import com.siyeh.InspectionGadgetsBundle;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.deadCodeNotWorking.impl.SingleIntegerFieldOptionsPanel;
 import consulo.language.editor.inspection.CommonProblemDescriptor;
 import consulo.language.editor.inspection.GlobalInspectionContext;
 import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.scope.AnalysisScope;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -41,8 +42,7 @@ public abstract class PackageWithTooFewClassesInspection extends BaseGlobalInspe
 	@Override
 	public String getDisplayName()
 	{
-		return InspectionGadgetsBundle.message(
-				"package.with.too.few.classes.display.name");
+		return InspectionGadgetsLocalize.packageWithTooFewClassesDisplayName().get();
 	}
 
 	@Override
@@ -75,21 +75,15 @@ public abstract class PackageWithTooFewClassesInspection extends BaseGlobalInspe
 		{
 			return null;
 		}
-		final String errorString = InspectionGadgetsBundle.message(
-				"package.with.too.few.classes.problem.descriptor",
-				refEntity.getQualifiedName(), Integer.valueOf(numClasses),
-				Integer.valueOf(limit));
-		return new CommonProblemDescriptor[]{
-				inspectionManager.createProblemDescriptor(errorString)
-		};
+		final LocalizeValue errorString =
+			InspectionGadgetsLocalize.packageWithTooFewClassesProblemDescriptor(refEntity.getQualifiedName(), numClasses, limit);
+		return new CommonProblemDescriptor[]{inspectionManager.createProblemDescriptor(errorString.get())};
 	}
 
 	@Override
 	public JComponent createOptionsPanel()
 	{
-		return new SingleIntegerFieldOptionsPanel(
-				InspectionGadgetsBundle.message(
-						"package.with.too.few.classes.min.option"),
-				this, "limit");
+		LocalizeValue message = InspectionGadgetsLocalize.packageWithTooFewClassesMinOption();
+		return new SingleIntegerFieldOptionsPanel(message.get(), this, "limit");
 	}
 }

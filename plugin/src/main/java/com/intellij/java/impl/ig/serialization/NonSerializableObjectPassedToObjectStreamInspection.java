@@ -15,15 +15,15 @@
  */
 package com.intellij.java.impl.ig.serialization;
 
+import com.intellij.java.impl.ig.psiutils.SerializationUtils;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiExpressionList;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiType;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodCallUtils;
-import com.intellij.java.impl.ig.psiutils.SerializationUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
@@ -35,15 +35,13 @@ public class NonSerializableObjectPassedToObjectStreamInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "non.serializable.object.passed.to.object.stream.display.name");
+    return InspectionGadgetsLocalize.nonSerializableObjectPassedToObjectStreamDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "non.serializable.object.passed.to.object.stream.problem.descriptor");
+    return InspectionGadgetsLocalize.nonSerializableObjectPassedToObjectStreamProblemDescriptor().get();
   }
 
   @Override

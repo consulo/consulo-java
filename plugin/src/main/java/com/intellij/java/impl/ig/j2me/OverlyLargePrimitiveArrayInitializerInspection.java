@@ -19,17 +19,16 @@ import com.intellij.java.language.psi.PsiArrayInitializerExpression;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiPrimitiveType;
 import com.intellij.java.language.psi.PsiType;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.deadCodeNotWorking.impl.SingleIntegerFieldOptionsPanel;
-
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 
-public abstract class OverlyLargePrimitiveArrayInitializerInspection
-  extends BaseInspection {
-
+public abstract class OverlyLargePrimitiveArrayInitializerInspection extends BaseInspection {
   /**
    * @noinspection PublicField
    */
@@ -37,36 +36,27 @@ public abstract class OverlyLargePrimitiveArrayInitializerInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "large.initializer.primitive.type.array.display.name");
+    return InspectionGadgetsLocalize.largeInitializerPrimitiveTypeArrayDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer numElements = (Integer)infos[0];
-    return InspectionGadgetsBundle.message(
-      "large.initializer.primitive.type.array.problem.descriptor",
-      numElements);
+    return InspectionGadgetsLocalize.largeInitializerPrimitiveTypeArrayProblemDescriptor(numElements).get();
   }
 
   public JComponent createOptionsPanel() {
-    return new SingleIntegerFieldOptionsPanel(
-      InspectionGadgetsBundle.message(
-        "large.initializer.primitive.type.array.maximum.number.of.elements.option"),
-      this, "m_limit");
+    LocalizeValue message = InspectionGadgetsLocalize.largeInitializerPrimitiveTypeArrayMaximumNumberOfElementsOption();
+    return new SingleIntegerFieldOptionsPanel(message.get(), this, "m_limit");
   }
 
   public BaseInspectionVisitor buildVisitor() {
     return new OverlyLargePrimitiveArrayInitializerVisitor();
   }
 
-  private class OverlyLargePrimitiveArrayInitializerVisitor
-    extends BaseInspectionVisitor {
-
-
+  private class OverlyLargePrimitiveArrayInitializerVisitor extends BaseInspectionVisitor {
     @Override
-    public void visitArrayInitializerExpression(
-      PsiArrayInitializerExpression expression) {
+    public void visitArrayInitializerExpression(PsiArrayInitializerExpression expression) {
       super.visitArrayInitializerExpression(expression);
       final PsiType type = expression.getType();
       if (type == null) {
@@ -85,10 +75,8 @@ public abstract class OverlyLargePrimitiveArrayInitializerInspection
 
     private int calculateNumElements(PsiExpression expression) {
       if (expression instanceof PsiArrayInitializerExpression) {
-        final PsiArrayInitializerExpression arrayExpression =
-          (PsiArrayInitializerExpression)expression;
-        final PsiExpression[] initializers =
-          arrayExpression.getInitializers();
+        final PsiArrayInitializerExpression arrayExpression = (PsiArrayInitializerExpression)expression;
+        final PsiExpression[] initializers = arrayExpression.getInitializers();
         int out = 0;
         for (final PsiExpression initializer : initializers) {
           out += calculateNumElements(initializer);

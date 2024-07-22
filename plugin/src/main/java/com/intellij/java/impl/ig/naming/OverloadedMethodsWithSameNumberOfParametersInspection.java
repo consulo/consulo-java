@@ -15,13 +15,14 @@
  */
 package com.intellij.java.impl.ig.naming;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
@@ -35,19 +36,19 @@ public class OverloadedMethodsWithSameNumberOfParametersInspection extends BaseI
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("overloaded.methods.with.same.number.parameters.display.name");
+    return InspectionGadgetsLocalize.overloadedMethodsWithSameNumberParametersDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("overloaded.methods.with.same.number.parameters.problem.descriptor");
+    return InspectionGadgetsLocalize.overloadedMethodsWithSameNumberParametersProblemDescriptor().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message(
-      "overloaded.methods.with.same.number.parameters.option"), this, "ignoreInconvertibleTypes");
+    LocalizeValue message = InspectionGadgetsLocalize.overloadedMethodsWithSameNumberParametersOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreInconvertibleTypes");
   }
 
   @Override

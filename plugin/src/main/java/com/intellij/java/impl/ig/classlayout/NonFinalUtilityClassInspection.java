@@ -15,18 +15,17 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-
+import com.intellij.java.impl.ig.fixes.MakeClassFinalFix;
+import com.intellij.java.impl.ig.psiutils.UtilityClassUtil;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiModifier;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.MakeClassFinalFix;
-import com.intellij.java.impl.ig.psiutils.UtilityClassUtil;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Nls;
 
 /**
@@ -39,13 +38,13 @@ public class NonFinalUtilityClassInspection extends BaseInspection {
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("non.final.utility.class.display.name");
+    return InspectionGadgetsLocalize.nonFinalUtilityClassDisplayName().get();
   }
 
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("non.final.utility.class.problem.descriptor");
+    return InspectionGadgetsLocalize.nonFinalUtilityClassProblemDescriptor().get();
   }
 
   @Nullable

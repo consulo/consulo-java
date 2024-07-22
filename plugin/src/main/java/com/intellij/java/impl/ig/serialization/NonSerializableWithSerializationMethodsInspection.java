@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.ig.serialization;
 
-import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.impl.ig.fixes.MakeSerializableFix;
+import com.intellij.java.impl.ig.psiutils.SerializationUtils;
 import com.intellij.java.language.psi.PsiAnonymousClass;
-import com.siyeh.InspectionGadgetsBundle;
+import com.intellij.java.language.psi.PsiClass;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.MakeSerializableFix;
-import com.intellij.java.impl.ig.psiutils.SerializationUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 
@@ -39,8 +39,7 @@ public class NonSerializableWithSerializationMethodsInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "non.serializable.class.with.readwriteobject.display.name");
+    return InspectionGadgetsLocalize.nonSerializableClassWithReadwriteobjectDisplayName().get();
   }
 
   @Override
@@ -54,35 +53,29 @@ public class NonSerializableWithSerializationMethodsInspection
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final boolean hasReadObject = ((Boolean)infos[0]).booleanValue();
-    final boolean hasWriteObject = ((Boolean)infos[1]).booleanValue();
+    final boolean hasReadObject = (Boolean)infos[0];
+    final boolean hasWriteObject = (Boolean)infos[1];
     final PsiClass aClass = (PsiClass)infos[2];
     if (aClass instanceof PsiAnonymousClass) {
       if (hasReadObject && hasWriteObject) {
-        return InspectionGadgetsBundle.message(
-          "non.serializable.anonymous.with.readwriteobject.problem.descriptor.both");
+        return InspectionGadgetsLocalize.nonSerializableAnonymousWithReadwriteobjectProblemDescriptorBoth().get();
       }
       else if (hasWriteObject) {
-        return InspectionGadgetsBundle.message(
-          "non.serializable.anonymous.with.readwriteobject.problem.descriptor.write");
+        return InspectionGadgetsLocalize.nonSerializableAnonymousWithReadwriteobjectProblemDescriptorWrite().get();
       }
       else {
-        return InspectionGadgetsBundle.message(
-          "non.serializable.anonymous.with.readwriteobject.problem.descriptor.read");
+        return InspectionGadgetsLocalize.nonSerializableAnonymousWithReadwriteobjectProblemDescriptorRead().get();
       }
     }
     else {
       if (hasReadObject && hasWriteObject) {
-        return InspectionGadgetsBundle.message(
-          "non.serializable.class.with.readwriteobject.problem.descriptor.both");
+        return InspectionGadgetsLocalize.nonSerializableClassWithReadwriteobjectProblemDescriptorBoth().get();
       }
       else if (hasWriteObject) {
-        return InspectionGadgetsBundle.message(
-          "non.serializable.class.with.readwriteobject.problem.descriptor.write");
+        return InspectionGadgetsLocalize.nonSerializableClassWithReadwriteobjectProblemDescriptorWrite().get();
       }
       else {
-        return InspectionGadgetsBundle.message(
-          "non.serializable.class.with.readwriteobject.problem.descriptor.read");
+        return InspectionGadgetsLocalize.nonSerializableClassWithReadwriteobjectProblemDescriptorRead().get();
       }
     }
   }

@@ -17,10 +17,10 @@ package com.intellij.java.impl.ig.initialization;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.function.Processor;
 import consulo.language.ast.IElementType;
@@ -31,9 +31,9 @@ import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import java.util.Collection;
 
 @ExtensionImpl
@@ -42,14 +42,12 @@ public class NonThreadSafeLazyInitializationInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "non.thread.safe.lazy.initialization.display.name");
+    return InspectionGadgetsLocalize.nonThreadSafeLazyInitializationDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "non.thread.safe.lazy.initialization.problem.descriptor");
+    return InspectionGadgetsLocalize.nonThreadSafeLazyInitializationProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

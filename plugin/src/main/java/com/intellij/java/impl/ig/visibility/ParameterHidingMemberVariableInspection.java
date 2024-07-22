@@ -18,17 +18,17 @@ package com.intellij.java.impl.ig.visibility;
 import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.psi.*;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 
 @ExtensionImpl
@@ -56,7 +56,7 @@ public class ParameterHidingMemberVariableInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("parameter.hides.member.variable.display.name");
+    return InspectionGadgetsLocalize.parameterHidesMemberVariableDisplayName().get();
   }
 
   protected InspectionGadgetsFix buildFix(Object... infos) {
@@ -70,21 +70,30 @@ public class ParameterHidingMemberVariableInspection extends BaseInspection {
   @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiClass aClass = (PsiClass)infos[0];
-    return InspectionGadgetsBundle.message("parameter.hides.member.variable.problem.descriptor", aClass.getName());
+    return InspectionGadgetsLocalize.parameterHidesMemberVariableProblemDescriptor(aClass.getName()).get();
   }
 
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message("parameter.hides.member.variable.ignore.setters.option"),
-                             "m_ignoreForPropertySetters");
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message("parameter.hides.member.variable.ignore.superclass.option"),
-                             "m_ignoreInvisibleFields");
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message("parameter.hides.member.variable.ignore.constructors.option"),
-                             "m_ignoreForConstructors");
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message("parameter.hides.member.variable.ignore.abstract.methods.option"),
-                             "m_ignoreForAbstractMethods");
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message("parameter.hides.member.variable.ignore.static.parameters.option"),
-                             "m_ignoreStaticMethodParametersHidingInstanceFields");
+    optionsPanel.addCheckbox(
+      InspectionGadgetsLocalize.parameterHidesMemberVariableIgnoreSettersOption().get(),
+      "m_ignoreForPropertySetters"
+    );
+    optionsPanel.addCheckbox(
+      InspectionGadgetsLocalize.parameterHidesMemberVariableIgnoreSuperclassOption().get(),
+      "m_ignoreInvisibleFields");
+    optionsPanel.addCheckbox(
+      InspectionGadgetsLocalize.parameterHidesMemberVariableIgnoreConstructorsOption().get(),
+      "m_ignoreForConstructors"
+    );
+    optionsPanel.addCheckbox(
+      InspectionGadgetsLocalize.parameterHidesMemberVariableIgnoreAbstractMethodsOption().get(),
+      "m_ignoreForAbstractMethods"
+    );
+    optionsPanel.addCheckbox(
+      InspectionGadgetsLocalize.parameterHidesMemberVariableIgnoreStaticParametersOption().get(),
+      "m_ignoreStaticMethodParametersHidingInstanceFields"
+    );
     return optionsPanel;
   }
 
