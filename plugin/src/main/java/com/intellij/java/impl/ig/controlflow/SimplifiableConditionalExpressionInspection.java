@@ -15,19 +15,19 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
 import com.intellij.java.language.psi.PsiConditionalExpression;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiType;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.BoolUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
@@ -38,8 +38,7 @@ public class SimplifiableConditionalExpressionInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "simplifiable.conditional.expression.display.name");
+    return InspectionGadgetsLocalize.simplifiableConditionalExpressionDisplayName().get();
   }
 
   @Override
@@ -50,11 +49,8 @@ public class SimplifiableConditionalExpressionInspection
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final PsiConditionalExpression expression =
-      (PsiConditionalExpression)infos[0];
-    return InspectionGadgetsBundle.message(
-      "simplifiable.conditional.expression.problem.descriptor",
-      calculateReplacementExpression(expression));
+    final PsiConditionalExpression expression = (PsiConditionalExpression)infos[0];
+    return InspectionGadgetsLocalize.simplifiableConditionalExpressionProblemDescriptor(calculateReplacementExpression(expression)).get();
   }
 
   @Override
@@ -62,22 +58,17 @@ public class SimplifiableConditionalExpressionInspection
     return new SimplifiableConditionalFix();
   }
 
-  private static class SimplifiableConditionalFix
-    extends InspectionGadgetsFix {
-
+  private static class SimplifiableConditionalFix extends InspectionGadgetsFix {
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "constant.conditional.expression.simplify.quickfix");
+      return InspectionGadgetsLocalize.constantConditionalExpressionSimplifyQuickfix().get();
     }
 
     @Override
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiConditionalExpression expression =
-        (PsiConditionalExpression)descriptor.getPsiElement();
-      final String newExpression =
-        calculateReplacementExpression(expression);
+      final PsiConditionalExpression expression = (PsiConditionalExpression)descriptor.getPsiElement();
+      final String newExpression = calculateReplacementExpression(expression);
       replaceExpression(expression, newExpression);
     }
   }

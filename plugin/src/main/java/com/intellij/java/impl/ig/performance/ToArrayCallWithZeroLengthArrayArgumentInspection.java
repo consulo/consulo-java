@@ -17,19 +17,18 @@ package com.intellij.java.impl.ig.performance;
 
 import com.intellij.java.impl.ig.psiutils.HighlightUtils;
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.PsiReplacementUtil;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
-
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ToArrayCallWithZeroLengthArrayArgumentInspection extends ToArrayCallWithZeroLengthArrayArgumentInspectionBase {
@@ -45,7 +44,7 @@ public class ToArrayCallWithZeroLengthArrayArgumentInspection extends ToArrayCal
     @Override
     @Nonnull
     public String getFamilyName() {
-      return InspectionGadgetsBundle.message("to.array.call.with.zero.length.array.argument.quickfix");
+      return InspectionGadgetsLocalize.toArrayCallWithZeroLengthArrayArgumentQuickfix().get();
     }
 
     @Override

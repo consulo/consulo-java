@@ -16,27 +16,24 @@
 package com.intellij.java.impl.ig.j2me;
 
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
-
-import jakarta.annotation.Nullable;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
-import consulo.util.lang.StringUtil;
-import consulo.language.psi.*;
-import consulo.language.ast.IElementType;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.siyeh.ig.psiutils.BoolUtils;
-import com.siyeh.ig.psiutils.ComparisonUtils;
-import com.siyeh.ig.psiutils.ControlFlowUtils;
-import com.siyeh.ig.psiutils.EquivalenceChecker;
-import com.siyeh.ig.psiutils.ParenthesesUtils;
+import com.siyeh.ig.psiutils.*;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiWhiteSpace;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class SimplifiableIfStatementInspection extends BaseInspection {
@@ -44,7 +41,7 @@ public class SimplifiableIfStatementInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("simplifiable.if.statement.display.name");
+    return InspectionGadgetsLocalize.simplifiableIfStatementDisplayName().get();
   }
 
   @Override
@@ -61,8 +58,9 @@ public class SimplifiableIfStatementInspection extends BaseInspection {
   @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiIfStatement statement = (PsiIfStatement)infos[0];
-    return InspectionGadgetsBundle.message("simplifiable.if.statement.problem.descriptor", 
-                                           StringUtil.escapeXml(calculateReplacementStatement(statement)));
+    return InspectionGadgetsLocalize.simplifiableIfStatementProblemDescriptor(
+      StringUtil.escapeXml(calculateReplacementStatement(statement))
+    ).get();
   }
 
   @Nullable
@@ -272,11 +270,10 @@ public class SimplifiableIfStatementInspection extends BaseInspection {
   }
 
   private static class SimplifiableIfStatementFix extends InspectionGadgetsFix {
-
     @Override
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("constant.conditional.expression.simplify.quickfix");
+      return InspectionGadgetsLocalize.constantConditionalExpressionSimplifyQuickfix().get();
     }
 
     @Override

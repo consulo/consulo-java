@@ -19,9 +19,9 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiReferenceExpression;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
@@ -36,14 +36,12 @@ public class RuntimeExecInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "runtime.exec.call.display.name");
+    return InspectionGadgetsLocalize.runtimeExecCallDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "runtime.exec.call.problem.descriptor");
+    return InspectionGadgetsLocalize.runtimeExecCallProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

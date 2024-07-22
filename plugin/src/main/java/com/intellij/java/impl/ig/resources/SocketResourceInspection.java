@@ -15,15 +15,16 @@
  */
 package com.intellij.java.impl.ig.resources;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
-import consulo.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
-import org.jetbrains.annotations.NonNls;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 
@@ -42,8 +43,7 @@ public class SocketResourceInspection extends ResourceInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "socket.opened.not.closed.display.name");
+    return InspectionGadgetsLocalize.socketOpenedNotClosedDisplayName().get();
   }
 
   @Override
@@ -53,15 +53,13 @@ public class SocketResourceInspection extends ResourceInspection {
     final PsiType type = expression.getType();
     assert type != null;
     final String text = type.getPresentableText();
-    return InspectionGadgetsBundle.message(
-      "resource.opened.not.closed.problem.descriptor", text);
+    return InspectionGadgetsLocalize.resourceOpenedNotClosedProblemDescriptor(text).get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message(
-      "allow.resource.to.be.opened.inside.a.try.block"),
-                                          this, "insideTryAllowed");
+    LocalizeValue message = InspectionGadgetsLocalize.allowResourceToBeOpenedInsideATryBlock();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "insideTryAllowed");
   }
 
 

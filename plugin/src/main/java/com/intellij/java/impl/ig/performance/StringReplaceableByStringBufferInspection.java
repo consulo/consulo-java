@@ -19,16 +19,16 @@ import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiLocalVariable;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiVariable;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.java.language.module.util.JavaClassNames;
-
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
@@ -48,22 +48,19 @@ public class StringReplaceableByStringBufferInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "string.replaceable.by.string.buffer.display.name");
+    return InspectionGadgetsLocalize.stringReplaceableByStringBufferDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "string.replaceable.by.string.buffer.problem.descriptor");
+    return InspectionGadgetsLocalize.stringReplaceableByStringBufferProblemDescriptor().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message(
-      "string.replaceable.by.string.buffer.in.loop.option"),
-                                          this, "onlyWarnOnLoop");
+    LocalizeValue message = InspectionGadgetsLocalize.stringReplaceableByStringBufferInLoopOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "onlyWarnOnLoop");
   }
 
   @Override

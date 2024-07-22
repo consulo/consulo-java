@@ -23,17 +23,17 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class StringConcatenationInMessageFormatCallInspection extends BaseInspection {
@@ -42,13 +42,13 @@ public class StringConcatenationInMessageFormatCallInspection extends BaseInspec
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("string.concatenation.in.message.format.call.display.name");
+    return InspectionGadgetsLocalize.stringConcatenationInMessageFormatCallDisplayName().get();
   }
 
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("string.concatenation.in.message.format.call.problem.descriptor");
+    return InspectionGadgetsLocalize.stringConcatenationInMessageFormatCallProblemDescriptor().get();
   }
 
   @Override

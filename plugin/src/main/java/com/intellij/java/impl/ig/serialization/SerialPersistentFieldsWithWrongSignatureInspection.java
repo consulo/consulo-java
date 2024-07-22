@@ -15,17 +15,16 @@
  */
 package com.intellij.java.impl.ig.serialization;
 
-import jakarta.annotation.Nonnull;
-
+import com.intellij.java.impl.ig.psiutils.SerializationUtils;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiType;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import com.intellij.java.impl.ig.psiutils.SerializationUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
@@ -34,14 +33,12 @@ public class SerialPersistentFieldsWithWrongSignatureInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "serialpersistentfields.with.wrong.signature.display.name");
+    return InspectionGadgetsLocalize.serialpersistentfieldsWithWrongSignatureDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "serialpersistentfields.with.wrong.signature.problem.descriptor");
+    return InspectionGadgetsLocalize.serialpersistentfieldsWithWrongSignatureProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

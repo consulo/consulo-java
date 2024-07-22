@@ -24,14 +24,15 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TestUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
+import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.document.Document;
 import consulo.document.util.TextRange;
 import consulo.fileEditor.FileEditorManager;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
@@ -61,7 +62,7 @@ public class TooBroadCatchInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("too.broad.catch.display.name");
+    return InspectionGadgetsLocalize.tooBroadCatchDisplayName().get();
   }
 
   @Override
@@ -70,7 +71,7 @@ public class TooBroadCatchInspection extends BaseInspection {
     final List<PsiClass> typesMasked = (List<PsiClass>)infos[0];
     String typesMaskedString = typesMasked.get(0).getName();
     if (typesMasked.size() == 1) {
-      return InspectionGadgetsBundle.message("too.broad.catch.problem.descriptor", typesMaskedString);
+      return InspectionGadgetsLocalize.tooBroadCatchProblemDescriptor(typesMaskedString).get();
     }
     else {
       //Collections.sort(typesMasked);
@@ -80,7 +81,7 @@ public class TooBroadCatchInspection extends BaseInspection {
         typesMaskedString += typesMasked.get(i).getName();
       }
       final String lastTypeString = typesMasked.get(lastTypeIndex).getName();
-      return InspectionGadgetsBundle.message("too.broad.catch.problem.descriptor1", typesMaskedString, lastTypeString);
+      return InspectionGadgetsLocalize.tooBroadCatchProblemDescriptor1(typesMaskedString, lastTypeString).get();
     }
   }
 
@@ -98,9 +99,9 @@ public class TooBroadCatchInspection extends BaseInspection {
   @Override
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
-    panel.addCheckbox(InspectionGadgetsBundle.message("too.broad.catch.option"), "onlyWarnOnRootExceptions");
+    panel.addCheckbox(InspectionGadgetsLocalize.tooBroadCatchOption().get(), "onlyWarnOnRootExceptions");
     panel.addCheckbox(InspectionGadgetsBundle.message("ignore.in.test.code"), "ignoreInTestCode");
-    panel.addCheckbox(InspectionGadgetsBundle.message("overly.broad.throws.clause.ignore.thrown.option"), "ignoreThrown");
+    panel.addCheckbox(InspectionGadgetsLocalize.overlyBroadThrowsClauseIgnoreThrownOption().get(), "ignoreThrown");
     return panel;
   }
 
@@ -117,7 +118,7 @@ public class TooBroadCatchInspection extends BaseInspection {
     @Override
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("too.broad.catch.quickfix", myText);
+      return InspectionGadgetsLocalize.tooBroadCatchQuickfix(myText).get();
     }
 
     @Override

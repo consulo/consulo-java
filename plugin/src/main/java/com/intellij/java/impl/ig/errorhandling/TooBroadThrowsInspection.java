@@ -23,14 +23,15 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TestUtils;
-import consulo.language.editor.inspection.ProblemDescriptor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
-
 import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 import java.util.*;
 
@@ -57,7 +58,7 @@ public abstract class TooBroadThrowsInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("overly.broad.throws.clause.display.name");
+    return InspectionGadgetsLocalize.overlyBroadThrowsClauseDisplayName().get();
   }
 
   @Override
@@ -67,9 +68,7 @@ public abstract class TooBroadThrowsInspection extends BaseInspection {
     final PsiType type = typesMasked.get(0).getType();
     String typesMaskedString = type != null ? type.getPresentableText() : "";
     if (typesMasked.size() == 1) {
-      return InspectionGadgetsBundle.message(
-        "overly.broad.throws.clause.problem.descriptor1",
-        typesMaskedString);
+      return InspectionGadgetsLocalize.overlyBroadThrowsClauseProblemDescriptor1(typesMaskedString).get();
     }
     else {
       final int lastTypeIndex = typesMasked.size() - 1;
@@ -82,17 +81,17 @@ public abstract class TooBroadThrowsInspection extends BaseInspection {
       }
       final PsiType psiType = typesMasked.get(lastTypeIndex).getType();
       final String lastTypeString = psiType != null ? psiType.getPresentableText() : "";
-      return InspectionGadgetsBundle.message("overly.broad.throws.clause.problem.descriptor2", typesMaskedString, lastTypeString);
+      return InspectionGadgetsLocalize.overlyBroadThrowsClauseProblemDescriptor2(typesMaskedString, lastTypeString).get();
     }
   }
 
   @Override
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
-    panel.addCheckbox(InspectionGadgetsBundle.message("too.broad.catch.option"), "onlyWarnOnRootExceptions");
+    panel.addCheckbox(InspectionGadgetsLocalize.tooBroadCatchOption().get(), "onlyWarnOnRootExceptions");
     panel.addCheckbox(InspectionGadgetsBundle.message("ignore.exceptions.declared.in.tests.option"), "ignoreInTestCode");
-    panel.addCheckbox(InspectionGadgetsBundle.message("ignore.exceptions.declared.on.library.override.option"), "ignoreLibraryOverrides");
-    panel.addCheckbox(InspectionGadgetsBundle.message("overly.broad.throws.clause.ignore.thrown.option"), "ignoreThrown");
+    panel.addCheckbox(InspectionGadgetsLocalize.ignoreExceptionsDeclaredOnLibraryOverrideOption().get(), "ignoreLibraryOverrides");
+    panel.addCheckbox(InspectionGadgetsLocalize.overlyBroadThrowsClauseIgnoreThrownOption().get(), "ignoreThrown");
     return panel;
   }
 
@@ -117,12 +116,9 @@ public abstract class TooBroadThrowsInspection extends BaseInspection {
     @Override
     @Nonnull
     public String getName() {
-      if (originalNeeded) {
-        return InspectionGadgetsBundle.message("overly.broad.throws.clause.quickfix1");
-      }
-      else {
-        return InspectionGadgetsBundle.message("overly.broad.throws.clause.quickfix2");
-      }
+      return originalNeeded
+        ? InspectionGadgetsLocalize.overlyBroadThrowsClauseQuickfix1().get()
+        : InspectionGadgetsLocalize.overlyBroadThrowsClauseQuickfix2().get();
     }
 
     @Override

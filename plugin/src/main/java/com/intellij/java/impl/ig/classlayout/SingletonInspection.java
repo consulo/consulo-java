@@ -15,14 +15,13 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
-import jakarta.annotation.Nonnull;
-
+import com.intellij.java.impl.ig.psiutils.SingletonUtil;
 import com.intellij.java.language.psi.PsiClass;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import com.intellij.java.impl.ig.psiutils.SingletonUtil;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class SingletonInspection extends BaseInspection {
@@ -30,13 +29,13 @@ public class SingletonInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("singleton.display.name");
+    return InspectionGadgetsLocalize.singletonDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("singleton.problem.descriptor");
+    return InspectionGadgetsLocalize.singletonProblemDescriptor().get();
   }
 
   @Override

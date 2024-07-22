@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.errorhandling;
 
 import com.intellij.java.language.psi.*;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -24,6 +25,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ClassUtils;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -39,21 +41,18 @@ public class ThrowCaughtLocallyInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "throw.caught.locally.display.name");
+    return InspectionGadgetsLocalize.throwCaughtLocallyDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "throw.caught.locally.problem.descriptor");
+    return InspectionGadgetsLocalize.throwCaughtLocallyProblemDescriptor().get();
   }
 
   @Nullable
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message(
-      "throw.caught.locally.ignore.option"), this,
-                                          "ignoreRethrownExceptions");
+    LocalizeValue message = InspectionGadgetsLocalize.throwCaughtLocallyIgnoreOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreRethrownExceptions");
   }
 
   public BaseInspectionVisitor buildVisitor() {

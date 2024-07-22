@@ -15,19 +15,19 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class StaticFieldReferenceOnSubclassInspection
@@ -40,18 +40,17 @@ public class StaticFieldReferenceOnSubclassInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "static.field.via.subclass.display.name");
+    return InspectionGadgetsLocalize.staticFieldViaSubclassDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiClass declaringClass = (PsiClass)infos[0];
     final PsiClass referencedClass = (PsiClass)infos[1];
-    return InspectionGadgetsBundle.message(
-      "static.field.via.subclass.problem.descriptor",
+    return InspectionGadgetsLocalize.staticFieldViaSubclassProblemDescriptor(
       declaringClass.getQualifiedName(),
-      referencedClass.getQualifiedName());
+      referencedClass.getQualifiedName()
+    ).get();
   }
 
   protected InspectionGadgetsFix buildFix(Object... infos) {
@@ -62,16 +61,12 @@ public class StaticFieldReferenceOnSubclassInspection
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "static.field.via.subclass.rationalize.quickfix");
+      return InspectionGadgetsLocalize.staticFieldViaSubclassRationalizeQuickfix().get();
     }
 
-    public void doFix(Project project, ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
-      final PsiIdentifier name =
-        (PsiIdentifier)descriptor.getPsiElement();
-      final PsiReferenceExpression expression =
-        (PsiReferenceExpression)name.getParent();
+    public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+      final PsiIdentifier name = (PsiIdentifier)descriptor.getPsiElement();
+      final PsiReferenceExpression expression = (PsiReferenceExpression)name.getParent();
       assert expression != null;
       final PsiField field = (PsiField)expression.resolve();
       assert field != null;

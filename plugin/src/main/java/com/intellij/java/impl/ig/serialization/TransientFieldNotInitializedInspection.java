@@ -15,14 +15,13 @@
  */
 package com.intellij.java.impl.ig.serialization;
 
-import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
-import com.siyeh.ig.BaseInspection;
-import com.siyeh.ig.BaseInspectionVisitor;
 import com.intellij.java.impl.ig.psiutils.InitializationUtils;
 import com.intellij.java.impl.ig.psiutils.SerializationUtils;
+import com.intellij.java.language.psi.*;
+import com.siyeh.ig.BaseInspection;
+import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -30,14 +29,12 @@ public class TransientFieldNotInitializedInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "transient.field.not.initialized.display.name");
+    return InspectionGadgetsLocalize.transientFieldNotInitializedDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "transient.field.not.initialized.problem.descriptor");
+    return InspectionGadgetsLocalize.transientFieldNotInitializedProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

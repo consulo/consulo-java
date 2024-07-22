@@ -15,21 +15,20 @@
  */
 package com.intellij.java.impl.ig.j2me;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
@@ -37,14 +36,12 @@ public class SingleCharacterStartsWithInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "single.character.startswith.display.name");
+    return InspectionGadgetsLocalize.singleCharacterStartswithDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "single.character.startswith.problem.descriptor");
+    return InspectionGadgetsLocalize.singleCharacterStartswithProblemDescriptor().get();
   }
 
   @Nullable
@@ -57,8 +54,7 @@ public class SingleCharacterStartsWithInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "single.character.startswith.quickfix");
+      return InspectionGadgetsLocalize.singleCharacterStartswithQuickfix().get();
     }
 
     protected void doFix(Project project, ProblemDescriptor descriptor)

@@ -18,17 +18,16 @@ package com.intellij.java.impl.ig.bitwise;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.ConstantExpressionUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -37,22 +36,16 @@ public class ShiftOutOfRangeInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "shift.operation.by.inappropriate.constant.display.name");
+    return InspectionGadgetsLocalize.shiftOperationByInappropriateConstantDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer value = (Integer)infos[0];
-    if (value.intValue() > 0) {
-      return InspectionGadgetsBundle.message(
-        "shift.operation.by.inappropriate.constant.problem.descriptor.too.large");
-    }
-    else {
-      return InspectionGadgetsBundle.message(
-        "shift.operation.by.inappropriate.constant.problem.descriptor.negative");
-    }
+    return value > 0
+      ? InspectionGadgetsLocalize.shiftOperationByInappropriateConstantProblemDescriptorTooLarge().get()
+      : InspectionGadgetsLocalize.shiftOperationByInappropriateConstantProblemDescriptorNegative().get();
   }
 
   @Override
@@ -62,8 +55,7 @@ public class ShiftOutOfRangeInspection extends BaseInspection {
 
   @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new ShiftOutOfRangeFix(((Integer)infos[0]).intValue(),
-                                  ((Boolean)infos[1]).booleanValue());
+    return new ShiftOutOfRangeFix((Integer)infos[0], (Boolean)infos[1]);
   }
 
   private static class ShiftOutOfRangeFix extends InspectionGadgetsFix {
@@ -80,14 +72,12 @@ public class ShiftOutOfRangeInspection extends BaseInspection {
     public String getName() {
       final int newValue;
       if (isLong) {
-        newValue = value & 63;
+        newValue = value & 0b111111;
       }
       else {
-        newValue = value & 31;
+        newValue = value & 0b11111;
       }
-      return InspectionGadgetsBundle.message(
-        "shift.out.of.range.quickfix",
-        Integer.valueOf(value), Integer.valueOf(newValue));
+      return InspectionGadgetsLocalize.shiftOutOfRangeQuickfix(value, newValue).get();
     }
 
     @Override

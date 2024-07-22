@@ -15,21 +15,20 @@
  */
 package com.intellij.java.impl.ig.serialization;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
+import com.intellij.java.impl.ig.psiutils.SerializationUtils;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.psiutils.SerializationUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class TransientFieldInNonSerializableClassInspection
@@ -37,16 +36,13 @@ public class TransientFieldInNonSerializableClassInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "transient.field.in.non.serializable.class.display.name");
+    return InspectionGadgetsLocalize.transientFieldInNonSerializableClassDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiField field = (PsiField)infos[0];
-    return InspectionGadgetsBundle.message(
-      "transient.field.in.non.serializable.class.problem.descriptor",
-      field.getName());
+    return InspectionGadgetsLocalize.transientFieldInNonSerializableClassProblemDescriptor(field.getName()).get();
   }
 
   public InspectionGadgetsFix buildFix(Object... infos) {
@@ -59,12 +55,10 @@ public class TransientFieldInNonSerializableClassInspection
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "transient.field.in.non.serializable.class.remove.quickfix");
+      return InspectionGadgetsLocalize.transientFieldInNonSerializableClassRemoveQuickfix().get();
     }
 
-    public void doFix(Project project, ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
+    public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
       final PsiElement transientModifier = descriptor.getPsiElement();
       deleteElement(transientModifier);
     }

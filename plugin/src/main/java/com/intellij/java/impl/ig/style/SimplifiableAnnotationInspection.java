@@ -20,16 +20,16 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class SimplifiableAnnotationInspection extends BaseInspection {
@@ -38,7 +38,7 @@ public class SimplifiableAnnotationInspection extends BaseInspection {
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("simplifiable.annotation.display.name");
+    return InspectionGadgetsLocalize.simplifiableAnnotationDisplayName().get();
   }
 
   @Nonnull
@@ -64,8 +64,7 @@ public class SimplifiableAnnotationInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "simplifiable.annotation.quickfix");
+      return InspectionGadgetsLocalize.simplifiableAnnotationQuickfix().get();
     }
 
     @Override

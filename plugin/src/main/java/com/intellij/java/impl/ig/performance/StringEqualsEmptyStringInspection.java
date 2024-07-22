@@ -15,24 +15,24 @@
  */
 package com.intellij.java.impl.ig.performance;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.BoolUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
-import org.jetbrains.annotations.NonNls;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class StringEqualsEmptyStringInspection extends BaseInspection {
@@ -40,23 +40,21 @@ public class StringEqualsEmptyStringInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("string.equals.empty.string.display.name");
+    return InspectionGadgetsLocalize.stringEqualsEmptyStringDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    final boolean useIsEmpty = ((Boolean)infos[0]).booleanValue();
-    if (useIsEmpty) {
-      return InspectionGadgetsBundle.message("string.equals.empty.string.is.empty.problem.descriptor");
-    } else {
-      return InspectionGadgetsBundle.message("string.equals.empty.string.problem.descriptor");
-    }
+    final boolean useIsEmpty = (Boolean)infos[0];
+    return useIsEmpty
+      ? InspectionGadgetsLocalize.stringEqualsEmptyStringIsEmptyProblemDescriptor().get()
+      : InspectionGadgetsLocalize.stringEqualsEmptyStringProblemDescriptor().get();
   }
 
   @Override
   public InspectionGadgetsFix buildFix(Object... infos) {
-    final boolean useIsEmpty = ((Boolean)infos[0]).booleanValue();
+    final boolean useIsEmpty = (Boolean)infos[0];
     return new StringEqualsEmptyStringFix(useIsEmpty);
   }
 
@@ -70,12 +68,9 @@ public class StringEqualsEmptyStringInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      if (useIsEmpty) {
-        return InspectionGadgetsBundle.message("string.equals.empty.string.isempty.quickfix");
-      }
-      else {
-        return InspectionGadgetsBundle.message("string.equals.empty.string.quickfix");
-      }
+      return useIsEmpty
+        ? InspectionGadgetsLocalize.stringEqualsEmptyStringIsemptyQuickfix().get()
+        : InspectionGadgetsLocalize.stringEqualsEmptyStringQuickfix().get();
     }
 
     @Override

@@ -19,13 +19,12 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.java.language.psi.PsiNewExpression;
 import com.intellij.java.language.psi.PsiType;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
-
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -34,15 +33,13 @@ public class SetReplaceableByEnumSetInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "set.replaceable.by.enum.set.display.name");
+    return InspectionGadgetsLocalize.setReplaceableByEnumSetDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "set.replaceable.by.enum.set.problem.descriptor");
+    return InspectionGadgetsLocalize.setReplaceableByEnumSetProblemDescriptor().get();
   }
 
   @Override

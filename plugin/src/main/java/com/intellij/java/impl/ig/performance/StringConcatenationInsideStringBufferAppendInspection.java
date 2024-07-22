@@ -15,23 +15,23 @@
  */
 package com.intellij.java.impl.ig.performance;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.ChangeToAppendFix;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
@@ -40,7 +40,7 @@ public class StringConcatenationInsideStringBufferAppendInspection extends BaseI
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("string.concatenation.inside.string.buffer.append.display.name");
+    return InspectionGadgetsLocalize.stringConcatenationInsideStringBufferAppendDisplayName().get();
   }
 
   @Override
@@ -50,10 +50,11 @@ public class StringConcatenationInsideStringBufferAppendInspection extends BaseI
 
   @Override
   @Nonnull
+  @RequiredReadAction
   public String buildErrorString(Object... infos) {
     final PsiClass aClass = (PsiClass)infos[0];
     final String className = aClass.getName();
-    return InspectionGadgetsBundle.message("string.concatenation.inside.string.buffer.append.problem.descriptor", className);
+    return InspectionGadgetsLocalize.stringConcatenationInsideStringBufferAppendProblemDescriptor(className).get();
   }
 
   @Override
@@ -70,8 +71,7 @@ public class StringConcatenationInsideStringBufferAppendInspection extends BaseI
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "string.concatenation.inside.string.buffer.append.replace.quickfix");
+      return InspectionGadgetsLocalize.stringConcatenationInsideStringBufferAppendReplaceQuickfix().get();
     }
 
     @Override
