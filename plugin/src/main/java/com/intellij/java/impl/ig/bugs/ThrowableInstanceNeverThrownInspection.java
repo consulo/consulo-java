@@ -16,10 +16,10 @@
 package com.intellij.java.impl.ig.bugs;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
-import com.siyeh.ig.BaseInspection;
+import com.siyeh.InspectionGadgetsBundle;import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.query.Query;
 import consulo.java.language.module.util.JavaClassNames;
@@ -45,26 +45,23 @@ public class ThrowableInstanceNeverThrownInspection extends BaseInspection {
   @Nonnull
   protected String buildErrorString(Object... infos) {
     final PsiExpression expression = (PsiExpression)infos[0];
-    final String type =
-      TypeUtils.expressionHasTypeOrSubtype(expression,
-                                           JavaClassNames.JAVA_LANG_RUNTIME_EXCEPTION,
-                                           JavaClassNames.JAVA_LANG_EXCEPTION,
-                                           JavaClassNames.JAVA_LANG_ERROR);
+    final String type = TypeUtils.expressionHasTypeOrSubtype(
+      expression,
+      JavaClassNames.JAVA_LANG_RUNTIME_EXCEPTION,
+      JavaClassNames.JAVA_LANG_EXCEPTION,
+      JavaClassNames.JAVA_LANG_ERROR
+    );
     if (JavaClassNames.JAVA_LANG_RUNTIME_EXCEPTION.equals(type)) {
-      return InspectionGadgetsBundle.message(
-        "throwable.instance.never.thrown.runtime.exception.problem.descriptor");
+      return InspectionGadgetsLocalize.throwableInstanceNeverThrownRuntimeExceptionProblemDescriptor().get();
     }
     else if (JavaClassNames.JAVA_LANG_EXCEPTION.equals(type)) {
-      return InspectionGadgetsBundle.message(
-        "throwable.instance.never.thrown.checked.exception.problem.descriptor");
+      return InspectionGadgetsLocalize.throwableInstanceNeverThrownCheckedExceptionProblemDescriptor().get();
     }
     else if (JavaClassNames.JAVA_LANG_ERROR.equals(type)) {
-      return InspectionGadgetsBundle.message(
-        "throwable.instance.never.thrown.error.problem.descriptor");
+      return InspectionGadgetsLocalize.throwableInstanceNeverThrownErrorProblemDescriptor().get();
     }
     else {
-      return InspectionGadgetsBundle.message(
-        "throwable.instance.never.thrown.problem.descriptor");
+      return InspectionGadgetsLocalize.throwableInstanceNeverThrownProblemDescriptor().get();
     }
   }
 

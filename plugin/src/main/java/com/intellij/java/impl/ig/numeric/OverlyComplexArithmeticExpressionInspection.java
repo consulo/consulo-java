@@ -17,16 +17,17 @@ package com.intellij.java.impl.ig.numeric;
 
 import com.intellij.java.impl.ig.fixes.ExtractMethodFix;
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TypeUtils;
-import consulo.language.ast.IElementType;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.deadCodeNotWorking.impl.SingleIntegerFieldOptionsPanel;
+import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
-
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -55,23 +56,19 @@ public abstract class OverlyComplexArithmeticExpressionInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "overly.complex.arithmetic.expression.display.name");
+    return InspectionGadgetsLocalize.overlyComplexArithmeticExpressionDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "overly.complex.arithmetic.expression.problem.descriptor");
+    return InspectionGadgetsLocalize.overlyComplexArithmeticExpressionProblemDescriptor().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleIntegerFieldOptionsPanel(
-      InspectionGadgetsBundle.message(
-        "overly.complex.arithmetic.expression.max.number.option"),
-      this, "m_limit");
+    LocalizeValue message = InspectionGadgetsLocalize.overlyComplexArithmeticExpressionMaxNumberOption();
+    return new SingleIntegerFieldOptionsPanel(message.get(), this, "m_limit");
   }
 
   @Override

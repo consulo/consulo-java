@@ -15,18 +15,18 @@
  */
 package com.intellij.java.impl.ig.logging;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.ide.impl.idea.codeInspection.ui.ListTable;
-import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
+import com.intellij.java.impl.ig.fixes.MakeFieldStaticFinalFix;
+import com.intellij.java.impl.ig.ui.UiUtils;
 import com.intellij.java.language.psi.*;
-import consulo.util.xml.serializer.InvalidDataException;
-import consulo.util.xml.serializer.WriteExternalException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.MakeFieldStaticFinalFix;
-import com.intellij.java.impl.ig.ui.UiUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.ide.impl.idea.codeInspection.ui.ListTable;
+import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.WriteExternalException;
 import jakarta.annotation.Nonnull;
 import org.jdom.Element;
 
@@ -54,13 +54,13 @@ public class NonStaticFinalLoggerInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("non.constant.logger.display.name");
+    return InspectionGadgetsLocalize.nonConstantLoggerDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("non.constant.logger.problem.descriptor");
+    return InspectionGadgetsLocalize.nonConstantLoggerProblemDescriptor().get();
   }
 
   @Override
@@ -83,9 +83,8 @@ public class NonStaticFinalLoggerInspection extends BaseInspection {
 
   @Override
   public JComponent createOptionsPanel() {
-    final ListTable table = new ListTable(
-      new ListWrappingTableModel(loggerClassNames, InspectionGadgetsBundle.message("logger.class.name")));
-    return UiUtils.createAddRemoveTreeClassChooserPanel(table, InspectionGadgetsBundle.message("choose.logger.class"));
+    final ListTable table = new ListTable(new ListWrappingTableModel(loggerClassNames, InspectionGadgetsLocalize.loggerClassName().get()));
+    return UiUtils.createAddRemoveTreeClassChooserPanel(table, InspectionGadgetsLocalize.chooseLoggerClass().get());
   }
 
   @Override

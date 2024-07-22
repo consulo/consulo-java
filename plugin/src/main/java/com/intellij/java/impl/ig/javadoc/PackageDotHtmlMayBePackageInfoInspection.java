@@ -24,6 +24,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.dataContext.DataContext;
 import consulo.dataContext.DataManager;
@@ -45,11 +46,10 @@ import consulo.xml.psi.html.HtmlTag;
 import consulo.xml.psi.xml.XmlFile;
 import consulo.xml.psi.xml.XmlTag;
 import consulo.xml.psi.xml.XmlTagValue;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class PackageDotHtmlMayBePackageInfoInspection extends BaseInspection {
@@ -58,21 +58,20 @@ public class PackageDotHtmlMayBePackageInfoInspection extends BaseInspection {
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("package.dot.html.may.be.package.info.display.name");
+    return InspectionGadgetsLocalize.packageDotHtmlMayBePackageInfoDisplayName().get();
   }
 
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
-    if (((Boolean) infos[1]).booleanValue()) {
-      return InspectionGadgetsBundle.message("package.dot.html.may.be.package.info.exists.problem.descriptor");
+    return (Boolean)infos[1]
+      ? InspectionGadgetsLocalize.packageDotHtmlMayBePackageInfoExistsProblemDescriptor().get()
+      : InspectionGadgetsLocalize.packageDotHtmlMayBePackageInfoProblemDescriptor().get();
     }
-    return InspectionGadgetsBundle.message("package.dot.html.may.be.package.info.problem.descriptor");
-  }
 
   @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {
-    final boolean packageInfoExists = ((Boolean) infos[1]).booleanValue();
+    final boolean packageInfoExists = (Boolean)infos[1];
     if (packageInfoExists) {
       return new DeletePackageDotHtmlFix();
     }
@@ -81,10 +80,9 @@ public class PackageDotHtmlMayBePackageInfoInspection extends BaseInspection {
   }
 
   private static class DeletePackageDotHtmlFix extends InspectionGadgetsFix {
-
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("package.dot.html.may.be.package.info.delete.quickfix");
+      return InspectionGadgetsLocalize.packageDotHtmlMayBePackageInfoDeleteQuickfix().get();
     }
 
     @Override
@@ -118,7 +116,7 @@ public class PackageDotHtmlMayBePackageInfoInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("package.dot.html.may.be.package.info.convert.quickfix");
+      return InspectionGadgetsLocalize.packageDotHtmlMayBePackageInfoConvertQuickfix().get();
     }
 
     @Override

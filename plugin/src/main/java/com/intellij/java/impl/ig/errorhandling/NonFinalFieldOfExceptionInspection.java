@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.errorhandling;
 
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 import com.intellij.java.language.psi.PsiClass;
@@ -31,19 +32,16 @@ import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class NonFinalFieldOfExceptionInspection extends BaseInspection {
-
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "non.final.field.of.exception.display.name");
+    return InspectionGadgetsLocalize.nonFinalFieldOfExceptionDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "non.final.field.of.exception.problem.descriptor");
+    return InspectionGadgetsLocalize.nonFinalFieldOfExceptionProblemDescriptor().get();
   }
 
   @Override

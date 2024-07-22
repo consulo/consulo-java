@@ -15,21 +15,25 @@
  */
 package com.intellij.java.impl.ig.maturity;
 
+import com.intellij.java.impl.ig.psiutils.LibraryUtil;
 import com.intellij.java.language.psi.*;
+import com.siyeh.ig.BaseInspection;
+import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
+import consulo.application.util.query.Query;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiNamedElement;
+import consulo.language.psi.PsiReference;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.application.util.query.Query;
-import com.siyeh.InspectionGadgetsBundle;
-import com.siyeh.ig.BaseInspection;
-import com.siyeh.ig.BaseInspectionVisitor;
-import com.intellij.java.impl.ig.psiutils.LibraryUtil;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.localize.LocalizeValue;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -48,23 +52,20 @@ public class ObsoleteCollectionInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "use.obsolete.collection.type.display.name");
+    return InspectionGadgetsLocalize.useObsoleteCollectionTypeDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "use.obsolete.collection.type.problem.descriptor");
+    return InspectionGadgetsLocalize.useObsoleteCollectionTypeProblemDescriptor().get();
   }
 
   @Override
   @Nullable
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message(
-      "use.obsolete.collection.type.ignore.library.arguments.option"
-    ), this, "ignoreRequiredObsoleteCollectionTypes");
+    LocalizeValue message = InspectionGadgetsLocalize.useObsoleteCollectionTypeIgnoreLibraryArgumentsOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreRequiredObsoleteCollectionTypes");
   }
 
   @Override

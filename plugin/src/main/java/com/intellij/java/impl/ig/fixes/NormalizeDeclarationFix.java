@@ -16,8 +16,8 @@
 package com.intellij.java.impl.ig.fixes;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
@@ -28,15 +28,14 @@ public class NormalizeDeclarationFix extends InspectionGadgetsFix {
 
   @Nonnull
   public String getName() {
-    return InspectionGadgetsBundle.message("normalize.declaration.quickfix");
+    return InspectionGadgetsLocalize.normalizeDeclarationQuickfix().get();
   }
 
   @Override
   public void doFix(Project project, ProblemDescriptor descriptor)
     throws IncorrectOperationException {
     final PsiElement variableNameElement = descriptor.getPsiElement();
-    final PsiVariable parent =
-      (PsiVariable)variableNameElement.getParent();
+    final PsiVariable parent = (PsiVariable)variableNameElement.getParent();
     if (parent == null) {
       return;
     }
@@ -50,10 +49,8 @@ public class NormalizeDeclarationFix extends InspectionGadgetsFix {
     }
     final PsiElement greatGrandParent = grandParent.getParent();
     if (greatGrandParent instanceof PsiForStatement) {
-      final PsiDeclarationStatement declarationStatement =
-        (PsiDeclarationStatement)grandParent;
-      splitMultipleDeclarationInForStatementInitialization(
-        declarationStatement);
+      final PsiDeclarationStatement declarationStatement = (PsiDeclarationStatement)grandParent;
+      splitMultipleDeclarationInForStatementInitialization(declarationStatement);
       return;
     }
     parent.normalizeDeclaration();

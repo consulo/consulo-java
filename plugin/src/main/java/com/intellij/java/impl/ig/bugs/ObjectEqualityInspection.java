@@ -18,22 +18,21 @@ package com.intellij.java.impl.ig.bugs;
 import com.intellij.java.impl.ig.fixes.EqualityToEqualsFix;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.progress.ProgressManager;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.resolve.PsiElementProcessor;
 import consulo.language.psi.resolve.PsiElementProcessorAdapter;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -61,23 +60,24 @@ public class ObjectEqualityInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("object.comparison.display.name");
+    return InspectionGadgetsLocalize.objectComparisonDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "object.comparison.problem.description");
+    return InspectionGadgetsLocalize.objectComparisonProblemDescription().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message("object.comparison.enumerated.ignore.option"), "m_ignoreEnums");
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message("object.comparison.klass.ignore.option"), "m_ignoreClassObjects");
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message(
-      "object.equality.ignore.between.objects.of.a.type.with.only.private.constructors.option"), "m_ignorePrivateConstructors");
+    optionsPanel.addCheckbox(InspectionGadgetsLocalize.objectComparisonEnumeratedIgnoreOption().get(), "m_ignoreEnums");
+    optionsPanel.addCheckbox(InspectionGadgetsLocalize.objectComparisonKlassIgnoreOption().get(), "m_ignoreClassObjects");
+    optionsPanel.addCheckbox(
+      InspectionGadgetsLocalize.objectEqualityIgnoreBetweenObjectsOfATypeWithOnlyPrivateConstructorsOption().get(),
+      "m_ignorePrivateConstructors"
+    );
     return optionsPanel;
   }
 

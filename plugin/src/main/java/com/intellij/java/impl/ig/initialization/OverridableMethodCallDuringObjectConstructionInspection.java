@@ -15,24 +15,23 @@
  */
 package com.intellij.java.impl.ig.initialization;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
+import com.intellij.java.impl.ig.fixes.MakeClassFinalFix;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.MakeClassFinalFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class OverridableMethodCallDuringObjectConstructionInspection extends BaseInspection {
@@ -40,13 +39,13 @@ public class OverridableMethodCallDuringObjectConstructionInspection extends Bas
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("overridable.method.call.in.constructor.display.name");
+    return InspectionGadgetsLocalize.overridableMethodCallInConstructorDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("overridable.method.call.in.constructor.problem.descriptor");
+    return InspectionGadgetsLocalize.overridableMethodCallInConstructorProblemDescriptor().get();
   }
 
   @Override
@@ -80,7 +79,7 @@ public class OverridableMethodCallDuringObjectConstructionInspection extends Bas
     @Override
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("make.method.final.fix.name", methodName);
+      return InspectionGadgetsLocalize.makeMethodFinalFixName(methodName).get();
     }
 
     @Override

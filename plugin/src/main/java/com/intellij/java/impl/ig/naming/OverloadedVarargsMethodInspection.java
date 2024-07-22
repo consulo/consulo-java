@@ -15,35 +15,28 @@
  */
 package com.intellij.java.impl.ig.naming;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class OverloadedVarargsMethodInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "overloaded.vararg.method.display.name");
+    return InspectionGadgetsLocalize.overloadedVarargMethodDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiMethod element = (PsiMethod)infos[0];
-    if (element.isConstructor()) {
-      return InspectionGadgetsBundle.message(
-        "overloaded.vararg.constructor.problem.descriptor");
-    }
-    else {
-      return InspectionGadgetsBundle.message(
-        "overloaded.vararg.method.problem.descriptor");
-    }
+    return element.isConstructor()
+      ? InspectionGadgetsLocalize.overloadedVarargConstructorProblemDescriptor().get()
+      : InspectionGadgetsLocalize.overloadedVarargMethodProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

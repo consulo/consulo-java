@@ -15,15 +15,15 @@
  */
 package com.intellij.java.impl.ig.numeric;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
@@ -35,7 +35,7 @@ public class NonReproducibleMathCallInspection extends BaseInspection {
 
   @SuppressWarnings("StaticCollection")
   @NonNls private static final Set<String> nonReproducibleMethods =
-    new HashSet<String>(20);
+    new HashSet<>(20);
 
   static {
     nonReproducibleMethods.add("acos");
@@ -61,14 +61,12 @@ public class NonReproducibleMathCallInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "non.reproducible.math.call.display.name");
+    return InspectionGadgetsLocalize.nonReproducibleMathCallDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "non.reproducible.math.call.problem.descriptor");
+    return InspectionGadgetsLocalize.nonReproducibleMathCallProblemDescriptor().get();
   }
 
   public InspectionGadgetsFix buildFix(Object... infos) {
@@ -79,16 +77,12 @@ public class NonReproducibleMathCallInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "non.reproducible.math.call.replace.quickfix");
+      return InspectionGadgetsLocalize.nonReproducibleMathCallReplaceQuickfix().get();
     }
 
-    public void doFix(Project project, ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
-      final PsiIdentifier nameIdentifier =
-        (PsiIdentifier)descriptor.getPsiElement();
-      final PsiReferenceExpression reference =
-        (PsiReferenceExpression)nameIdentifier.getParent();
+    public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+      final PsiIdentifier nameIdentifier = (PsiIdentifier)descriptor.getPsiElement();
+      final PsiReferenceExpression reference = (PsiReferenceExpression)nameIdentifier.getParent();
       assert reference != null;
       final String name = reference.getReferenceName();
       replaceExpression(reference, "StrictMath." + name);
@@ -105,8 +99,7 @@ public class NonReproducibleMathCallInspection extends BaseInspection {
     public void visitMethodCallExpression(
       @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression =
-        expression.getMethodExpression();
+      final PsiReferenceExpression methodExpression = expression.getMethodExpression();
       final String methodName = methodExpression.getReferenceName();
       if (!nonReproducibleMethods.contains(methodName)) {
         return;

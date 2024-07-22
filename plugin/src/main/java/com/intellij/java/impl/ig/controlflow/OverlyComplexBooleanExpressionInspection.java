@@ -17,10 +17,10 @@ package com.intellij.java.impl.ig.controlflow;
 
 import com.intellij.java.impl.ig.fixes.ExtractMethodFix;
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.language.ast.IElementType;
@@ -59,28 +59,30 @@ public class OverlyComplexBooleanExpressionInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("overly.complex.boolean.expression.display.name");
+    return InspectionGadgetsLocalize.overlyComplexBooleanExpressionDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
     final Integer termCount = (Integer)infos[0];
-    return InspectionGadgetsBundle.message("overly.complex.boolean.expression.problem.descriptor", termCount);
+    return InspectionGadgetsLocalize.overlyComplexBooleanExpressionProblemDescriptor(termCount).get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
     final JPanel panel = new JPanel(new GridBagLayout());
-    final CheckBox ignoreConjunctionsDisjunctionsCheckBox =
-      new CheckBox(InspectionGadgetsBundle.message("overly.complex.boolean.expression.ignore.option"),
-                   this, "m_ignorePureConjunctionsDisjunctions");
+    final CheckBox ignoreConjunctionsDisjunctionsCheckBox = new CheckBox(
+      InspectionGadgetsLocalize.overlyComplexBooleanExpressionIgnoreOption().get(),
+      this,
+      "m_ignorePureConjunctionsDisjunctions"
+    );
     final NumberFormat formatter = NumberFormat.getIntegerInstance();
     formatter.setParseIntegerOnly(true);
     final JFormattedTextField termLimitTextField = prepareNumberEditor(() -> m_limit, i -> m_limit = i);
 
     final GridBagConstraints constraints = new GridBagConstraints();
-    final JLabel label = new JLabel(InspectionGadgetsBundle.message("overly.complex.boolean.expression.max.terms.option"));
+    final JLabel label = new JLabel(InspectionGadgetsLocalize.overlyComplexBooleanExpressionMaxTermsOption().get());
 
     constraints.anchor = GridBagConstraints.BASELINE_LEADING;
     constraints.fill = GridBagConstraints.HORIZONTAL;

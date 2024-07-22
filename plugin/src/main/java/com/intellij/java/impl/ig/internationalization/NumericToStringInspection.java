@@ -15,15 +15,14 @@
  */
 package com.intellij.java.impl.ig.internationalization;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NumericToStringInspection extends BaseInspection {
@@ -35,14 +34,12 @@ public class NumericToStringInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "call.to.numeric.tostring.display.name");
+    return InspectionGadgetsLocalize.callToNumericTostringDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "call.to.numeric.tostring.problem.descriptor");
+    return InspectionGadgetsLocalize.callToNumericTostringProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {
