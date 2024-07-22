@@ -16,9 +16,9 @@
 package com.intellij.java.impl.ig.fixes;
 
 import com.intellij.java.analysis.codeInspection.AbstractBaseJavaLocalInspectionTool;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TestUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.content.scope.NamedScope;
 import consulo.content.scope.NamedScopesHolder;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -32,7 +32,6 @@ import consulo.project.Project;
 import consulo.undoRedo.BasicUndoableAction;
 import consulo.undoRedo.ProjectUndoManager;
 import consulo.virtualFileSystem.VirtualFile;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -58,7 +57,7 @@ public class SuppressForTestsScopeFix extends InspectionGadgetsFix {
   @Nonnull
   @Override
   public String getFamilyName() {
-    return InspectionGadgetsBundle.message("suppress.for.tests.scope.quickfix");
+    return InspectionGadgetsLocalize.suppressForTestsScopeQuickfix().get();
   }
 
   @Override

@@ -15,15 +15,15 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiWhiteSpace;
+import consulo.language.psi.util.PsiTreeUtil;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class SuspiciousIndentAfterControlStatementInspection
@@ -32,15 +32,13 @@ public class SuspiciousIndentAfterControlStatementInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "suspicious.indent.after.control.statement.display.name");
+    return InspectionGadgetsLocalize.suspiciousIndentAfterControlStatementDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "suspicious.indent.after.control.statement.problem.descriptor");
+    return InspectionGadgetsLocalize.suspiciousIndentAfterControlStatementProblemDescriptor().get();
   }
 
   @Override

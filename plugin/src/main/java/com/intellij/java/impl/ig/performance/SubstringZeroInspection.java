@@ -15,19 +15,18 @@
  */
 package com.intellij.java.impl.ig.performance;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
@@ -36,15 +35,13 @@ public class SubstringZeroInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "substring.zero.display.name");
+    return InspectionGadgetsLocalize.substringZeroDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "substring.zero.problem.descriptor");
+    return InspectionGadgetsLocalize.substringZeroProblemDescriptor().get();
   }
 
   @Override
@@ -61,17 +58,14 @@ public class SubstringZeroInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "constant.conditional.expression.simplify.quickfix");
+      return InspectionGadgetsLocalize.constantConditionalExpressionSimplifyQuickfix().get();
     }
 
     @Override
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiMethodCallExpression call =
-        (PsiMethodCallExpression)descriptor.getPsiElement();
-      final PsiReferenceExpression expression =
-        call.getMethodExpression();
+      final PsiMethodCallExpression call = (PsiMethodCallExpression)descriptor.getPsiElement();
+      final PsiReferenceExpression expression = call.getMethodExpression();
       final PsiExpression qualifier = expression.getQualifierExpression();
       if (qualifier == null) {
         return;
@@ -82,15 +76,11 @@ public class SubstringZeroInspection extends BaseInspection {
   }
 
   private static class SubstringZeroVisitor extends BaseInspectionVisitor {
-
     @Override
-    public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression =
-        expression.getMethodExpression();
-      @NonNls final String methodName =
-        methodExpression.getReferenceName();
+      final PsiReferenceExpression methodExpression = expression.getMethodExpression();
+      @NonNls final String methodName = methodExpression.getReferenceName();
       if (!"substring".equals(methodName)) {
         return;
       }

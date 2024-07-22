@@ -15,14 +15,13 @@
  */
 package com.intellij.java.impl.ig.portability;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
@@ -35,14 +34,12 @@ public class SystemGetenvInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "system.getenv.call.display.name");
+    return InspectionGadgetsLocalize.systemGetenvCallDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "system.getenv.call.problem.descriptor");
+    return InspectionGadgetsLocalize.systemGetenvCallProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

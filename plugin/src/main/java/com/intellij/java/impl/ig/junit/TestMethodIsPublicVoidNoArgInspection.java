@@ -15,21 +15,16 @@
  */
 package com.intellij.java.impl.ig.junit;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiModifier;
-import com.intellij.java.language.psi.PsiParameterList;
-import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TestUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class TestMethodIsPublicVoidNoArgInspection extends BaseInspection {
@@ -37,8 +32,7 @@ public class TestMethodIsPublicVoidNoArgInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "test.method.is.public.void.no.arg.display.name");
+    return InspectionGadgetsLocalize.testMethodIsPublicVoidNoArgDisplayName().get();
   }
 
   @Override
@@ -50,20 +44,14 @@ public class TestMethodIsPublicVoidNoArgInspection extends BaseInspection {
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final boolean isStatic = ((Boolean)infos[1]).booleanValue();
+    final boolean isStatic = (Boolean)infos[1];
     if (isStatic) {
-      return InspectionGadgetsBundle.message(
-        "test.method.is.public.void.no.arg.problem.descriptor3");
+      return InspectionGadgetsLocalize.testMethodIsPublicVoidNoArgProblemDescriptor3().get();
     }
-    final boolean takesArguments = ((Boolean)infos[0]).booleanValue();
-    if (takesArguments) {
-      return InspectionGadgetsBundle.message(
-        "test.method.is.public.void.no.arg.problem.descriptor1");
-    }
-    else {
-      return InspectionGadgetsBundle.message(
-        "test.method.is.public.void.no.arg.problem.descriptor2");
-    }
+    final boolean takesArguments = (Boolean)infos[0];
+    return takesArguments
+      ? InspectionGadgetsLocalize.testMethodIsPublicVoidNoArgProblemDescriptor1().get()
+      : InspectionGadgetsLocalize.testMethodIsPublicVoidNoArgProblemDescriptor2().get();
   }
 
   @Override

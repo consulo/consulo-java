@@ -15,20 +15,19 @@
  */
 package com.intellij.java.impl.ig.internationalization;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-
-import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationFix;
+import com.intellij.java.impl.ig.DelegatingFix;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.*;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import com.intellij.java.impl.ig.DelegatingFix;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class StringToUpperWithoutLocaleInspection extends BaseInspection {
@@ -42,30 +41,24 @@ public class StringToUpperWithoutLocaleInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "string.touppercase.tolowercase.without.locale.display.name");
+    return InspectionGadgetsLocalize.stringTouppercaseTolowercaseWithoutLocaleDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "string.touppercase.tolowercase.without.locale.problem.descriptor");
+    return InspectionGadgetsLocalize.stringTouppercaseTolowercaseWithoutLocaleProblemDescriptor().get();
   }
 
   @Override
   @Nullable
   protected InspectionGadgetsFix buildFix(Object... infos) {
-    final PsiReferenceExpression methodExpression =
-      (PsiReferenceExpression)infos[0];
-    final PsiModifierListOwner annotatableQualifier =
-      NonNlsUtils.getAnnotatableQualifier(
-        methodExpression);
+    final PsiReferenceExpression methodExpression = (PsiReferenceExpression)infos[0];
+    final PsiModifierListOwner annotatableQualifier = NonNlsUtils.getAnnotatableQualifier(methodExpression);
     if (annotatableQualifier == null) {
       return null;
     }
-    return new DelegatingFix(new AddAnnotationFix(
-      AnnotationUtil.NON_NLS, annotatableQualifier));
+    return new DelegatingFix(new AddAnnotationFix(AnnotationUtil.NON_NLS, annotatableQualifier));
   }
 
   @Override
@@ -73,15 +66,11 @@ public class StringToUpperWithoutLocaleInspection extends BaseInspection {
     return new StringToUpperWithoutLocaleVisitor();
   }
 
-  private static class StringToUpperWithoutLocaleVisitor
-    extends BaseInspectionVisitor {
-
+  private static class StringToUpperWithoutLocaleVisitor extends BaseInspectionVisitor {
     @Override
-    public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression =
-        expression.getMethodExpression();
+      final PsiReferenceExpression methodExpression = expression.getMethodExpression();
       final String methodName = methodExpression.getReferenceName();
       if (!HardcodedMethodConstants.TO_UPPER_CASE.equals(methodName) &&
           !HardcodedMethodConstants.TO_LOWER_CASE.equals(methodName)) {
@@ -106,8 +95,7 @@ public class StringToUpperWithoutLocaleInspection extends BaseInspection {
       if (!JavaClassNames.JAVA_LANG_STRING.equals(className)) {
         return;
       }
-      final PsiExpression qualifier =
-        methodExpression.getQualifierExpression();
+      final PsiExpression qualifier = methodExpression.getQualifierExpression();
       if (NonNlsUtils.isNonNlsAnnotated(qualifier)) {
         return;
       }

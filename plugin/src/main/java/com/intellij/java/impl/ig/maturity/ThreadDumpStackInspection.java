@@ -15,16 +15,15 @@
  */
 package com.intellij.java.impl.ig.maturity;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodCallUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElement;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ThreadDumpStackInspection extends BaseInspection {
@@ -36,13 +35,12 @@ public class ThreadDumpStackInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("dumpstack.call.display.name");
+    return InspectionGadgetsLocalize.dumpstackCallDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "dumpstack.call.problem.descriptor");
+    return InspectionGadgetsLocalize.dumpstackCallProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

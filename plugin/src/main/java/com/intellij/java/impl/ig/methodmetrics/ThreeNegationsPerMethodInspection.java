@@ -16,10 +16,10 @@
 package com.intellij.java.impl.ig.methodmetrics;
 
 import com.intellij.java.language.psi.PsiMethod;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import jakarta.annotation.Nonnull;
@@ -46,15 +46,14 @@ public class ThreeNegationsPerMethodInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "three.negations.per.method.display.name");
+    return InspectionGadgetsLocalize.threeNegationsPerMethodDisplayName().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
-    panel.addCheckbox(InspectionGadgetsBundle.message("three.negations.per.method.ignore.option"), "m_ignoreInEquals");
-    panel.addCheckbox(InspectionGadgetsBundle.message("three.negations.per.method.ignore.assert.option"), "ignoreInAssert");
+    panel.addCheckbox(InspectionGadgetsLocalize.threeNegationsPerMethodIgnoreOption().get(), "m_ignoreInEquals");
+    panel.addCheckbox(InspectionGadgetsLocalize.threeNegationsPerMethodIgnoreAssertOption().get(), "ignoreInAssert");
     return panel;
   }
 
@@ -62,8 +61,7 @@ public class ThreeNegationsPerMethodInspection extends BaseInspection {
   @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer negationCount = (Integer)infos[0];
-    return InspectionGadgetsBundle.message(
-      "three.negations.per.method.problem.descriptor", negationCount);
+    return InspectionGadgetsLocalize.threeNegationsPerMethodProblemDescriptor(negationCount).get();
   }
 
   @Override

@@ -16,11 +16,12 @@
 package com.intellij.java.impl.ig.bugs;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
@@ -30,8 +31,7 @@ public class SuspiciousSystemArraycopyInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "suspicious.system.arraycopy.display.name");
+    return InspectionGadgetsLocalize.suspiciousSystemArraycopyDisplayName().get();
   }
 
   @Override
@@ -83,35 +83,30 @@ public class SuspiciousSystemArraycopyInspection extends BaseInspection {
       final PsiType srcType = src.getType();
       final PsiExpression srcPos = arguments[1];
       if (isNegativeArgument(srcPos)) {
-        final String errorString = InspectionGadgetsBundle.message(
-          "suspicious.system.arraycopy.problem.descriptor1");
-        registerError(srcPos, errorString);
+        final LocalizeValue errorString = InspectionGadgetsLocalize.suspiciousSystemArraycopyProblemDescriptor1();
+        registerError(srcPos, errorString.get());
       }
       final PsiExpression destPos = arguments[3];
       if (isNegativeArgument(destPos)) {
-        final String errorString = InspectionGadgetsBundle.message(
-          "suspicious.system.arraycopy.problem.descriptor2");
-        registerError(destPos, errorString);
+        final LocalizeValue errorString = InspectionGadgetsLocalize.suspiciousSystemArraycopyProblemDescriptor2();
+        registerError(destPos, errorString.get());
       }
       final PsiExpression length = arguments[4];
       if (isNegativeArgument(length)) {
-        final String errorString = InspectionGadgetsBundle.message(
-          "suspicious.system.arraycopy.problem.descriptor3");
-        registerError(length, errorString);
+        final LocalizeValue errorString = InspectionGadgetsLocalize.suspiciousSystemArraycopyProblemDescriptor3();
+        registerError(length, errorString.get());
       }
       boolean notArrayReported = false;
       if (!(srcType instanceof PsiArrayType)) {
-        final String errorString = InspectionGadgetsBundle.message(
-          "suspicious.system.arraycopy.problem.descriptor4");
-        registerError(src, errorString);
+        final LocalizeValue errorString = InspectionGadgetsLocalize.suspiciousSystemArraycopyProblemDescriptor4();
+        registerError(src, errorString.get());
         notArrayReported = true;
       }
       final PsiExpression dest = arguments[2];
       final PsiType destType = dest.getType();
       if (!(destType instanceof PsiArrayType)) {
-        final String errorString = InspectionGadgetsBundle.message(
-          "suspicious.system.arraycopy.problem.descriptor5");
-        registerError(dest, errorString);
+        final LocalizeValue errorString = InspectionGadgetsLocalize.suspiciousSystemArraycopyProblemDescriptor5();
+        registerError(dest, errorString.get());
         notArrayReported = true;
       }
       if (notArrayReported) {
@@ -123,19 +118,19 @@ public class SuspiciousSystemArraycopyInspection extends BaseInspection {
       final PsiType destComponentType = destArrayType.getComponentType();
       if (!(srcComponentType instanceof PsiPrimitiveType)) {
         if (!destComponentType.isAssignableFrom(srcComponentType)) {
-          final String errorString = InspectionGadgetsBundle.message(
-            "suspicious.system.arraycopy.problem.descriptor6",
-            srcType.getCanonicalText(),
-            destType.getCanonicalText());
-          registerError(dest, errorString);
+          final LocalizeValue errorString = InspectionGadgetsLocalize.suspiciousSystemArraycopyProblemDescriptor6(
+              srcType.getCanonicalText(),
+              destType.getCanonicalText()
+          );
+          registerError(dest, errorString.get());
         }
       }
       else if (!destComponentType.equals(srcComponentType)) {
-        final String errorString = InspectionGadgetsBundle.message(
-          "suspicious.system.arraycopy.problem.descriptor6",
-          srcType.getCanonicalText(),
-          destType.getCanonicalText());
-        registerError(dest, errorString);
+        final LocalizeValue errorString = InspectionGadgetsLocalize.suspiciousSystemArraycopyProblemDescriptor6(
+            srcType.getCanonicalText(),
+            destType.getCanonicalText()
+        );
+        registerError(dest, errorString.get());
       }
     }
 
