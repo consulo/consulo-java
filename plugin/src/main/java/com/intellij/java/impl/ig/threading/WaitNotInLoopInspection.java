@@ -17,10 +17,10 @@ package com.intellij.java.impl.ig.threading;
 
 import com.intellij.java.language.psi.*;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
@@ -30,13 +30,12 @@ public class WaitNotInLoopInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("wait.not.in.loop.display.name");
+    return InspectionGadgetsLocalize.waitNotInLoopDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "wait.not.in.loop.problem.descriptor");
+    return InspectionGadgetsLocalize.waitNotInLoopProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

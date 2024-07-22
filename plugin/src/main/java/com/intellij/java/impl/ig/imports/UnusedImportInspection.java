@@ -15,30 +15,28 @@
  */
 package com.intellij.java.impl.ig.imports;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-
+import com.intellij.java.impl.ig.fixes.DeleteImportFix;
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.DeleteImportFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class UnusedImportInspection extends BaseInspection {
-
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("unused.import.display.name");
+    return InspectionGadgetsLocalize.unusedImportDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("unused.import.problem.descriptor");
+    return InspectionGadgetsLocalize.unusedImportProblemDescriptor().get();
   }
 
   @Override

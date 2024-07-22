@@ -16,9 +16,9 @@
 package com.intellij.java.impl.ig.threading;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 
@@ -27,14 +27,12 @@ public class WaitOrAwaitWithoutTimeoutInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "wait.or.await.without.timeout.display.name");
+    return InspectionGadgetsLocalize.waitOrAwaitWithoutTimeoutDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "wait.or.await.without.timeout.problem.descriptor");
+    return InspectionGadgetsLocalize.waitOrAwaitWithoutTimeoutProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

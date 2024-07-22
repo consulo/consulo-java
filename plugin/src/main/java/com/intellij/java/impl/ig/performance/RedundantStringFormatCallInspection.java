@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.performance;
 
 import com.intellij.java.language.psi.*;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
 import consulo.project.Project;
@@ -38,13 +39,13 @@ public class RedundantStringFormatCallInspection extends BaseInspection {
   @Nls
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("redundant.string.format.call.display.name");
+    return InspectionGadgetsLocalize.redundantStringFormatCallDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("redundant.string.format.call.problem.descriptor");
+    return InspectionGadgetsLocalize.redundantStringFormatCallProblemDescriptor().get();
   }
 
   @Override
@@ -58,8 +59,7 @@ public class RedundantStringFormatCallInspection extends BaseInspection {
     @Override
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "redundant.string.format.call.quickfix");
+      return InspectionGadgetsLocalize.redundantStringFormatCallQuickfix().get();
     }
 
     @Override

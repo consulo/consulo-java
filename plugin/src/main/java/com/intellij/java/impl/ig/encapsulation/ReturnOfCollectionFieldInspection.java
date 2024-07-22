@@ -19,24 +19,24 @@ import com.intellij.java.impl.ig.psiutils.HighlightUtils;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.CollectionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
-
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -57,14 +57,14 @@ public class ReturnOfCollectionFieldInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("return.of.collection.array.field.display.name");
+    return InspectionGadgetsLocalize.returnOfCollectionArrayFieldDisplayName().get();
   }
 
   @Override
   @Nullable
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message("return.of.collection.array.field.option"),
-                                          this, "ignorePrivateMethods");
+    LocalizeValue message = InspectionGadgetsLocalize.returnOfCollectionArrayFieldOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignorePrivateMethods");
   }
 
   @Override
@@ -72,12 +72,9 @@ public class ReturnOfCollectionFieldInspection extends BaseInspection {
   public String buildErrorString(Object... infos) {
     final PsiField field = (PsiField)infos[0];
     final PsiType type = field.getType();
-    if (type instanceof PsiArrayType) {
-      return InspectionGadgetsBundle.message("return.of.collection.array.field.problem.descriptor.array");
-    }
-    else {
-      return InspectionGadgetsBundle.message("return.of.collection.array.field.problem.descriptor.collection");
-    }
+    return type instanceof PsiArrayType
+      ? InspectionGadgetsLocalize.returnOfCollectionArrayFieldProblemDescriptorArray().get()
+      : InspectionGadgetsLocalize.returnOfCollectionArrayFieldProblemDescriptorCollection().get();
   }
 
   @Override
@@ -123,8 +120,7 @@ public class ReturnOfCollectionFieldInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "return.of.collection.field.quickfix", myReplacementText);
+      return InspectionGadgetsLocalize.returnOfCollectionFieldQuickfix(myReplacementText).get();
     }
 
     @Override

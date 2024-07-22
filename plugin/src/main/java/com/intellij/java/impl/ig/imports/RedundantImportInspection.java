@@ -15,15 +15,16 @@
  */
 package com.intellij.java.impl.ig.imports;
 
+import com.intellij.java.impl.ig.fixes.DeleteImportFix;
+import com.intellij.java.impl.ig.psiutils.ImportUtils;
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.DeleteImportFix;
-import com.intellij.java.impl.ig.psiutils.ImportUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
@@ -35,13 +36,13 @@ public class RedundantImportInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("redundant.import.display.name");
+    return InspectionGadgetsLocalize.redundantImportDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("redundant.import.problem.descriptor");
+    return InspectionGadgetsLocalize.redundantImportProblemDescriptor().get();
   }
 
   @Override

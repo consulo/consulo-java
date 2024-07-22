@@ -15,23 +15,24 @@
  */
 package com.intellij.java.impl.ig.junit;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.module.Module;
-import consulo.ide.impl.idea.openapi.module.ModuleUtil;
-import consulo.project.Project;
-import consulo.util.lang.Comparing;
-import consulo.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.ide.impl.idea.openapi.module.ModuleUtil;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.module.Module;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 public abstract class UseOfObsoleteAssertInspection extends BaseInspection {
@@ -39,7 +40,7 @@ public abstract class UseOfObsoleteAssertInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("usage.of.obsolete.assert.display.name");
+    return InspectionGadgetsLocalize.usageOfObsoleteAssertDisplayName().get();
   }
 
   @Override
@@ -225,7 +226,7 @@ public abstract class UseOfObsoleteAssertInspection extends BaseInspection {
     @Nonnull
     @Override
     public String getName() {
-      return InspectionGadgetsBundle.message("use.of.obsolete.assert.quickfix");
+      return InspectionGadgetsLocalize.useOfObsoleteAssertQuickfix().get();
     }
   }
 }

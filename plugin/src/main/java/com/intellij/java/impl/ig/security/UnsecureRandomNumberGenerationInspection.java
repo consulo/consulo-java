@@ -15,15 +15,14 @@
  */
 package com.intellij.java.impl.ig.security;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElement;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
@@ -33,8 +32,7 @@ public class UnsecureRandomNumberGenerationInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "unsecure.random.number.generation.display.name");
+    return InspectionGadgetsLocalize.unsecureRandomNumberGenerationDisplayName().get();
   }
 
   @Override
@@ -42,16 +40,13 @@ public class UnsecureRandomNumberGenerationInspection
   public String buildErrorString(Object... infos) {
     @NonNls final String text = ((PsiElement)infos[0]).getText();
     if ("random".equals(text)) {
-      return InspectionGadgetsBundle.message(
-        "unsecure.random.number.generation.problem.descriptor1");
+      return InspectionGadgetsLocalize.unsecureRandomNumberGenerationProblemDescriptor1().get();
     }
     else if ("Random".equals(text)) {
-      return InspectionGadgetsBundle.message(
-        "unsecure.random.number.generation.problem.descriptor2");
+      return InspectionGadgetsLocalize.unsecureRandomNumberGenerationProblemDescriptor2().get();
     }
     else {
-      return InspectionGadgetsBundle.message(
-        "unsecure.random.number.generation.problem.descriptor3");
+      return InspectionGadgetsLocalize.unsecureRandomNumberGenerationProblemDescriptor3().get();
     }
   }
 

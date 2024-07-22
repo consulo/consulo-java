@@ -19,14 +19,14 @@ import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiExpressionList;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiReferenceExpression;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import org.jetbrains.annotations.NonNls;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class ResultSetIndexZeroInspection extends BaseInspection {
@@ -40,17 +40,15 @@ public class ResultSetIndexZeroInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("use.0index.in.jdbc.resultset.display.name");
+    return InspectionGadgetsLocalize.use0indexInJdbcResultsetDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    if (((Boolean)infos[0]).booleanValue()) {
-      return InspectionGadgetsBundle.message("use.0index.in.jdbc.resultset.problem.descriptor");
-    } else {
-      return InspectionGadgetsBundle.message("use.0index.in.jdbc.prepared.statement.problem.descriptor");
-    }
+    return (Boolean)infos[0]
+      ? InspectionGadgetsLocalize.use0indexInJdbcResultsetProblemDescriptor().get()
+      : InspectionGadgetsLocalize.use0indexInJdbcPreparedStatementProblemDescriptor().get();
   }
 
   @Override

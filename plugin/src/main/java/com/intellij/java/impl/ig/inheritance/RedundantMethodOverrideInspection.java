@@ -15,21 +15,10 @@
  */
 package com.intellij.java.impl.ig.inheritance;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
 import com.intellij.java.language.psi.search.PackageScope;
-import consulo.language.psi.search.PsiSearchHelper;
-import consulo.language.psi.search.ReferencesSearch;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.application.util.query.Query;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -37,6 +26,18 @@ import com.siyeh.ig.psiutils.EquivalenceChecker;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.application.util.query.Query;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.search.PsiSearchHelper;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class RedundantMethodOverrideInspection extends BaseInspection
@@ -46,14 +47,14 @@ public class RedundantMethodOverrideInspection extends BaseInspection
 	@Nonnull
 	public String getDisplayName()
 	{
-		return InspectionGadgetsBundle.message("redundant.method.override.display.name");
+		return InspectionGadgetsLocalize.redundantMethodOverrideDisplayName().get();
 	}
 
 	@Override
 	@Nonnull
 	protected String buildErrorString(Object... infos)
 	{
-		return InspectionGadgetsBundle.message("redundant.method.override.problem.descriptor");
+		return InspectionGadgetsLocalize.redundantMethodOverrideProblemDescriptor().get();
 	}
 
 	@Override
@@ -70,7 +71,7 @@ public class RedundantMethodOverrideInspection extends BaseInspection
 		@Nonnull
 		public String getFamilyName()
 		{
-			return InspectionGadgetsBundle.message("redundant.method.override.quickfix");
+			return InspectionGadgetsLocalize.redundantMethodOverrideQuickfix().get();
 		}
 
 		@Override

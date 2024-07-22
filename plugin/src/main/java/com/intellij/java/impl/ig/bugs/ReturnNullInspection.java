@@ -20,20 +20,20 @@ import com.intellij.java.impl.ig.DelegatingFix;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.CollectionUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.collection.ArrayUtil;
-import org.intellij.lang.annotations.Pattern;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.intellij.lang.annotations.Pattern;
+
 import javax.swing.*;
 
 @ExtensionImpl
@@ -58,14 +58,13 @@ public class ReturnNullInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("return.of.null.display.name");
+    return InspectionGadgetsLocalize.returnOfNullDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "return.of.null.problem.descriptor");
+    return InspectionGadgetsLocalize.returnOfNullProblemDescriptor().get();
   }
 
   @Override
@@ -84,18 +83,11 @@ public class ReturnNullInspection extends BaseInspection {
 
   @Override
   public JComponent createOptionsPanel() {
-    final MultipleCheckboxOptionsPanel optionsPanel =
-      new MultipleCheckboxOptionsPanel(this);
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message(
-      "return.of.null.ignore.private.option"),
-                             "m_ignorePrivateMethods");
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message(
-      "return.of.null.arrays.option"), "m_reportArrayMethods");
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message(
-      "return.of.null.collections.option"),
-                             "m_reportCollectionMethods");
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message(
-      "return.of.null.objects.option"), "m_reportObjectMethods");
+    final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
+    optionsPanel.addCheckbox(InspectionGadgetsLocalize.returnOfNullIgnorePrivateOption().get(), "m_ignorePrivateMethods");
+    optionsPanel.addCheckbox(InspectionGadgetsLocalize.returnOfNullArraysOption().get(), "m_reportArrayMethods");
+    optionsPanel.addCheckbox(InspectionGadgetsLocalize.returnOfNullCollectionsOption().get(), "m_reportCollectionMethods");
+    optionsPanel.addCheckbox(InspectionGadgetsLocalize.returnOfNullObjectsOption().get(), "m_reportObjectMethods");
     return optionsPanel;
   }
 

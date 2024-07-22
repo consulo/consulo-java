@@ -24,12 +24,12 @@ import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.query.Query;
 import consulo.java.language.module.util.JavaClassNames;
@@ -44,10 +44,9 @@ import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class WhileCanBeForeachInspection extends BaseInspection {
@@ -61,13 +60,13 @@ public class WhileCanBeForeachInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("while.can.be.foreach.display.name");
+    return InspectionGadgetsLocalize.whileCanBeForeachDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("while.can.be.foreach.problem.descriptor");
+    return InspectionGadgetsLocalize.whileCanBeForeachProblemDescriptor().get();
   }
 
   @Override
@@ -84,7 +83,7 @@ public class WhileCanBeForeachInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("foreach.replace.quickfix");
+      return InspectionGadgetsLocalize.foreachReplaceQuickfix().get();
     }
 
     @Override
