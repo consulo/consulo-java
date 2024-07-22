@@ -15,13 +15,13 @@
  */
 package com.intellij.java.impl.ig.serialization;
 
+import com.intellij.java.impl.ig.psiutils.SerializationUtils;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiEnumConstantInitializer;
 import com.intellij.java.language.psi.PsiTypeParameter;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
-import com.intellij.java.impl.ig.psiutils.SerializationUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 
@@ -32,26 +32,22 @@ public class SerializableHasSerializationMethodsInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "serializable.has.serialization.methods.display.name");
+    return InspectionGadgetsLocalize.serializableHasSerializationMethodsDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final boolean hasReadObject = ((Boolean)infos[0]).booleanValue();
-    final boolean hasWriteObject = ((Boolean)infos[1]).booleanValue();
+    final boolean hasReadObject = (Boolean)infos[0];
+    final boolean hasWriteObject = (Boolean)infos[1];
     if (!hasReadObject && !hasWriteObject) {
-      return InspectionGadgetsBundle.message(
-        "serializable.has.serialization.methods.problem.descriptor");
+      return InspectionGadgetsLocalize.serializableHasSerializationMethodsProblemDescriptor().get();
     }
     else if (hasReadObject) {
-      return InspectionGadgetsBundle.message(
-        "serializable.has.serialization.methods.problem.descriptor1");
+      return InspectionGadgetsLocalize.serializableHasSerializationMethodsProblemDescriptor1().get();
     }
     else {
-      return InspectionGadgetsBundle.message(
-        "serializable.has.serialization.methods.problem.descriptor2");
+      return InspectionGadgetsLocalize.serializableHasSerializationMethodsProblemDescriptor2().get();
     }
   }
 

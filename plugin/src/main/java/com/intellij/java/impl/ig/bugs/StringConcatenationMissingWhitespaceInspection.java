@@ -15,21 +15,22 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import com.intellij.java.impl.ig.psiutils.FormatUtils;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiPolyadicExpression;
-import consulo.language.ast.IElementType;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
-import com.intellij.java.impl.ig.psiutils.FormatUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.ast.IElementType;
+import consulo.localize.LocalizeValue;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -46,19 +47,19 @@ public class StringConcatenationMissingWhitespaceInspection extends BaseInspecti
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("string.concatenation.missing.whitespace.display.name");
+    return InspectionGadgetsLocalize.stringConcatenationMissingWhitespaceDisplayName().get();
   }
 
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("string.concatenation.missing.whitespace.problem.descriptor");
+    return InspectionGadgetsLocalize.stringConcatenationMissingWhitespaceProblemDescriptor().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message("string.concatenation.missing.whitespace.option"),
-                                          this, "ignoreNonStringLiterals");
+    LocalizeValue message = InspectionGadgetsLocalize.stringConcatenationMissingWhitespaceOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreNonStringLiterals");
   }
 
   @Override

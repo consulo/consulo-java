@@ -15,13 +15,13 @@
  */
 package com.intellij.java.impl.ig.serialization;
 
-import com.intellij.java.language.psi.*;
-import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
-import com.siyeh.ig.BaseInspectionVisitor;
-import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.AddSerialVersionUIDFix;
 import com.intellij.java.impl.ig.psiutils.SerializationUtils;
+import com.intellij.java.language.psi.*;
+import com.siyeh.HardcodedMethodConstants;
+import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
@@ -39,15 +39,13 @@ public class SerializableHasSerialVersionUIDFieldInspection extends Serializable
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "serializable.class.without.serialversionuid.display.name");
+    return InspectionGadgetsLocalize.serializableClassWithoutSerialversionuidDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "serializable.class.without.serialversionuid.problem.descriptor");
+    return InspectionGadgetsLocalize.serializableClassWithoutSerialversionuidProblemDescriptor().get();
   }
 
   @Override

@@ -15,21 +15,22 @@
  */
 package com.intellij.java.impl.ig.naming;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.psi.*;
-import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.RenameFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import javax.swing.JComponent;
+import javax.swing.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -72,8 +73,7 @@ public class StandardVariableNamesInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "standard.variable.names.display.name");
+    return InspectionGadgetsLocalize.standardVariableNamesDisplayName().get();
   }
 
   @Override
@@ -95,21 +95,16 @@ public class StandardVariableNamesInspection extends BaseInspection {
     if (PsiUtil.isLanguageLevel5OrHigher(variable)) {
       final String boxedType = s_boxingClasses.get(expectedType);
       if (boxedType != null) {
-        return InspectionGadgetsBundle.message(
-          "standard.variable.names.problem.descriptor2",
-          expectedType, boxedType);
+        return InspectionGadgetsLocalize.standardVariableNamesProblemDescriptor2(expectedType, boxedType).get();
       }
     }
-    return InspectionGadgetsBundle.message(
-      "standard.variable.names.problem.descriptor", expectedType);
+    return InspectionGadgetsLocalize.standardVariableNamesProblemDescriptor(expectedType).get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(
-      InspectionGadgetsBundle.message(
-        "standard.variable.names.ignore.override.option"),
-      this, "ignoreParameterNameSameAsSuper");
+    LocalizeValue message = InspectionGadgetsLocalize.standardVariableNamesIgnoreOverrideOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreParameterNameSameAsSuper");
   }
 
   @Override

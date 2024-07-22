@@ -15,16 +15,15 @@
  */
 package com.intellij.java.impl.ig.serialization;
 
+import com.intellij.java.impl.ig.psiutils.SerializationUtils;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiParameterList;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import com.intellij.java.impl.ig.psiutils.SerializationUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-
 import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
@@ -42,14 +41,14 @@ public class SerializableWithUnconstructableAncestorInspection extends BaseInspe
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("serializable.with.unconstructable.ancestor.display.name");
+    return InspectionGadgetsLocalize.serializableWithUnconstructableAncestorDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiClass ancestor = (PsiClass)infos[0];
-    return InspectionGadgetsBundle.message("serializable.with.unconstructable.ancestor.problem.descriptor", ancestor.getName());
+    return InspectionGadgetsLocalize.serializableWithUnconstructableAncestorProblemDescriptor(ancestor.getName()).get();
   }
 
   @Override

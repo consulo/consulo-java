@@ -18,10 +18,10 @@ package com.intellij.java.impl.ig.internationalization;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiExpressionList;
 import com.intellij.java.language.psi.PsiNewExpression;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 
@@ -31,13 +31,13 @@ public class SimpleDateFormatWithoutLocaleInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("instantiating.simpledateformat.without.locale.display.name");
+    return InspectionGadgetsLocalize.instantiatingSimpledateformatWithoutLocaleDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("instantiating.simpledateformat.without.locale.problem.descriptor");
+    return InspectionGadgetsLocalize.instantiatingSimpledateformatWithoutLocaleProblemDescriptor().get();
   }
 
   @Override

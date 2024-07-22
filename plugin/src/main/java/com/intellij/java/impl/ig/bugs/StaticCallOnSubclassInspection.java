@@ -15,19 +15,19 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class StaticCallOnSubclassInspection extends BaseInspection {
@@ -39,17 +39,17 @@ public class StaticCallOnSubclassInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "static.method.via.subclass.display.name");
+    return InspectionGadgetsLocalize.staticMethodViaSubclassDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiClass declaringClass = (PsiClass)infos[0];
     final PsiClass referencedClass = (PsiClass)infos[1];
-    return InspectionGadgetsBundle.message(
-      "static.method.via.subclass.problem.descriptor",
-      declaringClass.getQualifiedName(), referencedClass.getQualifiedName());
+    return InspectionGadgetsLocalize.staticMethodViaSubclassProblemDescriptor(
+      declaringClass.getQualifiedName(),
+      referencedClass.getQualifiedName()
+    ).get();
   }
 
   protected InspectionGadgetsFix buildFix(Object... infos) {
@@ -60,21 +60,17 @@ public class StaticCallOnSubclassInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "static.method.via.subclass.rationalize.quickfix");
+      return InspectionGadgetsLocalize.staticMethodViaSubclassRationalizeQuickfix().get();
     }
 
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiIdentifier name =
-        (PsiIdentifier)descriptor.getPsiElement();
-      final PsiReferenceExpression expression =
-        (PsiReferenceExpression)name.getParent();
+      final PsiIdentifier name = (PsiIdentifier)descriptor.getPsiElement();
+      final PsiReferenceExpression expression = (PsiReferenceExpression)name.getParent();
       if (expression == null) {
         return;
       }
-      final PsiMethodCallExpression call =
-        (PsiMethodCallExpression)expression.getParent();
+      final PsiMethodCallExpression call = (PsiMethodCallExpression)expression.getParent();
       final String methodName = expression.getReferenceName();
       if (call == null) {
         return;
@@ -88,11 +84,9 @@ public class StaticCallOnSubclassInspection extends BaseInspection {
       if (containingClass == null) {
         return;
       }
-      final String containingClassName =
-        containingClass.getQualifiedName();
+      final String containingClassName = containingClass.getQualifiedName();
       final String argText = argumentList.getText();
-      replaceExpressionAndShorten(call, containingClassName + '.' +
-                                        methodName + argText);
+      replaceExpressionAndShorten(call, containingClassName + '.' + methodName + argText);
     }
   }
 
@@ -100,9 +94,7 @@ public class StaticCallOnSubclassInspection extends BaseInspection {
     return new StaticCallOnSubclassVisitor();
   }
 
-  private static class StaticCallOnSubclassVisitor
-    extends BaseInspectionVisitor {
-
+  private static class StaticCallOnSubclassVisitor extends BaseInspectionVisitor {
     @Override
     public void visitMethodCallExpression(
       @Nonnull PsiMethodCallExpression call) {

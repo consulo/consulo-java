@@ -15,20 +15,19 @@
  */
 package com.intellij.java.impl.ig.serialization;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
+import com.intellij.java.impl.ig.psiutils.SerializationUtils;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.psiutils.SerializationUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class SerialVersionUIDNotStaticFinalInspection extends BaseInspection {
@@ -42,20 +41,18 @@ public class SerialVersionUIDNotStaticFinalInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "serialversionuid.private.static.final.long.display.name");
+    return InspectionGadgetsLocalize.serialversionuidPrivateStaticFinalLongDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "serialversionuid.private.static.final.long.problem.descriptor");
+    return InspectionGadgetsLocalize.serialversionuidPrivateStaticFinalLongProblemDescriptor().get();
   }
 
   @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {
-    if (((Boolean)infos[0]).booleanValue()) {
+    if ((Boolean)infos[0]) {
       return null;
     }
     return new SerialVersionUIDNotStaticFinalFix();
@@ -66,13 +63,11 @@ public class SerialVersionUIDNotStaticFinalInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "serialversionuid.private.static.final.long.quickfix");
+      return InspectionGadgetsLocalize.serialversionuidPrivateStaticFinalLongQuickfix().get();
     }
 
     @Override
-    protected void doFix(Project project, ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
+    protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
       final PsiElement element = descriptor.getPsiElement();
       final PsiElement parent = element.getParent();
       if (!(parent instanceof PsiField)) {

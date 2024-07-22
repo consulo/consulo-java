@@ -15,17 +15,17 @@
  */
 package com.intellij.java.impl.ig.serialization;
 
+import com.intellij.java.impl.ig.psiutils.SerializationUtils;
+import com.intellij.java.impl.ig.ui.UiUtils;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.util.InheritanceUtil;
+import com.siyeh.ig.BaseInspection;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.siyeh.InspectionGadgetsBundle;
-import com.siyeh.ig.BaseInspection;
-import com.intellij.java.impl.ig.psiutils.SerializationUtils;
-import com.intellij.java.impl.ig.ui.UiUtils;
-import org.jdom.Element;
 import jakarta.annotation.Nonnull;
+import org.jdom.Element;
 
 import javax.swing.*;
 import java.awt.*;
@@ -48,11 +48,16 @@ public abstract class SerializableInspection extends BaseInspection {
     final JComponent panel = new JPanel(new GridBagLayout());
 
     final JPanel chooserList = UiUtils.createTreeClassChooserList(
-      superClassList, InspectionGadgetsBundle.message("ignore.classes.in.hierarchy.column.name"),
-      InspectionGadgetsBundle.message("choose.super.class.to.ignore"));
+      superClassList,
+      InspectionGadgetsLocalize.ignoreClassesInHierarchyColumnName().get(),
+      InspectionGadgetsLocalize.chooseSuperClassToIgnore().get()
+    );
     UiUtils.setComponentSize(chooserList, 7, 25);
-    final CheckBox checkBox = new CheckBox(InspectionGadgetsBundle.message(
-      "ignore.anonymous.inner.classes"), this, "ignoreAnonymousInnerClasses");
+    final CheckBox checkBox = new CheckBox(
+      InspectionGadgetsLocalize.ignoreAnonymousInnerClasses().get(),
+      this,
+      "ignoreAnonymousInnerClasses"
+    );
 
     final GridBagConstraints constraints = new GridBagConstraints();
     constraints.gridx = 0;

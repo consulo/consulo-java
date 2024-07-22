@@ -15,14 +15,13 @@
  */
 package com.intellij.java.impl.ig.internationalization;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class TimeToStringInspection extends BaseInspection {
@@ -34,14 +33,12 @@ public class TimeToStringInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "time.tostring.call.display.name");
+    return InspectionGadgetsLocalize.timeTostringCallDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "time.tostring.call.problem.descriptor");
+    return InspectionGadgetsLocalize.timeTostringCallProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {
