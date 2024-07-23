@@ -18,11 +18,10 @@ package com.intellij.java.impl.ig.bugs;
 import com.intellij.java.impl.ig.psiutils.RecursionUtils;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -31,15 +30,13 @@ public class InfiniteRecursionInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "infinite.recursion.display.name");
+    return InspectionGadgetsLocalize.infiniteRecursionDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "infinite.recursion.problem.descriptor");
+    return InspectionGadgetsLocalize.infiniteRecursionProblemDescriptor().get();
   }
 
   @Override

@@ -15,18 +15,19 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
+import com.intellij.java.impl.ig.psiutils.FormatUtils;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
-import com.intellij.java.impl.ig.psiutils.FormatUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 
@@ -37,18 +38,18 @@ public class StringConcatenationInFormatCallInspection extends BaseInspection {
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("string.concatenation.in.format.call.display.name");
+    return InspectionGadgetsLocalize.stringConcatenationInFormatCallDisplayName().get();
   }
 
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("string.concatenation.in.format.call.problem.descriptor");
+    return InspectionGadgetsLocalize.stringConcatenationInFormatCallProblemDescriptor().get();
   }
 
   @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new StringConcatenationInFormatCallFix(((Boolean)infos[0]).booleanValue());
+    return new StringConcatenationInFormatCallFix((Boolean)infos[0]);
   }
 
   private static class StringConcatenationInFormatCallFix extends InspectionGadgetsFix {
@@ -66,7 +67,7 @@ public class StringConcatenationInFormatCallInspection extends BaseInspection {
         return InspectionGadgetsBundle.message("string.concatenation.in.format.call.plural.quickfix");
       }
       else {
-        return InspectionGadgetsBundle.message("string.concatenation.in.format.call.quickfix");
+        return InspectionGadgetsLocalize.stringConcatenationInFormatCallQuickfix().get();
       }
     }
 

@@ -15,28 +15,25 @@
  */
 package com.intellij.java.impl.ig.performance;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
+import com.intellij.java.impl.ig.psiutils.StringUtils;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.psiutils.StringUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
-public class InstantiatingObjectToGetClassObjectInspection
-  extends BaseInspection {
-
+public class InstantiatingObjectToGetClassObjectInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "instantiating.object.to.get.class.object.display.name");
+    return InspectionGadgetsLocalize.instantiatingObjectToGetClassObjectDisplayName().get();
   }
 
   @Override
@@ -47,8 +44,7 @@ public class InstantiatingObjectToGetClassObjectInspection
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "instantiating.object.to.get.class.object.problem.descriptor");
+    return InspectionGadgetsLocalize.instantiatingObjectToGetClassObjectProblemDescriptor().get();
   }
 
   @Override
@@ -61,19 +57,15 @@ public class InstantiatingObjectToGetClassObjectInspection
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "instantiating.object.to.get.class.object.replace.quickfix");
+      return InspectionGadgetsLocalize.instantiatingObjectToGetClassObjectReplaceQuickfix().get();
     }
 
     @Override
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiMethodCallExpression expression =
-        (PsiMethodCallExpression)descriptor.getPsiElement();
-      final PsiReferenceExpression methodExpression =
-        expression.getMethodExpression();
-      final PsiExpression qualifier =
-        methodExpression.getQualifierExpression();
+      final PsiMethodCallExpression expression = (PsiMethodCallExpression)descriptor.getPsiElement();
+      final PsiReferenceExpression methodExpression = expression.getMethodExpression();
+      final PsiExpression qualifier = methodExpression.getQualifierExpression();
       if (qualifier == null) {
         return;
       }
@@ -81,12 +73,10 @@ public class InstantiatingObjectToGetClassObjectInspection
       if (type == null) {
         return;
       }
-      replaceExpression(expression,
-                        getTypeText(type, new StringBuilder()) + ".class");
+      replaceExpression(expression, getTypeText(type, new StringBuilder()) + ".class");
     }
 
-    private static StringBuilder getTypeText(PsiType type,
-                                             StringBuilder text) {
+    private static StringBuilder getTypeText(PsiType type, StringBuilder text) {
       if (type instanceof PsiArrayType) {
         text.append("[]");
         final PsiArrayType arrayType = (PsiArrayType)type;
@@ -94,8 +84,7 @@ public class InstantiatingObjectToGetClassObjectInspection
       }
       else if (type instanceof PsiClassType) {
         final String canonicalText = type.getCanonicalText();
-        final String typeText =
-          StringUtils.stripAngleBrackets(canonicalText);
+        final String typeText = StringUtils.stripAngleBrackets(canonicalText);
         text.insert(0, typeText);
       }
       else {
@@ -110,17 +99,12 @@ public class InstantiatingObjectToGetClassObjectInspection
     return new InstantiatingObjectToGetClassObjectVisitor();
   }
 
-  private static class InstantiatingObjectToGetClassObjectVisitor
-    extends BaseInspectionVisitor {
-
+  private static class InstantiatingObjectToGetClassObjectVisitor extends BaseInspectionVisitor {
     @Override
-    public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression =
-        expression.getMethodExpression();
-      @NonNls final String methodName =
-        methodExpression.getReferenceName();
+      final PsiReferenceExpression methodExpression = expression.getMethodExpression();
+      @NonNls final String methodName = methodExpression.getReferenceName();
       if (!"getClass".equals(methodName)) {
         return;
       }
@@ -129,8 +113,7 @@ public class InstantiatingObjectToGetClassObjectInspection
       if (args.length != 0) {
         return;
       }
-      final PsiExpression qualifier =
-        methodExpression.getQualifierExpression();
+      final PsiExpression qualifier = methodExpression.getQualifierExpression();
       if (!(qualifier instanceof PsiNewExpression)) {
         return;
       }

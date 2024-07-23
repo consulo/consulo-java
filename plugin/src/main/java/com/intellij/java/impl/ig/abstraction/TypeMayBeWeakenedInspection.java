@@ -18,16 +18,16 @@ package com.intellij.java.impl.ig.abstraction;
 import com.intellij.java.impl.ig.psiutils.WeakestTypeFinder;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.MethodUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.query.Query;
+import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
@@ -56,8 +56,7 @@ public class TypeMayBeWeakenedInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "type.may.be.weakened.display.name");
+    return InspectionGadgetsLocalize.typeMayBeWeakenedDisplayName().get();
   }
 
   @Override
@@ -74,32 +73,37 @@ public class TypeMayBeWeakenedInspection extends BaseInspection {
     }
     final Object info = infos[0];
     if (info instanceof PsiField) {
-      return InspectionGadgetsBundle.message("type.may.be.weakened.field.problem.descriptor",
-        builder.toString());
+      return InspectionGadgetsLocalize.typeMayBeWeakenedFieldProblemDescriptor(builder.toString()).get();
     }
     else if (info instanceof PsiParameter) {
-      return InspectionGadgetsBundle.message("type.may.be.weakened.parameter.problem.descriptor",
-        builder.toString());
+      return InspectionGadgetsLocalize.typeMayBeWeakenedParameterProblemDescriptor(builder.toString()).get();
     }
     else if (info instanceof PsiMethod) {
-      return InspectionGadgetsBundle.message("type.may.be.weakened.method.problem.descriptor",
-        builder.toString());
+      return InspectionGadgetsLocalize.typeMayBeWeakenedMethodProblemDescriptor(builder.toString()).get();
     }
-    return InspectionGadgetsBundle.message("type.may.be.weakened.problem.descriptor", builder.toString());
+    return InspectionGadgetsLocalize.typeMayBeWeakenedProblemDescriptor(builder.toString()).get();
   }
 
   @Override
   @Nullable
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message("type.may.be.weakened.ignore.option"),
-                             "useRighthandTypeAsWeakestTypeInAssignments");
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message("type.may.be.weakened.collection.method.option"),
-                             "useParameterizedTypeForCollectionMethods");
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message("type.may.be.weakened.do.not.weaken.to.object.option"),
-                             "doNotWeakenToJavaLangObject");
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message("only.weaken.to.an.interface"),
-                             "onlyWeakentoInterface");
+    optionsPanel.addCheckbox(
+      InspectionGadgetsLocalize.typeMayBeWeakenedIgnoreOption().get(),
+      "useRighthandTypeAsWeakestTypeInAssignments"
+    );
+    optionsPanel.addCheckbox(
+      InspectionGadgetsLocalize.typeMayBeWeakenedCollectionMethodOption().get(),
+      "useParameterizedTypeForCollectionMethods"
+    );
+    optionsPanel.addCheckbox(
+      InspectionGadgetsLocalize.typeMayBeWeakenedDoNotWeakenToObjectOption().get(),
+      "doNotWeakenToJavaLangObject"
+    );
+    optionsPanel.addCheckbox(
+      InspectionGadgetsLocalize.onlyWeakenToAnInterface().get(),
+      "onlyWeakentoInterface"
+    );
     return optionsPanel;
   }
 
@@ -128,7 +132,7 @@ public class TypeMayBeWeakenedInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("type.may.be.weakened.quickfix", fqClassName);
+      return InspectionGadgetsLocalize.typeMayBeWeakenedQuickfix(fqClassName).get();
     }
 
     @Override

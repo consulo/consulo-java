@@ -17,27 +17,25 @@ package com.intellij.java.impl.ig.threading;
 
 import com.intellij.java.language.psi.*;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import org.jetbrains.annotations.NonNls;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class WaitCalledOnConditionInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "wait.called.on.condition.display.name");
+    return InspectionGadgetsLocalize.waitCalledOnConditionDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "wait.called.on.condition.problem.descriptor");
+    return InspectionGadgetsLocalize.waitCalledOnConditionProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

@@ -15,28 +15,22 @@
  */
 package com.intellij.java.impl.ig.serialization;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-
-import consulo.annotation.component.ExtensionImpl;
-import org.jetbrains.annotations.Nls;
 import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.AddDefaultConstructorFix;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
-import com.intellij.java.language.psi.PsiAnonymousClass;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiModifier;
-import com.intellij.java.language.psi.PsiParameterList;
-import com.intellij.java.language.psi.PsiTypeParameter;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
+import com.intellij.java.impl.ig.DelegatingFix;
+import com.intellij.java.language.psi.*;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import com.intellij.java.impl.ig.DelegatingFix;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.Nls;
 
 /**
  * @author Bas Leijdekkers
@@ -48,13 +42,13 @@ public class ExternalizableWithoutPublicNoArgConstructorInspection extends BaseI
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("externalizable.without.public.no.arg.constructor.display.name");
+    return InspectionGadgetsLocalize.externalizableWithoutPublicNoArgConstructorDisplayName().get();
   }
 
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("externalizable.without.public.no.arg.constructor.problem.descriptor");
+    return InspectionGadgetsLocalize.externalizableWithoutPublicNoArgConstructorProblemDescriptor().get();
   }
 
   @Override
@@ -86,11 +80,10 @@ public class ExternalizableWithoutPublicNoArgConstructorInspection extends BaseI
   }
 
   private static class MakeConstructorPublicFix extends InspectionGadgetsFix {
-
     @Override
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("make.constructor.public");
+      return InspectionGadgetsLocalize.makeConstructorPublic().get();
     }
 
     @Override

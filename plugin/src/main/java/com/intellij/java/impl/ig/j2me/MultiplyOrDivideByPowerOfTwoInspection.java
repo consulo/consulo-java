@@ -15,24 +15,25 @@
  */
 package com.intellij.java.impl.ig.j2me;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import com.intellij.java.impl.ig.psiutils.WellFormednessUtils;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.ast.IElementType;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
-import com.intellij.java.impl.ig.psiutils.WellFormednessUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
-
 import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 
 @ExtensionImpl
@@ -46,22 +47,18 @@ public class MultiplyOrDivideByPowerOfTwoInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "multiply.or.divide.by.power.of.two.display.name");
+    return InspectionGadgetsLocalize.multiplyOrDivideByPowerOfTwoDisplayName().get();
   }
 
   @Nullable
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message(
-      "multiply.or.divide.by.power.of.two.divide.option"), this,
-                                          "checkDivision");
+    LocalizeValue message = InspectionGadgetsLocalize.multiplyOrDivideByPowerOfTwoDivideOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "checkDivision");
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "expression.can.be.replaced.problem.descriptor",
-      calculateReplacementShift((PsiExpression)infos[0]));
+    return InspectionGadgetsLocalize.expressionCanBeReplacedProblemDescriptor(calculateReplacementShift((PsiExpression)infos[0])).get();
   }
 
   static String calculateReplacementShift(PsiExpression expression) {
@@ -69,8 +66,7 @@ public class MultiplyOrDivideByPowerOfTwoInspection
     final PsiExpression rhs;
     final String operator;
     if (expression instanceof PsiAssignmentExpression) {
-      final PsiAssignmentExpression exp =
-        (PsiAssignmentExpression)expression;
+      final PsiAssignmentExpression exp = (PsiAssignmentExpression)expression;
       lhs = exp.getLExpression();
       rhs = exp.getRExpression();
       final IElementType tokenType = exp.getOperationTokenType();
@@ -141,14 +137,12 @@ public class MultiplyOrDivideByPowerOfTwoInspection
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "multiply.or.divide.by.power.of.two.replace.quickfix");
+      return InspectionGadgetsLocalize.multiplyOrDivideByPowerOfTwoReplaceQuickfix().get();
     }
 
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiExpression expression =
-        (PsiExpression)descriptor.getPsiElement();
+      final PsiExpression expression = (PsiExpression)descriptor.getPsiElement();
       final String newExpression = calculateReplacementShift(expression);
       replaceExpression(expression, newExpression);
     }

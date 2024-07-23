@@ -15,14 +15,15 @@
  */
 package com.intellij.java.impl.ig.dependency;
 
-import consulo.language.editor.scope.AnalysisScope;
+import com.intellij.java.analysis.codeInspection.reference.RefPackage;
+import com.intellij.java.impl.ig.BaseGlobalInspection;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.language.editor.inspection.CommonProblemDescriptor;
 import consulo.language.editor.inspection.GlobalInspectionContext;
-import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.inspection.reference.RefEntity;
-import com.intellij.java.analysis.codeInspection.reference.RefPackage;
-import com.siyeh.InspectionGadgetsBundle;
-import com.intellij.java.impl.ig.BaseGlobalInspection;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -34,8 +35,7 @@ public abstract class CyclicPackageDependencyInspection extends BaseGlobalInspec
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "cyclic.package.dependency.display.name");
+    return InspectionGadgetsLocalize.cyclicPackageDependencyDisplayName().get();
   }
 
   @Nullable
@@ -60,11 +60,10 @@ public abstract class CyclicPackageDependencyInspection extends BaseGlobalInspec
       return null;
     }
     final String packageName = refEntity.getName();
-    final String errorString = InspectionGadgetsBundle.message(
-      "cyclic.package.dependency.problem.descriptor",
-      packageName, numMutualDependents - 1);
+    final LocalizeValue errorString =
+      InspectionGadgetsLocalize.cyclicPackageDependencyProblemDescriptor(packageName, numMutualDependents - 1);
     return new CommonProblemDescriptor[]{
-      inspectionManager.createProblemDescriptor(errorString)
+      inspectionManager.createProblemDescriptor(errorString.get())
     };
   }
 }

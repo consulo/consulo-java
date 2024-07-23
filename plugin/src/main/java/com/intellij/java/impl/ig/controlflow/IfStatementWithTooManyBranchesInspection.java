@@ -17,13 +17,14 @@ package com.intellij.java.impl.ig.controlflow;
 
 import com.intellij.java.language.psi.PsiIfStatement;
 import com.intellij.java.language.psi.PsiStatement;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.deadCodeNotWorking.impl.SingleIntegerFieldOptionsPanel;
 import consulo.language.psi.PsiElement;
-
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 
 public abstract class IfStatementWithTooManyBranchesInspection
@@ -40,32 +41,25 @@ public abstract class IfStatementWithTooManyBranchesInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "if.statement.with.too.many.branches.display.name");
+    return InspectionGadgetsLocalize.ifStatementWithTooManyBranchesDisplayName().get();
   }
 
   public JComponent createOptionsPanel() {
-    return new SingleIntegerFieldOptionsPanel(
-      InspectionGadgetsBundle.message(
-        "if.statement.with.too.many.branches.max.option"),
-      this, "m_limit");
+    LocalizeValue message = InspectionGadgetsLocalize.ifStatementWithTooManyBranchesMaxOption();
+    return new SingleIntegerFieldOptionsPanel(message.get(), this, "m_limit");
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
     final Integer branchCount = (Integer)infos[0];
-    return InspectionGadgetsBundle.message(
-      "if.statement.with.too.many.branches.problem.descriptor",
-      branchCount);
+    return InspectionGadgetsLocalize.ifStatementWithTooManyBranchesProblemDescriptor(branchCount).get();
   }
 
   public BaseInspectionVisitor buildVisitor() {
     return new IfStatementWithTooManyBranchesVisitor();
   }
 
-  private class IfStatementWithTooManyBranchesVisitor
-    extends BaseInspectionVisitor {
-
+  private class IfStatementWithTooManyBranchesVisitor extends BaseInspectionVisitor {
     @Override
     public void visitIfStatement(@Nonnull PsiIfStatement statement) {
       super.visitIfStatement(statement);
@@ -81,7 +75,7 @@ public abstract class IfStatementWithTooManyBranchesInspection
       if (branchCount <= m_limit) {
         return;
       }
-      registerStatementError(statement, Integer.valueOf(branchCount));
+      registerStatementError(statement, branchCount);
     }
 
     private int calculateBranchCount(PsiIfStatement statement) {

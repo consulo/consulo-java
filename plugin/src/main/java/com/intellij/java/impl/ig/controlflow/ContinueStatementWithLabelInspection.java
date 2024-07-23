@@ -17,9 +17,9 @@ package com.intellij.java.impl.ig.controlflow;
 
 import com.intellij.java.language.psi.PsiContinueStatement;
 import com.intellij.java.language.psi.PsiIdentifier;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 
@@ -28,26 +28,21 @@ public class ContinueStatementWithLabelInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "continue.statement.with.label.display.name");
+    return InspectionGadgetsLocalize.continueStatementWithLabelDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "continue.statement.with.label.problem.descriptor");
+    return InspectionGadgetsLocalize.continueStatementWithLabelProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {
     return new ContinueStatementWithLabelVisitor();
   }
 
-  private static class ContinueStatementWithLabelVisitor
-    extends BaseInspectionVisitor {
-
+  private static class ContinueStatementWithLabelVisitor extends BaseInspectionVisitor {
     @Override
-    public void visitContinueStatement(
-      @Nonnull PsiContinueStatement statement) {
+    public void visitContinueStatement(@Nonnull PsiContinueStatement statement) {
       super.visitContinueStatement(statement);
       final PsiIdentifier label = statement.getLabelIdentifier();
       if (label == null) {

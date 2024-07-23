@@ -16,10 +16,10 @@
 package com.intellij.java.impl.ig.abstraction;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ClassUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
@@ -32,7 +32,6 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.PsiSearchHelper;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -53,7 +52,7 @@ public class MethodOnlyUsedFromInnerClassInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("method.only.used.from.inner.class.display.name");
+    return InspectionGadgetsLocalize.methodOnlyUsedFromInnerClassDisplayName().get();
   }
 
   @Override
@@ -63,23 +62,26 @@ public class MethodOnlyUsedFromInnerClassInspection extends BaseInspection {
     final String name = element.getName();
     if (infos.length > 1) {
       if (Boolean.TRUE.equals(infos[1])) {
-        return InspectionGadgetsBundle.message("method.only.used.from.inner.class.problem.descriptor.anonymous.extending", name);
+        return InspectionGadgetsLocalize.methodOnlyUsedFromInnerClassProblemDescriptorAnonymousExtending(name).get();
       }
-      return InspectionGadgetsBundle.message("method.only.used.from.inner.class.problem.descriptor.anonymous.implementing", name);
+      return InspectionGadgetsLocalize.methodOnlyUsedFromInnerClassProblemDescriptorAnonymousImplementing(name).get();
     }
-    return InspectionGadgetsBundle.message(
-      "method.only.used.from.inner.class.problem.descriptor", name);
+    return InspectionGadgetsLocalize.methodOnlyUsedFromInnerClassProblemDescriptor(name).get();
   }
 
   @Override
   @Nullable
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
-    panel.addCheckbox(InspectionGadgetsBundle.message("method.only.used.from.inner.class.ignore.option"),
-                      "ignoreMethodsAccessedFromAnonymousClass");
-    panel.addCheckbox(InspectionGadgetsBundle.message("ignore.static.methods.accessed.from.a.non.static.inner.class"),
-                      "ignoreStaticMethodsFromNonStaticInnerClass");
-    panel.addCheckbox(InspectionGadgetsBundle.message("only.report.static.methods"), "onlyReportStaticMethods");
+    panel.addCheckbox(
+      InspectionGadgetsLocalize.methodOnlyUsedFromInnerClassIgnoreOption().get(),
+      "ignoreMethodsAccessedFromAnonymousClass"
+    );
+    panel.addCheckbox(
+      InspectionGadgetsLocalize.ignoreStaticMethodsAccessedFromANonStaticInnerClass().get(),
+      "ignoreStaticMethodsFromNonStaticInnerClass"
+    );
+    panel.addCheckbox(InspectionGadgetsLocalize.onlyReportStaticMethods().get(), "onlyReportStaticMethods");
     return panel;
   }
 
@@ -88,9 +90,7 @@ public class MethodOnlyUsedFromInnerClassInspection extends BaseInspection {
     return new MethodOnlyUsedFromInnerClassVisitor();
   }
 
-  private class MethodOnlyUsedFromInnerClassVisitor
-    extends BaseInspectionVisitor {
-
+  private class MethodOnlyUsedFromInnerClassVisitor extends BaseInspectionVisitor {
     @Override
     public void visitMethod(PsiMethod method) {
       super.visitMethod(method);

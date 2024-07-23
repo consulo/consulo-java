@@ -18,6 +18,7 @@ package com.intellij.java.impl.ig.naming;
 import com.intellij.java.analysis.codeInspection.reference.RefPackage;
 import com.intellij.java.impl.ig.BaseGlobalInspection;
 import com.siyeh.InspectionGadgetsBundle;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.ide.impl.idea.util.ui.RegExFormatter;
 import consulo.ide.impl.idea.util.ui.RegExInputVerifier;
 import consulo.language.editor.inspection.CommonProblemDescriptor;
@@ -25,14 +26,14 @@ import consulo.language.editor.inspection.GlobalInspectionContext;
 import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.scope.AnalysisScope;
+import consulo.localize.LocalizeValue;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.util.xml.serializer.InvalidDataException;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -72,8 +73,7 @@ public abstract class PackageNamingConventionInspection extends BaseGlobalInspec
 	@Override
 	public String getDisplayName()
 	{
-		return InspectionGadgetsBundle.message(
-				"package.naming.convention.display.name");
+		return InspectionGadgetsLocalize.packageNamingConventionDisplayName().get();
 	}
 
 	@Override
@@ -97,21 +97,13 @@ public abstract class PackageNamingConventionInspection extends BaseGlobalInspec
 		final int length = name.length();
 		if(length < m_minLength)
 		{
-			final String errorString =
-					InspectionGadgetsBundle.message(
-							"package.naming.convention.problem.descriptor.short",
-							name);
-			return new CommonProblemDescriptor[]{
-					inspectionManager.createProblemDescriptor(errorString)
-			};
+			final LocalizeValue errorString = InspectionGadgetsLocalize.packageNamingConventionProblemDescriptorShort(name);
+			return new CommonProblemDescriptor[]{inspectionManager.createProblemDescriptor(errorString.get())};
 		}
 		if(length > m_maxLength)
 		{
-			final String errorString =
-					InspectionGadgetsBundle.message("package.naming.convention.problem.descriptor.long", name);
-			return new CommonProblemDescriptor[]{
-					inspectionManager.createProblemDescriptor(errorString)
-			};
+			final LocalizeValue errorString = InspectionGadgetsLocalize.packageNamingConventionProblemDescriptorLong(name);
+			return new CommonProblemDescriptor[]{inspectionManager.createProblemDescriptor(errorString.get())};
 		}
 		final Matcher matcher = m_regexPattern.matcher(name);
 		if(matcher.matches())
@@ -120,11 +112,8 @@ public abstract class PackageNamingConventionInspection extends BaseGlobalInspec
 		}
 		else
 		{
-			final String errorString =
-					InspectionGadgetsBundle.message("package.naming.convention.problem.descriptor.regex.mismatch", name, m_regex);
-			return new CommonProblemDescriptor[]{
-					inspectionManager.createProblemDescriptor(errorString)
-			};
+			final LocalizeValue errorString = InspectionGadgetsLocalize.packageNamingConventionProblemDescriptorRegexMismatch(name, m_regex);
+			return new CommonProblemDescriptor[]{inspectionManager.createProblemDescriptor(errorString.get())};
 		}
 	}
 

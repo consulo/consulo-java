@@ -20,10 +20,10 @@ import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.documentation.CodeDocumentationProvider;
 import consulo.language.editor.documentation.CompositeDocumentationProvider;
@@ -34,9 +34,8 @@ import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-import org.jetbrains.annotations.Nls;
-
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.Nls;
 
 @ExtensionImpl
 public class ThrowsRuntimeExceptionInspection extends BaseInspection {
@@ -44,13 +43,13 @@ public class ThrowsRuntimeExceptionInspection extends BaseInspection {
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("throws.runtime.exception.display.name");
+    return InspectionGadgetsLocalize.throwsRuntimeExceptionDisplayName().get();
   }
 
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("throws.runtime.exception.problem.descriptor");
+    return InspectionGadgetsLocalize.throwsRuntimeExceptionProblemDescriptor().get();
   }
 
   @Nonnull
@@ -77,7 +76,7 @@ public class ThrowsRuntimeExceptionInspection extends BaseInspection {
     @Nonnull
     @Override
     public String getName() {
-      return InspectionGadgetsBundle.message("throws.runtime.exception.move.quickfix", myExceptionName);
+      return InspectionGadgetsLocalize.throwsRuntimeExceptionMoveQuickfix(myExceptionName).get();
     }
 
     @Override
@@ -168,7 +167,7 @@ public class ThrowsRuntimeExceptionInspection extends BaseInspection {
     @Nonnull
     @Override
     public String getName() {
-      return InspectionGadgetsBundle.message("throws.runtime.exception.quickfix", myClassName);
+      return InspectionGadgetsLocalize.throwsRuntimeExceptionQuickfix(myClassName).get();
     }
 
     @Override

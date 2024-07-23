@@ -17,14 +17,13 @@ package com.intellij.java.impl.ig.bugs;
 
 import com.intellij.java.impl.ig.fixes.MakeFieldFinalFix;
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.MethodUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -39,14 +38,12 @@ public class HashCodeUsesNonFinalVariableInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "non.final.field.in.hashcode.display.name");
+    return InspectionGadgetsLocalize.nonFinalFieldInHashcodeDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "non.final.field.in.hashcode.problem.descriptor");
+    return InspectionGadgetsLocalize.nonFinalFieldInHashcodeProblemDescriptor().get();
   }
 
   @Nullable

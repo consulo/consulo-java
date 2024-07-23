@@ -15,13 +15,12 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 
 /**
@@ -34,13 +33,13 @@ public class SuspiciousArrayCastInspection extends BaseInspection {
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("suspicious.array.cast.display.name");
+    return InspectionGadgetsLocalize.suspiciousArrayCastDisplayName().get();
   }
 
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("suspicious.array.cast.problem.descriptor");
+    return InspectionGadgetsLocalize.suspiciousArrayCastProblemDescriptor().get();
   }
 
   @Override

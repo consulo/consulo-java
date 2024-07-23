@@ -15,21 +15,21 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
-import javax.swing.JComponent;
-
-import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.impl.codeInspection.util.SpecialAnnotationsUtil;
+import com.intellij.java.impl.ig.fixes.AddToIgnoreIfAnnotatedByListQuickFix;
+import com.intellij.java.impl.ig.psiutils.UtilityClassUtil;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiModifierListOwner;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.AddToIgnoreIfAnnotatedByListQuickFix;
-import com.intellij.java.impl.ig.psiutils.UtilityClassUtil;
 import com.siyeh.ig.ui.ExternalizableStringSet;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
+
+import javax.swing.*;
 
 @ExtensionImpl
 public class UtilityClassInspection extends BaseInspection {
@@ -40,14 +40,13 @@ public class UtilityClassInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("utility.class.display.name");
+    return InspectionGadgetsLocalize.utilityClassDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "utility.class.problem.descriptor");
+    return InspectionGadgetsLocalize.utilityClassProblemDescriptor().get();
   }
 
   @Nonnull
@@ -59,7 +58,9 @@ public class UtilityClassInspection extends BaseInspection {
   @Override
   public JComponent createOptionsPanel() {
     return SpecialAnnotationsUtil.createSpecialAnnotationsListControl(
-      ignorableAnnotations, InspectionGadgetsBundle.message("ignore.if.annotated.by"));
+      ignorableAnnotations,
+      InspectionGadgetsLocalize.ignoreIfAnnotatedBy().get()
+    );
   }
 
   @Override

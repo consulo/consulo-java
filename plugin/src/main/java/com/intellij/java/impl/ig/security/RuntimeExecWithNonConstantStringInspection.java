@@ -17,9 +17,9 @@ package com.intellij.java.impl.ig.security;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
@@ -37,13 +37,13 @@ public class RuntimeExecWithNonConstantStringInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("runtime.exec.with.non.constant.string.display.name");
+    return InspectionGadgetsLocalize.runtimeExecWithNonConstantStringDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("runtime.exec.with.non.constant.string.problem.descriptor");
+    return InspectionGadgetsLocalize.runtimeExecWithNonConstantStringProblemDescriptor().get();
   }
 
   @Override

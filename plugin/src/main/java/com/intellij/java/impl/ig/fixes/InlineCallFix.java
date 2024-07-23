@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.fixes;
 
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.Application;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -32,7 +33,7 @@ public class InlineCallFix extends InspectionGadgetsFix {
 
   @Nonnull
   public String getName() {
-    return InspectionGadgetsBundle.message("inline.call.quickfix");
+    return InspectionGadgetsLocalize.inlineCallQuickfix().get();
   }
 
   @RequiredReadAction

@@ -15,29 +15,23 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import javax.swing.JComponent;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
-import com.intellij.java.language.psi.JavaTokenType;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiIfStatement;
-import com.intellij.java.language.psi.PsiMethodCallExpression;
-import com.intellij.java.language.psi.PsiParenthesizedExpression;
-import com.intellij.java.language.psi.PsiPolyadicExpression;
-import com.intellij.java.language.psi.PsiStatement;
-import consulo.language.ast.IElementType;
-import com.siyeh.InspectionGadgetsBundle;
+import com.intellij.java.language.psi.*;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.EquivalenceChecker;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
+import javax.swing.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 @ExtensionImpl
 public class DuplicateConditionInspection extends BaseInspection {
@@ -52,18 +46,18 @@ public class DuplicateConditionInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("duplicate.condition.display.name");
+    return InspectionGadgetsLocalize.duplicateConditionDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("duplicate.condition.problem.descriptor");
+    return InspectionGadgetsLocalize.duplicateConditionProblemDescriptor().get();
   }
 
   @Nullable
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message("duplicate.condition.ignore.method.calls.option"),
-                                          this, "ignoreMethodCalls");
+    LocalizeValue message = InspectionGadgetsLocalize.duplicateConditionIgnoreMethodCallsOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreMethodCalls");
   }
 
   public BaseInspectionVisitor buildVisitor() {

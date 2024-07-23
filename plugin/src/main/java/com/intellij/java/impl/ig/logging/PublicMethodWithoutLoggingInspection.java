@@ -15,18 +15,18 @@
  */
 package com.intellij.java.impl.ig.logging;
 
+import com.intellij.java.impl.ig.ui.UiUtils;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PropertyUtil;
+import com.siyeh.ig.BaseInspection;
+import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
 import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
-import com.intellij.java.language.psi.*;
+import consulo.language.psi.PsiElement;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import consulo.language.psi.*;
-import com.intellij.java.language.psi.util.PropertyUtil;
-import com.siyeh.InspectionGadgetsBundle;
-import com.siyeh.ig.BaseInspection;
-import com.siyeh.ig.BaseInspectionVisitor;
-import com.intellij.java.impl.ig.ui.UiUtils;
 import jakarta.annotation.Nonnull;
 import org.jdom.Element;
 
@@ -48,21 +48,20 @@ public class PublicMethodWithoutLoggingInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "public.method.without.logging.display.name");
+    return InspectionGadgetsLocalize.publicMethodWithoutLoggingDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("public.method.without.logging.problem.descriptor");
+    return InspectionGadgetsLocalize.publicMethodWithoutLoggingProblemDescriptor().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
     final ListTable table = new ListTable(
-      new ListWrappingTableModel(loggerClassNames, InspectionGadgetsBundle.message("logger.class.name")));
-    return UiUtils.createAddRemoveTreeClassChooserPanel(table, InspectionGadgetsBundle.message("choose.logger.class"));
+      new ListWrappingTableModel(loggerClassNames, InspectionGadgetsLocalize.loggerClassName().get()));
+    return UiUtils.createAddRemoveTreeClassChooserPanel(table, InspectionGadgetsLocalize.chooseLoggerClass().get());
   }
 
   @Override

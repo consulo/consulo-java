@@ -17,6 +17,7 @@ package com.intellij.java.impl.ig.visibility;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import com.siyeh.HardcodedMethodConstants;
@@ -26,6 +27,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
@@ -47,8 +49,7 @@ public class FieldHidesSuperclassFieldInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "field.name.hides.in.superclass.display.name");
+    return InspectionGadgetsLocalize.fieldNameHidesInSuperclassDisplayName().get();
   }
 
   protected InspectionGadgetsFix buildFix(Object... infos) {
@@ -61,14 +62,12 @@ public class FieldHidesSuperclassFieldInspection extends BaseInspection {
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "field.name.hides.in.superclass.problem.descriptor");
+    return InspectionGadgetsLocalize.fieldNameHidesInSuperclassProblemDescriptor().get();
   }
 
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message(
-      "field.name.hides.in.superclass.ignore.option"),
-                                          this, "m_ignoreInvisibleFields");
+    LocalizeValue message = InspectionGadgetsLocalize.fieldNameHidesInSuperclassIgnoreOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "m_ignoreInvisibleFields");
   }
 
   public BaseInspectionVisitor buildVisitor() {

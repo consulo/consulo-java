@@ -15,30 +15,27 @@
  */
 package com.intellij.java.impl.ig.naming;
 
-import jakarta.annotation.Nonnull;
-
+import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.RenameFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class MethodNameSameAsParentNameInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "method.name.same.as.parent.name.display.name");
+    return InspectionGadgetsLocalize.methodNameSameAsParentNameDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "method.name.same.as.parent.name.problem.descriptor");
+    return InspectionGadgetsLocalize.methodNameSameAsParentNameProblemDescriptor().get();
   }
 
   protected InspectionGadgetsFix buildFix(Object... infos) {

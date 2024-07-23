@@ -15,17 +15,18 @@
  */
 package com.intellij.java.impl.ig.visibility;
 
+import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.RenameFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.util.PsiTreeUtil;
 import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
@@ -48,8 +49,7 @@ public class MethodOverridesPackageLocalMethodInspection
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "method.overrides.package.local.method.problem.descriptor");
+    return InspectionGadgetsLocalize.methodOverridesPackageLocalMethodProblemDescriptor().get();
   }
 
   protected InspectionGadgetsFix buildFix(Object... infos) {

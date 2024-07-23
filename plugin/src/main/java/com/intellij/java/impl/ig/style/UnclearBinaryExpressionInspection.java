@@ -15,24 +15,23 @@
  */
 package com.intellij.java.impl.ig.style;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.component.ProcessCanceledException;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.ast.IElementType;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.component.ProcessCanceledException;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiWhiteSpace;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-
-import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class UnclearBinaryExpressionInspection extends BaseInspection {
@@ -41,13 +40,13 @@ public class UnclearBinaryExpressionInspection extends BaseInspection {
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("unclear.binary.expression.display.name");
+    return InspectionGadgetsLocalize.unclearBinaryExpressionDisplayName().get();
   }
 
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("unclear.binary.expression.problem.descriptor");
+    return InspectionGadgetsLocalize.unclearBinaryExpressionProblemDescriptor().get();
   }
 
   @Override
@@ -60,7 +59,7 @@ public class UnclearBinaryExpressionInspection extends BaseInspection {
     @Nonnull
     @Override
     public String getName() {
-      return InspectionGadgetsBundle.message("unclear.binary.expression.quickfix");
+      return InspectionGadgetsLocalize.unclearBinaryExpressionQuickfix().get();
     }
 
     @Override

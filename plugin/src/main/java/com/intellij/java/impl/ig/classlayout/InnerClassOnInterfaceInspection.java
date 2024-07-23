@@ -18,6 +18,7 @@ package com.intellij.java.impl.ig.classlayout;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiTypeParameter;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import com.siyeh.InspectionGadgetsBundle;
@@ -25,6 +26,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.MoveClassFix;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
@@ -44,22 +46,19 @@ public class InnerClassOnInterfaceInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "inner.class.on.interface.display.name");
+    return InspectionGadgetsLocalize.innerClassOnInterfaceDisplayName().get();
   }
 
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message(
-      "inner.class.on.interface.ignore.option"),
-                                          this, "m_ignoreInnerInterfaces");
+    LocalizeValue message = InspectionGadgetsLocalize.innerClassOnInterfaceIgnoreOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "m_ignoreInnerInterfaces");
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiClass parentInterface = (PsiClass)infos[0];
     final String interfaceName = parentInterface.getName();
-    return InspectionGadgetsBundle.message(
-      "inner.class.on.interface.problem.descriptor", interfaceName);
+    return InspectionGadgetsLocalize.innerClassOnInterfaceProblemDescriptor(interfaceName).get();
   }
 
   protected InspectionGadgetsFix buildFix(Object... infos) {

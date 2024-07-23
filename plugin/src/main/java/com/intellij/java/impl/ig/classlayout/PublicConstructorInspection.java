@@ -16,6 +16,7 @@
 
 package com.intellij.java.impl.ig.classlayout;
 
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import jakarta.annotation.Nonnull;
 
 import consulo.annotation.component.ExtensionImpl;
@@ -54,21 +55,16 @@ public class PublicConstructorInspection extends BaseInspection
 	@Override
 	public String getDisplayName()
 	{
-		return InspectionGadgetsBundle.message("public.constructor.display.name");
+		return InspectionGadgetsLocalize.publicConstructorDisplayName().get();
 	}
 
 	@Nonnull
 	@Override
 	protected String buildErrorString(Object... infos)
 	{
-		if(((Boolean) infos[0]).booleanValue())
-		{
-			return InspectionGadgetsBundle.message("public.default.constructor.problem.descriptor");
-		}
-		else
-		{
-			return InspectionGadgetsBundle.message("public.constructor.problem.descriptor");
-		}
+		return (Boolean)infos[0]
+			? InspectionGadgetsLocalize.publicDefaultConstructorProblemDescriptor().get()
+			: InspectionGadgetsLocalize.publicConstructorProblemDescriptor().get();
 	}
 
 	@Override
@@ -91,7 +87,7 @@ public class PublicConstructorInspection extends BaseInspection
 		@Override
 		public String getName()
 		{
-			return InspectionGadgetsBundle.message("public.constructor.quickfix");
+			return InspectionGadgetsLocalize.publicConstructorQuickfix().get();
 		}
 
 		@Override

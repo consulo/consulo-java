@@ -16,16 +16,15 @@
 package com.intellij.java.impl.ig.numeric;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import consulo.language.editor.inspection.ProblemDescriptor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -39,26 +38,26 @@ public abstract class UnpredictableBigDecimalConstructorCallInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "unpredictable.big.decimal.constructor.call.display.name");
+    return InspectionGadgetsLocalize.unpredictableBigDecimalConstructorCallDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "unpredictable.big.decimal.constructor.call.problem.descriptor");
+    return InspectionGadgetsLocalize.unpredictableBigDecimalConstructorCallProblemDescriptor().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel optionsPanel =
       new MultipleCheckboxOptionsPanel(this);
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message(
-      "unpredictable.big.decimal.constructor.call.ignore.references.option"),
-                             "ignoreReferences");
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message(
-      "unpredictable.big.decimal.constructor.call.ignore.complex.literals.option"),
-                             "ignoreComplexLiterals");
+    optionsPanel.addCheckbox(
+      InspectionGadgetsLocalize.unpredictableBigDecimalConstructorCallIgnoreReferencesOption().get(),
+      "ignoreReferences"
+    );
+    optionsPanel.addCheckbox(
+      InspectionGadgetsLocalize.unpredictableBigDecimalConstructorCallIgnoreComplexLiteralsOption().get(),
+      "ignoreComplexLiterals"
+    );
     return optionsPanel;
   }
 
@@ -91,9 +90,7 @@ public abstract class UnpredictableBigDecimalConstructorCallInspection
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "unpredictable.big.decimal.constructor.call.quickfix",
-        argumentText);
+      return InspectionGadgetsLocalize.unpredictableBigDecimalConstructorCallQuickfix(argumentText).get();
     }
 
     @Override

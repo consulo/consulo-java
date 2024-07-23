@@ -15,13 +15,12 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class MarkerInterfaceInspection extends BaseInspection {
@@ -29,14 +28,13 @@ public class MarkerInterfaceInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("marker.interface.display.name");
+    return InspectionGadgetsLocalize.markerInterfaceDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "marker.interface.problem.descriptor");
+    return InspectionGadgetsLocalize.markerInterfaceProblemDescriptor().get();
   }
 
   @Override

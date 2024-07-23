@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.ig.threading;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiSynchronizedStatement;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -30,14 +30,12 @@ public class NestedSynchronizedStatementInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "nested.synchronized.statement.display.name");
+    return InspectionGadgetsLocalize.nestedSynchronizedStatementDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "nested.synchronized.statement.problem.descriptor");
+    return InspectionGadgetsLocalize.nestedSynchronizedStatementProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

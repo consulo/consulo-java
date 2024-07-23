@@ -18,11 +18,11 @@ package com.intellij.java.impl.ig.encapsulation;
 import com.intellij.java.impl.ig.fixes.MoveClassFix;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiModifier;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import jakarta.annotation.Nonnull;
@@ -42,23 +42,21 @@ public class PublicInnerClassInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "public.inner.class.display.name");
+    return InspectionGadgetsLocalize.publicInnerClassDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "public.inner.class.problem.descriptor");
+    return InspectionGadgetsLocalize.publicInnerClassProblemDescriptor().get();
   }
 
   @Override
   @Nullable
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
-    panel.addCheckbox(InspectionGadgetsBundle.message("public.inner.class.ignore.enum.option"), "ignoreEnums");
-    panel.addCheckbox(InspectionGadgetsBundle.message("public.inner.class.ignore.interface.option"), "ignoreInterfaces");
+    panel.addCheckbox(InspectionGadgetsLocalize.publicInnerClassIgnoreEnumOption().get(), "ignoreEnums");
+    panel.addCheckbox(InspectionGadgetsLocalize.publicInnerClassIgnoreInterfaceOption().get(), "ignoreInterfaces");
     return panel;
   }
 

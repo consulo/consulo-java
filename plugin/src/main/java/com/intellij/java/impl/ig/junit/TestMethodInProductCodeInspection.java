@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.ig.junit;
 
-import jakarta.annotation.Nonnull;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TestUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class TestMethodInProductCodeInspection extends BaseInspection
@@ -32,7 +32,7 @@ public class TestMethodInProductCodeInspection extends BaseInspection
 	@Nonnull
 	public String getDisplayName()
 	{
-		return InspectionGadgetsBundle.message("test.method.in.product.code.display.name");
+		return InspectionGadgetsLocalize.testMethodInProductCodeDisplayName().get();
 	}
 
 	@Override
@@ -46,7 +46,7 @@ public class TestMethodInProductCodeInspection extends BaseInspection
 	@Nonnull
 	protected String buildErrorString(Object... infos)
 	{
-		return InspectionGadgetsBundle.message("test.method.in.product.code.problem.descriptor");
+		return InspectionGadgetsLocalize.testMethodInProductCodeProblemDescriptor().get();
 	}
 
 	@Override

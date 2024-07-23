@@ -21,11 +21,13 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
-import consulo.language.editor.inspection.ProblemDescriptor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 
@@ -43,22 +45,28 @@ public abstract class UnnecessaryParenthesesInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("unnecessary.parentheses.display.name");
+    return InspectionGadgetsLocalize.unnecessaryParenthesesDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("unnecessary.parentheses.problem.descriptor");
+    return InspectionGadgetsLocalize.unnecessaryParenthesesProblemDescriptor().get();
   }
 
   @Override
+  @NonNls
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message("unnecessary.parentheses.option"), "ignoreClarifyingParentheses");
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message("unnecessary.parentheses.conditional.option"),
-                             "ignoreParenthesesOnConditionals");
-    optionsPanel.addCheckbox("Ignore parentheses around single no formal type lambda parameter", "ignoreParenthesesOnLambdaParameter");
+    optionsPanel.addCheckbox(InspectionGadgetsLocalize.unnecessaryParenthesesOption().get(), "ignoreClarifyingParentheses");
+    optionsPanel.addCheckbox(
+      InspectionGadgetsLocalize.unnecessaryParenthesesConditionalOption().get(),
+      "ignoreParenthesesOnConditionals"
+    );
+    optionsPanel.addCheckbox(
+      InspectionGadgetsBundle.message("ignore.parentheses.around.single.no.formal.type.lambda.parameter"),
+      "ignoreParenthesesOnLambdaParameter"
+    );
     return optionsPanel;
   }
 
@@ -71,7 +79,7 @@ public abstract class UnnecessaryParenthesesInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("unnecessary.parentheses.remove.quickfix");
+      return InspectionGadgetsLocalize.unnecessaryParenthesesRemoveQuickfix().get();
     }
 
     @Override

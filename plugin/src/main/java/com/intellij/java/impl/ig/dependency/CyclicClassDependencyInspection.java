@@ -15,15 +15,16 @@
  */
 package com.intellij.java.impl.ig.dependency;
 
-import consulo.language.editor.scope.AnalysisScope;
+import com.intellij.java.analysis.codeInspection.reference.RefClass;
+import com.intellij.java.impl.ig.BaseGlobalInspection;
+import com.intellij.java.language.psi.PsiClass;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.language.editor.inspection.CommonProblemDescriptor;
 import consulo.language.editor.inspection.GlobalInspectionContext;
-import consulo.language.editor.inspection.scheme.InspectionManager;
-import com.intellij.java.analysis.codeInspection.reference.RefClass;
 import consulo.language.editor.inspection.reference.RefEntity;
-import com.intellij.java.language.psi.PsiClass;
-import com.siyeh.InspectionGadgetsBundle;
-import com.intellij.java.impl.ig.BaseGlobalInspection;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -35,8 +36,7 @@ public abstract class CyclicClassDependencyInspection extends BaseGlobalInspecti
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "cyclic.class.dependency.display.name");
+    return InspectionGadgetsLocalize.cyclicClassDependencyDisplayName().get();
   }
 
   @Nullable
@@ -64,11 +64,10 @@ public abstract class CyclicClassDependencyInspection extends BaseGlobalInspecti
     if (numMutualDependents <= 1) {
       return null;
     }
-    final String errorString = InspectionGadgetsBundle.message(
-      "cyclic.class.dependency.problem.descriptor",
-      refEntity.getName(), numMutualDependents - 1);
+    final LocalizeValue errorString =
+      InspectionGadgetsLocalize.cyclicClassDependencyProblemDescriptor(refEntity.getName(), numMutualDependents - 1);
     return new CommonProblemDescriptor[]{
-      inspectionManager.createProblemDescriptor(errorString)
+      inspectionManager.createProblemDescriptor(errorString.get())
     };
   }
 }

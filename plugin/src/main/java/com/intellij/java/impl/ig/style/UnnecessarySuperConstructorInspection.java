@@ -15,19 +15,18 @@
  */
 package com.intellij.java.impl.ig.style;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.language.editor.inspection.ProblemHighlightType;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class UnnecessarySuperConstructorInspection
@@ -40,14 +39,12 @@ public class UnnecessarySuperConstructorInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "unnecessary.super.constructor.display.name");
+    return InspectionGadgetsLocalize.unnecessarySuperConstructorDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "unnecessary.super.constructor.problem.descriptor");
+    return InspectionGadgetsLocalize.unnecessarySuperConstructorProblemDescriptor().get();
   }
 
   public InspectionGadgetsFix buildFix(Object... infos) {
@@ -59,8 +56,7 @@ public class UnnecessarySuperConstructorInspection
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "unnecessary.super.constructor.remove.quickfix");
+      return InspectionGadgetsLocalize.unnecessarySuperConstructorRemoveQuickfix().get();
     }
 
     public void doFix(Project project, ProblemDescriptor descriptor)

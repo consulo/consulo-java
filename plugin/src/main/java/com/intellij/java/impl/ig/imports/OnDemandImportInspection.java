@@ -15,29 +15,28 @@
  */
 package com.intellij.java.impl.ig.imports;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiImportList;
 import com.intellij.java.language.psi.PsiImportStatement;
 import com.intellij.java.language.psi.PsiJavaFile;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElement;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class OnDemandImportInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("import.display.name");
+    return InspectionGadgetsLocalize.importDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("import.problem.descriptor");
+    return InspectionGadgetsLocalize.importProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

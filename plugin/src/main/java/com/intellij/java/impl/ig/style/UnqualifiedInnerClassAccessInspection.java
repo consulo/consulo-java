@@ -15,23 +15,24 @@
  */
 package com.intellij.java.impl.ig.style;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import com.intellij.java.impl.ig.psiutils.HighlightUtils;
+import com.intellij.java.impl.ig.psiutils.ImportUtils;
 import com.intellij.java.language.psi.*;
-import consulo.document.Document;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.psiutils.HighlightUtils;
-import com.intellij.java.impl.ig.psiutils.ImportUtils;
-import org.jetbrains.annotations.Nls;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.document.Document;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.*;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.Nls;
 
 import javax.swing.*;
 import java.util.*;
@@ -46,19 +47,19 @@ public class UnqualifiedInnerClassAccessInspection extends BaseInspection {
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("unqualified.inner.class.access.display.name");
+    return InspectionGadgetsLocalize.unqualifiedInnerClassAccessDisplayName().get();
   }
 
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("unqualified.inner.class.access.problem.descriptor");
+    return InspectionGadgetsLocalize.unqualifiedInnerClassAccessProblemDescriptor().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message("unqualified.inner.class.access.option"),
-                                          this, "ignoreReferencesToLocalInnerClasses");
+    LocalizeValue message = InspectionGadgetsLocalize.unqualifiedInnerClassAccessOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreReferencesToLocalInnerClasses");
   }
 
   @Override
@@ -70,8 +71,7 @@ public class UnqualifiedInnerClassAccessInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "unqualified.inner.class.access.quickfix");
+      return InspectionGadgetsLocalize.unqualifiedInnerClassAccessQuickfix().get();
     }
 
     @Override

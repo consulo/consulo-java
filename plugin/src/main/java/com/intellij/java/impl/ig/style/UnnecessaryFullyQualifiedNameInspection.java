@@ -15,34 +15,35 @@
  */
 package com.intellij.java.impl.ig.style;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
-import jakarta.annotation.Nonnull;
-import javax.swing.JComponent;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
-import com.intellij.java.language.psi.*;
-import consulo.logging.Logger;
-import consulo.project.Project;
-import consulo.project.ui.wm.StatusBar;
-import consulo.project.ui.wm.WindowManager;
-import consulo.language.psi.*;
-import consulo.language.codeStyle.CodeStyleSettingsManager;
+import com.intellij.java.impl.ig.psiutils.HighlightUtils;
+import com.intellij.java.impl.ig.psiutils.ImportUtils;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.psiutils.HighlightUtils;
-import com.intellij.java.impl.ig.psiutils.ImportUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.project.ui.wm.StatusBar;
+import consulo.project.ui.wm.WindowManager;
+import jakarta.annotation.Nonnull;
+
+import javax.swing.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * com.siyeh.ipp.fqnames.ReplaceFullyQualifiedNameWithImportIntention
@@ -56,7 +57,7 @@ public class UnnecessaryFullyQualifiedNameInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("unnecessary.fully.qualified.name.display.name");
+    return InspectionGadgetsLocalize.unnecessaryFullyQualifiedNameDisplayName().get();
   }
 
   @Override
@@ -68,11 +69,10 @@ public class UnnecessaryFullyQualifiedNameInspection extends BaseInspection {
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final boolean inSameFile = ((Boolean)infos[0]).booleanValue();
-    if (inSameFile) {
-      return InspectionGadgetsBundle.message("unnecessary.fully.qualified.name.problem.descriptor2");
-    }
-    return InspectionGadgetsBundle.message("unnecessary.fully.qualified.name.problem.descriptor1");
+    final boolean inSameFile = (Boolean)infos[0];
+    return inSameFile
+      ? InspectionGadgetsLocalize.unnecessaryFullyQualifiedNameProblemDescriptor2().get()
+      : InspectionGadgetsLocalize.unnecessaryFullyQualifiedNameProblemDescriptor1().get();
   }
 
   @Override
@@ -91,12 +91,9 @@ public class UnnecessaryFullyQualifiedNameInspection extends BaseInspection {
     @Override
     @Nonnull
     public String getName() {
-      if (inSameFile) {
-        return InspectionGadgetsBundle.message("unnecessary.fully.qualified.name.remove.quickfix");
-      }
-      else {
-        return InspectionGadgetsBundle.message("unnecessary.fully.qualified.name.replace.quickfix");
-      }
+      return inSameFile
+        ? InspectionGadgetsLocalize.unnecessaryFullyQualifiedNameRemoveQuickfix().get()
+        : InspectionGadgetsLocalize.unnecessaryFullyQualifiedNameReplaceQuickfix().get();
     }
 
     @Override
@@ -130,7 +127,8 @@ public class UnnecessaryFullyQualifiedNameInspection extends BaseInspection {
       }
       else {
         statusBar.setInfo(InspectionGadgetsBundle.message("unnecessary.fully.qualified.name.status.bar.escape.highlighting.message2",
-          Integer.valueOf(elementCount - 1)));
+            elementCount - 1
+        ));
       }
     }
 

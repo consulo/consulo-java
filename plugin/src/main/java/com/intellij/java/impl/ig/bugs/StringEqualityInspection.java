@@ -15,17 +15,17 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
+import com.intellij.java.impl.ig.fixes.EqualityToEqualsFix;
 import com.intellij.java.language.psi.PsiBinaryExpression;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiKeyword;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.EqualityToEqualsFix;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 
@@ -34,12 +34,12 @@ public class StringEqualityInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("string.comparison.display.name");
+    return InspectionGadgetsLocalize.stringComparisonDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("string.comparison.problem.descriptor");
+    return InspectionGadgetsLocalize.stringComparisonProblemDescriptor().get();
   }
 
   public boolean isEnabledByDefault() {

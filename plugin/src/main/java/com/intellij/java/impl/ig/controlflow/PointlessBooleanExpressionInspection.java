@@ -15,10 +15,12 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.language.psi.*;
 import consulo.language.ast.IElementType;
@@ -61,15 +63,14 @@ public class PointlessBooleanExpressionInspection extends BaseInspection {
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(
-      InspectionGadgetsBundle.message("pointless.boolean.expression.ignore.option"), this, "m_ignoreExpressionsContainingConstants"
-    );
+    LocalizeValue message = InspectionGadgetsLocalize.pointlessBooleanExpressionIgnoreOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "m_ignoreExpressionsContainingConstants");
   }
 
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("pointless.boolean.expression.display.name");
+    return InspectionGadgetsLocalize.pointlessBooleanExpressionDisplayName().get();
   }
 
   @Override
@@ -81,8 +82,9 @@ public class PointlessBooleanExpressionInspection extends BaseInspection {
   @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiExpression expression = (PsiExpression)infos[0];
-    return InspectionGadgetsBundle.message("boolean.expression.can.be.simplified.problem.descriptor",
-                                           buildSimplifiedExpression(expression, new StringBuilder()).toString());
+    return InspectionGadgetsLocalize.booleanExpressionCanBeSimplifiedProblemDescriptor(
+        buildSimplifiedExpression(expression, new StringBuilder())
+    ).get();
   }
 
   private StringBuilder buildSimplifiedExpression(@Nullable PsiExpression expression, StringBuilder out) {
@@ -279,7 +281,7 @@ public class PointlessBooleanExpressionInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("constant.conditional.expression.simplify.quickfix");
+      return InspectionGadgetsLocalize.constantConditionalExpressionSimplifyQuickfix().get();
     }
 
     @Override

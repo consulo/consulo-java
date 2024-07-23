@@ -15,20 +15,20 @@
  */
 package com.intellij.java.impl.ig.fixes;
 
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.dataContext.DataManager;
+import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.dataContext.DataContext;
-import consulo.project.Project;
-import consulo.util.concurrent.AsyncResult;
-import consulo.language.psi.PsiElement;
+import consulo.dataContext.DataManager;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.refactoring.RefactoringFactory;
 import consulo.language.editor.refactoring.RenameRefactoring;
 import consulo.language.editor.refactoring.rename.RenameHandler;
 import consulo.language.editor.refactoring.rename.RenameHandlerRegistry;
-import com.siyeh.InspectionGadgetsBundle;
-import com.siyeh.ig.InspectionGadgetsFix;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
+import consulo.util.concurrent.AsyncResult;
+import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 public class RenameFix extends InspectionGadgetsFix
 {
@@ -59,14 +59,9 @@ public class RenameFix extends InspectionGadgetsFix
 	@Nonnull
 	public String getName()
 	{
-		if(m_targetName == null)
-		{
-			return InspectionGadgetsBundle.message("rename.quickfix");
-		}
-		else
-		{
-			return InspectionGadgetsBundle.message("renameto.quickfix", m_targetName);
-		}
+		return m_targetName == null
+			? InspectionGadgetsLocalize.renameQuickfix().get()
+			: InspectionGadgetsLocalize.renametoQuickfix(m_targetName).get();
 	}
 
 	public String getTargetName()

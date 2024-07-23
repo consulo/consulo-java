@@ -18,18 +18,18 @@ package com.intellij.java.impl.ig.dataflow;
 import com.intellij.java.impl.ig.psiutils.HighlightUtils;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.application.util.query.Query;
+import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.ast.IElementType;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
@@ -38,10 +38,10 @@ import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
 import javax.swing.*;
 import java.util.Collection;
 
@@ -60,7 +60,7 @@ public abstract class TooBroadScopeInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("too.broad.scope.display.name");
+    return InspectionGadgetsLocalize.tooBroadScopeDisplayName().get();
   }
 
   @Override
@@ -73,15 +73,15 @@ public abstract class TooBroadScopeInspection extends BaseInspection {
   @Nullable
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel checkboxOptionsPanel = new MultipleCheckboxOptionsPanel(this);
-    checkboxOptionsPanel.addCheckbox(InspectionGadgetsBundle.message("too.broad.scope.only.blocks.option"), "m_onlyLookAtBlocks");
-    checkboxOptionsPanel.addCheckbox(InspectionGadgetsBundle.message("too.broad.scope.allow.option"), "m_allowConstructorAsInitializer");
+    checkboxOptionsPanel.addCheckbox(InspectionGadgetsLocalize.tooBroadScopeOnlyBlocksOption().get(), "m_onlyLookAtBlocks");
+    checkboxOptionsPanel.addCheckbox(InspectionGadgetsLocalize.tooBroadScopeAllowOption().get(), "m_allowConstructorAsInitializer");
     return checkboxOptionsPanel;
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("too.broad.scope.problem.descriptor");
+    return InspectionGadgetsLocalize.tooBroadScopeProblemDescriptor().get();
   }
 
   @Override
@@ -100,7 +100,7 @@ public abstract class TooBroadScopeInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("too.broad.scope.narrow.quickfix", variableName);
+      return InspectionGadgetsLocalize.tooBroadScopeNarrowQuickfix(variableName).get();
     }
 
     @Override

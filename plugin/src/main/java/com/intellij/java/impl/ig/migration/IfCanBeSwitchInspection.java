@@ -18,13 +18,13 @@ package com.intellij.java.impl.ig.migration;
 import com.intellij.java.impl.ig.psiutils.SwitchUtils;
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.ig.psiutils.EquivalenceChecker;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
@@ -35,11 +35,11 @@ import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import consulo.ui.ex.awt.event.DocumentAdapter;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -72,13 +72,13 @@ public class IfCanBeSwitchInspection extends BaseInspection {
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("if.can.be.switch.display.name");
+    return InspectionGadgetsLocalize.ifCanBeSwitchDisplayName().get();
   }
 
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("if.can.be.switch.problem.descriptor");
+    return InspectionGadgetsLocalize.ifCanBeSwitchProblemDescriptor().get();
   }
 
   @Override
@@ -89,7 +89,7 @@ public class IfCanBeSwitchInspection extends BaseInspection {
   @Override
   public JComponent createOptionsPanel() {
     final JPanel panel = new JPanel(new GridBagLayout());
-    final JLabel label = new JLabel(InspectionGadgetsBundle.message("if.can.be.switch.minimum.branch.option"));
+    final JLabel label = new JLabel(InspectionGadgetsLocalize.ifCanBeSwitchMinimumBranchOption().get());
     final NumberFormat formatter = NumberFormat.getIntegerInstance();
     formatter.setParseIntegerOnly(true);
     final JFormattedTextField valueField = new JFormattedTextField(formatter);
@@ -126,7 +126,7 @@ public class IfCanBeSwitchInspection extends BaseInspection {
     constraints.gridx = 0;
     constraints.gridy = 1;
     constraints.gridwidth = 2;
-    final JCheckBox checkBox1 = new JCheckBox(InspectionGadgetsBundle.message("if.can.be.switch.int.option"), suggestIntSwitches);
+    final JCheckBox checkBox1 = new JCheckBox(InspectionGadgetsLocalize.ifCanBeSwitchIntOption().get(), suggestIntSwitches);
     final ButtonModel model1 = checkBox1.getModel();
     model1.addChangeListener(new ChangeListener() {
       public void stateChanged(ChangeEvent e) {
@@ -136,7 +136,7 @@ public class IfCanBeSwitchInspection extends BaseInspection {
     panel.add(checkBox1, constraints);
     constraints.gridy = 2;
     constraints.weighty = 1.0;
-    final JCheckBox checkBox2 = new JCheckBox(InspectionGadgetsBundle.message("if.can.be.switch.enum.option"), suggestEnumSwitches);
+    final JCheckBox checkBox2 = new JCheckBox(InspectionGadgetsLocalize.ifCanBeSwitchEnumOption().get(), suggestEnumSwitches);
     final ButtonModel model2 = checkBox2.getModel();
     model2.addChangeListener(new ChangeListener() {
       public void stateChanged(ChangeEvent e) {
@@ -156,7 +156,7 @@ public class IfCanBeSwitchInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("if.can.be.switch.quickfix");
+      return InspectionGadgetsLocalize.ifCanBeSwitchQuickfix().get();
     }
 
     @Override

@@ -16,14 +16,14 @@
 package com.intellij.java.impl.ig.maturity;
 
 import com.intellij.java.language.psi.PsiClass;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElement;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -36,14 +36,12 @@ public class SystemOutErrInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "use.system.out.err.display.name");
+    return InspectionGadgetsLocalize.useSystemOutErrDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "use.system.out.err.problem.descriptor");
+    return InspectionGadgetsLocalize.useSystemOutErrProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

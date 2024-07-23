@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.errorhandling;
 
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiCodeBlock;
@@ -31,14 +32,12 @@ public class NestedTryStatementInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "nested.try.statement.display.name");
+    return InspectionGadgetsLocalize.nestedTryStatementDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "nested.try.statement.problem.descriptor");
+    return InspectionGadgetsLocalize.nestedTryStatementProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

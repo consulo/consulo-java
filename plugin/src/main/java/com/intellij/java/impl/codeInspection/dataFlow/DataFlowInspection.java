@@ -34,20 +34,20 @@ import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.SideEffectChecker;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.java.analysis.impl.localize.JavaInspectionsLocalize;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.InspectionToolState;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.LocalQuickFixOnPsiElement;
-import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.SmartList;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -84,7 +84,7 @@ public class DataFlowInspection extends DataFlowInspectionBase
 	@Override
 	public String getDisplayName()
 	{
-		return InspectionLocalize.inspectionDataFlowDisplayName().get();
+		return JavaInspectionsLocalize.inspectionDataFlowDisplayName().get();
 	}
 
 	@Override

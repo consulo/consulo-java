@@ -20,17 +20,17 @@ import com.intellij.java.impl.ig.fixes.AddToIgnoreIfAnnotatedByListQuickFix;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.ui.ExternalizableStringSet;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.language.psi.PsiFile;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 
@@ -49,7 +49,7 @@ public class EmptyClassInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("empty.class.display.name");
+    return InspectionGadgetsLocalize.emptyClassDisplayName().get();
   }
 
   @Override
@@ -57,11 +57,11 @@ public class EmptyClassInspection extends BaseInspection {
   protected String buildErrorString(Object... infos) {
     final Object element = infos[0];
     if (element instanceof PsiAnonymousClass) {
-      return InspectionGadgetsBundle.message("empty.anonymous.class.problem.descriptor");
+      return InspectionGadgetsLocalize.emptyAnonymousClassProblemDescriptor().get();
     } else if (element instanceof PsiClass) {
-      return InspectionGadgetsBundle.message("empty.class.problem.descriptor");
+      return InspectionGadgetsLocalize.emptyClassProblemDescriptor().get();
     } else {
-      return InspectionGadgetsBundle.message("empty.class.file.without.class.problem.descriptor");
+      return InspectionGadgetsLocalize.emptyClassFileWithoutClassProblemDescriptor().get();
     }
   }
 
@@ -69,7 +69,9 @@ public class EmptyClassInspection extends BaseInspection {
   public JComponent createOptionsPanel() {
     final JPanel panel = new JPanel(new GridBagLayout());
     final JPanel annotationsListControl = SpecialAnnotationsUtil.createSpecialAnnotationsListControl(
-        ignorableAnnotations, InspectionGadgetsBundle.message("ignore.if.annotated.by"));
+      ignorableAnnotations,
+      InspectionGadgetsLocalize.ignoreIfAnnotatedBy().get()
+    );
     final GridBagConstraints constraints = new GridBagConstraints();
     constraints.gridx = 0;
     constraints.gridy = 0;
@@ -81,8 +83,11 @@ public class EmptyClassInspection extends BaseInspection {
     constraints.gridy++;
     constraints.weighty = 0.0;
     constraints.fill = GridBagConstraints.HORIZONTAL;
-    final CheckBox checkBox1 = new CheckBox(InspectionGadgetsBundle.message("empty.class.ignore.parameterization.option"),
-        this, "ignoreClassWithParameterization");
+    final CheckBox checkBox1 = new CheckBox(
+      InspectionGadgetsLocalize.emptyClassIgnoreParameterizationOption().get(),
+      this,
+      "ignoreClassWithParameterization"
+    );
     panel.add(checkBox1, constraints);
     constraints.gridy++;
     final CheckBox checkBox2 = new CheckBox("Ignore subclasses of java.lang.Throwable", this, "ignoreThrowables");

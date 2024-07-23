@@ -15,15 +15,16 @@
  */
 package com.intellij.java.impl.ig.style;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import com.intellij.java.impl.ig.fixes.NormalizeDeclarationFix;
 import com.intellij.java.language.psi.*;
-import consulo.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.NormalizeDeclarationFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
@@ -37,8 +38,7 @@ public class MultipleDeclarationInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "multiple.declaration.display.name");
+    return InspectionGadgetsLocalize.multipleDeclarationDisplayName().get();
   }
 
   @Override
@@ -50,15 +50,13 @@ public class MultipleDeclarationInspection extends BaseInspection {
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "multiple.declaration.problem.descriptor");
+    return InspectionGadgetsLocalize.multipleDeclarationProblemDescriptor().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message(
-      "multiple.declaration.option"),
-                                          this, "ignoreForLoopDeclarations");
+    LocalizeValue message = InspectionGadgetsLocalize.multipleDeclarationOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreForLoopDeclarations");
   }
 
   @Override

@@ -15,20 +15,18 @@
  */
 package com.intellij.java.impl.ig.fixes;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.language.editor.inspection.ProblemDescriptor;
+import com.intellij.java.impl.ig.psiutils.FinalUtils;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiModifierList;
 import com.intellij.java.language.psi.PsiReferenceExpression;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.psiutils.FinalUtils;
-
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 public class MakeFieldFinalFix extends InspectionGadgetsFix {
@@ -55,8 +53,7 @@ public class MakeFieldFinalFix extends InspectionGadgetsFix {
 
   @Nonnull
   public String getName() {
-    return InspectionGadgetsBundle.message("make.field.final.quickfix",
-                                           fieldName);
+    return InspectionGadgetsLocalize.makeFieldFinalQuickfix(fieldName).get();
   }
 
   @Override

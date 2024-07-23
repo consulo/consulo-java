@@ -15,19 +15,19 @@
  */
 package com.intellij.java.impl.ig.numeric;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
 import com.intellij.java.language.psi.util.ConstantExpressionUtil;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import org.jetbrains.annotations.NonNls;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -68,15 +68,13 @@ public class ConstantMathCallInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "constant.math.call.display.name");
+    return InspectionGadgetsLocalize.constantMathCallDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "constant.math.call.problem.descriptor");
+    return InspectionGadgetsLocalize.constantMathCallProblemDescriptor().get();
   }
 
   @Override
@@ -88,20 +86,15 @@ public class ConstantMathCallInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "constant.conditional.expression.simplify.quickfix");
+      return InspectionGadgetsLocalize.constantConditionalExpressionSimplifyQuickfix().get();
     }
 
     @Override
-    public void doFix(Project project, ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
-      final PsiIdentifier nameIdentifier =
-        (PsiIdentifier)descriptor.getPsiElement();
-      final PsiReferenceExpression reference =
-        (PsiReferenceExpression)nameIdentifier.getParent();
+    public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+      final PsiIdentifier nameIdentifier = (PsiIdentifier)descriptor.getPsiElement();
+      final PsiReferenceExpression reference = (PsiReferenceExpression)nameIdentifier.getParent();
       assert reference != null;
-      final PsiMethodCallExpression call =
-        (PsiMethodCallExpression)reference.getParent();
+      final PsiMethodCallExpression call = (PsiMethodCallExpression)reference.getParent();
       assert call != null;
       final PsiExpressionList argumentList = call.getArgumentList();
       final PsiExpression[] arguments = argumentList.getExpressions();
@@ -123,13 +116,11 @@ public class ConstantMathCallInspection extends BaseInspection {
       if (argumentValue instanceof Float ||
           argumentValue instanceof Double) {
         final Number number = (Number)argumentValue;
-        newExpression = createValueString(methodName,
-                                          number.doubleValue());
+        newExpression = createValueString(methodName, number.doubleValue());
       }
       else {
         final Number number = (Number)argumentValue;
-        newExpression = createValueString(methodName,
-                                          number.longValue());
+        newExpression = createValueString(methodName, number.longValue());
       }
       if (newExpression == null) {
         return;

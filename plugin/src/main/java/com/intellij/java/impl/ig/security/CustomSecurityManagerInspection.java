@@ -17,9 +17,9 @@ package com.intellij.java.impl.ig.security;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 
@@ -29,15 +29,13 @@ public class CustomSecurityManagerInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "custom.security.manager.display.name");
+    return InspectionGadgetsLocalize.customSecurityManagerDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "custom.security.manager.problem.descriptor");
+    return InspectionGadgetsLocalize.customSecurityManagerProblemDescriptor().get();
   }
 
   @Override

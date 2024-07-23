@@ -19,10 +19,10 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
@@ -33,11 +33,11 @@ import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -55,13 +55,13 @@ public class TryFinallyCanBeTryWithResourcesInspection extends BaseInspection {
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("try.finally.can.be.try.with.resources.display.name");
+    return InspectionGadgetsLocalize.tryFinallyCanBeTryWithResourcesDisplayName().get();
   }
 
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("try.finally.can.be.try.with.resources.problem.descriptor");
+    return InspectionGadgetsLocalize.tryFinallyCanBeTryWithResourcesProblemDescriptor().get();
   }
 
   @Override
@@ -75,7 +75,7 @@ public class TryFinallyCanBeTryWithResourcesInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("try.finally.can.be.try.with.resources.quickfix");
+      return InspectionGadgetsLocalize.tryFinallyCanBeTryWithResourcesQuickfix().get();
     }
 
     @Override

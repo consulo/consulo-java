@@ -15,18 +15,17 @@
  */
 package com.intellij.java.impl.ig.fixes;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.application.ApplicationManager;
-import consulo.project.Project;
-import consulo.language.psi.PsiElement;
+import com.intellij.java.analysis.refactoring.JavaRefactoringActionHandlerFactory;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiReferenceExpression;
-import com.intellij.java.analysis.refactoring.JavaRefactoringActionHandlerFactory;
-import consulo.language.editor.refactoring.action.RefactoringActionHandler;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.application.ApplicationManager;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 
 public class EncapsulateVariableFix extends InspectionGadgetsFix {
 
@@ -39,8 +38,7 @@ public class EncapsulateVariableFix extends InspectionGadgetsFix {
   @Override
   @Nonnull
   public String getName() {
-    return InspectionGadgetsBundle.message("encapsulate.variable.quickfix",
-                                           fieldName);
+    return InspectionGadgetsLocalize.encapsulateVariableQuickfix(fieldName).get();
   }
 
   @Override

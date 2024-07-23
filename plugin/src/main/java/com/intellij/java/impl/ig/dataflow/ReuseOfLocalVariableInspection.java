@@ -18,11 +18,11 @@ package com.intellij.java.impl.ig.dataflow;
 import com.intellij.java.impl.ig.psiutils.HighlightUtils;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.query.Query;
 import consulo.content.scope.SearchScope;
@@ -36,30 +36,25 @@ import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
-
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @ExtensionImpl
-public class ReuseOfLocalVariableInspection
-  extends BaseInspection {
-
+public class ReuseOfLocalVariableInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "reuse.of.local.variable.display.name");
+    return InspectionGadgetsLocalize.reuseOfLocalVariableDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "reuse.of.local.variable.problem.descriptor");
+    return InspectionGadgetsLocalize.reuseOfLocalVariableProblemDescriptor().get();
   }
 
   @Override
@@ -72,36 +67,25 @@ public class ReuseOfLocalVariableInspection
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "reuse.of.local.variable.split.quickfix");
+      return InspectionGadgetsLocalize.reuseOfLocalVariableSplitQuickfix().get();
     }
 
     @Override
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiReferenceExpression referenceExpression =
-        (PsiReferenceExpression)descriptor.getPsiElement();
-      final PsiLocalVariable variable =
-        (PsiLocalVariable)referenceExpression.resolve();
-      final PsiAssignmentExpression assignment =
-        (PsiAssignmentExpression)referenceExpression.getParent();
+      final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)descriptor.getPsiElement();
+      final PsiLocalVariable variable = (PsiLocalVariable)referenceExpression.resolve();
+      final PsiAssignmentExpression assignment = (PsiAssignmentExpression)referenceExpression.getParent();
       assert assignment != null;
-      final PsiExpressionStatement assignmentStatement =
-        (PsiExpressionStatement)assignment.getParent();
+      final PsiExpressionStatement assignmentStatement = (PsiExpressionStatement)assignment.getParent();
       final PsiExpression lExpression = assignment.getLExpression();
       final String originalVariableName = lExpression.getText();
       assert variable != null;
       final PsiType type = variable.getType();
-      final JavaCodeStyleManager codeStyleManager =
-        JavaCodeStyleManager.getInstance(project);
-      final PsiCodeBlock variableBlock =
-        PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class);
-      final String newVariableName =
-        codeStyleManager.suggestUniqueVariableName(
-          originalVariableName, variableBlock, false);
-      final PsiCodeBlock codeBlock =
-        PsiTreeUtil.getParentOfType(assignmentStatement,
-                                    PsiCodeBlock.class);
+      final JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(project);
+      final PsiCodeBlock variableBlock = PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class);
+      final String newVariableName = codeStyleManager.suggestUniqueVariableName(originalVariableName, variableBlock, false);
+      final PsiCodeBlock codeBlock = PsiTreeUtil.getParentOfType(assignmentStatement, PsiCodeBlock.class);
       final SearchScope scope;
       if (codeBlock != null) {
         scope = new LocalSearchScope(codeBlock);
@@ -109,26 +93,21 @@ public class ReuseOfLocalVariableInspection
       else {
         scope = variable.getUseScope();
       }
-      final Query<PsiReference> query =
-        ReferencesSearch.search(variable, scope, false);
+      final Query<PsiReference> query = ReferencesSearch.search(variable, scope, false);
       final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
       final PsiElementFactory factory = psiFacade.getElementFactory();
-      List<PsiReferenceExpression> collectedReferences = new ArrayList();
+      List<PsiReferenceExpression> collectedReferences = new ArrayList<>();
       for (PsiReference reference : query) {
         final PsiElement referenceElement = reference.getElement();
         if (referenceElement == null) {
           continue;
         }
         final TextRange textRange = assignmentStatement.getTextRange();
-        if (referenceElement.getTextOffset() <=
-            textRange.getEndOffset()) {
+        if (referenceElement.getTextOffset() <= textRange.getEndOffset()) {
           continue;
         }
-        final PsiExpression newExpression =
-          factory.createExpressionFromText(newVariableName, referenceElement);
-        final PsiReferenceExpression replacementExpression =
-          (PsiReferenceExpression)
-            referenceElement.replace(newExpression);
+        final PsiExpression newExpression = factory.createExpressionFromText(newVariableName, referenceElement);
+        final PsiReferenceExpression replacementExpression = (PsiReferenceExpression)referenceElement.replace(newExpression);
         collectedReferences.add(replacementExpression);
       }
       final PsiExpression rhs = assignment.getRExpression();
@@ -139,24 +118,19 @@ public class ReuseOfLocalVariableInspection
       else {
         rhsText = rhs.getText();
       }
-      @NonNls final String newStatementText =
-        type.getCanonicalText() + ' ' + newVariableName +
-        " =  " + rhsText + ';';
+      @NonNls final String newStatementText = type.getCanonicalText() + ' ' + newVariableName + " =  " + rhsText + ';';
 
-      final PsiStatement newStatement =
-        factory.createStatementFromText(newStatementText,
-                                        assignmentStatement);
-      final PsiDeclarationStatement declarationStatement =
-        (PsiDeclarationStatement)
-          assignmentStatement.replace(newStatement);
+      final PsiStatement newStatement = factory.createStatementFromText(newStatementText, assignmentStatement);
+      final PsiDeclarationStatement declarationStatement = (PsiDeclarationStatement)assignmentStatement.replace(newStatement);
       final PsiElement[] elements =
         declarationStatement.getDeclaredElements();
       final PsiLocalVariable newVariable = (PsiLocalVariable)elements[0];
       final PsiElement context = declarationStatement.getParent();
-      HighlightUtils.showRenameTemplate(context, newVariable,
-                                        collectedReferences.toArray(
-                                          new PsiReferenceExpression[
-                                          collectedReferences.size()]));
+      HighlightUtils.showRenameTemplate(
+          context,
+          newVariable,
+          collectedReferences.toArray(new PsiReferenceExpression[collectedReferences.size()])
+      );
     }
   }
 
@@ -165,9 +139,7 @@ public class ReuseOfLocalVariableInspection
     return new ReuseOfLocalVariableVisitor();
   }
 
-  private static class ReuseOfLocalVariableVisitor
-    extends BaseInspectionVisitor {
-
+  private static class ReuseOfLocalVariableVisitor extends BaseInspectionVisitor {
     @Override
     public void visitAssignmentExpression(
       @Nonnull PsiAssignmentExpression assignment) {
@@ -180,8 +152,7 @@ public class ReuseOfLocalVariableInspection
       if (!(lhs instanceof PsiReferenceExpression)) {
         return;
       }
-      final PsiReferenceExpression reference =
-        (PsiReferenceExpression)lhs;
+      final PsiReferenceExpression reference = (PsiReferenceExpression)lhs;
       final PsiElement referent = reference.resolve();
       if (!(referent instanceof PsiLocalVariable)) {
         return;
@@ -197,12 +168,10 @@ public class ReuseOfLocalVariableInspection
         return;
       }
       final PsiExpression rhs = assignment.getRExpression();
-      if (rhs != null &&
-          VariableAccessUtils.variableIsUsed(variable, rhs)) {
+      if (rhs != null && VariableAccessUtils.variableIsUsed(variable, rhs)) {
         return;
       }
-      final PsiCodeBlock variableBlock =
-        PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class);
+      final PsiCodeBlock variableBlock = PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class);
       if (variableBlock == null) {
         return;
       }
@@ -215,8 +184,7 @@ public class ReuseOfLocalVariableInspection
         // that a variable is used in only one branch of a try statement
         return;
       }
-      final PsiElement assignmentBlock =
-        assignmentParent.getParent();
+      final PsiElement assignmentBlock = assignmentParent.getParent();
       if (assignmentBlock == null) {
         return;
       }
@@ -224,8 +192,7 @@ public class ReuseOfLocalVariableInspection
         registerError(lhs);
       }
       final PsiStatement[] statements = variableBlock.getStatements();
-      final PsiElement containingStatement =
-        getChildWhichContainsElement(variableBlock, assignment);
+      final PsiElement containingStatement = getChildWhichContainsElement(variableBlock, assignment);
       int statementPosition = -1;
       for (int i = 0; i < statements.length; i++) {
         if (statements[i].equals(containingStatement)) {
@@ -244,8 +211,7 @@ public class ReuseOfLocalVariableInspection
       registerError(lhs);
     }
 
-    private static boolean loopExistsBetween(
-      PsiAssignmentExpression assignment, PsiCodeBlock block) {
+    private static boolean loopExistsBetween(PsiAssignmentExpression assignment, PsiCodeBlock block) {
       PsiElement elementToTest = assignment;
       while (elementToTest != null) {
         if (elementToTest.equals(block)) {

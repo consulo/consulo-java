@@ -22,6 +22,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TestUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
 import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
@@ -74,25 +75,26 @@ public class TestMethodWithoutAssertionInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("test.method.without.assertion.display.name");
+    return InspectionGadgetsLocalize.testMethodWithoutAssertionDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-        "test.method.without.assertion.problem.descriptor");
+    return InspectionGadgetsLocalize.testMethodWithoutAssertionProblemDescriptor().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
     final JPanel panel = new JPanel(new BorderLayout());
-    final ListTable table = new ListTable(
-        new ListWrappingTableModel(Arrays.asList(classNames, methodNamePatterns), InspectionGadgetsBundle.message("class.name"),
-            InspectionGadgetsBundle.message("method.name.pattern")));
+    final ListTable table = new ListTable(new ListWrappingTableModel(
+      Arrays.asList(classNames, methodNamePatterns),
+      InspectionGadgetsLocalize.className().get(),
+      InspectionGadgetsBundle.message("method.name.pattern")
+    ));
     final JPanel tablePanel = UiUtils.createAddRemovePanel(table);
     final CheckBox checkBox =
-        new CheckBox(InspectionGadgetsBundle.message("assert.keyword.is.considered.an.assertion"), this, "assertKeywordIsAssertion");
+      new CheckBox(InspectionGadgetsLocalize.assertKeywordIsConsideredAnAssertion().get(), this, "assertKeywordIsAssertion");
     panel.add(tablePanel, BorderLayout.CENTER);
     panel.add(checkBox, BorderLayout.SOUTH);
     return panel;

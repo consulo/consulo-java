@@ -16,12 +16,11 @@
 package com.intellij.java.impl.ig.internationalization;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -34,14 +33,12 @@ public class StringTokenizerInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "use.stringtokenizer.display.name");
+    return InspectionGadgetsLocalize.useStringtokenizerDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "use.stringtokenizer.problem.descriptor");
+    return InspectionGadgetsLocalize.useStringtokenizerProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

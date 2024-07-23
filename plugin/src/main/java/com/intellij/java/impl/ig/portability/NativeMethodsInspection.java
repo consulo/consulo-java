@@ -15,14 +15,13 @@
  */
 package com.intellij.java.impl.ig.portability;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NativeMethodsInspection extends BaseInspection {
@@ -34,13 +33,12 @@ public class NativeMethodsInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("native.method.display.name");
+    return InspectionGadgetsLocalize.nativeMethodDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "native.method.problem.descriptor");
+    return InspectionGadgetsLocalize.nativeMethodProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

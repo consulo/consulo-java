@@ -15,19 +15,20 @@
  */
 package com.intellij.java.impl.ig.performance;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.content.scope.SearchScope;
-import consulo.language.psi.search.ReferencesSearch;
-import consulo.language.util.IncorrectOperationException;
-import consulo.application.util.query.Query;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.application.util.query.Query;
+import consulo.content.scope.SearchScope;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
@@ -38,15 +39,13 @@ public class InnerClassMayBeStaticInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "inner.class.may.be.static.display.name");
+    return InspectionGadgetsLocalize.innerClassMayBeStaticDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "inner.class.may.be.static.problem.descriptor");
+    return InspectionGadgetsLocalize.innerClassMayBeStaticProblemDescriptor().get();
   }
 
   @Override
@@ -63,19 +62,17 @@ public class InnerClassMayBeStaticInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("make.static.quickfix");
+      return InspectionGadgetsLocalize.makeStaticQuickfix().get();
     }
 
     @Override
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiJavaToken classNameToken =
-        (PsiJavaToken)descriptor.getPsiElement();
+      final PsiJavaToken classNameToken = (PsiJavaToken)descriptor.getPsiElement();
       final PsiClass innerClass = (PsiClass)classNameToken.getParent();
       assert innerClass != null;
       final SearchScope useScope = innerClass.getUseScope();
-      final Query<PsiReference> query =
-        ReferencesSearch.search(innerClass, useScope);
+      final Query<PsiReference> query = ReferencesSearch.search(innerClass, useScope);
       final Collection<PsiReference> references = query.findAll();
       for (final PsiReference reference : references) {
         final PsiElement element = reference.getElement();
@@ -83,10 +80,8 @@ public class InnerClassMayBeStaticInspection extends BaseInspection {
         if (!(parent instanceof PsiNewExpression)) {
           continue;
         }
-        final PsiNewExpression newExpression =
-          (PsiNewExpression)parent;
-        final PsiExpression qualifier =
-          newExpression.getQualifier();
+        final PsiNewExpression newExpression = (PsiNewExpression)parent;
+        final PsiExpression qualifier = newExpression.getQualifier();
         if (qualifier == null) {
           continue;
         }

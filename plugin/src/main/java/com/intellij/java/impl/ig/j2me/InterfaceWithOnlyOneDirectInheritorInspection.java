@@ -15,11 +15,11 @@
  */
 package com.intellij.java.impl.ig.j2me;
 
+import com.intellij.java.impl.ig.psiutils.InheritanceUtil;
 import com.intellij.java.language.psi.PsiClass;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import com.intellij.java.impl.ig.psiutils.InheritanceUtil;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 
@@ -28,12 +28,12 @@ public class InterfaceWithOnlyOneDirectInheritorInspection extends BaseInspectio
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("interface.one.inheritor.display.name");
+    return InspectionGadgetsLocalize.interfaceOneInheritorDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("interface.one.inheritor.problem.descriptor");
+    return InspectionGadgetsLocalize.interfaceOneInheritorProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

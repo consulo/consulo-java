@@ -16,18 +16,18 @@
 package com.intellij.java.impl.ig.performance;
 
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nonnull;
-import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.CollectionUtils;
 import com.siyeh.ig.psiutils.ConstructionUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.psi.PsiElement;
+import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class ToArrayCallWithZeroLengthArrayArgumentInspectionBase extends BaseInspection
@@ -37,7 +37,7 @@ public class ToArrayCallWithZeroLengthArrayArgumentInspectionBase extends BaseIn
 	@Nonnull
 	public String getDisplayName()
 	{
-		return InspectionGadgetsBundle.message("to.array.call.with.zero.length.array.argument.display.name");
+		return InspectionGadgetsLocalize.toArrayCallWithZeroLengthArrayArgumentDisplayName().get();
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class ToArrayCallWithZeroLengthArrayArgumentInspectionBase extends BaseIn
 	protected String buildErrorString(Object... infos)
 	{
 		final PsiExpression argument = (PsiExpression) infos[1];
-		return InspectionGadgetsBundle.message("to.array.call.with.zero.length.array.argument.problem.descriptor", argument.getText());
+		return InspectionGadgetsLocalize.toArrayCallWithZeroLengthArrayArgumentProblemDescriptor(argument.getText()).get();
 	}
 
 	@Override

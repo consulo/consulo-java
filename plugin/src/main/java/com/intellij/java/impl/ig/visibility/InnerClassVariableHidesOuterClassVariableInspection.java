@@ -15,18 +15,19 @@
  */
 package com.intellij.java.impl.ig.visibility;
 
+import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
@@ -47,14 +48,12 @@ public class InnerClassVariableHidesOuterClassVariableInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "inner.class.field.hides.outer.display.name");
+    return InspectionGadgetsLocalize.innerClassFieldHidesOuterDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "inner.class.field.hides.outer.problem.descriptor");
+    return InspectionGadgetsLocalize.innerClassFieldHidesOuterProblemDescriptor().get();
   }
 
   protected InspectionGadgetsFix buildFix(Object... infos) {
@@ -62,9 +61,8 @@ public class InnerClassVariableHidesOuterClassVariableInspection
   }
 
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message(
-      "inner.class.field.hides.outer.ignore.option"),
-                                          this, "m_ignoreInvisibleFields");
+    LocalizeValue message = InspectionGadgetsLocalize.innerClassFieldHidesOuterIgnoreOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "m_ignoreInvisibleFields");
   }
 
   protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {

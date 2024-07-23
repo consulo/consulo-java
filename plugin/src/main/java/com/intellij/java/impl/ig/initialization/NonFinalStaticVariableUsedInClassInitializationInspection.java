@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.initialization;
 
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiField;
@@ -33,14 +34,12 @@ public class NonFinalStaticVariableUsedInClassInitializationInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "non.final.static.variable.initialization.display.name");
+    return InspectionGadgetsLocalize.nonFinalStaticVariableInitializationDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "non.final.static.variable.initialization.problem.descriptor");
+    return InspectionGadgetsLocalize.nonFinalStaticVariableInitializationProblemDescriptor().get();
   }
 
   @Nullable

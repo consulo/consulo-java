@@ -15,14 +15,13 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
@@ -31,13 +30,13 @@ public class ReflectionForUnavailableAnnotationInspection extends BaseInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("reflection.for.unavailable.annotation.display.name");
+    return InspectionGadgetsLocalize.reflectionForUnavailableAnnotationDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("reflection.for.unavailable.annotation.problem.descriptor");
+    return InspectionGadgetsLocalize.reflectionForUnavailableAnnotationProblemDescriptor().get();
   }
 
   @Override

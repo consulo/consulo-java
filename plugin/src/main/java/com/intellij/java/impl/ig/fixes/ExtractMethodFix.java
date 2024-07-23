@@ -15,41 +15,32 @@
  */
 package com.intellij.java.impl.ig.fixes;
 
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.dataContext.DataManager;
-import consulo.dataContext.DataContext;
-import consulo.application.ApplicationManager;
-import consulo.project.Project;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.analysis.refactoring.JavaRefactoringActionHandlerFactory;
-import consulo.language.editor.refactoring.action.RefactoringActionHandler;
-import com.siyeh.InspectionGadgetsBundle;
+import com.intellij.java.language.psi.PsiExpression;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.application.ApplicationManager;
+import consulo.dataContext.DataContext;
+import consulo.dataContext.DataManager;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 public class ExtractMethodFix extends InspectionGadgetsFix {
-
   @Nonnull
   public String getName() {
-    return InspectionGadgetsBundle.message("extract.method.quickfix");
+    return InspectionGadgetsLocalize.extractMethodQuickfix().get();
   }
 
   public void doFix(final Project project, ProblemDescriptor descriptor) {
-    final PsiExpression expression =
-      (PsiExpression)descriptor.getPsiElement();
-    final JavaRefactoringActionHandlerFactory factory =
-      JavaRefactoringActionHandlerFactory.getInstance();
-    final RefactoringActionHandler extractHandler =
-      factory.createExtractMethodHandler();
+    final PsiExpression expression = (PsiExpression)descriptor.getPsiElement();
+    final JavaRefactoringActionHandlerFactory factory = JavaRefactoringActionHandlerFactory.getInstance();
+    final RefactoringActionHandler extractHandler = factory.createExtractMethodHandler();
     final DataManager dataManager = DataManager.getInstance();
     final DataContext dataContext = dataManager.getDataContext();
-    final Runnable runnable = new Runnable() {
-      public void run() {
-        extractHandler.invoke(project,
-                              new PsiElement[]{expression}, dataContext);
-      }
-    };
+    final Runnable runnable = () -> extractHandler.invoke(project, new PsiElement[]{expression}, dataContext);
     if (ApplicationManager.getApplication().isUnitTestMode()) {
       runnable.run();
     }

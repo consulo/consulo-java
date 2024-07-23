@@ -16,20 +16,20 @@
 package com.intellij.java.impl.ig.threading;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import javax.swing.*;
 
 @ExtensionImpl
@@ -46,16 +46,14 @@ public class SynchronizedMethodInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "synchronized.method.display.name");
+    return InspectionGadgetsLocalize.synchronizedMethodDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiMethod method = (PsiMethod)infos[0];
-    return InspectionGadgetsBundle.message(
-      "synchronized.method.problem.descriptor", method.getName());
+    return InspectionGadgetsLocalize.synchronizedMethodProblemDescriptor(method.getName()).get();
   }
 
   @Override
@@ -75,9 +73,11 @@ public class SynchronizedMethodInspection extends BaseInspection {
   @Override
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
-    panel.addCheckbox(InspectionGadgetsBundle.message("synchronized.method.include.option"), "m_includeNativeMethods");
-    panel.addCheckbox(InspectionGadgetsBundle.message("synchronized.method.ignore.synchronized.super.option"),
-                      "ignoreSynchronizedSuperMethods");
+    panel.addCheckbox(InspectionGadgetsLocalize.synchronizedMethodIncludeOption().get(), "m_includeNativeMethods");
+    panel.addCheckbox(
+      InspectionGadgetsLocalize.synchronizedMethodIgnoreSynchronizedSuperOption().get(),
+      "ignoreSynchronizedSuperMethods"
+    );
     return panel;
   }
 
@@ -86,8 +86,7 @@ public class SynchronizedMethodInspection extends BaseInspection {
     @Override
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "synchronized.method.move.quickfix");
+      return InspectionGadgetsLocalize.synchronizedMethodMoveQuickfix().get();
     }
 
     @Override

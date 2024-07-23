@@ -18,9 +18,9 @@ package com.intellij.java.impl.ig.threading;
 import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiStatement;
 import com.intellij.java.language.psi.PsiSynchronizedStatement;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 
@@ -29,23 +29,19 @@ public class EmptySynchronizedStatementInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "empty.synchronized.statement.display.name");
+    return InspectionGadgetsLocalize.emptySynchronizedStatementDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "empty.synchronized.statement.problem.descriptor");
+    return InspectionGadgetsLocalize.emptySynchronizedStatementProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {
     return new EmptySynchronizedStatementVisitor();
   }
 
-  private static class EmptySynchronizedStatementVisitor
-    extends BaseInspectionVisitor {
-
+  private static class EmptySynchronizedStatementVisitor extends BaseInspectionVisitor {
     @Override
     public void visitSynchronizedStatement(
       @Nonnull PsiSynchronizedStatement statement) {

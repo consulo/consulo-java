@@ -17,16 +17,17 @@ package com.intellij.java.impl.ig.errorhandling;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 
-import jakarta.annotation.Nonnull;
 import javax.swing.*;
 
 @ExtensionImpl
@@ -39,19 +40,19 @@ public class NewExceptionWithoutArgumentsInspection extends BaseInspection {
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("new.exception.without.arguments.display.name");
+    return InspectionGadgetsLocalize.newExceptionWithoutArgumentsDisplayName().get();
   }
 
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("new.exception.without.arguments.problem.descriptor");
+    return InspectionGadgetsLocalize.newExceptionWithoutArgumentsProblemDescriptor().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message("new.exception.without.arguments.ignore.option"), this,
-                                          "ignoreWithoutParameters");
+    LocalizeValue message = InspectionGadgetsLocalize.newExceptionWithoutArgumentsIgnoreOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreWithoutParameters");
   }
 
   @Override

@@ -16,17 +16,17 @@
 package com.intellij.java.impl.ig.bugs;
 
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
-import consulo.language.ast.IElementType;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
-import org.jetbrains.annotations.NonNls;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class MismatchedArrayReadWriteInspection extends BaseInspection {
@@ -40,22 +40,16 @@ public class MismatchedArrayReadWriteInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "mismatched.read.write.array.display.name");
+    return InspectionGadgetsLocalize.mismatchedReadWriteArrayDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final boolean written = ((Boolean)infos[0]).booleanValue();
-    if (written) {
-      return InspectionGadgetsBundle.message(
-        "mismatched.read.write.array.problem.descriptor.write.not.read");
-    }
-    else {
-      return InspectionGadgetsBundle.message(
-        "mismatched.read.write.array.problem.descriptor.read.not.write");
-    }
+    final boolean written = (Boolean)infos[0];
+    return written
+      ? InspectionGadgetsLocalize.mismatchedReadWriteArrayProblemDescriptorWriteNotRead().get()
+      : InspectionGadgetsLocalize.mismatchedReadWriteArrayProblemDescriptorReadNotWrite().get();
   }
 
   @Override

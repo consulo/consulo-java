@@ -19,17 +19,16 @@ import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiAssignmentExpression;
 import com.intellij.java.language.psi.PsiBinaryExpression;
 import com.intellij.java.language.psi.PsiExpression;
-import com.siyeh.InspectionGadgetsBundle;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.codeEditor.Editor;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Nls;
-
-import jakarta.annotation.Nonnull;
 
 public class ReplaceAssignmentWithComparisonFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   public ReplaceAssignmentWithComparisonFix(PsiAssignmentExpression expr) {
@@ -59,6 +58,6 @@ public class ReplaceAssignmentWithComparisonFix extends LocalQuickFixAndIntentio
   @Nonnull
   @Override
   public String getFamilyName() {
-    return InspectionGadgetsBundle.message("assignment.used.as.condition.replace.quickfix");
+    return InspectionGadgetsLocalize.assignmentUsedAsConditionReplaceQuickfix().get();
   }
 }

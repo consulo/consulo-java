@@ -15,15 +15,14 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class PrimitiveArrayArgumentToVariableArgMethodInspection extends BaseInspection {
@@ -31,13 +30,13 @@ public class PrimitiveArrayArgumentToVariableArgMethodInspection extends BaseIns
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("primitive.array.argument.to.var.arg.method.display.name");
+    return InspectionGadgetsLocalize.primitiveArrayArgumentToVarArgMethodDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("primitive.array.argument.to.var.arg.method.problem.descriptor");
+    return InspectionGadgetsLocalize.primitiveArrayArgumentToVarArgMethodProblemDescriptor().get();
   }
 
   @Override

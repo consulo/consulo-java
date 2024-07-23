@@ -15,23 +15,22 @@
  */
 package com.intellij.java.impl.ig.style;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.language.editor.inspection.ProblemHighlightType;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiKeyword;
 import com.intellij.java.language.psi.PsiThisExpression;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class UnnecessaryQualifierForThisInspection
@@ -39,14 +38,12 @@ public class UnnecessaryQualifierForThisInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "unnecessary.qualifier.for.this.display.name");
+    return InspectionGadgetsLocalize.unnecessaryQualifierForThisDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "unnecessary.qualifier.for.this.problem.descriptor");
+    return InspectionGadgetsLocalize.unnecessaryQualifierForThisProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {
@@ -62,15 +59,12 @@ public class UnnecessaryQualifierForThisInspection
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "unnecessary.qualifier.for.this.remove.quickfix");
+      return InspectionGadgetsLocalize.unnecessaryQualifierForThisRemoveQuickfix().get();
     }
 
-    public void doFix(Project project, ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
+    public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
       final PsiElement qualifier = descriptor.getPsiElement();
-      final PsiThisExpression thisExpression =
-        (PsiThisExpression)qualifier.getParent();
+      final PsiThisExpression thisExpression = (PsiThisExpression)qualifier.getParent();
       replaceExpression(thisExpression, PsiKeyword.THIS);
     }
   }

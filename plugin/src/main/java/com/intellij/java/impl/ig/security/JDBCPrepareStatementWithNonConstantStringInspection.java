@@ -18,13 +18,13 @@ package com.intellij.java.impl.ig.security;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.ConstantExpressionUtil;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
-import org.jetbrains.annotations.NonNls;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -48,15 +48,13 @@ public class JDBCPrepareStatementWithNonConstantStringInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "jdbc.prepare.statement.with.non.constant.string.display.name");
+    return InspectionGadgetsLocalize.jdbcPrepareStatementWithNonConstantStringDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "jdbc.prepare.statement.with.non.constant.string.problem.descriptor");
+    return InspectionGadgetsLocalize.jdbcPrepareStatementWithNonConstantStringProblemDescriptor().get();
   }
 
   @Override

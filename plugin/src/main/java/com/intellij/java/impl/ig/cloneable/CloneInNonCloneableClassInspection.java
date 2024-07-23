@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.ig.cloneable;
 
+import com.intellij.java.impl.ig.fixes.MakeCloneableFix;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.MakeCloneableFix;
 import com.siyeh.ig.psiutils.CloneUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 
@@ -32,8 +32,7 @@ public class CloneInNonCloneableClassInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "clone.method.in.non.cloneable.class.display.name");
+    return InspectionGadgetsLocalize.cloneMethodInNonCloneableClassDisplayName().get();
   }
 
   @Override
@@ -41,16 +40,9 @@ public class CloneInNonCloneableClassInspection extends BaseInspection {
   public String buildErrorString(Object... infos) {
     final PsiClass aClass = (PsiClass)infos[0];
     final String className = aClass.getName();
-    if (aClass.isInterface()) {
-      return InspectionGadgetsBundle.message(
-        "clone.method.in.non.cloneable.interface.problem.descriptor",
-        className);
-    }
-    else {
-      return InspectionGadgetsBundle.message(
-        "clone.method.in.non.cloneable.class.problem.descriptor",
-        className);
-    }
+    return aClass.isInterface()
+      ? InspectionGadgetsLocalize.cloneMethodInNonCloneableInterfaceProblemDescriptor(className).get()
+      : InspectionGadgetsLocalize.cloneMethodInNonCloneableClassProblemDescriptor(className).get();
   }
 
   @Override

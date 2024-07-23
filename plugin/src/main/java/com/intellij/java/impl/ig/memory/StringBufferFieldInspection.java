@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.memory;
 
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 import com.intellij.java.language.psi.PsiField;
@@ -31,8 +32,7 @@ public class StringBufferFieldInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "stringbuffer.field.display.name");
+    return InspectionGadgetsLocalize.stringbufferFieldDisplayName().get();
   }
 
   @Override
@@ -40,8 +40,7 @@ public class StringBufferFieldInspection extends BaseInspection {
   public String buildErrorString(Object... infos) {
     final PsiType type = (PsiType)infos[0];
     final String typeName = type.getPresentableText();
-    return InspectionGadgetsBundle.message(
-      "stringbuffer.field.problem.descriptor", typeName);
+    return InspectionGadgetsLocalize.stringbufferFieldProblemDescriptor(typeName).get();
   }
 
   @Override

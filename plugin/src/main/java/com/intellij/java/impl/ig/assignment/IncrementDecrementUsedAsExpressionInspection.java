@@ -17,10 +17,10 @@ package com.intellij.java.impl.ig.assignment;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.content.scope.SearchScope;
 import consulo.language.ast.IElementType;
@@ -30,7 +30,6 @@ import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -47,8 +46,7 @@ public class IncrementDecrementUsedAsExpressionInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "increment.decrement.display.name");
+    return InspectionGadgetsLocalize.incrementDecrementDisplayName().get();
   }
 
   @Override
@@ -60,28 +58,16 @@ public class IncrementDecrementUsedAsExpressionInspection
         (PsiPostfixExpression)info;
       final IElementType tokenType =
         postfixExpression.getOperationTokenType();
-      if (tokenType.equals(JavaTokenType.PLUSPLUS)) {
-        return InspectionGadgetsBundle.message(
-          "value.of.post.increment.problem.descriptor");
-      }
-      else {
-        return InspectionGadgetsBundle.message(
-          "value.of.post.decrement.problem.descriptor");
-      }
+      return JavaTokenType.PLUSPLUS.equals(tokenType)
+        ? InspectionGadgetsLocalize.valueOfPostIncrementProblemDescriptor().get()
+        : InspectionGadgetsLocalize.valueOfPostDecrementProblemDescriptor().get();
     }
     else {
-      final PsiPrefixExpression prefixExpression =
-        (PsiPrefixExpression)info;
-      final IElementType tokenType =
-        prefixExpression.getOperationTokenType();
-      if (tokenType.equals(JavaTokenType.PLUSPLUS)) {
-        return InspectionGadgetsBundle.message(
-          "value.of.pre.increment.problem.descriptor");
-      }
-      else {
-        return InspectionGadgetsBundle.message(
-          "value.of.pre.decrement.problem.descriptor");
-      }
+      final PsiPrefixExpression prefixExpression = (PsiPrefixExpression)info;
+      final IElementType tokenType = prefixExpression.getOperationTokenType();
+      return JavaTokenType.PLUSPLUS.equals(tokenType)
+        ? InspectionGadgetsLocalize.valueOfPreIncrementProblemDescriptor().get()
+        : InspectionGadgetsLocalize.valueOfPreDecrementProblemDescriptor().get();
     }
   }
 
@@ -103,9 +89,7 @@ public class IncrementDecrementUsedAsExpressionInspection
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "increment.decrement.used.as.expression.quickfix",
-        elementText);
+      return InspectionGadgetsLocalize.incrementDecrementUsedAsExpressionQuickfix(elementText).get();
     }
 
     @Override

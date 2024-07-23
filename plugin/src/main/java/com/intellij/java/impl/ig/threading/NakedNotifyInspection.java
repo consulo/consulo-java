@@ -17,9 +17,9 @@ package com.intellij.java.impl.ig.threading;
 
 import com.intellij.java.language.psi.*;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
@@ -29,13 +29,12 @@ public class NakedNotifyInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("naked.notify.display.name");
+    return InspectionGadgetsLocalize.nakedNotifyDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "naked.notify.problem.descriptor");
+    return InspectionGadgetsLocalize.nakedNotifyProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

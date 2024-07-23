@@ -17,9 +17,9 @@ package com.intellij.java.impl.ig.controlflow;
 
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.java.language.psi.PsiLabeledStatement;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 
@@ -28,14 +28,12 @@ public class LabeledStatementInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "labeled.statement.display.name");
+    return InspectionGadgetsLocalize.labeledStatementDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "labeled.statement.problem.descriptor");
+    return InspectionGadgetsLocalize.labeledStatementProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

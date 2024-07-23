@@ -15,19 +15,20 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
+import com.intellij.java.impl.ig.psiutils.IteratorUtils;
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
-import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.util.collection.SmartList;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.BoolUtils;
-import com.intellij.java.impl.ig.psiutils.IteratorUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
+import consulo.util.collection.SmartList;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -43,21 +44,18 @@ public class LoopConditionNotUpdatedInsideLoopInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "loop.condition.not.updated.inside.loop.display.name");
+    return InspectionGadgetsLocalize.loopConditionNotUpdatedInsideLoopDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "loop.condition.not.updated.inside.loop.problem.descriptor");
+    return InspectionGadgetsLocalize.loopConditionNotUpdatedInsideLoopProblemDescriptor().get();
   }
 
   @Nullable
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(
-      InspectionGadgetsBundle.message("ignore.iterator.loop.variables"),
-      this, "ignoreIterators");
+    LocalizeValue message = InspectionGadgetsLocalize.ignoreIteratorLoopVariables();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreIterators");
   }
 
   public BaseInspectionVisitor buildVisitor() {

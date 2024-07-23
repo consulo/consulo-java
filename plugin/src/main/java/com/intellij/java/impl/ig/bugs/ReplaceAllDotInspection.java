@@ -18,13 +18,13 @@ package com.intellij.java.impl.ig.bugs;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.ConstantExpressionUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
-import org.jetbrains.annotations.NonNls;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class ReplaceAllDotInspection extends BaseInspection {
@@ -32,15 +32,13 @@ public class ReplaceAllDotInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "replace.all.dot.display.name");
+    return InspectionGadgetsLocalize.replaceAllDotDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "replace.all.dot.problem.descriptor");
+    return InspectionGadgetsLocalize.replaceAllDotProblemDescriptor().get();
   }
 
   @Override

@@ -20,6 +20,7 @@ import com.intellij.java.language.psi.PsiExpressionList;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.java.language.psi.util.InheritanceUtil;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.util.containers.ContainerUtilRt;
 import com.siyeh.InspectionGadgetsBundle;
@@ -42,22 +43,17 @@ public class PlaceholderCountMatchesArgumentCountInspection extends BaseInspecti
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("placeholder.count.matches.argument.count.display.name");
+    return InspectionGadgetsLocalize.placeholderCountMatchesArgumentCountDisplayName().get();
   }
 
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
-    final int argumentCount = ((Integer)infos[0]).intValue();
-    final int placeholderCount = ((Integer)infos[1]).intValue();
-    if (argumentCount > placeholderCount) {
-      return InspectionGadgetsBundle.message("placeholder.count.matches.argument.count.more.problem.descriptor",
-                                             argumentCount, placeholderCount);
-    }
-    else {
-      return InspectionGadgetsBundle.message("placeholder.count.matches.argument.count.fewer.problem.descriptor",
-                                             argumentCount, placeholderCount);
-    }
+    final int argumentCount = (Integer)infos[0];
+    final int placeholderCount = (Integer)infos[1];
+    return argumentCount > placeholderCount
+      ? InspectionGadgetsLocalize.placeholderCountMatchesArgumentCountMoreProblemDescriptor(argumentCount, placeholderCount).get()
+      : InspectionGadgetsLocalize.placeholderCountMatchesArgumentCountFewerProblemDescriptor(argumentCount, placeholderCount).get();
   }
 
   @Override

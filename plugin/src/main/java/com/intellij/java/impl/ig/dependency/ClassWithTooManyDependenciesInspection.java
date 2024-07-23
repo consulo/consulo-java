@@ -18,7 +18,7 @@ package com.intellij.java.impl.ig.dependency;
 import com.intellij.java.analysis.codeInspection.reference.RefClass;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaVisitor;
 import com.intellij.java.impl.ig.BaseGlobalInspection;
-import com.siyeh.InspectionGadgetsBundle;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.deadCodeNotWorking.impl.SingleIntegerFieldOptionsPanel;
 import consulo.language.editor.inspection.CommonProblemDescriptor;
 import consulo.language.editor.inspection.GlobalInspectionContext;
@@ -27,8 +27,9 @@ import consulo.language.editor.inspection.reference.RefFile;
 import consulo.language.editor.inspection.reference.RefManager;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.scope.AnalysisScope;
-
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 import java.util.Set;
 
@@ -42,8 +43,7 @@ public abstract class ClassWithTooManyDependenciesInspection extends BaseGlobalI
 	@Override
 	public String getDisplayName()
 	{
-		return InspectionGadgetsBundle.message(
-				"class.with.too.many.dependencies.display.name");
+		return InspectionGadgetsLocalize.classWithTooManyDependenciesDisplayName().get();
 	}
 
 	@Override
@@ -73,11 +73,13 @@ public abstract class ClassWithTooManyDependenciesInspection extends BaseGlobalI
 				{
 					return;
 				}
-				final String errorString = InspectionGadgetsBundle.message(
-						"class.with.too.many.dependencies.problem.descriptor",
-						refClass.getName(), numDependencies, limit);
+				final String errorString = InspectionGadgetsLocalize.classWithTooManyDependenciesProblemDescriptor(
+					refClass.getName(),
+					numDependencies,
+					limit
+				).get();
 				final CommonProblemDescriptor[] descriptors = {
-						inspectionManager.createProblemDescriptor(errorString)
+					inspectionManager.createProblemDescriptor(errorString)
 				};
 				problemDescriptionsProcessor.addProblemElement(refClass, descriptors);
 			}
@@ -87,9 +89,7 @@ public abstract class ClassWithTooManyDependenciesInspection extends BaseGlobalI
 	@Override
 	public JComponent createOptionsPanel()
 	{
-		return new SingleIntegerFieldOptionsPanel(
-				InspectionGadgetsBundle.message(
-						"class.with.too.many.dependencies.max.option"),
-				this, "limit");
+		LocalizeValue message = InspectionGadgetsLocalize.classWithTooManyDependenciesMaxOption();
+		return new SingleIntegerFieldOptionsPanel(message.get(), this, "limit");
 	}
 }

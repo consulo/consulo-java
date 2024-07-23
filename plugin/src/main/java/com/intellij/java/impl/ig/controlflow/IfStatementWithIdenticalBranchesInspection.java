@@ -17,6 +17,7 @@ package com.intellij.java.impl.ig.controlflow;
 
 import java.util.Collections;
 
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import jakarta.annotation.Nonnull;
 
 import consulo.annotation.component.ExtensionImpl;
@@ -52,15 +53,13 @@ public class IfStatementWithIdenticalBranchesInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "if.statement.with.identical.branches.display.name");
+    return InspectionGadgetsLocalize.ifStatementWithIdenticalBranchesDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "if.statement.with.identical.branches.problem.descriptor");
+    return InspectionGadgetsLocalize.ifStatementWithIdenticalBranchesProblemDescriptor().get();
   }
 
   @Override
@@ -75,17 +74,14 @@ public class IfStatementWithIdenticalBranchesInspection
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "if.statement.with.identical.branches.collapse.quickfix");
+      return InspectionGadgetsLocalize.ifStatementWithIdenticalBranchesCollapseQuickfix().get();
     }
 
     @Override
-    public void doFix(@Nonnull Project project,
-                      ProblemDescriptor descriptor)
+    public void doFix(@Nonnull Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
       final PsiElement identifier = descriptor.getPsiElement();
-      final PsiIfStatement statement =
-        (PsiIfStatement)identifier.getParent();
+      final PsiIfStatement statement = (PsiIfStatement)identifier.getParent();
       assert statement != null;
       final PsiStatement thenBranch = statement.getThenBranch();
       if (thenBranch == null) {
@@ -98,17 +94,14 @@ public class IfStatementWithIdenticalBranchesInspection
         return;
       }
       if (elseBranch instanceof PsiIfStatement) {
-        final PsiIfStatement elseIfStatement =
-          (PsiIfStatement)elseBranch;
+        final PsiIfStatement elseIfStatement = (PsiIfStatement)elseBranch;
         final PsiExpression condition1 = statement.getCondition();
         final PsiExpression condition2 = elseIfStatement.getCondition();
         if (condition1 == null) {
           return;
         }
-        replaceExpression(condition1, buildOrExpressionText(
-          condition1, condition2));
-        final PsiStatement elseElseBranch =
-          elseIfStatement.getElseBranch();
+        replaceExpression(condition1, buildOrExpressionText(condition1, condition2));
+        final PsiStatement elseElseBranch = elseIfStatement.getElseBranch();
         if (elseElseBranch == null) {
           elseIfStatement.delete();
         }
@@ -119,16 +112,13 @@ public class IfStatementWithIdenticalBranchesInspection
       else {
         final PsiElement parent = statement.getParent();
         if (thenBranch instanceof PsiBlockStatement) {
-          final PsiBlockStatement blockStatement =
-            (PsiBlockStatement)thenBranch;
+          final PsiBlockStatement blockStatement = (PsiBlockStatement)thenBranch;
           if (parent instanceof PsiCodeBlock) {
-            final PsiCodeBlock codeBlock =
-              blockStatement.getCodeBlock();
+            final PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
             final PsiStatement[] statements =
               codeBlock.getStatements();
             if (statements.length > 0) {
-              parent.addRangeBefore(statements[0],
-                                    statements[statements.length - 1], statement);
+              parent.addRangeBefore(statements[0], statements[statements.length - 1], statement);
             }
             statement.delete();
           }

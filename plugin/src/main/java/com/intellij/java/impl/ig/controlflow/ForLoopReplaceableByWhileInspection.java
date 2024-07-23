@@ -15,19 +15,20 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import org.jetbrains.annotations.NonNls;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 
@@ -42,8 +43,7 @@ public class ForLoopReplaceableByWhileInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "for.loop.replaceable.by.while.display.name");
+    return InspectionGadgetsLocalize.forLoopReplaceableByWhileDisplayName().get();
   }
 
   @Override
@@ -55,15 +55,13 @@ public class ForLoopReplaceableByWhileInspection extends BaseInspection {
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "for.loop.replaceable.by.while.problem.descriptor");
+    return InspectionGadgetsLocalize.forLoopReplaceableByWhileProblemDescriptor().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message(
-      "for.loop.replaceable.by.while.ignore.option"),
-                                          this, "m_ignoreLoopsWithoutConditions");
+    LocalizeValue message = InspectionGadgetsLocalize.forLoopReplaceableByWhileIgnoreOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "m_ignoreLoopsWithoutConditions");
   }
 
   @Override
@@ -75,16 +73,14 @@ public class ForLoopReplaceableByWhileInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "for.loop.replaceable.by.while.replace.quickfix");
+      return InspectionGadgetsLocalize.forLoopReplaceableByWhileReplaceQuickfix().get();
     }
 
     @Override
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
       final PsiElement forKeywordElement = descriptor.getPsiElement();
-      final PsiForStatement forStatement =
-        (PsiForStatement)forKeywordElement.getParent();
+      final PsiForStatement forStatement = (PsiForStatement)forKeywordElement.getParent();
       assert forStatement != null;
       final PsiExpression condition = forStatement.getCondition();
       final PsiStatement body = forStatement.getBody();

@@ -5,12 +5,11 @@ import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiTypeElement;
-import com.siyeh.InspectionGadgetsBundle;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.project.Project;
 import consulo.util.lang.ObjectUtil;
-
 import jakarta.annotation.Nonnull;
 
 public class ReplaceTypeInCastFix implements LocalQuickFix {
@@ -27,7 +26,7 @@ public class ReplaceTypeInCastFix implements LocalQuickFix {
   @Override
   @Nonnull
   public String getName() {
-    return InspectionGadgetsBundle.message("cast.conflicts.with.instanceof.quickfix1", myExistingTypeText, myWantedTypeText);
+    return InspectionGadgetsLocalize.castConflictsWithInstanceofQuickfix1(myExistingTypeText, myWantedTypeText).get();
   }
 
   @Nonnull

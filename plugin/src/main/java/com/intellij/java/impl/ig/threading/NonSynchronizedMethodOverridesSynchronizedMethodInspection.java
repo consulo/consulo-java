@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.ig.threading;
 
-import com.siyeh.InspectionGadgetsBundle;
+import com.intellij.java.impl.ig.fixes.ChangeModifierFix;
+import com.intellij.java.language.psi.PsiModifier;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.ChangeModifierFix;
-import com.intellij.java.language.psi.PsiModifier;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 
@@ -30,14 +30,12 @@ public class NonSynchronizedMethodOverridesSynchronizedMethodInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "non.synchronized.method.overrides.synchronized.method.display.name");
+    return InspectionGadgetsLocalize.nonSynchronizedMethodOverridesSynchronizedMethodDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "non.synchronized.method.overrides.synchronized.method.problem.descriptor");
+    return InspectionGadgetsLocalize.nonSynchronizedMethodOverridesSynchronizedMethodProblemDescriptor().get();
   }
 
   @Override

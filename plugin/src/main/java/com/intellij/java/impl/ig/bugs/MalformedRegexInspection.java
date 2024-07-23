@@ -21,13 +21,12 @@ import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.util.ConstantExpressionUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.MethodCallUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-
 import jakarta.annotation.Nonnull;
 
 import java.util.regex.Pattern;
@@ -39,18 +38,15 @@ public class MalformedRegexInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("malformed.regular.expression.display.name");
+    return InspectionGadgetsLocalize.malformedRegularExpressionDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    if (infos.length == 0) {
-      return InspectionGadgetsBundle.message("malformed.regular.expression.problem.descriptor1");
-    }
-    else {
-      return InspectionGadgetsBundle.message("malformed.regular.expression.problem.descriptor2", infos[0]);
-    }
+    return infos.length == 0
+      ? InspectionGadgetsLocalize.malformedRegularExpressionProblemDescriptor1().get()
+      : InspectionGadgetsLocalize.malformedRegularExpressionProblemDescriptor2(infos[0]).get();
   }
 
   @Override

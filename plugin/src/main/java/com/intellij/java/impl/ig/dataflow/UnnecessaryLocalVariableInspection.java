@@ -18,18 +18,18 @@ package com.intellij.java.impl.ig.dataflow;
 import com.intellij.java.impl.ig.fixes.InlineVariableFix;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
-import consulo.language.ast.IElementType;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
+import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.util.PsiTreeUtil;
-
 import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 
 public abstract class UnnecessaryLocalVariableInspection extends BaseInspection {
@@ -47,16 +47,20 @@ public abstract class UnnecessaryLocalVariableInspection extends BaseInspection 
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("redundant.local.variable.display.name");
+    return InspectionGadgetsLocalize.redundantLocalVariableDisplayName().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message("redundant.local.variable.ignore.option"),
-                             "m_ignoreImmediatelyReturnedVariables");
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message("redundant.local.variable.annotation.option"),
-                             "m_ignoreAnnotatedVariables");
+    optionsPanel.addCheckbox(
+      InspectionGadgetsLocalize.redundantLocalVariableIgnoreOption().get(),
+      "m_ignoreImmediatelyReturnedVariables"
+    );
+    optionsPanel.addCheckbox(
+      InspectionGadgetsLocalize.redundantLocalVariableAnnotationOption().get(),
+      "m_ignoreAnnotatedVariables"
+    );
     return optionsPanel;
   }
 
@@ -68,7 +72,7 @@ public abstract class UnnecessaryLocalVariableInspection extends BaseInspection 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("unnecessary.local.variable.problem.descriptor");
+    return InspectionGadgetsLocalize.unnecessaryLocalVariableProblemDescriptor().get();
   }
 
   @Override

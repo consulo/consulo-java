@@ -15,19 +15,18 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class UnnecessaryLabelOnBreakStatementInspection
@@ -35,14 +34,12 @@ public class UnnecessaryLabelOnBreakStatementInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "unnecessary.label.on.break.statement.display.name");
+    return InspectionGadgetsLocalize.unnecessaryLabelOnBreakStatementDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "unnecessary.label.on.break.statement.problem.descriptor");
+    return InspectionGadgetsLocalize.unnecessaryLabelOnBreakStatementProblemDescriptor().get();
   }
 
   public boolean isEnabledByDefault() {
@@ -58,17 +55,13 @@ public class UnnecessaryLabelOnBreakStatementInspection
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "unnecessary.label.remove.quickfix");
+      return InspectionGadgetsLocalize.unnecessaryLabelRemoveQuickfix().get();
     }
 
-    public void doFix(Project project, ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
+    public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
       final PsiElement breakKeywordElement = descriptor.getPsiElement();
-      final PsiBreakStatement breakStatement =
-        (PsiBreakStatement)breakKeywordElement.getParent();
-      final PsiIdentifier identifier =
-        breakStatement.getLabelIdentifier();
+      final PsiBreakStatement breakStatement = (PsiBreakStatement)breakKeywordElement.getParent();
+      final PsiIdentifier identifier = breakStatement.getLabelIdentifier();
       if (identifier == null) {
         return;
       }
@@ -80,13 +73,10 @@ public class UnnecessaryLabelOnBreakStatementInspection
     return new UnnecessaryLabelOnBreakStatementVisitor();
   }
 
-  private static class UnnecessaryLabelOnBreakStatementVisitor
-    extends BaseInspectionVisitor {
-
+  private static class UnnecessaryLabelOnBreakStatementVisitor extends BaseInspectionVisitor {
     @Override
     public void visitBreakStatement(@Nonnull PsiBreakStatement statement) {
-      final PsiIdentifier labelIdentifier =
-        statement.getLabelIdentifier();
+      final PsiIdentifier labelIdentifier = statement.getLabelIdentifier();
       if (labelIdentifier == null) {
         return;
       }
@@ -94,8 +84,7 @@ public class UnnecessaryLabelOnBreakStatementInspection
       if (labelText == null || labelText.length() == 0) {
         return;
       }
-      final PsiStatement exitedStatement =
-        statement.findExitedStatement();
+      final PsiStatement exitedStatement = statement.findExitedStatement();
       if (exitedStatement == null) {
         return;
       }

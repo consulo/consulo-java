@@ -15,20 +15,20 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
+import com.intellij.java.impl.ig.psiutils.VariableSearchUtils;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.BoolUtils;
-import com.intellij.java.impl.ig.psiutils.VariableSearchUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -37,8 +37,7 @@ public class ConstantIfStatementInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "constant.if.statement.display.name");
+    return InspectionGadgetsLocalize.constantIfStatementDisplayName().get();
   }
 
   @Override
@@ -49,8 +48,7 @@ public class ConstantIfStatementInspection extends BaseInspection {
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "constant.if.statement.problem.descriptor");
+    return InspectionGadgetsLocalize.constantIfStatementProblemDescriptor().get();
   }
 
   @Override
@@ -70,15 +68,13 @@ public class ConstantIfStatementInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "constant.conditional.expression.simplify.quickfix");
+      return InspectionGadgetsLocalize.constantConditionalExpressionSimplifyQuickfix().get();
     }
 
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
       final PsiElement ifKeyword = descriptor.getPsiElement();
-      final PsiIfStatement statement =
-        (PsiIfStatement)ifKeyword.getParent();
+      final PsiIfStatement statement = (PsiIfStatement)ifKeyword.getParent();
       assert statement != null;
       final PsiStatement thenBranch = statement.getThenBranch();
       final PsiStatement elseBranch = statement.getElseBranch();
@@ -96,23 +92,16 @@ public class ConstantIfStatementInspection extends BaseInspection {
       }
     }
 
-    private static void replaceStatementWithUnwrapping(
-      PsiStatement branch, PsiIfStatement statement)
-      throws IncorrectOperationException {
-      if (branch instanceof PsiBlockStatement &&
-          !(statement.getParent() instanceof PsiIfStatement)) {
-        final PsiCodeBlock parentBlock =
-          PsiTreeUtil.getParentOfType(branch, PsiCodeBlock.class);
+    private static void replaceStatementWithUnwrapping(PsiStatement branch, PsiIfStatement statement) throws IncorrectOperationException {
+      if (branch instanceof PsiBlockStatement && !(statement.getParent() instanceof PsiIfStatement)) {
+        final PsiCodeBlock parentBlock = PsiTreeUtil.getParentOfType(branch, PsiCodeBlock.class);
         if (parentBlock == null) {
           final String elseText = branch.getText();
           replaceStatement(statement, elseText);
           return;
         }
-        final PsiCodeBlock block =
-          ((PsiBlockStatement)branch).getCodeBlock();
-        final boolean hasConflicts =
-          VariableSearchUtils.containsConflictingDeclarations(
-            block, parentBlock);
+        final PsiCodeBlock block = ((PsiBlockStatement)branch).getCodeBlock();
+        final boolean hasConflicts = VariableSearchUtils.containsConflictingDeclarations(block, parentBlock);
         if (hasConflicts) {
           final String elseText = branch.getText();
           replaceStatement(statement, elseText);
@@ -133,12 +122,10 @@ public class ConstantIfStatementInspection extends BaseInspection {
               }
             }
             if (added == null) {
-              added = containingElement.addRangeBefore(statements[0],
-                                                       statements[statements.length - 1], statement);
+              added = containingElement.addRangeBefore(statements[0], statements[statements.length - 1], statement);
             }
             final Project project = statement.getProject();
-            final CodeStyleManager codeStyleManager =
-              CodeStyleManager.getInstance(project);
+            final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
             codeStyleManager.reformat(added);
           }
           statement.delete();
@@ -151,9 +138,7 @@ public class ConstantIfStatementInspection extends BaseInspection {
     }
   }
 
-  private static class ConstantIfStatementVisitor
-    extends BaseInspectionVisitor {
-
+  private static class ConstantIfStatementVisitor extends BaseInspectionVisitor {
     @Override
     public void visitIfStatement(PsiIfStatement statement) {
       super.visitIfStatement(statement);

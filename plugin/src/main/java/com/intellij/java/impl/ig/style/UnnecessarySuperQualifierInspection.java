@@ -15,21 +15,21 @@
  */
 package com.intellij.java.impl.ig.style;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.language.editor.inspection.ProblemHighlightType;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import org.jetbrains.annotations.Nls;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.Nls;
 
 @ExtensionImpl
 public class UnnecessarySuperQualifierInspection extends BaseInspection {
@@ -38,16 +38,13 @@ public class UnnecessarySuperQualifierInspection extends BaseInspection {
   @Nls
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "unnecessary.super.qualifier.display.name");
+    return InspectionGadgetsLocalize.unnecessarySuperQualifierDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "unnecessary.super.qualifier.problem.descriptor"
-    );
+    return InspectionGadgetsLocalize.unnecessarySuperQualifierProblemDescriptor().get();
   }
 
   @Override
@@ -56,12 +53,10 @@ public class UnnecessarySuperQualifierInspection extends BaseInspection {
     return new UnnecessarySuperQualifierFix();
   }
 
-  private static class UnnecessarySuperQualifierFix
-    extends InspectionGadgetsFix {
+  private static class UnnecessarySuperQualifierFix extends InspectionGadgetsFix {
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "unnecessary.super.qualifier.quickfix");
+      return InspectionGadgetsLocalize.unnecessarySuperQualifierQuickfix().get();
     }
 
     @Override
@@ -77,14 +72,11 @@ public class UnnecessarySuperQualifierInspection extends BaseInspection {
     return new UnnecessarySuperQualifierVisitor();
   }
 
-  private static class UnnecessarySuperQualifierVisitor
-    extends BaseInspectionVisitor {
-
+  private static class UnnecessarySuperQualifierVisitor extends BaseInspectionVisitor {
     @Override
     public void visitSuperExpression(PsiSuperExpression expression) {
       super.visitSuperExpression(expression);
-      final PsiJavaCodeReferenceElement qualifier =
-        expression.getQualifier();
+      final PsiJavaCodeReferenceElement qualifier = expression.getQualifier();
       if (qualifier != null) {
         return;
       }
@@ -92,12 +84,9 @@ public class UnnecessarySuperQualifierInspection extends BaseInspection {
       if (!(parent instanceof PsiReferenceExpression)) {
         return;
       }
-      final PsiReferenceExpression referenceExpression =
-        (PsiReferenceExpression)parent;
+      final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)parent;
       final PsiElement grandParent = referenceExpression.getParent();
-      if (grandParent instanceof PsiMethodCallExpression) {
-        final PsiMethodCallExpression methodCallExpression =
-          (PsiMethodCallExpression)grandParent;
+      if (grandParent instanceof PsiMethodCallExpression methodCallExpression) {
         if (!hasUnnecessarySuperQualifier(methodCallExpression)) {
           return;
         }
@@ -110,11 +99,8 @@ public class UnnecessarySuperQualifierInspection extends BaseInspection {
       registerError(expression, ProblemHighlightType.LIKE_UNUSED_SYMBOL);
     }
 
-    private static boolean hasUnnecessarySuperQualifier(
-      PsiReferenceExpression referenceExpression) {
-      final PsiClass parentClass =
-        PsiTreeUtil.getParentOfType(referenceExpression,
-                                    PsiClass.class);
+    private static boolean hasUnnecessarySuperQualifier(PsiReferenceExpression referenceExpression) {
+      final PsiClass parentClass = PsiTreeUtil.getParentOfType(referenceExpression, PsiClass.class);
       if (parentClass == null) {
         return false;
       }

@@ -15,22 +15,23 @@
  */
 package com.intellij.java.impl.ig.bitwise;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.ConstantExpressionUtil;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.java.language.module.util.JavaClassNames;
-import org.jetbrains.annotations.NonNls;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import java.util.HashSet;
@@ -59,20 +60,15 @@ public class PointlessBitwiseExpressionInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "pointless.bitwise.expression.display.name");
+    return InspectionGadgetsLocalize.pointlessBitwiseExpressionDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final PsiPolyadicExpression polyadicExpression =
-      (PsiPolyadicExpression)infos[0];
-    final String replacementExpression =
-      calculateReplacementExpression(polyadicExpression);
-    return InspectionGadgetsBundle.message(
-      "expression.can.be.replaced.problem.descriptor",
-      replacementExpression);
+    final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)infos[0];
+    final String replacementExpression = calculateReplacementExpression(polyadicExpression);
+    return InspectionGadgetsLocalize.expressionCanBeReplacedProblemDescriptor(replacementExpression).get();
   }
 
   @Override
@@ -174,8 +170,7 @@ public class PointlessBitwiseExpressionInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "pointless.bitwise.expression.simplify.quickfix");
+      return InspectionGadgetsLocalize.pointlessBitwiseExpressionSimplifyQuickfix().get();
     }
 
     @Override

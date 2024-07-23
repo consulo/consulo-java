@@ -15,14 +15,13 @@
  */
 package com.intellij.java.impl.ig.methodmetrics;
 
-import jakarta.annotation.Nonnull;
-
+import com.intellij.java.impl.ig.psiutils.LibraryUtil;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameterList;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
-import com.intellij.java.impl.ig.psiutils.LibraryUtil;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ParametersPerMethodInspection extends MethodMetricInspection {
@@ -34,15 +33,13 @@ public class ParametersPerMethodInspection extends MethodMetricInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "parameters.per.method.display.name");
+    return InspectionGadgetsLocalize.parametersPerMethodDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer parameterCount = (Integer)infos[0];
-    return InspectionGadgetsBundle.message(
-      "parameters.per.method.problem.descriptor", parameterCount);
+    return InspectionGadgetsLocalize.parametersPerMethodProblemDescriptor(parameterCount).get();
   }
 
   protected int getDefaultLimit() {
@@ -50,7 +47,7 @@ public class ParametersPerMethodInspection extends MethodMetricInspection {
   }
 
   protected String getConfigurationLabel() {
-    return InspectionGadgetsBundle.message("parameter.limit.option");
+    return InspectionGadgetsLocalize.parameterLimitOption().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

@@ -15,17 +15,16 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiDoWhileStatement;
 import com.intellij.java.language.psi.PsiForStatement;
 import com.intellij.java.language.psi.PsiStatement;
 import com.intellij.java.language.psi.PsiWhileStatement;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class InfiniteLoopStatementInspection extends BaseInspection
@@ -35,7 +34,7 @@ public class InfiniteLoopStatementInspection extends BaseInspection
 	@Nonnull
 	public String getDisplayName()
 	{
-		return InspectionGadgetsBundle.message("infinite.loop.statement.display.name");
+		return InspectionGadgetsLocalize.infiniteLoopStatementDisplayName().get();
 	}
 
 	@Override
@@ -48,7 +47,7 @@ public class InfiniteLoopStatementInspection extends BaseInspection
 	@Nonnull
 	protected String buildErrorString(Object... infos)
 	{
-		return InspectionGadgetsBundle.message("infinite.loop.statement.problem.descriptor");
+		return InspectionGadgetsLocalize.infiniteLoopStatementProblemDescriptor().get();
 	}
 
 	@Override

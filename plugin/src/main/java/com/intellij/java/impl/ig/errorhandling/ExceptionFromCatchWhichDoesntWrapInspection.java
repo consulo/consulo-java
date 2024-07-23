@@ -16,15 +16,15 @@
 package com.intellij.java.impl.ig.errorhandling;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.function.Processor;
 import consulo.application.util.query.Query;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
@@ -55,21 +55,21 @@ public class ExceptionFromCatchWhichDoesntWrapInspection extends BaseInspection 
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("exception.from.catch.which.doesnt.wrap.display.name");
+    return InspectionGadgetsLocalize.exceptionFromCatchWhichDoesntWrapDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("exception.from.catch.which.doesnt.wrap.problem.descriptor");
+    return InspectionGadgetsLocalize.exceptionFromCatchWhichDoesntWrapProblemDescriptor().get();
   }
 
   @Override
   @Nullable
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
-    panel.addCheckbox(InspectionGadgetsBundle.message("exception.from.catch.which.doesntwrap.ignore.option"), "ignoreGetMessage");
-    panel.addCheckbox(InspectionGadgetsBundle.message("exception.from.catch.which.doesntwrap.ignore.cant.wrap.option"), "ignoreCantWrap");
+    panel.addCheckbox(InspectionGadgetsLocalize.exceptionFromCatchWhichDoesntwrapIgnoreOption().get(), "ignoreGetMessage");
+    panel.addCheckbox(InspectionGadgetsLocalize.exceptionFromCatchWhichDoesntwrapIgnoreCantWrapOption().get(), "ignoreCantWrap");
     return panel;
   }
 

@@ -15,16 +15,16 @@
  */
 package com.intellij.java.impl.ig.security;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.ConstantExpressionUtil;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
@@ -34,8 +34,7 @@ public class LoadLibraryWithNonConstantStringInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "load.library.with.non.constant.string.display.name");
+    return InspectionGadgetsLocalize.loadLibraryWithNonConstantStringDisplayName().get();
   }
 
   @Override

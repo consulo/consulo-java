@@ -15,23 +15,22 @@
  */
 package com.intellij.java.impl.ig.numeric;
 
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
 import com.intellij.java.language.psi.JavaPsiFacade;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.PsiExpression;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 class RemoveLeadingZeroFix extends InspectionGadgetsFix {
 
   @Nonnull
   public String getName() {
-    return InspectionGadgetsBundle.message(
-      "remove.leading.zero.to.make.decimal.quickfix");
+    return InspectionGadgetsLocalize.removeLeadingZeroToMakeDecimalQuickfix().get();
   }
 
   @Override

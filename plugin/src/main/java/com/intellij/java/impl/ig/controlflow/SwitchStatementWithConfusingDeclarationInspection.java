@@ -16,11 +16,11 @@
 package com.intellij.java.impl.ig.controlflow;
 
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElement;
 import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
@@ -36,12 +36,12 @@ public class SwitchStatementWithConfusingDeclarationInspection extends BaseInspe
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("switch.statement.with.confusing.declaration.display.name");
+    return InspectionGadgetsLocalize.switchStatementWithConfusingDeclarationDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("switch.statement.with.confusing.declaration.problem.descriptor");
+    return InspectionGadgetsLocalize.switchStatementWithConfusingDeclarationProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

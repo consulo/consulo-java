@@ -15,23 +15,24 @@
  */
 package com.intellij.java.impl.ig.performance;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.java.language.module.util.JavaClassNames;
-import org.jetbrains.annotations.NonNls;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
-
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
 import javax.swing.*;
 
 @ExtensionImpl
@@ -45,8 +46,7 @@ public class StringConstructorInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "string.constructor.display.name");
+    return InspectionGadgetsLocalize.stringConstructorDisplayName().get();
   }
 
   @Override
@@ -58,16 +58,14 @@ public class StringConstructorInspection extends BaseInspection {
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "string.constructor.problem.descriptor");
+    return InspectionGadgetsLocalize.stringConstructorProblemDescriptor().get();
   }
 
   @Override
   @Nullable
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message(
-      "string.constructor.substring.parameter.option"), this,
-                                          "ignoreSubstringArguments");
+    LocalizeValue message = InspectionGadgetsLocalize.stringConstructorSubstringParameterOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreSubstringArguments");
   }
 
   @Override
@@ -87,18 +85,12 @@ public class StringConstructorInspection extends BaseInspection {
   }
 
   private static class StringConstructorFix extends InspectionGadgetsFix {
-
     private final String m_name;
 
     private StringConstructorFix(boolean noArguments) {
-      if (noArguments) {
-        m_name = InspectionGadgetsBundle.message(
-          "string.constructor.replace.empty.quickfix");
-      }
-      else {
-        m_name = InspectionGadgetsBundle.message(
-          "string.constructor.replace.arg.quickfix");
-      }
+      m_name = noArguments
+        ? InspectionGadgetsLocalize.stringConstructorReplaceEmptyQuickfix().get()
+        : InspectionGadgetsLocalize.stringConstructorReplaceArgQuickfix().get();
     }
 
     @Nonnull

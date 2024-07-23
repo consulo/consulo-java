@@ -21,7 +21,6 @@ import com.intellij.java.impl.ig.ui.UiUtils;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.callMatcher.CallMatcher;
@@ -30,20 +29,22 @@ import com.siyeh.ig.psiutils.ConstructionUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.SideEffectChecker;
 import com.siyeh.ig.ui.ExternalizableStringSet;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
 import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.ObjectUtil;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import one.util.streamex.StreamEx;
 import org.intellij.lang.annotations.Pattern;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
@@ -90,17 +91,22 @@ public class MismatchedCollectionQueryUpdateInspection
 
   @Override
   public JComponent createOptionsPanel() {
-    final ListTable queryNamesTable = new ListTable(new ListWrappingTableModel(queryNames, InspectionGadgetsBundle.message("query.column.name")));
+    final ListTable queryNamesTable =
+      new ListTable(new ListWrappingTableModel(queryNames, InspectionGadgetsLocalize.queryColumnName().get()));
     final JPanel queryNamesPanel = UiUtils.createAddRemovePanel(queryNamesTable);
 
-    final ListTable updateNamesTable = new ListTable(new ListWrappingTableModel(updateNames, InspectionGadgetsBundle.message("update.column.name")));
+    final ListTable updateNamesTable =
+        new ListTable(new ListWrappingTableModel(updateNames, InspectionGadgetsLocalize.updateColumnName().get()));
     final JPanel updateNamesPanel = UiUtils.createAddRemovePanel(updateNamesTable);
 
-    String ignoreClassesMessage = InspectionGadgetsBundle.message("ignored.class.names");
-    final ListTable ignoredClassesTable = new ListTable(new ListWrappingTableModel(ignoredClasses, ignoreClassesMessage));
-    final JPanel ignoredClassesPanel =
-        UiUtils.createAddRemoveTreeClassChooserPanel(ignoredClassesTable, ignoreClassesMessage, CommonClassNames.JAVA_UTIL_COLLECTION,
-            CommonClassNames.JAVA_UTIL_MAP);
+    LocalizeValue ignoreClassesMessage = InspectionGadgetsLocalize.ignoredClassNames();
+    final ListTable ignoredClassesTable = new ListTable(new ListWrappingTableModel(ignoredClasses, ignoreClassesMessage.get()));
+    final JPanel ignoredClassesPanel = UiUtils.createAddRemoveTreeClassChooserPanel(
+      ignoredClassesTable,
+      ignoreClassesMessage.get(),
+      CommonClassNames.JAVA_UTIL_COLLECTION,
+      CommonClassNames.JAVA_UTIL_MAP
+    );
 
     final JPanel namesPanel = new JPanel(new GridLayout(1, 2, UIUtil.DEFAULT_HGAP, UIUtil.DEFAULT_VGAP));
     namesPanel.add(queryNamesPanel);
@@ -122,18 +128,16 @@ public class MismatchedCollectionQueryUpdateInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("mismatched.update.collection.display.name");
+    return InspectionGadgetsLocalize.mismatchedUpdateCollectionDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final boolean updated = ((Boolean) infos[0]).booleanValue();
-    if (updated) {
-      return InspectionGadgetsBundle.message("mismatched.update.collection.problem.descriptor.updated.not.queried");
-    } else {
-      return InspectionGadgetsBundle.message("mismatched.update.collection.problem.description.queried.not.updated");
-    }
+    final boolean updated = (Boolean)infos[0];
+    return updated
+      ? InspectionGadgetsLocalize.mismatchedUpdateCollectionProblemDescriptorUpdatedNotQueried().get()
+      : InspectionGadgetsLocalize.mismatchedUpdateCollectionProblemDescriptionQueriedNotUpdated().get();
   }
 
   @Override

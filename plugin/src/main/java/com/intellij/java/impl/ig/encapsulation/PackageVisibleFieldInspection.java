@@ -15,16 +15,15 @@
  */
 package com.intellij.java.impl.ig.encapsulation;
 
-import jakarta.annotation.Nonnull;
-
+import com.intellij.java.impl.ig.fixes.EncapsulateVariableFix;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.EncapsulateVariableFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class PackageVisibleFieldInspection extends BaseInspection {
@@ -32,15 +31,13 @@ public class PackageVisibleFieldInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "package.visible.field.display.name");
+    return InspectionGadgetsLocalize.packageVisibleFieldDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "package.visible.field.problem.descriptor");
+    return InspectionGadgetsLocalize.packageVisibleFieldProblemDescriptor().get();
   }
 
   @Override

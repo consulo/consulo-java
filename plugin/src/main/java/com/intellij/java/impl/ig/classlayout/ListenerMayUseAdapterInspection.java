@@ -16,21 +16,23 @@
 package com.intellij.java.impl.ig.classlayout;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 
-import jakarta.annotation.Nonnull;
 import javax.swing.*;
 
 @ExtensionImpl
@@ -42,8 +44,7 @@ public class ListenerMayUseAdapterInspection extends BaseInspection {
   @Nls
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "listener.may.use.adapter.display.name");
+    return InspectionGadgetsLocalize.listenerMayUseAdapterDisplayName().get();
   }
 
   @Override
@@ -53,16 +54,13 @@ public class ListenerMayUseAdapterInspection extends BaseInspection {
     final String className = aClass.getName();
     final PsiClass adapterClass = (PsiClass)infos[1];
     final String adapterName = adapterClass.getName();
-    return InspectionGadgetsBundle.message(
-      "listener.may.use.adapter.problem.descriptor", className,
-      adapterName);
+    return InspectionGadgetsLocalize.listenerMayUseAdapterProblemDescriptor(className, adapterName).get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message(
-      "listener.may.use.adapter.emtpy.methods.option"), this,
-                                          "checkForEmptyMethods");
+    LocalizeValue message = InspectionGadgetsLocalize.listenerMayUseAdapterEmtpyMethodsOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "checkForEmptyMethods");
   }
 
   @Override
@@ -80,19 +78,16 @@ public class ListenerMayUseAdapterInspection extends BaseInspection {
     }
 
     @Nonnull
+    @RequiredReadAction
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "listener.may.use.adapter.quickfix",
-        adapterClass.getName());
+      return InspectionGadgetsLocalize.listenerMayUseAdapterQuickfix(adapterClass.getName()).get();
     }
 
     @Override
     protected void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiJavaCodeReferenceElement element =
-        (PsiJavaCodeReferenceElement)descriptor.getPsiElement();
-      final PsiClass aClass = PsiTreeUtil.getParentOfType(element,
-                                                          PsiClass.class);
+      final PsiJavaCodeReferenceElement element = (PsiJavaCodeReferenceElement)descriptor.getPsiElement();
+      final PsiClass aClass = PsiTreeUtil.getParentOfType(element, PsiClass.class);
       if (aClass == null) {
         return;
       }

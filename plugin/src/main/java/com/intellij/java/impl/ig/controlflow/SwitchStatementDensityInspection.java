@@ -17,12 +17,13 @@ package com.intellij.java.impl.ig.controlflow;
 
 import com.intellij.java.impl.ig.psiutils.SwitchUtils;
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.deadCodeNotWorking.impl.SingleIntegerFieldOptionsPanel;
-
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 
 public abstract class SwitchStatementDensityInspection extends BaseInspection {
@@ -35,19 +36,20 @@ public abstract class SwitchStatementDensityInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("switch.statement.density.display.name");
+    return InspectionGadgetsLocalize.switchStatementDensityDisplayName().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleIntegerFieldOptionsPanel(InspectionGadgetsBundle.message("switch.statement.density.min.option"), this, "m_limit");
+    LocalizeValue message = InspectionGadgetsLocalize.switchStatementDensityMinOption();
+    return new SingleIntegerFieldOptionsPanel(message.get(), this, "m_limit");
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
     final Integer intDensity = (Integer)infos[0];
-    return InspectionGadgetsBundle.message("switch.statement.density.problem.descriptor", intDensity);
+    return InspectionGadgetsLocalize.switchStatementDensityProblemDescriptor(intDensity).get();
   }
 
   @Override
@@ -56,7 +58,6 @@ public abstract class SwitchStatementDensityInspection extends BaseInspection {
   }
 
   private class SwitchStatementDensityVisitor extends BaseInspectionVisitor {
-
     @Override
     public void visitSwitchStatement(@Nonnull PsiSwitchStatement statement) {
       final PsiCodeBlock body = statement.getBody();

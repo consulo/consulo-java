@@ -15,20 +15,23 @@
  */
 package com.intellij.java.impl.ig.style;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.language.editor.inspection.ProblemHighlightType;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import com.intellij.java.impl.ig.psiutils.ImportUtils;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.psiutils.ImportUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 
@@ -45,25 +48,21 @@ public class UnnecessarilyQualifiedInnerClassAccessInspection
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "unnecessarily.qualified.inner.class.access.display.name");
+    return InspectionGadgetsLocalize.unnecessarilyQualifiedInnerClassAccessDisplayName().get();
   }
 
   @Nonnull
   @Override
+  @RequiredReadAction
   protected String buildErrorString(Object... infos) {
     final PsiClass aClass = (PsiClass)infos[0];
-    return InspectionGadgetsBundle.message(
-      "unnecessarily.qualified.inner.class.access.problem.descriptor",
-      aClass.getName());
+    return InspectionGadgetsLocalize.unnecessarilyQualifiedInnerClassAccessProblemDescriptor(aClass.getName()).get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(
-      InspectionGadgetsBundle.message(
-        "unnecessarily.qualified.inner.class.access.option"),
-      this, "ignoreReferencesNeedingImport");
+    LocalizeValue message = InspectionGadgetsLocalize.unnecessarilyQualifiedInnerClassAccessOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreReferencesNeedingImport");
   }
 
   @Override
@@ -76,8 +75,7 @@ public class UnnecessarilyQualifiedInnerClassAccessInspection
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "unnecessarily.qualified.inner.class.access.quickfix");
+      return InspectionGadgetsLocalize.unnecessarilyQualifiedInnerClassAccessQuickfix().get();
     }
 
     @Override

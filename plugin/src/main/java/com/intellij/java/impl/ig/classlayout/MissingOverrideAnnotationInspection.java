@@ -18,20 +18,20 @@ package com.intellij.java.impl.ig.classlayout;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.MethodUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.collection.SmartList;
-
 import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,26 +55,20 @@ public class MissingOverrideAnnotationInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "missing.override.annotation.display.name");
+    return InspectionGadgetsLocalize.missingOverrideAnnotationDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "missing.override.annotation.problem.descriptor");
+    return InspectionGadgetsLocalize.missingOverrideAnnotationProblemDescriptor().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    final MultipleCheckboxOptionsPanel panel =
-      new MultipleCheckboxOptionsPanel(this);
-    panel.addCheckbox(InspectionGadgetsBundle.message(
-      "ignore.equals.hashcode.and.tostring"), "ignoreObjectMethods");
-    panel.addCheckbox(InspectionGadgetsBundle.message(
-      "ignore.methods.in.anonymous.classes"),
-                      "ignoreAnonymousClassMethods");
+    final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
+    panel.addCheckbox(InspectionGadgetsLocalize.ignoreEqualsHashcodeAndTostring().get(), "ignoreObjectMethods");
+    panel.addCheckbox(InspectionGadgetsLocalize.ignoreMethodsInAnonymousClasses().get(), "ignoreAnonymousClassMethods");
     return panel;
   }
 
@@ -83,13 +77,10 @@ public class MissingOverrideAnnotationInspection extends BaseInspection {
     return new MissingOverrideAnnotationFix();
   }
 
-  private static class MissingOverrideAnnotationFix
-    extends InspectionGadgetsFix {
-
+  private static class MissingOverrideAnnotationFix extends InspectionGadgetsFix {
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "missing.override.annotation.add.quickfix");
+      return InspectionGadgetsLocalize.missingOverrideAnnotationAddQuickfix().get();
     }
 
     @Override

@@ -16,21 +16,21 @@
 package com.intellij.java.impl.ig.j2me;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class PrivateMemberAccessBetweenOuterAndInnerClassInspection
@@ -39,17 +39,15 @@ public class PrivateMemberAccessBetweenOuterAndInnerClassInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "private.member.access.between.outer.and.inner.classes.display.name");
+    return InspectionGadgetsLocalize.privateMemberAccessBetweenOuterAndInnerClassesDisplayName().get();
   }
 
   @Override
   @Nonnull
+  @RequiredReadAction
   protected String buildErrorString(Object... infos) {
     final PsiClass aClass = (PsiClass)infos[0];
-    return InspectionGadgetsBundle.message(
-      "private.member.access.between.outer.and.inner.classes.problem.descriptor",
-      aClass.getName());
+    return InspectionGadgetsLocalize.privateMemberAccessBetweenOuterAndInnerClassesProblemDescriptor(aClass.getName()).get();
   }
 
   @Override
@@ -89,14 +87,9 @@ public class PrivateMemberAccessBetweenOuterAndInnerClassInspection
     @Override
     @Nonnull
     public String getName() {
-      if (constructor) {
-        return InspectionGadgetsBundle.message(
-          "private.member.access.between.outer.and.inner.classes.make.constructor.package.local.quickfix",
-          elementName);
-      }
-      return InspectionGadgetsBundle.message(
-        "private.member.access.between.outer.and.inner.classes.make.local.quickfix",
-        elementName);
+      return constructor
+        ? InspectionGadgetsLocalize.privateMemberAccessBetweenOuterAndInnerClassesMakeConstructorPackageLocalQuickfix(elementName).get()
+        : InspectionGadgetsLocalize.privateMemberAccessBetweenOuterAndInnerClassesMakeLocalQuickfix(elementName).get();
     }
 
     @Override

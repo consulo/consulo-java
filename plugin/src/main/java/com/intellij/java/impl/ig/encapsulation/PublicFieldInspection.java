@@ -20,14 +20,13 @@ import com.intellij.java.impl.ig.fixes.AddToIgnoreIfAnnotatedByListQuickFix;
 import com.intellij.java.impl.ig.fixes.EncapsulateVariableFix;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.ui.ExternalizableStringSet;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-
 import consulo.deadCodeNotWorking.impl.CheckBox;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -49,14 +48,13 @@ public class PublicFieldInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("public.field.display.name");
+    return InspectionGadgetsLocalize.publicFieldDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "public.field.problem.descriptor");
+    return InspectionGadgetsLocalize.publicFieldProblemDescriptor().get();
   }
 
   @Override
@@ -64,10 +62,12 @@ public class PublicFieldInspection extends BaseInspection {
   public JComponent createOptionsPanel() {
     final JPanel panel = new JPanel(new BorderLayout());
     final JPanel annotationsListControl = SpecialAnnotationsUtil.createSpecialAnnotationsListControl(
-      ignorableAnnotations, InspectionGadgetsBundle.message("ignore.if.annotated.by"));
+      ignorableAnnotations,
+      InspectionGadgetsLocalize.ignoreIfAnnotatedBy().get()
+    );
     panel.add(annotationsListControl, BorderLayout.CENTER);
-    final CheckBox checkBox = new CheckBox(InspectionGadgetsBundle.message(
-      "public.field.ignore.enum.type.fields.option"), this, "ignoreEnums");
+    final CheckBox checkBox =
+      new CheckBox(InspectionGadgetsLocalize.publicFieldIgnoreEnumTypeFieldsOption().get(), this, "ignoreEnums");
     panel.add(checkBox, BorderLayout.SOUTH);
     return panel;
   }

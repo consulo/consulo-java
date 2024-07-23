@@ -15,16 +15,17 @@
  */
 package com.intellij.java.impl.ig.abstraction;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiTypeElement;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
-import javax.swing.JComponent;
+import javax.swing.*;
 
 @ExtensionImpl
 public class MethodReturnOfConcreteClassInspection extends BaseInspection {
@@ -35,23 +36,19 @@ public class MethodReturnOfConcreteClassInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "method.return.concrete.class.display.name");
+    return InspectionGadgetsLocalize.methodReturnConcreteClassDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "method.return.concrete.class.problem.descriptor");
+    return InspectionGadgetsLocalize.methodReturnConcreteClassProblemDescriptor().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(
-      InspectionGadgetsBundle.message(
-        "method.return.of.concrete.class.option"),
-      this, "ignoreAbstractClasses");
+    LocalizeValue message = InspectionGadgetsLocalize.methodReturnOfConcreteClassOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreAbstractClasses");
   }
 
   @Override
@@ -59,9 +56,7 @@ public class MethodReturnOfConcreteClassInspection extends BaseInspection {
     return new MethodReturnOfConcreteClassVisitor();
   }
 
-  private class MethodReturnOfConcreteClassVisitor
-    extends BaseInspectionVisitor {
-
+  private class MethodReturnOfConcreteClassVisitor extends BaseInspectionVisitor {
     @Override
     public void visitMethod(@Nonnull PsiMethod method) {
       super.visitMethod(method);

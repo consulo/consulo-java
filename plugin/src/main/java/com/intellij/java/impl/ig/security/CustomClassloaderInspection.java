@@ -15,14 +15,13 @@
  */
 package com.intellij.java.impl.ig.security;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class CustomClassloaderInspection extends BaseInspection {
@@ -30,15 +29,13 @@ public class CustomClassloaderInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "custom.classloader.display.name");
+    return InspectionGadgetsLocalize.customClassloaderDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "custom.classloader.problem.descriptor");
+    return InspectionGadgetsLocalize.customClassloaderProblemDescriptor().get();
   }
 
   @Override
@@ -46,9 +43,7 @@ public class CustomClassloaderInspection extends BaseInspection {
     return new CustomClassloaderVisitor();
   }
 
-  private static class CustomClassloaderVisitor
-    extends BaseInspectionVisitor {
-
+  private static class CustomClassloaderVisitor extends BaseInspectionVisitor {
     @Override
     public void visitClass(@Nonnull PsiClass aClass) {
       if (!InheritanceUtil.isInheritor(aClass, "java.lang.ClassLoader")) {

@@ -15,21 +15,22 @@
  */
 package com.intellij.java.impl.ig.performance;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
-import org.jetbrains.annotations.NonNls;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -57,8 +58,7 @@ public class UnnecessaryTemporaryOnConversionFromStringInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "unnecessary.temporary.on.conversion.from.string.display.name");
+    return InspectionGadgetsLocalize.unnecessaryTemporaryOnConversionFromStringDisplayName().get();
   }
 
   @Override
@@ -69,12 +69,8 @@ public class UnnecessaryTemporaryOnConversionFromStringInspection
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final String replacementString =
-      calculateReplacementExpression(
-        (PsiMethodCallExpression)infos[0]);
-    return InspectionGadgetsBundle.message(
-      "unnecessary.temporary.on.conversion.from.string.problem.descriptor",
-      replacementString);
+    final String replacementString = calculateReplacementExpression((PsiMethodCallExpression)infos[0]);
+    return InspectionGadgetsLocalize.unnecessaryTemporaryOnConversionFromStringProblemDescriptor(replacementString).get();
   }
 
   @Nullable
@@ -128,10 +124,8 @@ public class UnnecessaryTemporaryOnConversionFromStringInspection
     if (replacementExpression == null) {
       return null;
     }
-    final String name = InspectionGadgetsBundle.message(
-      "unnecessary.temporary.on.conversion.from.string.fix.name",
-      replacementExpression);
-    return new UnnecessaryTemporaryObjectFix(name);
+    final LocalizeValue name = InspectionGadgetsLocalize.unnecessaryTemporaryOnConversionFromStringFixName(replacementExpression);
+    return new UnnecessaryTemporaryObjectFix(name.get());
   }
 
   private static class UnnecessaryTemporaryObjectFix

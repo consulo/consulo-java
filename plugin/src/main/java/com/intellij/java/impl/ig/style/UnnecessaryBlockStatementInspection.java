@@ -15,22 +15,24 @@
  */
 package com.intellij.java.impl.ig.style;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import com.intellij.java.impl.ig.psiutils.VariableSearchUtils;
 import com.intellij.java.language.psi.PsiBlockStatement;
 import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiSwitchLabelStatement;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.psiutils.VariableSearchUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiWhiteSpace;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
@@ -50,22 +52,19 @@ public class UnnecessaryBlockStatementInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "unnecessary.code.block.display.name");
+    return InspectionGadgetsLocalize.unnecessaryCodeBlockDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "unnecessary.block.statement.problem.descriptor");
+    return InspectionGadgetsLocalize.unnecessaryBlockStatementProblemDescriptor().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(
-      InspectionGadgetsBundle.message("ignore.branches.of.switch.statements"),
-      this, "ignoreSwitchBranches");
+    LocalizeValue message = InspectionGadgetsLocalize.ignoreBranchesOfSwitchStatements();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreSwitchBranches");
   }
 
   @Override
@@ -82,8 +81,7 @@ public class UnnecessaryBlockStatementInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "unnecessary.code.block.unwrap.quickfix");
+      return InspectionGadgetsLocalize.unnecessaryCodeBlockUnwrapQuickfix().get();
     }
 
     @Override

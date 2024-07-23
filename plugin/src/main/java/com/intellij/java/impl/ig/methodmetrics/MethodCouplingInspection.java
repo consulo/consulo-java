@@ -16,12 +16,12 @@
 package com.intellij.java.impl.ig.methodmetrics;
 
 import com.intellij.java.language.psi.PsiMethod;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-
 import consulo.deadCodeNotWorking.impl.CheckBox;
 import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -46,15 +46,14 @@ public class MethodCouplingInspection extends MethodMetricInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("method.coupling.display.name");
+    return InspectionGadgetsLocalize.methodCouplingDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer coupling = (Integer)infos[0];
-    return InspectionGadgetsBundle.message(
-      "method.coupling.problem.descriptor", coupling);
+    return InspectionGadgetsLocalize.methodCouplingProblemDescriptor(coupling).get();
   }
 
   @Override
@@ -64,7 +63,7 @@ public class MethodCouplingInspection extends MethodMetricInspection {
 
   @Override
   protected String getConfigurationLabel() {
-    return InspectionGadgetsBundle.message("method.coupling.limit.option");
+    return InspectionGadgetsLocalize.methodCouplingLimitOption().get();
   }
 
   @Override
@@ -90,13 +89,15 @@ public class MethodCouplingInspection extends MethodMetricInspection {
     panel.add(valueField, constraints);
 
     final CheckBox arrayCheckBox = new CheckBox(
-      InspectionGadgetsBundle.message(
-        "include.java.system.classes.option"),
-      this, "m_includeJavaClasses");
+      InspectionGadgetsLocalize.includeJavaSystemClassesOption().get(),
+      this,
+      "m_includeJavaClasses"
+    );
     final CheckBox objectCheckBox = new CheckBox(
-      InspectionGadgetsBundle.message(
-        "include.library.classes.option"),
-      this, "m_includeLibraryClasses");
+      InspectionGadgetsLocalize.includeLibraryClassesOption().get(),
+      this,
+      "m_includeLibraryClasses"
+    );
     constraints.gridx = 0;
     constraints.gridy = 1;
     constraints.gridwidth = 2;

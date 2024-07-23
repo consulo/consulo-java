@@ -51,9 +51,7 @@ public class ClassReferencesSubclassInspection extends BaseInspection {
     return new ClassReferencesSubclassVisitor();
   }
 
-  private static class ClassReferencesSubclassVisitor
-    extends BaseInspectionVisitor {
-
+  private static class ClassReferencesSubclassVisitor extends BaseInspectionVisitor {
     @Override
     public void visitVariable(@Nonnull PsiVariable variable) {
       final PsiTypeElement typeElement = variable.getTypeElement();

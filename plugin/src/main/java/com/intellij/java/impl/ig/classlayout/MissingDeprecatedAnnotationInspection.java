@@ -19,16 +19,15 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -37,13 +36,13 @@ public class MissingDeprecatedAnnotationInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("missing.deprecated.annotation.display.name");
+    return InspectionGadgetsLocalize.missingDeprecatedAnnotationDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("missing.deprecated.annotation.problem.descriptor");
+    return InspectionGadgetsLocalize.missingDeprecatedAnnotationProblemDescriptor().get();
   }
 
   @Override
@@ -57,10 +56,9 @@ public class MissingDeprecatedAnnotationInspection extends BaseInspection {
   }
 
   private static class MissingDeprecatedAnnotationFix extends InspectionGadgetsFix {
-
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("missing.deprecated.annotation.add.quickfix");
+      return InspectionGadgetsLocalize.missingDeprecatedAnnotationAddQuickfix().get();
     }
 
     @Override

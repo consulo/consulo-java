@@ -15,22 +15,22 @@
  */
 package com.intellij.java.impl.ig.junit;
 
-import javax.swing.JComponent;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiTypeParameter;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TestUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.localize.LocalizeValue;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
+import javax.swing.*;
 
 @ExtensionImpl
 public class TestCaseWithNoTestMethodsInspection extends BaseInspection {
@@ -47,24 +47,20 @@ public class TestCaseWithNoTestMethodsInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "test.case.with.no.test.methods.display.name");
+    return InspectionGadgetsLocalize.testCaseWithNoTestMethodsDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "test.case.with.no.test.methods.problem.descriptor");
+    return InspectionGadgetsLocalize.testCaseWithNoTestMethodsProblemDescriptor().get();
   }
 
   @Override
   @Nullable
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(
-      InspectionGadgetsBundle.message(
-        "test.case.with.no.test.methods.option"), this,
-      "ignoreSupers");
+    LocalizeValue message = InspectionGadgetsLocalize.testCaseWithNoTestMethodsOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreSupers");
   }
 
   @Override

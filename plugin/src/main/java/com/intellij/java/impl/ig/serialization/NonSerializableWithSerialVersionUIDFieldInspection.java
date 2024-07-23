@@ -15,23 +15,23 @@
  */
 package com.intellij.java.impl.ig.serialization;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.impl.ig.fixes.MakeSerializableFix;
+import com.intellij.java.impl.ig.psiutils.SerializationUtils;
 import com.intellij.java.language.psi.PsiAnonymousClass;
-import consulo.language.util.IncorrectOperationException;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiField;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.MakeSerializableFix;
-import com.intellij.java.impl.ig.psiutils.SerializationUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NonSerializableWithSerialVersionUIDFieldInspection
@@ -46,8 +46,7 @@ public class NonSerializableWithSerialVersionUIDFieldInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "non.serializable.with.serialversionuid.display.name");
+    return InspectionGadgetsLocalize.nonSerializableWithSerialversionuidDisplayName().get();
   }
 
   @Override
@@ -59,16 +58,13 @@ public class NonSerializableWithSerialVersionUIDFieldInspection
         "non.serializable.@interface.with.serialversionuid.problem.descriptor");
     }
     else if (aClass.isInterface()) {
-      return InspectionGadgetsBundle.message(
-        "non.serializable.interface.with.serialversionuid.problem.descriptor");
+      return InspectionGadgetsLocalize.nonSerializableInterfaceWithSerialversionuidProblemDescriptor().get();
     }
     else if (aClass instanceof PsiAnonymousClass) {
-      return InspectionGadgetsBundle.message(
-        "non.serializable.anonymous.with.serialversionuid.problem.descriptor");
+      return InspectionGadgetsLocalize.nonSerializableAnonymousWithSerialversionuidProblemDescriptor().get();
     }
     else {
-      return InspectionGadgetsBundle.message(
-        "non.serializable.class.with.serialversionuid.problem.descriptor");
+      return InspectionGadgetsLocalize.nonSerializableClassWithSerialversionuidProblemDescriptor().get();
     }
   }
 
@@ -88,8 +84,7 @@ public class NonSerializableWithSerialVersionUIDFieldInspection
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "non.serializable.with.serialversionuid.remove.quickfix");
+      return InspectionGadgetsLocalize.nonSerializableWithSerialversionuidRemoveQuickfix().get();
     }
 
     @Override

@@ -19,10 +19,10 @@ import com.intellij.java.language.psi.PsiArrayType;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiType;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.CollectionUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 
@@ -31,14 +31,12 @@ public class PublicStaticArrayFieldInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "public.static.array.field.display.name");
+    return InspectionGadgetsLocalize.publicStaticArrayFieldDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "public.static.array.field.problem.descriptor");
+    return InspectionGadgetsLocalize.publicStaticArrayFieldProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

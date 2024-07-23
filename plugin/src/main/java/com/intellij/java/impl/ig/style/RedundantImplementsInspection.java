@@ -18,19 +18,19 @@ package com.intellij.java.impl.ig.style;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiReferenceList;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 
 @ExtensionImpl
@@ -50,25 +50,20 @@ public class RedundantImplementsInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "redundant.implements.display.name");
+    return InspectionGadgetsLocalize.redundantImplementsDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "redundant.implements.problem.descriptor");
+    return InspectionGadgetsLocalize.redundantImplementsProblemDescriptor().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    final MultipleCheckboxOptionsPanel checkboxOptionsPanel =
-      new MultipleCheckboxOptionsPanel(this);
-    checkboxOptionsPanel.addCheckbox(InspectionGadgetsBundle.message(
-      "ignore.serializable.option"), "ignoreSerializable");
-    checkboxOptionsPanel.addCheckbox(InspectionGadgetsBundle.message(
-      "ignore.cloneable.option"), "ignoreCloneable");
+    final MultipleCheckboxOptionsPanel checkboxOptionsPanel = new MultipleCheckboxOptionsPanel(this);
+    checkboxOptionsPanel.addCheckbox(InspectionGadgetsLocalize.ignoreSerializableOption().get(), "ignoreSerializable");
+    checkboxOptionsPanel.addCheckbox(InspectionGadgetsLocalize.ignoreCloneableOption().get(), "ignoreCloneable");
     return checkboxOptionsPanel;
   }
 
@@ -81,8 +76,7 @@ public class RedundantImplementsInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "redundant.implements.remove.quickfix");
+      return InspectionGadgetsLocalize.redundantImplementsRemoveQuickfix().get();
     }
 
     @Override

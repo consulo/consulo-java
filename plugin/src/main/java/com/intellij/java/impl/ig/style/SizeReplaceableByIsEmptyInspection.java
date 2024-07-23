@@ -19,12 +19,12 @@ import com.intellij.java.impl.ig.ui.UiUtils;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
@@ -35,10 +35,9 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.collection.OrderedSet;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
-
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -55,25 +54,23 @@ public class SizeReplaceableByIsEmptyInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("size.replaceable.by.isempty.display.name");
+    return InspectionGadgetsLocalize.sizeReplaceableByIsemptyDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("expression.can.be.replaced.problem.descriptor", infos[0]);
+    return InspectionGadgetsLocalize.expressionCanBeReplacedProblemDescriptor(infos[0]).get();
   }
 
   @Override
   @Nullable
   public JComponent createOptionsPanel() {
     final JComponent panel = new JPanel(new BorderLayout());
-    final ListTable table =
-        new ListTable(new ListWrappingTableModel(ignoredTypes, InspectionGadgetsBundle.message("ignored.classes.table")));
-    JPanel tablePanel =
-        UiUtils.createAddRemoveTreeClassChooserPanel(table, InspectionGadgetsBundle.message("choose.class.type.to.ignore"));
-    final CheckBox checkBox = new CheckBox(InspectionGadgetsBundle.message(
-        "size.replaceable.by.isempty.negation.ignore.option"), this, "ignoreNegations");
+    final ListTable table = new ListTable(new ListWrappingTableModel(ignoredTypes, InspectionGadgetsLocalize.ignoredClassesTable().get()));
+    JPanel tablePanel = UiUtils.createAddRemoveTreeClassChooserPanel(table, InspectionGadgetsLocalize.chooseClassTypeToIgnore().get());
+    final CheckBox checkBox =
+      new CheckBox(InspectionGadgetsLocalize.sizeReplaceableByIsemptyNegationIgnoreOption().get(), this, "ignoreNegations");
     panel.add(tablePanel, BorderLayout.CENTER);
     panel.add(checkBox, BorderLayout.SOUTH);
     return panel;
@@ -85,12 +82,10 @@ public class SizeReplaceableByIsEmptyInspection extends BaseInspection {
     return new SizeReplaceableByIsEmptyFix();
   }
 
-  private static class SizeReplaceableByIsEmptyFix
-      extends InspectionGadgetsFix {
-
+  private static class SizeReplaceableByIsEmptyFix extends InspectionGadgetsFix {
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("size.replaceable.by.isempty.quickfix");
+      return InspectionGadgetsLocalize.sizeReplaceableByIsemptyQuickfix().get();
     }
 
     @Override

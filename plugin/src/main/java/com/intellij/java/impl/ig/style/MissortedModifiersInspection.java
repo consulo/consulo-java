@@ -16,22 +16,23 @@
 package com.intellij.java.impl.ig.style;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.util.*;
 
@@ -45,14 +46,12 @@ public class MissortedModifiersInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "missorted.modifiers.display.name");
+    return InspectionGadgetsLocalize.missortedModifiersDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "missorted.modifiers.problem.descriptor");
+    return InspectionGadgetsLocalize.missortedModifiersProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {
@@ -64,26 +63,22 @@ public class MissortedModifiersInspection extends BaseInspection {
   }
 
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(
-      InspectionGadgetsBundle.message(
-        "missorted.modifiers.require.option"),
-      this, "m_requireAnnotationsFirst");
+    LocalizeValue message = InspectionGadgetsLocalize.missortedModifiersRequireOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "m_requireAnnotationsFirst");
   }
 
   private static class SortModifiersFix extends InspectionGadgetsFix {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "missorted.modifiers.sort.quickfix");
+      return InspectionGadgetsLocalize.missortedModifiersSortQuickfix().get();
     }
 
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
 
-      final PsiModifierList modifierList =
-        (PsiModifierList)descriptor.getPsiElement();
-      final List<String> modifiers = new ArrayList<String>();
+      final PsiModifierList modifierList = (PsiModifierList)descriptor.getPsiElement();
+      final List<String> modifiers = new ArrayList<>();
       final PsiElement[] children = modifierList.getChildren();
       for (final PsiElement child : children) {
         if (child instanceof PsiComment) {

@@ -16,12 +16,12 @@
 package com.intellij.java.impl.ig.portability;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import org.jetbrains.annotations.NonNls;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class SystemExitInspection extends BaseInspection {
@@ -33,14 +33,13 @@ public class SystemExitInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("system.exit.call.display.name");
+    return InspectionGadgetsLocalize.systemExitCallDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
     final String className = (String)infos[0];
-    return InspectionGadgetsBundle.message(
-      "system.exit.call.problem.descriptor", className);
+    return InspectionGadgetsLocalize.systemExitCallProblemDescriptor(className).get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

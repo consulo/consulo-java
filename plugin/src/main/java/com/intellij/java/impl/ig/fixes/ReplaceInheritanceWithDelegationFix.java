@@ -15,18 +15,18 @@
  */
 package com.intellij.java.impl.ig.fixes;
 
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.dataContext.DataManager;
-import consulo.dataContext.DataContext;
-import consulo.application.ApplicationManager;
-import consulo.project.Project;
+import com.intellij.java.analysis.refactoring.JavaRefactoringActionHandlerFactory;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.analysis.refactoring.JavaRefactoringActionHandlerFactory;
-import consulo.language.editor.refactoring.action.RefactoringActionHandler;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.application.ApplicationManager;
+import consulo.dataContext.DataContext;
+import consulo.dataContext.DataManager;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 public class ReplaceInheritanceWithDelegationFix extends InspectionGadgetsFix {
@@ -34,8 +34,7 @@ public class ReplaceInheritanceWithDelegationFix extends InspectionGadgetsFix {
   @Override
   @Nonnull
   public String getName() {
-    return InspectionGadgetsBundle.message(
-      "replace.inheritance.with.delegation.quickfix");
+    return InspectionGadgetsLocalize.replaceInheritanceWithDelegationQuickfix().get();
   }
 
   @Override

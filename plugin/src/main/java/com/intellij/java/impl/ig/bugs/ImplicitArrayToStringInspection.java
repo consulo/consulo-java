@@ -18,11 +18,11 @@ package com.intellij.java.impl.ig.bugs;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -30,9 +30,8 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class ImplicitArrayToStringInspection extends BaseInspection {
@@ -40,24 +39,20 @@ public class ImplicitArrayToStringInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "implicit.array.to.string.display.name");
+    return InspectionGadgetsLocalize.implicitArrayToStringDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    if (((Boolean)infos[1]).booleanValue()) {
-      return InspectionGadgetsBundle.message(
-        "explicit.array.to.string.problem.descriptor");
+    if ((Boolean)infos[1]) {
+      return InspectionGadgetsLocalize.explicitArrayToStringProblemDescriptor().get();
     }
     else if (infos[0] instanceof PsiMethodCallExpression) {
-      return InspectionGadgetsBundle.message(
-        "implicit.array.to.string.method.call.problem.descriptor");
+      return InspectionGadgetsLocalize.implicitArrayToStringMethodCallProblemDescriptor().get();
     }
     else {
-      return InspectionGadgetsBundle.message(
-        "implicit.array.to.string.problem.descriptor");
+      return InspectionGadgetsLocalize.implicitArrayToStringProblemDescriptor().get();
     }
   }
 
@@ -100,8 +95,7 @@ public class ImplicitArrayToStringInspection extends BaseInspection {
       else {
         expressionText = "java.util.Arrays.toString()";
       }
-      return InspectionGadgetsBundle.message(
-        "implicit.array.to.string.quickfix", expressionText);
+      return InspectionGadgetsLocalize.implicitArrayToStringQuickfix(expressionText).get();
     }
 
     @Override

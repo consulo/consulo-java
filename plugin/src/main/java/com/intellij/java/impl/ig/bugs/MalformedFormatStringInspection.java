@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
+import com.intellij.java.impl.ig.psiutils.FormatUtils;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.ConstantExpressionUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
@@ -22,9 +23,8 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
-import com.intellij.java.impl.ig.psiutils.FormatUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -33,7 +33,7 @@ public class MalformedFormatStringInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("malformed.format.string.display.name");
+    return InspectionGadgetsLocalize.malformedFormatStringDisplayName().get();
   }
 
   @Override
@@ -41,7 +41,7 @@ public class MalformedFormatStringInspection extends BaseInspection {
   public String buildErrorString(Object... infos) {
     final Object value = infos[0];
     if (value instanceof Exception) {
-      return InspectionGadgetsBundle.message("malformed.format.string.problem.descriptor.malformed");
+      return InspectionGadgetsLocalize.malformedFormatStringProblemDescriptorMalformed().get();
     }
     final Validator[] validators = (Validator[])value;
     final int argumentCount = ((Integer)infos[1]).intValue();

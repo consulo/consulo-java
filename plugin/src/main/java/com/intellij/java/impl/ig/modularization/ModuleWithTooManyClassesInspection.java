@@ -17,7 +17,7 @@ package com.intellij.java.impl.ig.modularization;
 
 import com.intellij.java.analysis.codeInspection.reference.RefClass;
 import com.intellij.java.impl.ig.BaseGlobalInspection;
-import com.siyeh.InspectionGadgetsBundle;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.deadCodeNotWorking.impl.SingleIntegerFieldOptionsPanel;
 import consulo.language.editor.inspection.CommonProblemDescriptor;
 import consulo.language.editor.inspection.GlobalInspectionContext;
@@ -25,9 +25,10 @@ import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.reference.RefModule;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.scope.AnalysisScope;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
-
 import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 import java.util.List;
 
@@ -41,8 +42,7 @@ public abstract class ModuleWithTooManyClassesInspection extends BaseGlobalInspe
 	@Override
 	public String getDisplayName()
 	{
-		return InspectionGadgetsBundle.message(
-				"module.with.too.many.classes.display.name");
+		return InspectionGadgetsLocalize.moduleWithTooManyClassesDisplayName().get();
 	}
 
 	@Override
@@ -75,21 +75,17 @@ public abstract class ModuleWithTooManyClassesInspection extends BaseGlobalInspe
 		{
 			return null;
 		}
-		final String errorString = InspectionGadgetsBundle.message(
-				"module.with.too.many.classes.problem.descriptor",
-				refEntity.getName(), Integer.valueOf(numClasses),
-				Integer.valueOf(limit));
+		final LocalizeValue errorString =
+			InspectionGadgetsLocalize.moduleWithTooManyClassesProblemDescriptor(refEntity.getName(), numClasses, limit);
 		return new CommonProblemDescriptor[]{
-				inspectionManager.createProblemDescriptor(errorString)
+            inspectionManager.createProblemDescriptor(errorString.get())
 		};
 	}
 
 	@Override
 	public JComponent createOptionsPanel()
 	{
-		return new SingleIntegerFieldOptionsPanel(
-				InspectionGadgetsBundle.message(
-						"module.with.too.many.classes.max.option"),
-				this, "limit", 3);
+		LocalizeValue message = InspectionGadgetsLocalize.moduleWithTooManyClassesMaxOption();
+		return new SingleIntegerFieldOptionsPanel(message.get(), this, "limit", 3);
 	}
 }

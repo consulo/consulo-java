@@ -15,19 +15,18 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class UnnecessaryLabelOnContinueStatementInspection
@@ -35,8 +34,7 @@ public class UnnecessaryLabelOnContinueStatementInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "unnecessary.label.on.continue.statement.display.name");
+    return InspectionGadgetsLocalize.unnecessaryLabelOnContinueStatementDisplayName().get();
   }
 
   public boolean isEnabledByDefault() {
@@ -45,8 +43,7 @@ public class UnnecessaryLabelOnContinueStatementInspection
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "unnecessary.label.on.continue.statement.problem.descriptor");
+    return InspectionGadgetsLocalize.unnecessaryLabelOnContinueStatementProblemDescriptor().get();
   }
 
   public InspectionGadgetsFix buildFix(Object... infos) {
@@ -58,8 +55,7 @@ public class UnnecessaryLabelOnContinueStatementInspection
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "unnecessary.label.remove.quickfix");
+      return InspectionGadgetsLocalize.unnecessaryLabelRemoveQuickfix().get();
     }
 
     public void doFix(Project project, ProblemDescriptor descriptor)

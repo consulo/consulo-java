@@ -32,6 +32,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.DeclarationSearchUtils;
 import com.siyeh.ig.psiutils.TestUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.progress.ProgressManager;
 import consulo.application.util.function.Processor;
@@ -51,9 +52,9 @@ import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.ref.Ref;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -76,7 +77,7 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
 	@Nonnull
 	public String getDisplayName()
 	{
-		return InspectionGadgetsBundle.message("static.method.only.used.in.one.class.display.name");
+		return InspectionGadgetsLocalize.staticMethodOnlyUsedInOneClassDisplayName().get();
 	}
 
 	@Nonnull
@@ -91,9 +92,18 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
 	public JComponent createOptionsPanel()
 	{
 		final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
-		panel.addCheckbox(InspectionGadgetsBundle.message("static.method.only.used.in.one.class.ignore.test.option"), "ignoreTestClasses");
-		panel.addCheckbox(InspectionGadgetsBundle.message("static.method.only.used.in.one.class.ignore.anonymous.option"), "ignoreAnonymousClasses");
-		panel.addCheckbox(InspectionGadgetsBundle.message("static.method.only.used.in.one.class.ignore.on.conflicts"), "ignoreOnConflicts");
+		panel.addCheckbox(
+			InspectionGadgetsLocalize.staticMethodOnlyUsedInOneClassIgnoreTestOption().get(),
+			"ignoreTestClasses"
+		);
+		panel.addCheckbox(
+			InspectionGadgetsLocalize.staticMethodOnlyUsedInOneClassIgnoreAnonymousOption().get(),
+			"ignoreAnonymousClasses"
+		);
+		panel.addCheckbox(
+			InspectionGadgetsLocalize.staticMethodOnlyUsedInOneClassIgnoreOnConflicts().get(),
+			"ignoreOnConflicts"
+		);
 		return panel;
 	}
 
@@ -175,8 +185,12 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
 	@Nonnull
 	static ProblemDescriptor createProblemDescriptor(@Nonnull InspectionManager manager, PsiElement problemElement, PsiClass usageClass)
 	{
-		final String message = (usageClass instanceof PsiAnonymousClass) ? InspectionGadgetsBundle.message("static.method.only.used.in.one.anonymous.class.problem.descriptor", ((PsiAnonymousClass)
-				usageClass).getBaseClassReference().getText()) : InspectionGadgetsBundle.message("static.method.only.used.in.one.class.problem.descriptor", usageClass.getName());
+		final String message = (usageClass instanceof PsiAnonymousClass)
+			? InspectionGadgetsBundle.message(
+				"static.method.only.used.in.one.anonymous.class.problem.descriptor",
+				((PsiAnonymousClass)usageClass).getBaseClassReference().getText()
+			)
+			: InspectionGadgetsLocalize.staticMethodOnlyUsedInOneClassProblemDescriptor(usageClass.getName()).get();
 		return manager.createProblemDescriptor(problemElement, message, false, null, ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
 	}
 
@@ -368,7 +382,8 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
 		{
 			final PsiClass usageClass = (PsiClass) infos[0];
 			return (usageClass instanceof PsiAnonymousClass) ? InspectionGadgetsBundle.message("static.method.only.used.in.one.anonymous.class.problem.descriptor", ((PsiAnonymousClass) usageClass)
-					.getBaseClassReference().getText()) : InspectionGadgetsBundle.message("static.method.only.used.in.one.class.problem.descriptor", usageClass.getName());
+					.getBaseClassReference().getText()) : InspectionGadgetsLocalize.staticMethodOnlyUsedInOneClassProblemDescriptor(
+				usageClass.getName()).get();
 		}
 
 		@Override
@@ -394,7 +409,7 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
 			@Nonnull
 			public String getFamilyName()
 			{
-				return InspectionGadgetsBundle.message("static.method.only.used.in.one.class.quickfix");
+				return InspectionGadgetsLocalize.staticMethodOnlyUsedInOneClassQuickfix().get();
 			}
 
 			@Nonnull

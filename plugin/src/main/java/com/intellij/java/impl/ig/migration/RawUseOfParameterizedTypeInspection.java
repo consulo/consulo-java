@@ -18,15 +18,14 @@ package com.intellij.java.impl.ig.migration;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -44,25 +43,31 @@ public class RawUseOfParameterizedTypeInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("raw.use.of.parameterized.type.display.name");
+    return InspectionGadgetsLocalize.rawUseOfParameterizedTypeDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("raw.use.of.parameterized.type.problem.descriptor");
+    return InspectionGadgetsLocalize.rawUseOfParameterizedTypeProblemDescriptor().get();
   }
 
   @Override
   @Nullable
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message("raw.use.of.parameterized.type.ignore.new.objects.option"),
-                             "ignoreObjectConstruction");
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message("raw.use.of.parameterized.type.ignore.type.casts.option"),
-                             "ignoreTypeCasts");
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message("raw.use.of.parameterized.type.ignore.uncompilable.option"),
-                             "ignoreUncompilable");
+    optionsPanel.addCheckbox(
+      InspectionGadgetsLocalize.rawUseOfParameterizedTypeIgnoreNewObjectsOption().get(),
+      "ignoreObjectConstruction"
+    );
+    optionsPanel.addCheckbox(
+      InspectionGadgetsLocalize.rawUseOfParameterizedTypeIgnoreTypeCastsOption().get(),
+      "ignoreTypeCasts"
+    );
+    optionsPanel.addCheckbox(
+      InspectionGadgetsLocalize.rawUseOfParameterizedTypeIgnoreUncompilableOption().get(),
+      "ignoreUncompilable"
+    );
     return optionsPanel;
   }
 

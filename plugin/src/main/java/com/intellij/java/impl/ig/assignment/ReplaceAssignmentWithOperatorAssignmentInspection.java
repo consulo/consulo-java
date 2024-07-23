@@ -16,20 +16,19 @@
 package com.intellij.java.impl.ig.assignment;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.EquivalenceChecker;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -57,8 +56,7 @@ public class ReplaceAssignmentWithOperatorAssignmentInspection extends BaseInspe
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "assignment.replaceable.with.operator.assignment.display.name");
+    return InspectionGadgetsLocalize.assignmentReplaceableWithOperatorAssignmentDisplayName().get();
   }
 
   @Override
@@ -66,21 +64,23 @@ public class ReplaceAssignmentWithOperatorAssignmentInspection extends BaseInspe
   public String buildErrorString(Object... infos) {
     final PsiExpression lhs = (PsiExpression)infos[0];
     final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)infos[1];
-    return InspectionGadgetsBundle.message(
-      "assignment.replaceable.with.operator.assignment.problem.descriptor",
-      calculateReplacementExpression(lhs, polyadicExpression));
+    return InspectionGadgetsLocalize.assignmentReplaceableWithOperatorAssignmentProblemDescriptor(
+        calculateReplacementExpression(lhs, polyadicExpression)
+    ).get();
   }
 
   @Override
   @Nullable
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message(
-      "assignment.replaceable.with.operator.assignment.ignore.conditional.operators.option"),
-                             "ignoreLazyOperators");
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message(
-      "assignment.replaceable.with.operator.assignment.ignore.obscure.operators.option"),
-                             "ignoreObscureOperators");
+    optionsPanel.addCheckbox(
+      InspectionGadgetsLocalize.assignmentReplaceableWithOperatorAssignmentIgnoreConditionalOperatorsOption().get(),
+      "ignoreLazyOperators"
+    );
+    optionsPanel.addCheckbox(
+      InspectionGadgetsLocalize.assignmentReplaceableWithOperatorAssignmentIgnoreObscureOperatorsOption().get(),
+      "ignoreObscureOperators"
+    );
     return optionsPanel;
   }
 
@@ -135,9 +135,7 @@ public class ReplaceAssignmentWithOperatorAssignmentInspection extends BaseInspe
       else if ("||".equals(signText)) {
         signText = "|";
       }
-      m_name = InspectionGadgetsBundle.message(
-        "assignment.replaceable.with.operator.replace.quickfix",
-        signText);
+      m_name = InspectionGadgetsLocalize.assignmentReplaceableWithOperatorReplaceQuickfix(signText).get();
     }
 
     @Nonnull

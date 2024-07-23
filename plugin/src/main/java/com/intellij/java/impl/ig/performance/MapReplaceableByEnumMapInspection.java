@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.performance;
 
 import com.intellij.java.language.psi.*;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.InspectionGadgetsBundle;
@@ -32,13 +33,13 @@ public class MapReplaceableByEnumMapInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("map.replaceable.by.enum.map.display.name");
+    return InspectionGadgetsLocalize.mapReplaceableByEnumMapDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("map.replaceable.by.enum.map.problem.descriptor");
+    return InspectionGadgetsLocalize.mapReplaceableByEnumMapProblemDescriptor().get();
   }
 
   @Override

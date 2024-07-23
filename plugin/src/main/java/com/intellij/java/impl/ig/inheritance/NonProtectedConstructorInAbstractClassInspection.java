@@ -15,16 +15,17 @@
  */
 package com.intellij.java.impl.ig.inheritance;
 
+import com.intellij.java.impl.ig.fixes.ChangeModifierFix;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.ChangeModifierFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
@@ -41,8 +42,7 @@ public class NonProtectedConstructorInAbstractClassInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "non.protected.constructor.in.abstract.class.display.name");
+    return InspectionGadgetsLocalize.nonProtectedConstructorInAbstractClassDisplayName().get();
   }
 
   @Override
@@ -54,16 +54,13 @@ public class NonProtectedConstructorInAbstractClassInspection
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "non.protected.constructor.in.abstract.class.problem.descriptor");
+    return InspectionGadgetsLocalize.nonProtectedConstructorInAbstractClassProblemDescriptor().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(
-      InspectionGadgetsBundle.message(
-        "non.protected.constructor.in.abstract.class.ignore.option"),
-      this, "m_ignoreNonPublicClasses");
+    LocalizeValue message = InspectionGadgetsLocalize.nonProtectedConstructorInAbstractClassIgnoreOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "m_ignoreNonPublicClasses");
   }
 
   @Override

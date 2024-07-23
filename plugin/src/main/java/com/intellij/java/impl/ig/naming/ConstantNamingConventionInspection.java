@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.naming;
 
+import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.psi.PsiEnumConstant;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
@@ -22,14 +23,14 @@ import com.intellij.java.language.psi.PsiType;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.CheckBox;
-
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
-import javax.swing.JComponent;
+import javax.swing.*;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -45,8 +46,7 @@ public class ConstantNamingConventionInspection extends ConventionInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "constant.naming.convention.display.name");
+    return InspectionGadgetsLocalize.constantNamingConventionDisplayName().get();
   }
 
   @Override
@@ -74,8 +74,8 @@ public class ConstantNamingConventionInspection extends ConventionInspection {
 
   @Override
   public Collection<? extends JComponent> createExtraOptions() {
-    return Arrays.asList(
-      new CheckBox(InspectionGadgetsBundle.message("constant.naming.convention.immutables.option"), this, "onlyCheckImmutables"));
+    LocalizeValue message = InspectionGadgetsLocalize.constantNamingConventionImmutablesOption();
+    return Arrays.asList(new CheckBox(message.get(), this, "onlyCheckImmutables"));
   }
 
   @Override

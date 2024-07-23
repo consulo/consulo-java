@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
+import com.intellij.java.impl.ig.fixes.RemoveModifierFix;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.RemoveModifierFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 
@@ -32,8 +32,7 @@ public class FinalMethodInFinalClassInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "final.method.in.final.class.display.name");
+    return InspectionGadgetsLocalize.finalMethodInFinalClassDisplayName().get();
   }
 
   @Override
@@ -44,8 +43,7 @@ public class FinalMethodInFinalClassInspection extends BaseInspection {
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "final.method.in.final.class.problem.descriptor");
+    return InspectionGadgetsLocalize.finalMethodInFinalClassProblemDescriptor().get();
   }
 
   @Override

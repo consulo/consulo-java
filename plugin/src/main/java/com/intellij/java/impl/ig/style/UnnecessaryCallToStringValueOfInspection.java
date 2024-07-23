@@ -15,22 +15,22 @@
  */
 package com.intellij.java.impl.ig.style;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Nls;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class UnnecessaryCallToStringValueOfInspection extends BaseInspection {
@@ -39,14 +39,14 @@ public class UnnecessaryCallToStringValueOfInspection extends BaseInspection {
   @Nls
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("unnecessary.call.to.string.valueof.display.name");
+    return InspectionGadgetsLocalize.unnecessaryCallToStringValueofDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
     final String text = (String)infos[0];
-    return InspectionGadgetsBundle.message("unnecessary.call.to.string.valueof.problem.descriptor", text);
+    return InspectionGadgetsLocalize.unnecessaryCallToStringValueofProblemDescriptor(text).get();
   }
 
   @Override
@@ -78,7 +78,7 @@ public class UnnecessaryCallToStringValueOfInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("unnecessary.call.to.string.valueof.quickfix", replacementText);
+      return InspectionGadgetsLocalize.unnecessaryCallToStringValueofQuickfix(replacementText).get();
     }
 
     @Override

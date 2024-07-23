@@ -15,14 +15,15 @@
  */
 package com.intellij.java.impl.ig.initialization;
 
+import com.intellij.java.impl.ig.psiutils.UninitializedReadCollector;
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ClassUtils;
-import com.intellij.java.impl.ig.psiutils.UninitializedReadCollector;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
@@ -44,23 +45,19 @@ public class StaticVariableUninitializedUseInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "static.variable.used.before.initialization.display.name");
+    return InspectionGadgetsLocalize.staticVariableUsedBeforeInitializationDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "static.variable.used.before.initialization.problem.descriptor");
+    return InspectionGadgetsLocalize.staticVariableUsedBeforeInitializationProblemDescriptor().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(
-      InspectionGadgetsBundle.message(
-        "primitive.fields.ignore.option"),
-      this, "m_ignorePrimitives");
+    LocalizeValue message = InspectionGadgetsLocalize.primitiveFieldsIgnoreOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "m_ignorePrimitives");
   }
 
   @Override

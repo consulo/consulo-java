@@ -17,16 +17,16 @@ package com.intellij.java.impl.ig.encapsulation;
 
 import com.intellij.java.impl.ig.fixes.EncapsulateVariableFix;
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.MethodUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
-
 import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 
 public abstract class UseOfAnotherObjectsPrivateFieldInspection extends BaseInspection {
@@ -45,25 +45,20 @@ public abstract class UseOfAnotherObjectsPrivateFieldInspection extends BaseInsp
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-        "accessing.non.public.field.of.another.object.display.name");
+    return InspectionGadgetsLocalize.accessingNonPublicFieldOfAnotherObjectDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-        "accessing.non.public.field.of.another.object.problem.descriptor");
+    return InspectionGadgetsLocalize.accessingNonPublicFieldOfAnotherObjectProblemDescriptor().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    final MultipleCheckboxOptionsPanel panel =
-        new MultipleCheckboxOptionsPanel(this);
-    panel.addCheckbox(InspectionGadgetsBundle.message(
-        "ignore.accesses.from.the.same.class"), "ignoreSameClass");
-    panel.addCheckbox(InspectionGadgetsBundle.message(
-        "ignore.accesses.from.equals.method"), "ignoreEquals");
+    final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
+    panel.addCheckbox(InspectionGadgetsLocalize.ignoreAccessesFromTheSameClass().get(), "ignoreSameClass");
+    panel.addCheckbox(InspectionGadgetsLocalize.ignoreAccessesFromEqualsMethod().get(), "ignoreEquals");
     return panel;
   }
 

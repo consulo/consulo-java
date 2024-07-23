@@ -15,17 +15,18 @@
  */
 package com.intellij.java.impl.ig.threading;
 
+import com.intellij.java.impl.ig.fixes.MakeFieldFinalFix;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.PsiElement;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.MakeFieldFinalFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -44,24 +45,20 @@ public class FieldAccessedSynchronizedAndUnsynchronizedInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "field.accessed.synchronized.and.unsynchronized.display.name");
+    return InspectionGadgetsLocalize.fieldAccessedSynchronizedAndUnsynchronizedDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "field.accessed.synchronized.and.unsynchronized.problem.descriptor");
+    return InspectionGadgetsLocalize.fieldAccessedSynchronizedAndUnsynchronizedProblemDescriptor().get();
   }
 
   @Override
   @Nullable
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(
-      InspectionGadgetsBundle.message(
-        "field.accessed.synchronized.and.unsynchronized.option"),
-      this, "countGettersAndSetters");
+    LocalizeValue message = InspectionGadgetsLocalize.fieldAccessedSynchronizedAndUnsynchronizedOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "countGettersAndSetters");
   }
 
   @Override

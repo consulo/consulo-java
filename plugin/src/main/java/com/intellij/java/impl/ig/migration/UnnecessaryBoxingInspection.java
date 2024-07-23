@@ -15,34 +15,30 @@
  */
 package com.intellij.java.impl.ig.migration;
 
-import jakarta.annotation.Nonnull;
-import javax.swing.JComponent;
-
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import org.jetbrains.annotations.NonNls;
-
-import jakarta.annotation.Nullable;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
-import consulo.project.Project;
-import consulo.util.lang.StringUtil;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.PsiReplacementUtil;
-import com.siyeh.ig.psiutils.ComparisonUtils;
-import com.siyeh.ig.psiutils.ExpectedTypeUtils;
-import com.siyeh.ig.psiutils.ExpressionUtils;
-import com.siyeh.ig.psiutils.MethodCallUtils;
-import com.siyeh.ig.psiutils.ParenthesesUtils;
-import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.ig.psiutils.*;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
+import javax.swing.*;
 
 @ExtensionImpl
 public class UnnecessaryBoxingInspection extends BaseInspection
@@ -55,7 +51,7 @@ public class UnnecessaryBoxingInspection extends BaseInspection
 	@Nonnull
 	public String getDisplayName()
 	{
-		return InspectionGadgetsBundle.message("unnecessary.boxing.display.name");
+		return InspectionGadgetsLocalize.unnecessaryBoxingDisplayName().get();
 	}
 
 	@Override
@@ -68,14 +64,15 @@ public class UnnecessaryBoxingInspection extends BaseInspection
 	@Override
 	public JComponent createOptionsPanel()
 	{
-		return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message("unnecessary.boxing.superfluous.option"), this, "onlyReportSuperfluouslyBoxed");
+		LocalizeValue message = InspectionGadgetsLocalize.unnecessaryBoxingSuperfluousOption();
+		return new SingleCheckboxOptionsPanel(message.get(), this, "onlyReportSuperfluouslyBoxed");
 	}
 
 	@Override
 	@Nonnull
 	protected String buildErrorString(Object... infos)
 	{
-		return InspectionGadgetsBundle.message("unnecessary.boxing.problem.descriptor");
+		return InspectionGadgetsLocalize.unnecessaryBoxingProblemDescriptor().get();
 	}
 
 	@Override
@@ -91,7 +88,7 @@ public class UnnecessaryBoxingInspection extends BaseInspection
 		@Nonnull
 		public String getFamilyName()
 		{
-			return InspectionGadgetsBundle.message("unnecessary.boxing.remove.quickfix");
+			return InspectionGadgetsLocalize.unnecessaryBoxingRemoveQuickfix().get();
 		}
 
 		@Override

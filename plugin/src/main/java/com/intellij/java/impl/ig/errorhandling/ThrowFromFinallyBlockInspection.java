@@ -16,12 +16,11 @@
 package com.intellij.java.impl.ig.errorhandling;
 
 import com.intellij.java.language.psi.PsiThrowStatement;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
-
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -29,8 +28,7 @@ public class ThrowFromFinallyBlockInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "throw.from.finally.block.display.name");
+    return InspectionGadgetsLocalize.throwFromFinallyBlockDisplayName().get();
   }
 
   public boolean isEnabledByDefault() {
@@ -39,8 +37,7 @@ public class ThrowFromFinallyBlockInspection extends BaseInspection {
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "throw.from.finally.block.problem.descriptor");
+    return InspectionGadgetsLocalize.throwFromFinallyBlockProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

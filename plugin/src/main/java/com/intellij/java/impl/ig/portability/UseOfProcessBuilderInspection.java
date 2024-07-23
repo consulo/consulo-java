@@ -15,16 +15,15 @@
  */
 package com.intellij.java.impl.ig.portability;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiNewExpression;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiTypeElement;
 import com.intellij.java.language.psi.PsiVariable;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
@@ -32,14 +31,12 @@ public class UseOfProcessBuilderInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "use.processbuilder.class.display.name");
+    return InspectionGadgetsLocalize.useProcessbuilderClassDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "use.processbuilder.class.problem.descriptor");
+    return InspectionGadgetsLocalize.useProcessbuilderClassProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

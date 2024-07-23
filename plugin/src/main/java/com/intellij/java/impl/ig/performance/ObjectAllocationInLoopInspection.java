@@ -15,30 +15,27 @@
  */
 package com.intellij.java.impl.ig.performance;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ObjectAllocationInLoopInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "object.allocation.in.loop.display.name");
+    return InspectionGadgetsLocalize.objectAllocationInLoopDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "object.allocation.in.loop.problem.descriptor");
+    return InspectionGadgetsLocalize.objectAllocationInLoopProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

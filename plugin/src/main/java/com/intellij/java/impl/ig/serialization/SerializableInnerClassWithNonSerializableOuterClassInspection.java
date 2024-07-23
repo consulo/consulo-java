@@ -15,11 +15,10 @@
  */
 package com.intellij.java.impl.ig.serialization;
 
-import jakarta.annotation.Nonnull;
-
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class SerializableInnerClassWithNonSerializableOuterClassInspection
@@ -27,14 +26,12 @@ public class SerializableInnerClassWithNonSerializableOuterClassInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "serializable.inner.class.with.non.serializable.outer.class.display.name");
+    return InspectionGadgetsLocalize.serializableInnerClassWithNonSerializableOuterClassDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "serializable.inner.class.with.non.serializable.outer.class.problem.descriptor");
+    return InspectionGadgetsLocalize.serializableInnerClassWithNonSerializableOuterClassProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

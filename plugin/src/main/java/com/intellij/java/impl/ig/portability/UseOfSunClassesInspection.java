@@ -16,9 +16,9 @@
 package com.intellij.java.impl.ig.portability;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
@@ -28,13 +28,12 @@ public class UseOfSunClassesInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("use.sun.classes.display.name");
+    return InspectionGadgetsLocalize.useSunClassesDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "use.sun.classes.problem.descriptor");
+    return InspectionGadgetsLocalize.useSunClassesProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {
