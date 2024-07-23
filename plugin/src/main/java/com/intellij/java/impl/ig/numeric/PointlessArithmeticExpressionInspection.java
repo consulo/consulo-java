@@ -15,21 +15,22 @@
  */
 package com.intellij.java.impl.ig.numeric;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.ConstantExpressionUtil;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
-import org.jetbrains.annotations.NonNls;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import java.util.HashSet;
@@ -61,17 +62,14 @@ public class PointlessArithmeticExpressionInspection
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(
-      InspectionGadgetsBundle.message(
-        "pointless.boolean.expression.ignore.option"),
-      this, "m_ignoreExpressionsContainingConstants");
+    LocalizeValue message = InspectionGadgetsLocalize.pointlessBooleanExpressionIgnoreOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "m_ignoreExpressionsContainingConstants");
   }
 
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "pointless.arithmetic.expression.display.name");
+    return InspectionGadgetsLocalize.pointlessArithmeticExpressionDisplayName().get();
   }
 
   @Override
@@ -82,9 +80,8 @@ public class PointlessArithmeticExpressionInspection
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "expression.can.be.replaced.problem.descriptor",
-      calculateReplacementExpression((PsiExpression)infos[0]));
+    String replacementExpression = calculateReplacementExpression((PsiExpression)infos[0]);
+    return InspectionGadgetsLocalize.expressionCanBeReplacedProblemDescriptor(replacementExpression).get();
   }
 
   @NonNls
@@ -145,8 +142,7 @@ public class PointlessArithmeticExpressionInspection
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "constant.conditional.expression.simplify.quickfix");
+      return InspectionGadgetsLocalize.constantConditionalExpressionSimplifyQuickfix().get();
     }
 
     @Override

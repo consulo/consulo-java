@@ -29,6 +29,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TestUtils;
 import com.siyeh.ig.ui.ExternalizableStringSet;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.java.language.module.util.JavaClassNames;
@@ -51,15 +52,13 @@ public class PublicMethodNotExposedInInterfaceInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "public.method.not.in.interface.display.name");
+    return InspectionGadgetsLocalize.publicMethodNotInInterfaceDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "public.method.not.in.interface.problem.descriptor");
+    return InspectionGadgetsLocalize.publicMethodNotInInterfaceProblemDescriptor().get();
   }
 
   @Nonnull
@@ -72,7 +71,9 @@ public class PublicMethodNotExposedInInterfaceInspection
   public JComponent createOptionsPanel() {
     final JPanel panel = new JPanel(new GridBagLayout());
     final JPanel annotationsListControl = SpecialAnnotationsUtil.createSpecialAnnotationsListControl(
-        ignorableAnnotations, InspectionGadgetsBundle.message("ignore.if.annotated.by"));
+      ignorableAnnotations,
+      InspectionGadgetsLocalize.ignoreIfAnnotatedBy().get()
+    );
     final GridBagConstraints constraints = new GridBagConstraints();
     constraints.gridx = 0;
     constraints.gridy = 0;
@@ -81,8 +82,11 @@ public class PublicMethodNotExposedInInterfaceInspection
     constraints.anchor = GridBagConstraints.CENTER;
     constraints.fill = GridBagConstraints.BOTH;
     panel.add(annotationsListControl, constraints);
-    final CheckBox checkBox = new CheckBox(InspectionGadgetsBundle.message(
-      "public.method.not.in.interface.option"), this, "onlyWarnIfContainingClassImplementsAnInterface");
+    final CheckBox checkBox = new CheckBox(
+        InspectionGadgetsLocalize.publicMethodNotInInterfaceOption().get(),
+        this,
+        "onlyWarnIfContainingClassImplementsAnInterface"
+    );
     constraints.gridy = 1;
     constraints.weighty = 0.0;
     constraints.anchor = GridBagConstraints.WEST;

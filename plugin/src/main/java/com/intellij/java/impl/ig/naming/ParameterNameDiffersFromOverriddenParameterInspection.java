@@ -23,14 +23,13 @@ import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiParameterList;
 import com.intellij.java.language.psi.search.searches.SuperMethodsSearch;
 import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.query.Query;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -52,26 +51,24 @@ public class ParameterNameDiffersFromOverriddenParameterInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "parameter.name.differs.from.overridden.parameter.display.name");
+    return InspectionGadgetsLocalize.parameterNameDiffersFromOverriddenParameterDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "parameter.name.differs.from.overridden.parameter.problem.descriptor",
-      infos[0]);
+    return InspectionGadgetsLocalize.parameterNameDiffersFromOverriddenParameterProblemDescriptor(infos[0]).get();
   }
 
   public JComponent createOptionsPanel() {
-    final MultipleCheckboxOptionsPanel optionsPanel =
-      new MultipleCheckboxOptionsPanel(this);
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message(
-      "parameter.name.differs.from.overridden.parameter.ignore.character.option"),
-                             "m_ignoreSingleCharacterNames");
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message(
-      "parameter.name.differs.from.overridden.parameter.ignore.library.option"),
-                             "m_ignoreOverridesOfLibraryMethods");
+    final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
+    optionsPanel.addCheckbox(
+      InspectionGadgetsLocalize.parameterNameDiffersFromOverriddenParameterIgnoreCharacterOption().get(),
+      "m_ignoreSingleCharacterNames"
+    );
+    optionsPanel.addCheckbox(
+      InspectionGadgetsLocalize.parameterNameDiffersFromOverriddenParameterIgnoreLibraryOption().get(),
+      "m_ignoreOverridesOfLibraryMethods"
+    );
     return optionsPanel;
   }
 

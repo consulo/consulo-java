@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.ig.fixes;
 
+import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
-import com.siyeh.ig.InspectionGadgetsFix;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 public class RemoveModifierFix extends InspectionGadgetsFix {
@@ -33,8 +33,7 @@ public class RemoveModifierFix extends InspectionGadgetsFix {
 
   @Nonnull
   public String getName() {
-    return InspectionGadgetsBundle.message("remove.modifier.quickfix",
-                                           modifierText);
+    return InspectionGadgetsLocalize.removeModifierQuickfix(modifierText).get();
   }
 
   public void doFix(Project project, ProblemDescriptor descriptor)

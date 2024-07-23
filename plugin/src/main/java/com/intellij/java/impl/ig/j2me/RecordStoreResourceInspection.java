@@ -15,15 +15,15 @@
  */
 package com.intellij.java.impl.ig.j2me;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.util.PsiTreeUtil;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
@@ -36,8 +36,7 @@ public class RecordStoreResourceInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "recordstore.opened.not.safely.closed.display.name");
+    return InspectionGadgetsLocalize.recordstoreOpenedNotSafelyClosedDisplayName().get();
   }
 
   @Nonnull
@@ -46,8 +45,7 @@ public class RecordStoreResourceInspection extends BaseInspection {
     final PsiType type = expression.getType();
     assert type != null;
     final String text = type.getPresentableText();
-    return InspectionGadgetsBundle.message(
-      "resource.opened.not.closed.problem.descriptor", text);
+    return InspectionGadgetsLocalize.resourceOpenedNotClosedProblemDescriptor(text).get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

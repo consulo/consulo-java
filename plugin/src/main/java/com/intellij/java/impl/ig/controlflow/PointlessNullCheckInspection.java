@@ -15,21 +15,21 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.ast.IElementType;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
-import org.jetbrains.annotations.Nls;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.Nls;
 
 /**
  * This inspection finds instances of null checks followed by an instanceof check
@@ -49,13 +49,13 @@ public class PointlessNullCheckInspection extends BaseInspection {
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("pointless.nullcheck.display.name");
+    return InspectionGadgetsLocalize.pointlessNullcheckDisplayName().get();
   }
 
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("pointless.nullcheck.problem.descriptor");
+    return InspectionGadgetsLocalize.pointlessNullcheckProblemDescriptor().get();
   }
 
   @Override
@@ -80,7 +80,7 @@ public class PointlessNullCheckInspection extends BaseInspection {
     @Override
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("pointless.nullcheck.simplify.quickfix", myExpressionText);
+      return InspectionGadgetsLocalize.pointlessNullcheckSimplifyQuickfix(myExpressionText).get();
     }
 
     @Override

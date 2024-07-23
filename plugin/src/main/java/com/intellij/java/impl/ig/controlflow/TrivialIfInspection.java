@@ -15,32 +15,25 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import org.jetbrains.annotations.NonNls;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
-import com.intellij.java.language.psi.PsiAssignmentExpression;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiExpressionStatement;
-import com.intellij.java.language.psi.PsiIfStatement;
-import com.intellij.java.language.psi.PsiJavaToken;
-import com.intellij.java.language.psi.PsiKeyword;
-import com.intellij.java.language.psi.PsiStatement;
-import consulo.language.psi.PsiWhiteSpace;
-import consulo.language.ast.IElementType;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.psi.PsiUtilCore;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
+import com.intellij.java.language.psi.*;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.BoolUtils;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.ig.psiutils.EquivalenceChecker;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiUtilCore;
+import consulo.language.psi.PsiWhiteSpace;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class TrivialIfInspection extends BaseInspection {
@@ -54,7 +47,7 @@ public class TrivialIfInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("trivial.if.display.name");
+    return InspectionGadgetsLocalize.trivialIfDisplayName().get();
   }
 
   @Override
@@ -65,7 +58,7 @@ public class TrivialIfInspection extends BaseInspection {
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("trivial.if.problem.descriptor");
+    return InspectionGadgetsLocalize.trivialIfProblemDescriptor().get();
   }
 
   @Override
@@ -76,16 +69,14 @@ public class TrivialIfInspection extends BaseInspection {
   private static class TrivialIfFix extends InspectionGadgetsFix {
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "constant.conditional.expression.simplify.quickfix");
+      return InspectionGadgetsLocalize.constantConditionalExpressionSimplifyQuickfix().get();
     }
 
     @Override
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
       final PsiElement ifKeywordElement = descriptor.getPsiElement();
-      final PsiIfStatement statement =
-        (PsiIfStatement)ifKeywordElement.getParent();
+      final PsiIfStatement statement = (PsiIfStatement)ifKeywordElement.getParent();
       if (isSimplifiableAssignment(statement)) {
         replaceSimplifiableAssignment(statement);
       }

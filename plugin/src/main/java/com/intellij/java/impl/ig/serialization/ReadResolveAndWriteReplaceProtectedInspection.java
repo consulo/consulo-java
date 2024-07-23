@@ -15,15 +15,15 @@
  */
 package com.intellij.java.impl.ig.serialization;
 
+import com.intellij.java.impl.ig.fixes.ChangeModifierFix;
+import com.intellij.java.impl.ig.psiutils.SerializationUtils;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.ChangeModifierFix;
-import com.intellij.java.impl.ig.psiutils.SerializationUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 
@@ -33,14 +33,12 @@ public class ReadResolveAndWriteReplaceProtectedInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "readresolve.writereplace.protected.display.name");
+    return InspectionGadgetsLocalize.readresolveWritereplaceProtectedDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "readresolve.writereplace.protected.problem.descriptor");
+    return InspectionGadgetsLocalize.readresolveWritereplaceProtectedProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

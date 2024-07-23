@@ -15,16 +15,15 @@
  */
 package com.intellij.java.impl.ig.serialization;
 
-import jakarta.annotation.Nonnull;
-
+import com.intellij.java.impl.ig.psiutils.InitializationUtils;
+import com.intellij.java.impl.ig.psiutils.SerializationUtils;
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
-import com.intellij.java.impl.ig.psiutils.InitializationUtils;
-import com.intellij.java.impl.ig.psiutils.SerializationUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ReadObjectInitializationInspection extends BaseInspection {
@@ -36,14 +35,12 @@ public class ReadObjectInitializationInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "readobject.initialization.display.name");
+    return InspectionGadgetsLocalize.readobjectInitializationDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "readobject.initialization.problem.descriptor");
+    return InspectionGadgetsLocalize.readobjectInitializationProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

@@ -17,10 +17,10 @@ package com.intellij.java.impl.ig.junit;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
@@ -37,15 +37,13 @@ public class UnconstructableTestCaseInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "unconstructable.test.case.display.name");
+    return InspectionGadgetsLocalize.unconstructableTestCaseDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "unconstructable.test.case.problem.descriptor");
+    return InspectionGadgetsLocalize.unconstructableTestCaseProblemDescriptor().get();
   }
 
   @Override
