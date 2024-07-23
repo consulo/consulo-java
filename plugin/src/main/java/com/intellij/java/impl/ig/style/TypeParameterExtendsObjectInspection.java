@@ -15,21 +15,20 @@
  */
 package com.intellij.java.impl.ig.style;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.ast.IElementType;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class TypeParameterExtendsObjectInspection extends BaseInspection {
@@ -37,8 +36,7 @@ public class TypeParameterExtendsObjectInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "type.parameter.extends.object.display.name");
+    return InspectionGadgetsLocalize.typeParameterExtendsObjectDisplayName().get();
   }
 
   @Override
@@ -51,14 +49,9 @@ public class TypeParameterExtendsObjectInspection extends BaseInspection {
   @Nonnull
   protected String buildErrorString(Object... infos) {
     final Integer type = (Integer)infos[0];
-    if (type.intValue() == 1) {
-      return InspectionGadgetsBundle.message(
-        "type.parameter.extends.object.problem.descriptor1");
-    }
-    else {
-      return InspectionGadgetsBundle.message(
-        "type.parameter.extends.object.problem.descriptor2");
-    }
+    return type == 1
+      ? InspectionGadgetsLocalize.typeParameterExtendsObjectProblemDescriptor1().get()
+      : InspectionGadgetsLocalize.typeParameterExtendsObjectProblemDescriptor2().get();
   }
 
   @Override
@@ -75,8 +68,7 @@ public class TypeParameterExtendsObjectInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "extends.object.remove.quickfix");
+      return InspectionGadgetsLocalize.extendsObjectRemoveQuickfix().get();
     }
 
     @Override

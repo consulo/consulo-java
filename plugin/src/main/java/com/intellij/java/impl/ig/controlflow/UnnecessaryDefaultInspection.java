@@ -15,31 +15,28 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import jakarta.annotation.Nullable;
-
+import com.intellij.java.impl.ig.psiutils.InitializationUtils;
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import com.intellij.java.impl.ig.psiutils.InitializationUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class UnnecessaryDefaultInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "unnecessary.default.display.name");
+    return InspectionGadgetsLocalize.unnecessaryDefaultDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "unnecessary.default.problem.descriptor");
+    return InspectionGadgetsLocalize.unnecessaryDefaultProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

@@ -15,10 +15,12 @@
  */
 package com.intellij.java.impl.ig.style;
 
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
@@ -49,23 +51,19 @@ public class UnnecessaryConstructorInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "unnecessary.constructor.display.name");
+    return InspectionGadgetsLocalize.unnecessaryConstructorDisplayName().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(
-      InspectionGadgetsBundle.message(
-        "unnecessary.constructor.annotation.option"),
-      this, "ignoreAnnotations");
+    LocalizeValue message = InspectionGadgetsLocalize.unnecessaryConstructorAnnotationOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreAnnotations");
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "unnecessary.constructor.problem.descriptor");
+    return InspectionGadgetsLocalize.unnecessaryConstructorProblemDescriptor().get();
   }
 
   @Override
@@ -78,17 +76,14 @@ public class UnnecessaryConstructorInspection extends BaseInspection {
     return new UnnecessaryConstructorFix();
   }
 
-  private static class UnnecessaryConstructorFix
-    extends InspectionGadgetsFix {
+  private static class UnnecessaryConstructorFix extends InspectionGadgetsFix {
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "unnecessary.constructor.remove.quickfix");
+      return InspectionGadgetsLocalize.unnecessaryConstructorRemoveQuickfix().get();
     }
 
     @Override
-    public void doFix(Project project, ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
+    public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
       final PsiElement nameIdentifier = descriptor.getPsiElement();
       final PsiElement constructor = nameIdentifier.getParent();
       assert constructor != null;
@@ -96,9 +91,7 @@ public class UnnecessaryConstructorInspection extends BaseInspection {
     }
   }
 
-  private class UnnecessaryConstructorVisitor
-    extends BaseInspectionVisitor {
-
+  private class UnnecessaryConstructorVisitor extends BaseInspectionVisitor {
     @Override
     public void visitClass(@Nonnull PsiClass aClass) {
       final PsiMethod[] constructors = aClass.getConstructors();

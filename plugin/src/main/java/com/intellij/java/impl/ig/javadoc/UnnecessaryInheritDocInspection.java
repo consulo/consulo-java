@@ -15,25 +15,24 @@
  */
 package com.intellij.java.impl.ig.javadoc;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
-import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.JavaDocTokenType;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.java.language.psi.javadoc.PsiDocToken;
 import com.intellij.java.language.psi.javadoc.PsiInlineDocTag;
-import consulo.language.ast.IElementType;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
@@ -44,15 +43,13 @@ public class UnnecessaryInheritDocInspection extends BaseInspection {
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "unnecessary.inherit.doc.display.name");
+    return InspectionGadgetsLocalize.unnecessaryInheritDocDisplayName().get();
   }
 
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "unnecessary.inherit.doc.problem.descriptor");
+    return InspectionGadgetsLocalize.unnecessaryInheritDocProblemDescriptor().get();
   }
 
   @Override
@@ -64,8 +61,7 @@ public class UnnecessaryInheritDocInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "unnecessary.inherit.doc.quickfix");
+      return InspectionGadgetsLocalize.unnecessaryInheritDocQuickfix().get();
     }
 
     @Override

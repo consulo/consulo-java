@@ -16,21 +16,21 @@
 package com.intellij.java.impl.ig.style;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.document.util.TextRange;
 import consulo.language.editor.inspection.CleanupLocalInspectionTool;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ProblemHighlightType;
-import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 
 public abstract class UnnecessarilyQualifiedStaticUsageInspection extends BaseInspection implements CleanupLocalInspectionTool {
@@ -53,7 +53,7 @@ public abstract class UnnecessarilyQualifiedStaticUsageInspection extends BaseIn
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("unnecessarily.qualified.static.usage.display.name");
+    return InspectionGadgetsLocalize.unnecessarilyQualifiedStaticUsageDisplayName().get();
   }
 
   @Override
@@ -61,19 +61,26 @@ public abstract class UnnecessarilyQualifiedStaticUsageInspection extends BaseIn
   public String buildErrorString(Object... infos) {
     final PsiJavaCodeReferenceElement element = (PsiJavaCodeReferenceElement) infos[0];
     final PsiElement parent = element.getParent();
-    if (parent instanceof PsiMethodCallExpression) {
-      return InspectionGadgetsBundle.message("unnecessarily.qualified.static.usage.problem.descriptor", element.getText());
-    } else {
-      return InspectionGadgetsBundle.message("unnecessarily.qualified.static.usage.problem.descriptor1", element.getText());
-    }
+    return parent instanceof PsiMethodCallExpression
+      ? InspectionGadgetsLocalize.unnecessarilyQualifiedStaticUsageProblemDescriptor(element.getText()).get()
+      : InspectionGadgetsLocalize.unnecessarilyQualifiedStaticUsageProblemDescriptor1(element.getText()).get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message("unnecessarily.qualified.static.usage.ignore.field.option"), "m_ignoreStaticFieldAccesses");
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message("unnecessarily.qualified.static.usage.ignore.method.option"), "m_ignoreStaticMethodCalls");
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message("only.report.qualified.static.usages.option"), "m_ignoreStaticAccessFromStaticContext");
+    optionsPanel.addCheckbox(
+      InspectionGadgetsLocalize.unnecessarilyQualifiedStaticUsageIgnoreFieldOption().get(),
+      "m_ignoreStaticFieldAccesses"
+    );
+    optionsPanel.addCheckbox(
+      InspectionGadgetsLocalize.unnecessarilyQualifiedStaticUsageIgnoreMethodOption().get(),
+      "m_ignoreStaticMethodCalls"
+    );
+    optionsPanel.addCheckbox(
+      InspectionGadgetsLocalize.onlyReportQualifiedStaticUsagesOption().get(),
+      "m_ignoreStaticAccessFromStaticContext"
+    );
     return optionsPanel;
   }
 
@@ -87,7 +94,7 @@ public abstract class UnnecessarilyQualifiedStaticUsageInspection extends BaseIn
     @Override
     @Nonnull
     public String getFamilyName() {
-      return InspectionGadgetsBundle.message("unnecessary.qualifier.for.this.remove.quickfix");
+      return InspectionGadgetsLocalize.unnecessaryQualifierForThisRemoveQuickfix().get();
     }
 
     @Override

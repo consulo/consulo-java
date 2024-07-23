@@ -18,11 +18,11 @@ package com.intellij.java.impl.ig.numeric;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiPrefixExpression;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.ast.IElementType;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.ast.IElementType;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -30,13 +30,12 @@ public class UnaryPlusInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("unary.plus.display.name");
+    return InspectionGadgetsLocalize.unaryPlusDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "unary.plus.problem.descriptor");
+    return InspectionGadgetsLocalize.unaryPlusProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

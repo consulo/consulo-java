@@ -15,22 +15,21 @@
  */
 package com.intellij.java.impl.ig.performance;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
@@ -45,13 +44,13 @@ public class TrivialStringConcatenationInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("trivial.string.concatenation.display.name");
+    return InspectionGadgetsLocalize.trivialStringConcatenationDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("trivial.string.concatenation.problem.descriptor");
+    return InspectionGadgetsLocalize.trivialStringConcatenationProblemDescriptor().get();
   }
 
   @NonNls
@@ -143,7 +142,7 @@ public class TrivialStringConcatenationInspection extends BaseInspection {
     private final String m_name;
 
     private UnnecessaryTemporaryObjectFix(PsiLiteralExpression expression) {
-      m_name = InspectionGadgetsBundle.message("string.replace.quickfix", calculateReplacementExpression(expression));
+      m_name = InspectionGadgetsLocalize.stringReplaceQuickfix(calculateReplacementExpression(expression)).get();
     }
 
     @Nonnull

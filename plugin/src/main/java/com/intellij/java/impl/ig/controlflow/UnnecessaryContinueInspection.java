@@ -15,16 +15,17 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.DeleteUnnecessaryStatementFix;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
@@ -37,12 +38,12 @@ public class UnnecessaryContinueInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("unnecessary.continue.display.name");
+    return InspectionGadgetsLocalize.unnecessaryContinueDisplayName().get();
   }
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("unnecessary.continue.problem.descriptor");
+    return InspectionGadgetsLocalize.unnecessaryContinueProblemDescriptor().get();
   }
 
   public boolean isEnabledByDefault() {
@@ -51,7 +52,8 @@ public class UnnecessaryContinueInspection extends BaseInspection {
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message("unnecessary.return.option"), this, "ignoreInThenBranch");
+    LocalizeValue message = InspectionGadgetsLocalize.unnecessaryReturnOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreInThenBranch");
   }
 
   public BaseInspectionVisitor buildVisitor() {
