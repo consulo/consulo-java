@@ -15,30 +15,33 @@
  */
 package com.intellij.java.impl.ig.javadoc;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.JavaDocTokenType;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.javadoc.*;
-import consulo.project.Project;
-import consulo.util.lang.StringUtil;
-import consulo.language.psi.*;
-import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.PsiWhiteSpace;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -56,34 +59,28 @@ public class UnnecessaryJavaDocLinkInspection extends BaseInspection {
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "unnecessary.javadoc.link.display.name");
+    return InspectionGadgetsLocalize.unnecessaryJavadocLinkDisplayName().get();
   }
 
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
-    final int n = ((Integer)infos[1]).intValue();
+    final int n = (Integer)infos[1];
     if (n == THIS_METHOD) {
-      return InspectionGadgetsBundle.message(
-        "unnecessary.javadoc.link.this.method.problem.descriptor");
+      return InspectionGadgetsLocalize.unnecessaryJavadocLinkThisMethodProblemDescriptor().get();
     }
     else if (n == THIS_CLASS) {
-      return InspectionGadgetsBundle.message(
-        "unnecessary.javadoc.link.this.class.problem.descriptor");
+      return InspectionGadgetsLocalize.unnecessaryJavadocLinkThisClassProblemDescriptor().get();
     }
     else {
-      return InspectionGadgetsBundle.message(
-        "unnecessary.javadoc.link.super.method.problem.descriptor");
+      return InspectionGadgetsLocalize.unnecessaryJavadocLinkSuperMethodProblemDescriptor().get();
     }
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(
-      InspectionGadgetsBundle.message(
-        "unnecessary.javadoc.link.option"),
-      this, "ignoreInlineLinkToSuper");
+    LocalizeValue message = InspectionGadgetsLocalize.unnecessaryJavadocLinkOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreInlineLinkToSuper");
   }
 
   @Override
@@ -102,8 +99,7 @@ public class UnnecessaryJavaDocLinkInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "unnecessary.javadoc.link.quickfix", tagName);
+      return InspectionGadgetsLocalize.unnecessaryJavadocLinkQuickfix(tagName).get();
     }
 
     @Override

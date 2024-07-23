@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.ig.style;
 
+import com.intellij.java.impl.ig.fixes.AddThisQualifierFix;
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.AddThisQualifierFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElement;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -31,7 +31,7 @@ public class UnqualifiedMethodAccessInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("unqualified.method.access.display.name");
+    return InspectionGadgetsLocalize.unqualifiedMethodAccessDisplayName().get();
   }
 
   @Override
@@ -42,7 +42,7 @@ public class UnqualifiedMethodAccessInspection extends BaseInspection {
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("unqualified.method.access.problem.descriptor");
+    return InspectionGadgetsLocalize.unqualifiedMethodAccessProblemDescriptor().get();
   }
 
   @Override

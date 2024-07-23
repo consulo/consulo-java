@@ -15,15 +15,15 @@
  */
 package com.intellij.java.impl.ig.naming;
 
-import jakarta.annotation.Nonnull;
-
+import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.java.language.psi.PsiTypeParameter;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.RenameFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class TypeParameterNamingConventionInspection
@@ -34,8 +34,7 @@ public class TypeParameterNamingConventionInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "type.parameter.naming.convention.display.name");
+    return InspectionGadgetsLocalize.typeParameterNamingConventionDisplayName().get();
   }
 
   protected InspectionGadgetsFix buildFix(Object... infos) {

@@ -16,11 +16,11 @@
 package com.intellij.java.impl.ig.inheritance;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.MethodUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.query.Query;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -31,7 +31,6 @@ import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -41,7 +40,7 @@ public class TypeParameterExtendsFinalClassInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("type.parameter.extends.final.class.display.name");
+    return InspectionGadgetsLocalize.typeParameterExtendsFinalClassDisplayName().get();
   }
 
   @Override
@@ -50,12 +49,9 @@ public class TypeParameterExtendsFinalClassInspection extends BaseInspection {
     final Integer problemType = (Integer)infos[1];
     final PsiNamedElement namedElement = (PsiNamedElement)infos[0];
     final String name = namedElement.getName();
-    if (problemType.intValue() == 1) {
-      return InspectionGadgetsBundle.message("type.parameter.extends.final.class.problem.descriptor1", name);
-    }
-    else {
-      return InspectionGadgetsBundle.message("type.parameter.extends.final.class.problem.descriptor2", name);
-    }
+    return problemType == 1
+      ? InspectionGadgetsLocalize.typeParameterExtendsFinalClassProblemDescriptor1(name).get()
+      : InspectionGadgetsLocalize.typeParameterExtendsFinalClassProblemDescriptor2(name).get();
   }
 
   @Override
@@ -69,7 +65,7 @@ public class TypeParameterExtendsFinalClassInspection extends BaseInspection {
     @Override
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("type.parameter.extends.final.class.quickfix");
+      return InspectionGadgetsLocalize.typeParameterExtendsFinalClassQuickfix().get();
     }
 
     @Override

@@ -15,16 +15,16 @@
  */
 package com.intellij.java.impl.ig.style;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 import java.util.Arrays;
@@ -48,7 +48,7 @@ public class UnnecessaryInterfaceModifierInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("unnecessary.interface.modifier.display.name");
+    return InspectionGadgetsLocalize.unnecessaryInterfaceModifierDisplayName().get();
   }
 
   @Override
@@ -60,22 +60,19 @@ public class UnnecessaryInterfaceModifierInspection extends BaseInspection {
       final PsiClass aClass = (PsiClass)parent;
       final PsiClass containingClass = aClass.getContainingClass();
       if (containingClass != null) {
-        if (aClass.isInterface()) {
-          return InspectionGadgetsBundle.message("unnecessary.interface.modifier.inner.interface.of.interface.problem.descriptor");
-        }
-        else {
-          return InspectionGadgetsBundle.message("unnecessary.interface.modifier.problem.descriptor3");
-        }
+        return aClass.isInterface()
+          ? InspectionGadgetsLocalize.unnecessaryInterfaceModifierInnerInterfaceOfInterfaceProblemDescriptor().get()
+          : InspectionGadgetsLocalize.unnecessaryInterfaceModifierProblemDescriptor3().get();
       }
       else {
-        return InspectionGadgetsBundle.message("unnecessary.interface.modifier.problem.descriptor");
+        return InspectionGadgetsLocalize.unnecessaryInterfaceModifierProblemDescriptor().get();
       }
     }
     else if (parent instanceof PsiMethod) {
-      return InspectionGadgetsBundle.message("unnecessary.interface.modifier.problem.descriptor2");
+      return InspectionGadgetsLocalize.unnecessaryInterfaceModifierProblemDescriptor2().get();
     }
     else {
-      return InspectionGadgetsBundle.message("unnecessary.interface.modifier.problem.descriptor4");
+      return InspectionGadgetsLocalize.unnecessaryInterfaceModifierProblemDescriptor4().get();
     }
   }
 
@@ -99,7 +96,7 @@ public class UnnecessaryInterfaceModifierInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("smth.unnecessary.remove.quickfix", modifiersText);
+      return InspectionGadgetsLocalize.smthUnnecessaryRemoveQuickfix(modifiersText).get();
     }
 
     @Override

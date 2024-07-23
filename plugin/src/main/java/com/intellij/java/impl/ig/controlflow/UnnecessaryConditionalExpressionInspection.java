@@ -15,19 +15,18 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
 import com.intellij.java.language.psi.PsiConditionalExpression;
 import com.intellij.java.language.psi.PsiExpression;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.BoolUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class UnnecessaryConditionalExpressionInspection
@@ -40,8 +39,7 @@ public class UnnecessaryConditionalExpressionInspection
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "unnecessary.conditional.expression.display.name");
+    return InspectionGadgetsLocalize.unnecessaryConditionalExpressionDisplayName().get();
   }
 
   public boolean isEnabledByDefault() {
@@ -54,11 +52,8 @@ public class UnnecessaryConditionalExpressionInspection
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final PsiConditionalExpression expression =
-      (PsiConditionalExpression)infos[0];
-    return InspectionGadgetsBundle.message(
-      "simplifiable.conditional.expression.problem.descriptor",
-      calculateReplacementExpression(expression));
+    final PsiConditionalExpression expression = (PsiConditionalExpression)infos[0];
+    return InspectionGadgetsLocalize.simplifiableConditionalExpressionProblemDescriptor(calculateReplacementExpression(expression)).get();
   }
 
   static String calculateReplacementExpression(
@@ -85,16 +80,12 @@ public class UnnecessaryConditionalExpressionInspection
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "constant.conditional.expression.simplify.quickfix");
+      return InspectionGadgetsLocalize.constantConditionalExpressionSimplifyQuickfix().get();
     }
 
-    public void doFix(Project project, ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
-      final PsiConditionalExpression expression =
-        (PsiConditionalExpression)descriptor.getPsiElement();
-      final String newExpression =
-        calculateReplacementExpression(expression);
+    public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+      final PsiConditionalExpression expression = (PsiConditionalExpression)descriptor.getPsiElement();
+      final String newExpression = calculateReplacementExpression(expression);
       replaceExpression(expression, newExpression);
     }
   }

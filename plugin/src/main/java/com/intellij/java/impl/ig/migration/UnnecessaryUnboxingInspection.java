@@ -15,23 +15,8 @@
  */
 package com.intellij.java.impl.ig.migration;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.swing.JComponent;
-
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -40,7 +25,23 @@ import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ExpectedTypeUtils;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
+import javax.swing.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @ExtensionImpl
 public class UnnecessaryUnboxingInspection extends BaseInspection
@@ -68,14 +69,14 @@ public class UnnecessaryUnboxingInspection extends BaseInspection
 	@Nonnull
 	public String getDisplayName()
 	{
-		return InspectionGadgetsBundle.message("unnecessary.unboxing.display.name");
+		return InspectionGadgetsLocalize.unnecessaryUnboxingDisplayName().get();
 	}
 
 	@Override
 	@Nonnull
 	protected String buildErrorString(Object... infos)
 	{
-		return InspectionGadgetsBundle.message("unnecessary.unboxing.problem.descriptor");
+		return InspectionGadgetsLocalize.unnecessaryUnboxingProblemDescriptor().get();
 	}
 
 	@Override
@@ -88,7 +89,8 @@ public class UnnecessaryUnboxingInspection extends BaseInspection
 	@Override
 	public JComponent createOptionsPanel()
 	{
-		return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message("unnecessary.unboxing.superfluous.option"), this, "onlyReportSuperfluouslyUnboxed");
+		LocalizeValue message = InspectionGadgetsLocalize.unnecessaryUnboxingSuperfluousOption();
+		return new SingleCheckboxOptionsPanel(message.get(), this, "onlyReportSuperfluouslyUnboxed");
 	}
 
 	@Override
@@ -104,7 +106,7 @@ public class UnnecessaryUnboxingInspection extends BaseInspection
 		@Nonnull
 		public String getFamilyName()
 		{
-			return InspectionGadgetsBundle.message("unnecessary.unboxing.remove.quickfix");
+			return InspectionGadgetsLocalize.unnecessaryUnboxingRemoveQuickfix().get();
 		}
 
 		@Override

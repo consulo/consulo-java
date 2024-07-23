@@ -15,14 +15,13 @@
  */
 package com.intellij.java.impl.ig.errorhandling;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.module.util.JavaClassNames;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.java.language.module.util.JavaClassNames;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -31,15 +30,13 @@ public class UncheckedExceptionClassInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "unchecked.exception.class.display.name");
+    return InspectionGadgetsLocalize.uncheckedExceptionClassDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "unchecked.exception.class.problem.descriptor");
+    return InspectionGadgetsLocalize.uncheckedExceptionClassProblemDescriptor().get();
   }
 
   @Override

@@ -18,10 +18,10 @@ package com.intellij.java.impl.ig.style;
 import com.intellij.java.impl.ig.psiutils.ImportUtils;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.infos.CandidateInfo;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ProblemHighlightType;
@@ -29,9 +29,8 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-import org.jetbrains.annotations.Nls;
-
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.Nls;
 
 @ExtensionImpl
 public class UnnecessarilyQualifiedStaticallyImportedElementInspection extends BaseInspection {
@@ -40,14 +39,14 @@ public class UnnecessarilyQualifiedStaticallyImportedElementInspection extends B
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("unnecessarily.qualified.statically.imported.element.display.name");
+    return InspectionGadgetsLocalize.unnecessarilyQualifiedStaticallyImportedElementDisplayName().get();
   }
 
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     final PsiMember member = (PsiMember)infos[0];
-    return InspectionGadgetsBundle.message("unnecessarily.qualified.statically.imported.element.problem.descriptor", member.getName());
+    return InspectionGadgetsLocalize.unnecessarilyQualifiedStaticallyImportedElementProblemDescriptor(member.getName()).get();
   }
 
   @Override
@@ -59,7 +58,7 @@ public class UnnecessarilyQualifiedStaticallyImportedElementInspection extends B
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("unnecessarily.qualified.statically.imported.element.quickfix");
+      return InspectionGadgetsLocalize.unnecessarilyQualifiedStaticallyImportedElementQuickfix().get();
     }
 
     @Override

@@ -15,16 +15,16 @@
  */
 package com.intellij.java.impl.ig.style;
 
+import com.intellij.java.impl.ig.fixes.RemoveModifierFix;
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.RemoveModifierFix;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -49,8 +49,7 @@ public class UnnecessaryFinalOnLocalVariableOrParameterInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "unnecessary.final.on.local.variable.or.parameter.display.name");
+    return InspectionGadgetsLocalize.unnecessaryFinalOnLocalVariableOrParameterDisplayName().get();
   }
 
   @Override
@@ -58,16 +57,9 @@ public class UnnecessaryFinalOnLocalVariableOrParameterInspection
   public String buildErrorString(Object... infos) {
     final PsiVariable variable = (PsiVariable)infos[0];
     final String variableName = variable.getName();
-    if (variable instanceof PsiParameter) {
-      return InspectionGadgetsBundle.message(
-        "unnecessary.final.on.parameter.problem.descriptor",
-        variableName);
-    }
-    else {
-      return InspectionGadgetsBundle.message(
-        "unnecessary.final.on.local.variable.problem.descriptor",
-        variableName);
-    }
+    return variable instanceof PsiParameter
+      ? InspectionGadgetsLocalize.unnecessaryFinalOnParameterProblemDescriptor(variableName).get()
+      : InspectionGadgetsLocalize.unnecessaryFinalOnLocalVariableProblemDescriptor(variableName).get();
   }
 
   @Override
@@ -75,9 +67,7 @@ public class UnnecessaryFinalOnLocalVariableOrParameterInspection
   public JComponent createOptionsPanel() {
     final JPanel panel = new JPanel(new GridBagLayout());
     final JCheckBox abstractOnlyCheckBox =
-      new JCheckBox(InspectionGadgetsBundle.message(
-        "unnecessary.final.on.parameter.only.interface.option"),
-                    onlyWarnOnAbstractMethods) {
+      new JCheckBox(InspectionGadgetsLocalize.unnecessaryFinalOnParameterOnlyInterfaceOption().get(), onlyWarnOnAbstractMethods) {
         @Override
         public void setEnabled(boolean b) {
           // hack to display correctly on initial opening of
@@ -98,13 +88,9 @@ public class UnnecessaryFinalOnLocalVariableOrParameterInspection
       }
     });
     final JCheckBox reportLocalVariablesCheckBox =
-      new JCheckBox(InspectionGadgetsBundle.message(
-        "unnecessary.final.report.local.variables.option"),
-                    reportLocalVariables);
+      new JCheckBox(InspectionGadgetsLocalize.unnecessaryFinalReportLocalVariablesOption().get(), reportLocalVariables);
     final JCheckBox reportParametersCheckBox =
-      new JCheckBox(InspectionGadgetsBundle.message(
-        "unnecessary.final.report.parameters.option"),
-                    reportParameters);
+      new JCheckBox(InspectionGadgetsLocalize.unnecessaryFinalReportParametersOption().get(), reportParameters);
 
     reportLocalVariablesCheckBox.addChangeListener(new ChangeListener() {
       @Override

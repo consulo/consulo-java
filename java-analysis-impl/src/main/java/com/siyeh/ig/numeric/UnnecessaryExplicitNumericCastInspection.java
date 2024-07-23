@@ -16,22 +16,22 @@
 package com.siyeh.ig.numeric;
 
 import com.intellij.java.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.ExpectedTypeUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 
-import jakarta.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -60,14 +60,14 @@ public abstract class UnnecessaryExplicitNumericCastInspection extends BaseInspe
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("unnecessary.explicit.numeric.cast.display.name");
+    return InspectionGadgetsLocalize.unnecessaryExplicitNumericCastDisplayName().get();
   }
 
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     final PsiExpression expression = (PsiExpression) infos[0];
-    return InspectionGadgetsBundle.message("unnecessary.explicit.numeric.cast.problem.descriptor", expression.getText());
+    return InspectionGadgetsLocalize.unnecessaryExplicitNumericCastProblemDescriptor(expression.getText()).get();
   }
 
   @Override
@@ -80,7 +80,7 @@ public abstract class UnnecessaryExplicitNumericCastInspection extends BaseInspe
     @Nonnull
     @Override
     public String getName() {
-      return InspectionGadgetsBundle.message("unnecessary.explicit.numeric.cast.quickfix");
+      return InspectionGadgetsLocalize.unnecessaryExplicitNumericCastQuickfix().get();
     }
 
     @Override

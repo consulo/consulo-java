@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.ig.visibility;
 
+import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.RenameFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiFile;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
@@ -30,8 +30,7 @@ public class TypeParameterHidesVisibleTypeInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "type.parameter.hides.visible.type.display.name");
+    return InspectionGadgetsLocalize.typeParameterHidesVisibleTypeDisplayName().get();
   }
 
   protected InspectionGadgetsFix buildFix(Object... infos) {
@@ -45,9 +44,7 @@ public class TypeParameterHidesVisibleTypeInspection extends BaseInspection {
   @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiClass aClass = (PsiClass)infos[0];
-    return InspectionGadgetsBundle.message(
-      "type.parameter.hides.visible.type.problem.descriptor",
-      aClass.getQualifiedName());
+    return InspectionGadgetsLocalize.typeParameterHidesVisibleTypeProblemDescriptor(aClass.getQualifiedName()).get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

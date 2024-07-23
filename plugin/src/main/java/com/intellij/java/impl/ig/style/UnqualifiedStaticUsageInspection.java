@@ -17,18 +17,18 @@ package com.intellij.java.impl.ig.style;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import consulo.language.editor.inspection.ProblemDescriptor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-
 import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 
 public abstract class UnqualifiedStaticUsageInspection extends BaseInspection {
@@ -48,34 +48,31 @@ public abstract class UnqualifiedStaticUsageInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "unqualified.static.usage.display.name");
+    return InspectionGadgetsLocalize.unqualifiedStaticUsageDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    if (infos[0] instanceof PsiMethodCallExpression) {
-      return InspectionGadgetsBundle.message(
-        "unqualified.static.usage.problem.descriptor");
-    }
-    else {
-      return InspectionGadgetsBundle.message(
-        "unqualified.static.usage.problem.descriptor1");
-    }
+    return infos[0] instanceof PsiMethodCallExpression
+      ? InspectionGadgetsLocalize.unqualifiedStaticUsageProblemDescriptor().get()
+      : InspectionGadgetsLocalize.unqualifiedStaticUsageProblemDescriptor1().get();
   }
 
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel optionsPanel =
       new MultipleCheckboxOptionsPanel(this);
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message(
-      "unqualified.static.usage.ignore.field.option"),
-                             "m_ignoreStaticFieldAccesses");
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message(
-      "unqualified.static.usage.ignore.method.option"),
-                             "m_ignoreStaticMethodCalls");
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message(
-      "unqualified,static.usage.only.report.static.usages.option"),
-                             "m_ignoreStaticAccessFromStaticContext");
+    optionsPanel.addCheckbox(
+      InspectionGadgetsLocalize.unqualifiedStaticUsageIgnoreFieldOption().get(),
+      "m_ignoreStaticFieldAccesses"
+    );
+    optionsPanel.addCheckbox(
+      InspectionGadgetsLocalize.unqualifiedStaticUsageIgnoreMethodOption().get(),
+      "m_ignoreStaticMethodCalls"
+    );
+    optionsPanel.addCheckbox(
+      InspectionGadgetsLocalize.unqualifiedStaticUsageOnlyReportStaticUsagesOption().get(),
+      "m_ignoreStaticAccessFromStaticContext"
+    );
     return optionsPanel;
   }
 
@@ -103,20 +100,14 @@ public abstract class UnqualifiedStaticUsageInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      if (m_fixField) {
-        return InspectionGadgetsBundle.message(
-          "unqualified.static.usage.qualify.field.quickfix");
-      }
-      else {
-        return InspectionGadgetsBundle.message(
-          "unqualified.static.usage.qualify.method.quickfix");
-      }
+      return m_fixField
+        ? InspectionGadgetsLocalize.unqualifiedStaticUsageQualifyFieldQuickfix().get()
+        : InspectionGadgetsLocalize.unqualifiedStaticUsageQualifyMethodQuickfix().get();
     }
 
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiReferenceExpression expression =
-        (PsiReferenceExpression)descriptor.getPsiElement();
+      final PsiReferenceExpression expression = (PsiReferenceExpression)descriptor.getPsiElement();
       final PsiMember member = (PsiMember)expression.resolve();
       assert member != null;
       final PsiClass containingClass = member.getContainingClass();

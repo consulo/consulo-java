@@ -15,22 +15,22 @@
  */
 package com.intellij.java.impl.ig.migration;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.psi.scope.LocalSearchScope;
-import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.analysis.impl.refactoring.extractMethod.InputVariables;
 import com.intellij.java.analysis.impl.refactoring.util.duplicates.DuplicatesFinder;
 import com.intellij.java.analysis.impl.refactoring.util.duplicates.Match;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.scope.LocalSearchScope;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 
@@ -53,7 +53,7 @@ public class TryWithIdenticalCatchesInspection extends BaseInspection {
   @Override
   protected String buildErrorString(Object... infos) {
     final PsiType type = (PsiType)infos[1];
-    return InspectionGadgetsBundle.message("try.with.identical.catches.problem.descriptor", type.getPresentableText());
+    return InspectionGadgetsLocalize.tryWithIdenticalCatchesProblemDescriptor(type.getPresentableText()).get();
   }
 
   @Override
@@ -65,7 +65,7 @@ public class TryWithIdenticalCatchesInspection extends BaseInspection {
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("try.with.identical.catches.display.name");
+    return InspectionGadgetsLocalize.tryWithIdenticalCatchesDisplayName().get();
   }
 
   @Override
@@ -171,7 +171,7 @@ public class TryWithIdenticalCatchesInspection extends BaseInspection {
     @Override
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("try.with.identical.catches.quickfix");
+      return InspectionGadgetsLocalize.tryWithIdenticalCatchesQuickfix().get();
     }
 
     @Override

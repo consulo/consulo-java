@@ -15,22 +15,21 @@
  */
 package com.intellij.java.impl.ig.style;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiModifierList;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class UnnecessaryEnumModifierInspection extends BaseInspection {
@@ -38,19 +37,16 @@ public class UnnecessaryEnumModifierInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("unnecessary.enum.modifier.display.name");
+    return InspectionGadgetsLocalize.unnecessaryEnumModifierDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiElement parent = (PsiElement)infos[1];
-    if (parent instanceof PsiMethod) {
-      return InspectionGadgetsBundle.message("unnecessary.enum.modifier.problem.descriptor");
-    }
-    else {
-      return InspectionGadgetsBundle.message("unnecessary.enum.modifier.problem.descriptor1");
-    }
+    return parent instanceof PsiMethod
+      ? InspectionGadgetsLocalize.unnecessaryEnumModifierProblemDescriptor().get()
+      : InspectionGadgetsLocalize.unnecessaryEnumModifierProblemDescriptor1().get();
   }
 
   @Override
@@ -68,7 +64,7 @@ public class UnnecessaryEnumModifierInspection extends BaseInspection {
     private final String m_name;
 
     private UnnecessaryEnumModifierFix(PsiElement modifier) {
-      m_name = InspectionGadgetsBundle.message("smth.unnecessary.remove.quickfix", modifier.getText());
+      m_name = InspectionGadgetsLocalize.smthUnnecessaryRemoveQuickfix(modifier.getText()).get();
     }
 
     @Override
