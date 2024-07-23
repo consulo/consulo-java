@@ -15,6 +15,7 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.testIntegration.JavaTestFramework;
 import com.intellij.java.language.testIntegration.TestFramework;
 import com.siyeh.ig.psiutils.TestUtils;
+import consulo.annotation.DeprecationInfo;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.ReadAction;
 import consulo.application.progress.ProgressManager;
@@ -40,6 +41,8 @@ import java.util.*;
 import static com.intellij.java.language.codeInsight.AnnotationUtil.CHECK_HIERARCHY;
 
 @SuppressWarnings({"UtilityClassWithoutPrivateConstructor"})
+@Deprecated
+@DeprecationInfo("Use JUnitUtil from junit plugin")
 public class JUnitUtil {
   public static final String TEST_CASE_CLASS = "junit.framework.TestCase";
   private static final String TEST_INTERFACE = "junit.framework.Test";
