@@ -15,22 +15,21 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
@@ -39,15 +38,13 @@ public class UseOfPropertiesAsHashtableInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "properties.object.as.hashtable.display.name");
+    return InspectionGadgetsLocalize.propertiesObjectAsHashtableDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "properties.object.as.hashtable.problem.descriptor");
+    return InspectionGadgetsLocalize.propertiesObjectAsHashtableProblemDescriptor().get();
   }
 
   @Override
@@ -85,14 +82,9 @@ public class UseOfPropertiesAsHashtableInspection extends BaseInspection {
     @Nonnull
     @Override
     public String getName() {
-      if (put) {
-        return InspectionGadgetsBundle.message(
-          "properties.object.as.hashtable.set.quickfix");
-      }
-      else {
-        return InspectionGadgetsBundle.message(
-          "properties.object.as.hashtable.get.quickfix");
-      }
+      return put
+        ? InspectionGadgetsLocalize.propertiesObjectAsHashtableSetQuickfix().get()
+        : InspectionGadgetsLocalize.propertiesObjectAsHashtableGetQuickfix().get();
     }
 
     @Override

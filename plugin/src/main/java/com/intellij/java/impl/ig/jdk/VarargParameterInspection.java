@@ -18,10 +18,10 @@ package com.intellij.java.impl.ig.jdk;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.query.Query;
 import consulo.language.codeStyle.CodeStyleManager;
@@ -31,10 +31,9 @@ import consulo.language.psi.PsiManager;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
-
-import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 
@@ -50,13 +49,13 @@ public class VarargParameterInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("variable.argument.method.display.name");
+    return InspectionGadgetsLocalize.variableArgumentMethodDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("variable.argument.method.problem.descriptor");
+    return InspectionGadgetsLocalize.variableArgumentMethodProblemDescriptor().get();
   }
 
   @Override
@@ -69,7 +68,7 @@ public class VarargParameterInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("variable.argument.method.quickfix");
+      return InspectionGadgetsLocalize.variableArgumentMethodQuickfix().get();
     }
 
     @Override

@@ -15,16 +15,15 @@
  */
 package com.intellij.java.impl.ig.naming;
 
-import jakarta.annotation.Nonnull;
-
+import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.RenameFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class UpperCaseFieldNameNotConstantInspection extends BaseInspection {
@@ -32,8 +31,7 @@ public class UpperCaseFieldNameNotConstantInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "upper.case.field.name.not.constant.display.name");
+    return InspectionGadgetsLocalize.upperCaseFieldNameNotConstantDisplayName().get();
   }
 
   @Override
@@ -50,8 +48,7 @@ public class UpperCaseFieldNameNotConstantInspection extends BaseInspection {
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "upper.case.field.name.not.constant.problem.descriptor");
+    return InspectionGadgetsLocalize.upperCaseFieldNameNotConstantProblemDescriptor().get();
   }
 
   @Override

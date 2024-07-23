@@ -27,12 +27,13 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.ui.ExternalizableStringSet;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.query.Query;
 import consulo.content.scope.SearchScope;
+import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -40,7 +41,6 @@ import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -61,13 +61,13 @@ public class UtilityClassWithoutPrivateConstructorInspection extends BaseInspect
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("utility.class.without.private.constructor.display.name");
+    return InspectionGadgetsLocalize.utilityClassWithoutPrivateConstructorDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("utility.class.without.private.constructor.problem.descriptor");
+    return InspectionGadgetsLocalize.utilityClassWithoutPrivateConstructorProblemDescriptor().get();
   }
 
   @Override
@@ -75,10 +75,15 @@ public class UtilityClassWithoutPrivateConstructorInspection extends BaseInspect
   public JComponent createOptionsPanel() {
     final JPanel panel = new JPanel(new BorderLayout());
     final JPanel annotationsPanel = SpecialAnnotationsUtil.createSpecialAnnotationsListControl(
-        ignorableAnnotations, InspectionGadgetsBundle.message("ignore.if.annotated.by"));
+      ignorableAnnotations,
+      InspectionGadgetsLocalize.ignoreIfAnnotatedBy().get()
+    );
     panel.add(annotationsPanel, BorderLayout.CENTER);
-    final CheckBox checkBox = new CheckBox(InspectionGadgetsBundle.message("utility.class.without.private.constructor.option"),
-        this, "ignoreClassesWithOnlyMain");
+    final CheckBox checkBox = new CheckBox(
+      InspectionGadgetsLocalize.utilityClassWithoutPrivateConstructorOption().get(),
+      this,
+      "ignoreClassesWithOnlyMain"
+    );
     panel.add(checkBox, BorderLayout.SOUTH);
     return panel;
   }
@@ -106,7 +111,7 @@ public class UtilityClassWithoutPrivateConstructorInspection extends BaseInspect
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("utility.class.without.private.constructor.create.quickfix");
+      return InspectionGadgetsLocalize.utilityClassWithoutPrivateConstructorCreateQuickfix().get();
     }
 
     @Override
@@ -150,7 +155,7 @@ public class UtilityClassWithoutPrivateConstructorInspection extends BaseInspect
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("utility.class.without.private.constructor.make.quickfix");
+      return InspectionGadgetsLocalize.utilityClassWithoutPrivateConstructorMakeQuickfix().get();
     }
 
     @Override

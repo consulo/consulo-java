@@ -18,9 +18,9 @@ package com.intellij.java.impl.ig.bugs;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiExpressionStatement;
 import com.intellij.java.language.psi.PsiNewExpression;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 
@@ -29,12 +29,12 @@ public class ResultOfObjectAllocationIgnoredInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("result.of.object.allocation.ignored.display.name");
+    return InspectionGadgetsLocalize.resultOfObjectAllocationIgnoredDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("result.of.object.allocation.ignored.problem.descriptor");
+    return InspectionGadgetsLocalize.resultOfObjectAllocationIgnoredProblemDescriptor().get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

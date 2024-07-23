@@ -15,31 +15,28 @@
  */
 package com.intellij.java.impl.ig.threading;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiType;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class VolatileArrayFieldInspection extends BaseInspection {
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "volatile.array.field.display.name");
+    return InspectionGadgetsLocalize.volatileArrayFieldDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiType type = (PsiType)infos[0];
     final String typeString = type.getPresentableText();
-    return InspectionGadgetsBundle.message(
-      "volatile.field.problem.descriptor", typeString);
+    return InspectionGadgetsLocalize.volatileFieldProblemDescriptor(typeString).get();
   }
 
   public BaseInspectionVisitor buildVisitor() {

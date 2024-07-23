@@ -15,22 +15,21 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
+import com.intellij.java.impl.ig.psiutils.UtilityClassUtil;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiModifierList;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.psiutils.UtilityClassUtil;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class UtilityClassWithPublicConstructorInspection
@@ -39,16 +38,14 @@ public class UtilityClassWithPublicConstructorInspection
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "utility.class.with.public.constructor.display.name");
+    return InspectionGadgetsLocalize.utilityClassWithPublicConstructorDisplayName().get();
   }
 
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "utility.class.with.public.constructor.problem.descriptor");
+    return InspectionGadgetsLocalize.utilityClassWithPublicConstructorProblemDescriptor().get();
   }
 
   @Override
@@ -74,9 +71,7 @@ public class UtilityClassWithPublicConstructorInspection
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "utility.class.with.public.constructor.make.quickfix",
-        Integer.valueOf(m_multipleConstructors ? 1 : 2));
+      return InspectionGadgetsLocalize.utilityClassWithPublicConstructorMakeQuickfix(m_multipleConstructors ? 1 : 2).get();
     }
 
     @Override

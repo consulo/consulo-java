@@ -25,14 +25,14 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TestUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
-
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -51,40 +51,36 @@ public class UnusedCatchParameterInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "unused.catch.parameter.display.name");
+    return InspectionGadgetsLocalize.unusedCatchParameterDisplayName().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    final MultipleCheckboxOptionsPanel optionsPanel =
-      new MultipleCheckboxOptionsPanel(this);
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message(
-      "unused.catch.parameter.ignore.catch.option"),
-                             "m_ignoreCatchBlocksWithComments");
-    optionsPanel.addCheckbox(InspectionGadgetsBundle.message(
-      "unused.catch.parameter.ignore.empty.option"),
-                             "m_ignoreTestCases");
+    final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
+    optionsPanel.addCheckbox(
+      InspectionGadgetsLocalize.unusedCatchParameterIgnoreCatchOption().get(),
+      "m_ignoreCatchBlocksWithComments"
+    );
+    optionsPanel.addCheckbox(
+      InspectionGadgetsBundle.message("unused.catch.parameter.ignore.empty.option"),
+      "m_ignoreTestCases"
+    );
     return optionsPanel;
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    final boolean namedIgnoreButUsed = ((Boolean)infos[0]).booleanValue();
-    if (namedIgnoreButUsed) {
-      return InspectionGadgetsBundle.message(
-        "used.catch.parameter.named.ignore.problem.descriptor"
-      );
+    final boolean namedIgnoreButUsed = (Boolean)infos[0];
+    return namedIgnoreButUsed
+      ? InspectionGadgetsLocalize.usedCatchParameterNamedIgnoreProblemDescriptor().get()
+      : InspectionGadgetsLocalize.unusedCatchParameterProblemDescriptor().get();
     }
-    return InspectionGadgetsBundle.message(
-      "unused.catch.parameter.problem.descriptor");
-  }
 
   @Override
   @Nullable
   protected InspectionGadgetsFix buildFix(Object... infos) {
-    final boolean namedIgnoreButUsed = ((Boolean)infos[0]).booleanValue();
+    final boolean namedIgnoreButUsed = (Boolean)infos[0];
     if (namedIgnoreButUsed) {
       return null;
     }

@@ -15,16 +15,16 @@
  */
 package com.intellij.java.impl.ig.threading;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.util.PsiTreeUtil;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
@@ -39,7 +39,7 @@ public class SafeLockInspection extends BaseInspection { // todo extend Resource
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("safe.lock.display.name");
+    return InspectionGadgetsLocalize.safeLockDisplayName().get();
   }
 
   @Override
@@ -49,8 +49,7 @@ public class SafeLockInspection extends BaseInspection { // todo extend Resource
     final PsiType type = expression.getType();
     assert type != null;
     final String text = type.getPresentableText();
-    return InspectionGadgetsBundle.message(
-      "safe.lock.problem.descriptor", text);
+    return InspectionGadgetsLocalize.safeLockProblemDescriptor(text).get();
   }
 
   @Override

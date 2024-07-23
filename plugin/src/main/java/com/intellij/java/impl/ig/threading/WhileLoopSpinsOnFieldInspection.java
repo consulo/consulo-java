@@ -15,16 +15,17 @@
  */
 package com.intellij.java.impl.ig.threading;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
-import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -39,23 +40,20 @@ public class WhileLoopSpinsOnFieldInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "while.loop.spins.on.field.display.name");
+    return InspectionGadgetsLocalize.whileLoopSpinsOnFieldDisplayName().get();
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "while.loop.spins.on.field.problem.descriptor");
+    return InspectionGadgetsLocalize.whileLoopSpinsOnFieldProblemDescriptor().get();
   }
 
   @Override
   @Nullable
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message(
-      "while.loop.spins.on.field.ignore.non.empty.loops.option"),
-                                          this, "ignoreNonEmtpyLoops");
+    LocalizeValue message = InspectionGadgetsLocalize.whileLoopSpinsOnFieldIgnoreNonEmptyLoopsOption();
+    return new SingleCheckboxOptionsPanel(message.get(), this, "ignoreNonEmtpyLoops");
   }
 
   @Override

@@ -15,13 +15,13 @@
  */
 package com.intellij.java.impl.ig.fixes;
 
+import com.siyeh.ig.InspectionGadgetsFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
-import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.RefactoringFactory;
 import consulo.language.editor.refactoring.RenameRefactoring;
-import com.siyeh.ig.InspectionGadgetsFix;
-import com.siyeh.InspectionGadgetsBundle;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 public class RenameParameterFix extends InspectionGadgetsFix {
@@ -35,7 +35,7 @@ public class RenameParameterFix extends InspectionGadgetsFix {
 
   @Nonnull
   public String getName() {
-    return InspectionGadgetsBundle.message("renameto.quickfix", m_targetName);
+    return InspectionGadgetsLocalize.renametoQuickfix(m_targetName).get();
   }
 
   public void doFix(Project project, ProblemDescriptor descriptor) {

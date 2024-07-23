@@ -18,14 +18,13 @@ package com.siyeh.ig.memory;
 import com.intellij.java.language.psi.PsiArrayInitializerExpression;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiNewExpression;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ConstructionUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
-import org.intellij.lang.annotations.Pattern;
-
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import jakarta.annotation.Nonnull;
+import org.intellij.lang.annotations.Pattern;
 
 public abstract class ZeroLengthArrayInitializationInspectionBase extends BaseInspection {
   @Pattern(VALID_ID_PATTERN)
@@ -38,13 +37,13 @@ public abstract class ZeroLengthArrayInitializationInspectionBase extends BaseIn
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("array.allocation.zero.length.display.name");
+    return InspectionGadgetsLocalize.arrayAllocationZeroLengthDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("array.allocation.zero.length.problem.descriptor");
+    return InspectionGadgetsLocalize.arrayAllocationZeroLengthProblemDescriptor().get();
   }
 
   @Override
