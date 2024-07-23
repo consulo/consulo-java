@@ -15,9 +15,9 @@
  */
 package com.siyeh.ig.fixes.errorhandling;
 
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.IGQuickFixesTestCase;
 import com.siyeh.ig.errorhandling.ThrowsRuntimeExceptionInspection;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 
 public class ThrowsRuntimeExceptionInspectionFixTest extends IGQuickFixesTestCase {
   @Override
@@ -32,14 +32,14 @@ public class ThrowsRuntimeExceptionInspectionFixTest extends IGQuickFixesTestCas
   }
 
   public void testMoveThrows() {
-    doTest(InspectionGadgetsBundle.message("throws.runtime.exception.move.quickfix", "RuntimeException"));
+    doTest(InspectionGadgetsLocalize.throwsRuntimeExceptionMoveQuickfix("RuntimeException").get());
   }
 
   public void testMoveThrowsExistingComment() {
-    doTest(InspectionGadgetsBundle.message("throws.runtime.exception.move.quickfix", "RuntimeException"));
+    doTest(InspectionGadgetsLocalize.throwsRuntimeExceptionMoveQuickfix("RuntimeException").get());
   }
 
   public void testRemoveThrows() {
-    doTest(InspectionGadgetsBundle.message("throws.runtime.exception.quickfix", "RuntimeException"));
+    doTest(InspectionGadgetsLocalize.throwsRuntimeExceptionQuickfix("RuntimeException").get());
   }
 }

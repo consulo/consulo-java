@@ -19,12 +19,13 @@ package com.siyeh.ig.fixes.logging;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.IGQuickFixesTestCase;
 import com.siyeh.ig.logging.StringConcatenationArgumentToLogCallInspection;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 
 public class StringConcatenationArgumentToLogCallFixTest extends IGQuickFixesTestCase {
   @Override
   public void setUp() throws Exception {
     super.setUp();
-    myDefaultHint = InspectionGadgetsBundle.message("string.concatenation.in.format.call.quickfix");
+    myDefaultHint = InspectionGadgetsLocalize.stringConcatenationInFormatCallQuickfix().get();
     myFixture.addClass("package org.slf4j; public interface Logger {  void info(String format); }");
     myFixture.addClass("package org.slf4j; public class LoggerFactory { public static Logger getLogger(Class clazz) { return null; }}");
     myFixture.enableInspections(new StringConcatenationArgumentToLogCallInspection());

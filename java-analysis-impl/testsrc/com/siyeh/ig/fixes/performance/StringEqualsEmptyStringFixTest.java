@@ -15,9 +15,9 @@
  */
 package com.siyeh.ig.fixes.performance;
 
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.IGQuickFixesTestCase;
 import com.siyeh.ig.performance.StringEqualsEmptyStringInspection;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 
 public class StringEqualsEmptyStringFixTest extends IGQuickFixesTestCase {
 
@@ -26,7 +26,7 @@ public class StringEqualsEmptyStringFixTest extends IGQuickFixesTestCase {
     super.setUp();
     myFixture.enableInspections(new StringEqualsEmptyStringInspection());
     myRelativePath = "performance/replace_with_isempty";
-    myDefaultHint = InspectionGadgetsBundle.message("string.equals.empty.string.isempty.quickfix");
+    myDefaultHint = InspectionGadgetsLocalize.stringEqualsEmptyStringIsemptyQuickfix().get();
   }
 
   public void testSimple() { doTest(); }

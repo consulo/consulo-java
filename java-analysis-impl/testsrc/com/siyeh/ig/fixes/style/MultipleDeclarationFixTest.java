@@ -15,9 +15,9 @@
  */
 package com.siyeh.ig.fixes.style;
 
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.IGQuickFixesTestCase;
 import com.siyeh.ig.style.MultipleDeclarationInspection;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 
 public class MultipleDeclarationFixTest extends IGQuickFixesTestCase {
 
@@ -26,7 +26,7 @@ public class MultipleDeclarationFixTest extends IGQuickFixesTestCase {
     super.setUp();
     myFixture.enableInspections(new MultipleDeclarationInspection());
     myRelativePath = "style/multiple_declaration";
-    myDefaultHint = InspectionGadgetsBundle.message("normalize.declaration.quickfix");
+    myDefaultHint = InspectionGadgetsLocalize.normalizeDeclarationQuickfix().get();
   }
 
   public void testLocalVariable() { doTest(); }

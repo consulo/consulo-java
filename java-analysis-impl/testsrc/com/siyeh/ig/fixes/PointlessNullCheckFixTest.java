@@ -16,9 +16,9 @@
 
 package com.siyeh.ig.fixes;
 
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.IGQuickFixesTestCase;
 import com.siyeh.ig.controlflow.PointlessNullCheckInspection;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 
 public class PointlessNullCheckFixTest extends IGQuickFixesTestCase {
   @Override
@@ -29,6 +29,6 @@ public class PointlessNullCheckFixTest extends IGQuickFixesTestCase {
   }
 
   public void testScenario1() {
-    doTest(InspectionGadgetsBundle.message("pointless.nullcheck.simplify.quickfix", "arg != null"));
+    doTest(InspectionGadgetsLocalize.pointlessNullcheckSimplifyQuickfix("arg != null").get());
   }
 }

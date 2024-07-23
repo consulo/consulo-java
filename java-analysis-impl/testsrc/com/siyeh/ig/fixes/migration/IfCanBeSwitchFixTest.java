@@ -15,9 +15,9 @@
  */
 package com.siyeh.ig.fixes.migration;
 
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.IGQuickFixesTestCase;
 import com.siyeh.ig.migration.IfCanBeSwitchInspection;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 
 public class IfCanBeSwitchFixTest extends IGQuickFixesTestCase {
   @Override
@@ -27,7 +27,7 @@ public class IfCanBeSwitchFixTest extends IGQuickFixesTestCase {
     inspection.suggestIntSwitches = true;
     myFixture.enableInspections(inspection);
     myRelativePath = "migration/if_can_be_switch";
-    myDefaultHint = InspectionGadgetsBundle.message("if.can.be.switch.quickfix");
+    myDefaultHint = InspectionGadgetsLocalize.ifCanBeSwitchQuickfix().get();
   }
 
   public void testComment() {

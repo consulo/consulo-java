@@ -1,8 +1,8 @@
 package com.siyeh.ig.fixes.jdk;
 
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.IGQuickFixesTestCase;
 import com.siyeh.ig.jdk.ForeachStatementInspection;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 
 public class ForeachStatementFixTest extends IGQuickFixesTestCase {
 
@@ -11,7 +11,7 @@ public class ForeachStatementFixTest extends IGQuickFixesTestCase {
     super.setUp();
     myFixture.enableInspections(new ForeachStatementInspection());
     myRelativePath = "jdk/foreach_statement";
-    myDefaultHint = InspectionGadgetsBundle.message("extended.for.statement.replace.quickfix");
+    myDefaultHint = InspectionGadgetsLocalize.extendedForStatementReplaceQuickfix().get();
   }
 
   public void testBareCollectionLoop() { doTest(); }

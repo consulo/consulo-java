@@ -15,8 +15,8 @@
  */
 package com.siyeh.ig.numeric;
 
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.IGQuickFixesTestCase;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 
 public class OctalLiteralFixesTest extends IGQuickFixesTestCase {
   @Override
@@ -26,15 +26,15 @@ public class OctalLiteralFixesTest extends IGQuickFixesTestCase {
   }
 
   public void testConvertOctalToDecimal1() {
-    doTest("ConvertToDecimal1", InspectionGadgetsBundle.message("convert.octal.literal.to.decimal.literal.quickfix"));
+    doTest("ConvertToDecimal1", InspectionGadgetsLocalize.convertOctalLiteralToDecimalLiteralQuickfix().get());
   }
 
   public void testConvertOctalToDecimal2() {
-    doTest("ConvertToDecimal2", InspectionGadgetsBundle.message("convert.octal.literal.to.decimal.literal.quickfix"));
+    doTest("ConvertToDecimal2", InspectionGadgetsLocalize.convertOctalLiteralToDecimalLiteralQuickfix().get());
   }
 
   public void testRemoveLeadingZero() {
-    doTest("RemoveLeadingZero", InspectionGadgetsBundle.message("remove.leading.zero.to.make.decimal.quickfix"));
+    doTest("RemoveLeadingZero", InspectionGadgetsLocalize.removeLeadingZeroToMakeDecimalQuickfix().get());
   }
 
   @Override

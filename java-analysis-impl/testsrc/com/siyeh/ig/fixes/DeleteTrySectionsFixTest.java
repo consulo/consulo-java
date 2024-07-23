@@ -15,10 +15,10 @@
  */
 package com.siyeh.ig.fixes;
 
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.IGQuickFixesTestCase;
 import com.siyeh.ig.errorhandling.CaughtExceptionImmediatelyRethrownInspection;
 import com.siyeh.ig.errorhandling.EmptyFinallyBlockInspection;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 
 public class DeleteTrySectionsFixTest extends IGQuickFixesTestCase {
   @Override
@@ -33,22 +33,22 @@ public class DeleteTrySectionsFixTest extends IGQuickFixesTestCase {
   }
 
   public void testDeleteTryStatement() {
-    doTest(InspectionGadgetsBundle.message("remove.try.catch.quickfix"));
+    doTest(InspectionGadgetsLocalize.removeTryCatchQuickfix().get());
   }
 
   public void testDeleteEmptyTryStatement() {
-    doTest(InspectionGadgetsBundle.message("remove.try.catch.quickfix"));
+    doTest(InspectionGadgetsLocalize.removeTryCatchQuickfix().get());
   }
 
   public void testDeleteEmptyFinally() {
-    doTest(InspectionGadgetsBundle.message("remove.finally.block.quickfix"));
+    doTest(InspectionGadgetsLocalize.removeFinallyBlockQuickfix().get());
   }
 
   public void testDeleteTryWithEmptyFinally() {
-    doTest(InspectionGadgetsBundle.message("remove.try.finally.block.quickfix"));
+    doTest(InspectionGadgetsLocalize.removeTryFinallyBlockQuickfix().get());
   }
 
   public void testDeleteTryWithResources() {
-    doTest(InspectionGadgetsBundle.message("delete.catch.section.quickfix"));
+    doTest(InspectionGadgetsLocalize.deleteCatchSectionQuickfix().get());
   }
 }
