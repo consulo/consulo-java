@@ -15,20 +15,20 @@
  */
 package com.intellij.java.impl.ig.inheritance;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import javax.swing.JComponent;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
-import consulo.language.psi.*;
-import consulo.util.lang.xml.XmlStringUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.TestUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.language.psi.PsiElement;
+import consulo.util.lang.xml.XmlStringUtil;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
+import javax.swing.*;
 
 @ExtensionImpl
 public class RefusedBequestInspection extends BaseInspection {
@@ -38,21 +38,23 @@ public class RefusedBequestInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("refused.bequest.display.name");
+    return InspectionGadgetsLocalize.refusedBequestDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("refused.bequest.problem.descriptor");
+    return InspectionGadgetsLocalize.refusedBequestProblemDescriptor().get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
     //noinspection HardCodedStringLiteral
     return new SingleCheckboxOptionsPanel(
-      XmlStringUtil.wrapInHtml(InspectionGadgetsBundle.message("refused.bequest.ignore.empty.super.methods.option"))
-      , this, "ignoreEmptySuperMethods");
+      XmlStringUtil.wrapInHtml(InspectionGadgetsLocalize.refusedBequestIgnoreEmptySuperMethodsOption().get()),
+      this,
+      "ignoreEmptySuperMethods"
+    );
   }
 
   @Override

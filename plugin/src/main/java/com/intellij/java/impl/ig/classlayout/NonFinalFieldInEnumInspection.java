@@ -15,18 +15,18 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-
+import com.intellij.java.impl.ig.fixes.MakeFieldFinalFix;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.MakeFieldFinalFix;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Nls;
 
 /**
@@ -39,14 +39,15 @@ public class NonFinalFieldInEnumInspection extends BaseInspection {
   @Nonnull
   @Override
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("non.final.field.in.enum.display.name");
+    return InspectionGadgetsLocalize.nonFinalFieldInEnumDisplayName().get();
   }
 
   @Nonnull
   @Override
+  @RequiredReadAction
   protected String buildErrorString(Object... infos) {
     final PsiClass enumClass = (PsiClass)infos[0];
-    return InspectionGadgetsBundle.message("non.final.field.in.enum.problem.descriptor", enumClass.getName());
+    return InspectionGadgetsLocalize.nonFinalFieldInEnumProblemDescriptor(enumClass.getName()).get();
   }
 
   @Nullable

@@ -15,18 +15,18 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
+import com.intellij.java.impl.ig.fixes.RemoveModifierFix;
+import com.intellij.java.impl.ig.psiutils.SerializationUtils;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.RemoveModifierFix;
-import com.intellij.java.impl.ig.psiutils.SerializationUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
@@ -37,14 +37,13 @@ public class PublicConstructorInNonPublicClassInspection extends BaseInspection 
 
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("public.constructor.in.non.public.class.display.name");
+    return InspectionGadgetsLocalize.publicConstructorInNonPublicClassDisplayName().get();
   }
 
   @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiMethod method = (PsiMethod)infos[0];
-    return InspectionGadgetsBundle.message("public.constructor.in.non.public.class.problem.descriptor",
-      method.getName());
+    return InspectionGadgetsLocalize.publicConstructorInNonPublicClassProblemDescriptor(method.getName()).get();
   }
 
   public BaseInspectionVisitor buildVisitor() {
@@ -53,7 +52,7 @@ public class PublicConstructorInNonPublicClassInspection extends BaseInspection 
 
   @Nonnull
   public InspectionGadgetsFix[] buildFixes(Object... infos) {
-    final List<InspectionGadgetsFix> fixes = new ArrayList();
+    final List<InspectionGadgetsFix> fixes = new ArrayList<>();
     final PsiMethod constructor = (PsiMethod)infos[0];
     final PsiClass aClass = constructor.getContainingClass();
     if (aClass != null && aClass.hasModifierProperty(PsiModifier.PRIVATE)) {
@@ -73,10 +72,7 @@ public class PublicConstructorInNonPublicClassInspection extends BaseInspection 
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message(
-        "public.constructor.in.non.public.class.quickfix",
-        modifier
-      );
+      return InspectionGadgetsLocalize.publicConstructorInNonPublicClassQuickfix(modifier).get();
     }
 
     protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {

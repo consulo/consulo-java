@@ -15,17 +15,16 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.ast.IElementType;
 import com.siyeh.HardcodedMethodConstants;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.ast.IElementType;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class PointlessIndexOfComparisonInspection extends BaseInspection {
@@ -33,8 +32,7 @@ public class PointlessIndexOfComparisonInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "pointless.indexof.comparison.display.name");
+    return InspectionGadgetsLocalize.pointlessIndexofComparisonDisplayName().get();
   }
 
   @Override
@@ -51,12 +49,10 @@ public class PointlessIndexOfComparisonInspection extends BaseInspection {
       value = createContainsExpressionValue(sign, true);
     }
     if (value) {
-      return InspectionGadgetsBundle.message(
-        "pointless.indexof.comparison.always.true.problem.descriptor");
+      return InspectionGadgetsLocalize.pointlessIndexofComparisonAlwaysTrueProblemDescriptor().get();
     }
     else {
-      return InspectionGadgetsBundle.message(
-        "pointless.indexof.comparison.always.false.problem.descriptor");
+      return InspectionGadgetsLocalize.pointlessIndexofComparisonAlwaysFalseProblemDescriptor().get();
     }
   }
 

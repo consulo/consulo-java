@@ -15,35 +15,36 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
-import consulo.language.editor.refactoring.localize.RefactoringLocalize;
-import jakarta.annotation.Nonnull;
-
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import com.intellij.java.language.psi.*;
-import consulo.application.AccessToken;
-import consulo.application.WriteAction;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import com.intellij.java.language.impl.psi.impl.source.resolve.JavaResolveUtil;
+import com.intellij.java.impl.ig.fixes.RemoveModifierFix;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
-import consulo.language.psi.search.ReferencesSearch;
+import com.intellij.java.language.impl.psi.impl.source.resolve.JavaResolveUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.search.searches.SuperMethodsSearch;
 import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import consulo.language.editor.refactoring.ui.ConflictsDialog;
-import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
-import consulo.language.util.IncorrectOperationException;
-import consulo.application.util.function.Processor;
-import consulo.application.util.query.Query;
-import consulo.util.collection.MultiMap;
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.RemoveModifierFix;
 import com.siyeh.ig.psiutils.MethodUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.application.AccessToken;
+import consulo.application.WriteAction;
+import consulo.application.util.function.Processor;
+import consulo.application.util.query.Query;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.language.editor.refactoring.ui.ConflictsDialog;
+import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
+import consulo.language.psi.PsiBundle;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.util.collection.MultiMap;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ProtectedMemberInFinalClassInspection extends BaseInspection {
@@ -51,13 +52,13 @@ public class ProtectedMemberInFinalClassInspection extends BaseInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("protected.member.in.final.class.display.name");
+    return InspectionGadgetsLocalize.protectedMemberInFinalClassDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message("protected.member.in.final.class.problem.descriptor");
+    return InspectionGadgetsLocalize.protectedMemberInFinalClassProblemDescriptor().get();
   }
 
   @Override
@@ -78,7 +79,7 @@ public class ProtectedMemberInFinalClassInspection extends BaseInspection {
 
     @Nonnull
     public String getName() {
-      return InspectionGadgetsBundle.message("make.private.quickfix");
+      return InspectionGadgetsLocalize.makePrivateQuickfix().get();
     }
 
     @Override
@@ -102,20 +103,26 @@ public class ProtectedMemberInFinalClassInspection extends BaseInspection {
           @Override
           public boolean process(MethodSignatureBackedByPsiMethod methodSignature) {
             final PsiMethod superMethod = methodSignature.getMethod();
-              conflicts.putValue(superMethod, InspectionGadgetsBundle.message(
-                "0.will.have.incompatible.access.privileges.with.super.1",
-                RefactoringUIUtil.getDescription(method, false),
-                RefactoringUIUtil.getDescription(superMethod, true)));
+              conflicts.putValue(
+                  superMethod,
+                  InspectionGadgetsLocalize.zeroWillHaveIncompatibleAccessPrivilegesWithSuper1(
+                      RefactoringUIUtil.getDescription(method, false),
+                      RefactoringUIUtil.getDescription(superMethod, true)
+                  ).get()
+              );
             return true;
           }
         });
       OverridingMethodsSearch.search(method).forEach(new Processor<PsiMethod>() {
         @Override
         public boolean process(PsiMethod overridingMethod) {
-            conflicts.putValue(overridingMethod, InspectionGadgetsBundle.message(
-              "0.will.no.longer.be.visible.from.overriding.1",
-              RefactoringUIUtil.getDescription(method, false),
-              RefactoringUIUtil.getDescription(overridingMethod, true)));
+            conflicts.putValue(
+                overridingMethod,
+                InspectionGadgetsLocalize.zeroWillNoLongerBeVisibleFromOverriding1(
+                    RefactoringUIUtil.getDescription(method, false),
+                    RefactoringUIUtil.getDescription(overridingMethod, true)
+                ).get()
+            );
           return false;
         }
       });

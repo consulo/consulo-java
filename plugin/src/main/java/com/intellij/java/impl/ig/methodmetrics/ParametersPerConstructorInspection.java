@@ -18,11 +18,10 @@ package com.intellij.java.impl.ig.methodmetrics;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiParameterList;
+import com.siyeh.ig.BaseInspectionVisitor;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.ui.ex.awt.ListCellRendererWrapper;
-import com.siyeh.InspectionGadgetsBundle;
-import com.siyeh.ig.BaseInspectionVisitor;
-
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
@@ -36,25 +35,25 @@ public class ParametersPerConstructorInspection extends MethodMetricInspection {
     NONE {
       @Override
       String getText() {
-        return InspectionGadgetsBundle.message("none");
+        return InspectionGadgetsLocalize.none().get();
       }
     },
     PRIVATE {
       @Override
       String getText() {
-        return InspectionGadgetsBundle.message("private");
+        return InspectionGadgetsLocalize._private().get();
       }
     },
     PACKAGE_LOCAL {
       @Override
       String getText() {
-        return InspectionGadgetsBundle.message("package.local.private");
+        return InspectionGadgetsLocalize.packageLocalPrivate().get();
       }
     },
     PROTECTED {
       @Override
       String getText() {
-        return InspectionGadgetsBundle.message("protected.package.local.private");
+        return InspectionGadgetsLocalize.protectedPackageLocalPrivate().get();
       }
     };
 
@@ -72,14 +71,14 @@ public class ParametersPerConstructorInspection extends MethodMetricInspection {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return InspectionGadgetsBundle.message("parameters.per.constructor.display.name");
+    return InspectionGadgetsLocalize.parametersPerConstructorDisplayName().get();
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
     final Integer parameterCount = (Integer)infos[0];
-    return InspectionGadgetsBundle.message("parameters.per.constructor.problem.descriptor", parameterCount);
+    return InspectionGadgetsLocalize.parametersPerConstructorProblemDescriptor(parameterCount).get();
   }
 
   @Override
@@ -89,7 +88,7 @@ public class ParametersPerConstructorInspection extends MethodMetricInspection {
 
   @Override
   protected String getConfigurationLabel() {
-    return InspectionGadgetsBundle.message("parameter.limit.option");
+    return InspectionGadgetsLocalize.parameterLimitOption().get();
   }
 
   @Override
@@ -97,7 +96,7 @@ public class ParametersPerConstructorInspection extends MethodMetricInspection {
     final JPanel panel = new JPanel();
     final JLabel textFieldLabel = new JLabel(getConfigurationLabel());
     final JFormattedTextField valueField = prepareNumberEditor(() -> m_limit, i -> m_limit = i);
-    final JLabel comboBoxLabel = new JLabel(InspectionGadgetsBundle.message("constructor.visibility.option"));
+    final JLabel comboBoxLabel = new JLabel(InspectionGadgetsLocalize.constructorVisibilityOption().get());
     final JComboBox comboBox = new JComboBox();
     comboBox.addItem(Scope.NONE);
     comboBox.addItem(Scope.PRIVATE);
