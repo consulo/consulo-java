@@ -15,9 +15,9 @@
  */
 package com.siyeh.ig.fixes.performance;
 
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.IGQuickFixesTestCase;
 import com.siyeh.ig.performance.ToArrayCallWithZeroLengthArrayArgumentInspection;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 
 public class ToArrayCallWithZeroLengthArrayArgumentFixTest extends IGQuickFixesTestCase {
 
@@ -32,7 +32,7 @@ public class ToArrayCallWithZeroLengthArrayArgumentFixTest extends IGQuickFixesT
   }
 
   private void doFixTest() {
-    doTest(getTestName(false), InspectionGadgetsBundle.message("to.array.call.with.zero.length.array.argument.quickfix"));
+    doTest(getTestName(false), InspectionGadgetsLocalize.toArrayCallWithZeroLengthArrayArgumentQuickfix().get());
   }
 
   @Override

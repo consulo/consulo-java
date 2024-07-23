@@ -1,8 +1,8 @@
 package com.siyeh.ig.fixes.style;
 
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.IGQuickFixesTestCase;
 import com.siyeh.ig.style.StringBufferReplaceableByStringInspection;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 
 public class StringBufferReplaceableWithStringFixTest extends IGQuickFixesTestCase {
 
@@ -11,17 +11,17 @@ public class StringBufferReplaceableWithStringFixTest extends IGQuickFixesTestCa
     super.setUp();
     myFixture.enableInspections(new StringBufferReplaceableByStringInspection());
     myRelativePath = "style/replace_with_string";
-    myDefaultHint = InspectionGadgetsBundle.message("string.buffer.replaceable.by.string.quickfix");
+    myDefaultHint = InspectionGadgetsLocalize.stringBufferReplaceableByStringQuickfix().get();
   }
 
   public void testSimpleStringBuffer() { doTest(); }
-  public void testStringBuilderAppend() { doTest(InspectionGadgetsBundle.message("string.builder.replaceable.by.string.quickfix")); }
+  public void testStringBuilderAppend() { doTest(InspectionGadgetsLocalize.stringBuilderReplaceableByStringQuickfix().get()); }
   public void testStringBufferVariable() { doTest(); }
   public void testStringBufferVariable2() { doTest(); }
   public void testStartsWithPrimitive() { doTest(); }
-  public void testPrecedence() { doTest(InspectionGadgetsBundle.message("string.builder.replaceable.by.string.quickfix")); }
-  public void testPrecedence2() { doTest(InspectionGadgetsBundle.message("string.builder.replaceable.by.string.quickfix")); }
-  public void testPrecedence3() { doTest(InspectionGadgetsBundle.message("string.builder.replaceable.by.string.quickfix")); }
-  public void testNonString1() { doTest(InspectionGadgetsBundle.message("string.builder.replaceable.by.string.quickfix")); }
-  public void testNonString2() { doTest(InspectionGadgetsBundle.message("string.builder.replaceable.by.string.quickfix")); }
+  public void testPrecedence() { doTest(InspectionGadgetsLocalize.stringBuilderReplaceableByStringQuickfix().get()); }
+  public void testPrecedence2() { doTest(InspectionGadgetsLocalize.stringBuilderReplaceableByStringQuickfix().get()); }
+  public void testPrecedence3() { doTest(InspectionGadgetsLocalize.stringBuilderReplaceableByStringQuickfix().get()); }
+  public void testNonString1() { doTest(InspectionGadgetsLocalize.stringBuilderReplaceableByStringQuickfix().get()); }
+  public void testNonString2() { doTest(InspectionGadgetsLocalize.stringBuilderReplaceableByStringQuickfix().get()); }
 }

@@ -15,9 +15,9 @@
  */
 package com.siyeh.ig.fixes.controlflow;
 
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.IGQuickFixesTestCase;
 import com.siyeh.ig.controlflow.ConstantIfStatementInspection;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 
 public class ConstantIfFixTest extends IGQuickFixesTestCase {
 
@@ -26,7 +26,7 @@ public class ConstantIfFixTest extends IGQuickFixesTestCase {
     super.setUp();
     myFixture.enableInspections(new ConstantIfStatementInspection());
     myRelativePath = "controlflow/constant_if";
-    myDefaultHint = InspectionGadgetsBundle.message("constant.conditional.expression.simplify.quickfix");
+    myDefaultHint = InspectionGadgetsLocalize.constantConditionalExpressionSimplifyQuickfix().get();
   }
 
   public void testComment() { doTest(); }

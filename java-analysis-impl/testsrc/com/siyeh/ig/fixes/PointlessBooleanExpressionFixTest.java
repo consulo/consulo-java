@@ -16,9 +16,9 @@
 
 package com.siyeh.ig.fixes;
 
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.IGQuickFixesTestCase;
 import com.siyeh.ig.controlflow.PointlessBooleanExpressionInspection;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 
 public class PointlessBooleanExpressionFixTest extends IGQuickFixesTestCase {
   @Override
@@ -26,7 +26,7 @@ public class PointlessBooleanExpressionFixTest extends IGQuickFixesTestCase {
     super.setUp();
     myFixture.enableInspections(new PointlessBooleanExpressionInspection());
     myRelativePath = "pointlessboolean";
-    myDefaultHint = InspectionGadgetsBundle.message("pointless.bitwise.expression.simplify.quickfix");
+    myDefaultHint = InspectionGadgetsLocalize.pointlessBitwiseExpressionSimplifyQuickfix().get();
   }
 
 

@@ -18,6 +18,7 @@ package com.siyeh.ig.fixes.migration;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.IGQuickFixesTestCase;
 import com.siyeh.ig.migration.UnnecessaryBoxingInspection;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 
 public class UnnecessaryBoxingFixTest extends IGQuickFixesTestCase {
   @Override
@@ -31,7 +32,7 @@ public class UnnecessaryBoxingFixTest extends IGQuickFixesTestCase {
   }
 
   private void doFixTest() {
-    doTest(getTestName(false), InspectionGadgetsBundle.message("unnecessary.boxing.remove.quickfix"));
+    doTest(getTestName(false), InspectionGadgetsLocalize.unnecessaryBoxingRemoveQuickfix().get());
   }
 
   @Override

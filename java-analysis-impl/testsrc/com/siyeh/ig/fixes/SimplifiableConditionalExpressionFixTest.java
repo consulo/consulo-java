@@ -16,9 +16,9 @@
 
 package com.siyeh.ig.fixes;
 
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.IGQuickFixesTestCase;
 import com.siyeh.ig.controlflow.SimplifiableConditionalExpressionInspection;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 
 public class SimplifiableConditionalExpressionFixTest extends IGQuickFixesTestCase {
   @Override
@@ -26,7 +26,7 @@ public class SimplifiableConditionalExpressionFixTest extends IGQuickFixesTestCa
     super.setUp();
     myFixture.enableInspections(new SimplifiableConditionalExpressionInspection());
     myRelativePath = "simple_condition";
-    myDefaultHint = InspectionGadgetsBundle.message("constant.conditional.expression.simplify.quickfix");
+    myDefaultHint = InspectionGadgetsLocalize.constantConditionalExpressionSimplifyQuickfix().get();
   }
 
   public void testPrecedence1() {

@@ -15,9 +15,9 @@
  */
 package com.siyeh.ig.fixes;
 
-import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.IGQuickFixesTestCase;
 import com.siyeh.ig.dataflow.UnnecessaryLocalVariableInspection;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 
 public class InlineVariableFixTest extends IGQuickFixesTestCase {
   @Override
@@ -25,7 +25,7 @@ public class InlineVariableFixTest extends IGQuickFixesTestCase {
     super.setUp();
     myFixture.enableInspections(new UnnecessaryLocalVariableInspection());
     myRelativePath = "inline";
-    myDefaultHint = InspectionGadgetsBundle.message("inline.variable.quickfix");
+    myDefaultHint = InspectionGadgetsLocalize.inlineVariableQuickfix().get();
   }
 
   public void testResourceVar() {

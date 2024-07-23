@@ -18,6 +18,7 @@ package com.siyeh.ig.fixes.controlflow;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.IGQuickFixesTestCase;
 import com.siyeh.ig.controlflow.SimplifiableEqualsExpressionInspection;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 
 public class SimplifiableEqualsExpressionFixTest extends IGQuickFixesTestCase {
 
@@ -28,6 +29,6 @@ public class SimplifiableEqualsExpressionFixTest extends IGQuickFixesTestCase {
     myRelativePath = "controlflow/simplifiable_equals_expression";
   }
 
-  public void testNormal() { doTest(InspectionGadgetsBundle.message("simplifiable.equals.expression.quickfix", "equals")); }
-  public void testNegated() { doTest(InspectionGadgetsBundle.message("simplifiable.equals.expression.quickfix", "equalsIgnoreCase")); }
+  public void testNormal() { doTest(InspectionGadgetsLocalize.simplifiableEqualsExpressionQuickfix("equals").get()); }
+  public void testNegated() { doTest(InspectionGadgetsLocalize.simplifiableEqualsExpressionQuickfix("equalsIgnoreCase").get()); }
 }
