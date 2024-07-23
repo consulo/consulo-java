@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.style;
 
 import com.intellij.java.language.psi.*;
+import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
@@ -46,7 +47,7 @@ public class UnnecessaryToStringCallInspection extends BaseInspection {
   @Nonnull
   protected String buildErrorString(Object... infos) {
     final String text = (String)infos[0];
-    return InspectionGadgetsLocalize.unnecessaryTostringCallProblemDescriptor(text).get();
+    return InspectionGadgetsBundle.message("unnecessary.tostring.call.problem.descriptor", text);
   }
 
   @Override
