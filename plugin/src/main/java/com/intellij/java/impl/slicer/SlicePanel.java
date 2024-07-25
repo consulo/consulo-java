@@ -21,11 +21,11 @@ import consulo.dataContext.DataSink;
 import consulo.dataContext.TypeSafeDataProvider;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
-import consulo.ide.impl.idea.openapi.wm.ex.ToolWindowManagerEx;
 import consulo.ide.localize.IdeLocalize;
 import consulo.navigation.Navigatable;
 import consulo.project.Project;
 import consulo.project.ui.view.tree.AbstractTreeNode;
+import consulo.project.ui.wm.ToolWindowManager;
 import consulo.project.ui.wm.ToolWindowManagerListener;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.*;
@@ -97,7 +97,7 @@ public abstract class SlicePanel extends JPanel implements TypeSafeDataProvider,
       }
 
       @Override
-      public void stateChanged() {
+      public void stateChanged(ToolWindowManager toolWindowManager) {
         if (!project.isOpen()) {
           return;
         }
@@ -107,8 +107,7 @@ public abstract class SlicePanel extends JPanel implements TypeSafeDataProvider,
         }
       }
     };
-    ToolWindowManagerEx.getInstanceEx(project).addToolWindowManagerListener(listener);
-    Disposer.register(this, () -> ToolWindowManagerEx.getInstanceEx(project).removeToolWindowManagerListener(listener));
+    project.getMessageBus().connect(this).subscribe(ToolWindowManagerListener.class, listener);
 
     project.getApplication().assertIsDispatchThread();
     myProject = project;

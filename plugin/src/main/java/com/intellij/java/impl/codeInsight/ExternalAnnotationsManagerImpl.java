@@ -28,6 +28,7 @@ import consulo.application.AllIcons;
 import consulo.application.Application;
 import consulo.application.Result;
 import consulo.application.util.function.Processor;
+import consulo.application.util.logging.LoggerUtil;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorColors;
 import consulo.codeEditor.LogicalPosition;
@@ -49,9 +50,6 @@ import consulo.fileChooser.FileChooserDescriptor;
 import consulo.fileChooser.FileChooserDescriptorFactory;
 import consulo.fileChooser.IdeaFileChooser;
 import consulo.fileEditor.FileEditorManager;
-import consulo.ide.impl.idea.diagnostic.LogMessageEx;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
-import consulo.ide.impl.idea.util.ui.OptionsMessageDialog;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.WriteCommandAction;
@@ -74,6 +72,7 @@ import consulo.project.Project;
 import consulo.project.localize.ProjectLocalize;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.OptionsMessageDialog;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.ex.popup.BaseListPopupStep;
 import consulo.ui.ex.popup.JBPopupFactory;
@@ -93,6 +92,7 @@ import consulo.virtualFileSystem.event.VirtualFileAdapter;
 import consulo.virtualFileSystem.event.VirtualFileCopyEvent;
 import consulo.virtualFileSystem.event.VirtualFileEvent;
 import consulo.virtualFileSystem.event.VirtualFileMoveEvent;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 import consulo.xml.ide.highlighter.XmlFileType;
 import consulo.xml.psi.XmlElementFactory;
 import consulo.xml.psi.xml.XmlDocument;
@@ -273,7 +273,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
       for (XmlFile xmlFile : xmlFiles) {
         VirtualFile vf = xmlFile.getVirtualFile();
         if (vf != null) {
-          if (VfsUtilCore.isAncestor(root, vf, false)) {
+          if (VirtualFileUtil.isAncestor(root, vf, false)) {
             return xmlFile;
           }
         }
@@ -326,7 +326,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
   @Nonnull
   private static VirtualFile[] filterByReadOnliness(@Nonnull VirtualFile[] files) {
     List<VirtualFile> result = ContainerUtil.filter(files, VirtualFile::isInLocalFileSystem);
-    return VfsUtilCore.toVirtualFileArray(result);
+    return VirtualFileUtil.toVirtualFileArray(result);
   }
 
   @RequiredWriteAction
@@ -771,7 +771,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
   @RequiredReadAction
   protected void duplicateError(@Nonnull PsiFile file, @Nonnull String externalName, @Nonnull String text) {
     String message = text + "; for signature: '" + externalName + "' in the file " + file.getVirtualFile().getPresentableUrl();
-    LogMessageEx.error(LOG, message, file.getText());
+    LoggerUtil.error(LOG, message, file.getText());
   }
 
   private static class MyExternalPromptDialog extends OptionsMessageDialog {
