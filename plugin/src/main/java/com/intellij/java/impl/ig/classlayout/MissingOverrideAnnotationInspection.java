@@ -25,6 +25,7 @@ import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.CleanupLocalInspectionTool;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
@@ -38,13 +39,18 @@ import java.util.Arrays;
 import java.util.List;
 
 @ExtensionImpl
-public class MissingOverrideAnnotationInspection extends BaseInspection {
+public class MissingOverrideAnnotationInspection extends BaseInspection implements CleanupLocalInspectionTool {
 
   @SuppressWarnings({"PublicField"})
-  public boolean ignoreObjectMethods = true;
+  public boolean ignoreObjectMethods = false;
 
   @SuppressWarnings({"PublicField"})
   public boolean ignoreAnonymousClassMethods = false;
+
+  @Override
+  public boolean isEnabledByDefault() {
+    return true;
+  }
 
   @Override
   @Nonnull
