@@ -23,6 +23,7 @@ import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.projectRoots.JavaVersionService;
 import com.intellij.java.language.psi.*;
+import consulo.application.ui.NonFocusableSetting;
 import consulo.ide.impl.idea.ide.wizard.StepAdapter;
 import consulo.ide.impl.idea.refactoring.ui.AbstractMemberSelectionPanel;
 import consulo.ide.setting.ShowSettingsUtil;
@@ -34,11 +35,12 @@ import consulo.language.editor.refactoring.classMember.MemberInfoBase;
 import consulo.language.editor.refactoring.classMember.MemberInfoTooltipManager;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.CheckBox;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.ComboBox;
 import consulo.ui.ex.awt.ComponentWithBrowseButton;
-import consulo.ui.ex.awt.NonFocusableCheckBox;
 import consulo.ui.ex.awt.VerticalFlowLayout;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.java.generate.psi.PsiAdapter;
 
@@ -382,19 +384,21 @@ public class GenerateEqualsWizard extends AbstractGenerateEqualsWizard<PsiClass,
             templateChooserPanel.add(comboBoxWithBrowseButton, BorderLayout.CENTER);
             myPanel.add(templateChooserPanel);
 
-            final JCheckBox checkbox = new NonFocusableCheckBox(CodeInsightLocalize.generateEqualsHashcodeAcceptSublcasses().get());
-            checkbox.setSelected(!isFinal && JavaCodeInsightSettings.getInstance().USE_INSTANCEOF_ON_EQUALS_PARAMETER);
+            final CheckBox checkbox = CheckBox.create(CodeInsightLocalize.generateEqualsHashcodeAcceptSublcasses());
+            NonFocusableSetting.initFocusability(checkbox);
+            checkbox.setValue(!isFinal && JavaCodeInsightSettings.getInstance().USE_INSTANCEOF_ON_EQUALS_PARAMETER);
             checkbox.setEnabled(!isFinal);
-            checkbox.addActionListener(M -> JavaCodeInsightSettings.getInstance().USE_INSTANCEOF_ON_EQUALS_PARAMETER = checkbox.isSelected());
-            myPanel.add(checkbox);
+            checkbox.addValueListener(M -> JavaCodeInsightSettings.getInstance().USE_INSTANCEOF_ON_EQUALS_PARAMETER = checkbox.getValue());
+            myPanel.add(TargetAWT.to(checkbox));
             myPanel.add(new JLabel(CodeInsightLocalize.generateEqualsHashcodeAcceptSublcassesExplanation().get()));
 
-            final JCheckBox gettersCheckbox = new NonFocusableCheckBox(JavaCodeInsightBundle.message("generate.equals.hashcode.use.getters"));
-            gettersCheckbox.setSelected(JavaCodeInsightSettings.getInstance().USE_ACCESSORS_IN_EQUALS_HASHCODE);
-            gettersCheckbox.addActionListener(
-                M -> JavaCodeInsightSettings.getInstance().USE_ACCESSORS_IN_EQUALS_HASHCODE = gettersCheckbox.isSelected()
+            final CheckBox gettersCheckbox = CheckBox.create(JavaCodeInsightBundle.message("generate.equals.hashcode.use.getters"));
+            NonFocusableSetting.initFocusability(gettersCheckbox);
+            gettersCheckbox.setValue(JavaCodeInsightSettings.getInstance().USE_ACCESSORS_IN_EQUALS_HASHCODE);
+            gettersCheckbox.addValueListener(
+                M -> JavaCodeInsightSettings.getInstance().USE_ACCESSORS_IN_EQUALS_HASHCODE = gettersCheckbox.getValue()
             );
-            myPanel.add(gettersCheckbox);
+            myPanel.add(TargetAWT.to(gettersCheckbox));
         }
 
         @Override
