@@ -23,9 +23,12 @@ import com.intellij.java.language.psi.PsiType;
 import consulo.ide.impl.idea.ide.util.PropertiesComponent;
 import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.project.Project;
+import consulo.ui.CheckBox;
+import consulo.ui.Label;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.*;
 import consulo.ui.ex.awt.event.DocumentAdapter;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
@@ -43,7 +46,7 @@ public class CreateFieldFromParameterDialog extends DialogWrapper {
   private final boolean myFieldMayBeFinal;
 
   private JComponent myNameField;
-  private JCheckBox myCbFinal;
+  private CheckBox myCbFinal;
   private static final @NonNls String PROPERTY_NAME = "CREATE_FIELD_FROM_PARAMETER_DECLARE_FINAL";
   private TypeSelector myTypeSelector;
 
@@ -69,7 +72,7 @@ public class CreateFieldFromParameterDialog extends DialogWrapper {
   @Override
   protected void doOKAction() {
     if (myCbFinal.isEnabled()) {
-      PropertiesComponent.getInstance().setValue(PROPERTY_NAME, String.valueOf(myCbFinal.isSelected()));
+      PropertiesComponent.getInstance().setValue(PROPERTY_NAME, String.valueOf(myCbFinal.getValueOrError()));
     }
 
     final PsiField[] fields = myTargetClass.getFields();
@@ -103,7 +106,7 @@ public class CreateFieldFromParameterDialog extends DialogWrapper {
   }
 
   public boolean isDeclareFinal() {
-    return myCbFinal.isEnabled() && myCbFinal.isSelected();
+    return myCbFinal.isEnabled() && myCbFinal.getValueOrError();
   }
 
   @Override
@@ -180,8 +183,8 @@ public class CreateFieldFromParameterDialog extends DialogWrapper {
     gbConstraints.weighty = 1;
     gbConstraints.gridx = 0;
     gbConstraints.gridy = 0;
-    final JLabel typeLabel = new JLabel(CodeInsightLocalize.dialogCreateFieldFromParameterFieldTypeLabel().get());
-    panel.add(typeLabel, gbConstraints);
+    final Label typeLabel = Label.create(CodeInsightLocalize.dialogCreateFieldFromParameterFieldTypeLabel());
+    panel.add(TargetAWT.to(typeLabel), gbConstraints);
     gbConstraints.gridx = 1;
     if (myTypes.length > 1) {
       myTypeSelector = new TypeSelector(myProject);
@@ -197,8 +200,8 @@ public class CreateFieldFromParameterDialog extends DialogWrapper {
     gbConstraints.weighty = 1;
     gbConstraints.gridx = 0;
     gbConstraints.gridy = 1;
-    JLabel namePrompt = new JLabel(CodeInsightLocalize.dialogCreateFieldFromParameterFieldNameLabel().get());
-    panel.add(namePrompt, gbConstraints);
+    Label namePrompt = Label.create(CodeInsightLocalize.dialogCreateFieldFromParameterFieldNameLabel());
+    panel.add(TargetAWT.to(namePrompt), gbConstraints);
 
     gbConstraints.gridwidth = 1;
     gbConstraints.weightx = 1;
@@ -221,18 +224,18 @@ public class CreateFieldFromParameterDialog extends DialogWrapper {
     gbConstraints.gridy = 0;
     gbConstraints.insets = JBUI.emptyInsets();
 
-    myCbFinal = new JCheckBox(CodeInsightLocalize.dialogCreateFieldFromParameterDeclareFinalCheckbox().get());
+    myCbFinal = CheckBox.create(CodeInsightLocalize.dialogCreateFieldFromParameterDeclareFinalCheckbox());
     if (myFieldMayBeFinal) {
-      myCbFinal.setSelected(PropertiesComponent.getInstance().isTrueValue(PROPERTY_NAME));
+      myCbFinal.setValue(PropertiesComponent.getInstance().isTrueValue(PROPERTY_NAME));
     }
     else {
-      myCbFinal.setSelected(false);
+      myCbFinal.setValue(false);
       myCbFinal.setEnabled(false);
     }
 
     gbConstraints.gridy++;
-    panel.add(myCbFinal, gbConstraints);
-    myCbFinal.addActionListener(e -> {
+    panel.add(TargetAWT.to(myCbFinal), gbConstraints);
+    myCbFinal.addValueListener(e -> {
       requestFocusInNameWindow();
       if (myCbFinal.isEnabled()) {
       }

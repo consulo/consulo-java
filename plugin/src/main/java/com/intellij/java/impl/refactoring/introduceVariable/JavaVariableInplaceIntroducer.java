@@ -26,31 +26,33 @@ import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.application.ApplicationManager;
 import consulo.application.Result;
+import consulo.application.ui.NonFocusableSetting;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.document.Document;
 import consulo.document.RangeMarker;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.WriteCommandAction;
+import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.refactoring.ResolveSnapshotProvider;
 import consulo.language.editor.refactoring.introduce.inplace.InplaceVariableIntroducer;
 import consulo.language.editor.template.TemplateBuilder;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
+import consulo.ui.CheckBox;
 import consulo.ui.ex.action.Shortcut;
-import consulo.ui.ex.awt.NonFocusableCheckBox;
+import consulo.ui.ex.awt.JBUI;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.ex.keymap.Keymap;
 import consulo.ui.ex.keymap.KeymapManager;
 import consulo.ui.ex.keymap.util.KeymapUtil;
 import consulo.util.lang.Comparing;
 import jakarta.annotation.Nonnull;
-
 import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,7 +64,7 @@ public class JavaVariableInplaceIntroducer extends InplaceVariableIntroducer<Psi
   protected final Project myProject;
   private final SmartPsiElementPointer<PsiDeclarationStatement> myPointer;
 
-  private JCheckBox myCanBeFinalCb;
+  private CheckBox myCanBeFinalCb;
 
   private final boolean myCantChangeFinalModifier;
   private final String myTitle;
@@ -113,6 +115,7 @@ public class JavaVariableInplaceIntroducer extends InplaceVariableIntroducer<Psi
     myConflictResolver = resolveSnapshotProvider != null ? resolveSnapshotProvider.createSnapshot(myScope) : null;
   }
 
+  @Override
   @Nullable
   protected PsiVariable getVariable() {
     final PsiDeclarationStatement declarationStatement = myPointer.getElement();
@@ -153,6 +156,7 @@ public class JavaVariableInplaceIntroducer extends InplaceVariableIntroducer<Psi
         myEditor.getCaretModel().moveToOffset(startOffset);
         myEditor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
         ApplicationManager.getApplication().runWriteAction(new Runnable() {
+          @Override
           public void run() {
             if (psiVariable.getInitializer() != null) {
               appendTypeCasts(getOccurrenceMarkers(), file, myProject, psiVariable);
@@ -169,36 +173,34 @@ public class JavaVariableInplaceIntroducer extends InplaceVariableIntroducer<Psi
           myEditor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
         }
         if (myExpressionText != null) {
-          ApplicationManager.getApplication().runWriteAction(new Runnable() {
-            public void run() {
-              final PsiDeclarationStatement element = myPointer.getElement();
-              if (element != null) {
-                final PsiElement[] vars = element.getDeclaredElements();
-                if (vars.length > 0 && vars[0] instanceof PsiVariable) {
-                  final PsiFile containingFile = element.getContainingFile();
-                  //todo pull up method restore state
-                  final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(myProject);
-                  final RangeMarker exprMarker = getExprMarker();
-                  if (exprMarker != null) {
-                    myExpr = AbstractJavaInplaceIntroducer.restoreExpression(containingFile, (PsiVariable) vars[0], elementFactory, exprMarker, myExpressionText);
-                    if (myExpr != null && myExpr.isPhysical()) {
-                      myExprMarker = createMarker(myExpr);
-                    }
+          ApplicationManager.getApplication().runWriteAction(() -> {
+            final PsiDeclarationStatement element = myPointer.getElement();
+            if (element != null) {
+              final PsiElement[] vars = element.getDeclaredElements();
+              if (vars.length > 0 && vars[0] instanceof PsiVariable) {
+                final PsiFile containingFile = element.getContainingFile();
+                //todo pull up method restore state
+                final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(myProject);
+                final RangeMarker exprMarker1 = getExprMarker();
+                if (exprMarker1 != null) {
+                  myExpr = AbstractJavaInplaceIntroducer.restoreExpression(containingFile, (PsiVariable) vars[0], elementFactory, exprMarker1, myExpressionText);
+                  if (myExpr != null && myExpr.isPhysical()) {
+                    myExprMarker = createMarker(myExpr);
                   }
-                  List<RangeMarker> markers = getOccurrenceMarkers();
-                  for (RangeMarker occurrenceMarker : markers) {
-                    if (getExprMarker() != null && occurrenceMarker.getStartOffset() == getExprMarker().getStartOffset() && myExpr != null) {
-                      continue;
-                    }
-                    AbstractJavaInplaceIntroducer
-                        .restoreExpression(containingFile, (PsiVariable) vars[0], elementFactory, occurrenceMarker, myExpressionText);
+                }
+                List<RangeMarker> markers = getOccurrenceMarkers();
+                for (RangeMarker occurrenceMarker : markers) {
+                  if (getExprMarker() != null && occurrenceMarker.getStartOffset() == getExprMarker().getStartOffset() && myExpr != null) {
+                    continue;
                   }
-                  final PsiExpression initializer = ((PsiVariable) vars[0]).getInitializer();
-                  if (initializer != null && Comparing.strEqual(initializer.getText(), myExpressionText) && myExpr == null) {
-                    element.replace(JavaPsiFacade.getInstance(myProject).getElementFactory().createStatementFromText(myExpressionText, element));
-                  } else {
-                    element.delete();
-                  }
+                  AbstractJavaInplaceIntroducer
+                      .restoreExpression(containingFile, (PsiVariable) vars[0], elementFactory, occurrenceMarker, myExpressionText);
+                }
+                final PsiExpression initializer = ((PsiVariable) vars[0]).getInitializer();
+                if (initializer != null && Comparing.strEqual(initializer.getText(), myExpressionText) && myExpr == null) {
+                  element.replace(JavaPsiFacade.getInstance(myProject).getElementFactory().createStatementFromText(myExpressionText, element));
+                } else {
+                  element.delete();
                 }
               }
             }
@@ -216,28 +218,24 @@ public class JavaVariableInplaceIntroducer extends InplaceVariableIntroducer<Psi
   }
 
 
+  @Override
   @Nullable
   protected JComponent getComponent() {
     if (!myCantChangeFinalModifier) {
-      myCanBeFinalCb = new NonFocusableCheckBox("Declare final");
-      myCanBeFinalCb.setSelected(createFinals());
-      myCanBeFinalCb.setMnemonic('f');
+      myCanBeFinalCb = CheckBox.create(CodeInsightLocalize.dialogCreateFieldFromParameterDeclareFinalCheckbox());
+      NonFocusableSetting.initFocusability(myCanBeFinalCb);
+      myCanBeFinalCb.setValue(createFinals());
       final FinalListener finalListener = new FinalListener(myEditor);
-      myCanBeFinalCb.addActionListener(new ActionListener() {
+      myCanBeFinalCb.addValueListener(e -> new WriteCommandAction(myProject, getCommandName(), getCommandName()) {
         @Override
-        public void actionPerformed(ActionEvent e) {
-          new WriteCommandAction(myProject, getCommandName(), getCommandName()) {
-            @Override
-            protected void run(Result result) throws Throwable {
-              PsiDocumentManager.getInstance(myProject).commitDocument(myEditor.getDocument());
-              final PsiVariable variable = getVariable();
-              if (variable != null) {
-                finalListener.perform(myCanBeFinalCb.isSelected(), variable);
-              }
-            }
-          }.execute();
+        protected void run(Result result) throws Throwable {
+          PsiDocumentManager.getInstance(myProject).commitDocument(myEditor.getDocument());
+          final PsiVariable variable = getVariable();
+          if (variable != null) {
+            finalListener.perform(myCanBeFinalCb.getValueOrError(), variable);
+          }
         }
-      });
+      }.execute());
     } else {
       return null;
     }
@@ -245,14 +243,15 @@ public class JavaVariableInplaceIntroducer extends InplaceVariableIntroducer<Psi
     panel.setBorder(null);
 
     if (myCanBeFinalCb != null) {
-      panel.add(myCanBeFinalCb, new GridBagConstraints(0, 1, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 0, 0));
+      panel.add(TargetAWT.to(myCanBeFinalCb), new GridBagConstraints(0, 1, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, JBUI.insets(5), 0, 0));
     }
 
-    panel.add(Box.createVerticalBox(), new GridBagConstraints(0, 2, 1, 1, 1, 1, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+    panel.add(Box.createVerticalBox(), new GridBagConstraints(0, 2, 1, 1, 1, 1, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, JBUI.emptyInsets(), 0, 0));
 
     return panel;
   }
 
+  @Override
   protected void addAdditionalVariables(TemplateBuilder builder) {
     final PsiTypeElement typeElement = getVariable().getTypeElement();
     builder.replaceElement(typeElement, "Variable_Type", AbstractJavaInplaceIntroducer.createExpression(myExpression, typeElement.getText()), true, true);
@@ -332,30 +331,14 @@ public class JavaVariableInplaceIntroducer extends InplaceVariableIntroducer<Psi
     final int modifierListOffset = psiVariable.getTextRange().getStartOffset();
     final int varLineNumber = document.getLineNumber(modifierListOffset);
 
-    ApplicationManager.getApplication().runWriteAction(new Runnable() { //adjust line indent if final was inserted and then deleted
-
-      public void run() {
-        PsiDocumentManager.getInstance(psiVariable.getProject()).doPostponedOperationsAndUnblockDocument(document);
-        CodeStyleManager.getInstance(psiVariable.getProject()).adjustLineIndent(document, document.getLineStartOffset(varLineNumber));
-      }
+    //adjust line indent if final was inserted and then deleted
+    ApplicationManager.getApplication().runWriteAction(() -> {
+      PsiDocumentManager.getInstance(psiVariable.getProject()).doPostponedOperationsAndUnblockDocument(document);
+      CodeStyleManager.getInstance(psiVariable.getProject()).adjustLineIndent(document, document.getLineStartOffset(varLineNumber));
     });
   }
 
-
   protected String getTitle() {
     return myTitle;
-  }
-
-
-  @Nullable
-  private static String getAdvertisementText(final boolean hasTypeSuggestion) {
-    final Keymap keymap = KeymapManager.getInstance().getActiveKeymap();
-    if (hasTypeSuggestion) {
-      final Shortcut[] shortcuts = keymap.getShortcuts("PreviousTemplateVariable");
-      if (shortcuts.length > 0) {
-        return "Press " + shortcuts[0] + " to change type";
-      }
-    }
-    return null;
   }
 }
