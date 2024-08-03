@@ -35,162 +35,174 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
+import consulo.ui.Label;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.RecentsManager;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.FormBuilder;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.usage.UsageViewUtil;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import java.awt.*;
 
 class CopyClassDialog extends DialogWrapper {
-  @NonNls private static final String RECENTS_KEY = "CopyClassDialog.RECENTS_KEY";
-  private final JLabel myInformationLabel = new JLabel();
-  private EditorTextField myNameField;
-  private final JLabel myPackageLabel = new JLabel();
-  private ReferenceEditorComboWithBrowseButton myTfPackage;
-  private final Project myProject;
-  private final boolean myDoClone;
-  private final PsiDirectory myDefaultTargetDirectory;
-  private final DestinationFolderComboBox myDestinationCB = new DestinationFolderComboBox() {
-    @Override
-    public String getTargetPackage() {
-      return myTfPackage.getText().trim();
-    }
+    private static final String RECENTS_KEY = "CopyClassDialog.RECENTS_KEY";
 
-    @Override
-    protected boolean reportBaseInTestSelectionInSource() {
-      return true;
-    }
-  };
-  protected MoveDestination myDestination;
-
-  public CopyClassDialog(PsiClass aClass, PsiDirectory defaultTargetDirectory, Project project, boolean doClone) {
-    super(project, true);
-    myProject = project;
-    myDefaultTargetDirectory = defaultTargetDirectory;
-    myDoClone = doClone;
-    LocalizeValue text = myDoClone
-      ? RefactoringLocalize.copyClassClone01(UsageViewUtil.getType(aClass), UsageViewUtil.getLongName(aClass))
-      : RefactoringLocalize.copyClassCopy01(UsageViewUtil.getType(aClass), UsageViewUtil.getLongName(aClass));
-    myInformationLabel.setText(text.get());
-    myInformationLabel.setFont(myInformationLabel.getFont().deriveFont(Font.BOLD));
-    init();
-    myDestinationCB.setData(myProject, defaultTargetDirectory,
-        s -> setErrorText(s), myTfPackage.getChildComponent());
-    myNameField.setText(UsageViewUtil.getShortName(aClass));
-    myNameField.selectAll();
-  }
-
-  @Nonnull
-  protected Action[] createActions() {
-    return new Action[]{getOKAction(),getCancelAction(),getHelpAction()};
-  }
-
-  public JComponent getPreferredFocusedComponent() {
-    return myNameField;
-  }
-
-  protected JComponent createCenterPanel() {
-    return new JPanel(new BorderLayout());
-  }
-
-  protected JComponent createNorthPanel() {
-    myNameField = new EditorTextField("");
-
-    String qualifiedName = getQualifiedName();
-    myTfPackage = new PackageNameReferenceEditorCombo(
-      qualifiedName,
-      myProject,
-      RECENTS_KEY,
-      RefactoringLocalize.chooseDestinationPackage().get()
-    );
-    myTfPackage.setTextFieldPreferredWidth(Math.max(qualifiedName.length() + 5, 40));
-    myPackageLabel.setText(RefactoringLocalize.destinationPackage().get());
-    myPackageLabel.setLabelFor(myTfPackage);
-    if (myDoClone) {
-      myTfPackage.setVisible(false);
-      myPackageLabel.setVisible(false);
-    }
-
-    final JLabel label = new JLabel(RefactoringLocalize.targetDestinationFolder().get());
-    final boolean isMultipleSourceRoots = ProjectRootManager.getInstance(myProject).getContentSourceRoots().length > 1;
-    myDestinationCB.setVisible(!myDoClone && isMultipleSourceRoots);
-    label.setVisible(!myDoClone && isMultipleSourceRoots);
-    label.setLabelFor(myDestinationCB);
-
-    return FormBuilder.createFormBuilder()
-      .addComponent(myInformationLabel)
-      .addLabeledComponent(RefactoringLocalize.copyFilesNewNameLabel().get(), myNameField, UIUtil.LARGE_VGAP)
-      .addLabeledComponent(myPackageLabel, myTfPackage)
-      .addLabeledComponent(label, myDestinationCB)
-      .getPanel();
-  }
-
-  protected String getQualifiedName() {
-    String qualifiedName = "";
-    if (myDefaultTargetDirectory != null) {
-      final PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(myDefaultTargetDirectory);
-      if (aPackage != null) {
-        qualifiedName = aPackage.getQualifiedName();
-      }
-    }
-    return qualifiedName;
-  }
-
-  public MoveDestination getTargetDirectory() {
-    return myDestination;
-  }
-
-  public String getClassName() {
-    return myNameField.getText();
-  }
-
-  @RequiredUIAccess
-  protected void doOKAction() {
-    final String packageName = myTfPackage.getText();
-    final String className = getClassName();
-
-    final String[] errorString = new String[1];
-    final PsiManager manager = PsiManager.getInstance(myProject);
-    final PsiNameHelper nameHelper = PsiNameHelper.getInstance(manager.getProject());
-    if (packageName.length() > 0 && !nameHelper.isQualifiedName(packageName)) {
-      errorString[0] = RefactoringLocalize.invalidTargetPackageNameSpecified().get();
-    } else if (className != null && className.isEmpty()) {
-      errorString[0] = RefactoringLocalize.noClassNameSpecified().get();
-    } else {
-      if (!nameHelper.isIdentifier(className)) {
-        errorString[0] = RefactoringMessageUtil.getIncorrectIdentifierMessage(className);
-      }
-      else if (!myDoClone) {
-        try {
-          final PackageWrapper targetPackage = new PackageWrapper(manager, packageName);
-          myDestination = myDestinationCB.selectDirectory(targetPackage, false);
-          if (myDestination == null) return;
+    private final JLabel myInformationLabel;
+    private EditorTextField myNameField;
+    private ReferenceEditorComboWithBrowseButton myTfPackage;
+    private final Project myProject;
+    private final boolean myDoClone;
+    private final PsiDirectory myDefaultTargetDirectory;
+    private final DestinationFolderComboBox myDestinationCB = new DestinationFolderComboBox() {
+        @Override
+        public String getTargetPackage() {
+            return myTfPackage.getText().trim();
         }
-        catch (IncorrectOperationException e) {
-          errorString[0] = e.getMessage();
+
+        @Override
+        protected boolean reportBaseInTestSelectionInSource() {
+            return true;
         }
-      }
-      RecentsManager.getInstance(myProject).registerRecentEntry(RECENTS_KEY, packageName);
+    };
+    protected MoveDestination myDestination;
+
+    public CopyClassDialog(PsiClass aClass, PsiDirectory defaultTargetDirectory, Project project, boolean doClone) {
+        super(project, true);
+        myProject = project;
+        myDefaultTargetDirectory = defaultTargetDirectory;
+        myDoClone = doClone;
+        LocalizeValue text = myDoClone
+            ? RefactoringLocalize.copyClassClone01(UsageViewUtil.getType(aClass), UsageViewUtil.getLongName(aClass))
+            : RefactoringLocalize.copyClassCopy01(UsageViewUtil.getType(aClass), UsageViewUtil.getLongName(aClass));
+        myInformationLabel = new JLabel();
+        myInformationLabel.setText(text.get());
+        myInformationLabel.setFont(myInformationLabel.getFont().deriveFont(Font.BOLD));
+        init();
+        myDestinationCB.setData(myProject, defaultTargetDirectory, this::setErrorText, myTfPackage.getChildComponent());
+        myNameField.setText(UsageViewUtil.getShortName(aClass));
+        myNameField.selectAll();
     }
 
-    if (errorString[0] != null) {
-      if (errorString[0].length() > 0) {
-        Messages.showMessageDialog(myProject, errorString[0], RefactoringLocalize.errorTitle().get(), UIUtil.getErrorIcon());
-      }
-      myNameField.requestFocusInWindow();
-      return;
+    @Override
+    @Nonnull
+    protected Action[] createActions() {
+        return new Action[]{getOKAction(), getCancelAction(), getHelpAction()};
     }
-    super.doOKAction();
-  }
 
-  protected void doHelpAction() {
-    HelpManager.getInstance().invokeHelp(HelpID.COPY_CLASS);
-  }
+    @Override
+    public JComponent getPreferredFocusedComponent() {
+        return myNameField;
+    }
+
+    @Override
+    protected JComponent createCenterPanel() {
+        return new JPanel(new BorderLayout());
+    }
+
+    @Override
+    protected JComponent createNorthPanel() {
+        myNameField = new EditorTextField("");
+
+        String qualifiedName = getQualifiedName();
+        myTfPackage = new PackageNameReferenceEditorCombo(
+            qualifiedName,
+            myProject,
+            RECENTS_KEY,
+            RefactoringLocalize.chooseDestinationPackage().get()
+        );
+        myTfPackage.setTextFieldPreferredWidth(Math.max(qualifiedName.length() + 5, 40));
+
+        Label packageLabel = Label.create(RefactoringLocalize.destinationPackage());
+        packageLabel.setTarget(TargetAWT.wrap(myTfPackage));
+        if (myDoClone) {
+            myTfPackage.setVisible(false);
+            packageLabel.setVisible(false);
+        }
+
+        Label label = Label.create(RefactoringLocalize.targetDestinationFolder());
+        final boolean isMultipleSourceRoots = ProjectRootManager.getInstance(myProject).getContentSourceRoots().length > 1;
+        myDestinationCB.setVisible(!myDoClone && isMultipleSourceRoots);
+        label.setVisible(!myDoClone && isMultipleSourceRoots);
+        label.setTarget(TargetAWT.wrap(myDestinationCB));
+
+        return FormBuilder.createFormBuilder()
+            .addComponent(myInformationLabel)
+            .addLabeledComponent(RefactoringLocalize.copyFilesNewNameLabel().get(), myNameField, UIUtil.LARGE_VGAP)
+            .addLabeledComponent((JComponent) TargetAWT.to(packageLabel), myTfPackage)
+            .addLabeledComponent((JComponent) TargetAWT.to(label), myDestinationCB)
+            .getPanel();
+    }
+
+    protected String getQualifiedName() {
+        String qualifiedName = "";
+        if (myDefaultTargetDirectory != null) {
+            final PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(myDefaultTargetDirectory);
+            if (aPackage != null) {
+                qualifiedName = aPackage.getQualifiedName();
+            }
+        }
+        return qualifiedName;
+    }
+
+    public MoveDestination getTargetDirectory() {
+        return myDestination;
+    }
+
+    public String getClassName() {
+        return myNameField.getText();
+    }
+
+    @Override
+    @RequiredUIAccess
+    protected void doOKAction() {
+        final String packageName = myTfPackage.getText();
+        final String className = getClassName();
+
+        final String[] errorString = new String[1];
+        final PsiManager manager = PsiManager.getInstance(myProject);
+        final PsiNameHelper nameHelper = PsiNameHelper.getInstance(manager.getProject());
+        if (packageName.length() > 0 && !nameHelper.isQualifiedName(packageName)) {
+            errorString[0] = RefactoringLocalize.invalidTargetPackageNameSpecified().get();
+        }
+        else if (className != null && className.isEmpty()) {
+            errorString[0] = RefactoringLocalize.noClassNameSpecified().get();
+        }
+        else {
+            if (!nameHelper.isIdentifier(className)) {
+                errorString[0] = RefactoringMessageUtil.getIncorrectIdentifierMessage(className);
+            }
+            else if (!myDoClone) {
+                try {
+                    final PackageWrapper targetPackage = new PackageWrapper(manager, packageName);
+                    myDestination = myDestinationCB.selectDirectory(targetPackage, false);
+                    if (myDestination == null) {
+                        return;
+                    }
+                }
+                catch (IncorrectOperationException e) {
+                    errorString[0] = e.getMessage();
+                }
+            }
+            RecentsManager.getInstance(myProject).registerRecentEntry(RECENTS_KEY, packageName);
+        }
+
+        if (errorString[0] != null) {
+            if (errorString[0].length() > 0) {
+                Messages.showMessageDialog(myProject, errorString[0], RefactoringLocalize.errorTitle().get(), UIUtil.getErrorIcon());
+            }
+            myNameField.requestFocusInWindow();
+            return;
+        }
+        super.doOKAction();
+    }
+
+    @Override
+    protected void doHelpAction() {
+        HelpManager.getInstance().invokeHelp(HelpID.COPY_CLASS);
+    }
 }
