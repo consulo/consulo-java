@@ -96,26 +96,6 @@ public class OwnJdkUtil {
     return new File(homePath, "modules/java.base").isDirectory();
   }
 
-  @Deprecated
-  public static boolean useDynamicVMOptions() {
-    return true;
-  }
-
-  @Deprecated
-  public static boolean useDynamicParameters() {
-    return true;
-  }
-
-  @Deprecated
-  public static boolean useClasspathJar() {
-    return true;
-  }
-
-  @Deprecated
-  public static boolean useDynamicClasspath(@Nullable Project project) {
-    return true;
-  }
-
   public static GeneralCommandLine setupJVMCommandLine(@Nonnull OwnSimpleJavaParameters javaParameters) throws CantRunException {
     Sdk jdk = javaParameters.getJdk();
     if (jdk == null) {
