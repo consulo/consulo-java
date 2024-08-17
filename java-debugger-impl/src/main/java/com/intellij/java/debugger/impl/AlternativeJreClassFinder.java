@@ -15,11 +15,11 @@
  */
 package com.intellij.java.debugger.impl;
 
-import com.intellij.java.debugger.DebuggerManager;
 import com.intellij.java.execution.configurations.ConfigurationWithAlternativeJre;
 import com.intellij.java.language.impl.psi.NonClasspathClassFinder;
 import com.intellij.java.language.impl.psi.NonClasspathDirectoriesScope;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.component.messagebus.MessageBusConnection;
 import consulo.content.base.BinariesOrderRootType;
 import consulo.content.base.SourcesOrderRootType;
 import consulo.content.bundle.Sdk;
@@ -28,10 +28,10 @@ import consulo.execution.configuration.RunProfile;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.inject.Inject;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import jakarta.inject.Inject;
+
 import java.util.*;
 
 /**
@@ -39,61 +39,65 @@ import java.util.*;
  */
 @ExtensionImpl(order = "last")
 public class AlternativeJreClassFinder extends NonClasspathClassFinder {
-  @Inject
-  public AlternativeJreClassFinder(Project project, DebuggerManager manager) {
-    super(project);
-    ((DebuggerManagerEx) manager).addDebuggerManagerListener(new DebuggerManagerListener() {
-      @Override
-      public void sessionCreated(DebuggerSession session) {
-        clearCache();
-      }
-
-      @Override
-      public void sessionRemoved(DebuggerSession session) {
-        clearCache();
-      }
-    });
-  }
-
-  @Override
-  protected List<VirtualFile> calcClassRoots() {
-    Collection<DebuggerSession> sessions = DebuggerManagerEx.getInstanceEx(myProject).getSessions();
-    if (sessions.isEmpty()) {
-      return Collections.emptyList();
+    @Inject
+    public AlternativeJreClassFinder(Project project) {
+        super(project);
     }
-    List<VirtualFile> res = new ArrayList<>();
-    for (DebuggerSession session : sessions) {
-      Sdk jre = session.getAlternativeJre();
-      if (jre != null) {
-        res.addAll(getClassRoots(jre));
-      }
+
+    @Override
+    protected void connect(MessageBusConnection connection) {
+        connection.subscribe(DebuggerManagerListener.class, new DebuggerManagerListener() {
+            @Override
+            public void sessionCreated(DebuggerSession session) {
+                clearCache();
+            }
+
+            @Override
+            public void sessionRemoved(DebuggerSession session) {
+                clearCache();
+            }
+        });
     }
-    return res;
-  }
 
-  @Nullable
-  public static Sdk getAlternativeJre(RunProfile profile) {
-    if (profile instanceof ConfigurationWithAlternativeJre) {
-      ConfigurationWithAlternativeJre appConfig = (ConfigurationWithAlternativeJre) profile;
-      if (appConfig.isAlternativeJrePathEnabled()) {
-        return SdkTable.getInstance().findSdk(appConfig.getAlternativeJrePath());
-      }
+    @Override
+    protected List<VirtualFile> calcClassRoots() {
+        Collection<DebuggerSession> sessions = DebuggerManagerEx.getInstanceEx(myProject).getSessions();
+        if (sessions.isEmpty()) {
+            return Collections.emptyList();
+        }
+        List<VirtualFile> res = new ArrayList<>();
+        for (DebuggerSession session : sessions) {
+            Sdk jre = session.getAlternativeJre();
+            if (jre != null) {
+                res.addAll(getClassRoots(jre));
+            }
+        }
+        return res;
     }
-    return null;
-  }
 
-  @Nonnull
-  private static Collection<VirtualFile> getClassRoots(@Nonnull Sdk jre) {
-    return Arrays.asList(jre.getRootProvider().getFiles(BinariesOrderRootType.getInstance()));
-  }
+    @Nullable
+    public static Sdk getAlternativeJre(RunProfile profile) {
+        if (profile instanceof ConfigurationWithAlternativeJre) {
+            ConfigurationWithAlternativeJre appConfig = (ConfigurationWithAlternativeJre) profile;
+            if (appConfig.isAlternativeJrePathEnabled()) {
+                return SdkTable.getInstance().findSdk(appConfig.getAlternativeJrePath());
+            }
+        }
+        return null;
+    }
 
-  @Nonnull
-  public static Collection<VirtualFile> getSourceRoots(@Nonnull Sdk jre) {
-    return Arrays.asList(jre.getRootProvider().getFiles(SourcesOrderRootType.getInstance()));
-  }
+    @Nonnull
+    private static Collection<VirtualFile> getClassRoots(@Nonnull Sdk jre) {
+        return Arrays.asList(jre.getRootProvider().getFiles(BinariesOrderRootType.getInstance()));
+    }
 
-  @Nonnull
-  public static GlobalSearchScope getSearchScope(@Nonnull Sdk jre) {
-    return new NonClasspathDirectoriesScope(getClassRoots(jre));
-  }
+    @Nonnull
+    public static Collection<VirtualFile> getSourceRoots(@Nonnull Sdk jre) {
+        return Arrays.asList(jre.getRootProvider().getFiles(SourcesOrderRootType.getInstance()));
+    }
+
+    @Nonnull
+    public static GlobalSearchScope getSearchScope(@Nonnull Sdk jre) {
+        return new NonClasspathDirectoriesScope(getClassRoots(jre));
+    }
 }

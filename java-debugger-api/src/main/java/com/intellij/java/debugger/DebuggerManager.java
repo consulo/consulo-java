@@ -28,10 +28,10 @@ import java.util.function.Function;
 /**
  * @author lex
  */
-@ServiceAPI(value = ComponentScope.PROJECT, lazy = false)
+@ServiceAPI(value = ComponentScope.PROJECT)
 public abstract class DebuggerManager {
   public static DebuggerManager getInstance(Project project) {
-    return project.getComponent(DebuggerManager.class);
+    return project.getInstance(DebuggerManager.class);
   }
 
   public abstract DebugProcess getDebugProcess(ProcessHandler processHandler);

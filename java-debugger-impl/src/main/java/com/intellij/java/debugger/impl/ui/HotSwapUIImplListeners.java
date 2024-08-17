@@ -3,7 +3,8 @@ package com.intellij.java.debugger.impl.ui;
 import com.intellij.java.debugger.impl.DebuggerManagerEx;
 import com.intellij.java.debugger.impl.DebuggerManagerListener;
 import com.intellij.java.debugger.impl.DebuggerSession;
-import consulo.annotation.component.ExtensionImpl;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.TopicImpl;
 import consulo.compiler.CompileContext;
 import consulo.compiler.event.CompilationStatusListener;
 import consulo.component.messagebus.MessageBusConnection;
@@ -13,7 +14,7 @@ import consulo.util.lang.StringUtil;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
-@ExtensionImpl
+@TopicImpl(ComponentScope.PROJECT)
 public class HotSwapUIImplListeners implements DebuggerManagerListener {
 
   private static class MyCompilationStatusListener implements CompilationStatusListener {

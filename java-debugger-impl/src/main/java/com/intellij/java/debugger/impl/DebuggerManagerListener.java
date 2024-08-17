@@ -16,24 +16,21 @@
 package com.intellij.java.debugger.impl;
 
 import consulo.annotation.component.ComponentScope;
-import consulo.annotation.component.ExtensionAPI;
-import consulo.component.extension.ExtensionPointName;
+import consulo.annotation.component.TopicAPI;
 
 import java.util.EventListener;
 
-@ExtensionAPI(ComponentScope.PROJECT)
+@TopicAPI(ComponentScope.PROJECT)
 public interface DebuggerManagerListener extends EventListener {
-  ExtensionPointName<DebuggerManagerListener> EP_NAME = ExtensionPointName.create(DebuggerManagerListener.class);
+    default void sessionCreated(DebuggerSession session) {
+    }
 
-  default void sessionCreated(DebuggerSession session) {
-  }
+    default void sessionAttached(DebuggerSession session) {
+    }
 
-  default void sessionAttached(DebuggerSession session) {
-  }
+    default void sessionDetached(DebuggerSession session) {
+    }
 
-  default void sessionDetached(DebuggerSession session) {
-  }
-
-  default void sessionRemoved(DebuggerSession session) {
-  }
+    default void sessionRemoved(DebuggerSession session) {
+    }
 }

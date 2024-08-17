@@ -27,17 +27,17 @@ import com.intellij.java.language.util.TreeClassChooserFactory;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.AllIcons;
 import consulo.application.ApplicationManager;
-import consulo.application.util.function.Computable;
 import consulo.execution.debug.XDebuggerManager;
 import consulo.execution.debug.breakpoint.XBreakpoint;
 import consulo.execution.debug.breakpoint.ui.XBreakpointCustomPropertiesPanel;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
 import consulo.ui.image.Image;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import javax.swing.*;
+import java.util.function.Supplier;
 
 /**
  * @author Eugene Zhuravlev
@@ -124,9 +124,9 @@ public class JavaExceptionBreakpointType extends JavaBreakpointTypeBase<JavaExce
     final String qName = selectedClass == null ? null : JVMNameUtil.getNonAnonymousClassName(selectedClass);
 
     if (qName != null && qName.length() > 0) {
-      return ApplicationManager.getApplication().runWriteAction(new Computable<XBreakpoint<JavaExceptionBreakpointProperties>>() {
+      return ApplicationManager.getApplication().runWriteAction(new Supplier<XBreakpoint<JavaExceptionBreakpointProperties>>() {
         @Override
-        public XBreakpoint<JavaExceptionBreakpointProperties> compute() {
+        public XBreakpoint<JavaExceptionBreakpointProperties> get() {
           return XDebuggerManager.getInstance(project).getBreakpointManager().addBreakpoint(JavaExceptionBreakpointType.this,
                                                                                             new JavaExceptionBreakpointProperties(qName,
                                                                                                                                   ((PsiClassOwner)selectedClass
@@ -140,7 +140,7 @@ public class JavaExceptionBreakpointType extends JavaBreakpointTypeBase<JavaExce
 
   @Override
   public Breakpoint createJavaBreakpoint(Project project, XBreakpoint<JavaExceptionBreakpointProperties> breakpoint) {
-    if (!XDebuggerManager.getInstance(project).getBreakpointManager().isDefaultBreakpoint(breakpoint)) {
+    if (!breakpoint.getBreakpointManager().isDefaultBreakpoint(breakpoint)) {
       return new ExceptionBreakpoint(project, breakpoint);
     }
     else {

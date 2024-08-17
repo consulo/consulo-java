@@ -15,43 +15,38 @@
  */
 package com.intellij.java.debugger.impl;
 
-import consulo.execution.ExecutionResult;
-import consulo.process.ExecutionException;
 import com.intellij.java.execution.configurations.RemoteConnection;
 import consulo.content.bundle.Sdk;
+import consulo.execution.ExecutionResult;
 import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.process.ExecutionException;
 import jakarta.annotation.Nonnull;
-
 import jakarta.annotation.Nullable;
 
-public interface DebugEnvironment
-{
+public interface DebugEnvironment {
+    int LOCAL_START_TIMEOUT = 30000;
 
-	int LOCAL_START_TIMEOUT = 30000;
+    @Nullable
+    ExecutionResult createExecutionResult() throws ExecutionException;
 
-	@Nullable
-  ExecutionResult createExecutionResult() throws ExecutionException;
+    @Nonnull
+    GlobalSearchScope getSearchScope();
 
-	@Nonnull
-	GlobalSearchScope getSearchScope();
+    @Nullable
+    default Sdk getAlternativeJre() {
+        return null;
+    }
 
-	@Nullable
-	default Sdk getAlternativeJre()
-	{
-		return null;
-	}
+    @Nullable
+    default Sdk getRunJre() {
+        return null;
+    }
 
-	@Nullable
-	default Sdk getRunJre()
-	{
-		return null;
-	}
+    boolean isRemote();
 
-	boolean isRemote();
+    RemoteConnection getRemoteConnection();
 
-	RemoteConnection getRemoteConnection();
+    long getPollTimeout();
 
-	long getPollTimeout();
-
-	String getSessionName();
+    String getSessionName();
 }

@@ -15,38 +15,31 @@
  */
 package com.intellij.java.debugger.impl;
 
-import java.util.Collection;
-
-import jakarta.annotation.Nonnull;
-
 import com.intellij.java.debugger.DebuggerManager;
 import com.intellij.java.debugger.engine.DebugProcess;
 import com.intellij.java.debugger.impl.ui.breakpoints.BreakpointManager;
 import consulo.process.ExecutionException;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-public abstract class DebuggerManagerEx extends DebuggerManager
-{
-	public static DebuggerManagerEx getInstanceEx(Project project)
-	{
-		return (DebuggerManagerEx) DebuggerManager.getInstance(project);
-	}
+import java.util.Collection;
 
-	public abstract BreakpointManager getBreakpointManager();
+public abstract class DebuggerManagerEx extends DebuggerManager {
+    public static DebuggerManagerEx getInstanceEx(Project project) {
+        return (DebuggerManagerEx) DebuggerManager.getInstance(project);
+    }
 
-	public abstract Collection<DebuggerSession> getSessions();
+    public abstract BreakpointManager getBreakpointManager();
 
-	public abstract DebuggerSession getSession(DebugProcess debugProcess);
+    public abstract Collection<DebuggerSession> getSessions();
 
-	public abstract DebuggerContextImpl getContext();
+    public abstract DebuggerSession getSession(DebugProcess debugProcess);
 
-	public abstract DebuggerStateManager getContextManager();
+    public abstract DebuggerContextImpl getContext();
 
-	public abstract void addDebuggerManagerListener(DebuggerManagerListener debuggerManagerListener);
+    public abstract DebuggerStateManager getContextManager();
 
-	public abstract void removeDebuggerManagerListener(DebuggerManagerListener debuggerManagerListener);
-
-	@Nullable
-	public abstract DebuggerSession attachVirtualMachine(@Nonnull DebugEnvironment environment) throws ExecutionException;
+    @Nullable
+    public abstract DebuggerSession attachVirtualMachine(@Nonnull DebugEnvironment environment) throws ExecutionException;
 }

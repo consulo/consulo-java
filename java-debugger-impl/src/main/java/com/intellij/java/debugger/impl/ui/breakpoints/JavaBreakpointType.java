@@ -24,7 +24,6 @@ import consulo.project.Project;
  *
  * @author egor
  */
-public interface JavaBreakpointType<P extends JavaBreakpointProperties>
-{
-	Breakpoint createJavaBreakpoint(Project project, XBreakpoint<P> breakpoint);
+public interface JavaBreakpointType<P extends JavaBreakpointProperties> {
+    Breakpoint createJavaBreakpoint(Project project, XBreakpoint<P> breakpoint);
 }
