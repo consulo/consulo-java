@@ -30,112 +30,117 @@ import consulo.language.editor.ui.RadioUpDownListener;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.project.Project;
+import consulo.ui.Label;
+import consulo.ui.RadioButton;
+import consulo.ui.ValueGroup;
 import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
+import consulo.ui.layout.LabeledLayout;
+import consulo.ui.layout.VerticalLayout;
 import jakarta.annotation.Nullable;
 
 import javax.swing.*;
-import java.awt.*;
 
 @ExtensionImpl
 public class MoveInnerToUpperOrMembersHandler extends MoveHandlerDelegate {
-  public boolean canMove(final PsiElement[] elements, @Nullable final PsiElement targetContainer) {
-    if (elements.length != 1) return false;
-    PsiElement element = elements [0];
-    return isStaticInnerClass(element) &&
-           (targetContainer == null || targetContainer.equals(MoveInnerImpl.getTargetContainer((PsiClass)elements[0], false)));
-  }
-
-  private static boolean isStaticInnerClass(final PsiElement element) {
-    return element instanceof PsiClass && element.getParent() instanceof PsiClass &&
-           ((PsiClass) element).hasModifierProperty(PsiModifier.STATIC);
-  }
-
-  public void doMove(final Project project, final PsiElement[] elements, final PsiElement targetContainer, final MoveCallback callback) {
-    SelectInnerOrMembersRefactoringDialog dialog = new SelectInnerOrMembersRefactoringDialog((PsiClass)elements[0], project);
-    dialog.show();
-    if (!dialog.isOK()) {
-      return;
-    }
-    MoveHandlerDelegate delegate = dialog.getRefactoringHandler();
-    if (delegate != null) {
-      delegate.doMove(project, elements, targetContainer, callback);
-    }
-  }
-
-  public boolean tryToMove(final PsiElement element, final Project project, final DataContext dataContext, final PsiReference reference,
-                           final Editor editor) {
-    if (isStaticInnerClass(element) && !JavaMoveClassesOrPackagesHandler.isReferenceInAnonymousClass(reference)) {
-      FeatureUsageTracker.getInstance().triggerFeatureUsed("refactoring.move.moveInner");
-      PsiClass aClass = (PsiClass) element;
-      SelectInnerOrMembersRefactoringDialog dialog = new SelectInnerOrMembersRefactoringDialog(aClass, project);
-      dialog.show();
-      if (dialog.isOK()) {
-        final MoveHandlerDelegate moveHandlerDelegate = dialog.getRefactoringHandler();
-        if (moveHandlerDelegate != null) {
-          moveHandlerDelegate.doMove(project, new PsiElement[] { aClass }, null, null);
+    @Override
+    public boolean canMove(final PsiElement[] elements, @Nullable final PsiElement targetContainer) {
+        if (elements.length != 1) {
+            return false;
         }
-      }
-      return true;
-    }
-    return false;
-  }
-
-  private static class SelectInnerOrMembersRefactoringDialog extends DialogWrapper {
-    private JRadioButton myRbMoveInner;
-    private JRadioButton myRbMoveMembers;
-    private final String myClassName;
-
-    public SelectInnerOrMembersRefactoringDialog(final PsiClass innerClass, Project project) {
-      super(project, true);
-      setTitle(RefactoringLocalize.selectRefactoringTitle());
-      myClassName = innerClass.getName();
-      init();
+        PsiElement element = elements[0];
+        return isStaticInnerClass(element) &&
+            (targetContainer == null || targetContainer.equals(MoveInnerImpl.getTargetContainer((PsiClass) elements[0], false)));
     }
 
-    protected JComponent createNorthPanel() {
-      return new JLabel(RefactoringLocalize.whatWouldYouLikeToDo().get());
+    private static boolean isStaticInnerClass(final PsiElement element) {
+        return element instanceof PsiClass && element.getParent() instanceof PsiClass &&
+            ((PsiClass) element).hasModifierProperty(PsiModifier.STATIC);
     }
 
-    public JComponent getPreferredFocusedComponent() {
-      return myRbMoveInner;
+    @Override
+    public void doMove(final Project project, final PsiElement[] elements, final PsiElement targetContainer, final MoveCallback callback) {
+        SelectInnerOrMembersRefactoringDialog dialog = new SelectInnerOrMembersRefactoringDialog((PsiClass) elements[0], project);
+        dialog.show();
+        if (!dialog.isOK()) {
+            return;
+        }
+        MoveHandlerDelegate delegate = dialog.getRefactoringHandler();
+        if (delegate != null) {
+            delegate.doMove(project, elements, targetContainer, callback);
+        }
     }
 
-    protected String getDimensionServiceKey() {
-      return "#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog";
+    @Override
+    public boolean tryToMove(final PsiElement element, final Project project, final DataContext dataContext, final PsiReference reference,
+                             final Editor editor) {
+        if (isStaticInnerClass(element) && !JavaMoveClassesOrPackagesHandler.isReferenceInAnonymousClass(reference)) {
+            FeatureUsageTracker.getInstance().triggerFeatureUsed("refactoring.move.moveInner");
+            PsiClass aClass = (PsiClass) element;
+            SelectInnerOrMembersRefactoringDialog dialog = new SelectInnerOrMembersRefactoringDialog(aClass, project);
+            dialog.show();
+            if (dialog.isOK()) {
+                final MoveHandlerDelegate moveHandlerDelegate = dialog.getRefactoringHandler();
+                if (moveHandlerDelegate != null) {
+                    moveHandlerDelegate.doMove(project, new PsiElement[]{aClass}, null, null);
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
-    protected JComponent createCenterPanel() {
-      JPanel panel = new JPanel(new BorderLayout());
-      myRbMoveInner = new JRadioButton();
-      myRbMoveInner.setText(RefactoringLocalize.moveInnerClassToUpperLevel(myClassName).get());
-      myRbMoveInner.setSelected(true);
-      myRbMoveMembers = new JRadioButton();
-      myRbMoveMembers.setText(RefactoringLocalize.moveInnerClassToAnotherClass(myClassName).get());
+    private static class SelectInnerOrMembersRefactoringDialog extends DialogWrapper {
+        private RadioButton myRbMoveInner;
+        private RadioButton myRbMoveMembers;
+        private final String myClassName;
 
+        public SelectInnerOrMembersRefactoringDialog(final PsiClass innerClass, Project project) {
+            super(project, true);
+            setTitle(RefactoringLocalize.selectRefactoringTitle());
+            myClassName = innerClass.getName();
+            init();
+        }
 
-      ButtonGroup gr = new ButtonGroup();
-      gr.add(myRbMoveInner);
-      gr.add(myRbMoveMembers);
+        @Override
+        public JComponent getPreferredFocusedComponent() {
+            return (JComponent) TargetAWT.to(myRbMoveInner);
+        }
 
-      new RadioUpDownListener(myRbMoveInner, myRbMoveMembers);
+        @Override
+        protected String getDimensionServiceKey() {
+            return "#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog";
+        }
 
-      Box box = Box.createVerticalBox();
-      box.add(Box.createVerticalStrut(5));
-      box.add(myRbMoveInner);
-      box.add(myRbMoveMembers);
-      panel.add(box, BorderLayout.CENTER);
-      return panel;
+        @Override
+        protected JComponent createCenterPanel() {
+            myRbMoveInner = RadioButton.create(RefactoringLocalize.moveInnerClassToUpperLevel(myClassName));
+            myRbMoveInner.setValue(true);
+            myRbMoveMembers = RadioButton.create(RefactoringLocalize.moveInnerClassToAnotherClass(myClassName));
+
+            ValueGroup<Boolean> group = ValueGroup.createBool();
+            group.add(myRbMoveInner);
+            group.add(myRbMoveMembers);
+
+            new RadioUpDownListener((JRadioButton) TargetAWT.to(myRbMoveInner), (JRadioButton) TargetAWT.to(myRbMoveMembers));
+
+            VerticalLayout layout = VerticalLayout.create();
+            layout.add(myRbMoveInner);
+            layout.add(myRbMoveMembers);
+
+            LabeledLayout labeledLayout = LabeledLayout.create(RefactoringLocalize.whatWouldYouLikeToDo(), layout);
+            return (JComponent) TargetAWT.to(labeledLayout);
+        }
+
+        @Nullable
+        public MoveHandlerDelegate getRefactoringHandler() {
+            if (myRbMoveInner.getValueOrError()) {
+                return new MoveInnerToUpperHandler();
+            }
+            if (myRbMoveMembers.getValueOrError()) {
+                return new MoveMembersHandler();
+            }
+            return null;
+        }
     }
-
-    @Nullable
-    public MoveHandlerDelegate getRefactoringHandler() {
-      if (myRbMoveInner.isSelected()) {
-        return new MoveInnerToUpperHandler();
-      }
-      if (myRbMoveMembers.isSelected()) {
-        return new MoveMembersHandler();
-      }
-      return null;
-    }
-  }
 }
