@@ -31,7 +31,7 @@ import java.util.stream.Stream;
  * @see JavaSdkVersion
  * @see JavaFeature
  */
-public enum LanguageLevel implements Named, NamedPointer<LanguageLevel> {
+public enum LanguageLevel implements Named, NamedPointer<LanguageLevel>  {
   JDK_1_3(JavaLanguageLocalize.jdk1_3LanguageLevelDescription(), 3),
   JDK_1_4(JavaLanguageLocalize.jdk1_4LanguageLevelDescription(), 4),
   JDK_1_5(JavaLanguageLocalize.jdk1_5LanguageLevelDescription(), 5),
