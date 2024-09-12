@@ -47,7 +47,7 @@ import consulo.project.Project;
 import consulo.project.localize.ProjectLocalize;
 import consulo.ui.Component;
 import consulo.ui.annotation.RequiredUIAccess;
-import consulo.ui.event.UIEvent;
+import consulo.ui.event.ComponentEvent;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.ex.popup.BaseListPopupStep;
@@ -288,7 +288,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 		}
 
 		@Override
-		public AsyncResult<Void> perform(List<LibraryOrderEntry> orderEntriesContainingFile, @Nonnull UIEvent<Component> e)
+		public AsyncResult<Void> perform(List<LibraryOrderEntry> orderEntriesContainingFile, @Nonnull ComponentEvent<Component> e)
 		{
 			final List<Library.ModifiableModel> modelsToCommit = new ArrayList<>();
 			for (LibraryOrderEntry orderEntry : orderEntriesContainingFile)
@@ -358,7 +358,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 
 		@Override
 		@RequiredUIAccess
-		public AsyncResult<Void> perform(final List<LibraryOrderEntry> libraries, UIEvent<Component> e)
+		public AsyncResult<Void> perform(final List<LibraryOrderEntry> libraries, ComponentEvent<Component> e)
 		{
 			FileChooserDescriptor descriptor = FileChooserDescriptorFactory.createMultipleJavaPathDescriptor();
 			descriptor.withTitleValue(ProjectLocalize.libraryAttachSourcesAction());
