@@ -25,8 +25,8 @@ import consulo.language.editor.ui.awt.EditorTextField;
 import consulo.localize.LocalizeValue;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.*;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -41,7 +41,7 @@ import java.util.Set;
  * @author ven
  */
 public class MoveInstanceMethodDialog extends MoveInstanceMethodDialogBase {
-  @NonNls private static final String KEY = "#com.intellij.refactoring.move.moveInstanceMethod.MoveInstanceMethodDialog";
+  private static final String KEY = "#com.intellij.refactoring.move.moveInstanceMethod.MoveInstanceMethodDialog";
 
   //Map from classes referenced by 'this' to sets of referenced members
   private Map<PsiClass, Set<PsiMember>> myThisClassesMap;
@@ -54,10 +54,12 @@ public class MoveInstanceMethodDialog extends MoveInstanceMethodDialogBase {
     init();
   }
 
+  @Override
   protected String getDimensionServiceKey() {
     return KEY;
   }
 
+  @Override
   protected JComponent createCenterPanel() {
     JPanel mainPanel = new JPanel(new GridBagLayout());
     final TitledSeparator separator = new TitledSeparator();
@@ -65,6 +67,7 @@ public class MoveInstanceMethodDialog extends MoveInstanceMethodDialogBase {
 
     myList = createTargetVariableChooser();
     myList.addListSelectionListener(new ListSelectionListener() {
+      @Override
       public void valueChanged(ListSelectionEvent e) {
         validateTextFields(e.getFirstIndex());
       }
@@ -76,7 +79,7 @@ public class MoveInstanceMethodDialog extends MoveInstanceMethodDialogBase {
     mainPanel.add(scrollPane, new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0,0,0,0), 0,0));
 
     myVisibilityPanel = createVisibilityPanel();
-    mainPanel.add(myVisibilityPanel, new GridBagConstraints(1, GridBagConstraints.RELATIVE, 1, 1, 0.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.VERTICAL, new Insets(0,0,0,0), 0,0));
+    mainPanel.add(TargetAWT.to(myVisibilityPanel.getComponent()), new GridBagConstraints(1, GridBagConstraints.RELATIVE, 1, 1, 0.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.VERTICAL, new Insets(0,0,0,0), 0,0));
 
     final JPanel parametersPanel = createParametersPanel();
     if (parametersPanel != null) {
@@ -126,6 +129,7 @@ public class MoveInstanceMethodDialog extends MoveInstanceMethodDialogBase {
     return panel;
   }
 
+  @Override
   @RequiredUIAccess
   protected void doAction() {
     Map<PsiClass, String> parameterNames = new LinkedHashMap<PsiClass, String>();
@@ -158,10 +162,11 @@ public class MoveInstanceMethodDialog extends MoveInstanceMethodDialogBase {
     if (selectedValue != null) {
       final PsiClassType psiType = (PsiClassType)selectedValue.getType();
       final PsiClass targetClass = psiType.resolve();
-      UIUtil.setEnabled(myVisibilityPanel, targetClass != null && !targetClass.isInterface(), true);
+      UIUtil.setEnabled(TargetAWT.to(myVisibilityPanel.getComponent()), targetClass != null && !targetClass.isInterface(), true);
     }
   }
 
+  @Override
   protected void doHelpAction() {
     HelpManager.getInstance().invokeHelp(HelpID.MOVE_INSTANCE_METHOD);
   }

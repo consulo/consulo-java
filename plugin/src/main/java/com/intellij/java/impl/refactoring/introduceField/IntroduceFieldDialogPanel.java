@@ -15,6 +15,9 @@
  */
 package com.intellij.java.impl.refactoring.introduceField;
 
+import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
+import com.intellij.java.impl.refactoring.ui.JavaVisibilityPanel;
+import com.intellij.java.impl.refactoring.ui.TypeSelectorManager;
 import com.intellij.java.language.codeInsight.TestFrameworks;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiExpression;
@@ -22,11 +25,8 @@ import com.intellij.java.language.psi.PsiLocalVariable;
 import com.intellij.java.language.psi.PsiMethod;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import com.intellij.java.impl.refactoring.ui.JavaVisibilityPanel;
-import com.intellij.java.impl.refactoring.ui.TypeSelectorManager;
 import consulo.ui.ex.awt.IdeBorderFactory;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 
 import javax.swing.*;
 import java.awt.*;
@@ -189,7 +189,7 @@ public class IntroduceFieldDialogPanel extends IntroduceFieldCentralPanel {
     groupPanel.add(initializationPanel);
 
     myVisibilityPanel = new JavaVisibilityPanel(false, false);
-    groupPanel.add(myVisibilityPanel);
+    groupPanel.add(TargetAWT.to(myVisibilityPanel.getComponent()));
 
     mainPanel.add(groupPanel, BorderLayout.CENTER);
 

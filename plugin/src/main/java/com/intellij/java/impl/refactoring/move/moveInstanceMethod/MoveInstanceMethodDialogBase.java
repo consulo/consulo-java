@@ -79,7 +79,7 @@ public abstract class MoveInstanceMethodDialogBase extends RefactoringDialog {
     gbConstraints.anchor = GridBagConstraints.NORTH;
     gbConstraints.gridx++;
     myVisibilityPanel = createVisibilityPanel();
-    hBox.add (myVisibilityPanel, gbConstraints);
+    hBox.add (TargetAWT.to(myVisibilityPanel.getComponent()), gbConstraints);
     return hBox;
   }
 

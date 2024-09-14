@@ -52,6 +52,7 @@ import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.StateRestoringCheckBox;
 import consulo.ui.ex.awt.UIUtil;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.usage.UsageViewUtil;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.Comparing;
@@ -129,7 +130,7 @@ class IntroduceConstantDialog extends DialogWrapper {
     setTitle(IntroduceConstantHandlerImpl.REFACTORING_NAME);
     myCodeStyleManager = JavaCodeStyleManager.getInstance(myProject);
     myVPanel = new JavaVisibilityPanel(false, true);
-    myVisibilityPanel.add(myVPanel, BorderLayout.CENTER);
+    myVisibilityPanel.add(TargetAWT.to(myVPanel.getComponent()), BorderLayout.CENTER);
     init();
 
     myVPanel.setVisibility(JavaRefactoringSettings.getInstance().INTRODUCE_CONSTANT_VISIBILITY);

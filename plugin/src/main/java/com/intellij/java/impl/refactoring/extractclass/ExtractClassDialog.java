@@ -45,6 +45,7 @@ import consulo.ui.ex.awt.JBLabelDecorator;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.ex.awt.event.DocumentAdapter;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -162,7 +163,7 @@ class ExtractClassDialog extends RefactoringDialog implements MemberInfoChangeLi
                                                                       ? enumConstants
                                                                       : Collections.<MemberInfo>emptyList());
     if (processor.getCreatedClass() == null) {
-      Messages.showErrorDialog(myVisibilityPanel, "Unable to create class with the given name");
+      Messages.showErrorDialog(TargetAWT.to(myVisibilityPanel.getComponent()), "Unable to create class with the given name");
       classNameField.requestFocusInWindow();
       return;
     }
@@ -361,7 +362,7 @@ class ExtractClassDialog extends RefactoringDialog implements MemberInfoChangeLi
     myGenerateAccessorsCb.setMnemonic('G');
     panel.add(myGenerateAccessorsCb, BorderLayout.SOUTH);
 
-    panel.add(myVisibilityPanel, BorderLayout.EAST);
+    panel.add(TargetAWT.to(myVisibilityPanel.getComponent()), BorderLayout.EAST);
     return panel;
   }
 

@@ -50,6 +50,7 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.RecentsManager;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.undoRedo.CommandProcessor;
 import consulo.usage.UsageViewUtil;
 import consulo.util.lang.ref.Ref;
@@ -205,6 +206,7 @@ public class MoveMembersDialog extends RefactoringDialog implements MoveMembersO
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected JComponent createCenterPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         final LocalizeValue title = RefactoringLocalize.moveMembersMembersToBeMovedBorderTitle();
@@ -218,7 +220,7 @@ public class MoveMembersDialog extends RefactoringDialog implements MoveMembersO
 
         myVisibilityPanel = new JavaVisibilityPanel(true, true);
         myVisibilityPanel.setVisibility(null);
-        panel.add(myVisibilityPanel, BorderLayout.EAST);
+        panel.add(TargetAWT.to(myVisibilityPanel.getComponent()), BorderLayout.EAST);
 
         return panel;
     }

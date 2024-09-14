@@ -26,134 +26,118 @@ package com.intellij.java.impl.refactoring.ui;
 
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.util.VisibilityUtil;
-import consulo.ide.impl.idea.refactoring.ui.VisibilityPanelBase;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
-import consulo.ui.ex.awt.IdeBorderFactory;
-import consulo.ui.ex.awt.UIUtil;
+import consulo.language.editor.ui.VisibilityPanelBase;
+import consulo.ui.Component;
+import consulo.ui.RadioButton;
+import consulo.ui.ValueComponent;
+import consulo.ui.ValueGroup;
+import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.event.ComponentEventListener;
+import consulo.ui.event.ValueComponentEvent;
+import consulo.ui.layout.LabeledLayout;
+import consulo.ui.layout.VerticalLayout;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import java.awt.*;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-
 public class JavaVisibilityPanel extends VisibilityPanelBase<String> {
-    private JRadioButton myRbAsIs;
-    private JRadioButton myRbEscalate;
-    private final JRadioButton myRbPrivate;
-    private final JRadioButton myRbProtected;
-    private final JRadioButton myRbPackageLocal;
-    private final JRadioButton myRbPublic;
+    private RadioButton myRbAsIs;
+    private RadioButton myRbEscalate;
+    private final RadioButton myRbPrivate;
+    private final RadioButton myRbProtected;
+    private final RadioButton myRbPackageLocal;
+    private final RadioButton myRbPublic;
+
+    private final LabeledLayout myLayout;
 
     public JavaVisibilityPanel(boolean hasAsIs, final boolean hasEscalate) {
-        setBorder(IdeBorderFactory.createTitledBorder(
-            RefactoringLocalize.visibilityBorderTitle().get(),
-            true,
-            new Insets(
-                IdeBorderFactory.TITLED_BORDER_TOP_INSET,
-                UIUtil.DEFAULT_HGAP,
-                IdeBorderFactory.TITLED_BORDER_BOTTOM_INSET,
-                IdeBorderFactory.TITLED_BORDER_RIGHT_INSET
-            )
-        ));
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        ButtonGroup bg = new ButtonGroup();
+        VerticalLayout layout = VerticalLayout.create();
 
-        ItemListener listener = new ItemListener() {
-            public void itemStateChanged(ItemEvent e) {
-                if (e.getStateChange() == ItemEvent.SELECTED) {
-                    myEventDispatcher.getMulticaster().stateChanged(new ChangeEvent(this));
-                }
-            }
+        ValueGroup<Boolean> bg = ValueGroup.createBool();
+
+        ComponentEventListener<ValueComponent<Boolean>, ValueComponentEvent<Boolean>> listener = e -> {
+            myEventDispatcher.getMulticaster().visibilityChanged(this);
         };
 
         if (hasEscalate) {
-            myRbEscalate = new JRadioButton();
-            myRbEscalate.setText(RefactoringLocalize.visibilityEscalate().get());
-            myRbEscalate.addItemListener(listener);
-            add(myRbEscalate);
+            myRbEscalate = RadioButton.create(RefactoringLocalize.visibilityEscalate());
+            myRbEscalate.addValueListener(listener);
+            layout.add(myRbEscalate);
             bg.add(myRbEscalate);
         }
 
         if (hasAsIs) {
-            myRbAsIs = new JRadioButton();
-            myRbAsIs.setText(RefactoringLocalize.visibilityAsIs().get());
-            myRbAsIs.addItemListener(listener);
-            add(myRbAsIs);
+            myRbAsIs = RadioButton.create(RefactoringLocalize.visibilityAsIs());
+            myRbAsIs.addValueListener(listener);
+            layout.add(myRbAsIs);
             bg.add(myRbAsIs);
         }
 
-
-        myRbPrivate = new JRadioButton();
-        myRbPrivate.setText(RefactoringLocalize.visibilityPrivate().get());
-        myRbPrivate.addItemListener(listener);
-        myRbPrivate.setFocusable(false);
-        add(myRbPrivate);
+        myRbPrivate = RadioButton.create(RefactoringLocalize.visibilityPrivate());
+        myRbPrivate.addValueListener(listener);
+        layout.add(myRbPrivate);
         bg.add(myRbPrivate);
 
-        myRbPackageLocal = new JRadioButton();
-        myRbPackageLocal.setText(RefactoringLocalize.visibilityPackageLocal().get());
-        myRbPackageLocal.addItemListener(listener);
-        myRbPackageLocal.setFocusable(false);
-        add(myRbPackageLocal);
+        myRbPackageLocal = RadioButton.create(RefactoringLocalize.visibilityPackageLocal());
+        myRbPackageLocal.addValueListener(listener);
+        layout.add(myRbPackageLocal);
         bg.add(myRbPackageLocal);
 
-        myRbProtected = new JRadioButton();
-        myRbProtected.setText(RefactoringLocalize.visibilityProtected().get());
-        myRbProtected.addItemListener(listener);
-        myRbProtected.setFocusable(false);
-        add(myRbProtected);
+        myRbProtected = RadioButton.create(RefactoringLocalize.visibilityProtected());
+        myRbProtected.addValueListener(listener);
+        layout.add(myRbProtected);
         bg.add(myRbProtected);
 
-        myRbPublic = new JRadioButton();
-        myRbPublic.setText(RefactoringLocalize.visibilityPublic().get());
-        myRbPublic.addItemListener(listener);
-        myRbPublic.setFocusable(false);
-        add(myRbPublic);
+        myRbPublic = RadioButton.create(RefactoringLocalize.visibilityPublic());
+        myRbPublic.addValueListener(listener);
+        layout.add(myRbPublic);
         bg.add(myRbPublic);
+
+        myLayout = LabeledLayout.create(RefactoringLocalize.visibilityBorderTitle(), layout);
     }
 
-
+    @Override
     @Nullable
+    @RequiredUIAccess
     public String getVisibility() {
-        if (myRbPublic.isSelected()) {
+        if (myRbPublic.getValueOrError()) {
             return PsiModifier.PUBLIC;
         }
-        if (myRbPackageLocal.isSelected()) {
+        if (myRbPackageLocal.getValueOrError()) {
             return PsiModifier.PACKAGE_LOCAL;
         }
-        if (myRbProtected.isSelected()) {
+        if (myRbProtected.getValueOrError()) {
             return PsiModifier.PROTECTED;
         }
-        if (myRbPrivate.isSelected()) {
+        if (myRbPrivate.getValueOrError()) {
             return PsiModifier.PRIVATE;
         }
-        if (myRbEscalate != null && myRbEscalate.isSelected()) {
+        if (myRbEscalate != null && myRbEscalate.getValueOrError()) {
             return VisibilityUtil.ESCALATE_VISIBILITY;
         }
 
         return null;
     }
 
+    @Override
     public void setVisibility(@Nullable String visibility) {
         if (PsiModifier.PUBLIC.equals(visibility)) {
-            myRbPublic.setSelected(true);
+            myRbPublic.setValue(true);
         }
         else if (PsiModifier.PROTECTED.equals(visibility)) {
-            myRbProtected.setSelected(true);
+            myRbProtected.setValue(true);
         }
         else if (PsiModifier.PACKAGE_LOCAL.equals(visibility)) {
-            myRbPackageLocal.setSelected(true);
+            myRbPackageLocal.setValue(true);
         }
         else if (PsiModifier.PRIVATE.equals(visibility)) {
-            myRbPrivate.setSelected(true);
+            myRbPrivate.setValue(true);
         }
         else if (myRbEscalate != null) {
-            myRbEscalate.setSelected(true);
+            myRbEscalate.setValue(true);
         }
         else if (myRbAsIs != null) {
-            myRbAsIs.setSelected(true);
+            myRbAsIs.setValue(true);
         }
     }
 
@@ -168,6 +152,12 @@ public class JavaVisibilityPanel extends VisibilityPanelBase<String> {
             myRbAsIs.setEnabled(false);
         }
         myRbPublic.setEnabled(true);
-        myRbPublic.setSelected(true);
+        myRbPublic.setValue(true);
+    }
+
+    @Nonnull
+    @Override
+    public Component getComponent() {
+        return myLayout;
     }
 }
