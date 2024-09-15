@@ -21,9 +21,12 @@ import com.intellij.java.language.psi.PsiCall;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import consulo.application.HelpManager;
+import consulo.language.editor.refactoring.inline.InlineOptionsWithSearchSettingsDialog;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import consulo.ide.impl.idea.refactoring.inline.InlineOptionsWithSearchSettingsDialog;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author yole
@@ -41,23 +44,32 @@ public class InlineToAnonymousClassDialog extends InlineOptionsWithSearchSetting
     init();
   }
 
-  protected String getNameLabelText() {
+  @Nonnull
+  @Override
+  protected LocalizeValue getNameLabelText() {
     String className = PsiFormatUtil.formatClass(myClass, PsiFormatUtil.SHOW_NAME);
-    return RefactoringLocalize.inlineToAnonymousNameLabel(className).get();
+    return RefactoringLocalize.inlineToAnonymousNameLabel(className);
   }
 
-  protected String getBorderTitle() {
-    return RefactoringLocalize.inlineToAnonymousBorderTitle().get();
+  @Nonnull
+  @Override
+  protected LocalizeValue getBorderTitle() {
+    return RefactoringLocalize.inlineToAnonymousBorderTitle();
   }
 
-  protected String getInlineAllText() {
-    return RefactoringLocalize.allReferencesAndRemoveTheClass().get();
+  @Nonnull
+  @Override
+  protected LocalizeValue getInlineAllText() {
+    return RefactoringLocalize.allReferencesAndRemoveTheClass();
   }
 
-  protected String getInlineThisText() {
-    return RefactoringLocalize.thisReferenceOnlyAndKeepTheClass().get();
+  @Nonnull
+  @Override
+  protected LocalizeValue getInlineThisText() {
+    return RefactoringLocalize.thisReferenceOnlyAndKeepTheClass();
   }
 
+  @Override
   protected boolean isInlineThis() {
     return false;
   }
@@ -72,6 +84,7 @@ public class InlineToAnonymousClassDialog extends InlineOptionsWithSearchSetting
     return JavaRefactoringSettings.getInstance().INLINE_CLASS_SEARCH_IN_NON_JAVA;
   }
 
+  @Override
   protected void doAction() {
     super.doAction();
     invokeRefactoring(new InlineToAnonymousClassProcessor(getProject(), myClass, myCallToInline, isInlineThisOnly(),
@@ -88,6 +101,7 @@ public class InlineToAnonymousClassDialog extends InlineOptionsWithSearchSetting
     JavaRefactoringSettings.getInstance().INLINE_CLASS_SEARCH_IN_NON_JAVA = searchInTextOccurrences;
   }
 
+  @Override
   protected void doHelpAction() {
     HelpManager.getInstance().invokeHelp(HelpID.INLINE_CLASS);
   }

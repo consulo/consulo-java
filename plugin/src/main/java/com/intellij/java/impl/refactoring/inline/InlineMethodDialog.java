@@ -23,10 +23,13 @@ import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import consulo.application.HelpManager;
 import consulo.codeEditor.Editor;
-import consulo.language.editor.refactoring.localize.RefactoringLocalize;
-import consulo.project.Project;
 import consulo.language.editor.refactoring.RefactoringBundle;
-import consulo.ide.impl.idea.refactoring.inline.InlineOptionsWithSearchSettingsDialog;
+import consulo.language.editor.refactoring.inline.InlineOptionsWithSearchSettingsDialog;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
 
 public class InlineMethodDialog extends InlineOptionsWithSearchSettingsDialog {
   public static final String REFACTORING_NAME = RefactoringBundle.message("inline.method.title");
@@ -52,29 +55,37 @@ public class InlineMethodDialog extends InlineOptionsWithSearchSettingsDialog {
     init();
   }
 
-  protected String getNameLabelText() {
+  @Nonnull
+  @Override
+  protected LocalizeValue getNameLabelText() {
     String methodText = PsiFormatUtil.formatMethod(myMethod,
         PsiSubstitutor.EMPTY, PsiFormatUtil.SHOW_NAME | PsiFormatUtil.SHOW_PARAMETERS, PsiFormatUtil.SHOW_TYPE);
-    return RefactoringLocalize.inlineMethodMethodLabel(methodText).get();
+    return RefactoringLocalize.inlineMethodMethodLabel(methodText);
   }
 
-  protected String getBorderTitle() {
-    return RefactoringLocalize.inlineMethodBorderTitle().get();
+  @Nonnull
+  @Override
+  protected LocalizeValue getBorderTitle() {
+    return RefactoringLocalize.inlineMethodBorderTitle();
   }
 
-  protected String getInlineThisText() {
-    return RefactoringLocalize.thisInvocationOnlyAndKeepTheMethod().get();
+  @Nonnull
+  @Override
+  protected LocalizeValue getInlineThisText() {
+    return RefactoringLocalize.thisInvocationOnlyAndKeepTheMethod();
   }
 
-  protected String getInlineAllText() {
+  @Nonnull
+  @Override
+  protected LocalizeValue getInlineAllText() {
     final String occurrencesString = myOccurrencesNumber > -1 ? " (" + myOccurrencesNumber + " occurrence" + (myOccurrencesNumber == 1 ? ")" : "s)") : "";
-    return (
-      myMethod.isWritable()
-        ? RefactoringLocalize.allInvocationsAndRemoveTheMethod().get()
-        : RefactoringLocalize.allInvocationsInProject().get()
-    ) + occurrencesString;
+      LocalizeValue prefix = myMethod.isWritable()
+          ? RefactoringLocalize.allInvocationsAndRemoveTheMethod()
+          : RefactoringLocalize.allInvocationsInProject();
+      return LocalizeValue.join(prefix, LocalizeValue.localizeTODO(occurrencesString));
   }
 
+  @Override
   protected void doAction() {
     super.doAction();
     invokeRefactoring(
@@ -86,15 +97,18 @@ public class InlineMethodDialog extends InlineOptionsWithSearchSettingsDialog {
     }
   }
 
+  @Override
   protected void doHelpAction() {
     if (myMethod.isConstructor()) HelpManager.getInstance().invokeHelp(HelpID.INLINE_CONSTRUCTOR);
     else HelpManager.getInstance().invokeHelp(HelpID.INLINE_METHOD);
   }
 
+  @Override
   protected boolean canInlineThisOnly() {
     return InlineMethodHandler.checkRecursive(myMethod) || myAllowInlineThisOnly;
   }
 
+  @Override
   protected boolean isInlineThis() {
     return JavaRefactoringSettings.getInstance().INLINE_METHOD_THIS;
   }

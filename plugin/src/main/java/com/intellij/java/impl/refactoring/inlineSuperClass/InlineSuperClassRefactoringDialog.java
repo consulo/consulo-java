@@ -22,18 +22,18 @@ package com.intellij.java.impl.refactoring.inlineSuperClass;
 
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.ide.impl.idea.refactoring.inline.InlineOptionsDialog;
 import consulo.ide.impl.idea.refactoring.ui.DocCommentPanel;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.inline.InlineOptionsDialog;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.ex.awt.IdeBorderFactory;
+import consulo.ui.ex.awt.JBUI;
 import consulo.util.lang.StringUtil;
-
 import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 import java.awt.*;
-import java.util.function.Function;
 
 public class InlineSuperClassRefactoringDialog extends InlineOptionsDialog {
   private final PsiClass mySuperClass;
@@ -53,6 +53,7 @@ public class InlineSuperClassRefactoringDialog extends InlineOptionsDialog {
     setTitle(InlineSuperClassRefactoringHandler.REFACTORING_NAME);
   }
 
+  @Override
   protected void doAction() {
     JavaRefactoringSettings settings = JavaRefactoringSettings.getInstance();
     if (myRbInlineThisOnly.isEnabled() && myRbInlineAll.isEnabled()) {
@@ -66,22 +67,19 @@ public class InlineSuperClassRefactoringDialog extends InlineOptionsDialog {
     return null;
   }
 
+  @Override
   protected JComponent createCenterPanel() {
     final JLabel label = new JLabel("<html>Super class \'" +
         mySuperClass.getQualifiedName() +
         "\' inheritors: " +
         (myTargetClasses.length > 1 ? " <br>&nbsp;&nbsp;&nbsp;\'" : "\'") +
-        StringUtil.join(myTargetClasses, new Function<PsiClass, String>() {
-          public String apply(final PsiClass psiClass) {
-            return psiClass.getQualifiedName();
-          }
-        }, "\',<br>&nbsp;&nbsp;&nbsp;\'") +
+        StringUtil.join(myTargetClasses, PsiClass::getQualifiedName, "\',<br>&nbsp;&nbsp;&nbsp;\'") +
         "\'</html>");
     label.setBorder(IdeBorderFactory.createEmptyBorder(5, 5, 5, 5));
     final JPanel panel = new JPanel(new GridBagLayout());
     final GridBagConstraints gc =
         new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-            new Insets(0, 0, 0, 0), 0, 0);
+            JBUI.emptyInsets(), 0, 0);
     panel.add(myDocPanel, gc);
     panel.add(label, gc);
     gc.weighty = 1;
@@ -90,24 +88,28 @@ public class InlineSuperClassRefactoringDialog extends InlineOptionsDialog {
     return panel;
   }
 
+  @Nonnull
   @Override
-  protected String getNameLabelText() {
-    return "Class " + mySuperClass.getQualifiedName();
+  protected LocalizeValue getNameLabelText() {
+    return LocalizeValue.join(LocalizeValue.localizeTODO("Class "), LocalizeValue.of(mySuperClass.getQualifiedName()));
   }
 
+  @Nonnull
   @Override
-  protected String getBorderTitle() {
-    return "Inline";
+  protected LocalizeValue getBorderTitle() {
+      return RefactoringLocalize.inlineMethodBorderTitle();
   }
 
+  @Nonnull
   @Override
-  protected String getInlineAllText() {
-    return RefactoringLocalize.allReferencesAndRemoveSuperClass().get();
+  protected LocalizeValue getInlineAllText() {
+    return RefactoringLocalize.allReferencesAndRemoveSuperClass();
   }
 
+  @Nonnull
   @Override
-  protected String getInlineThisText() {
-    return RefactoringLocalize.thisReferenceOnlyAndKeepSuperClass().get();
+  protected LocalizeValue getInlineThisText() {
+    return RefactoringLocalize.thisReferenceOnlyAndKeepSuperClass();
   }
 
   @Override

@@ -22,10 +22,13 @@ import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import consulo.application.HelpManager;
-import consulo.language.editor.refactoring.localize.RefactoringLocalize;
-import consulo.project.Project;
 import consulo.language.editor.refactoring.RefactoringBundle;
-import consulo.ide.impl.idea.refactoring.inline.InlineOptionsWithSearchSettingsDialog;
+import consulo.language.editor.refactoring.inline.InlineOptionsWithSearchSettingsDialog;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
+import consulo.localize.LocalizeValue;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
 
 public class InlineFieldDialog extends InlineOptionsWithSearchSettingsDialog {
   public static final String REFACTORING_NAME = RefactoringBundle.message("inline.field.title");
@@ -45,24 +48,33 @@ public class InlineFieldDialog extends InlineOptionsWithSearchSettingsDialog {
     init();
   }
 
-  protected String getNameLabelText() {
+  @Nonnull
+  @Override
+  protected LocalizeValue getNameLabelText() {
     String fieldText = PsiFormatUtil.formatVariable(myField, PsiFormatUtil.SHOW_NAME | PsiFormatUtil.SHOW_TYPE, PsiSubstitutor.EMPTY);
-    return RefactoringLocalize.inlineFieldFieldNameLabel(fieldText).get();
+    return RefactoringLocalize.inlineFieldFieldNameLabel(fieldText);
   }
 
-  protected String getBorderTitle() {
-    return RefactoringLocalize.inlineFieldBorderTitle().get();
+  @Nonnull
+  @Override
+  protected LocalizeValue getBorderTitle() {
+    return RefactoringLocalize.inlineFieldBorderTitle();
   }
 
-  protected String getInlineThisText() {
-    return RefactoringLocalize.thisReferenceOnlyAndKeepTheField().get();
+  @Nonnull
+  @Override
+  protected LocalizeValue getInlineThisText() {
+    return RefactoringLocalize.thisReferenceOnlyAndKeepTheField();
   }
 
-  protected String getInlineAllText() {
+  @Nonnull
+  @Override
+  protected LocalizeValue getInlineAllText() {
     final String occurrencesString = myOccurrencesNumber > -1 ? " (" + myOccurrencesNumber + " occurrence" + (myOccurrencesNumber == 1 ? ")" : "s)") : "";
-    return RefactoringLocalize.allReferencesAndRemoveTheField() + occurrencesString;
+    return LocalizeValue.join(RefactoringLocalize.allReferencesAndRemoveTheField(), LocalizeValue.localizeTODO(occurrencesString));
   }
 
+  @Override
   protected boolean isInlineThis() {
     return JavaRefactoringSettings.getInstance().INLINE_FIELD_THIS;
   }
@@ -87,6 +99,7 @@ public class InlineFieldDialog extends InlineOptionsWithSearchSettingsDialog {
     JavaRefactoringSettings.getInstance().RENAME_SEARCH_FOR_TEXT_FOR_FIELD = searchInTextOccurrences;
   }
 
+  @Override
   protected void doAction() {
     super.doAction();
     invokeRefactoring(
@@ -98,6 +111,7 @@ public class InlineFieldDialog extends InlineOptionsWithSearchSettingsDialog {
     }
   }
 
+  @Override
   protected void doHelpAction() {
     HelpManager.getInstance().invokeHelp(HelpID.INLINE_FIELD);
   }

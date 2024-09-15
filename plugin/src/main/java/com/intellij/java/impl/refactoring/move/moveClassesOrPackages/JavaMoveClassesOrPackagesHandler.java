@@ -31,7 +31,7 @@ import consulo.language.editor.refactoring.move.MoveCallback;
 import consulo.language.editor.refactoring.move.MoveHandlerDelegate;
 import consulo.language.editor.refactoring.move.fileOrDirectory.MoveFilesOrDirectoriesUtil;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
-import consulo.language.editor.ui.RadioUpDownListener;
+import consulo.language.editor.ui.awt.RadioUpDownListener;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;

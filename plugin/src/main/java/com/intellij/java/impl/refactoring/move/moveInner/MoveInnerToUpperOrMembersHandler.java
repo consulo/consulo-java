@@ -26,17 +26,16 @@ import consulo.externalService.statistic.FeatureUsageTracker;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.move.MoveCallback;
 import consulo.language.editor.refactoring.move.MoveHandlerDelegate;
-import consulo.language.editor.ui.RadioUpDownListener;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.project.Project;
-import consulo.ui.Label;
 import consulo.ui.RadioButton;
 import consulo.ui.ValueGroup;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.layout.LabeledLayout;
 import consulo.ui.layout.VerticalLayout;
+import consulo.ui.util.RadioUpDownListener;
 import jakarta.annotation.Nullable;
 
 import javax.swing.*;
@@ -122,7 +121,7 @@ public class MoveInnerToUpperOrMembersHandler extends MoveHandlerDelegate {
             group.add(myRbMoveInner);
             group.add(myRbMoveMembers);
 
-            new RadioUpDownListener((JRadioButton) TargetAWT.to(myRbMoveInner), (JRadioButton) TargetAWT.to(myRbMoveMembers));
+            RadioUpDownListener.registerListener(myRbMoveInner, myRbMoveMembers);
 
             VerticalLayout layout = VerticalLayout.create();
             layout.add(myRbMoveInner);
