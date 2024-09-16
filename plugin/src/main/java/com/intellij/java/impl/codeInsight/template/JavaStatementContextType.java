@@ -10,7 +10,7 @@ import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
-public class JavaStatementContextType extends JavaCodeContextType {
+public class JavaStatementContextType extends JavaCodeContextType implements JavaLikeStatementContextType {
   public JavaStatementContextType() {
     super("JAVA_STATEMENT", LocalizeValue.localizeTODO("Statement"), JavaGenericContextType.class);
   }

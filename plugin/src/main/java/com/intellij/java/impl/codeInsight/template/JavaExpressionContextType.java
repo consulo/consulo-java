@@ -13,7 +13,7 @@ import jakarta.annotation.Nonnull;
 import static consulo.language.pattern.PlatformPatterns.psiElement;
 
 @ExtensionImpl
-public class JavaExpressionContextType extends JavaCodeContextType {
+public class JavaExpressionContextType extends JavaCodeContextType implements JavaLikeExpressionContextType {
   public JavaExpressionContextType() {
     super("JAVA_EXPRESSION", LocalizeValue.localizeTODO("Expression"), JavaGenericContextType.class);
   }

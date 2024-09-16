@@ -8,7 +8,7 @@ import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
-public class JavaGenericContextType extends JavaCodeContextType {
+public class JavaGenericContextType extends JavaCodeContextType implements JavaLikeCodeContextType {
   public JavaGenericContextType() {
     super("JAVA_CODE", LocalizeValue.localizeTODO("Java"), EverywhereContextType.class);
   }
