@@ -17,7 +17,7 @@ package com.intellij.java.impl.codeInsight.template;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.localize.CodeInsightLocalize;
-import consulo.language.editor.template.context.TemplateContextType;
+import consulo.language.editor.template.context.BaseTemplateContextType;
 import consulo.language.psi.PsiFile;
 import jakarta.annotation.Nonnull;
 
@@ -25,9 +25,9 @@ import jakarta.annotation.Nonnull;
  * @author yole
  */
 @ExtensionImpl
-public class SmartCompletionContextType extends TemplateContextType {
+public class SmartCompletionContextType extends BaseTemplateContextType {
   public SmartCompletionContextType() {
-    super("COMPLETION", CodeInsightLocalize.dialogEditTemplateCheckboxSmartTypeCompletion().get(), JavaCodeContextType.class);
+    super("COMPLETION", CodeInsightLocalize.dialogEditTemplateCheckboxSmartTypeCompletion(), JavaCodeContextType.class);
   }
 
   @Override
@@ -39,5 +39,4 @@ public class SmartCompletionContextType extends TemplateContextType {
   public boolean isExpandableFromEditor() {
     return false;
   }
-
 }

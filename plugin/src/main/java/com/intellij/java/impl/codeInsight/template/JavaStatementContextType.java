@@ -6,12 +6,13 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class JavaStatementContextType extends JavaCodeContextType {
   public JavaStatementContextType() {
-    super("JAVA_STATEMENT", "Statement", JavaGenericContextType.class);
+    super("JAVA_STATEMENT", LocalizeValue.localizeTODO("Statement"), JavaGenericContextType.class);
   }
 
   @Override

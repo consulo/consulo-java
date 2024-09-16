@@ -24,12 +24,12 @@ import com.intellij.java.language.psi.PsiExpression;
 import consulo.document.Document;
 import consulo.language.editor.DaemonCodeAnalyzer;
 import consulo.language.editor.highlight.SyntaxHighlighter;
-import consulo.language.editor.template.context.TemplateContextType;
+import consulo.language.editor.template.context.BaseTemplateContextType;
+import consulo.language.editor.template.context.TemplateActionContext;
 import consulo.language.psi.*;
 import consulo.language.util.ProcessingContext;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -37,54 +37,70 @@ import static com.intellij.java.language.patterns.PsiJavaPatterns.psiJavaElement
 import static consulo.language.pattern.PlatformPatterns.psiElement;
 import static consulo.language.pattern.StandardPatterns.instanceOf;
 
-public abstract class JavaCodeContextType extends TemplateContextType {
+public abstract class JavaCodeContextType extends BaseTemplateContextType {
 
-  protected JavaCodeContextType(@Nonnull @NonNls String id, @Nonnull String presentableName, @Nullable Class<? extends TemplateContextType> baseContextType) {
-    super(id, presentableName, baseContextType);
-  }
+    protected JavaCodeContextType(@Nonnull String id, @Nonnull LocalizeValue presentableName, @Nullable Class<? extends BaseTemplateContextType> baseContextType) {
+        super(id, presentableName, baseContextType);
+    }
 
-  @Override
-  public boolean isInContext(@Nonnull final PsiFile file, final int offset) {
-    if (PsiUtilCore.getLanguageAtOffset(file, offset).isKindOf(JavaLanguage.INSTANCE)) {
-      PsiElement element = file.findElementAt(offset);
-      if (element instanceof PsiWhiteSpace) {
+    @Override
+    public boolean isInContext(@Nonnull TemplateActionContext templateActionContext) {
+        PsiFile file = templateActionContext.getFile();
+        int offset = templateActionContext.getStartOffset();
+
+        if (PsiUtilCore.getLanguageAtOffset(file, offset).isKindOf(JavaLanguage.INSTANCE)) {
+            PsiElement element = file.findElementAt(offset);
+            if (element instanceof PsiWhiteSpace) {
+                return false;
+            }
+            return element != null && isInContext(element);
+        }
+
         return false;
-      }
-      return element != null && isInContext(element);
     }
 
-    return false;
-  }
+    @Override
+    public boolean isInContext(@Nonnull final PsiFile file, final int offset) {
+        if (PsiUtilCore.getLanguageAtOffset(file, offset).isKindOf(JavaLanguage.INSTANCE)) {
+            PsiElement element = file.findElementAt(offset);
+            if (element instanceof PsiWhiteSpace) {
+                return false;
+            }
+            return element != null && isInContext(element);
+        }
 
-  protected abstract boolean isInContext(@Nonnull PsiElement element);
-
-  @Nonnull
-  @Override
-  public SyntaxHighlighter createHighlighter() {
-    return new JavaFileHighlighter();
-  }
-
-  @Override
-  public Document createDocument(CharSequence text, Project project) {
-    if (project == null) {
-      return super.createDocument(text, project);
-    }
-    final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-    final JavaCodeFragmentFactory factory = JavaCodeFragmentFactory.getInstance(project);
-    final JavaCodeFragment fragment = factory.createCodeBlockCodeFragment((String) text, psiFacade.findPackage(""), true);
-    DaemonCodeAnalyzer.getInstance(project).setHighlightingEnabled(fragment, false);
-    return PsiDocumentManager.getInstance(project).getDocument(fragment);
-  }
-
-  protected static boolean isAfterExpression(PsiElement element) {
-    ProcessingContext context = new ProcessingContext();
-    if (psiJavaElement().withAncestor(1, instanceOf(PsiExpression.class)).afterLeaf(psiElement().withAncestor(1, psiElement(PsiExpression.class).save("prevExpr"))).accepts(element, context)) {
-      PsiExpression prevExpr = (PsiExpression) context.get("prevExpr");
-      if (prevExpr.getTextRange().getEndOffset() <= element.getTextRange().getStartOffset()) {
-        return true;
-      }
+        return false;
     }
 
-    return false;
-  }
+    protected abstract boolean isInContext(@Nonnull PsiElement element);
+
+    @Nonnull
+    @Override
+    public SyntaxHighlighter createHighlighter() {
+        return new JavaFileHighlighter();
+    }
+
+    @Override
+    public Document createDocument(CharSequence text, Project project) {
+        if (project == null) {
+            return super.createDocument(text, project);
+        }
+        final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
+        final JavaCodeFragmentFactory factory = JavaCodeFragmentFactory.getInstance(project);
+        final JavaCodeFragment fragment = factory.createCodeBlockCodeFragment((String) text, psiFacade.findPackage(""), true);
+        DaemonCodeAnalyzer.getInstance(project).setHighlightingEnabled(fragment, false);
+        return PsiDocumentManager.getInstance(project).getDocument(fragment);
+    }
+
+    protected static boolean isAfterExpression(PsiElement element) {
+        ProcessingContext context = new ProcessingContext();
+        if (psiJavaElement().withAncestor(1, instanceOf(PsiExpression.class)).afterLeaf(psiElement().withAncestor(1, psiElement(PsiExpression.class).save("prevExpr"))).accepts(element, context)) {
+            PsiExpression prevExpr = (PsiExpression) context.get("prevExpr");
+            if (prevExpr.getTextRange().getEndOffset() <= element.getTextRange().getStartOffset()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

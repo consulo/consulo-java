@@ -3,12 +3,13 @@ package com.intellij.java.impl.codeInsight.template;
 import com.intellij.java.impl.codeInsight.completion.JavaKeywordCompletion;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class JavaDeclarationContextType extends JavaCodeContextType {
   public JavaDeclarationContextType() {
-    super("JAVA_DECLARATION", "Declaration", JavaGenericContextType.class);
+    super("JAVA_DECLARATION", LocalizeValue.localizeTODO("Declaration"), JavaGenericContextType.class);
   }
 
   @Override

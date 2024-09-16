@@ -15,25 +15,21 @@
  */
 package com.intellij.java.impl.codeInsight.template;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.template.context.TemplateContextType;
 import com.intellij.java.language.JavaLanguage;
-import consulo.language.psi.PsiComment;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiFile;
-import consulo.language.psi.PsiWhiteSpace;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.template.context.BaseTemplateContextType;
+import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.psi.PsiUtilCore;
-
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 /**
  * @author yole
  */
 @ExtensionImpl
-public class JavaCommentContextType extends TemplateContextType {
+public class JavaCommentContextType extends BaseTemplateContextType {
   public JavaCommentContextType() {
-    super("JAVA_COMMENT", "Comment", JavaGenericContextType.class);
+    super("JAVA_COMMENT", LocalizeValue.localizeTODO("Comment"), JavaGenericContextType.class);
   }
 
   @Override

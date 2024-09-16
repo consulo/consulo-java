@@ -15,23 +15,24 @@
  */
 package com.intellij.java.impl.codeInsight.template;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.template.context.TemplateContextType;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiJavaToken;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.template.context.BaseTemplateContextType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiUtilCore;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 /**
  * @author yole
  */
 @ExtensionImpl
-public class JavaStringContextType extends TemplateContextType {
+public class JavaStringContextType extends BaseTemplateContextType {
   public JavaStringContextType() {
-    super("JAVA_STRING", "String", JavaGenericContextType.class);
+    super("JAVA_STRING", LocalizeValue.localizeTODO("String"), JavaGenericContextType.class);
   }
 
   @Override

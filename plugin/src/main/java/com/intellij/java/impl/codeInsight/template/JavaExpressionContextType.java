@@ -7,6 +7,7 @@ import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiTypeElement;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 import static consulo.language.pattern.PlatformPatterns.psiElement;
@@ -14,7 +15,7 @@ import static consulo.language.pattern.PlatformPatterns.psiElement;
 @ExtensionImpl
 public class JavaExpressionContextType extends JavaCodeContextType {
   public JavaExpressionContextType() {
-    super("JAVA_EXPRESSION", "Expression", JavaGenericContextType.class);
+    super("JAVA_EXPRESSION", LocalizeValue.localizeTODO("Expression"), JavaGenericContextType.class);
   }
 
   @Override
