@@ -46,6 +46,8 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
+import consulo.ui.CheckBox;
+import consulo.ui.Label;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.RecentsManager;
 import consulo.ui.ex.awt.Messages;
@@ -80,7 +82,7 @@ public class MoveMembersDialog extends RefactoringDialog implements MoveMembersO
     private final MoveCallback myMoveCallback;
 
     JavaVisibilityPanel myVisibilityPanel;
-    private final JCheckBox myIntroduceEnumConstants = new JCheckBox(RefactoringLocalize.moveEnumConstantCb().get(), true);
+    private final CheckBox myIntroduceEnumConstants = CheckBox.create(RefactoringLocalize.moveEnumConstantCb(), true);
 
     public MoveMembersDialog(
         Project project,
@@ -157,7 +159,7 @@ public class MoveMembersDialog extends RefactoringDialog implements MoveMembersO
 
     @Override
     public boolean makeEnumConstant() {
-        return myIntroduceEnumConstants.isVisible() && myIntroduceEnumConstants.isEnabled() && myIntroduceEnumConstants.isSelected();
+        return myIntroduceEnumConstants.isVisible() && myIntroduceEnumConstants.isEnabled() && myIntroduceEnumConstants.getValueOrError();
     }
 
     @Override
@@ -167,28 +169,28 @@ public class MoveMembersDialog extends RefactoringDialog implements MoveMembersO
 
     @Override
     protected JComponent createNorthPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
+        JPanel mainPanel = new JPanel(new BorderLayout());
 
-        JPanel _panel;
+        JPanel panel;
         Box box = Box.createVerticalBox();
 
-        _panel = new JPanel(new BorderLayout());
+        panel = new JPanel(new BorderLayout());
         JTextField sourceClassField = new JTextField();
         sourceClassField.setText(mySourceClassName);
         sourceClassField.setEditable(false);
-        _panel.add(new JLabel(RefactoringLocalize.moveMembersMoveMembersFromLabel().get()), BorderLayout.NORTH);
-        _panel.add(sourceClassField, BorderLayout.CENTER);
-        box.add(_panel);
+        panel.add(new JLabel(RefactoringLocalize.moveMembersMoveMembersFromLabel().get()), BorderLayout.NORTH);
+        panel.add(sourceClassField, BorderLayout.CENTER);
+        box.add(panel);
 
         box.add(Box.createVerticalStrut(10));
 
-        _panel = new JPanel(new BorderLayout());
-        JLabel label = new JLabel(RefactoringLocalize.moveMembersToFullyQualifiedNameLabel().get());
-        label.setLabelFor(myTfTargetClassName);
-        _panel.add(label, BorderLayout.NORTH);
-        _panel.add(myTfTargetClassName, BorderLayout.CENTER);
-        _panel.add(myIntroduceEnumConstants, BorderLayout.SOUTH);
-        box.add(_panel);
+        panel = new JPanel(new BorderLayout());
+        Label label = Label.create(RefactoringLocalize.moveMembersToFullyQualifiedNameLabel());
+        label.setTarget(TargetAWT.wrap(myTfTargetClassName));
+        panel.add(TargetAWT.to(label), BorderLayout.NORTH);
+        panel.add(myTfTargetClassName, BorderLayout.CENTER);
+        panel.add(TargetAWT.to(myIntroduceEnumConstants), BorderLayout.SOUTH);
+        box.add(panel);
 
         myTfTargetClassName.getChildComponent().getDocument().addDocumentListener(new DocumentAdapter() {
             @Override
@@ -198,11 +200,11 @@ public class MoveMembersDialog extends RefactoringDialog implements MoveMembersO
             }
         });
 
-        panel.add(box, BorderLayout.CENTER);
-        panel.add(Box.createVerticalStrut(10), BorderLayout.SOUTH);
+        mainPanel.add(box, BorderLayout.CENTER);
+        mainPanel.add(Box.createVerticalStrut(10), BorderLayout.SOUTH);
 
         validateButtons();
-        return panel;
+        return mainPanel;
     }
 
     @Override
