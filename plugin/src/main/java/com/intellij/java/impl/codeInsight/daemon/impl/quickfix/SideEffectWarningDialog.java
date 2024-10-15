@@ -16,7 +16,9 @@
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import consulo.annotation.access.RequiredReadAction;
+import consulo.localize.LocalizeValue;
 import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.ex.awt.LocalizeAction;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.project.Project;
@@ -40,8 +42,8 @@ public class SideEffectWarningDialog extends DialogWrapper {
   private final String myBeforeText;
   private final String myAfterText;
   private final boolean myCanCopeWithSideEffects;
-  private AbstractAction myRemoveAllAction;
-  private AbstractAction myCancelAllAction;
+  private LocalizeAction myRemoveAllAction;
+  private LocalizeAction myCancelAllAction;
   public static final int MAKE_STATEMENT = 1;
   public static final int DELETE_ALL = 2;
   public static final int CANCEL = 0;
@@ -60,25 +62,16 @@ public class SideEffectWarningDialog extends DialogWrapper {
   @Override
   protected Action[] createActions() {
     List<AbstractAction> actions = new ArrayList<>();
-    myRemoveAllAction = new AbstractAction() {
-      {
-        UIUtil.setActionNameAndMnemonic(JavaQuickFixBundle.message("side.effect.action.remove"), this);
-        putValue(DEFAULT_ACTION, this);
-      }
-
+    myRemoveAllAction = new LocalizeAction(LocalizeValue.localizeTODO(JavaQuickFixBundle.message("side.effect.action.remove"))) {
       @Override
       public void actionPerformed(ActionEvent e) {
         close(DELETE_ALL);
       }
-
     };
+    myRemoveAllAction.putValue(DEFAULT_ACTION, myRemoveAllAction);
     actions.add(myRemoveAllAction);
     if (myCanCopeWithSideEffects) {
-      AbstractAction makeStmtAction = new AbstractAction() {
-        {
-          UIUtil.setActionNameAndMnemonic(JavaQuickFixBundle.message("side.effect.action.transform"), this);
-        }
-
+        LocalizeAction makeStmtAction = new LocalizeAction(LocalizeValue.localizeTODO(JavaQuickFixBundle.message("side.effect.action.transform"))) {
         @Override
         public void actionPerformed(ActionEvent e) {
           close(MAKE_STATEMENT);
@@ -86,11 +79,7 @@ public class SideEffectWarningDialog extends DialogWrapper {
       };
       actions.add(makeStmtAction);
     }
-    myCancelAllAction = new AbstractAction() {
-      {
-        UIUtil.setActionNameAndMnemonic(JavaQuickFixBundle.message("side.effect.action.cancel"), this);
-      }
-
+    myCancelAllAction = new LocalizeAction(LocalizeValue.localizeTODO(JavaQuickFixBundle.message("side.effect.action.cancel"))) {
       @Override
       public void actionPerformed(ActionEvent e) {
         doCancelAction();
@@ -103,13 +92,13 @@ public class SideEffectWarningDialog extends DialogWrapper {
 
   @Nonnull
   @Override
-  protected Action getCancelAction() {
+  protected LocalizeAction getCancelAction() {
     return myCancelAllAction;
   }
 
   @Nonnull
   @Override
-  protected Action getOKAction() {
+  protected LocalizeAction getOKAction() {
     return myRemoveAllAction;
   }
 

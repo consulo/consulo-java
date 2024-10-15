@@ -33,9 +33,9 @@ import consulo.ui.ex.popup.BaseListPopupStep;
 import consulo.ui.ex.popup.PopupStep;
 import consulo.ui.image.Image;
 import consulo.util.lang.ObjectUtil;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -134,9 +134,9 @@ public class AddImportAction implements QuestionAction {
       protected ListCellRenderer getListElementRenderer() {
         final PopupListElementRenderer baseRenderer = (PopupListElementRenderer) super.getListElementRenderer();
         final DefaultPsiElementCellRenderer psiRenderer = new DefaultPsiElementCellRenderer();
-        return new ListCellRenderer() {
+        return new ListCellRenderer<PsiClass>() {
           @Override
-          public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+          public Component getListCellRendererComponent(JList<? extends PsiClass> list, PsiClass value, int index, boolean isSelected, boolean cellHasFocus) {
             JPanel panel = new JPanel(new BorderLayout());
             baseRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
             panel.add(baseRenderer.getNextStepLabel(), BorderLayout.EAST);

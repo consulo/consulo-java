@@ -57,6 +57,7 @@ import consulo.language.editor.highlight.HighlightManager;
 import consulo.language.editor.util.LanguageUndoUtil;
 import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.module.content.ProjectRootManager;
 import consulo.module.content.layer.event.ModuleRootAdapter;
@@ -72,6 +73,7 @@ import consulo.project.Project;
 import consulo.project.localize.ProjectLocalize;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.LocalizeAction;
 import consulo.ui.ex.awt.OptionsMessageDialog;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.ex.popup.BaseListPopupStep;
@@ -88,10 +90,7 @@ import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.ReadonlyStatusHandler;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.VirtualFileManager;
-import consulo.virtualFileSystem.event.VirtualFileAdapter;
-import consulo.virtualFileSystem.event.VirtualFileCopyEvent;
-import consulo.virtualFileSystem.event.VirtualFileEvent;
-import consulo.virtualFileSystem.event.VirtualFileMoveEvent;
+import consulo.virtualFileSystem.event.*;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
 import consulo.xml.ide.highlighter.XmlFileType;
 import consulo.xml.psi.XmlElementFactory;
@@ -780,39 +779,33 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
     public MyExternalPromptDialog(final Project project) {
       super(
         project,
-        ProjectLocalize.externalAnnotationsSuggestionMessage().get(),
-        ProjectLocalize.externalAnnotationPrompt().get(),
+        ProjectLocalize.externalAnnotationsSuggestionMessage(),
+        ProjectLocalize.externalAnnotationPrompt(),
         UIUtil.getQuestionIcon()
       );
       myProject = project;
       init();
     }
 
+    @Nonnull
     @Override
-    protected String getOkActionName() {
-      return ProjectLocalize.externalAnnotationsInCodeOption().get();
+    protected LocalizeValue getOkActionValue() {
+        return ProjectLocalize.externalAnnotationsInCodeOption();
     }
 
     @Override
     @Nonnull
-    protected String getCancelActionName() {
-      return CommonLocalize.buttonCancel().get();
+    protected LocalizeValue getCancelActionValue() {
+      return CommonLocalize.buttonCancel();
     }
 
     @Override
     @Nonnull
-    @SuppressWarnings({"NonStaticInitializer"})
-    protected Action[] createActions() {
-      final Action okAction = getOKAction();
-      assignMnemonic(ProjectLocalize.externalAnnotationsInCodeOption().get(), okAction);
-      final String externalName = ProjectLocalize.externalAnnotationsExternalOption().get();
-      return new Action[]{
+    protected LocalizeAction[] createActions() {
+      final LocalizeAction okAction = getOKAction();
+      return new LocalizeAction[]{
           okAction,
-          new AbstractAction(externalName) {
-            {
-              assignMnemonic(externalName, this);
-            }
-
+          new LocalizeAction(ProjectLocalize.externalAnnotationsExternalOption()) {
             @Override
             public void actionPerformed(final ActionEvent e) {
               if (canBeHidden()) {
@@ -848,7 +841,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
     }
   }
 
-  private class MyVirtualFileListener extends VirtualFileAdapter {
+  private class MyVirtualFileListener implements VirtualFileListener {
     @RequiredWriteAction
     private void processEvent(VirtualFileEvent event) {
       if (event.isFromRefresh() && ANNOTATIONS_XML.equals(event.getFileName())) {
