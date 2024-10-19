@@ -1,20 +1,7 @@
-/*
- * Copyright 2000-2016 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2021 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.language.impl.psi.impl.source;
 
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.impl.psi.impl.java.stubs.impl.PsiJavaFileStubImpl;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
@@ -22,18 +9,23 @@ import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaSourceUtil;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiJavaFile;
+import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.ast.*;
 import consulo.language.impl.ast.RecursiveTreeElementWalkingVisitor;
 import consulo.language.impl.ast.TreeElement;
+import consulo.language.impl.ast.TreeUtil;
+import consulo.language.lexer.Lexer;
+import consulo.language.lexer.TokenList;
+import consulo.language.parser.ParserDefinition;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.stub.LightStubBuilder;
 import consulo.language.psi.stub.StubElement;
 import jakarta.annotation.Nonnull;
 
 public class JavaLightStubBuilder extends LightStubBuilder {
-    @Nonnull
     @Override
-    protected StubElement createStubForFile(@Nonnull PsiFile file, @Nonnull LighterAST tree) {
+    @Nonnull
+    protected StubElement<?> createStubForFile(@Nonnull PsiFile file, @Nonnull LighterAST tree) {
         if (!(file instanceof PsiJavaFile)) {
             return super.createStubForFile(file, tree);
         }
@@ -59,12 +51,28 @@ public class JavaLightStubBuilder extends LightStubBuilder {
         }
 
         if (nodeType == JavaElementType.CODE_BLOCK) {
-            CodeBlockVisitor visitor = new CodeBlockVisitor();
-            ((TreeElement) node).acceptTree(visitor);
-            return visitor.result;
+            return isCodeBlockWithoutStubs(node);
         }
 
         return false;
+    }
+
+    private static boolean isCodeBlockWithoutStubs(@Nonnull ASTNode node) {
+        CodeBlockVisitor visitor = new CodeBlockVisitor();
+        if (TreeUtil.isCollapsedChameleon(node)) {
+            ParserDefinition parserDefinition = ParserDefinition.forLanguage(JavaLanguage.INSTANCE);
+            assert parserDefinition != null;
+            Lexer lexer = parserDefinition.createLexer(PsiUtil.getLanguageLevel(node.getPsi()).toLangVersion());
+            
+            TokenList tokens = TokenList.performLexing(node.getChars(), lexer);
+            for (int i = 0; i < tokens.getTokenCount(); i++) {
+                visitor.visit(tokens.getTokenType(i));
+            }
+        }
+        else {
+            ((TreeElement) node).acceptTree(visitor);
+        }
+        return visitor.result;
     }
 
     @Override
@@ -153,9 +161,17 @@ public class JavaLightStubBuilder extends LightStubBuilder {
                 seenModifier = true;
             }
             // local classes
-            else if (type == JavaTokenType.CLASS_KEYWORD && (last != JavaTokenType.DOT || preLast != JavaTokenType.IDENTIFIER || seenModifier)
-                || type == JavaTokenType.ENUM_KEYWORD
-                || type == JavaTokenType.INTERFACE_KEYWORD) {
+            else if (type == JavaTokenType.CLASS_KEYWORD && (last != JavaTokenType.DOT || preLast != JavaTokenType.IDENTIFIER || seenModifier) ||
+                type == JavaTokenType.ENUM_KEYWORD ||
+                type == JavaTokenType.INTERFACE_KEYWORD) {
+                return (result = false);
+            }
+            // if record is inside lazy parseable element, tokens are not remapped and record token is still identifier
+            // This token combination may be "record RecordName (" or "record RecordName<..."
+            // Local records without < or ( won't be parsed
+            else if (preLast == JavaTokenType.IDENTIFIER &&
+                last == JavaTokenType.IDENTIFIER &&
+                (type == JavaTokenType.LPARENTH || type == JavaTokenType.LT)) {
                 return (result = false);
             }
 
