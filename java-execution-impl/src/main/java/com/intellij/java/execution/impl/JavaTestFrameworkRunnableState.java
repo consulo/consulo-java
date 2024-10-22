@@ -73,6 +73,7 @@ import consulo.process.cmd.ParametersList;
 import consulo.process.event.ProcessAdapter;
 import consulo.process.event.ProcessEvent;
 import consulo.project.Project;
+import consulo.ui.ex.action.Presentation;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.util.io.CharsetToolkit;
 import consulo.util.io.ClassPathUtil;
@@ -296,7 +297,7 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
     if (Comparing.strEqual(forkMode, "none")) {
       if (forkPerModule()) {
         if (isExecutorDisabledInForkedMode()) {
-          final String actionName = UIUtil.removeMnemonic(executor.getStartActionText());
+          final String actionName = executor.getStartActionText().map(Presentation.NO_MNEMONIC).get();
           throw new CantRunException("'" + actionName + "' is disabled when per-module working directory is configured.<br/>" + "Please specify single working directory, or change test " +
               "scope to single module.");
         }
@@ -304,8 +305,8 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
         return;
       }
     } else if (isExecutorDisabledInForkedMode()) {
-      final String actionName = executor.getActionName();
-      throw new CantRunException(actionName + " is disabled in fork mode.<br/>Please change fork mode to &lt;none&gt; to " + actionName.toLowerCase(Locale.ENGLISH) + ".");
+      final String actionName = executor.getStartActionText().toLowerCase().map(Presentation.NO_MNEMONIC).get();
+      throw new CantRunException(actionName + " is disabled in fork mode.<br/>Please change fork mode to &lt;none&gt; to " + actionName + ".");
     }
 
     final OwnJavaParameters javaParameters = getJavaParameters();
