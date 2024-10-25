@@ -16,7 +16,6 @@
 package com.intellij.java.impl.ide.fileTemplates;
 
 import com.intellij.java.impl.psi.impl.file.JavaDirectoryServiceImpl;
-import com.intellij.java.language.JavaCoreBundle;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.impl.codeInsight.template.JavaTemplateUtil;
@@ -30,6 +29,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.fileTemplate.CreateFromTemplateHandler;
 import consulo.fileTemplate.FileTemplate;
 import consulo.ide.localize.IdeLocalize;
+import consulo.java.localize.JavaCoreLocalize;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.file.FileTypeManager;
 import consulo.language.psi.PsiDirectory;
@@ -37,6 +37,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiFileFactory;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
 import consulo.virtualFileSystem.fileType.FileType;
@@ -163,8 +164,8 @@ public class JavaCreateFromTemplateHandler implements CreateFromTemplateHandler 
     }
 
     @Override
-    public String getErrorMessage() {
-        return JavaCoreBundle.message("title.cannot.create.class");
+    public LocalizeValue getErrorMessage() {
+        return JavaCoreLocalize.titleCannotCreateClass();
     }
 
     @Override
@@ -177,8 +178,8 @@ public class JavaCreateFromTemplateHandler implements CreateFromTemplateHandler 
 
     @Nonnull
     @Override
-    public String commandName(@Nonnull FileTemplate template) {
-        return IdeLocalize.commandCreateClassFromTemplate().get();
+    public LocalizeValue commandName(@Nonnull FileTemplate template) {
+        return IdeLocalize.commandCreateClassFromTemplate();
     }
 
     public static boolean canCreate(PsiDirectory dir) {
