@@ -28,24 +28,23 @@ import consulo.language.codeStyle.CodeStyleSettings;
  * @since 8/8/12 8:57 AM
  */
 public class JavaArrangementPanel extends ArrangementSettingsPanel {
+    public JavaArrangementPanel(@Nonnull CodeStyleSettings settings) {
+        super(settings, JavaLanguage.INSTANCE);
+    }
 
-  public JavaArrangementPanel(@Nonnull CodeStyleSettings settings) {
-    super(settings, JavaLanguage.INSTANCE);
-  }
+    @Override
+    protected int getRightMargin() {
+        return 80;
+    }
 
-  @Override
-  protected int getRightMargin() {
-    return 80;
-  }
+    @Nonnull
+    @Override
+    protected FileType getFileType() {
+        return JavaFileType.INSTANCE;
+    }
 
-  @Nonnull
-  @Override
-  protected FileType getFileType() {
-    return JavaFileType.INSTANCE;
-  }
-
-  @Override
-  protected String getPreviewText() {
-    return null;
-  }
+    @Override
+    protected String getPreviewText() {
+        return null;
+    }
 }

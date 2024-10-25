@@ -24,64 +24,64 @@ import consulo.virtualFileSystem.fileType.FileType;
 import consulo.language.codeStyle.CodeStyleSettings;
 
 import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 
 /**
  * @author Rustam Vishnyakov
  */
 public class CodeStyleImportsPanelWrapper extends CodeStyleAbstractPanel {
+    private CodeStyleImportsPanel myImporsPanel;
 
-  private CodeStyleImportsPanel myImporsPanel;
-
-  protected CodeStyleImportsPanelWrapper(CodeStyleSettings settings) {
-    super(settings);
-    myImporsPanel = new CodeStyleImportsPanel();
-  }
+    protected CodeStyleImportsPanelWrapper(CodeStyleSettings settings) {
+        super(settings);
+        myImporsPanel = new CodeStyleImportsPanel();
+    }
 
 
-  @Override
-  protected int getRightMargin() {
-    return 0;
-  }
+    @Override
+    protected int getRightMargin() {
+        return 0;
+    }
 
-  @Override
-  protected EditorHighlighter createHighlighter(EditorColorsScheme scheme) {
-    return null;
-  }
+    @Override
+    protected EditorHighlighter createHighlighter(EditorColorsScheme scheme) {
+        return null;
+    }
 
-  @Nonnull
-  @Override
-  protected FileType getFileType() {
-    return JavaFileType.INSTANCE;
-  }
+    @Nonnull
+    @Override
+    protected FileType getFileType() {
+        return JavaFileType.INSTANCE;
+    }
 
-  @Override
-  protected String getPreviewText() {
-    return null;
-  }
+    @Override
+    protected String getPreviewText() {
+        return null;
+    }
 
-  @Override
-  public void apply(CodeStyleSettings settings) {
-    myImporsPanel.apply(settings);
-  }
+    @Override
+    public void apply(CodeStyleSettings settings) {
+        myImporsPanel.apply(settings);
+    }
 
-  @Override
-  public boolean isModified(CodeStyleSettings settings) {
-    return myImporsPanel.isModified(settings);
-  }
+    @Override
+    public boolean isModified(CodeStyleSettings settings) {
+        return myImporsPanel.isModified(settings);
+    }
 
-  @Override
-  public JComponent getPanel() {
-    return myImporsPanel;
-  }
+    @Override
+    public JComponent getPanel() {
+        return myImporsPanel;
+    }
 
-  @Override
-  protected void resetImpl(CodeStyleSettings settings) {
-    myImporsPanel.reset(settings);
-  }
+    @Override
+    protected void resetImpl(CodeStyleSettings settings) {
+        myImporsPanel.reset(settings);
+    }
 
-  @Override
-  protected String getTabTitle() {
-    return ApplicationBundle.message("title.imports");
-  }
+    @Override
+    protected String getTabTitle() {
+        return ApplicationBundle.message("title.imports");
+    }
 }

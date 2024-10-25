@@ -30,24 +30,24 @@ import jakarta.annotation.Nonnull;
  */
 @ExtensionImpl
 public class GenerationSettingsProvider extends CodeStyleSettingsProvider {
-  @Override
-  @Nonnull
-  public Configurable createSettingsPage(final CodeStyleSettings settings, final CodeStyleSettings originalSettings) {
-    return new CodeStyleGenerationConfigurable(settings);
-  }
+    @Override
+    @Nonnull
+    public Configurable createSettingsPage(final CodeStyleSettings settings, final CodeStyleSettings originalSettings) {
+        return new CodeStyleGenerationConfigurable(settings);
+    }
 
-  @Override
-  public String getConfigurableDisplayName() {
-    return ApplicationBundle.message("title.code.generation");
-  }
+    @Override
+    public String getConfigurableDisplayName() {
+        return ApplicationBundle.message("title.code.generation");
+    }
 
-  @Override
-  public boolean hasSettingsPage() {
-    return false;
-  }
+    @Override
+    public boolean hasSettingsPage() {
+        return false;
+    }
 
-  @Override
-  public Language getLanguage() {
-    return JavaLanguage.INSTANCE;
-  }
+    @Override
+    public Language getLanguage() {
+        return JavaLanguage.INSTANCE;
+    }
 }

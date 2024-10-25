@@ -40,141 +40,141 @@ import java.awt.*;
  */
 @ExtensionImpl
 public class JavaAutoImportConfigurable implements ProjectConfigurable {
-  private static final String INSERT_IMPORTS_ALWAYS = ApplicationBundle.message("combobox.insert.imports.all");
-  private static final String INSERT_IMPORTS_ASK = ApplicationBundle.message("combobox.insert.imports.ask");
-  private static final String INSERT_IMPORTS_NONE = ApplicationBundle.message("combobox.insert.imports.none");
+    private static final String INSERT_IMPORTS_ALWAYS = ApplicationBundle.message("combobox.insert.imports.all");
+    private static final String INSERT_IMPORTS_ASK = ApplicationBundle.message("combobox.insert.imports.ask");
+    private static final String INSERT_IMPORTS_NONE = ApplicationBundle.message("combobox.insert.imports.none");
 
-  private JComboBox mySmartPasteCombo;
-  private JCheckBox myCbShowImportPopup;
-  private JPanel myWholePanel;
-  private JCheckBox myCbAddUnambiguousImports;
-  private JCheckBox myCbAddMethodImports;
-  private JCheckBox myCbOptimizeImports;
-  private JPanel myExcludeFromImportAndCompletionPanel;
-  private final ExcludeTable myExcludePackagesTable;
+    private JComboBox mySmartPasteCombo;
+    private JCheckBox myCbShowImportPopup;
+    private JPanel myWholePanel;
+    private JCheckBox myCbAddUnambiguousImports;
+    private JCheckBox myCbAddMethodImports;
+    private JCheckBox myCbOptimizeImports;
+    private JPanel myExcludeFromImportAndCompletionPanel;
+    private final ExcludeTable myExcludePackagesTable;
 
-  @Inject
-  public JavaAutoImportConfigurable(Project project) {
-    mySmartPasteCombo.addItem(INSERT_IMPORTS_ALWAYS);
-    mySmartPasteCombo.addItem(INSERT_IMPORTS_ASK);
-    mySmartPasteCombo.addItem(INSERT_IMPORTS_NONE);
+    @Inject
+    public JavaAutoImportConfigurable(Project project) {
+        mySmartPasteCombo.addItem(INSERT_IMPORTS_ALWAYS);
+        mySmartPasteCombo.addItem(INSERT_IMPORTS_ASK);
+        mySmartPasteCombo.addItem(INSERT_IMPORTS_NONE);
 
-    myExcludePackagesTable = new ExcludeTable(project);
-    myExcludeFromImportAndCompletionPanel.add(myExcludePackagesTable.getComponent(), BorderLayout.CENTER);
-  }
-
-  @Nonnull
-  @Override
-  public String getId() {
-    return "editor.preferences.import.java";
-  }
-
-  @Nullable
-  @Override
-  public String getParentId() {
-    return "editor.preferences.import";
-  }
-
-  @Override
-  public String getDisplayName() {
-    return "Java";
-  }
-
-  public void addExcludePackage(String packageName) {
-    myExcludePackagesTable.addExcludePackage(packageName);
-  }
-
-  @RequiredUIAccess
-  @Override
-  public void reset() {
-    CodeInsightSettings codeInsightSettings = CodeInsightSettings.getInstance();
-    DaemonCodeAnalyzerSettings daemonSettings = DaemonCodeAnalyzerSettings.getInstance();
-
-    switch (codeInsightSettings.ADD_IMPORTS_ON_PASTE) {
-      case CodeInsightSettings.YES:
-        mySmartPasteCombo.setSelectedItem(INSERT_IMPORTS_ALWAYS);
-        break;
-
-      case CodeInsightSettings.NO:
-        mySmartPasteCombo.setSelectedItem(INSERT_IMPORTS_NONE);
-        break;
-
-      case CodeInsightSettings.ASK:
-        mySmartPasteCombo.setSelectedItem(INSERT_IMPORTS_ASK);
-        break;
+        myExcludePackagesTable = new ExcludeTable(project);
+        myExcludeFromImportAndCompletionPanel.add(myExcludePackagesTable.getComponent(), BorderLayout.CENTER);
     }
 
-
-    myCbShowImportPopup.setSelected(daemonSettings.isImportHintEnabled());
-    myCbOptimizeImports.setSelected(codeInsightSettings.OPTIMIZE_IMPORTS_ON_THE_FLY);
-    myCbAddUnambiguousImports.setSelected(codeInsightSettings.ADD_UNAMBIGIOUS_IMPORTS_ON_THE_FLY);
-    myCbAddMethodImports.setSelected(codeInsightSettings.ADD_MEMBER_IMPORTS_ON_THE_FLY);
-
-    myExcludePackagesTable.reset();
-  }
-
-  @RequiredUIAccess
-  @Override
-  public void disposeUIResources() {
-
-  }
-
-  @RequiredUIAccess
-  @Override
-  public void apply() {
-    CodeInsightSettings codeInsightSettings = CodeInsightSettings.getInstance();
-    DaemonCodeAnalyzerSettings daemonSettings = DaemonCodeAnalyzerSettings.getInstance();
-
-    codeInsightSettings.ADD_IMPORTS_ON_PASTE = getSmartPasteValue();
-    daemonSettings.setImportHintEnabled(myCbShowImportPopup.isSelected());
-    codeInsightSettings.OPTIMIZE_IMPORTS_ON_THE_FLY = myCbOptimizeImports.isSelected();
-    codeInsightSettings.ADD_UNAMBIGIOUS_IMPORTS_ON_THE_FLY = myCbAddUnambiguousImports.isSelected();
-    codeInsightSettings.ADD_MEMBER_IMPORTS_ON_THE_FLY = myCbAddMethodImports.isSelected();
-
-    myExcludePackagesTable.apply();
-
-    for (Project project : ProjectManager.getInstance().getOpenProjects()) {
-      DaemonCodeAnalyzer.getInstance(project).restart();
+    @Nonnull
+    @Override
+    public String getId() {
+        return "editor.preferences.import.java";
     }
-  }
 
-  @RequiredUIAccess
-  @Override
-  public JComponent createComponent(Disposable disposable) {
-    return myWholePanel;
-  }
-
-  @RequiredUIAccess
-  @Override
-  public boolean isModified() {
-    CodeInsightSettings codeInsightSettings = CodeInsightSettings.getInstance();
-    DaemonCodeAnalyzerSettings daemonSettings = DaemonCodeAnalyzerSettings.getInstance();
-
-    boolean isModified = isModified(myCbShowImportPopup, daemonSettings.isImportHintEnabled());
-    isModified |= isModified(myCbOptimizeImports, codeInsightSettings.OPTIMIZE_IMPORTS_ON_THE_FLY);
-    isModified |= isModified(myCbAddUnambiguousImports, codeInsightSettings.ADD_UNAMBIGIOUS_IMPORTS_ON_THE_FLY);
-    isModified |= isModified(myCbAddMethodImports, codeInsightSettings.ADD_MEMBER_IMPORTS_ON_THE_FLY);
-
-    isModified |= getSmartPasteValue() != codeInsightSettings.ADD_IMPORTS_ON_PASTE;
-    isModified |= myExcludePackagesTable.isModified();
-
-    return isModified;
-  }
-
-  private int getSmartPasteValue() {
-    Object selectedItem = mySmartPasteCombo.getSelectedItem();
-    if (INSERT_IMPORTS_ALWAYS.equals(selectedItem)) {
-      return CodeInsightSettings.YES;
+    @Nullable
+    @Override
+    public String getParentId() {
+        return "editor.preferences.import";
     }
-    else if (INSERT_IMPORTS_NONE.equals(selectedItem)) {
-      return CodeInsightSettings.NO;
-    }
-    else {
-      return CodeInsightSettings.ASK;
-    }
-  }
 
-  private static boolean isModified(JToggleButton checkBox, boolean value) {
-    return checkBox.isSelected() != value;
-  }
+    @Override
+    public String getDisplayName() {
+        return "Java";
+    }
+
+    public void addExcludePackage(String packageName) {
+        myExcludePackagesTable.addExcludePackage(packageName);
+    }
+
+    @RequiredUIAccess
+    @Override
+    public void reset() {
+        CodeInsightSettings codeInsightSettings = CodeInsightSettings.getInstance();
+        DaemonCodeAnalyzerSettings daemonSettings = DaemonCodeAnalyzerSettings.getInstance();
+
+        switch (codeInsightSettings.ADD_IMPORTS_ON_PASTE) {
+            case CodeInsightSettings.YES:
+                mySmartPasteCombo.setSelectedItem(INSERT_IMPORTS_ALWAYS);
+                break;
+
+            case CodeInsightSettings.NO:
+                mySmartPasteCombo.setSelectedItem(INSERT_IMPORTS_NONE);
+                break;
+
+            case CodeInsightSettings.ASK:
+                mySmartPasteCombo.setSelectedItem(INSERT_IMPORTS_ASK);
+                break;
+        }
+
+
+        myCbShowImportPopup.setSelected(daemonSettings.isImportHintEnabled());
+        myCbOptimizeImports.setSelected(codeInsightSettings.OPTIMIZE_IMPORTS_ON_THE_FLY);
+        myCbAddUnambiguousImports.setSelected(codeInsightSettings.ADD_UNAMBIGIOUS_IMPORTS_ON_THE_FLY);
+        myCbAddMethodImports.setSelected(codeInsightSettings.ADD_MEMBER_IMPORTS_ON_THE_FLY);
+
+        myExcludePackagesTable.reset();
+    }
+
+    @RequiredUIAccess
+    @Override
+    public void disposeUIResources() {
+
+    }
+
+    @RequiredUIAccess
+    @Override
+    public void apply() {
+        CodeInsightSettings codeInsightSettings = CodeInsightSettings.getInstance();
+        DaemonCodeAnalyzerSettings daemonSettings = DaemonCodeAnalyzerSettings.getInstance();
+
+        codeInsightSettings.ADD_IMPORTS_ON_PASTE = getSmartPasteValue();
+        daemonSettings.setImportHintEnabled(myCbShowImportPopup.isSelected());
+        codeInsightSettings.OPTIMIZE_IMPORTS_ON_THE_FLY = myCbOptimizeImports.isSelected();
+        codeInsightSettings.ADD_UNAMBIGIOUS_IMPORTS_ON_THE_FLY = myCbAddUnambiguousImports.isSelected();
+        codeInsightSettings.ADD_MEMBER_IMPORTS_ON_THE_FLY = myCbAddMethodImports.isSelected();
+
+        myExcludePackagesTable.apply();
+
+        for (Project project : ProjectManager.getInstance().getOpenProjects()) {
+            DaemonCodeAnalyzer.getInstance(project).restart();
+        }
+    }
+
+    @RequiredUIAccess
+    @Override
+    public JComponent createComponent(Disposable disposable) {
+        return myWholePanel;
+    }
+
+    @RequiredUIAccess
+    @Override
+    public boolean isModified() {
+        CodeInsightSettings codeInsightSettings = CodeInsightSettings.getInstance();
+        DaemonCodeAnalyzerSettings daemonSettings = DaemonCodeAnalyzerSettings.getInstance();
+
+        boolean isModified = isModified(myCbShowImportPopup, daemonSettings.isImportHintEnabled());
+        isModified |= isModified(myCbOptimizeImports, codeInsightSettings.OPTIMIZE_IMPORTS_ON_THE_FLY);
+        isModified |= isModified(myCbAddUnambiguousImports, codeInsightSettings.ADD_UNAMBIGIOUS_IMPORTS_ON_THE_FLY);
+        isModified |= isModified(myCbAddMethodImports, codeInsightSettings.ADD_MEMBER_IMPORTS_ON_THE_FLY);
+
+        isModified |= getSmartPasteValue() != codeInsightSettings.ADD_IMPORTS_ON_PASTE;
+        isModified |= myExcludePackagesTable.isModified();
+
+        return isModified;
+    }
+
+    private int getSmartPasteValue() {
+        Object selectedItem = mySmartPasteCombo.getSelectedItem();
+        if (INSERT_IMPORTS_ALWAYS.equals(selectedItem)) {
+            return CodeInsightSettings.YES;
+        }
+        else if (INSERT_IMPORTS_NONE.equals(selectedItem)) {
+            return CodeInsightSettings.NO;
+        }
+        else {
+            return CodeInsightSettings.ASK;
+        }
+    }
+
+    private static boolean isModified(JToggleButton checkBox, boolean value) {
+        return checkBox.isSelected() != value;
+    }
 }

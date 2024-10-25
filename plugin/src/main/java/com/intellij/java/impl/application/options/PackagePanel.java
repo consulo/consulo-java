@@ -30,48 +30,43 @@ import java.awt.*;
  * @author Max Medvedev
  */
 public class PackagePanel {
-
-  private static void addPackageToPackages(JBTable table, PackageEntryTable list) {
-    int selected = table.getSelectedRow() + 1;
-    if (selected < 0) {
-      selected = list.getEntryCount();
-    }
-    PackageEntry entry = new PackageEntry(false, "", true);
-    list.insertEntryAt(entry, selected);
-    ImportLayoutPanel.refreshTableModel(selected, table);
-  }
-
-  private static void removeEntryFromPackages(JBTable table, PackageEntryTable list) {
-    int selected = table.getSelectedRow();
-    if (selected < 0) return;
-    TableUtil.stopEditing(table);
-    list.removeEntryAt(selected);
-    AbstractTableModel model = (AbstractTableModel)table.getModel();
-    model.fireTableRowsDeleted(selected, selected);
-    if (selected >= list.getEntryCount()) {
-      selected--;
-    }
-    if (selected >= 0) {
-      table.setRowSelectionInterval(selected, selected);
-    }
-  }
-
-  public static JPanel createPackagesPanel(final JBTable packageTable, final PackageEntryTable packageList) {
-    JPanel panel = ToolbarDecorator.createDecorator(packageTable)
-      .setAddAction(new AnActionButtonRunnable() {
-        @Override
-        public void run(AnActionButton button) {
-          addPackageToPackages(packageTable, packageList);
+    private static void addPackageToPackages(JBTable table, PackageEntryTable list) {
+        int selected = table.getSelectedRow() + 1;
+        if (selected < 0) {
+            selected = list.getEntryCount();
         }
-      }).setRemoveAction(new AnActionButtonRunnable() {
-        @Override
-        public void run(AnActionButton button) {
-          removeEntryFromPackages(packageTable, packageList);
+        PackageEntry entry = new PackageEntry(false, "", true);
+        list.insertEntryAt(entry, selected);
+        ImportLayoutPanel.refreshTableModel(selected, table);
+    }
+
+    private static void removeEntryFromPackages(JBTable table, PackageEntryTable list) {
+        int selected = table.getSelectedRow();
+        if (selected < 0) {
+            return;
         }
-      }).disableUpDownActions().setPreferredSize(new Dimension(-1, 100)).createPanel();
+        TableUtil.stopEditing(table);
+        list.removeEntryAt(selected);
+        AbstractTableModel model = (AbstractTableModel)table.getModel();
+        model.fireTableRowsDeleted(selected, selected);
+        if (selected >= list.getEntryCount()) {
+            selected--;
+        }
+        if (selected >= 0) {
+            table.setRowSelectionInterval(selected, selected);
+        }
+    }
 
-    UIUtil.addBorder(panel, IdeBorderFactory.createTitledBorder(ApplicationBundle.message("title.packages.to.use.import.with"), false));
+    public static JPanel createPackagesPanel(final JBTable packageTable, final PackageEntryTable packageList) {
+        JPanel panel = ToolbarDecorator.createDecorator(packageTable)
+            .setAddAction(button -> addPackageToPackages(packageTable, packageList))
+            .setRemoveAction(button -> removeEntryFromPackages(packageTable, packageList))
+            .disableUpDownActions()
+            .setPreferredSize(new Dimension(-1, 100))
+            .createPanel();
 
-    return panel;
-  }
+        UIUtil.addBorder(panel, IdeBorderFactory.createTitledBorder(ApplicationBundle.message("title.packages.to.use.import.with"), false));
+
+        return panel;
+    }
 }

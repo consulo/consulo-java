@@ -41,173 +41,151 @@ import jakarta.annotation.Nullable;
 /**
  * @author max
  */
-public class JavaDocFormattingPanel extends OptionTreeWithPreviewPanel
-{
-	private JCheckBox myEnableCheckBox;
+public class JavaDocFormattingPanel extends OptionTreeWithPreviewPanel {
+    private JCheckBox myEnableCheckBox;
 
-	private final JPanel myJavaDocPanel = new JPanel(new BorderLayout());
-	public static final String OTHER_GROUP = ApplicationBundle.message("group.javadoc.other");
-	public static final String INVALID_TAGS_GROUP = ApplicationBundle.message("group.javadoc.invalid.tags");
-	public static final String BLANK_LINES_GROUP = ApplicationBundle.message("group.javadoc.blank.lines");
-	public static final String ALIGNMENT_GROUP = ApplicationBundle.message("group.javadoc.alignment");
+    private final JPanel myJavaDocPanel = new JPanel(new BorderLayout());
+    public static final String OTHER_GROUP = ApplicationBundle.message("group.javadoc.other");
+    public static final String INVALID_TAGS_GROUP = ApplicationBundle.message("group.javadoc.invalid.tags");
+    public static final String BLANK_LINES_GROUP = ApplicationBundle.message("group.javadoc.blank.lines");
+    public static final String ALIGNMENT_GROUP = ApplicationBundle.message("group.javadoc.alignment");
 
-	public JavaDocFormattingPanel(CodeStyleSettings settings)
-	{
-		super(settings);
-		init();
-	}
+    public JavaDocFormattingPanel(CodeStyleSettings settings) {
+        super(settings);
+        init();
+    }
 
-	@Override
-	protected void init()
-	{
-		super.init();
+    @Override
+    protected void init() {
+        super.init();
 
-		myEnableCheckBox = new JCheckBox(ApplicationBundle.message("checkbox.enable.javadoc.formatting"));
-		myEnableCheckBox.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				update();
-			}
-		});
+        myEnableCheckBox = new JCheckBox(ApplicationBundle.message("checkbox.enable.javadoc.formatting"));
+        myEnableCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                update();
+            }
+        });
 
-		myPanel.setBorder(new CustomLineBorder(OnePixelDivider.BACKGROUND, 1, 0, 0, 0));
-		myJavaDocPanel.add(BorderLayout.CENTER, myPanel);
-		myJavaDocPanel.add(myEnableCheckBox, BorderLayout.NORTH);
-	}
+        myPanel.setBorder(new CustomLineBorder(OnePixelDivider.BACKGROUND, 1, 0, 0, 0));
+        myJavaDocPanel.add(BorderLayout.CENTER, myPanel);
+        myJavaDocPanel.add(myEnableCheckBox, BorderLayout.NORTH);
+    }
 
-	@Override
-	public LanguageCodeStyleSettingsProvider.SettingsType getSettingsType()
-	{
-		return LanguageCodeStyleSettingsProvider.SettingsType.LANGUAGE_SPECIFIC;
-	}
+    @Override
+    public LanguageCodeStyleSettingsProvider.SettingsType getSettingsType() {
+        return LanguageCodeStyleSettingsProvider.SettingsType.LANGUAGE_SPECIFIC;
+    }
 
-	@Override
-	public JComponent getPanel()
-	{
-		return myJavaDocPanel;
-	}
+    @Override
+    public JComponent getPanel() {
+        return myJavaDocPanel;
+    }
 
-	private void update()
-	{
-		setEnabled(getPanel(), myEnableCheckBox.isSelected());
-		myEnableCheckBox.setEnabled(true);
-	}
+    private void update() {
+        setEnabled(getPanel(), myEnableCheckBox.isSelected());
+        myEnableCheckBox.setEnabled(true);
+    }
 
-	@Override
-	protected void initTables()
-	{
-		initCustomOptions(ALIGNMENT_GROUP);
-		initCustomOptions(BLANK_LINES_GROUP);
-		initCustomOptions(INVALID_TAGS_GROUP);
-		initBooleanField("WRAP_COMMENTS", ApplicationBundle.message("checkbox.wrap.at.right.margin"), OTHER_GROUP);
-		initCustomOptions(OTHER_GROUP);
-	}
+    @Override
+    protected void initTables() {
+        initCustomOptions(ALIGNMENT_GROUP);
+        initCustomOptions(BLANK_LINES_GROUP);
+        initCustomOptions(INVALID_TAGS_GROUP);
+        initBooleanField("WRAP_COMMENTS", ApplicationBundle.message("checkbox.wrap.at.right.margin"), OTHER_GROUP);
+        initCustomOptions(OTHER_GROUP);
+    }
 
-	@Override
-	protected int getRightMargin()
-	{
-		return 47;
-	}
+    @Override
+    protected int getRightMargin() {
+        return 47;
+    }
 
-	@Override
-	protected String getPreviewText()
-	{                    //| Margin is here
-		return "package sample;\n" +
-				"public class Sample {\n" +
-				"  /**\n" +
-				"   * This is a method description that is long enough to exceed right margin.\n" +
-				"   *\n" +
-				"   * Another paragraph of the description placed after blank line.\n" +
-				"   * <p/>\n" +
-				"   * Line with manual\n" +
-				"   * line feed.\n" +
-				"   * @param i short named parameter description\n" +
-				"   * @param longParameterName long named parameter description\n" +
-				"   * @param missingDescription\n" +
-				"   * @return return description.\n" +
-				"   * @throws XXXException description.\n" +
-				"   * @throws YException description.\n" +
-				"   * @throws ZException\n" +
-				"   *\n" +
-				"   * @invalidTag" +
-				"   */\n" +
-				"  public abstract String sampleMethod(int i, int longParameterName, int missingDescription) throws XXXException, YException, ZException;\n" +
-				"\n" +
-				"  /** One-line comment */\n" +
-				"  public abstract String sampleMethod2();\n" +
-				"\n" +
-				"  /**\n" +
-				"   * Simple method description\n" +
-				"   * @return\n" +
-				"   */\n" +
-				"  public abstract String sampleMethod3();\n";
-	}
+    @Override
+    protected String getPreviewText() {                    //| Margin is here
+        return "package sample;\n" +
+            "public class Sample {\n" +
+            "  /**\n" +
+            "   * This is a method description that is long enough to exceed right margin.\n" +
+            "   *\n" +
+            "   * Another paragraph of the description placed after blank line.\n" +
+            "   * <p/>\n" +
+            "   * Line with manual\n" +
+            "   * line feed.\n" +
+            "   * @param i short named parameter description\n" +
+            "   * @param longParameterName long named parameter description\n" +
+            "   * @param missingDescription\n" +
+            "   * @return return description.\n" +
+            "   * @throws XXXException description.\n" +
+            "   * @throws YException description.\n" +
+            "   * @throws ZException\n" +
+            "   *\n" +
+            "   * @invalidTag" +
+            "   */\n" +
+            "  public abstract String sampleMethod(int i, int longParameterName, int missingDescription) throws XXXException, YException, ZException;\n" +
+            "\n" +
+            "  /** One-line comment */\n" +
+            "  public abstract String sampleMethod2();\n" +
+            "\n" +
+            "  /**\n" +
+            "   * Simple method description\n" +
+            "   * @return\n" +
+            "   */\n" +
+            "  public abstract String sampleMethod3();\n";
+    }
 
 
-	private static void setEnabled(JComponent c, boolean enabled)
-	{
-		c.setEnabled(enabled);
-		Component[] children = c.getComponents();
-		for(Component child : children)
-		{
-			if(child instanceof JComponent)
-			{
-				setEnabled((JComponent) child, enabled);
-			}
-		}
-	}
+    private static void setEnabled(JComponent c, boolean enabled) {
+        c.setEnabled(enabled);
+        Component[] children = c.getComponents();
+        for (Component child : children) {
+            if (child instanceof JComponent) {
+                setEnabled((JComponent)child, enabled);
+            }
+        }
+    }
 
-	@Override
-	public void apply(CodeStyleSettings settings)
-	{
-		super.apply(settings);
-		settings.getCustomSettings(JavaCodeStyleSettings.class).ENABLE_JAVADOC_FORMATTING = myEnableCheckBox.isSelected();
-	}
+    @Override
+    public void apply(CodeStyleSettings settings) {
+        super.apply(settings);
+        settings.getCustomSettings(JavaCodeStyleSettings.class).ENABLE_JAVADOC_FORMATTING = myEnableCheckBox.isSelected();
+    }
 
-	@Override
-	protected void resetImpl(final CodeStyleSettings settings)
-	{
-		super.resetImpl(settings);
-		myEnableCheckBox.setSelected(settings.getCustomSettings(JavaCodeStyleSettings.class).ENABLE_JAVADOC_FORMATTING);
-		update();
-	}
+    @Override
+    protected void resetImpl(final CodeStyleSettings settings) {
+        super.resetImpl(settings);
+        myEnableCheckBox.setSelected(settings.getCustomSettings(JavaCodeStyleSettings.class).ENABLE_JAVADOC_FORMATTING);
+        update();
+    }
 
-	@Override
-	public boolean isModified(CodeStyleSettings settings)
-	{
-		return super.isModified(settings) ||
-				myEnableCheckBox.isSelected() != settings.getCustomSettings(JavaCodeStyleSettings.class).ENABLE_JAVADOC_FORMATTING;
-	}
+    @Override
+    public boolean isModified(CodeStyleSettings settings) {
+        return super.isModified(settings) ||
+            myEnableCheckBox.isSelected() != settings.getCustomSettings(JavaCodeStyleSettings.class).ENABLE_JAVADOC_FORMATTING;
+    }
 
-	@Override
-	@Nonnull
-	protected final FileType getFileType()
-	{
-		return JavaFileType.INSTANCE;
-	}
+    @Override
+    @Nonnull
+    protected final FileType getFileType() {
+        return JavaFileType.INSTANCE;
+    }
 
-	@Override
-	protected void customizeSettings()
-	{
-		LanguageCodeStyleSettingsProvider provider = LanguageCodeStyleSettingsProvider.forLanguage(JavaLanguage.INSTANCE);
-		if(provider != null)
-		{
-			provider.customizeSettings(this, getSettingsType());
-		}
-	}
+    @Override
+    protected void customizeSettings() {
+        LanguageCodeStyleSettingsProvider provider = LanguageCodeStyleSettingsProvider.forLanguage(JavaLanguage.INSTANCE);
+        if (provider != null) {
+            provider.customizeSettings(this, getSettingsType());
+        }
+    }
 
-	@Override
-	protected String getTabTitle()
-	{
-		return ApplicationBundle.message("title.javadoc");
-	}
+    @Override
+    protected String getTabTitle() {
+        return ApplicationBundle.message("title.javadoc");
+    }
 
-	@Nullable
-	@Override
-	public Language getDefaultLanguage()
-	{
-		return JavaLanguage.INSTANCE;
-	}
+    @Nullable
+    @Override
+    public Language getDefaultLanguage() {
+        return JavaLanguage.INSTANCE;
+    }
 }
