@@ -17,6 +17,7 @@ package com.intellij.java.impl.testIntegration;
 
 import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.CreateFromUsageUtils;
 import com.intellij.java.impl.codeInsight.generation.GenerateMembersUtil;
+import com.intellij.java.impl.codeInsight.template.impl.ShortenFQNamesProcessor;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import com.intellij.java.language.codeInsight.TestFrameworks;
 import com.intellij.java.language.psi.*;
@@ -232,7 +233,7 @@ public class TestIntegrationUtils {
 
     template.setToIndent(true);
     template.setToReformat(true);
-    template.setToShortenLongNames(true);
+    template.setOption(ShortenFQNamesProcessor.KEY, true);
 
     return template;
   }

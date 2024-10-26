@@ -30,11 +30,12 @@ import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiUtilCore;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
+import consulo.util.dataholder.KeyWithDefaultValue;
 import consulo.util.lang.Pair;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.Nls;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,100 +48,88 @@ import static java.util.Arrays.asList;
  */
 @ExtensionImpl
 public class ShortenToStaticImportProcessor implements TemplateOptionalProcessor {
+    public static final KeyWithDefaultValue<Boolean> KEY = KeyWithDefaultValue.create("java-use-static-import", false);
 
-  private static final List<StaticImporter> IMPORTERS = asList(new SingleMemberStaticImporter(), new OnDemandStaticImporter());
+    private static final List<StaticImporter> IMPORTERS = asList(new SingleMemberStaticImporter(), new OnDemandStaticImporter());
 
-  @Override
-  public void processText(Project project, Template template, Document document, RangeMarker templateRange, Editor editor) {
-    if (!template.getValue(Template.Property.USE_STATIC_IMPORT_IF_POSSIBLE)) {
-      return;
+    @Nonnull
+    @Override
+    public KeyWithDefaultValue<Boolean> getKey() {
+        return KEY;
     }
 
-    PsiDocumentManager.getInstance(project).commitDocument(document);
-    final PsiFile file = PsiUtilBase.getPsiFileInEditor(editor, project);
-    if (file == null) {
-      return;
-    }
-
-    List<Pair<PsiElement, StaticImporter>> staticImportTargets = new ArrayList<Pair<PsiElement, StaticImporter>>();
-    for (
-        PsiElement element = PsiUtilCore.getElementAtOffset(file, templateRange.getStartOffset());
-        element != null && element.getTextRange().getStartOffset() < templateRange.getEndOffset();
-        element = getNext(element)) {
-      for (StaticImporter importer : IMPORTERS) {
-        if (importer.canPerform(element)) {
-          staticImportTargets.add(new Pair<PsiElement, StaticImporter>(element, importer));
-          break;
+    @Override
+    public void processText(Project project, Template template, Document document, RangeMarker templateRange, Editor editor) {
+        PsiDocumentManager.getInstance(project).commitDocument(document);
+        final PsiFile file = PsiUtilBase.getPsiFileInEditor(editor, project);
+        if (file == null) {
+            return;
         }
-      }
+
+        List<Pair<PsiElement, StaticImporter>> staticImportTargets = new ArrayList<Pair<PsiElement, StaticImporter>>();
+        for (
+            PsiElement element = PsiUtilCore.getElementAtOffset(file, templateRange.getStartOffset());
+            element != null && element.getTextRange().getStartOffset() < templateRange.getEndOffset();
+            element = getNext(element)) {
+            for (StaticImporter importer : IMPORTERS) {
+                if (importer.canPerform(element)) {
+                    staticImportTargets.add(new Pair<PsiElement, StaticImporter>(element, importer));
+                    break;
+                }
+            }
+        }
+
+        for (Pair<PsiElement, StaticImporter> pair : staticImportTargets) {
+            if (pair.first.isValid()) {
+                pair.second.perform(project, file, editor, pair.first);
+            }
+        }
     }
 
-    for (Pair<PsiElement, StaticImporter> pair : staticImportTargets) {
-      if (pair.first.isValid()) {
-        pair.second.perform(project, file, editor, pair.first);
-      }
+    @Nullable
+    private static PsiElement getNext(@Nonnull PsiElement element) {
+        PsiElement result = element.getNextSibling();
+        for (PsiElement current = element; current != null && result == null; current = current.getParent()) {
+            result = current.getNextSibling();
+        }
+        return result;
     }
-  }
 
-  @Nullable
-  private static PsiElement getNext(@Nonnull PsiElement element) {
-    PsiElement result = element.getNextSibling();
-    for (PsiElement current = element; current != null && result == null; current = current.getParent()) {
-      result = current.getNextSibling();
-    }
-    return result;
-  }
-
-  @Nls
-  @Override
-  public String getOptionName() {
-    return CodeInsightLocalize.dialogEditTemplateCheckboxUseStaticImport().get();
-  }
-
-  @Override
-  public boolean isEnabled(Template template) {
-    return template.getValue(Template.Property.USE_STATIC_IMPORT_IF_POSSIBLE);
-  }
-
-  @Override
-  public void setEnabled(Template template, boolean value) {
-    template.setValue(Template.Property.USE_STATIC_IMPORT_IF_POSSIBLE, value);
-  }
-
-  @Override
-  public boolean isVisible(Template template) {
-    return true;
-  }
-
-  private interface StaticImporter {
-    boolean canPerform(@Nonnull PsiElement element);
-
-    void perform(Project project, PsiFile file, Editor editor, PsiElement element);
-  }
-
-  private static class SingleMemberStaticImporter implements StaticImporter {
+    @Nonnull
     @Override
-    public boolean canPerform(@Nonnull PsiElement element) {
-      return AddSingleMemberStaticImportAction.getStaticImportClass(element) != null;
+    public LocalizeValue getOptionText() {
+        return CodeInsightLocalize.dialogEditTemplateCheckboxUseStaticImport();
     }
 
-    @Override
-    public void perform(Project project, PsiFile file, Editor editor, PsiElement element) {
-      AddSingleMemberStaticImportAction.invoke(file, element);
-    }
-  }
+    private interface StaticImporter {
+        boolean canPerform(@Nonnull PsiElement element);
 
-  private static class OnDemandStaticImporter implements StaticImporter {
-    @Override
-    @RequiredReadAction
-    public boolean canPerform(@Nonnull PsiElement element) {
-      return AddOnDemandStaticImportAction.getClassToPerformStaticImport(element) != null;
+        void perform(Project project, PsiFile file, Editor editor, PsiElement element);
     }
 
-    @Override
-    @RequiredReadAction
-    public void perform(Project project, PsiFile file, Editor editor, PsiElement element) {
-      AddOnDemandStaticImportAction.invoke(project, file, editor, element);
+    private static class SingleMemberStaticImporter implements StaticImporter {
+        @Override
+        public boolean canPerform(@Nonnull PsiElement element) {
+            return AddSingleMemberStaticImportAction.getStaticImportClass(element) != null;
+        }
+
+        @Override
+        public void perform(Project project, PsiFile file, Editor editor, PsiElement element) {
+            AddSingleMemberStaticImportAction.invoke(file, element);
+        }
     }
-  }
+
+    private static class OnDemandStaticImporter implements StaticImporter {
+        @Override
+        @RequiredReadAction
+        public boolean canPerform(@Nonnull PsiElement element) {
+            return AddOnDemandStaticImportAction.getClassToPerformStaticImport(element) != null;
+        }
+
+        @Override
+        @RequiredReadAction
+        public void perform(Project project, PsiFile file, Editor editor, PsiElement element) {
+            AddOnDemandStaticImportAction.invoke(project, file, editor, element);
+        }
+    }
 }

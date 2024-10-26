@@ -16,7 +16,6 @@
 package com.intellij.java.impl.codeInsight.template.postfix.templates;
 
 import com.intellij.java.impl.codeInsight.intention.impl.TypeExpression;
-import com.intellij.java.impl.codeInsight.template.impl.TextExpression;
 import com.intellij.java.impl.codeInsight.template.macro.SuggestVariableNameMacro;
 import com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils;
 import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
@@ -29,13 +28,14 @@ import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.postfixTemplate.PostfixTemplate;
 import consulo.language.editor.template.Template;
 import consulo.language.editor.template.TemplateManager;
+import consulo.language.editor.template.TextExpression;
 import consulo.language.editor.template.macro.MacroCallNode;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
 import consulo.project.content.scope.ProjectScopes;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.Collection;
 import java.util.Collections;
 

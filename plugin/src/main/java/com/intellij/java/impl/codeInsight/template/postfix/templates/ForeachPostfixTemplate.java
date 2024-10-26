@@ -15,21 +15,20 @@
  */
 package com.intellij.java.impl.codeInsight.template.postfix.templates;
 
-import consulo.language.editor.template.Template;
-import consulo.language.editor.template.TemplateManager;
-import consulo.language.editor.template.macro.MacroCallNode;
-import consulo.language.editor.template.VariableNode;
-import consulo.language.editor.postfixTemplate.PostfixTemplate;
-import com.intellij.java.impl.codeInsight.template.impl.TextExpression;
 import com.intellij.java.impl.codeInsight.template.macro.IterableComponentTypeMacro;
 import com.intellij.java.impl.codeInsight.template.macro.SuggestVariableNameMacro;
 import com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils;
 import com.intellij.java.language.psi.PsiExpression;
-import consulo.document.Document;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
+import consulo.document.Document;
+import consulo.language.editor.postfixTemplate.PostfixTemplate;
+import consulo.language.editor.template.Template;
+import consulo.language.editor.template.TemplateManager;
+import consulo.language.editor.template.TextExpression;
+import consulo.language.editor.template.VariableNode;
+import consulo.language.editor.template.macro.MacroCallNode;
 import consulo.language.psi.PsiElement;
-
+import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 public class ForeachPostfixTemplate extends PostfixTemplate {

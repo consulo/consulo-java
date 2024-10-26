@@ -16,7 +16,6 @@
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.java.impl.codeInsight.intention.impl.ParameterClassMember;
-import com.intellij.java.impl.codeInsight.template.impl.TextExpression;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
@@ -38,6 +37,7 @@ import consulo.language.editor.intention.PsiElementBaseIntentionAction;
 import consulo.language.editor.template.Template;
 import consulo.language.editor.template.TemplateBuilder;
 import consulo.language.editor.template.TemplateBuilderFactory;
+import consulo.language.editor.template.TextExpression;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -48,7 +48,6 @@ import consulo.ui.image.Image;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 

@@ -27,47 +27,47 @@ import consulo.language.editor.util.PsiUtilBase;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.util.dataholder.KeyWithDefaultValue;
+
+import javax.annotation.Nonnull;
 
 @ExtensionImpl
 public class ShortenFQNamesProcessor implements TemplateOptionalProcessor {
-  private static final Logger LOG = Logger.getInstance(ShortenFQNamesProcessor.class);
+    private static final Logger LOG = Logger.getInstance(ShortenFQNamesProcessor.class);
 
-  @Override
-  public void processText(final Project project, final Template template, final Document document, final RangeMarker templateRange,
-                          final Editor editor) {
-    if (!template.isToShortenLongNames()) return;
+    public static final KeyWithDefaultValue<Boolean> KEY = KeyWithDefaultValue.create("java-shorted-fq-names", true);
 
-    try {
-      PsiDocumentManager.getInstance(project).commitDocument(document);
-      JavaCodeStyleManager javaStyle = JavaCodeStyleManager.getInstance(project);
-      final PsiFile file = PsiUtilBase.getPsiFileInEditor(editor, project);
-      assert file != null;
-      javaStyle.shortenClassReferences(file, templateRange.getStartOffset(), templateRange.getEndOffset());
-      PsiDocumentManager.getInstance(project).doPostponedOperationsAndUnblockDocument(document);
-    } catch (IncorrectOperationException e) {
-      LOG.error(e);
+    @Nonnull
+    @Override
+    public KeyWithDefaultValue<Boolean> getKey() {
+        return KEY;
     }
-  }
 
-  @Override
-  public String getOptionName() {
-    return CodeInsightLocalize.dialogEditTemplateCheckboxShortenFqNames().get();
-  }
+    @Override
+    public void processText(Project project,
+                            Template template,
+                            Document document,
+                            RangeMarker templateRange,
+                            Editor editor) {
+        try {
+            PsiDocumentManager.getInstance(project).commitDocument(document);
+            JavaCodeStyleManager javaStyle = JavaCodeStyleManager.getInstance(project);
+            final PsiFile file = PsiUtilBase.getPsiFileInEditor(editor, project);
+            assert file != null;
+            javaStyle.shortenClassReferences(file, templateRange.getStartOffset(), templateRange.getEndOffset());
+            PsiDocumentManager.getInstance(project).doPostponedOperationsAndUnblockDocument(document);
+        }
+        catch (IncorrectOperationException e) {
+            LOG.error(e);
+        }
+    }
 
-  @Override
-  public boolean isEnabled(final Template template) {
-    return template.isToShortenLongNames();
-  }
-
-  @Override
-  public void setEnabled(final Template template, final boolean value) {
-    template.setToShortenLongNames(value);
-  }
-
-  @Override
-  public boolean isVisible(Template template) {
-    return true;
-  }
+    @Nonnull
+    @Override
+    public LocalizeValue getOptionText() {
+        return CodeInsightLocalize.dialogEditTemplateCheckboxShortenFqNames();
+    }
 }

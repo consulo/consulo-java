@@ -16,6 +16,7 @@
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
+import com.intellij.java.impl.codeInsight.template.impl.ShortenFQNamesProcessor;
 import com.intellij.java.impl.refactoring.introduceField.BaseExpressionToFieldHandler;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
@@ -65,7 +66,9 @@ public class JavaCreateFieldFromUsageHelper implements CreateFieldFromUsageHelpe
     }
     editor.getCaretModel().moveToOffset(field.getTextRange().getStartOffset());
     Template template = builder.buildInlineTemplate();
-    if (((ExpectedTypeInfo[]) expectedTypes).length > 1) template.setToShortenLongNames(false);
+    if (((ExpectedTypeInfo[]) expectedTypes).length > 1) {
+      template.setOption(ShortenFQNamesProcessor.KEY, false);
+    }
     return template;
   }
 
