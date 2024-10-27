@@ -7,7 +7,7 @@ import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
-public class JavaDeclarationContextType extends JavaCodeContextType {
+public class JavaDeclarationContextType extends JavaCodeContextType implements JavaLikeDeclarationContextType {
   public JavaDeclarationContextType() {
     super("JAVA_DECLARATION", LocalizeValue.localizeTODO("Declaration"), JavaGenericContextType.class);
   }

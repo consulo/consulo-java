@@ -2,6 +2,7 @@ package consulo.java.impl.template;
 
 import com.intellij.java.impl.codeInsight.template.JavaLikeCodeContextType;
 import com.intellij.java.impl.codeInsight.template.JavaLikeStatementContextType;
+import com.intellij.java.impl.codeInsight.template.impl.ShortenFQNamesProcessor;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.template.LiveTemplateContributor;
@@ -29,6 +30,8 @@ public class JavaIterationsLiveTemplateContributor implements LiveTemplateContri
             + "}", LocalizeValue.localizeTODO("Create iteration loop"))) {
             builder.withReformat();
 
+            builder.withOption(ShortenFQNamesProcessor.KEY, true);
+
             builder.withVariable("INDEX", "suggestIndexName()", "", true);
             builder.withVariable("LIMIT", "", "", true);
 
@@ -40,6 +43,8 @@ public class JavaIterationsLiveTemplateContributor implements LiveTemplateContri
             + "  $END$\n"
             + "}", CodeInsightLocalize.livetemplateDescriptionItar())) {
             builder.withReformat();
+
+            builder.withOption(ShortenFQNamesProcessor.KEY, true);
 
             builder.withVariable("INDEX", "suggestIndexName()", "", true);
             builder.withVariable("ARRAY", "arrayVariable()", "\"array\"", true);
@@ -55,6 +60,8 @@ public class JavaIterationsLiveTemplateContributor implements LiveTemplateContri
             + "  $END$\n"
             + "}", CodeInsightLocalize.livetemplateDescriptionItco())) {
             builder.withReformat();
+
+            builder.withOption(ShortenFQNamesProcessor.KEY, true);
 
             builder.withVariable("ITER", "suggestVariableName()", "", true);
             builder.withVariable("COLLECTION", "variableOfType(\"java.util.Collection\")", "\"collection\"", true);
@@ -73,6 +80,8 @@ public class JavaIterationsLiveTemplateContributor implements LiveTemplateContri
             + "}", CodeInsightLocalize.livetemplateDescriptionIten())) {
             builder.withReformat();
 
+            builder.withOption(ShortenFQNamesProcessor.KEY, true);
+
             builder.withVariable("ENUM", "variableOfType(\"java.util.Enumeration\")", "\"enumeration\"", true);
             builder.withVariable("TYPE", "rightSideType()", "\"Object\"", true);
             builder.withVariable("VAR", "suggestVariableName()", "", true);
@@ -88,6 +97,8 @@ public class JavaIterationsLiveTemplateContributor implements LiveTemplateContri
             + "}", CodeInsightLocalize.livetemplateDescriptionItit())) {
             builder.withReformat();
 
+            builder.withOption(ShortenFQNamesProcessor.KEY, true);
+
             builder.withVariable("ITER", "variableOfType(\"java.util.Iterator\")", "\"iterator\"", true);
             builder.withVariable("TYPE", "rightSideType()", "\"Object\"", true);
             builder.withVariable("VAR", "suggestVariableName()", "", true);
@@ -102,6 +113,8 @@ public class JavaIterationsLiveTemplateContributor implements LiveTemplateContri
             + "  $END$\n"
             + "}", CodeInsightLocalize.livetemplateDescriptionItli())) {
             builder.withReformat();
+
+            builder.withOption(ShortenFQNamesProcessor.KEY, true);
 
             builder.withVariable("INDEX", "suggestIndexName()", "", true);
             builder.withVariable("LIST", "variableOfType(\"java.util.List\")", "\"list\"", true);
@@ -119,6 +132,8 @@ public class JavaIterationsLiveTemplateContributor implements LiveTemplateContri
             + "}\n", CodeInsightLocalize.livetemplateDescriptionIttok())) {
             builder.withReformat();
 
+            builder.withOption(ShortenFQNamesProcessor.KEY, true);
+
             builder.withVariable("TOKENIZER", "suggestVariableName()", "\"tokenizer\"", true);
             builder.withVariable("STRING", "variableOfType(\"java.lang.String\")", "", true);
             builder.withVariable("VAR", "suggestVariableName()", "\"token\"", true);
@@ -133,6 +148,8 @@ public class JavaIterationsLiveTemplateContributor implements LiveTemplateContri
             + "  $END$\n"
             + "}", CodeInsightLocalize.livetemplateDescriptionItve())) {
             builder.withReformat();
+
+            builder.withOption(ShortenFQNamesProcessor.KEY, true);
 
             builder.withVariable("INDEX", "suggestIndexName()", "", true);
             builder.withVariable("VECTOR", "variableOfType(\"java.util.Vector\")", "\"vector\"", true);
@@ -150,6 +167,8 @@ public class JavaIterationsLiveTemplateContributor implements LiveTemplateContri
             + "}", CodeInsightLocalize.livetemplateDescriptionRitar())) {
             builder.withReformat();
 
+            builder.withOption(ShortenFQNamesProcessor.KEY, true);
+
             builder.withVariable("INDEX", "suggestIndexName()", "", true);
             builder.withVariable("ARRAY", "arrayVariable()", "\"array\"", true);
             builder.withVariable("ELEMENT_TYPE", "componentTypeOf(ARRAY)", "", false);
@@ -163,6 +182,8 @@ public class JavaIterationsLiveTemplateContributor implements LiveTemplateContri
             + "  $END$\n"
             + "}", CodeInsightLocalize.livetemplateDescriptionIter())) {
             builder.withReformat();
+
+            builder.withOption(ShortenFQNamesProcessor.KEY, true);
 
             builder.withVariable("ITERABLE_TYPE", "iterableVariable()", "", true);
             builder.withVariable("ELEMENT_TYPE", "iterableComponentType(ITERABLE_TYPE)", "\"java.lang.Object\"", false);
