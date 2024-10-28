@@ -38,30 +38,30 @@ import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class AnalysisScopeRule implements GetDataRule<AnalysisScope> {
-  @Nonnull
-  @Override
-  public Key<AnalysisScope> getKey() {
-    return AnalysisScopeUtil.KEY;
-  }
+    @Nonnull
+    @Override
+    public Key<AnalysisScope> getKey() {
+        return AnalysisScopeUtil.KEY;
+    }
 
-  @Override
-  public AnalysisScope getData(@Nonnull final DataProvider dataProvider) {
-    final Object psiFile = dataProvider.getDataUnchecked(PsiFile.KEY);
-    if (psiFile instanceof PsiJavaFile javaFile) {
-      return new JavaAnalysisScope(javaFile);
-    }
-    Object psiTarget = dataProvider.getDataUnchecked(PsiElement.KEY);
-    if (psiTarget instanceof PsiJavaPackage pack) {
-      PsiManager manager = pack.getManager();
-      if (!manager.isInProject(pack)) {
+    @Override
+    public AnalysisScope getData(@Nonnull final DataProvider dataProvider) {
+        final Object psiFile = dataProvider.getDataUnchecked(PsiFile.KEY);
+        if (psiFile instanceof PsiJavaFile javaFile) {
+            return new JavaAnalysisScope(javaFile);
+        }
+        Object psiTarget = dataProvider.getDataUnchecked(PsiElement.KEY);
+        if (psiTarget instanceof PsiJavaPackage pack) {
+            PsiManager manager = pack.getManager();
+            if (!manager.isInProject(pack)) {
+                return null;
+            }
+            PsiDirectory[] dirs = pack.getDirectories(GlobalSearchScope.projectScope(manager.getProject()));
+            if (dirs.length == 0) {
+                return null;
+            }
+            return new JavaAnalysisScope(pack, dataProvider.getDataUnchecked(Module.KEY));
+        }
         return null;
-      }
-      PsiDirectory[] dirs = pack.getDirectories(GlobalSearchScope.projectScope(manager.getProject()));
-      if (dirs.length == 0) {
-        return null;
-      }
-      return new JavaAnalysisScope(pack, dataProvider.getDataUnchecked(Module.KEY));
     }
-    return null;
-  }
 }

@@ -24,20 +24,20 @@ import consulo.language.codeStyle.setting.CodeStyleSettingsProvider;
  * @author Rustam Vishnyakov
  */
 public class JavaCodeStyleMainPanel extends TabbedLanguageCodeStylePanel {
-  public JavaCodeStyleMainPanel(CodeStyleSettings currentSettings, CodeStyleSettings settings) {
-    super(JavaLanguage.INSTANCE, currentSettings, settings);
-  }
-
-  @Override
-  protected void initTabs(CodeStyleSettings settings) {
-    super.initTabs(settings);
-    addTab(new JavaDocFormattingPanel(settings));
-    addTab(new CodeStyleImportsPanelWrapper(settings));
-    addTab(new JavaArrangementPanel(settings));
-    for (CodeStyleSettingsProvider provider : CodeStyleSettingsProvider.EXTENSION_POINT_NAME.getExtensionList()) {
-      if (provider.getLanguage() == JavaLanguage.INSTANCE && !provider.hasSettingsPage()) {
-        createTab(provider);
-      }
+    public JavaCodeStyleMainPanel(CodeStyleSettings currentSettings, CodeStyleSettings settings) {
+        super(JavaLanguage.INSTANCE, currentSettings, settings);
     }
-  }
+
+    @Override
+    protected void initTabs(CodeStyleSettings settings) {
+        super.initTabs(settings);
+        addTab(new JavaDocFormattingPanel(settings));
+        addTab(new CodeStyleImportsPanelWrapper(settings));
+        addTab(new JavaArrangementPanel(settings));
+        for (CodeStyleSettingsProvider provider : CodeStyleSettingsProvider.EXTENSION_POINT_NAME.getExtensionList()) {
+            if (provider.getLanguage() == JavaLanguage.INSTANCE && !provider.hasSettingsPage()) {
+                createTab(provider);
+            }
+        }
+    }
 }

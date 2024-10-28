@@ -1,0 +1,776 @@
+annotation.not.allowed.here:
+  text: Annotations are not allowed here
+annotation.unknown.method:
+  text: Cannot resolve method ''{0}''
+annotation.missing.method:
+  text: Cannot find method ''{0}''
+annotation.incompatible.types:
+  text: 'Incompatible types. Found: ''''{0}'''', required: ''''{1}'''''
+annotation.illegal.array.initializer:
+  text: Illegal initializer for ''{0}''
+annotation.duplicate.annotation:
+  text: Duplicate annotation
+annotation.duplicate.attribute:
+  text: Duplicate attribute ''{0}''
+annotation.missing.attribute:
+  text: '{0} missing though required'
+annotation.not.applicable:
+  text: '''''@{0}'''' not applicable to {1}'
+annotation.non.constant.attribute.value:
+  text: Attribute value must be constant
+annotation.non.class.literal.attribute.value:
+  text: Attribute value must be a class literal
+annotation.invalid.annotation.member.type:
+  text: Invalid type for annotation member
+annotation.cyclic.element.type:
+  text: Cyclic annotation element type
+annotation.annotation.type.expected:
+  text: Annotation type expected
+annotation.members.may.not.have.throws.list:
+  text: '@interface members may not have throws list'
+annotation.may.not.have.extends.list:
+  text: '@interface may not have extends list'
+annotation.name.is.missing:
+  text: Annotation attribute must be of the form 'name=value'
+annotation.not.allowed.ref:
+  text: Annotation not applicable to this kind of reference
+annotation.not.allowed.static:
+  text: Static member qualifying type may not be annotated
+annotation.not.allowed.void:
+  text: '''void'' type may not be annotated'
+annotation.not.allowed.class:
+  text: Class literal type may not be annotated
+annotation.container.no.value:
+  text: 'Invalid container annotation ''''{0}'''': no ''''value'''' method declared'
+annotation.container.bad.type:
+  text: 'Invalid container annotation ''''{0}'''': ''''value'''' method should have type ''''{1}'''''
+annotation.container.low.retention:
+  text: Container annotation ''{0}'' has shorter retention (''{1}'') than the contained annotation
+annotation.container.wide.target:
+  text: Target of container annotation ''{0}'' is not a subset of target of this annotation
+annotation.duplicate.explained:
+  text: Duplicate annotation. {0}
+annotation.non.repeatable:
+  text: The declaration of ''{0}'' does not have a valid java.lang.annotation.Repeatable annotation
+annotation.container.wrong.place:
+  text: Container annotation ''{0}'' must not be present at the same time as the element it contains
+annotation.container.not.applicable:
+  text: Container annotation ''@{0}'' is not applicable to {1}
+annotation.target.ANNOTATION_TYPE:
+  text: annotation type
+annotation.target.TYPE:
+  text: type
+annotation.target.TYPE_USE:
+  text: type use
+annotation.target.TYPE_PARAMETER:
+  text: type parameter
+annotation.target.CONSTRUCTOR:
+  text: constructor
+annotation.target.METHOD:
+  text: method
+annotation.target.FIELD:
+  text: field
+annotation.target.PARAMETER:
+  text: parameter
+annotation.target.LOCAL_VARIABLE:
+  text: local variable
+annotation.target.PACKAGE:
+  text: package
+generics.holder.type:
+  text: Type
+generics.holder.method:
+  text: Method
+generics.inferred.type.for.type.parameter.is.not.within.its.bound.extend:
+  text: Inferred type ''{2}'' for type parameter ''{0}'' is not within its bound; should extend ''{1}''
+generics.inferred.type.for.type.parameter.is.not.within.its.bound.implement:
+  text: Inferred type ''{2}'' for type parameter ''{0}'' is not within its bound; should implement ''{1}''
+generics.type.parameter.is.not.within.its.bound.extend:
+  text: Type parameter ''{0}'' is not within its bound; should extend ''{1}''
+generics.type.parameter.is.not.within.its.bound.implement:
+  text: Type parameter ''{0}'' is not within its bound; should implement ''{1}''
+generics.type.or.method.does.not.have.type.parameters:
+  text: '{0} ''''{1}'''' does not have type parameters'
+generics.wrong.number.of.type.arguments:
+  text: 'Wrong number of type arguments: {0}; required: {1}'
+generics.cannot.be.inherited.with.different.type.arguments:
+  text: '''''{0}'''' cannot be inherited with different type arguments: ''''{1}'''' and ''''{2}'''''
+generics.select.static.class.from.parameterized.type:
+  text: Cannot select static class ''{0}'' from parameterized type
+generics.methods.have.same.erasure:
+  text: '{0}; both methods have same erasure'
+generics.methods.have.same.erasure.override:
+  text: '{0}; both methods have same erasure, yet neither overrides the other'
+generics.methods.have.same.erasure.hide:
+  text: '{0}; both methods have same erasure, yet neither hides the other'
+generics.type.parameter.cannot.be.instantiated:
+  text: Type parameter ''{0}'' cannot be instantiated directly
+wildcard.type.cannot.be.instantiated:
+  text: Wildcard type ''{0}'' cannot be instantiated directly
+generics.wildcard.not.expected:
+  text: No wildcard expected
+generics.wildcards.may.be.used.only.as.reference.parameters:
+  text: Wildcards may be used only as reference parameters
+generics.type.argument.cannot.be.of.primitive.type:
+  text: Type argument cannot be of primitive type
+generics.unchecked.assignment:
+  text: 'Unchecked assignment: ''''{0}'''' to ''''{1}'''''
+generics.unchecked.cast:
+  text: 'Unchecked cast: ''''{0}'''' to ''''{1}'''''
+generics.unchecked.call.to.member.of.raw.type:
+  text: Unchecked call to ''{0}'' as a member of raw type ''{1}''
+generics.unchecked.call:
+  text: Unchecked method ''{0}'' invocation
+generics.diamond.not.applicable:
+  text: Diamond operator is not applicable for non-parameterized types
+generics.reference.parameters.not.allowed:
+  text: Reference parameters are not allowed here
+foreach.not.applicable:
+  text: foreach not applicable to type ''{0}''.
+illegal.to.access.static.member.from.enum.constructor.or.instance.initializer:
+  text: It is illegal to access static member ''{0}'' from enum constructor or instance initializer
+enum.types.cannot.be.instantiated:
+  text: Enum types cannot be instantiated
+generic.array.creation:
+  text: Generic array creation
+generics.enum.may.not.have.type.parameters:
+  text: Enum may not have type parameters
+generics.annotation.members.may.not.have.type.parameters:
+  text: '@interface members may not have type parameters'
+annotation.may.not.have.type.parameters:
+  text: '@interface may not have type parameters'
+generics.duplicate.type.parameter:
+  text: 'Duplicate type parameter: ''''{0}'''''
+generics.cannot.catch.type.parameters:
+  text: Cannot catch type parameters
+generics.cannot.instanceof.type.parameters:
+  text: Class or array expected
+illegal.generic.type.for.instanceof:
+  text: Illegal generic type for instanceof
+cannot.select.dot.class.from.type.variable:
+  text: Cannot select from a type variable
+method.does.not.override.super:
+  text: Method does not override method from its superclass
+call.to.super.is.not.allowed.in.enum.constructor:
+  text: Call to super is not allowed in enum constructor
+vararg.not.last.parameter:
+  text: Vararg parameter must be the last in the list
+modifiers.for.enum.constants:
+  text: No modifiers allowed for enum constants
+generics.type.arguments.on.raw.type:
+  text: Type arguments given on a raw type
+generics.type.arguments.on.raw.method:
+  text: Type arguments given on a raw method
+classes.extends.enum:
+  text: Classes cannot directly extend 'java.lang.Enum'
+unchecked.overriding.incompatible.return.type:
+  text: 'Unchecked overriding: return type requires unchecked conversion. Found ''''{0}'''', required ''''{1}'''''
+local.enum:
+  text: Enum must not be local
+wildcard.not.expected:
+  text: Unexpected wildcard
+bound.not.expected:
+  text: Unexpected bound
+interface.expected:
+  text: Interface expected here
+no.interface.expected:
+  text: No interface expected here
+class.expected:
+  text: Class name expected here
+implements.after.interface:
+  text: No implements clause allowed for interface
+extends.after.enum:
+  text: No extends clause allowed for enum
+static.declaration.in.inner.class:
+  text: Inner classes cannot have static declarations
+class.must.be.abstract:
+  text: Class ''{0}'' must either be declared abstract or implement abstract method ''{1}'' in ''{2}''
+enum.constant.should.implement.method:
+  text: Class ''{0}'' must implement abstract method ''{1}'' in ''{2}''
+abstract.cannot.be.instantiated:
+  text: '''''{0}'''' is abstract; cannot be instantiated'
+duplicate.class.in.other.file:
+  text: Duplicate class found in the file ''{0}''
+duplicate.class:
+  text: 'Duplicate class: ''''{0}'''''
+public.class.should.be.named.after.file:
+  text: Class ''{0}'' is public, should be declared in a file named ''{0}.java''
+inheritance.from.final.class:
+  text: Cannot inherit from final ''{0}''
+package.name.file.path.mismatch:
+  text: Package name ''{0}'' does not correspond to the file path ''{1}''
+missing.package.statement:
+  text: 'Missing package statement: ''''{0}'''''
+interface.cannot.be.local:
+  text: Modifier 'interface' not allowed here
+cyclic.inheritance:
+  text: Cyclic inheritance involving ''{0}''
+class.already.imported:
+  text: '''''{0}'''' is already defined in this compilation unit'
+class.cannot.extend.multiple.classes:
+  text: Class cannot extend multiple classes
+not.allowed.in.interface:
+  text: Not allowed in interface
+qualified.new.of.static.class:
+  text: Qualified new of static class
+invalid.qualified.new:
+  text: Invalid qualified new
+class.name.expected:
+  text: Class name expected
+no.enclosing.instance.in.scope:
+  text: No enclosing instance of type ''{0}'' is in scope
+is.not.an.enclosing.class:
+  text: '''''{0}'''' is not an enclosing class'
+cannot.be.referenced.from.static.context:
+  text: '''''{0}'''' cannot be referenced from a static context'
+no.default.constructor.available:
+  text: There is no default constructor available in ''{0}''
+missing.return.statement:
+  text: Missing return statement
+unreachable.statement:
+  text: Unreachable statement
+variable.not.initialized:
+  text: Variable ''{0}'' might not have been initialized
+variable.already.assigned:
+  text: Variable ''{0}'' might already have been assigned to
+variable.assigned.in.loop:
+  text: Variable ''{0}'' might be assigned in loop
+assignment.to.final.variable:
+  text: Cannot assign a value to final variable ''{0}''
+variable.must.be.final:
+  text: Variable ''{0}'' is accessed from within inner class. Needs to be declared final.
+lambda.variable.must.be.final:
+  text: Variable used in lambda expression should be final or effectively final
+initializer.must.be.able.to.complete.normally:
+  text: Initializer must be able to complete normally
+weaker.privileges:
+  text: '{0}; attempting to assign weaker access privileges (''''{1}''''); was ''''{2}'''''
+incompatible.return.type:
+  text: attempting to use incompatible return type
+final.method.override:
+  text: '''''{0}'''' cannot override ''''{1}'''' in ''''{2}''''; overridden method is final'
+overridden.method.does.not.throw:
+  text: '{0}; overridden method does not throw ''''{1}'''''
+exception.is.never.thrown:
+  text: Exception ''{0}'' is never thrown in the method
+wrong.method.arguments:
+  text: '''''{0}'''' in ''''{1}'''' cannot be applied to ''''{2}'''''
+method.call.expected:
+  text: Method call expected
+ambiguous.method.call:
+  text: 'Ambiguous method call: both ''''{0}'''' and ''''{1}'''' match'
+ambiguous.reference:
+  text: Reference to ''{0}'' is ambiguous, both ''{1}'' and ''{2}'' match
+cannot.resolve.method:
+  text: Cannot resolve method ''{0}''
+missing.method.body:
+  text: Missing method body, or declare abstract
+abstract.method.in.non.abstract.class:
+  text: Abstract method in non-abstract class
+missing.return.type:
+  text: Invalid method declaration; return type required
+duplicate.method:
+  text: '''''{0}'''' is already defined in ''''{1}'''''
+constructor.call.must.be.first.statement:
+  text: Call to ''{0}'' must be first statement in constructor body
+direct.abstract.method.access:
+  text: Abstract method ''{0}'' cannot be accessed directly
+unrelated.overriding.methods.return.types:
+  text: methods have unrelated return types
+overrides.deprecated.method:
+  text: Overrides deprecated method in ''{0}''
+recursive.constructor.invocation:
+  text: Recursive constructor invocation
+wrong.constructor.arguments:
+  text: '''''{0}'''' cannot be applied to ''''{1}'''''
+cannot.resolve.constructor:
+  text: Cannot resolve constructor ''{0}''
+invalid.package.annotation.containing.file:
+  text: Package annotations should be in file package-info.java
+repeated.annotation.target:
+  text: Repeated annotation target
+clash.methods.message:
+  text: '''''{0}'''' clashes with ''''{1}'''''
+clash.methods.message.show.classes:
+  text: '''''{0}'''' in ''''{2}'''' clashes with ''''{1}'''' in ''''{3}'''''
+package.clashes.with.class:
+  text: Package ''{0}'' clashes with class of same name
+class.clashes.with.package:
+  text: Class ''{0}'' clashes with package of same name
+incompatible.call.types:
+  text: 'Wrong {0, choice, 1#1st|2#2nd|3#3rd|4#{0,number}th} argument type. Found: ''''{2}'''', required: ''''{1}'''''
+ambiguous.method.html.tooltip:
+  text: <html><body><table border=0><tr><td colspan={0}>Ambiguous method call. Both</td></tr><tr>{1}<td>in <b>{2}</b>\&nbsp;and</td></tr><tr>{3}<td>in <b>{4}</b>\&nbsp;match.</td></tr></table></body></html>
+argument.mismatch.html.tooltip:
+  text: <html><body><table border=0><tr><td><b>{1}</b></td>{3}<td colspan={0}>in <b>{2}</b>\&nbsp;cannot be applied</td></tr><tr><td>to</td>{4}</tr></table></body></html>
+incompatible.types.html.tooltip:
+  text: <html><body>Incompatible types.<table><tr><td>Required:</td><td>{0}</td>{1}</tr><tr><td>Found:</td><td>{2}</td>{3}</tr></table></body></html>
+interface.methods.cannot.have.body:
+  text: Interface methods cannot have body
+abstract.methods.cannot.have.a.body:
+  text: Abstract methods cannot have a body
+native.methods.cannot.have.a.body:
+  text: Native methods cannot have a body
+extension.method.should.have.a.body:
+  text: Extension method should have a body
+extension.method.in.class:
+  text: Extension methods can only be used within an interface
+instance.method.cannot.override.static.method:
+  text: Instance method ''{0}'' in ''{1}'' cannot override static method ''{2}'' in ''{3}''
+static.method.cannot.override.instance.method:
+  text: Static method ''{0}'' in ''{1}'' cannot override instance method ''{2}'' in ''{3}''
+inconvertible.type.cast:
+  text: Inconvertible types; cannot cast ''{0}'' to ''{1}''
+variable.expected:
+  text: Variable expected
+binary.operator.not.applicable:
+  text: Operator ''{0}'' cannot be applied to ''{1}'', ''{2}''
+unary.operator.not.applicable:
+  text: Operator ''{0}'' cannot be applied to ''{1}''
+return.outside.method:
+  text: Return outside method
+return.from.void.method:
+  text: Cannot return a value from a method with void result type
+missing.return.value:
+  text: Missing return value
+unhandled.exceptions:
+  text: 'Unhandled {1, choice, 0#exception|2#exceptions}: {0}'
+unhandled.close.exceptions:
+  text: 'Unhandled {1, choice, 0#exception|2#exceptions} from {2}: {0}'
+variable.already.defined:
+  text: Variable ''{0}'' is already defined in the scope
+break.outside.switch.or.loop:
+  text: Break outside switch or loop
+continue.outside.loop:
+  text: Continue outside of loop
+not.loop.label:
+  text: 'Not a loop label: ''''{0}'''''
+incompatible.modifiers:
+  text: 'Illegal combination of modifiers: ''''{0}'''' and ''''{1}'''''
+modifier.not.allowed:
+  text: Modifier ''{0}'' not allowed here
+exception.never.thrown.try:
+  text: Exception ''{0}'' is never thrown in the corresponding try block
+exception.already.caught.warn:
+  text: 'Unreachable section: {1, choice, 0#exception|2#exceptions} ''''{0}'''' {1, choice, 0#has|2#have} already been caught'
+not.a.statement:
+  text: Not a statement
+invalid.statement:
+  text: Invalid statement
+incompatible.types:
+  text: 'Incompatible types. Found: ''''{1}'''', required: ''''{0}'''''
+valid.switch.selector.types:
+  text: byte, char, short or int
+valid.switch.1_7.selector.types:
+  text: char, byte, short, int, Character, Byte, Short, Integer, String, or an enum
+dot.expected.after.super.or.this:
+  text: '''.'' expected'
+unqualified.super.disallowed:
+  text: Unqualified super reference is not allowed in extension method
+non.static.symbol.referenced.from.static.context:
+  text: Non-static {0} ''{1}'' cannot be referenced from a static context
+private.symbol:
+  text: '''''{0}'''' has private access in ''''{1}'''''
+protected.symbol:
+  text: '''''{0}'''' has protected access in ''''{1}'''''
+package.local.symbol:
+  text: '''''{0}'''' is not public in ''''{1}''''. Cannot be accessed from outside package'
+visibility.access.problem:
+  text: Cannot access ''{0}'' in ''{1}''
+array.type.expected:
+  text: 'Array type expected; found: ''''{0}'''''
+expression.expected:
+  text: Expression expected
+array.initializer.not.allowed:
+  text: Array initializer is not allowed here
+case.statement.outside.switch:
+  text: Case statement outside switch
+qualified.enum.constant.in.switch:
+  text: An enum switch case label must be the unqualified name of an enumeration constant
+constant.expression.required:
+  text: Constant expression required
+duplicate.default.switch.label:
+  text: Duplicate default label
+duplicate.switch.label:
+  text: Duplicate label ''{0}''
+switch.colon.expected.after.case.label:
+  text: ''':'' expected'
+illegal.forward.reference:
+  text: Illegal forward reference
+unknown.class:
+  text: 'Unknown class: ''''{0}'''''
+illegal.type.void:
+  text: 'Illegal type: ''void'''
+member.referenced.before.constructor.called:
+  text: Cannot reference ''{0}'' before supertype constructor has been called
+label.without.statement:
+  text: Label without statement
+duplicate.label:
+  text: Label ''{0}'' already in use
+unclosed.comment:
+  text: Unclosed comment
+exception.already.caught:
+  text: Exception ''{0}'' has already been caught
+exception.must.be.disjoint:
+  text: 'Types in multi-catch must be disjoint: ''''{0}'''' is a subclass of ''''{1}'''''
+statement.must.be.prepended.with.case.label:
+  text: Statement must be prepended with case label
+void.type.is.not.allowed:
+  text: '''void'' type is not allowed here'
+single.import.class.conflict:
+  text: '''''{0}'''' is already defined in a single-type import'
+numeric.overflow.in.expression:
+  text: Numeric overflow in expression
+static.member.accessed.via.instance.reference:
+  text: Static member ''{0}.{1}'' accessed via instance reference
+unresolved.label:
+  text: 'Undefined label: ''''{0}'''''
+deprecated.symbol:
+  text: '''''{0}'''' is deprecated'
+deprecated.symbol.0:
+  text: '''''{0}'''' is deprecated. {1}'
+cannot.resolve.symbol:
+  text: Cannot resolve symbol ''{0}''
+class.is.already.defined.in.single.static.import:
+  text: Class ''{0}'' is already defined in a single static import
+class.is.ambiguous.in.single.static.import:
+  text: Class ''{0}'' is ambiguous in a single static import
+field.is.already.defined.in.single.static.import:
+  text: Field ''{0}'' is already defined in a single static import
+field.is.ambiguous.in.single.static.import:
+  text: Field ''{0}'' is ambiguous in a single static import
+annotation.interface.members.may.not.have.parameters:
+  text: '@interface members may not have parameters'
+bad.qualifier.in.super.method.reference:
+  text: 'Bad type qualifier in default super call: {0}'
+static.interface.method.call.qualifier:
+  text: Static method may be invoked on containing interface class only
+local.variable.is.never.used:
+  text: Variable ''{0}'' is never used
+local.variable.is.not.used.for.reading:
+  text: Variable ''{0}'' is assigned but never accessed
+local.variable.is.not.assigned:
+  text: Variable ''{0}'' is never assigned
+private.field.is.not.used:
+  text: Private field ''{0}'' is never used
+field.is.not.used:
+  text: Field ''{0}'' is never used
+private.field.is.not.used.for.reading:
+  text: Private field ''{0}'' is assigned but never accessed
+private.field.is.not.assigned:
+  text: Private field ''{0}'' is never assigned
+parameter.is.not.used:
+  text: Parameter ''{0}'' is never used
+private.method.is.not.used:
+  text: Private method ''{0}'' is never used
+method.is.not.used:
+  text: Method ''{0}'' is never used
+constructor.is.not.used:
+  text: Constructor ''{0}'' is never used
+private.constructor.is.not.used:
+  text: Private constructor ''{0}'' is never used
+private.inner.class.is.not.used:
+  text: Private inner class ''{0}'' is never used
+private.inner.interface.is.not.used:
+  text: Private inner interface ''{0}'' is never used
+type.parameter.is.not.used:
+  text: Type parameter ''{0}'' is never used
+local.class.is.not.used:
+  text: Local class ''{0}'' is never used
+class.is.not.used:
+  text: Class ''{0}'' is never used
+hexadecimal.numbers.must.contain.at.least.one.hexadecimal.digit:
+  text: Hexadecimal numbers must contain at least one hexadecimal digit
+binary.numbers.must.contain.at.least.one.hexadecimal.digit:
+  text: Binary numbers must contain at least one binary digit
+integer.number.too.large:
+  text: Integer number too large
+long.number.too.large:
+  text: Long number too large
+malformed.floating.point.literal:
+  text: Malformed floating point literal
+illegal.line.end.in.character.literal:
+  text: Illegal line end in character literal
+illegal.escape.character.in.character.literal:
+  text: Illegal escape character in character literal
+too.many.characters.in.character.literal:
+  text: Too many characters in character literal
+empty.character.literal:
+  text: Empty character literal
+illegal.line.end.in.string.literal:
+  text: Illegal line end in string literal
+unclosed.char.literal:
+  text: Unclosed character literal
+illegal.escape.character.in.string.literal:
+  text: Illegal escape character in string literal
+floating.point.number.too.large:
+  text: Floating point number too large
+floating.point.number.too.small:
+  text: Floating point number too small
+illegal.underscore:
+  text: Illegal underscore
+import.statement.identifier.or.asterisk.expected.:
+  text: Identifier or '*' expected
+javadoc.exception.tag.exception.class.expected:
+  text: Exception class expected
+javadoc.exception.tag.wrong.tag.value:
+  text: Wrong tag value
+javadoc.exception.tag.class.is.not.throwable:
+  text: Class {0} is not a descendant of Throwable
+javadoc.exception.tag.exception.is.not.thrown:
+  text: '{0} is not declared to be thrown by method {1}'
+javadoc.param.tag.parameter.name.expected:
+  text: Parameter name expected
+javadoc.param.tag.type.parameter.name.expected:
+  text: Type parameter name expected
+javadoc.param.tag.type.parameter.gt.expected:
+  text: '''>'' expected'
+javadoc.value.tag.jdk15.required:
+  text: '@value tag may not have any arguments when JDK 1.4 or earlier is used'
+javadoc.value.field.required:
+  text: '@value tag must reference a field'
+javadoc.value.static.field.required:
+  text: '@value tag must reference a static field'
+javadoc.value.field.with.initializer.required:
+  text: '@value tag must reference a field with a constant initializer'
+expected.identifier:
+  text: Identifier expected
+expected.comma.or.semicolon:
+  text: ''','' or '';'' expected'
+unexpected.token:
+  text: Unexpected token
+expected.class.or.interface:
+  text: '''class'' or ''interface'' expected'
+expected.identifier.or.type:
+  text: Identifier or type expected
+expected.rbracket:
+  text: ''']'' expected'
+expected.expression:
+  text: Expression expected
+expected.semicolon:
+  text: ''';'' expected'
+expected.class.reference:
+  text: Class reference expected
+expected.package.reference:
+  text: Package reference expected
+expected.lparen:
+  text: '''('' expected'
+expected.rparen:
+  text: ''')'' expected'
+expected.eq:
+  text: '''='' expected'
+expected.value:
+  text: Value expected
+expected.rbrace:
+  text: '''}'' expected'
+expected.lbrace:
+  text: '''{'' expected'
+unexpected.identifier:
+  text: Unexpected identifier
+expected.gt:
+  text: '''>'' expected.'
+expected.lbrace.or.semicolon:
+  text: '''{'' or '';'' expected'
+expected.parameter:
+  text: Parameter expected
+expected.resource:
+  text: Resource definition expected
+expected.type.parameter:
+  text: Type parameter expected
+expected.comma:
+  text: ''','' expected'
+expected.comma.or.rparen:
+  text: ''','' or '')'' expected'
+expected.colon:
+  text: ''':'' expected'
+expected.dot:
+  text: '''.'' expected'
+expected.type:
+  text: Type expected
+expected.lbracket:
+  text: '''['' expected'
+expected.lparen.or.lbracket:
+  text: '''('' or ''['' expected'
+expected.array.initializer:
+  text: Array initializer expected
+unexpected.tokens:
+  text: Unexpected tokens
+expected.gt.or.comma:
+  text: '''>'' or '','' expected'
+string.expected:
+  text: String literal expected
+else.without.if:
+  text: '''else'' without ''if'''
+catch.without.try:
+  text: '''catch'' without ''try'''
+finally.without.try:
+  text: '''finally'' without ''try'''
+expected.statement:
+  text: Statement expected
+expected.while:
+  text: '''while'' expected'
+expected.catch.or.finally:
+  text: '''catch'' or ''finally'' expected'
+expected.boolean.expression:
+  text: Boolean expression expected
+expected.with:
+  text: '''with'' expected'
+expected.module.declaration:
+  text: Module declaration expected
+expected.module.statement:
+  text: Module statement expected
+inaccessible.type:
+  text: '''''{0}'''' is inaccessible here'
+module.no.package:
+  text: A module file should not have 'package' statement
+module.file.wrong.name:
+  text: Module declaration should be in a file named 'module-info.java'
+module.file.duplicate:
+  text: '''module-info.java'' already exists in the module'
+module.duplicate.requires:
+  text: 'Duplicate ''''requires'''': {0}'
+module.duplicate.exports:
+  text: 'Duplicate ''''exports'''': {0}'
+module.duplicate.opens:
+  text: 'Duplicate ''''opens'''': {0}'
+module.duplicate.uses:
+  text: 'Duplicate ''''uses'''': {0}'
+module.duplicate.provides:
+  text: 'Duplicate ''''provides'''': {0}'
+module.duplicate.exports.target:
+  text: 'Duplicate ''''exports'''' target: {0}'
+module.duplicate.opens.target:
+  text: 'Duplicate ''''opens'''' target: {0}'
+module.duplicate.impl:
+  text: 'Duplicate implementation: {0}'
+module.file.wrong.location:
+  text: Module declaration should be located in a module's source root
+module.open.duplicate.text:
+  text: Go to duplicate
+module.not.found:
+  text: 'Module not found: {0}'
+module.ambiguous:
+  text: 'Ambiguous module reference: {0}'
+module.not.on.path:
+  text: 'Module is not in dependencies: {0}'
+module.cyclic.dependence:
+  text: 'Cyclic dependence: {0}'
+module.opens.in.weak.module:
+  text: '''opens'' is not allowed in an open module'
+package.not.found:
+  text: 'Package not found: {0}'
+package.is.empty:
+  text: 'Package is empty: {0}'
+module.service.enum:
+  text: 'The service definition is an enum: {0}'
+module.service.alien:
+  text: The service implementation must be defined in the same module as the provides directive
+module.service.impl:
+  text: The service implementation type must be a subtype of the service interface type, or have a public static no-args 'provider' method
+module.service.abstract:
+  text: 'The service implementation is an abstract class: {0}'
+module.service.inner:
+  text: 'The service implementation is an inner class: {0}'
+module.service.no.ctor:
+  text: 'The service implementation does not have a public default constructor: {0}'
+module.service.provider.type:
+  text: 'The ''''provider'''' method return type must be a subtype of the service interface type: {0}'
+module.service.unused:
+  text: Service interface provided but not exported or used
+module.package.not.exported:
+  text: The module ''{0}'' does not export the package ''{1}'' to the module ''{2}''
+module.package.not.open:
+  text: The module ''{0}'' does not open the package ''{1}'' to the module ''{2}''
+module.package.on.classpath:
+  text: A named module cannot access packages of an unnamed one
+module.not.in.requirements:
+  text: The module ''{0}'' does not have the module ''{1}'' in requirements
+module.conflicting.reads:
+  text: Module ''{0}'' reads package ''{1}'' from both ''{2}'' and ''{3}''
+module.conflicting.packages:
+  text: 'Package ''''{0}'''' exists in another module: {1}'
+text.block.new.line:
+  text: 'Illegal text block start: missing new line after opening quotes'
+text.block.unclosed:
+  text: Unclosed text block
+feature.generics:
+  text: Generics
+feature.annotations:
+  text: Annotations
+feature.static.imports:
+  text: Static imports
+feature.for.each:
+  text: For-each loops
+feature.varargs:
+  text: Variable arity methods
+feature.hex.fp.literals:
+  text: Hexadecimal floating point literals
+feature.diamond.types:
+  text: Diamond types
+feature.multi.catch:
+  text: Multi-catches
+feature.try.with.resources:
+  text: Try-with-resources
+feature.binary.literals:
+  text: Binary literals
+feature.underscores.in.literals:
+  text: Underscores in literals
+feature.extension.methods:
+  text: Extension methods
+feature.method.references:
+  text: Method references
+feature.lambda.expressions:
+  text: Lambda expressions
+feature.type.annotations:
+  text: Type annotations
+feature.type.receivers:
+  text: Receiver parameters
+feature.intersections.in.casts:
+  text: Intersection types in casts
+feature.static.interface.calls:
+  text: Static interface method calls
+feature.try.with.resources.refs:
+  text: Resource references
+feature.modules:
+  text: Modules
+feature.lvti:
+  text: Local variable type inference
+feature.var.lambda.parameter:
+  text: '''var'' in lambda parameters'
+feature.text.blocks:
+  text: Text block literals
+feature.text.block.escape.sequences:
+  text: '''\s'' and ''\'' escape sequences'
+feature.enhanced.switch:
+  text: Enhanced 'switch' blocks
+feature.switch.expressions:
+  text: '''switch'' expressions'
+feature.records:
+  text: Records
+feature.patterns.instanceof:
+  text: Patterns in 'instanceof'
+feature.sealed.classes:
+  text: Sealed classes
+feature.local.interfaces:
+  text: Local interfaces
+feature.local.enums:
+  text: Local enums
+feature.inner.statics:
+  text: Static declarations in inner classes
+feature.patterns.in.switch:
+  text: Patterns in switch
+feature.guarded.and.parenthesised.patterns:
+  text: Guarded and parenthesized patterns
+insufficient.language.level:
+  text: '{0} are not supported at language level ''''{1}'''''
+underscore.identifier.warn:
+  text: Use of '_' as an identifier might not be supported in releases after Java 8
+underscore.identifier.error:
+  text: As of Java 9, '_' is a keyword, and may not be used as an identifier
+underscore.lambda.identifier:
+  text: Use of '_' as a lambda parameter name is not allowed
+cannot.resolve.package:
+  text: Cannot resolve package {0}
+error.cannot.resolve.class:
+  text: Cannot resolve class ''{0}''
+error.cannot.resolve.class.or.package:
+  text: Cannot resolve class or package ''{0}''

@@ -34,36 +34,36 @@ import jakarta.annotation.Nullable;
  */
 @ExtensionImpl
 public class JavaCodeStyleSettingsProvider extends CodeStyleSettingsProvider {
-  @Nonnull
-  @Override
-  public Configurable createSettingsPage(CodeStyleSettings settings, CodeStyleSettings originalSettings) {
-    return new CodeStyleAbstractConfigurable(settings, originalSettings, "Java") {
-      @Override
-      protected CodeStyleAbstractPanel createPanel(final CodeStyleSettings settings) {
-        return new JavaCodeStyleMainPanel(getCurrentSettings(), settings);
-      }
+    @Nonnull
+    @Override
+    public Configurable createSettingsPage(CodeStyleSettings settings, CodeStyleSettings originalSettings) {
+        return new CodeStyleAbstractConfigurable(settings, originalSettings, "Java") {
+            @Override
+            protected CodeStyleAbstractPanel createPanel(final CodeStyleSettings settings) {
+                return new JavaCodeStyleMainPanel(getCurrentSettings(), settings);
+            }
 
-      @Override
-      public String getHelpTopic() {
-        return "reference.settingsdialog.codestyle.java";
-      }
-    };
-  }
+            @Override
+            public String getHelpTopic() {
+                return "reference.settingsdialog.codestyle.java";
+            }
+        };
+    }
 
-  @Override
-  public String getConfigurableDisplayName() {
-    return "Java";
-  }
+    @Override
+    public String getConfigurableDisplayName() {
+        return "Java";
+    }
 
-  @Nullable
-  @Override
-  public Language getLanguage() {
-    return JavaLanguage.INSTANCE;
-  }
+    @Nullable
+    @Override
+    public Language getLanguage() {
+        return JavaLanguage.INSTANCE;
+    }
 
-  @Nullable
-  @Override
-  public CustomCodeStyleSettings createCustomSettings(CodeStyleSettings settings) {
-    return new JavaCodeStyleSettings(settings);
-  }
+    @Nullable
+    @Override
+    public CustomCodeStyleSettings createCustomSettings(CodeStyleSettings settings) {
+        return new JavaCodeStyleSettings(settings);
+    }
 }

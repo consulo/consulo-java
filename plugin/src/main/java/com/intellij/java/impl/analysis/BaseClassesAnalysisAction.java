@@ -34,71 +34,77 @@ import jakarta.annotation.Nullable;
  * @author mike
  */
 public abstract class BaseClassesAnalysisAction extends BaseAnalysisAction {
-  protected BaseClassesAnalysisAction(String title, String analysisNoon) {
-    super(title, analysisNoon);
-  }
+    protected BaseClassesAnalysisAction(String title, String analysisNoon) {
+        super(title, analysisNoon);
+    }
 
-  protected abstract void analyzeClasses(final Project project, final AnalysisScope scope, ProgressIndicator indicator);
+    protected abstract void analyzeClasses(final Project project, final AnalysisScope scope, ProgressIndicator indicator);
 
-  @Override
-  protected void analyze(@Nonnull final Project project, @Nonnull final AnalysisScope scope) {
-    FileDocumentManager.getInstance().saveAllDocuments();
+    @Override
+    protected void analyze(@Nonnull final Project project, @Nonnull final AnalysisScope scope) {
+        FileDocumentManager.getInstance().saveAllDocuments();
 
-    ProgressManager.getInstance().run(new Task.Backgroundable(project, AnalysisScopeLocalize.analyzingProject().get(), true) {
-      @RequiredReadAction
-      @Override
-      public void run(@Nonnull final ProgressIndicator indicator) {
-        indicator.setIndeterminate(true);
-        indicator.setTextValue(AnalysisScopeLocalize.checkingClassFiles());
+        ProgressManager.getInstance().run(new Task.Backgroundable(project, AnalysisScopeLocalize.analyzingProject().get(), true) {
+            @RequiredReadAction
+            @Override
+            public void run(@Nonnull final ProgressIndicator indicator) {
+                indicator.setIndeterminate(true);
+                indicator.setTextValue(AnalysisScopeLocalize.checkingClassFiles());
 
-        final CompilerManager compilerManager = CompilerManager.getInstance((Project) getProject());
-        final boolean upToDate = compilerManager.isUpToDate(compilerManager.createProjectCompileScope());
+                final CompilerManager compilerManager = CompilerManager.getInstance((Project)getProject());
+                final boolean upToDate = compilerManager.isUpToDate(compilerManager.createProjectCompileScope());
 
-        project.getApplication().invokeLater(() -> {
-          if (!upToDate) {
-            final int i = Messages.showYesNoCancelDialog(
-              (Project) getProject(),
-              AnalysisScopeLocalize.recompileConfirmationMessage().get(),
-              AnalysisScopeLocalize.projectIsOutOfDate().get(),
-              UIUtil.getWarningIcon()
-            );
+                project.getApplication().invokeLater(() -> {
+                    if (!upToDate) {
+                        final int i = Messages.showYesNoCancelDialog(
+                            (Project)getProject(),
+                            AnalysisScopeLocalize.recompileConfirmationMessage().get(),
+                            AnalysisScopeLocalize.projectIsOutOfDate().get(),
+                            UIUtil.getWarningIcon()
+                        );
 
-            if (i == 2) return;
+                        if (i == 2) {
+                            return;
+                        }
 
-            if (i == 0) {
-              compileAndAnalyze(project, scope);
-            } else {
-              doAnalyze(project, scope);
+                        if (i == 0) {
+                            compileAndAnalyze(project, scope);
+                        }
+                        else {
+                            doAnalyze(project, scope);
+                        }
+                    }
+                    else {
+                        doAnalyze(project, scope);
+                    }
+                });
             }
-          } else {
-            doAnalyze(project, scope);
-          }
         });
-      }
-    });
-  }
+    }
 
-  private void doAnalyze(final Project project, final AnalysisScope scope) {
-    ProgressManager.getInstance().run(new Task.Backgroundable(project, AnalysisScopeLocalize.analyzingProject().get(), true) {
-      @Override
-      @Nullable
-      public NotificationInfo getNotificationInfo() {
-        return new NotificationInfo("Analysis", "\"" + getTitle() + "\" Analysis Finished", "");
-      }
+    private void doAnalyze(final Project project, final AnalysisScope scope) {
+        ProgressManager.getInstance().run(new Task.Backgroundable(project, AnalysisScopeLocalize.analyzingProject().get(), true) {
+            @Override
+            @Nullable
+            public NotificationInfo getNotificationInfo() {
+                return new NotificationInfo("Analysis", "\"" + getTitle() + "\" Analysis Finished", "");
+            }
 
-      @Override
-      public void run(@Nonnull final ProgressIndicator indicator) {
-        analyzeClasses(project, scope, indicator);
-      }
-    });
-  }
+            @Override
+            public void run(@Nonnull final ProgressIndicator indicator) {
+                analyzeClasses(project, scope, indicator);
+            }
+        });
+    }
 
-  @RequiredReadAction
-  private void compileAndAnalyze(final Project project, final AnalysisScope scope) {
-    final CompilerManager compilerManager = CompilerManager.getInstance(project);
-    compilerManager.make(compilerManager.createProjectCompileScope(), (aborted, errors, warnings, compileContext) -> {
-      if (aborted || errors != 0) return;
-      project.getApplication().invokeLater(() -> doAnalyze(project, scope));
-    });
-  }
+    @RequiredReadAction
+    private void compileAndAnalyze(final Project project, final AnalysisScope scope) {
+        final CompilerManager compilerManager = CompilerManager.getInstance(project);
+        compilerManager.make(compilerManager.createProjectCompileScope(), (aborted, errors, warnings, compileContext) -> {
+            if (aborted || errors != 0) {
+                return;
+            }
+            project.getApplication().invokeLater(() -> doAnalyze(project, scope));
+        });
+    }
 }
