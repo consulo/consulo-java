@@ -1,6 +1,6 @@
 /**
  * @author VISTALL
- * @since 02/12/2022
+ * @since 2022-12-02
  */
 open module consulo.java {
     requires consulo.ide.api;
@@ -407,4 +407,5 @@ open module consulo.java {
     exports consulo.java.impl.roots;
     exports consulo.java.impl.spi;
     exports consulo.java.impl.util;
+    exports consulo.java.localize;
 }

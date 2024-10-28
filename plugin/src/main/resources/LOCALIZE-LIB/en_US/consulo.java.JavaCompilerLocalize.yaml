@@ -1,0 +1,42 @@
+add.notnull.assertions:
+  text: Add @NotNull &assertions
+eclipse.compiler.error.jar.not.found:
+  text: |-
+    Cannot start Eclipse compiler.
+    The file {0} not found.
+compiler.eclipse.name:
+  text: Eclipse
+eclipse.options.group.title:
+  text: Eclipse Options
+eclipse.compiler.parsing:
+  text: Parsing {0}
+eclipse.compiler.reading:
+  text: Reading classes
+eclipse.compiler.analyzing:
+  text: Analyzing {0}
+compiler.eclipse.embedded.name:
+  text: Eclipse in-process
+generate.ant.build.title:
+  text: Generate Ant Build
+generate.ant.build.progress.message:
+  text: Generating ant build...
+compiler.javac.name:
+  text: Javac
+javac.error.jdk.home.missing:
+  text: |-
+    Cannot find home directory ''{1}'' for JDK ''{0}''.
+    Update JDK configuration.
+javac.error.jdk.is.not.set.for.module:
+  text: |-
+    JDK is not set for module ''{0}''.
+    Update JDK configuration.
+javac.error.tools.jar.missing:
+  text: |-
+    Cannot obtain path javac classes for JDK {0}.
+    Update JDK configuration.
+javac.error.unknown.jdk.version:
+  text: |-
+    Cannot determine version for JDK {0}.
+    Update JDK configuration.
+javac.error.target.jdk.not.supported:
+  text: Compilation is not supported for JDK lower 1.5

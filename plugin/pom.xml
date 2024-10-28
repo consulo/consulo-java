@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  - Copyright 2013-2017 consulo.io
+  - Copyright 2013-2024 consulo.io
   -
   - Licensed under the Apache License, Version 2.0 (the "License");
   - you may not use this file except in compliance with the License.
@@ -94,6 +94,13 @@
                         <phase>package</phase>
                         <goals>
                             <goal>workspace</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>generate-sources</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate-localize</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -318,14 +325,12 @@
             <version>2.0</version>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>com.intellij.xml</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>consulo</groupId>
             <artifactId>consulo-ide-impl</artifactId>

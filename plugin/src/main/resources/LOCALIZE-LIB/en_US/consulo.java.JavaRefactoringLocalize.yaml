@@ -1,0 +1,6 @@
+rename.overloads:
+  text: Rename &overloads
+declare.static.pass.fields.checkbox:
+  text: Declare &static (pass fields as params)
+declare.generated.annotations:
+  text: '&Generate annotations'

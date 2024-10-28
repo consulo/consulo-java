@@ -1,0 +1,532 @@
+add.import:
+  text: Add Import
+class.to.import.chooser.title:
+  text: Class to Import
+method.to.import.chooser.title:
+  text: Method to Import
+field.to.import.chooser.title:
+  text: Field to Import
+access.static.via.class.reference.family:
+  text: Access static via class reference
+access.static.via.class.reference.text:
+  text: Access static ''{1}.{0}'' via class ''{2}'' reference
+add.default.constructor.family:
+  text: Add Default Constructor
+add.default.constructor.text:
+  text: Add {0} no-args constructor to {1}
+add.catch.clause.family:
+  text: Add exception to catch clause
+add.catch.clause.text:
+  text: Add 'catch' clause(s)
+add.exception.to.throws.inherited.method.warning.text:
+  text: |-
+    Method ''{0}'' is inherited.
+    Do you want to add exceptions to method signatures in the whole method hierarchy?
+method.is.inherited.warning.title:
+  text: Method Is Inherited
+add.exception.to.throws.text:
+  text: Add {0, choice, 0#exception|2#exceptions} to method signature
+add.exception.to.throws.family:
+  text: Add exception to method signature
+add.method.body.text:
+  text: Add method body
+add.method.family:
+  text: Add Method
+add.method.text:
+  text: Add Method ''{0}'' to Class ''{1}''
+add.new.array.family:
+  text: Add missing new expression
+add.new.array.text:
+  text: Add ''new {0}[]''
+add.return.statement.text:
+  text: Add 'return' statement
+add.runtime.exception.to.throws.text:
+  text: Add runtime exception(s) to method signature
+add.runtime.exception.to.throws.family:
+  text: Add Runtime Exception to Method Signature
+add.typecast.family:
+  text: Add TypeCast
+add.typecast.text:
+  text: Cast to ''{0}''
+add.docTag.to.custom.tags:
+  text: Add {0} to custom tags
+fix.javadoc.family:
+  text: Fix Javadoc
+adjust.package.family:
+  text: Adjust Package Name
+adjust.package.text:
+  text: Set package name to ''{0}''
+bring.variable.to.scope.family:
+  text: Bring Variable to Scope
+bring.variable.to.scope.text:
+  text: Bring ''{0}'' into scope
+delete.reference.fix.text:
+  text: Delete reference
+cast.parameter.text:
+  text: Cast {0, choice, 1#1st|2#2nd|3#3rd|4#{0,number}th} parameter to ''{1}''
+cast.single.parameter.text:
+  text: Cast parameter to ''{0}''
+add.type.arguments.text:
+  text: Add explicit type arguments to {0, choice, 1#1st|2#2nd|3#3rd|4#{0,number}th} argument
+add.type.arguments.single.argument.text:
+  text: Add explicit type arguments
+change.class.signature.text:
+  text: Change signature of ''{0}'' to match ''{1}''
+change.class.signature.family:
+  text: Change class signature
+uidesigner.change.bound.field.type:
+  text: Change bound field type
+cannot.change.field.exception:
+  text: |-
+    Cannot change field ''{0}'' type.
+    Reason: {1}
+exchange.extends.implements.keyword:
+  text: Change ''{0} {2}'' to ''{1} {2}''
+uidesigner.change.gui.component.type:
+  text: Change GUI component type
+change.method.signature.from.usage.family:
+  text: Change method signature from usage
+change.method.signature.from.usage.text:
+  text: Change signature of ''{0}'' to ''{1}({2})''
+add.parameter.from.usage.text:
+  text: Add ''{0}'' as {1, choice, 1#1st|2#2nd|3#3rd|4#{1,number}th} parameter to method ''{2}''
+remove.parameter.from.usage.text:
+  text: Remove {0, choice, 1#1st|2#2nd|3#3rd|4#{0,number}th} parameter from method ''{1}''
+change.parameter.from.usage.text:
+  text: Change {0, choice, 1#1st|2#2nd|3#3rd|4#{0,number}th} parameter of method ''{1}'' from ''{2}'' to ''{3}''
+searching.for.usages.progress.title:
+  text: Searching For Usages...
+create.class.from.new.family:
+  text: Create Class from New
+create.class.from.new.text:
+  text: Create class ''{0}''
+create.class.from.usage.family:
+  text: Create Class from Usage
+create.class.from.usage.text:
+  text: Create {0} ''{1}''
+create.inner.class.from.usage.text:
+  text: Create inner {0} ''{1}''
+create.constant.from.usage.family:
+  text: Create Constant From Usage
+create.constant.from.usage.text:
+  text: Create constant field ''{0}''
+create.enum.constant.from.usage.text:
+  text: Create enum constant ''{0}''
+create.constructor.from.new.family:
+  text: Create Constructor from New
+create.constructor.from.new.text:
+  text: Create constructor
+create.constructor.from.super.call.family:
+  text: Create Constructor From super() Call
+create.constructor.from.this.call.family:
+  text: Create Constructor From this() Call
+create.constructor.text:
+  text: Create constructor in ''{0}''
+create.constructor.matching.super:
+  text: Create constructor matching super
+super.class.constructors.chooser.title:
+  text: Choose Super Class Constructors
+create.field.from.usage.family:
+  text: Create field from Usage
+create.field.from.usage.text:
+  text: Create field ''{0}''
+target.class.chooser.title:
+  text: Choose Target Class
+create.class.title:
+  text: Create {0}
+create.enum:
+  text: enum
+create.interface:
+  text: interface
+create.class:
+  text: class
+new.method.body.template.error.text:
+  text: Please Correct "New Method Body" Template
+new.method.body.template.error.title:
+  text: File Template Error
+cannot.create.java.file.error.text:
+  text: 'Cannot create {0}.java in {1}: {2}'
+cannot.create.java.file.error.title:
+  text: File Creation Failed
+cannot.create.java.package.error.text:
+  text: 'Cannot create {0} in {1}: {2}'
+cannot.create.java.package.error.title:
+  text: Package Creation Failed
+create.accessor.for.unused.field.family:
+  text: Create Accessor for Unused Field
+create.getter.for.field:
+  text: Create getter for ''{0}''
+create.setter.for.field:
+  text: Create setter for ''{0}''
+create.getter.and.setter.for.field:
+  text: Create getter and setter for ''{0}''
+create.local.from.usage.family:
+  text: Create Local from Usage
+create.local.from.usage.text:
+  text: Create local variable ''{0}''
+create.local.from.instanceof.usage.family:
+  text: Create Local Var from instanceof Usage
+create.local.from.instanceof.usage.text:
+  text: Insert ''({0}){1}'' declaration
+create.method.from.usage.family:
+  text: Create method from usage
+create.method.from.usage.text:
+  text: Create method ''{0}''
+create.abstract.method.from.usage.text:
+  text: Create abstract method ''{0}''
+create.parameter.from.usage.family:
+  text: Create parameter from Usage
+create.parameter.from.usage.text:
+  text: Create parameter ''{0}''
+create.property.from.usage.family:
+  text: Create property From Usage
+create.getter:
+  text: Create Getter
+create.setter:
+  text: Create Setter
+defer.final.assignment.with.temp.family:
+  text: Defer final assignment with temp
+defer.final.assignment.with.temp.text:
+  text: Defer assignment to ''{0}'' using temp variable
+delete.catch.family:
+  text: Delete Catch
+delete.catch.text:
+  text: Delete catch for ''{0}''
+delete.body.text:
+  text: Delete method body
+enable.optimize.imports.on.the.fly:
+  text: Enable 'Settings|Code Style|Imports|Optimize imports on the fly'
+generalize.catch.family:
+  text: Generalize Catch
+generalize.catch.text:
+  text: Generalize catch for ''{0}'' to ''{1}''
+generify.family:
+  text: Generify File
+generify.text:
+  text: Try to generify ''{0}''
+implement.methods.fix:
+  text: Implement methods
+import.class.fix:
+  text: Import class
+insert.new.fix:
+  text: Insert new
+insert.super.constructor.call.family:
+  text: Base Ctr call
+insert.super.constructor.call.text:
+  text: Insert 'super();'
+make.class.an.interface.family:
+  text: Make Class an Interface
+make.class.an.interface.text:
+  text: Make ''{0}'' an interface
+make.interface.an.class.text:
+  text: Make ''{0}'' a class
+make.vararg.parameter.last.family:
+  text: Make vararg parameter last
+make.vararg.parameter.last.text:
+  text: Move ''{0}'' to the end of the list
+fix.parameter.type.family:
+  text: Fix Parameter Type
+fix.parameter.type.text:
+  text: Make ''{0}'' take parameter of type ''{1}'' here
+fix.return.type.family:
+  text: Fix Return Type
+fix.return.type.text:
+  text: Make ''{0}'' return ''{1}''
+fix.throws.list.family:
+  text: Fix Throws List
+fix.throws.list.add.exception:
+  text: Add ''{0}'' to ''{1}'' throws list
+fix.throws.list.remove.exception:
+  text: Remove ''{0}'' from ''{1}'' throws list
+fix.modifiers.family:
+  text: Fix Modifiers
+anonymous.class.presentation:
+  text: Anonymous class derived from {0}
+class.initializer.presentation:
+  text: '{0} class initializer'
+add.modifier.fix:
+  text: Make ''{0}'' {1}
+remove.modifier.fix:
+  text: Make ''{0}'' not {1}
+change.inheritors.visibility.warning.text:
+  text: Do you want to change inheritors' visibility to visibility of the base method?
+change.inheritors.visibility.warning.title:
+  text: Change Inheritors
+move.class.in.extend.list.family:
+  text: Move Class in Extend list
+move.bound.class.to.front.fix.text:
+  text: Move bound ''{0}'' to the beginning of the bounds list of type parameter ''{1}''
+move.catch.up.family:
+  text: Move Catch Up
+move.catch.up.text:
+  text: Move catch for ''{0}'' before ''{1}''
+move.class.to.separate.file.family:
+  text: Move Class to Separate File
+move.class.to.separate.file.text:
+  text: Move class ''{0}'' to ''{0}.java''
+move.class.to.package.family:
+  text: Move Class to Package
+move.class.to.package.text:
+  text: Move to package ''{0}''
+negation.broader.scope.family:
+  text: Negation Broader Scope
+negation.broader.scope.text:
+  text: Change to ''!({0})''
+optimize.imports.fix:
+  text: Optimize imports
+remove.qualifier.fix:
+  text: Remove qualifier
+remove.redundant.else.fix:
+  text: Remove redundant 'else'
+remove.unused.parameter.family:
+  text: Remove unused parameter
+remove.unused.parameter.text:
+  text: Remove parameter ''{0}''
+remove.unused.variable.family:
+  text: Remove unused variable
+remove.unused.variable:
+  text: Remove variable ''{0}''
+remove.unused.field:
+  text: Remove field ''{0}''
+rename.wrong.reference.family:
+  text: Rename Wrong Reference
+rename.wrong.reference.text:
+  text: Rename reference
+reuse.variable.declaration.family:
+  text: Reuse variable declaration
+reuse.variable.declaration.text:
+  text: Reuse previous variable ''{0}'' declaration
+safe.delete.family:
+  text: Safe delete
+safe.delete.text:
+  text: Safe delete ''{0}''
+setup.jdk.location.family:
+  text: Setup JDK Location
+setup.jdk.location.text:
+  text: Setup JDK
+side.effects.warning.dialog.title:
+  text: Side Effects Found
+simplify.boolean.expression.family:
+  text: Simplify boolean expression
+simplify.boolean.expression.text:
+  text: Simplify ''{0}'' to {1}
+fix.super.method.return.type.family:
+  text: Fix Super Method Return Type
+fix.super.method.return.type.text:
+  text: Make ''{0}'' return ''{1}''
+surround.with.try.catch.fix:
+  text: Surround with try/catch
+make.final.family:
+  text: Make Final
+make.final.text:
+  text: Make {0} final
+make.final.copy.to.temp:
+  text: Copy ''{0}'' to temp final variable
+make.final.transform.to.one.element.array:
+  text: Transform {0} into final one element array
+fix.variable.type.family:
+  text: Fix Variable Type
+fix.variable.type.text:
+  text: Change {0} ''{1}'' type to ''{2}''
+wrap.expression.using.static.accessor.family:
+  text: Wrap Expression
+wrap.expression.using.static.accessor.text:
+  text: Wrap using ''{0}''
+side.effect.action.remove:
+  text: '&Remove'
+side.effect.action.transform:
+  text: '&Transform'
+side.effect.action.cancel:
+  text: '&Cancel'
+side.effect.message1:
+  text: <html><body>There are possible side effects found in expressions assigned to the variable ''{0}''<br>You can:<ul><li><b>Remove</b> variable usages along with all expressions involved</li></body></html>
+change.parameter.class.family:
+  text: Change Parameter Class
+change.extends.list.family:
+  text: Extend Class from
+add.class.to.extends.list:
+  text: Make ''{0}'' extend ''{1}''
+remove.class.from.extends.list:
+  text: Make ''{0}'' not extend ''{1}''
+add.interface.to.implements.list:
+  text: Make ''{0}'' implement ''{1}''
+remove.interface.from.implements.list:
+  text: Make ''{0}'' not implement ''{1}''
+convert.method.to.constructor:
+  text: Make method constructor
+create.class.text:
+  text: Create class {0}
+create.interface.text:
+  text: Create interface {0}
+create.package.text:
+  text: Create package {0}
+create.field.text:
+  text: Create field {0}
+create.property.text:
+  text: Create property {0}
+add.constructor.parameter.name:
+  text: Add constructor parameter
+remove.suppression.action.name:
+  text: Remove ''{0}'' suppression
+remove.suppression.action.family:
+  text: Remove suppression
+remove.qualifier.action.text:
+  text: Remove qualifier
+fix.argument.family:
+  text: Fix Arguments
+change.new.operator.type.text:
+  text: Change ''{0}'' to ''new {1}{2}''
+change.new.operator.type.family:
+  text: Change new operator type
+fix.unused.symbol.injection.family:
+  text: Add to Dependency Injection Annotations
+fix.unused.symbol.injection.text:
+  text: Suppress for {0} annotated by ''{1}''
+fix.add.special.annotation.family:
+  text: Add to Special Annotations
+fix.add.special.annotation.text:
+  text: Add ''{0}'' to special annotations list
+orderEntry.fix.add.dependency.on.module:
+  text: Add dependency on module ''{0}''
+orderEntry.fix.add.dependency.on.module.choose:
+  text: Add dependency on module...
+orderEntry.fix.choose.module.to.add.dependency.on:
+  text: Choose Module to Add Dependency on
+orderEntry.fix.family.add.module.dependency:
+  text: Add module dependency
+orderEntry.fix.add.library.to.classpath:
+  text: Add library ''{0}'' to classpath
+orderEntry.fix.family.add.library.to.classpath:
+  text: Add library to classpath
+orderEntry.fix.circular.dependency.warning:
+  text: |-
+    Adding dependency on module ''{0}'' will introduce circular dependency between modules ''{1}'' and ''{2}''.
+    Add dependency anyway?
+orderEntry.fix.title.circular.dependency.warning:
+  text: Circular Dependency Warning
+static.import.method.text:
+  text: Static import method
+static.import.method.choose.method.to.import:
+  text: Choose Method to Import
+add.library.title.dialog:
+  text: Add ''{0}'' Library to Project
+add.library.title.choose.folder:
+  text: Choose Directory
+add.library.description.choose.folder:
+  text: Choose directory where the library will be copied
+add.library.error.not.found:
+  text: Library file ''{0}'' does not exist
+add.library.error.cannot.copy:
+  text: |-
+    Cannot copy ''{0}'' to ''{1}''
+    ({2})
+add.library.use.bundled.library.radio.button:
+  text: '&Use ''''{0}'''' from {1} distribution'
+add.library.copy.files.to.radio.button:
+  text: '&Copy ''''{0}'''' library files to'
+permute.arguments:
+  text: Permute arguments
+fix.single.character.string.to.char.literal.text:
+  text: Change {0} to {1} (to {2} literal)
+fix.single.character.string.to.char.literal.family:
+  text: Fix literal type
+create.readable.writable.property.with.field:
+  text: Create getter, setter and field for ''{0}''
+create.readable.property:
+  text: Create getter for ''{0}''
+create.writable.property:
+  text: Create setter for ''{0}''
+create.readable.property.with.field:
+  text: Create getter and field for ''{0}''
+create.writable.property.with.field:
+  text: Create setter and field for ''{0}''
+change.to.append.family:
+  text: Fix StringBuilder append
+change.to.append.text:
+  text: Change to ''{0}''
+convert.to.string.family:
+  text: Fix Character Literal
+convert.to.string.text:
+  text: Convert to string literal
+initialize.final.field.in.constructor.name:
+  text: Initialize in constructor
+initialize.final.field.in.constructor.choose.dialog.title:
+  text: Choose constructors to add initialization to
+remove.redundant.arguments.text:
+  text: Remove redundant arguments to call ''{0}''
+remove.redundant.arguments.family:
+  text: Remove redundant arguments
+replace.with.list.access.text:
+  text: Replace with list access
+add.qualifier:
+  text: Add qualifier
+add.qualifier.original.class.chooser.title:
+  text: Original class
+wrap.array.to.arrays.as.list.parameter.text:
+  text: Wrap {0, choice, 1#1st|2#2nd|3#3rd|4#{0,number}th} parameter using ''Arrays.asList''
+wrap.array.to.arrays.as.list.single.parameter.text:
+  text: Wrap using ''Arrays.asList''
+annotations.fix:
+  text: Annotations
+add.missing.annotation.parameters.fix:
+  text: Add missing annotation parameters - {0}
+add.missing.annotation.single.parameter.fix:
+  text: Add missing annotation parameter ''{0}''
+add.method.qualifier.fix.text:
+  text: Add qualifier {0} to method
+add.method.qualifier.fix.family:
+  text: Add method qualifier
+collection.addall.can.be.replaced.with.constructor.fix.options.title:
+  text: Classes to check
+collection.addall.can.be.replaced.with.constructor.fix.description:
+  text: '''''{0}()'''' method can be replaced with parametrized constructor'
+collection.addall.can.be.replaced.with.constructor.fix.title:
+  text: Replace 'addAll/putAll' method with parametrized constructor call
+wrap.long.with.math.to.int.text:
+  text: Wrap using 'Math.toIntExact()'
+wrap.long.with.math.to.int.parameter.single.text:
+  text: Wrap parameter using 'Math.toIntExact()'
+wrap.long.with.math.to.int.parameter.multiple.text:
+  text: Wrap {0, choice, 1#1st|2#2nd|3#3rd|4#{0,number}th} parameter using ''Math.toIntExact()''
+add.exception.from.field.initializer.to.constructor.throws.text:
+  text: Add exception to class {0, choice, 0#default constructor|1#constructor|2#constructors} signature
+add.exception.from.field.initializer.to.constructor.throws.family.text:
+  text: Add exception to class constructors signature
+wrap.with.optional.parameter.text:
+  text: Wrap {0, choice, 1#1st|2#2nd|3#3rd|4#{0,number}th} parameter using ''java.util.Optional''
+wrap.with.optional.single.parameter.text:
+  text: Wrap using 'java.util.Optional'
+move.file.to.source.root.text:
+  text: Move file to a source root
+delete.element.fix.text:
+  text: Delete element
+module.info.add.requires.family.name:
+  text: Add 'requires' statement to module-info.java
+module.info.add.requires.name:
+  text: Add ''requires {0}'' statement to module-info.java
+collection.to.array.text:
+  text: Apply conversion ''.toArray({0})''
+collection.to.array.family.name:
+  text: Apply conversion '.toArray()'
+insert.sam.method.call.fix.name:
+  text: Insert ''.{0}'' to call functional interface method
+insert.sam.method.call.fix.family.name:
+  text: Insert single abstract method call
+wrap.with.java.io.file.text:
+  text: Wrap using 'new File()'
+wrap.with.java.io.file.parameter.single.text:
+  text: Wrap parameter using 'new File()'
+wrap.with.java.io.file.parameter.multiple.text:
+  text: Wrap {0, choice, 1#1st|2#2nd|3#3rd|4#{0,number}th} parameter using ''new File()''
+java.9.merge.module.statements.fix.family.name:
+  text: Merge with other ''{0}'' statement
+java.9.merge.module.statements.fix.name:
+  text: Merge with other ''{0} {1}'' statement
+extract.side.effects.convert.to.if:
+  text: Convert to 'if' statement
+extract.side.effects.single:
+  text: Extract side effect
+extract.side.effects.multiple:
+  text: Extract side effects
+extract.side.effects.family.name:
+  text: Delete statement extracting side effects

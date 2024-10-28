@@ -1,0 +1,68 @@
+java:
+  text: Java
+psi.error.attempt.to.edit.class.file:
+  text: Cannot modify compiled element
+jdk.1.3.language.level.description:
+  text: Plain old Java
+jdk.1.4.language.level.description:
+  text: '''assert'' keyword'
+jdk.1.5.language.level.description:
+  text: '''enum'' keyword, autoboxing etc.'
+jdk.1.6.language.level.description:
+  text: '@Override in interfaces'
+jdk.1.7.language.level.description:
+  text: Diamonds, ARM, multi-catch etc.
+jdk.1.8.language.level.description:
+  text: Lambdas, type annotations etc.
+jdk.1.9.language.level.description:
+  text: Jigsaw project etc.
+jdk.10.language.level.description:
+  text: Local variable type inference
+jdk.11.language.level.description:
+  text: var lamba parameter
+jdk.12.language.level.description:
+  text: No new language features
+jdk.13.language.level.description:
+  text: No new language features
+jdk.13.preview.language.level.description:
+  text: Switch expressions, text blocks(Preview)
+jdk.14.language.level.description:
+  text: No new language features
+jdk.15.language.level.description:
+  text: No new language features
+jdk.15.preview.language.level.description:
+  text: Preview. Sealed types, records, patterns, local enums and interfaces
+jdk.16.language.level.description:
+  text: No new language features
+jdk.17.language.level.description:
+  text: No new language features
+jdk.18.language.level.description:
+  text: No new language features
+jdk.19.language.level.description:
+  text: No new language features
+jdk.20.language.level.description:
+  text: No new language features
+jdk.21.language.level.description:
+  text: No new language features
+jdk.22.language.level.description:
+  text: No new language features
+jdk.X.language.level.description:
+  text: Experimental features
+action.create.new.class:
+  text: Create New Class
+title.cannot.create.class:
+  text: Cannot Create Class
+progress.creating.class:
+  text: Creating class {0}
+application.configuration.description:
+  text: Java Application configuration
+application.configuration.name:
+  text: Java Application
+paths.to.special.roots:
+  text: Paths to special roots (META-INF, etc)
+module.jdk.not.defined:
+  text: JDK for module is not defined
+module.jdk.setup:
+  text: Setup JDK
+sdk.configure.external.annotations.tab:
+  text: External Annotations

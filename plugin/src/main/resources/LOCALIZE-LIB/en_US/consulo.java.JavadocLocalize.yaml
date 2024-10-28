@@ -1,0 +1,78 @@
+javadoc.generate.start.button:
+  text: '&Start'
+javadoc.generate.package.default:
+  text: <default>
+javadoc.generate.title:
+  text: Generate JavaDoc
+javadoc.generate.scope.whole.project:
+  text: '&Whole project'
+javadoc.generate.scope.package:
+  text: '&Package{0}'
+javadoc.generate.scope.include.subpackages.checkbox:
+  text: Include subpackages
+javadoc.generate.settings.group:
+  text: Settings
+javadoc.generate.output.directory.not.specified:
+  text: Output directory is not specified.
+javadoc.generate.output.directory.not.exists:
+  text: |-
+    Output directory "{0}" does not exist
+    Do you want to create it?
+javadoc.generate.message.title:
+  text: JavaDoc
+javadoc.generate.output.directory.creation.failed:
+  text: Creation of "{0}" failed.
+javadoc.generate.output.not.a.directory:
+  text: '"{0}" is not a directory.'
+javadoc.generate.open.in.browser:
+  text: Open &generated documentation in browser
+javadoc.generate.heap.size:
+  text: '&Maximum heap size (Mb):'
+javadoc.generate.output.directory:
+  text: 'Output &directory:'
+javadoc.generate.scope.group:
+  text: Scope
+javadoc.generate.tags.group:
+  text: Document these tags
+javadoc.generate.tag.list.deprecated:
+  text: deprecated list
+javadoc.generate.basic.option:
+  text: Basic options
+javadoc.generate.options.index.per.letter:
+  text: Separate index per letter
+javadoc.generate.options.index:
+  text: Generate index
+javadoc.generate.options.navigator:
+  text: Generate navigation bar
+javadoc.generate.options.hierarchy:
+  text: Generate hierarchy tree
+javadoc.generate.arguments:
+  text: '&Other command line arguments:'
+javadoc.settings.title:
+  text: Javadoc
+javadoc.settings.not.specified:
+  text: Generation options for javadoc not specified
+javadoc.generate.no.jdk.path:
+  text: |-
+    JDK path is not specified
+    Cannot generate JavaDoc
+javadoc.generate.no.classes.in.selected.packages.error:
+  text: Selected scope contain no Java classes
+javadoc.generate.exited:
+  text: |2
+
+    javadoc exited with exit code $EXIT_CODE$
+javadoc.generate.output.directory.browse:
+  text: Browse Output directory
+javadoc.generate.locale:
+  text: '&Locale:'
+javadoc.generate.closing.tag:
+  text: Automatically insert closing tag inside javadoc
+javadoc.resolved.value:
+  text: 'Resolved value:'
+javadoc.candidates:
+  text: <html>Candidates for method call <b>{0}</b> are:<br><br>{1}</html>
+javadoc.candidates.not.found:
+  text: <html>No candidates found for method call <b>{0}</b>.</html>
+javadoc.constructor.candidates:
+  text: <html>Candidates for new <b>{0}</b>() are:<br>{1}</html>
