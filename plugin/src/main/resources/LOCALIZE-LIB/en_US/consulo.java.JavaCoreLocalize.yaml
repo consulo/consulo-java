@@ -2,19 +2,19 @@ java:
   text: Java
 psi.error.attempt.to.edit.class.file:
   text: Cannot modify compiled element
-jdk.1.3.language.level.description:
+jdk.3.language.level.description:
   text: Plain old Java
-jdk.1.4.language.level.description:
+jdk.4.language.level.description:
   text: '''assert'' keyword'
-jdk.1.5.language.level.description:
+jdk.5.language.level.description:
   text: '''enum'' keyword, autoboxing etc.'
-jdk.1.6.language.level.description:
+jdk.6.language.level.description:
   text: '@Override in interfaces'
-jdk.1.7.language.level.description:
+jdk.7.language.level.description:
   text: Diamonds, ARM, multi-catch etc.
-jdk.1.8.language.level.description:
+jdk.8.language.level.description:
   text: Lambdas, type annotations etc.
-jdk.1.9.language.level.description:
+jdk.9.language.level.description:
   text: Jigsaw project etc.
 jdk.10.language.level.description:
   text: Local variable type inference
