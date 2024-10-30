@@ -15,7 +15,10 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
+import consulo.annotation.DeprecationInfo;
+import consulo.annotation.internal.MigratedExtensionsTo;
 import consulo.application.CommonBundle;
+import consulo.java.localize.JavaCompletionLocalize;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.PropertyKey;
 
@@ -26,6 +29,9 @@ import java.util.ResourceBundle;
 /**
  * @author max
  */
+@Deprecated
+@DeprecationInfo("Use JavaCompletionLocalize")
+@MigratedExtensionsTo(JavaCompletionLocalize.class)
 public class CompletionBundle {
   private static Reference<ResourceBundle> ourBundle;
 

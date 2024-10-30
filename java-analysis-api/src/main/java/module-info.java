@@ -1,6 +1,6 @@
 /**
  * @author VISTALL
- * @since 02/12/2022
+ * @since 2022-02-12
  */
 module consulo.java.analysis.api {
     requires transitive consulo.java.language.api;
@@ -16,6 +16,8 @@ module consulo.java.analysis.api {
     exports com.intellij.java.analysis.refactoring;
     exports consulo.java.analysis.codeInsight;
     exports consulo.java.analysis.codeInspection;
+    exports consulo.java.analysis.codeInsight.localize;
+    exports consulo.java.analysis.localize;
 
     exports consulo.java.deadCodeNotWorking;
 }

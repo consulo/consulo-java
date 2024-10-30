@@ -16,13 +16,19 @@
 
 package consulo.java.impl;
 
-import org.jetbrains.annotations.PropertyKey;
+import consulo.annotation.DeprecationInfo;
+import consulo.annotation.internal.MigratedExtensionsTo;
 import consulo.component.util.localize.AbstractBundle;
+import consulo.java.localize.JavaLocalize;
+import org.jetbrains.annotations.PropertyKey;
 
 /**
  * @author VISTALL
  * @since 18.11.2015
  */
+@Deprecated
+@DeprecationInfo("Use JavaLocalize")
+@MigratedExtensionsTo(JavaLocalize.class)
 public class JavaBundle extends AbstractBundle
 {
 	private static final JavaBundle ourInstance = new JavaBundle();

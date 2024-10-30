@@ -15,6 +15,9 @@
  */
 package consulo.java.compiler;
 
+import consulo.annotation.DeprecationInfo;
+import consulo.annotation.internal.MigratedExtensionsTo;
+import consulo.java.compiler.localize.JavaCompilerLocalize;
 import org.jetbrains.annotations.PropertyKey;
 import consulo.component.util.localize.AbstractBundle;
 
@@ -22,6 +25,9 @@ import consulo.component.util.localize.AbstractBundle;
  * @author VISTALL
  * @since 18:11/20.10.13
  */
+@Deprecated
+@DeprecationInfo("Use JavaCompletionLocalize")
+@MigratedExtensionsTo(JavaCompilerLocalize.class)
 public class JavaCompilerBundle extends AbstractBundle
 {
 	private static final JavaCompilerBundle ourInstance = new JavaCompilerBundle();

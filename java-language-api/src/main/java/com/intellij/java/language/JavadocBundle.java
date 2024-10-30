@@ -15,7 +15,10 @@
  */
 package com.intellij.java.language;
 
+import consulo.annotation.DeprecationInfo;
+import consulo.annotation.internal.MigratedExtensionsTo;
 import consulo.application.CommonBundle;
+import consulo.java.language.localize.JavadocLocalize;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.PropertyKey;
 
@@ -26,6 +29,9 @@ import java.util.ResourceBundle;
 /**
  * @author yole
  */
+@Deprecated
+@DeprecationInfo("Use JavadocLocalize")
+@MigratedExtensionsTo(JavadocLocalize.class)
 public class JavadocBundle {
   private static Reference<ResourceBundle> ourBundle;
 

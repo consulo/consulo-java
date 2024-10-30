@@ -214,3 +214,7 @@ nullable.notnull.configuration.dialog.title:
   text: Nullable/NotNull Configuration
 nullable.notnull.annotation.used.label:
   text: 'Annotation used for code generation:'
+notification.navigation.to.overriding.classes:
+  text: Navigation to overriding classes is not possible during index update
+notification.navigation.to.overriding.methods:
+  text: Navigation to overriding methods is not possible during index update

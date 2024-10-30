@@ -16,6 +16,9 @@
 
 package consulo.java.execution;
 
+import consulo.annotation.DeprecationInfo;
+import consulo.annotation.internal.MigratedExtensionsTo;
+import consulo.java.execution.localize.JavaExecutionLocalize;
 import org.jetbrains.annotations.PropertyKey;
 import consulo.component.util.localize.AbstractBundle;
 
@@ -23,6 +26,9 @@ import consulo.component.util.localize.AbstractBundle;
  * @author VISTALL
  * @since 27-Dec-16
  */
+@Deprecated
+@DeprecationInfo("Use JavaExecutionLocalize")
+@MigratedExtensionsTo(JavaExecutionLocalize.class)
 public class JavaExecutionBundle extends AbstractBundle
 {
 	private static final JavaExecutionBundle ourInstance = new JavaExecutionBundle();

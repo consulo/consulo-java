@@ -15,10 +15,16 @@
  */
 package com.intellij.java.debugger;
 
+import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
+import consulo.annotation.DeprecationInfo;
+import consulo.annotation.internal.MigratedExtensionsTo;
 import org.jetbrains.annotations.PropertyKey;
 import consulo.component.util.localize.AbstractBundle;
 import com.intellij.java.execution.configurations.RemoteConnection;
 
+@Deprecated
+@DeprecationInfo("Use JavaDebuggerLocalize")
+@MigratedExtensionsTo(JavaDebuggerLocalize.class)
 public class DebuggerBundle extends AbstractBundle
 {
 	public static String getAddressDisplayName(final RemoteConnection connection)

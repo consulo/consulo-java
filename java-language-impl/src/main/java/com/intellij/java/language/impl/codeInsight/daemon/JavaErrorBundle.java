@@ -15,12 +15,18 @@
  */
 package com.intellij.java.language.impl.codeInsight.daemon;
 
+import consulo.annotation.DeprecationInfo;
+import consulo.annotation.internal.MigratedExtensionsTo;
 import consulo.component.util.localize.AbstractBundle;
+import consulo.java.language.impl.localize.JavaErrorLocalize;
 import org.jetbrains.annotations.PropertyKey;
 
 /**
  * @author max
  */
+@Deprecated
+@DeprecationInfo("Use JavaErrorLocalize")
+@MigratedExtensionsTo(JavaErrorLocalize.class)
 public class JavaErrorBundle extends AbstractBundle {
   public static final String BUNDLE = "messages.JavaErrorBundle";
   private static final JavaErrorBundle ourInstance = new JavaErrorBundle();

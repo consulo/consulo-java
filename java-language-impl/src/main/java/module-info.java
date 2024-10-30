@@ -81,5 +81,10 @@ open module consulo.java.language.impl {
     exports consulo.java.language.impl.spi;
     exports consulo.java.language.impl.util;
 
-    exports consulo.java.language.impl.annoPackages to consulo.java;
+    exports consulo.java.language.impl.localize to
+        consulo.java,
+        consulo.java.analysis.impl,
+        consulo.java.debugger.impl;
+    exports consulo.java.language.impl.annoPackages to
+        consulo.java;
 }

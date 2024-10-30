@@ -16,6 +16,9 @@
 
 package consulo.java.analysis.impl.codeInsight;
 
+import consulo.annotation.DeprecationInfo;
+import consulo.annotation.internal.MigratedExtensionsTo;
+import consulo.java.analysis.impl.localize.JavaInspectionsLocalize;
 import org.jetbrains.annotations.PropertyKey;
 import consulo.component.util.localize.AbstractBundle;
 
@@ -23,6 +26,9 @@ import consulo.component.util.localize.AbstractBundle;
  * @author VISTALL
  * @since 15.07.14
  */
+@Deprecated
+@DeprecationInfo("Use JavaInspectionsLocalize")
+@MigratedExtensionsTo(JavaInspectionsLocalize.class)
 public class JavaInspectionsBundle extends AbstractBundle
 {
 	public static final String BUNDLE = "messages.JavaInspectionsBundle";

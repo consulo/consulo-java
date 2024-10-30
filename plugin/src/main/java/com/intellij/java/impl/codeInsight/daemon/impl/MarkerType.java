@@ -19,6 +19,7 @@ import consulo.application.ReadAction;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
 import consulo.application.util.function.CommonProcessors;
+import consulo.java.localize.JavaLocalize;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.DaemonBundle;
 import consulo.language.editor.gutter.GutterIconNavigationHandler;
@@ -303,24 +304,30 @@ public class MarkerType {
 
     private static void navigateToOverriddenMethod(MouseEvent e, @Nonnull final PsiMethod method) {
         if (DumbService.isDumb(method.getProject())) {
-            DumbService.getInstance(method.getProject()).showDumbModeNotification(
-                "Navigation to overriding classes is not possible during index update");
+            DumbService.getInstance(method.getProject())
+                .showDumbModeNotification(JavaLocalize.notificationNavigationToOverridingClasses());
             return;
         }
 
         PsiElementProcessor.CollectElementsWithLimit<PsiMethod> collectProcessor = getProcessor(2, true);
         PsiElementProcessor.CollectElementsWithLimit<PsiFunctionalExpression> collectExprProcessor = getProcessor(2, true);
         final boolean isAbstract = method.hasModifierProperty(PsiModifier.ABSTRACT);
-        if (!ProgressManager.getInstance().runProcessWithProgressSynchronously(() -> {
-            GlobalSearchScope scope = GlobalSearchScope.allScope(PsiUtilCore.getProjectInReadAction(method));
-            OverridingMethodsSearch.search(method, scope, true).forEach(new PsiElementProcessorAdapter<>(collectProcessor));
-            if (isAbstract && collectProcessor.getCollection().size() < 2) {
-                final PsiClass aClass = ReadAction.compute(method::getContainingClass);
-                if (aClass != null) {
-                    FunctionalExpressionSearch.search(aClass).forEach(new PsiElementProcessorAdapter<>(collectExprProcessor));
+        if (!ProgressManager.getInstance().runProcessWithProgressSynchronously(
+            () -> {
+                GlobalSearchScope scope = GlobalSearchScope.allScope(PsiUtilCore.getProjectInReadAction(method));
+                OverridingMethodsSearch.search(method, scope, true).forEach(new PsiElementProcessorAdapter<>(collectProcessor));
+                if (isAbstract && collectProcessor.getCollection().size() < 2) {
+                    final PsiClass aClass = ReadAction.compute(method::getContainingClass);
+                    if (aClass != null) {
+                        FunctionalExpressionSearch.search(aClass).forEach(new PsiElementProcessorAdapter<>(collectExprProcessor));
+                    }
                 }
-            }
-        }, SEARCHING_FOR_OVERRIDING_METHODS, true, method.getProject(), (JComponent)e.getComponent())) {
+            },
+            SEARCHING_FOR_OVERRIDING_METHODS,
+            true,
+            method.getProject(),
+            (JComponent)e.getComponent()
+        )) {
             return;
         }
 
