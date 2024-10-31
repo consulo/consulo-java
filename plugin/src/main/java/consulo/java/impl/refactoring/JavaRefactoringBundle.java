@@ -16,6 +16,9 @@
 
 package consulo.java.impl.refactoring;
 
+import consulo.annotation.DeprecationInfo;
+import consulo.annotation.internal.MigratedExtensionsTo;
+import consulo.java.localize.JavaRefactoringLocalize;
 import org.jetbrains.annotations.PropertyKey;
 import consulo.component.util.localize.AbstractBundle;
 
@@ -23,6 +26,9 @@ import consulo.component.util.localize.AbstractBundle;
  * @author VISTALL
  * @since 15.08.2015
  */
+@Deprecated
+@DeprecationInfo("Use JavaCompletionLocalize")
+@MigratedExtensionsTo(JavaRefactoringLocalize.class)
 public class JavaRefactoringBundle extends AbstractBundle
 {
 	private static final JavaRefactoringBundle ourInstance = new JavaRefactoringBundle();

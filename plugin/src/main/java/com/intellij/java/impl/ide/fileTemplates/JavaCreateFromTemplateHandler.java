@@ -29,7 +29,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.fileTemplate.CreateFromTemplateHandler;
 import consulo.fileTemplate.FileTemplate;
 import consulo.ide.localize.IdeLocalize;
-import consulo.java.localize.JavaCoreLocalize;
+import consulo.java.language.localize.JavaCoreLocalize;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.file.FileTypeManager;
 import consulo.language.psi.PsiDirectory;

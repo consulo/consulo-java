@@ -15,9 +15,15 @@
  */
 package com.intellij.java.language;
 
+import consulo.annotation.DeprecationInfo;
+import consulo.annotation.internal.MigratedExtensionsTo;
 import consulo.component.util.localize.AbstractBundle;
+import consulo.java.language.localize.JavaCoreLocalize;
 import org.jetbrains.annotations.PropertyKey;
 
+@Deprecated
+@DeprecationInfo("Use JavaCoreLocalize")
+@MigratedExtensionsTo(JavaCoreLocalize.class)
 public class JavaCoreBundle extends AbstractBundle {
   private static final JavaCoreBundle ourInstance = new JavaCoreBundle();
 

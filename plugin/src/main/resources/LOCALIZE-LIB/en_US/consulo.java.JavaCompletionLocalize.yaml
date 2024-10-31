@@ -1,0 +1,20 @@
+completion.smart.type.generate.anonymous.body:
+  text: generate anonymous body
+completion.smarttype.select.methods.to.override:
+  text: Select Methods to Override
+completion.no.suggestions.of.type:
+  text: No suggestions of type {0}
+completion.unknown.type:
+  text: Unknown type {0}
+completion.smart.hint:
+  text: Press {0} to show only variants that are suitable by type
+completion.smart.chain.hint:
+  text: Press {0} once more to search across chained method calls
+completion.smart.toar.hint:
+  text: Press {0} once more to find collections of {1}
+completion.smart.aslist.hint:
+  text: Press {0} once more to find arrays of {1}
+completion.class.name.hint:
+  text: Press {0} again to view all accessible classes
+completion.class.name.hint.2:
+  text: Press {0} once more to ignore module dependencies while searching

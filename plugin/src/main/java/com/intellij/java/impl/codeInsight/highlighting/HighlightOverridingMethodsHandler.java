@@ -35,69 +35,79 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class HighlightOverridingMethodsHandler extends HighlightUsagesHandlerBase<PsiClass> {
-  private final PsiElement myTarget;
-  private final PsiClass myClass;
+    private final PsiElement myTarget;
+    private final PsiClass myClass;
 
-  public HighlightOverridingMethodsHandler(final Editor editor, final PsiFile file, final PsiElement target, final PsiClass psiClass) {
-    super(editor, file);
-    myTarget = target;
-    myClass = psiClass;
-  }
+    public HighlightOverridingMethodsHandler(final Editor editor, final PsiFile file, final PsiElement target, final PsiClass psiClass) {
+        super(editor, file);
+        myTarget = target;
+        myClass = psiClass;
+    }
 
-  @Override
-  @RequiredReadAction
-  public List<PsiClass> getTargets() {
-    PsiReferenceList list = PsiKeyword.EXTENDS.equals(myTarget.getText()) ? myClass.getExtendsList() : myClass.getImplementsList();
-    if (list == null) return Collections.emptyList();
-    final PsiClassType[] classTypes = list.getReferencedTypes();
-    return ChooseClassAndDoHighlightRunnable.resolveClasses(classTypes);
-  }
-
-  @Override
-  protected void selectTargets(final List<PsiClass> targets, final Consumer<List<PsiClass>> selectionConsumer) {
-    new ChooseClassAndDoHighlightRunnable(targets, myEditor, CodeInsightLocalize.highlightOverriddenClassesChooserTitle().get()) {
-      @Override
-      protected void selected(PsiClass... classes) {
-        selectionConsumer.accept(Arrays.asList(classes));
-      }
-    }.run();
-  }
-
-  @Override
-  @RequiredReadAction
-  public void computeUsages(final List<PsiClass> classes) {
-    FeatureUsageTracker.getInstance().triggerFeatureUsed("codeassists.highlight.implements");
-    for (PsiMethod method : myClass.getMethods()) {
-      List<HierarchicalMethodSignature> superSignatures = method.getHierarchicalMethodSignature().getSuperSignatures();
-      for (HierarchicalMethodSignature superSignature : superSignatures) {
-        PsiClass containingClass = superSignature.getMethod().getContainingClass();
-        if (containingClass == null) continue;
-        for (PsiClass classToAnalyze : classes) {
-          if (InheritanceUtil.isInheritorOrSelf(classToAnalyze, containingClass, true)) {
-            PsiIdentifier identifier = method.getNameIdentifier();
-            if (identifier != null) {
-              addOccurrence(identifier);
-              break;
-            }
-          }
+    @Override
+    @RequiredReadAction
+    public List<PsiClass> getTargets() {
+        PsiReferenceList list = PsiKeyword.EXTENDS.equals(myTarget.getText()) ? myClass.getExtendsList() : myClass.getImplementsList();
+        if (list == null) {
+            return Collections.emptyList();
         }
-      }
+        final PsiClassType[] classTypes = list.getReferencedTypes();
+        return ChooseClassAndDoHighlightRunnable.resolveClasses(classTypes);
     }
-    if (myReadUsages.isEmpty()) {
-      if (myClass.getApplication().isUnitTestMode()) return;
-      String name;
-      if (classes.size() == 1) {
-        final ItemPresentation presentation = classes.get(0).getPresentation();
-        name = presentation != null ? presentation.getPresentableText() : "";
-      } else {
-        name = "";
-      }
-      myHintText = CodeInsightBundle.message("no.methods.overriding.0.are.found", classes.size(), name);
-    } else {
-      addOccurrence(myTarget);
-      final int methodCount = myReadUsages.size() - 1;  // exclude 'target' keyword
-      myStatusText =
-        CodeInsightLocalize.statusBarOverriddenMethodsHighlightedMessage(methodCount, HighlightUsagesHandler.getShortcutText()).get();
+
+    @Override
+    protected void selectTargets(final List<PsiClass> targets, final Consumer<List<PsiClass>> selectionConsumer) {
+        new ChooseClassAndDoHighlightRunnable(targets, myEditor, CodeInsightLocalize.highlightOverriddenClassesChooserTitle().get()) {
+            @Override
+            protected void selected(PsiClass... classes) {
+                selectionConsumer.accept(Arrays.asList(classes));
+            }
+        }.run();
     }
-  }
+
+    @Override
+    @RequiredReadAction
+    public void computeUsages(final List<PsiClass> classes) {
+        FeatureUsageTracker.getInstance().triggerFeatureUsed("codeassists.highlight.implements");
+        for (PsiMethod method : myClass.getMethods()) {
+            List<HierarchicalMethodSignature> superSignatures = method.getHierarchicalMethodSignature().getSuperSignatures();
+            for (HierarchicalMethodSignature superSignature : superSignatures) {
+                PsiClass containingClass = superSignature.getMethod().getContainingClass();
+                if (containingClass == null) {
+                    continue;
+                }
+                for (PsiClass classToAnalyze : classes) {
+                    if (InheritanceUtil.isInheritorOrSelf(classToAnalyze, containingClass, true)) {
+                        PsiIdentifier identifier = method.getNameIdentifier();
+                        if (identifier != null) {
+                            addOccurrence(identifier);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        if (myReadUsages.isEmpty()) {
+            if (myClass.getApplication().isUnitTestMode()) {
+                return;
+            }
+            String name;
+            if (classes.size() == 1) {
+                final ItemPresentation presentation = classes.get(0).getPresentation();
+                name = presentation != null ? presentation.getPresentableText() : "";
+            }
+            else {
+                name = "";
+            }
+            myHintText = CodeInsightBundle.message("no.methods.overriding.0.are.found", classes.size(), name);
+        }
+        else {
+            addOccurrence(myTarget);
+            final int methodCount = myReadUsages.size() - 1;  // exclude 'target' keyword
+            myStatusText = CodeInsightLocalize.statusBarOverriddenMethodsHighlightedMessage(
+                methodCount,
+                HighlightUsagesHandler.getShortcutText()
+            ).get();
+        }
+    }
 }

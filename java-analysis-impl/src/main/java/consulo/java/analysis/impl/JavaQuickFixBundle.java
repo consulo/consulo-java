@@ -16,6 +16,9 @@
 
 package consulo.java.analysis.impl;
 
+import consulo.annotation.DeprecationInfo;
+import consulo.annotation.internal.MigratedExtensionsTo;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import org.jetbrains.annotations.PropertyKey;
 import consulo.component.util.localize.AbstractBundle;
 
@@ -23,6 +26,9 @@ import consulo.component.util.localize.AbstractBundle;
  * @author VISTALL
  * @since 27.12.2015
  */
+@Deprecated
+@DeprecationInfo("Use JavaQuickFixLocalize")
+@MigratedExtensionsTo(JavaQuickFixLocalize.class)
 public class JavaQuickFixBundle extends AbstractBundle
 {
 	private static final JavaQuickFixBundle ourInstance = new JavaQuickFixBundle();
