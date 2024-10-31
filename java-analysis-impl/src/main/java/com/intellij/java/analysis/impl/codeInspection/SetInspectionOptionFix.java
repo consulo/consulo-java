@@ -21,77 +21,78 @@ import consulo.virtualFileSystem.VirtualFile;
 import org.jetbrains.annotations.Nls;
 
 import jakarta.annotation.Nonnull;
+
 import java.util.function.BiConsumer;
 
 public class SetInspectionOptionFix<I extends AbstractBaseJavaLocalInspectionTool<State>, State>
-  implements LocalQuickFix, LowPriorityAction, Iconable {
-  private final String myID;
-  private final BiConsumer<State, Boolean> myPropertySetter;
-  private final String myMessage;
-  private final boolean myValue;
+    implements LocalQuickFix, LowPriorityAction, Iconable {
+    private final String myID;
+    private final BiConsumer<State, Boolean> myPropertySetter;
+    private final String myMessage;
+    private final boolean myValue;
 
-  public SetInspectionOptionFix(I inspection, BiConsumer<State, Boolean> propertySetter, String message, boolean value) {
-    myID = inspection.getShortName();
-    myPropertySetter = propertySetter;
-    myMessage = message;
-    myValue = value;
-  }
-
-  @Nls
-  @Nonnull
-  @Override
-  public String getName() {
-    return myMessage;
-  }
-
-  @Nls
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return "Set inspection option";
-  }
-
-  @Override
-  public boolean startInWriteAction() {
-    return false;
-  }
-
-  @Override
-  @RequiredWriteAction
-  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
-    VirtualFile vFile = descriptor.getPsiElement().getContainingFile().getVirtualFile();
-    setOption(project, vFile, myValue);
-    ProjectUndoManager.getInstance(project).undoableActionPerformed(new BasicUndoableAction(vFile) {
-      @Override
-      @RequiredReadAction
-      public void undo() {
-        setOption(project, vFile, !myValue);
-      }
-
-      @Override
-      @RequiredReadAction
-      public void redo() {
-        setOption(project, vFile, myValue);
-      }
-    });
-  }
-
-  @RequiredReadAction
-  private void setOption(@Nonnull Project project, @Nonnull VirtualFile vFile, boolean value) {
-    PsiFile file = PsiManager.getInstance(project).findFile(vFile);
-    if (file == null) {
-      return;
+    public SetInspectionOptionFix(I inspection, BiConsumer<State, Boolean> propertySetter, String message, boolean value) {
+        myID = inspection.getShortName();
+        myPropertySetter = propertySetter;
+        myMessage = message;
+        myValue = value;
     }
 
-    InspectionProjectProfileManager manager = InspectionProjectProfileManager.getInstance(project);
+    @Nls
+    @Nonnull
+    @Override
+    public String getName() {
+        return myMessage;
+    }
 
-    InspectionProfile inspectionProfile = manager.getInspectionProfile();
+    @Nls
+    @Nonnull
+    @Override
+    public String getFamilyName() {
+        return "Set inspection option";
+    }
 
-    inspectionProfile.<I, State>modifyToolSettings(myID, file, (inspectionTool, state) -> myPropertySetter.accept(state, value));
-  }
+    @Override
+    public boolean startInWriteAction() {
+        return false;
+    }
 
-  @Override
-  public Image getIcon(int flags) {
-    return AllIcons.Actions.Cancel;
-  }
+    @Override
+    @RequiredWriteAction
+    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+        VirtualFile vFile = descriptor.getPsiElement().getContainingFile().getVirtualFile();
+        setOption(project, vFile, myValue);
+        ProjectUndoManager.getInstance(project).undoableActionPerformed(new BasicUndoableAction(vFile) {
+            @Override
+            @RequiredReadAction
+            public void undo() {
+                setOption(project, vFile, !myValue);
+            }
+
+            @Override
+            @RequiredReadAction
+            public void redo() {
+                setOption(project, vFile, myValue);
+            }
+        });
+    }
+
+    @RequiredReadAction
+    private void setOption(@Nonnull Project project, @Nonnull VirtualFile vFile, boolean value) {
+        PsiFile file = PsiManager.getInstance(project).findFile(vFile);
+        if (file == null) {
+            return;
+        }
+
+        InspectionProjectProfileManager manager = InspectionProjectProfileManager.getInstance(project);
+
+        InspectionProfile inspectionProfile = manager.getInspectionProfile();
+
+        inspectionProfile.<I, State>modifyToolSettings(myID, file, (inspectionTool, state) -> myPropertySetter.accept(state, value));
+    }
+
+    @Override
+    public Image getIcon(int flags) {
+        return AllIcons.Actions.Cancel;
+    }
 }

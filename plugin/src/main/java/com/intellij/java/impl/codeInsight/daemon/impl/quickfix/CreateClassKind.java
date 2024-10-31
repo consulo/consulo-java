@@ -25,31 +25,31 @@ import consulo.ui.image.Image;
  * @author ven
  */
 public enum CreateClassKind implements ClassKind {
-  CLASS(JavaElementKind.CLASS, PlatformIconGroup.nodesClass()),
-  INTERFACE(JavaElementKind.INTERFACE, PlatformIconGroup.nodesInterface()),
-  ENUM(JavaElementKind.ENUM, PlatformIconGroup.nodesEnum()),
-  ANNOTATION(JavaElementKind.ANNOTATION, PlatformIconGroup.nodesAnnotationtype()),
-  RECORD(JavaElementKind.RECORD, JavaPsiImplIconGroup.nodesRecord());
+    CLASS(JavaElementKind.CLASS, PlatformIconGroup.nodesClass()),
+    INTERFACE(JavaElementKind.INTERFACE, PlatformIconGroup.nodesInterface()),
+    ENUM(JavaElementKind.ENUM, PlatformIconGroup.nodesEnum()),
+    ANNOTATION(JavaElementKind.ANNOTATION, PlatformIconGroup.nodesAnnotationtype()),
+    RECORD(JavaElementKind.RECORD, JavaPsiImplIconGroup.nodesRecord());
 
-  private final JavaElementKind myKind;
-  private final Image myKindIcon;
+    private final JavaElementKind myKind;
+    private final Image myKindIcon;
 
-  CreateClassKind(JavaElementKind kind, Image kindIcon) {
-    myKind = kind;
-    myKindIcon = kindIcon;
-  }
+    CreateClassKind(JavaElementKind kind, Image kindIcon) {
+        myKind = kind;
+        myKindIcon = kindIcon;
+    }
 
-  public Image getKindIcon() {
-    return myKindIcon;
-  }
+    public Image getKindIcon() {
+        return myKindIcon;
+    }
 
-  @Override
-  public String getDescription() {
-    return myKind.subject();
-  }
+    @Override
+    public String getDescription() {
+        return myKind.subject();
+    }
 
-  @Override
-  public String getDescriptionAccusative() {
-    return myKind.object();
-  }
+    @Override
+    public String getDescriptionAccusative() {
+        return myKind.object();
+    }
 }
