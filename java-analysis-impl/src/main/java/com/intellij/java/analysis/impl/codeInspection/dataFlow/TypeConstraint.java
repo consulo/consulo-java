@@ -1,22 +1,21 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
-import com.intellij.java.analysis.JavaAnalysisBundle;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfReferenceType;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfType;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes;
 import com.intellij.java.language.psi.PsiIntersectionType;
 import com.intellij.java.language.psi.PsiType;
+import consulo.java.analysis.localize.JavaAnalysisLocalize;
 import consulo.project.Project;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import one.util.streamex.EntryStream;
 import one.util.streamex.MoreCollectors;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Nls;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 import java.util.*;
 
@@ -253,23 +252,20 @@ public interface TypeConstraint {
                 return null;
             }
             if (expectedAssignable) {
-                if (equals(exact)) {
-                    return JavaAnalysisBundle.message("type.constraint.assignability.explanation.exact", elementTitle, toShortString());
-                }
-                return JavaAnalysisBundle.message(
-                    "type.constraint.assignability.explanation.exact.subtype",
-                    elementTitle,
-                    toShortString(),
-                    exact.toShortString()
-                );
+                return equals(exact)
+                    ? JavaAnalysisLocalize.typeConstraintAssignabilityExplanationExact(elementTitle, toShortString()).get()
+                    : JavaAnalysisLocalize.typeConstraintAssignabilityExplanationExactSubtype(
+                        elementTitle,
+                        toShortString(),
+                        exact.toShortString()
+                    ).get();
             }
             else {
-                return JavaAnalysisBundle.message(
-                    "type.constraint.assignability.explanation.exact.not.subtype",
+                return JavaAnalysisLocalize.typeConstraintAssignabilityExplanationExactNotSubtype(
                     elementTitle,
                     toShortString(),
                     exact.toShortString()
-                );
+                ).get();
             }
         }
 
@@ -568,52 +564,38 @@ public interface TypeConstraint {
             if (expectedAssignable) {
                 for (Exact inst : myInstanceOf) {
                     if (exact.isAssignableFrom(inst)) {
-                        if (exact == inst) {
-                            return JavaAnalysisBundle.message(
-                                "type.constraint.assignability.explanation.exact",
-                                elementTitle,
-                                inst.toShortString()
-                            );
-                        }
-                        else {
-                            return JavaAnalysisBundle.message(
-                                "type.constraint.assignability.explanation.subtype.of.subtype",
+                        return exact == inst
+                            ? JavaAnalysisLocalize.typeConstraintAssignabilityExplanationExact(elementTitle, inst.toShortString()).get()
+                            : JavaAnalysisLocalize.typeConstraintAssignabilityExplanationSubtypeOfSubtype(
                                 elementTitle,
                                 inst.toShortString(),
                                 exact.toShortString()
-                            );
-                        }
+                            ).get();
                     }
                 }
             }
             else {
                 for (Exact notInst : myNotInstanceOf) {
                     if (notInst.isAssignableFrom(exact)) {
-                        if (exact == notInst) {
-                            return JavaAnalysisBundle.message(
-                                "type.constraint.assignability.explanation.not.instance.of",
+                        return exact == notInst
+                            ? JavaAnalysisLocalize.typeConstraintAssignabilityExplanationNotInstanceOf(
                                 elementTitle,
                                 notInst.toShortString()
-                            );
-                        }
-                        else {
-                            return JavaAnalysisBundle.message(
-                                "type.constraint.assignability.explanation.not.instance.of.supertype",
+                            ).get()
+                            : JavaAnalysisLocalize.typeConstraintAssignabilityExplanationNotInstanceOfSupertype(
                                 elementTitle,
                                 notInst.toShortString(),
                                 exact.toShortString()
-                            );
-                        }
+                            ).get();
                     }
                 }
                 for (Exact inst : myInstanceOf) {
                     if (!exact.isConvertibleFrom(inst)) {
-                        return JavaAnalysisBundle.message(
-                            "type.constraint.assignability.explanation.definitely.inconvertible",
+                        return JavaAnalysisLocalize.typeConstraintAssignabilityExplanationDefinitelyInconvertible(
                             elementTitle,
                             inst.toShortString(),
                             exact.toShortString()
-                        );
+                        ).get();
                     }
                 }
             }
@@ -635,7 +617,7 @@ public interface TypeConstraint {
         @Nonnull
         TypeConstraint getArrayComponent() {
             return instanceOfTypes().map(Exact::getArrayComponent)
-                .map(type -> type instanceof Exact ? ((Exact)type).instanceOf() : TypeConstraints.BOTTOM)
+                .map(type -> type instanceof Exact exact ? exact.instanceOf() : TypeConstraints.BOTTOM)
                 .reduce(TypeConstraint::meet).orElse(TypeConstraints.BOTTOM);
         }
 

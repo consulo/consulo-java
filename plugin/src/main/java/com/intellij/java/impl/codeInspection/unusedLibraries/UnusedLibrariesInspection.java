@@ -1,11 +1,10 @@
 // Copyright 2000-2021 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.impl.codeInspection.unusedLibraries;
 
-import com.intellij.java.analysis.JavaAnalysisBundle;
 import com.intellij.java.impl.codeInspection.AbstractDependencyVisitor;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.access.RequiredWriteAction;
-import consulo.application.ReadAction;
+import consulo.application.AccessRule;
 import consulo.application.util.graph.GraphAlgorithms;
 import consulo.component.util.graph.Graph;
 import consulo.component.util.graph.GraphGenerator;
@@ -14,7 +13,8 @@ import consulo.content.base.BinariesOrderRootType;
 import consulo.content.library.Library;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
-import consulo.ide.impl.idea.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
+import consulo.java.analysis.localize.JavaAnalysisLocalize;
 import consulo.java.deadCodeNotWorking.OldStyleInspection;
 import consulo.language.editor.inspection.*;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
@@ -26,6 +26,7 @@ import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiUtilCore;
 import consulo.language.util.ModuleUtilCore;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.module.ModuleManager;
@@ -45,7 +46,6 @@ import consulo.virtualFileSystem.VirtualFile;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -62,7 +62,7 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool imp
     @Nonnull
     JComponent createOptionsPanel() {
         return new SingleCheckboxOptionsPanel(
-            JavaAnalysisBundle.message("don.t.report.unused.jars.inside.used.library"),
+            JavaAnalysisLocalize.donTReportUnusedJarsInsideUsedLibrary().get(),
             this,
             "IGNORE_LIBRARY_PARTS"
         );
@@ -104,7 +104,7 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool imp
     }
 
     private CommonProblemDescriptor[] getDescriptors(@Nonnull InspectionManager manager, RefModule refModule, Module module) {
-        VirtualFile[] givenRoots = ReadAction.compute(
+        VirtualFile[] givenRoots = AccessRule.read(
             () -> OrderEnumerator.orderEntries(module).withoutSdk()
                 .withoutModuleSourceEntries()
                 .withoutDepModules()
@@ -123,35 +123,32 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool imp
             appendUsedRootDependencies(usedRoots, givenRoots);
         }
 
-        return ReadAction.compute(() -> {
+        return AccessRule.read(() -> {
             final List<CommonProblemDescriptor> result = new ArrayList<>();
             for (OrderEntry entry : moduleRootManager.getOrderEntries()) {
                 if (entry instanceof LibraryOrderEntry libraryOrderEntry &&
                     !libraryOrderEntry.isExported() && libraryOrderEntry.getScope() != DependencyScope.RUNTIME) {
-                    final Set<VirtualFile> files = ContainerUtil.set(entry.getFiles(BinariesOrderRootType.getInstance()));
+                    final Set<VirtualFile> files =
+                        consulo.ide.impl.idea.util.containers.ContainerUtil.set(entry.getFiles(BinariesOrderRootType.getInstance()));
                     boolean allRootsUnused = usedRoots == null || !files.removeAll(usedRoots);
                     if (allRootsUnused) {
-                        String message = JavaAnalysisBundle.message("unused.library.problem.descriptor", entry.getPresentableName());
                         result.add(manager.createProblemDescriptor(
-                            message,
+                            JavaAnalysisLocalize.unusedLibraryProblemDescriptor(entry.getPresentableName()).get(),
                             module,
                             new RemoveUnusedLibrary(entry.getPresentableName(), null)
                         ));
                     }
                     else if (!files.isEmpty() && !IGNORE_LIBRARY_PARTS) {
-                        final String unusedLibraryRoots = StringUtil.join(files, file -> file.getPresentableName(), ",");
-                        String message = JavaAnalysisBundle.message(
-                            "unused.library.roots.problem.descriptor",
-                            unusedLibraryRoots,
-                            entry.getPresentableName()
-                        );
+                        final String unusedLibraryRoots = StringUtil.join(files, VirtualFile::getPresentableName, ",");
+                        LocalizeValue message =
+                            JavaAnalysisLocalize.unusedLibraryRootsProblemDescriptor(unusedLibraryRoots, entry.getPresentableName());
                         CommonProblemDescriptor descriptor = ((LibraryOrderEntry)entry).isModuleLevel()
                             ? manager.createProblemDescriptor(
-                                message,
+                                message.get(),
                                 module,
                                 new RemoveUnusedLibrary(entry.getPresentableName(), files)
                             )
-                            : manager.createProblemDescriptor(message);
+                            : manager.createProblemDescriptor(message.get());
                         result.add(descriptor);
                     }
                 }
@@ -184,7 +181,7 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool imp
                 Set<String> classesInCurrentRoot = fromClasses.get(n);
                 return toClasses.entrySet().stream()
                     .filter(entry -> ContainerUtil.intersects(entry.getValue(), classesInCurrentRoot))
-                    .map(entry -> entry.getKey())
+                    .map(Map.Entry::getKey)
                     .collect(Collectors.toSet()).iterator();
             }
         });
@@ -247,7 +244,6 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool imp
     }
 
     @Override
-    @NonNls
     @Nonnull
     public String getShortName() {
         return "UnusedLibrary";
@@ -279,8 +275,9 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool imp
         @Override
         @Nonnull
         public String getFamilyName() {
-            return myFiles == null ? JavaAnalysisBundle.message("detach.library.quickfix.name") : JavaAnalysisBundle.message(
-                "detach.library.roots.quickfix.name");
+            return myFiles == null
+                ? JavaAnalysisLocalize.detachLibraryQuickfixName().get()
+                : JavaAnalysisLocalize.detachLibraryRootsQuickfixName().get();
         }
 
         @Override

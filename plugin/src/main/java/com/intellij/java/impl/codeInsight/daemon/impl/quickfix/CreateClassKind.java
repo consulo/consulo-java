@@ -18,6 +18,7 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.ClassKind;
 import com.intellij.java.language.psi.util.JavaElementKind;
 import consulo.java.language.impl.icon.JavaPsiImplIconGroup;
+import consulo.localize.LocalizeValue;
 import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.ui.image.Image;
 
@@ -45,11 +46,21 @@ public enum CreateClassKind implements ClassKind {
 
     @Override
     public String getDescription() {
+        return getDescriptionValue().get();
+    }
+
+    @Override
+    public LocalizeValue getDescriptionValue() {
         return myKind.subject();
     }
 
     @Override
-    public String getDescriptionAccusative() {
+    public LocalizeValue getDescriptionAccusativeValue() {
         return myKind.object();
+    }
+
+    @Override
+    public String getDescriptionAccusative() {
+        return getDescriptionAccusativeValue().get();
     }
 }

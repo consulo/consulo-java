@@ -1,7 +1,6 @@
 // Copyright 2000-2017 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.impl.codeInspection.miscGenerics;
 
-import com.intellij.java.analysis.JavaAnalysisBundle;
 import com.intellij.java.analysis.codeInspection.AbstractBaseJavaLocalInspectionTool;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.CommonDataflow;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.TypeConstraint;
@@ -11,6 +10,7 @@ import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.java.analysis.localize.JavaAnalysisLocalize;
 import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
@@ -45,7 +45,7 @@ public class SuspiciousCollectionsMethodCallsInspection extends AbstractBaseJava
     @Nullable
     public JComponent createOptionsPanel() {
         return new SingleCheckboxOptionsPanel(
-            JavaAnalysisBundle.message("report.suspicious.but.possibly.correct.method.calls"),
+            JavaAnalysisLocalize.reportSuspiciousButPossiblyCorrectMethodCalls().get(),
             this,
             "REPORT_CONVERTIBLE_METHOD_CALLS"
         );
@@ -62,7 +62,7 @@ public class SuspiciousCollectionsMethodCallsInspection extends AbstractBaseJava
         final List<SuspiciousMethodCallUtil.PatternMethod> patternMethods = new ArrayList<>();
         return new JavaElementVisitor() {
             @Override
-            public void visitMethodCallExpression(PsiMethodCallExpression methodCall) {
+            public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression methodCall) {
                 final PsiExpression[] args = methodCall.getArgumentList().getExpressions();
                 if (args.length < 1) {
                     return;
@@ -77,7 +77,7 @@ public class SuspiciousCollectionsMethodCallsInspection extends AbstractBaseJava
             }
 
             @Override
-            public void visitMethodReferenceExpression(PsiMethodReferenceExpression expression) {
+            public void visitMethodReferenceExpression(@Nonnull PsiMethodReferenceExpression expression) {
                 final PsiType functionalInterfaceType = expression.getFunctionalInterfaceType();
                 final PsiClassType.ClassResolveResult functionalInterfaceResolveResult =
                     PsiUtil.resolveGenericsClassInType(functionalInterfaceType);

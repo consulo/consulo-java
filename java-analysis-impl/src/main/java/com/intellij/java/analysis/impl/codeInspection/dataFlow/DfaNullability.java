@@ -1,16 +1,14 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
-import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfReferenceType;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfType;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes;
-import com.intellij.java.analysis.JavaAnalysisBundle;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.Nls;
+import com.intellij.java.language.codeInsight.Nullability;
+import consulo.java.analysis.localize.JavaAnalysisLocalize;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
-
-import java.util.function.Supplier;
+import jakarta.annotation.Nullable;
 
 /**
  * Represents a value nullability within DFA. Unlike {@link Nullability} may have more fine-grained
@@ -22,27 +20,24 @@ public enum DfaNullability {
     /**
      * Means: exactly null
      */
-    NULL("Null", JavaAnalysisBundle.messagePointer("nullability.null"), Nullability.NULLABLE),
-    NULLABLE("Nullable", JavaAnalysisBundle.messagePointer("nullability.nullable"), Nullability.NULLABLE),
-    NOT_NULL("Not-null", JavaAnalysisBundle.messagePointer("nullability.non.null"), Nullability.NOT_NULL),
-    UNKNOWN("Unknown", () -> "", Nullability.UNKNOWN),
+    NULL("Null", JavaAnalysisLocalize.nullabilityNull(), Nullability.NULLABLE),
+    NULLABLE("Nullable", JavaAnalysisLocalize.nullabilityNullable(), Nullability.NULLABLE),
+    NOT_NULL("Not-null", JavaAnalysisLocalize.nullabilityNonNull(), Nullability.NOT_NULL),
+    UNKNOWN("Unknown", LocalizeValue.empty(), Nullability.UNKNOWN),
     /**
      * Means: non-stable variable declared as Nullable was checked for nullity and flushed afterwards (e.g. by unknown method call),
      * so we are unsure about its nullability anymore.
      */
-    FLUSHED("Flushed", () -> "", Nullability.UNKNOWN);
+    FLUSHED("Flushed", LocalizeValue.empty(), Nullability.UNKNOWN);
 
-    private final
     @Nonnull
-    String myInternalName;
-    private final
+    private final String myInternalName;
     @Nonnull
-    Supplier<String> myPresentationalName;
-    private final
+    private final LocalizeValue myPresentationalName;
     @Nonnull
-    Nullability myNullability;
+    private final Nullability myNullability;
 
-    DfaNullability(@Nonnull String internalName, @Nonnull Supplier<String> presentationalName, @Nonnull Nullability nullability) {
+    DfaNullability(@Nonnull String internalName, @Nonnull LocalizeValue presentationalName, @Nonnull Nullability nullability) {
         myInternalName = internalName;
         myPresentationalName = presentationalName;
         myNullability = nullability;
@@ -53,11 +48,9 @@ public enum DfaNullability {
         return myInternalName;
     }
 
-    public
     @Nonnull
-    @Nls
-    String getPresentationName() {
-        return myPresentationalName.get();
+    public LocalizeValue getPresentationName() {
+        return myPresentationalName;
     }
 
     @Nonnull
@@ -103,33 +96,26 @@ public enum DfaNullability {
 
     @Nonnull
     public static DfaNullability fromNullability(@Nonnull Nullability nullability) {
-        switch (nullability) {
-            case NOT_NULL:
-                return NOT_NULL;
-            case NULLABLE:
-                return NULLABLE;
-            case UNKNOWN:
-                return UNKNOWN;
-        }
-        throw new IllegalStateException("Unknown nullability: " + nullability);
+        return switch (nullability) {
+            case NOT_NULL -> NOT_NULL;
+            case NULLABLE -> NULLABLE;
+            case UNKNOWN -> UNKNOWN;
+            default -> throw new IllegalStateException("Unknown nullability: " + nullability);
+        };
     }
 
     @Nonnull
     public DfReferenceType asDfType() {
-        switch (this) {
-            case NULL:
-                return DfTypes.NULL;
-            case NOT_NULL:
-                return DfTypes.NOT_NULL_OBJECT;
-            case UNKNOWN:
-                return DfTypes.OBJECT_OR_NULL;
-            default:
-                return DfTypes.customObject(TypeConstraints.TOP, this, Mutability.UNKNOWN, null, DfTypes.BOTTOM);
-        }
+        return switch (this) {
+            case NULL -> DfTypes.NULL;
+            case NOT_NULL -> DfTypes.NOT_NULL_OBJECT;
+            case UNKNOWN -> DfTypes.OBJECT_OR_NULL;
+            default -> DfTypes.customObject(TypeConstraints.TOP, this, Mutability.UNKNOWN, null, DfTypes.BOTTOM);
+        };
     }
 
     @Nonnull
     public static DfaNullability fromDfType(@Nonnull DfType type) {
-        return type instanceof DfReferenceType ? ((DfReferenceType)type).getNullability() : UNKNOWN;
+        return type instanceof DfReferenceType refType ? refType.getNullability() : UNKNOWN;
     }
 }

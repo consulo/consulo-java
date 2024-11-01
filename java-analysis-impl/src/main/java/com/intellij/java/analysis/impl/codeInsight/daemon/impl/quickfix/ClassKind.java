@@ -15,11 +15,20 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 
+import consulo.localize.LocalizeValue;
+
 /**
- * Created by Max Medvedev on 28/05/14
+ * @author Max Medvedev
+ * @since 2014-05-28
  */
 public interface ClassKind {
+    LocalizeValue getDescriptionValue();
+
     String getDescription();
+
+    default LocalizeValue getDescriptionAccusativeValue() {
+        return getDescriptionValue();
+    }
 
     default String getDescriptionAccusative() {
         return getDescription();

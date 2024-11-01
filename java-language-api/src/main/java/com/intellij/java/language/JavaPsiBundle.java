@@ -2,13 +2,19 @@
 package com.intellij.java.language;
 
 import com.intellij.java.language.psi.PsiModifier;
+import consulo.annotation.DeprecationInfo;
+import consulo.annotation.internal.MigratedExtensionsTo;
 import consulo.component.util.localize.AbstractBundle;
+import consulo.java.language.localize.JavaLanguageLocalize;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.PropertyKey;
 
 import java.util.function.Supplier;
 
+@Deprecated
+@DeprecationInfo("Use JavaLanguageLocalize")
+@MigratedExtensionsTo(JavaLanguageLocalize.class)
 public final class JavaPsiBundle extends AbstractBundle {
   public static final String BUNDLE = "com.intellij.java.language.JavaPsiBundle";
   public static final JavaPsiBundle INSTANCE = new JavaPsiBundle();

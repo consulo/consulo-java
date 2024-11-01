@@ -7,11 +7,11 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaTypeValu
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaVariableValue;
-import com.intellij.java.analysis.JavaAnalysisBundle;
 import com.intellij.java.language.psi.*;
+import consulo.java.analysis.localize.JavaAnalysisLocalize;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
-import jakarta.annotation.Nonnull;
 
 import java.util.Objects;
 import java.util.function.Function;
@@ -30,23 +30,23 @@ public abstract class ContractReturnValue {
 
     private static final Validator NOT_CONSTRUCTOR =
         method -> method.isConstructor()
-            ? JavaAnalysisBundle.message("contract.return.validator.not.applicable.for.constructor")
+            ? JavaAnalysisLocalize.contractReturnValidatorNotApplicableForConstructor().get()
             : null;
     private static final Validator NOT_STATIC =
         method -> method.hasModifierProperty(PsiModifier.STATIC)
-            ? JavaAnalysisBundle.message("contract.return.validator.not.applicable.static")
+            ? JavaAnalysisLocalize.contractReturnValidatorNotApplicableStatic().get()
             : null;
     private static final Validator NOT_PRIMITIVE_RETURN =
         method -> {
             PsiType returnType = method.getReturnType();
             return returnType instanceof PsiPrimitiveType
-                ? JavaAnalysisBundle.message("contract.return.validator.not.applicable.primitive", returnType.getPresentableText())
+                ? JavaAnalysisLocalize.contractReturnValidatorNotApplicablePrimitive(returnType.getPresentableText()).get()
                 : null;
         };
     private static final Validator BOOLEAN_RETURN =
         method -> PsiType.BOOLEAN.equals(method.getReturnType())
             ? null
-            : JavaAnalysisBundle.message("contract.return.validator.return.type.must.be.boolean");
+            : JavaAnalysisLocalize.contractReturnValidatorReturnTypeMustBeBoolean().get();
 
     private final
     @Nonnull
@@ -86,7 +86,7 @@ public abstract class ContractReturnValue {
     public final String getMethodCompatibilityProblem(PsiMethod method) {
         //noinspection HardCodedStringLiteral
         return validators().map(fn -> fn.apply(method)).filter(Objects::nonNull).findFirst()
-            .map((JavaAnalysisBundle.message("contract.return.value.validation.prefix", this) + ' ')::concat)
+            .map((JavaAnalysisLocalize.contractReturnValueValidationPrefix(this).get() + ' ')::concat)
             .orElse(null);
     }
 
@@ -477,7 +477,7 @@ public abstract class ContractReturnValue {
                         return null;
                     }
                 }
-                return JavaAnalysisBundle.message("contract.return.validator.method.return.incompatible.with.method.containing.class");
+                return JavaAnalysisLocalize.contractReturnValidatorMethodReturnIncompatibleWithMethodContainingClass().get();
             });
         }
 
@@ -559,16 +559,15 @@ public abstract class ContractReturnValue {
             return Stream.of(NOT_CONSTRUCTOR, method -> {
                 PsiParameter[] parameters = method.getParameterList().getParameters();
                 if (parameters.length <= myParamNumber) {
-                    return JavaAnalysisBundle.message("contract.return.validator.too.few.parameters", parameters.length);
+                    return JavaAnalysisLocalize.contractReturnValidatorTooFewParameters(parameters.length).get();
                 }
                 PsiType parameterType = parameters[myParamNumber].getType();
                 PsiType returnType = method.getReturnType();
                 if (returnType != null && !returnType.isConvertibleFrom(parameterType)) {
-                    return JavaAnalysisBundle.message(
-                        "contract.return.validator.incompatible.return.parameter.type",
+                    return JavaAnalysisLocalize.contractReturnValidatorIncompatibleReturnParameterType(
                         returnType.getPresentableText(),
                         parameterType.getPresentableText()
-                    );
+                    ).get();
                 }
                 return null;
             });

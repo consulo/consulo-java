@@ -1,76 +1,71 @@
 // Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.language.psi.util;
 
-import com.intellij.java.language.JavaPsiBundle;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiSnippetDocTagBody;
+import consulo.java.language.localize.JavaLanguageLocalize;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.PropertyKey;
 
 /**
  * Represents a kind of element that appears in Java source code.
  * The main purpose of this enum is to be able to display localized element name in UI
  */
 public enum JavaElementKind {
-    ABSTRACT_METHOD("element.abstract_method"),
-    ANNOTATION("element.annotation"),
-    ANONYMOUS_CLASS("element.anonymous_class"),
-    CLASS("element.class"),
-    TYPE_PARAMETER("element.type.parameter"),
-    CONSTANT("element.constant"),
-    CONSTRUCTOR("element.constructor"),
-    ENUM("element.enum"),
-    ENUM_CONSTANT("element.enum_constant"),
-    EXPRESSION("element.expression"),
-    FIELD("element.field"),
-    INITIALIZER("element.initializer"),
-    INTERFACE("element.interface"),
-    LABEL("element.label"),
-    LOCAL_VARIABLE("element.local_variable"),
-    METHOD("element.method"),
-    MODULE("element.module"),
-    PACKAGE("element.package"),
-    PARAMETER("element.parameter"),
-    PATTERN_VARIABLE("element.pattern_variable"),
-    RECORD("element.record"),
-    RECORD_COMPONENT("element.record_component"),
-    SNIPPET_BODY("element.snippet_body"),
-    STATEMENT("element.statement"),
-    UNKNOWN("element.unknown"),
-    VARIABLE("element.variable"),
-    THROWS_LIST("element.throws.list"),
-    EXTENDS_LIST("element.extends.list"),
-    RECEIVER_PARAMETER("element.receiver.parameter"),
-    METHOD_CALL("element.method.call"),
-    TYPE_ARGUMENTS("element.type.arguments"),
-    SEMICOLON("element.type.semicolon");
+    ABSTRACT_METHOD(JavaLanguageLocalize.elementAbstract_method()),
+    ANNOTATION(JavaLanguageLocalize.elementAnnotation()),
+    ANONYMOUS_CLASS(JavaLanguageLocalize.elementAnonymous_class()),
+    CLASS(JavaLanguageLocalize.elementClass()),
+    TYPE_PARAMETER(JavaLanguageLocalize.elementTypeParameter()),
+    CONSTANT(JavaLanguageLocalize.elementConstant()),
+    CONSTRUCTOR(JavaLanguageLocalize.elementConstructor()),
+    ENUM(JavaLanguageLocalize.elementEnum()),
+    ENUM_CONSTANT(JavaLanguageLocalize.elementEnum_constant()),
+    EXPRESSION(JavaLanguageLocalize.elementExpression()),
+    FIELD(JavaLanguageLocalize.elementField()),
+    INITIALIZER(JavaLanguageLocalize.elementInitializer()),
+    INTERFACE(JavaLanguageLocalize.elementInterface()),
+    LABEL(JavaLanguageLocalize.elementLabel()),
+    LOCAL_VARIABLE(JavaLanguageLocalize.elementLocal_variable()),
+    METHOD(JavaLanguageLocalize.elementMethod()),
+    MODULE(JavaLanguageLocalize.elementModule()),
+    PACKAGE(JavaLanguageLocalize.elementPackage()),
+    PARAMETER(JavaLanguageLocalize.elementParameter()),
+    PATTERN_VARIABLE(JavaLanguageLocalize.elementPattern_variable()),
+    RECORD(JavaLanguageLocalize.elementRecord()),
+    RECORD_COMPONENT(JavaLanguageLocalize.elementRecord_component()),
+    SNIPPET_BODY(JavaLanguageLocalize.elementSnippet_body()),
+    STATEMENT(JavaLanguageLocalize.elementStatement()),
+    UNKNOWN(JavaLanguageLocalize.elementUnknown()),
+    VARIABLE(JavaLanguageLocalize.elementVariable()),
+    THROWS_LIST(JavaLanguageLocalize.elementThrowsList()),
+    EXTENDS_LIST(JavaLanguageLocalize.elementExtendsList()),
+    RECEIVER_PARAMETER(JavaLanguageLocalize.elementReceiverParameter()),
+    METHOD_CALL(JavaLanguageLocalize.elementMethodCall()),
+    TYPE_ARGUMENTS(JavaLanguageLocalize.elementTypeArguments()),
+    SEMICOLON(JavaLanguageLocalize.elementTypeSemicolon());
 
-    private final
-    @PropertyKey(resourceBundle = JavaPsiBundle.BUNDLE)
-    String propertyKey;
+    @Nonnull
+    private final LocalizeValue myName;
 
-    JavaElementKind(@PropertyKey(resourceBundle = JavaPsiBundle.BUNDLE) String key) {
-        propertyKey = key;
+    JavaElementKind(@Nonnull LocalizeValue name) {
+        myName = name;
     }
 
     /**
      * @return human-readable name of the item having the subject role in the sentence (nominative case)
      */
-    @Nls
-    @Nonnull
-    public String subject() {
-        return JavaPsiBundle.message(propertyKey, 0);
+    public LocalizeValue subject() {
+        return myName;
     }
 
     /**
      * @return human-readable name of the item having the object role in the sentence (accusative case)
      */
-    @Nls
     @Nonnull
-    public String object() {
-        return JavaPsiBundle.message(propertyKey, 1);
+    public LocalizeValue object() {
+        return myName;
     }
 
     /**
@@ -79,20 +74,13 @@ public enum JavaElementKind {
      */
     @Nonnull
     public JavaElementKind lessDescriptive() {
-        switch (this) {
-            case ABSTRACT_METHOD:
-                return METHOD;
-            case LOCAL_VARIABLE:
-            case PATTERN_VARIABLE:
-                return VARIABLE;
-            case CONSTANT:
-                return FIELD;
-            case TYPE_PARAMETER:
-            case ANONYMOUS_CLASS:
-                return CLASS;
-            default:
-                return this;
-        }
+        return switch (this) {
+            case ABSTRACT_METHOD -> METHOD;
+            case LOCAL_VARIABLE, PATTERN_VARIABLE -> VARIABLE;
+            case CONSTANT -> FIELD;
+            case TYPE_PARAMETER, ANONYMOUS_CLASS -> CLASS;
+            default -> this;
+        };
     }
 
     /**
@@ -100,8 +88,7 @@ public enum JavaElementKind {
      * @return resulting kind
      */
     public static JavaElementKind fromElement(@Nonnull PsiElement element) {
-        if (element instanceof PsiClass) {
-            PsiClass psiClass = (PsiClass)element;
+        if (element instanceof PsiClass psiClass) {
             if (psiClass instanceof PsiAnonymousClass) {
                 return ANONYMOUS_CLASS;
             }
@@ -122,17 +109,16 @@ public enum JavaElementKind {
             }
             return CLASS;
         }
-        if (element instanceof PsiMethod) {
-            if (((PsiMethod)element).isConstructor()) {
+        if (element instanceof PsiMethod method) {
+            if (method.isConstructor()) {
                 return CONSTRUCTOR;
             }
-            if (((PsiMethod)element).hasModifierProperty(PsiModifier.ABSTRACT)) {
+            if (method.hasModifierProperty(PsiModifier.ABSTRACT)) {
                 return ABSTRACT_METHOD;
             }
             return METHOD;
         }
-        if (element instanceof PsiField) {
-            PsiField field = (PsiField)element;
+        if (element instanceof PsiField field) {
             if (field instanceof PsiEnumConstant) {
                 return ENUM_CONSTANT;
             }
@@ -144,8 +130,8 @@ public enum JavaElementKind {
         if (element instanceof PsiReferenceParameterList) {
             return TYPE_ARGUMENTS;
         }
-        if (element instanceof PsiReferenceList) {
-            PsiReferenceList.Role role = ((PsiReferenceList)element).getRole();
+        if (element instanceof PsiReferenceList referenceList) {
+            PsiReferenceList.Role role = referenceList.getRole();
             if (role == PsiReferenceList.Role.THROWS_LIST) {
                 return THROWS_LIST;
             }

@@ -13,6 +13,7 @@ import consulo.language.editor.inspection.scheme.InspectionProjectProfileManager
 import consulo.language.editor.intention.LowPriorityAction;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.image.Image;
 import consulo.undoRedo.BasicUndoableAction;
@@ -28,10 +29,10 @@ public class SetInspectionOptionFix<I extends AbstractBaseJavaLocalInspectionToo
     implements LocalQuickFix, LowPriorityAction, Iconable {
     private final String myID;
     private final BiConsumer<State, Boolean> myPropertySetter;
-    private final String myMessage;
+    private final LocalizeValue myMessage;
     private final boolean myValue;
 
-    public SetInspectionOptionFix(I inspection, BiConsumer<State, Boolean> propertySetter, String message, boolean value) {
+    public SetInspectionOptionFix(I inspection, BiConsumer<State, Boolean> propertySetter, @Nonnull LocalizeValue message, boolean value) {
         myID = inspection.getShortName();
         myPropertySetter = propertySetter;
         myMessage = message;
@@ -42,7 +43,7 @@ public class SetInspectionOptionFix<I extends AbstractBaseJavaLocalInspectionToo
     @Nonnull
     @Override
     public String getName() {
-        return myMessage;
+        return myMessage.get();
     }
 
     @Nls

@@ -1,7 +1,6 @@
 // Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
-import com.intellij.java.analysis.JavaAnalysisBundle;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.StandardMethodContract.ValueConstraint;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.instructions.MethodCallInstruction;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.instructions.ReturnInstruction;
@@ -13,9 +12,9 @@ import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
+import consulo.java.analysis.localize.JavaAnalysisLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.util.collection.ContainerUtil;
-
 import jakarta.annotation.Nonnull;
 
 import java.util.*;
@@ -101,7 +100,7 @@ public final class ContractChecker {
             HashMap<PsiElement, String> errors = new HashMap<>();
             for (PsiElement element : myViolations) {
                 if (!myNonViolations.contains(element)) {
-                    errors.put(element, JavaAnalysisBundle.message("inspection.contract.checker.contract.violated", myContract));
+                    errors.put(element, JavaAnalysisLocalize.inspectionContractCheckerContractViolated(myContract).get());
                 }
             }
 
@@ -112,13 +111,13 @@ public final class ContractChecker {
                         if (myContract.isTrivial()) {
                             errors.put(
                                 element,
-                                JavaAnalysisBundle.message("inspection.contract.checker.method.always.fails.trivial", myContract)
+                                JavaAnalysisLocalize.inspectionContractCheckerMethodAlwaysFailsTrivial(myContract).get()
                             );
                         }
                         else {
                             errors.put(
                                 element,
-                                JavaAnalysisBundle.message("inspection.contract.checker.method.always.fails.nontrivial", myContract)
+                                JavaAnalysisLocalize.inspectionContractCheckerMethodAlwaysFailsNontrivial(myContract).get()
                             );
                         }
                     }
@@ -128,7 +127,7 @@ public final class ContractChecker {
                 PsiIdentifier nameIdentifier = myMethod.getNameIdentifier();
                 errors.put(
                     nameIdentifier != null ? nameIdentifier : myMethod,
-                    JavaAnalysisBundle.message("inspection.contract.checker.no.exception.thrown", myContract)
+                    JavaAnalysisLocalize.inspectionContractCheckerNoExceptionThrown(myContract).get()
                 );
             }
 

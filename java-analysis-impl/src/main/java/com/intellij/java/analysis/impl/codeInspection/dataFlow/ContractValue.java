@@ -35,7 +35,6 @@ import java.util.function.UnaryOperator;
 public abstract class ContractValue {
     // package private to avoid uncontrolled implementations
     ContractValue() {
-
     }
 
     abstract DfaValue makeDfaValue(DfaValueFactory factory, DfaCallArguments arguments);
@@ -47,10 +46,7 @@ public abstract class ContractValue {
 
     public DfaCondition fromCall(DfaValueFactory factory, PsiCallExpression call) {
         DfaCallArguments arguments = DfaCallArguments.fromCall(factory, call);
-        if (arguments == null) {
-            return DfaCondition.getUnknown();
-        }
-        return makeCondition(factory, arguments);
+        return arguments == null ? DfaCondition.getUnknown() : makeCondition(factory, arguments);
     }
 
     /**
@@ -146,10 +142,7 @@ public abstract class ContractValue {
 
         @Override
         public PsiExpression findPlace(PsiCallExpression call) {
-            if (call instanceof PsiMethodCallExpression) {
-                return ((PsiMethodCallExpression)call).getMethodExpression().getQualifierExpression();
-            }
-            return null;
+            return call instanceof PsiMethodCallExpression methodCall ? methodCall.getMethodExpression().getQualifierExpression() : null;
         }
 
         @Override
@@ -206,7 +199,7 @@ public abstract class ContractValue {
         public String getPresentationText(PsiMethod method) {
             PsiParameter[] params = method.getParameterList().getParameters();
             if (myIndex == 0 && params.length == 1) {
-                return JavaElementKind.PARAMETER.subject();
+                return JavaElementKind.PARAMETER.subject().get();
             }
             if (myIndex < params.length) {
                 PsiParameter param = params[myIndex];
@@ -248,7 +241,7 @@ public abstract class ContractValue {
     }
 
     private static class IndependentValue extends ContractValue {
-        static final IndependentValue NULL = new IndependentValue("null", factory -> factory.getNull());
+        static final IndependentValue NULL = new IndependentValue("null", DfaValueFactory::getNull);
         static final IndependentValue TRUE = new IndependentValue("true", factory -> factory.getBoolean(true)) {
             @Override
             public boolean isExclusive(ContractValue other) {
@@ -283,12 +276,10 @@ public abstract class ContractValue {
     }
 
     private static final class Spec extends ContractValue {
-        private final
         @Nonnull
-        ContractValue myQualifier;
-        private final
+        private final ContractValue myQualifier;
         @Nonnull
-        SpecialField myField;
+        private final SpecialField myField;
 
         Spec(@Nonnull ContractValue qualifier, @Nonnull SpecialField field) {
             myQualifier = qualifier;
@@ -302,27 +293,28 @@ public abstract class ContractValue {
 
         @Override
         public boolean equals(Object obj) {
-            if (obj == this) {
-                return true;
-            }
-            if (!(obj instanceof Spec)) {
-                return false;
-            }
-            Spec that = (Spec)obj;
-            return myQualifier.equals(that.myQualifier) && myField == that.myField;
+            return obj == this
+                || obj instanceof Spec that
+                && myQualifier.equals(that.myQualifier)
+                && myField == that.myField;
         }
 
         @Override
         @Nonnull
         DfaCallArguments fixArgument(@Nonnull DfaCallArguments arguments, @Nonnull UnaryOperator<DfType> converter) {
-            return myQualifier.fixArgument(arguments, t -> {
-                if (!(t instanceof DfReferenceType)) {
-                    return t;
+            return myQualifier.fixArgument(
+                arguments,
+                t -> {
+                    if (t instanceof DfReferenceType drt) {
+                        DfType sfType = myField.getFromQualifier(drt);
+                        DfType newType = converter.apply(sfType);
+                        return newType.equals(sfType) ? drt : drt.dropSpecialField().meet(myField.asDfType(newType));
+                    }
+                    else {
+                        return t;
+                    }
                 }
-                DfType sfType = myField.getFromQualifier(t);
-                DfType newType = converter.apply(sfType);
-                return newType.equals(sfType) ? t : ((DfReferenceType)t).dropSpecialField().meet(myField.asDfType(newType));
-            });
+            );
         }
 
         @Override
@@ -356,15 +348,10 @@ public abstract class ContractValue {
 
         @Override
         public boolean isBoundCheckingCondition() {
-            switch (myRelationType) {
-                case LE:
-                case LT:
-                case GE:
-                case GT:
-                    return true;
-                default:
-                    return false;
-            }
+            return switch (myRelationType) {
+                case LE, LT, GE, GT -> true;
+                default -> false;
+            };
         }
 
         @Override
@@ -428,7 +415,7 @@ public abstract class ContractValue {
         @Override
         public OptionalInt getArgumentComparedTo(ContractValue value, boolean equal) {
             ContractValue other = getValueComparedTo(value, equal);
-            return other instanceof Argument ? OptionalInt.of(((Argument)other).myIndex) : OptionalInt.empty();
+            return other instanceof Argument argument ? OptionalInt.of(argument.myIndex) : OptionalInt.empty();
         }
 
         @Override

@@ -1,7 +1,6 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInsight.intention;
 
-import com.intellij.java.analysis.JavaAnalysisBundle;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.AnnotationsHighlightUtil;
 import com.intellij.java.language.codeInsight.AnnotationTargetUtil;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
@@ -12,6 +11,8 @@ import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.JavaElementKind;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.psiutils.CommentTracker;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.java.analysis.localize.JavaAnalysisLocalize;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.inspection.LocalQuickFixOnPsiElement;
 import consulo.language.editor.intention.BaseIntentionAction;
@@ -21,14 +22,14 @@ import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.StringUtil;
-import one.util.streamex.StreamEx;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import one.util.streamex.StreamEx;
 
 import java.lang.annotation.RetentionPolicy;
 import java.util.List;
@@ -44,6 +45,7 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
     protected final String myText;
     private final ExternalAnnotationsManager.AnnotationPlace myAnnotationPlace;
 
+    @RequiredReadAction
     public AddAnnotationPsiFix(
         @Nonnull String fqn,
         @Nonnull PsiModifierListOwner modifierListOwner,
@@ -52,6 +54,7 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
         this(fqn, modifierListOwner, PsiNameValuePair.EMPTY_ARRAY, annotationsToRemove);
     }
 
+    @RequiredReadAction
     public AddAnnotationPsiFix(
         @Nonnull String fqn,
         @Nonnull PsiModifierListOwner modifierListOwner,
@@ -68,34 +71,32 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
         myAnnotationPlace = choosePlace(modifierListOwner);
     }
 
+    @RequiredReadAction
     public static String calcText(PsiModifierListOwner modifierListOwner, @Nullable String annotation) {
         final String shortName = annotation == null ? null : annotation.substring(annotation.lastIndexOf('.') + 1);
-        if (modifierListOwner instanceof PsiNamedElement) {
-            final String name = ((PsiNamedElement)modifierListOwner).getName();
+        if (modifierListOwner instanceof PsiNamedElement namedElement) {
+            final String name = namedElement.getName();
             if (name != null) {
                 JavaElementKind type = JavaElementKind.fromElement(modifierListOwner).lessDescriptive();
-                if (shortName == null) {
-                    return JavaAnalysisBundle.message("inspection.i18n.quickfix.annotate.element", type.object(), name);
-                }
-                return JavaAnalysisBundle
-                    .message("inspection.i18n.quickfix.annotate.element.as", type.object(), name, shortName);
+                return shortName == null
+                    ? JavaAnalysisLocalize.inspectionI18nQuickfixAnnotateElement(type.object(), name).get()
+                    : JavaAnalysisLocalize.inspectionI18nQuickfixAnnotateElementAs(type.object(), name, shortName).get();
             }
         }
-        if (shortName == null) {
-            return JavaAnalysisBundle.message("inspection.i18n.quickfix.annotate");
-        }
-        return JavaAnalysisBundle.message("inspection.i18n.quickfix.annotate.as", shortName);
+        return shortName == null
+            ? JavaAnalysisLocalize.inspectionI18nQuickfixAnnotate().get()
+            : JavaAnalysisLocalize.inspectionI18nQuickfixAnnotateAs(shortName).get();
     }
 
-    public static
     @Nullable
-    PsiModifierListOwner getContainer(PsiFile file, int offset) {
+    @RequiredReadAction
+    public static PsiModifierListOwner getContainer(PsiFile file, int offset) {
         return getContainer(file, offset, false);
     }
 
-    public static
     @Nullable
-    PsiModifierListOwner getContainer(PsiFile file, int offset, boolean availableOnReference) {
+    @RequiredReadAction
+    public static PsiModifierListOwner getContainer(PsiFile file, int offset, boolean availableOnReference) {
         PsiReference reference = availableOnReference ? file.findReferenceAt(offset) : null;
         if (reference != null) {
             PsiElement target = reference.resolve();
@@ -111,8 +112,8 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
             return listOwner;
         }
 
-        if (listOwner instanceof PsiNameIdentifierOwner) {
-            PsiElement id = ((PsiNameIdentifierOwner)listOwner).getNameIdentifier();
+        if (listOwner instanceof PsiNameIdentifierOwner nameIdentifierOwner) {
+            PsiElement id = nameIdentifierOwner.getNameIdentifier();
             if (id != null && id.getTextRange().containsOffset(offset)) { // Groovy methods will pass this check as well
                 return listOwner;
             }
@@ -121,18 +122,16 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
         return null;
     }
 
-    @Override
-    public
     @Nonnull
-    String getText() {
+    @Override
+    public String getText() {
         return myText;
     }
 
-    @Override
-    public
     @Nonnull
-    String getFamilyName() {
-        return JavaAnalysisBundle.message("intention.add.annotation.family");
+    @Override
+    public String getFamilyName() {
+        return JavaAnalysisLocalize.intentionAddAnnotationFamily().get();
     }
 
     @Override
@@ -179,6 +178,7 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
     }
 
     @Override
+    @RequiredUIAccess
     public void invoke(
         @Nonnull Project project,
         @Nonnull PsiFile file,
@@ -274,6 +274,7 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
      * @return added physical annotation; null if annotation already exists (in this case, no changes are performed)
      */
     @Nullable
+    @RequiredReadAction
     public static PsiAnnotation addPhysicalAnnotationIfAbsent(
         @Nonnull String fqn,
         @Nonnull PsiNameValuePair[] pairs,
@@ -282,21 +283,20 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
         if (owner.hasAnnotation(fqn)) {
             return null;
         }
-        if (owner instanceof PsiModifierList) {
-            PsiElement modListOwner = ((PsiModifierList)owner).getParent();
-            if (modListOwner instanceof PsiModifierListOwner) {
-                if (ExternalAnnotationsManager.getInstance(modListOwner.getProject())
-                    .findExternalAnnotation((PsiModifierListOwner)modListOwner, fqn) != null) {
-                    return null;
-                }
-                PsiTypeElement typeElement = modListOwner instanceof PsiMethod ? ((PsiMethod)modListOwner).getReturnTypeElement() :
-                    modListOwner instanceof PsiVariable ? ((PsiVariable)modListOwner).getTypeElement() : null;
-                while (typeElement != null && typeElement.getType() instanceof PsiArrayType) {
-                    typeElement = PsiTreeUtil.getChildOfType(typeElement, PsiTypeElement.class);
-                }
-                if (typeElement != null && typeElement.getType().hasAnnotation(fqn)) {
-                    return null;
-                }
+        if (owner instanceof PsiModifierList modifierList && modifierList.getParent() instanceof PsiModifierListOwner modListOwner) {
+            if (ExternalAnnotationsManager.getInstance(modListOwner.getProject()).findExternalAnnotation(modListOwner, fqn) != null) {
+                return null;
+            }
+            PsiTypeElement typeElement = modListOwner instanceof PsiMethod method
+                ? method.getReturnTypeElement()
+                : modListOwner instanceof PsiVariable variable
+                ? variable.getTypeElement()
+                : null;
+            while (typeElement != null && typeElement.getType() instanceof PsiArrayType) {
+                typeElement = PsiTreeUtil.getChildOfType(typeElement, PsiTypeElement.class);
+            }
+            if (typeElement != null && typeElement.getType().hasAnnotation(fqn)) {
+                return null;
             }
         }
         return addPhysicalAnnotationTo(fqn, pairs, owner);
@@ -310,9 +310,9 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
         }
         catch (UnsupportedOperationException | IncorrectOperationException e) {
             String message = "Cannot add annotation to " + owner.getClass();
-            if (owner instanceof PsiElement) {
+            if (owner instanceof PsiElement psiElement) {
                 StreamEx.iterate(
-                        ((PsiElement)owner).getParent(),
+                        psiElement.getParent(),
                         p -> p != null && !(p instanceof PsiFileSystemItem),
                         PsiElement::getParent
                     )
@@ -328,8 +328,8 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
     }
 
     private static PsiAnnotationOwner expandParameterIfNecessary(PsiAnnotationOwner owner) {
-        if (owner instanceof PsiModifierList) {
-            PsiParameter parameter = ObjectUtil.tryCast(((PsiModifierList)owner).getParent(), PsiParameter.class);
+        if (owner instanceof PsiModifierList modifierList) {
+            PsiParameter parameter = ObjectUtil.tryCast(modifierList.getParent(), PsiParameter.class);
             if (parameter != null && parameter.getTypeElement() == null) {
                 PsiParameterList list = ObjectUtil.tryCast(parameter.getParent(), PsiParameterList.class);
                 if (list != null && list.getParent() instanceof PsiLambdaExpression) {
@@ -337,9 +337,11 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
                     int index = ArrayUtil.indexOf(parameters, parameter);
                     PsiParameterList newList;
                     if (PsiUtil.isLanguageLevel11OrHigher(list)) {
-                        String newListText = StreamEx.of(parameters).map(p -> PsiKeyword.VAR + " " + p.getName()).joining(",", "(", ")");
+                        String newListText = StreamEx.of(parameters)
+                            .map(p -> PsiKeyword.VAR + " " + p.getName()).joining(",", "(", ")");
                         newList = ((PsiLambdaExpression)JavaPsiFacade.getElementFactory(list.getProject())
-                            .createExpressionFromText(newListText + " -> {}", null)).getParameterList();
+                            .createExpressionFromText(newListText + " -> {}", null))
+                            .getParameterList();
                         newList = (PsiParameterList)new CommentTracker().replaceAndRestoreComments(list, newList);
                     }
                     else {
@@ -373,8 +375,8 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
     }
 
     public static boolean isNullabilityAnnotationApplicable(@Nonnull PsiModifierListOwner owner) {
-        if (owner instanceof PsiMethod) {
-            PsiType returnType = ((PsiMethod)owner).getReturnType();
+        if (owner instanceof PsiMethod method) {
+            PsiType returnType = method.getReturnType();
             return returnType != null && !(returnType instanceof PsiPrimitiveType);
         }
         return !(owner instanceof PsiClass);
@@ -386,9 +388,9 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
      * @param owner an element to add the annotation
      * @return newly created fix or null if adding nullability annotation is impossible for the specified element.
      */
-    public static
     @Nullable
-    AddAnnotationPsiFix createAddNullableFix(PsiModifierListOwner owner) {
+    @RequiredReadAction
+    public static AddAnnotationPsiFix createAddNullableFix(PsiModifierListOwner owner) {
         NullableNotNullManager manager = NullableNotNullManager.getInstance(owner.getProject());
         return createAddNullableNotNullFix(owner, manager.getDefaultNullable(), manager.getNotNulls());
     }
@@ -399,22 +401,21 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
      * @param owner an element to add the annotation
      * @return newly created fix or null if adding nullability annotation is impossible for the specified element.
      */
-    public static
     @Nullable
-    AddAnnotationPsiFix createAddNotNullFix(PsiModifierListOwner owner) {
+    @RequiredReadAction
+    public static AddAnnotationPsiFix createAddNotNullFix(PsiModifierListOwner owner) {
         NullableNotNullManager manager = NullableNotNullManager.getInstance(owner.getProject());
         return createAddNullableNotNullFix(owner, manager.getDefaultNotNull(), manager.getNullables());
     }
 
-    private static
     @Nullable
-    AddAnnotationPsiFix createAddNullableNotNullFix(
+    @RequiredReadAction
+    private static AddAnnotationPsiFix createAddNullableNotNullFix(
         PsiModifierListOwner owner, String annotationToAdd,
         List<String> annotationsToRemove
     ) {
-        if (!isNullabilityAnnotationApplicable(owner)) {
-            return null;
-        }
-        return new AddAnnotationPsiFix(annotationToAdd, owner, ArrayUtil.toStringArray(annotationsToRemove));
+        return !isNullabilityAnnotationApplicable(owner)
+            ? null
+            : new AddAnnotationPsiFix(annotationToAdd, owner, ArrayUtil.toStringArray(annotationsToRemove));
     }
 }
