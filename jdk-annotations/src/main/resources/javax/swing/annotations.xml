@@ -3,6 +3,9 @@
   <item name="javax.swing.AbstractAction AbstractAction(java.lang.String) 0">
     <annotation name="org.jetbrains.annotations.NonNls" />
   </item>
+  <item name="javax.swing.AbstractButton void addActionListener(java.awt.event.ActionListener) 0">
+    <annotation name="consulo.ui.annotation.RequiredUIAccess" />
+  </item>
   <item name="javax.swing.ActionMap javax.swing.Action get(java.lang.Object) 0">
     <annotation name="org.jetbrains.annotations.NonNls" />
   </item>
