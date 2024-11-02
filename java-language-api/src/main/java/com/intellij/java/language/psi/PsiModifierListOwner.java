@@ -29,39 +29,39 @@ import static com.intellij.java.language.psi.PsiJvmConversionHelper.getListAnnot
  * and annotations.
  */
 public interface PsiModifierListOwner extends PsiElement {
-  /**
-   * Returns the list of modifiers for the element.
-   *
-   * @return the list of modifiers, or null if the element (for example, an anonymous
-   * inner class) does not have the list of modifiers.
-   */
-  @Nullable
-  PsiModifierList getModifierList();
+    /**
+     * Returns the list of modifiers for the element.
+     *
+     * @return the list of modifiers, or null if the element (for example, an anonymous
+     * inner class) does not have the list of modifiers.
+     */
+    @Nullable
+    PsiModifierList getModifierList();
 
-  /**
-   * Checks if the element has the specified modifier. Possible modifiers are defined
-   * as constants in the {@link PsiModifier} class.
-   *
-   * @param name the name of the modifier to check.
-   * @return true if the element has the modifier, false otherwise
-   */
-  boolean hasModifierProperty(@PsiModifier.ModifierConstant @NonNls @Nonnull String name);
+    /**
+     * Checks if the element has the specified modifier. Possible modifiers are defined
+     * as constants in the {@link PsiModifier} class.
+     *
+     * @param name the name of the modifier to check.
+     * @return true if the element has the modifier, false otherwise
+     */
+    boolean hasModifierProperty(@PsiModifier.ModifierConstant @NonNls @Nonnull String name);
 
-  @Nonnull
-  default PsiAnnotation[] getAnnotations() {
-    return getListAnnotations(this);
-  }
+    @Nonnull
+    default PsiAnnotation[] getAnnotations() {
+        return getListAnnotations(this);
+    }
 
-  default boolean hasModifier(@Nonnull JvmModifier modifier) {
-    return PsiJvmConversionHelper.hasListModifier(this, modifier);
-  }
+    default boolean hasModifier(@Nonnull JvmModifier modifier) {
+        return PsiJvmConversionHelper.hasListModifier(this, modifier);
+    }
 
-  @Nullable
-  default PsiAnnotation getAnnotation(@Nonnull String fqn) {
-    return PsiJvmConversionHelper.getListAnnotation(this, fqn);
-  }
+    @Nullable
+    default PsiAnnotation getAnnotation(@Nonnull String fqn) {
+        return PsiJvmConversionHelper.getListAnnotation(this, fqn);
+    }
 
-  default boolean hasAnnotation(@Nonnull String fqn) {
-    return PsiJvmConversionHelper.hasListAnnotation(this, fqn);
-  }
+    default boolean hasAnnotation(@Nonnull String fqn) {
+        return PsiJvmConversionHelper.hasListAnnotation(this, fqn);
+    }
 }
