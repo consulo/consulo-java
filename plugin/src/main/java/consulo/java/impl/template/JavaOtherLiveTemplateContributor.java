@@ -91,8 +91,8 @@ public class JavaOtherLiveTemplateContributor implements LiveTemplateContributor
             builder.withOption(ShortenFQNamesProcessor.KEY, true);
 
 
-            builder.withContextsOf(JavaLikeCodeContextType.class, false);
-            builder.withContextsOf(JavaLikeStatementContextType.class, true);
+            builder.withContextsOf(JavaLikeCodeContextType.class, true);
+            builder.withContextsOf(JavaLikeStatementContextType.class, false);
         }
 
         try (Builder builder = factory.newBuilder("javaotherToar", "toar", "$COLLECTION$.toArray(new $COMPONENT_TYPE$[$COLLECTION$.size()])$END$", CodeInsightLocalize.livetemplateDescriptionToar())) {
