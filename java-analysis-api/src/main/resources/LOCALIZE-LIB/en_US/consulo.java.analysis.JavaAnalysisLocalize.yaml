@@ -146,6 +146,10 @@ dataflow.not.precise:
   text: '{0} is complex: data flow results could be imprecise'
 dataflow.too.complex:
   text: '{0} is too complex to analyze by data flow algorithm'
+dataflow.method.with.name.template:
+  text: "Method <code>#ref</code>"
+dataflow.constructor:
+  text: "Class initializer"
 delete.repeated.0:
   text: Delete repeated ''{0}''
 delete.repeated.interface:

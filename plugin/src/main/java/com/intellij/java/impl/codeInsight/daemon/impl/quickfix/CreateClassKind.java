@@ -18,6 +18,7 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.ClassKind;
 import com.intellij.java.language.psi.util.JavaElementKind;
 import consulo.java.language.impl.icon.JavaPsiImplIconGroup;
+import consulo.localize.LocalizeValue;
 import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.ui.image.Image;
 
@@ -25,31 +26,41 @@ import consulo.ui.image.Image;
  * @author ven
  */
 public enum CreateClassKind implements ClassKind {
-  CLASS(JavaElementKind.CLASS, PlatformIconGroup.nodesClass()),
-  INTERFACE(JavaElementKind.INTERFACE, PlatformIconGroup.nodesInterface()),
-  ENUM(JavaElementKind.ENUM, PlatformIconGroup.nodesEnum()),
-  ANNOTATION(JavaElementKind.ANNOTATION, PlatformIconGroup.nodesAnnotationtype()),
-  RECORD(JavaElementKind.RECORD, JavaPsiImplIconGroup.nodesRecord());
+    CLASS(JavaElementKind.CLASS, PlatformIconGroup.nodesClass()),
+    INTERFACE(JavaElementKind.INTERFACE, PlatformIconGroup.nodesInterface()),
+    ENUM(JavaElementKind.ENUM, PlatformIconGroup.nodesEnum()),
+    ANNOTATION(JavaElementKind.ANNOTATION, PlatformIconGroup.nodesAnnotationtype()),
+    RECORD(JavaElementKind.RECORD, JavaPsiImplIconGroup.nodesRecord());
 
-  private final JavaElementKind myKind;
-  private final Image myKindIcon;
+    private final JavaElementKind myKind;
+    private final Image myKindIcon;
 
-  CreateClassKind(JavaElementKind kind, Image kindIcon) {
-    myKind = kind;
-    myKindIcon = kindIcon;
-  }
+    CreateClassKind(JavaElementKind kind, Image kindIcon) {
+        myKind = kind;
+        myKindIcon = kindIcon;
+    }
 
-  public Image getKindIcon() {
-    return myKindIcon;
-  }
+    public Image getKindIcon() {
+        return myKindIcon;
+    }
 
-  @Override
-  public String getDescription() {
-    return myKind.subject();
-  }
+    @Override
+    public String getDescription() {
+        return getDescriptionValue().get();
+    }
 
-  @Override
-  public String getDescriptionAccusative() {
-    return myKind.object();
-  }
+    @Override
+    public LocalizeValue getDescriptionValue() {
+        return myKind.subject();
+    }
+
+    @Override
+    public LocalizeValue getDescriptionAccusativeValue() {
+        return myKind.object();
+    }
+
+    @Override
+    public String getDescriptionAccusative() {
+        return getDescriptionAccusativeValue().get();
+    }
 }

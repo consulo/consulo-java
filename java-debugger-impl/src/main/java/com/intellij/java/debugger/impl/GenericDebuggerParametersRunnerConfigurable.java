@@ -15,28 +15,21 @@
  */
 package com.intellij.java.debugger.impl;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JTextField;
-
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.engine.DebuggerUtils;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
 import consulo.configurable.ConfigurationException;
 import consulo.execution.configuration.ui.SettingsEditor;
-import consulo.process.ExecutionException;
+import consulo.ide.impl.idea.xdebugger.impl.settings.DebuggerConfigurable;
 import consulo.ide.setting.ShowSettingsUtil;
+import consulo.logging.Logger;
+import consulo.process.ExecutionException;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-import consulo.ide.impl.idea.xdebugger.impl.settings.DebuggerConfigurable;
-import consulo.logging.Logger;
 import jakarta.annotation.Nonnull;
+
+import javax.swing.*;
+import java.awt.event.ActionListener;
 
 public class GenericDebuggerParametersRunnerConfigurable extends SettingsEditor<GenericDebuggerRunnerSettings> {
     private static final Logger LOGGER = Logger.getInstance(GenericDebuggerParametersRunnerConfigurable.class);
@@ -53,25 +46,19 @@ public class GenericDebuggerParametersRunnerConfigurable extends SettingsEditor<
     private JPanel myTransportPanel;
 
     public GenericDebuggerParametersRunnerConfigurable(final Project project) {
-        myDebuggerSettings.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ShowSettingsUtil.getInstance().showSettingsDialog(project, DebuggerConfigurable.class);
-                if (myIsLocal) {
-                    setTransport(DebuggerSettings.getInstance().DEBUGGER_TRANSPORT);
-                }
-                suggestAvailablePortIfNotSpecified();
-                updateUI();
+        myDebuggerSettings.addActionListener(e -> {
+            ShowSettingsUtil.getInstance().showSettingsDialog(project, DebuggerConfigurable.class);
+            if (myIsLocal) {
+                setTransport(DebuggerSettings.getInstance().DEBUGGER_TRANSPORT);
             }
+            suggestAvailablePortIfNotSpecified();
+            updateUI();
         });
 
-        final ActionListener listener = new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                suggestAvailablePortIfNotSpecified();
-                updateUI();
-                myPanel.repaint();
-            }
+        final ActionListener listener = e -> {
+            suggestAvailablePortIfNotSpecified();
+            updateUI();
+            myPanel.repaint();
         };
         mySocketTransport.addActionListener(listener);
         myShmemTransport.addActionListener(listener);
