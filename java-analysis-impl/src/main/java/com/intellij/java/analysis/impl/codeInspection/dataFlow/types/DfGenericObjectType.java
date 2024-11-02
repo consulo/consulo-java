@@ -1,15 +1,14 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 
-import com.intellij.java.analysis.JavaAnalysisBundle;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.*;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiEnumConstant;
-import one.util.streamex.StreamEx;
-
+import consulo.java.analysis.localize.JavaAnalysisLocalize;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import one.util.streamex.StreamEx;
 
 import java.util.*;
 
@@ -187,13 +186,13 @@ class DfGenericObjectType extends DfAntiConstantType<Object> implements DfRefere
             return false;
         }
         if (!myNotValues.isEmpty()) {
-            if (other instanceof DfReferenceConstantType) {
-                if (myNotValues.contains(((DfReferenceConstantType)other).getValue())) {
+            if (other instanceof DfReferenceConstantType referenceConstantType) {
+                if (myNotValues.contains(referenceConstantType.getValue())) {
                     return false;
                 }
             }
-            else if (other instanceof DfGenericObjectType) {
-                if (!((DfGenericObjectType)other).myNotValues.containsAll(myNotValues)) {
+            else if (other instanceof DfGenericObjectType genericObjectType) {
+                if (!genericObjectType.myNotValues.containsAll(myNotValues)) {
                     return false;
                 }
             }
@@ -262,13 +261,13 @@ class DfGenericObjectType extends DfAntiConstantType<Object> implements DfRefere
         SpecialField sf = Objects.equals(getSpecialField(), type.getSpecialField()) ? getSpecialField() : null;
         DfType sfType = sf == null ? BOTTOM : getSpecialFieldType().join(type.getSpecialFieldType());
         Set<Object> notValues = myNotValues;
-        if (type instanceof DfGenericObjectType) {
+        if (type instanceof DfGenericObjectType genericObjectType) {
             notValues = new HashSet<>(myNotValues);
-            notValues.retainAll(((DfGenericObjectType)other).myNotValues);
+            notValues.retainAll(genericObjectType.myNotValues);
         }
-        if (type instanceof DfReferenceConstantType) {
+        if (type instanceof DfReferenceConstantType referenceConstantType) {
             notValues = new HashSet<>(myNotValues);
-            notValues.remove(((DfReferenceConstantType)type).getValue());
+            notValues.remove(referenceConstantType.getValue());
         }
         return new DfGenericObjectType(notValues, constraint, nullability, mutability, sf, sfType, locality);
     }
@@ -320,8 +319,8 @@ class DfGenericObjectType extends DfAntiConstantType<Object> implements DfRefere
             return BOTTOM;
         }
         Set<Object> notValues = myNotValues;
-        if (type instanceof DfGenericObjectType) {
-            Set<Object> otherNotValues = ((DfGenericObjectType)other).myNotValues;
+        if (type instanceof DfGenericObjectType genericObjectType) {
+            Set<Object> otherNotValues = genericObjectType.myNotValues;
             if (otherNotValues.containsAll(myNotValues)) {
                 notValues = otherNotValues;
             }
@@ -343,16 +342,13 @@ class DfGenericObjectType extends DfAntiConstantType<Object> implements DfRefere
         if (notValues.isEmpty()) {
             return null;
         }
-        Object value = notValues.iterator().next();
-        if (!(value instanceof PsiEnumConstant)) {
-            return null;
-        }
-        PsiClass enumClass = ((PsiEnumConstant)value).getContainingClass();
+        PsiClass enumClass = notValues.iterator().next() instanceof PsiEnumConstant enumConstant ? enumConstant.getContainingClass() : null;
         if (enumClass == null) {
             return null;
         }
         TypeConstraint enumType = TypeConstraints.instanceOf(
-            JavaPsiFacade.getElementFactory(enumClass.getProject()).createType(enumClass));
+            JavaPsiFacade.getElementFactory(enumClass.getProject()).createType(enumClass)
+        );
         if (!enumType.equals(constraint)) {
             return null;
         }
@@ -361,10 +357,7 @@ class DfGenericObjectType extends DfAntiConstantType<Object> implements DfRefere
             return null;
         }
         for (Object notValue : notValues) {
-            if (!(notValue instanceof PsiEnumConstant)) {
-                return null;
-            }
-            if (!allEnumConstants.remove(notValue)) {
+            if (!(notValue instanceof PsiEnumConstant) || !allEnumConstants.remove(notValue)) {
                 return null;
             }
         }
@@ -376,20 +369,15 @@ class DfGenericObjectType extends DfAntiConstantType<Object> implements DfRefere
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        DfGenericObjectType type = (DfGenericObjectType)o;
-        return myLocal == type.myLocal &&
-            myNullability == type.myNullability &&
-            myMutability == type.myMutability &&
-            mySpecialField == type.mySpecialField &&
-            myConstraint.equals(type.myConstraint) &&
-            mySpecialFieldType.equals(type.mySpecialFieldType) &&
-            myNotValues.equals(type.myNotValues);
+        return this == o
+            || o instanceof DfGenericObjectType that
+            && myLocal == that.myLocal
+            && myNullability == that.myNullability
+            && myMutability == that.myMutability
+            && mySpecialField == that.mySpecialField
+            && myConstraint.equals(that.myConstraint)
+            && mySpecialFieldType.equals(that.mySpecialFieldType)
+            && myNotValues.equals(that.myNotValues);
     }
 
     @Override
@@ -410,7 +398,7 @@ class DfGenericObjectType extends DfAntiConstantType<Object> implements DfRefere
             components.add(myMutability.name());
         }
         if (myLocal) {
-            components.add(JavaAnalysisBundle.message("type.information.local.object"));
+            components.add(JavaAnalysisLocalize.typeInformationLocalObject().get());
         }
         if (mySpecialField != null) {
             components.add(mySpecialField + "=" + mySpecialFieldType);

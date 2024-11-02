@@ -22,30 +22,36 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.CloneUtils;
+import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class CloneCallsSuperCloneInspection extends BaseInspection {
     @Nonnull
+    @Override
     public String getID() {
         return "CloneDoesntCallSuperClone";
     }
 
     @Nonnull
+    @Override
     public String getDisplayName() {
-        return InspectionGadgetsBundle.message("clone.doesnt.call.super.clone.display.name");
+        return InspectionGadgetsLocalize.cloneDoesntCallSuperCloneDisplayName().get();
     }
 
     @Nonnull
+    @Override
     public String buildErrorString(Object... infos) {
-        return InspectionGadgetsBundle.message("clone.doesnt.call.super.clone.problem.descriptor");
+        return InspectionGadgetsLocalize.cloneDoesntCallSuperCloneProblemDescriptor().get();
     }
 
+    @Override
     public boolean isEnabledByDefault() {
         return true;
     }
 
+    @Override
     public BaseInspectionVisitor buildVisitor() {
         return new NoExplicitCloneCallsVisitor();
     }

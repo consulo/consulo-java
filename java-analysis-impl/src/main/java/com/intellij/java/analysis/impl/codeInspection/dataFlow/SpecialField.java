@@ -1,7 +1,6 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
-import com.intellij.java.analysis.JavaAnalysisBundle;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.rangeSet.LongRangeSet;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfConstantType;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfReferenceType;
@@ -16,14 +15,14 @@ import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.java.analysis.localize.JavaAnalysisLocalize;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import consulo.util.lang.ObjectUtil;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.PropertyKey;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nls;
 
 import java.util.Objects;
 
@@ -38,7 +37,7 @@ import static com.intellij.java.language.psi.CommonClassNames.*;
  * @author Tagir Valeev
  */
 public enum SpecialField implements VariableDescriptor {
-    ARRAY_LENGTH("length", "special.field.array.length", true) {
+    ARRAY_LENGTH("length", JavaAnalysisLocalize.specialFieldArrayLength(), true) {
         @Override
         boolean isMyQualifierType(PsiType type) {
             return type instanceof PsiArrayType;
@@ -52,26 +51,23 @@ public enum SpecialField implements VariableDescriptor {
         @Nonnull
         @Override
         DfType fromInitializer(PsiExpression initializer) {
-            if (initializer instanceof PsiArrayInitializerExpression) {
-                return DfTypes.intValue(((PsiArrayInitializerExpression)initializer).getInitializers().length);
+            if (initializer instanceof PsiArrayInitializerExpression arrayInitializer) {
+                return DfTypes.intValue(arrayInitializer.getInitializers().length);
             }
-            if (initializer instanceof PsiNewExpression) {
-                PsiArrayInitializerExpression arrayInitializer = ((PsiNewExpression)initializer).getArrayInitializer();
+            if (initializer instanceof PsiNewExpression newExpr) {
+                PsiArrayInitializerExpression arrayInitializer = newExpr.getArrayInitializer();
                 if (arrayInitializer != null) {
                     return DfTypes.intValue(arrayInitializer.getInitializers().length);
                 }
-                PsiExpression[] dimensions = ((PsiNewExpression)initializer).getArrayDimensions();
-                if (dimensions.length > 0) {
-                    Object length = ExpressionUtils.computeConstantExpression(dimensions[0]);
-                    if (length instanceof Integer) {
-                        return DfTypes.intValue(((Integer)length).intValue());
-                    }
+                PsiExpression[] dimensions = newExpr.getArrayDimensions();
+                if (dimensions.length > 0 && ExpressionUtils.computeConstantExpression(dimensions[0]) instanceof Integer length) {
+                    return DfTypes.intValue(length);
                 }
             }
             return DfTypes.TOP;
         }
     },
-    STRING_LENGTH("length", "special.field.string.length", true) {
+    STRING_LENGTH("length", JavaAnalysisLocalize.specialFieldStringLength(), true) {
         @Nonnull
         @Override
         DfType fromInitializer(PsiExpression initializer) {
@@ -97,10 +93,10 @@ public enum SpecialField implements VariableDescriptor {
         @Nonnull
         @Override
         public DfType fromConstant(@Nullable Object obj) {
-            return obj instanceof String ? DfTypes.intValue(((String)obj).length()) : DfTypes.TOP;
+            return obj instanceof String string ? DfTypes.intValue(string.length()) : DfTypes.TOP;
         }
     },
-    COLLECTION_SIZE("size", "special.field.collection.size", false) {
+    COLLECTION_SIZE("size", JavaAnalysisLocalize.specialFieldCollectionSize(), false) {
         private final CallMatcher SIZE_METHODS = CallMatcher.anyOf(
             CallMatcher.instanceCall(JAVA_UTIL_COLLECTION, "size").parameterCount(0),
             CallMatcher.instanceCall(JAVA_UTIL_MAP, "size").parameterCount(0)
@@ -111,13 +107,14 @@ public enum SpecialField implements VariableDescriptor {
         @Override
         boolean isMyQualifierType(PsiType type) {
             PsiClass psiClass = PsiUtil.resolveClassInClassTypeOnly(type);
-            if (psiClass == null) {
-                return false;
-            }
-            return !InheritanceUtil.processSupers(psiClass, true, cls -> {
-                String qualifiedName = cls.getQualifiedName();
-                return !JAVA_UTIL_MAP.equals(qualifiedName) && !JAVA_UTIL_COLLECTION.equals(qualifiedName);
-            });
+            return psiClass != null && !InheritanceUtil.processSupers(
+                psiClass,
+                true,
+                cls -> {
+                    String qualifiedName = cls.getQualifiedName();
+                    return !JAVA_UTIL_MAP.equals(qualifiedName) && !JAVA_UTIL_COLLECTION.equals(qualifiedName);
+                }
+            );
         }
 
         @Override
@@ -137,17 +134,16 @@ public enum SpecialField implements VariableDescriptor {
         @Nonnull
         @Override
         public DfaValue createValue(@Nonnull DfaValueFactory factory, @Nullable DfaValue qualifier, boolean forAccessor) {
-            if (qualifier instanceof DfaVariableValue) {
-                DfaVariableValue var = (DfaVariableValue)qualifier;
-                PsiModifierListOwner owner = var.getPsiVariable();
-                if (var.getQualifier() != null && owner instanceof PsiMethod && MAP_COLLECTIONS.methodMatches((PsiMethod)owner)) {
-                    return super.createValue(factory, var.getQualifier(), forAccessor);
-                }
+            if (qualifier instanceof DfaVariableValue var
+                && var.getQualifier() != null
+                && var.getPsiVariable() instanceof PsiMethod method
+                && MAP_COLLECTIONS.methodMatches(method)) {
+                return super.createValue(factory, var.getQualifier(), forAccessor);
             }
             return super.createValue(factory, qualifier, forAccessor);
         }
     },
-    UNBOX("value", "special.field.unboxed.value", true) {
+    UNBOX("value", JavaAnalysisLocalize.specialFieldUnboxedValue(), true) {
         private final CallMatcher UNBOXING_CALL = CallMatcher.anyOf(
             CallMatcher.exactInstanceCall(JAVA_LANG_INTEGER, "intValue").parameterCount(0),
             CallMatcher.exactInstanceCall(JAVA_LANG_LONG, "longValue").parameterCount(0),
@@ -173,10 +169,9 @@ public enum SpecialField implements VariableDescriptor {
         @Nonnull
         @Override
         public DfaValue createValue(@Nonnull DfaValueFactory factory, @Nullable DfaValue qualifier, boolean forAccessor) {
-            if (qualifier instanceof DfaBoxedValue) {
-                return ((DfaBoxedValue)qualifier).getWrappedValue();
-            }
-            return super.createValue(factory, qualifier, forAccessor);
+            return qualifier instanceof DfaBoxedValue boxedValue
+                ? boxedValue.getWrappedValue()
+                : super.createValue(factory, qualifier, forAccessor);
         }
 
         @Override
@@ -189,15 +184,14 @@ public enum SpecialField implements VariableDescriptor {
             return accessor instanceof PsiMethod && UNBOXING_CALL.methodMatches((PsiMethod)accessor);
         }
     },
-    OPTIONAL_VALUE("value", "special.field.optional.value", true) {
+    OPTIONAL_VALUE("value", JavaAnalysisLocalize.specialFieldOptionalValue(), true) {
         @Override
         public PsiType getType(DfaVariableValue variableValue) {
             PsiType optionalType = variableValue.getType();
             PsiType type = OptionalUtil.getOptionalElementType(optionalType);
-            if (type instanceof PsiPrimitiveType) {
-                return ((PsiPrimitiveType)type).getBoxedType(Objects.requireNonNull(((PsiClassType)optionalType).resolve()));
-            }
-            return type;
+            return type instanceof PsiPrimitiveType primitiveType
+                ? primitiveType.getBoxedType(Objects.requireNonNull(((PsiClassType)optionalType).resolve()))
+                : type;
         }
 
         @Nonnull
@@ -214,30 +208,28 @@ public enum SpecialField implements VariableDescriptor {
         @Override
         public String getPresentationText(@Nonnull DfType dfType, @Nullable PsiType type) {
             if (dfType == DfTypes.NULL) {
-                return JavaAnalysisBundle.message("dftype.presentation.empty.optional");
+                return JavaAnalysisLocalize.dftypePresentationEmptyOptional().get();
             }
             if ((!dfType.isSuperType(DfTypes.NULL))) {
-                return JavaAnalysisBundle.message("dftype.presentation.present.optional");
+                return JavaAnalysisLocalize.dftypePresentationPresentOptional().get();
             }
             return "";
         }
 
         @Override
         boolean isMyAccessor(PsiMember accessor) {
-            return accessor instanceof PsiMethod && OptionalUtil.OPTIONAL_GET.methodMatches((PsiMethod)accessor);
+            return accessor instanceof PsiMethod method && OptionalUtil.OPTIONAL_GET.methodMatches(method);
         }
     };
 
     private static final SpecialField[] VALUES = values();
     private final String myTitle;
-    private final
-    @PropertyKey(resourceBundle = JavaAnalysisBundle.BUNDLE)
-    String myTitleKey;
+    private final LocalizeValue myTitleValue;
     private final boolean myFinal;
 
-    SpecialField(String title, @PropertyKey(resourceBundle = JavaAnalysisBundle.BUNDLE) String titleKey, boolean isFinal) {
+    SpecialField(String title, LocalizeValue titleValue, boolean isFinal) {
         myTitle = title;
-        myTitleKey = titleKey;
+        myTitleValue = titleValue;
         myFinal = isFinal;
     }
 
@@ -259,10 +251,7 @@ public enum SpecialField implements VariableDescriptor {
     public
     @Nls
     String getPresentationText(@Nonnull DfType dfType, @Nullable PsiType type) {
-        if (getDefaultValue(false).equals(dfType)) {
-            return "";
-        }
-        return dfType.toString();
+        return getDefaultValue(false).equals(dfType) ? "" : dfType.toString();
     }
 
     /**
@@ -302,14 +291,12 @@ public enum SpecialField implements VariableDescriptor {
     @Nonnull
     @Override
     public DfaValue createValue(@Nonnull DfaValueFactory factory, @Nullable DfaValue qualifier, boolean forAccessor) {
-        if (qualifier instanceof DfaVariableValue) {
-            DfaVariableValue variableValue = (DfaVariableValue)qualifier;
+        if (qualifier instanceof DfaVariableValue variableValue) {
             PsiModifierListOwner psiVariable = variableValue.getPsiVariable();
-            if (psiVariable instanceof PsiField &&
-                factory.canTrustFieldInitializer((PsiField)psiVariable) &&
-                psiVariable.hasModifierProperty(PsiModifier.STATIC) &&
-                psiVariable.hasModifierProperty(PsiModifier.FINAL)) {
-                PsiExpression initializer = ((PsiField)psiVariable).getInitializer();
+            if (psiVariable instanceof PsiField field
+                && factory.canTrustFieldInitializer(field)
+                && field.isStatic() && field.isFinal()) {
+                PsiExpression initializer = field.getInitializer();
                 if (initializer != null) {
                     DfType dfType = fromInitializer(initializer);
                     if (dfType != DfTypes.TOP) {
@@ -465,11 +452,9 @@ public enum SpecialField implements VariableDescriptor {
         return fromQualifierType(value.getType());
     }
 
-    public
     @Nonnull
-    @Nls
-    String getPresentationName() {
-        return JavaAnalysisBundle.message(myTitleKey);
+    public String getPresentationName() {
+        return myTitleValue.get();
     }
 
     @Override

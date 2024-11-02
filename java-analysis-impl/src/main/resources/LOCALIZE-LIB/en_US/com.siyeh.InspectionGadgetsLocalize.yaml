@@ -4426,3 +4426,7 @@ junit5.malformed.repeated.test.display.name:
   text: JUnit 5 malformed repeated test
 meta.annotation.without.runtime.retention:
   text: Non-runtime annotation to be used by reflection
+clone.doesnt.call.super.clone.display.name:
+  text: "'clone()' does not call 'super.clone()'"
+clone.doesnt.call.super.clone.problem.descriptor:
+  text: "<code>#ref()</code> does not call 'super.clone()' #loc"

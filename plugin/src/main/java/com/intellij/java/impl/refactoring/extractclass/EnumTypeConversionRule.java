@@ -28,6 +28,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 
 import java.util.List;
 
+@SuppressWarnings("ExtensionImplIsNotAnnotated")
 public class EnumTypeConversionRule extends TypeConversionRule {
     private final List<PsiField> myEnumConstants;
 
@@ -54,8 +55,7 @@ public class EnumTypeConversionRule extends TypeConversionRule {
             }
         }
         final PsiField field = PsiTreeUtil.getParentOfType(context, PsiField.class);
-        if (field != null && !myEnumConstants.contains(field) && field.hasModifierProperty(PsiModifier.STATIC)
-            && field.hasModifierProperty(PsiModifier.FINAL) && field.hasInitializer()) {
+        if (field != null && !myEnumConstants.contains(field) && field.isStatic() && field.isFinal() && field.hasInitializer()) {
             return null;
         }
         final PsiClass toClass = PsiUtil.resolveClassInType(to);

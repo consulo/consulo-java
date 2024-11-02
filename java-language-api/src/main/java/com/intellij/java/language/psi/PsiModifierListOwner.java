@@ -45,7 +45,7 @@ public interface PsiModifierListOwner extends PsiElement {
      * @param name the name of the modifier to check.
      * @return true if the element has the modifier, false otherwise
      */
-    boolean hasModifierProperty(@PsiModifier.ModifierConstant @NonNls @Nonnull String name);
+    boolean hasModifierProperty(@PsiModifier.ModifierConstant @Nonnull String name);
 
     @Nonnull
     default PsiAnnotation[] getAnnotations() {

@@ -1,23 +1,26 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.impl.codeInspection.dataFlow;
 
-import com.intellij.java.language.codeInsight.AnnotationUtil;
-import consulo.language.editor.inspection.LocalInspectionToolSession;
-import consulo.language.editor.inspection.ProblemsHolder;
 import com.intellij.java.analysis.codeInspection.AbstractBaseJavaLocalInspectionTool;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.*;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.StandardMethodContract.ValueConstraint;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.*;
-import consulo.application.ApplicationManager;
-import consulo.document.util.TextRange;
-import consulo.util.lang.StringUtil;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.application.Application;
+import consulo.document.util.TextRange;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.inspection.LocalInspectionToolSession;
+import consulo.language.editor.inspection.ProblemsHolder;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
+import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import one.util.streamex.StreamEx;
-
-import jakarta.annotation.Nonnull;
 
 import java.util.Collections;
 import java.util.List;
@@ -39,12 +42,10 @@ public abstract class ContractInspection extends AbstractBaseJavaLocalInspection
         Object state
     ) {
         return new JavaElementVisitor() {
-
             @Override
-            public void visitMethod(PsiMethod method) {
+            public void visitMethod(@Nonnull PsiMethod method) {
                 PsiAnnotation annotation = JavaMethodContractUtil.findContractAnnotation(method);
-                if (annotation == null || (!ApplicationManager.getApplication().isInternal()
-                    && AnnotationUtil.isInferredAnnotation(annotation))) {
+                if (annotation == null || (!Application.get().isInternal() && AnnotationUtil.isInferredAnnotation(annotation))) {
                     return;
                 }
                 boolean ownContract = annotation.getOwner() == method.getModifierList();
@@ -58,7 +59,8 @@ public abstract class ContractInspection extends AbstractBaseJavaLocalInspection
             }
 
             @Override
-            public void visitAnnotation(PsiAnnotation annotation) {
+            @RequiredReadAction
+            public void visitAnnotation(@Nonnull PsiAnnotation annotation) {
                 if (!JavaMethodContractUtil.ORG_JETBRAINS_ANNOTATIONS_CONTRACT.equals(annotation.getQualifiedName())) {
                     return;
                 }
@@ -75,9 +77,9 @@ public abstract class ContractInspection extends AbstractBaseJavaLocalInspection
                         PsiAnnotationMemberValue value = annotation.findAttributeValue(null);
                         assert value != null;
                         TextRange actualRange = null;
-                        if (value instanceof PsiExpression && error.getRange() != null) {
+                        if (value instanceof PsiExpression expression && error.getRange() != null) {
                             actualRange = ExpressionUtils.findStringLiteralRange(
-                                (PsiExpression)value,
+                                expression,
                                 error.getRange().getStartOffset(),
                                 error.getRange().getEndOffset()
                             );
@@ -126,8 +128,10 @@ public abstract class ContractInspection extends AbstractBaseJavaLocalInspection
             StandardMethodContract contract = contracts.get(clauseIndex);
             if (contract.getParameterCount() != paramCount) {
                 return ParseException.forClause(
-                    "Method takes " + paramCount + " parameters, " +
-                        "while contract clause '" + contract + "' expects " + contract.getParameterCount(),
+                    LocalizeValue.localizeTODO(
+                        "Method takes " + paramCount + " parameters, " +
+                            "while contract clause '" + contract + "' expects " + contract.getParameterCount()
+                    ),
                     text,
                     clauseIndex
                 );
@@ -141,36 +145,39 @@ public abstract class ContractInspection extends AbstractBaseJavaLocalInspection
                     case NULL_VALUE:
                     case NOT_NULL_VALUE:
                         if (type instanceof PsiPrimitiveType) {
-                            String message =
-                                "Contract clause '" + contract + "': parameter #" + (i + 1) + " has primitive type '" + type.getPresentableText() + "'";
+                            LocalizeValue message = LocalizeValue.localizeTODO(
+                                "Contract clause '" + contract + "': parameter #" + (i + 1) + " has primitive type '" + type.getPresentableText() + "'"
+                            );
                             return ParseException.forConstraint(message, text, clauseIndex, i);
                         }
                         break;
                     case TRUE_VALUE:
                     case FALSE_VALUE:
-                        if (!PsiType.BOOLEAN.equals(type) && !type.equalsToText(CommonClassNames.JAVA_LANG_BOOLEAN)) {
-                            String message = "Contract clause '" + contract + "': parameter #" + (i + 1) + " has '" +
-                                type.getPresentableText() + "' type (expected boolean)";
+                        if (!PsiType.BOOLEAN.equals(type) && !type.equalsToText(JavaClassNames.JAVA_LANG_BOOLEAN)) {
+                            LocalizeValue message = LocalizeValue.localizeTODO(
+                                "Contract clause '" + contract + "': parameter #" + (i + 1) + " has '" +
+                                type.getPresentableText() + "' type (expected boolean)"
+                            );
                             return ParseException.forConstraint(message, text, clauseIndex, i);
                         }
                         break;
                 }
             }
-            String problem = contract.getReturnValue().getMethodCompatibilityProblem(method);
+            LocalizeValue problem = LocalizeValue.localizeTODO(contract.getReturnValue().getMethodCompatibilityProblem(method));
             if (problem != null) {
                 return ParseException.forReturnValue(problem, text, clauseIndex);
             }
             if (possibleContracts != null) {
                 if (possibleContracts.isEmpty()) {
                     return ParseException.forClause(
-                        "Contract clause '" + contract + "' is unreachable: previous contracts cover all possible cases",
+                        LocalizeValue.localizeTODO("Contract clause '" + contract + "' is unreachable: previous contracts cover all possible cases"),
                         text,
                         clauseIndex
                     );
                 }
                 if (StreamEx.of(possibleContracts).allMatch(c -> c.intersect(contract) == null)) {
                     return ParseException.forClause(
-                        "Contract clause '" + contract + "' is never satisfied as its conditions are covered by previous contracts",
+                        LocalizeValue.localizeTODO("Contract clause '" + contract + "' is never satisfied as its conditions are covered by previous contracts"),
                         text,
                         clauseIndex
                     );

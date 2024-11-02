@@ -21,6 +21,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.content.scope.SearchScope;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -34,27 +35,32 @@ import jakarta.annotation.Nullable;
 @ExtensionImpl
 public class ClassMayBeInterfaceInspection extends BaseInspection {
     @Nonnull
+    @Override
     public String getDisplayName() {
         return InspectionGadgetsLocalize.classMayBeInterfaceDisplayName().get();
     }
 
     @Nonnull
+    @Override
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.classMayBeInterfaceProblemDescriptor().get();
     }
 
+    @Override
     protected InspectionGadgetsFix buildFix(Object... infos) {
         return new ClassMayBeInterfaceFix();
     }
 
     private static class ClassMayBeInterfaceFix extends InspectionGadgetsFix {
         @Nonnull
+        @Override
         public String getName() {
             return InspectionGadgetsLocalize.classMayBeInterfaceConvertQuickfix().get();
         }
 
-        public void doFix(Project project, ProblemDescriptor descriptor)
-            throws IncorrectOperationException {
+        @Override
+        @RequiredReadAction
+        public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
             final PsiIdentifier classNameIdentifier = (PsiIdentifier)descriptor.getPsiElement();
             final PsiClass interfaceClass = (PsiClass)classNameIdentifier.getParent();
             moveSubClassExtendsToImplements(interfaceClass);
@@ -62,6 +68,7 @@ public class ClassMayBeInterfaceInspection extends BaseInspection {
             moveImplementsToExtends(interfaceClass);
         }
 
+        @RequiredReadAction
         private static void changeClassToInterface(PsiClass aClass)
             throws IncorrectOperationException {
             final PsiIdentifier nameIdentifier = aClass.getNameIdentifier();
@@ -134,6 +141,7 @@ public class ClassMayBeInterfaceInspection extends BaseInspection {
         }
     }
 
+    @Override
     public BaseInspectionVisitor buildVisitor() {
         return new ClassMayBeInterfaceVisitor();
     }
@@ -142,13 +150,9 @@ public class ClassMayBeInterfaceInspection extends BaseInspection {
         @Override
         public void visitClass(@Nonnull PsiClass aClass) {
             // no call to super, so that it doesn't drill down to inner classes
-            if (aClass.isInterface() || aClass.isAnnotationType() || aClass.isEnum()) {
-                return;
-            }
-            if (aClass instanceof PsiTypeParameter || aClass instanceof PsiAnonymousClass) {
-                return;
-            }
-            if (!mayBeInterface(aClass)) {
+            if (aClass.isInterface() || aClass.isAnnotationType() || aClass.isEnum()
+                || aClass instanceof PsiTypeParameter || aClass instanceof PsiAnonymousClass
+                || !mayBeInterface(aClass)) {
                 return;
             }
             registerClassError(aClass);
@@ -163,25 +167,17 @@ public class ClassMayBeInterfaceInspection extends BaseInspection {
                 }
             }
             final PsiClassInitializer[] initializers = aClass.getInitializers();
-            if (initializers.length > 0) {
-                return false;
-            }
-            if (!allMethodsPublicAbstract(aClass)) {
-                return false;
-            }
-            if (!allFieldsPublicStaticFinal(aClass)) {
-                return false;
-            }
-            return allInnerClassesPublic(aClass);
+            return initializers.length <= 0
+                && allMethodsPublicAbstract(aClass)
+                && allFieldsPublicStaticFinal(aClass)
+                && allInnerClassesPublic(aClass);
         }
 
         private static boolean allFieldsPublicStaticFinal(PsiClass aClass) {
             boolean allFieldsStaticFinal = true;
             final PsiField[] fields = aClass.getFields();
             for (final PsiField field : fields) {
-                if (!(field.hasModifierProperty(PsiModifier.STATIC)
-                    && field.hasModifierProperty(PsiModifier.FINAL)
-                    && field.hasModifierProperty(PsiModifier.PUBLIC))) {
+                if (!(field.isPublic() && field.isStatic() && field.isFinal())) {
                     allFieldsStaticFinal = false;
                 }
             }
@@ -191,8 +187,7 @@ public class ClassMayBeInterfaceInspection extends BaseInspection {
         private static boolean allMethodsPublicAbstract(PsiClass aClass) {
             final PsiMethod[] methods = aClass.getMethods();
             for (final PsiMethod method : methods) {
-                if (!(method.hasModifierProperty(PsiModifier.ABSTRACT) &&
-                    method.hasModifierProperty(PsiModifier.PUBLIC))) {
+                if (!(method.isPublic() && method.isAbstract())) {
                     return false;
                 }
             }
@@ -202,7 +197,7 @@ public class ClassMayBeInterfaceInspection extends BaseInspection {
         private static boolean allInnerClassesPublic(PsiClass aClass) {
             final PsiClass[] innerClasses = aClass.getInnerClasses();
             for (PsiClass innerClass : innerClasses) {
-                if (!innerClass.hasModifierProperty(PsiModifier.PUBLIC)) {
+                if (!innerClass.isPublic()) {
                     return false;
                 }
             }
