@@ -1,18 +1,18 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
-import com.intellij.java.analysis.JavaAnalysisBundle;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.RelationType;
 import consulo.document.util.TextRange;
+import consulo.java.analysis.localize.JavaAnalysisLocalize;
+import consulo.localize.LocalizeValue;
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import one.util.streamex.IntStreamEx;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Contract;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -264,7 +264,7 @@ public final class StandardMethodContract extends MethodContract {
         String arrow = "->";
         int arrowIndex = clause.indexOf(arrow);
         if (arrowIndex < 0) {
-            throw ParseException.forClause(JavaAnalysisBundle.message("inspection.contract.checker.clause.syntax"), text, clauseIndex);
+            throw ParseException.forClause(JavaAnalysisLocalize.inspectionContractCheckerClauseSyntax(), text, clauseIndex);
         }
 
         String beforeArrow = clause.substring(0, arrowIndex);
@@ -283,8 +283,7 @@ public final class StandardMethodContract extends MethodContract {
         ContractReturnValue returnValue = ContractReturnValue.valueOf(returnValueString);
         if (returnValue == null) {
             String possibleValues = "null, !null, true, false, this, new, paramN, fail, _";
-            String message =
-                JavaAnalysisBundle.message("inspection.contract.checker.unknown.return.value", possibleValues, returnValueString);
+            LocalizeValue message = JavaAnalysisLocalize.inspectionContractCheckerUnknownReturnValue(possibleValues, returnValueString);
             throw ParseException.forReturnValue(message, text, clauseIndex);
         }
         return new StandardMethodContract(args, returnValue);
@@ -292,7 +291,7 @@ public final class StandardMethodContract extends MethodContract {
 
     private static ValueConstraint parseConstraint(String name, String text, int clauseIndex, int constraintIndex) throws ParseException {
         if (StringUtil.isEmpty(name)) {
-            throw new ParseException(JavaAnalysisBundle.message("inspection.contract.checker.empty.constraint"));
+            throw new ParseException(JavaAnalysisLocalize.inspectionContractCheckerEmptyConstraint());
         }
         for (ValueConstraint constraint : ValueConstraint.values()) {
             if (constraint.toString().equals(name)) {
@@ -300,7 +299,7 @@ public final class StandardMethodContract extends MethodContract {
             }
         }
         String allowedClause = StreamEx.of(ValueConstraint.values()).joining(", ");
-        String message = JavaAnalysisBundle.message("inspection.contract.checker.unknown.constraint", allowedClause, name);
+        LocalizeValue message = JavaAnalysisLocalize.inspectionContractCheckerUnknownConstraint(allowedClause, name);
         throw ParseException.forConstraint(message, text, clauseIndex, constraintIndex);
     }
 
@@ -397,16 +396,15 @@ public final class StandardMethodContract extends MethodContract {
     }
 
     public static class ParseException extends Exception {
-        private final
         @Nullable
-        TextRange myRange;
+        private final TextRange myRange;
 
-        ParseException(String message) {
+        ParseException(@Nonnull LocalizeValue message) {
             this(message, null);
         }
 
-        ParseException(String message, @Nullable TextRange range) {
-            super(message);
+        ParseException(@Nonnull LocalizeValue message, @Nullable TextRange range) {
+            super(message.get());
             myRange = range != null && range.isEmpty() ? null : range;
         }
 
@@ -415,13 +413,12 @@ public final class StandardMethodContract extends MethodContract {
             return super.getMessage();
         }
 
-        public
         @Nullable
-        TextRange getRange() {
+        public TextRange getRange() {
             return myRange;
         }
 
-        public static ParseException forConstraint(String message, String text, int clauseNumber, int constraintNumber) {
+        public static ParseException forConstraint(@Nonnull LocalizeValue message, String text, int clauseNumber, int constraintNumber) {
             TextRange range = findClauseRange(text, clauseNumber);
             if (range == null) {
                 return new ParseException(message);
@@ -453,7 +450,7 @@ public final class StandardMethodContract extends MethodContract {
             return new ParseException(message, new TextRange(start, end));
         }
 
-        public static ParseException forReturnValue(String message, String text, int clauseNumber) {
+        public static ParseException forReturnValue(@Nonnull LocalizeValue message, String text, int clauseNumber) {
             TextRange range = findClauseRange(text, clauseNumber);
             if (range == null) {
                 return new ParseException(message);
@@ -472,7 +469,7 @@ public final class StandardMethodContract extends MethodContract {
             return new ParseException(message, new TextRange(index, range.getEndOffset()));
         }
 
-        public static ParseException forClause(String message, String text, int clauseNumber) {
+        public static ParseException forClause(LocalizeValue message, String text, int clauseNumber) {
             TextRange range = findClauseRange(text, clauseNumber);
             return range == null ? new ParseException(message) : new ParseException(message, range);
         }

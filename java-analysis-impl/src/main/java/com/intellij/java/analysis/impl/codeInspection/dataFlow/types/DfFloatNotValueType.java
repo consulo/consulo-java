@@ -1,9 +1,9 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 
-import com.intellij.java.analysis.JavaAnalysisBundle;
-import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.PsiKeyword;
+import consulo.java.analysis.localize.JavaAnalysisLocalize;
+import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
@@ -19,11 +19,11 @@ class DfFloatNotValueType extends DfAntiConstantType<Float> implements DfFloatTy
         if (other == DfTypes.BOTTOM || other.equals(this)) {
             return true;
         }
-        if (other instanceof DfFloatNotValueType) {
-            return ((DfFloatNotValueType)other).myNotValues.containsAll(myNotValues);
+        if (other instanceof DfFloatNotValueType floatNotValueType) {
+            return floatNotValueType.myNotValues.containsAll(myNotValues);
         }
-        if (other instanceof DfFloatConstantType) {
-            return !myNotValues.contains(((DfFloatConstantType)other).getValue());
+        if (other instanceof DfFloatConstantType floatConstantType) {
+            return !myNotValues.contains(floatConstantType.getValue());
         }
         return false;
     }
@@ -37,9 +37,9 @@ class DfFloatNotValueType extends DfAntiConstantType<Float> implements DfFloatTy
         if (other.isSuperType(this)) {
             return other;
         }
-        if (other instanceof DfFloatNotValueType) {
+        if (other instanceof DfFloatNotValueType floatNotValueType) {
             Set<Float> notValues = new HashSet<>(myNotValues);
-            notValues.retainAll(((DfFloatNotValueType)other).myNotValues);
+            notValues.retainAll(floatNotValueType.myNotValues);
             return notValues.isEmpty() ? DfTypes.FLOAT : new DfFloatNotValueType(notValues);
         }
         return DfTypes.TOP;
@@ -54,12 +54,12 @@ class DfFloatNotValueType extends DfAntiConstantType<Float> implements DfFloatTy
         if (other.isSuperType(this)) {
             return this;
         }
-        if (other instanceof DfFloatConstantType && myNotValues.contains(((DfFloatConstantType)other).getValue())) {
+        if (other instanceof DfFloatConstantType floatConstantType && myNotValues.contains(floatConstantType.getValue())) {
             return DfTypes.BOTTOM;
         }
-        if (other instanceof DfFloatNotValueType) {
+        if (other instanceof DfFloatNotValueType floatNotValueType) {
             Set<Float> notValues = new HashSet<>(myNotValues);
-            notValues.addAll(((DfFloatNotValueType)other).myNotValues);
+            notValues.addAll(floatNotValueType.myNotValues);
             return new DfFloatNotValueType(notValues);
         }
         return DfTypes.BOTTOM;
@@ -67,6 +67,6 @@ class DfFloatNotValueType extends DfAntiConstantType<Float> implements DfFloatTy
 
     @Override
     public String toString() {
-        return JavaAnalysisBundle.message("type.presentation.except.values", PsiKeyword.FLOAT, StringUtil.join(myNotValues, ", "));
+        return JavaAnalysisLocalize.typePresentationExceptValues(PsiKeyword.FLOAT, StringUtil.join(myNotValues, ", ")).get();
     }
 }

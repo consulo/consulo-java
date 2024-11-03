@@ -15,11 +15,17 @@
  */
 package com.intellij.java.impl.refactoring;
 
+import consulo.annotation.DeprecationInfo;
+import consulo.annotation.internal.MigratedExtensionsTo;
 import consulo.application.CommonBundle;
+import consulo.java.localize.JavaRefactoringLocalize;
 import org.jetbrains.annotations.PropertyKey;
 
 import java.util.ResourceBundle;
 
+@Deprecated
+@DeprecationInfo("Use JavaRefactoringLocalize")
+@MigratedExtensionsTo(JavaRefactoringLocalize.class)
 public class RefactorJBundle{
     private static final ResourceBundle ourBundle =
             ResourceBundle.getBundle("com.intellij.refactoring.RefactorJBundle");

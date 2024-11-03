@@ -28,47 +28,47 @@ import consulo.language.psi.util.PsiTreeUtil;
 
 import java.util.List;
 
+@SuppressWarnings("ExtensionImplIsNotAnnotated")
 public class EnumTypeConversionRule extends TypeConversionRule {
-  private final List<PsiField> myEnumConstants;
+    private final List<PsiField> myEnumConstants;
 
-  public EnumTypeConversionRule(List<PsiField> enumConstants) {
-    myEnumConstants = enumConstants;
-  }
+    public EnumTypeConversionRule(List<PsiField> enumConstants) {
+        myEnumConstants = enumConstants;
+    }
 
-  @Override
-  public TypeConversionDescriptorBase findConversion(PsiType from,
-                                                     PsiType to,
-                                                     PsiMember member,
-                                                     PsiExpression context,
-                                                     TypeMigrationLabeler labeler) {
-    final PsiMethodCallExpression callExpression = PsiTreeUtil.getParentOfType(context, PsiMethodCallExpression.class, false);
-    if (callExpression != null) {
-      final PsiMethod resolved = callExpression.resolveMethod();
-      if (resolved != null) {
-        final SearchScope searchScope = labeler.getRules().getSearchScope();
-        if (!PsiSearchScopeUtil.isInScope(searchScope, resolved)) {
-          return null;
+    @Override
+    public TypeConversionDescriptorBase findConversion(
+        PsiType from,
+        PsiType to,
+        PsiMember member,
+        PsiExpression context,
+        TypeMigrationLabeler labeler
+    ) {
+        final PsiMethodCallExpression callExpression = PsiTreeUtil.getParentOfType(context, PsiMethodCallExpression.class, false);
+        if (callExpression != null) {
+            final PsiMethod resolved = callExpression.resolveMethod();
+            if (resolved != null) {
+                final SearchScope searchScope = labeler.getRules().getSearchScope();
+                if (!PsiSearchScopeUtil.isInScope(searchScope, resolved)) {
+                    return null;
+                }
+            }
         }
-      }
-    }
-    final PsiField field = PsiTreeUtil.getParentOfType(context, PsiField.class);
-    if (field != null && !myEnumConstants.contains(field) && field.hasModifierProperty(PsiModifier.STATIC) && field.hasModifierProperty(
-      PsiModifier.FINAL) && field.hasInitializer()) {
-      return null;
-    }
-    final PsiClass toClass = PsiUtil.resolveClassInType(to);
-    if (toClass != null && toClass.isEnum()) {
-      final PsiMethod[] constructors = toClass.getConstructors();
-      if (constructors.length == 1) {
-        final PsiMethod constructor = constructors[0];
-        final PsiParameter[] parameters = constructor.getParameterList().getParameters();
-        if (parameters.length == 1) {
-          if (TypeConversionUtil.isAssignable(parameters[0].getType(), from)) {
-            return new TypeConversionDescriptorBase();
-          }
+        final PsiField field = PsiTreeUtil.getParentOfType(context, PsiField.class);
+        if (field != null && !myEnumConstants.contains(field) && field.isStatic() && field.isFinal() && field.hasInitializer()) {
+            return null;
         }
-      }
+        final PsiClass toClass = PsiUtil.resolveClassInType(to);
+        if (toClass != null && toClass.isEnum()) {
+            final PsiMethod[] constructors = toClass.getConstructors();
+            if (constructors.length == 1) {
+                final PsiMethod constructor = constructors[0];
+                final PsiParameter[] parameters = constructor.getParameterList().getParameters();
+                if (parameters.length == 1 && TypeConversionUtil.isAssignable(parameters[0].getType(), from)) {
+                    return new TypeConversionDescriptorBase();
+                }
+            }
+        }
+        return null;
     }
-    return null;
-  }
 }

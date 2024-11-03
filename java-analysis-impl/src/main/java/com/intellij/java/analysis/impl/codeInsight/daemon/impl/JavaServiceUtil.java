@@ -1,25 +1,26 @@
 // Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl;
 
-import com.intellij.java.analysis.JavaAnalysisBundle;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaModuleGraphUtil;
 import com.intellij.java.analysis.impl.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.callMatcher.CallMatcher;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.markup.GutterIconRenderer;
+import consulo.java.analysis.localize.JavaAnalysisLocalize;
 import consulo.java.language.impl.icon.JavaPsiImplIconGroup;
 import consulo.language.editor.Pass;
 import consulo.language.editor.gutter.GutterIconNavigationHandler;
 import consulo.language.editor.gutter.LineMarkerInfo;
 import consulo.language.psi.PsiElement;
 import consulo.navigation.NavigationItem;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.collection.ContainerUtil;
-import one.util.streamex.StreamEx;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import one.util.streamex.StreamEx;
 
 import java.awt.event.MouseEvent;
 import java.util.Collections;
@@ -30,10 +31,7 @@ public final class JavaServiceUtil {
     public static final CallMatcher SERVICE_LOADER_LOAD = CallMatcher.staticCall("java.util.ServiceLoader", "load", "loadInstalled");
 
     public static boolean isServiceProviderMethod(@Nonnull PsiMethod method) {
-        return "provider".equals(method.getName()) &&
-            method.getParameterList().isEmpty() &&
-            method.hasModifierProperty(PsiModifier.PUBLIC) &&
-            method.hasModifierProperty(PsiModifier.STATIC);
+        return "provider".equals(method.getName()) && method.getParameterList().isEmpty() && method.isPublic() && method.isStatic();
     }
 
     @Nonnull
@@ -75,7 +73,7 @@ public final class JavaServiceUtil {
                                                 identifier.getTextRange(),
                                                 JavaPsiImplIconGroup.gutterJava9service(),
                                                 Pass.LINE_MARKERS,
-                                                e -> JavaAnalysisBundle.message("service.provides", interfaceClassName),
+                                                e -> JavaAnalysisLocalize.serviceProvides(interfaceClassName).get(),
                                                 new ServiceProvidesNavigationHandler(interfaceClassName, implementerClassName),
                                                 GutterIconRenderer.Alignment.LEFT
                                             );
@@ -92,6 +90,7 @@ public final class JavaServiceUtil {
         return Collections.emptyList();
     }
 
+    @RequiredReadAction
     public static List<LineMarkerInfo<PsiElement>> collectServiceLoaderLoadCall(
         @Nonnull PsiIdentifier identifier,
         @Nonnull PsiMethodCallExpression methodCall
@@ -119,7 +118,7 @@ public final class JavaServiceUtil {
                                         identifier.getTextRange(),
                                         JavaPsiImplIconGroup.gutterJava9service(),
                                         Pass.LINE_MARKERS,
-                                        e -> JavaAnalysisBundle.message("service.uses", qualifiedName),
+                                        e -> JavaAnalysisLocalize.serviceUses(qualifiedName).get(),
                                         new ServiceUsesNavigationHandler(qualifiedName),
                                         GutterIconRenderer.Alignment.LEFT
                                     );
@@ -142,6 +141,7 @@ public final class JavaServiceUtil {
         }
 
         @Override
+        @RequiredUIAccess
         public void navigate(MouseEvent e, PsiElement element) {
             Optional.ofNullable(JavaModuleGraphUtil.findDescriptorByElement(element))
                 .map(this::findTargetReference)
