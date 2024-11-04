@@ -248,7 +248,7 @@ public class RedundantSuppressInspection extends GlobalInspectionTool implements
         final Collection<CommonProblemDescriptor> descriptors;
         if (toolWrapper instanceof LocalInspectionToolWrapper local) {
           if (local.isUnfair()) continue; //cant't work with passes other than LocalInspectionPass
-          List<ProblemDescriptor> results = local.getTool().processFile(file, manager, state);
+          List<ProblemDescriptor> results = manager.runLocalToolLocaly(local.getTool(), file, state);
           descriptors = new ArrayList<>(results);
         } else if (toolWrapper instanceof GlobalInspectionToolWrapper global) {
           GlobalInspectionTool globalTool = global.getTool();

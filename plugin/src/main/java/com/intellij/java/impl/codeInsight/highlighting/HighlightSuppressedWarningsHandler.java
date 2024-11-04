@@ -27,7 +27,6 @@ import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorPopupHelper;
 import consulo.ide.impl.idea.codeInsight.daemon.impl.LocalInspectionsPass;
 import consulo.ide.impl.idea.codeInspection.ex.GlobalInspectionContextImpl;
-import consulo.ide.impl.idea.codeInspection.ex.InspectionManagerEx;
 import consulo.language.editor.DaemonCodeAnalyzer;
 import consulo.language.editor.highlight.usage.HighlightUsagesHandlerBase;
 import consulo.language.editor.impl.highlight.HighlightInfoProcessor;
@@ -133,15 +132,15 @@ public class HighlightSuppressedWarningsHandler extends HighlightUsagesHandlerBa
         continue;
       }
       final LocalInspectionToolWrapper toolWrapper = ((LocalInspectionToolWrapper) toolWrapperById).createCopy();
-      final InspectionManagerEx managerEx = (InspectionManagerEx) InspectionManager.getInstance(project);
-      final GlobalInspectionContextImpl context = managerEx.createNewGlobalContext(false);
+      final InspectionManager manager = InspectionManager.getInstance(project);
+      final GlobalInspectionContextImpl context = (GlobalInspectionContextImpl) manager.createNewGlobalContext(false);
       toolWrapper.initialize(context);
       ((RefManagerImpl) context.getRefManager()).inspectionReadActionStarted();
       ProgressIndicator indicator = ProgressManager.getInstance().getProgressIndicator();
       Runnable inspect = new Runnable() {
         @Override
         public void run() {
-          pass.doInspectInBatch(context, managerEx, Collections.<LocalInspectionToolWrapper>singletonList(toolWrapper));
+          pass.doInspectInBatch(context, manager, Collections.<LocalInspectionToolWrapper>singletonList(toolWrapper));
         }
       };
       if (indicator == null) {
