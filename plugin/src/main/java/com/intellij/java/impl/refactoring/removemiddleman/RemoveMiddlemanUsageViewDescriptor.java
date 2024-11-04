@@ -15,36 +15,39 @@
  */
 package com.intellij.java.impl.refactoring.removemiddleman;
 
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiField;
-import com.intellij.java.impl.refactoring.RefactorJBundle;
-import com.intellij.java.impl.refactoring.psi.MyUsageViewUtil;
+import consulo.java.localize.JavaRefactoringLocalize;
+import consulo.language.psi.PsiElement;
 import consulo.usage.UsageViewDescriptor;
 import jakarta.annotation.Nonnull;
 
 class RemoveMiddlemanUsageViewDescriptor implements UsageViewDescriptor {
-  private @Nonnull
-  final PsiField field;
+    private @Nonnull
+    final PsiField field;
 
-  RemoveMiddlemanUsageViewDescriptor(@Nonnull PsiField field) {
-    super();
-    this.field = field;
-  }
+    RemoveMiddlemanUsageViewDescriptor(@Nonnull PsiField field) {
+        super();
+        this.field = field;
+    }
 
-  public String getCodeReferencesText(int usagesCount, int filesCount) {
-    return RefactorJBundle
-      .message("references.to.expose.usage.view", MyUsageViewUtil.getUsageCountInfo(usagesCount, filesCount, "reference"));
-  }
+    @Override
+    public String getCodeReferencesText(int usagesCount, int filesCount) {
+        return JavaRefactoringLocalize.referencesToExposeUsageView(usagesCount, filesCount).get();
+    }
 
-  public String getProcessedElementsHeader() {
-    return RefactorJBundle.message("remove.middleman.field.header");
-  }
+    @Override
+    public String getProcessedElementsHeader() {
+        return JavaRefactoringLocalize.removeMiddlemanFieldHeader().get();
+    }
 
-  public PsiElement[] getElements() {
-    return new PsiElement[]{field};
-  }
+    @Nonnull
+    @Override
+    public PsiElement[] getElements() {
+        return new PsiElement[]{field};
+    }
 
-  public String getCommentReferencesText(int usagesCount, int filesCount) {
-    return null;
-  }
+    @Override
+    public String getCommentReferencesText(int usagesCount, int filesCount) {
+        return null;
+    }
 }

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.refactoring.psi;
 
-
+@Deprecated(forRemoval = true)
 public class MyUsageViewUtil {
 
     public static String getUsageCountInfo(int usagesCount, int filesCount, String referenceWord) {
