@@ -22,22 +22,23 @@ import com.intellij.java.impl.refactoring.psi.MyUsageViewUtil;
 import consulo.language.editor.refactoring.ui.UsageViewDescriptorAdapter;
 
 class IntroduceParameterObjectUsageViewDescriptor extends UsageViewDescriptorAdapter {
-
-   private final PsiMethod method;
+    private final PsiMethod method;
 
     IntroduceParameterObjectUsageViewDescriptor(PsiMethod method) {
 
-       this.method = method;
-   }
+        this.method = method;
+    }
 
-   public PsiElement[] getElements() {
-       return new PsiElement[]{method};
-   }
-   public String getProcessedElementsHeader() {
-       return RefactorJBundle.message("method.whose.parameters.are.to.wrapped");
-   }
+    public PsiElement[] getElements() {
+        return new PsiElement[]{method};
+    }
 
-   public String getCodeReferencesText(int usagesCount, int filesCount) {
-       return RefactorJBundle.message("references.to.be.modified") + MyUsageViewUtil.getUsageCountInfo(usagesCount, filesCount, "reference");
-   }
+    public String getProcessedElementsHeader() {
+        return RefactorJBundle.message("method.whose.parameters.are.to.wrapped");
+    }
+
+    public String getCodeReferencesText(int usagesCount, int filesCount) {
+        return RefactorJBundle.message("references.to.be.modified") +
+            MyUsageViewUtil.getUsageCountInfo(usagesCount, filesCount, "reference");
+    }
 }

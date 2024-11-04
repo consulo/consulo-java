@@ -40,93 +40,105 @@ import jakarta.annotation.Nonnull;
 import java.util.List;
 
 public class RemoveMiddlemanProcessor extends FixableUsagesRefactoringProcessor {
-  private static final Logger LOG = Logger.getInstance(RemoveMiddlemanProcessor.class);
+    private static final Logger LOG = Logger.getInstance(RemoveMiddlemanProcessor.class);
 
-  private final PsiField field;
-  private final PsiClass containingClass;
-  private final List<MemberInfo> myDelegateMethodInfos;
-  private PsiMethod getter;
+    private final PsiField field;
+    private final PsiClass containingClass;
+    private final List<MemberInfo> myDelegateMethodInfos;
+    private PsiMethod getter;
 
-  public RemoveMiddlemanProcessor(PsiField field, List<MemberInfo> memberInfos) {
-    super(field.getProject());
-    this.field = field;
-    containingClass = field.getContainingClass();
-    final String propertyName = PropertyUtil.suggestPropertyName(field);
-    final boolean isStatic = field.hasModifierProperty(PsiModifier.STATIC);
-    getter = PropertyUtil.findPropertyGetter(containingClass, propertyName, isStatic, false);
-    myDelegateMethodInfos = memberInfos;
-  }
-
-  @Nonnull
-  protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usageInfos) {
-    return new RemoveMiddlemanUsageViewDescriptor(field);
-  }
-
-
-  public void findUsages(@Nonnull List<FixableUsageInfo> usages) {
-    for (final MemberInfo memberInfo : myDelegateMethodInfos) {
-      if (!memberInfo.isChecked()) continue;
-      final PsiMethod method = (PsiMethod)memberInfo.getMember();
-      final Project project = method.getProject();
-      final String getterName = PropertyUtil.suggestGetterName(field);
-      final int[] paramPermutation = DelegationUtils.getParameterPermutation(method);
-      final PsiMethod delegatedMethod = DelegationUtils.getDelegatedMethod(method);
-      LOG.assertTrue(!DelegationUtils.isAbstract(method));
-      processUsagesForMethod(memberInfo.isToAbstract(), method, paramPermutation, getterName, delegatedMethod, usages);
+    public RemoveMiddlemanProcessor(PsiField field, List<MemberInfo> memberInfos) {
+        super(field.getProject());
+        this.field = field;
+        containingClass = field.getContainingClass();
+        final String propertyName = PropertyUtil.suggestPropertyName(field);
+        final boolean isStatic = field.hasModifierProperty(PsiModifier.STATIC);
+        getter = PropertyUtil.findPropertyGetter(containingClass, propertyName, isStatic, false);
+        myDelegateMethodInfos = memberInfos;
     }
-  }
 
-  @Override
-  protected boolean preprocessUsages(final Ref<UsageInfo[]> refUsages) {
-    final MultiMap<PsiElement, String> conflicts = new MultiMap<PsiElement, String>();
-    for (MemberInfo memberInfo : myDelegateMethodInfos) {
-      if (memberInfo.isChecked() && memberInfo.isToAbstract()) {
-        final PsiMember psiMember = memberInfo.getMember();
-        if (psiMember instanceof PsiMethod && ((PsiMethod)psiMember).findDeepestSuperMethods().length > 0) {
-          conflicts.putValue(psiMember, SymbolPresentationUtil.getSymbolPresentableText(psiMember) + " will be deleted. Hierarchy will be broken");
+    @Nonnull
+    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usageInfos) {
+        return new RemoveMiddlemanUsageViewDescriptor(field);
+    }
+
+
+    public void findUsages(@Nonnull List<FixableUsageInfo> usages) {
+        for (final MemberInfo memberInfo : myDelegateMethodInfos) {
+            if (!memberInfo.isChecked()) {
+                continue;
+            }
+            final PsiMethod method = (PsiMethod)memberInfo.getMember();
+            final Project project = method.getProject();
+            final String getterName = PropertyUtil.suggestGetterName(field);
+            final int[] paramPermutation = DelegationUtils.getParameterPermutation(method);
+            final PsiMethod delegatedMethod = DelegationUtils.getDelegatedMethod(method);
+            LOG.assertTrue(!DelegationUtils.isAbstract(method));
+            processUsagesForMethod(memberInfo.isToAbstract(), method, paramPermutation, getterName, delegatedMethod, usages);
         }
-      }
     }
-    return showConflicts(conflicts, refUsages.get());
-  }
 
-  private void processUsagesForMethod(final boolean deleteMethodHierarchy, PsiMethod method, int[] paramPermutation, String getterName, PsiMethod delegatedMethod,
-                                      List<FixableUsageInfo> usages) {
-    for (PsiReference reference : ReferencesSearch.search(method)) {
-      final PsiElement referenceElement = reference.getElement();
-      final PsiMethodCallExpression call = (PsiMethodCallExpression)referenceElement.getParent();
-      final String access;
-      if (call.getMethodExpression().getQualifierExpression() == null) {
-        access = field.getName();
-      } else {
-        access = getterName + "()";
-        if (getter == null) {
-          getter = GenerateMembersUtil.generateGetterPrototype(field);
+    @Override
+    protected boolean preprocessUsages(final Ref<UsageInfo[]> refUsages) {
+        final MultiMap<PsiElement, String> conflicts = new MultiMap<PsiElement, String>();
+        for (MemberInfo memberInfo : myDelegateMethodInfos) {
+            if (memberInfo.isChecked() && memberInfo.isToAbstract()) {
+                final PsiMember psiMember = memberInfo.getMember();
+                if (psiMember instanceof PsiMethod && ((PsiMethod)psiMember).findDeepestSuperMethods().length > 0) {
+                    conflicts.putValue(
+                        psiMember,
+                        SymbolPresentationUtil.getSymbolPresentableText(psiMember) + " will be deleted. Hierarchy will be broken"
+                    );
+                }
+            }
         }
-      }
-      usages.add(new InlineDelegatingCall(call, paramPermutation, access, delegatedMethod.getName()));
+        return showConflicts(conflicts, refUsages.get());
     }
-    if (deleteMethodHierarchy) {
-      usages.add(new DeleteMethod(method));
-    }
-  }
 
-  protected void performRefactoring(UsageInfo[] usageInfos) {
-    if (getter != null) {
-      try {
-        if (containingClass.findMethodBySignature(getter, false) == null) {
-          containingClass.add(getter);
+    private void processUsagesForMethod(
+        final boolean deleteMethodHierarchy,
+        PsiMethod method,
+        int[] paramPermutation,
+        String getterName,
+        PsiMethod delegatedMethod,
+        List<FixableUsageInfo> usages
+    ) {
+        for (PsiReference reference : ReferencesSearch.search(method)) {
+            final PsiElement referenceElement = reference.getElement();
+            final PsiMethodCallExpression call = (PsiMethodCallExpression)referenceElement.getParent();
+            final String access;
+            if (call.getMethodExpression().getQualifierExpression() == null) {
+                access = field.getName();
+            }
+            else {
+                access = getterName + "()";
+                if (getter == null) {
+                    getter = GenerateMembersUtil.generateGetterPrototype(field);
+                }
+            }
+            usages.add(new InlineDelegatingCall(call, paramPermutation, access, delegatedMethod.getName()));
         }
-      }
-      catch (IncorrectOperationException e) {
-        LOG.error(e);
-      }
+        if (deleteMethodHierarchy) {
+            usages.add(new DeleteMethod(method));
+        }
     }
 
-    super.performRefactoring(usageInfos);
-  }
+    protected void performRefactoring(UsageInfo[] usageInfos) {
+        if (getter != null) {
+            try {
+                if (containingClass.findMethodBySignature(getter, false) == null) {
+                    containingClass.add(getter);
+                }
+            }
+            catch (IncorrectOperationException e) {
+                LOG.error(e);
+            }
+        }
 
-  protected String getCommandName() {
-    return RefactorJBundle.message("exposed.delegation.command.name", containingClass.getName(), '.', field.getName());
-  }
+        super.performRefactoring(usageInfos);
+    }
+
+    protected String getCommandName() {
+        return RefactorJBundle.message("exposed.delegation.command.name", containingClass.getName(), '.', field.getName());
+    }
 }

@@ -24,30 +24,30 @@ import consulo.usage.UsageViewDescriptor;
 import jakarta.annotation.Nonnull;
 
 class WrapReturnValueUsageViewDescriptor implements UsageViewDescriptor {
-
     @Nonnull
     private final PsiMethod method;
 
-    WrapReturnValueUsageViewDescriptor(@Nonnull PsiMethod method,
-                                       UsageInfo[] usages){
+    WrapReturnValueUsageViewDescriptor(@Nonnull PsiMethod method, UsageInfo[] usages) {
         super();
         this.method = method;
     }
 
-    public PsiElement[] getElements(){
+    public PsiElement[] getElements() {
         return new PsiElement[]{method};
     }
 
-    public String getProcessedElementsHeader(){
+    public String getProcessedElementsHeader() {
         return RefactorJBundle.message("method.whose.return.are.to.wrapped");
     }
 
-    public String getCodeReferencesText(int usagesCount, int filesCount){
-        return RefactorJBundle.message("references.to.be.modified.usage.view",
-                MyUsageViewUtil.getUsageCountInfo(usagesCount, filesCount, RefactorJBundle.message("reference")));
+    public String getCodeReferencesText(int usagesCount, int filesCount) {
+        return RefactorJBundle.message(
+            "references.to.be.modified.usage.view",
+            MyUsageViewUtil.getUsageCountInfo(usagesCount, filesCount, RefactorJBundle.message("reference"))
+        );
     }
 
-  public String getCommentReferencesText(int usagesCount, int filesCount) {
+    public String getCommentReferencesText(int usagesCount, int filesCount) {
         return null;
     }
 }

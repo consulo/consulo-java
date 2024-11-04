@@ -44,7 +44,7 @@ class ExtractClassUsageViewDescriptor implements UsageViewDescriptor {
         return new PsiElement[]{aClass};
     }
 
-  public String getCommentReferencesText(int usagesCount, int filesCount) {
+    public String getCommentReferencesText(int usagesCount, int filesCount) {
         return null;
     }
 }

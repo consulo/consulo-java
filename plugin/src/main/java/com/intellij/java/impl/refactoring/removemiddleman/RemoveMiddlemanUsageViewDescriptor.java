@@ -23,28 +23,30 @@ import consulo.usage.UsageViewDescriptor;
 import jakarta.annotation.Nonnull;
 
 class RemoveMiddlemanUsageViewDescriptor implements UsageViewDescriptor {
-  private @Nonnull
-  final PsiField field;
+    private @Nonnull
+    final PsiField field;
 
-  RemoveMiddlemanUsageViewDescriptor(@Nonnull PsiField field) {
-    super();
-    this.field = field;
-  }
+    RemoveMiddlemanUsageViewDescriptor(@Nonnull PsiField field) {
+        super();
+        this.field = field;
+    }
 
-  public String getCodeReferencesText(int usagesCount, int filesCount) {
-    return RefactorJBundle
-      .message("references.to.expose.usage.view", MyUsageViewUtil.getUsageCountInfo(usagesCount, filesCount, "reference"));
-  }
+    public String getCodeReferencesText(int usagesCount, int filesCount) {
+        return RefactorJBundle.message(
+            "references.to.expose.usage.view",
+            MyUsageViewUtil.getUsageCountInfo(usagesCount, filesCount, "reference")
+        );
+    }
 
-  public String getProcessedElementsHeader() {
-    return RefactorJBundle.message("remove.middleman.field.header");
-  }
+    public String getProcessedElementsHeader() {
+        return RefactorJBundle.message("remove.middleman.field.header");
+    }
 
-  public PsiElement[] getElements() {
-    return new PsiElement[]{field};
-  }
+    public PsiElement[] getElements() {
+        return new PsiElement[]{field};
+    }
 
-  public String getCommentReferencesText(int usagesCount, int filesCount) {
-    return null;
-  }
+    public String getCommentReferencesText(int usagesCount, int filesCount) {
+        return null;
+    }
 }

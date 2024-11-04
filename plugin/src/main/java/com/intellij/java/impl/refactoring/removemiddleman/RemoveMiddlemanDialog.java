@@ -37,74 +37,74 @@ import java.util.List;
 
 @SuppressWarnings({"OverridableMethodCallInConstructor"})
 public class RemoveMiddlemanDialog extends RefactoringDialog {
+    private final JTextField fieldNameLabel;
 
-  private final JTextField fieldNameLabel;
+    private final List<MemberInfo> delegateMethods;
 
-  private final List<MemberInfo> delegateMethods;
+    private final PsiField myField;
 
-  private final PsiField myField;
+    RemoveMiddlemanDialog(PsiField field, MemberInfo[] delegateMethods) {
+        super(field.getProject(), true);
+        myField = field;
+        this.delegateMethods = Arrays.asList(delegateMethods);
+        fieldNameLabel = new JTextField();
+        fieldNameLabel.setText(
+            PsiFormatUtil.formatVariable(myField, PsiFormatUtil.SHOW_TYPE | PsiFormatUtil.SHOW_NAME, PsiSubstitutor.EMPTY)
+        );
+        setTitle(RefactorJBundle.message("remove.middleman.title"));
+        init();
+    }
 
+    protected String getDimensionServiceKey() {
+        return "RefactorJ.RemoveMiddleman";
+    }
 
-  RemoveMiddlemanDialog(PsiField field, MemberInfo[] delegateMethods) {
-    super(field.getProject(), true);
-    myField = field;
-    this.delegateMethods = Arrays.asList(delegateMethods);
-    fieldNameLabel = new JTextField();
-    fieldNameLabel.setText(
-      PsiFormatUtil.formatVariable(myField, PsiFormatUtil.SHOW_TYPE | PsiFormatUtil.SHOW_NAME, PsiSubstitutor.EMPTY));
-    setTitle(RefactorJBundle.message("remove.middleman.title"));
-    init();
-  }
+    protected JComponent createCenterPanel() {
+        final JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 0, 5, 0));
+        final MemberSelectionPanel selectionPanel = new MemberSelectionPanel("&Methods to inline", delegateMethods, "Delete");
+        final MemberSelectionTable table = selectionPanel.getTable();
+        table.setMemberInfoModel(new DelegatingMemberInfoModel<PsiMember, MemberInfo>(table.getMemberInfoModel()) {
+            @Override
+            public int checkForProblems(@Nonnull final MemberInfo member) {
+                return hasSuperMethods(member) ? ERROR : OK;
+            }
 
-  protected String getDimensionServiceKey() {
-    return "RefactorJ.RemoveMiddleman";
-  }
+            @Override
+            public String getTooltipText(final MemberInfo member) {
+                if (hasSuperMethods(member)) {
+                    return "Deletion will break type hierarchy";
+                }
+                return super.getTooltipText(member);
+            }
 
+            private boolean hasSuperMethods(final MemberInfo member) {
+                if (member.isChecked() && member.isToAbstract()) {
+                    final PsiMember psiMember = member.getMember();
+                    if (psiMember instanceof PsiMethod && ((PsiMethod)psiMember).findDeepestSuperMethods().length > 0) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+        panel.add(selectionPanel, BorderLayout.CENTER);
+        return panel;
+    }
 
-  protected JComponent createCenterPanel() {
-    final JPanel panel = new JPanel(new BorderLayout());
-    panel.setBorder(BorderFactory.createEmptyBorder(10, 0, 5, 0));
-    final MemberSelectionPanel selectionPanel = new MemberSelectionPanel("&Methods to inline", delegateMethods, "Delete");
-    final MemberSelectionTable table = selectionPanel.getTable();
-    table.setMemberInfoModel(new DelegatingMemberInfoModel<PsiMember, MemberInfo>(table.getMemberInfoModel()) {
-      @Override
-      public int checkForProblems(@Nonnull final MemberInfo member) {
-        return hasSuperMethods(member) ? ERROR : OK;
-      }
+    protected JComponent createNorthPanel() {
+        fieldNameLabel.setEditable(false);
+        final JPanel sourceClassPanel = new JPanel(new BorderLayout());
+        sourceClassPanel.add(new JLabel("Delegating field"), BorderLayout.NORTH);
+        sourceClassPanel.add(fieldNameLabel, BorderLayout.CENTER);
+        return sourceClassPanel;
+    }
 
-      @Override
-      public String getTooltipText(final MemberInfo member) {
-        if (hasSuperMethods(member)) return "Deletion will break type hierarchy";
-        return super.getTooltipText(member);
-      }
+    protected void doHelpAction() {
+        HelpManager.getInstance().invokeHelp(HelpID.RemoveMiddleman);
+    }
 
-      private boolean hasSuperMethods(final MemberInfo member) {
-        if (member.isChecked() && member.isToAbstract()) {
-          final PsiMember psiMember = member.getMember();
-          if (psiMember instanceof PsiMethod && ((PsiMethod)psiMember).findDeepestSuperMethods().length > 0) {
-            return true;
-          }
-        }
-        return false;
-      }
-    });
-    panel.add(selectionPanel, BorderLayout.CENTER);
-    return panel;
-  }
-
-  protected JComponent createNorthPanel() {
-    fieldNameLabel.setEditable(false);
-    final JPanel sourceClassPanel = new JPanel(new BorderLayout());
-    sourceClassPanel.add(new JLabel("Delegating field"), BorderLayout.NORTH);
-    sourceClassPanel.add(fieldNameLabel, BorderLayout.CENTER);
-    return sourceClassPanel;
-  }
-
-  protected void doHelpAction() {
-    HelpManager.getInstance().invokeHelp(HelpID.RemoveMiddleman);
-  }
-
-  protected void doAction() {
-    invokeRefactoring(new RemoveMiddlemanProcessor(myField, delegateMethods));
-  }
+    protected void doAction() {
+        invokeRefactoring(new RemoveMiddlemanProcessor(myField, delegateMethods));
+    }
 }
