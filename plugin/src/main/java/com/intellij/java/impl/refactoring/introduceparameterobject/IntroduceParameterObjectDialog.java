@@ -20,7 +20,6 @@ import com.intellij.java.impl.ide.util.TreeJavaClassChooserDialog;
 import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.impl.refactoring.MoveDestination;
 import com.intellij.java.impl.refactoring.PackageWrapper;
-import com.intellij.java.impl.refactoring.RefactorJBundle;
 import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.DestinationFolderComboBox;
 import com.intellij.java.impl.refactoring.ui.PackageNameReferenceEditorCombo;
 import com.intellij.java.impl.refactoring.util.ParameterTablePanel;
@@ -33,13 +32,16 @@ import consulo.application.ui.wm.ApplicationIdeFocusManager;
 import consulo.application.ui.wm.IdeFocusManager;
 import consulo.configurable.ConfigurationException;
 import consulo.document.Document;
+import consulo.java.localize.JavaRefactoringLocalize;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.RefactoringDialog;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.localize.LocalizeValue;
 import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.RecentsManager;
 import consulo.ui.ex.awt.ComboboxWithBrowseButton;
 import consulo.ui.ex.awt.UIUtil;
@@ -52,7 +54,6 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
@@ -89,8 +90,9 @@ public class IntroduceParameterObjectDialog extends RefactoringDialog {
     public IntroduceParameterObjectDialog(PsiMethod sourceMethod) {
         super(sourceMethod.getProject(), true);
         this.sourceMethod = sourceMethod;
-        setTitle(RefactorJBundle.message("introduce.parameter.object.title"));
+        setTitle(JavaRefactoringLocalize.introduceParameterObjectTitle());
         final DocumentListener docListener = new DocumentAdapter() {
+            @Override
             protected void textChanged(final DocumentEvent e) {
                 validateButtons();
             }
@@ -124,19 +126,17 @@ public class IntroduceParameterObjectDialog extends RefactoringDialog {
         }
         init();
 
-        final ActionListener listener = new ActionListener() {
-            public void actionPerformed(ActionEvent actionEvent) {
-                toggleRadioEnablement();
-                final IdeFocusManager focusManager = ApplicationIdeFocusManager.getInstance().getInstanceForProject(myProject);
-                if (useExistingClass()) {
-                    focusManager.requestFocus(existingClassField, true);
-                }
-                else if (myCreateInnerClassRadioButton.isSelected()) {
-                    focusManager.requestFocus(myInnerClassNameTextField, true);
-                }
-                else {
-                    focusManager.requestFocus(classNameField, true);
-                }
+        final ActionListener listener = actionEvent -> {
+            toggleRadioEnablement();
+            final IdeFocusManager focusManager = ApplicationIdeFocusManager.getInstance().getInstanceForProject(myProject);
+            if (useExistingClass()) {
+                focusManager.requestFocus(existingClassField, true);
+            }
+            else if (myCreateInnerClassRadioButton.isSelected()) {
+                focusManager.requestFocus(myInnerClassNameTextField, true);
+            }
+            else {
+                focusManager.requestFocus(classNameField, true);
             }
         };
         useExistingClassButton.addActionListener(listener);
@@ -155,10 +155,12 @@ public class IntroduceParameterObjectDialog extends RefactoringDialog {
         enableGenerateAccessors();
     }
 
+    @Override
     protected String getDimensionServiceKey() {
         return "RefactorJ.IntroduceParameterObject";
     }
 
+    @Override
     protected void doAction() {
         final boolean useExistingClass = useExistingClass();
         final boolean keepMethod = keepMethodAsDelegate();
@@ -178,7 +180,7 @@ public class IntroduceParameterObjectDialog extends RefactoringDialog {
             packageName = getPackageName();
             className = getClassName();
         }
-        List<VariableData> parameters = new ArrayList<VariableData>();
+        List<VariableData> parameters = new ArrayList<>();
         for (VariableData data : parameterInfo) {
             if (data.passAsParameter) {
                 parameters.add(data);
@@ -209,35 +211,35 @@ public class IntroduceParameterObjectDialog extends RefactoringDialog {
 
         final List<PsiParameter> parametersToExtract = getParametersToExtract();
         if (parametersToExtract.isEmpty()) {
-            throw new ConfigurationException("Nothing found to extract");
+            throw new ConfigurationException(LocalizeValue.localizeTODO("Nothing found to extract"));
         }
         if (myCreateInnerClassRadioButton.isSelected()) {
             final String innerClassName = getInnerClassName().trim();
             if (!nameHelper.isIdentifier(innerClassName)) {
-                throw new ConfigurationException("\'" + innerClassName + "\' is invalid inner class name");
+                throw new ConfigurationException(LocalizeValue.localizeTODO("\'" + innerClassName + "\' is invalid inner class name"));
             }
             if (sourceMethod.getContainingClass().findInnerClassByName(innerClassName, false) != null) {
-                throw new ConfigurationException("Inner class with name \'" + innerClassName + "\' already exist");
+                throw new ConfigurationException(LocalizeValue.localizeTODO("Inner class with name \'" + innerClassName + "\' already exist"));
             }
         }
         else if (!useExistingClass()) {
             final String className = getClassName();
             if (className.length() == 0 || !nameHelper.isIdentifier(className)) {
-                throw new ConfigurationException("\'" + className + "\' is invalid parameter class name");
+                throw new ConfigurationException(LocalizeValue.localizeTODO("\'" + className + "\' is invalid parameter class name"));
             }
             final String packageName = getPackageName();
 
             if (packageName.length() == 0 || !nameHelper.isQualifiedName(packageName)) {
-                throw new ConfigurationException("\'" + packageName + "\' is invalid parameter class package name");
+                throw new ConfigurationException(LocalizeValue.localizeTODO("\'" + packageName + "\' is invalid parameter class package name"));
             }
         }
         else {
             final String className = getExistingClassName();
             if (className.length() == 0 || !nameHelper.isQualifiedName(className)) {
-                throw new ConfigurationException("\'" + className + "\' is invalid qualified parameter class name");
+                throw new ConfigurationException(LocalizeValue.localizeTODO("\'" + className + "\' is invalid qualified parameter class name"));
             }
             if (JavaPsiFacade.getInstance(getProject()).findClass(className, GlobalSearchScope.allScope(getProject())) == null) {
-                throw new ConfigurationException("\'" + className + "\' does not exist");
+                throw new ConfigurationException(LocalizeValue.localizeTODO("\'" + className + "\' does not exist"));
             }
         }
     }
@@ -263,7 +265,7 @@ public class IntroduceParameterObjectDialog extends RefactoringDialog {
 
     @Nonnull
     public List<PsiParameter> getParametersToExtract() {
-        final List<PsiParameter> out = new ArrayList<PsiParameter>();
+        final List<PsiParameter> out = new ArrayList<>();
         for (VariableData info : parameterInfo) {
             if (info.passAsParameter) {
                 out.add((PsiParameter)info.variable);
@@ -272,15 +274,19 @@ public class IntroduceParameterObjectDialog extends RefactoringDialog {
         return out;
     }
 
+    @Override
     protected JComponent createCenterPanel() {
         sourceMethodTextField.setEditable(false);
         final ParameterTablePanel paramsPanel = new ParameterTablePanel(myProject, parameterInfo, sourceMethod) {
+            @Override
             protected void updateSignature() {
             }
 
+            @Override
             protected void doEnterAction() {
             }
 
+            @Override
             protected void doCancelAction() {
                 IntroduceParameterObjectDialog.this.doCancelAction();
             }
@@ -289,10 +295,14 @@ public class IntroduceParameterObjectDialog extends RefactoringDialog {
         return myWholePanel;
     }
 
+    @Override
+    @RequiredUIAccess
     public JComponent getPreferredFocusedComponent() {
         return classNameField;
     }
 
+    @Override
+    @RequiredUIAccess
     protected void doHelpAction() {
         final HelpManager helpManager = HelpManager.getInstance();
         helpManager.invokeHelp(HelpID.IntroduceParameterObject);
@@ -316,18 +326,19 @@ public class IntroduceParameterObjectDialog extends RefactoringDialog {
         );
         final Document document = packageTextField.getChildComponent().getDocument();
         final consulo.document.event.DocumentAdapter adapter = new consulo.document.event.DocumentAdapter() {
+            @Override
             public void documentChanged(consulo.document.event.DocumentEvent e) {
                 validateButtons();
             }
         };
         document.addDocumentListener(adapter);
 
-        existingClassField = new ReferenceEditorComboWithBrowseButton(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        existingClassField = new ReferenceEditorComboWithBrowseButton(
+            e -> {
                 final Project project = sourceMethod.getProject();
                 final GlobalSearchScope scope = GlobalSearchScope.allScope(project);
                 final TreeJavaClassChooserDialog chooser =
-                    new TreeJavaClassChooserDialog(RefactorJBundle.message("select.wrapper.class"), project, scope, null, null);
+                    new TreeJavaClassChooserDialog(JavaRefactoringLocalize.selectWrapperClass().get(), project, scope, null, null);
                 final String classText = existingClassField.getText();
                 final PsiClass currentClass = JavaPsiFacade.getInstance(project).findClass(classText, GlobalSearchScope.allScope(project));
                 if (currentClass != null) {
@@ -340,8 +351,12 @@ public class IntroduceParameterObjectDialog extends RefactoringDialog {
                     existingClassField.setText(className);
                     RecentsManager.getInstance(myProject).registerRecentEntry(EXISTING_KEY, className);
                 }
-            }
-        }, "", myProject, true, EXISTING_KEY);
+            },
+            "",
+            myProject,
+            true,
+            EXISTING_KEY
+        );
 
         existingClassField.getChildComponent().getDocument().addDocumentListener(new consulo.document.event.DocumentAdapter() {
             @Override

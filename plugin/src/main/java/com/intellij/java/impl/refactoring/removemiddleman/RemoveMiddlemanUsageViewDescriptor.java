@@ -15,10 +15,9 @@
  */
 package com.intellij.java.impl.refactoring.removemiddleman;
 
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiField;
-import com.intellij.java.impl.refactoring.RefactorJBundle;
-import com.intellij.java.impl.refactoring.psi.MyUsageViewUtil;
+import consulo.java.localize.JavaRefactoringLocalize;
+import consulo.language.psi.PsiElement;
 import consulo.usage.UsageViewDescriptor;
 import jakarta.annotation.Nonnull;
 
@@ -31,21 +30,23 @@ class RemoveMiddlemanUsageViewDescriptor implements UsageViewDescriptor {
         this.field = field;
     }
 
+    @Override
     public String getCodeReferencesText(int usagesCount, int filesCount) {
-        return RefactorJBundle.message(
-            "references.to.expose.usage.view",
-            MyUsageViewUtil.getUsageCountInfo(usagesCount, filesCount, "reference")
-        );
+        return JavaRefactoringLocalize.referencesToExposeUsageView(usagesCount, filesCount).get();
     }
 
+    @Override
     public String getProcessedElementsHeader() {
-        return RefactorJBundle.message("remove.middleman.field.header");
+        return JavaRefactoringLocalize.removeMiddlemanFieldHeader().get();
     }
 
+    @Nonnull
+    @Override
     public PsiElement[] getElements() {
         return new PsiElement[]{field};
     }
 
+    @Override
     public String getCommentReferencesText(int usagesCount, int filesCount) {
         return null;
     }

@@ -16,9 +16,8 @@
 package com.intellij.java.impl.refactoring.extractclass;
 
 import com.intellij.java.language.psi.PsiClass;
+import consulo.java.localize.JavaRefactoringLocalize;
 import consulo.language.psi.PsiElement;
-import com.intellij.java.impl.refactoring.RefactorJBundle;
-import com.intellij.java.impl.refactoring.psi.MyUsageViewUtil;
 import consulo.usage.UsageViewDescriptor;
 import jakarta.annotation.Nonnull;
 
@@ -30,20 +29,23 @@ class ExtractClassUsageViewDescriptor implements UsageViewDescriptor {
         this.aClass = aClass;
     }
 
-
+    @Override
     public String getCodeReferencesText(int usagesCount, int filesCount) {
-        return RefactorJBundle.message("references.to.extract") + MyUsageViewUtil.getUsageCountInfo(usagesCount, filesCount, "reference");
+        return JavaRefactoringLocalize.referencesToExtract(usagesCount, filesCount).get();
     }
 
+    @Override
     public String getProcessedElementsHeader() {
-        return RefactorJBundle.message("extracting.from.class");
+        return JavaRefactoringLocalize.extractingFromClass().get();
     }
 
     @Nonnull
+    @Override
     public PsiElement[] getElements() {
         return new PsiElement[]{aClass};
     }
 
+    @Override
     public String getCommentReferencesText(int usagesCount, int filesCount) {
         return null;
     }

@@ -2,7 +2,6 @@
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.rangeSet;
 
 import com.intellij.java.language.codeInsight.AnnotationUtil;
-import com.intellij.java.analysis.JavaAnalysisBundle;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.RelationType;
 import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiModifierListOwner;

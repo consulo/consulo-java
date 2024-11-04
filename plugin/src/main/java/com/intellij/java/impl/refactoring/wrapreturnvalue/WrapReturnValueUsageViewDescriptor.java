@@ -15,10 +15,9 @@
  */
 package com.intellij.java.impl.refactoring.wrapreturnvalue;
 
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.impl.refactoring.RefactorJBundle;
-import com.intellij.java.impl.refactoring.psi.MyUsageViewUtil;
+import consulo.java.localize.JavaRefactoringLocalize;
+import consulo.language.psi.PsiElement;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
 import jakarta.annotation.Nonnull;
@@ -32,21 +31,23 @@ class WrapReturnValueUsageViewDescriptor implements UsageViewDescriptor {
         this.method = method;
     }
 
+    @Nonnull
+    @Override
     public PsiElement[] getElements() {
         return new PsiElement[]{method};
     }
 
+    @Override
     public String getProcessedElementsHeader() {
-        return RefactorJBundle.message("method.whose.return.are.to.wrapped");
+        return JavaRefactoringLocalize.methodWhoseReturnAreToWrapped().get();
     }
 
+    @Override
     public String getCodeReferencesText(int usagesCount, int filesCount) {
-        return RefactorJBundle.message(
-            "references.to.be.modified.usage.view",
-            MyUsageViewUtil.getUsageCountInfo(usagesCount, filesCount, RefactorJBundle.message("reference"))
-        );
+        return JavaRefactoringLocalize.referencesToBeModifiedUsageView(usagesCount, filesCount).get();
     }
 
+    @Override
     public String getCommentReferencesText(int usagesCount, int filesCount) {
         return null;
     }

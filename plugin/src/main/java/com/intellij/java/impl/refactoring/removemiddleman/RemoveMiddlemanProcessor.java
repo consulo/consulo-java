@@ -16,25 +16,26 @@
 package com.intellij.java.impl.refactoring.removemiddleman;
 
 import com.intellij.java.impl.codeInsight.generation.GenerateMembersUtil;
-import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.util.lang.ref.Ref;
-import consulo.language.psi.*;
-import consulo.language.psi.util.SymbolPresentationUtil;
-import consulo.language.psi.search.ReferencesSearch;
-import com.intellij.java.language.psi.util.PropertyUtil;
-import com.intellij.java.impl.refactoring.RefactorJBundle;
 import com.intellij.java.impl.refactoring.removemiddleman.usageInfo.DeleteMethod;
 import com.intellij.java.impl.refactoring.removemiddleman.usageInfo.InlineDelegatingCall;
 import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
 import com.intellij.java.impl.refactoring.util.FixableUsagesRefactoringProcessor;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PropertyUtil;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.java.localize.JavaRefactoringLocalize;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.SymbolPresentationUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
-import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.MultiMap;
-import consulo.logging.Logger;
-
+import consulo.util.lang.ref.Ref;
 import jakarta.annotation.Nonnull;
 
 import java.util.List;
@@ -58,18 +59,19 @@ public class RemoveMiddlemanProcessor extends FixableUsagesRefactoringProcessor 
     }
 
     @Nonnull
-    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usageInfos) {
+    @Override
+    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usageInfos) {
         return new RemoveMiddlemanUsageViewDescriptor(field);
     }
 
-
+    @Override
+    @RequiredReadAction
     public void findUsages(@Nonnull List<FixableUsageInfo> usages) {
         for (final MemberInfo memberInfo : myDelegateMethodInfos) {
             if (!memberInfo.isChecked()) {
                 continue;
             }
             final PsiMethod method = (PsiMethod)memberInfo.getMember();
-            final Project project = method.getProject();
             final String getterName = PropertyUtil.suggestGetterName(field);
             final int[] paramPermutation = DelegationUtils.getParameterPermutation(method);
             final PsiMethod delegatedMethod = DelegationUtils.getDelegatedMethod(method);
@@ -79,22 +81,24 @@ public class RemoveMiddlemanProcessor extends FixableUsagesRefactoringProcessor 
     }
 
     @Override
-    protected boolean preprocessUsages(final Ref<UsageInfo[]> refUsages) {
-        final MultiMap<PsiElement, String> conflicts = new MultiMap<PsiElement, String>();
+    @RequiredUIAccess
+    protected boolean preprocessUsages(@Nonnull final Ref<UsageInfo[]> refUsages) {
+        final MultiMap<PsiElement, String> conflicts = new MultiMap<>();
         for (MemberInfo memberInfo : myDelegateMethodInfos) {
-            if (memberInfo.isChecked() && memberInfo.isToAbstract()) {
-                final PsiMember psiMember = memberInfo.getMember();
-                if (psiMember instanceof PsiMethod && ((PsiMethod)psiMember).findDeepestSuperMethods().length > 0) {
-                    conflicts.putValue(
-                        psiMember,
-                        SymbolPresentationUtil.getSymbolPresentableText(psiMember) + " will be deleted. Hierarchy will be broken"
-                    );
-                }
+            if (memberInfo.isChecked() && memberInfo.isToAbstract()
+                && memberInfo.getMember() instanceof PsiMethod method && method.findDeepestSuperMethods().length > 0) {
+                conflicts.putValue(
+                    method,
+                    JavaRefactoringLocalize.removeMiddlemanDeletedHierarchyConflict(
+                        SymbolPresentationUtil.getSymbolPresentableText(method)
+                    ).get()
+                );
             }
         }
         return showConflicts(conflicts, refUsages.get());
     }
 
+    @RequiredReadAction
     private void processUsagesForMethod(
         final boolean deleteMethodHierarchy,
         PsiMethod method,
@@ -104,9 +108,9 @@ public class RemoveMiddlemanProcessor extends FixableUsagesRefactoringProcessor 
         List<FixableUsageInfo> usages
     ) {
         for (PsiReference reference : ReferencesSearch.search(method)) {
-            final PsiElement referenceElement = reference.getElement();
-            final PsiMethodCallExpression call = (PsiMethodCallExpression)referenceElement.getParent();
-            final String access;
+            PsiElement referenceElement = reference.getElement();
+            PsiMethodCallExpression call = (PsiMethodCallExpression)referenceElement.getParent();
+            String access;
             if (call.getMethodExpression().getQualifierExpression() == null) {
                 access = field.getName();
             }
@@ -123,6 +127,7 @@ public class RemoveMiddlemanProcessor extends FixableUsagesRefactoringProcessor 
         }
     }
 
+    @Override
     protected void performRefactoring(UsageInfo[] usageInfos) {
         if (getter != null) {
             try {
@@ -138,7 +143,10 @@ public class RemoveMiddlemanProcessor extends FixableUsagesRefactoringProcessor 
         super.performRefactoring(usageInfos);
     }
 
+    @Nonnull
+    @Override
+    @RequiredReadAction
     protected String getCommandName() {
-        return RefactorJBundle.message("exposed.delegation.command.name", containingClass.getName(), '.', field.getName());
+        return JavaRefactoringLocalize.exposedDelegationCommandName(containingClass.getName(), '.', field.getName()).get();
     }
 }

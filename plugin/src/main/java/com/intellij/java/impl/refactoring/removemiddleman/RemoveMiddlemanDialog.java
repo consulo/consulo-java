@@ -15,19 +15,20 @@
  */
 package com.intellij.java.impl.refactoring.removemiddleman;
 
-import consulo.application.HelpManager;
+import com.intellij.java.impl.refactoring.HelpID;
+import com.intellij.java.impl.refactoring.ui.MemberSelectionPanel;
+import com.intellij.java.impl.refactoring.ui.MemberSelectionTable;
+import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import com.intellij.java.language.psi.PsiField;
-import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import com.intellij.java.impl.refactoring.HelpID;
-import com.intellij.java.impl.refactoring.RefactorJBundle;
+import consulo.application.HelpManager;
+import consulo.java.localize.JavaRefactoringLocalize;
 import consulo.language.editor.refactoring.classMember.DelegatingMemberInfoModel;
-import com.intellij.java.impl.refactoring.ui.MemberSelectionPanel;
-import com.intellij.java.impl.refactoring.ui.MemberSelectionTable;
 import consulo.language.editor.refactoring.ui.RefactoringDialog;
-import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
+import consulo.localize.LocalizeValue;
+import consulo.ui.annotation.RequiredUIAccess;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
@@ -51,20 +52,26 @@ public class RemoveMiddlemanDialog extends RefactoringDialog {
         fieldNameLabel.setText(
             PsiFormatUtil.formatVariable(myField, PsiFormatUtil.SHOW_TYPE | PsiFormatUtil.SHOW_NAME, PsiSubstitutor.EMPTY)
         );
-        setTitle(RefactorJBundle.message("remove.middleman.title"));
+        setTitle(JavaRefactoringLocalize.removeMiddlemanTitle());
         init();
     }
 
+    @Override
     protected String getDimensionServiceKey() {
         return "RefactorJ.RemoveMiddleman";
     }
 
+    @Override
     protected JComponent createCenterPanel() {
         final JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(10, 0, 5, 0));
-        final MemberSelectionPanel selectionPanel = new MemberSelectionPanel("&Methods to inline", delegateMethods, "Delete");
+        final MemberSelectionPanel selectionPanel = new MemberSelectionPanel(
+            JavaRefactoringLocalize.removeMiddlemanMethodsToInlineTitle().get(),
+            delegateMethods,
+            JavaRefactoringLocalize.removeMiddlemanColumnHeader().get()
+        );
         final MemberSelectionTable table = selectionPanel.getTable();
-        table.setMemberInfoModel(new DelegatingMemberInfoModel<PsiMember, MemberInfo>(table.getMemberInfoModel()) {
+        table.setMemberInfoModel(new DelegatingMemberInfoModel<>(table.getMemberInfoModel()) {
             @Override
             public int checkForProblems(@Nonnull final MemberInfo member) {
                 return hasSuperMethods(member) ? ERROR : OK;
@@ -72,38 +79,37 @@ public class RemoveMiddlemanDialog extends RefactoringDialog {
 
             @Override
             public String getTooltipText(final MemberInfo member) {
-                if (hasSuperMethods(member)) {
-                    return "Deletion will break type hierarchy";
-                }
-                return super.getTooltipText(member);
+                return hasSuperMethods(member)
+                    ? JavaRefactoringLocalize.removeMiddlemanTooltipWarning().get()
+                    : super.getTooltipText(member);
             }
 
             private boolean hasSuperMethods(final MemberInfo member) {
-                if (member.isChecked() && member.isToAbstract()) {
-                    final PsiMember psiMember = member.getMember();
-                    if (psiMember instanceof PsiMethod && ((PsiMethod)psiMember).findDeepestSuperMethods().length > 0) {
-                        return true;
-                    }
-                }
-                return false;
+                return member.isChecked() && member.isToAbstract()
+                    && member.getMember() instanceof PsiMethod method
+                    && method.findDeepestSuperMethods().length > 0;
             }
         });
         panel.add(selectionPanel, BorderLayout.CENTER);
         return panel;
     }
 
+    @Override
     protected JComponent createNorthPanel() {
         fieldNameLabel.setEditable(false);
         final JPanel sourceClassPanel = new JPanel(new BorderLayout());
-        sourceClassPanel.add(new JLabel("Delegating field"), BorderLayout.NORTH);
+        sourceClassPanel.add(new JLabel(LocalizeValue.localizeTODO("Delegating field").get()), BorderLayout.NORTH);
         sourceClassPanel.add(fieldNameLabel, BorderLayout.CENTER);
         return sourceClassPanel;
     }
 
+    @Override
+    @RequiredUIAccess
     protected void doHelpAction() {
         HelpManager.getInstance().invokeHelp(HelpID.RemoveMiddleman);
     }
 
+    @Override
     protected void doAction() {
         invokeRefactoring(new RemoveMiddlemanProcessor(myField, delegateMethods));
     }

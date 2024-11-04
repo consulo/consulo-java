@@ -15,27 +15,28 @@
  */
 package com.intellij.java.impl.refactoring.extractclass;
 
-import jakarta.annotation.Nonnull;
-
+import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
-import consulo.dataContext.DataContext;
 import consulo.codeEditor.CaretModel;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.codeEditor.ScrollingModel;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.impl.refactoring.HelpID;
-import com.intellij.java.impl.refactoring.RefactorJBundle;
+import consulo.dataContext.DataContext;
+import consulo.java.localize.JavaRefactoringLocalize;
 import consulo.language.editor.refactoring.ElementsHandler;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
+import jakarta.annotation.Nonnull;
 
 public class ExtractClassHandler implements ElementsHandler {
-
     protected static String getHelpID() {
         return HelpID.ExtractClass;
     }
@@ -45,6 +46,8 @@ public class ExtractClassHandler implements ElementsHandler {
         return elements.length == 1 && PsiTreeUtil.getParentOfType(elements[0], PsiClass.class, false) != null;
     }
 
+    @Override
+    @RequiredUIAccess
     public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
         final ScrollingModel scrollingModel = editor.getScrollingModel();
         scrollingModel.scrollToCaret(ScrollType.MAKE_VISIBLE);
@@ -60,16 +63,17 @@ public class ExtractClassHandler implements ElementsHandler {
 
         PsiClass containingClass = selectedMember.getContainingClass();
 
-        if (containingClass == null && selectedMember instanceof PsiClass) {
-            containingClass = (PsiClass)selectedMember;
+        if (containingClass == null && selectedMember instanceof PsiClass selectedClass) {
+            containingClass = selectedClass;
         }
 
         if (containingClass == null) {
             CommonRefactoringUtil.showErrorHint(
                 project,
                 editor,
-                RefactorJBundle.message("cannot.perform.the.refactoring") + RefactorJBundle.message(
-                    "the.caret.should.be.positioned.within.a.class.to.be.refactored"),
+                RefactoringLocalize.cannotPerformRefactoringWithReason(
+                    JavaRefactoringLocalize.theCaretShouldBePositionedWithinAClassToBeRefactored()
+                ).get(),
                 null,
                 getHelpID()
             );
@@ -79,7 +83,7 @@ public class ExtractClassHandler implements ElementsHandler {
             CommonRefactoringUtil.showErrorHint(
                 project,
                 editor,
-                RefactorJBundle.message("cannot.perform.the.refactoring") + RefactorJBundle.message("the.selected.class.is.an.interface"),
+                RefactoringLocalize.cannotPerformRefactoringWithReason(JavaRefactoringLocalize.theSelectedClassIsAnInterface()).get(),
                 null,
                 getHelpID()
             );
@@ -89,7 +93,7 @@ public class ExtractClassHandler implements ElementsHandler {
             CommonRefactoringUtil.showErrorHint(
                 project,
                 editor,
-                RefactorJBundle.message("cannot.perform.the.refactoring") + RefactorJBundle.message("the.selected.class.is.an.enumeration"),
+                RefactoringLocalize.cannotPerformRefactoringWithReason(JavaRefactoringLocalize.theSelectedClassIsAnEnumeration()).get(),
                 null,
                 getHelpID()
             );
@@ -99,19 +103,19 @@ public class ExtractClassHandler implements ElementsHandler {
             CommonRefactoringUtil.showErrorHint(
                 project,
                 editor,
-                RefactorJBundle.message("cannot.perform.the.refactoring") + RefactorJBundle.message(
-                    "the.selected.class.is.an.annotation.type"),
+                RefactoringLocalize.cannotPerformRefactoringWithReason(JavaRefactoringLocalize.theSelectedClassIsAnAnnotationType()).get(),
                 null,
                 getHelpID()
             );
             return;
         }
-        if (classIsInner(containingClass) && !containingClass.hasModifierProperty(PsiModifier.STATIC)) {
+        if (classIsInner(containingClass) && !containingClass.isStatic()) {
             CommonRefactoringUtil.showErrorHint(
                 project,
                 editor,
-                RefactorJBundle.message("cannot.perform.the.refactoring") + RefactorJBundle.message(
-                    "the.refactoring.is.not.supported.on.non.static.inner.classes"),
+                RefactoringLocalize.cannotPerformRefactoringWithReason(
+                    JavaRefactoringLocalize.theRefactoringIsNotSupportedOnNonStaticInnerClasses()
+                ).get(),
                 null,
                 getHelpID()
             );
@@ -121,8 +125,9 @@ public class ExtractClassHandler implements ElementsHandler {
             CommonRefactoringUtil.showErrorHint(
                 project,
                 editor,
-                RefactorJBundle.message("cannot.perform.the.refactoring") + RefactorJBundle.message(
-                    "the.selected.class.has.no.members.to.extract"),
+                RefactoringLocalize.cannotPerformRefactoringWithReason(
+                    JavaRefactoringLocalize.theSelectedClassHasNoMembersToExtract()
+                ).get(),
                 null,
                 getHelpID()
             );
@@ -135,6 +140,8 @@ public class ExtractClassHandler implements ElementsHandler {
         return PsiTreeUtil.getParentOfType(aClass, PsiClass.class, true) != null;
     }
 
+    @Override
+    @RequiredUIAccess
     public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
         if (elements.length != 1) {
             return;
