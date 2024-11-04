@@ -1,17 +1,17 @@
 // Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
-import com.intellij.java.analysis.JavaAnalysisBundle;
 import com.intellij.java.language.psi.*;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.MethodCallUtils;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.java.analysis.localize.JavaAnalysisLocalize;
 import consulo.util.lang.ObjectUtil;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import one.util.streamex.IntStreamEx;
 import one.util.streamex.StreamEx;
-
-import jakarta.annotation.Nullable;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -105,8 +105,9 @@ public final class MutationSignature {
         if ((this == UNKNOWN) != (obj == UNKNOWN)) {
             return false;
         }
-        return obj instanceof MutationSignature && ((MutationSignature)obj).myThis == myThis &&
-            Arrays.equals(((MutationSignature)obj).myParameters, myParameters);
+        return obj instanceof MutationSignature mutationSignature
+            && mutationSignature.myThis == myThis
+            && Arrays.equals(mutationSignature.myParameters, myParameters);
     }
 
     @Override
@@ -129,6 +130,7 @@ public final class MutationSignature {
      * @return a stream of expressions which are mutated by this call. If qualifier is omitted, but mutated,
      * a non-physical {@link PsiThisExpression} might be returned.
      */
+    @RequiredReadAction
     public Stream<PsiExpression> mutatedExpressions(PsiMethodCallExpression call) {
         PsiExpression[] args = call.getArgumentList().getExpressions();
         StreamEx<PsiExpression> elements =
@@ -185,7 +187,7 @@ public final class MutationSignature {
             else if (part.startsWith("param")) {
                 int argNum = Integer.parseInt(part.substring("param".length()));
                 if (argNum < 0 || argNum > 255) {
-                    throw new IllegalArgumentException(JavaAnalysisBundle.message("mutation.signature.problem.invalid.token", part));
+                    throw new IllegalArgumentException(JavaAnalysisLocalize.mutationSignatureProblemInvalidToken(part).get());
                 }
                 if (args.length < argNum) {
                     args = Arrays.copyOf(args, argNum);
@@ -193,7 +195,7 @@ public final class MutationSignature {
                 args[argNum - 1] = true;
             }
             else if (!part.isEmpty()) {
-                throw new IllegalArgumentException(JavaAnalysisBundle.message("mutation.signature.problem.invalid.token", part));
+                throw new IllegalArgumentException(JavaAnalysisLocalize.mutationSignatureProblemInvalidToken(part).get());
             }
         }
         return new MutationSignature(mutatesThis, args);
@@ -211,21 +213,18 @@ public final class MutationSignature {
         try {
             MutationSignature ms = parse(signature);
             if (ms.myThis && method.hasModifierProperty(PsiModifier.STATIC)) {
-                return JavaAnalysisBundle.message("mutation.signature.problem.static.method.cannot.mutate.this");
+                return JavaAnalysisLocalize.mutationSignatureProblemStaticMethodCannotMutateThis().get();
             }
             PsiParameter[] parameters = method.getParameterList().getParameters();
             if (ms.myParameters.length > parameters.length) {
-                return JavaAnalysisBundle.message("mutation.signature.problem.reference.to.parameter.invalid", ms.myParameters.length);
+                return JavaAnalysisLocalize.mutationSignatureProblemReferenceToParameterInvalid(ms.myParameters.length).get();
             }
             for (int i = 0; i < ms.myParameters.length; i++) {
                 if (ms.myParameters[i]) {
                     PsiType type = parameters[i].getType();
                     if (ClassUtils.isImmutable(type)) {
-                        return JavaAnalysisBundle.message(
-                            "mutation.signature.problem.parameter.has.immutable.type",
-                            i + 1,
-                            type.getPresentableText()
-                        );
+                        return JavaAnalysisLocalize.mutationSignatureProblemParameterHasImmutableType(i + 1, type.getPresentableText())
+                            .get();
                     }
                 }
             }
@@ -236,18 +235,17 @@ public final class MutationSignature {
         return null;
     }
 
-    public static
     @Nonnull
-    MutationSignature fromMethod(@Nullable PsiMethod method) {
+    public static MutationSignature fromMethod(@Nullable PsiMethod method) {
         if (method == null) {
             return UNKNOWN;
         }
         return JavaMethodContractUtil.getContractInfo(method).getMutationSignature();
     }
 
-    public static
     @Nonnull
-    MutationSignature fromCall(@Nullable PsiCall call) {
+    @RequiredReadAction
+    public static MutationSignature fromCall(@Nullable PsiCall call) {
         if (call == null) {
             return UNKNOWN;
         }
