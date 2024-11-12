@@ -190,7 +190,7 @@ method.to.wrap.returns.from.label:
 method.whose.return.are.to.wrapped:
   text: Method whose return are to wrapped
 references.to.be.modified.usage.view:
-  text: References to be modified {0}
+  text: "References to be modified {0, choice, 0#(Not found)|1#{0} reference|2#{0} references}{1, choice, 0#|1# in {1} file|2# in {1} files}"
 reference:
   text: reference
 type.parameter.to.be.remove:
@@ -204,7 +204,7 @@ property.to.be.removed:
 remove.middleman.field.header:
   text: 'Remove middleman field:'
 references.to.expose.usage.view:
-  text: References to expose {0}
+  text: References to expose {0, choice, 0#(Not found)|1#{0} reference|2#{0} references}{1, choice, 0#|1# in {1} file|2# in {1} files}
 retain.all.delegating.methods.radio.button:
   text: Retain all delegating methods
 remove.middleman.title:
@@ -390,7 +390,7 @@ the.refactoring.is.not.supported.on.non.static.inner.classes:
 the.selected.class.has.no.members.to.extract:
   text: The selected class has no members to extract.
 references.to.extract:
-  text: References to extract
+  text: References to extract ({0, choice, 0#(Not found)|1#{0} reference|2#{0} references}{1, choice, 0#|1# in {1} file|2# in {1} files})
 extracting.from.class:
   text: 'Extracting from class:'
 extracted.class.command.name:
@@ -502,3 +502,11 @@ extract.class.depends.on.0.from.1.tooltip:
   text: "Depends on {0} from {1}"
 extract.class.depends.on.0.from.new.class:
   text: "Depends on {0} from new class {1}"
+remove.middleman.tooltip.warning:
+  text: "Deletion will break type hierarchy"
+remove.middleman.column.header:
+  text: "Delete"
+remove.middleman.methods.to.inline.title:
+  text: "&Methods to Inline"
+remove.middleman.deleted.hierarchy.conflict:
+  text: "{0} will be deleted. Hierarchy will be broken"

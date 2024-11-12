@@ -15,117 +15,162 @@
  */
 package com.intellij.java.impl.refactoring.extractclass;
 
-import jakarta.annotation.Nonnull;
-
+import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
-import consulo.dataContext.DataContext;
 import consulo.codeEditor.CaretModel;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.codeEditor.ScrollingModel;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.impl.refactoring.HelpID;
-import com.intellij.java.impl.refactoring.RefactorJBundle;
+import consulo.dataContext.DataContext;
+import consulo.java.localize.JavaRefactoringLocalize;
 import consulo.language.editor.refactoring.ElementsHandler;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
+import jakarta.annotation.Nonnull;
 
 public class ExtractClassHandler implements ElementsHandler {
-
-  protected static String getHelpID() {
-    return HelpID.ExtractClass;
-  }
-
-  @Override
-  public boolean isEnabledOnElements(PsiElement[] elements) {
-    return elements.length == 1 && PsiTreeUtil.getParentOfType(elements[0], PsiClass.class, false) != null;
-  }
-
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
-    final ScrollingModel scrollingModel = editor.getScrollingModel();
-    scrollingModel.scrollToCaret(ScrollType.MAKE_VISIBLE);
-    final CaretModel caretModel = editor.getCaretModel();
-    final int position = caretModel.getOffset();
-    final PsiElement element = file.findElementAt(position);
-
-    final PsiMember selectedMember = PsiTreeUtil.getParentOfType(element, PsiMember.class, true);
-    if (selectedMember == null) {
-      //todo
-      return;
-    }
-    
-    PsiClass containingClass = selectedMember.getContainingClass();
-
-    if (containingClass == null && selectedMember instanceof PsiClass) {
-      containingClass = (PsiClass)selectedMember;
+    protected static String getHelpID() {
+        return HelpID.ExtractClass;
     }
 
-    if (containingClass == null) {
-      CommonRefactoringUtil.showErrorHint(project, editor, RefactorJBundle.message("cannot.perform.the.refactoring") + RefactorJBundle.message("the.caret.should.be.positioned.within.a.class.to.be.refactored"),
-                                          null, getHelpID());
-      return;
+    @Override
+    public boolean isEnabledOnElements(PsiElement[] elements) {
+        return elements.length == 1 && PsiTreeUtil.getParentOfType(elements[0], PsiClass.class, false) != null;
     }
-    if (containingClass.isInterface()) {
-      CommonRefactoringUtil.showErrorHint(project, editor, RefactorJBundle.message("cannot.perform.the.refactoring") + RefactorJBundle.message("the.selected.class.is.an.interface"), null,
-                                          getHelpID());
-      return;
-    }
-    if (containingClass.isEnum()) {
-      CommonRefactoringUtil.showErrorHint(project, editor, RefactorJBundle.message("cannot.perform.the.refactoring") + RefactorJBundle.message("the.selected.class.is.an.enumeration"), null,
-                                          getHelpID());
-      return;
-    }
-    if (containingClass.isAnnotationType()) {
-      CommonRefactoringUtil.showErrorHint(project, editor, RefactorJBundle.message("cannot.perform.the.refactoring") + RefactorJBundle.message("the.selected.class.is.an.annotation.type"), null,
-                                          getHelpID());
-      return;
-    }
-    if (classIsInner(containingClass) && !containingClass.hasModifierProperty(PsiModifier.STATIC)) {
-      CommonRefactoringUtil.showErrorHint(project, editor, RefactorJBundle.message("cannot.perform.the.refactoring") + RefactorJBundle.message("the.refactoring.is.not.supported.on.non.static.inner.classes"),
-                                          null, getHelpID());
-      return;
-    }
-    if (classIsTrivial(containingClass)) {
-      CommonRefactoringUtil.showErrorHint(project, editor, RefactorJBundle.message("cannot.perform.the.refactoring") + RefactorJBundle.message("the.selected.class.has.no.members.to.extract"), null,
-                                          getHelpID());
-      return;
-    }
-    new ExtractClassDialog(containingClass, selectedMember).show();
-  }
 
-  private static boolean classIsInner(PsiClass aClass) {
-    return PsiTreeUtil.getParentOfType(aClass, PsiClass.class, true) != null;
-  }
+    @Override
+    @RequiredUIAccess
+    public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+        final ScrollingModel scrollingModel = editor.getScrollingModel();
+        scrollingModel.scrollToCaret(ScrollType.MAKE_VISIBLE);
+        final CaretModel caretModel = editor.getCaretModel();
+        final int position = caretModel.getOffset();
+        final PsiElement element = file.findElementAt(position);
 
-  public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
-    if (elements.length != 1) {
-      return;
-    }
-    final PsiClass containingClass = PsiTreeUtil.getParentOfType(elements[0], PsiClass.class, false);
+        final PsiMember selectedMember = PsiTreeUtil.getParentOfType(element, PsiMember.class, true);
+        if (selectedMember == null) {
+            //todo
+            return;
+        }
 
-    final PsiMember selectedMember = PsiTreeUtil.getParentOfType(elements[0], PsiMember.class, false);
-    if (containingClass == null) {
-      return;
-    }
-    if (classIsTrivial(containingClass)) {
-      return;
-    }
-    new ExtractClassDialog(containingClass, selectedMember).show();
-  }
+        PsiClass containingClass = selectedMember.getContainingClass();
 
-  private static boolean classIsTrivial(PsiClass containingClass) {
-    if (containingClass.getFields().length == 0) {
-      final PsiMethod[] methods = containingClass.getMethods();
-      if (methods.length == 0) return true;
-      for (PsiMethod method : methods) {
-        if (method.getBody() != null) return false;
-      }
-      return true;
+        if (containingClass == null && selectedMember instanceof PsiClass selectedClass) {
+            containingClass = selectedClass;
+        }
+
+        if (containingClass == null) {
+            CommonRefactoringUtil.showErrorHint(
+                project,
+                editor,
+                RefactoringLocalize.cannotPerformRefactoringWithReason(
+                    JavaRefactoringLocalize.theCaretShouldBePositionedWithinAClassToBeRefactored()
+                ).get(),
+                null,
+                getHelpID()
+            );
+            return;
+        }
+        if (containingClass.isInterface()) {
+            CommonRefactoringUtil.showErrorHint(
+                project,
+                editor,
+                RefactoringLocalize.cannotPerformRefactoringWithReason(JavaRefactoringLocalize.theSelectedClassIsAnInterface()).get(),
+                null,
+                getHelpID()
+            );
+            return;
+        }
+        if (containingClass.isEnum()) {
+            CommonRefactoringUtil.showErrorHint(
+                project,
+                editor,
+                RefactoringLocalize.cannotPerformRefactoringWithReason(JavaRefactoringLocalize.theSelectedClassIsAnEnumeration()).get(),
+                null,
+                getHelpID()
+            );
+            return;
+        }
+        if (containingClass.isAnnotationType()) {
+            CommonRefactoringUtil.showErrorHint(
+                project,
+                editor,
+                RefactoringLocalize.cannotPerformRefactoringWithReason(JavaRefactoringLocalize.theSelectedClassIsAnAnnotationType()).get(),
+                null,
+                getHelpID()
+            );
+            return;
+        }
+        if (classIsInner(containingClass) && !containingClass.isStatic()) {
+            CommonRefactoringUtil.showErrorHint(
+                project,
+                editor,
+                RefactoringLocalize.cannotPerformRefactoringWithReason(
+                    JavaRefactoringLocalize.theRefactoringIsNotSupportedOnNonStaticInnerClasses()
+                ).get(),
+                null,
+                getHelpID()
+            );
+            return;
+        }
+        if (classIsTrivial(containingClass)) {
+            CommonRefactoringUtil.showErrorHint(
+                project,
+                editor,
+                RefactoringLocalize.cannotPerformRefactoringWithReason(
+                    JavaRefactoringLocalize.theSelectedClassHasNoMembersToExtract()
+                ).get(),
+                null,
+                getHelpID()
+            );
+            return;
+        }
+        new ExtractClassDialog(containingClass, selectedMember).show();
     }
-    return false;
-  }
+
+    private static boolean classIsInner(PsiClass aClass) {
+        return PsiTreeUtil.getParentOfType(aClass, PsiClass.class, true) != null;
+    }
+
+    @Override
+    @RequiredUIAccess
+    public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+        if (elements.length != 1) {
+            return;
+        }
+        final PsiClass containingClass = PsiTreeUtil.getParentOfType(elements[0], PsiClass.class, false);
+
+        final PsiMember selectedMember = PsiTreeUtil.getParentOfType(elements[0], PsiMember.class, false);
+        if (containingClass == null) {
+            return;
+        }
+        if (classIsTrivial(containingClass)) {
+            return;
+        }
+        new ExtractClassDialog(containingClass, selectedMember).show();
+    }
+
+    private static boolean classIsTrivial(PsiClass containingClass) {
+        if (containingClass.getFields().length == 0) {
+            final PsiMethod[] methods = containingClass.getMethods();
+            if (methods.length == 0) {
+                return true;
+            }
+            for (PsiMethod method : methods) {
+                if (method.getBody() != null) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
 }

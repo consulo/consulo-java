@@ -15,29 +15,32 @@
  */
 package com.intellij.java.impl.refactoring.introduceparameterobject;
 
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.impl.refactoring.RefactorJBundle;
-import com.intellij.java.impl.refactoring.psi.MyUsageViewUtil;
+import consulo.java.localize.JavaRefactoringLocalize;
 import consulo.language.editor.refactoring.ui.UsageViewDescriptorAdapter;
+import consulo.language.psi.PsiElement;
+import jakarta.annotation.Nonnull;
 
 class IntroduceParameterObjectUsageViewDescriptor extends UsageViewDescriptorAdapter {
-
-   private final PsiMethod method;
+    private final PsiMethod method;
 
     IntroduceParameterObjectUsageViewDescriptor(PsiMethod method) {
+        this.method = method;
+    }
 
-       this.method = method;
-   }
+    @Nonnull
+    @Override
+    public PsiElement[] getElements() {
+        return new PsiElement[]{method};
+    }
 
-   public PsiElement[] getElements() {
-       return new PsiElement[]{method};
-   }
-   public String getProcessedElementsHeader() {
-       return RefactorJBundle.message("method.whose.parameters.are.to.wrapped");
-   }
+    @Override
+    public String getProcessedElementsHeader() {
+        return JavaRefactoringLocalize.methodWhoseParametersAreToWrapped().get();
+    }
 
-   public String getCodeReferencesText(int usagesCount, int filesCount) {
-       return RefactorJBundle.message("references.to.be.modified") + MyUsageViewUtil.getUsageCountInfo(usagesCount, filesCount, "reference");
-   }
+    @Override
+    public String getCodeReferencesText(int usagesCount, int filesCount) {
+        return JavaRefactoringLocalize.referencesToBeModifiedUsageView(usagesCount, filesCount).get();
+    }
 }

@@ -2,13 +2,14 @@
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.rangeSet;
 
 import com.intellij.java.language.codeInsight.AnnotationUtil;
-import com.intellij.java.analysis.JavaAnalysisBundle;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.RelationType;
 import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiModifierListOwner;
 import com.intellij.java.language.psi.PsiPrimitiveType;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.java.analysis.localize.JavaAnalysisLocalize;
+import consulo.localize.LocalizeValue;
 import consulo.util.lang.MathUtil;
 import consulo.util.lang.ThreeState;
 import one.util.streamex.IntStreamEx;
@@ -739,8 +740,8 @@ public abstract class LongRangeSet {
         if (val instanceof Byte || val instanceof Short || val instanceof Integer || val instanceof Long) {
             return point(((Number)val).longValue());
         }
-        else if (val instanceof Character) {
-            return point(((Character)val).charValue());
+        else if (val instanceof Character charValue) {
+            return point(charValue);
         }
         return null;
     }
@@ -1013,7 +1014,7 @@ public abstract class LongRangeSet {
 
         @Override
         public String getPresentationText(PsiType type) {
-            return JavaAnalysisBundle.message("long.range.set.presentation.empty");
+            return JavaAnalysisLocalize.longRangeSetPresentationEmpty().get();
         }
 
         @Override
@@ -1368,10 +1369,9 @@ public abstract class LongRangeSet {
 
         @Override
         public boolean equals(Object o) {
-            if (o == this) {
-                return true;
-            }
-            return o instanceof Point && myValue == ((Point)o).myValue;
+            return o == this
+                || o instanceof Point that
+                && myValue == that.myValue;
         }
 
         @Override
@@ -1405,7 +1405,7 @@ public abstract class LongRangeSet {
             if (set != null) {
                 if (set.min() == myFrom) {
                     if (set.max() == myTo) {
-                        return JavaAnalysisBundle.message("long.range.set.presentation.any");
+                        return JavaAnalysisLocalize.longRangeSetPresentationAny().get();
                     }
                     return "<= " + LongRangeSet.formatNumber(myTo);
                 }
@@ -1414,9 +1414,9 @@ public abstract class LongRangeSet {
                 }
             }
             if (myTo - myFrom == 1) {
-                return JavaAnalysisBundle.message("long.range.set.presentation.two.values", myFrom, myTo);
+                return JavaAnalysisLocalize.longRangeSetPresentationTwoValues(myFrom, myTo).get();
             }
-            return JavaAnalysisBundle.message("long.range.set.presentation.range", toString());
+            return JavaAnalysisLocalize.longRangeSetPresentationRange(toString()).get();
         }
 
         @Override
@@ -1844,10 +1844,8 @@ public abstract class LongRangeSet {
 
         @Override
         public boolean equals(Object o) {
-            if (o == this) {
-                return true;
-            }
-            return o != null && o.getClass() == getClass() && myFrom == ((Range)o).myFrom && myTo == ((Range)o).myTo;
+            return o == this
+                || o != null && o.getClass() == getClass() && myFrom == ((Range)o).myFrom && myTo == ((Range)o).myTo;
         }
 
         @Override
@@ -1885,11 +1883,11 @@ public abstract class LongRangeSet {
                     if (prefix.isEmpty()) {
                         return getSuffix();
                     }
-                    return JavaAnalysisBundle.message("long.range.set.presentation.range.with.mod", prefix, getSuffix());
+                    return JavaAnalysisLocalize.longRangeSetPresentationRangeWithMod(prefix, getSuffix()).get();
                 }
             }
-            String rangeMessage = JavaAnalysisBundle.message("long.range.set.presentation.range", super.toString());
-            return JavaAnalysisBundle.message("long.range.set.presentation.range.with.mod", rangeMessage, getSuffix());
+            LocalizeValue rangeMessage = JavaAnalysisLocalize.longRangeSetPresentationRange(super.toString());
+            return JavaAnalysisLocalize.longRangeSetPresentationRangeWithMod(rangeMessage, getSuffix()).get();
         }
 
         @Override
@@ -2109,13 +2107,11 @@ public abstract class LongRangeSet {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass() || !super.equals(o)) {
-                return false;
-            }
-            return myMod == ((ModRange)o).myMod && myBits == ((ModRange)o).myBits;
+            return this == o
+                || super.equals(o)
+                && o instanceof ModRange that
+                && myMod == that.myMod
+                && myBits == that.myBits;
         }
 
         @Override
@@ -2131,20 +2127,22 @@ public abstract class LongRangeSet {
         private
         @Nls
         String getSuffix() {
-            String suffix;
+            LocalizeValue suffix;
             if (myMod == 2) {
                 suffix = myBits == 1
-                    ? JavaAnalysisBundle.message("long.range.set.presentation.even")
-                    : JavaAnalysisBundle.message("long.range.set.presentation.odd");
+                    ? JavaAnalysisLocalize.longRangeSetPresentationEven()
+                    : JavaAnalysisLocalize.longRangeSetPresentationOdd();
             }
             else if (myBits == 1) {
-                suffix = JavaAnalysisBundle.message("long.range.set.presentation.divisible.by", myMod);
+                suffix = JavaAnalysisLocalize.longRangeSetPresentationDivisibleBy(myMod);
             }
             else {
                 //noinspection HardCodedStringLiteral
-                suffix = IntStreamEx.of(BitSet.valueOf(new long[]{myBits})).joining(", ", "<", "> mod " + myMod);
+                suffix = LocalizeValue.localizeTODO(
+                    IntStreamEx.of(BitSet.valueOf(new long[]{myBits})).joining(", ", "<", "> mod " + myMod)
+                );
             }
-            return suffix;
+            return suffix.get();
         }
 
         @Override
@@ -2378,23 +2376,29 @@ public abstract class LongRangeSet {
                     return "!= " + diff.min();
                 }
                 if (diff instanceof Range && !diff.intersects(this)) {
-                    String min =
-                        diff.min() == set.min() ? "" : diff.min() == set.min() + 1 ? formatNumber(set.min()) : "<= " + formatNumber(diff.min() - 1);
-                    String max =
-                        diff.max() == set.max() ? "" : diff.max() == set.max() - 1 ? formatNumber(set.max()) : ">= " + formatNumber(diff.max() + 1);
+                    String min = diff.min() == set.min()
+                        ? ""
+                        : diff.min() == set.min() + 1
+                        ? formatNumber(set.min())
+                        : "<= " + formatNumber(diff.min() - 1);
+                    String max = diff.max() == set.max()
+                        ? ""
+                        : diff.max() == set.max() - 1
+                        ? formatNumber(set.max())
+                        : ">= " + formatNumber(diff.max() + 1);
                     if (min.isEmpty()) {
                         return max;
                     }
                     if (max.isEmpty()) {
                         return min;
                     }
-                    return JavaAnalysisBundle.message("long.range.set.presentation.two.values", min, max);
+                    return JavaAnalysisLocalize.longRangeSetPresentationTwoValues(min, max).get();
                 }
             }
             if (myRanges.length == 4 && myRanges[0] == myRanges[1] && myRanges[2] == myRanges[3]) {
-                return JavaAnalysisBundle.message("long.range.set.presentation.two.values", myRanges[0], myRanges[2]);
+                return JavaAnalysisLocalize.longRangeSetPresentationTwoValues(myRanges[0], myRanges[2]).get();
             }
-            return JavaAnalysisBundle.message("long.range.set.presentation.range", toString());
+            return JavaAnalysisLocalize.longRangeSetPresentationRange(toString()).get();
         }
 
         @Override
@@ -2498,10 +2502,9 @@ public abstract class LongRangeSet {
 
         @Override
         public boolean equals(Object o) {
-            if (o == this) {
-                return true;
-            }
-            return o instanceof RangeSet && Arrays.equals(myRanges, ((RangeSet)o).myRanges);
+            return o == this
+                || o instanceof RangeSet that
+                && Arrays.equals(myRanges, that.myRanges);
         }
 
         @Override
