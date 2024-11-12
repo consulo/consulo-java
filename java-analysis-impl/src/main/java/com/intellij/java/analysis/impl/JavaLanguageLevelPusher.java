@@ -87,11 +87,6 @@ public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel
   }
 
   @Override
-  public boolean acceptsFile(@Nonnull VirtualFile file) {
-    return false;
-  }
-
-  @Override
   public boolean acceptsDirectory(@Nonnull VirtualFile file, @Nonnull Project project) {
     return ProjectFileIndex.getInstance(project).isInSourceContent(file);
   }
