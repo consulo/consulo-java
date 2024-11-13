@@ -123,6 +123,11 @@ public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel
   public void afterRootsChanged(@Nonnull Project project) {
   }
 
+  @Override
+  public boolean acceptsFile(@Nonnull VirtualFile file, @Nonnull Project project) {
+    return false;
+  }
+
   @Nullable
   public String getInconsistencyLanguageLevelMessage(@Nonnull String message,
                                                      @Nonnull PsiElement element,
