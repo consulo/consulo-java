@@ -3924,7 +3924,7 @@ junit3.style.test.method.in.junit4.class.problem.descriptor:
   text: 'Old style JUnit test method <code>#ref()</code> in JUnit 4 class #loc'
 none:
   text: none
-private:
+private.modifier:
   text: private
 package.local.private:
   text: package-private \& private

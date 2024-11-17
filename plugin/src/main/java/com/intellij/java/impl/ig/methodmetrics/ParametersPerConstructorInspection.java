@@ -41,7 +41,7 @@ public class ParametersPerConstructorInspection extends MethodMetricInspection {
     PRIVATE {
       @Override
       String getText() {
-        return InspectionGadgetsLocalize._private().get();
+        return InspectionGadgetsLocalize.privateModifier().get();
       }
     },
     PACKAGE_LOCAL {
