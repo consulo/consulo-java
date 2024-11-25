@@ -491,11 +491,6 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
     @Override
     protected void showPopup() {
     }
-
-    @Override
-    protected boolean hasIconsOutsideOfTextField() {
-      return false;
-    }
   }
 
   private class MyOpenNewInstancesListener extends MouseAdapter {
