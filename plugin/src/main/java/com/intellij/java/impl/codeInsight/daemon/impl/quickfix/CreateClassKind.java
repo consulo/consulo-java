@@ -17,7 +17,6 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.ClassKind;
 import com.intellij.java.language.psi.util.JavaElementKind;
-import consulo.java.language.impl.icon.JavaPsiImplIconGroup;
 import consulo.localize.LocalizeValue;
 import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.ui.image.Image;
@@ -30,7 +29,7 @@ public enum CreateClassKind implements ClassKind {
     INTERFACE(JavaElementKind.INTERFACE, PlatformIconGroup.nodesInterface()),
     ENUM(JavaElementKind.ENUM, PlatformIconGroup.nodesEnum()),
     ANNOTATION(JavaElementKind.ANNOTATION, PlatformIconGroup.nodesAnnotationtype()),
-    RECORD(JavaElementKind.RECORD, JavaPsiImplIconGroup.nodesRecord());
+    RECORD(JavaElementKind.RECORD, PlatformIconGroup.nodesRecord());
 
     private final JavaElementKind myKind;
     private final Image myKindIcon;

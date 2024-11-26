@@ -34,6 +34,7 @@ import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.DumbService;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
@@ -63,7 +64,7 @@ public class JavaIconDescriptorUpdater implements IconDescriptorUpdater {
       } else if (psiClass.isAnnotationType()) {
         iconDescriptor.setMainIcon(AllIcons.Nodes.Annotationtype);
       } else if (psiClass.isRecord()) {
-        iconDescriptor.setMainIcon(JavaPsiImplIconGroup.nodesRecord());
+        iconDescriptor.setMainIcon(PlatformIconGroup.nodesRecord());
       } else if (psiClass.isInterface()) {
         iconDescriptor.setMainIcon(AllIcons.Nodes.Interface);
       } else if (psiClass instanceof PsiAnonymousClass) {

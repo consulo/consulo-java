@@ -17,10 +17,10 @@
 package com.intellij.java.impl.ide.actions;
 
 import com.intellij.java.impl.ide.fileTemplates.JavaCreateFromTemplateHandler;
-import com.intellij.java.language.impl.codeInsight.template.JavaTemplateUtil;
 import com.intellij.java.language.JavaCoreBundle;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.JavaFileType;
+import com.intellij.java.language.impl.codeInsight.template.JavaTemplateUtil;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiNameHelper;
@@ -30,12 +30,12 @@ import consulo.application.dumb.DumbAware;
 import consulo.fileTemplate.FileTemplate;
 import consulo.fileTemplate.FileTemplateManager;
 import consulo.ide.action.CreateFileFromTemplateDialog;
-import consulo.java.language.impl.icon.JavaPsiImplIconGroup;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.module.extension.ModuleExtension;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.InputValidatorEx;
@@ -62,7 +62,7 @@ public class CreateClassAction extends JavaCreateTemplateInPackageAction<PsiClas
 
     LanguageLevel level = PsiUtil.getLanguageLevel(directory);
     if (level.isAtLeast(LanguageLevel.JDK_16)) {
-      builder.addKind("Record", JavaPsiImplIconGroup.nodesRecord(), JavaTemplateUtil.INTERNAL_RECORD_TEMPLATE_NAME);
+      builder.addKind("Record", PlatformIconGroup.nodesRecord(), JavaTemplateUtil.INTERNAL_RECORD_TEMPLATE_NAME);
     }
     if (level.isAtLeast(LanguageLevel.JDK_1_5)) {
       builder.addKind("Enum", AllIcons.Nodes.Enum, JavaTemplateUtil.INTERNAL_ENUM_TEMPLATE_NAME);
