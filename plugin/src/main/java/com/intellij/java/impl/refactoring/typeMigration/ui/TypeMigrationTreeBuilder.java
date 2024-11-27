@@ -9,7 +9,6 @@ import consulo.ui.ex.awt.tree.AbstractTreeBuilder;
 import consulo.ui.ex.tree.AlphaComparator;
 import consulo.ui.ex.tree.NodeDescriptor;
 import consulo.application.progress.ProgressIndicator;
-import consulo.ide.impl.idea.openapi.progress.util.StatusBarProgress;
 import consulo.project.Project;
 
 /**
@@ -32,12 +31,5 @@ public class TypeMigrationTreeBuilder extends AbstractTreeBuilder
 	public void setRoot(MigrationRootNode root)
 	{
 		((TypeMigrationTreeStructure) getTreeStructure()).setRoots(root);
-	}
-
-	@Nullable
-	@Override
-	protected ProgressIndicator createProgressIndicator()
-	{
-		return new StatusBarProgress();
 	}
 }
