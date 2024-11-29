@@ -21,7 +21,6 @@ import consulo.annotation.component.ActionImpl;
 import consulo.annotation.component.ActionParentRef;
 import consulo.annotation.component.ActionRef;
 import consulo.annotation.component.ActionRefAnchor;
-import consulo.application.AllIcons;
 import consulo.application.Application;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
@@ -39,12 +38,14 @@ import consulo.language.editor.inject.InjectedEditorManager;
 import consulo.language.editor.util.PsiUtilBase;
 import consulo.language.psi.*;
 import consulo.module.content.ProjectRootManager;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.popup.JBPopup;
 import consulo.ui.ex.popup.JBPopupFactory;
+import consulo.ui.image.Image;
 import consulo.virtualFileSystem.VirtualFile;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -66,19 +67,26 @@ public class ShowByteCodeAction extends AnAction {
         super("Show Byte Code");
     }
 
+    @Nullable
+    @Override
+    protected Image getTemplateIcon() {
+        return PlatformIconGroup.filetypesBinary();
+    }
+
     @Override
     public void update(AnActionEvent e) {
-        e.getPresentation().setEnabled(false);
-        e.getPresentation().setIcon(AllIcons.Toolwindows.Documentation);
+        boolean enabled = false;
         final Project project = e.getData(Project.KEY);
         if (project != null) {
             final PsiElement psiElement = getPsiElement(e.getDataContext(), project, e.getData(Editor.KEY));
             if (psiElement != null) {
                 if (psiElement.getContainingFile() instanceof PsiClassOwner && ByteCodeViewerManager.getContainingClass(psiElement) != null) {
-                    e.getPresentation().setEnabled(true);
+                    enabled = true;
                 }
             }
         }
+
+        e.getPresentation().setEnabled(enabled);
     }
 
     @Override
