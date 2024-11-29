@@ -191,12 +191,6 @@ public class DebuggerManagerThreadImpl extends InvokeAndWaitThread<DebuggerComma
 		}
 	}
 
-	@Deprecated
-	public void startProgress(final DebuggerCommandImpl command, final ProgressWindowWithNotification progressWindow)
-	{
-		startProgress(command, (ProgressWindow) progressWindow);
-	}
-
 	public void startProgress(DebuggerCommandImpl command, ProgressWindow progressWindow)
 	{
 		progressWindow.addListener(new ProgressIndicatorListener()

@@ -19,22 +19,22 @@
  */
 package com.intellij.java.debugger.impl.actions;
 
-import jakarta.annotation.Nullable;
 import com.intellij.java.debugger.DebuggerBundle;
+import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.DebuggerInvocationUtil;
 import com.intellij.java.debugger.impl.DebuggerManagerEx;
-import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;
-import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
+import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
-import consulo.ui.ex.action.AnActionEvent;
 import consulo.dataContext.DataContext;
-import consulo.ui.ex.action.Presentation;
-import consulo.ide.impl.idea.openapi.progress.util.ProgressWindowWithNotification;
-import consulo.project.Project;
+import consulo.ide.impl.idea.openapi.progress.util.ProgressWindow;
 import consulo.internal.com.sun.jdi.Value;
+import consulo.project.Project;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.Presentation;
+import jakarta.annotation.Nullable;
 
 /*
  * @author Jeka
@@ -63,7 +63,7 @@ public abstract class BaseValueAction extends DebuggerAction
 			return;
 		}
 
-		final ProgressWindowWithNotification progressWindow = new ProgressWindowWithNotification(true, project);
+		final ProgressWindow progressWindow = new ProgressWindow(true, project);
 		SuspendContextCommandImpl getTextCommand = new SuspendContextCommandImpl(debuggerContext.getSuspendContext())
 		{
 			public Priority getPriority()

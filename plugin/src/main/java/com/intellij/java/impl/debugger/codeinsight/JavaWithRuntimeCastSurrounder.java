@@ -31,7 +31,7 @@ import consulo.application.progress.ProgressIndicator;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.document.util.TextRange;
-import consulo.ide.impl.idea.openapi.progress.util.ProgressWindowWithNotification;
+import consulo.ide.impl.idea.openapi.progress.util.ProgressWindow;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiCodeFragment;
@@ -67,7 +67,7 @@ public class JavaWithRuntimeCastSurrounder extends JavaExpressionSurrounder {
     DebuggerContextImpl debuggerContext = (DebuggerManagerEx.getInstanceEx(project)).getContext();
     DebuggerSession debuggerSession = debuggerContext.getDebuggerSession();
     if (debuggerSession != null) {
-      final ProgressWindowWithNotification progressWindow = new ProgressWindowWithNotification(true, expr.getProject());
+      final ProgressWindow progressWindow = new ProgressWindow(true, expr.getProject());
       SurroundWithCastWorker worker = new SurroundWithCastWorker(editor, expr, debuggerContext, progressWindow);
       progressWindow.setTitle(DebuggerBundle.message("title.evaluating"));
       debuggerContext.getDebugProcess().getManagerThread().startProgress(worker, progressWindow);
