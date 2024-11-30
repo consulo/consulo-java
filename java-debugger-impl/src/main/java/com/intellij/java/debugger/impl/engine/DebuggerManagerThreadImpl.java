@@ -28,7 +28,6 @@ import consulo.application.util.concurrent.AppExecutorUtil;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
 import consulo.ide.impl.idea.openapi.progress.util.ProgressWindow;
-import consulo.ide.impl.idea.openapi.progress.util.ProgressWindowWithNotification;
 import consulo.internal.com.sun.jdi.VMDisconnectedException;
 import consulo.logging.Logger;
 import consulo.project.Project;
