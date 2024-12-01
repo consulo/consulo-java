@@ -37,7 +37,6 @@ import com.intellij.java.debugger.impl.memory.utils.KeyboardUtils;
 import com.intellij.java.debugger.impl.memory.utils.LowestPriorityCommand;
 import com.intellij.java.debugger.impl.memory.utils.SingleAlarmWithMutableDelay;
 import com.intellij.java.debugger.requests.ClassPrepareRequestor;
-import consulo.application.AllIcons;
 import consulo.application.ApplicationManager;
 import consulo.application.ui.wm.ApplicationIdeFocusManager;
 import consulo.disposer.Disposable;
@@ -51,14 +50,13 @@ import consulo.internal.com.sun.jdi.VirtualMachine;
 import consulo.internal.com.sun.jdi.request.ClassPrepareRequest;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import consulo.ui.Size;
 import consulo.ui.ex.action.*;
 import consulo.ui.ex.awt.*;
 import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.ui.ex.awt.event.DoubleClickListener;
 import jakarta.annotation.Nonnull;
-
 import jakarta.annotation.Nullable;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
@@ -288,16 +286,18 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
       }
     });
 
-    final JScrollPane scroll = ScrollPaneFactory.createScrollPane(myTable, SideBorder.TOP);
-    final DefaultActionGroup group = (DefaultActionGroup)ActionManager.getInstance().getAction("MemoryView.SettingsPopupActionGroup");
-    group.setPopup(true);
-    final Presentation actionsPresentation = new Presentation("Memory View Settings");
-    actionsPresentation.setIcon(AllIcons.General.GearPlain);
+    JScrollPane scroll = ScrollPaneFactory.createScrollPane(myTable, SideBorder.TOP);
+    ActionGroup group = (ActionGroup)ActionManager.getInstance().getAction(MemoryViewSettingsPopupActionGroup.ID);
 
-    final ActionButton button = ActionButtonFactory.getInstance().create(group, actionsPresentation, ActionPlaces.UNKNOWN, new Size(25, 25));
+    ActionToolbar toolbar = ActionManager.getInstance().createActionToolbar("MemoryViewSearch", ActionGroup.newImmutableBuilder().add(group).build(), true);
+    toolbar.setMiniMode(true);
+    toolbar.setTargetComponent(this);
+
+    toolbar.updateActionsImmediately();
+
     final BorderLayoutPanel topPanel = new BorderLayoutPanel();
     topPanel.addToCenter(myFilterTextField);
-    topPanel.addToRight(button.getComponent());
+    topPanel.addToRight(toolbar.getComponent());
     addToTop(topPanel);
     addToCenter(scroll);
   }

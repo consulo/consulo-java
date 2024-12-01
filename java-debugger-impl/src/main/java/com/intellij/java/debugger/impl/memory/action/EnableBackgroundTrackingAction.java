@@ -16,27 +16,28 @@
 package com.intellij.java.debugger.impl.memory.action;
 
 import com.intellij.java.debugger.impl.memory.component.InstancesTracker;
+import consulo.annotation.component.ActionImpl;
+import consulo.project.Project;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.action.ToggleAction;
-import consulo.project.Project;
 
-public class EnableBackgroundTrackingAction extends ToggleAction
-{
+@ActionImpl(id = "MemoryView.EnableTrackingWithClosedWindow")
+public class EnableBackgroundTrackingAction extends ToggleAction {
+    public EnableBackgroundTrackingAction() {
+        super("Enable Tracking With Hidden Memory View");
+    }
 
-	@Override
-	public boolean isSelected(AnActionEvent e)
-	{
-		Project project = e.getData(Project.KEY);
-		return project != null && !project.isDisposed() && InstancesTracker.getInstance(project).isBackgroundTrackingEnabled();
-	}
+    @Override
+    public boolean isSelected(AnActionEvent e) {
+        Project project = e.getData(Project.KEY);
+        return project != null && !project.isDisposed() && InstancesTracker.getInstance(project).isBackgroundTrackingEnabled();
+    }
 
-	@Override
-	public void setSelected(AnActionEvent e, boolean state)
-	{
-		Project project = e.getData(Project.KEY);
-		if(project != null && !project.isDisposed())
-		{
-			InstancesTracker.getInstance(project).setBackgroundTackingEnabled(state);
-		}
-	}
+    @Override
+    public void setSelected(AnActionEvent e, boolean state) {
+        Project project = e.getData(Project.KEY);
+        if (project != null && !project.isDisposed()) {
+            InstancesTracker.getInstance(project).setBackgroundTackingEnabled(state);
+        }
+    }
 }

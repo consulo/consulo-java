@@ -16,25 +16,27 @@
 package com.intellij.java.debugger.impl.memory.action;
 
 import com.intellij.java.debugger.impl.memory.component.MemoryViewManager;
+import consulo.annotation.component.ActionImpl;
+import consulo.project.Project;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.action.ToggleAction;
-import consulo.project.Project;
 
-public class ShowClassesWithInstanceAction extends ToggleAction
-{
-	@Override
-	public boolean isSelected(AnActionEvent e)
-	{
-		return MemoryViewManager.getInstance().isNeedShowInstancesOnly();
-	}
+@ActionImpl(id = "MemoryView.ShowOnlyWithInstances")
+public class ShowClassesWithInstanceAction extends ToggleAction {
+    public ShowClassesWithInstanceAction() {
+        super("Show With Instances Only");
+    }
 
-	@Override
-	public void setSelected(AnActionEvent e, boolean state)
-	{
-		Project project = e.getData(Project.KEY);
-		if(project != null)
-		{
-			MemoryViewManager.getInstance().setShowWithInstancesOnly(state);
-		}
-	}
+    @Override
+    public boolean isSelected(AnActionEvent e) {
+        return MemoryViewManager.getInstance().isNeedShowInstancesOnly();
+    }
+
+    @Override
+    public void setSelected(AnActionEvent e, boolean state) {
+        Project project = e.getData(Project.KEY);
+        if (project != null) {
+            MemoryViewManager.getInstance().setShowWithInstancesOnly(state);
+        }
+    }
 }

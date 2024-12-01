@@ -250,27 +250,6 @@
 			<add-to-group group-id="CallHierarchyPopupMenu" anchor="first"/>
 		</action>
 
-
-		<group id="MemoryView.SettingsPopupActionGroup">
-			<action class="com.intellij.java.debugger.impl.memory.action.ShowClassesWithInstanceAction"
-					id="MemoryView.ShowOnlyWithInstances"
-					text="Show With Instances Only"/>
-
-			<action class="com.intellij.java.debugger.impl.memory.action.ShowClassesWithDiffAction"
-					id="MemoryView.ShowOnlyWithDiff"
-					text="Show Non-Zero Diff Only"/>
-
-			<action class="com.intellij.java.debugger.impl.memory.action.ShowTrackedAction"
-					id="MemoryView.ShowOnlyTracked"
-					text="Show Tracked Classes Only"/>
-
-			<separator/>
-
-			<action class="com.intellij.java.debugger.impl.memory.action.EnableBackgroundTrackingAction"
-					id="MemoryView.EnableTrackingWithClosedWindow"
-					text="Enable Tracking With Hidden Memory View"/>
-		</group>
-
 		<group id="MemoryView.ClassesPopupActionGroup">
 			<action class="com.intellij.java.debugger.impl.memory.action.ShowInstancesFromClassesViewAction"
 					id="MemoryView.ShowInstances"
