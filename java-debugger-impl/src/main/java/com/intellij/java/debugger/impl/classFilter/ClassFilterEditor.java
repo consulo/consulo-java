@@ -143,11 +143,11 @@ public class ClassFilterEditor extends JPanel implements ComponentWithEmptyText 
   }
 
   protected Image getAddButtonIcon() {
-    return PlatformIconGroup.toolbardecoratorAddclass();
+    return PlatformIconGroup.nodesClass();
   }
 
   protected Image getAddPatternButtonIcon() {
-    return PlatformIconGroup.toolbardecoratorAddpattern();
+    return PlatformIconGroup.actionsRegex();
   }
 
   protected boolean addPatternButtonVisible() {

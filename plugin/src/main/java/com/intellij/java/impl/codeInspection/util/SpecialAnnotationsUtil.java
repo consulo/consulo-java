@@ -22,7 +22,6 @@ import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
 import consulo.codeEditor.Editor;
 import consulo.dataContext.DataManager;
-import consulo.ide.impl.idea.util.IconUtil;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
@@ -30,6 +29,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
 import consulo.project.ProjectManager;
 import consulo.ui.ex.action.AnActionEvent;
@@ -106,12 +106,12 @@ public class SpecialAnnotationsUtil {
 
     if (acceptPatterns) {
       toolbarDecorator
-        .setAddIcon(IconUtil.getAddClassIcon())
+        .setAddIcon(PlatformIconGroup.nodesClass())
         .addExtraAction(
           new AnActionButton(
             InspectionLocalize.specialAnnotationsListAnnotationPattern(),
             LocalizeValue.empty(),
-            IconUtil.getAddPatternIcon()
+            PlatformIconGroup.actionsRegex()
           ) {
             @Override
             public void actionPerformed(@Nonnull AnActionEvent e) {

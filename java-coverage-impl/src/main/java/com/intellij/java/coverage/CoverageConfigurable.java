@@ -103,7 +103,7 @@ public class CoverageConfigurable extends SettingsEditor<RunConfigurationBase> {
 
     @Override
     protected Image getAddPatternButtonIcon() {
-      return PlatformIconGroup.toolbardecoratorAddpackage();
+      return PlatformIconGroup.nodesPackage();
     }
   }
 

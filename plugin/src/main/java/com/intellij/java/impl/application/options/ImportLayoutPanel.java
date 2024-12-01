@@ -18,9 +18,9 @@ package com.intellij.java.impl.application.options;
 import com.intellij.java.analysis.impl.ide.highlighter.JavaHighlightingColors;
 import consulo.application.ApplicationBundle;
 import consulo.colorScheme.TextAttributes;
-import consulo.ide.impl.idea.util.IconUtil;
 import consulo.language.codeStyle.PackageEntry;
 import consulo.language.codeStyle.PackageEntryTable;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.ui.ex.SimpleTextAttributes;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.awt.*;
@@ -99,12 +99,12 @@ public abstract class ImportLayoutPanel extends JPanel {
 
         this.add(
             ToolbarDecorator.createDecorator(myImportLayoutTable = createTableForPackageEntries(myImportLayoutList, this))
-                .addExtraAction(new AnActionButton(ApplicationBundle.message("button.add.package"), IconUtil.getAddPackageIcon()) {
+                .addExtraAction(new AnActionButton(ApplicationBundle.message("button.add.package"), PlatformIconGroup.nodesPackage()) {
                     @Override
                     public void actionPerformed(AnActionEvent e) {
                         addPackageToImportLayouts();
                     }
-                }).addExtraAction(new AnActionButton(ApplicationBundle.message("button.add.blank"), IconUtil.getAddBlankLineIcon()) {
+                }).addExtraAction(new AnActionButton(ApplicationBundle.message("button.add.blank"), PlatformIconGroup.actionsSearchnewline()) {
                     @Override
                     public void actionPerformed(AnActionEvent e) {
                         addBlankLine();
