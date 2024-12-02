@@ -59,7 +59,7 @@ public class HotSwapProgressImpl extends HotSwapProgress {
             public void processSentToBackground() {
             }
 
-        }, null, null, true);
+        }, LocalizeValue.of(), LocalizeValue.of(), true);
         myProgressWindow.addListener(new ProgressIndicatorListener() {
             @Override
             public void canceled() {
