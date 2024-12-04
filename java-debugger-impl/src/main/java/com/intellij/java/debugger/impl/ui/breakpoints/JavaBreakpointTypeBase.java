@@ -27,56 +27,47 @@ import consulo.execution.debug.breakpoint.XBreakpointType;
 import consulo.execution.debug.breakpoint.ui.XBreakpointCustomPropertiesPanel;
 import consulo.execution.debug.evaluation.XDebuggerEditorsProvider;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Nls;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * Base class for non-line java breakpoint
  *
  * @author egor
  */
-public abstract class JavaBreakpointTypeBase<T extends JavaBreakpointProperties> extends XBreakpointType<XBreakpoint<T>, T>
-{
-	protected JavaBreakpointTypeBase(@Nonnull String id, @Nls @Nonnull String title)
-	{
-		super(id, title, true);
-	}
+public abstract class JavaBreakpointTypeBase<T extends JavaBreakpointProperties> extends XBreakpointType<XBreakpoint<T>, T> {
+    protected JavaBreakpointTypeBase(@Nonnull String id, @Nls @Nonnull String title) {
+        super(id, title, true);
+    }
 
-	@Override
-	public final boolean isAddBreakpointButtonVisible()
-	{
-		return true;
-	}
+    @Override
+    public final boolean isAddBreakpointButtonVisible() {
+        return true;
+    }
 
-	@Nullable
-	@Override
-	public final XBreakpointCustomPropertiesPanel<XBreakpoint<T>> createCustomRightPropertiesPanel(@Nonnull Project project)
-	{
-		return new JavaBreakpointFiltersPanel<T, XBreakpoint<T>>(project);
-	}
+    @Nullable
+    @Override
+    public final XBreakpointCustomPropertiesPanel<XBreakpoint<T>> createCustomRightPropertiesPanel(@Nonnull Project project) {
+        return new JavaBreakpointFiltersPanel<T, XBreakpoint<T>>(project);
+    }
 
-	@Nullable
-	@Override
-	public final XDebuggerEditorsProvider getEditorsProvider(@Nonnull XBreakpoint<T> breakpoint, @Nonnull Project project)
-	{
-		return new JavaDebuggerEditorsProvider();
-	}
+    @Nullable
+    @Override
+    public final XDebuggerEditorsProvider getEditorsProvider(@Nonnull XBreakpoint<T> breakpoint, @Nonnull Project project) {
+        return new JavaDebuggerEditorsProvider();
+    }
 
-	@Nullable
-	@Override
-	public XSourcePosition getSourcePosition(@Nonnull XBreakpoint<T> breakpoint)
-	{
-		Breakpoint javaBreakpoint = BreakpointManager.getJavaBreakpoint(breakpoint);
-		if(javaBreakpoint != null)
-		{
-			PsiClass aClass = javaBreakpoint.getPsiClass();
-			if(aClass != null && aClass.getContainingFile() != null)
-			{
-				return ReadAction.compute(() -> XDebuggerUtil.getInstance().createPositionByElement(aClass));
-			}
-		}
-		return null;
-	}
+    @Nullable
+    @Override
+    public XSourcePosition getSourcePosition(@Nonnull XBreakpoint<T> breakpoint) {
+        Breakpoint javaBreakpoint = BreakpointManager.getJavaBreakpoint(breakpoint);
+        if (javaBreakpoint != null) {
+            PsiClass aClass = javaBreakpoint.getPsiClass();
+            if (aClass != null && aClass.getContainingFile() != null) {
+                return ReadAction.compute(() -> XDebuggerUtil.getInstance().createPositionByElement(aClass));
+            }
+        }
+        return null;
+    }
 }

@@ -25,11 +25,11 @@ import com.intellij.java.language.psi.PsiClassOwner;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.AllIcons;
 import consulo.application.ApplicationManager;
 import consulo.execution.debug.XDebuggerManager;
 import consulo.execution.debug.breakpoint.XBreakpoint;
 import consulo.execution.debug.breakpoint.ui.XBreakpointCustomPropertiesPanel;
+import consulo.execution.debug.icon.ExecutionDebugIconGroup;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
 import consulo.ui.image.Image;
@@ -45,106 +45,106 @@ import java.util.function.Supplier;
  */
 @ExtensionImpl
 public class JavaExceptionBreakpointType extends JavaBreakpointTypeBase<JavaExceptionBreakpointProperties> implements
-  JavaBreakpointType<JavaExceptionBreakpointProperties> {
-  public JavaExceptionBreakpointType() {
-    super("java-exception", DebuggerBundle.message("exception.breakpoints.tab.title"));
-  }
-
-  @Nonnull
-  @Override
-  public Image getEnabledIcon() {
-    return AllIcons.Debugger.Db_exception_breakpoint;
-  }
-
-  @Nonnull
-  @Override
-  public Image getDisabledIcon() {
-    return AllIcons.Debugger.Db_disabled_exception_breakpoint;
-  }
-
-  //@Override
-  protected String getHelpID() {
-    return HelpID.EXCEPTION_BREAKPOINTS;
-  }
-
-  //@Override
-  public String getDisplayName() {
-    return DebuggerBundle.message("exception.breakpoints.tab.title");
-  }
-
-  @Override
-  public String getDisplayText(XBreakpoint<JavaExceptionBreakpointProperties> breakpoint) {
-    String name = breakpoint.getProperties().myQualifiedName;
-    if (name != null) {
-      return DebuggerBundle.message("breakpoint.exception.breakpoint.display.name", name);
+    JavaBreakpointType<JavaExceptionBreakpointProperties> {
+    public JavaExceptionBreakpointType() {
+        super("java-exception", DebuggerBundle.message("exception.breakpoints.tab.title"));
     }
-    else {
-      return DebuggerBundle.message("breakpoint.any.exception.display.name");
+
+    @Nonnull
+    @Override
+    public Image getEnabledIcon() {
+        return ExecutionDebugIconGroup.breakpointBreakpointexception();
     }
-  }
 
-  @Nullable
-  @Override
-  public JavaExceptionBreakpointProperties createProperties() {
-    return new JavaExceptionBreakpointProperties();
-  }
+    @Nonnull
+    @Override
+    public Image getDisabledIcon() {
+        return ExecutionDebugIconGroup.breakpointBreakpointexceptiondisabled();
+    }
 
-  @Nullable
-  @Override
-  public XBreakpointCustomPropertiesPanel<XBreakpoint<JavaExceptionBreakpointProperties>> createCustomPropertiesPanel() {
-    return new ExceptionBreakpointPropertiesPanel();
-  }
+    //@Override
+    protected String getHelpID() {
+        return HelpID.EXCEPTION_BREAKPOINTS;
+    }
 
-  @Nullable
-  @Override
-  public XBreakpoint<JavaExceptionBreakpointProperties> createDefaultBreakpoint(@Nonnull XBreakpointCreator<JavaExceptionBreakpointProperties>
-                                                                                  creator) {
-    return creator.createBreakpoint(new JavaExceptionBreakpointProperties());
-  }
+    //@Override
+    public String getDisplayName() {
+        return DebuggerBundle.message("exception.breakpoints.tab.title");
+    }
 
-  //public Key<ExceptionBreakpoint> getBreakpointCategory() {
-  //  return ExceptionBreakpoint.CATEGORY;
-  //}
-
-  @Nullable
-  @Override
-  public XBreakpoint<JavaExceptionBreakpointProperties> addBreakpoint(final Project project, JComponent parentComponent) {
-    final PsiClass throwableClass =
-      JavaPsiFacade.getInstance(project).findClass("java.lang.Throwable", GlobalSearchScope.allScope(project));
-    TreeClassChooser chooser =
-      TreeClassChooserFactory.getInstance(project).createInheritanceClassChooser(DebuggerBundle.message("add.exception" +
-                                                                                                          ".breakpoint.classchooser.title"),
-                                                                                 GlobalSearchScope.allScope(project),
-                                                                                 throwableClass,
-                                                                                 true,
-                                                                                 true,
-                                                                                 null);
-    chooser.showDialog();
-    final PsiClass selectedClass = chooser.getSelected();
-    final String qName = selectedClass == null ? null : JVMNameUtil.getNonAnonymousClassName(selectedClass);
-
-    if (qName != null && qName.length() > 0) {
-      return ApplicationManager.getApplication().runWriteAction(new Supplier<XBreakpoint<JavaExceptionBreakpointProperties>>() {
-        @Override
-        public XBreakpoint<JavaExceptionBreakpointProperties> get() {
-          return XDebuggerManager.getInstance(project).getBreakpointManager().addBreakpoint(JavaExceptionBreakpointType.this,
-                                                                                            new JavaExceptionBreakpointProperties(qName,
-                                                                                                                                  ((PsiClassOwner)selectedClass
-                                                                                                                                    .getContainingFile())
-                                                                                                                                    .getPackageName()));
+    @Override
+    public String getDisplayText(XBreakpoint<JavaExceptionBreakpointProperties> breakpoint) {
+        String name = breakpoint.getProperties().myQualifiedName;
+        if (name != null) {
+            return DebuggerBundle.message("breakpoint.exception.breakpoint.display.name", name);
         }
-      });
+        else {
+            return DebuggerBundle.message("breakpoint.any.exception.display.name");
+        }
     }
-    return null;
-  }
 
-  @Override
-  public Breakpoint createJavaBreakpoint(Project project, XBreakpoint<JavaExceptionBreakpointProperties> breakpoint) {
-    if (!breakpoint.getBreakpointManager().isDefaultBreakpoint(breakpoint)) {
-      return new ExceptionBreakpoint(project, breakpoint);
+    @Nullable
+    @Override
+    public JavaExceptionBreakpointProperties createProperties() {
+        return new JavaExceptionBreakpointProperties();
     }
-    else {
-      return new AnyExceptionBreakpoint(project, breakpoint);
+
+    @Nullable
+    @Override
+    public XBreakpointCustomPropertiesPanel<XBreakpoint<JavaExceptionBreakpointProperties>> createCustomPropertiesPanel(@Nonnull Project project) {
+        return new ExceptionBreakpointPropertiesPanel();
     }
-  }
+
+    @Nullable
+    @Override
+    public XBreakpoint<JavaExceptionBreakpointProperties> createDefaultBreakpoint(@Nonnull XBreakpointCreator<JavaExceptionBreakpointProperties>
+                                                                                      creator) {
+        return creator.createBreakpoint(new JavaExceptionBreakpointProperties());
+    }
+
+    //public Key<ExceptionBreakpoint> getBreakpointCategory() {
+    //  return ExceptionBreakpoint.CATEGORY;
+    //}
+
+    @Nullable
+    @Override
+    public XBreakpoint<JavaExceptionBreakpointProperties> addBreakpoint(final Project project, JComponent parentComponent) {
+        final PsiClass throwableClass =
+            JavaPsiFacade.getInstance(project).findClass("java.lang.Throwable", GlobalSearchScope.allScope(project));
+        TreeClassChooser chooser =
+            TreeClassChooserFactory.getInstance(project).createInheritanceClassChooser(DebuggerBundle.message("add.exception" +
+                    ".breakpoint.classchooser.title"),
+                GlobalSearchScope.allScope(project),
+                throwableClass,
+                true,
+                true,
+                null);
+        chooser.showDialog();
+        final PsiClass selectedClass = chooser.getSelected();
+        final String qName = selectedClass == null ? null : JVMNameUtil.getNonAnonymousClassName(selectedClass);
+
+        if (qName != null && qName.length() > 0) {
+            return ApplicationManager.getApplication().runWriteAction(new Supplier<XBreakpoint<JavaExceptionBreakpointProperties>>() {
+                @Override
+                public XBreakpoint<JavaExceptionBreakpointProperties> get() {
+                    return XDebuggerManager.getInstance(project).getBreakpointManager().addBreakpoint(JavaExceptionBreakpointType.this,
+                        new JavaExceptionBreakpointProperties(qName,
+                            ((PsiClassOwner) selectedClass
+                                .getContainingFile())
+                                .getPackageName()));
+                }
+            });
+        }
+        return null;
+    }
+
+    @Override
+    public Breakpoint createJavaBreakpoint(Project project, XBreakpoint<JavaExceptionBreakpointProperties> breakpoint) {
+        if (!breakpoint.getBreakpointManager().isDefaultBreakpoint(breakpoint)) {
+            return new ExceptionBreakpoint(project, breakpoint);
+        }
+        else {
+            return new AnyExceptionBreakpoint(project, breakpoint);
+        }
+    }
 }

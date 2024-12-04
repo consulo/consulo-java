@@ -19,14 +19,13 @@ import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.HelpID;
 import com.intellij.java.debugger.impl.breakpoints.properties.JavaMethodBreakpointProperties;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.AllIcons;
 import consulo.execution.debug.breakpoint.XBreakpoint;
 import consulo.execution.debug.breakpoint.XLineBreakpoint;
 import consulo.execution.debug.breakpoint.ui.XBreakpointCustomPropertiesPanel;
+import consulo.execution.debug.icon.ExecutionDebugIconGroup;
 import consulo.project.Project;
 import consulo.ui.image.Image;
 import consulo.virtualFileSystem.VirtualFile;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -36,89 +35,89 @@ import jakarta.annotation.Nullable;
  */
 @ExtensionImpl
 public class JavaMethodBreakpointType extends JavaLineBreakpointTypeBase<JavaMethodBreakpointProperties> implements JavaBreakpointType {
-  @Nonnull
-  public static JavaMethodBreakpointType getInstance() {
-    return EXTENSION_POINT_NAME.findExtension(JavaMethodBreakpointType.class);
-  }
-
-  public JavaMethodBreakpointType() {
-    super("java-method", DebuggerBundle.message("method.breakpoints.tab.title"));
-  }
-
-  @Nonnull
-  @Override
-  public Image getEnabledIcon() {
-    return AllIcons.Debugger.Db_method_breakpoint;
-  }
-
-  @Nonnull
-  @Override
-  public Image getDisabledIcon() {
-    return AllIcons.Debugger.Db_disabled_method_breakpoint;
-  }
-
-  //@Override
-  protected String getHelpID() {
-    return HelpID.METHOD_BREAKPOINTS;
-  }
-
-  //@Override
-  public String getDisplayName() {
-    return DebuggerBundle.message("method.breakpoints.tab.title");
-  }
-
-  @Override
-  public String getShortText(XLineBreakpoint<JavaMethodBreakpointProperties> breakpoint) {
-    return getText(breakpoint);
-  }
-
-  static String getText(XBreakpoint<JavaMethodBreakpointProperties> breakpoint) {
-    final StringBuilder buffer = new StringBuilder();
-    //if(isValid()) {
-    final String className = breakpoint.getProperties().myClassPattern;
-    final boolean classNameExists = className != null && className.length() > 0;
-    if (classNameExists) {
-      buffer.append(className);
+    @Nonnull
+    public static JavaMethodBreakpointType getInstance() {
+        return EXTENSION_POINT_NAME.findExtension(JavaMethodBreakpointType.class);
     }
-    if (breakpoint.getProperties().myMethodName != null) {
-      if (classNameExists) {
-        buffer.append(".");
-      }
-      buffer.append(breakpoint.getProperties().myMethodName);
+
+    public JavaMethodBreakpointType() {
+        super("java-method", DebuggerBundle.message("method.breakpoints.tab.title"));
     }
-    //}
-    //else {
-    //  buffer.append(DebuggerBundle.message("status.breakpoint.invalid"));
-    //}
-    return buffer.toString();
-  }
 
-  @Nullable
-  @Override
-  public XBreakpointCustomPropertiesPanel createCustomPropertiesPanel() {
-    return new MethodBreakpointPropertiesPanel();
-  }
+    @Nonnull
+    @Override
+    public Image getEnabledIcon() {
+        return ExecutionDebugIconGroup.breakpointBreakpointmethod();
+    }
 
-  @Nullable
-  @Override
-  public JavaMethodBreakpointProperties createProperties() {
-    return new JavaMethodBreakpointProperties();
-  }
+    @Nonnull
+    @Override
+    public Image getDisabledIcon() {
+        return ExecutionDebugIconGroup.breakpointBreakpointmethoddisabled();
+    }
 
-  @Nullable
-  @Override
-  public JavaMethodBreakpointProperties createBreakpointProperties(@Nonnull VirtualFile file, int line) {
-    return new JavaMethodBreakpointProperties();
-  }
+    //@Override
+    protected String getHelpID() {
+        return HelpID.METHOD_BREAKPOINTS;
+    }
 
-  @Nonnull
-  @Override
-  public Breakpoint createJavaBreakpoint(Project project, XBreakpoint breakpoint) {
-    return new MethodBreakpoint(project, breakpoint);
-  }
+    //@Override
+    public String getDisplayName() {
+        return DebuggerBundle.message("method.breakpoints.tab.title");
+    }
 
-  @Override
-  public boolean canBeHitInOtherPlaces() {
-    return true;
-  }
+    @Override
+    public String getShortText(XLineBreakpoint<JavaMethodBreakpointProperties> breakpoint) {
+        return getText(breakpoint);
+    }
+
+    static String getText(XBreakpoint<JavaMethodBreakpointProperties> breakpoint) {
+        final StringBuilder buffer = new StringBuilder();
+        //if(isValid()) {
+        final String className = breakpoint.getProperties().myClassPattern;
+        final boolean classNameExists = className != null && className.length() > 0;
+        if (classNameExists) {
+            buffer.append(className);
+        }
+        if (breakpoint.getProperties().myMethodName != null) {
+            if (classNameExists) {
+                buffer.append(".");
+            }
+            buffer.append(breakpoint.getProperties().myMethodName);
+        }
+        //}
+        //else {
+        //  buffer.append(DebuggerBundle.message("status.breakpoint.invalid"));
+        //}
+        return buffer.toString();
+    }
+
+    @Nullable
+    @Override
+    public XBreakpointCustomPropertiesPanel createCustomPropertiesPanel(@Nonnull Project project) {
+        return new MethodBreakpointPropertiesPanel();
+    }
+
+    @Nullable
+    @Override
+    public JavaMethodBreakpointProperties createProperties() {
+        return new JavaMethodBreakpointProperties();
+    }
+
+    @Nullable
+    @Override
+    public JavaMethodBreakpointProperties createBreakpointProperties(@Nonnull VirtualFile file, int line) {
+        return new JavaMethodBreakpointProperties();
+    }
+
+    @Nonnull
+    @Override
+    public Breakpoint createJavaBreakpoint(Project project, XBreakpoint breakpoint) {
+        return new MethodBreakpoint(project, breakpoint);
+    }
+
+    @Override
+    public boolean canBeHitInOtherPlaces() {
+        return true;
+    }
 }

@@ -18,6 +18,7 @@ package com.intellij.java.debugger.impl.engine;
 import com.intellij.java.debugger.impl.ui.impl.watch.StackFrameDescriptorImpl;
 import consulo.colorScheme.EditorColorsManager;
 import consulo.colorScheme.EditorColorsScheme;
+import consulo.execution.debug.icon.ExecutionDebugIconGroup;
 import consulo.execution.debug.ui.ValueMarkup;
 import consulo.internal.com.sun.jdi.Method;
 import consulo.ui.ex.ColoredTextContainer;
@@ -38,7 +39,7 @@ class JavaFramesListRenderer /*extends ColoredListCellRenderer*/
 
 	public void customizePresentation(StackFrameDescriptorImpl descriptor, @Nonnull ColoredTextContainer component, StackFrameDescriptorImpl selectedDescriptor)
 	{
-		component.setIcon(descriptor.getIcon());
+		component.setIcon(ExecutionDebugIconGroup.nodeFrame());
 		//final Object selectedValue = list.getSelectedValue();
 
 		final boolean shouldHighlightAsRecursive = isOccurrenceOfSelectedFrame(selectedDescriptor, descriptor);

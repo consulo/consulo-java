@@ -48,300 +48,225 @@ import java.awt.*;
 /**
  * Nodes of this type cannot be updated, because StackFrame objects become invalid as soon as VM has been resumed
  */
-public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements StackFrameDescriptor
-{
-	private final StackFrameProxyImpl myFrame;
-	private int myUiIndex;
-	private String myName = null;
-	private Location myLocation;
-	private MethodsTracker.MethodOccurrence myMethodOccurrence;
-	private boolean myIsSynthetic;
-	private boolean myIsInLibraryContent;
-	private ObjectReference myThisObject;
-	private Color myBackgroundColor;
-	private SourcePosition mySourcePosition;
+public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements StackFrameDescriptor {
+    private final StackFrameProxyImpl myFrame;
+    private int myUiIndex;
+    private String myName = null;
+    private Location myLocation;
+    private MethodsTracker.MethodOccurrence myMethodOccurrence;
+    private boolean myIsSynthetic;
+    private boolean myIsInLibraryContent;
+    private ObjectReference myThisObject;
+    private Color myBackgroundColor;
+    private SourcePosition mySourcePosition;
 
-	private Image myIcon = PlatformIconGroup.debuggerFrame();
+    public StackFrameDescriptorImpl(@Nonnull StackFrameProxyImpl frame, @Nonnull MethodsTracker tracker) {
+        myFrame = frame;
 
-	public StackFrameDescriptorImpl(@Nonnull StackFrameProxyImpl frame, @Nonnull MethodsTracker tracker)
-	{
-		myFrame = frame;
+        try {
+            myUiIndex = frame.getFrameIndex();
+            myLocation = frame.location();
+            try {
+                myThisObject = frame.thisObject();
+            }
+            catch (EvaluateException e) {
+                // catch internal exceptions here
+                if (!(e.getCause() instanceof InternalException)) {
+                    throw e;
+                }
+                LOG.info(e);
+            }
+            myMethodOccurrence = tracker.getMethodOccurrence(myUiIndex, myLocation.method());
+            myIsSynthetic = DebuggerUtils.isSynthetic(myMethodOccurrence.getMethod());
+            ApplicationManager.getApplication().runReadAction(new Runnable() {
+                @Override
+                public void run() {
+                    mySourcePosition = ContextUtil.getSourcePosition(StackFrameDescriptorImpl.this);
+                    final PsiFile file = mySourcePosition != null ? mySourcePosition.getFile() : null;
+                    if (file == null) {
+                        myIsInLibraryContent = true;
+                    }
+                    else {
+                        myBackgroundColor = FileColorManager.getInstance(file.getProject()).getFileColor(file);
 
-		try
-		{
-			myUiIndex = frame.getFrameIndex();
-			myLocation = frame.location();
-			try
-			{
-				myThisObject = frame.thisObject();
-			}
-			catch(EvaluateException e)
-			{
-				// catch internal exceptions here
-				if(!(e.getCause() instanceof InternalException))
-				{
-					throw e;
-				}
-				LOG.info(e);
-			}
-			myMethodOccurrence = tracker.getMethodOccurrence(myUiIndex, myLocation.method());
-			myIsSynthetic = DebuggerUtils.isSynthetic(myMethodOccurrence.getMethod());
-			ApplicationManager.getApplication().runReadAction(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					mySourcePosition = ContextUtil.getSourcePosition(StackFrameDescriptorImpl.this);
-					final PsiFile file = mySourcePosition != null ? mySourcePosition.getFile() : null;
-					if(file == null)
-					{
-						myIsInLibraryContent = true;
-					}
-					else
-					{
-						myBackgroundColor = FileColorManager.getInstance(file.getProject()).getFileColor(file);
+                        final ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(StackFrameDescriptorImpl.this.getDebugProcess().getProject()).getFileIndex();
+                        final VirtualFile vFile = file.getVirtualFile();
+                        myIsInLibraryContent = vFile != null && (projectFileIndex.isInLibraryClasses(vFile) || projectFileIndex.isInLibrarySource(vFile));
+                    }
+                }
+            });
+        }
+        catch (InternalException e) {
+            LOG.info(e);
+            myLocation = null;
+            myMethodOccurrence = tracker.getMethodOccurrence(0, null);
+            myIsSynthetic = false;
+            myIsInLibraryContent = false;
+        }
+        catch (EvaluateException e) {
+            LOG.info(e);
+            myLocation = null;
+            myMethodOccurrence = tracker.getMethodOccurrence(0, null);
+            myIsSynthetic = false;
+            myIsInLibraryContent = false;
+        }
+    }
 
-						final ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(StackFrameDescriptorImpl.this.getDebugProcess().getProject()).getFileIndex();
-						final VirtualFile vFile = file.getVirtualFile();
-						myIsInLibraryContent = vFile != null && (projectFileIndex.isInLibraryClasses(vFile) || projectFileIndex.isInLibrarySource(vFile));
-					}
-				}
-			});
-		}
-		catch(InternalException e)
-		{
-			LOG.info(e);
-			myLocation = null;
-			myMethodOccurrence = tracker.getMethodOccurrence(0, null);
-			myIsSynthetic = false;
-			myIsInLibraryContent = false;
-		}
-		catch(EvaluateException e)
-		{
-			LOG.info(e);
-			myLocation = null;
-			myMethodOccurrence = tracker.getMethodOccurrence(0, null);
-			myIsSynthetic = false;
-			myIsInLibraryContent = false;
-		}
-	}
+    public int getUiIndex() {
+        return myUiIndex;
+    }
 
-	public int getUiIndex()
-	{
-		return myUiIndex;
-	}
+    @Override
+    @Nonnull
+    public StackFrameProxyImpl getFrameProxy() {
+        return myFrame;
+    }
 
-	@Override
-	@Nonnull
-	public StackFrameProxyImpl getFrameProxy()
-	{
-		return myFrame;
-	}
+    @Nonnull
+    @Override
+    public DebugProcess getDebugProcess() {
+        return myFrame.getVirtualMachine().getDebugProcess();
+    }
 
-	@Nonnull
-	@Override
-	public DebugProcess getDebugProcess()
-	{
-		return myFrame.getVirtualMachine().getDebugProcess();
-	}
+    @Override
+    public Color getBackgroundColor() {
+        return myBackgroundColor;
+    }
 
-	@Override
-	public Color getBackgroundColor()
-	{
-		return myBackgroundColor;
-	}
+    @Nullable
+    public Method getMethod() {
+        return myMethodOccurrence.getMethod();
+    }
 
-	@Nullable
-	public Method getMethod()
-	{
-		return myMethodOccurrence.getMethod();
-	}
+    public int getOccurrenceIndex() {
+        return myMethodOccurrence.getIndex();
+    }
 
-	public int getOccurrenceIndex()
-	{
-		return myMethodOccurrence.getIndex();
-	}
+    public boolean isRecursiveCall() {
+        return myMethodOccurrence.isRecursive();
+    }
 
-	public boolean isRecursiveCall()
-	{
-		return myMethodOccurrence.isRecursive();
-	}
+    @Nullable
+    public ValueMarkup getValueMarkup() {
+        if (myThisObject != null) {
+            DebugProcess process = myFrame.getVirtualMachine().getDebugProcess();
+            if (process instanceof DebugProcessImpl) {
+                XDebugSession session = ((DebugProcessImpl) process).getSession().getXDebugSession();
+                XValueMarkers<?, ?> markers = session == null ? null : session.getValueMarkers();
+                if (markers != null) {
+                    return markers.getAllMarkers().get(myThisObject);
+                }
+            }
+        }
+        return null;
+    }
 
-	@Nullable
-	public ValueMarkup getValueMarkup()
-	{
-		if(myThisObject != null)
-		{
-			DebugProcess process = myFrame.getVirtualMachine().getDebugProcess();
-			if(process instanceof DebugProcessImpl)
-			{
-				XDebugSession session = ((DebugProcessImpl) process).getSession().getXDebugSession();
-				XValueMarkers<?, ?> markers = session == null ? null : session.getValueMarkers();
-				if (markers != null)
-				{
-					return markers.getAllMarkers().get(myThisObject);
-				}
-			}
-		}
-		return null;
-	}
+    @Override
+    public String getName() {
+        return myName;
+    }
 
-	@Override
-	public String getName()
-	{
-		return myName;
-	}
+    @Override
+    protected String calcRepresentation(EvaluationContextImpl context, DescriptorLabelListener descriptorLabelListener) throws EvaluateException {
+        DebuggerManagerThreadImpl.assertIsManagerThread();
 
-	@Override
-	protected String calcRepresentation(EvaluationContextImpl context, DescriptorLabelListener descriptorLabelListener) throws EvaluateException
-	{
-		DebuggerManagerThreadImpl.assertIsManagerThread();
+        if (myLocation == null) {
+            return "";
+        }
+        ThreadsViewSettings settings = ThreadsViewSettings.getInstance();
+        final StringBuilder label = new StringBuilder();
+        Method method = myMethodOccurrence.getMethod();
+        if (method != null) {
+            myName = method.name();
+            label.append(settings.SHOW_ARGUMENTS_TYPES ? DebuggerUtilsEx.methodNameWithArguments(method) : myName);
+        }
+        if (settings.SHOW_LINE_NUMBER) {
+            String lineNumber;
+            try {
+                lineNumber = Integer.toString(myLocation.lineNumber());
+            }
+            catch (InternalError e) {
+                lineNumber = e.toString();
+            }
+            if (lineNumber != null) {
+                label.append(':');
+                label.append(lineNumber);
+            }
+        }
+        if (settings.SHOW_CLASS_NAME) {
+            String name;
+            try {
+                ReferenceType refType = myLocation.declaringType();
+                name = refType != null ? refType.name() : null;
+            }
+            catch (InternalError e) {
+                name = e.toString();
+            }
+            if (name != null) {
+                label.append(", ");
+                int dotIndex = name.lastIndexOf('.');
+                if (dotIndex < 0) {
+                    label.append(name);
+                }
+                else {
+                    label.append(name.substring(dotIndex + 1));
+                    if (settings.SHOW_PACKAGE_NAME) {
+                        label.append(" {");
+                        label.append(name.substring(0, dotIndex));
+                        label.append("}");
+                    }
+                }
+            }
+        }
+        if (settings.SHOW_SOURCE_NAME) {
+            try {
+                String sourceName;
+                try {
+                    sourceName = myLocation.sourceName();
+                }
+                catch (InternalError e) {
+                    sourceName = e.toString();
+                }
+                label.append(", ");
+                label.append(sourceName);
+            }
+            catch (AbsentInformationException ignored) {
+            }
+        }
+        return label.toString();
+    }
 
-		if(myLocation == null)
-		{
-			return "";
-		}
-		ThreadsViewSettings settings = ThreadsViewSettings.getInstance();
-		final StringBuilder label = new StringBuilder();
-		Method method = myMethodOccurrence.getMethod();
-		if(method != null)
-		{
-			myName = method.name();
-			label.append(settings.SHOW_ARGUMENTS_TYPES ? DebuggerUtilsEx.methodNameWithArguments(method) : myName);
-		}
-		if(settings.SHOW_LINE_NUMBER)
-		{
-			String lineNumber;
-			try
-			{
-				lineNumber = Integer.toString(myLocation.lineNumber());
-			}
-			catch(InternalError e)
-			{
-				lineNumber = e.toString();
-			}
-			if(lineNumber != null)
-			{
-				label.append(':');
-				label.append(lineNumber);
-			}
-		}
-		if(settings.SHOW_CLASS_NAME)
-		{
-			String name;
-			try
-			{
-				ReferenceType refType = myLocation.declaringType();
-				name = refType != null ? refType.name() : null;
-			}
-			catch(InternalError e)
-			{
-				name = e.toString();
-			}
-			if(name != null)
-			{
-				label.append(", ");
-				int dotIndex = name.lastIndexOf('.');
-				if(dotIndex < 0)
-				{
-					label.append(name);
-				}
-				else
-				{
-					label.append(name.substring(dotIndex + 1));
-					if(settings.SHOW_PACKAGE_NAME)
-					{
-						label.append(" {");
-						label.append(name.substring(0, dotIndex));
-						label.append("}");
-					}
-				}
-			}
-		}
-		if(settings.SHOW_SOURCE_NAME)
-		{
-			try
-			{
-				String sourceName;
-				try
-				{
-					sourceName = myLocation.sourceName();
-				}
-				catch(InternalError e)
-				{
-					sourceName = e.toString();
-				}
-				label.append(", ");
-				label.append(sourceName);
-			}
-			catch(AbsentInformationException ignored)
-			{
-			}
-		}
-		return label.toString();
-	}
+    public final boolean stackFramesEqual(StackFrameDescriptorImpl d) {
+        return getFrameProxy().equals(d.getFrameProxy());
+    }
 
-	public final boolean stackFramesEqual(StackFrameDescriptorImpl d)
-	{
-		return getFrameProxy().equals(d.getFrameProxy());
-	}
+    @Override
+    public boolean isExpandable() {
+        return true;
+    }
 
-	@Override
-	public boolean isExpandable()
-	{
-		return true;
-	}
+    @Override
+    public final void setContext(EvaluationContextImpl context) {
+    }
 
-	@Override
-	public final void setContext(EvaluationContextImpl context)
-	{
-		myIcon = calcIcon();
-	}
+    public boolean isSynthetic() {
+        return myIsSynthetic;
+    }
 
-	public boolean isSynthetic()
-	{
-		return myIsSynthetic;
-	}
+    public boolean isInLibraryContent() {
+        return myIsInLibraryContent;
+    }
 
-	public boolean isInLibraryContent()
-	{
-		return myIsInLibraryContent;
-	}
+    @Nullable
+    public Location getLocation() {
+        return myLocation;
+    }
 
-	@Nullable
-	public Location getLocation()
-	{
-		return myLocation;
-	}
+    public SourcePosition getSourcePosition() {
+        return mySourcePosition;
+    }
 
-	public SourcePosition getSourcePosition()
-	{
-		return mySourcePosition;
-	}
-
-	@Nonnull
-	private Image calcIcon()
-	{
-		try
-		{
-			if(myFrame.isObsolete())
-			{
-				return PlatformIconGroup.debuggerDb_obsolete();
-			}
-		}
-		catch(EvaluateException ignored)
-		{
-		}
-		return PlatformIconGroup.debuggerFrame();
-	}
-
-	public Image getIcon()
-	{
-		return myIcon;
-	}
-
-	public ObjectReference getThisObject()
-	{
-		return myThisObject;
-	}
+    public ObjectReference getThisObject() {
+        return myThisObject;
+    }
 }

@@ -15,11 +15,11 @@
  */
 package com.intellij.java.impl.slicer;
 
-import consulo.application.AllIcons;
 import com.intellij.java.language.psi.*;
+import consulo.execution.debug.icon.ExecutionDebugIconGroup;
+import consulo.language.psi.PsiElement;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
-import consulo.language.psi.*;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -31,7 +31,7 @@ public class CanItBeNullAction  extends AnAction {
   private static final String TEXT = "Group by leaf expression nullness";
 
   public CanItBeNullAction(SliceTreeBuilder treeBuilder) {
-    super(TEXT, "Determine whether null can flow into this expression", AllIcons.Debugger.Db_disabled_breakpoint_process);
+    super(TEXT, "Determine whether null can flow into this expression", ExecutionDebugIconGroup.breakpointBreakpointdisabled());
     myTreeBuilder = treeBuilder;
   }
 

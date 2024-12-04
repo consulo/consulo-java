@@ -26,23 +26,24 @@ import com.intellij.java.debugger.impl.settings.DebuggerSettings;
 import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
 import com.intellij.java.debugger.impl.ui.breakpoints.StackCapturingLineBreakpoint;
 import com.intellij.java.debugger.impl.ui.tree.render.ClassRenderer;
-import consulo.application.AllIcons;
 import consulo.execution.debug.XSourcePosition;
 import consulo.execution.debug.frame.*;
 import consulo.execution.debug.frame.presentation.XStringValuePresentation;
+import consulo.execution.debug.icon.ExecutionDebugIconGroup;
 import consulo.execution.debug.ui.XDebuggerUIConstants;
 import consulo.ide.setting.ShowSettingsUtil;
 import consulo.internal.com.sun.jdi.*;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.logging.Logger;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.ui.ex.ColoredTextContainer;
 import consulo.ui.ex.SimpleTextAttributes;
 import consulo.ui.image.Image;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
-
 import jakarta.annotation.Nullable;
+
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -192,7 +193,7 @@ public class StackFrameItem {
     public void computePresentation(@Nonnull XValueNode node, @Nonnull XValuePlace place) {
       ClassRenderer classRenderer = NodeRendererSettings.getInstance().getClassRenderer();
       String type = classRenderer.renderTypeName(myType);
-      Image icon = myVarType == VariableItem.VarType.PARAM ? AllIcons.Nodes.Parameter : AllIcons.Debugger.Value;
+      Image icon = myVarType == VariableItem.VarType.PARAM ? PlatformIconGroup.nodesParameter() : ExecutionDebugIconGroup.nodeValue();
       if (myType != null && myType.startsWith(JavaClassNames.JAVA_LANG_STRING + "@")) {
         node.setPresentation(icon, new XStringValuePresentation(myValue) {
           @Nullable
