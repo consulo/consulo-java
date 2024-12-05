@@ -17,24 +17,25 @@ package consulo.java.execution.projectRoots;
 
 import com.intellij.java.execution.CommandLineWrapperUtil;
 import com.intellij.java.language.projectRoots.JavaSdkType;
+import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import consulo.application.Application;
 import consulo.content.bundle.Sdk;
 import consulo.content.bundle.SdkTypeId;
 import consulo.execution.CantRunException;
 import consulo.execution.localize.ExecutionLocalize;
 import consulo.java.execution.OwnSimpleJavaParameters;
+import consulo.java.language.bundle.JavaSdkTypeUtil;
 import consulo.process.cmd.GeneralCommandLine;
 import consulo.process.cmd.ParametersList;
 import consulo.process.cmd.ParametersListUtil;
 import consulo.process.local.OSProcessUtil;
-import consulo.project.Project;
 import consulo.util.dataholder.Key;
 import consulo.util.io.ClassPathUtil;
 import consulo.util.io.FileUtil;
 import consulo.util.lang.StringUtil;
 import consulo.util.nodep.classloader.UrlClassLoader;
 import consulo.util.nodep.text.StringUtilRt;
-import consulo.virtualFileSystem.encoding.EncodingManager;
+import consulo.virtualFileSystem.encoding.ApplicationEncodingManager;
 import consulo.virtualFileSystem.util.PathsList;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -363,7 +364,7 @@ public class OwnJdkUtil {
         if (encoding == null) {
             Charset charset = javaParameters.getCharset();
             if (charset == null) {
-                charset = EncodingManager.getInstance().getDefaultCharset();
+                charset = ApplicationEncodingManager.getInstance().getDefaultCharset();
             }
             commandLine.addParameter("-Dfile.encoding=" + charset.name());
             commandLine.withCharset(charset);
@@ -374,6 +375,24 @@ public class OwnJdkUtil {
                 commandLine.withCharset(charset);
             }
             catch (UnsupportedCharsetException | IllegalCharsetNameException ignore) {
+            }
+        }
+
+        if (!parametersList.hasProperty("sun.stdout.encoding")
+            && !parametersList.hasProperty("sun.stderr.encoding")) {
+            try {
+                Sdk jdk = javaParameters.getJdk();
+                JavaSdkVersion version = jdk != null ? JavaSdkTypeUtil.getVersion(jdk) : null;
+                if (version != null && version.isAtLeast(JavaSdkVersion.JDK_18)) {
+                    Charset charset = javaParameters.getCharset();
+                    if (charset == null) {
+                        charset = ApplicationEncodingManager.getInstance().getDefaultCharset();
+                    }
+                    commandLine.addParameter("-Dsun.stdout.encoding=" + charset.name());
+                    commandLine.addParameter("-Dsun.stderr.encoding=" + charset.name());
+                }
+            }
+            catch (IllegalArgumentException ignore) {
             }
         }
     }
