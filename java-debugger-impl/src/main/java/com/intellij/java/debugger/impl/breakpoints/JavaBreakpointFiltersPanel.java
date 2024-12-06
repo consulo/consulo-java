@@ -25,7 +25,6 @@ import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.FieldPanel;
 import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.ide.impl.idea.ui.MultiLineTooltipUI;
 import consulo.execution.debug.XSourcePosition;
 import consulo.execution.debug.breakpoint.XBreakpoint;
 import consulo.execution.debug.breakpoint.ui.XBreakpointCustomPropertiesPanel;
