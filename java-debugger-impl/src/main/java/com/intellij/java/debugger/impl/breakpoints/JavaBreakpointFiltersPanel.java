@@ -271,17 +271,6 @@ public class JavaBreakpointFiltersPanel<T extends JavaBreakpointProperties, B ex
 			String toolTipText = super.getToolTipText(event);
 			return getToolTipText().length() == 0 ? null : toolTipText;
 		}
-
-		@Override
-		public JToolTip createToolTip()
-		{
-			JToolTip toolTip = new JToolTip()
-			{{
-					setUI(new MultiLineTooltipUI());
-				}};
-			toolTip.setComponent(this);
-			return toolTip;
-		}
 	}
 
 	private void reloadClassFilters()
