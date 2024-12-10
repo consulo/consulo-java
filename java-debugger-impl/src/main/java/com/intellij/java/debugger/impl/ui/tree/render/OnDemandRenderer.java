@@ -23,14 +23,13 @@ import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.actions.ForceOnDemandRenderersAction;
+import consulo.execution.debug.XDebugSession;
 import consulo.execution.debug.frame.HeadlessValueEvaluationCallback;
 import consulo.execution.debug.frame.XFullValueEvaluator;
+import consulo.execution.debug.frame.XValueNode;
 import consulo.execution.debug.frame.XValuePlace;
-import consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl;
-import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 import consulo.util.dataholder.Key;
 import jakarta.annotation.Nonnull;
-
 import jakarta.annotation.Nullable;
 
 /**
@@ -61,7 +60,7 @@ public interface OnDemandRenderer extends FullValueEvaluatorProvider {
       @Override
       public void startEvaluation(@Nonnull XFullValueEvaluationCallback callback) {
         if (callback instanceof HeadlessValueEvaluationCallback) {
-          XValueNodeImpl node = (XValueNodeImpl) ((HeadlessValueEvaluationCallback) callback).getNode();
+          XValueNode node = ((HeadlessValueEvaluationCallback) callback).getNode();
           node.clearFullValueEvaluator();
           setCalculated(((JavaValue) node.getValueContainer()).getDescriptor());
           node.getValueContainer().computePresentation(node, XValuePlace.TREE);
@@ -82,6 +81,6 @@ public interface OnDemandRenderer extends FullValueEvaluatorProvider {
   }
 
   static boolean isOnDemandForced(EvaluationContext evaluationContext) {
-    return ForceOnDemandRenderersAction.isForcedOnDemand((XDebugSessionImpl) ((DebugProcessImpl) evaluationContext.getDebugProcess()).getXdebugProcess().getSession());
+    return ForceOnDemandRenderersAction.isForcedOnDemand(((DebugProcessImpl) evaluationContext.getDebugProcess()).getXdebugProcess().getSession());
   }
 }

@@ -20,8 +20,7 @@ import com.intellij.java.debugger.engine.DebuggerUtils;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
 import consulo.configurable.ConfigurationException;
 import consulo.execution.configuration.ui.SettingsEditor;
-import consulo.ide.impl.idea.xdebugger.impl.settings.DebuggerConfigurable;
-import consulo.ide.setting.ShowSettingsUtil;
+import consulo.execution.debug.XDebuggerManager;
 import consulo.logging.Logger;
 import consulo.process.ExecutionException;
 import consulo.project.Project;
@@ -47,10 +46,12 @@ public class GenericDebuggerParametersRunnerConfigurable extends SettingsEditor<
 
     public GenericDebuggerParametersRunnerConfigurable(final Project project) {
         myDebuggerSettings.addActionListener(e -> {
-            ShowSettingsUtil.getInstance().showSettingsDialog(project, DebuggerConfigurable.class);
+            XDebuggerManager.getInstance(project).showSettings();
+
             if (myIsLocal) {
                 setTransport(DebuggerSettings.getInstance().DEBUGGER_TRANSPORT);
             }
+
             suggestAvailablePortIfNotSpecified();
             updateUI();
         });

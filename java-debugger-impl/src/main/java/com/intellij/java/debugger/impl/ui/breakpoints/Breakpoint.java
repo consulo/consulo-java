@@ -51,15 +51,12 @@ import com.intellij.java.debugger.ui.classFilter.ClassFilter;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.application.ApplicationManager;
 import consulo.application.ReadAction;
+import consulo.execution.debug.XDebuggerHistoryManager;
 import consulo.execution.debug.XDebuggerUtil;
 import consulo.execution.debug.breakpoint.SuspendPolicy;
 import consulo.execution.debug.breakpoint.XBreakpoint;
 import consulo.execution.debug.breakpoint.XExpression;
 import consulo.execution.debug.breakpoint.XLineBreakpoint;
-import consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl;
-import consulo.ide.impl.idea.xdebugger.impl.XDebuggerHistoryManager;
-import consulo.ide.impl.idea.xdebugger.impl.breakpoints.XBreakpointBase;
-import consulo.ide.impl.idea.xdebugger.impl.breakpoints.ui.XBreakpointActionsPanel;
 import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.event.LocatableEvent;
 import consulo.internal.com.sun.jdi.request.EventRequest;
@@ -132,7 +129,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		return ReadAction.compute(() ->
 		{
 			JavaDebugProcess process = debugProcess.getXdebugProcess();
-			return process != null && debugProcess.isAttached() && (xBreakpoint == null || ((XDebugSessionImpl) process.getSession()).isBreakpointActive(xBreakpoint)) && (forPreparedClass ||
+			return process != null && debugProcess.isAttached() && (xBreakpoint == null || process.getSession().isBreakpointActive(xBreakpoint)) && (forPreparedClass ||
 					debugProcess.getRequestsManager().findRequests(requestor).isEmpty());
 		});
 	}
@@ -588,9 +585,9 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 			if(logMessage != null && !logMessage.isEmpty())
 			{
 				XExpression expression = XExpression.fromText(logMessage);
-				XDebuggerHistoryManager.getInstance(myProject).addRecentExpression(XBreakpointActionsPanel.LOG_EXPRESSION_HISTORY_ID, expression);
+				XDebuggerHistoryManager.getInstance(myProject).addRecentExpression(XDebuggerHistoryManager.BREAKPOINT_CONDITION_HISTORY_ID, expression);
 				myXBreakpoint.setLogExpressionObject(expression);
-				((XBreakpointBase) myXBreakpoint).setLogExpressionEnabled(Boolean.valueOf(JDOMExternalizerUtil.readField(parentNode, "LOG_EXPRESSION_ENABLED")));
+				myXBreakpoint.setLogExpressionEnabled(Boolean.valueOf(JDOMExternalizerUtil.readField(parentNode, "LOG_EXPRESSION_ENABLED")));
 			}
 		}
 		catch(Exception ignored)
@@ -819,6 +816,6 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 
 	protected void fireBreakpointChanged()
 	{
-		((XBreakpointBase) myXBreakpoint).fireBreakpointChanged();
+		myXBreakpoint.fireBreakpointChanged();
 	}
 }

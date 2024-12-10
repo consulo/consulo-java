@@ -39,7 +39,7 @@ import consulo.application.util.function.ThrowableComputable;
 import consulo.component.ProcessCanceledException;
 import consulo.dataContext.DataContext;
 import consulo.execution.debug.breakpoint.XExpression;
-import consulo.ide.impl.idea.xdebugger.impl.breakpoints.XExpressionState;
+import consulo.execution.debug.breakpoint.XExpressionState;
 import consulo.internal.com.sun.jdi.InternalException;
 import consulo.internal.com.sun.jdi.ObjectCollectedException;
 import consulo.internal.com.sun.jdi.VMDisconnectedException;
@@ -58,11 +58,10 @@ import consulo.util.lang.StringUtil;
 import consulo.util.xml.serializer.JDOMExternalizerUtil;
 import consulo.util.xml.serializer.SkipDefaultValuesSerializationFilters;
 import consulo.util.xml.serializer.XmlSerializer;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.inject.Singleton;
 import org.jdom.Element;
-
-import jakarta.annotation.Nonnull;
 
 import java.io.IOException;
 

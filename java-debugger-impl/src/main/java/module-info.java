@@ -39,14 +39,6 @@ open module consulo.java.debugger.impl {
   exports com.intellij.java.debugger.impl.engine.requests;
   exports com.intellij.java.debugger.impl.externalSystem;
   exports com.intellij.java.debugger.impl.jdi;
-  exports com.intellij.java.debugger.impl.memory.action;
-  exports com.intellij.java.debugger.impl.memory.action.tracking;
-  exports com.intellij.java.debugger.impl.memory.component;
-  exports com.intellij.java.debugger.impl.memory.event;
-  exports com.intellij.java.debugger.impl.memory.filtering;
-  exports com.intellij.java.debugger.impl.memory.tracking;
-  exports com.intellij.java.debugger.impl.memory.ui;
-  exports com.intellij.java.debugger.impl.memory.utils;
   exports com.intellij.java.debugger.impl.settings;
   exports com.intellij.java.debugger.impl.ui;
   exports com.intellij.java.debugger.impl.ui.breakpoints;

@@ -24,7 +24,6 @@ import com.intellij.java.debugger.impl.DebuggerManagerEx;
 import com.intellij.java.debugger.impl.DebuggerSession;
 import com.intellij.java.debugger.impl.codeinsight.RuntimeTypeEvaluator;
 import com.intellij.java.debugger.impl.engine.evaluation.expression.EvaluatorBuilderImpl;
-import com.intellij.java.debugger.impl.ui.DebuggerExpressionComboBox;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.JavaCodeFragment;
 import com.intellij.java.language.psi.JavaCodeFragmentFactory;
@@ -153,6 +152,6 @@ public class DefaultCodeFragmentFactory extends CodeFragmentFactory {
   public static final Key<String> KEY = Key.create("DefaultCodeFragmentFactory.KEY");
 
   public static boolean isDebuggerFile(PsiFile file) {
-    return file.getUserData(KEY) != null || file.getUserData(DebuggerExpressionComboBox.KEY) != null;
+    return file.getUserData(KEY) != null;
   }
 }

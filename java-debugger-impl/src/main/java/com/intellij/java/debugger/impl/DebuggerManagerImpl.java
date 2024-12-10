@@ -39,7 +39,6 @@ import consulo.annotation.component.ServiceImpl;
 import consulo.application.Application;
 import consulo.application.progress.ProgressManager;
 import consulo.colorScheme.event.EditorColorsListener;
-import consulo.component.persist.PersistentStateComponent;
 import consulo.component.persist.State;
 import consulo.component.persist.Storage;
 import consulo.component.persist.StoragePathMacros;
@@ -55,18 +54,15 @@ import consulo.process.ProcessHandler;
 import consulo.process.event.ProcessAdapter;
 import consulo.process.event.ProcessEvent;
 import consulo.project.Project;
-import consulo.project.startup.StartupManager;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.collection.Lists;
 import consulo.util.collection.SmartList;
 import consulo.util.lang.StringUtil;
-import consulo.util.xml.serializer.WriteExternalException;
 import consulo.virtualFileSystem.VirtualFile;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import org.jdom.Element;
 
 import javax.swing.*;
 import java.io.File;
@@ -77,7 +73,7 @@ import java.util.stream.Stream;
 @Singleton
 @State(name = "DebuggerManager", storages = {@Storage(StoragePathMacros.WORKSPACE_FILE)})
 @ServiceImpl
-public class DebuggerManagerImpl extends DebuggerManagerEx implements PersistentStateComponent<Element> {
+public class DebuggerManagerImpl extends DebuggerManagerEx {
     private static final Logger LOG = Logger.getInstance(DebuggerManagerImpl.class);
 
     private final Project myProject;
@@ -142,14 +138,9 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
     }
 
     @Inject
-    public DebuggerManagerImpl(Project project, StartupManager startupManager) {
+    public DebuggerManagerImpl(Project project) {
         myProject = project;
-        myBreakpointManager = new BreakpointManager(myProject, startupManager, this);
-        if (project.isDefault()) {
-            return;
-        }
-
-        project.getMessageBus().connect().subscribe(EditorColorsListener.class, scheme -> getBreakpointManager().updateBreakpointsUI());
+        myBreakpointManager = new BreakpointManager(myProject, this);
     }
 
     @Nonnull
@@ -172,23 +163,6 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
             final Collection<DebuggerSession> values = mySessions.values();
             return values.isEmpty() ? Collections.emptyList() : new ArrayList<>(values);
         }
-    }
-
-    @Nullable
-    @Override
-    public Element getState() {
-        Element state = new Element("state");
-        myBreakpointManager.writeExternal(state);
-        return state;
-    }
-
-    @Override
-    public void loadState(Element state) {
-        myBreakpointManager.readExternal(state);
-    }
-
-    public void writeExternal(Element element) throws WriteExternalException {
-        myBreakpointManager.writeExternal(element);
     }
 
     /**

@@ -36,6 +36,7 @@ import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.render.*;
 import com.intellij.java.debugger.ui.tree.NodeDescriptor;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.application.Application;
 import consulo.application.ApplicationManager;
 import consulo.application.ReadAction;
 import consulo.execution.debug.XDebuggerUtil;
@@ -46,7 +47,6 @@ import consulo.execution.debug.frame.*;
 import consulo.execution.debug.frame.presentation.*;
 import consulo.execution.debug.icon.ExecutionDebugIconGroup;
 import consulo.execution.debug.ui.XValueTextProvider;
-import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 import consulo.internal.com.sun.jdi.ArrayReference;
 import consulo.internal.com.sun.jdi.ArrayType;
 import consulo.internal.com.sun.jdi.Value;
@@ -294,8 +294,8 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
                 renderer.renderError(myError);
             }
             else {
-                if (compact && ((XValueNodeImpl) node).getValueContainer() instanceof JavaValue) {
-                    final JavaValue container = (JavaValue) ((XValueNodeImpl) node).getValueContainer();
+                if (compact && node.getValueContainer() instanceof JavaValue) {
+                    final JavaValue container = (JavaValue) node.getValueContainer();
 
                     if (container.getDescriptor().isArray()) {
                         final ArrayReference value = (ArrayReference) container.getDescriptor().getValue();
@@ -702,14 +702,13 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
     public void setRenderer(NodeRenderer nodeRenderer, final XValueNode node) {
         DebuggerManagerThreadImpl.assertIsManagerThread();
         myValueDescriptor.setRenderer(nodeRenderer);
-        reBuild((XValueNodeImpl) node);
+        reBuild(node);
     }
 
-    public void reBuild(final XValueNodeImpl node) {
+    public void reBuild(final XValueNode node) {
         DebuggerManagerThreadImpl.assertIsManagerThread();
         myChildrenRemaining = -1;
-        node.invokeNodeUpdate(() ->
-        {
+        Application.get().invokeLater(() -> {
             node.clearChildren();
             computePresentation(node, XValuePlace.TREE);
         });

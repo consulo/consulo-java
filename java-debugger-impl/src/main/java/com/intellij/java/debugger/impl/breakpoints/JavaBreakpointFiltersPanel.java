@@ -20,18 +20,17 @@ import com.intellij.java.debugger.impl.breakpoints.properties.JavaBreakpointProp
 import com.intellij.java.debugger.impl.ui.breakpoints.EditClassFiltersDialog;
 import com.intellij.java.debugger.impl.ui.breakpoints.EditInstanceFiltersDialog;
 import com.intellij.java.debugger.ui.classFilter.ClassFilter;
-import consulo.project.Project;
-import consulo.ui.ex.awt.DialogWrapper;
-import consulo.ui.ex.awt.FieldPanel;
-import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.execution.debug.XSourcePosition;
 import consulo.execution.debug.breakpoint.XBreakpoint;
 import consulo.execution.debug.breakpoint.ui.XBreakpointCustomPropertiesPanel;
-import consulo.ide.impl.idea.xdebugger.impl.breakpoints.XBreakpointBase;
-import consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil;
-
+import consulo.execution.debug.ui.DebuggerUIUtil;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.FieldPanel;
+import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -96,13 +95,13 @@ public class JavaBreakpointFiltersPanel<T extends JavaBreakpointProperties, B ex
 
 				com.intellij.java.language.util.ClassFilter classFilter = createClassConditionFilter();
 
-				EditClassFiltersDialog _dialog = new EditClassFiltersDialog(myProject, classFilter);
-				_dialog.setFilters(myClassFilters, myClassExclusionFilters);
-				_dialog.show();
-				if(_dialog.getExitCode() == DialogWrapper.OK_EXIT_CODE)
+				EditClassFiltersDialog dialog = new EditClassFiltersDialog(myProject, classFilter);
+				dialog.setFilters(myClassFilters, myClassExclusionFilters);
+				dialog.show();
+				if(dialog.getExitCode() == DialogWrapper.OK_EXIT_CODE)
 				{
-					myClassFilters = _dialog.getFilters();
-					myClassExclusionFilters = _dialog.getExclusionFilters();
+					myClassFilters = dialog.getFilters();
+					myClassExclusionFilters = dialog.getExclusionFilters();
 					updateClassFilterEditor(true);
 				}
 			}
@@ -188,7 +187,7 @@ public class JavaBreakpointFiltersPanel<T extends JavaBreakpointProperties, B ex
 		changed = properties.setInstanceFilters(myInstanceFilters) || changed;
 		if(changed)
 		{
-			((XBreakpointBase) breakpoint).fireBreakpointChanged();
+			breakpoint.fireBreakpointChanged();
 		}
 	}
 

@@ -26,20 +26,16 @@ import com.intellij.java.debugger.ui.tree.NodeDescriptor;
 import consulo.application.AllIcons;
 import consulo.colorScheme.EditorColorsScheme;
 import consulo.colorScheme.TextAttributes;
-import consulo.execution.debug.XDebugSession;
-import consulo.execution.debug.XDebuggerManager;
 import consulo.execution.debug.icon.ExecutionDebugIconGroup;
 import consulo.execution.debug.ui.ValueMarkup;
 import consulo.execution.debug.ui.XDebuggerUIConstants;
-import consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl;
-import consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil;
-import consulo.ide.impl.idea.xdebugger.impl.ui.XDebugSessionTab;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.Value;
 import consulo.ui.ex.Gray;
 import consulo.ui.ex.JBColor;
 import consulo.ui.ex.SimpleColoredText;
 import consulo.ui.ex.SimpleTextAttributes;
+import consulo.ui.ex.awt.EditorColorsUtil;
 import consulo.ui.ex.awt.tree.ColoredTreeCellRenderer;
 import consulo.ui.ex.util.TextAttributesUtil;
 import consulo.ui.image.Image;
@@ -155,17 +151,6 @@ public class DebuggerTreeRenderer extends ColoredTreeCellRenderer {
             }
         }
 
-        // if watches in variables enabled, always use watch icon
-        if (valueDescriptor instanceof WatchItemDescriptor && nodeIcon != ExecutionDebugIconGroup.nodeWatch()) {
-            XDebugSession session = XDebuggerManager.getInstance(valueDescriptor.getProject()).getCurrentSession();
-            if (session != null) {
-                XDebugSessionTab tab = ((XDebugSessionImpl) session).getSessionTab();
-                if (tab != null && tab.isWatchesInVariables()) {
-                    nodeIcon = ExecutionDebugIconGroup.nodeWatch();
-                }
-            }
-        }
-
         final Image valueIcon = valueDescriptor.getValueIcon();
         if (nodeIcon != null && valueIcon != null) {
             nodeIcon = ImageEffects.appendRight(nodeIcon, valueIcon);
@@ -192,11 +177,11 @@ public class DebuggerTreeRenderer extends ColoredTreeCellRenderer {
     }
 
     public static SimpleColoredText getDescriptorText(final DebuggerContextImpl debuggerContext, NodeDescriptorImpl descriptor, boolean multiline) {
-        return getDescriptorText(debuggerContext, descriptor, DebuggerUIUtil.getColorScheme(null), multiline, true);
+        return getDescriptorText(debuggerContext, descriptor, EditorColorsUtil.getColorSchemeForComponent(null), multiline, true);
     }
 
     public static SimpleColoredText getDescriptorTitle(final DebuggerContextImpl debuggerContext, NodeDescriptorImpl descriptor) {
-        return getDescriptorText(debuggerContext, descriptor, DebuggerUIUtil.getColorScheme(null), false, false);
+        return getDescriptorText(debuggerContext, descriptor, EditorColorsUtil.getColorSchemeForComponent(null), false, false);
     }
 
     private static SimpleColoredText getDescriptorText(DebuggerContextImpl debuggerContext, NodeDescriptorImpl descriptor, EditorColorsScheme colorScheme, boolean multiline, boolean appendValue) {

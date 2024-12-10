@@ -27,26 +27,19 @@ import consulo.execution.debug.XDebugSession;
 import consulo.execution.debug.XDebuggerManager;
 import consulo.ide.impl.idea.openapi.options.TabbedConfigurable;
 import consulo.ide.impl.idea.openapi.options.ex.SingleConfigurableEditor;
-import consulo.ide.impl.idea.xdebugger.impl.ui.tree.actions.XDebuggerTreeActionBase;
-import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 import consulo.platform.base.localize.ActionLocalize;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnActionEvent;
-import jakarta.annotation.Nonnull;
+import consulo.ui.ex.action.DumbAwareAction;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.util.List;
 
-public class CustomizeContextViewAction extends XDebuggerTreeActionBase {
+public class CustomizeContextViewAction extends DumbAwareAction {
   @Override
   public void actionPerformed(AnActionEvent e) {
-    perform(null, "", e);
-  }
-
-  @Override
-  protected void perform(XValueNodeImpl node, @Nonnull String nodeName, AnActionEvent e) {
     final Project project = e.getData(Project.KEY);
     Disposable disposable = Disposable.newDisposable();
     SingleConfigurableEditor editor = new SingleConfigurableEditor(project, new TabbedConfigurable(disposable) {

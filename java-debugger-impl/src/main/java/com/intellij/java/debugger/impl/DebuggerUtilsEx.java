@@ -51,10 +51,7 @@ import consulo.disposer.Disposer;
 import consulo.document.Document;
 import consulo.document.util.DocumentUtil;
 import consulo.document.util.TextRange;
-import consulo.execution.debug.XDebugSession;
-import consulo.execution.debug.XDebuggerManager;
-import consulo.execution.debug.XSourcePosition;
-import consulo.execution.debug.XSourcePositionWithHighlighter;
+import consulo.execution.debug.*;
 import consulo.execution.debug.frame.XValueNode;
 import consulo.execution.ui.RunContentManager;
 import consulo.execution.ui.console.ConsoleView;
@@ -64,7 +61,6 @@ import consulo.execution.ui.console.TextConsoleBuilderFactory;
 import consulo.execution.ui.layout.RunnerLayoutUi;
 import consulo.execution.unscramble.ThreadDumpPanel;
 import consulo.execution.unscramble.ThreadState;
-import consulo.ide.impl.idea.xdebugger.impl.XSourcePositionImpl;
 import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.event.Event;
 import consulo.internal.com.sun.jdi.event.EventSet;
@@ -861,7 +857,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
         @Nonnull
         @Override
         public Navigatable createNavigatable(@Nonnull Project project) {
-            return XSourcePositionImpl.doCreateOpenFileDescriptor(project, this);
+            return project.getApplication().getInstance(XSourcePositionFactory.class).createDefaultNavigatable(project, this);
         }
 
         @Nullable

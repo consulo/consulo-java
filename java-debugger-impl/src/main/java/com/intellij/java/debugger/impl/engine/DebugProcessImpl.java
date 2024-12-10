@@ -66,7 +66,6 @@ import consulo.execution.debug.XDebugSession;
 import consulo.execution.debug.XSourcePosition;
 import consulo.execution.debug.ui.XDebuggerUIConstants;
 import consulo.fileEditor.statusBar.StatusBarUtil;
-import consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl;
 import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.connect.*;
 import consulo.internal.com.sun.jdi.request.EventRequest;
@@ -1935,7 +1934,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
       private void doReattach() {
         DebuggerInvocationUtil.swingInvokeLater(myProject, () ->
         {
-          ((XDebugSessionImpl)getXdebugProcess().getSession()).reset();
+          getXdebugProcess().getSession().resetBreakpoints();
           myState.set(State.INITIAL);
           myConnection = environment.getRemoteConnection();
           getManagerThread().restartIfNeeded();

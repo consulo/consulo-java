@@ -31,16 +31,15 @@ import consulo.execution.debug.XSourcePosition;
 import consulo.execution.debug.breakpoint.XExpression;
 import consulo.execution.debug.evaluation.EvaluationMode;
 import consulo.execution.debug.evaluation.XDebuggerEvaluator;
-import consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil;
 import consulo.java.analysis.codeInsight.JavaCodeInsightUtilCore;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.project.Project;
+import consulo.util.concurrent.Obsolescent;
 import consulo.util.lang.Pair;
 import consulo.util.lang.ref.Ref;
 import jakarta.annotation.Nonnull;
-
 import jakarta.annotation.Nullable;
 
 /**
@@ -70,7 +69,7 @@ public class JavaDebuggerEvaluator extends XDebuggerEvaluator {
 
       @Override
       public void threadAction() {
-        if (DebuggerUIUtil.isObsolete(callback)) {
+        if (Obsolescent.isObsolete(callback)) {
           return;
         }
 

@@ -20,34 +20,28 @@
  */
 package com.intellij.java.debugger.impl.ui.breakpoints;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
-import com.intellij.java.debugger.impl.InstanceFilter;
 import com.intellij.java.debugger.engine.evaluation.CodeFragmentKind;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
-import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.engine.evaluation.TextWithImports;
+import com.intellij.java.debugger.impl.DebuggerUtilsEx;
+import com.intellij.java.debugger.impl.InstanceFilter;
+import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.engine.evaluation.TextWithImportsImpl;
 import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;
-import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
-import consulo.project.Project;
-import consulo.util.xml.serializer.DefaultJDOMExternalizer;
-import consulo.util.xml.serializer.InvalidDataException;
-import consulo.util.xml.serializer.JDOMExternalizable;
-import consulo.util.xml.serializer.JDOMExternalizerUtil;
-import consulo.util.xml.serializer.WriteExternalException;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.debugger.ui.classFilter.ClassFilter;
-import consulo.ide.impl.idea.xdebugger.impl.XDebuggerHistoryManager;
-import consulo.ide.impl.idea.xdebugger.impl.breakpoints.ui.XLightBreakpointPropertiesPanel;
+import consulo.execution.debug.XDebuggerHistoryManager;
 import consulo.internal.com.sun.jdi.event.LocatableEvent;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
+import consulo.util.xml.serializer.*;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /*
  * Not used any more, since move to xBreakpoints
@@ -167,7 +161,7 @@ public class FilteredRequestorImpl implements JDOMExternalizable, FilteredReques
 		breakpoint.setCondition(CONDITION_ENABLED ? myCondition : null);
 		if(myCondition != null && !myCondition.isEmpty())
 		{
-			XDebuggerHistoryManager.getInstance(myProject).addRecentExpression(XLightBreakpointPropertiesPanel.CONDITION_HISTORY_ID, TextWithImportsImpl.toXExpression(myCondition));
+			XDebuggerHistoryManager.getInstance(myProject).addRecentExpression(XDebuggerHistoryManager.BREAKPOINT_CONDITION_HISTORY_ID, TextWithImportsImpl.toXExpression(myCondition));
 		}
 
 		breakpoint.setClassFiltersEnabled(CLASS_FILTERS_ENABLED);

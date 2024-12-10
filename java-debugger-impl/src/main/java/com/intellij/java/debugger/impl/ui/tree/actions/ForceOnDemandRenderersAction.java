@@ -18,64 +18,54 @@ package com.intellij.java.debugger.impl.ui.tree.actions;
 
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
+import consulo.application.dumb.DumbAware;
+import consulo.execution.debug.XDebugSession;
 import consulo.execution.debug.XDebuggerManager;
+import consulo.execution.debug.ui.XDebugSessionData;
+import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.action.ToggleAction;
-import consulo.application.dumb.DumbAware;
-import consulo.project.Project;
 import consulo.util.dataholder.Key;
-import consulo.execution.debug.XDebugSession;
-import consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl;
-import consulo.ide.impl.idea.xdebugger.impl.ui.XDebugSessionData;
-import consulo.ui.annotation.RequiredUIAccess;
 
 /**
  * from kotlin
  */
-public class ForceOnDemandRenderersAction extends ToggleAction implements DumbAware
-{
-	private static final Key<Boolean> RENDERERS_ONDEMAND_FORCED = Key.create("RENDERERS_ONDEMAND_FORCED");
+public class ForceOnDemandRenderersAction extends ToggleAction implements DumbAware {
+    private static final Key<Boolean> RENDERERS_ONDEMAND_FORCED = Key.create("RENDERERS_ONDEMAND_FORCED");
 
-	private static XDebugSessionData getSessionData(AnActionEvent e)
-	{
-		XDebugSessionData data = e.getData(XDebugSessionData.DATA_KEY);
-		if(data == null)
-		{
-			Project project = e.getData(Project.KEY);
-			if(project != null)
-			{
-				XDebugSession session = XDebuggerManager.getInstance(project).getCurrentSession();
-				if(session != null)
-				{
-					data = ((XDebugSessionImpl) session).getSessionData();
-				}
-			}
-		}
-		return data ;
-	}
+    private static XDebugSessionData getSessionData(AnActionEvent e) {
+        XDebugSessionData data = e.getData(XDebugSessionData.DATA_KEY);
+        if (data == null) {
+            Project project = e.getData(Project.KEY);
+            if (project != null) {
+                XDebugSession session = XDebuggerManager.getInstance(project).getCurrentSession();
+                if (session != null) {
+                    data = ((XDebugSession) session).getSessionData();
+                }
+            }
+        }
+        return data;
+    }
 
-	public static boolean isForcedOnDemand(XDebugSessionImpl session)
-	{
-		return RENDERERS_ONDEMAND_FORCED.get(session.getSessionData(), false);
-	}
+    public static boolean isForcedOnDemand(XDebugSession session) {
+        return RENDERERS_ONDEMAND_FORCED.get(session.getSessionData(), false);
+    }
 
-	@Override
-	public boolean isSelected(AnActionEvent e)
-	{
-		return RENDERERS_ONDEMAND_FORCED.get(getSessionData(e), false);
-	}
+    @Override
+    public boolean isSelected(AnActionEvent e) {
+        return RENDERERS_ONDEMAND_FORCED.get(getSessionData(e), false);
+    }
 
-	@Override
-	public void setSelected(AnActionEvent e, boolean state)
-	{
-		RENDERERS_ONDEMAND_FORCED.set(getSessionData(e), state);
-		NodeRendererSettings.getInstance().fireRenderersChanged();
-	}
+    @Override
+    public void setSelected(AnActionEvent e, boolean state) {
+        RENDERERS_ONDEMAND_FORCED.set(getSessionData(e), state);
+        NodeRendererSettings.getInstance().fireRenderersChanged();
+    }
 
-	@RequiredUIAccess
-	@Override
-	public void update(AnActionEvent e)
-	{
-		e.getPresentation().setEnabledAndVisible(DebuggerUtilsEx.isInJavaSession(e));
-	}
+    @RequiredUIAccess
+    @Override
+    public void update(AnActionEvent e) {
+        e.getPresentation().setEnabledAndVisible(DebuggerUtilsEx.isInJavaSession(e));
+    }
 }

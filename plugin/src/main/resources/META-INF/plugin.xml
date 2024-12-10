@@ -250,38 +250,6 @@
 			<add-to-group group-id="CallHierarchyPopupMenu" anchor="first"/>
 		</action>
 
-		<group id="MemoryView.ClassesPopupActionGroup">
-			<action class="com.intellij.java.debugger.impl.memory.action.ShowInstancesFromClassesViewAction"
-					id="MemoryView.ShowInstances"
-					text="Show Instances"/>
-
-			<action class="com.intellij.java.debugger.impl.memory.action.ShowNewInstancesAction"
-					id="MemoryView.ShowNewInstances"
-					text="Show New Instances"/>
-
-			<action class="com.intellij.java.debugger.impl.memory.action.JumpToTypeSourceAction"
-					id="MemoryView.JumpToTypeSource"
-					text="Jump To Type Source"/>
-			<separator/>
-
-			<action class="com.intellij.java.debugger.impl.memory.action.tracking.TrackInstancesToggleAction"
-					id="MemoryView.TrackingAction.NewInstancesTracking"
-					text="Track New Instances"/>
-		</group>
-
-		<action class="com.intellij.java.debugger.impl.memory.action.ShowInstancesByClassAction"
-				id="MemoryView.ShowInstancesFromDebuggerTree"
-				text="Show Instances">
-			<add-to-group group-id="XDebugger.ValueGroup" anchor="after"
-						  relative-to-action="Debugger.ShowReferring"/>
-		</action>
-
-		<action class="com.intellij.java.debugger.impl.memory.action.tracking.JumpToAllocationSourceAction"
-				id="MemoryView.ShowAllocationStackTrace"
-				text="Jump To Allocation Position">
-			<add-to-group group-id="XDebugger.ValueGroup" anchor="after"
-						  relative-to-action="XDebugger.JumpToTypeSource"/>
-		</action>
 
 		<group id="Debugger.FramePanelPopup">
 			<reference ref="Debugger.AdjustArrayRange"/>

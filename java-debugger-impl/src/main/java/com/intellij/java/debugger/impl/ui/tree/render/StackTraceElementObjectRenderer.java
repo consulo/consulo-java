@@ -28,13 +28,11 @@ import consulo.application.ApplicationManager;
 import consulo.execution.debug.frame.XFullValueEvaluator;
 import consulo.execution.ui.console.Filter;
 import consulo.execution.ui.console.HyperlinkInfo;
-import consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil;
 import consulo.internal.com.sun.jdi.*;
 import consulo.logging.Logger;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
-
-import jakarta.annotation.Nonnull;
 
 import java.util.Collections;
 
@@ -77,12 +75,7 @@ class StackTraceElementObjectRenderer extends ToStringBasedRenderer implements F
                   if (result != null) {
                     final HyperlinkInfo info = result.getFirstHyperlinkInfo();
                     if (info != null) {
-                      DebuggerUIUtil.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                          info.navigate(valueDescriptor.getProject());
-                        }
-                      });
+                      valueDescriptor.getProject().getUIAccess().give(() -> info.navigate(valueDescriptor.getProject()));
                     }
                   }
                 }

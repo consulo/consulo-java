@@ -15,16 +15,11 @@
  */
 package com.intellij.java.debugger.impl.actions;
 
-import java.util.List;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.DebuggerContext;
+import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.impl.engine.JavaValue;
 import com.intellij.java.debugger.impl.engine.SuspendContextImpl;
-import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.FieldDescriptorImpl;
@@ -32,192 +27,176 @@ import com.intellij.java.debugger.impl.ui.impl.watch.NodeManagerImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.java.language.psi.PsiExpression;
 import consulo.execution.debug.frame.*;
-import consulo.execution.debug.frame.XValueModifier;
-import consulo.execution.debug.frame.XValueNode;
-import consulo.execution.debug.frame.XValuePlace;
+import consulo.execution.debug.frame.presentation.XValueNodePresentationConfigurator;
 import consulo.execution.debug.frame.presentation.XValuePresentation;
-import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodePresentationConfigurator;
-import consulo.execution.debug.frame.XCompositeNode;
-import consulo.execution.debug.frame.XValueChildrenList;
+import consulo.execution.debug.ui.XValueTree;
 import consulo.internal.com.sun.jdi.Field;
 import consulo.internal.com.sun.jdi.ObjectCollectedException;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.Value;
 import consulo.ui.image.Image;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-public class JavaReferringObjectsValue extends JavaValue
-{
-	private static final long MAX_REFERRING = 100;
-	private final boolean myIsField;
+import java.util.List;
 
-	private JavaReferringObjectsValue(@Nullable JavaValue parent,
-			@Nonnull ValueDescriptorImpl valueDescriptor,
-			@Nonnull EvaluationContextImpl evaluationContext,
-			NodeManagerImpl nodeManager,
-			boolean isField)
-	{
-		super(parent, valueDescriptor, evaluationContext, nodeManager, false);
-		myIsField = isField;
-	}
+public class JavaReferringObjectsValue extends JavaValue {
+    private static final long MAX_REFERRING = 100;
+    private final boolean myIsField;
 
-	public JavaReferringObjectsValue(@Nonnull JavaValue javaValue, boolean isField)
-	{
-		super(null, javaValue.getDescriptor(), javaValue.getEvaluationContext(), javaValue.getNodeManager(), false);
-		myIsField = isField;
-	}
+    private JavaReferringObjectsValue(@Nullable JavaValue parent,
+                                      @Nonnull ValueDescriptorImpl valueDescriptor,
+                                      @Nonnull EvaluationContextImpl evaluationContext,
+                                      NodeManagerImpl nodeManager,
+                                      boolean isField) {
+        super(parent, valueDescriptor, evaluationContext, nodeManager, false);
+        myIsField = isField;
+    }
 
-	@Override
-	public boolean canNavigateToSource()
-	{
-		return true;
-	}
+    public JavaReferringObjectsValue(@Nonnull JavaValue javaValue, boolean isField) {
+        super(null, javaValue.getDescriptor(), javaValue.getEvaluationContext(), javaValue.getNodeManager(), false);
+        myIsField = isField;
+    }
 
-	@Override
-	public void computeChildren(@Nonnull final XCompositeNode node)
-	{
-		scheduleCommand(getEvaluationContext(), node, new SuspendContextCommandImpl(getEvaluationContext().getSuspendContext())
-		{
-			@Override
-			public Priority getPriority()
-			{
-				return Priority.NORMAL;
-			}
+    @Override
+    public boolean canNavigateToSource() {
+        return true;
+    }
 
-			@Override
-			public void contextAction(@Nonnull SuspendContextImpl suspendContext) throws Exception
-			{
-				final XValueChildrenList children = new XValueChildrenList();
+    @Override
+    public void computeChildren(@Nonnull final XCompositeNode node) {
+        scheduleCommand(getEvaluationContext(), node, new SuspendContextCommandImpl(getEvaluationContext().getSuspendContext()) {
+            @Override
+            public Priority getPriority() {
+                return Priority.NORMAL;
+            }
 
-				Value value = getDescriptor().getValue();
+            @Override
+            public void contextAction(@Nonnull SuspendContextImpl suspendContext) throws Exception {
+                final XValueChildrenList children = new XValueChildrenList();
 
-				List<ObjectReference> references;
-				try
-				{
-					references = ((ObjectReference) value).referringObjects(MAX_REFERRING);
-				}
-				catch(ObjectCollectedException e)
-				{
-					node.setErrorMessage(DebuggerBundle.message("evaluation.error.object.collected"));
-					return;
-				}
+                Value value = getDescriptor().getValue();
 
-				int i = 1;
-				for(final ObjectReference reference : references)
-				{
-					// try to find field name
-					Field field = findField(reference, value);
-					if(field != null)
-					{
-						ValueDescriptorImpl descriptor = new FieldDescriptorImpl(getProject(), reference, field)
-						{
-							@Override
-							public Value calcValue(EvaluationContextImpl evaluationContext) throws EvaluateException
-							{
-								return reference;
-							}
-						};
-						children.add(new JavaReferringObjectsValue(null, descriptor, getEvaluationContext(), getNodeManager(), true));
-						i++;
-					}
-					else
-					{
-						ValueDescriptorImpl descriptor = new ValueDescriptorImpl(getProject(), reference)
-						{
-							@Override
-							public Value calcValue(EvaluationContextImpl evaluationContext) throws EvaluateException
-							{
-								return reference;
-							}
+                List<ObjectReference> references;
+                try {
+                    references = ((ObjectReference) value).referringObjects(MAX_REFERRING);
+                }
+                catch (ObjectCollectedException e) {
+                    node.setErrorMessage(DebuggerBundle.message("evaluation.error.object.collected"));
+                    return;
+                }
 
-							@Override
-							public String getName()
-							{
-								return "Ref";
-							}
+                int i = 1;
+                for (final ObjectReference reference : references) {
+                    // try to find field name
+                    Field field = findField(reference, value);
+                    if (field != null) {
+                        ValueDescriptorImpl descriptor = new FieldDescriptorImpl(getProject(), reference, field) {
+                            @Override
+                            public Value calcValue(EvaluationContextImpl evaluationContext) throws EvaluateException {
+                                return reference;
+                            }
+                        };
+                        children.add(new JavaReferringObjectsValue(null, descriptor, getEvaluationContext(), getNodeManager(), true));
+                        i++;
+                    }
+                    else {
+                        ValueDescriptorImpl descriptor = new ValueDescriptorImpl(getProject(), reference) {
+                            @Override
+                            public Value calcValue(EvaluationContextImpl evaluationContext) throws EvaluateException {
+                                return reference;
+                            }
 
-							@Override
-							public PsiExpression getDescriptorEvaluation(DebuggerContext context) throws EvaluateException
-							{
-								return null;
-							}
-						};
-						children.add("Referrer " + i++, new JavaReferringObjectsValue(null, descriptor, getEvaluationContext(), getNodeManager(), false));
-					}
-				}
+                            @Override
+                            public String getName() {
+                                return "Ref";
+                            }
 
-				node.addChildren(children, true);
-			}
-		});
-	}
+                            @Override
+                            public PsiExpression getDescriptorEvaluation(DebuggerContext context) throws EvaluateException {
+                                return null;
+                            }
+                        };
+                        children.add("Referrer " + i++, new JavaReferringObjectsValue(null, descriptor, getEvaluationContext(), getNodeManager(), false));
+                    }
+                }
 
-	@Override
-	public void computePresentation(@Nonnull final XValueNode node, @Nonnull final XValuePlace place)
-	{
-		if(!myIsField)
-		{
-			super.computePresentation(node, place);
-		}
-		else
-		{
-			super.computePresentation(new XValueNodePresentationConfigurator.ConfigurableXValueNodeImpl()
-			{
-				@Override
-				public void applyPresentation(@Nullable Image icon, @Nonnull final XValuePresentation valuePresenter, boolean hasChildren)
-				{
-					node.setPresentation(icon, new XValuePresentation()
-					{
-						@Nonnull
-						@Override
-						public String getSeparator()
-						{
-							return " in ";
-						}
+                node.addChildren(children, true);
+            }
+        });
+    }
 
-						@Nullable
-						@Override
-						public String getType()
-						{
-							return valuePresenter.getType();
-						}
+    @Override
+    public void computePresentation(@Nonnull final XValueNode node, @Nonnull final XValuePlace place) {
+        if (!myIsField) {
+            super.computePresentation(node, place);
+        }
+        else {
+            super.computePresentation(new XValueNodePresentationConfigurator.ConfigurableXValueNodeImpl() {
+                @Override
+                public void applyPresentation(@Nullable Image icon, @Nonnull final XValuePresentation valuePresenter, boolean hasChildren) {
+                    node.setPresentation(icon, new XValuePresentation() {
+                        @Nonnull
+                        @Override
+                        public String getSeparator() {
+                            return " in ";
+                        }
 
-						@Override
-						public void renderValue(@Nonnull XValueTextRenderer renderer)
-						{
-							valuePresenter.renderValue(renderer);
-						}
-					}, hasChildren);
-				}
+                        @Nullable
+                        @Override
+                        public String getType() {
+                            return valuePresenter.getType();
+                        }
 
-				@Override
-				public void setFullValueEvaluator(@Nonnull XFullValueEvaluator fullValueEvaluator)
-				{
-				}
+                        @Override
+                        public void renderValue(@Nonnull XValueTextRenderer renderer) {
+                            valuePresenter.renderValue(renderer);
+                        }
+                    }, hasChildren);
+                }
 
-				@Override
-				public boolean isObsolete()
-				{
-					return false;
-				}
-			}, place);
-		}
-	}
+                @Override
+                public void setFullValueEvaluator(@Nonnull XFullValueEvaluator fullValueEvaluator) {
+                }
 
-	private static Field findField(ObjectReference reference, Value value)
-	{
-		for(Field field : reference.referenceType().allFields())
-		{
-			if(reference.getValue(field) == value)
-			{
-				return field;
-			}
-		}
-		return null;
-	}
+                @Nullable
+                @Override
+                public String getName() {
+                    return null;
+                }
 
-	@Nullable
-	@Override
-	public XValueModifier getModifier()
-	{
-		return null;
-	}
+                @Nullable
+                @Override
+                public XValue getValueContainer() {
+                    return null;
+                }
+
+                @Nullable
+                @Override
+                public XValueTree getTree() {
+                    return null;
+                }
+
+                @Override
+                public boolean isObsolete() {
+                    return false;
+                }
+            }, place);
+        }
+    }
+
+    private static Field findField(ObjectReference reference, Value value) {
+        for (Field field : reference.referenceType().allFields()) {
+            if (reference.getValue(field) == value) {
+                return field;
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public XValueModifier getModifier() {
+        return null;
+    }
 }

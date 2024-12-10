@@ -21,196 +21,168 @@
 package com.intellij.java.debugger.impl.actions;
 
 
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.JTree;
-import javax.swing.SwingUtilities;
-import javax.swing.tree.TreePath;
-
-import consulo.ide.impl.idea.xdebugger.impl.frame.XDebugView;
-import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
-import jakarta.annotation.Nonnull;
-import com.intellij.java.debugger.impl.DebuggerManagerEx;
-import com.intellij.java.debugger.impl.engine.JavaDebugProcess;
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
+import com.intellij.java.debugger.impl.DebuggerManagerEx;
 import com.intellij.java.debugger.impl.DebuggerStateManager;
+import com.intellij.java.debugger.impl.engine.JavaDebugProcess;
 import com.intellij.java.debugger.impl.ui.impl.DebuggerTreePanel;
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTree;
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeImpl;
+import consulo.dataContext.DataContext;
 import consulo.dataContext.DataManager;
+import consulo.disposer.Disposable;
 import consulo.execution.debug.XDebugProcess;
+import consulo.execution.debug.XDebugSession;
+import consulo.execution.debug.frame.XValueNode;
+import consulo.execution.debug.ui.XValueTree;
+import consulo.project.Project;
 import consulo.ui.ex.action.ActionManager;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.action.CommonShortcuts;
-import consulo.dataContext.DataContext;
-import consulo.project.Project;
 import consulo.ui.ex.awt.event.DoubleClickListener;
-import consulo.execution.debug.XDebugSession;
-import consulo.disposer.Disposable;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-public abstract class DebuggerAction extends AnAction
-{
-	private static final DebuggerTreeNodeImpl[] EMPTY_TREE_NODE_ARRAY = new DebuggerTreeNodeImpl[0];
+import javax.swing.*;
+import javax.swing.tree.TreePath;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
-	@Nullable
-	public static DebuggerTree getTree(DataContext dataContext)
-	{
-		return dataContext.getData(DebuggerTree.DATA_KEY);
-	}
+public abstract class DebuggerAction extends AnAction {
+    private static final DebuggerTreeNodeImpl[] EMPTY_TREE_NODE_ARRAY = new DebuggerTreeNodeImpl[0];
 
-	@Nullable
-	public static DebuggerTreePanel getPanel(DataContext dataContext)
-	{
-		return dataContext.getData(DebuggerTreePanel.DATA_KEY);
-	}
+    @Nullable
+    public static DebuggerTree getTree(DataContext dataContext) {
+        return dataContext.getData(DebuggerTree.DATA_KEY);
+    }
 
-	@Nullable
-	public static DebuggerTreeNodeImpl getSelectedNode(DataContext dataContext)
-	{
-		DebuggerTree tree = getTree(dataContext);
-		if (tree == null)
-		{
-			return null;
-		}
+    @Nullable
+    public static DebuggerTreePanel getPanel(DataContext dataContext) {
+        return dataContext.getData(DebuggerTreePanel.DATA_KEY);
+    }
 
-		if (tree.getSelectionCount() != 1)
-		{
-			return null;
-		}
-		TreePath path = tree.getSelectionPath();
-		if (path == null)
-		{
-			return null;
-		}
-		Object component = path.getLastPathComponent();
-		if (!(component instanceof DebuggerTreeNodeImpl))
-		{
-			return null;
-		}
-		return (DebuggerTreeNodeImpl) component;
-	}
+    @Nullable
+    public static DebuggerTreeNodeImpl getSelectedNode(DataContext dataContext) {
+        DebuggerTree tree = getTree(dataContext);
+        if (tree == null) {
+            return null;
+        }
 
-	@Nullable
-	public static DebuggerTreeNodeImpl[] getSelectedNodes(DataContext dataContext)
-	{
-		DebuggerTree tree = getTree(dataContext);
-		if (tree == null)
-		{
-			return null;
-		}
-		TreePath[] paths = tree.getSelectionPaths();
-		if (paths == null || paths.length == 0)
-		{
-			return EMPTY_TREE_NODE_ARRAY;
-		}
-		List<DebuggerTreeNodeImpl> nodes = new ArrayList<>(paths.length);
-		for (TreePath path : paths)
-		{
-			Object component = path.getLastPathComponent();
-			if (component instanceof DebuggerTreeNodeImpl debuggerTreeNode)
-			{
-				nodes.add(debuggerTreeNode);
-			}
-		}
-		return nodes.toArray(new DebuggerTreeNodeImpl[nodes.size()]);
-	}
+        if (tree.getSelectionCount() != 1) {
+            return null;
+        }
+        TreePath path = tree.getSelectionPath();
+        if (path == null) {
+            return null;
+        }
+        Object component = path.getLastPathComponent();
+        if (!(component instanceof DebuggerTreeNodeImpl)) {
+            return null;
+        }
+        return (DebuggerTreeNodeImpl) component;
+    }
 
-	public static DebuggerContextImpl getDebuggerContext(DataContext dataContext)
-	{
-		DebuggerTreePanel panel = getPanel(dataContext);
-		if (panel != null)
-		{
-			return panel.getContext();
-		}
-		else
-		{
-			Project project = dataContext.getData(Project.KEY);
-			return project != null ? (DebuggerManagerEx.getInstanceEx(project)).getContext() : DebuggerContextImpl.EMPTY_CONTEXT;
-		}
-	}
+    @Nullable
+    public static DebuggerTreeNodeImpl[] getSelectedNodes(DataContext dataContext) {
+        DebuggerTree tree = getTree(dataContext);
+        if (tree == null) {
+            return null;
+        }
+        TreePath[] paths = tree.getSelectionPaths();
+        if (paths == null || paths.length == 0) {
+            return EMPTY_TREE_NODE_ARRAY;
+        }
+        List<DebuggerTreeNodeImpl> nodes = new ArrayList<>(paths.length);
+        for (TreePath path : paths) {
+            Object component = path.getLastPathComponent();
+            if (component instanceof DebuggerTreeNodeImpl debuggerTreeNode) {
+                nodes.add(debuggerTreeNode);
+            }
+        }
+        return nodes.toArray(new DebuggerTreeNodeImpl[nodes.size()]);
+    }
 
-	@Nullable
-	public static DebuggerStateManager getContextManager(DataContext dataContext)
-	{
-		DebuggerTreePanel panel = getPanel(dataContext);
-		return panel == null ? null : panel.getContextManager();
-	}
+    public static DebuggerContextImpl getDebuggerContext(DataContext dataContext) {
+        DebuggerTreePanel panel = getPanel(dataContext);
+        if (panel != null) {
+            return panel.getContext();
+        }
+        else {
+            Project project = dataContext.getData(Project.KEY);
+            return project != null ? (DebuggerManagerEx.getInstanceEx(project)).getContext() : DebuggerContextImpl.EMPTY_CONTEXT;
+        }
+    }
 
-	public static boolean isContextView(AnActionEvent e)
-	{
-		return DebuggerActions.EVALUATION_DIALOG_POPUP.equals(e.getPlace()) ||
-				DebuggerActions.FRAME_PANEL_POPUP.equals(e.getPlace()) ||
-				DebuggerActions.WATCH_PANEL_POPUP.equals(e.getPlace()) ||
-				DebuggerActions.INSPECT_PANEL_POPUP.equals(e.getPlace());
-	}
+    @Nullable
+    public static DebuggerStateManager getContextManager(DataContext dataContext) {
+        DebuggerTreePanel panel = getPanel(dataContext);
+        return panel == null ? null : panel.getContextManager();
+    }
 
-	public static Disposable installEditAction(final JTree tree, String actionName)
-	{
-		final DoubleClickListener listener = new DoubleClickListener()
-		{
-			@Override
-			protected boolean onDoubleClick(MouseEvent e)
-			{
-				if (tree.getPathForLocation(e.getX(), e.getY()) == null)
-				{
-					return false;
-				}
-				DataContext dataContext = DataManager.getInstance().getDataContext(tree);
-				GotoFrameSourceAction.doAction(dataContext);
-				return true;
-			}
-		};
-		listener.installOn(tree);
+    public static boolean isContextView(AnActionEvent e) {
+        return DebuggerActions.EVALUATION_DIALOG_POPUP.equals(e.getPlace()) ||
+            DebuggerActions.FRAME_PANEL_POPUP.equals(e.getPlace()) ||
+            DebuggerActions.WATCH_PANEL_POPUP.equals(e.getPlace()) ||
+            DebuggerActions.INSPECT_PANEL_POPUP.equals(e.getPlace());
+    }
 
-		final AnAction action = ActionManager.getInstance().getAction(actionName);
-		action.registerCustomShortcutSet(CommonShortcuts.getEditSource(), tree);
+    public static Disposable installEditAction(final JTree tree, String actionName) {
+        final DoubleClickListener listener = new DoubleClickListener() {
+            @Override
+            protected boolean onDoubleClick(MouseEvent e) {
+                if (tree.getPathForLocation(e.getX(), e.getY()) == null) {
+                    return false;
+                }
+                DataContext dataContext = DataManager.getInstance().getDataContext(tree);
+                GotoFrameSourceAction.doAction(dataContext);
+                return true;
+            }
+        };
+        listener.installOn(tree);
 
-		return () -> {
-			listener.uninstall(tree);
-			action.unregisterCustomShortcutSet(tree);
-		};
-	}
+        final AnAction action = ActionManager.getInstance().getAction(actionName);
+        action.registerCustomShortcutSet(CommonShortcuts.getEditSource(), tree);
 
-	public static boolean isFirstStart(final AnActionEvent event)
-	{
-		//noinspection HardCodedStringLiteral
-		String key = "initalized";
-		if (event.getPresentation().getClientProperty(key) != null)
-		{
-			return false;
-		}
+        return () -> {
+            listener.uninstall(tree);
+            action.unregisterCustomShortcutSet(tree);
+        };
+    }
 
-		event.getPresentation().putClientProperty(key, key);
-		return true;
-	}
+    public static boolean isFirstStart(final AnActionEvent event) {
+        //noinspection HardCodedStringLiteral
+        String key = "initalized";
+        if (event.getPresentation().getClientProperty(key) != null) {
+            return false;
+        }
 
-	public static void enableAction(final AnActionEvent event, final boolean enable)
-	{
-		SwingUtilities.invokeLater(() -> {
-			event.getPresentation().setEnabled(enable);
-			event.getPresentation().setVisible(true);
-		});
-	}
+        event.getPresentation().putClientProperty(key, key);
+        return true;
+    }
 
-	public static void refreshViews(@Nonnull XValueNodeImpl node)
-	{
-		refreshViews(XDebugView.getSession(node.getTree()));
-	}
+    public static void enableAction(final AnActionEvent event, final boolean enable) {
+        SwingUtilities.invokeLater(() -> {
+            event.getPresentation().setEnabled(enable);
+            event.getPresentation().setVisible(true);
+        });
+    }
 
-	public static void refreshViews(@Nullable XDebugSession session)
-	{
-		if (session != null)
-		{
-			XDebugProcess process = session.getDebugProcess();
-			if (process instanceof JavaDebugProcess debugProcess)
-			{
-				debugProcess.saveNodeHistory();
-			}
-			session.rebuildViews();
-		}
-	}
+    public static void refreshViews(@Nonnull XValueNode node) {
+        XValueTree tree = node.getTree();
+        if (tree != null) {
+            refreshViews(tree.getSession());
+        }
+    }
+
+    public static void refreshViews(@Nullable XDebugSession session) {
+        if (session != null) {
+            XDebugProcess process = session.getDebugProcess();
+            if (process instanceof JavaDebugProcess debugProcess) {
+                debugProcess.saveNodeHistory();
+            }
+            session.rebuildViews();
+        }
+    }
 }

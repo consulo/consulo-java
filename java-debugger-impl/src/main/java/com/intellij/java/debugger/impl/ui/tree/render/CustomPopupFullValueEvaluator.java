@@ -15,65 +15,53 @@
  */
 package com.intellij.java.debugger.impl.ui.tree.render;
 
-import java.awt.Dimension;
-import java.awt.Point;
-
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-
 import com.intellij.java.debugger.impl.engine.JavaValue;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
-import consulo.project.Project;
-import consulo.project.ui.wm.WindowManager;
-import consulo.ui.ex.popup.JBPopup;
-import consulo.ui.ex.RelativePoint;
-import consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil;
+import consulo.application.Application;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
+import consulo.execution.debug.ui.DebuggerUIUtil;
+import consulo.project.Project;
+import consulo.project.ui.wm.WindowManager;
+import consulo.ui.ex.RelativePoint;
+import consulo.ui.ex.popup.JBPopup;
 import jakarta.annotation.Nonnull;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * @author egor
  */
-public abstract class CustomPopupFullValueEvaluator<T> extends JavaValue.JavaFullValueEvaluator
-{
-	public CustomPopupFullValueEvaluator(@Nonnull String linkText, @Nonnull EvaluationContextImpl evaluationContext)
-	{
-		super(linkText, evaluationContext);
-		setShowValuePopup(false);
-	}
+public abstract class CustomPopupFullValueEvaluator<T> extends JavaValue.JavaFullValueEvaluator {
+    public CustomPopupFullValueEvaluator(@Nonnull String linkText, @Nonnull EvaluationContextImpl evaluationContext) {
+        super(linkText, evaluationContext);
+        setShowValuePopup(false);
+    }
 
-	protected abstract T getData();
+    protected abstract T getData();
 
-	protected abstract JComponent createComponent(T data);
+    protected abstract JComponent createComponent(T data);
 
-	@Override
-	public void evaluate(@Nonnull final XFullValueEvaluationCallback callback)
-	{
-		final T data = getData();
-		DebuggerUIUtil.invokeLater(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				if(callback.isObsolete())
-				{
-					return;
-				}
-				final JComponent comp = createComponent(data);
-				Project project = getEvaluationContext().getProject();
-				JBPopup popup = DebuggerUIUtil.createValuePopup(project, comp, null);
-				JFrame frame = WindowManager.getInstance().getFrame(project);
-				Dimension frameSize = frame.getSize();
-				Dimension size = new Dimension(frameSize.width / 2, frameSize.height / 2);
-				popup.setSize(size);
-				if(comp instanceof Disposable)
-				{
-					Disposer.register(popup, (Disposable) comp);
-				}
-				callback.evaluated("");
-				popup.show(new RelativePoint(frame, new Point(size.width / 2, size.height / 2)));
-			}
-		});
-	}
+    @Override
+    public void evaluate(@Nonnull final XFullValueEvaluationCallback callback) {
+        final T data = getData();
+        Application.get().invokeLater(() -> {
+            if (callback.isObsolete()) {
+                return;
+            }
+            final JComponent comp = createComponent(data);
+            Project project = getEvaluationContext().getProject();
+            JBPopup popup = DebuggerUIUtil.createValuePopup(project, comp, null);
+            JFrame frame = WindowManager.getInstance().getFrame(project);
+            Dimension frameSize = frame.getSize();
+            Dimension size = new Dimension(frameSize.width / 2, frameSize.height / 2);
+            popup.setSize(size);
+            if (comp instanceof Disposable) {
+                Disposer.register(popup, (Disposable) comp);
+            }
+            callback.evaluated("");
+            popup.show(new RelativePoint(frame, new Point(size.width / 2, size.height / 2)));
+        });
+    }
 }
