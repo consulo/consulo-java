@@ -37,8 +37,6 @@ import consulo.language.editor.FileColorManager;
 import consulo.language.psi.PsiFile;
 import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
-import consulo.platform.base.icon.PlatformIconGroup;
-import consulo.ui.image.Image;
 import consulo.virtualFileSystem.VirtualFile;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -96,20 +94,17 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
                 }
             });
         }
-        catch (InternalException e) {
+        catch (InternalException | EvaluateException e) {
             LOG.info(e);
             myLocation = null;
             myMethodOccurrence = tracker.getMethodOccurrence(0, null);
             myIsSynthetic = false;
             myIsInLibraryContent = false;
         }
-        catch (EvaluateException e) {
-            LOG.info(e);
-            myLocation = null;
-            myMethodOccurrence = tracker.getMethodOccurrence(0, null);
-            myIsSynthetic = false;
-            myIsInLibraryContent = false;
-        }
+    }
+
+    public boolean canDrop() {
+        return !myFrame.isBottom() && myMethodOccurrence.canDrop();
     }
 
     public int getUiIndex() {

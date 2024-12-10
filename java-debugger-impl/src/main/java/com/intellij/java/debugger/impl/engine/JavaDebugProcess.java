@@ -19,6 +19,7 @@ import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.java.debugger.impl.*;
 import com.intellij.java.debugger.impl.actions.DebuggerActions;
+import com.intellij.java.debugger.impl.actions.JvmDropFrameActionHandler;
 import com.intellij.java.debugger.impl.actions.JvmSmartStepIntoActionHandler;
 import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
 import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;
@@ -36,6 +37,7 @@ import consulo.execution.debug.breakpoint.XBreakpoint;
 import consulo.execution.debug.breakpoint.XBreakpointHandler;
 import consulo.execution.debug.evaluation.XDebuggerEditorsProvider;
 import consulo.execution.debug.event.XDebugSessionListener;
+import consulo.execution.debug.frame.XDropFrameHandler;
 import consulo.execution.debug.frame.XStackFrame;
 import consulo.execution.debug.frame.XValueMarkerProvider;
 import consulo.execution.debug.icon.ExecutionDebugIconGroup;
@@ -72,6 +74,7 @@ public class JavaDebugProcess extends XDebugProcess {
     private final JavaDebuggerEditorsProvider myEditorsProvider;
     private final XBreakpointHandler<?>[] myBreakpointHandlers;
     private final JvmSmartStepIntoActionHandler mySmartStepIntoActionHandler;
+    private final JvmDropFrameActionHandler myDropFrameActionActionHandler;
     private final NodeManagerImpl myNodeManager;
 
     public static JavaDebugProcess create(@Nonnull final XDebugSession session, final DebuggerSession javaSession) {
@@ -92,8 +95,6 @@ public class JavaDebugProcess extends XDebugProcess {
         handlers.add(new JavaBreakpointHandler.JavaFieldBreakpointHandler(process));
         handlers.add(new JavaBreakpointHandler.JavaMethodBreakpointHandler(process));
         handlers.add(new JavaBreakpointHandler.JavaWildcardBreakpointHandler(process));
-
-        mySmartStepIntoActionHandler = new JvmSmartStepIntoActionHandler(myJavaSession);
 
         for (JavaBreakpointHandlerFactory factory : JavaBreakpointHandlerFactory.EP_NAME.getExtensionList()) {
             handlers.add(factory.createHandler(process));
@@ -181,6 +182,9 @@ public class JavaDebugProcess extends XDebugProcess {
                 }
             }
         });
+
+        mySmartStepIntoActionHandler = new JvmSmartStepIntoActionHandler(myJavaSession);
+        myDropFrameActionActionHandler = new JvmDropFrameActionHandler(javaSession);
     }
 
     private void unsetPausedIfNeeded(DebuggerContextImpl context) {
@@ -504,5 +508,11 @@ public class JavaDebugProcess extends XDebugProcess {
     @Override
     public XSmartStepIntoHandler<?> getSmartStepIntoHandler() {
         return mySmartStepIntoActionHandler;
+    }
+
+    @Nullable
+    @Override
+    public XDropFrameHandler getDropFrameHandler() {
+        return myDropFrameActionActionHandler;
     }
 }

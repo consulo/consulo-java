@@ -24,6 +24,8 @@ open module consulo.java.debugger.impl {
   requires asm.tree;
   requires asm.util;
 
+  requires it.unimi.dsi.fastutil;
+
   exports com.intellij.java.debugger.impl;
   exports com.intellij.java.debugger.impl.actions;
   exports com.intellij.java.debugger.impl.apiAdapters;

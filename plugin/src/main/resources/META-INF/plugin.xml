@@ -135,10 +135,6 @@
 			<add-to-group group-id="DebugMainMenu" anchor="before" relative-to-action="StepOver"/>
 		</action>
 
-		<action id="Debugger.PopFrame" class="com.intellij.java.debugger.impl.actions.PopFrameAction" icon="consulo.platform.base.PlatformIconGroup@actions.popframe">
-			<add-to-group group-id="DebugMainMenu" anchor="after" relative-to-action="ForceRunToCursor"/>
-		</action>
-
 		<group id="ToggleBreakpointAction">
 			<action id="ToggleMethodBreakpoint" class="com.intellij.java.debugger.impl.actions.ToggleMethodBreakpointAction"/>
 			<action id="ToggleFieldBreakpoint" class="com.intellij.java.debugger.impl.actions.ToggleFieldBreakpointAction"/>
