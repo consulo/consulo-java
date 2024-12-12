@@ -33,9 +33,6 @@ import consulo.execution.executor.Executor;
 import consulo.execution.process.ProcessTerminatedListener;
 import consulo.execution.runner.ExecutionEnvironment;
 import consulo.execution.ui.console.RegexpFilter;
-import consulo.ide.impl.idea.ide.BrowserUtil;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
 import consulo.java.language.bundle.JavaSdkTypeUtil;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.psi.PsiFile;
@@ -56,9 +53,12 @@ import consulo.process.event.ProcessAdapter;
 import consulo.process.event.ProcessEvent;
 import consulo.project.Project;
 import consulo.ui.image.Image;
+import consulo.util.io.FileUtil;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.PathsList;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
+import consulo.webBrowser.BrowserUtil;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
@@ -268,7 +268,7 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
         VirtualFile[] docUrls = jdk.getRootProvider().getFiles(SourcesOrderRootType.getInstance());
         for (VirtualFile docUrl : docUrls) {
           parameters.add("-link");
-          parameters.add(VfsUtil.toUri(docUrl).toString());
+          parameters.add(VirtualFileUtil.toUri(docUrl).toString());
         }
       }
 
