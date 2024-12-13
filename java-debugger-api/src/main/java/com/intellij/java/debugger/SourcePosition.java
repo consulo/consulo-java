@@ -19,6 +19,7 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassOwner;
 import com.intellij.java.language.psi.PsiForStatement;
 import consulo.application.ApplicationManager;
+import consulo.application.ReadAction;
 import consulo.application.util.function.Computable;
 import consulo.codeEditor.Editor;
 import consulo.document.Document;
@@ -31,7 +32,6 @@ import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Comparing;
 import consulo.virtualFileSystem.VirtualFile;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -134,7 +134,7 @@ public abstract class SourcePosition implements Navigatable {
         return true;
       }
       final PsiElement psiElement = myPsiElement;
-      return psiElement != null && !psiElement.isValid();
+      return psiElement != null && !ReadAction.compute(psiElement::isValid);
     }
 
     @Override
