@@ -32,6 +32,7 @@ import consulo.java.execution.JavaExecutionBundle;
 import consulo.java.execution.localize.JavaExecutionLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.module.ui.awt.ModuleDescriptionsComboBox;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
 import consulo.ui.CheckBox;
 import consulo.ui.ex.awt.JBCheckBox;
@@ -71,6 +72,7 @@ public class ApplicationConfigurable extends SettingsEditor<ApplicationConfigura
         return Visibility.NOT_VISIBLE;
       }
     });
+    myMainClassField.setButtonIcon(PlatformIconGroup.nodesClass());
 
     myModuleDescriptionsComboBox = new ModuleDescriptionsComboBox();
     myJrePathEditor = new JrePathEditor();
