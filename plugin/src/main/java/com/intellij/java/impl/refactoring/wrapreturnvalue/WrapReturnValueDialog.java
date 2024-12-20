@@ -36,6 +36,7 @@ import consulo.language.editor.refactoring.ui.RefactoringDialog;
 import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.ComboboxWithBrowseButton;
@@ -309,6 +310,7 @@ class WrapReturnValueDialog extends RefactoringDialog {
             true,
             RECENT_KEYS
         );
+        existingClassField.setButtonIcon(PlatformIconGroup.nodesClass());
         existingClassField.getChildComponent().getDocument().addDocumentListener(adapter);
 
         myDestinationCb = new DestinationFolderComboBox() {

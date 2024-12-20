@@ -35,6 +35,7 @@ import consulo.language.editor.refactoring.ui.RefactoringDialog;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.logging.Logger;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
 import consulo.ui.ex.awt.*;
 import consulo.ui.ex.awt.event.DocumentAdapter;
@@ -258,6 +259,7 @@ public class ReplaceConstructorWithBuilderDialog extends RefactoringDialog {
         }
       }
     }, "", myProject, true, RECENT_KEYS);
+    myExistentClassTF.setButtonIcon(PlatformIconGroup.nodesClass());
     myExistentClassTF.getChildComponent().getDocument().addDocumentListener(adapter);
   }
 

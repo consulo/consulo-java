@@ -45,6 +45,7 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
 import consulo.ui.CheckBox;
 import consulo.ui.Label;
@@ -192,6 +193,7 @@ public class MoveMembersDialog extends RefactoringDialog implements MoveMembersO
         panel.add(TargetAWT.to(myIntroduceEnumConstants), BorderLayout.SOUTH);
         box.add(panel);
 
+        myTfTargetClassName.setButtonIcon(PlatformIconGroup.nodesClass());
         myTfTargetClassName.getChildComponent().getDocument().addDocumentListener(new DocumentAdapter() {
             @Override
             public void documentChanged(DocumentEvent e) {

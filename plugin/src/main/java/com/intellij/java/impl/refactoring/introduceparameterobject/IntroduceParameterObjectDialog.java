@@ -40,6 +40,7 @@ import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.localize.LocalizeValue;
 import consulo.module.content.ProjectRootManager;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.RecentsManager;
@@ -357,7 +358,7 @@ public class IntroduceParameterObjectDialog extends RefactoringDialog {
             true,
             EXISTING_KEY
         );
-
+        existingClassField.setButtonIcon(PlatformIconGroup.nodesClass());
         existingClassField.getChildComponent().getDocument().addDocumentListener(new consulo.document.event.DocumentAdapter() {
             @Override
             public void documentChanged(consulo.document.event.DocumentEvent e) {

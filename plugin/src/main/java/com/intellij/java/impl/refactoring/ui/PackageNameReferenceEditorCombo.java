@@ -16,6 +16,7 @@
 package com.intellij.java.impl.refactoring.ui;
 
 import com.intellij.java.impl.codeInsight.PackageChooserDialog;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.java.impl.ui.ReferenceEditorComboWithBrowseButton;
@@ -31,6 +32,7 @@ public class PackageNameReferenceEditorCombo extends ReferenceEditorComboWithBro
   public PackageNameReferenceEditorCombo(final String text, @Nonnull final Project project,
                                          final String recentsKey, final String chooserTitle) {
     super(null, text, project, false, recentsKey);
+    setButtonIcon(PlatformIconGroup.nodesPackage());
     addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         final PackageChooserDialog chooser = new PackageChooserDialog(chooserTitle, project);

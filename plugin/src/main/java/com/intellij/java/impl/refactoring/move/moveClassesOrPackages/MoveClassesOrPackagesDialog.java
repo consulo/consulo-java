@@ -47,6 +47,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.module.content.ProjectRootManager;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
 import consulo.project.content.scope.ProjectScopes;
 import consulo.ui.annotation.RequiredUIAccess;
@@ -125,6 +126,8 @@ public class MoveClassesOrPackagesDialog extends RefactoringDialog {
     } else if (initialTargetElement instanceof PsiJavaPackage javaPackage) {
       myClassPackageChooser.setText(javaPackage.getQualifiedName());
     }
+    myClassPackageChooser.setButtonIcon(PlatformIconGroup.nodesPackage());
+    myInnerClassChooser.setButtonIcon(PlatformIconGroup.nodesClass());
 
     updateControlsEnabled();
     myToPackageRadioButton.addActionListener(e -> {

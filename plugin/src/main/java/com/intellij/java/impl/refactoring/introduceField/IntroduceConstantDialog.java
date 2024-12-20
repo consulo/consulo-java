@@ -45,6 +45,7 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.RecentsManager;
@@ -199,6 +200,7 @@ class IntroduceConstantDialog extends DialogWrapper {
     }
     myTfTargetClassName =
       new ReferenceEditorComboWithBrowseButton(new ChooseClassAction(), "", myProject, true, RECENTS_KEY);
+    myTfTargetClassName.setButtonIcon(PlatformIconGroup.nodesClass());
     myTargetClassNamePanel.setLayout(new BorderLayout());
     myTargetClassNamePanel.add(myTfTargetClassName, BorderLayout.CENTER);
     myTargetClassNameLabel.setLabelFor(myTfTargetClassName);
