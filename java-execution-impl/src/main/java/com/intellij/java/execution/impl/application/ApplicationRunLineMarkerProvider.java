@@ -21,7 +21,7 @@ import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.util.PsiMethodUtil;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.AllIcons;
+import consulo.execution.icon.ExecutionIconGroup;
 import consulo.execution.lineMarker.ExecutorAction;
 import consulo.execution.lineMarker.RunLineMarkerContributor;
 import consulo.language.Language;
@@ -45,7 +45,7 @@ public class ApplicationRunLineMarkerProvider extends RunLineMarkerContributor {
       if (element instanceof PsiClass && PsiMethodUtil.findMainInClass((PsiClass) element) != null || element instanceof PsiMethod && "main".equals(((PsiMethod) element).getName()) &&
           PsiMethodUtil.isMainMethod((PsiMethod) element)) {
         final AnAction[] actions = ExecutorAction.getActions(0);
-        return new Info(AllIcons.RunConfigurations.TestState.Run, element1 -> StringUtil.join(ContainerUtil.mapNotNull(actions, action -> getText(action, element1)), "\n"), actions);
+        return new Info(ExecutionIconGroup.gutterRun(), element1 -> StringUtil.join(ContainerUtil.mapNotNull(actions, action -> getText(action, element1)), "\n"), actions);
       }
     }
     return null;
