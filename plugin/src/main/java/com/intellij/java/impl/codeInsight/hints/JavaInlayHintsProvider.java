@@ -5,9 +5,9 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.impl.source.resolve.graphInference.PsiPolyExpressionUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.ide.impl.idea.codeInsight.dataflow.SetUtil;
 import consulo.ide.impl.idea.codeInsight.hints.settings.ParameterNameHintsSettings;
 import consulo.language.ast.IElementType;
+import consulo.language.dataFlow.SetUtil;
 import consulo.language.editor.inlay.InlayInfo;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.ResolveResult;
@@ -16,8 +16,8 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.JBIterable;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
-
 import jakarta.annotation.Nullable;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
