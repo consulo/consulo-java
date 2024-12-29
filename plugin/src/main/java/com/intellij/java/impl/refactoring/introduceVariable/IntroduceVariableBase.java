@@ -55,9 +55,9 @@ import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.editor.completion.lookup.LookupManager;
 import consulo.language.editor.highlight.HighlightManager;
 import consulo.language.editor.inject.EditorWindow;
-import consulo.language.editor.refactoring.IntroduceTargetChooser;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.RefactoringSupportProvider;
+import consulo.language.editor.refactoring.introduce.IntroduceTargetChooser;
 import consulo.language.editor.refactoring.introduce.inplace.AbstractInplaceIntroducer;
 import consulo.language.editor.refactoring.introduce.inplace.OccurrencesChooser;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
@@ -79,10 +79,10 @@ import consulo.util.collection.MultiMap;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.Ref;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
 import java.util.*;
 import java.util.function.Consumer;
 

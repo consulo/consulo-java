@@ -16,7 +16,6 @@
 
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
-import javax.annotation.Nonnegative;
 import jakarta.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
@@ -36,7 +35,7 @@ public interface TransferTarget {
   /**
    * @return next instruction states assuming no traps
    */
-  @Nonnegative
+  @Nonnull
   default List<DfaInstructionState> dispatch(DfaMemoryState state, DataFlowRunner runner) {
     return List.of();
   }

@@ -31,8 +31,7 @@ import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.dataholder.KeyWithDefaultValue;
-
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ShortenFQNamesProcessor implements TemplateOptionalProcessor {
