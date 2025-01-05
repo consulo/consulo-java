@@ -26,3 +26,5 @@ application.configuration.description:
   text: Java Application configuration
 application.configuration.name:
   text: Java Application
+run.test:
+  text: Run Test
