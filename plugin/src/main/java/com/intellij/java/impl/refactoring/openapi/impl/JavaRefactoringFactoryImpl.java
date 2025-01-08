@@ -22,18 +22,15 @@ import com.intellij.java.impl.refactoring.move.moveInner.MoveInnerImpl;
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ServiceImpl;
 import consulo.language.editor.refactoring.RenameRefactoring;
-import consulo.language.editor.refactoring.SafeDeleteRefactoring;
-import consulo.language.editor.refactoring.safeDelete.SafeDeleteRefactoringImpl;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
+import jakarta.annotation.Nonnull;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * @author dsl
@@ -116,10 +113,6 @@ public class JavaRefactoringFactoryImpl extends JavaRefactoringFactory {
   public ConvertToInstanceMethodRefactoring createConvertToInstanceMethod(PsiMethod method,
                                                                           PsiParameter targetParameter) {
     return new ConvertToInstanceMethodRefactoringImpl(myProject, method, targetParameter);
-  }
-
-  public SafeDeleteRefactoring createSafeDelete(PsiElement[] elements) {
-    return new SafeDeleteRefactoringImpl(myProject, elements);
   }
 
   public TurnRefsToSuperRefactoring createTurnRefsToSuper(PsiClass aClass,
