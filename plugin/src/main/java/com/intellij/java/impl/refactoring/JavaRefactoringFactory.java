@@ -36,7 +36,7 @@ public abstract class JavaRefactoringFactory {
     return ServiceManager.getService(project, JavaRefactoringFactory.class);
   }
 
-  public abstract JavaRenameRefactoring createRename(PsiElement element, String newName);
+  public abstract RenameRefactoring createRename(PsiElement element, String newName);
 
   /**
    * @return in case the source file is not located under any source root

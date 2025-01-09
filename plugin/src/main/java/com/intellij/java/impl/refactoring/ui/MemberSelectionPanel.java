@@ -26,7 +26,7 @@ package com.intellij.java.impl.refactoring.ui;
 
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import com.intellij.java.language.psi.PsiMember;
-import consulo.ide.impl.idea.refactoring.ui.AbstractMemberSelectionPanel;
+import consulo.language.editor.refactoring.ui.AbstractMemberSelectionPanel;
 import consulo.ui.ex.awt.ScrollPaneFactory;
 import consulo.ui.ex.awt.SeparatorFactory;
 

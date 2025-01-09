@@ -3,9 +3,9 @@ package com.intellij.java.impl.codeInsight.generation.ui;
 import consulo.ide.impl.idea.ide.wizard.AbstractWizard;
 import consulo.ide.impl.idea.ide.wizard.Step;
 import consulo.ide.impl.idea.ide.wizard.StepAdapter;
-import consulo.ide.impl.idea.refactoring.ui.AbstractMemberSelectionPanel;
 import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.refactoring.classMember.MemberInfoBase;
+import consulo.language.editor.refactoring.ui.AbstractMemberSelectionPanel;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 
@@ -23,7 +23,6 @@ import java.util.List;
  */
 public abstract class AbstractGenerateEqualsWizard<C extends PsiElement, M extends PsiElement, I extends MemberInfoBase<M>> extends AbstractWizard<Step>
 {
-
 	protected final C myClass;
 
 	protected final AbstractMemberSelectionPanel<M, I> myEqualsPanel;

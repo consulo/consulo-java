@@ -17,19 +17,18 @@
 package com.intellij.java.impl.refactoring.rename;
 
 import com.intellij.java.impl.psi.impl.beanProperties.BeanProperty;
-import com.intellij.java.impl.refactoring.openapi.impl.JavaRenameRefactoringImpl;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.util.PropertyUtil;
-import consulo.dataContext.DataContext;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.ui.ex.awt.DialogWrapper;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiFile;
+import consulo.dataContext.DataContext;
+import consulo.language.editor.refactoring.RefactoringFactory;
 import consulo.language.editor.refactoring.RenameRefactoring;
 import consulo.language.editor.refactoring.rename.RenameDialog;
 import consulo.language.editor.refactoring.rename.RenameHandler;
-
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -61,7 +60,7 @@ public abstract class BeanPropertyRenameHandler implements RenameHandler {
 
   public static void doRename(@Nonnull final BeanProperty property, final String newName, final boolean searchInComments, boolean isPreview) {
     final PsiElement psiElement = property.getPsiElement();
-    final RenameRefactoring rename = new JavaRenameRefactoringImpl(psiElement.getProject(), psiElement, newName, searchInComments, false);
+    final RenameRefactoring rename = RefactoringFactory.getInstance(psiElement.getProject()).createRename(psiElement, newName, searchInComments, false);
     rename.setPreviewUsages(isPreview);
 
     final PsiMethod setter = property.getSetter();

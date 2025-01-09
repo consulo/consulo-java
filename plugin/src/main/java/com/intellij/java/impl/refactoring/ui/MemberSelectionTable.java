@@ -24,13 +24,13 @@
  */
 package com.intellij.java.impl.refactoring.ui;
 
-import consulo.application.AllIcons;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
+import consulo.application.AllIcons;
 import consulo.language.editor.refactoring.classMember.MemberInfoModel;
-import consulo.ide.impl.idea.refactoring.ui.AbstractMemberSelectionTable;
+import consulo.language.editor.refactoring.ui.AbstractMemberSelectionTable;
 import consulo.ui.image.Image;
 import jakarta.annotation.Nullable;
 

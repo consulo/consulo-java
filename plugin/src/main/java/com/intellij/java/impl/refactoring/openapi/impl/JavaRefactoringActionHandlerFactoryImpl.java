@@ -39,97 +39,119 @@ import com.intellij.java.impl.refactoring.turnRefsToSuper.TurnRefsToSuperHandler
 import com.intellij.java.impl.refactoring.typeCook.TypeCookHandler;
 import com.intellij.java.impl.refactoring.util.duplicates.MethodDuplicatesHandler;
 import consulo.annotation.component.ServiceImpl;
-import consulo.ide.impl.idea.refactoring.inline.InlineRefactoringActionHandler;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.action.RefactoringActionHandlerFactory;
 import jakarta.inject.Singleton;
 
 @Singleton
 @ServiceImpl
 public class JavaRefactoringActionHandlerFactoryImpl extends JavaRefactoringActionHandlerFactory {
+  @Override
   public RefactoringActionHandler createAnonymousToInnerHandler() {
     return new AnonymousToInnerHandler();
   }
 
+  @Override
   public RefactoringActionHandler createPullUpHandler() {
     return new JavaPullUpHandler();
   }
 
+  @Override
   public RefactoringActionHandler createPushDownHandler() {
     return new JavaPushDownHandler();
   }
 
+  @Override
   public RefactoringActionHandler createTurnRefsToSuperHandler() {
     return new TurnRefsToSuperHandler();
   }
 
+  @Override
   public RefactoringActionHandler createTempWithQueryHandler() {
     return new TempWithQueryHandler();
   }
 
+  @Override
   public RefactoringActionHandler createIntroduceParameterHandler() {
     return new IntroduceParameterHandler();
   }
 
+  @Override
   public RefactoringActionHandler createMakeMethodStaticHandler() {
     return new MakeStaticHandler();
   }
 
+  @Override
   public RefactoringActionHandler createConvertToInstanceMethodHandler() {
     return new ConvertToInstanceMethodHandler();
   }
 
+  @Override
   public RefactoringActionHandler createReplaceConstructorWithFactoryHandler() {
     return new ReplaceConstructorWithFactoryHandler();
   }
 
+  @Override
   public RefactoringActionHandler createEncapsulateFieldsHandler() {
     return new EncapsulateFieldsHandler();
   }
 
+  @Override
   public RefactoringActionHandler createMethodDuplicatesHandler() {
     return new MethodDuplicatesHandler();
   }
 
+  @Override
   public RefactoringActionHandler createChangeSignatureHandler() {
     return new JavaChangeSignatureHandler();
   }
 
+  @Override
   public RefactoringActionHandler createExtractSuperclassHandler() {
     return new ExtractSuperclassHandler();
   }
 
+  @Override
   public RefactoringActionHandler createTypeCookHandler() {
     return new TypeCookHandler();
   }
 
+  @Override
   public RefactoringActionHandler createInlineHandler() {
-    return new InlineRefactoringActionHandler();
+    return RefactoringActionHandlerFactory.getInstance().createInlineHandler();
   }
 
+  @Override
   public RefactoringActionHandler createExtractMethodHandler() {
     return new ExtractMethodHandler();
   }
 
+  @Override
   public RefactoringActionHandler createInheritanceToDelegationHandler() {
     return new InheritanceToDelegationHandler();
   }
 
+  @Override
   public RefactoringActionHandler createExtractInterfaceHandler() {
     return new ExtractInterfaceHandler();
   }
 
+  @Override
   public RefactoringActionHandler createIntroduceFieldHandler() {
     return new IntroduceFieldHandler();
   }
 
+  @Override
   public RefactoringActionHandler createIntroduceVariableHandler() {
     return new IntroduceVariableHandler();
   }
 
+  @Override
   public IntroduceConstantHandler createIntroduceConstantHandler() {
     return new IntroduceConstantHandlerImpl();
   }
 
+  @Override
   public RefactoringActionHandler createInvertBooleanHandler() {
     return new InvertBooleanHandler();
   }
