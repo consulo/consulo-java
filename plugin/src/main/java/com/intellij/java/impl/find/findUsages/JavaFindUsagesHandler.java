@@ -34,7 +34,6 @@ import consulo.find.FindBundle;
 import consulo.find.FindUsagesHandler;
 import consulo.find.FindUsagesOptions;
 import consulo.find.ui.AbstractFindUsagesDialog;
-import consulo.find.ui.AbstractFindUsagesDialogDescriptor;
 import consulo.language.editor.refactoring.util.NonCodeSearchDescriptionLocation;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiPackage;
@@ -42,7 +41,6 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.PsiUtilCore;
 import consulo.logging.Logger;
 import consulo.platform.base.localize.CommonLocalize;
-import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.usage.UsageInfo;
@@ -76,41 +74,12 @@ public class JavaFindUsagesHandler extends FindUsagesHandler {
     }
 
     @Override
-    public boolean supportConsuloUI() {
-        return true;
-    }
-
-    @RequiredUIAccess
     @Nonnull
-    @Override
-    public AbstractFindUsagesDialogDescriptor createFindUsagesDialogDescriptor(DataContext ctx, boolean isSingleFile, boolean toShowInNewTab, boolean mustOpenInNewTab) {
-        PsiElement element = getPsiElement();
-//        if (element instanceof PsiPackage) {
-//            return new FindPackageUsagesDialog(element, getProject(), myFactory.getFindPackageOptions(),
-//                toShowInNewTab, mustOpenInNewTab, isSingleFile, this);
-//        }
-//        if (element instanceof PsiClass) {
-//            return new FindClassUsagesDialog(element, getProject(), myFactory.getFindClassOptions(), toShowInNewTab,
-//                mustOpenInNewTab, isSingleFile, this);
-//        }
-//        if (element instanceof PsiMethod) {
-//            return new FindMethodUsagesDialog(element, getProject(), myFactory.getFindMethodOptions(), toShowInNewTab,
-//                mustOpenInNewTab, isSingleFile, this);
-//        }
-        if (element instanceof PsiVariable) {
-            return new FindVariableUsagesDialogDescriptor(element, getProject(), myFactory.getFindVariableOptions(),
-                toShowInNewTab, mustOpenInNewTab, isSingleFile, this);
-        }
-//        if (ThrowSearchUtil.isSearchable(element)) {
-//            return new FindThrowUsagesDialog(element, getProject(), myFactory.getFindThrowOptions(), toShowInNewTab,
-//                mustOpenInNewTab, isSingleFile, this);
-//        }
-        return super.createFindUsagesDialogDescriptor(ctx, isSingleFile, toShowInNewTab, mustOpenInNewTab);
-    }
-
-    @Override
-    @Nonnull
-    public AbstractFindUsagesDialog getFindUsagesDialog(boolean isSingleFile, boolean toShowInNewTab, boolean mustOpenInNewTab) {
+    public AbstractFindUsagesDialog getFindUsagesDialog(
+        boolean isSingleFile,
+        boolean toShowInNewTab,
+        boolean mustOpenInNewTab
+    ) {
         PsiElement element = getPsiElement();
         if (element instanceof PsiPackage) {
             return new FindPackageUsagesDialog(element, getProject(), myFactory.getFindPackageOptions(),
