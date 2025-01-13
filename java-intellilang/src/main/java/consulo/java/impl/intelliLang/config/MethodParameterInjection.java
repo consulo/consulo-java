@@ -17,9 +17,10 @@ package consulo.java.impl.intelliLang.config;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import consulo.ide.impl.intelliLang.inject.config.BaseInjection;
-import consulo.ide.impl.intelliLang.inject.config.InjectionPlace;
-import consulo.language.pattern.compiler.PatternCompiler;
+import consulo.java.impl.intelliLang.JavaLanguageInjectionSupport;
+import consulo.language.inject.advanced.BaseInjection;
+import consulo.language.inject.advanced.InjectionPlace;
+import consulo.language.inject.advanced.pattern.PatternCompiler;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
@@ -28,12 +29,11 @@ import consulo.util.lang.StringUtil;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.JDOMExternalizableStringList;
 import consulo.util.xml.serializer.JDOMExternalizer;
-import consulo.java.impl.intelliLang.JavaLanguageInjectionSupport;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import java.util.*;
 
 public class MethodParameterInjection extends BaseInjection {

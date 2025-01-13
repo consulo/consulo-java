@@ -16,15 +16,14 @@
 package consulo.java.impl.intelliLang;
 
 import com.intellij.java.language.psi.PsiLiteralExpression;
-import consulo.ide.impl.intelliLang.inject.InjectedLanguage;
+import consulo.java.impl.intelliLang.util.StringLiteralReference;
 import consulo.language.Language;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupElementBuilder;
+import consulo.language.inject.advanced.InjectedLanguage;
 import consulo.language.psi.PsiElement;
 import consulo.util.collection.ContainerUtil;
 import consulo.virtualFileSystem.fileType.FileType;
-import consulo.java.impl.intelliLang.util.StringLiteralReference;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 

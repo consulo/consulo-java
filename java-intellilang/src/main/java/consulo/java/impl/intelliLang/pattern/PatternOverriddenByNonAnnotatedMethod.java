@@ -21,20 +21,19 @@ import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.java.language.psi.PsiMethod;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.ide.impl.intelliLang.Configuration;
+import consulo.java.impl.intelliLang.util.AnnotateFix;
+import consulo.java.impl.intelliLang.util.AnnotationUtilEx;
+import consulo.java.impl.intelliLang.util.PsiUtilEx;
 import consulo.language.Language;
 import consulo.language.editor.inspection.LocalInspectionTool;
 import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
+import consulo.language.inject.advanced.Configuration;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.util.lang.Pair;
-import consulo.java.impl.intelliLang.util.AnnotateFix;
-import consulo.java.impl.intelliLang.util.AnnotationUtilEx;
-import consulo.java.impl.intelliLang.util.PsiUtilEx;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
-
-import jakarta.annotation.Nonnull;
 
 import java.util.Set;
 

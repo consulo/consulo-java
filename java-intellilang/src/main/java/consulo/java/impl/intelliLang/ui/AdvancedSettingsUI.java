@@ -25,16 +25,16 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.configurable.ConfigurationException;
 import consulo.configurable.SearchableConfigurable;
 import consulo.document.Document;
-import consulo.ide.impl.intelliLang.Configuration;
+import consulo.java.impl.intelliLang.util.PsiUtilEx;
 import consulo.language.editor.ui.awt.ReferenceEditorWithBrowseButton;
+import consulo.language.inject.advanced.Configuration;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
-import consulo.java.impl.intelliLang.util.PsiUtilEx;
-import org.jetbrains.annotations.Nls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.Nls;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;

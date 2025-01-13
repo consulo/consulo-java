@@ -18,15 +18,14 @@ package consulo.java.impl.intelliLang;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.ide.impl.intelliLang.Configuration;
 import consulo.java.impl.intelliLang.util.PsiUtilEx;
 import consulo.language.Language;
+import consulo.language.inject.advanced.Configuration;
 import consulo.language.pattern.PatternCondition;
 import consulo.language.pattern.StandardPatterns;
 import consulo.language.psi.*;
 import consulo.language.util.ProcessingContext;
 import consulo.util.lang.Comparing;
-
 import jakarta.annotation.Nonnull;
 
 import static com.intellij.java.language.patterns.PsiJavaPatterns.literalExpression;

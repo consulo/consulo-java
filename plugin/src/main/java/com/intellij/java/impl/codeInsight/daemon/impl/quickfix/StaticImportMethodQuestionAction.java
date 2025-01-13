@@ -39,6 +39,7 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.popup.PopupListElementRenderer;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.ex.popup.BaseListPopupStep;
 import consulo.ui.ex.popup.PopupStep;
 import consulo.ui.image.Image;
@@ -49,212 +50,175 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class StaticImportMethodQuestionAction<T extends PsiMember> implements QuestionAction
-{
-	private static final Logger LOG = Logger.getInstance(StaticImportMethodQuestionAction.class);
-	private final Project myProject;
-	private final Editor myEditor;
-	private List<T> myCandidates;
-	private final SmartPsiElementPointer<? extends PsiElement> myRef;
+public class StaticImportMethodQuestionAction<T extends PsiMember> implements QuestionAction {
+    private static final Logger LOG = Logger.getInstance(StaticImportMethodQuestionAction.class);
+    private final Project myProject;
+    private final Editor myEditor;
+    private List<T> myCandidates;
+    private final SmartPsiElementPointer<? extends PsiElement> myRef;
 
-	public StaticImportMethodQuestionAction(Project project, Editor editor, List<T> candidates, SmartPsiElementPointer<? extends PsiElement> ref)
-	{
-		myProject = project;
-		myEditor = editor;
-		myCandidates = candidates;
-		myRef = ref;
-	}
+    public StaticImportMethodQuestionAction(Project project, Editor editor, List<T> candidates, SmartPsiElementPointer<? extends PsiElement> ref) {
+        myProject = project;
+        myEditor = editor;
+        myCandidates = candidates;
+        myRef = ref;
+    }
 
-	@Nonnull
-	protected String getPopupTitle()
-	{
-		return JavaQuickFixBundle.message("method.to.import.chooser.title");
-	}
+    @Nonnull
+    protected String getPopupTitle() {
+        return JavaQuickFixBundle.message("method.to.import.chooser.title");
+    }
 
-	@Override
-	public boolean execute()
-	{
-		PsiDocumentManager.getInstance(myProject).commitAllDocuments();
+    @Override
+    public boolean execute() {
+        PsiDocumentManager.getInstance(myProject).commitAllDocuments();
 
-		final PsiElement element = myRef.getElement();
-		if(element == null || !element.isValid())
-		{
-			return false;
-		}
+        final PsiElement element = myRef.getElement();
+        if (element == null || !element.isValid()) {
+            return false;
+        }
 
-		for(T targetMethod : myCandidates)
-		{
-			if(!targetMethod.isValid())
-			{
-				return false;
-			}
-		}
+        for (T targetMethod : myCandidates) {
+            if (!targetMethod.isValid()) {
+                return false;
+            }
+        }
 
-		if(myCandidates.size() == 1)
-		{
-			doImport(myCandidates.get(0));
-		}
-		else
-		{
-			chooseAndImport(myEditor, myProject);
-		}
-		return true;
-	}
+        if (myCandidates.size() == 1) {
+            doImport(myCandidates.get(0));
+        }
+        else {
+            chooseAndImport(myEditor, myProject);
+        }
+        return true;
+    }
 
-	private void doImport(final T toImport)
-	{
-		final Project project = toImport.getProject();
-		final PsiElement element = myRef.getElement();
-		if(element == null)
-		{
-			return;
-		}
-		WriteCommandAction.runWriteCommandAction(project, JavaQuickFixBundle.message("add.import"), null, () -> AddSingleMemberStaticImportAction.bindAllClassRefs(element.getContainingFile(),
-				toImport, toImport.getName(), toImport.getContainingClass()));
-	}
+    private void doImport(final T toImport) {
+        final Project project = toImport.getProject();
+        final PsiElement element = myRef.getElement();
+        if (element == null) {
+            return;
+        }
+        WriteCommandAction.runWriteCommandAction(project, JavaQuickFixBundle.message("add.import"), null, () -> AddSingleMemberStaticImportAction.bindAllClassRefs(element.getContainingFile(),
+            toImport, toImport.getName(), toImport.getContainingClass()));
+    }
 
-	private void chooseAndImport(final Editor editor, final Project project)
-	{
-		if(ApplicationManager.getApplication().isUnitTestMode())
-		{
-			doImport(myCandidates.get(0));
-			return;
-		}
-		final BaseListPopupStep<T> step = new BaseListPopupStep<T>(getPopupTitle(), myCandidates)
-		{
+    private void chooseAndImport(final Editor editor, final Project project) {
+        if (ApplicationManager.getApplication().isUnitTestMode()) {
+            doImport(myCandidates.get(0));
+            return;
+        }
+        final BaseListPopupStep<T> step = new BaseListPopupStep<T>(getPopupTitle(), myCandidates) {
 
-			@Override
-			public boolean isAutoSelectionEnabled()
-			{
-				return false;
-			}
+            @Override
+            public boolean isAutoSelectionEnabled() {
+                return false;
+            }
 
-			@Override
-			public boolean isSpeedSearchEnabled()
-			{
-				return true;
-			}
+            @Override
+            public boolean isSpeedSearchEnabled() {
+                return true;
+            }
 
-			@Override
-			public PopupStep onChosen(T selectedValue, boolean finalChoice)
-			{
-				if(selectedValue == null)
-				{
-					return FINAL_CHOICE;
-				}
+            @Override
+            public PopupStep onChosen(T selectedValue, boolean finalChoice) {
+                if (selectedValue == null) {
+                    return FINAL_CHOICE;
+                }
 
-				if(finalChoice)
-				{
-					return doFinalStep(() ->
-					{
-						PsiDocumentManager.getInstance(project).commitAllDocuments();
-						LOG.assertTrue(selectedValue.isValid());
-						doImport(selectedValue);
-					});
-				}
+                if (finalChoice) {
+                    return doFinalStep(() ->
+                    {
+                        PsiDocumentManager.getInstance(project).commitAllDocuments();
+                        LOG.assertTrue(selectedValue.isValid());
+                        doImport(selectedValue);
+                    });
+                }
 
-				return AddImportAction.getExcludesStep(PsiUtil.getMemberQualifiedName(selectedValue), project);
-			}
+                return AddImportAction.getExcludesStep(PsiUtil.getMemberQualifiedName(selectedValue), project);
+            }
 
-			@Override
-			public boolean hasSubstep(T selectedValue)
-			{
-				return true;
-			}
+            @Override
+            public boolean hasSubstep(T selectedValue) {
+                return true;
+            }
 
-			@Nonnull
-			@Override
-			public String getTextFor(T value)
-			{
-				return getElementPresentableName(value);
-			}
+            @Nonnull
+            @Override
+            public String getTextFor(T value) {
+                return getElementPresentableName(value);
+            }
 
-			@Override
-			@RequiredUIAccess
-			public Image getIconFor(T aValue)
-			{
-				return IconDescriptorUpdaters.getIcon(aValue, 0);
-			}
-		};
+            @Override
+            @RequiredUIAccess
+            public Image getIconFor(T aValue) {
+                return IconDescriptorUpdaters.getIcon(aValue, 0);
+            }
+        };
 
-		final ListPopupImpl popup = new ListPopupImpl(step)
-		{
-			final PopupListElementRenderer rightArrow = new PopupListElementRenderer(this);
+        final ListPopupImpl popup = new ListPopupImpl(step) {
+            final PopupListElementRenderer rightArrow = new PopupListElementRenderer(this);
 
-			@Override
-			protected ListCellRenderer getListElementRenderer()
-			{
-				return new PsiElementListCellRenderer<T>()
-				{
-					public String getElementText(T element)
-					{
-						return getElementPresentableName(element);
-					}
+            @Override
+            protected ListCellRenderer getListElementRenderer() {
+                return new PsiElementListCellRenderer<T>() {
+                    public String getElementText(T element) {
+                        return getElementPresentableName(element);
+                    }
 
-					public String getContainerText(final T element, final String name)
-					{
-						return PsiClassListCellRenderer.getContainerTextStatic(element);
-					}
+                    public String getContainerText(final T element, final String name) {
+                        return PsiClassListCellRenderer.getContainerTextStatic(element);
+                    }
 
-					public int getIconFlags()
-					{
-						return 0;
-					}
+                    public int getIconFlags() {
+                        return 0;
+                    }
 
-					@Nullable
-					@Override
-					protected TextAttributes getNavigationItemAttributes(Object value)
-					{
-						TextAttributes attrs = super.getNavigationItemAttributes(value);
-						if(value instanceof PsiDocCommentOwner && !((PsiDocCommentOwner) value).isDeprecated())
-						{
-							PsiClass psiClass = ((T) value).getContainingClass();
-							if(psiClass != null && psiClass.isDeprecated())
-							{
-								return TextAttributes.merge(attrs, super.getNavigationItemAttributes(psiClass));
-							}
-						}
-						return attrs;
-					}
+                    @Nullable
+                    @Override
+                    protected TextAttributes getNavigationItemAttributes(Object value) {
+                        TextAttributes attrs = super.getNavigationItemAttributes(value);
+                        if (value instanceof PsiDocCommentOwner && !((PsiDocCommentOwner) value).isDeprecated()) {
+                            PsiClass psiClass = ((T) value).getContainingClass();
+                            if (psiClass != null && psiClass.isDeprecated()) {
+                                return TextAttributes.merge(attrs, super.getNavigationItemAttributes(psiClass));
+                            }
+                        }
+                        return attrs;
+                    }
 
-					@Override
-					protected DefaultListCellRenderer getRightCellRenderer(final Object value)
-					{
-						final DefaultListCellRenderer moduleRenderer = super.getRightCellRenderer(value);
-						return new DefaultListCellRenderer()
-						{
-							@Override
-							public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
-							{
-								JPanel panel = new JPanel(new BorderLayout());
-								if(moduleRenderer != null)
-								{
-									Component moduleComponent = moduleRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-									if(!isSelected)
-									{
-										moduleComponent.setBackground(getBackgroundColor(value));
-									}
-									panel.add(moduleComponent, BorderLayout.CENTER);
-								}
-								rightArrow.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-								Component rightArrowComponent = rightArrow.getNextStepLabel();
-								panel.add(rightArrowComponent, BorderLayout.EAST);
-								return panel;
-							}
-						};
-					}
-				};
-			}
-		};
-		popup.showInBestPositionFor(editor);
-	}
+                    @Override
+                    protected DefaultListCellRenderer getRightCellRenderer(final Object value) {
+                        final DefaultListCellRenderer moduleRenderer = super.getRightCellRenderer(value);
+                        return new DefaultListCellRenderer() {
+                            @Override
+                            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                                JPanel panel = new JPanel(new BorderLayout());
+                                if (moduleRenderer != null) {
+                                    Component moduleComponent = moduleRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                                    if (!isSelected) {
+                                        moduleComponent.setBackground(TargetAWT.to(getBackgroundColor(value)));
+                                    }
+                                    panel.add(moduleComponent, BorderLayout.CENTER);
+                                }
+                                rightArrow.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                                Component rightArrowComponent = rightArrow.getNextStepLabel();
+                                panel.add(rightArrowComponent, BorderLayout.EAST);
+                                return panel;
+                            }
+                        };
+                    }
+                };
+            }
+        };
+        popup.showInBestPositionFor(editor);
+    }
 
-	private String getElementPresentableName(T element)
-	{
-		final PsiClass aClass = element.getContainingClass();
-		LOG.assertTrue(aClass != null);
-		return ClassPresentationUtil.getNameForClass(aClass, false) + "." + element.getName();
-	}
+    private String getElementPresentableName(T element) {
+        final PsiClass aClass = element.getContainingClass();
+        LOG.assertTrue(aClass != null);
+        return ClassPresentationUtil.getNameForClass(aClass, false) + "." + element.getName();
+    }
 }
 
 

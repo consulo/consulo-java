@@ -15,10 +15,10 @@
  */
 package consulo.java.impl.intelliLang.pattern.compiler.impl;
 
-import consulo.ide.impl.intelliLang.Configuration;
 import consulo.internal.org.objectweb.asm.*;
 import consulo.java.impl.intelliLang.pattern.compiler.InstrumentationException;
 import consulo.java.impl.intelliLang.pattern.compiler.Instrumenter;
+import consulo.language.inject.advanced.Configuration;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.Arrays;

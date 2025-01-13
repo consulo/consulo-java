@@ -15,10 +15,10 @@
  */
 package consulo.java.impl.intelliLang.config.ui.configurables;
 
-import consulo.ide.impl.intelliLang.inject.config.ui.configurables.InjectionConfigurable;
-import consulo.project.Project;
 import consulo.java.impl.intelliLang.config.MethodParameterInjection;
 import consulo.java.impl.intelliLang.config.ui.MethodParameterPanel;
+import consulo.language.inject.advanced.ui.InjectionConfigurable;
+import consulo.project.Project;
 
 public class MethodParameterInjectionConfigurable extends InjectionConfigurable<MethodParameterInjection, MethodParameterPanel> {
   public MethodParameterInjectionConfigurable(MethodParameterInjection injection, Runnable treeUpdater, Project project) {

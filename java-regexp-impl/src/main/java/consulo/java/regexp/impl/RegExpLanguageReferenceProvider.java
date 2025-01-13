@@ -21,14 +21,13 @@ import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiModifierListOwner;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.ide.impl.intelliLang.Configuration;
 import consulo.java.impl.intelliLang.util.AnnotationUtilEx;
 import consulo.java.impl.intelliLang.util.PsiUtilEx;
 import consulo.language.Language;
+import consulo.language.inject.advanced.Configuration;
 import consulo.language.pattern.PatternCondition;
 import consulo.language.psi.*;
 import consulo.language.util.ProcessingContext;
-
 import jakarta.annotation.Nonnull;
 
 /**

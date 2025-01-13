@@ -1,8 +1,10 @@
 package consulo.java.impl.intelliLang;
 
 import consulo.annotation.component.ExtensionImpl;
-import consulo.ide.impl.psi.injection.InjectionConfigProvider;
+import consulo.language.inject.advanced.InjectionConfigProvider;
 import jakarta.annotation.Nonnull;
+
+import java.io.InputStream;
 
 /**
  * @author VISTALL
@@ -10,9 +12,9 @@ import jakarta.annotation.Nonnull;
  */
 @ExtensionImpl
 public class JavaXmlInjectionConfigProvider implements InjectionConfigProvider {
-  @Nonnull
-  @Override
-  public String getConfigFilePath() {
-    return "/consulo/java/impl/intelliLang/xmlInjections-java.xml";
-  }
+    @Nonnull
+    @Override
+    public InputStream openConfigFileStream() throws Exception {
+        return getClass().getResourceAsStream("/consulo/java/impl/intelliLang/xmlInjections-java.xml");
+    }
 }

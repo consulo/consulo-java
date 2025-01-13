@@ -23,17 +23,17 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMember;
 import consulo.application.util.function.Processor;
 import consulo.application.util.query.Query;
-import consulo.ide.impl.intelliLang.Configuration;
 import consulo.internal.org.objectweb.asm.ClassWriter;
+import consulo.java.impl.intelliLang.pattern.compiler.AnnotationBasedInstrumentingCompiler;
+import consulo.java.impl.intelliLang.pattern.compiler.Instrumenter;
+import consulo.java.impl.intelliLang.util.AnnotationUtilEx;
+import consulo.language.inject.advanced.Configuration;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.Pair;
-import consulo.java.impl.intelliLang.pattern.compiler.AnnotationBasedInstrumentingCompiler;
-import consulo.java.impl.intelliLang.pattern.compiler.Instrumenter;
-import consulo.java.impl.intelliLang.util.AnnotationUtilEx;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;

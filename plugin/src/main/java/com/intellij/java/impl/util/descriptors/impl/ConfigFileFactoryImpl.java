@@ -22,8 +22,8 @@ import consulo.application.Application;
 import consulo.fileTemplate.FileTemplate;
 import consulo.fileTemplate.FileTemplateManager;
 import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
-import consulo.ide.impl.idea.util.FileContentUtil;
 import consulo.ide.localize.IdeLocalize;
+import consulo.language.util.LanguageFileContentUtil;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
@@ -106,7 +106,7 @@ public class ConfigFileFactoryImpl extends ConfigFileFactory {
       } else {
         childData = existingFile;
       }
-      FileContentUtil.setFileText(project, childData, text);
+      LanguageFileContentUtil.setFileText(project, childData, text);
       return childData;
     } catch (final IOException e) {
       LOG.info(e);

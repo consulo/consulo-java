@@ -23,8 +23,6 @@ import consulo.application.util.CachedValueProvider;
 import consulo.application.util.CachedValuesManager;
 import consulo.dataContext.DataContext;
 import consulo.dataContext.DataManager;
-import consulo.ide.impl.intelliLang.Configuration;
-import consulo.ide.impl.psi.injection.impl.ApplicationInjectionConfiguration;
 import consulo.java.impl.intelliLang.util.AnnotateFix;
 import consulo.java.impl.intelliLang.util.AnnotationUtilEx;
 import consulo.java.impl.intelliLang.util.PsiUtilEx;
@@ -32,6 +30,7 @@ import consulo.java.impl.intelliLang.util.SubstitutedExpressionEvaluationHelper;
 import consulo.language.editor.inspection.*;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.inject.advanced.Configuration;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -41,9 +40,9 @@ import consulo.util.concurrent.AsyncResult;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
+import jakarta.annotation.Nonnull;
 import jakarta.inject.Inject;
 
-import jakarta.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -63,9 +62,9 @@ public class PatternValidator extends LocalInspectionTool
 	private final Configuration myConfiguration;
 
 	@Inject
-	public PatternValidator(ApplicationInjectionConfiguration configuration)
+	public PatternValidator()
 	{
-		myConfiguration = configuration;
+		myConfiguration = Configuration.getInstance();
 	}
 
 	@Nonnull
