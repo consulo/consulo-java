@@ -29,10 +29,11 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.markup.GutterIconRenderer;
 import consulo.dataContext.DataContext;
+import consulo.dataContext.DataManager;
 import consulo.fileEditor.FileEditorManager;
 import consulo.ide.impl.idea.ide.actions.ApplyIntentionAction;
 import consulo.java.impl.codeInsight.JavaCodeInsightSettings;
-import consulo.java.language.impl.JavaIcons;
+import consulo.java.language.impl.icon.JavaPsiImplIconGroup;
 import consulo.language.Language;
 import consulo.language.editor.Pass;
 import consulo.language.editor.gutter.GutterIconNavigationHandler;
@@ -45,16 +46,17 @@ import consulo.language.psi.*;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.RelativePoint;
-import consulo.ui.ex.action.DefaultActionGroup;
+import consulo.ui.ex.action.ActionGroup;
 import consulo.ui.ex.popup.JBPopup;
 import consulo.ui.ex.popup.JBPopupFactory;
 import consulo.ui.image.Image;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.xml.XmlStringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.function.Function;
 
@@ -83,7 +85,7 @@ public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDes
       return null;
     }
 
-    return new LineMarkerInfo<>(element, element.getTextRange(), JavaIcons.Gutter.ExtAnnotation, Pass.LINE_MARKERS, ourTooltipProvider, MyIconGutterHandler.INSTANCE, GutterIconRenderer.Alignment
+    return new LineMarkerInfo<>(element, element.getTextRange(), JavaPsiImplIconGroup.gutterExtannotation(), Pass.LINE_MARKERS, ourTooltipProvider, MyIconGutterHandler.INSTANCE, GutterIconRenderer.Alignment
         .RIGHT);
   }
 
@@ -119,7 +121,7 @@ public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDes
   @Nullable
   @Override
   public Image getIcon() {
-    return JavaIcons.Gutter.ExtAnnotation;
+    return JavaPsiImplIconGroup.gutterExtannotation();
   }
 
   @Nonnull
@@ -147,7 +149,7 @@ public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDes
           final PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(editor.getDocument());
 
           if (file != null && virtualFile.equals(file.getVirtualFile())) {
-            final JBPopup popup = createActionGroupPopup(containingFile, project, editor);
+            final JBPopup popup = createActionGroupPopup(containingFile, project, editor, e.getComponent());
             if (popup != null) {
               popup.show(new RelativePoint(e));
             }
@@ -157,17 +159,17 @@ public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDes
     }
 
     @Nullable
-    protected JBPopup createActionGroupPopup(PsiFile file, Project project, Editor editor) {
-      final DefaultActionGroup group = new DefaultActionGroup();
+    protected JBPopup createActionGroupPopup(PsiFile file, Project project, Editor editor, Component component) {
+      final ActionGroup.Builder group = ActionGroup.newImmutableBuilder();
       for (final IntentionAction action : IntentionManager.getInstance().getAvailableIntentionActions()) {
         if (shouldShowInGutterPopup(action) && action.isAvailable(project, editor, file)) {
           group.add(new ApplyIntentionAction(action, action.getText(), editor, file));
         }
       }
 
-      if (group.getChildrenCount() > 0) {
-        final DataContext context = DataContext.EMPTY_CONTEXT;
-        return JBPopupFactory.getInstance().createActionGroupPopup(null, group, context, JBPopupFactory.ActionSelectionAid.SPEEDSEARCH, true);
+      if (!group.isEmpty()) {
+        final DataContext context = DataManager.getInstance().getDataContext(component);
+        return JBPopupFactory.getInstance().createActionGroupPopup(null, group.build(), context, JBPopupFactory.ActionSelectionAid.SPEEDSEARCH, true);
       }
 
       return null;
