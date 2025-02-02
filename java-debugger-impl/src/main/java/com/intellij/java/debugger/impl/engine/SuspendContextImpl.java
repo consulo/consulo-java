@@ -15,36 +15,28 @@
  */
 package com.intellij.java.debugger.impl.engine;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
-import jakarta.annotation.Nonnull;
-
-import com.intellij.java.debugger.engine.SuspendContext;
-import consulo.logging.Logger;
-import jakarta.annotation.Nullable;
-import org.intellij.lang.annotations.MagicConstant;
-
-import consulo.application.util.Patches;
 import com.intellij.java.debugger.DebuggerBundle;
+import com.intellij.java.debugger.engine.SuspendContext;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
+import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;
-import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
 import com.intellij.java.debugger.impl.jdi.ThreadReferenceProxyImpl;
-import consulo.application.util.concurrent.ThreadDumper;
-import consulo.util.lang.Comparing;
-import java.util.HashSet;
+import consulo.application.util.Patches;
 import consulo.execution.debug.frame.XSuspendContext;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.ThreadReference;
 import consulo.internal.com.sun.jdi.event.EventSet;
 import consulo.internal.com.sun.jdi.request.EventRequest;
+import consulo.logging.Logger;
+import consulo.util.lang.Comparing;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+import org.intellij.lang.annotations.MagicConstant;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * @author lex
@@ -95,7 +87,7 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
 		assertNotResumed();
 		if(isEvaluating())
 		{
-			LOG.error("Resuming context while evaluating", ThreadDumper.dumpThreadsToString());
+			LOG.error("Resuming context while evaluating");
 		}
 		DebuggerManagerThreadImpl.assertIsManagerThread();
 		try

@@ -23,7 +23,6 @@ import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
-import consulo.ide.impl.idea.diagnostic.LogMessageEx;
 import consulo.language.codeStyle.PostprocessReformattingAspect;
 import consulo.language.editor.completion.ClassConditionKey;
 import consulo.language.editor.completion.CompletionUtilCore;
@@ -35,10 +34,10 @@ import consulo.language.util.AttachmentFactoryUtil;
 import consulo.logging.Logger;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.StringUtil;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -307,8 +306,8 @@ public class PsiTypeLookupItem extends LookupItem implements TypedLookupItem {
     int tail = context.getTailOffset();
     int newTail = JavaCompletionUtil.insertClassReference(aClass, file, startOffset, tail);
     if (newTail > context.getDocument().getTextLength() || newTail < 0) {
-      LOG.error(LogMessageEx.createEvent("Invalid offset after insertion ", "offset=" + newTail + "\n" + "start=" + startOffset + "\n" + "tail=" + tail + "\n" + "file.length=" + file
-          .getTextLength() + "\n" + "document=" + context.getDocument() + "\n" + DebugUtil.currentStackTrace(), AttachmentFactoryUtil.createAttachment(context.getDocument())));
+      LOG.error("Invalid offset after insertion ", "offset=" + newTail + "\n" + "start=" + startOffset + "\n" + "tail=" + tail + "\n" + "file.length=" + file
+          .getTextLength() + "\n" + "document=" + context.getDocument() + "\n" + DebugUtil.currentStackTrace(), AttachmentFactoryUtil.createAttachment(context.getDocument()));
       return;
 
     }

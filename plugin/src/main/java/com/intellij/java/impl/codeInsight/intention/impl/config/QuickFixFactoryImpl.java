@@ -41,7 +41,6 @@ import consulo.codeEditor.Editor;
 import consulo.document.Document;
 import consulo.document.util.TextRange;
 import consulo.ide.impl.idea.codeInsight.daemon.impl.quickfix.RenameElementFix;
-import consulo.ide.impl.idea.diagnostic.LogMessageEx;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
@@ -805,12 +804,12 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
                                                                   if (oldStamp != document.getModificationStamp()) {
                                                                     String afterText = file.getText();
                                                                     if (Comparing.strEqual(beforeText, afterText)) {
-                                                                      LOG.error(LogMessageEx.createEvent(
+                                                                      LOG.error(
                                                                         "Import optimizer  hasn't optimized any imports",
                                                                         file.getViewProvider().getVirtualFile().getPath(),
                                                                         AttachmentFactoryUtil.createAttachment(file
                                                                                                                  .getViewProvider()
-                                                                                                                 .getVirtualFile())));
+                                                                                                                 .getVirtualFile()));
                                                                     }
                                                                   }
                                                                 });

@@ -28,7 +28,6 @@ import consulo.application.AllIcons;
 import consulo.application.Application;
 import consulo.application.Result;
 import consulo.application.util.function.Processor;
-import consulo.application.util.logging.LoggerUtil;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorColors;
 import consulo.codeEditor.LogicalPosition;
@@ -59,6 +58,7 @@ import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
+import consulo.logging.attachment.AttachmentFactory;
 import consulo.module.content.ProjectRootManager;
 import consulo.module.content.layer.event.ModuleRootAdapter;
 import consulo.module.content.layer.event.ModuleRootEvent;
@@ -770,7 +770,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
   @RequiredReadAction
   protected void duplicateError(@Nonnull PsiFile file, @Nonnull String externalName, @Nonnull String text) {
     String message = text + "; for signature: '" + externalName + "' in the file " + file.getVirtualFile().getPresentableUrl();
-    LoggerUtil.error(LOG, message, file.getText());
+    LOG.error(message, AttachmentFactory.get().create("file.txt", file.getText()));
   }
 
   private static class MyExternalPromptDialog extends OptionsMessageDialog {
