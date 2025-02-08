@@ -54,7 +54,7 @@ public class PrefixBasedPropertyReference extends PropertyReference {
     return keyText;
   }
 
-  protected void addKey(Object property, Set<Object> variants) {
+  public void addKey(Object property, Set<Object> variants) {
     String key = ((IProperty) property).getUnescapedKey();
     final String keyPrefix = getKeyPrefix();
     if (keyPrefix != null && key != null) {
