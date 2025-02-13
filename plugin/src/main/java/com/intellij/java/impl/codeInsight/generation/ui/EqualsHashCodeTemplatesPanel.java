@@ -104,7 +104,7 @@ public class EqualsHashCodeTemplatesPanel extends NamedItemsListEditor<Couple<Te
   private final EqualsHashCodeTemplatesManager myManager;
 
   public EqualsHashCodeTemplatesPanel(Project project, EqualsHashCodeTemplatesManager manager) {
-    super(NAMER, FACTORY, CLONER, COMPARER, new ArrayList<Couple<TemplateResource>>(manager.getTemplateCouples()));
+    super(NAMER, FACTORY, CLONER, COMPARER, new ArrayList<Couple<TemplateResource>>(manager.getTemplateCouples()), () -> null);
     myProject = project;
     myManager = manager;
   }
