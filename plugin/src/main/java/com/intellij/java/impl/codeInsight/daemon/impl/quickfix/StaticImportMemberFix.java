@@ -27,6 +27,7 @@ import consulo.language.editor.CodeInsightSettings;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.hint.HintManager;
 import consulo.language.editor.hint.QuestionAction;
+import consulo.language.editor.inspection.PriorityAction;
 import consulo.language.editor.intention.HintAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
@@ -37,8 +38,14 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import java.util.List;
 
-public abstract class StaticImportMemberFix<T extends PsiMember> implements SyntheticIntentionAction, HintAction {
+public abstract class StaticImportMemberFix<T extends PsiMember> implements SyntheticIntentionAction, HintAction, PriorityAction {
   private List<T> candidates;
+
+  @Nonnull
+  @Override
+  public Priority getPriority() {
+    return Priority.TOP;
+  }
 
   @Nonnull
   protected abstract String getBaseText();
