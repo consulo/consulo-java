@@ -199,7 +199,6 @@ open module consulo.java {
     exports com.intellij.java.impl.ig.threading;
     exports com.intellij.java.impl.ig.ui;
     exports com.intellij.java.impl.ig.visibility;
-    exports com.intellij.java.impl.internal;
     exports com.intellij.java.impl.internal.diGraph;
     exports com.intellij.java.impl.internal.diGraph.analyzer;
     exports com.intellij.java.impl.internal.diGraph.impl;
