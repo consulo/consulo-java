@@ -149,25 +149,6 @@
 			<add-to-group group-id="ToolsBasicGroup" anchor="after" relative-to-action="SaveFileAsTemplate"/>
 		</action>
 
-		<!--<action id="DebugListen" internal="true" class="com.intellij.debugger.actions.ThrowDebugExceptionAction">
-		  <add-to-group group-id="Internal.Errors"/>
-		</action> -->
-
-		<action id="GenerateVisitorByHierarchy" internal="true" class="com.intellij.java.impl.internal.GenerateVisitorByHierarchyAction"
-				text="Generate Hierarchy Visitor">
-			<add-to-group group-id="Internal"/>
-		</action>
-
-		<action id="UsedIconsListing" internal="true" class="com.intellij.java.impl.internal.UsedIconsListingAction"
-				text="List Used Icons">
-			<add-to-group group-id="Internal"/>
-		</action>
-
-		<action id="StaticIconFields" internal="true" class="com.intellij.java.impl.internal.StaticIconFieldsAction"
-				text="List Static Field Initializers">
-			<add-to-group group-id="Internal"/>
-		</action>
-
 		<group id="JavaDebuggerActions">
 			<action id="Debugger.CustomizeContextView" class="com.intellij.java.debugger.impl.actions.CustomizeContextViewAction">
 				<add-to-group group-id="XDebugger.Variables.Tree.Popup" anchor="last"/>
