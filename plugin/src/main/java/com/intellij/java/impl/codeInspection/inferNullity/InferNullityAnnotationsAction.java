@@ -21,6 +21,10 @@ import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ActionImpl;
+import consulo.annotation.component.ActionParentRef;
+import consulo.annotation.component.ActionRef;
+import consulo.annotation.component.ActionRefAnchor;
 import consulo.application.Result;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
@@ -51,6 +55,7 @@ import consulo.project.DumbService;
 import consulo.project.Project;
 import consulo.ui.CheckBox;
 import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.ex.action.IdeActions;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.layout.VerticalLayout;
@@ -67,6 +72,8 @@ import org.jetbrains.annotations.NonNls;
 import java.util.*;
 import java.util.function.Supplier;
 
+@ActionImpl(id = "InferNullity", parents =
+@ActionParentRef(value = @ActionRef(id = IdeActions.ACTION_CODE_MENU), relatedToAction = @ActionRef(id = "AnalyzeStacktrace"), anchor = ActionRefAnchor.AFTER))
 public class InferNullityAnnotationsAction extends BaseAnalysisAction {
   private static final String INFER_NULLITY_ANNOTATIONS = "Infer Nullity Annotations";
   private static final String ANNOTATE_LOCAL_VARIABLES = "annotate.local.variables";

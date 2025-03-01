@@ -70,10 +70,6 @@
 			<add-to-group group-id="NewGroup1" anchor="first"/>
 		</action>
 
-		<action id="InferNullity" class="com.intellij.java.impl.codeInspection.inferNullity.InferNullityAnnotationsAction">
-			<add-to-group group-id="InspectCodeGroup" anchor="after" relative-to-action="RunInspection"/>
-		</action>
-
 		<group id="AnalyzeJavaMenu">
 			<action id="ShowPackageCycles" class="com.intellij.java.impl.cyclicDependencies.actions.CyclicDependenciesAction"/>
 			<separator/>
