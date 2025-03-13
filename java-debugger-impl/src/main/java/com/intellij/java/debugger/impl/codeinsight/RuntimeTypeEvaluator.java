@@ -24,6 +24,7 @@ import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.DebuggerInvocationUtil;
 import com.intellij.java.debugger.impl.EvaluatingComputable;
 import com.intellij.java.debugger.impl.engine.ContextUtil;
+import com.intellij.java.debugger.impl.engine.SuspendContextImpl;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.engine.evaluation.expression.EvaluatorBuilderImpl;
 import com.intellij.java.debugger.impl.ui.EditorEvaluationCommand;
@@ -39,7 +40,7 @@ import consulo.internal.com.sun.jdi.Value;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
-
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 /**
@@ -53,20 +54,17 @@ public abstract class RuntimeTypeEvaluator extends EditorEvaluationCommand<PsiTy
 	}
 
 	@Override
-	public void threadAction()
+	public void threadAction(@Nonnull SuspendContextImpl suspendContext)
 	{
 		PsiType type = null;
 		try
 		{
 			type = evaluate();
 		}
-		catch(ProcessCanceledException ignored)
+		catch(ProcessCanceledException | EvaluateException ignored)
 		{
 		}
-		catch(EvaluateException ignored)
-		{
-		}
-		finally
+        finally
 		{
 			typeCalculationFinished(type);
 		}

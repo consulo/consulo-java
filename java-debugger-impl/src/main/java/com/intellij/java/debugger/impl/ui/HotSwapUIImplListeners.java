@@ -9,38 +9,23 @@ import consulo.compiler.CompileContext;
 import consulo.compiler.event.CompilationStatusListener;
 import consulo.component.messagebus.MessageBusConnection;
 import consulo.project.Project;
-import consulo.util.lang.StringUtil;
 
-import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @TopicImpl(ComponentScope.PROJECT)
 public class HotSwapUIImplListeners implements DebuggerManagerListener {
 
   private static class MyCompilationStatusListener implements CompilationStatusListener {
-    private final AtomicReference<Map<String, List<String>>> myGeneratedPaths = new AtomicReference<>(new HashMap<>());
     private Project myProject;
 
     public MyCompilationStatusListener(Project project) {
       myProject = project;
     }
 
-    public void fileGenerated(String outputRoot, String relativePath) {
-      if (StringUtil.endsWith(relativePath, ".class")) {
-        // collect only classes
-        final Map<String, List<String>> map = myGeneratedPaths.get();
-        List<String> paths = map.get(outputRoot);
-        if (paths == null) {
-          paths = new ArrayList<>();
-          map.put(outputRoot, paths);
-        }
-        paths.add(relativePath);
-      }
-    }
-
     @Override
     public void compilationFinished(boolean aborted, int errors, int warnings, CompileContext compileContext) {
-      final Map<String, List<String>> generated = myGeneratedPaths.getAndSet(new HashMap<>());
       if (myProject.isDisposed()) {
         return;
       }
@@ -62,7 +47,7 @@ public class HotSwapUIImplListeners implements DebuggerManagerListener {
           }
         }
         if (!sessions.isEmpty()) {
-          hotSwapUI.hotSwapSessions(sessions, generated);
+          hotSwapUI.hotSwapSessions(sessions);
         }
       }
       hotSwapUI.myPerformHotswapAfterThisCompilation = true;

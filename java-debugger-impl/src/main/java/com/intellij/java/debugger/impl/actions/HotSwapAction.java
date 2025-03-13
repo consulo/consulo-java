@@ -19,7 +19,6 @@ import com.intellij.java.debugger.impl.DebuggerManagerEx;
 import com.intellij.java.debugger.impl.DebuggerSession;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
 import com.intellij.java.debugger.impl.ui.HotSwapUI;
-import consulo.dataContext.DataContext;
 import consulo.project.Project;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
@@ -27,39 +26,33 @@ import consulo.ui.ex.action.AnActionEvent;
 /**
  * @author lex
  */
-public class HotSwapAction extends AnAction
-{
+public class HotSwapAction extends AnAction {
+    @Override
+    public void actionPerformed(AnActionEvent e) {
+        Project project = e.getData(Project.KEY);
+        if (project == null) {
+            return;
+        }
 
-	public void actionPerformed(AnActionEvent e)
-	{
-		Project project = e.getData(Project.KEY);
-		if (project == null)
-		{
-			return;
-		}
+        DebuggerManagerEx debuggerManager = DebuggerManagerEx.getInstanceEx(project);
+        DebuggerSession session = debuggerManager.getContext().getDebuggerSession();
 
-		DebuggerManagerEx debuggerManager = DebuggerManagerEx.getInstanceEx(project);
-		DebuggerSession session = debuggerManager.getContext().getDebuggerSession();
+        if (session != null && session.isAttached()) {
+            HotSwapUI.getInstance(project).reloadChangedClasses(session, DebuggerSettings.getInstance().COMPILE_BEFORE_HOTSWAP);
+        }
+    }
 
-		if (session != null && session.isAttached())
-		{
-			HotSwapUI.getInstance(project).reloadChangedClasses(session, DebuggerSettings.getInstance().COMPILE_BEFORE_HOTSWAP);
-		}
-	}
+    @Override
+    public void update(AnActionEvent e) {
+        Project project = e.getData(Project.KEY);
+        if (project == null) {
+            e.getPresentation().setEnabled(false);
+            return;
+        }
 
-	public void update(AnActionEvent e)
-	{
-		DataContext dataContext = e.getDataContext();
-		Project project = e.getData(Project.KEY);
-		if (project == null)
-		{
-			e.getPresentation().setEnabled(false);
-			return;
-		}
+        DebuggerManagerEx debuggerManager = DebuggerManagerEx.getInstanceEx(project);
+        DebuggerSession session = debuggerManager.getContext().getDebuggerSession();
 
-		DebuggerManagerEx debuggerManager = DebuggerManagerEx.getInstanceEx(project);
-		DebuggerSession session = debuggerManager.getContext().getDebuggerSession();
-
-		e.getPresentation().setEnabled(session != null && session.isAttached() && session.getProcess().canRedefineClasses());
-	}
+        e.getPresentation().setEnabled(session != null && session.isAttached() && session.getProcess().canRedefineClasses());
+    }
 }

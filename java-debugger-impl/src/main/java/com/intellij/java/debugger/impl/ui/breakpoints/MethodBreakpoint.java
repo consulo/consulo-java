@@ -39,17 +39,15 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
-import consulo.application.ApplicationManager;
 import consulo.application.ReadAction;
 import consulo.application.dumb.IndexNotReadyException;
 import consulo.application.progress.ProgressIndicator;
-import consulo.application.progress.ProgressManager;
+import consulo.application.progress.Task;
+import consulo.component.messagebus.MessageBusConnection;
 import consulo.document.Document;
-import consulo.execution.debug.XDebuggerManager;
 import consulo.execution.debug.breakpoint.XBreakpoint;
-import consulo.execution.debug.event.XBreakpointListener;
+import consulo.execution.debug.event.XTopicBreakpointListener;
 import consulo.execution.debug.icon.ExecutionDebugIconGroup;
-import consulo.ide.impl.idea.openapi.progress.util.ProgressWindow;
 import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.event.LocatableEvent;
 import consulo.internal.com.sun.jdi.event.MethodEntryEvent;
@@ -66,6 +64,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.image.Image;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.MultiMap;
@@ -145,27 +144,25 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
                 createRequestForPreparedClassEmulated(breakpoint, debugProcess, referenceType, false);
             }
         }, null);
+
         if (request != null) {
             requestsManager.registerRequest(breakpoint, request);
             request.enable();
             debugProcess.getVirtualMachineProxy().clearCaches(); // to force reload classes available so far
         }
 
-        AtomicReference<ProgressWindow> indicatorRef = new AtomicReference<>();
-        ApplicationManager.getApplication().invokeAndWait(() ->
-        {
-            ProgressWindow progress = new ProgressWindow(true, false, debugProcess.getProject());
-            progress.setDelayInMillis(2000);
-            indicatorRef.set(progress);
-        });
-        ProgressWindow indicator = indicatorRef.get();
-
+        AtomicReference<ProgressIndicator> indicatorRef = new AtomicReference<>();
         AtomicBoolean changed = new AtomicBoolean();
-        XBreakpointListener<XBreakpoint<?>> listener = new XBreakpointListener<XBreakpoint<?>>() {
+
+        XTopicBreakpointListener listener = new XTopicBreakpointListener() {
             void changed(@Nonnull XBreakpoint b) {
                 if (b == breakpoint.getXBreakpoint()) {
                     changed.set(true);
-                    indicator.cancel();
+
+                    ProgressIndicator indicator = indicatorRef.get();
+                    if (indicator != null) {
+                        indicator.cancel();
+                    }
                 }
             }
 
@@ -180,12 +177,31 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
             }
         };
 
-        XDebuggerManager.getInstance(debugProcess.getProject()).getBreakpointManager().addBreakpointListener(listener, indicator);
-        ProgressManager.getInstance().executeProcessUnderProgress(() -> processPreparedSubTypes(baseType, subType -> createRequestForPreparedClassEmulated(breakpoint, debugProcess, subType, false),
-            indicator), indicator);
-        if (indicator.isCanceled() && !changed.get()) {
-            breakpoint.disableEmulation();
-        }
+        MessageBusConnection connection = debugProcess.getProject().getMessageBus().connect();
+        connection.subscribe(XTopicBreakpointListener.class, listener);
+
+        new Task.Backgroundable(debugProcess.getProject(), "Creating Method Breakpoint...", true) {
+            @Override
+            public void run(@Nonnull ProgressIndicator progressIndicator) {
+                indicatorRef.set(progressIndicator);
+
+                processPreparedSubTypes(baseType, subType -> createRequestForPreparedClassEmulated(breakpoint, debugProcess, subType, false), progressIndicator);
+            }
+
+            @RequiredUIAccess
+            @Override
+            public void onCancel() {
+                if (!changed.get()) {
+                    breakpoint.disableEmulation();
+                }
+            }
+
+            @RequiredUIAccess
+            @Override
+            public void onFinished() {
+                connection.disconnect();
+            }
+        }.queue();
     }
 
     @Override

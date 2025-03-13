@@ -16,82 +16,73 @@
 package com.intellij.java.debugger.impl;
 
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
-import consulo.application.ApplicationManager;
-import consulo.ui.ModalityState;
-import consulo.project.Project;
-import consulo.application.util.function.Computable;
+import consulo.application.Application;
 import consulo.language.psi.PsiDocumentManager;
+import consulo.project.Project;
+import consulo.ui.ModalityState;
 import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
 public class DebuggerInvocationUtil {
-  public static void swingInvokeLater(final Project project, @Nonnull final Runnable runnable) {
-    SwingUtilities.invokeLater(new Runnable() {
-      public void run() {
-        if (project != null && !project.isDisposed()) {
-          runnable.run();
-        }
-      }
-    });
-  }
-  public static void invokeLater(final Project project, @Nonnull final Runnable runnable) {
-    ApplicationManager.getApplication().invokeLater(new Runnable() {
-      public void run() {
-        if (project != null && !project.isDisposed()) {
-          runnable.run();
-        }
-      }
-    });
-  }
-
-  public static void invokeLater(final Project project, @Nonnull final Runnable runnable, ModalityState state) {
-    ApplicationManager.getApplication().invokeLater(new Runnable() {
-      public void run() {
-        if(project == null || project.isDisposed()) return;
-
-        runnable.run();
-      }
-    }, state);
-  }
-
-  public static void invokeAndWait(final Project project, @Nonnull final Runnable runnable, ModalityState state) {
-    ApplicationManager.getApplication().invokeAndWait(new Runnable() {
-      public void run() {
-        if(project == null || project.isDisposed()) return;
-
-        runnable.run();
-      }
-    }, state);
-  }
-
-  public static  <T> T commitAndRunReadAction(Project project, final EvaluatingComputable<T> computable) throws EvaluateException {
-    final Throwable[] ex = new Throwable[] { null };
-    T result = PsiDocumentManager.getInstance(project).commitAndRunReadAction(new Computable<T>() {
-          public T compute() {
-            try {
-              return computable.compute();
+    public static void swingInvokeLater(final Project project, @Nonnull final Runnable runnable) {
+        SwingUtilities.invokeLater(() -> {
+            if (project != null && !project.isDisposed()) {
+                runnable.run();
             }
-            catch (RuntimeException e) {
-              ex[0] = e;
+        });
+    }
+
+    public static void invokeLater(final Project project, @Nonnull final Runnable runnable) {
+        Application.get().invokeLater(() -> {
+            if (project != null && !project.isDisposed()) {
+                runnable.run();
+            }
+        });
+    }
+
+    public static void invokeLater(final Project project, @Nonnull final Runnable runnable, ModalityState state) {
+        Application.get().invokeLater(() -> {
+            if (project == null || project.isDisposed()) {
+                return;
+            }
+
+            runnable.run();
+        }, state);
+    }
+
+    public static void invokeAndWait(final Project project, @Nonnull final Runnable runnable, ModalityState state) {
+        Application.get().invokeAndWait(() -> {
+            if (project == null || project.isDisposed()) {
+                return;
+            }
+
+            runnable.run();
+        }, state);
+    }
+
+    public static <T> T commitAndRunReadAction(Project project, final EvaluatingComputable<T> computable) throws EvaluateException {
+        final Throwable[] ex = new Throwable[]{null};
+        T result = PsiDocumentManager.getInstance(project).commitAndRunReadAction(() -> {
+            try {
+                return computable.compute();
             }
             catch (Exception th) {
-              ex[0] = th;
+                ex[0] = th;
             }
 
             return null;
-          }
         });
 
-    if(ex[0] != null) {
-      if(ex[0] instanceof RuntimeException) {
-        throw (RuntimeException)ex[0];
-      }
-      else {
-        throw (EvaluateException) ex[0];
-      }
-    }
+        if (ex[0] != null) {
+            if (ex[0] instanceof RuntimeException) {
+                throw (RuntimeException) ex[0];
+            }
+            else {
+                throw (EvaluateException) ex[0];
+            }
+        }
 
-    return result;
-  }
+        return result;
+    }
 }

@@ -19,13 +19,9 @@ import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.DebuggerInvocationUtil;
 import com.intellij.java.debugger.impl.DebuggerSession;
 import com.intellij.java.debugger.impl.HotSwapProgress;
-import com.intellij.java.debugger.impl.settings.DebuggerSettings;
 import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
-import consulo.application.progress.PerformInBackgroundOption;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressIndicatorListener;
-import consulo.ide.impl.idea.openapi.progress.impl.BackgroundableProcessIndicator;
-import consulo.ide.impl.idea.openapi.progress.util.ProgressWindow;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.project.ui.notification.NotificationGroup;
@@ -44,23 +40,14 @@ public class HotSwapProgressImpl extends HotSwapProgress {
     static final NotificationGroup NOTIFICATION_GROUP = NotificationGroup.toolWindowGroup("HotSwap", ToolWindowId.DEBUG, true);
 
     IntObjectMap<List<String>> myMessages = IntMaps.newIntObjectHashMap();
-    private final ProgressWindow myProgressWindow;
-    private LocalizeValue myTitle = JavaDebuggerLocalize.progressHotSwapTitle();
 
-    public HotSwapProgressImpl(Project project) {
+    private ProgressIndicator myProgressIndicator;
+
+    public HotSwapProgressImpl(Project project, ProgressIndicator progressIndicator) {
         super(project);
-        myProgressWindow = new BackgroundableProcessIndicator(getProject(), myTitle, new PerformInBackgroundOption() {
-            @Override
-            public boolean shouldStartInBackground() {
-                return DebuggerSettings.getInstance().HOTSWAP_IN_BACKGROUND;
-            }
+        myProgressIndicator = progressIndicator;
 
-            @Override
-            public void processSentToBackground() {
-            }
-
-        }, LocalizeValue.of(), LocalizeValue.of(), true);
-        myProgressWindow.addListener(new ProgressIndicatorListener() {
+        progressIndicator.addListener(new ProgressIndicatorListener() {
             @Override
             public void canceled() {
                 HotSwapProgressImpl.this.cancel();
@@ -114,55 +101,47 @@ public class HotSwapProgressImpl extends HotSwapProgress {
 
     @Override
     public void setText(final String text) {
-        DebuggerInvocationUtil.invokeLater(getProject(), new Runnable() {
-            @Override
-            public void run() {
-                if (!myProgressWindow.isCanceled() && myProgressWindow.isRunning()) {
-                    myProgressWindow.setText(text);
-                }
+        DebuggerInvocationUtil.invokeLater(getProject(), () -> {
+            if (!myProgressIndicator.isCanceled() && myProgressIndicator.isRunning()) {
+                myProgressIndicator.setText2(text);
             }
-        }, myProgressWindow.getModalityState());
+        }, myProgressIndicator.getModalityState());
 
     }
 
     @Override
     public void setTitle(final String text) {
-        DebuggerInvocationUtil.invokeLater(getProject(), new Runnable() {
-            @Override
-            public void run() {
-                if (!myProgressWindow.isCanceled() && myProgressWindow.isRunning()) {
-                    myProgressWindow.setTitle(text);
-                }
+        DebuggerInvocationUtil.invokeLater(getProject(), () -> {
+            if (!myProgressIndicator.isCanceled() && myProgressIndicator.isRunning()) {
+                myProgressIndicator.setText(text);
             }
-        }, myProgressWindow.getModalityState());
+        }, myProgressIndicator.getModalityState());
 
     }
 
     @Override
     public void setFraction(final double v) {
-        DebuggerInvocationUtil.invokeLater(getProject(), new Runnable() {
-            @Override
-            public void run() {
-                if (!myProgressWindow.isCanceled() && myProgressWindow.isRunning()) {
-                    myProgressWindow.setFraction(v);
-                }
+        DebuggerInvocationUtil.invokeLater(getProject(), () -> {
+            if (!myProgressIndicator.isCanceled() && myProgressIndicator.isRunning()) {
+                myProgressIndicator.setFraction(v);
             }
-        }, myProgressWindow.getModalityState());
+        }, myProgressIndicator.getModalityState());
     }
 
     @Override
     public boolean isCancelled() {
-        return myProgressWindow.isCanceled();
+        return myProgressIndicator.isCanceled();
     }
 
     public ProgressIndicator getProgressIndicator() {
-        return myProgressWindow;
+        return myProgressIndicator;
     }
 
     @Override
     public void setDebuggerSession(DebuggerSession session) {
         // TODO replace by another localize
-        myTitle = LocalizeValue.join(JavaDebuggerLocalize.progressHotSwapTitle(), LocalizeValue.localizeTODO(" : "), LocalizeValue.of(session.getSessionName()));
-        myProgressWindow.setTitle(myTitle.get());
+        LocalizeValue title = LocalizeValue.join(JavaDebuggerLocalize.progressHotSwapTitle(), LocalizeValue.localizeTODO(" : "), LocalizeValue.of(session.getSessionName()));
+
+        myProgressIndicator.setText(title.get());
     }
 }

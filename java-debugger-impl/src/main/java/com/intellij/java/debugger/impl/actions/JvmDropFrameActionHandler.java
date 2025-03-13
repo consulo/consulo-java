@@ -22,10 +22,11 @@ import consulo.internal.com.sun.jdi.InvalidStackFrameException;
 import consulo.internal.com.sun.jdi.VMDisconnectedException;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
+import consulo.platform.base.localize.CommonLocalize;
 import consulo.project.Project;
 import consulo.ui.ModalityState;
-import consulo.ui.ex.UIBundle;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.MessageDialogBuilder;
 import consulo.ui.ex.awt.Messages;
@@ -140,8 +141,8 @@ public class JvmDropFrameActionHandler implements XDropFrameHandler {
 
                             @Nonnull
                             @Override
-                            public String getDoNotShowMessage() {
-                                return UIBundle.message("dialog.options.do.not.show");
+                            public LocalizeValue getDoNotShowMessage() {
+                                return CommonLocalize.dialogOptionsDoNotShow();
                             }
                         })
                         .show();
