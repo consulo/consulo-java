@@ -49,7 +49,7 @@ import consulo.usage.UsageViewDescriptor;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
-import consulo.util.lang.ref.Ref;
+import consulo.util.lang.ref.SimpleReference;
 import jakarta.annotation.Nonnull;
 
 import java.io.IOException;
@@ -59,7 +59,6 @@ import java.util.List;
 import java.util.Set;
 
 public class WrapReturnValueProcessor extends FixableUsagesRefactoringProcessor {
-
     private static final Logger LOG = Logger.getInstance("com.siyeh.rpp.wrapreturnvalue.WrapReturnValueProcessor");
 
     private MoveDestination myMoveDestination;
@@ -76,9 +75,11 @@ public class WrapReturnValueProcessor extends FixableUsagesRefactoringProcessor 
     public WrapReturnValueProcessor(
         String className,
         String packageName,
-        MoveDestination moveDestination, PsiMethod method,
+        MoveDestination moveDestination,
+        PsiMethod method,
         boolean useExistingClass,
-        final boolean createInnerClass, PsiField delegateField
+        boolean createInnerClass,
+        PsiField delegateField
     ) {
         super(method.getProject());
         myMoveDestination = moveDestination;
@@ -90,9 +91,9 @@ public class WrapReturnValueProcessor extends FixableUsagesRefactoringProcessor 
         myQualifiedName = StringUtil.getQualifiedName(packageName, className);
         this.myUseExistingClass = useExistingClass;
 
-        final Set<PsiTypeParameter> typeParamSet = new HashSet<>();
-        final TypeParametersVisitor visitor = new TypeParametersVisitor(typeParamSet);
-        final PsiTypeElement returnTypeElement = method.getReturnTypeElement();
+        Set<PsiTypeParameter> typeParamSet = new HashSet<>();
+        TypeParametersVisitor visitor = new TypeParametersVisitor(typeParamSet);
+        PsiTypeElement returnTypeElement = method.getReturnTypeElement();
         assert returnTypeElement != null;
         returnTypeElement.accept(visitor);
         typeParams = new ArrayList<>(typeParamSet);
@@ -105,17 +106,17 @@ public class WrapReturnValueProcessor extends FixableUsagesRefactoringProcessor 
     }
 
     private String calculateUnwrapMethodName() {
-        final PsiClass existingClass =
+        PsiClass existingClass =
             JavaPsiFacade.getInstance(myProject).findClass(myQualifiedName, GlobalSearchScope.allScope(myProject));
         if (existingClass != null) {
             if (TypeConversionUtil.isPrimitiveWrapper(myQualifiedName)) {
-                final PsiPrimitiveType unboxedType =
+                PsiPrimitiveType unboxedType =
                     PsiPrimitiveType.getUnboxedType(JavaPsiFacade.getInstance(myProject).getElementFactory().createType(existingClass));
                 assert unboxedType != null;
                 return unboxedType.getCanonicalText() + "Value()";
             }
 
-            final PsiMethod getter = PropertyUtil.findGetterForField(myDelegateField);
+            PsiMethod getter = PropertyUtil.findGetterForField(myDelegateField);
             return getter != null ? getter.getName() : "";
         }
         return "";
@@ -139,20 +140,20 @@ public class WrapReturnValueProcessor extends FixableUsagesRefactoringProcessor 
     @RequiredReadAction
     private void findUsagesForMethod(PsiMethod psiMethod, List<FixableUsageInfo> usages) {
         for (PsiReference reference : ReferencesSearch.search(psiMethod, psiMethod.getUseScope())) {
-            final PsiElement referenceElement = reference.getElement();
-            final PsiElement parent = referenceElement.getParent();
-            if (parent instanceof PsiCallExpression) {
-                usages.add(new UnwrapCall((PsiCallExpression)parent, unwrapMethodName));
+            PsiElement referenceElement = reference.getElement();
+            PsiElement parent = referenceElement.getParent();
+            if (parent instanceof PsiCallExpression callExpr) {
+                usages.add(new UnwrapCall(callExpr, unwrapMethodName));
             }
         }
-        final String returnType = calculateReturnTypeString();
+        String returnType = calculateReturnTypeString();
         usages.add(new ChangeReturnType(psiMethod, returnType));
         psiMethod.accept(new ReturnSearchVisitor(usages, returnType, psiMethod));
     }
 
     private String calculateReturnTypeString() {
-        final String qualifiedName = StringUtil.getQualifiedName(packageName, className);
-        final StringBuilder returnTypeBuffer = new StringBuilder(qualifiedName);
+        String qualifiedName = StringUtil.getQualifiedName(packageName, className);
+        StringBuilder returnTypeBuffer = new StringBuilder(qualifiedName);
         if (!typeParams.isEmpty()) {
             returnTypeBuffer.append('<');
             returnTypeBuffer.append(StringUtil.join(
@@ -171,9 +172,9 @@ public class WrapReturnValueProcessor extends FixableUsagesRefactoringProcessor 
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(@Nonnull final Ref<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
         MultiMap<PsiElement, String> conflicts = new MultiMap<>();
-        final PsiClass existingClass =
+        PsiClass existingClass =
             JavaPsiFacade.getInstance(myProject).findClass(myQualifiedName, GlobalSearchScope.allScope(myProject));
         if (myUseExistingClass) {
             if (existingClass == null) {
@@ -181,9 +182,9 @@ public class WrapReturnValueProcessor extends FixableUsagesRefactoringProcessor 
             }
             else {
                 boolean foundConstructor = false;
-                final Set<PsiType> returnTypes = new HashSet<>();
+                Set<PsiType> returnTypes = new HashSet<>();
                 returnTypes.add(method.getReturnType());
-                final PsiCodeBlock methodBody = method.getBody();
+                PsiCodeBlock methodBody = method.getBody();
                 if (methodBody != null) {
                     methodBody.accept(new JavaRecursiveElementWalkingVisitor() {
                         @Override
@@ -200,21 +201,21 @@ public class WrapReturnValueProcessor extends FixableUsagesRefactoringProcessor 
                     });
                 }
 
-                final PsiMethod[] constructors = existingClass.getConstructors();
+                PsiMethod[] constructors = existingClass.getConstructors();
                 constr:
                 for (PsiMethod constructor : constructors) {
-                    final PsiParameter[] parameters = constructor.getParameterList().getParameters();
+                    PsiParameter[] parameters = constructor.getParameterList().getParameters();
                     if (parameters.length == 1) {
-                        final PsiParameter parameter = parameters[0];
-                        final PsiType parameterType = parameter.getType();
+                        PsiParameter parameter = parameters[0];
+                        PsiType parameterType = parameter.getType();
                         for (PsiType returnType : returnTypes) {
                             if (!TypeConversionUtil.isAssignable(parameterType, returnType)) {
                                 continue constr;
                             }
                         }
-                        final PsiCodeBlock body = constructor.getBody();
+                        PsiCodeBlock body = constructor.getBody();
                         LOG.assertTrue(body != null);
-                        final boolean[] found = new boolean[1];
+                        boolean[] found = new boolean[1];
                         body.accept(new JavaRecursiveElementWalkingVisitor() {
                             @Override
                             @RequiredReadAction
@@ -264,7 +265,7 @@ public class WrapReturnValueProcessor extends FixableUsagesRefactoringProcessor 
 
     @Override
     @RequiredReadAction
-    protected void performRefactoring(UsageInfo[] usageInfos) {
+    protected void performRefactoring(@Nonnull UsageInfo[] usageInfos) {
         if (!myUseExistingClass && !buildClass()) {
             return;
         }
@@ -273,18 +274,18 @@ public class WrapReturnValueProcessor extends FixableUsagesRefactoringProcessor 
 
     @RequiredReadAction
     private boolean buildClass() {
-        final PsiManager manager = method.getManager();
-        final Project project = method.getProject();
-        final ReturnValueBeanBuilder beanClassBuilder = new ReturnValueBeanBuilder();
+        PsiManager manager = method.getManager();
+        Project project = method.getProject();
+        ReturnValueBeanBuilder beanClassBuilder = new ReturnValueBeanBuilder();
         beanClassBuilder.setCodeStyleSettings(project);
         beanClassBuilder.setTypeArguments(typeParams);
         beanClassBuilder.setClassName(className);
         beanClassBuilder.setPackageName(packageName);
-        beanClassBuilder.setStatic(myCreateInnerClass && method.hasModifierProperty(PsiModifier.STATIC));
-        final PsiType returnType = method.getReturnType();
+        beanClassBuilder.setStatic(myCreateInnerClass && method.isStatic());
+        PsiType returnType = method.getReturnType();
         beanClassBuilder.setValueType(returnType);
 
-        final String classString;
+        String classString;
         try {
             classString = beanClassBuilder.buildBeanClass();
         }
@@ -294,30 +295,30 @@ public class WrapReturnValueProcessor extends FixableUsagesRefactoringProcessor 
         }
 
         try {
-            final PsiFileFactory factory = PsiFileFactory.getInstance(project);
-            final PsiJavaFile psiFile = (PsiJavaFile)factory.createFileFromText(className + ".java", JavaFileType.INSTANCE, classString);
-            final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(manager.getProject());
+            PsiFileFactory factory = PsiFileFactory.getInstance(project);
+            PsiJavaFile psiFile = (PsiJavaFile)factory.createFileFromText(className + ".java", JavaFileType.INSTANCE, classString);
+            CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(manager.getProject());
             if (myCreateInnerClass) {
-                final PsiClass containingClass = method.getContainingClass();
-                final PsiElement innerClass = containingClass.add(psiFile.getClasses()[0]);
+                PsiClass containingClass = method.getContainingClass();
+                PsiElement innerClass = containingClass.add(psiFile.getClasses()[0]);
                 JavaCodeStyleManager.getInstance(project).shortenClassReferences(innerClass);
             }
             else {
-                final PsiFile containingFile = method.getContainingFile();
+                PsiFile containingFile = method.getContainingFile();
 
-                final PsiDirectory containingDirectory = containingFile.getContainingDirectory();
-                final PsiDirectory directory;
+                PsiDirectory containingDirectory = containingFile.getContainingDirectory();
+                PsiDirectory directory;
                 if (myMoveDestination != null) {
                     directory = myMoveDestination.getTargetDirectory(containingDirectory);
                 }
                 else {
-                    final Module module = ModuleUtil.findModuleForPsiElement(containingFile);
+                    Module module = ModuleUtil.findModuleForPsiElement(containingFile);
                     directory = PackageUtil.findOrCreateDirectoryForPackage(module, packageName, containingDirectory, true, true);
                 }
 
                 if (directory != null) {
-                    final PsiElement shortenedFile = JavaCodeStyleManager.getInstance(project).shortenClassReferences(psiFile);
-                    final PsiElement reformattedFile = codeStyleManager.reformat(shortenedFile);
+                    PsiElement shortenedFile = JavaCodeStyleManager.getInstance(project).shortenClassReferences(psiFile);
+                    PsiElement reformattedFile = codeStyleManager.reformat(shortenedFile);
                     directory.add(reformattedFile);
                 }
                 else {
@@ -336,7 +337,7 @@ public class WrapReturnValueProcessor extends FixableUsagesRefactoringProcessor 
     @Override
     @RequiredReadAction
     protected String getCommandName() {
-        final PsiClass containingClass = method.getContainingClass();
+        PsiClass containingClass = method.getContainingClass();
         return JavaRefactoringLocalize.wrappedReturnCommandName(className, containingClass.getName(), '.', method.getName()).get();
     }
 
@@ -345,7 +346,7 @@ public class WrapReturnValueProcessor extends FixableUsagesRefactoringProcessor 
         private final String type;
         private final PsiMethod myMethod;
 
-        ReturnSearchVisitor(List<FixableUsageInfo> usages, String type, final PsiMethod psiMethod) {
+        ReturnSearchVisitor(List<FixableUsageInfo> usages, String type, PsiMethod psiMethod) {
             super();
             this.usages = usages;
             this.type = type;
@@ -364,15 +365,15 @@ public class WrapReturnValueProcessor extends FixableUsagesRefactoringProcessor 
                 return;
             }
 
-            final PsiExpression returnValue = statement.getReturnValue();
+            PsiExpression returnValue = statement.getReturnValue();
             if (myUseExistingClass && returnValue instanceof PsiMethodCallExpression call) {
                 if (call.getArgumentList().getExpressions().length == 0) {
-                    final PsiReferenceExpression callMethodExpression = call.getMethodExpression();
-                    final String methodName = callMethodExpression.getReferenceName();
+                    PsiReferenceExpression callMethodExpression = call.getMethodExpression();
+                    String methodName = callMethodExpression.getReferenceName();
                     if (Comparing.strEqual(unwrapMethodName, methodName)) {
-                        final PsiExpression qualifier = callMethodExpression.getQualifierExpression();
+                        PsiExpression qualifier = callMethodExpression.getQualifierExpression();
                         if (qualifier != null) {
-                            final PsiType qualifierType = qualifier.getType();
+                            PsiType qualifierType = qualifier.getType();
                             if (qualifierType != null && qualifierType.getCanonicalText().equals(myQualifiedName)) {
                                 usages.add(new ReturnWrappedValue(statement));
                                 return;

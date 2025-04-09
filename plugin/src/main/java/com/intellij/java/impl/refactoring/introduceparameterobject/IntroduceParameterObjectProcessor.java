@@ -52,7 +52,7 @@ import consulo.usage.UsageViewDescriptor;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.StringUtil;
-import consulo.util.lang.ref.Ref;
+import consulo.util.lang.ref.SimpleReference;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -86,8 +86,10 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
         String packageName,
         MoveDestination moveDestination,
         PsiMethod method,
-        VariableData[] parameters, boolean keepMethodAsDelegate, final boolean useExistingClass,
-        final boolean createInnerClass,
+        VariableData[] parameters,
+        boolean keepMethodAsDelegate,
+        boolean useExistingClass,
+        boolean createInnerClass,
         String newVisibility,
         boolean generateAccessors
     ) {
@@ -105,26 +107,26 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
         for (VariableData parameter : parameters) {
             this.parameters.add(new ParameterChunk(parameter));
         }
-        final PsiParameterList parameterList = method.getParameterList();
-        final PsiParameter[] methodParams = parameterList.getParameters();
+        PsiParameterList parameterList = method.getParameterList();
+        PsiParameter[] methodParams = parameterList.getParameters();
         paramsToMerge = new int[parameters.length];
         for (int p = 0; p < parameters.length; p++) {
             VariableData parameter = parameters[p];
             for (int i = 0; i < methodParams.length; i++) {
-                final PsiParameter methodParam = methodParams[i];
+                PsiParameter methodParam = methodParams[i];
                 if (parameter.variable.equals(methodParam)) {
                     paramsToMerge[p] = i;
                     break;
                 }
             }
         }
-        final Set<PsiTypeParameter> typeParamSet = new HashSet<>();
-        final PsiTypeVisitor<Object> typeParametersVisitor = new PsiTypeVisitor<>() {
+        Set<PsiTypeParameter> typeParamSet = new HashSet<>();
+        PsiTypeVisitor<Object> typeParametersVisitor = new PsiTypeVisitor<>() {
             @Override
             public Object visitClassType(PsiClassType classType) {
-                final PsiClass referent = classType.resolve();
-                if (referent instanceof PsiTypeParameter) {
-                    typeParamSet.add((PsiTypeParameter)referent);
+                PsiClass referent = classType.resolve();
+                if (referent instanceof PsiTypeParameter typeParameter) {
+                    typeParamSet.add(typeParameter);
                 }
                 return super.visitClassType(classType);
             }
@@ -134,8 +136,8 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
         }
         typeParams = new ArrayList<>(typeParamSet);
 
-        final String qualifiedName = StringUtil.getQualifiedName(packageName, className);
-        final GlobalSearchScope scope = GlobalSearchScope.allScope(myProject);
+        String qualifiedName = StringUtil.getQualifiedName(packageName, className);
+        GlobalSearchScope scope = GlobalSearchScope.allScope(myProject);
         existingClass = JavaPsiFacade.getInstance(myProject).findClass(qualifiedName, scope);
     }
 
@@ -147,7 +149,7 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(@Nonnull final Ref<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
         MultiMap<PsiElement, String> conflicts = new MultiMap<>();
         if (myUseExistingClass) {
             if (existingClass == null) {
@@ -183,8 +185,8 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
             }
         }
         for (UsageInfo usageInfo : refUsages.get()) {
-            if (usageInfo instanceof FixableUsageInfo) {
-                final String conflictMessage = ((FixableUsageInfo)usageInfo).getConflictMessage();
+            if (usageInfo instanceof FixableUsageInfo fixableUsageInfo) {
+                String conflictMessage = fixableUsageInfo.getConflictMessage();
                 if (conflictMessage != null) {
                     conflicts.putValue(usageInfo.getElement(), conflictMessage);
                 }
@@ -211,7 +213,7 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
             ));
         }
 
-        final PsiMethod[] overridingMethods = OverridingMethodsSearch.search(method, true).toArray(PsiMethod.EMPTY_ARRAY);
+        PsiMethod[] overridingMethods = OverridingMethodsSearch.search(method, true).toArray(PsiMethod.EMPTY_ARRAY);
         for (PsiMethod siblingMethod : overridingMethods) {
             findUsagesForMethod(siblingMethod, usages, false);
         }
@@ -228,9 +230,9 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
 
     @RequiredReadAction
     private void findUsagesForMethod(PsiMethod overridingMethod, List<FixableUsageInfo> usages, boolean changeSignature) {
-        final PsiCodeBlock body = overridingMethod.getBody();
-        final String baseParameterName = StringUtil.decapitalize(className);
-        final String fixedParamName = body != null
+        PsiCodeBlock body = overridingMethod.getBody();
+        String baseParameterName = StringUtil.decapitalize(className);
+        String fixedParamName = body != null
             ? JavaCodeStyleManager.getInstance(myProject).suggestUniqueVariableName(baseParameterName, body.getLBrace(), true)
             : JavaCodeStyleManager.getInstance(myProject).propertyNameToVariableName(baseParameterName, VariableKind.PARAMETER);
 
@@ -246,16 +248,16 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
             changeSignature
         ));
 
-        final ParamUsageVisitor visitor = new ParamUsageVisitor(overridingMethod, paramsToMerge);
+        ParamUsageVisitor visitor = new ParamUsageVisitor(overridingMethod, paramsToMerge);
         overridingMethod.accept(visitor);
-        final Set<PsiReferenceExpression> values = visitor.getParameterUsages();
+        Set<PsiReferenceExpression> values = visitor.getParameterUsages();
         for (PsiReferenceExpression paramUsage : values) {
-            final PsiParameter parameter = (PsiParameter)paramUsage.resolve();
+            PsiParameter parameter = (PsiParameter)paramUsage.resolve();
             assert parameter != null;
-            final PsiMethod containingMethod = (PsiMethod)parameter.getDeclarationScope();
-            final int index = containingMethod.getParameterList().getParameterIndex(parameter);
-            final PsiParameter replacedParameter = method.getParameterList().getParameters()[index];
-            final ParameterChunk parameterChunk = ParameterChunk.getChunkByParameter(parameter, parameters);
+            PsiMethod containingMethod = (PsiMethod)parameter.getDeclarationScope();
+            int index = containingMethod.getParameterList().getParameterIndex(parameter);
+            PsiParameter replacedParameter = method.getParameterList().getParameters()[index];
+            ParameterChunk parameterChunk = ParameterChunk.getChunkByParameter(parameter, parameters);
 
             String getter = parameterChunk != null ? parameterChunk.getter : null;
             if (getter == null) {
@@ -286,14 +288,14 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
 
     @Override
     @RequiredReadAction
-    protected void performRefactoring(UsageInfo[] usageInfos) {
-        final PsiClass psiClass = buildClass();
+    protected void performRefactoring(@Nonnull UsageInfo[] usageInfos) {
+        PsiClass psiClass = buildClass();
         if (psiClass != null) {
             fixJavadocForConstructor(psiClass);
             super.performRefactoring(usageInfos);
             if (!myUseExistingClass) {
                 for (PsiReference reference : ReferencesSearch.search(method)) {
-                    final PsiElement place = reference.getElement();
+                    PsiElement place = reference.getElement();
                     VisibilityUtil.escalateVisibility(psiClass, place);
                     for (PsiMethod constructor : psiClass.getConstructors()) {
                         VisibilityUtil.escalateVisibility(constructor, place);
@@ -308,46 +310,46 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
         if (existingClass != null) {
             return existingClass;
         }
-        final ParameterObjectBuilder beanClassBuilder = new ParameterObjectBuilder();
+        ParameterObjectBuilder beanClassBuilder = new ParameterObjectBuilder();
         beanClassBuilder.setVisibility(myCreateInnerClass ? PsiModifier.PRIVATE : PsiModifier.PUBLIC);
         beanClassBuilder.setProject(myProject);
         beanClassBuilder.setTypeArguments(typeParams);
         beanClassBuilder.setClassName(className);
         beanClassBuilder.setPackageName(packageName);
         for (ParameterChunk parameterChunk : parameters) {
-            final VariableData parameter = parameterChunk.parameter;
-            final boolean setterRequired = paramsNeedingSetters.contains(parameter.variable);
+            VariableData parameter = parameterChunk.parameter;
+            boolean setterRequired = paramsNeedingSetters.contains(parameter.variable);
             beanClassBuilder.addField((PsiParameter)parameter.variable, parameter.name, parameter.type, setterRequired);
         }
-        final String classString = beanClassBuilder.buildBeanClass();
+        String classString = beanClassBuilder.buildBeanClass();
 
         try {
-            final PsiFileFactory factory = PsiFileFactory.getInstance(method.getProject());
-            final PsiJavaFile newFile = (PsiJavaFile)factory.createFileFromText(className + ".java", JavaFileType.INSTANCE, classString);
+            PsiFileFactory factory = PsiFileFactory.getInstance(method.getProject());
+            PsiJavaFile newFile = (PsiJavaFile)factory.createFileFromText(className + ".java", JavaFileType.INSTANCE, classString);
             if (myCreateInnerClass) {
-                final PsiClass containingClass = method.getContainingClass();
-                final PsiClass[] classes = newFile.getClasses();
+                PsiClass containingClass = method.getContainingClass();
+                PsiClass[] classes = newFile.getClasses();
                 assert classes.length > 0 : classString;
-                final PsiClass innerClass = (PsiClass)containingClass.add(classes[0]);
+                PsiClass innerClass = (PsiClass)containingClass.add(classes[0]);
                 PsiUtil.setModifierProperty(innerClass, PsiModifier.STATIC, true);
                 return (PsiClass)JavaCodeStyleManager.getInstance(newFile.getProject()).shortenClassReferences(innerClass);
             }
             else {
-                final PsiFile containingFile = method.getContainingFile();
-                final PsiDirectory containingDirectory = containingFile.getContainingDirectory();
-                final PsiDirectory directory;
+                PsiFile containingFile = method.getContainingFile();
+                PsiDirectory containingDirectory = containingFile.getContainingDirectory();
+                PsiDirectory directory;
                 if (myMoveDestination != null) {
                     directory = myMoveDestination.getTargetDirectory(containingDirectory);
                 }
                 else {
-                    final Module module = ModuleUtil.findModuleForPsiElement(containingFile);
+                    Module module = ModuleUtil.findModuleForPsiElement(containingFile);
                     directory = PackageUtil.findOrCreateDirectoryForPackage(module, packageName, containingDirectory, true, true);
                 }
 
                 if (directory != null) {
-                    final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(method.getManager().getProject());
-                    final PsiElement shortenedFile = JavaCodeStyleManager.getInstance(newFile.getProject()).shortenClassReferences(newFile);
-                    final PsiElement reformattedFile = codeStyleManager.reformat(shortenedFile);
+                    CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(method.getManager().getProject());
+                    PsiElement shortenedFile = JavaCodeStyleManager.getInstance(newFile.getProject()).shortenClassReferences(newFile);
+                    PsiElement reformattedFile = codeStyleManager.reformat(shortenedFile);
                     return ((PsiJavaFile)directory.add(reformattedFile)).getClasses()[0];
                 }
             }
@@ -360,17 +362,17 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
 
     @RequiredReadAction
     private void fixJavadocForConstructor(PsiClass psiClass) {
-        final PsiDocComment docComment = method.getDocComment();
+        PsiDocComment docComment = method.getDocComment();
         if (docComment != null) {
-            final List<PsiDocTag> mergedTags = new ArrayList<>();
-            final PsiDocTag[] paramTags = docComment.findTagsByName("param");
+            List<PsiDocTag> mergedTags = new ArrayList<>();
+            PsiDocTag[] paramTags = docComment.findTagsByName("param");
             for (PsiDocTag paramTag : paramTags) {
-                final PsiElement[] dataElements = paramTag.getDataElements();
+                PsiElement[] dataElements = paramTag.getDataElements();
                 if (dataElements.length > 0) {
                     if (dataElements[0] instanceof PsiDocParamRef docParamRef) {
-                        final PsiReference reference = docParamRef.getReference();
+                        PsiReference reference = docParamRef.getReference();
                         if (reference != null && reference.resolve() instanceof PsiParameter parameter) {
-                            final int parameterIndex = method.getParameterList().getParameterIndex(parameter);
+                            int parameterIndex = method.getParameterList().getParameterIndex(parameter);
                             if (ArrayUtil.find(paramsToMerge, parameterIndex) < 0) {
                                 continue;
                             }
@@ -406,7 +408,7 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
     @Override
     @RequiredReadAction
     protected String getCommandName() {
-        final PsiClass containingClass = method.getContainingClass();
+        PsiClass containingClass = method.getContainingClass();
         return JavaRefactoringLocalize.introducedParameterClassCommandName(className, containingClass.getName(), method.getName()).get();
     }
 
@@ -416,8 +418,8 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
 
         ParamUsageVisitor(PsiMethod method, int[] paramIndicesToMerge) {
             super();
-            final PsiParameterList paramList = method.getParameterList();
-            final PsiParameter[] parameters = paramList.getParameters();
+            PsiParameterList paramList = method.getParameterList();
+            PsiParameter[] parameters = paramList.getParameters();
             for (int i : paramIndicesToMerge) {
                 paramsToMerge.add(parameters[i]);
             }
@@ -427,7 +429,7 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
         @RequiredReadAction
         public void visitReferenceExpression(PsiReferenceExpression expression) {
             super.visitReferenceExpression(expression);
-            final PsiElement referent = expression.resolve();
+            PsiElement referent = expression.resolve();
             if (referent instanceof PsiParameter parameter && paramsToMerge.contains(parameter)) {
                 parameterUsages.add(expression);
             }
@@ -441,8 +443,8 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
     @Nullable
     private static PsiMethod existingClassIsCompatible(PsiClass aClass, List<ParameterChunk> params) {
         if (params.size() == 1) {
-            final ParameterChunk parameterChunk = params.get(0);
-            final PsiType paramType = parameterChunk.parameter.type;
+            ParameterChunk parameterChunk = params.get(0);
+            PsiType paramType = parameterChunk.parameter.type;
             if (TypeConversionUtil.isPrimitiveWrapper(aClass.getQualifiedName())) {
                 parameterChunk.setField(aClass.findFieldByName("value", false));
                 parameterChunk.setGetter(paramType.getCanonicalText() + "Value");
@@ -453,7 +455,7 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
                 }
             }
         }
-        final PsiMethod[] constructors = aClass.getConstructors();
+        PsiMethod[] constructors = aClass.getConstructors();
         PsiMethod compatibleConstructor = null;
         for (PsiMethod constructor : constructors) {
             if (constructorIsCompatible(constructor, params)) {
@@ -464,25 +466,25 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
         if (compatibleConstructor == null) {
             return null;
         }
-        final PsiParameterList parameterList = compatibleConstructor.getParameterList();
-        final PsiParameter[] constructorParams = parameterList.getParameters();
+        PsiParameterList parameterList = compatibleConstructor.getParameterList();
+        PsiParameter[] constructorParams = parameterList.getParameters();
         for (int i = 0; i < constructorParams.length; i++) {
-            final PsiParameter param = constructorParams[i];
-            final ParameterChunk parameterChunk = params.get(i);
+            PsiParameter param = constructorParams[i];
+            ParameterChunk parameterChunk = params.get(i);
 
-            final PsiField field = findFieldAssigned(param, compatibleConstructor);
+            PsiField field = findFieldAssigned(param, compatibleConstructor);
             if (field == null) {
                 return null;
             }
 
             parameterChunk.setField(field);
 
-            final PsiMethod getterForField = PropertyUtil.findGetterForField(field);
+            PsiMethod getterForField = PropertyUtil.findGetterForField(field);
             if (getterForField != null) {
                 parameterChunk.setGetter(getterForField.getName());
             }
 
-            final PsiMethod setterForField = PropertyUtil.findSetterForField(field);
+            PsiMethod setterForField = PropertyUtil.findSetterForField(field);
             if (setterForField != null) {
                 parameterChunk.setSetter(setterForField.getName());
             }
@@ -491,8 +493,8 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
     }
 
     private static boolean constructorIsCompatible(PsiMethod constructor, List<ParameterChunk> params) {
-        final PsiParameterList parameterList = constructor.getParameterList();
-        final PsiParameter[] constructorParams = parameterList.getParameters();
+        PsiParameterList parameterList = constructor.getParameterList();
+        PsiParameter[] constructorParams = parameterList.getParameters();
         if (constructorParams.length != params.size()) {
             return false;
         }
@@ -543,7 +545,7 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
     }
 
     private static PsiField findFieldAssigned(PsiParameter param, PsiMethod constructor) {
-        final ParamAssignmentFinder visitor = new ParamAssignmentFinder(param);
+        ParamAssignmentFinder visitor = new ParamAssignmentFinder(param);
         constructor.accept(visitor);
         return visitor.getFieldAssigned();
     }

@@ -21,12 +21,12 @@ import consulo.util.lang.ref.Ref;
 import consulo.language.editor.refactoring.changeSignature.ChangeInfo;
 import consulo.language.editor.refactoring.changeSignature.ChangeSignatureUsageProcessor;
 import consulo.usage.UsageInfo;
+import consulo.util.lang.ref.SimpleReference;
 
 /**
  * @author VISTALL
- * @since 26.06.14
+ * @since 2014-06-26
  */
-public interface ChangeSignatureUsageProcessorEx extends ChangeSignatureUsageProcessor
-{
-	boolean setupDefaultValues(ChangeInfo changeInfo, Ref<UsageInfo[]> refUsages, Project project);
+public interface ChangeSignatureUsageProcessorEx extends ChangeSignatureUsageProcessor {
+    boolean setupDefaultValues(ChangeInfo changeInfo, SimpleReference<UsageInfo[]> refUsages, Project project);
 }

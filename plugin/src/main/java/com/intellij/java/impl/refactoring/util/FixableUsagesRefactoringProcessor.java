@@ -15,60 +15,62 @@
  */
 package com.intellij.java.impl.refactoring.util;
 
-import consulo.project.Project;
-import consulo.util.lang.ref.Ref;
-import consulo.language.psi.PsiElement;
+import com.intellij.xml.util.XmlUtil;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
-import consulo.usage.UsageInfo;
+import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
-import consulo.util.collection.MultiMap;
-import com.intellij.xml.util.XmlUtil;
 import consulo.logging.Logger;
-
+import consulo.project.Project;
+import consulo.usage.UsageInfo;
+import consulo.util.collection.MultiMap;
+import consulo.util.lang.ref.SimpleReference;
 import jakarta.annotation.Nonnull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public abstract class FixableUsagesRefactoringProcessor extends BaseRefactoringProcessor {
-  private static final Logger LOG = Logger.getInstance(FixableUsagesRefactoringProcessor.class);
+    private static final Logger LOG = Logger.getInstance(FixableUsagesRefactoringProcessor.class);
 
-  protected FixableUsagesRefactoringProcessor(Project project) {
-    super(project);
-  }
+    protected FixableUsagesRefactoringProcessor(Project project) {
+        super(project);
+    }
 
-  protected void performRefactoring(UsageInfo[] usageInfos) {
-    CommonRefactoringUtil.sortDepthFirstRightLeftOrder(usageInfos);
-    for (UsageInfo usageInfo : usageInfos) {
-      if (usageInfo instanceof FixableUsageInfo) {
-        try {
-          ((FixableUsageInfo) usageInfo).fixUsage();
-        } catch (IncorrectOperationException e) {
-          LOG.info(e);
+    @Override
+    protected void performRefactoring(@Nonnull UsageInfo[] usageInfos) {
+        CommonRefactoringUtil.sortDepthFirstRightLeftOrder(usageInfos);
+        for (UsageInfo usageInfo : usageInfos) {
+            if (usageInfo instanceof FixableUsageInfo) {
+                try {
+                    ((FixableUsageInfo)usageInfo).fixUsage();
+                }
+                catch (IncorrectOperationException e) {
+                    LOG.info(e);
+                }
+            }
         }
-      }
     }
-  }
 
-
-  @Nonnull
-  protected final UsageInfo[] findUsages() {
-    final List<FixableUsageInfo> usages = Collections.synchronizedList(new ArrayList<FixableUsageInfo>());
-    findUsages(usages);
-    final int numUsages = usages.size();
-    final FixableUsageInfo[] usageArray = usages.toArray(new FixableUsageInfo[numUsages]);
-    return usageArray;
-  }
-
-  protected abstract void findUsages(@Nonnull List<FixableUsageInfo> usages);
-
-  protected static void checkConflicts(final Ref<UsageInfo[]> refUsages, final MultiMap<PsiElement, String> conflicts) {
-    for (UsageInfo info : refUsages.get()) {
-      final String conflict = ((FixableUsageInfo) info).getConflictMessage();
-      if (conflict != null) {
-        conflicts.putValue(info.getElement(), XmlUtil.escape(conflict));
-      }
+    @Nonnull
+    @Override
+    protected final UsageInfo[] findUsages() {
+        List<FixableUsageInfo> usages = Collections.synchronizedList(new ArrayList<FixableUsageInfo>());
+        findUsages(usages);
+        final int numUsages = usages.size();
+        final FixableUsageInfo[] usageArray = usages.toArray(new FixableUsageInfo[numUsages]);
+        return usageArray;
     }
-  }
+
+    protected abstract void findUsages(@Nonnull List<FixableUsageInfo> usages);
+
+    protected static void checkConflicts(SimpleReference<UsageInfo[]> refUsages, MultiMap<PsiElement, String> conflicts) {
+        for (UsageInfo info : refUsages.get()) {
+            String conflict = ((FixableUsageInfo)info).getConflictMessage();
+            if (conflict != null) {
+                conflicts.putValue(info.getElement(), XmlUtil.escape(conflict));
+            }
+        }
+    }
 }

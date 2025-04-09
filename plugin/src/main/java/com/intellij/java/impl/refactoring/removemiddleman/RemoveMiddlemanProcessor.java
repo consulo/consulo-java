@@ -21,7 +21,10 @@ import com.intellij.java.impl.refactoring.removemiddleman.usageInfo.InlineDelega
 import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
 import com.intellij.java.impl.refactoring.util.FixableUsagesRefactoringProcessor;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
-import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.java.localize.JavaRefactoringLocalize;
@@ -35,7 +38,7 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
 import consulo.util.collection.MultiMap;
-import consulo.util.lang.ref.Ref;
+import consulo.util.lang.ref.SimpleReference;
 import jakarta.annotation.Nonnull;
 
 import java.util.List;
@@ -52,8 +55,8 @@ public class RemoveMiddlemanProcessor extends FixableUsagesRefactoringProcessor 
         super(field.getProject());
         this.field = field;
         containingClass = field.getContainingClass();
-        final String propertyName = PropertyUtil.suggestPropertyName(field);
-        final boolean isStatic = field.hasModifierProperty(PsiModifier.STATIC);
+        String propertyName = PropertyUtil.suggestPropertyName(field);
+        boolean isStatic = field.isStatic();
         getter = PropertyUtil.findPropertyGetter(containingClass, propertyName, isStatic, false);
         myDelegateMethodInfos = memberInfos;
     }
@@ -67,14 +70,14 @@ public class RemoveMiddlemanProcessor extends FixableUsagesRefactoringProcessor 
     @Override
     @RequiredReadAction
     public void findUsages(@Nonnull List<FixableUsageInfo> usages) {
-        for (final MemberInfo memberInfo : myDelegateMethodInfos) {
+        for (MemberInfo memberInfo : myDelegateMethodInfos) {
             if (!memberInfo.isChecked()) {
                 continue;
             }
-            final PsiMethod method = (PsiMethod)memberInfo.getMember();
-            final String getterName = PropertyUtil.suggestGetterName(field);
-            final int[] paramPermutation = DelegationUtils.getParameterPermutation(method);
-            final PsiMethod delegatedMethod = DelegationUtils.getDelegatedMethod(method);
+            PsiMethod method = (PsiMethod)memberInfo.getMember();
+            String getterName = PropertyUtil.suggestGetterName(field);
+            int[] paramPermutation = DelegationUtils.getParameterPermutation(method);
+            PsiMethod delegatedMethod = DelegationUtils.getDelegatedMethod(method);
             LOG.assertTrue(!DelegationUtils.isAbstract(method));
             processUsagesForMethod(memberInfo.isToAbstract(), method, paramPermutation, getterName, delegatedMethod, usages);
         }
@@ -82,8 +85,8 @@ public class RemoveMiddlemanProcessor extends FixableUsagesRefactoringProcessor 
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(@Nonnull final Ref<UsageInfo[]> refUsages) {
-        final MultiMap<PsiElement, String> conflicts = new MultiMap<>();
+    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
+        MultiMap<PsiElement, String> conflicts = new MultiMap<>();
         for (MemberInfo memberInfo : myDelegateMethodInfos) {
             if (memberInfo.isChecked() && memberInfo.isToAbstract()
                 && memberInfo.getMember() instanceof PsiMethod method && method.findDeepestSuperMethods().length > 0) {
@@ -100,7 +103,7 @@ public class RemoveMiddlemanProcessor extends FixableUsagesRefactoringProcessor 
 
     @RequiredReadAction
     private void processUsagesForMethod(
-        final boolean deleteMethodHierarchy,
+        boolean deleteMethodHierarchy,
         PsiMethod method,
         int[] paramPermutation,
         String getterName,
@@ -128,7 +131,7 @@ public class RemoveMiddlemanProcessor extends FixableUsagesRefactoringProcessor 
     }
 
     @Override
-    protected void performRefactoring(UsageInfo[] usageInfos) {
+    protected void performRefactoring(@Nonnull UsageInfo[] usageInfos) {
         if (getter != null) {
             try {
                 if (containingClass.findMethodBySignature(getter, false) == null) {
