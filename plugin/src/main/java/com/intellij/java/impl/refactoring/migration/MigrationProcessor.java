@@ -18,11 +18,11 @@ package com.intellij.java.impl.refactoring.migration;
 import com.intellij.java.impl.psi.impl.migration.PsiMigrationManager;
 import com.intellij.java.language.psi.PsiMigration;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import consulo.application.ApplicationManager;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.application.Application;
 import consulo.application.WriteAction;
 import consulo.content.scope.SearchScope;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.SmartPsiElementPointer;
@@ -36,8 +36,7 @@ import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
-import consulo.util.lang.ref.Ref;
-
+import consulo.util.lang.ref.SimpleReference;
 import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
@@ -47,7 +46,6 @@ import java.util.ArrayList;
  */
 public class MigrationProcessor extends BaseRefactoringProcessor {
     private final MigrationMap myMigrationMap;
-    private static final String REFACTORING_NAME = RefactoringBundle.message("migration.title");
     private PsiMigration myPsiMigration;
     private final SearchScope mySearchScope;
     private ArrayList<SmartPsiElementPointer<PsiElement>> myRefsToShorten;
@@ -70,12 +68,12 @@ public class MigrationProcessor extends BaseRefactoringProcessor {
     }
 
     private PsiMigration startMigration(Project project) {
-        final PsiMigration migration = PsiMigrationManager.getInstance(project).startMigration();
+        PsiMigration migration = PsiMigrationManager.getInstance(project).startMigration();
         findOrCreateEntries(project, migration);
         return migration;
     }
 
-    private void findOrCreateEntries(Project project, final PsiMigration migration) {
+    private void findOrCreateEntries(Project project, PsiMigration migration) {
         for (int i = 0; i < myMigrationMap.getEntryCount(); i++) {
             MigrationMapEntry entry = myMigrationMap.getEntryAt(i);
             if (entry.getType() == MigrationMapEntry.PACKAGE) {
@@ -92,8 +90,9 @@ public class MigrationProcessor extends BaseRefactoringProcessor {
         myPsiMigration = startMigration(myProject);
     }
 
-    @Override
     @Nonnull
+    @Override
+    @RequiredReadAction
     protected UsageInfo[] findUsages() {
         ArrayList<UsageInfo> usagesVector = new ArrayList<>();
         try {
@@ -116,9 +115,11 @@ public class MigrationProcessor extends BaseRefactoringProcessor {
             }
         }
         finally {
-            //invalidating resolve caches without write action could lead to situations when somebody with read action resolves reference and gets ResolveResult
-            //then here, in another read actions, all caches are invalidated but those resolve result is used without additional checks inside that read action - but it's already invalid
-            ApplicationManager.getApplication().invokeLater(() -> WriteAction.run(this::finishFindMigration), myProject.getDisposed());
+            // Invalidating resolve caches without write action could lead to situations
+            // when somebody with read action resolves reference and gets ResolveResult.
+            // Then here, in another read actions, all caches are invalidated but those resolve result
+            // is used without additional checks inside that read action - but it's already invalid
+            Application.get().invokeLater(() -> WriteAction.run(this::finishFindMigration), myProject.getDisposed());
         }
         return usagesVector.toArray(UsageInfo.EMPTY_ARRAY);
     }
@@ -132,9 +133,13 @@ public class MigrationProcessor extends BaseRefactoringProcessor {
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(@Nonnull Ref<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
         if (refUsages.get().length == 0) {
-            Messages.showInfoMessage(myProject, RefactoringLocalize.migrationNoUsagesFoundInTheProject().get(), REFACTORING_NAME);
+            Messages.showInfoMessage(
+                myProject,
+                RefactoringLocalize.migrationNoUsagesFoundInTheProject().get(),
+                RefactoringLocalize.migrationTitle().get()
+            );
             return false;
         }
         setPreviewUsages(true);
@@ -144,7 +149,7 @@ public class MigrationProcessor extends BaseRefactoringProcessor {
     @Override
     protected void performRefactoring(@Nonnull UsageInfo[] usages) {
         finishFindMigration();
-        final PsiMigration psiMigration = PsiMigrationManager.getInstance(myProject).startMigration();
+        PsiMigration psiMigration = PsiMigrationManager.getInstance(myProject).startMigration();
         LocalHistoryAction a = LocalHistory.getInstance().startAction(getCommandName());
 
         myRefsToShorten = new ArrayList<>();
@@ -176,6 +181,7 @@ public class MigrationProcessor extends BaseRefactoringProcessor {
     }
 
     @Override
+    @RequiredReadAction
     protected void performPsiSpoilingRefactoring() {
         JavaCodeStyleManager styleManager = JavaCodeStyleManager.getInstance(myProject);
         for (SmartPsiElementPointer<PsiElement> pointer : myRefsToShorten) {
@@ -189,12 +195,13 @@ public class MigrationProcessor extends BaseRefactoringProcessor {
     @Override
     @Nonnull
     protected String getCommandName() {
-        return REFACTORING_NAME;
+        return RefactoringLocalize.migrationTitle().get();
     }
 
     static class MigrationUsageInfo extends UsageInfo {
         MigrationMapEntry mapEntry;
 
+        @RequiredReadAction
         MigrationUsageInfo(UsageInfo info, MigrationMapEntry mapEntry) {
             super(info.getElement(), info.getRangeInElement().getStartOffset(), info.getRangeInElement().getEndOffset());
             this.mapEntry = mapEntry;

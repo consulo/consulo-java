@@ -44,6 +44,7 @@ import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.ref.Ref;
+import consulo.util.lang.ref.SimpleReference;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -184,10 +185,10 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(@Nonnull Ref<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
         for (ChangeSignatureUsageProcessor processor : ChangeSignatureUsageProcessor.EP_NAME.getExtensions()) {
-            if (processor instanceof ChangeSignatureUsageProcessorEx && ((ChangeSignatureUsageProcessorEx)processor).setupDefaultValues
-                (myChangeInfo, refUsages, myProject)) {
+            if (processor instanceof ChangeSignatureUsageProcessorEx changeSignatureUsageProcessorEx
+                && changeSignatureUsageProcessorEx.setupDefaultValues(myChangeInfo, refUsages, myProject)) {
                 return false;
             }
         }

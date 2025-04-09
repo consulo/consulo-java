@@ -4,32 +4,28 @@
 
 package com.intellij.java.impl.refactoring.extractclass;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import com.intellij.java.impl.codeInsight.generation.GenerateMembersUtil;
-import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.util.lang.ref.Ref;
-import consulo.util.lang.StringUtil;
-import consulo.language.psi.*;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.psi.PsiUtilCore;
 import com.intellij.java.impl.refactoring.extractclass.usageInfo.ReplaceStaticVariableAccess;
 import com.intellij.java.impl.refactoring.psi.MutationUtils;
 import com.intellij.java.impl.refactoring.typeMigration.TypeMigrationProcessor;
 import com.intellij.java.impl.refactoring.typeMigration.TypeMigrationRules;
 import com.intellij.java.impl.refactoring.util.EnumConstantsUtil;
 import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
+import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
-import consulo.usage.UsageInfo;
-import consulo.util.lang.function.Functions;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiUtilCore;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.usage.UsageInfo;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.function.Functions;
+import consulo.util.lang.ref.SimpleReference;
+
+import java.util.*;
 
 public class ExtractEnumProcessor {
     private final Project myProject;
@@ -44,17 +40,18 @@ public class ExtractEnumProcessor {
         myClass = aClass;
     }
 
-    public void findEnumConstantConflicts(final Ref<UsageInfo[]> refUsages) {
+    @RequiredReadAction
+    public void findEnumConstantConflicts(SimpleReference<UsageInfo[]> refUsages) {
         if (hasUsages2Migrate()) {
-            final List<UsageInfo> resolvableConflicts = new ArrayList<>();
+            List<UsageInfo> resolvableConflicts = new ArrayList<>();
             for (UsageInfo failedUsage : myTypeMigrationProcessor.getLabeler().getFailedUsages()) {
-                final PsiElement element = failedUsage.getElement();
+                PsiElement element = failedUsage.getElement();
                 if (element instanceof PsiReferenceExpression) {
                     resolvableConflicts.add(new FixableUsageInfo(element) {
                         @Override
                         public void fixUsage() throws IncorrectOperationException {
-                            final PsiReferenceExpression expression = (PsiReferenceExpression)element;
-                            final String link = GenerateMembersUtil.suggestGetterName("value", expression.getType(), myProject) + "()";
+                            PsiReferenceExpression expression = (PsiReferenceExpression)element;
+                            String link = GenerateMembersUtil.suggestGetterName("value", expression.getType(), myProject) + "()";
                             MutationUtils.replaceExpression(expression.getReferenceName() + "." + link, expression);
                         }
                     });
@@ -64,9 +61,9 @@ public class ExtractEnumProcessor {
                 }
             }
             if (!resolvableConflicts.isEmpty()) {
-                final List<UsageInfo> usageInfos = new ArrayList<>(Arrays.asList(refUsages.get()));
+                List<UsageInfo> usageInfos = new ArrayList<>(Arrays.asList(refUsages.get()));
                 for (Iterator<UsageInfo> iterator = resolvableConflicts.iterator(); iterator.hasNext(); ) {
-                    final UsageInfo conflict = iterator.next();
+                    UsageInfo conflict = iterator.next();
                     for (UsageInfo usageInfo : usageInfos) {
                         if (conflict.getElement() == usageInfo.getElement()) {
                             iterator.remove();
@@ -84,33 +81,34 @@ public class ExtractEnumProcessor {
         return myTypeMigrationProcessor != null;
     }
 
+    @RequiredReadAction
     public List<FixableUsageInfo> findEnumConstantUsages(List<FixableUsageInfo> fieldUsages) {
-        final List<FixableUsageInfo> result = new ArrayList<>();
+        List<FixableUsageInfo> result = new ArrayList<>();
         if (!myEnumConstants.isEmpty()) {
-            final Set<PsiSwitchStatement> switchStatements = new HashSet<>();
+            Set<PsiSwitchStatement> switchStatements = new HashSet<>();
             for (UsageInfo usage : fieldUsages) {
                 if (usage instanceof ReplaceStaticVariableAccess) {
-                    final PsiElement element = usage.getElement();
-                    final PsiSwitchStatement switchStatement = PsiTreeUtil.getParentOfType(element, PsiSwitchStatement.class);
+                    PsiElement element = usage.getElement();
+                    PsiSwitchStatement switchStatement = PsiTreeUtil.getParentOfType(element, PsiSwitchStatement.class);
                     if (switchStatement != null) {
                         switchStatements.add(switchStatement);
                     }
                 }
             }
 
-            final PsiConstantEvaluationHelper evaluationHelper = JavaPsiFacade.getInstance(myProject).getConstantEvaluationHelper();
-            final Set<Object> enumValues = new HashSet<>();
+            PsiConstantEvaluationHelper evaluationHelper = JavaPsiFacade.getInstance(myProject).getConstantEvaluationHelper();
+            Set<Object> enumValues = new HashSet<>();
             for (PsiField enumConstant : myEnumConstants) {
                 enumValues.add(evaluationHelper.computeConstantExpression(enumConstant.getInitializer()));
             }
-            final PsiType enumValueType = myEnumConstants.get(0).getType();
+            PsiType enumValueType = myEnumConstants.get(0).getType();
 
             for (PsiSwitchStatement switchStatement : switchStatements) {
-                final PsiStatement errStatement = EnumConstantsUtil.isEnumSwitch(switchStatement, enumValueType, enumValues);
+                PsiStatement errStatement = EnumConstantsUtil.isEnumSwitch(switchStatement, enumValueType, enumValues);
                 if (errStatement != null) {
                     String description = null;
-                    if (errStatement instanceof PsiSwitchLabelStatement) {
-                        final PsiExpression caseValue = ((PsiSwitchLabelStatement)errStatement).getCaseValue();
+                    if (errStatement instanceof PsiSwitchLabelStatement switchLabelStmt) {
+                        PsiExpression caseValue = switchLabelStmt.getCaseValue();
                         if (caseValue != null) {
                             description = caseValue.getText() + " can not be replaced with enum";
                         }
@@ -118,16 +116,14 @@ public class ExtractEnumProcessor {
                     result.add(new ConflictUsageInfo(errStatement, description));
                 }
                 else {
-                    final PsiExpression expression = switchStatement.getExpression();
-                    if (expression instanceof PsiReferenceExpression) {
-                        final PsiElement element = ((PsiReferenceExpression)expression).resolve();
-                        if (element != null) {
-                            if (!element.getManager().isInProject(element)) {
-                                result.add(new ConflictUsageInfo(
-                                    expression,
-                                    StringUtil.capitalize(RefactoringUIUtil.getDescription(element, false)) + " is out of project"
-                                ));
-                            }
+                    PsiExpression expression = switchStatement.getExpression();
+                    if (expression instanceof PsiReferenceExpression refExpr) {
+                        PsiElement element = refExpr.resolve();
+                        if (element != null && !element.getManager().isInProject(element)) {
+                            result.add(new ConflictUsageInfo(
+                                expression,
+                                StringUtil.capitalize(RefactoringUIUtil.getDescription(element, false)) + " is out of project"
+                            ));
                         }
                     }
                     else {
@@ -136,7 +132,7 @@ public class ExtractEnumProcessor {
                 }
             }
 
-            final TypeMigrationRules rules = new TypeMigrationRules(myProject);
+            TypeMigrationRules rules = new TypeMigrationRules(myProject);
             rules.addConversionDescriptor(new EnumTypeConversionRule(myEnumConstants));
             rules.setBoundScope(GlobalSearchScope.projectScope(myProject));
             myTypeMigrationProcessor = new TypeMigrationProcessor(
@@ -147,11 +143,9 @@ public class ExtractEnumProcessor {
                 true
             );
             for (UsageInfo usageInfo : myTypeMigrationProcessor.findUsages()) {
-                final PsiElement migrateElement = usageInfo.getElement();
-                if (migrateElement instanceof PsiField) {
-                    final PsiField enumConstantField = (PsiField)migrateElement;
-                    if (enumConstantField.hasModifierProperty(PsiModifier.STATIC)
-                        && enumConstantField.hasModifierProperty(PsiModifier.FINAL)
+                PsiElement migrateElement = usageInfo.getElement();
+                if (migrateElement instanceof PsiField enumConstantField) {
+                    if (enumConstantField.isStatic() && enumConstantField.isFinal()
                         && enumConstantField.hasInitializer() && !myEnumConstants.contains(enumConstantField)) {
                         continue;
                     }
@@ -164,10 +158,10 @@ public class ExtractEnumProcessor {
 
     public void performEnumConstantTypeMigration(UsageInfo[] usageInfos) {
         if (hasUsages2Migrate()) {
-            final List<UsageInfo> migrationInfos = new ArrayList<>();
+            List<UsageInfo> migrationInfos = new ArrayList<>();
             for (UsageInfo usageInfo : usageInfos) {
-                if (usageInfo instanceof EnumTypeMigrationUsageInfo) {
-                    migrationInfos.add(((EnumTypeMigrationUsageInfo)usageInfo).getUsageInfo());
+                if (usageInfo instanceof EnumTypeMigrationUsageInfo enumTypeMigrationUsageInfo) {
+                    migrationInfos.add(enumTypeMigrationUsageInfo.getUsageInfo());
                 }
             }
             myTypeMigrationProcessor.performRefactoring(migrationInfos.toArray(UsageInfo.EMPTY_ARRAY));

@@ -26,6 +26,7 @@ import consulo.language.impl.ast.SharedImplUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.lang.Comparing;
 
 import java.util.ArrayList;
@@ -44,7 +45,6 @@ public class ChangeSignatureUtil {
         ChildrenGenerator<Parent, Child> generator,
         final boolean[] shouldRemoveChild
     ) throws IncorrectOperationException {
-
         ArrayList<Child> elementsToRemove = null;
         List<Child> elements;
 
@@ -56,7 +56,7 @@ public class ChangeSignatureUtil {
             }
 
             if (elementsToRemove == null) {
-                elementsToRemove = new ArrayList<Child>();
+                elementsToRemove = new ArrayList<>();
                 for (int i = 0; i < shouldRemoveChild.length; i++) {
                     if (shouldRemoveChild[i] && i < elements.size()) {
                         elementsToRemove.add(elements.get(i));
@@ -81,29 +81,27 @@ public class ChangeSignatureUtil {
                     }
                 }
             }
-            else {
-                if (newElements.size() > 1 && (!elements.isEmpty() || index < newElements.size() - 1)) {
-                    PsiElement anchor;
-                    if (index == 0) {
-                        anchor = list.getFirstChild();
-                    }
-                    else {
-                        anchor = index - 1 < elements.size() ? elements.get(index - 1) : null;
-                    }
-                    final PsiElement psi = Factory.createSingleLeafElement(
-                        JavaTokenType.COMMA,
-                        ",",
-                        0,
-                        1,
-                        SharedImplUtil.findCharTableByTree(list.getNode()),
-                        list.getManager()
-                    ).getPsi();
-                    if (anchor != null) {
-                        list.addAfter(psi, anchor);
-                    }
-                    else {
-                        list.add(psi);
-                    }
+            else if (newElements.size() > 1 && (!elements.isEmpty() || index < newElements.size() - 1)) {
+                PsiElement anchor;
+                if (index == 0) {
+                    anchor = list.getFirstChild();
+                }
+                else {
+                    anchor = index - 1 < elements.size() ? elements.get(index - 1) : null;
+                }
+                final PsiElement psi = Factory.createSingleLeafElement(
+                    JavaTokenType.COMMA,
+                    ",",
+                    0,
+                    1,
+                    SharedImplUtil.findCharTableByTree(list.getNode()),
+                    list.getManager()
+                ).getPsi();
+                if (anchor != null) {
+                    list.addAfter(psi, anchor);
+                }
+                else {
+                    list.add(psi);
                 }
             }
             index++;
@@ -114,6 +112,7 @@ public class ChangeSignatureUtil {
         }
     }
 
+    @RequiredUIAccess
     public static void invokeChangeSignatureOn(PsiMethod method, Project project) {
         final ChangeSignatureHandler handler = RefactoringSupportProvider.forLanguage(method.getLanguage()).getChangeSignatureHandler();
         handler.invoke(project, new PsiElement[]{method}, null);
