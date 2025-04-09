@@ -3,6 +3,7 @@ package consulo.java.manifest.editor.completionProviders;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.Application;
 import consulo.application.util.function.Computable;
+import consulo.component.extension.ExtensionPoint;
 import consulo.language.editor.QualifiedNameProvider;
 import consulo.language.editor.completion.CompletionParameters;
 import consulo.language.editor.ui.awt.TextFieldWithAutoCompletionListProvider;
@@ -30,82 +31,81 @@ import java.util.List;
  */
 public class HeaderValueCompletionProvider extends TextFieldWithAutoCompletionListProvider<Object> {
 
-  private final Header myHeaderByName;
-  private final HeaderParser myHeaderParser;
+    private final Header myHeaderByName;
+    private final HeaderParser myHeaderParser;
 
-  public HeaderValueCompletionProvider(Header headerByName, HeaderParser headerParser) {
-    super(null);
-    myHeaderByName = headerByName;
-    myHeaderParser = headerParser;
-  }
-
-  @Nonnull
-  @Override
-  @RequiredReadAction
-  public Collection<Object> getItems(String prefix, boolean cached, CompletionParameters parameters) {
-    return Application.get().runReadAction((Computable<Collection<Object>>)() -> {
-      Clause[] clauses = myHeaderByName.getClauses();
-      if (clauses.length == 0) {
-        return Collections.emptyList();
-      }
-      HeaderValuePart value = clauses[0].getValue();
-      if (value == null) {
-        return Collections.emptyList();
-      }
-
-      List<Object> objects = new ArrayList<>();
-      PsiReference[] references = myHeaderParser.getReferences(value);
-      for (PsiReference reference : references) {
-        for (Object o : reference.getVariants()) {
-          if (myHeaderParser.isAcceptable(o)) {
-            objects.add(o);
-          }
-        }
-      }
-      return objects;
-    });
-  }
-
-  @Nullable
-  @Override
-  protected Image getIcon(@Nonnull Object item) {
-    if (item instanceof NavigationItem navigationItem) {
-      ItemPresentation itemPresentation = ItemPresentationProvider.getItemPresentation(navigationItem);
-      if (itemPresentation != null) {
-        return itemPresentation.getIcon();
-      }
+    public HeaderValueCompletionProvider(Header headerByName, HeaderParser headerParser) {
+        super(null);
+        myHeaderByName = headerByName;
+        myHeaderParser = headerParser;
     }
-    return null;
-  }
 
-  @Nonnull
-  @Override
-  protected String getLookupString(@Nonnull Object item) {
-    if (item instanceof PsiElement element) {
-      for (QualifiedNameProvider provider : QualifiedNameProvider.EP_NAME.getExtensionList()) {
-        String result = provider.getQualifiedName(element);
-        if (result != null) {
-          return result;
-        }
-      }
+    @Nonnull
+    @Override
+    @RequiredReadAction
+    public Collection<Object> getItems(String prefix, boolean cached, CompletionParameters parameters) {
+        return Application.get().runReadAction((Computable<Collection<Object>>) () -> {
+            Clause[] clauses = myHeaderByName.getClauses();
+            if (clauses.length == 0) {
+                return Collections.emptyList();
+            }
+            HeaderValuePart value = clauses[0].getValue();
+            if (value == null) {
+                return Collections.emptyList();
+            }
+
+            List<Object> objects = new ArrayList<>();
+            PsiReference[] references = myHeaderParser.getReferences(value);
+            for (PsiReference reference : references) {
+                for (Object o : reference.getVariants()) {
+                    if (myHeaderParser.isAcceptable(o)) {
+                        objects.add(o);
+                    }
+                }
+            }
+            return objects;
+        });
     }
-    return item.toString();
-  }
 
-  @Nullable
-  @Override
-  protected String getTailText(@Nonnull Object item) {
-    return null;
-  }
+    @Nullable
+    @Override
+    protected Image getIcon(@Nonnull Object item) {
+        if (item instanceof NavigationItem navigationItem) {
+            ItemPresentation itemPresentation = ItemPresentationProvider.getItemPresentation(navigationItem);
+            if (itemPresentation != null) {
+                return itemPresentation.getIcon();
+            }
+        }
+        return null;
+    }
 
-  @Nullable
-  @Override
-  protected String getTypeText(@Nonnull Object item) {
-    return null;
-  }
+    @Nonnull
+    @Override
+    protected String getLookupString(@Nonnull Object item) {
+        if (item instanceof PsiElement element) {
+            ExtensionPoint<QualifiedNameProvider> point = element.getApplication().getExtensionPoint(QualifiedNameProvider.class);
+            String qualifiedFromExtensions = point.computeSafeIfAny(provider -> provider.getQualifiedName(element));
+            if (qualifiedFromExtensions != null) {
+                return qualifiedFromExtensions;
+            }
+        }
+        return item.toString();
+    }
 
-  @Override
-  public int compare(Object item1, Object item2) {
-    return 0;
-  }
+    @Nullable
+    @Override
+    protected String getTailText(@Nonnull Object item) {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    protected String getTypeText(@Nonnull Object item) {
+        return null;
+    }
+
+    @Override
+    public int compare(Object item1, Object item2) {
+        return 0;
+    }
 }

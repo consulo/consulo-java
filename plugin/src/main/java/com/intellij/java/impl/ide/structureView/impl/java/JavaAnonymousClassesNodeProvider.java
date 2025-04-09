@@ -3,7 +3,9 @@ package com.intellij.java.impl.ide.structureView.impl.java;
 
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import consulo.application.AllIcons;
+import consulo.application.Application;
 import consulo.application.dumb.DumbAware;
+import consulo.component.extension.ExtensionPoint;
 import consulo.fileEditor.structureView.tree.ActionPresentation;
 import consulo.fileEditor.structureView.tree.ActionPresentationData;
 import consulo.fileEditor.structureView.tree.FileStructureNodeProvider;
@@ -15,67 +17,72 @@ import consulo.language.psi.PsiElement;
 import consulo.platform.Platform;
 import consulo.ui.ex.action.KeyboardShortcut;
 import consulo.ui.ex.action.Shortcut;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 /**
  * @author Konstantin Bulenkov
  */
 public class JavaAnonymousClassesNodeProvider implements FileStructureNodeProvider<JavaAnonymousClassTreeElement>, DumbAware {
-  public static final String ID = "SHOW_ANONYMOUS";
-  public static final String JAVA_ANONYMOUS_PROPERTY_NAME = "java.anonymous.provider";
+    public static final String ID = "SHOW_ANONYMOUS";
+    public static final String JAVA_ANONYMOUS_PROPERTY_NAME = "java.anonymous.provider";
 
-  @Nonnull
-  @Override
-  public Collection<JavaAnonymousClassTreeElement> provideNodes(@Nonnull TreeElement node) {
-    if (node instanceof PsiMethodTreeElement || node instanceof PsiFieldTreeElement || node instanceof ClassInitializerTreeElement) {
-      final PsiElement el = ((PsiTreeElementBase) node).getElement();
-      if (el != null) {
-        for (AnonymousElementProvider provider : AnonymousElementProvider.EP_NAME.getExtensionList()) {
-          final PsiElement[] elements = provider.getAnonymousElements(el);
-          if (elements.length > 0) {
-            List<JavaAnonymousClassTreeElement> result = new ArrayList<>(elements.length);
-            for (PsiElement element : elements) {
-              result.add(new JavaAnonymousClassTreeElement((PsiAnonymousClass) element));
+    @Nonnull
+    @Override
+    public Collection<JavaAnonymousClassTreeElement> provideNodes(@Nonnull TreeElement node) {
+        if (node instanceof PsiMethodTreeElement || node instanceof PsiFieldTreeElement || node instanceof ClassInitializerTreeElement) {
+            final PsiElement el = ((PsiTreeElementBase) node).getElement();
+            if (el != null) {
+                Application application = el.getApplication();
+
+                ExtensionPoint<AnonymousElementProvider> point = application.getExtensionPoint(AnonymousElementProvider.class);
+
+                PsiElement[] anonymElements = point.computeSafeIfAny(provider -> {
+                    final PsiElement[] elements = provider.getAnonymousElements(el);
+                    return elements.length > 0 ? elements : null;
+                });
+
+                if (anonymElements != null) {
+                    List<JavaAnonymousClassTreeElement> result = new ArrayList<>(anonymElements.length);
+                    for (PsiElement element : anonymElements) {
+                        result.add(new JavaAnonymousClassTreeElement((PsiAnonymousClass) element));
+                    }
+                    return result;
+                }
             }
-            return result;
-          }
         }
-      }
+        return List.of();
     }
-    return Collections.emptyList();
-  }
 
-  @Nonnull
-  @Override
-  public String getCheckBoxText() {
-    return JavaCodeInsightBundle.message("file.structure.toggle.show.anonymous.classes");
-  }
+    @Nonnull
+    @Override
+    public String getCheckBoxText() {
+        return JavaCodeInsightBundle.message("file.structure.toggle.show.anonymous.classes");
+    }
 
-  @Override
-  public Shortcut[] getShortcut() {
-    return new Shortcut[]{KeyboardShortcut.fromString(Platform.current().os().isMac() ? "meta I" : "control I")};
-  }
+    @Override
+    public Shortcut[] getShortcut() {
+        return new Shortcut[]{KeyboardShortcut.fromString(Platform.current().os().isMac() ? "meta I" : "control I")};
+    }
 
-  @Nonnull
-  @Override
-  public ActionPresentation getPresentation() {
-    return new ActionPresentationData(getCheckBoxText(), null, AllIcons.Nodes.AnonymousClass);
-  }
+    @Nonnull
+    @Override
+    public ActionPresentation getPresentation() {
+        return new ActionPresentationData(getCheckBoxText(), null, AllIcons.Nodes.AnonymousClass);
+    }
 
-  @Nonnull
-  @Override
-  public String getName() {
-    return ID;
-  }
+    @Nonnull
+    @Override
+    public String getName() {
+        return ID;
+    }
 
-  @Nonnull
-  @Override
-  public String getSerializePropertyName() {
-    return JAVA_ANONYMOUS_PROPERTY_NAME;
-  }
+    @Nonnull
+    @Override
+    public String getSerializePropertyName() {
+        return JAVA_ANONYMOUS_PROPERTY_NAME;
+    }
 }
