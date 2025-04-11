@@ -24,7 +24,7 @@ import com.intellij.java.language.psi.PsiType;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
-import consulo.util.lang.Pair;
+import consulo.util.lang.Couple;
 import jakarta.annotation.Nullable;
 
 /**
@@ -36,20 +36,20 @@ public abstract class TypeConversionRule {
 
     @Nullable
     public abstract TypeConversionDescriptorBase findConversion(
-        final PsiType from,
-        final PsiType to,
-        final PsiMember member,
-        final PsiExpression context,
-        final TypeMigrationLabeler labeler
+        PsiType from,
+        PsiType to,
+        PsiMember member,
+        PsiExpression context,
+        TypeMigrationLabeler labeler
     );
 
     @Nullable
-    public Pair<PsiType, PsiType> bindTypeParameters(
+    public Couple<PsiType> bindTypeParameters(
         PsiType from,
         PsiType to,
-        final PsiMethod method,
-        final PsiExpression context,
-        final TypeMigrationLabeler labeler
+        PsiMethod method,
+        PsiExpression context,
+        TypeMigrationLabeler labeler
     ) {
         return null;
     }

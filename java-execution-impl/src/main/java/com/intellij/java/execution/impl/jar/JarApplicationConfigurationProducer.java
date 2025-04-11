@@ -21,9 +21,8 @@ import consulo.execution.action.Location;
 import consulo.execution.action.RunConfigurationProducer;
 import consulo.language.psi.PsiElement;
 import consulo.util.io.FileUtil;
-import consulo.util.lang.ref.Ref;
+import consulo.util.lang.ref.SimpleReference;
 import consulo.virtualFileSystem.VirtualFile;
-
 import jakarta.annotation.Nullable;
 
 /**
@@ -39,7 +38,7 @@ public class JarApplicationConfigurationProducer extends RunConfigurationProduce
     protected boolean setupConfigurationFromContext(
         JarApplicationConfiguration configuration,
         ConfigurationContext context,
-        Ref<PsiElement> sourceElement
+        SimpleReference<PsiElement> sourceElement
     ) {
         VirtualFile file = getJarFileFromContext(context);
         if (file != null) {

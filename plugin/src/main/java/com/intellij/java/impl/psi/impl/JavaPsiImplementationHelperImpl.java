@@ -32,7 +32,6 @@ import consulo.content.base.BinariesOrderRootType;
 import consulo.content.base.SourcesOrderRootType;
 import consulo.fileTemplate.FileTemplate;
 import consulo.fileTemplate.FileTemplateManager;
-import consulo.ide.impl.idea.openapi.roots.impl.LibraryScopeCache;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.ast.ASTNode;
 import consulo.language.codeStyle.CodeStyleSettings;
@@ -40,6 +39,7 @@ import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.codeStyle.arrangement.MemberOrderService;
 import consulo.language.psi.*;
 import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.scope.LibraryScopeCache;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.language.util.ModuleUtilCore;
@@ -92,7 +92,7 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
         }
 
         VirtualFile vFile = psiClass.getContainingFile().getVirtualFile();
-        final ProjectFileIndex idx = ProjectRootManager.getInstance(myProject).getFileIndex();
+        ProjectFileIndex idx = ProjectRootManager.getInstance(myProject).getFileIndex();
         if (vFile == null || !idx.isInLibrarySource(vFile)) {
             return psiClass;
         }
@@ -102,7 +102,7 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
             return psiClass;
         }
 
-        final Set<OrderEntry> orderEntries = Set.copyOf(idx.getOrderEntriesForFile(vFile));
+        Set<OrderEntry> orderEntries = Set.copyOf(idx.getOrderEntriesForFile(vFile));
         GlobalSearchScope librariesScope = LibraryScopeCache.getInstance(myProject).getLibrariesOnlyScope();
         for (PsiClass original : JavaPsiFacade.getInstance(myProject).findClasses(fqn, librariesScope)) {
             PsiFile psiFile = original.getContainingFile();
@@ -125,6 +125,7 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
     }
 
     @Override
+    @RequiredReadAction
     public PsiElement getClsFileNavigationElement(PsiJavaFile clsFile) {
         PsiClass[] classes = clsFile.getClasses();
         if (classes.length == 0) {
@@ -157,9 +158,9 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
     @Nullable
     @Override
     public LanguageLevel getClassesLanguageLevel(VirtualFile virtualFile) {
-        final ProjectFileIndex index = ProjectRootManager.getInstance(myProject).getFileIndex();
-        final VirtualFile sourceRoot = index.getSourceRootForFile(virtualFile);
-        final VirtualFile folder = virtualFile.getParent();
+        ProjectFileIndex index = ProjectRootManager.getInstance(myProject).getFileIndex();
+        VirtualFile sourceRoot = index.getSourceRootForFile(virtualFile);
+        VirtualFile folder = virtualFile.getParent();
         if (sourceRoot != null && folder != null) {
             String relativePath = VirtualFileUtil.getRelativePath(folder, sourceRoot, '/');
             if (relativePath == null) {
@@ -169,35 +170,33 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
             if (orderEntries.isEmpty()) {
                 LOG.error("Inconsistent: " + DirectoryIndex.getInstance(myProject).getInfoForFile(folder).toString());
             }
-            final VirtualFile[] files = orderEntries.get(0).getFiles(BinariesOrderRootType.getInstance());
+            VirtualFile[] files = orderEntries.get(0).getFiles(BinariesOrderRootType.getInstance());
             for (VirtualFile rootFile : files) {
-                final VirtualFile classFile = rootFile.findFileByRelativePath(relativePath);
+                VirtualFile classFile = rootFile.findFileByRelativePath(relativePath);
                 if (classFile != null) {
-                    final PsiJavaFile javaFile = getPsiFileInRoot(classFile);
+                    PsiJavaFile javaFile = getPsiFileInRoot(classFile);
                     if (javaFile != null) {
                         return javaFile.getLanguageLevel();
                     }
                 }
             }
-            final Module moduleForFile = ModuleUtilCore.findModuleForFile(virtualFile, myProject);
+            Module moduleForFile = ModuleUtilCore.findModuleForFile(virtualFile, myProject);
             if (moduleForFile == null) {
                 return null;
             }
-            final JavaModuleExtension extension = ModuleUtilCore.getExtension(moduleForFile, JavaModuleExtension.class);
+            JavaModuleExtension extension = ModuleUtilCore.getExtension(moduleForFile, JavaModuleExtension.class);
             return extension == null ? null : extension.getLanguageLevel();
         }
         return null;
     }
 
     @Nullable
-    private PsiJavaFile getPsiFileInRoot(final VirtualFile dirFile) {
-        final VirtualFile[] children = dirFile.getChildren();
-        for (VirtualFile child : children) {
-            if (JavaClassFileType.INSTANCE.equals(child.getFileType())) {
-                final PsiFile psiFile = PsiManager.getInstance(myProject).findFile(child);
-                if (psiFile instanceof PsiJavaFile) {
-                    return (PsiJavaFile)psiFile;
-                }
+    @RequiredReadAction
+    private PsiJavaFile getPsiFileInRoot(VirtualFile dirFile) {
+        for (VirtualFile child : dirFile.getChildren()) {
+            if (JavaClassFileType.INSTANCE.equals(child.getFileType())
+                && PsiManager.getInstance(myProject).findFile(child) instanceof PsiJavaFile javaFile) {
+                return javaFile;
             }
         }
         return null;
@@ -225,7 +224,7 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
         if (anchor != null && anchor != aClass) {
             anchor = anchor.getNextSibling();
             while (anchor instanceof PsiJavaToken && (anchor.getText().equals(",") || anchor.getText().equals(";"))) {
-                final boolean afterComma = anchor.getText().equals(",");
+                boolean afterComma = anchor.getText().equals(",");
                 anchor = anchor.getNextSibling();
                 if (afterComma) {
                     newAnchor = skipWhitespaces(aClass, anchor);
@@ -241,7 +240,7 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
 
         // The main idea is to avoid to anchor to 'white space' element because that causes reformatting algorithm
         // to perform incorrectly. The algorithm is encapsulated at the PostprocessReformattingAspect.doPostponedFormattingInner().
-        final PsiElement lBrace = aClass.getLBrace();
+        PsiElement lBrace = aClass.getLBrace();
         if (lBrace != null) {
             PsiElement result = lBrace.getNextSibling();
             while (result instanceof PsiWhiteSpace) {
@@ -253,6 +252,7 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
         return aClass.getRBrace();
     }
 
+    @RequiredReadAction
     private static PsiElement skipWhitespaces(PsiClass aClass, PsiElement anchor) {
         if (anchor != null && PsiTreeUtil.skipSiblingsForward(anchor, PsiWhiteSpace.class) == aClass.getRBrace()) {
             // Given member should be inserted as the last child.
@@ -263,23 +263,23 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
 
     @Override
     public void setupCatchBlock(String exceptionName, PsiElement context, PsiCatchSection catchSection) {
-        final FileTemplate catchBodyTemplate =
+        FileTemplate catchBodyTemplate =
             FileTemplateManager.getInstance(catchSection.getProject()).getCodeTemplate(JavaTemplateUtil.TEMPLATE_CATCH_BODY);
         LOG.assertTrue(catchBodyTemplate != null);
 
-        final Properties props = new Properties();
+        Properties props = new Properties();
         props.setProperty(FileTemplate.ATTRIBUTE_EXCEPTION, exceptionName);
         if (context != null && context.isPhysical()) {
-            final PsiDirectory directory = context.getContainingFile().getContainingDirectory();
+            PsiDirectory directory = context.getContainingFile().getContainingDirectory();
             if (directory != null) {
                 JavaTemplateUtil.setPackageNameAttribute(props, directory);
             }
         }
 
-        final PsiCodeBlock codeBlockFromText;
+        PsiCodeBlock codeBlockFromText;
         try {
-            codeBlockFromText =
-                PsiElementFactory.getInstance(myProject).createCodeBlockFromText("{\n" + catchBodyTemplate.getText(props) + "\n}", null);
+            codeBlockFromText = PsiElementFactory.getInstance(myProject)
+                .createCodeBlockFromText("{\n" + catchBodyTemplate.getText(props) + "\n}", null);
         }
         catch (ProcessCanceledException ce) {
             throw ce;
