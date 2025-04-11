@@ -23,59 +23,51 @@ import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.impl.refactoring.typeMigration.TypeConversionDescriptorBase;
 import com.intellij.java.impl.refactoring.typeMigration.TypeMigrationLabeler;
 
-public class DisjunctionTypeConversionRule extends TypeConversionRule
-{
-	@Override
-	public TypeConversionDescriptorBase findConversion(final PsiType from, final PsiType to, final PsiMember member, final PsiExpression context, final TypeMigrationLabeler labeler)
-	{
-		if(from instanceof PsiDisjunctionType)
-		{
-			final PsiType lub = ((PsiDisjunctionType) from).getLeastUpperBound();
-			if(lub instanceof PsiIntersectionType)
-			{
-				for(PsiType type : ((PsiIntersectionType) lub).getConjuncts())
-				{
-					final TypeConversionDescriptorBase conversion = labeler.getRules().findConversion(type, to, member, context, labeler);
-					if(conversion != null)
-					{
-						return conversion;
-					}
-				}
-			}
-			else
-			{
-				final TypeConversionDescriptorBase conversion = labeler.getRules().findConversion(lub, to, member, context, labeler);
-				if(conversion != null)
-				{
-					return conversion;
-				}
-			}
-		}
+public class DisjunctionTypeConversionRule extends TypeConversionRule {
+    @Override
+    public TypeConversionDescriptorBase findConversion(
+        final PsiType from,
+        final PsiType to,
+        final PsiMember member,
+        final PsiExpression context,
+        final TypeMigrationLabeler labeler
+    ) {
+        if (from instanceof PsiDisjunctionType) {
+            final PsiType lub = ((PsiDisjunctionType)from).getLeastUpperBound();
+            if (lub instanceof PsiIntersectionType) {
+                for (PsiType type : ((PsiIntersectionType)lub).getConjuncts()) {
+                    final TypeConversionDescriptorBase conversion = labeler.getRules().findConversion(type, to, member, context, labeler);
+                    if (conversion != null) {
+                        return conversion;
+                    }
+                }
+            }
+            else {
+                final TypeConversionDescriptorBase conversion = labeler.getRules().findConversion(lub, to, member, context, labeler);
+                if (conversion != null) {
+                    return conversion;
+                }
+            }
+        }
 
-		if(to instanceof PsiDisjunctionType)
-		{
-			final PsiType lub = ((PsiDisjunctionType) to).getLeastUpperBound();
-			if(lub instanceof PsiIntersectionType)
-			{
-				for(PsiType type : ((PsiIntersectionType) lub).getConjuncts())
-				{
-					final TypeConversionDescriptorBase conversion = labeler.getRules().findConversion(from, type, member, context, labeler);
-					if(conversion != null)
-					{
-						return conversion;
-					}
-				}
-			}
-			else
-			{
-				final TypeConversionDescriptorBase conversion = labeler.getRules().findConversion(from, lub, member, context, labeler);
-				if(conversion != null)
-				{
-					return conversion;
-				}
-			}
-		}
+        if (to instanceof PsiDisjunctionType) {
+            final PsiType lub = ((PsiDisjunctionType)to).getLeastUpperBound();
+            if (lub instanceof PsiIntersectionType) {
+                for (PsiType type : ((PsiIntersectionType)lub).getConjuncts()) {
+                    final TypeConversionDescriptorBase conversion = labeler.getRules().findConversion(from, type, member, context, labeler);
+                    if (conversion != null) {
+                        return conversion;
+                    }
+                }
+            }
+            else {
+                final TypeConversionDescriptorBase conversion = labeler.getRules().findConversion(from, lub, member, context, labeler);
+                if (conversion != null) {
+                    return conversion;
+                }
+            }
+        }
 
-		return null;
-	}
+        return null;
+    }
 }

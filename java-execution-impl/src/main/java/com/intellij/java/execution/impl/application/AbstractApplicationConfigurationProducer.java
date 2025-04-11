@@ -33,84 +33,86 @@ import consulo.util.lang.ref.Ref;
 import jakarta.annotation.Nullable;
 
 public abstract class AbstractApplicationConfigurationProducer<T extends ApplicationConfiguration> extends JavaRunConfigurationProducerBase<T> {
-  public AbstractApplicationConfigurationProducer(final ApplicationConfigurationType configurationType) {
-    super(configurationType);
-  }
+    public AbstractApplicationConfigurationProducer(final ApplicationConfigurationType configurationType) {
+        super(configurationType);
+    }
 
-  @Override
-  protected boolean setupConfigurationFromContext(T configuration, ConfigurationContext context, Ref<PsiElement> sourceElement) {
-    final Location contextLocation = context.getLocation();
-    if (contextLocation == null) {
-      return false;
-    }
-    final Location location = JavaExecutionUtil.stepIntoSingleClass(contextLocation);
-    if (location == null) {
-      return false;
-    }
-    final PsiElement element = location.getPsiElement();
-    if (!element.isPhysical()) {
-      return false;
-    }
-    PsiElement currentElement = element;
-    PsiMethod method;
-    while ((method = findMain(currentElement)) != null) {
-      final PsiClass aClass = method.getContainingClass();
-      if (ConfigurationUtil.MAIN_CLASS.test(aClass)) {
-        sourceElement.set(method);
+    @Override
+    protected boolean setupConfigurationFromContext(T configuration, ConfigurationContext context, Ref<PsiElement> sourceElement) {
+        final Location contextLocation = context.getLocation();
+        if (contextLocation == null) {
+            return false;
+        }
+        final Location location = JavaExecutionUtil.stepIntoSingleClass(contextLocation);
+        if (location == null) {
+            return false;
+        }
+        final PsiElement element = location.getPsiElement();
+        if (!element.isPhysical()) {
+            return false;
+        }
+        PsiElement currentElement = element;
+        PsiMethod method;
+        while ((method = findMain(currentElement)) != null) {
+            final PsiClass aClass = method.getContainingClass();
+            if (ConfigurationUtil.MAIN_CLASS.test(aClass)) {
+                sourceElement.set(method);
+                setupConfiguration(configuration, aClass, context);
+                return true;
+            }
+            currentElement = method.getParent();
+        }
+        final PsiClass aClass = ApplicationConfigurationType.getMainClass(element);
+        if (aClass == null) {
+            return false;
+        }
+        sourceElement.set(aClass);
         setupConfiguration(configuration, aClass, context);
         return true;
-      }
-      currentElement = method.getParent();
     }
-    final PsiClass aClass = ApplicationConfigurationType.getMainClass(element);
-    if (aClass == null) {
-      return false;
+
+    private void setupConfiguration(T configuration, final PsiClass aClass, final ConfigurationContext context) {
+        configuration.MAIN_CLASS_NAME = JavaExecutionUtil.getRuntimeQualifiedName(aClass);
+        configuration.setGeneratedName();
+        setupConfigurationModule(context, configuration);
     }
-    sourceElement.set(aClass);
-    setupConfiguration(configuration, aClass, context);
-    return true;
-  }
 
-  private void setupConfiguration(T configuration, final PsiClass aClass, final ConfigurationContext context) {
-    configuration.MAIN_CLASS_NAME = JavaExecutionUtil.getRuntimeQualifiedName(aClass);
-    configuration.setGeneratedName();
-    setupConfigurationModule(context, configuration);
-  }
-
-  @Nullable
-  private static PsiMethod findMain(PsiElement element) {
-    PsiMethod method;
-    while ((method = PsiTreeUtil.getParentOfType(element, PsiMethod.class)) != null) {
-      if (PsiMethodUtil.isMainMethod(method)) {
-        return method;
-      } else {
-        element = method.getParent();
-      }
+    @Nullable
+    private static PsiMethod findMain(PsiElement element) {
+        PsiMethod method;
+        while ((method = PsiTreeUtil.getParentOfType(element, PsiMethod.class)) != null) {
+            if (PsiMethodUtil.isMainMethod(method)) {
+                return method;
+            }
+            else {
+                element = method.getParent();
+            }
+        }
+        return null;
     }
-    return null;
-  }
 
-  @Override
-  public boolean isConfigurationFromContext(T appConfiguration, ConfigurationContext context) {
-    final PsiElement location = context.getPsiLocation();
-    final PsiClass aClass = ApplicationConfigurationType.getMainClass(location);
-    if (aClass != null && Comparing.equal(JavaExecutionUtil.getRuntimeQualifiedName(aClass), appConfiguration.MAIN_CLASS_NAME)) {
-      final PsiMethod method = PsiTreeUtil.getParentOfType(location, PsiMethod.class, false);
-      if (method != null && TestFrameworks.getInstance().isTestMethod(method)) {
+    @Override
+    public boolean isConfigurationFromContext(T appConfiguration, ConfigurationContext context) {
+        final PsiElement location = context.getPsiLocation();
+        final PsiClass aClass = ApplicationConfigurationType.getMainClass(location);
+        if (aClass != null && Comparing.equal(JavaExecutionUtil.getRuntimeQualifiedName(aClass), appConfiguration.MAIN_CLASS_NAME)) {
+            final PsiMethod method = PsiTreeUtil.getParentOfType(location, PsiMethod.class, false);
+            if (method != null && TestFrameworks.getInstance().isTestMethod(method)) {
+                return false;
+            }
+
+            final Module configurationModule = appConfiguration.getConfigurationModule().getModule();
+            if (Comparing.equal(context.getModule(), configurationModule)) {
+                return true;
+            }
+
+            ApplicationConfiguration template =
+                (ApplicationConfiguration)context.getRunManager().getConfigurationTemplate(getConfigurationFactory()).getConfiguration();
+            final Module predefinedModule = template.getConfigurationModule().getModule();
+            if (Comparing.equal(predefinedModule, configurationModule)) {
+                return true;
+            }
+        }
         return false;
-      }
-
-      final Module configurationModule = appConfiguration.getConfigurationModule().getModule();
-      if (Comparing.equal(context.getModule(), configurationModule)) {
-        return true;
-      }
-
-      ApplicationConfiguration template = (ApplicationConfiguration) context.getRunManager().getConfigurationTemplate(getConfigurationFactory()).getConfiguration();
-      final Module predefinedModule = template.getConfigurationModule().getModule();
-      if (Comparing.equal(predefinedModule, configurationModule)) {
-        return true;
-      }
     }
-    return false;
-  }
 }

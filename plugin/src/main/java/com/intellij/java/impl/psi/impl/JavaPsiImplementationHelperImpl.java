@@ -69,224 +69,224 @@ import java.util.Set;
 @Singleton
 @ServiceImpl
 public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper {
-  private static final Logger LOG = Logger.getInstance(JavaPsiImplementationHelperImpl.class);
+    private static final Logger LOG = Logger.getInstance(JavaPsiImplementationHelperImpl.class);
 
-  private final Project myProject;
-  private final MemberOrderService myMemberOrderService;
+    private final Project myProject;
+    private final MemberOrderService myMemberOrderService;
 
-  @Inject
-  public JavaPsiImplementationHelperImpl(Project project, MemberOrderService memberOrderService) {
-    myProject = project;
-    myMemberOrderService = memberOrderService;
-  }
-
-  @Override
-  public PsiClass getOriginalClass(PsiClass psiClass) {
-    PsiCompiledElement cls = psiClass.getUserData(ClsElementImpl.COMPILED_ELEMENT);
-    if (cls != null && cls.isValid()) {
-      return (PsiClass)cls;
+    @Inject
+    public JavaPsiImplementationHelperImpl(Project project, MemberOrderService memberOrderService) {
+        myProject = project;
+        myMemberOrderService = memberOrderService;
     }
 
-    if (DumbService.isDumb(myProject)) {
-      return psiClass;
-    }
+    @Override
+    public PsiClass getOriginalClass(PsiClass psiClass) {
+        PsiCompiledElement cls = psiClass.getUserData(ClsElementImpl.COMPILED_ELEMENT);
+        if (cls != null && cls.isValid()) {
+            return (PsiClass)cls;
+        }
 
-    VirtualFile vFile = psiClass.getContainingFile().getVirtualFile();
-    final ProjectFileIndex idx = ProjectRootManager.getInstance(myProject).getFileIndex();
-    if (vFile == null || !idx.isInLibrarySource(vFile)) {
-      return psiClass;
-    }
+        if (DumbService.isDumb(myProject)) {
+            return psiClass;
+        }
 
-    String fqn = psiClass.getQualifiedName();
-    if (fqn == null) {
-      return psiClass;
-    }
+        VirtualFile vFile = psiClass.getContainingFile().getVirtualFile();
+        final ProjectFileIndex idx = ProjectRootManager.getInstance(myProject).getFileIndex();
+        if (vFile == null || !idx.isInLibrarySource(vFile)) {
+            return psiClass;
+        }
 
-    final Set<OrderEntry> orderEntries = Set.copyOf(idx.getOrderEntriesForFile(vFile));
-    GlobalSearchScope librariesScope =  LibraryScopeCache.getInstance(myProject).getLibrariesOnlyScope();
-    for (PsiClass original : JavaPsiFacade.getInstance(myProject).findClasses(fqn, librariesScope)) {
-      PsiFile psiFile = original.getContainingFile();
-      if (psiFile != null) {
-        VirtualFile candidateFile = psiFile.getVirtualFile();
-        if (candidateFile != null) {
-          // order for file and vFile has non empty intersection.
-          List<OrderEntry> entries = idx.getOrderEntriesForFile(candidateFile);
-          //noinspection ForLoopReplaceableByForEach
-          for (int i = 0; i < entries.size(); i++) {
-            if (orderEntries.contains(entries.get(i))) {
-              return original;
+        String fqn = psiClass.getQualifiedName();
+        if (fqn == null) {
+            return psiClass;
+        }
+
+        final Set<OrderEntry> orderEntries = Set.copyOf(idx.getOrderEntriesForFile(vFile));
+        GlobalSearchScope librariesScope = LibraryScopeCache.getInstance(myProject).getLibrariesOnlyScope();
+        for (PsiClass original : JavaPsiFacade.getInstance(myProject).findClasses(fqn, librariesScope)) {
+            PsiFile psiFile = original.getContainingFile();
+            if (psiFile != null) {
+                VirtualFile candidateFile = psiFile.getVirtualFile();
+                if (candidateFile != null) {
+                    // order for file and vFile has non empty intersection.
+                    List<OrderEntry> entries = idx.getOrderEntriesForFile(candidateFile);
+                    //noinspection ForLoopReplaceableByForEach
+                    for (int i = 0; i < entries.size(); i++) {
+                        if (orderEntries.contains(entries.get(i))) {
+                            return original;
+                        }
+                    }
+                }
             }
-          }
         }
-      }
+
+        return psiClass;
     }
 
-    return psiClass;
-  }
+    @Override
+    public PsiElement getClsFileNavigationElement(PsiJavaFile clsFile) {
+        PsiClass[] classes = clsFile.getClasses();
+        if (classes.length == 0) {
+            return clsFile;
+        }
 
-  @Override
-  public PsiElement getClsFileNavigationElement(PsiJavaFile clsFile) {
-    PsiClass[] classes = clsFile.getClasses();
-    if (classes.length == 0) {
-      return clsFile;
+        String sourceFileName = ((ClsClassImpl)classes[0]).getSourceFileName();
+        String packageName = clsFile.getPackageName();
+        String relativePath = packageName.isEmpty() ? sourceFileName : packageName.replace('.', '/') + '/' + sourceFileName;
+
+        ProjectFileIndex index = ProjectFileIndex.getInstance(clsFile.getProject());
+        for (OrderEntry orderEntry : index.getOrderEntriesForFile(clsFile.getContainingFile().getVirtualFile())) {
+            if (!(orderEntry instanceof OrderEntryWithTracking)) {
+                continue;
+            }
+            for (VirtualFile root : orderEntry.getFiles(SourcesOrderRootType.getInstance())) {
+                VirtualFile source = root.findFileByRelativePath(relativePath);
+                if (source != null && source.isValid()) {
+                    PsiFile psiSource = clsFile.getManager().findFile(source);
+                    if (psiSource instanceof PsiClassOwner) {
+                        return psiSource;
+                    }
+                }
+            }
+        }
+
+        return clsFile;
     }
 
-    String sourceFileName = ((ClsClassImpl)classes[0]).getSourceFileName();
-    String packageName = clsFile.getPackageName();
-    String relativePath = packageName.isEmpty() ? sourceFileName : packageName.replace('.', '/') + '/' + sourceFileName;
-
-    ProjectFileIndex index = ProjectFileIndex.getInstance(clsFile.getProject());
-    for (OrderEntry orderEntry : index.getOrderEntriesForFile(clsFile.getContainingFile().getVirtualFile())) {
-      if (!(orderEntry instanceof OrderEntryWithTracking)) {
-        continue;
-      }
-      for (VirtualFile root : orderEntry.getFiles(SourcesOrderRootType.getInstance())) {
-        VirtualFile source = root.findFileByRelativePath(relativePath);
-        if (source != null && source.isValid()) {
-          PsiFile psiSource = clsFile.getManager().findFile(source);
-          if (psiSource instanceof PsiClassOwner) {
-            return psiSource;
-          }
+    @Nullable
+    @Override
+    public LanguageLevel getClassesLanguageLevel(VirtualFile virtualFile) {
+        final ProjectFileIndex index = ProjectRootManager.getInstance(myProject).getFileIndex();
+        final VirtualFile sourceRoot = index.getSourceRootForFile(virtualFile);
+        final VirtualFile folder = virtualFile.getParent();
+        if (sourceRoot != null && folder != null) {
+            String relativePath = VirtualFileUtil.getRelativePath(folder, sourceRoot, '/');
+            if (relativePath == null) {
+                throw new AssertionError("Null relative path: folder=" + folder + "; root=" + sourceRoot);
+            }
+            List<OrderEntry> orderEntries = index.getOrderEntriesForFile(virtualFile);
+            if (orderEntries.isEmpty()) {
+                LOG.error("Inconsistent: " + DirectoryIndex.getInstance(myProject).getInfoForFile(folder).toString());
+            }
+            final VirtualFile[] files = orderEntries.get(0).getFiles(BinariesOrderRootType.getInstance());
+            for (VirtualFile rootFile : files) {
+                final VirtualFile classFile = rootFile.findFileByRelativePath(relativePath);
+                if (classFile != null) {
+                    final PsiJavaFile javaFile = getPsiFileInRoot(classFile);
+                    if (javaFile != null) {
+                        return javaFile.getLanguageLevel();
+                    }
+                }
+            }
+            final Module moduleForFile = ModuleUtilCore.findModuleForFile(virtualFile, myProject);
+            if (moduleForFile == null) {
+                return null;
+            }
+            final JavaModuleExtension extension = ModuleUtilCore.getExtension(moduleForFile, JavaModuleExtension.class);
+            return extension == null ? null : extension.getLanguageLevel();
         }
-      }
-    }
-
-    return clsFile;
-  }
-
-  @Nullable
-  @Override
-  public LanguageLevel getClassesLanguageLevel(VirtualFile virtualFile) {
-    final ProjectFileIndex index = ProjectRootManager.getInstance(myProject).getFileIndex();
-    final VirtualFile sourceRoot = index.getSourceRootForFile(virtualFile);
-    final VirtualFile folder = virtualFile.getParent();
-    if (sourceRoot != null && folder != null) {
-      String relativePath = VirtualFileUtil.getRelativePath(folder, sourceRoot, '/');
-      if (relativePath == null) {
-        throw new AssertionError("Null relative path: folder=" + folder + "; root=" + sourceRoot);
-      }
-      List<OrderEntry> orderEntries = index.getOrderEntriesForFile(virtualFile);
-      if (orderEntries.isEmpty()) {
-        LOG.error("Inconsistent: " + DirectoryIndex.getInstance(myProject).getInfoForFile(folder).toString());
-      }
-      final VirtualFile[] files = orderEntries.get(0).getFiles(BinariesOrderRootType.getInstance());
-      for (VirtualFile rootFile : files) {
-        final VirtualFile classFile = rootFile.findFileByRelativePath(relativePath);
-        if (classFile != null) {
-          final PsiJavaFile javaFile = getPsiFileInRoot(classFile);
-          if (javaFile != null) {
-            return javaFile.getLanguageLevel();
-          }
-        }
-      }
-      final Module moduleForFile = ModuleUtilCore.findModuleForFile(virtualFile, myProject);
-      if (moduleForFile == null) {
         return null;
-      }
-      final JavaModuleExtension extension = ModuleUtilCore.getExtension(moduleForFile, JavaModuleExtension.class);
-      return extension == null ? null : extension.getLanguageLevel();
     }
-    return null;
-  }
 
-  @Nullable
-  private PsiJavaFile getPsiFileInRoot(final VirtualFile dirFile) {
-    final VirtualFile[] children = dirFile.getChildren();
-    for (VirtualFile child : children) {
-      if (JavaClassFileType.INSTANCE.equals(child.getFileType())) {
-        final PsiFile psiFile = PsiManager.getInstance(myProject).findFile(child);
-        if (psiFile instanceof PsiJavaFile) {
-          return (PsiJavaFile)psiFile;
+    @Nullable
+    private PsiJavaFile getPsiFileInRoot(final VirtualFile dirFile) {
+        final VirtualFile[] children = dirFile.getChildren();
+        for (VirtualFile child : children) {
+            if (JavaClassFileType.INSTANCE.equals(child.getFileType())) {
+                final PsiFile psiFile = PsiManager.getInstance(myProject).findFile(child);
+                if (psiFile instanceof PsiJavaFile) {
+                    return (PsiJavaFile)psiFile;
+                }
+            }
         }
-      }
-    }
-    return null;
-  }
-
-  @Override
-  public ASTNode getDefaultImportAnchor(PsiImportList list, PsiImportStatementBase statement) {
-    CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(list.getProject());
-    ImportHelper importHelper = new ImportHelper(settings);
-    return importHelper.getDefaultAnchor(list, statement);
-  }
-
-  @Nullable
-  @Override
-  @RequiredReadAction
-  public PsiElement getDefaultMemberAnchor(@Nonnull PsiClass aClass, @Nonnull PsiMember member) {
-    CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(aClass.getProject());
-    PsiElement anchor = myMemberOrderService.getAnchor(member, settings.getCommonSettings(JavaLanguage.INSTANCE), aClass);
-
-    PsiElement newAnchor = skipWhitespaces(aClass, anchor);
-    if (newAnchor != null) {
-      return newAnchor;
+        return null;
     }
 
-    if (anchor != null && anchor != aClass) {
-      anchor = anchor.getNextSibling();
-      while (anchor instanceof PsiJavaToken && (anchor.getText().equals(",") || anchor.getText().equals(";"))) {
-        final boolean afterComma = anchor.getText().equals(",");
-        anchor = anchor.getNextSibling();
-        if (afterComma) {
-          newAnchor = skipWhitespaces(aClass, anchor);
-          if (newAnchor != null) {
+    @Override
+    public ASTNode getDefaultImportAnchor(PsiImportList list, PsiImportStatementBase statement) {
+        CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(list.getProject());
+        ImportHelper importHelper = new ImportHelper(settings);
+        return importHelper.getDefaultAnchor(list, statement);
+    }
+
+    @Nullable
+    @Override
+    @RequiredReadAction
+    public PsiElement getDefaultMemberAnchor(@Nonnull PsiClass aClass, @Nonnull PsiMember member) {
+        CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(aClass.getProject());
+        PsiElement anchor = myMemberOrderService.getAnchor(member, settings.getCommonSettings(JavaLanguage.INSTANCE), aClass);
+
+        PsiElement newAnchor = skipWhitespaces(aClass, anchor);
+        if (newAnchor != null) {
             return newAnchor;
-          }
         }
-      }
-      if (anchor != null) {
-        return anchor;
-      }
+
+        if (anchor != null && anchor != aClass) {
+            anchor = anchor.getNextSibling();
+            while (anchor instanceof PsiJavaToken && (anchor.getText().equals(",") || anchor.getText().equals(";"))) {
+                final boolean afterComma = anchor.getText().equals(",");
+                anchor = anchor.getNextSibling();
+                if (afterComma) {
+                    newAnchor = skipWhitespaces(aClass, anchor);
+                    if (newAnchor != null) {
+                        return newAnchor;
+                    }
+                }
+            }
+            if (anchor != null) {
+                return anchor;
+            }
+        }
+
+        // The main idea is to avoid to anchor to 'white space' element because that causes reformatting algorithm
+        // to perform incorrectly. The algorithm is encapsulated at the PostprocessReformattingAspect.doPostponedFormattingInner().
+        final PsiElement lBrace = aClass.getLBrace();
+        if (lBrace != null) {
+            PsiElement result = lBrace.getNextSibling();
+            while (result instanceof PsiWhiteSpace) {
+                result = result.getNextSibling();
+            }
+            return result;
+        }
+
+        return aClass.getRBrace();
     }
 
-    // The main idea is to avoid to anchor to 'white space' element because that causes reformatting algorithm
-    // to perform incorrectly. The algorithm is encapsulated at the PostprocessReformattingAspect.doPostponedFormattingInner().
-    final PsiElement lBrace = aClass.getLBrace();
-    if (lBrace != null) {
-      PsiElement result = lBrace.getNextSibling();
-      while (result instanceof PsiWhiteSpace) {
-        result = result.getNextSibling();
-      }
-      return result;
+    private static PsiElement skipWhitespaces(PsiClass aClass, PsiElement anchor) {
+        if (anchor != null && PsiTreeUtil.skipSiblingsForward(anchor, PsiWhiteSpace.class) == aClass.getRBrace()) {
+            // Given member should be inserted as the last child.
+            return aClass.getRBrace();
+        }
+        return null;
     }
 
-    return aClass.getRBrace();
-  }
+    @Override
+    public void setupCatchBlock(String exceptionName, PsiElement context, PsiCatchSection catchSection) {
+        final FileTemplate catchBodyTemplate =
+            FileTemplateManager.getInstance(catchSection.getProject()).getCodeTemplate(JavaTemplateUtil.TEMPLATE_CATCH_BODY);
+        LOG.assertTrue(catchBodyTemplate != null);
 
-  private static PsiElement skipWhitespaces(PsiClass aClass, PsiElement anchor) {
-    if (anchor != null && PsiTreeUtil.skipSiblingsForward(anchor, PsiWhiteSpace.class) == aClass.getRBrace()) {
-      // Given member should be inserted as the last child.
-      return aClass.getRBrace();
-    }
-    return null;
-  }
+        final Properties props = new Properties();
+        props.setProperty(FileTemplate.ATTRIBUTE_EXCEPTION, exceptionName);
+        if (context != null && context.isPhysical()) {
+            final PsiDirectory directory = context.getContainingFile().getContainingDirectory();
+            if (directory != null) {
+                JavaTemplateUtil.setPackageNameAttribute(props, directory);
+            }
+        }
 
-  @Override
-  public void setupCatchBlock(String exceptionName, PsiElement context, PsiCatchSection catchSection) {
-    final FileTemplate catchBodyTemplate =
-      FileTemplateManager.getInstance(catchSection.getProject()).getCodeTemplate(JavaTemplateUtil.TEMPLATE_CATCH_BODY);
-    LOG.assertTrue(catchBodyTemplate != null);
-
-    final Properties props = new Properties();
-    props.setProperty(FileTemplate.ATTRIBUTE_EXCEPTION, exceptionName);
-    if (context != null && context.isPhysical()) {
-      final PsiDirectory directory = context.getContainingFile().getContainingDirectory();
-      if (directory != null) {
-        JavaTemplateUtil.setPackageNameAttribute(props, directory);
-      }
+        final PsiCodeBlock codeBlockFromText;
+        try {
+            codeBlockFromText =
+                PsiElementFactory.getInstance(myProject).createCodeBlockFromText("{\n" + catchBodyTemplate.getText(props) + "\n}", null);
+        }
+        catch (ProcessCanceledException ce) {
+            throw ce;
+        }
+        catch (Throwable e) {
+            throw new IncorrectOperationException("Incorrect file template", e);
+        }
+        catchSection.getCatchBlock().replace(codeBlockFromText);
     }
-
-    final PsiCodeBlock codeBlockFromText;
-    try {
-      codeBlockFromText =
-        PsiElementFactory.getInstance(myProject).createCodeBlockFromText("{\n" + catchBodyTemplate.getText(props) + "\n}", null);
-    }
-    catch (ProcessCanceledException ce) {
-      throw ce;
-    }
-    catch (Throwable e) {
-      throw new IncorrectOperationException("Incorrect file template", e);
-    }
-    catchSection.getCatchBlock().replace(codeBlockFromText);
-  }
 }
