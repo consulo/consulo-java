@@ -44,26 +44,26 @@ public class EnumTypeConversionRule extends TypeConversionRule {
         PsiExpression context,
         TypeMigrationLabeler labeler
     ) {
-        final PsiMethodCallExpression callExpression = PsiTreeUtil.getParentOfType(context, PsiMethodCallExpression.class, false);
+        PsiMethodCallExpression callExpression = PsiTreeUtil.getParentOfType(context, PsiMethodCallExpression.class, false);
         if (callExpression != null) {
-            final PsiMethod resolved = callExpression.resolveMethod();
+            PsiMethod resolved = callExpression.resolveMethod();
             if (resolved != null) {
-                final SearchScope searchScope = labeler.getRules().getSearchScope();
+                SearchScope searchScope = labeler.getRules().getSearchScope();
                 if (!PsiSearchScopeUtil.isInScope(searchScope, resolved)) {
                     return null;
                 }
             }
         }
-        final PsiField field = PsiTreeUtil.getParentOfType(context, PsiField.class);
+        PsiField field = PsiTreeUtil.getParentOfType(context, PsiField.class);
         if (field != null && !myEnumConstants.contains(field) && field.isStatic() && field.isFinal() && field.hasInitializer()) {
             return null;
         }
-        final PsiClass toClass = PsiUtil.resolveClassInType(to);
+        PsiClass toClass = PsiUtil.resolveClassInType(to);
         if (toClass != null && toClass.isEnum()) {
-            final PsiMethod[] constructors = toClass.getConstructors();
+            PsiMethod[] constructors = toClass.getConstructors();
             if (constructors.length == 1) {
-                final PsiMethod constructor = constructors[0];
-                final PsiParameter[] parameters = constructor.getParameterList().getParameters();
+                PsiMethod constructor = constructors[0];
+                PsiParameter[] parameters = constructor.getParameterList().getParameters();
                 if (parameters.length == 1 && TypeConversionUtil.isAssignable(parameters[0].getType(), from)) {
                     return new TypeConversionDescriptorBase();
                 }

@@ -24,7 +24,7 @@ import com.intellij.java.language.psi.PsiType;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
-import consulo.util.lang.Pair;
+import consulo.util.lang.Couple;
 import jakarta.annotation.Nullable;
 
 /**
@@ -32,26 +32,29 @@ import jakarta.annotation.Nullable;
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class TypeConversionRule {
-  public static final ExtensionPointName<TypeConversionRule> EP_NAME = ExtensionPointName.create(TypeConversionRule.class);
+    public static final ExtensionPointName<TypeConversionRule> EP_NAME = ExtensionPointName.create(TypeConversionRule.class);
 
-  @Nullable
-  public abstract TypeConversionDescriptorBase findConversion(final PsiType from,
-                                                              final PsiType to,
-                                                              final PsiMember member,
-                                                              final PsiExpression context,
-                                                              final TypeMigrationLabeler labeler);
+    @Nullable
+    public abstract TypeConversionDescriptorBase findConversion(
+        PsiType from,
+        PsiType to,
+        PsiMember member,
+        PsiExpression context,
+        TypeMigrationLabeler labeler
+    );
 
+    @Nullable
+    public Couple<PsiType> bindTypeParameters(
+        PsiType from,
+        PsiType to,
+        PsiMethod method,
+        PsiExpression context,
+        TypeMigrationLabeler labeler
+    ) {
+        return null;
+    }
 
-  @Nullable
-  public Pair<PsiType, PsiType> bindTypeParameters(PsiType from,
-                                                   PsiType to,
-                                                   final PsiMethod method,
-                                                   final PsiExpression context,
-                                                   final TypeMigrationLabeler labeler) {
-    return null;
-  }
-
-  public boolean shouldConvertNullInitializer(PsiType from, PsiType to, PsiExpression context) {
-    return false;
-  }
+    public boolean shouldConvertNullInitializer(PsiType from, PsiType to, PsiExpression context) {
+        return false;
+    }
 }
