@@ -21,14 +21,14 @@ import consulo.application.progress.ProgressManager;
 import consulo.application.progress.Task;
 import consulo.compiler.CompilerManager;
 import consulo.document.FileDocumentManager;
-import consulo.ide.impl.idea.analysis.BaseAnalysisAction;
+import consulo.language.editor.impl.action.BaseAnalysisAction;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.editor.scope.localize.AnalysisScopeLocalize;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * @author mike
@@ -38,25 +38,25 @@ public abstract class BaseClassesAnalysisAction extends BaseAnalysisAction {
         super(title, analysisNoon);
     }
 
-    protected abstract void analyzeClasses(final Project project, final AnalysisScope scope, ProgressIndicator indicator);
+    protected abstract void analyzeClasses(Project project, AnalysisScope scope, ProgressIndicator indicator);
 
     @Override
-    protected void analyze(@Nonnull final Project project, @Nonnull final AnalysisScope scope) {
+    protected void analyze(@Nonnull Project project, @Nonnull AnalysisScope scope) {
         FileDocumentManager.getInstance().saveAllDocuments();
 
-        ProgressManager.getInstance().run(new Task.Backgroundable(project, AnalysisScopeLocalize.analyzingProject().get(), true) {
+        ProgressManager.getInstance().run(new Task.Backgroundable(project, AnalysisScopeLocalize.analyzingProject(), true) {
             @RequiredReadAction
             @Override
-            public void run(@Nonnull final ProgressIndicator indicator) {
+            public void run(@Nonnull ProgressIndicator indicator) {
                 indicator.setIndeterminate(true);
                 indicator.setTextValue(AnalysisScopeLocalize.checkingClassFiles());
 
-                final CompilerManager compilerManager = CompilerManager.getInstance((Project)getProject());
-                final boolean upToDate = compilerManager.isUpToDate(compilerManager.createProjectCompileScope());
+                CompilerManager compilerManager = CompilerManager.getInstance((Project)getProject());
+                boolean upToDate = compilerManager.isUpToDate(compilerManager.createProjectCompileScope());
 
                 project.getApplication().invokeLater(() -> {
                     if (!upToDate) {
-                        final int i = Messages.showYesNoCancelDialog(
+                        int i = Messages.showYesNoCancelDialog(
                             (Project)getProject(),
                             AnalysisScopeLocalize.recompileConfirmationMessage().get(),
                             AnalysisScopeLocalize.projectIsOutOfDate().get(),
@@ -82,24 +82,28 @@ public abstract class BaseClassesAnalysisAction extends BaseAnalysisAction {
         });
     }
 
-    private void doAnalyze(final Project project, final AnalysisScope scope) {
-        ProgressManager.getInstance().run(new Task.Backgroundable(project, AnalysisScopeLocalize.analyzingProject().get(), true) {
+    private void doAnalyze(Project project, AnalysisScope scope) {
+        ProgressManager.getInstance().run(new Task.Backgroundable(project, AnalysisScopeLocalize.analyzingProject(), true) {
+            @Nonnull
             @Override
-            @Nullable
             public NotificationInfo getNotificationInfo() {
-                return new NotificationInfo("Analysis", "\"" + getTitle() + "\" Analysis Finished", "");
+                return new NotificationInfo(
+                    LocalizeValue.localizeTODO("Analysis"),
+                    LocalizeValue.localizeTODO("\"" + getTitle() + "\" Analysis Finished"),
+                    LocalizeValue.empty()
+                );
             }
 
             @Override
-            public void run(@Nonnull final ProgressIndicator indicator) {
+            public void run(@Nonnull ProgressIndicator indicator) {
                 analyzeClasses(project, scope, indicator);
             }
         });
     }
 
     @RequiredReadAction
-    private void compileAndAnalyze(final Project project, final AnalysisScope scope) {
-        final CompilerManager compilerManager = CompilerManager.getInstance(project);
+    private void compileAndAnalyze(Project project, AnalysisScope scope) {
+        CompilerManager compilerManager = CompilerManager.getInstance(project);
         compilerManager.make(compilerManager.createProjectCompileScope(), (aborted, errors, warnings, compileContext) -> {
             if (aborted || errors != 0) {
                 return;

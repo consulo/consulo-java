@@ -7,7 +7,7 @@ import consulo.language.psi.PsiReference;
 
 /**
  * @author VISTALL
- * @since 01-Sep-22
+ * @since 2022-09-01
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface MethodReferencesSearchExecutor extends QueryExecutor<PsiReference, MethodReferencesSearch.SearchParameters> {

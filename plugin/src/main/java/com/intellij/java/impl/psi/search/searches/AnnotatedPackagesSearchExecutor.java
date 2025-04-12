@@ -7,7 +7,7 @@ import consulo.application.util.query.QueryExecutor;
 
 /**
  * @author VISTALL
- * @since 14/11/2022
+ * @since 2022-11-14
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface AnnotatedPackagesSearchExecutor extends QueryExecutor<PsiJavaPackage, AnnotatedPackagesSearch.Parameters> {

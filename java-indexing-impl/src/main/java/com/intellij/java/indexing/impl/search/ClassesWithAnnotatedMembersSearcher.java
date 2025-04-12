@@ -21,42 +21,46 @@ import com.intellij.java.indexing.search.searches.ClassesWithAnnotatedMembersSea
 import com.intellij.java.indexing.search.searches.ScopedQueryExecutor;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.application.AccessRule;
 import consulo.application.Application;
-import consulo.application.ReadAction;
-import consulo.application.util.function.Processor;
 import consulo.application.util.query.QueryExecutor;
 import consulo.content.scope.SearchScope;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.util.query.QueryExecutorBase;
-
 import jakarta.annotation.Nonnull;
+
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * @author yole
  */
 @ExtensionImpl
-public class ClassesWithAnnotatedMembersSearcher extends QueryExecutorBase<PsiClass, ClassesWithAnnotatedMembersSearch.Parameters> implements ClassesWithAnnotatedMembersSearchExecutor {
-  @Override
-  public void processQuery(@Nonnull ClassesWithAnnotatedMembersSearch.Parameters queryParameters, @Nonnull final Processor<? super PsiClass> consumer) {
-    SearchScope scope = queryParameters.getScope();
-    for (QueryExecutor executor : Application.get().getExtensionList(ClassesWithAnnotatedMembersSearchExecutor.class)) {
-      if (executor instanceof ScopedQueryExecutor) {
-        scope = scope.intersectWith(GlobalSearchScope.notScope(((ScopedQueryExecutor) executor).getScope(queryParameters)));
-      }
+public class ClassesWithAnnotatedMembersSearcher extends QueryExecutorBase<PsiClass, ClassesWithAnnotatedMembersSearch.Parameters>
+    implements ClassesWithAnnotatedMembersSearchExecutor {
+    @Override
+    public void processQuery(
+        @Nonnull ClassesWithAnnotatedMembersSearch.Parameters queryParameters,
+        @Nonnull Predicate<? super PsiClass> consumer
+    ) {
+        SearchScope scope = queryParameters.getScope();
+        for (QueryExecutor executor : Application.get().getExtensionList(ClassesWithAnnotatedMembersSearchExecutor.class)) {
+            if (executor instanceof ScopedQueryExecutor scopedQueryExecutor) {
+                scope = scope.intersectWith(GlobalSearchScope.notScope(scopedQueryExecutor.getScope(queryParameters)));
+            }
+        }
+
+        Set<PsiClass> processed = new HashSet<>();
+        AnnotatedElementsSearch.searchPsiMembers(queryParameters.getAnnotationClass(), scope).forEach(member ->
+        {
+            PsiClass psiClass = AccessRule.read(() -> member instanceof PsiClass clazz ? clazz : member.getContainingClass());
+
+            if (psiClass != null && processed.add(psiClass)) {
+                consumer.test(psiClass);
+            }
+
+            return true;
+        });
     }
-
-    final Set<PsiClass> processed = new HashSet<>();
-    AnnotatedElementsSearch.searchPsiMembers(queryParameters.getAnnotationClass(), scope).forEach(member ->
-    {
-      PsiClass psiClass = ReadAction.compute(() -> member instanceof PsiClass ? (PsiClass) member : member.getContainingClass());
-
-      if (psiClass != null && processed.add(psiClass)) {
-        consumer.process(psiClass);
-      }
-
-      return true;
-    });
-  }
 }

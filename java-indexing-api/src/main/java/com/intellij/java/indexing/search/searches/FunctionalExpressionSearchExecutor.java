@@ -7,7 +7,7 @@ import consulo.application.util.query.QueryExecutor;
 
 /**
  * @author VISTALL
- * @since 01-Sep-22
+ * @since 2022-09-01
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface FunctionalExpressionSearchExecutor extends QueryExecutor<PsiFunctionalExpression, FunctionalExpressionSearch.SearchParameters> {

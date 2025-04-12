@@ -25,7 +25,6 @@ import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.dataContext.DataProvider;
 import consulo.dataContext.GetDataRule;
-import consulo.ide.impl.idea.analysis.AnalysisScopeUtil;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
@@ -41,12 +40,12 @@ public class AnalysisScopeRule implements GetDataRule<AnalysisScope> {
     @Nonnull
     @Override
     public Key<AnalysisScope> getKey() {
-        return AnalysisScopeUtil.KEY;
+        return AnalysisScope.KEY;
     }
 
     @Override
-    public AnalysisScope getData(@Nonnull final DataProvider dataProvider) {
-        final Object psiFile = dataProvider.getDataUnchecked(PsiFile.KEY);
+    public AnalysisScope getData(@Nonnull DataProvider dataProvider) {
+        Object psiFile = dataProvider.getDataUnchecked(PsiFile.KEY);
         if (psiFile instanceof PsiJavaFile javaFile) {
             return new JavaAnalysisScope(javaFile);
         }

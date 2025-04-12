@@ -17,8 +17,8 @@ package com.intellij.java.impl.javadoc.actions;
 
 import com.intellij.java.impl.javadoc.JavadocConfigurable;
 import com.intellij.java.impl.javadoc.JavadocGenerationManager;
-import com.intellij.java.language.JavadocBundle;
-import consulo.ide.impl.idea.analysis.BaseAnalysisAction;
+import consulo.java.language.localize.JavadocLocalize;
+import consulo.language.editor.impl.action.BaseAnalysisAction;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.editor.ui.awt.scope.BaseAnalysisActionDialog;
 import consulo.project.Project;
@@ -32,55 +32,55 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 
 public final class GenerateJavadocAction extends BaseAnalysisAction {
-  private JavadocConfigurable myConfigurable;
+    private JavadocConfigurable myConfigurable;
 
-  public GenerateJavadocAction() {
-    super(JavadocBundle.message("javadoc.generate.title"), JavadocBundle.message("javadoc.generate.title"));
-  }
-
-  @Override
-  protected void analyze(@Nonnull Project project, AnalysisScope scope) {
-    myConfigurable.apply();
-    JavadocGenerationManager.getInstance(project).generateJavadoc(scope);
-    dispose();
-  }
-
-  @RequiredUIAccess
-  @Override
-  protected void extendMainLayout(BaseAnalysisActionDialog dialog, VerticalLayout layout, Project project) {
-    myConfigurable = new JavadocConfigurable(JavadocGenerationManager.getInstance(project).getConfiguration());
-    final JComponent component = myConfigurable.createComponent();
-    myConfigurable.reset();
-    myConfigurable.getOutputDirField().getDocument().addDocumentListener(new DocumentAdapter() {
-      @Override
-      protected void textChanged(DocumentEvent e) {
-        updateAvailability(dialog);
-      }
-    });
-    updateAvailability(dialog);
-
-    layout.add(TargetAWT.wrap(component));
-  }
-
-  private void updateAvailability(BaseAnalysisActionDialog dialog) {
-    dialog.setOKActionEnabled(!myConfigurable.getOutputDir().isEmpty());
-  }
-
-  @Override
-  protected void canceled() {
-    super.canceled();
-    dispose();
-  }
-
-  private void dispose() {
-    if (myConfigurable != null) {
-      myConfigurable.disposeUIResources();
-      myConfigurable = null;
+    public GenerateJavadocAction() {
+        super(JavadocLocalize.javadocGenerateTitle().get(), JavadocLocalize.javadocGenerateTitle().get());
     }
-  }
 
-  @Override
-  protected String getHelpTopic() {
-    return "reference.dialogs.generate.javadoc";
-  }
+    @Override
+    protected void analyze(@Nonnull Project project, @Nonnull AnalysisScope scope) {
+        myConfigurable.apply();
+        JavadocGenerationManager.getInstance(project).generateJavadoc(scope);
+        dispose();
+    }
+
+    @RequiredUIAccess
+    @Override
+    protected void extendMainLayout(BaseAnalysisActionDialog dialog, VerticalLayout layout, Project project) {
+        myConfigurable = new JavadocConfigurable(JavadocGenerationManager.getInstance(project).getConfiguration());
+        JComponent component = myConfigurable.createComponent();
+        myConfigurable.reset();
+        myConfigurable.getOutputDirField().getDocument().addDocumentListener(new DocumentAdapter() {
+            @Override
+            protected void textChanged(DocumentEvent e) {
+                updateAvailability(dialog);
+            }
+        });
+        updateAvailability(dialog);
+
+        layout.add(TargetAWT.wrap(component));
+    }
+
+    private void updateAvailability(BaseAnalysisActionDialog dialog) {
+        dialog.setOKActionEnabled(!myConfigurable.getOutputDir().isEmpty());
+    }
+
+    @Override
+    protected void canceled() {
+        super.canceled();
+        dispose();
+    }
+
+    private void dispose() {
+        if (myConfigurable != null) {
+            myConfigurable.disposeUIResources();
+            myConfigurable = null;
+        }
+    }
+
+    @Override
+    protected String getHelpTopic() {
+        return "reference.dialogs.generate.javadoc";
+    }
 }
